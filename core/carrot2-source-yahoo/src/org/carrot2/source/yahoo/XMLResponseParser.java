@@ -167,7 +167,7 @@ final class XMLResponseParser implements ContentHandler
         }
         else if (stack.size() == 4 && "Thumbnail".equals(stack.get(2)))
         {
-            final String text = StringEscapeUtils.unescapeHtml(buffer.toString());
+            final String text = buffer.toString();
             buffer.setLength(0);
 
             if ("Url".equals(localName)) 

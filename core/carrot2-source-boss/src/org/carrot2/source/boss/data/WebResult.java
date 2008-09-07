@@ -1,10 +1,7 @@
 package org.carrot2.source.boss.data;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.carrot2.util.StringUtils;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Commit;
 
 /**
  * A single Web search result.
@@ -32,29 +29,4 @@ public final class WebResult
 
     @Element(required = false)
     public String url;
-
-    /**
-     * On commit, unescape HTML fields.
-     */
-    @Commit
-    @SuppressWarnings("unused")
-    private void unescape()   
-    {
-        summary = clean(summary);
-        title = clean(title);
-    }
-
-    /*
-     * 
-     */
-    private static String clean(String value)
-    {
-        if (org.apache.commons.lang.StringUtils.isBlank(value)) {
-            return value;
-        }
-
-        // TODO: should we really remove all tags here? Or just unescape and
-        // possibly remove highlights in bold?
-        return StringUtils.removeHtmlTags(StringEscapeUtils.unescapeHtml(value));
-    }
 }

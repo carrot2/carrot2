@@ -3,7 +3,7 @@
   <sources>
     <source component-class="org.carrot2.source.etools.EToolsDocumentSource" id="etools">
       <label>eTools</label>
-      <title>Search the Web with etools.ch</title>
+      <title>eTools Metasearch Engine</title>
       <icon-path>icons/etools.gif</icon-path>
       <mnemonic>w</mnemonic>
       <description>Carrot2 clustering engine will search the Web with www.etools.ch and automatically organize the results into thematic categories</description>

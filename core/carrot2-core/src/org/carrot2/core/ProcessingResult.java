@@ -3,6 +3,7 @@ package org.carrot2.core;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.simplexml.TypeStringValuePair;
 import org.codehaus.jackson.*;
@@ -179,7 +180,7 @@ public final class ProcessingResult
             new HashMap<String, Object>(), otherAttributesAsStrings);
         attributesView = Collections.unmodifiableMap(attributes);
 
-        attributes.put(AttributeNames.QUERY, query);
+        attributes.put(AttributeNames.QUERY, query != null ? query.trim() : null);
         attributes.put(AttributeNames.DOCUMENTS, documents);
         attributes.put(AttributeNames.CLUSTERS, clusters);
 
@@ -280,19 +281,6 @@ public final class ProcessingResult
     }
 
     /**
-     * Deserializes a {@link ProcessingResult} from an XML byte stream.
-     * 
-     * @param stream the stream to deserialize a {@link ProcessingResult} from. The stream
-     *            will <strong>not</strong> be closed.
-     * @return deserialized {@link ProcessingResult}
-     * @throws Exception is case of any problems with deserialization
-     */
-    public static ProcessingResult deserialize(InputStream stream) throws Exception
-    {
-        return new Persister().read(ProcessingResult.class, stream);
-    }
-
-    /**
      * Serializes this processing result as JSON to the provided <code>writer</code>.
      * 
      * @param writer the writer to serialize this processing result to. The writer will
@@ -301,10 +289,9 @@ public final class ProcessingResult
      * @param saveClusters if <code>false</code>, clusters will not be serialized
      * @throws Exception in case of any problems with serialization
      */
-    public void serializeJson(Writer writer)
-        throws IOException
+    public void serializeJson(Writer writer) throws IOException
     {
-        serializeJson(writer, true, true);
+        serializeJson(writer, null);
     }
 
     /**
@@ -312,18 +299,57 @@ public final class ProcessingResult
      * 
      * @param writer the writer to serialize this processing result to. The writer will
      *            <strong>not</strong> be closed.
+     * @param callback JavaScript function name in which to wrap the JSON response or
+     *            <code>null</code>.
      * @param saveDocuments if <code>false</code>, documents will not be serialized.
      * @param saveClusters if <code>false</code>, clusters will not be serialized
      * @throws Exception in case of any problems with serialization
      */
-    public void serializeJson(Writer writer, boolean saveDocuments, boolean saveClusters)
-        throws IOException
+    public void serializeJson(Writer writer, String callback) throws IOException
+    {
+        serializeJson(writer, callback, true, true);
+    }
+
+    /**
+     * Serializes this processing result as JSON to the provided <code>writer</code>.
+     * 
+     * @param writer the writer to serialize this processing result to. The writer will
+     *            <strong>not</strong> be closed.
+     * @param callback JavaScript function name in which to wrap the JSON response or
+     *            <code>null</code>.
+     * @param saveDocuments if <code>false</code>, documents will not be serialized.
+     * @param saveClusters if <code>false</code>, clusters will not be serialized
+     * @throws Exception in case of any problems with serialization
+     */
+    public void serializeJson(Writer writer, String callback, boolean saveDocuments,
+        boolean saveClusters) throws IOException
+    {
+        serializeJson(writer, callback, false, saveDocuments, saveClusters);
+    }
+
+    /**
+     * Serializes this processing result as JSON to the provided <code>writer</code>.
+     * 
+     * @param writer the writer to serialize this processing result to. The writer will
+     *            <strong>not</strong> be closed.
+     * @param callback JavaScript function name in which to wrap the JSON response or
+     *            <code>null</code>.
+     * @param indent if <code>true</code>, the output JSON will be pretty-printed
+     * @param saveDocuments if <code>false</code>, documents will not be serialized.
+     * @param saveClusters if <code>false</code>, clusters will not be serialized
+     * @throws Exception in case of any problems with serialization
+     */
+    public void serializeJson(Writer writer, String callback, boolean indent,
+        boolean saveDocuments, boolean saveClusters) throws IOException
     {
         final JavaTypeMapper mapper = new JavaTypeMapper();
         mapper.setCustomSerializer(CARROT2_JAVA_TYPES_SERIALIZER);
         final JsonGenerator generator = new JsonFactory().createJsonGenerator(writer);
-        generator.setPrettyPrinter(new DefaultPrettyPrinter());
-
+        if (indent)
+        {
+            generator.setPrettyPrinter(new DefaultPrettyPrinter());
+        }
+        
         final Map<String, Object> mapToSerialize = Maps.newHashMap(attributes);
         if (!saveDocuments)
         {
@@ -334,7 +360,15 @@ public final class ProcessingResult
             mapToSerialize.remove(AttributeNames.CLUSTERS);
         }
 
+        if (StringUtils.isNotBlank(callback))
+        {
+            writer.write(callback + "(");
+        }
         mapper.write(generator, mapToSerialize);
+        if (StringUtils.isNotBlank(callback))
+        {
+            writer.write(");");
+        }
     }
 
     /**

@@ -2,7 +2,6 @@ package org.carrot2.dcs;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -11,10 +10,11 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.dcs.DcsRequestModel.OutputFormat;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.resource.ClassResource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 
 import com.google.common.collect.Lists;
@@ -36,6 +36,7 @@ public final class RestProcessorServlet extends HttpServlet
     private CachingController controller;
 
     @Override
+    @SuppressWarnings("unchecked")
     public void init() throws ServletException
     {
         // Check if config already injected by the console starter
@@ -90,6 +91,7 @@ public final class RestProcessorServlet extends HttpServlet
         throws ServletException, IOException
     {
         final String command = getCommandName(request);
+        response.setCharacterEncoding("utf-8");
         if ("components".equals(command))
         {
             try
@@ -100,6 +102,49 @@ public final class RestProcessorServlet extends HttpServlet
             catch (Exception e)
             {
                 sendInternalServerError("Could not serialize component information",
+                    response, e);
+                return;
+            }
+        }
+        else if ("input-example".equals(command))
+        {
+            try
+            {
+                response.setContentType("text/xml");
+                EXAMPLE_INPUT.serialize(response.getWriter(), true, false);
+            }
+            catch (Exception e)
+            {
+                sendInternalServerError("Could not serialize input format example",
+                    response, e);
+                return;
+            }
+        }
+        else if ("output-example-xml".equals(command))
+        {
+            try
+            {
+                response.setContentType("text/xml");
+                EXAMPLE_OUTPUT.serialize(response.getWriter());
+            }
+            catch (Exception e)
+            {
+                sendInternalServerError("Could not serialize output format XML example",
+                    response, e);
+                return;
+            }
+        }
+        else if ("output-example-json".equals(command))
+        {
+            try
+            {
+                response.setContentType("text/json");
+                EXAMPLE_OUTPUT
+                    .serializeJson(response.getWriter(), null, true, true, true);
+            }
+            catch (Exception e)
+            {
+                sendInternalServerError("Could not serialize output format JSON example",
                     response, e);
                 return;
             }
@@ -128,6 +173,7 @@ public final class RestProcessorServlet extends HttpServlet
     /**
      * Handle REST requests (HTTP POST with multipart/form-data content).
      */
+    @SuppressWarnings("unchecked")
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
@@ -141,6 +187,7 @@ public final class RestProcessorServlet extends HttpServlet
         // Documents will remain null if they were not provided. In that
         // case most probably a query to an external document source was requested
         List<Document> documents = null;
+        ProcessingResult input = null;
 
         // Parse uploaded file
         final ServletFileUpload upload = new ServletFileUpload(
@@ -174,10 +221,10 @@ public final class RestProcessorServlet extends HttpServlet
                 }
 
                 // Deserialize documents from the stream
-                final ProcessingResult result;
                 try
                 {
-                    result = ProcessingResult.deserialize(uploadInputStream);
+                    input = ProcessingResult.deserialize(new InputStreamReader(
+                        uploadInputStream, "utf-8"));
                 }
                 catch (Exception e)
                 {
@@ -188,7 +235,7 @@ public final class RestProcessorServlet extends HttpServlet
                 {
                     CloseableUtils.close(uploadInputStream);
                 }
-                documents = result.getDocuments();
+                documents = input.getDocuments();
             }
             else if (fileItem.isFormField())
             {
@@ -196,6 +243,10 @@ public final class RestProcessorServlet extends HttpServlet
             }
 
         }
+
+        // Remove useless parameters, we don't want them to get to the attributes map
+        parameters.remove("input-type");
+        parameters.remove("submit");
 
         // Bind request parameters to the request model
         final DcsRequestModel requestModel = new DcsRequestModel();
@@ -220,6 +271,12 @@ public final class RestProcessorServlet extends HttpServlet
         // Pass the remaining request attributes directly to the controller
         final Map<String, Object> processingAttributes = attributeBinderActionBind.remainingValues;
 
+        // Also add the attributes (e.g. query) from the input processing result
+        if (input != null)
+        {
+            processingAttributes.putAll(input.getAttributes());
+        }
+
         // We need either sourceId or direct document feed
         if (requestModel.source == null && documents == null)
         {
@@ -243,7 +300,6 @@ public final class RestProcessorServlet extends HttpServlet
             {
                 config.logger.info("Processing direct results feed with "
                     + requestModel.algorithm);
-                processingAttributes.put(AttributeNames.DOCUMENTS, documents);
                 result = controller.process(processingAttributes, requestModel.algorithm);
             }
         }
@@ -256,8 +312,23 @@ public final class RestProcessorServlet extends HttpServlet
         // Serialize the result
         try
         {
-            response.setContentType("text/xml");
-            result.serialize(response.getWriter(), !requestModel.clustersOnly, true);
+            response.setCharacterEncoding("utf-8");
+            if (OutputFormat.XML.equals(requestModel.outputFormat))
+            {
+                response.setContentType(OutputFormat.XML.contentType);
+                result.serialize(response.getWriter(), !requestModel.clustersOnly, true);
+            }
+            else if (OutputFormat.JSON.equals(requestModel.outputFormat))
+            {
+                response.setContentType(OutputFormat.JSON.contentType);
+                result.serializeJson(response.getWriter(), requestModel.jsonCallback,
+                    !requestModel.clustersOnly, true);
+            }
+            else
+            {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Unknown output format: '" + requestModel.outputFormat + "'");
+            }
         }
         catch (Exception e)
         {
@@ -299,5 +370,35 @@ public final class RestProcessorServlet extends HttpServlet
         final String finalMessage = message + ": " + e.getMessage();
         config.logger.warn(finalMessage);
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, finalMessage);
+    }
+
+    /**
+     * {@link ProcessingResult} served as input/output example.
+     */
+    private final static ProcessingResult EXAMPLE_INPUT;
+    private final static ProcessingResult EXAMPLE_OUTPUT;
+    static
+    {
+        InputStream streamInput = null;
+        InputStream streamOutput = null;
+        try
+        {
+            streamInput = new ClassResource(RestProcessorServlet.class,
+                "example-input.xml").open();
+            EXAMPLE_INPUT = ProcessingResult.deserialize(new InputStreamReader(
+                streamInput, "utf-8"));
+            streamOutput = new ClassResource(RestProcessorServlet.class,
+                "example-output.xml").open();
+            EXAMPLE_OUTPUT = ProcessingResult.deserialize(new InputStreamReader(
+                streamOutput, "utf-8"));
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Could not load example data", e);
+        }
+        finally
+        {
+            CloseableUtils.close(streamInput, streamOutput);
+        }
     }
 }

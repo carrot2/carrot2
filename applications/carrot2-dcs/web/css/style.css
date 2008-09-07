@@ -23,7 +23,9 @@ sup {
   width: 73px;
   height: 67px;
   left: 100px;
-  margin-top: -32px;
+  margin-top: -37px;
+  display: block;
+  text-indent: -20000px;
 }
 
 #content {
@@ -32,8 +34,9 @@ sup {
   border-bottom: 1px solid #b6afa8;
   margin-top: 60px;
   margin-bottom: 50px;
+  padding-top: 5px;
   padding-bottom: 2ex;
-  padding-left: 174px;
+  padding-left: 190px;
 }
 
 #content h1 {
@@ -137,4 +140,184 @@ button {
 span.hint {
   padding-left: 0.5em;
   color: #808080;
+}
+
+label span.hint {
+  position: relative;
+  top: -0.3em;
+}
+
+/** Tabs */
+ul.tabs {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  float: left;
+}
+
+#tab-lead-in {
+  float: left;
+  display: block;
+  background-repeat: no-repeat;
+}
+
+ul.tabs li.tab {
+  display: block;
+  float: left;
+  position: relative;
+}
+
+ul.tabs li.drag {
+  cursor: move;
+}
+
+ul.tabs .tab a {
+  text-decoration: none;
+  color: black;
+}
+
+ul.tabs .tab a:hover {
+  text-decoration: underline;
+}
+
+ul.tabs .tab .label {
+  white-space: nowrap;
+  background-repeat: no-repeat;
+  color: #909090;
+}
+
+ul.tabs li.active .label {
+  color: #404040;
+}
+
+ul.tabs li.tab {
+  margin: 0;
+  padding: 0;
+  background-repeat: repeat-x;
+}
+
+ul.tabs li.tab .right {
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+}
+
+ul.tabs li.drag,
+ul.tabs li.drag .right {
+  background-image: none !important;
+}
+
+
+#source-tabs {
+  position: absolute;
+  left: 185px;
+  top: 37px;
+}
+
+ul.tabs {
+  font-size: 11px;
+  font-weight: bold;
+}
+
+#tab-lead-in {
+  padding-left: 7px;
+  height: 24px;
+  background-image: url('../img/tab-passive-lead-in.png');
+}
+
+div.first-active #tab-lead-in {
+  background-image: url('../img/tab-active-lead-in.png');
+}
+
+ul.tabs li.tab {
+  height: 18px;
+  padding: 6px 10px 0 2px;
+  background-image: url('../img/tab-passive-body.png');
+}
+
+ul.tabs li.active {
+  background-image: url('../img/tab-active-body.png');
+}
+
+ul.tabs li.active-last,
+ul.tabs li.passive-last {
+  padding-right: 10px;
+}
+
+ul.tabs li.tab .right {
+  height: 24px;
+  width: 7px;
+  background-image: url('../img/tab-passive-passive-link.png');
+}
+
+ul.tabs li.active .right {
+  background-image: url('../img/tab-active-passive-link.png');
+}
+
+ul.tabs li.before-active .right {
+  background-image: url('../img/tab-passive-active-link.png');
+}
+
+ul.tabs li.passive-last .right,
+ul.tabs li.active-last .right {
+  width: 7px;
+}
+
+ul.tabs li.passive-last .right {
+  background-image: url('../img/tab-passive-lead-out.png');
+}
+
+ul.tabs li.active-last .right {
+  background-image: url('../img/tab-active-lead-out.png');
+}
+
+ul.tabs .tab a {
+  padding-right: 2px;
+}
+
+ul.tabs .tab .label {
+  padding-left: 22px;
+  padding-bottom: 3px;
+  margin-left: 1px;
+  background-position: 0 0px;
+}
+
+/** Icons for document sources */
+ul.tabs li.tab .quick-start {
+  background-image: url('../img/lightbulb.png');
+}
+ul.tabs li.tab .parameters {
+  background-image: url('../img/bricks.png');
+}
+ul.tabs li.tab .input {
+  background-image: url('../img/table-row-insert.png');
+}
+ul.tabs li.tab .output {
+  background-image: url('../img/table-row-delete.png');
+}
+
+/** Parameters */
+dd ul {
+  margin-top: 1ex;
+}
+
+dl {
+  margin-bottom: 4ex;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 3ex;
+}
+
+/** Input / output */
+.example-data {
+  border: 1px solid #e0e0e0;
+  background-color: white;
+  padding: 2ex;
+  font-family: monospace;
+  font-size: 11px;
+  white-space: pre;
+  width: 60em;
+  margin-bottom: 2ex;
 }

@@ -53,7 +53,7 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     public String referer = "http://www.carrot2.org";
 
     /**
-     * Remove query word highlighting. Google by default highlights query words in
+     * Keep query word highlighting. Google by default highlights query words in
      * snippets using the bold HTML tag. Set this attribute to <code>true</code> to keep
      * these highlights.
      */

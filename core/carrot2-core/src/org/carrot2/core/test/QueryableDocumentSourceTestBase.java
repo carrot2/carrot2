@@ -33,7 +33,8 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testSmallQuery() throws Exception
     {
-        checkMinimumResults(getSmallQueryText(), getSmallQuerySize(), getSmallQuerySize() / 2);
+        checkMinimumResults(getSmallQueryText(), getSmallQuerySize(),
+            getSmallQuerySize() / 2);
     }
 
     @Test
@@ -50,7 +51,8 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testLargeQuery() throws Exception
     {
-        checkMinimumResults(getLargeQueryText(), getLargeQuerySize(), getLargeQuerySize() / 2);
+        checkMinimumResults(getLargeQueryText(), getLargeQuerySize(),
+            getLargeQuerySize() / 2);
     }
 
     @Test
@@ -83,14 +85,23 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     {
         if (canReturnEscapedHtml())
         {
-            runQuery("html dt tag", getSmallQuerySize());
+            runQuery("test", getSmallQuerySize());
             final List<Document> documents = getDocuments();
+            int i = 0;
             for (Document document : documents)
             {
-                assertThat((String) document.getField(Document.SUMMARY)).as("snippet")
-                    .doesNotMatch(".*&lt;.*");
-                assertThat((String) document.getField(Document.TITLE)).as("title")
-                    .doesNotMatch(".*&lt;.*");
+                final String snippet = (String) document.getField(Document.SUMMARY);
+                if (snippet != null)
+                {
+                    assertThat(snippet).as("snippet[" + i + "]").doesNotMatch(".*&lt;.*");
+                }
+                final Object title = document.getField(Document.TITLE);
+                if (title != null)
+                {
+                    assertThat((String) title).as("title[" + i + "]").doesNotMatch(
+                        ".*&lt;.*");
+                }
+                i++;
             }
         }
     }
@@ -221,7 +232,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
     {
         return ExternalApiTestBase.NO_RESULTS_QUERY;
     }
-    
+
     private void checkMinimumResults(String query, int resultsToRequest,
         int minimumExpectedResults)
     {

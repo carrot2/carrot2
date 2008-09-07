@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.MultipageSearchEngine;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.ExecutorServiceUtils;
@@ -31,6 +32,16 @@ public final class YahooDocumentSource extends MultipageSearchEngine
      */
     private final static ExecutorService executor = ExecutorServiceUtils.createExecutorService(
         MAX_CONCURRENT_THREADS, YahooDocumentSource.class);
+
+    /**
+     * Keep query word highlighting. Yahoo by default highlights query words in
+     * snippets using the bold HTML tag. Set this attribute to <code>true</code> to keep
+     * these highlights.
+     */
+    @Input
+    @Processing
+    @Attribute
+    public boolean keepHighlights = false;
 
     /**
      * The specific search service to be used by this document source. You can use this
@@ -71,5 +82,11 @@ public final class YahooDocumentSource extends MultipageSearchEngine
                 return service.query(query, bucket.start, bucket.results);
             }
         };
+    }
+
+    @Override
+    protected void afterFetch(SearchEngineResponse response)
+    {
+        clean(response, keepHighlights, Document.TITLE, Document.SUMMARY);
     }
 }

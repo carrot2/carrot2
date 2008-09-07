@@ -168,7 +168,7 @@
         <exclude name="**/carrot2-util-log4j/**" />
       </fileset>
       <fileset dir="applications">
-        <include name="carrot2-dcs/src/config.xml" />
+        <include name="carrot2-dcs/src/**/*.xml" />
       </fileset>
       <regexpmapper from="^.*src(-resources)?(.*)$$" to="\2" />
     </copy>
@@ -188,6 +188,9 @@
         <exclude name="**/*.java" />
         <exclude name="**/*.clover" />
         <exclude name="**/carrot2-util-log4j/**" />
+      </fileset>
+      <fileset dir="applications">
+        <include name="**/src-test/**" />
       </fileset>
       <regexpmapper from="^.*src(-test)?(.*)$$" to="\2" />
     </copy>

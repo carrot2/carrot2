@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<searchresult>
+  <query>query (optional)</query>
+  <document>
+    <title>Document 1 Title</title>
+    <snippet>Document 1 Content.</snippet>
+    <url>http://document.url/1</url>
+  </document>
+  <document>
+    <title>Document 2 Title</title>
+    <snippet>Document 2 Content.</snippet>
+    <url>http://document.url/2</url>
+  </document>
+  <document>
+    <title>Document 3 Title</title>
+    <snippet>Document 3 Content.</snippet>
+    <url>http://document.url/3</url>
+  </document>
+</searchresult>

@@ -3,25 +3,45 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" title="style" media="all" href="css/style.css" />
-    <title>Document Clustering Server - Carrot2</title>
+    <title>Quick start - Document Clustering Server - Carrot2</title>
   </head>
 
   <body>
+    <div class="first-active" id="source-tabs">
+      <span id="tab-lead-in"></span>
+      <ul class="tabs clearfix" style="position: relative;">
+        <li class="tab active">
+          <a accesskey="Q" href="index.html" class="label quick-start"><u>Q</u>uick start</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive">
+          <a accesskey="P" href="parameters.html" class="label parameters"><u>P</u>arameters</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive">
+          <a accesskey="I" href="input.html" class="label input"><u>I</u>nput format</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive passive-last">
+          <a accesskey="O" href="output.html" class="label output"><u>O</u>utput format</a>
+          <span class="right"></span>
+        </li>
+      </ul>
+    </div>
+
     <div id="content">
-      <div id="logo"></div>
-      <h1>Document Clustering Server</h1>
-      
+      <a href="index.html"><span id="logo"></span></a>
       <p>
-        Document Clustering Server (DCS) <b>exposes Carrot<sup>2</sup> clustering
-        as a REST service</b>. The service can cluster documents obtained by <b>querying some
-        document source</b> (e.g. a search engine) or <b>documents provided directly</b> 
-        to it as an <a href="#">XML stream</a>. 
+        <b>Document Clustering Server</b> (DCS) exposes Carrot2 clustering
+        as a <b>REST service</b>. It can cluster documents from an <b>external source</b>
+        (e.g. a search engine) or <b>documents provided directly</b> as an 
+        <a href="input.html">XML stream</a>. Results are returned in <a href="output.html">XML or JSON formats</a>. 
       </p>
 
       <p>
-        You can invoke clustering by sending a <tt>multipart/form-data</tt> HTTP POST request 
-        to the <tt>/dcs/rest</tt> URL. Take a look at the 
-        <a href="#">service parameters</a> or use the form below to trigger clustering
+        To invoke clustering, send a <tt>multipart/form-data</tt> <b>HTTP POST request 
+        to the <tt>/dcs/rest</tt></b> URL. Take a look at the 
+        <a href="parameters.html">service parameters</a> or use the form below to trigger clustering
         from your browser.
       </p>
       
@@ -77,8 +97,15 @@
             <label>
               <span class="label">Output format</span>
             </label>
-            <label><input checked="checked" name="dcs.output.format" type="radio" />XML</label><br />
-            <label><input name="dcs.output.format" type="radio" />JSON</label><br />
+            <label><input id="output-format-xml" checked="checked" name="dcs.output.format" type="radio" value="XML" />XML</label><br />
+            <label><input id="output-format-json" name="dcs.output.format" type="radio" value="JSON" />JSON</label><br />
+          </li>
+          
+          <li id="json-callback" class="hide">
+            <label>
+              <span class="label">JSON Callback</span>
+              <input name="dcs.json.callback" type="text" /> <span class="hint">(optional)</span>
+            </label>
           </li>
           
           <li>
@@ -99,7 +126,7 @@
     <script src="js/jquery-1.2.6.js" type="text/javascript"></script>
     <script type="text/javascript">//<![CDATA[
       $(document).ready(function() {
-        $("#source-from-string, #source-from-file, #source-external").click(update).change(update);
+        $("#source-from-string, #source-from-file, #source-external, #output-format-xml, #output-format-json").click(update).change(update);
         update();
 
         $("#sources").loadOptions("source");
@@ -118,7 +145,7 @@
               $select.html("");
               $(data).find(option).each(function() {
                 $this = $(this);
-                $select.append("<option value='" + $this.attr("id") + "'>" + $this.find("label").text() + "</option>"); 
+                $select.append("<option value='" + $this.attr("id") + "'>" + $this.find("label").text() + "<\/option>"); 
               });
             }
           });
@@ -155,6 +182,16 @@
         {
           $("#document-source, #query").disabled(false);
           $("#xml-string, #xml-file").disabled(true);
+        }
+        
+        if ($("#output-format-xml").is(":checked"))
+        {
+          $("#json-callback").disabled(true);
+        }
+        
+        if ($("#output-format-json").is(":checked"))
+        {
+          $("#json-callback").disabled(false);
         }
       }
     //]]></script>

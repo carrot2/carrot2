@@ -73,6 +73,8 @@ public class ProcessingResultTest
         assertEquals(title, deserializedDocument.getField(Document.TITLE));
         assertEquals(snippet, deserializedDocument.getField(Document.SUMMARY));
         assertEquals(url, deserializedDocument.getField(Document.CONTENT_URL));
+        Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
+            .isEqualTo(query);
     }
 
     @Test
@@ -158,13 +160,36 @@ public class ProcessingResultTest
         clusterB.addDocuments(documents.get(1), documents.get(2));
 
         assertThat(clusters).isEquivalentTo(Lists.newArrayList(clusterA, clusterB));
+        Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
+            .isEqualTo(query);
     }
 
     @Test
     public void testJsonSerializationAll() throws IOException
     {
         final ProcessingResult result = prepareProcessingResult();
-        final JsonNode root = getJsonRootNode(result, true, true);
+        final JsonNode root = getJsonRootNode(result, null, true, true);
+
+        checkJsonQuery(root);
+        checkJsonClusters(result, root);
+        checkJsonDocuments(result, root);
+    }
+
+    @Test
+    public void testJsonSerializationWithCallback() throws IOException
+    {
+        final String callback = "callback";
+        final ProcessingResult result = prepareProcessingResult();
+
+        final StringWriter json = new StringWriter();
+        result.serializeJson(json, callback, true, true);
+        final String jsonString = json.toString();
+
+        Assertions.assertThat(jsonString).startsWith(callback + "(").endsWith(");");
+
+        final String data = jsonString.substring(callback.length() + 1, jsonString
+            .length() - 2);
+        final JsonNode root = getJsonRootNode(data);
 
         checkJsonQuery(root);
         checkJsonClusters(result, root);
@@ -175,19 +200,19 @@ public class ProcessingResultTest
     public void testJsonSerializationDocumentsOnly() throws IOException
     {
         final ProcessingResult result = prepareProcessingResult();
-        final JsonNode root = getJsonRootNode(result, true, false);
+        final JsonNode root = getJsonRootNode(result, null, true, false);
 
         checkJsonQuery(root);
         checkJsonDocuments(result, root);
         Assertions.assertThat(root.getFieldValue("clusters")).isNull();
     }
-    
+
     @Test
     public void testJsonSerializationClustersOnly() throws IOException
     {
         final ProcessingResult result = prepareProcessingResult();
-        final JsonNode root = getJsonRootNode(result, false, true);
-        
+        final JsonNode root = getJsonRootNode(result, null, false, true);
+
         checkJsonQuery(root);
         checkJsonClusters(result, root);
         Assertions.assertThat(root.getFieldValue("documents")).isNull();
@@ -217,19 +242,22 @@ public class ProcessingResultTest
         Assertions.assertThat(documentNodes).hasSize(result.getDocuments().size());
     }
 
-    private JsonNode getJsonRootNode(final ProcessingResult result,
+    private JsonNode getJsonRootNode(final ProcessingResult result, String callback,
         boolean saveDocuments, boolean saveClusters) throws IOException,
         JsonParseException
     {
         final StringWriter json = new StringWriter();
-        result.serializeJson(json, saveDocuments, saveClusters);
+        result.serializeJson(json, callback, saveDocuments, saveClusters);
+        return getJsonRootNode(json.toString());
+    }
 
-        // Some basic checks
+    private JsonNode getJsonRootNode(final String jsonString) throws IOException,
+        JsonParseException
+    {
         final JsonParser jsonParser = new JsonFactory()
-            .createJsonParser(new StringReader(json.toString()));
+            .createJsonParser(new StringReader(jsonString));
         final JsonTypeMapper mapper = new JsonTypeMapper();
         final JsonNode root = mapper.read(jsonParser);
-
         return root;
     }
 
@@ -245,7 +273,7 @@ public class ProcessingResultTest
         CloseableUtils.close(writer);
 
         final Reader reader = new InputStreamReader(new ByteArrayInputStream(outputStream
-            .toByteArray()));
+            .toByteArray()), "utf-8");
 
         final ProcessingResult deserialized = ProcessingResult.deserialize(reader);
 
@@ -271,6 +299,9 @@ public class ProcessingResultTest
         {
             Assertions.assertThat(deserialized.getClusters()).isNull();
         }
+
+        Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
+            .isEqualTo(sourceProcessingResult.getAttributes().get(AttributeNames.QUERY));
     }
 
     private ProcessingResult prepareProcessingResult()

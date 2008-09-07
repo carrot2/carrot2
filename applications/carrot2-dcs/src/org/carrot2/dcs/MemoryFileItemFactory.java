@@ -85,11 +85,11 @@ final class MemoryFileItemFactory implements FileItemFactory
         {
             try
             {
-                return new String(this.baos.toByteArray(), "iso-8859-1");
+                return new String(this.baos.toByteArray(), "utf-8");
             }
             catch (UnsupportedEncodingException e)
             {
-                throw new RuntimeException("ISO-8859-1 must be supported.");
+                throw new RuntimeException("UTF-8 must be supported.");
             }
         }
 

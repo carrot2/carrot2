@@ -30,7 +30,7 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
     public static String queryUrl = getQueryUrlFromRegistry();
 
     /**
-     * Remove query word highlighting. Google by default highlights query words in
+     * Keep query word highlighting. Google by default highlights query words in
      * snippets using the bold HTML tag. Set this attribute to <code>true</code> to keep
      * these highlights.
      */

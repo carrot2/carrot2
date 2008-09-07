@@ -97,7 +97,7 @@ public final class StreamUtils
 
     /**
      * Copies all available data from the input stream to the output stream. Data is
-     * internally buffered.
+     * internally buffered. Neither of the streams will be closed.
      */
     public static void copy(InputStream in, OutputStream out, int bufSize)
         throws IOException
@@ -107,6 +107,23 @@ public final class StreamUtils
         while ((tmp = in.read(buffer)) > 0)
         {
             out.write(buffer, 0, tmp);
+        }
+    }
+
+    /**
+     * Copies all available data from the input stream to the output stream. Data is
+     * internally buffered. Both stream will be closed before the method returns.
+     */
+    public static void copyAndClose(InputStream in, OutputStream out, int bufSize)
+        throws IOException
+    {
+        try
+        {
+            copy(in, out, bufSize);
+        }
+        finally
+        {
+            CloseableUtils.close(in, out);
         }
     }
 
