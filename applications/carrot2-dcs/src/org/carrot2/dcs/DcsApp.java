@@ -6,7 +6,7 @@ import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
 /**
- *
+ * Bootstraps the Document Clustering Server.
  */
 public class DcsApp
 {
@@ -47,13 +47,26 @@ public class DcsApp
         server.addConnector(connector);
 
         WebAppContext wac = new WebAppContext();
-        wac.setClassLoader(Thread.currentThread().getContextClassLoader());
         wac.setContextPath("/");
-        wac.setWar(webPathPrefix != null ? webPathPrefix + "/web" : "web");
+
+        final String dcsWar = System.getProperty("dcs.war");
+        if (dcsWar != null)
+        {
+            // WAR distribution provide, use it
+            wac.setWar(dcsWar);
+        }
+        else
+        {
+            // Run from the provided web dir
+            wac.setWar(webPathPrefix != null ? webPathPrefix + "/web" : "web");
+            wac.setClassLoader(Thread.currentThread().getContextClassLoader());
+        }
+        
         if (System.getProperty("dcs.development.mode") != null)
         {
             wac.setDefaultsDescriptor("etc/webdefault.xml");
         }
+        
         server.setHandler(wac);
         server.setStopAtShutdown(true);
 

@@ -12,16 +12,10 @@
        Web application WAR file.
     -->
   <target name="webapp" depends="webapp.templates, webapp.skins.prepare, webapp.sprites">
-    <mkdir dir="${webapp.dir}" />
     <antcall target="jar" />
+    <antcall target="lib.flattened" />
 
-    <mkdir dir="${webapp.dir}/lib-flattened" />
-    <copy todir="${webapp.dir}/lib-flattened">
-      <fileset refid="lib.files" />
-      <fileset dir="${jar.dir}" />
-      <mapper type="flatten" />
-    </copy>
-
+    <mkdir dir="${webapp.dir}" />
     <mkdir dir="${webapp.dir}/classes" />
 
     <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
@@ -44,7 +38,7 @@
       <fileset dir="${webapp.skins.dir}/..">
         <include name="skins${build.number}/**" />
       </fileset>
-      <lib dir="${webapp.dir}/lib-flattened" />
+      <lib dir="${lib.flattened}" />
       <classes dir="${webapp.dir}/classes">
         <exclude name="*.java" />
       </classes>
@@ -58,7 +52,6 @@
       </classes>
     </war>
 
-    <delete dir="${webapp.dir}/lib-flattened" />
     <delete dir="${webapp.dir}/classes" />
     <delete dir="${webapp.skins.dir}" />
   </target>

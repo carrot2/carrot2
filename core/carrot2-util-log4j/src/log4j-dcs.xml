@@ -19,51 +19,29 @@
 	</appender>
 
 	<appender  name="appender-file" class="org.apache.log4j.FileAppender">
-		<param name="File" value=".dcs.log" />
-		<param name="Encoding" value="UTF-8" />
-		<param name="Append" value="false" />
-
-	    <layout class="org.apache.log4j.PatternLayout">
-	        <param name="ConversionPattern" value="%d{ISO8601} [%-5p] [%c] %m%n"/>
-	    </layout>
+  		<param name="File" value="logs/dcs.log" />
+  		<param name="Encoding" value="UTF-8" />
+  		<param name="Append" value="false" />
+  
+      <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d{ISO8601} [%-5p] [%c] %m%n"/>
+      </layout>
 	</appender>
 
-	<appender  name="appender-benchmark" class="org.apache.log4j.FileAppender">
-		<param name="File" value=".dcs.benchmark" />
-		<param name="Encoding" value="UTF-8" />
-		<param name="Append" value="false" />
+  <!-- Add logger filters here. -->
+  &filters-common;
+  &filters-silent;
+  
+  <!-- Redirect DCS loggers to console appender -->
+  <logger name="dcs" additivity="false">
+      <level value="info" />
+      <appender-ref ref="appender-console" />
+  </logger>
 
-	    <layout class="org.apache.log4j.PatternLayout">
-	        <param name="ConversionPattern" value="%m%n"/>
-	    </layout>
-	</appender>
+  <!-- Root logger config. -->
+  <root>
+      <priority value="debug" />
 
-    <!-- Add logger filters here. -->
-    &filters-common;
-    &filters-silent;
-    
-    <!-- Redirect DCS loggers to console appender -->
-    <logger name="dcs" additivity="false">
-    	<level value="info" />
-        <appender-ref ref="appender-console" />
-    </logger>
-    <logger name="batch" additivity="false">
-    	<level value="info" />
-        <appender-ref ref="appender-console" />
-    </logger>
-    <logger name="benchmark" additivity="false">
-    	<level value="info" />
-        <appender-ref ref="appender-console" />
-    </logger>
-    <logger name="benchmark-results" additivity="false">
-    	<level value="info" />
-        <appender-ref ref="appender-benchmark" />
-    </logger>
-
-    <!-- Root logger config. -->
-    <root>
-        <priority value="debug" />
-
-        <appender-ref ref="appender-file" />
-    </root>
+      <appender-ref ref="appender-file" />
+  </root>
 </log4j:configuration>

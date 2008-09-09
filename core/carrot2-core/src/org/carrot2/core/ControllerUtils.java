@@ -142,8 +142,13 @@ final class ControllerUtils
     /**
      * Adds time to the specified time attribute.
      */
-    private static void addTime(String key, long timeToAdd, Map<String, Object> attributes)
+    static void addTime(String key, Long timeToAdd, Map<String, Object> attributes)
     {
+        if (timeToAdd == null)
+        {
+            return;
+        }
+        
         final Long time = (Long) attributes.get(key);
         if (time == null)
         {

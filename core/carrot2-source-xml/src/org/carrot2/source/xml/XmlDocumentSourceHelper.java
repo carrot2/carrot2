@@ -96,7 +96,7 @@ public class XmlDocumentSourceHelper
         }
         finally
         {
-            CloseableUtils.close(carrot2XmlStream);
+            CloseableUtils.close(carrot2XmlStream, xml);
         }
     }
 

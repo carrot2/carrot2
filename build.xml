@@ -4,6 +4,7 @@
  -->
 <project name="Carrot2 3.0" default="test">
   <import file="applications/carrot2-webapp/build.xml" />
+  <import file="applications/carrot2-dcs/build.xml" />
 
   <!-- Import local properties -->
   <property file="local.properties" />
@@ -66,8 +67,11 @@
     <exclude name="lib/**/easymock.jar" />
     <exclude name="lib/**/fest-*.jar" />
     <exclude name="lib/**/servlet-api-*.jar" />
+    <exclude name="lib/org.junit4-ext/*.jar" />
     <exclude name="lib/org.gargoylesoftware.htmlunit/*.jar" />
     <exclude name="lib/org.apache.xml/*.jar" />
+    <exclude name="lib/com.thoughtworks.qdox/*.jar" />
+    <exclude name="lib/org.apache.velocity/*.jar" />
   </fileset>
 
   <fileset dir="." id="lib.test.files">
@@ -79,6 +83,9 @@
     <include name="applications/carrot2-dcs/lib/*.jar" />
   </fileset>
 
+  <!-- Directory with flatten lib files -->
+  <property name="lib.flattened" location="tmp/lib" />
+  
   <path id="lib.classpath">
     <fileset refid="lib.test.files" />
   </path>
@@ -167,9 +174,6 @@
         <exclude name="**/*.clover" />
         <exclude name="**/carrot2-util-log4j/**" />
       </fileset>
-      <fileset dir="applications">
-        <include name="carrot2-dcs/src/**/*.xml" />
-      </fileset>
       <regexpmapper from="^.*src(-resources)?(.*)$$" to="\2" />
     </copy>
     <copy todir="${build.dir}" includeemptydirs="false">
@@ -178,7 +182,7 @@
   </target>
 
   <target name="resources.test"
-          depends="resources"
+          depends="resources, resources.dcs"
           description="Copies the test resources to the compiled classes directory">
     <mkdir dir="${build.dir}" />
 
@@ -560,10 +564,22 @@
   <!-- 
        Core JAR.
     -->
-  <target name="jar" depends="compile, attributes, resources">
+  <target name="jar" depends="clean.classes, compile, attributes, resources">
     <mkdir dir="${jar.dir}" />
     <jar destfile="${jar.dir}/carrot2-core.jar">
       <fileset dir="${build.dir}" />
     </jar>
+  </target>
+  
+  <!-- 
+       Flattened lib directory.
+    -->
+  <target name="lib.flattened">
+    <mkdir dir="${lib.flattened}" />
+    <copy todir="${lib.flattened}">
+      <fileset refid="lib.files" />
+      <fileset dir="${jar.dir}" />
+      <mapper type="flatten" />
+    </copy>
   </target>
 </project>

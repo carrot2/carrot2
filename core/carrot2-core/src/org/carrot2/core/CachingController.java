@@ -630,13 +630,16 @@ public final class CachingController implements Controller
                 attributes.putAll(getAttributesForDescriptors(
                     descriptors.outputDescriptors, processingResult));
 
-                // Copy processing times
-                attributes.put(AttributeNames.PROCESSING_TIME_ALGORITHM, processingResult
-                    .get(AttributeNames.PROCESSING_TIME_ALGORITHM));
-                attributes.put(AttributeNames.PROCESSING_TIME_SOURCE, processingResult
-                    .get(AttributeNames.PROCESSING_TIME_SOURCE));
-                attributes.put(AttributeNames.PROCESSING_TIME_TOTAL, processingResult
-                    .get(AttributeNames.PROCESSING_TIME_TOTAL));
+                ControllerUtils
+                    .addTime(AttributeNames.PROCESSING_TIME_ALGORITHM,
+                        (Long) processingResult
+                            .get(AttributeNames.PROCESSING_TIME_ALGORITHM), attributes);
+                ControllerUtils.addTime(AttributeNames.PROCESSING_TIME_SOURCE,
+                    (Long) processingResult.get(AttributeNames.PROCESSING_TIME_SOURCE),
+                    attributes);
+                ControllerUtils.addTime(AttributeNames.PROCESSING_TIME_TOTAL,
+                    (Long) processingResult.get(AttributeNames.PROCESSING_TIME_TOTAL),
+                    attributes);
 
             }
             catch (CacheException e)

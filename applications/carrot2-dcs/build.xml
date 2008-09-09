@@ -1,0 +1,112 @@
+<project name="Carrot2 Document Clustering Server" default="fail">
+  <!-- DCS project location -->
+  <property name="dcs.project" location="applications/carrot2-dcs" />
+
+  <!-- DCS build dirs -->
+  <property name="dcs.dir" location="tmp/dcs" />
+
+  <!-- 
+       DCS WAR file.
+    -->
+  <target name="dcs.war">
+    <antcall target="jar" />
+    <antcall target="lib.flattened" />
+
+    <mkdir dir="${dcs.dir}" />
+    <mkdir dir="${dcs.dir}/war" />
+
+    <!-- Remove unused libs -->
+    <delete>
+      <fileset dir="${lib.flattened}">
+        <include name="jetty*" />
+        <include name="jawr*" />
+        <include name="args4j*" />
+        <include name="carrot2-xslt-filter.jar" />
+        <include name="pjl-comp-filter*" />
+      </fileset>
+    </delete>
+    
+    <mkdir dir="${dcs.dir}/manifest" />
+    <mkdir dir="${dcs.dir}/classes" />
+    <manifest file="${dcs.dir}/manifest/MANIFEST.MF">
+      <attribute name="Main-Class" value="org.carrot2.dcs.DcsApp" />
+    </manifest>
+
+    <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
+    <javac srcdir="${dcs.project}/src"
+           destdir="${dcs.dir}/classes"
+           compiler="modern"
+           source="1.5"
+           target="1.5"
+           encoding="UTF-8">
+      <classpath refid="lib.classpath" />
+      <classpath path="${jar.dir}/carrot2-core.jar" />
+    </javac>
+    <copy tofile="${dcs.dir}/classes/log4j.xml"
+          file="core/carrot2-util-log4j/src/log4j-dcs.xml" />
+
+    <war destfile="${dcs.dir}/war/carrot2-dcs.war" webxml="${dcs.project}/web/WEB-INF/web.xml"
+         manifest="${dcs.dir}/manifest/MANIFEST.MF">
+      <fileset dir="${dcs.project}/web">
+        <exclude name="WEB-INF" />
+      </fileset>
+      <lib dir="${lib.flattened}" />
+      <classes dir="${dcs.dir}/classes">
+        <exclude name="*.java" />
+      </classes>
+      <classes dir="${dcs.project}/src">
+        <include name="**/*.xml" />
+        <exclude name="**/*.java" />
+      </classes>
+      <classes dir="core/carrot2-util-log4j/src">
+        <include name="appender-*" />
+        <include name="filters-*" />
+      </classes>
+    </war>
+
+    <delete dir="${dcs.dir}/manifest" />
+  </target>
+
+  <target name="dcs" depends="dcs.war">
+    <mkdir dir="${dcs.dir}/lib" />
+    <copy todir="${dcs.dir}/lib">
+      <fileset dir="lib">
+        <include name="**/jetty*.jar" />
+        <include name="**/args4j*.jar" />
+        <include name="**/servlet-api*.jar" />
+      </fileset>
+      <mapper type="flatten" />
+    </copy>
+    
+    <jar jarfile="${dcs.dir}/lib/carrot2-dcs-bootstrap.jar">
+      <fileset dir="${dcs.dir}/classes">
+        <include name="**/DcsApp.class" />
+      </fileset>
+    </jar>
+    
+    <copy todir="${dcs.dir}" file="${dcs.project}/etc/dcs.cmd" />
+    <copy todir="${dcs.dir}" file="${dcs.project}/etc/dcs.sh" />
+    
+    <delete dir="${dcs.dir}/classes" />
+  </target>
+  
+  <target name="resources.dcs"
+          description="Copies the runtime resources to the compiled classes directory">
+    <mkdir dir="${build.dir}" />
+
+    <copy todir="${build.dir}" includeemptydirs="false">
+      <fileset dir="applications">
+        <include name="carrot2-dcs/src/**/*.xml" />
+      </fileset>
+      <regexpmapper from="^.*src(-resources)?(.*)$$" to="\2" />
+    </copy>
+  </target>
+
+  <target name="clean.dcs">
+    <delete dir="${dcs.dir}" />
+  </target>
+
+  <target name="fail">
+    <fail>Please use the top-level build file to build the Document Clustering Server.</fail>
+  </target>
+</project>
