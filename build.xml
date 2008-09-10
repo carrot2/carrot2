@@ -303,6 +303,7 @@
     <attributes-xml java.source="core/carrot2-source-opensearch/src" output.dir="${build.dir}" />
     <attributes-xml java.source="core/carrot2-source-boss/src" output.dir="${build.dir}" />
     <attributes-xml java.source="core/carrot2-source-google-desktop/src" output.dir="${build.dir}" />
+    <attributes-xml java.source="core/carrot2-source-solr/src" output.dir="${build.dir}" />
     <attributes-xml java.source="core/carrot2-source-xml/src" output.dir="${build.dir}" />
     <attributes-xml java.source="core/carrot2-util-text/src" output.dir="${build.dir}" />
     <attributes-xml java.source="core/carrot2-util-attribute/src-test" output.dir="${build.dir}" />
@@ -357,6 +358,10 @@
     <attributes-xml-copy java.source="core/carrot2-source-google-desktop/src"
                          output.dir="core/carrot2-source-google-desktop/tmp/eclipse"
                          copy.to="core/carrot2-source-google-desktop/META-INF" />
+
+    <attributes-xml-copy java.source="core/carrot2-source-solr/src"
+                         output.dir="core/carrot2-source-solr/tmp/eclipse"
+                         copy.to="core/carrot2-source-solr/META-INF" />
 
     <attributes-xml-copy java.source="core/carrot2-source-xml/src"
                          output.dir="core/carrot2-source-xml/tmp/eclipse"

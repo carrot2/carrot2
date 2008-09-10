@@ -1,6 +1,7 @@
 package org.carrot2.workbench.core;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import junit.framework.TestCase;
@@ -8,7 +9,8 @@ import junit.framework.TestCase;
 import org.carrot2.core.DocumentSourceDescriptor;
 import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.source.xml.XmlDocumentSource;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.util.resource.Resource;
 import org.carrot2.util.resource.URLResource;
 import org.carrot2.workbench.core.ui.*;
@@ -16,17 +18,25 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
 
+import com.google.common.collect.ImmutableSet;
+
 public class ProcessingJobTest extends TestCase
 {
     private AttributeValueSet attributes;
-    
+
     /*
-     * This source ID must be available in the input suite. 
+     * This source ID must be available in the input suite.
      */
     private final static String SOURCE_XML = "test-xml";
-    
+
     private final static String ALGO_BY_URL = "test-by-url";
-    
+
+    /**
+     * Sources excluded from automatic Workbench tests, e.g. sources requiring some
+     * specific software installed locally.
+     */
+    private final static Set<String> EXCLUDED_SOURCES = ImmutableSet.of("solr");
+
     @Override
     protected void setUp() throws Exception
     {
@@ -48,7 +58,11 @@ public class ProcessingJobTest extends TestCase
         for (DocumentSourceDescriptor wrapper : WorkbenchCorePlugin.getDefault()
             .getComponentSuite().getSources())
         {
-            runSearch(ALGO_BY_URL, wrapper.getId());
+            final String id = wrapper.getId();
+            if (!EXCLUDED_SOURCES.contains(id))
+            {
+                runSearch(ALGO_BY_URL, id);
+            }
         }
     }
 
@@ -89,8 +103,7 @@ public class ProcessingJobTest extends TestCase
 
     private void performSaveAndRestore(String sourceId)
     {
-        SearchInput search = new SearchInput(sourceId,
-            ALGO_BY_URL, attributes);
+        SearchInput search = new SearchInput(sourceId, ALGO_BY_URL, attributes);
         IMemento memento = XMLMemento.createWriteRoot("root");
         search.saveState(memento);
 
@@ -100,9 +113,11 @@ public class ProcessingJobTest extends TestCase
         assertEquals(search.getAlgorithmId(), search2.getAlgorithmId());
         assertEquals(search.getSourceId(), search2.getSourceId());
 
-        for (Entry<String, Object> entry : search2.getAttributeValueSet().getAttributeValues().entrySet())
+        for (Entry<String, Object> entry : search2.getAttributeValueSet()
+            .getAttributeValues().entrySet())
         {
-            Map<String, Object> attributeValues = search.getAttributeValueSet().getAttributeValues();
+            Map<String, Object> attributeValues = search.getAttributeValueSet()
+                .getAttributeValues();
             assertTrue(attributeValues.containsKey(entry.getKey()));
             assertEquals(attributeValues.get(entry.getKey()), entry.getValue());
         }

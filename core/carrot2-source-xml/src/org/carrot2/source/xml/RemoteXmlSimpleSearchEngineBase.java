@@ -1,13 +1,14 @@
 package org.carrot2.source.xml;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.transform.Templates;
 
 import org.carrot2.core.*;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
-import org.carrot2.util.resource.ClassResource;
+import org.carrot2.util.resource.Resource;
 
 /**
  * A base class for implementing data sources based on XML/XSLT. The XSLT stylesheet will
@@ -45,7 +46,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
         final SearchEngineResponse response = new SearchEngineResponse();
 
         final ProcessingResult processingResult = xmlDocumentSourceHelper
-            .loadProcessingResult(serviceURL, toCarrot2Xslt, null, response.metadata);
+            .loadProcessingResult(serviceURL, toCarrot2Xslt, getXsltParameters(), response.metadata);
 
         final List<Document> documents = processingResult.getDocuments();
         if (documents != null)
@@ -61,7 +62,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
         }
 
         afterFetch(response);
-        
+
         return response;
     }
 
@@ -70,7 +71,18 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
      * XML. This method will be called once during component initialization.
      * Initialization time attributes will have been bound before the call to this method.
      */
-    protected abstract ClassResource getXsltResource();
+    protected abstract Resource getXsltResource();
+
+    /**
+     * Returns parameters to be passed to the XSLT transformer. This method will be called
+     * once per processing cycle. Processing-time attributes will have been bound before
+     * this method the call to this method. The default implementation returns
+     * <code>null</code>.
+     */
+    protected Map<String, String> getXsltParameters()
+    {
+        return null;
+    }
 
     /**
      * Builds the URL from which XML stream will be fetched. This method will be called

@@ -138,4 +138,12 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
     protected void afterFetch(SearchEngineResponse response)
     {
     }
+    
+    /**
+     * URL-encodes a string into UTF-8.
+     */
+    protected static final String urlEncode(String string)
+    {
+        return org.carrot2.util.StringUtils.urlEncodeWrapException(string, "UTF-8");
+    }
 }

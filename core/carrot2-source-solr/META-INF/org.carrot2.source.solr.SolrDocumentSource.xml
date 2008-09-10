@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component-metadata>
+  <title>Fetches documents from an instance of Solr</title>
+  <attributes class="java.util.LinkedHashMap">
+    <attribute field-name="serviceUrlBase">
+      <attribute-metadata>
+        <title>Solr service URL base</title>
+        <label>Service URL</label>
+        <level>ADVANCED</level>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="solrTitleFieldName">
+      <attribute-metadata>
+        <title>Title field name</title>
+        <description>Name of the Solr field that will provide document titles.</description>
+        <level>MEDIUM</level>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="solrSummaryFieldName">
+      <attribute-metadata>
+        <title>Summary field name</title>
+        <description>Name of the Solr field that will provide document summary.</description>
+        <level>MEDIUM</level>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="solrUrlFieldName">
+      <attribute-metadata>
+        <title>Title field name</title>
+        <description>Name of the Solr field that will provide document URLs.</description>
+        <level>MEDIUM</level>
+      </attribute-metadata>
+    </attribute>
+  </attributes>
+</component-metadata>
