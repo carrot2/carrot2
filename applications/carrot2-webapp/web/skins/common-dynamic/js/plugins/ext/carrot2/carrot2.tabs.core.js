@@ -16,7 +16,7 @@
 
     // Make tabs respond to clicks
     $tabContainer.click($.delegate({
-      ".label, .label u": function(e) {
+      ".label, .label u, li": function(e) {
         activateTab(e, $tabContainer);
         return false;
       }
@@ -34,10 +34,19 @@
    */
   activateTab = function(e, $tabContainer) {
     $tabContainer.find("li.tab").removeClass("active")
-    $(e.target).parents("li.tab").addClass("active").removeClass("passive");
+    
+    var $target = $(e.target);
+    var $tabLi;
+    if ($target.is("li.tab")) {
+    	$tabLi = $target;
+    } else {
+    	$tabLi = $target.parents("li.tab").eq(0);
+    }
+    
+    $tabLi.addClass("active").removeClass("passive");
     $tabContainer.trigger("tabStructureChanged");
     
-    var tabId = $(e.target).parents("li").eq(0).attr("id");
+    var tabId = $tabLi.attr("id");
     $tabContainer.trigger("tabActivated", [ tabId ]);
     
     $("#source").val(tabId);

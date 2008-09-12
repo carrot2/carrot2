@@ -6,7 +6,7 @@
     -->
   
   <!-- Value of the cookie containing the user's active source id-->
-  <xsl:variable name="user-active-source" select="/page/request/parameter[@name = 'active-source']/value/@value" />
+  <xsl:variable name="user-active-source" select="/page/request/parameter[@key = 'active-source']/value" />
   
   <!-- Active source, if user cookie not present, default is used -->
   <xsl:variable name="active-source-id">
@@ -25,7 +25,7 @@
     determined by the cookie from the user 
     -->  
   <xsl:template match="page" mode="sources-internal">
-    <xsl:variable name="source-order" select="/page/request/parameter[@name = 'source-order']/value/@value" />
+    <xsl:variable name="source-order" select="/page/request/parameter[@key = 'source-order']/value" />
     <xsl:choose>
       <xsl:when test="string-length($source-order) > 0">
         <xsl:call-template name="user-order-source">
@@ -44,7 +44,7 @@
     computes the value based on the cookie from the user. 
     -->  
   <xsl:template match="page" mode="is-first-source-active">
-    <xsl:variable name="source-order" select="/page/request/parameter[@name = 'source-order']/value/@value" />
+    <xsl:variable name="source-order" select="/page/request/parameter[@key = 'source-order']/value" />
     <xsl:choose>
       <xsl:when test="contains($source-order, '*')">
         <xsl:if test="substring-before($source-order, '*') = $active-source-id">yes</xsl:if>    

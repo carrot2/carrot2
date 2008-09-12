@@ -1,12 +1,13 @@
 package org.carrot2.webapp.model;
 
+import java.util.List;
 import java.util.Map;
 
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.simplexml.TypeStringValuePair;
 import org.carrot2.webapp.QueryProcessorServlet;
-import org.simpleframework.xml.ElementMap;
+import org.simpleframework.xml.ElementList;
 
 /**
  * Represents the data the application received in the HTTP request.
@@ -41,12 +42,13 @@ public class RequestModel
     @Input
     @Attribute(key = WebappConfig.ALGORITHM_PARAM)
     @org.simpleframework.xml.Attribute
-    public String algorithm = WebappConfig.INSTANCE.components.getAlgorithms().get(0).getId();
+    public String algorithm = WebappConfig.INSTANCE.components.getAlgorithms().get(0)
+        .getId();
 
     @Input
     @Attribute(key = WebappConfig.TYPE_PARAM)
     public RequestType type;
-    
+
     @Input
     @Attribute(key = WebappConfig.VIEW_PARAM)
     @org.simpleframework.xml.Attribute
@@ -55,15 +57,15 @@ public class RequestModel
     @Input
     @Attribute(key = QueryProcessorServlet.STATS_KEY)
     public String statsKey;
-    
+
     @org.simpleframework.xml.Attribute
     public boolean modern = true;
-    
+
     public Map<String, Object> otherParameters;
 
     @SuppressWarnings("unused")
-    @ElementMap(name = "parameters", entry = "parameter", key = "name", value="value", inline = true, attribute = true, required = false)
-    private Map<String, TypeStringValuePair> otherParametersToSerialize;
+    @ElementList(entry = "parameter", inline = true, required = false)
+    private List<TypeStringValuePair> otherParametersToSerialize;
 
     public void afterParametersBound(Map<String, Object> remainingHttpParameters)
     {
@@ -72,11 +74,11 @@ public class RequestModel
             type = RequestType.PAGE;
         }
 
-        if (!modern) 
+        if (!modern)
         {
             skin = "simple";
         }
-        
+
         otherParameters = remainingHttpParameters;
         otherParametersToSerialize = TypeStringValuePair
             .toTypeStringValuePairs(remainingHttpParameters);

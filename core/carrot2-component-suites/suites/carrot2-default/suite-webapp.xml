@@ -13,7 +13,7 @@
         <example-query>clustering</example-query>
       </example-queries>
     </source>
-    <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="icerocket">
+    <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="icerocket" position="END">
       <label>Blogs</label>
       <title>Blogs from icerocket.com</title>
       <mnemonic>B</mnemonic>

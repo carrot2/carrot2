@@ -48,7 +48,7 @@
         <example-query>ruby</example-query>
       </example-queries>
     </source>
-    <source component-class="org.carrot2.source.pubmed.PubMedDocumentSource" id="pubmed">
+    <source component-class="org.carrot2.source.pubmed.PubMedDocumentSource" id="pubmed" position="END">
       <label>PubMed</label>
       <title>PubMed medical database</title>
       <mnemonic>P</mnemonic>

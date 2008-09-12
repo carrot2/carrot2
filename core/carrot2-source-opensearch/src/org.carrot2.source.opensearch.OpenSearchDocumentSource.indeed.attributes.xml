@@ -2,15 +2,15 @@
   <attribute-set id="jobs">
     <value-set>
       <label>Jobs</label>
-      <entry key="org.carrot2.source.opensearch.OpenSearchDocumentSource.feedUrlTemplate">
-        <value type="java.lang.String" value="http://www.indeed.com/opensearch?q=${searchTerms}&amp;start=${startIndex}&amp;limit=${count}"/>
-      </entry>
-      <entry key="org.carrot2.source.opensearch.OpenSearchDocumentSource.resultsPerPage">
-        <value type="java.lang.Integer" value="50"/>
-      </entry>
-      <entry key="org.carrot2.source.opensearch.OpenSearchDocumentSource.maximumResults">
-        <value type="java.lang.Integer" value="400"/>
-      </entry>
+      <attribute key="org.carrot2.source.opensearch.OpenSearchDocumentSource.feedUrlTemplate" type="java.lang.String">
+        <value>http://www.indeed.com/opensearch?q=${searchTerms}&amp;start=${startIndex}&amp;limit=${count}"</value>
+      </attribute>
+      <attribute key="org.carrot2.source.opensearch.OpenSearchDocumentSource.resultsPerPage" type="java.lang.Integer">
+        <value>50</value>
+      </attribute>
+      <attribute key="org.carrot2.source.opensearch.OpenSearchDocumentSource.maximumResults" type="java.lang.Integer">
+        <value>400</value>
+      </attribute>
     </value-set>
   </attribute-set>
 </attribute-sets>

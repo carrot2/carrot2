@@ -1,21 +1,30 @@
 package org.carrot2.util.simplexml;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.*;
 
-import com.google.common.collect.Maps;
+import org.simpleframework.xml.Root;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 
 /**
- * A helper class for serializing/ deserializing collection of objects using Simple XML.
+ * A helper class for serializing/ deserializing collections of objects of different types
+ * using Simple XML.
  */
+@Root(name = "value")
 public class TypeStringValuePair
 {
+    /** Optional key for the value */
+    @org.simpleframework.xml.Attribute(required = false)
+    private String key;
+
     /** Type of the value to be serialized. */
     @org.simpleframework.xml.Attribute
     private Class<?> type;
 
     /** Value as string. */
-    @org.simpleframework.xml.Attribute(required = false)
+    @org.simpleframework.xml.Element(required = false, data = true)
     private String value;
 
     public TypeStringValuePair()
@@ -24,20 +33,33 @@ public class TypeStringValuePair
 
     public TypeStringValuePair(Class<?> type, String value)
     {
+        this(type, value, null);
+    }
+
+    public TypeStringValuePair(Class<?> type, String key, String value)
+    {
         this.value = value;
         this.type = type;
+        this.key = key;
     }
 
     /**
-     * Converts a map of objects of arbitrary types into a map of
+     * Converts a map of objects of arbitrary types into a list of
      * {@link TypeStringValuePair}s.
      */
-    public static Map<String, TypeStringValuePair> toTypeStringValuePairs(
-        Map<String, Object> source)
+    public static List<TypeStringValuePair> toTypeStringValuePairs(
+        Map<String, Object> source, String... ignoredKeys)
     {
-        Map<String, TypeStringValuePair> result = Maps.newLinkedHashMap();
+        final Set<String> ignored = ImmutableSet.of(ignoredKeys);
+
+        List<TypeStringValuePair> result = Lists.newArrayList();
         for (final Map.Entry<String, Object> entry : source.entrySet())
         {
+            if (ignored.contains(entry.getKey()))
+            {
+                continue;
+            }
+
             /*
              * There are two special cases handled here. First, Simple XML library does
              * not handle null entries. Second, enums need to be handled separately since
@@ -48,41 +70,46 @@ public class TypeStringValuePair
             if (entry.getValue() == null)
             {
                 // Simple XML hack.
-                result.put(entry.getKey(), new TypeStringValuePair(Object.class, null));
+                result.add(new TypeStringValuePair(Object.class, entry.getKey(), null));
                 continue;
             }
 
             if (entry.getValue() instanceof Enum)
             {
                 // Enum handling.
-                result.put(entry.getKey(), new TypeStringValuePair(entry.getValue()
-                    .getClass(), ((Enum<?>) entry.getValue()).name()));
+                result.add(new TypeStringValuePair(entry.getValue().getClass(), entry
+                    .getKey(), ((Enum<?>) entry.getValue()).name()));
                 continue;
             }
 
             // All the remaining types.
-            result.put(entry.getKey(), new TypeStringValuePair(entry.getValue()
-                .getClass(), entry.getValue().toString()));
+            result.add(new TypeStringValuePair(entry.getValue().getClass(), entry
+                .getKey(), entry.getValue().toString()));
         }
 
         return result;
     }
 
     /**
-     * Converts a map of {@link TypeStringValuePair}s into a map of objects of the
+     * Converts a list of {@link TypeStringValuePair}s into a map of objects of the
      * corresponding types. Looks for the <code>valueOf(String)</code> method in the
      * target type and uses the method to perform the conversion from {@link String}.
      */
     public static Map<String, Object> fromTypeStringValuePairs(
-        Map<String, Object> target, Map<String, TypeStringValuePair> source)
-        throws Exception
+        Map<String, Object> target, List<TypeStringValuePair> source) throws Exception
     {
-        for (final Map.Entry<String, TypeStringValuePair> entry : source.entrySet())
+        for (TypeStringValuePair entry : source)
         {
-            if (entry.getValue().value != null)
+            if (entry.key == null)
             {
-                final Class<?> clazz = entry.getValue().type;
-                final String stringValue = entry.getValue().value;
+                throw new IllegalArgumentException("No key specified for value: "
+                    + entry.value);
+            }
+
+            if (entry.value != null)
+            {
+                final Class<?> clazz = entry.type;
+                final String stringValue = entry.value;
                 Object value = null;
 
                 // Special support for Class and String
@@ -99,15 +126,15 @@ public class TypeStringValuePair
                 {
                     // Everything else needs to have a static valueOf(String) method
                     final Method valueOfMethod = clazz.getMethod("valueOf", String.class);
-                    value = valueOfMethod.invoke(null, stringValue);
+                    value = valueOfMethod.invoke(null, stringValue.trim());
                 }
 
-                target.put(entry.getKey(), value);
+                target.put(entry.key, value);
 
             }
             else
             {
-                target.put(entry.getKey(), null);
+                target.put(entry.key, null);
             }
         }
 

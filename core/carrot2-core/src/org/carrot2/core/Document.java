@@ -92,8 +92,8 @@ public final class Document
     /**
      * Field used during serialization/ deserialization.
      */
-    @ElementMap(name = "fields", entry = "field", key = "key", value = "value", inline = true, attribute = true, required = false)
-    private Map<String, TypeStringValuePair> otherFieldsAsStrings = new HashMap<String, TypeStringValuePair>();
+    @ElementList(entry = "field", inline = true, required = false)
+    private List<TypeStringValuePair> otherFieldsAsStrings = new ArrayList<TypeStringValuePair>();
 
     /**
      * Creates an empty document with no fields.
@@ -235,11 +235,8 @@ public final class Document
         url = (String) fields.get(CONTENT_URL);
         sources = (List<String>) fields.get(SOURCES);
 
-        otherFieldsAsStrings = TypeStringValuePair.toTypeStringValuePairs(fields);
-        otherFieldsAsStrings.remove(TITLE);
-        otherFieldsAsStrings.remove(SUMMARY);
-        otherFieldsAsStrings.remove(CONTENT_URL);
-        otherFieldsAsStrings.remove(SOURCES);
+        otherFieldsAsStrings = TypeStringValuePair.toTypeStringValuePairs(fields, TITLE,
+            SUMMARY, CONTENT_URL, SOURCES);
     }
 
     /**

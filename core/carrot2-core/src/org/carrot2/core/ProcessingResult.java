@@ -51,8 +51,8 @@ public final class ProcessingResult
     private List<Cluster> clusters;
 
     /** Attributes of this result for serialization/ deserialization purposes. */
-    @ElementMap(name = "attributes", entry = "attribute", key = "key", value = "value", inline = true, attribute = true, required = false)
-    private Map<String, TypeStringValuePair> otherAttributesAsStrings = new HashMap<String, TypeStringValuePair>();
+    @ElementList(entry = "attribute", inline = true, required = false)
+    private List<TypeStringValuePair> otherAttributesAsStrings = new ArrayList<TypeStringValuePair>();
 
     /**
      * Parameterless constructor required for XML serialization/ deserialization.
@@ -159,10 +159,8 @@ public final class ProcessingResult
             clusters = Lists.newArrayList(getClusters());
         }
 
-        otherAttributesAsStrings = TypeStringValuePair.toTypeStringValuePairs(attributes);
-        otherAttributesAsStrings.remove(AttributeNames.QUERY);
-        otherAttributesAsStrings.remove(AttributeNames.CLUSTERS);
-        otherAttributesAsStrings.remove(AttributeNames.DOCUMENTS);
+        otherAttributesAsStrings = TypeStringValuePair.toTypeStringValuePairs(attributes,
+            AttributeNames.QUERY, AttributeNames.CLUSTERS, AttributeNames.DOCUMENTS);
         if (otherAttributesAsStrings.isEmpty())
         {
             otherAttributesAsStrings = null;
@@ -349,7 +347,7 @@ public final class ProcessingResult
         {
             generator.setPrettyPrinter(new DefaultPrettyPrinter());
         }
-        
+
         final Map<String, Object> mapToSerialize = Maps.newHashMap(attributes);
         if (!saveDocuments)
         {

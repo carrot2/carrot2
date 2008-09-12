@@ -9,9 +9,7 @@ import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Comparators;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 
 /**
  * A cluster (group) of {@link Document}s. Each cluster has a human-readable label
@@ -89,8 +87,8 @@ public final class Cluster
     private Double score;
 
     /** Attributes of this cluster for serialization/ deserialization purposes. */
-    @ElementMap(name = "attributes", entry = "attribute", key = "key", value = "value", inline = true, attribute = true, required = false)
-    private Map<String, TypeStringValuePair> otherAttributesAsStrings = new HashMap<String, TypeStringValuePair>();
+    @ElementList(entry = "attribute", inline = true, required = false)
+    private List<TypeStringValuePair> otherAttributesAsStrings = new ArrayList<TypeStringValuePair>();
 
     /** The actual size of this cluster, for serialization purposes only */
     @SuppressWarnings("unused")
@@ -651,8 +649,8 @@ public final class Cluster
         size = size();
 
         // Remove score from attributes for serialization
-        otherAttributesAsStrings = TypeStringValuePair.toTypeStringValuePairs(attributes);
-        otherAttributesAsStrings.remove(SCORE);
+        otherAttributesAsStrings = TypeStringValuePair.toTypeStringValuePairs(attributes,
+            SCORE);
         if (otherAttributesAsStrings.isEmpty())
         {
             otherAttributesAsStrings = null;
@@ -665,7 +663,6 @@ public final class Cluster
     {
         if (otherAttributesAsStrings != null)
         {
-            attributes.putAll(otherAttributesAsStrings);
             attributes = TypeStringValuePair.fromTypeStringValuePairs(
                 new HashMap<String, Object>(), otherAttributesAsStrings);
         }

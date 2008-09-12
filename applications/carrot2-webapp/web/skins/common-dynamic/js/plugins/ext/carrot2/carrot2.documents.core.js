@@ -186,8 +186,8 @@
       $document.attr("id", "d" + i);
       $document.find(".rank").html(i + 1);
       $document.find("a.title, a.in-new-window").attr("href", result.url);
-      $document.find("a.title").html(result.titleNoFormatting);
-      $document.find(".snippet").html(result.content.replace(/<\/?b>/g, ""));
+      $document.find("a.title").html(result.title);
+      $document.find(".snippet").html(result.content);
       $document.find(".url").html(result.url + "<span class='sources'>[Google]</span>");
       
       $documents.append($document);

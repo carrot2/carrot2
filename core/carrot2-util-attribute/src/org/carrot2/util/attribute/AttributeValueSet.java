@@ -1,5 +1,6 @@
 package org.carrot2.util.attribute;
 
+import java.util.List;
 import java.util.Map;
 
 import org.carrot2.util.simplexml.TypeStringValuePair;
@@ -53,8 +54,8 @@ public class AttributeValueSet
      * {@link #convertAttributeValuesToStrings()} and
      * {@link #convertAttributeValuesFromStrings()}.
      */
-    @ElementMap(name = "values", entry = "entry", value = "value", key = "key", inline = true, attribute = true, required = false)
-    private Map<String, TypeStringValuePair> overridenAttributeValuesAsStrings;
+    @ElementList(entry = "attribute", inline = true, required = false)
+    private List<TypeStringValuePair> overridenAttributeValuesAsStrings;
 
     AttributeValueSet()
     {

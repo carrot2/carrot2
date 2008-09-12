@@ -13,6 +13,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.simplexml.NoClassAttributePersistenceStrategy;
+import org.carrot2.webapp.filter.QueryWordHighlighter;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.carrot2.webapp.model.*;
 import org.carrot2.webapp.util.RequestParameterUtils;
@@ -147,22 +148,22 @@ public class QueryProcessorServlet extends HttpServlet
                 output.write("source-updates-in-window: "
                     + statistics.sourceTimeMeasurementsInWindow + "\n");
             }
-            
+
             if (statistics.totalTimeAverageInWindow > 0)
             {
-                output.write("all-ms-per-query: "
-                    + statistics.totalTimeAverageInWindow + "\n");
+                output.write("all-ms-per-query: " + statistics.totalTimeAverageInWindow
+                    + "\n");
                 output.write("all-updates-in-window: "
                     + statistics.totalTimeMeasurementsInWindow + "\n");
             }
-            
+
             output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
             output.write("jvm.totalmem: " + Runtime.getRuntime().totalMemory() + "\n");
 
             output.write("ehcache.hits: " + statistics.cacheHitsTotal + "\n");
             output.write("ehcache.misses: " + statistics.cacheMisses + "\n");
-            output.write("ehcache.memhits: " + statistics.cacheHitsMemory  + "\n");
-            output.write("ehcache.diskhits: " + statistics.cacheHitsDisk  + "\n");
+            output.write("ehcache.memhits: " + statistics.cacheHitsMemory + "\n");
+            output.write("ehcache.diskhits: " + statistics.cacheHitsDisk + "\n");
 
             output.flush();
         }
@@ -195,13 +196,14 @@ public class QueryProcessorServlet extends HttpServlet
                     || RequestType.CARROT2.equals(requestModel.type))
                 {
                     processingResult = controller.process(requestParameters,
-                        requestModel.source, requestModel.algorithm);
+                        requestModel.source, requestModel.algorithm,
+                        QueryWordHighlighter.class.getName());
                     logQuery(requestModel, processingResult);
                 }
                 else if (RequestType.DOCUMENTS.equals(requestModel.type))
                 {
                     processingResult = controller.process(requestParameters,
-                        requestModel.source);
+                        requestModel.source, QueryWordHighlighter.class.getName());
                 }
                 setExpires(response);
             }
