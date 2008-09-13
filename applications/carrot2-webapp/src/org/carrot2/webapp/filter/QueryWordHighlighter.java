@@ -91,7 +91,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
             return;
         }
 
-        field = escapeLtGt(field);
+        field = new String(escapeLtGt(field));
 
         for (Pattern pattern : queryPatterns)
         {
