@@ -196,8 +196,7 @@ public class QueryProcessorServlet extends HttpServlet
                     || RequestType.CARROT2.equals(requestModel.type))
                 {
                     processingResult = controller.process(requestParameters,
-                        requestModel.source, requestModel.algorithm,
-                        QueryWordHighlighter.class.getName());
+                        requestModel.source, requestModel.algorithm);
                     logQuery(requestModel, processingResult);
                 }
                 else if (RequestType.DOCUMENTS.equals(requestModel.type))

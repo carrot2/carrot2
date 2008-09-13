@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
@@ -68,8 +67,9 @@ public class QueryWordHighlighter extends ProcessingComponentBase
         final Pattern [] queryPatterns = new Pattern [queryWords.length];
         for (int i = 0; i < queryWords.length; i++)
         {
-            queryPatterns[i] = Pattern.compile("(" + Pattern.quote(queryWords[i]) + ")",
-                Pattern.CASE_INSENSITIVE);
+            queryPatterns[i] = Pattern.compile("("
+                + Pattern.quote(escapeLtGt(queryWords[i])) + ")",
+                Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
         }
 
         for (Document document : documents)
@@ -84,13 +84,17 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     private void highlightQueryTerms(Document document, String fieldName,
         Pattern [] queryPatterns)
     {
-        String field = StringEscapeUtils
-            .escapeHtml((String) document.getField(fieldName));
+        String field = (String) document.getField(fieldName);
 
         if (StringUtils.isBlank(field))
         {
             return;
         }
+
+        // I have NO IDEA why we have to have this new String() here.
+        // Without it, the value gets lost during SimpleXML serialization.
+        // The same thing happens in WebDocumentSource.
+        field = new String(escapeLtGt(field));
 
         for (Pattern pattern : queryPatterns)
         {
@@ -99,5 +103,15 @@ public class QueryWordHighlighter extends ProcessingComponentBase
         }
 
         document.addField(fieldName + HIGHLIGHTED_FIELD_NAME_SUFFIX, field);
+    }
+
+    private static final Pattern LT_PATTERN = Pattern.compile("<");
+    private static final Pattern GT_PATTERN = Pattern.compile(">");
+
+    private String escapeLtGt(String field)
+    {
+        field = LT_PATTERN.matcher(field).replaceAll("&lt;");
+        field = GT_PATTERN.matcher(field).replaceAll("&gt;");
+        return field;
     }
 }

@@ -20,11 +20,29 @@ public class QueryWordHighlighterTest
     }
 
     @Test
+    public void testHtmlInSnippet()
+    {
+        check("test", "test <div>test</div>", "<b>test</b> &lt;div&gt;<b>test</b>&lt;/div&gt;");
+    }
+
+    @Test
+    public void testHtmlInQuery()
+    {
+        check("<div> tag", "<div> tag", "<b>&lt;div&gt;</b> <b>tag</b>");
+    }
+    
+    @Test
     public void testOneWordQuery()
     {
         check("test", "this is a test", "this is a <b>test</b>");
     }
-
+    
+    @Test
+    public void testUtf8Query()
+    {
+        check("żółć", "Żółć żółć żÓłć", "<b>Żółć</b> <b>żółć</b> <b>żÓłć</b>");
+    }
+    
     @Test
     public void testMultiWordQuery()
     {

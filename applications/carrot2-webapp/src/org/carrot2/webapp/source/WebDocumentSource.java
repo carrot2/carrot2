@@ -12,8 +12,7 @@ import org.carrot2.source.google.GoogleDocumentSource;
 import org.carrot2.util.ExecutorServiceUtils;
 import org.carrot2.util.attribute.Bindable;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 
 /**
  * A {@link DocumentSource} that folds in a few initial hits from Google API into the

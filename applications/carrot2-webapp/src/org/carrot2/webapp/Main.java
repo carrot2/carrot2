@@ -11,6 +11,8 @@ public class Main
      */
     private void startJetty(final int port) throws Exception
     {
+        System.setProperty("org.mortbay.util.URI.charset", "utf-8");
+        
         final Server server = new Server();
         SelectChannelConnector connector = new SelectChannelConnector();
         connector.setPort(port);

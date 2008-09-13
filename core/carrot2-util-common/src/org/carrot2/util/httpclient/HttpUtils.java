@@ -30,7 +30,8 @@ public class HttpUtils
      * Opens a stream for the provided URL using the GET method, unwraps a gzip compressed
      * stream if supported by the other end of the connection.
      * 
-     * @param url the URL to open
+     * @param url the URL to open. The URL must be properly escaped, this method will
+     *            <b>not</b> perform any escaping.
      * @param status if not <code>null</code>, additional response status will be stored
      *            in the provided map. See {@link #STATUS_CODE} and
      *            {@link #STATUS_COMPRESSION_USED}.
@@ -47,7 +48,7 @@ public class HttpUtils
 
         final GetMethod request = new GetMethod();
 
-        request.setURI(new URI(url, false));
+        request.setURI(new URI(url, true));
         request.setRequestHeader(HttpHeaders.URL_ENCODED);
         request.setRequestHeader(HttpHeaders.GZIP_ENCODING);
         for (Header header : headers)

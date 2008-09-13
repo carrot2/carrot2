@@ -3,7 +3,7 @@ package org.carrot2.util.simplexml;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import org.simpleframework.xml.Root;
+import org.simpleframework.xml.*;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
@@ -16,24 +16,19 @@ import com.google.common.collect.Lists;
 public class TypeStringValuePair
 {
     /** Optional key for the value */
-    @org.simpleframework.xml.Attribute(required = false)
+    @Attribute(required = false)
     private String key;
 
     /** Type of the value to be serialized. */
-    @org.simpleframework.xml.Attribute
+    @Attribute
     private Class<?> type;
 
     /** Value as string. */
-    @org.simpleframework.xml.Element(required = false, data = true)
+    @Element(required = false, data = true)
     private String value;
 
     public TypeStringValuePair()
     {
-    }
-
-    public TypeStringValuePair(Class<?> type, String value)
-    {
-        this(type, value, null);
     }
 
     public TypeStringValuePair(Class<?> type, String key, String value)
