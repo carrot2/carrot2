@@ -91,10 +91,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
             return;
         }
 
-        // I have NO IDEA why we have to have this new String() here.
-        // Without it, the value gets lost during SimpleXML serialization.
-        // The same thing happens in WebDocumentSource.
-        field = new String(escapeLtGt(field));
+        field = escapeLtGt(field);
 
         for (Pattern pattern : queryPatterns)
         {

@@ -157,7 +157,10 @@ public final class Document
      */
     public Document addField(String name, Object value)
     {
-        fields.put(name, value);
+        synchronized (fields)
+        {
+            fields.put(name, value);
+        }
         return this;
     }
 
@@ -256,6 +259,7 @@ public final class Document
         fields.put(CONTENT_URL, url);
         if (sources != null)
         {
+            // We're just creating this object, so no need to synchronize here
             fields.put(SOURCES, sources);
         }
 

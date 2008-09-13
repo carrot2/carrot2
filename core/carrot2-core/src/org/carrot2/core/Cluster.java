@@ -367,7 +367,10 @@ public final class Cluster
      */
     public <T> Cluster setAttribute(String key, T value)
     {
-        attributes.put(key, value);
+        synchronized (attributes)
+        {
+            attributes.put(key, value);
+        }
         return this;
     }
 
@@ -669,6 +672,8 @@ public final class Cluster
 
         if (score != null)
         {
+            // We're creating a new object which reference to which should not
+            // yet escape, so no need to synchronize here
             attributes.put(SCORE, score);
         }
 

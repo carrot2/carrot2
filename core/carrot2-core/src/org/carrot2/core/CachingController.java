@@ -32,6 +32,12 @@ import com.google.common.collect.*;
  * given to initialization: {@link #init(Map)} should be called before other threads are
  * allowed to see this object and {@link #dispose()} should be called after all threads
  * leave {@link #process(Map, Class...)}.
+ * <p>
+ * Notice for {@link ProcessingComponent} developers: If data caching is used (see
+ * {@link #CachingController(Class...)}), values of {@link Output} attributes produced by
+ * the components whose output is to be cached (e.g. the {@link Document} instances in
+ * case {@link DocumentSource} output is cached) may be accessed concurrently and
+ * therefore must be thread-safe.
  */
 public final class CachingController implements Controller
 {
