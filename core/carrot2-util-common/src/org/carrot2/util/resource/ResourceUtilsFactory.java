@@ -27,7 +27,7 @@ public final class ResourceUtilsFactory
     public static volatile ResourceUtils defaultResourceUtils;
 
     /** Default list of {@link ResourceLocator}s. */
-    public static ArrayList<ResourceLocator> defaultResourceLocators = Lists
+    public static final ArrayList<ResourceLocator> defaultResourceLocators = Lists
         .newArrayList();
 
     /*

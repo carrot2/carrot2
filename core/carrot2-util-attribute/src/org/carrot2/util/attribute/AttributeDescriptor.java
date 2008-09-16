@@ -2,9 +2,13 @@ package org.carrot2.util.attribute;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.ClassUtils;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.load.Persist;
 
 /**
  * Provides a full description of an individual attribute, including its {@link #key},
@@ -12,25 +16,29 @@ import org.apache.commons.lang.ClassUtils;
  * human-readable {@link #metadata} about the attribute such as title, label or
  * description.
  * <p>
- * {@link AttributeDescriptor}s can be obtained from {@link BindableDescriptor}s, which
- * in turn are built by {@link BindableDescriptorBuilder#buildDescriptor(Object)};
+ * {@link AttributeDescriptor}s can be obtained from {@link BindableDescriptor}s, which in
+ * turn are built by {@link BindableDescriptorBuilder#buildDescriptor(Object)};
  */
+@Root(name = "attribute-descriptor")
 public class AttributeDescriptor
 {
     /**
      * Human-readable metadata describing the attribute.
      */
+    @Element
     public final AttributeMetadata metadata;
 
     /**
      * Type of the attribute as defined by {@link Attribute#key()}.
      */
+    @org.simpleframework.xml.Attribute
     public final String key;
 
     /**
      * Type of the attribute. Primitive types are represented by their corresponding
      * wrapper/ box types.
      */
+    @org.simpleframework.xml.Attribute
     public final Class<?> type;
 
     /**
@@ -47,22 +55,39 @@ public class AttributeDescriptor
     /**
      * <code>True</code> if the attribute is an {@link Input} attribute.
      */
+    @org.simpleframework.xml.Attribute(name = "input")
     public final boolean inputAttribute;
 
     /**
      * <code>True</code> if the attribute is an {@link Output} attribute.
      */
+    @org.simpleframework.xml.Attribute(name = "output")
     public final boolean outputAttribute;
 
     /**
      * <code>True</code> if the attribute is a {@link Required} attribute.
      */
+    @org.simpleframework.xml.Attribute(name = "required")
     public final boolean requiredAttribute;
 
     /**
      * Field representing the attribute.
      */
-    final Field attributeField;
+    public final Field attributeField;
+
+    /**
+     * Name of field representing the attribute, for serialization only.
+     */
+    @org.simpleframework.xml.Attribute(name = "field")
+    @SuppressWarnings("unused")
+    private String attributeFieldString;
+
+    /**
+     * Default value as string.
+     */
+    @org.simpleframework.xml.Attribute(name = "default", required = false)
+    @SuppressWarnings("unused")
+    private String defaultValueString;
 
     /**
      * 
@@ -99,5 +124,23 @@ public class AttributeDescriptor
     public String toString()
     {
         return key + "=" + type;
+    }
+
+    @Persist
+    @SuppressWarnings("unused")
+    private void beforeSerialization()
+    {
+        attributeFieldString = attributeField.getName();
+        if (inputAttribute && defaultValue != null)
+        {
+            if (defaultValue instanceof Collection<?>)
+            {
+                if (((Collection<?>) defaultValue).isEmpty())
+                {
+                    return;
+                }
+            }
+            defaultValueString = defaultValue.toString();
+        }
     }
 }

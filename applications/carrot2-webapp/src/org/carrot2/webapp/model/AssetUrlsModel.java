@@ -1,9 +1,10 @@
 package org.carrot2.webapp.model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.carrot2.util.ListUtils;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.carrot2.webapp.util.UserAgentUtils;
 import org.simpleframework.xml.ElementList;
@@ -14,10 +15,10 @@ import org.simpleframework.xml.ElementList;
 public class AssetUrlsModel
 {
     @ElementList(name = "css-urls", entry = "css-url")
-    public final List<String> cssUrls;
+    public final ArrayList<String> cssUrls;
 
     @ElementList(name = "js-urls", entry = "js-url")
-    public final List<String> jsUrls;
+    public final ArrayList<String> jsUrls;
 
     public AssetUrlsModel(SkinModel currentSkin, HttpServletRequest request,
         JawrUrlGenerator generator)
@@ -25,8 +26,9 @@ public class AssetUrlsModel
         final String sprite = UserAgentUtils.isModernBrowser(request)
             && currentSkin.sprited ? "-sprite" : "";
 
-        this.cssUrls = generator.getCssUrls(request, "/" + currentSkin.id + sprite
-            + ".jcss");
-        this.jsUrls = generator.getJsUrls(request, "/" + currentSkin.id + ".jjs");
+        this.cssUrls = ListUtils.asArrayList(generator.getCssUrls(request, "/"
+            + currentSkin.id + sprite + ".jcss"));
+        this.jsUrls = ListUtils.asArrayList(generator.getJsUrls(request, "/"
+            + currentSkin.id + ".jjs"));
     }
 }

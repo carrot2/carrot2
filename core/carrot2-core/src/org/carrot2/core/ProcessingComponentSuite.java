@@ -2,14 +2,12 @@ package org.carrot2.core;
 
 import java.io.InputStream;
 import java.io.Writer;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import org.carrot2.core.ProcessingComponentDescriptor.Position;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.resource.Resource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
-import org.carrot2.util.simplexml.NoClassAttributePersistenceStrategy;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Commit;
@@ -25,20 +23,20 @@ import com.google.common.collect.*;
 public class ProcessingComponentSuite
 {
     @ElementList(inline = true, required = false, entry = "include")
-    List<ProcessingComponentSuiteInclude> includes;
+    ArrayList<ProcessingComponentSuiteInclude> includes;
 
     @ElementList(name = "sources", entry = "source", required = false)
-    private List<DocumentSourceDescriptor> sources;
+    private ArrayList<DocumentSourceDescriptor> sources;
 
     @ElementList(name = "algorithms", entry = "algorithm", required = false)
-    private List<ProcessingComponentDescriptor> algorithms;
+    private ArrayList<ProcessingComponentDescriptor> algorithms;
 
     public ProcessingComponentSuite()
     {
     }
 
-    public ProcessingComponentSuite(List<DocumentSourceDescriptor> sources,
-        List<ProcessingComponentDescriptor> algorithms)
+    public ProcessingComponentSuite(ArrayList<DocumentSourceDescriptor> sources,
+        ArrayList<ProcessingComponentDescriptor> algorithms)
     {
         this.algorithms = algorithms;
         this.sources = sources;
@@ -72,19 +70,19 @@ public class ProcessingComponentSuite
     {
         if (sources == null)
         {
-            sources = Collections.emptyList();
+            sources = Lists.newArrayList();
         }
         if (algorithms == null)
         {
-            algorithms = Collections.emptyList();
+            algorithms = Lists.newArrayList();
         }
         if (includes == null)
         {
-            includes = Collections.emptyList();
+            includes = Lists.newArrayList();
         }
 
-        final List<DocumentSourceDescriptor> mergedSources = Lists.newArrayList();
-        final List<ProcessingComponentDescriptor> mergedAlgorithms = Lists.newArrayList();
+        final ArrayList<DocumentSourceDescriptor> mergedSources = Lists.newArrayList();
+        final ArrayList<ProcessingComponentDescriptor> mergedAlgorithms = Lists.newArrayList();
 
         // Load included suites. Currently, we don't check for cycles.
         final List<ProcessingComponentSuite> suites = Lists.newArrayList();
@@ -212,6 +210,6 @@ public class ProcessingComponentSuite
      */
     public void serialize(Writer writer) throws Exception
     {
-        new Persister(NoClassAttributePersistenceStrategy.INSTANCE).write(this, writer);
+        new Persister().write(this, writer);
     }
 }

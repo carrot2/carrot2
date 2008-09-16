@@ -46,6 +46,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      */
     @Processing
     @Output
+    @Internal
     @Attribute(key = AttributeNames.CLUSTERS)
     public List<Cluster> clusters = null;
 

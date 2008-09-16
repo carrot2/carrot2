@@ -1,9 +1,10 @@
 package org.carrot2.webapp.model;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.util.ListUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.simplexml.TypeStringValuePair;
 import org.carrot2.webapp.QueryProcessorServlet;
@@ -65,7 +66,7 @@ public class RequestModel
 
     @SuppressWarnings("unused")
     @ElementList(entry = "parameter", inline = true, required = false)
-    private List<TypeStringValuePair> otherParametersToSerialize;
+    private ArrayList<TypeStringValuePair> otherParametersToSerialize;
 
     public void afterParametersBound(Map<String, Object> remainingHttpParameters)
     {
@@ -80,7 +81,7 @@ public class RequestModel
         }
 
         otherParameters = remainingHttpParameters;
-        otherParametersToSerialize = TypeStringValuePair
-            .toTypeStringValuePairs(remainingHttpParameters);
+        otherParametersToSerialize = ListUtils.asArrayList(TypeStringValuePair
+            .toTypeStringValuePairs(remainingHttpParameters));
     }
 }

@@ -50,6 +50,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
      */
     @Processing
     @Output
+    @Internal
     @Attribute(key = AttributeNames.CLUSTERS)
     public Collection<Cluster> clusters = null;
 

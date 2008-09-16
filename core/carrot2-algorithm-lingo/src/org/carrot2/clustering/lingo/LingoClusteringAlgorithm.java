@@ -49,6 +49,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      */
     @Processing
     @Output
+    @Internal
     @Attribute(key = AttributeNames.CLUSTERS)
     public List<Cluster> clusters = null;
 

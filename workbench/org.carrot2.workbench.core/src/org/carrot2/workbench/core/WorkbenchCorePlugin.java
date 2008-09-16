@@ -22,7 +22,6 @@ import org.carrot2.workbench.core.ui.adapters.SearchResultAdapterFactory;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.*;
 
@@ -259,8 +258,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         }
 
         // Merge all available suites
-        final List<DocumentSourceDescriptor> sources = Lists.newArrayList();
-        final List<ProcessingComponentDescriptor> algorithms = Lists.newArrayList();
+        final ArrayList<DocumentSourceDescriptor> sources = Lists.newArrayList();
+        final ArrayList<ProcessingComponentDescriptor> algorithms = Lists.newArrayList();
 
         for (ProcessingComponentSuite s : suites)
         {

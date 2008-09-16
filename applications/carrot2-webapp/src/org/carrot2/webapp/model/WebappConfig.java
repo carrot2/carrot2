@@ -1,7 +1,7 @@
 package org.carrot2.webapp.model;
 
 import java.io.InputStream;
-import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.ProcessingComponentSuite;
@@ -23,13 +23,13 @@ public class WebappConfig
     public ProcessingComponentSuite components;
 
     @ElementList(entry = "skin")
-    public List<SkinModel> skins;
+    public ArrayList<SkinModel> skins;
 
     @ElementList(entry = "size")
-    public List<ResultsSizeModel> sizes;
+    public ArrayList<ResultsSizeModel> sizes;
 
     @ElementList(entry = "view")
-    public List<ResultsViewModel> views;
+    public ArrayList<ResultsViewModel> views;
 
     @Attribute(name = "skins-folder")
     public String skinsFolder;

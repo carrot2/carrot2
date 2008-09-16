@@ -1,0 +1,96 @@
+<project name="Carrot2 Documentation" default="fail">
+
+  <!-- Documentation source dir -->
+  <property name="doc.docbook.dir" location="doc/docbook" />
+  <property name="doc.xsl.dir" location="doc/xsl" />
+  <property name="doc.src.dir" location="doc/src" />
+
+  <!-- Output directory for the documentation -->
+  <property name="doc.build.dir" location="tmp/doc/build" />
+  <property name="doc.output.dir" location="tmp/doc" />
+  
+  <property name="doc.classes.dir" location="${doc.build.dir}/classes" />
+
+  <!--
+       Builds Carrot2 Manual
+    -->
+  <target name="doc" depends="docbook.check, doc.prepare, doc.components" description="Builds Carrot2 Manual">
+    <mkdir dir="${doc.output.dir}" />
+    <mkdir dir="${doc.output.dir}/html" />
+
+    <!-- Build the actual manual -->
+    <xslt in="${doc.build.dir}/docbook/carrot2-manual.xml"
+          style="${docbook.xsl.dir}/html/docbook.xsl"
+          out="${doc.output.dir}/html/carrot2-manual.html"
+          classpath="${xalan.home}" force="yes">
+      <xmlcatalog>
+        <dtd publicId="-//OASIS//DTD DocBook V5.0//EN"
+             location="${docbook.dtd.dir}/docbook.dtd"/>
+      </xmlcatalog>
+      <classpath>
+        <fileset dir="${xalan.home}">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>
+    </xslt>
+  </target>
+
+  <target name="doc.prepare">
+    <mkdir dir="${doc.build.dir}" />
+      
+    <copy todir="${doc.build.dir}/docbook">
+      <fileset dir="${doc.docbook.dir}" />
+    </copy>
+      
+    <copy todir="${doc.build.dir}/xsl">
+      <fileset dir="${doc.xsl.dir}" />
+    </copy>
+  </target>
+
+  <target name="doc.components" depends="jar">
+    <mkdir dir="${doc.classes.dir}" />
+    
+    <javac destdir="${doc.classes.dir}"
+           compiler="modern"
+           source="1.5"
+           target="1.5"
+           encoding="UTF-8"
+           debug="true"
+           debuglevel="lines">
+      <src path="doc/src" />
+      <classpath>
+        <path refid="core.jar.classpath" />
+        <path refid="lib.classpath" />
+      </classpath>
+    </javac>
+
+    <java classname="org.carrot2.core.ProcessingComponentDumper">
+      <classpath>
+        <path refid="core.jar.classpath" />
+        <path refid="lib.classpath" />
+        <path path="${doc.classes.dir}" />
+      </classpath>
+      <arg value="carrot2-default/suite-doc.xml" />
+      <arg value="${doc.build.dir}/xsl/components-metadata.xml" />
+    </java>
+
+    <xslt in="${doc.build.dir}/docbook/components.template.xml"
+          style="${doc.build.dir}/xsl/attributes-to-docbook.xsl"
+          out="${doc.build.dir}/docbook/components.xml">
+    </xslt>
+  </target>
+  
+  <!--
+       Checks for required DocBook resources.
+    -->
+  <target name="docbook.check">
+    <fail unless="docbook.xsl.dir" message="Please specify docbook.xsl.dir" />
+    <fail unless="docbook.dtd.dir" message="Please specify docbook.dtd.dir" />
+    <fail unless="xalan.home" message="Please specify xalan.home" />
+  </target>
+
+  <target name="fail">
+    <fail>Please use the top-level build file to build documentation.</fail>
+  </target>
+</project>
+

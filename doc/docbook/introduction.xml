@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<chapter xml:id="chapter.introduction" xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <title>Introduction</title>
+  <subtitle>What is &C2; and what it is not</subtitle>
+
+  <para>
+    &C2; is a library and a set of supporting applications you can use to build
+    a search results clustering engine. Such an engine will <emphasis
+    role="bold">organize your search results into topics</emphasis>, fully
+    automatically and without external kowledge such as taxonomies or
+    preclassified content.
+  </para>
+
+  <para>
+    &C2; contains component for fetching search results from several search
+    engines, such as Yahoo!, MSN Live, Google, but it also supports other
+    sources of documents like Lucene, Solr or Google Desktop index. &C2;
+    contains two document clustering algorighms designed specifically for
+    search results clustering: Suffix Tree Clustering and Lingo.
+  </para>
+
+  <section>
+    <title>&C2; application suite</title>
+
+    <para>
+      &C2; comes with a number of supporting applications that you can use to tune
+      clustering results and expose &C2; clustering through different protocols. 
+    </para>
+    
+    <para>
+      &C2; application suite contains:
+    </para>
+    
+    <itemizedlist>
+      <listitem>
+        <formalpara>
+          <title>&DCW;</title>
+          <para>
+            You can use &DCW; to experiment with &C2; clustering using data from common search
+            engines or your own data. &DCW; allows you to tune the clustering algorithm
+            attributes and see how the results change in real time.
+          </para>
+        </formalpara>
+      </listitem>
+        
+      <listitem>
+        <formalpara>
+          <title>&DCS;</title>
+          <para>
+            &DCS; exposes &C2; clustering as a REST service.
+          </para>
+        </formalpara>
+      </listitem>
+    </itemizedlist>
+  </section>
+</chapter>

@@ -89,7 +89,7 @@ public class WebDocumentSource extends SimpleSearchEngine
             {
                 googleDocumentsByUrl.put((String) googleDocument
                     .getField(Document.CONTENT_URL), googleDocument);
-                googleDocument.addField(Document.SOURCES, Lists.newArrayList(new String("Google")));
+                googleDocument.addField(Document.SOURCES, Lists.newArrayList("Google"));
             }
             response.results.addAll(google.documents);
 
@@ -103,7 +103,7 @@ public class WebDocumentSource extends SimpleSearchEngine
                         .getField(Document.SOURCES);
                     if (!sources.contains("Google"))
                     {
-                        sources.add(new String("Google"));
+                        sources.add("Google");
                     }
                     matchingGoogleDocument.addField(Document.SOURCES, sources);
                 }

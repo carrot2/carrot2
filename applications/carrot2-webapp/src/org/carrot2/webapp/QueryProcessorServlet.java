@@ -12,7 +12,6 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
-import org.carrot2.util.simplexml.NoClassAttributePersistenceStrategy;
 import org.carrot2.webapp.filter.QueryWordHighlighter;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.carrot2.webapp.model.*;
@@ -218,8 +217,7 @@ public class QueryProcessorServlet extends HttpServlet
         final PageModel pageModel = new PageModel(request, requestModel,
             jawrUrlGenerator, processingResult, processingException);
 
-        final Persister persister = new Persister(
-            NoClassAttributePersistenceStrategy.INSTANCE, getPersisterFormat(pageModel));
+        final Persister persister = new Persister(getPersisterFormat(pageModel));
 
         if (RequestType.CARROT2.equals(requestModel.type))
         {

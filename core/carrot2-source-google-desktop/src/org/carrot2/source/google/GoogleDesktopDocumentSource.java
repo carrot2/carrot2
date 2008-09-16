@@ -28,7 +28,7 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Input
     @Processing
     @Attribute
-    public static String queryUrl = getQueryUrlFromRegistry();
+    public String queryUrl = getQueryUrlFromRegistry();
 
     /**
      * Keep query word highlighting. Google by default highlights query words in

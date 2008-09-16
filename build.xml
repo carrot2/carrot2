@@ -5,6 +5,7 @@
 <project name="Carrot2 3.0" default="test">
   <import file="applications/carrot2-webapp/build.xml" />
   <import file="applications/carrot2-dcs/build.xml" />
+  <import file="doc/build.xml" />
 
   <!-- Import local properties -->
   <property file="local.properties" />
@@ -96,6 +97,13 @@
     <path location="core/carrot2-component-suites/suites" />
     <path location="${build.dir}" />
     <path location="${clover.jar}" />
+  </path>
+
+  <!-- Path to the Carrot2 core JAR -->
+  <path id="core.jar.classpath">
+    <fileset dir="${jar.dir}">
+      <include name="*.jar" />
+    </fileset>
   </path>
 
   <!-- 
@@ -569,13 +577,30 @@
   <!-- 
        Core JAR.
     -->
-  <target name="jar" depends="clean.classes, compile, attributes, resources">
+  <target name="jar" depends="jar.check, jar.build">
     <mkdir dir="${jar.dir}" />
     <jar destfile="${jar.dir}/carrot2-core.jar">
       <fileset dir="${build.dir}" />
     </jar>
   </target>
-  
+
+  <target name="jar.build" unless="jar.exists">
+    <!-- Dependant tasks are always executed, so we need to have antalls here -->
+    <antcall target="clean.classes" />
+    <antcall target="compile" />
+    <antcall target="attributes" />
+    <antcall target="resources" />
+
+    <mkdir dir="${jar.dir}" />
+    <jar destfile="${jar.dir}/carrot2-core.jar">
+      <fileset dir="${build.dir}" />
+    </jar>
+  </target>
+
+  <target name="jar.check">
+    <available file="${jar.dir}/carrot2-core.jar" property="jar.exists" />
+  </target>
+
   <!-- 
        Flattened lib directory.
     -->
