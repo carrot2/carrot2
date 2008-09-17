@@ -84,9 +84,11 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
      */
     static String getQueryUrlFromRegistry()
     {
-        final String osName = System.getProperty("os.name");
-        if (org.apache.commons.lang.StringUtils.isBlank(osName)
-            || !osName.contains("Windows"))
+        /*
+         * Should we exclude Vista here (because it will tend to show this blocking
+         * hack-prevention screen.. forgot what the heck the name was.
+         */
+        if (!org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS)
         {
             return null;
         }
