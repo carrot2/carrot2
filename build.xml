@@ -286,6 +286,7 @@
     <attribute name="output.dir" />
     <attribute name="copy.to" />
     <sequential>
+      <mkdir dir="@{output.dir}" />
       <attributes-xml java.source="@{java.source}" output.dir="@{output.dir}" />
       <copy todir="@{copy.to}">
         <fileset dir="@{output.dir}">
