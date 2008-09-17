@@ -96,6 +96,7 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
 
         try
         {
+			// TODO: see http://issues.carrot2.org/browse/CARROT-381
             final Process process = Runtime.getRuntime().exec(command);
             process.waitFor();
 
