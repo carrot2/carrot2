@@ -1,5 +1,7 @@
 package org.carrot2.source.google;
 
+import java.io.*;
+
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
@@ -98,12 +100,28 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
 
         try
         {
-			// TODO: see http://issues.carrot2.org/browse/CARROT-381
             final Process process = Runtime.getRuntime().exec(command);
+
+            final InputStream is = process.getInputStream();
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            new Thread() {
+                public void run()
+                {
+                    try
+                    {
+                        StreamUtils.copyAndClose(is, baos, 1024 * 4);
+                    }
+                    catch (IOException e)
+                    {
+                        // Ignore.
+                    }
+                }
+            }.start();
+
             process.waitFor();
 
-            final String result = new String(StreamUtils.readFullyAndClose(process
-                .getInputStream()), "UTF-8");
+            final String result = new String(baos.toByteArray(), "UTF-8");
 
             final int p = result.indexOf(stringSymbol);
             if (p == -1)
