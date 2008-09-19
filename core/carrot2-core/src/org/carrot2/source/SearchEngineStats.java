@@ -6,7 +6,7 @@ import org.carrot2.util.attribute.*;
 /**
  * Usage statistics for an instance of {@link MultipageSearchEngine}. 
  */
-@Bindable
+@Bindable(prefix = "SearchEngineStats")
 public final class SearchEngineStats
 {
     /**

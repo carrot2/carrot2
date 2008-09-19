@@ -27,7 +27,7 @@ import org.carrot2.util.attribute.*;
  * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/">Yahoo Boss
  *      Documentation</a>
  */
-@Bindable
+@Bindable(prefix = "BossImageSearchService")
 public final class BossImageSearchService extends BossSearchService
 {
     /**

@@ -21,7 +21,7 @@ import com.google.common.collect.Maps;
  * Performs searches on the PubMed database using its on-line e-utilities:
  * http://eutils.ncbi.nlm.nih.gov/entrez/query/static/eutils_help.html
  */
-@Bindable
+@Bindable(prefix = "PubMedDocumentSource")
 public class PubMedDocumentSource extends SimpleSearchEngine
 {
     /** PubMed search service URL */

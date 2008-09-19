@@ -34,7 +34,7 @@ import com.google.common.collect.Maps;
  * <li>{@link AllTokens#type}</li>
  * </ul>
  */
-@Bindable
+@Bindable(prefix = "Tokenizer")
 public final class Tokenizer
 {
     /**

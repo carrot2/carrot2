@@ -3,7 +3,7 @@
   <attribute-set id="boss-images">
     <value-set>
       <label>Yahoo Boss Images</label>
-      <attribute key="org.carrot2.source.boss.BossDocumentSource.service" type="java.lang.Class">
+      <attribute key="BossDocumentSource.service" type="java.lang.Class">
         <value>class org.carrot2.source.boss.BossImageSearchService</value>
       </attribute>
     </value-set>

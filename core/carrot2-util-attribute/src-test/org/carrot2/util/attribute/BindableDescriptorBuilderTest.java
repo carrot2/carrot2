@@ -89,14 +89,15 @@ public class BindableDescriptorBuilderTest
         // Referenced attributes
         assertThat(bindableDescriptor.bindableDescriptorsInternal).isNotEmpty();
         assertThat(
-            bindableDescriptor.bindableDescriptorsInternal.get(BindableReferenceContainer.class
-                .getDeclaredField("bindableField"))).isNotNull().contains(
-            AttributeUtils.getKey(referenceClass, "processingInputInt"),
-            new AttributeDescriptor(
-                referenceClass.getDeclaredField("processingInputInt"), 10, Lists
+            bindableDescriptor.bindableDescriptorsInternal
+                .get(BindableReferenceContainer.class.getDeclaredField("bindableField")))
+            .isNotNull().contains(
+                AttributeUtils.getKey(referenceClass, "processingInputInt"),
+                new AttributeDescriptor(referenceClass
+                    .getDeclaredField("processingInputInt"), 10, Lists
                     .<Annotation> newArrayList(), new AttributeMetadata(
                     "Processing input int", null, null))).hasMetadata(
-            new BindableMetadata());
+                new BindableMetadata());
     }
 
     @Test
@@ -110,8 +111,8 @@ public class BindableDescriptorBuilderTest
 
         // Bind init input attributes
         final Map<String, Object> attributes = Maps.newHashMap();
-        attributes.put(BindableReferenceContainer.class.getName() + ".bindableAttribute",
-            BindableReferenceImpl2.class);
+        attributes.put(AttributeUtils.getKey(BindableReferenceContainer.class,
+            "bindableAttribute"), BindableReferenceImpl2.class);
         AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
 
         final BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
@@ -129,18 +130,21 @@ public class BindableDescriptorBuilderTest
         // Referenced attributes -- regular field
         assertThat(bindableDescriptor.bindableDescriptorsInternal).isNotEmpty();
         assertThat(
-            bindableDescriptor.bindableDescriptorsInternal.get(BindableReferenceContainer.class
-                .getDeclaredField("bindableField"))).isNotNull().contains(
-            AttributeUtils.getKey(BindableReferenceImpl1.class, "processingInputInt"),
-            new AttributeDescriptor(referenceClass1
-                .getDeclaredField("processingInputInt"), 10, Lists
-                .<Annotation> newArrayList(), new AttributeMetadata(
-                "Processing input int", null, null)));
+            bindableDescriptor.bindableDescriptorsInternal
+                .get(BindableReferenceContainer.class.getDeclaredField("bindableField")))
+            .isNotNull()
+            .contains(
+                AttributeUtils.getKey(BindableReferenceImpl1.class, "processingInputInt"),
+                new AttributeDescriptor(referenceClass1
+                    .getDeclaredField("processingInputInt"), 10, Lists
+                    .<Annotation> newArrayList(), new AttributeMetadata(
+                    "Processing input int", null, null)));
 
         // Referenced attributes -- attribute field
         assertThat(
-            bindableDescriptor.bindableDescriptorsInternal.get(BindableReferenceContainer.class
-                .getDeclaredField("bindableAttribute"))).isNotNull().contains(
+            bindableDescriptor.bindableDescriptorsInternal
+                .get(BindableReferenceContainer.class
+                    .getDeclaredField("bindableAttribute"))).isNotNull().contains(
             AttributeUtils.getKey(BindableReferenceImpl2.class, "initInputInt"),
             new AttributeDescriptor(referenceClass2.getDeclaredField("initInputInt"), 12,
                 Lists.<Annotation> newArrayList(), new AttributeMetadata(

@@ -15,7 +15,7 @@ import org.carrot2.util.resource.Resource;
 /**
  * Fetches documents from an instance of Google Desktop search engine.
  */
-@Bindable
+@Bindable(prefix = "GoogleDesktopDocumentSource")
 public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
 {
     /**

@@ -9,7 +9,7 @@ import org.carrot2.util.attribute.*;
  * Accepts labels that do not consist only of numeric tokens and start with a non-numeric
  * token.
  */
-@Bindable
+@Bindable(prefix = "NumericLabelFilter")
 public class NumericLabelFilter extends SingleLabelFilterBase
 {
     /**

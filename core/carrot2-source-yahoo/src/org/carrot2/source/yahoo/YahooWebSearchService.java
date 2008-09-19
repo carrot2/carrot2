@@ -16,7 +16,7 @@ import org.carrot2.util.attribute.*;
  * @see <a href="http://developer.yahoo.com/search/web/V1/webSearch.html">Yahoo Web Search
  *      Documentation</a>
  */
-@Bindable
+@Bindable(prefix = "YahooWebSearchService")
 public final class YahooWebSearchService extends YahooSearchService
 {
     /**

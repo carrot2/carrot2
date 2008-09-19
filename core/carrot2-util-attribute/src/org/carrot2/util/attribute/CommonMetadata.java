@@ -14,7 +14,7 @@ public class CommonMetadata
     @Element(required = false)
     protected String label;
 
-    @Element(required = false)
+    @Element(required = false, data = true)
     protected String description;
 
     /**

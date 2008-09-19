@@ -8,7 +8,7 @@ import org.carrot2.util.attribute.*;
 /**
  * Accepts labels that do not consist only of query words.
  */
-@Bindable
+@Bindable(prefix = "QueryLabelFilter")
 public class QueryLabelFilter extends SingleLabelFilterBase
 {
     /**

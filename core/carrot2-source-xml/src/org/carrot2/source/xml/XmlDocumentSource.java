@@ -23,10 +23,7 @@ import com.google.common.collect.Maps;
  * stylesheet can be applied to the XML stream before it is deserialized into Carrot2
  * data.
  */
-/**
- *
- */
-@Bindable
+@Bindable(prefix = "XmlDocumentSource")
 public class XmlDocumentSource extends ProcessingComponentBase implements DocumentSource
 {
     /**
@@ -38,6 +35,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * {@link ParameterizedUrlResource}. It allows you to specify attribute place holders
      * in the URL that will be replaced during runtime. The place holder format is
      * <code>${attribute}</code>. The following attributes will be resolved:
+     * </p>
      * <ul>
      * <li><code>query</code> will be replaced with the current query being processed. If
      * the query has not been provided, this attribute will be substituted with an empty
@@ -70,9 +68,11 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * time. The stylesheet provided on initialization will be cached for the life time of
      * the component, while processing-time style sheets will be compiled every time
      * processing is requested and will override the initialization-time stylesheet.
+     * </p>
      * <p>
      * To pass additional parameters to the XSLT transformer, use the
      * {@link #xsltParameters} attribute.
+     * </p>
      * 
      * @label XSLT stylesheet
      * @level Medium

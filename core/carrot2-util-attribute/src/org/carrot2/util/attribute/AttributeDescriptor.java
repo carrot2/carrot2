@@ -2,13 +2,14 @@ package org.carrot2.util.attribute;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.lang.ClassUtils;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Persist;
+
+import com.google.common.collect.Lists;
 
 /**
  * Provides a full description of an individual attribute, including its {@link #key},
@@ -55,13 +56,11 @@ public class AttributeDescriptor
     /**
      * <code>True</code> if the attribute is an {@link Input} attribute.
      */
-    @org.simpleframework.xml.Attribute(name = "input")
     public final boolean inputAttribute;
 
     /**
      * <code>True</code> if the attribute is an {@link Output} attribute.
      */
-    @org.simpleframework.xml.Attribute(name = "output")
     public final boolean outputAttribute;
 
     /**
@@ -76,18 +75,22 @@ public class AttributeDescriptor
     public final Field attributeField;
 
     /**
-     * Name of field representing the attribute, for serialization only.
+     * Name of field representing the attribute, for serialization only. Only for
+     * serialization purposes.
      */
     @org.simpleframework.xml.Attribute(name = "field")
     @SuppressWarnings("unused")
     private String attributeFieldString;
 
     /**
-     * Default value as string.
+     * Default value as string. Only for serialization purposes.
      */
     @org.simpleframework.xml.Attribute(name = "default", required = false)
     @SuppressWarnings("unused")
     private String defaultValueString;
+
+    @ElementList(entry = "annotation")
+    private ArrayList<String> annotations;
 
     /**
      * 
@@ -140,7 +143,22 @@ public class AttributeDescriptor
                     return;
                 }
             }
-            defaultValueString = defaultValue.toString();
+
+            if (attributeField.getAnnotation(ImplementingClasses.class) != null)
+            {
+                defaultValueString = defaultValue.getClass().getName();
+            }
+            else
+            {
+                defaultValueString = defaultValue.toString();
+            }
+        }
+
+        final Annotation [] annotationInstances = attributeField.getAnnotations();
+        annotations = Lists.newArrayListWithExpectedSize(annotationInstances.length);
+        for (Annotation annotation : annotationInstances)
+        {
+            annotations.add(annotation.annotationType().getSimpleName());
         }
     }
 }

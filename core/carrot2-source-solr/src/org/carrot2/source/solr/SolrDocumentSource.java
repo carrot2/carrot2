@@ -15,7 +15,7 @@ import com.google.common.collect.Maps;
  * 
  * @see http://lucene.apache.org/solr/
  */
-@Bindable
+@Bindable(prefix = "SolrDocumentSource")
 public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
 {
     /**

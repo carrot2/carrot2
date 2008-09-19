@@ -2,7 +2,7 @@
   <attribute-set id="news">
     <value-set>
       <label>Yahoo News Default</label>
-      <attribute key="org.carrot2.source.yahoo.YahooDocumentSource.service" type="java.lang.Class">
+      <attribute key="YahooDocumentSource.service" type="java.lang.Class">
         <value>class org.carrot2.source.yahoo.YahooNewsSearchService</value>
       </attribute>
     </value-set>

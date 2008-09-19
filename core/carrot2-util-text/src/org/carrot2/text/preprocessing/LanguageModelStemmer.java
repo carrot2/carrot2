@@ -30,7 +30,7 @@ import com.google.common.collect.Sets;
  * <li>{@link AllWords#FLAG_QUERY} in {@link This class requires that {@link Tokenizer}
  * and {@link CaseNormalizer} be invoked first.
  */
-@Bindable
+@Bindable(prefix = "LanguageModelStemmer")
 public final class LanguageModelStemmer
 {
     /**

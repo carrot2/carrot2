@@ -13,7 +13,7 @@ import org.carrot2.util.resource.Resource;
  * A Carrot2 input component for the eTools service (http://www.etools.ch). For commercial
  * licensing of the eTools feed, please e-mail: contact@comcepta.com.
  */
-@Bindable
+@Bindable(prefix = "EToolsDocumentSource")
 public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
 {
     /**

@@ -22,7 +22,7 @@ import com.microsoft.msnsearch.*;
  * A {@link DocumentSource} fetching {@link Document}s (search results) from Microsoft
  * Live!.
  */
-@Bindable
+@Bindable(prefix = "MicrosoftLiveDocumentSource")
 public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
 {
     /** Application ID assigned to Carrot Search s.c. */

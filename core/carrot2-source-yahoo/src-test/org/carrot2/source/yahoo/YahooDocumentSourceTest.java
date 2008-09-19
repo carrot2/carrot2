@@ -11,6 +11,7 @@ import org.carrot2.core.Document;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.MultipartDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
+import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,7 @@ public class YahooDocumentSourceTest extends
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNewsServiceSearch() throws Exception
     {
-        initAttributes.put(YahooDocumentSource.class.getName() + ".service",
+        initAttributes.put(AttributeUtils.getKey(YahooDocumentSource.class, "service"),
             YahooNewsSearchService.class);
 
         assertTrue(runQuery("iraq", 50) > 0);
@@ -39,13 +40,13 @@ public class YahooDocumentSourceTest extends
     @SuppressWarnings("unchecked")
     public void testNewsThumbnails() throws Exception
     {
-        initAttributes.put(YahooDocumentSource.class.getName() + ".service",
+        initAttributes.put(AttributeUtils.getKey(YahooDocumentSource.class, "service"),
             YahooNewsSearchService.class);
 
         assertTrue(runQuery("world", 200) > 0);
         List<Document> documents = (List<Document>) processingAttributes
             .get(AttributeNames.DOCUMENTS);
-        
+
         // At least one result should have a thumbnail
         int thumbnailCount = 0;
         for (Document document : documents)
@@ -55,7 +56,7 @@ public class YahooDocumentSourceTest extends
                 thumbnailCount++;
             }
         }
-        
+
         assertThat(thumbnailCount).isGreaterThan(0);
     }
 

@@ -37,7 +37,7 @@ import com.google.common.collect.Lists;
  * <p>
  * This class requires that {@link Tokenizer} be invoked first.
  */
-@Bindable
+@Bindable(prefix = "CaseNormalizer")
 public final class CaseNormalizer
 {
     /**

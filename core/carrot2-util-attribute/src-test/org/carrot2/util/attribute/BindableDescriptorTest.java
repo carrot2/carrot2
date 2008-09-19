@@ -307,16 +307,16 @@ public class BindableDescriptorTest
 
     private String keyFromSuperClass(String fieldName)
     {
-        return FilteringSuperClass.class.getName() + "." + fieldName;
+        return AttributeUtils.getKey(FilteringSuperClass.class, fieldName);
     }
 
     private String keyFromSubClass(String fieldName)
     {
-        return FilteringSubClass.class.getName() + "." + fieldName;
+        return AttributeUtils.getKey(FilteringSubClass.class, fieldName);
     }
 
     private String keyFromReferenceClass(String fieldName)
     {
-        return FilteringReferenceClass.class.getName() + "." + fieldName;
+        return AttributeUtils.getKey(FilteringReferenceClass.class, fieldName);
     }
 }

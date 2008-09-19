@@ -18,7 +18,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
  * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/">Yahoo Boss
  *      Documentation</a>
  */
-@Bindable
+@Bindable(prefix = "BossNewsSearchService")
 public final class BossNewsSearchService extends BossSearchService
 {
     /**

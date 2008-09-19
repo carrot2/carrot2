@@ -11,7 +11,7 @@ import org.carrot2.util.attribute.constraint.DoubleRange;
  * See {@link http://project.carrot2.org/publications/osinski-2003-lingo.pdf}, page 31 for
  * a definition of a complete phrase.
  */
-@Bindable
+@Bindable(prefix = "CompleteLabelFilter")
 public class CompleteLabelFilter implements LabelFilter
 {
     /**

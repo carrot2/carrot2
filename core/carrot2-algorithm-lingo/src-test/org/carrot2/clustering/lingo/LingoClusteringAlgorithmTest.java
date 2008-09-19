@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
 import org.carrot2.text.preprocessing.CaseNormalizer;
+import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Test;
 
 /**
@@ -24,7 +25,8 @@ public class LingoClusteringAlgorithmTest extends
     @Test
     public void testClusteringWithDfThreshold()
     {
-        processingAttributes.put(CaseNormalizer.class.getName() + ".dfThreshold", 20);
+        processingAttributes.put(AttributeUtils.getKey(CaseNormalizer.class,
+            "dfThreshold"), 20);
         final Collection<Cluster> clustersWithThreshold = cluster(DOCUMENTS_DATA_MINING)
             .getClusters();
 

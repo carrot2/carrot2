@@ -10,6 +10,7 @@ import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.boss.data.YSearchResponse;
@@ -25,7 +26,7 @@ import com.google.common.collect.Maps;
 /**
  * A superclass shared between various Boss verticals.
  */
-@Bindable
+@Bindable(prefix = "BossSearchService")
 public abstract class BossSearchService
 {
     /** Logger for this object. */
@@ -57,7 +58,7 @@ public abstract class BossSearchService
      * @label Domain restriction
      * @level Medium
      */
-    @Init
+    @Processing
     @Input
     @Attribute
     public String sites;

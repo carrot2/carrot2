@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
 /**
  * Lingo clustering algorithm.
  */
-@Bindable
+@Bindable(prefix = "LingoClusteringAlgorithm")
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     ClusteringAlgorithm
 {

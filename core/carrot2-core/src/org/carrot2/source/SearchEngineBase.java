@@ -7,8 +7,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.attribute.constraint.NotBlank;
@@ -21,7 +20,7 @@ import org.carrot2.util.attribute.constraint.NotBlank;
  * @see SimpleSearchEngine
  * @see MultipageSearchEngine
  */
-@Bindable
+@Bindable(prefix = "SearchEngineBase")
 public abstract class SearchEngineBase extends ProcessingComponentBase implements
     DocumentSource
 {
@@ -78,6 +77,7 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
     @Processing
     @Output
     @Attribute(key = AttributeNames.DOCUMENTS)
+    @Internal
     public Collection<Document> documents;
 
     /**

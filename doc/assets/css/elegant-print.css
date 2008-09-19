@@ -1,0 +1,11 @@
+a {
+  color: black;
+}
+
+.programlisting {
+  border: 1pt dotted #404040;
+}
+
+div.note h3.title, div.important h3.title, div.tip h3.title {
+  border-bottom: 1pt dotted #404040;
+}

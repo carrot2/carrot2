@@ -20,9 +20,9 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
  * <p>
  * For the time being, before you run this example, you need to run
  * {@link BindableMetadataXmlSerializer} giving source code locations of at least
- * <code>carrot2-core</code> and <code>carrot2-source-yahoo</code> as parameters.
- * There is an Eclipse launch configuration that does just that in
- * carrot2-util-attributes/ etc/ eclipse.
+ * <code>carrot2-core</code> and <code>carrot2-source-yahoo</code> as parameters. There is
+ * an Eclipse launch configuration that does just that in carrot2-util-attributes/ etc/
+ * eclipse.
  */
 public class WorkingWithAttributeDescriptors
 {
@@ -42,7 +42,7 @@ public class WorkingWithAttributeDescriptors
         // Notice that for some values of initialization attribute values,
         // you may get different attribute descriptors
         final Map<String, Object> initAttributes = new HashMap<String, Object>();
-        initAttributes.put(YahooDocumentSource.class.getName() + ".service",
+        initAttributes.put(AttributeUtils.getKey(YahooDocumentSource.class, "service"),
             YahooNewsSearchService.class);
         AttributeBinder
             .bind(yahooDocumentSource, initAttributes, Input.class, Init.class);
@@ -75,7 +75,7 @@ public class WorkingWithAttributeDescriptors
         // implementing classes to be shown e.g. in a combo box.
         descriptor = BindableDescriptorBuilder.buildDescriptor(yahooDocumentSource);
         final AttributeDescriptor yahooServiceDescriptor = descriptor.attributeDescriptors
-            .get(YahooDocumentSource.class.getName() + ".service");
+            .get(AttributeUtils.getKey(YahooDocumentSource.class, "service"));
         System.out.println(yahooServiceDescriptor.metadata.getLabel()
             + ": allowed implementations: "
             + Arrays.toString(((ImplementingClasses) yahooServiceDescriptor.constraints

@@ -30,7 +30,7 @@ import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
  * 
  * @see http://www.opensearch.org
  */
-@Bindable
+@Bindable(prefix = "OpenSearchDocumentSource")
 public class OpenSearchDocumentSource extends MultipageSearchEngine
 {
     /** Logger for this class. */
@@ -53,11 +53,11 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * runtime. The format of the place holder is <code>${variable}</code>. The following
      * variables are supported:
      * <ul>
-     * <li><code>searchTerms</code></li> will be replaced by the query <li><code>
-     * startIndex</code></li> index of the first result to be searched. Mutually exclusive
-     * with <code>startPage</code>. <li><code>startPage</code></li> index of the first
-     * result to be searched. Mutually exclusive with <code>startIndex</code>. <li><code>
-     * count</code></li> the number of search results per page
+     * <li><code>searchTerms</code> will be replaced by the query</li> <li><code>
+     * startIndex</code> index of the first result to be searched. Mutually exclusive with
+     * <code>startPage</code></li>. <li><code>startPage</code> index of the first result
+     * to be searched. Mutually exclusive with <code>startIndex</code>.</li><li><code>
+     * count</code> the number of search results per page</li>
      * </ul>
      */
     @Input

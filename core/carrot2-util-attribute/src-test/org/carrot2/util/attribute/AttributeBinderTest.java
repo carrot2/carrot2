@@ -960,9 +960,9 @@ public class AttributeBinderTest
 
         for (int i = 0; i < keysValues.length / 2; i += 2)
         {
-            final String key = clazz.getName() + "." + (String) keysValues[i];
             final Object expectedValue = keysValues[i + 1];
-            final Object actualValue = attributes.get(key);
+            final Object actualValue = attributes.get(AttributeUtils.getKey(clazz,
+                (String) keysValues[i]));
 
             assertEquals("Value of " + clazz.getName() + "#" + keysValues[i],
                 expectedValue, actualValue);

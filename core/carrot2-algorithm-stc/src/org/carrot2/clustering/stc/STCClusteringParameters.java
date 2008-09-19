@@ -11,7 +11,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
  * 
  * @author Dawid Weiss
  */
-@Bindable
+@Bindable(prefix = "STCClusteringAlgorithm")
 public final class STCClusteringParameters
 {
     /**

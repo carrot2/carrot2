@@ -26,7 +26,7 @@ import org.xml.sax.*;
 /**
  * A superclass shared between Web and News searching services.
  */
-@Bindable
+@Bindable(prefix = "YahooSearchService")
 public abstract class YahooSearchService
 {
     /** Logger for this object. */

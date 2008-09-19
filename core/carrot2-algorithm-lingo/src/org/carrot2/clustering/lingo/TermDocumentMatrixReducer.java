@@ -14,7 +14,7 @@ import cern.colt.matrix.DoubleFactory2D;
  * Reduces the dimensionality of a term-document matrix using a matrix factorization
  * algorithm.
  */
-@Bindable
+@Bindable(prefix = "LingoClusteringAlgorithm")
 public class TermDocumentMatrixReducer
 {
     /**

@@ -25,7 +25,7 @@ import cern.jet.math.Functions;
  * Builds cluster labels based on the reduced term-document matrix and assigns documents
  * to the labels.
  */
-@Bindable
+@Bindable(prefix = "LingoClusteringAlgorithm")
 public class ClusterBuilder
 {
     /**

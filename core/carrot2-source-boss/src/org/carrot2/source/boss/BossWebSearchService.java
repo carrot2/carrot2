@@ -19,7 +19,7 @@ import org.carrot2.util.attribute.*;
  * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/">Yahoo Boss
  *      Documentation</a>
  */
-@Bindable
+@Bindable(prefix = "BossWebSearchService")
 public final class BossWebSearchService extends BossSearchService
 {
     /**
@@ -65,10 +65,8 @@ public final class BossWebSearchService extends BossSearchService
      * </ul>
      * <p>
      * You can also specify a format group then exclude an item:
-     * 
-     * <pre>
-     * type=msoffice,-ppt
-     * </pre>
+     * <code>type=msoffice,-ppt</code>.
+     * </p>
      * 
      * @see http://developer.yahoo.com/search/boss/boss_guide/Web_Search.html
      * @group Results filtering

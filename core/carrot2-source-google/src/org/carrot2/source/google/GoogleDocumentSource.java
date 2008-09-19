@@ -27,7 +27,7 @@ import com.google.common.collect.Maps;
  * 
  * @see http://code.google.com/apis/ajaxsearch/documentation/#fonje
  */
-@Bindable
+@Bindable(prefix = "GoogleDocumentSource")
 public class GoogleDocumentSource extends MultipageSearchEngine
 {
     /**

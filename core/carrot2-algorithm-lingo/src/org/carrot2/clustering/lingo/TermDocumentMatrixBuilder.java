@@ -21,7 +21,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 /**
  * Builds a term document matrix based on the provided {@link PreprocessingContext}.
  */
-@Bindable
+@Bindable(prefix ="LingoClusteringAlgorithm")
 public class TermDocumentMatrixBuilder
 {
     /**

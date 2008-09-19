@@ -4,52 +4,71 @@
   <property name="doc.docbook.dir" location="doc/docbook" />
   <property name="doc.xsl.dir" location="doc/xsl" />
   <property name="doc.src.dir" location="doc/src" />
+  <property name="doc.assets.dir" location="doc/assets" />
 
   <!-- Output directory for the documentation -->
   <property name="doc.build.dir" location="tmp/doc/build" />
-  <property name="doc.output.dir" location="tmp/doc" />
-  
+  <property name="doc.output.dir" location="tmp/doc/html" />
+
   <property name="doc.classes.dir" location="${doc.build.dir}/classes" />
 
   <!--
        Builds Carrot2 Manual
     -->
-  <target name="doc" depends="docbook.check, doc.prepare, doc.components" description="Builds Carrot2 Manual">
+  <target name="doc"
+          depends="docbook.check, doc.prepare, doc.components"
+          description="Builds Carrot2 Manual">
     <mkdir dir="${doc.output.dir}" />
-    <mkdir dir="${doc.output.dir}/html" />
 
     <!-- Build the actual manual -->
     <xslt in="${doc.build.dir}/docbook/carrot2-manual.xml"
-          style="${docbook.xsl.dir}/html/docbook.xsl"
-          out="${doc.output.dir}/html/carrot2-manual.html"
-          classpath="${xalan.home}" force="yes">
+          style="${docbook.xsl.dir}/html-custom/docbook.xsl"
+          out="${doc.output.dir}/carrot2-manual.html"
+          classpath="${xalan.home}"
+          force="yes">
       <xmlcatalog>
         <dtd publicId="-//OASIS//DTD DocBook V5.0//EN"
-             location="${docbook.dtd.dir}/docbook.dtd"/>
+             location="${docbook.dtd.dir}/docbook.dtd" />
       </xmlcatalog>
       <classpath>
         <fileset dir="${xalan.home}">
-          <include name="*.jar"/>
+          <include name="*.jar" />
         </fileset>
       </classpath>
     </xslt>
+
+    <copy todir="${doc.output.dir}">
+      <fileset dir="${doc.assets.dir}">
+        <include name="css/**" />
+        <include name="img/**" />
+      </fileset>
+    </copy>
+
+    <antcall target="doc.cleanup" />
   </target>
 
   <target name="doc.prepare">
     <mkdir dir="${doc.build.dir}" />
-      
+
     <copy todir="${doc.build.dir}/docbook">
       <fileset dir="${doc.docbook.dir}" />
     </copy>
-      
+
     <copy todir="${doc.build.dir}/xsl">
-      <fileset dir="${doc.xsl.dir}" />
+      <fileset dir="${doc.xsl.dir}">
+        <include name="*.xsl" />
+      </fileset>
+    </copy>
+
+    <copy todir="${docbook.xsl.dir}/html-custom">
+      <fileset dir="${doc.xsl.dir}/html-custom" />
     </copy>
   </target>
 
-  <target name="doc.components" depends="jar">
+  <target name="doc.components">
+    <antcall target="jar" />
     <mkdir dir="${doc.classes.dir}" />
-    
+
     <javac destdir="${doc.classes.dir}"
            compiler="modern"
            source="1.5"
@@ -64,6 +83,7 @@
       </classpath>
     </javac>
 
+    <mkdir dir="${doc.build.dir}/xsl" />
     <java classname="org.carrot2.core.ProcessingComponentDumper">
       <classpath>
         <path refid="core.jar.classpath" />
@@ -74,12 +94,36 @@
       <arg value="${doc.build.dir}/xsl/components-metadata.xml" />
     </java>
 
+    <!-- 
+         HACK: remove CDATA sections from the description tags. This is the only
+         reasonably easy way of transforming HTML from JavaDocs into DocBook counterparts.
+         The downside is obviously that if the HTML in JavaDoc is not valid XML,
+         the documentation generation will fail.
+      -->
+    <copy file="${doc.build.dir}/xsl/components-metadata.xml"
+          tofile="${doc.build.dir}/xsl/components-metadata-nocdata.xml"
+          filtering="yes">
+      <filterset begintoken="&lt;description&gt;" endtoken="CDATA[">
+        <filter token="&lt;![" value="&lt;description&gt;" />
+      </filterset>
+      <filterset begintoken="]]&gt;" endtoken="&gt;">
+        <filter token="&lt;/description" value="&lt;/description&gt;" />
+      </filterset>
+    </copy>
+    <copy file="${doc.build.dir}/xsl/components-metadata-nocdata.xml"
+          tofile="${doc.build.dir}/xsl/components-metadata.xml" 
+          overwrite="true" />
+
     <xslt in="${doc.build.dir}/docbook/components.template.xml"
           style="${doc.build.dir}/xsl/attributes-to-docbook.xsl"
           out="${doc.build.dir}/docbook/components.xml">
     </xslt>
   </target>
-  
+
+  <target name="doc.cleanup">
+    <delete dir="${docbook.xsl.dir}/html-custom" />
+  </target>
+
   <!--
        Checks for required DocBook resources.
     -->

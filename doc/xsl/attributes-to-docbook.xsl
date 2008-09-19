@@ -16,28 +16,65 @@
 
   <xsl:template match="db:attribute-reference">
     <xsl:apply-templates select="$metadata/processing-component-docs/sources/processing-component-doc" />
+    <xsl:apply-templates select="$metadata/processing-component-docs/algorithms/processing-component-doc" />
   </xsl:template>
 
   <xsl:template match="processing-component-doc">
     <section xml:id="section.{component-descriptor/@id}">
       <title><xsl:apply-templates select="component-descriptor/title" /></title>
 
-      <xsl:variable name="this" select="." />
-      
-      <xsl:for-each select="groups/string">
-        <xsl:variable name="group" select="string(.)" />
-        
-        <section>
-          <title><xsl:value-of select="$group" /></title>
-          <xsl:apply-templates select="$this/attribute[attribute-descriptor/@input = 'true' and attribute-descriptor/metadata/group = $group]" />
-        </section>
-      </xsl:for-each>
-      
-      <section>
-        <title>Ungrouped</title>
-        <xsl:apply-templates select="$this/attribute[attribute-descriptor/@input = 'true' and not(attribute-descriptor/metadata/group)]" />
-      </section>
+      <xsl:call-template name="attribute-section">
+        <xsl:with-param name="section-title" select="'Initialization input attributes'" />
+        <xsl:with-param name="doc" select="." />
+        <xsl:with-param name="scope" select="'Init'" />
+        <xsl:with-param name="direction" select="'Input'" />
+      </xsl:call-template>
+
+      <xsl:call-template name="attribute-section">
+        <xsl:with-param name="section-title" select="'Processing input attributes'" />
+        <xsl:with-param name="doc" select="." />
+        <xsl:with-param name="scope" select="'Processing'" />
+        <xsl:with-param name="direction" select="'Input'" />
+      </xsl:call-template>
+
+      <xsl:call-template name="attribute-section">
+        <xsl:with-param name="section-title" select="'Processing output attributes'" />
+        <xsl:with-param name="doc" select="." />
+        <xsl:with-param name="scope" select="'Processing'" />
+        <xsl:with-param name="direction" select="'Output'" />
+      </xsl:call-template>
     </section>
+  </xsl:template>
+
+  <xsl:template name="attribute-section">
+    <xsl:param name="doc" />
+    <xsl:param name="scope" />
+    <xsl:param name="direction" />
+    <xsl:param name="section-title" />
+    
+    <xsl:if test="$doc/attribute[contains(string(attribute-descriptor/annotations), $scope) and contains(string(attribute-descriptor/annotations), $direction)]">
+      <section>
+        <title><xsl:value-of select="$section-title" /></title>
+        
+        <xsl:for-each select="$doc/groups/string">
+          <xsl:variable name="group" select="string(.)" />
+          
+          <xsl:if test="$doc/attribute[contains(string(attribute-descriptor/annotations), $scope) and contains(string(attribute-descriptor/annotations), $direction) and attribute-descriptor/metadata/group = $group]">
+            <section>
+              <title><xsl:value-of select="$group" /></title>
+              <xsl:apply-templates select="$doc/attribute[contains(string(attribute-descriptor/annotations), $scope) and contains(string(attribute-descriptor/annotations), $direction) and attribute-descriptor/metadata/group = $group]" />
+            </section>
+          </xsl:if>
+        </xsl:for-each>
+        
+        <xsl:if test="$doc/attribute[contains(string(attribute-descriptor/annotations), $scope) and contains(string(attribute-descriptor/annotations), $direction) and not(attribute-descriptor/metadata/group)]">
+          <section>
+            <title>Ungrouped</title>
+            <xsl:apply-templates select="$doc/attribute[contains(string(attribute-descriptor/annotations), $scope) and contains(string(attribute-descriptor/annotations), $direction) and not(attribute-descriptor/metadata/group)]" />
+          </section>
+        </xsl:if>
+      </section>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="attribute">
@@ -47,7 +84,7 @@
   <xsl:template match="attribute-descriptor">
     <section>
       <title><xsl:value-of select="metadata/title" /></title>
-      <informaltable frame="all">
+      <informaltable frame="none">
         <tgroup cols="2">
           <tbody>
             <row>
@@ -87,7 +124,32 @@
     </section>
   </xsl:template>
   
-  <!-- Certain Docbook elements -->
+  <!-- Some mappings between HTML elements and their DocBook counterparts -->
+  <xsl:template match="ul">
+    <itemizedlist>
+      <xsl:apply-templates />
+    </itemizedlist>
+  </xsl:template>
+  
+  <xsl:template match="li">
+    <listitem>
+      <xsl:apply-templates />
+    </listitem>
+  </xsl:template>
+
+  <xsl:template match="code">
+    <code>
+      <xsl:apply-templates />
+    </code>
+  </xsl:template>
+
+  <xsl:template match="p">
+    <para>
+      <xsl:apply-templates />
+    </para>
+  </xsl:template>
+
+  <!-- Copy certain Docbook elements -->
   <xsl:template match="db:chapter|db:para|db:section|db:title|db:subtitle|db:example|db:xref|db:programlisting|db:sgmltag|db:classname|db:filename|db:note|db:phrase">
     <xsl:copy>
       <xsl:copy-of select="@*" />

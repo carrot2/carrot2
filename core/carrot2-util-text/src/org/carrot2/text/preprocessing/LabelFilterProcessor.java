@@ -24,7 +24,7 @@ import bak.pcj.list.IntArrayList;
  * This class requires that {@link Tokenizer}, {@link CaseNormalizer},
  * {@link StopListMarker} and {@link PhraseExtractor} be invoked first.
  */
-@Bindable
+@Bindable(prefix = "LabelFilterProcessor")
 public class LabelFilterProcessor
 {
     // For the time being we include filters as instance fields here. If there is a need

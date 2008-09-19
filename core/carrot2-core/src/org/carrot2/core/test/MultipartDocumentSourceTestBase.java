@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import org.carrot2.core.DocumentSource;
 import org.carrot2.source.*;
 import org.carrot2.source.MultipageSearchEngine.SearchMode;
+import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Test;
 import org.junitext.Prerequisite;
 
@@ -41,8 +42,8 @@ public abstract class MultipartDocumentSourceTestBase<T extends DocumentSource> 
         processingAttributes.put("search-mode", SearchMode.CONSERVATIVE);
 
         runAndCheckNoResultsQuery();
-        assertEquals(1, processingAttributes.get(SearchEngineStats.class.getName()
-            + ".pageRequests"));
+        assertEquals(1, processingAttributes.get(AttributeUtils.getKey(
+            SearchEngineStats.class, "pageRequests")));
     }
 
     @Test
@@ -52,7 +53,7 @@ public abstract class MultipartDocumentSourceTestBase<T extends DocumentSource> 
         processingAttributes.put("search-mode", SearchMode.SPECULATIVE);
 
         runAndCheckNoResultsQuery(getSearchEngineMetadata().resultsPerPage + 1);
-        assertEquals(2, processingAttributes.get(SearchEngineStats.class.getName()
-            + ".pageRequests"));
+        assertEquals(2, processingAttributes.get(AttributeUtils.getKey(
+            SearchEngineStats.class, "pageRequests")));
     }
 }

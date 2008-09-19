@@ -1,6 +1,7 @@
 package org.carrot2.source.opensearch;
 
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
+import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.runner.RunWith;
 import org.junitext.runners.AnnotationRunner;
 
@@ -41,11 +42,13 @@ public class OpenSearchDocumentSourceByPageIncrementTest extends
     {
         super.prepareComponent();
 
-        final String base = OpenSearchDocumentSource.class.getName();
         initAttributes
-            .put(base + ".feedUrlTemplate",
+            .put(
+                AttributeUtils.getKey(OpenSearchDocumentSource.class, "feedUrlTemplate"),
                 "http://blogs.icerocket.com/search?q=${searchTerms}&rss=1&os=1&p=${startPage}&n=${count}&tab=blog");
-        initAttributes.put(base + ".resultsPerPage", 50);
-        initAttributes.put(base + ".maximumResults", 200);
+        initAttributes.put(AttributeUtils.getKey(OpenSearchDocumentSource.class,
+            "resultsPerPage"), 50);
+        initAttributes.put(AttributeUtils.getKey(OpenSearchDocumentSource.class,
+            "maximumResults"), 200);
     }
 }

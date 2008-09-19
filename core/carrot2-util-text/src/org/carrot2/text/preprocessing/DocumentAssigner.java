@@ -23,7 +23,7 @@ import bak.pcj.set.IntSet;
  * {@link StopListMarker}, {@link PhraseExtractor} and {@link LabelFilterProcessor} be
  * invoked first.
  */
-@Bindable
+@Bindable(prefix = "DocumentAssigner")
 public class DocumentAssigner
 {
     /**

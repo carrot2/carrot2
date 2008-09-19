@@ -301,21 +301,23 @@
           description="Builds attribute metadata files into the compiled classes dir">
     <property name="common.attribute.names.source.path"
               location="core/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
-    <attributes-xml java.source="core/carrot2-algorithm-lingo/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-algorithm-stc/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-algorithm-synthetic/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-core/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-source-etools/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-source-yahoo/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-source-microsoft/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-source-pubmed/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-source-opensearch/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-source-boss/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-source-google-desktop/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-source-solr/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-source-xml/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-util-text/src" output.dir="${build.dir}" />
-    <attributes-xml java.source="core/carrot2-util-attribute/src-test" output.dir="${build.dir}" />
+    <parallel threadsPerProcessor="1">
+      <attributes-xml java.source="core/carrot2-algorithm-lingo/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-algorithm-stc/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-algorithm-synthetic/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-core/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-source-etools/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-source-yahoo/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-source-microsoft/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-source-pubmed/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-source-opensearch/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-source-boss/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-source-google-desktop/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-source-solr/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-source-xml/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-util-text/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="core/carrot2-util-attribute/src-test" output.dir="${build.dir}" />
+    </parallel>
   </target>
 
   <target name="attributes-eclipse"
@@ -324,68 +326,70 @@
     <property name="common.attribute.names.source.path"
               location="core/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
 
-    <attributes-xml-copy java.source="core/carrot2-algorithm-lingo/src"
-                         output.dir="core/carrot2-algorithm-lingo/tmp/eclipse"
-                         copy.to="core/carrot2-algorithm-lingo/META-INF" />
+    <parallel threadsPerProcessor="1">
+      <attributes-xml-copy java.source="core/carrot2-algorithm-lingo/src"
+                           output.dir="core/carrot2-algorithm-lingo/tmp/eclipse"
+                           copy.to="core/carrot2-algorithm-lingo/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-algorithm-stc/src"
-                         output.dir="core/carrot2-algorithm-stc/tmp/eclipse"
-                         copy.to="core/carrot2-algorithm-stc/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-algorithm-stc/src"
+                           output.dir="core/carrot2-algorithm-stc/tmp/eclipse"
+                           copy.to="core/carrot2-algorithm-stc/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-algorithm-synthetic/src"
-                         output.dir="core/carrot2-algorithm-synthetic/tmp/eclipse"
-                         copy.to="core/carrot2-algorithm-synthetic/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-algorithm-synthetic/src"
+                           output.dir="core/carrot2-algorithm-synthetic/tmp/eclipse"
+                           copy.to="core/carrot2-algorithm-synthetic/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-core/src"
-                         output.dir="core/carrot2-core/tmp/eclipse"
-                         copy.to="core/carrot2-core/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-core/src"
+                           output.dir="core/carrot2-core/tmp/eclipse"
+                           copy.to="core/carrot2-core/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-source-etools/src"
-                         output.dir="core/carrot2-source-etools/tmp/eclipse"
-                         copy.to="core/carrot2-source-etools/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-source-etools/src"
+                           output.dir="core/carrot2-source-etools/tmp/eclipse"
+                           copy.to="core/carrot2-source-etools/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-source-yahoo/src"
-                         output.dir="core/carrot2-source-yahoo/tmp/eclipse"
-                         copy.to="core/carrot2-source-yahoo/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-source-yahoo/src"
+                           output.dir="core/carrot2-source-yahoo/tmp/eclipse"
+                           copy.to="core/carrot2-source-yahoo/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-source-microsoft/src"
-                         output.dir="core/carrot2-source-microsoft/tmp/eclipse"
-                         copy.to="core/carrot2-source-microsoft/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-source-microsoft/src"
+                           output.dir="core/carrot2-source-microsoft/tmp/eclipse"
+                           copy.to="core/carrot2-source-microsoft/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-source-pubmed/src"
-                         output.dir="core/carrot2-source-pubmed/tmp/eclipse"
-                         copy.to="core/carrot2-source-pubmed/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-source-pubmed/src"
+                           output.dir="core/carrot2-source-pubmed/tmp/eclipse"
+                           copy.to="core/carrot2-source-pubmed/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-source-opensearch/src"
-                         output.dir="core/carrot2-source-opensearch/tmp/eclipse"
-                         copy.to="core/carrot2-source-opensearch/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-source-opensearch/src"
+                           output.dir="core/carrot2-source-opensearch/tmp/eclipse"
+                           copy.to="core/carrot2-source-opensearch/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-source-boss/src"
-                         output.dir="core/carrot2-source-boss/tmp/eclipse"
-                         copy.to="core/carrot2-source-boss/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-source-boss/src"
+                           output.dir="core/carrot2-source-boss/tmp/eclipse"
+                           copy.to="core/carrot2-source-boss/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-source-google-desktop/src"
-                         output.dir="core/carrot2-source-google-desktop/tmp/eclipse"
-                         copy.to="core/carrot2-source-google-desktop/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-source-google-desktop/src"
+                           output.dir="core/carrot2-source-google-desktop/tmp/eclipse"
+                           copy.to="core/carrot2-source-google-desktop/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-source-solr/src"
-                         output.dir="core/carrot2-source-solr/tmp/eclipse"
-                         copy.to="core/carrot2-source-solr/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-source-solr/src"
+                           output.dir="core/carrot2-source-solr/tmp/eclipse"
+                           copy.to="core/carrot2-source-solr/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-source-xml/src"
-                         output.dir="core/carrot2-source-xml/tmp/eclipse"
-                         copy.to="core/carrot2-source-xml/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-source-xml/src"
+                           output.dir="core/carrot2-source-xml/tmp/eclipse"
+                           copy.to="core/carrot2-source-xml/META-INF" />
 
-    <attributes-xml-copy java.source="core/carrot2-util-text/src"
-                         output.dir="core/carrot2-util-text/tmp/eclipse"
-                         copy.to="core/carrot2-util-text/META-INF" />
+      <attributes-xml-copy java.source="core/carrot2-util-text/src"
+                           output.dir="core/carrot2-util-text/tmp/eclipse"
+                           copy.to="core/carrot2-util-text/META-INF" />
 
-    <attributes-xml java.source="core/carrot2-util-attribute/src-test"
-                    output.dir="core/carrot2-util-attribute/tmp/eclipse" />
+      <attributes-xml java.source="core/carrot2-util-attribute/src-test"
+                      output.dir="core/carrot2-util-attribute/tmp/eclipse" />
 
-    <attributes-xml-copy java.source="workbench/org.carrot2.workbench.editors/src"
-                         output.dir="workbench/org.carrot2.workbench.editors/tmp/eclipse"
-                         copy.to="workbench/org.carrot2.workbench.editors/META-INF" />
+      <attributes-xml-copy java.source="workbench/org.carrot2.workbench.editors/src"
+                           output.dir="workbench/org.carrot2.workbench.editors/tmp/eclipse"
+                           copy.to="workbench/org.carrot2.workbench.editors/META-INF" />
+    </parallel>
   </target>
 
   <!-- 

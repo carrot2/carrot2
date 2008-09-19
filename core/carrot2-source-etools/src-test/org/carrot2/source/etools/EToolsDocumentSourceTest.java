@@ -9,6 +9,7 @@ import java.util.Set;
 import org.carrot2.core.Document;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.source.SearchEngineBase;
+import org.carrot2.util.attribute.AttributeUtils;
 import org.fest.assertions.MapAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,7 +60,8 @@ public class EToolsDocumentSourceTest extends
     {
         runQuery("apache", 50);
         assertThat(processingAttributes).contains(
-            MapAssert.entry(SearchEngineBase.class.getName() + ".compressed", true));
+            MapAssert.entry(AttributeUtils.getKey(SearchEngineBase.class, "compressed"),
+                true));
     }
 
     @Test

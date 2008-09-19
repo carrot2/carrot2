@@ -34,7 +34,7 @@ import com.google.common.collect.Lists;
  * This class requires that {@link Tokenizer}, {@link CaseNormalizer} and
  * {@link LanguageModelStemmer} be invoked first.
  */
-@Bindable
+@Bindable(prefix = "PhraseExtractor")
 public class PhraseExtractor
 {
     /** Internal minimum phrase length, we may want to make it an attribute at some point */

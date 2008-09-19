@@ -11,7 +11,7 @@ import com.google.common.collect.Maps;
 /**
  * Accessor to all {@link LanguageModel} objects.
  */
-@Bindable
+@Bindable(prefix = "SnowballLanguageModelFactory")
 public final class SnowballLanguageModelFactory implements LanguageModelFactory
 {
     /**

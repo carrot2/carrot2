@@ -8,7 +8,7 @@ import org.carrot2.util.attribute.*;
  * Accepts words that are not stop words and phrases that do not start nor end in a stop
  * word.
  */
-@Bindable
+@Bindable(prefix = "StopWordLabelFilter")
 public class StopWordLabelFilter extends SingleLabelFilterBase
 {
     /**

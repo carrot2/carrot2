@@ -12,21 +12,21 @@
     <attribute field-name="solrTitleFieldName">
       <attribute-metadata>
         <title>Title field name</title>
-        <description>Name of the Solr field that will provide document titles.</description>
+        <description><![CDATA[Name of the Solr field that will provide document titles.]]></description>
         <level>MEDIUM</level>
       </attribute-metadata>
     </attribute>
     <attribute field-name="solrSummaryFieldName">
       <attribute-metadata>
         <title>Summary field name</title>
-        <description>Name of the Solr field that will provide document summary.</description>
+        <description><![CDATA[Name of the Solr field that will provide document summary.]]></description>
         <level>MEDIUM</level>
       </attribute-metadata>
     </attribute>
     <attribute field-name="solrUrlFieldName">
       <attribute-metadata>
         <title>Title field name</title>
-        <description>Name of the Solr field that will provide document URLs.</description>
+        <description><![CDATA[Name of the Solr field that will provide document URLs.]]></description>
         <level>MEDIUM</level>
       </attribute-metadata>
     </attribute>
