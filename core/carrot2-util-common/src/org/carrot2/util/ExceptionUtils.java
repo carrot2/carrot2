@@ -79,4 +79,9 @@ public final class ExceptionUtils
 
         throw new RuntimeException("(No constructor found in wrapper class " + clazz.getName() +"): ", t);
     }
+    
+    public static RuntimeException wrapAsRuntimeException(Throwable t)
+    {
+        return wrapAs(RuntimeException.class, t);
+    }
 }

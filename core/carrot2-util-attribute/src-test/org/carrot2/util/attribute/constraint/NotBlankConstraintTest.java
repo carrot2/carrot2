@@ -1,67 +1,57 @@
 package org.carrot2.util.attribute.constraint;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.junit.Test;
 
 /**
  * Test cases for {@link NotBlankConstraint}.
  */
-public class NotBlankConstraintTest
+public class NotBlankConstraintTest extends ConstraintTestBase<NotBlank>
 {
-    static class NonBlankAnnotationContainer
+    static class AnnotationContainer
     {
         @NotBlank
-        String string;
+        String field;
+    }
+
+    @Override
+    Class<?> getAnnotationContainerClass()
+    {
+        return AnnotationContainer.class;
+    }
+
+    @Override
+    Class<NotBlank> getAnnotationType()
+    {
+        return NotBlank.class;
     }
 
     @Test
     public void testValidString() throws Exception
     {
-        assertValid("  test  ");
+        assertMet("  test  ");
     }
 
     @Test
     public void testInvalidString() throws Exception
     {
-        assertInvalid("  \t");
+        assertNotMet("  \t");
     }
 
     @Test
     public void testValidCharSequence() throws Exception
     {
-        assertValid(new StringBuffer(" test "));
+        assertMet(new StringBuffer(" test "));
     }
 
     @Test
     public void testInvalidCharSequence() throws Exception
     {
-        assertInvalid(new StringBuffer(" \t  "));
+        assertNotMet(new StringBuffer(" \t  "));
     }
 
     @Test
-    public void testInvalidNull() throws Exception
+    public void testNull() throws Exception
     {
-        assertInvalid(null);
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testNotCharSequence() throws Exception
-    {
-        assertValid(Integer.valueOf(20));
-    }
-
-    private void assertValid(final Object value) throws NoSuchFieldException
-    {
-        assertThat(
-            ConstraintValidator.isMet(value, NonBlankAnnotationContainer.class
-                .getDeclaredField("string").getAnnotation(NotBlank.class))).isEmpty();
-    }
-
-    private void assertInvalid(final Object value) throws NoSuchFieldException
-    {
-        final NotBlank annotation = NonBlankAnnotationContainer.class.getDeclaredField(
-            "string").getAnnotation(NotBlank.class);
-        assertThat(ConstraintValidator.isMet(value, annotation)).contains(annotation);
+        assertNotMet(null);
     }
 }

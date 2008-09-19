@@ -1,52 +1,28 @@
 package org.carrot2.util.attribute.constraint;
 
 import org.apache.commons.lang.StringUtils;
+import org.simpleframework.xml.Root;
 
 /**
  * Implementation of the {@link NotBlank}.
  */
+@Root(name = "not-blank")
 class NotBlankConstraint extends Constraint
 {
     NotBlankConstraint()
     {
     }
 
-    boolean isMet(Object value)
+    protected boolean isMet(Object value)
     {
         if (value == null)
         {
             return false;
         }
 
-        if (value instanceof CharSequence)
-        {
-            return StringUtils.isNotBlank(value.toString());
-        }
+        checkAssignableFrom(CharSequence.class, value);
 
-        throw new RuntimeException("Expected an instance of CharSequence: "
-            + value);
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == this)
-        {
-            return true;
-        }
-
-        if (obj instanceof NotBlankConstraint)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return 0;
+        return StringUtils.isNotBlank(value.toString());
     }
 
     @Override

@@ -1,28 +1,29 @@
 package org.carrot2.util.attribute.constraint;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.carrot2.util.ExceptionUtils;
 
 import com.google.common.collect.Lists;
 
 /**
  * Builds constraint implementation from constraint annotations.
  */
-class ConstraintFactory
+public class ConstraintFactory
 {
     /**
      * Create a list of constraints based on the provided <code>annotations</code>.
      */
-    static List<Constraint> createConstraints(Annotation... annotations)
+    public static List<Constraint> createConstraints(Annotation... annotations)
     {
         final ArrayList<Constraint> constraints = Lists.newArrayList();
         for (Annotation annotation : annotations)
         {
             if (isConstraintAnnotation(annotation.annotationType()))
             {
-                constraints.add(createConstraint(annotation));
+                constraints.add(createImplementation(annotation));
             }
         }
 
@@ -40,65 +41,29 @@ class ConstraintFactory
     /**
      * Creates a class implementing the provided constraint annotation.
      */
-    static Constraint createImplementation(IsConstraint ann)
-        throws InstantiationException, IllegalAccessException
+    static Constraint createImplementation(Annotation ann)
     {
-        final Class<?> implClass = ann.implementation();
+        final IsConstraint constraintAnnotation = ann.annotationType().getAnnotation(
+            IsConstraint.class);
+        final Class<?> implClass = constraintAnnotation.implementation();
         if (!Constraint.class.isAssignableFrom(implClass))
         {
             throw new IllegalArgumentException("Implementation class "
                 + implClass.getClass().getName() + " must implement "
                 + Constraint.class.getName());
         }
-        return (Constraint) implClass.newInstance();
-    }
 
-    /**
-     * Creates a class implementing the provided constraint annotation.
-     */
-    private static Constraint createConstraint(Annotation annotation)
-    {
+        Constraint instance;
         try
         {
-            final Constraint implementation = createImplementation(annotation
-                .annotationType().getAnnotation(IsConstraint.class));
-            implementation.annotation = annotation;
-            assignFieldValues(implementation, annotation);
-            return implementation;
+            instance = (Constraint) implClass.newInstance();
         }
-        catch (final Exception e)
+        catch (Exception e)
         {
-            throw new RuntimeException("Could not create constraint instance", e);
+            throw ExceptionUtils.wrapAsRuntimeException(e);
         }
-    }
+        instance.populate(ann);
 
-    /**
-     * Sets fields of the constraint implementation based on the annotation parameters.
-     */
-    private static void assignFieldValues(Constraint implementator, Annotation ann)
-        throws IllegalAccessException, NoSuchFieldException, InvocationTargetException
-    {
-        final Method [] methods = ann.annotationType().getDeclaredMethods();
-        for (final Method method : methods)
-        {
-            try
-            {
-                final Field field = implementator.getClass().getDeclaredField(
-                    method.getName());
-                field.setAccessible(true);
-                field.set(implementator, method.invoke(ann));
-            }
-            catch (NoSuchFieldException e) 
-            {
-                /*
-                 * This mapping between methods and fields is so hacky... be verbose
-                 * about the error.
-                 */
-                throw new RuntimeException("Constraint " + ann.annotationType().getName()
-                    + " declares a field (method): '" + method.getName() +
-                    "' for which there is no corresponding field in the implementation" +
-                    " class: " + implementator.getClass().getName());
-            }
-        }
+        return instance;
     }
 }

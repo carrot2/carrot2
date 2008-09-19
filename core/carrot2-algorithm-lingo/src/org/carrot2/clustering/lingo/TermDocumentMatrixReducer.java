@@ -34,7 +34,7 @@ public class TermDocumentMatrixReducer
         NonnegativeMatrixFactorizationKLFactory.class,
         LocalNonnegativeMatrixFactorizationFactory.class,
         KMeansMatrixFactorizationFactory.class
-    })
+    }, strict = false)
     public MatrixFactorizationFactory factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
 
     /**

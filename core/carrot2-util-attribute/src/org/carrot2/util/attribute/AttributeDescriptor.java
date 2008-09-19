@@ -5,7 +5,8 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 import org.apache.commons.lang.ClassUtils;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.ListUtils;
+import org.carrot2.util.attribute.constraint.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Persist;
 
@@ -75,22 +76,31 @@ public class AttributeDescriptor
     public final Field attributeField;
 
     /**
-     * Name of field representing the attribute, for serialization only. Only for
-     * serialization purposes.
+     * Name of field representing the attribute, for serialization.
      */
     @org.simpleframework.xml.Attribute(name = "field")
     @SuppressWarnings("unused")
     private String attributeFieldString;
 
     /**
-     * Default value as string. Only for serialization purposes.
+     * Default value as string, for serialization.
      */
     @org.simpleframework.xml.Attribute(name = "default", required = false)
     @SuppressWarnings("unused")
     private String defaultValueString;
 
-    @ElementList(entry = "annotation")
+    /**
+     * Annotation names, for serialization.
+     */
+    @ElementList(entry = "annotation", required = false)
     private ArrayList<String> annotations;
+
+    /**
+     * Instances of this attribute's constraings, for serialization.
+     */
+    @ElementList(name = "constraints", required = false)
+    @SuppressWarnings("unused")
+    private ArrayList<Constraint> constraintInstances;
 
     /**
      * 
@@ -134,6 +144,8 @@ public class AttributeDescriptor
     private void beforeSerialization()
     {
         attributeFieldString = attributeField.getName();
+
+        // Default value
         if (inputAttribute && defaultValue != null)
         {
             if (defaultValue instanceof Collection<?>)
@@ -154,11 +166,16 @@ public class AttributeDescriptor
             }
         }
 
+        // Annotations as strings
         final Annotation [] annotationInstances = attributeField.getAnnotations();
         annotations = Lists.newArrayListWithExpectedSize(annotationInstances.length);
         for (Annotation annotation : annotationInstances)
         {
             annotations.add(annotation.annotationType().getSimpleName());
         }
+
+        // Constraints
+        constraintInstances = ListUtils.asArrayList(ConstraintFactory
+            .createConstraints(attributeField.getAnnotations()));
     }
 }

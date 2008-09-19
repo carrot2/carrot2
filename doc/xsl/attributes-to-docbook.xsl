@@ -116,15 +116,75 @@
             
             <row>
               <entry role="rowhead">Default value</entry>
-              <entry><constant><xsl:value-of select="@default" /></constant></entry>
+              <entry>
+                <xsl:choose>
+                  <xsl:when test="@default">
+                    <constant><xsl:value-of select="@default" /></constant>
+                  </xsl:when>
+                  
+                  <xsl:otherwise><emphasis>none</emphasis></xsl:otherwise>
+                </xsl:choose>
+              </entry>
             </row>
+            
+            <xsl:apply-templates select="constraints/constraint" />
           </tbody>
         </tgroup>
       </informaltable>
     </section>
   </xsl:template>
   
-  <!-- Some mappings between HTML elements and their DocBook counterparts -->
+  <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.ImplementingClassesConstraint']">
+    <row>
+      <entry role="rowhead">Allowed value types</entry>
+      <entry>
+        Allowed value types:
+        <itemizedlist>
+          <xsl:for-each select="classes/class">
+            <listitem>
+              <constant><xsl:apply-templates /></constant>
+            </listitem>
+          </xsl:for-each>
+        </itemizedlist>
+        <xsl:choose>
+          <xsl:when test="@strict = 'true'">
+            No other assignable value types are allowed.
+          </xsl:when>
+          <xsl:otherwise>
+            Other assignable value types are allowed.
+          </xsl:otherwise>
+        </xsl:choose>
+      </entry>
+    </row>
+  </xsl:template>
+
+  <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.IntRangeConstraint' or @class = 'org.carrot2.util.attribute.constraint.DoubleRangeConstraint']">
+    <xsl:if test="@min">
+      <row>
+        <entry role="rowhead">Min value</entry>
+        <entry><constant><xsl:value-of select="@min" /></constant></entry>
+      </row>
+    </xsl:if>
+    <xsl:if test="@max">
+      <row>
+        <entry role="rowhead">Max value</entry>
+        <entry><constant><xsl:value-of select="@max" /></constant></entry>
+      </row>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.NotBlankConstraint']">
+    <row>
+      <entry role="rowhead">Value content</entry>
+      <entry>Must not be blank</entry>
+    </row>
+  </xsl:template>
+    
+  <xsl:template match="constraint">
+    <xsl:message>Unsupported constraint type:<xsl:value-of select="@class" /></xsl:message>
+  </xsl:template>
+  
+  <!-- Some mappings between HTML elements and their DocBook counterparts-->
   <xsl:template match="ul">
     <itemizedlist>
       <xsl:apply-templates />

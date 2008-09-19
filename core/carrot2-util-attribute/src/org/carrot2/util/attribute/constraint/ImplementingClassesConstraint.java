@@ -1,8 +1,13 @@
 package org.carrot2.util.attribute.constraint;
 
+import java.lang.annotation.Annotation;
+
+import org.simpleframework.xml.*;
+
 /**
  * Implementation of the {@link ImplementingClasses} constraint.
  */
+@Root(name = "implementing-classes")
 class ImplementingClassesConstraint extends Constraint
 {
     /**
@@ -10,34 +15,26 @@ class ImplementingClassesConstraint extends Constraint
      * 
      * @see ImplementingClasses#classes()
      */
+    @ElementArray
     private Class<?> [] classes;
-    
+
     /**
      * Auto-assigned by {@link ConstraintFactory}.
      * 
      * @see ImplementingClasses#strict()
      */
+    @Attribute
     private boolean strict;
 
-    ImplementingClassesConstraint()
-    {
-    }
-
-    ImplementingClassesConstraint(Class<?> [] classes)
-    {
-        this.classes = classes;
-    }
-
-    boolean isMet(Object value)
+    protected boolean isMet(Object value)
     {
         /*
-         * I assume <code>null</code> values are not satisfying this
-         * constraint (even though <code>null</code>s can be assigned to 
-         * any class).
+         * I assume <code>null</code> values are not satisfying this constraint (even
+         * though <code>null</code>s can be assigned to any class).
          */
         if (value == null)
         {
-            return true;
+            return false;
         }
 
         final Class<?> target = value.getClass();
@@ -50,5 +47,13 @@ class ImplementingClassesConstraint extends Constraint
         }
 
         return !strict;
+    }
+
+    @Override
+    protected void populateCustom(Annotation annotation)
+    {
+        final ImplementingClasses implementingClasses = (ImplementingClasses) annotation;
+        classes = implementingClasses.classes();
+        strict = implementingClasses.strict();
     }
 }

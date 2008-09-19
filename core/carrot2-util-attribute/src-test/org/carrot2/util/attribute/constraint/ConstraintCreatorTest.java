@@ -6,93 +6,86 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.carrot2.util.attribute.test.constraint.*;
 import org.junit.Test;
 
 public class ConstraintCreatorTest
 {
     static class TestSample
     {
-        @DoubleRange(min = 0.2, max = 0.5)
-        public double somethingPercent = 0.8;
+        @TestConstraint1(value = 10)
+        public int intConstraint1;
 
-        @IntRange(min = 0, max = 8)
-        @IntModulo(modulo = 3, offset = 1)
-        public int somethingAmount = 4;
+        @TestConstraint1(value = 7)
+        @TestConstraint2(value = 5)
+        public int intConstraint1And2;
+
+        @ConstraintAnnotationWithWrongImplementingClass
+        public int wrongConstraint;
     }
 
     @Test
     public void testIsConstraintAnnotation()
     {
-        assertTrue(ConstraintFactory.isConstraintAnnotation(IntRange.class));
+        assertTrue(ConstraintFactory.isConstraintAnnotation(TestConstraint1.class));
         assertFalse(ConstraintFactory.isConstraintAnnotation(Target.class));
     }
 
     @Test
-    public void testCreateImplementationSuccess() throws InstantiationException,
-        IllegalAccessException
+    public void testCreateImplementationSuccess() throws Exception
     {
-        final Constraint impl = ConstraintFactory.createImplementation(IntRange.class
-            .getAnnotation(IsConstraint.class));
+        final Constraint impl = ConstraintFactory.createImplementation(TestSample.class
+            .getField("intConstraint1").getAnnotation(TestConstraint1.class));
         assertNotNull(impl);
-        assertEquals(RangeConstraint.class, impl.getClass());
+        assertEquals(TestConstraint1Constraint.class, impl.getClass());
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCreateImplementationException() throws InstantiationException,
-        IllegalAccessException
+    public void testCreateImplementationException() throws Exception
     {
-        ConstraintFactory.createImplementation(TestConstraintAnnotation.class
-            .getAnnotation(IsConstraint.class));
+        ConstraintFactory.createImplementation(TestSample.class.getField(
+            "wrongConstraint").getAnnotation(
+            ConstraintAnnotationWithWrongImplementingClass.class));
     }
 
     @Test
     public void testCreateSingleConstraint() throws NoSuchFieldException
     {
-        final TestSample sample = new TestSample();
-
-        final Field field = TestSample.class.getField("somethingPercent");
-        final DoubleRange range = field.getAnnotation(DoubleRange.class);
+        final Field field = TestSample.class.getField("intConstraint1");
+        final TestConstraint1 constraint1 = field
+            .getAnnotation(TestConstraint1.class);
         final List<Constraint> constraints = ConstraintFactory.createConstraints(field
             .getAnnotations());
 
         assertEquals(1, constraints.size());
-        final RangeConstraint rangeImpl = (RangeConstraint) constraints.get(0);
-        assertEquals(0.2, range.min(), 0.000001);
-        assertEquals(0.5, range.max(), 0.000001);
-        assertEquals(0.2, Double.class.cast(rangeImpl.min), 0.000001);
-        assertEquals(0.5, Double.class.cast(rangeImpl.max), 0.000001);
-        assertFalse(rangeImpl.isMet(sample.somethingPercent));
-        sample.somethingPercent = 0.2;
-        assertTrue(rangeImpl.isMet(sample.somethingPercent));
-        sample.somethingPercent = 0;
-        assertFalse(rangeImpl.isMet(sample.somethingPercent));
+
+        final TestConstraint1Constraint constraint1Impl = (TestConstraint1Constraint) constraints
+            .get(0);
+        assertEquals(10, constraint1.value());
+        assertEquals(10, constraint1Impl.value);
     }
 
     @Test
     public void testCreateMultipleConstraints() throws NoSuchFieldException
     {
-        final TestSample sample = new TestSample();
-
-        final Field field = TestSample.class.getField("somethingAmount");
-        final IntRange range = field.getAnnotation(IntRange.class);
-        final IntModulo modulo = field.getAnnotation(IntModulo.class);
+        final Field field = TestSample.class.getField("intConstraint1And2");
+        final TestConstraint1 constraint1 = field
+            .getAnnotation(TestConstraint1.class);
+        final TestConstraint2 constraint2 = field
+            .getAnnotation(TestConstraint2.class);
         final List<Constraint> constraints = ConstraintFactory.createConstraints(field
             .getAnnotations());
 
         assertEquals(2, constraints.size());
 
-        final RangeConstraint rangeImpl = (RangeConstraint) constraints.get(0);
-        assertEquals(range.min(), rangeImpl.min);
-        assertEquals(range.max(), rangeImpl.max);
-        assertTrue(rangeImpl.isMet(sample.somethingAmount));
-        sample.somethingAmount = 9;
-        assertFalse(rangeImpl.isMet(sample.somethingAmount));
+        final TestConstraint1Constraint constraint1Impl = (TestConstraint1Constraint) constraints
+            .get(0);
+        assertEquals(7, constraint1.value());
+        assertEquals(7, constraint1Impl.value);
 
-        final IntModuloConstraint moduloImpl = (IntModuloConstraint) constraints.get(1);
-        assertEquals(modulo.modulo(), moduloImpl.modulo);
-        assertEquals(modulo.offset(), moduloImpl.offset);
-        assertFalse(rangeImpl.isMet(sample.somethingAmount));
-        sample.somethingAmount = 4;
-        assertTrue(rangeImpl.isMet(sample.somethingAmount));
+        final TestConstraint2Constraint constraint2Impl = (TestConstraint2Constraint) constraints
+            .get(1);
+        assertEquals(5, constraint2.value());
+        assertEquals(5, constraint2Impl.value);
     }
 }

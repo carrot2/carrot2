@@ -67,7 +67,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     {
         LogTfIdfTermWeighting.class, LinearTfIdfTermWeighting.class,
         TfTermWeighting.class
-    })
+    }, strict = false)
     public TermWeighting termWeighting = new LogTfIdfTermWeighting();
 
     /**

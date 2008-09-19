@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 
 import org.carrot2.util.attribute.Attribute;
 
+
 /**
  * An exception thrown when an attempt is made to bind attribute values that do not meet
  * the constraints.

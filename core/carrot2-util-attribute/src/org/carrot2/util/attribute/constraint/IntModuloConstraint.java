@@ -1,57 +1,46 @@
 package org.carrot2.util.attribute.constraint;
 
+import java.lang.annotation.Annotation;
+
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
 /**
  * Implementation of the {@link IntModuloConstraint}.
  */
+@Root(name = "int-modulo")
 class IntModuloConstraint extends Constraint
 {
+    @Attribute
     int modulo;
+    
+    @Attribute
     int offset;
 
-    IntModuloConstraint()
+    protected boolean isMet(Object value)
     {
-    }
-
-    IntModuloConstraint(int modulo, int offset)
-    {
-        this.modulo = modulo;
-        this.offset = offset;
-    }
-
-    boolean isMet(Object value)
-    {
-        final Integer v = (Integer) value;
-        return (v % modulo) == offset;
-    }
-
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == this)
-        {
-            return true;
-        }
-
-        if (obj == null || !(obj instanceof IntModuloConstraint))
+        if (value == null)
         {
             return false;
         }
 
-        final IntModuloConstraint other = (IntModuloConstraint) obj;
+        checkAssignableFrom(Integer.class, value);
 
-        return other.modulo == this.modulo && other.offset == this.offset;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return offset ^ modulo;
+        final Integer v = (Integer) value;
+        return Math.abs((v % modulo)) == offset;
     }
 
     @Override
     public String toString()
     {
         return "modulo(modulo = " + modulo + ", offset = " + offset + ")";
+    }
+
+    @Override
+    public void populateCustom(Annotation annotation)
+    {
+        final IntModulo modulo = (IntModulo) annotation;
+        this.modulo = modulo.modulo();
+        this.offset = modulo.offset();
     }
 }

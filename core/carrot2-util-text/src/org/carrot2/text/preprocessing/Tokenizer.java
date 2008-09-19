@@ -50,7 +50,7 @@ public final class Tokenizer
     @ImplementingClasses(classes =
     {
         ExtendedWhitespaceAnalyzer.class
-    })
+    }, strict = false)
     public Analyzer analyzer = new ExtendedWhitespaceAnalyzer();
 
     /**

@@ -2,6 +2,7 @@ package org.carrot2.util.attribute.constraint;
 
 import java.lang.annotation.*;
 
+
 /**
  * Requires that the integer attribute value meets the condition:
  * <code>attributeValue % {@link #modulo()}</code> == {@link #offset()}.
