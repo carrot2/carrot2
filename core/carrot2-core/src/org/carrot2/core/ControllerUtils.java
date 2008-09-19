@@ -11,7 +11,7 @@ import org.carrot2.util.attribute.*;
  * This code is refactored to make sure the tests can perform exactly the same sequence of
  * actions without using the controller as a whole.
  */
-final class ControllerUtils
+public final class ControllerUtils
 {
     /**
      *
