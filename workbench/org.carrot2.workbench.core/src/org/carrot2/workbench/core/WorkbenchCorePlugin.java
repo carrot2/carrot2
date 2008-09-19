@@ -196,7 +196,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                 .getConfigurationElements();
             if (configElements.length == 1 && "suite".equals(configElements[0].getName()))
             {
-                final String suiteRoot = configElements[0].getAttribute("resourceRoot");
+                String suiteRoot = configElements[0].getAttribute("resourceRoot");
+                if (StringUtils.isEmpty(suiteRoot)) suiteRoot = "";
                 final String suiteResource = configElements[0].getAttribute("resource");
 
                 if (StringUtils.isEmpty(suiteResource))
@@ -220,6 +221,15 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                 }
 
                 final URL bundleURL = b.getEntry(suiteRoot + suiteResource);
+                
+                if (bundleURL == null)
+                {
+                    String message = "Suite extension resource not found: "
+                        + suiteRoot + suiteResource;
+                    Logger.getRootLogger().error(message);
+                    Utils.logError(message, false);
+                    continue;
+                }
 
                 /* This piece of code is currently quite fragile and hacky, but works. 
                  * 
