@@ -10,8 +10,7 @@ import org.carrot2.core.*;
 import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.StreamUtils;
-import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.util.attribute.BindableDescriptorBuilder;
+import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
@@ -276,15 +275,24 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             {
                 final ProcessingComponent pc = pcd.getComponentClass().newInstance();
 
-                processingDescriptors.put(pcd.getId(), pcd);
+                final Map<String, Object> initAttributes = Maps.newHashMap();
+                final AttributeValueSet defaultAttributeValueSet = pcd.getAttributeSets()
+                    .getDefaultAttributeValueSet();
+                if (defaultAttributeValueSet != null)
+                {
+                    initAttributes.putAll(defaultAttributeValueSet.getAttributeValues());
+                }
 
+                ControllerUtils.init(pc, initAttributes);
+
+                processingDescriptors.put(pcd.getId(), pcd);
                 bindableDescriptors.put(pcd.getId(), BindableDescriptorBuilder
                     .buildDescriptor(pc));
             }
             catch (Exception e)
             {
-                Utils
-                    .logError("Could not extract descriptor from: " + pcd.getId(), e, false);
+                Utils.logError("Could not extract descriptor from: " + pcd.getId(), e,
+                    false);
             }
         }
     }
@@ -303,8 +311,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         }
 
         /*
-         * Check if the workspace directory exists. It may happen the workspace
-         * has just been created.
+         * Check if the workspace directory exists. It may happen the workspace has just
+         * been created.
          */
         final File workspacePath = instanceLocation.toFile().getAbsoluteFile();
         if (!workspacePath.exists())
@@ -371,7 +379,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
          */
         ResourceUtilsFactory.addFirst(new DirLocator(workspacePath.getAbsolutePath()));
     }
-    
+
     /**
      * Restore the state of {@link SearchEditor}'s sections from the most recent global
      * state.

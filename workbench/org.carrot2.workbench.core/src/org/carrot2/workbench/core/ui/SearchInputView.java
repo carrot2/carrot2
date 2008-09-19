@@ -522,14 +522,9 @@ public class SearchInputView extends ViewPart
         {
             try
             {
-                final ProcessingComponent pc = e.getComponentClass().newInstance();
-
                 sources.put(e.getId(), e);
-
-                final BindableDescriptor descriptor = BindableDescriptorBuilder
-                    .buildDescriptor(pc).only(Input.class, Processing.class);
-
-                descriptors.put(e.getId(), descriptor);
+                descriptors.put(e.getId(), core.getComponentDescriptor(e.getId()).only(
+                    Input.class, Processing.class));
             }
             catch (Exception x)
             {
