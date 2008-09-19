@@ -13,30 +13,32 @@ public final class ExceptionUtils
     }
 
     /**
-     * If <code>t</code> if an instance of <code>clazz</code>, then <code>t</code>
-     * is returned. Otherwise an instance of <code>clazz</code> is created using a
+     * If <code>t</code> if an instance of <code>clazz</code>, then <code>t</code> is
+     * returned. Otherwise an instance of <code>clazz</code> is created using a
      * single-parameter constructor accepting <code>t</code> and the wrapper exception
-     * instance is returned. If no matching
-     * constructor can be found, a {@link RuntimeException} is returned.
+     * instance is returned. If no matching constructor can be found, a
+     * {@link RuntimeException} is returned.
      * 
      * @param clazz The exception class to return (or wrap) <code>t</code>.
      * @param t Throwable instance to wrap.
      */
-    public static <T extends Throwable> T wrapAs(Class<T> clazz, Throwable t) 
+    public static <T extends Throwable> T wrapAs(Class<T> clazz, Throwable t)
     {
         if (t == null)
         {
             return null;
         }
 
-        if (clazz.isAssignableFrom(t.getClass())) {
+        if (clazz.isAssignableFrom(t.getClass()))
+        {
             return clazz.cast(t);
         }
 
         try
         {
             @SuppressWarnings("unchecked")
-            final Constructor<T> [] constructors = (Constructor<T>[]) clazz.getConstructors();
+            final Constructor<T> [] constructors = (Constructor<T> []) clazz
+                .getConstructors();
 
             // Try single-argument (T extends Throwable) constructor.
             for (Constructor<T> constructor : constructors)
@@ -44,7 +46,10 @@ public final class ExceptionUtils
                 Class<?> [] params = constructor.getParameterTypes();
                 if (params.length == 1 && params[0].isAssignableFrom(t.getClass()))
                 {
-                    return constructor.newInstance(new Object [] {t});
+                    return constructor.newInstance(new Object []
+                    {
+                        t
+                    });
                 }
             }
 
@@ -54,7 +59,10 @@ public final class ExceptionUtils
                 Class<?> [] params = constructor.getParameterTypes();
                 if (params.length == 1 && params[0].isAssignableFrom(String.class))
                 {
-                    T instance = constructor.newInstance(new Object [] {t.toString()});
+                    T instance = constructor.newInstance(new Object []
+                    {
+                        t.toString()
+                    });
                     instance.initCause(t);
                     return instance;
                 }
@@ -72,14 +80,23 @@ public final class ExceptionUtils
                 }
             }
         }
+        catch (RuntimeException e)
+        {
+            throw e;
+        }
         catch (Exception e)
         {
             // fall through, no matching constructor found.
         }
 
-        throw new RuntimeException("(No constructor found in wrapper class " + clazz.getName() +"): ", t);
+        throw new RuntimeException("(No constructor found in wrapper class "
+            + clazz.getName() + "): ", t);
     }
-    
+
+    /**
+     * Calls {@link #wrapAs(Class, Throwable)} with the first parameter set to
+     * {@link RuntimeException}.
+     */
     public static RuntimeException wrapAsRuntimeException(Throwable t)
     {
         return wrapAs(RuntimeException.class, t);

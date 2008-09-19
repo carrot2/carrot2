@@ -22,19 +22,26 @@ public abstract class FileConstraintTestBase<T extends Annotation> extends
     public void prepareFiles() throws IOException
     {
         existingDirectory = new File("tmp-test-dir");
-        existingDirectory.mkdir();
+        if (!existingDirectory.mkdir())
+        {
+            throw new RuntimeException("Failed to create a directory: "
+                + existingDirectory.getAbsolutePath());
+        }
         existingFile = new File(existingDirectory, "file");
         FileUtils.touch(existingFile);
         nonExisting = new File(existingDirectory, "nonexisting");
-
-        existingFile.deleteOnExit();
-        existingDirectory.deleteOnExit();
     }
 
     @After
     public void removeFiles()
     {
-        existingFile.delete();
-        existingDirectory.delete();
+        final boolean fileDeleted = existingFile.delete();
+        final boolean directoryDeleted = existingDirectory.delete();
+        if (!(fileDeleted && directoryDeleted))
+        {
+            throw new RuntimeException("Failed to delete: "
+                + existingFile.getAbsolutePath() + " or "
+                + existingDirectory.getAbsolutePath());
+        }
     }
 }

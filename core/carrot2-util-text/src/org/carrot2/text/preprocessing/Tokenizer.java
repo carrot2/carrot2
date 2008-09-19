@@ -155,7 +155,7 @@ public final class Tokenizer
                     catch (IOException e)
                     {
                         // Not possible (StringReader above)?
-                        throw ExceptionUtils.wrapAs(RuntimeException.class, e);
+                        throw ExceptionUtils.wrapAsRuntimeException(e);
                     }
                     catch (ClassCastException e)
                     {

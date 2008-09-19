@@ -23,9 +23,10 @@ import org.simpleframework.xml.stream.Format;
 /**
  * Processes search requests.
  */
-@SuppressWarnings("serial")
 public class QueryProcessorServlet extends HttpServlet
 {
+    private static final long serialVersionUID = 1L;
+
     /** Controller that performs all searches */
     private transient CachingController controller;
 
@@ -33,7 +34,7 @@ public class QueryProcessorServlet extends HttpServlet
     private transient JawrUrlGenerator jawrUrlGenerator;
 
     /** Logger for processed queries */
-    private volatile Logger queryLogger;
+    private transient volatile Logger queryLogger;
 
     /**
      * Define this system property to enable statistical information from the query
@@ -125,9 +126,9 @@ public class QueryProcessorServlet extends HttpServlet
         {
             final CachingControllerStatistics statistics = controller.getStatistics();
 
+            // Sets encoding for the response writer
             response.setContentType("text/plain; charset=utf-8");
-            final Writer output = new OutputStreamWriter(response.getOutputStream(),
-                "UTF-8");
+            final Writer output = response.getWriter();
 
             output.write("clustering-total-queries: " + statistics.totalQueries + "\n");
             output.write("clustering-good-queries: " + statistics.goodQueries + "\n");
@@ -212,8 +213,8 @@ public class QueryProcessorServlet extends HttpServlet
         }
 
         // Send response
+        // Sets encoding of the response writer
         response.setContentType(MIME_XML_CHARSET_UTF);
-        final ServletOutputStream outputStream = response.getOutputStream();
         final PageModel pageModel = new PageModel(request, requestModel,
             jawrUrlGenerator, processingResult, processingException);
 
@@ -221,11 +222,11 @@ public class QueryProcessorServlet extends HttpServlet
 
         if (RequestType.CARROT2.equals(requestModel.type))
         {
-            persister.write(processingResult, outputStream);
+            persister.write(processingResult, response.getWriter());
         }
         else
         {
-            persister.write(pageModel, outputStream);
+            persister.write(pageModel, response.getWriter());
         }
     }
 

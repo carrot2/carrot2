@@ -318,6 +318,10 @@ public class AttributeBinder
                         String.class);
                     return valueOfMethod.invoke(null, stringValue);
                 }
+                catch (RuntimeException e)
+                {
+                    throw e;
+                }
                 catch (Exception e)
                 {
                     // Just skip this possibility

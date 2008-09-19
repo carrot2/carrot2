@@ -84,7 +84,7 @@ final class SnowballLanguageModel extends ThreadSafeLanguageModel
         }
         catch (Exception e)
         {
-            throw ExceptionUtils.wrapAs(RuntimeException.class, e);
+            throw ExceptionUtils.wrapAsRuntimeException(e);
         }
 
         return new SnowballStemmerAdapter(snowballStemmer);
@@ -111,7 +111,7 @@ final class SnowballLanguageModel extends ThreadSafeLanguageModel
         }
         catch (IOException e)
         {
-            throw ExceptionUtils.wrapAs(RuntimeException.class, e);
+            throw ExceptionUtils.wrapAsRuntimeException(e);
         }
     }
 }

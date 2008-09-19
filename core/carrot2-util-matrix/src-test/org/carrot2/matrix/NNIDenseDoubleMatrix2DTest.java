@@ -1,5 +1,6 @@
 package org.carrot2.matrix;
 
+import static org.carrot2.matrix.MatrixAssertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.matrix.NNIDenseDoubleMatrix2D;
@@ -69,10 +70,10 @@ public class NNIDenseDoubleMatrix2DTest
         DoubleMatrix2D coltB = new DenseDoubleMatrix2D(A.viewDice().toArray());
         DoubleMatrix2D D = DoubleFactory2D.dense.random(3, 4);
 
-        assertThat(nniB.zMult(A, null)).isEqualTo(coltB.zMult(A, null));
-        assertThat(nniB.zMult(C, null, 1, 0, false, true)).isEqualTo(
+        assertThat(nniB.zMult(A, null)).isEquivalentTo(coltB.zMult(A, null));
+        assertThat(nniB.zMult(C, null, 1, 0, false, true)).isEquivalentTo(
             coltB.zMult(C, null, 1, 0, false, true));
-        assertThat(nniB.zMult(D, null, 1, 0, true, true)).isEqualTo(
+        assertThat(nniB.zMult(D, null, 1, 0, true, true)).isEquivalentTo(
             coltB.zMult(D, null, 1, 0, true, true));
     }
 
@@ -83,7 +84,7 @@ public class NNIDenseDoubleMatrix2DTest
         DoubleMatrix2D coltB = new DenseDoubleMatrix2D(A.viewDice().toArray());
         DoubleMatrix2D D = DoubleFactory2D.dense.random(4, 3);
 
-        assertThat(nniB.zMult(D.viewDice(), null, 1, 0, true, true)).isEqualTo(
+        assertThat(nniB.zMult(D.viewDice(), null, 1, 0, true, true)).isEquivalentTo(
             coltB.zMult(D.viewDice(), null, 1, 0, true, true));
     }
 
@@ -103,7 +104,7 @@ public class NNIDenseDoubleMatrix2DTest
         DoubleMatrix2D colt = nniD.viewSelection(rows, null).viewDice().zMult(
             nniB.viewDice(), null, 1, 0, true, false).viewDice();
 
-        assertThat(nni).isEqualTo(colt);
+        assertThat(nni).isEquivalentTo(colt);
     }
 
     @Test
@@ -111,7 +112,7 @@ public class NNIDenseDoubleMatrix2DTest
     {
         NNIDenseDoubleMatrix2D copyE = new NNIDenseDoubleMatrix2D(E.toArray());
         copyE.transpose();
-        assertThat(copyE).isEqualTo(E.viewDice());
+        assertThat(copyE).isEquivalentTo(E.viewDice());
     }
 
     @Test
@@ -129,6 +130,6 @@ public class NNIDenseDoubleMatrix2DTest
         });
         final NNIDenseDoubleMatrix2D copy = (NNIDenseDoubleMatrix2D) matrix.clone();
         copy.transpose();
-        assertThat(matrix).isEqualTo(copy.viewDice());
+        assertThat(matrix).isEquivalentTo(copy.viewDice());
     }
 }

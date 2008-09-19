@@ -73,18 +73,8 @@ public class ProcessingComponentDumper
             this.attributeSets = descriptor.getAttributeSets();
 
             // Instantiate the component and get bindable metadata
-            final ProcessingComponent instance = descriptor.getComponentClass()
-                .newInstance();
-            final Map<String, Object> initAttributes = Maps.newHashMap();
-            final AttributeValueSet defaultAttributeValueSet = attributeSets
-                .getDefaultAttributeValueSet();
-            if (defaultAttributeValueSet != null)
-            {
-                initAttributes.putAll(defaultAttributeValueSet.getAttributeValues());
-            }
-
-            ControllerUtils.init(instance, initAttributes);
-
+            
+            final ProcessingComponent instance = descriptor.newInitializedInstance();
             this.attributeDescriptors = Maps.newHashMap(BindableDescriptorBuilder
                 .buildDescriptor(instance).attributeDescriptors);
 

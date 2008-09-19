@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.carrot2.core.attribute.Init;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.util.attribute.AttributeValueSets;
@@ -51,7 +52,7 @@ public class ProcessingComponentDescriptor
 
     @Attribute(required = false)
     Position position = Position.MIDDLE;
-    
+
     /**
      * The relative positioning of the component within the suite.
      */
@@ -190,5 +191,25 @@ public class ProcessingComponentDescriptor
         {
             attributeSets = new AttributeValueSets();
         }
+    }
+
+    /**
+     * Creates a new initialized instance of the processing component corresponding to
+     * this descriptor. The instance will be initialized with the {@link Init} attributes
+     * from this descriptor's default attribute set.
+     */
+    public ProcessingComponent newInitializedInstance() throws InstantiationException,
+        IllegalAccessException
+    {
+        final ProcessingComponent instance = componentClass.newInstance();
+        final Map<String, Object> initAttributes = Maps.newHashMap();
+        final AttributeValueSet defaultAttributeValueSet = attributeSets
+            .getDefaultAttributeValueSet();
+        if (defaultAttributeValueSet != null)
+        {
+            initAttributes.putAll(defaultAttributeValueSet.getAttributeValues());
+        }
+
+        return instance;
     }
 }

@@ -158,4 +158,21 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
         rowZero = columnZero;
         columnZero = tmp;
     }
+
+    //
+    // The superclass overrides only equals(), so override both methods below
+    // to make equals() and hashCode() consistent at least for this subclass.
+    // 
+    
+    @Override
+    public boolean equals(Object matrix)
+    {
+        return this == matrix;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return System.identityHashCode(this);
+    }
 }

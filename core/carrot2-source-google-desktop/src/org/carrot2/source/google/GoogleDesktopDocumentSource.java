@@ -33,9 +33,9 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
     public String queryUrl = getQueryUrlFromRegistry();
 
     /**
-     * Keep query word highlighting. Google by default highlights query words in
-     * snippets using the bold HTML tag. Set this attribute to <code>true</code> to keep
-     * these highlights.
+     * Keep query word highlighting. Google by default highlights query words in snippets
+     * using the bold HTML tag. Set this attribute to <code>true</code> to keep these
+     * highlights.
      */
     @Input
     @Processing
@@ -105,7 +105,8 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
             final InputStream is = process.getInputStream();
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-            new Thread() {
+            new Thread()
+            {
                 public void run()
                 {
                     try
@@ -130,6 +131,10 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
             }
 
             return result.substring(p + stringSymbol.length()).trim();
+        }
+        catch (RuntimeException e)
+        {
+            throw e;
         }
         catch (Exception e)
         {

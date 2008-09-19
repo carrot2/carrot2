@@ -24,16 +24,17 @@ import com.google.common.collect.Maps;
  * A servlet that parses HTTP POST input in Carrot<sup>2</sup> XML format, clusters it and
  * returns clusters.
  */
-@SuppressWarnings("serial")
 public final class RestProcessorServlet extends HttpServlet
 {
+    private static final long serialVersionUID = 1L;
+
     final String DCS_CONFIG_ATTRIBUTE = "dcs.config";
 
-    private DcsConfig config;
+    private transient DcsConfig config;
 
-    private ProcessingComponentSuite componentSuite;
+    private transient ProcessingComponentSuite componentSuite;
 
-    private CachingController controller;
+    private transient CachingController controller;
 
     @Override
     @SuppressWarnings("unchecked")

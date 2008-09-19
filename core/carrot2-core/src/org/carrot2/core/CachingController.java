@@ -818,10 +818,7 @@ public final class CachingController implements Controller
 
         CachingControllerStatistics getStatistics()
         {
-            synchronized (this)
-            {
-                return new CachingControllerStatistics(this, dataCache.getStatistics());
-            }
+            return new CachingControllerStatistics(this, dataCache.getStatistics());
         }
 
         private void addTimeToAverage(Map<String, Object> attributes, String key,

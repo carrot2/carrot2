@@ -306,17 +306,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         {
             try
             {
-                final ProcessingComponent pc = pcd.getComponentClass().newInstance();
-
-                final Map<String, Object> initAttributes = Maps.newHashMap();
-                final AttributeValueSet defaultAttributeValueSet = pcd.getAttributeSets()
-                    .getDefaultAttributeValueSet();
-                if (defaultAttributeValueSet != null)
-                {
-                    initAttributes.putAll(defaultAttributeValueSet.getAttributeValues());
-                }
-
-                ControllerUtils.init(pc, initAttributes);
+                final ProcessingComponent pc = pcd.newInitializedInstance();
 
                 processingDescriptors.put(pcd.getId(), pcd);
                 bindableDescriptors.put(pcd.getId(), BindableDescriptorBuilder

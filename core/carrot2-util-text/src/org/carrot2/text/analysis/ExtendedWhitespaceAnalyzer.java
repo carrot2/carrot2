@@ -32,7 +32,7 @@ public final class ExtendedWhitespaceAnalyzer extends Analyzer
             }
             catch (IOException e)
             {
-                throw ExceptionUtils.wrapAs(RuntimeException.class, e);
+                throw ExceptionUtils.wrapAsRuntimeException(e);
             }
         }
         return tokenizer;

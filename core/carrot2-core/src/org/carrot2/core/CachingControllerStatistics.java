@@ -115,33 +115,36 @@ public final class CachingControllerStatistics
     CachingControllerStatistics(CachingController.ProcessingStatistics controllerStats,
         Statistics ehcacheStats)
     {
-        // Total queries
-        totalQueries = controllerStats.totalQueries;
-        goodQueries = controllerStats.goodQueries;
+        synchronized (controllerStats)
+        {
+            // Total queries
+            totalQueries = controllerStats.totalQueries;
+            goodQueries = controllerStats.goodQueries;
 
-        // Averages
-        final RollingWindowAverage algorithmTimeAverage = controllerStats.algorithmTimeAverage;
-        algorithmTimeAverageInWindow = algorithmTimeAverage.getCurrentAverage();
-        algorithmTimeMeasurementsInWindow = algorithmTimeAverage.getUpdatesInWindow();
-        algorithmTimeWindowSize = algorithmTimeAverage.getWindowSizeMillis();
+            // Averages
+            final RollingWindowAverage algorithmTimeAverage = controllerStats.algorithmTimeAverage;
+            algorithmTimeAverageInWindow = algorithmTimeAverage.getCurrentAverage();
+            algorithmTimeMeasurementsInWindow = algorithmTimeAverage.getUpdatesInWindow();
+            algorithmTimeWindowSize = algorithmTimeAverage.getWindowSizeMillis();
 
-        final RollingWindowAverage sourceTimeAverage = controllerStats.sourceTimeAverage;
-        sourceTimeAverageInWindow = sourceTimeAverage.getCurrentAverage();
-        sourceTimeMeasurementsInWindow = sourceTimeAverage.getUpdatesInWindow();
-        sourceTimeWindowSize = sourceTimeAverage.getWindowSizeMillis();
+            final RollingWindowAverage sourceTimeAverage = controllerStats.sourceTimeAverage;
+            sourceTimeAverageInWindow = sourceTimeAverage.getCurrentAverage();
+            sourceTimeMeasurementsInWindow = sourceTimeAverage.getUpdatesInWindow();
+            sourceTimeWindowSize = sourceTimeAverage.getWindowSizeMillis();
 
-        final RollingWindowAverage totalTimeAverage = controllerStats.totalTimeAverage;
-        totalTimeAverageInWindow = totalTimeAverage.getCurrentAverage();
-        totalTimeMeasurementsInWindow = totalTimeAverage.getUpdatesInWindow();
-        totalTimeWindowSize = totalTimeAverage.getWindowSizeMillis();
+            final RollingWindowAverage totalTimeAverage = controllerStats.totalTimeAverage;
+            totalTimeAverageInWindow = totalTimeAverage.getCurrentAverage();
+            totalTimeMeasurementsInWindow = totalTimeAverage.getUpdatesInWindow();
+            totalTimeWindowSize = totalTimeAverage.getWindowSizeMillis();
 
-        // Cache stats
-        cacheMisses = ehcacheStats.getCacheMisses();
-        cacheHitsTotal = ehcacheStats.getCacheHits();
-        cacheHitsMemory = ehcacheStats.getInMemoryHits();
-        cacheHitsDisk = ehcacheStats.getOnDiskHits();
+            // Cache stats
+            cacheMisses = ehcacheStats.getCacheMisses();
+            cacheHitsTotal = ehcacheStats.getCacheHits();
+            cacheHitsMemory = ehcacheStats.getInMemoryHits();
+            cacheHitsDisk = ehcacheStats.getOnDiskHits();
+        }
     }
-    
+
     /**
      * Serializes this statistics object as XML to the provided writer.
      */

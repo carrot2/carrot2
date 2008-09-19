@@ -58,7 +58,7 @@ public final class StringUtils
         }
         catch (UnsupportedEncodingException e)
         {
-            throw ExceptionUtils.wrapAs(RuntimeException.class, e);
+            throw ExceptionUtils.wrapAsRuntimeException(e);
         }
     }
 
