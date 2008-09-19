@@ -51,7 +51,8 @@
         <example-query>solr</example-query>
       </example-queries>
     </source>
-    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="yahoo-web">
+
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
       <label>Yahoo!</label>
       <title>Yahoo Web Search</title>
       <mnemonic>Y</mnemonic>
@@ -62,12 +63,13 @@
         <example-query>olympics</example-query>
         <example-query>London</example-query>
       </example-queries>
-    </source>    
-    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-news">
-      <label>News</label>
-      <title>Yahoo News Search</title>
+    </source>
+
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-news">
+      <label>News (Boss)</label>
+      <title>Yahoo! News (Boss)</title>
       <mnemonic>N</mnemonic>
-      <description>Carrot2 clustering engine will search Yahoo News and organize the results into thematic categories</description>
+      <description>Carrot2 clustering engine will search Yahoo News with Boss API and organize the results into thematic categories</description>
       <icon-path>icons/yahoo.png</icon-path>
       <example-queries>
         <example-query>iphone</example-query>
@@ -75,6 +77,32 @@
         <example-query>election</example-query>
       </example-queries>
     </source>
+
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-images">
+      <label>Images (Boss)</label>
+      <title>Yahoo! Image search (Boss)</title>
+      <mnemonic>N</mnemonic>
+      <description>Carrot2 clustering engine will search Yahoo image search with Boss API and organize the results into thematic categories</description>
+      <icon-path>icons/yahoo.png</icon-path>
+      <example-queries>
+        <example-query>apple</example-query>
+        <example-query>amiga</example-query>
+        <example-query>president</example-query>
+      </example-queries>
+    </source>
+
+    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-news">
+      <label>News</label>
+      <title>Yahoo! News (API)</title>
+      <mnemonic>N</mnemonic>
+      <description>Carrot2 clustering engine will search Yahoo News API and organize the results into thematic categories</description>
+      <icon-path>icons/yahoo.png</icon-path>
+      <example-queries>
+        <example-query>iphone</example-query>
+        <example-query>olympics</example-query>
+        <example-query>election</example-query>
+      </example-queries>
+    </source>    
     <source component-class="org.carrot2.source.microsoft.MicrosoftLiveDocumentSource" id="msn-web">
       <label>MSN</label>
       <title>MSN Live Search</title>

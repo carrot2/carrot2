@@ -14,7 +14,7 @@ import org.junitext.Prerequisite;
 import org.junitext.runners.AnnotationRunner;
 
 /**
- * Tests plain service accessor (no queries longer than a single page etc.).
+ * Tests Web service accessor.
  */
 @RunWith(AnnotationRunner.class)
 public class BossWebSearchServiceTest extends ExternalApiTestBase

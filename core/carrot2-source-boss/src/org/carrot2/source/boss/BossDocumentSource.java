@@ -38,6 +38,9 @@ public final class BossDocumentSource extends MultipageSearchEngine
      * Keep query word highlighting. Yahoo by default highlights query words in
      * snippets using the bold HTML tag. Set this attribute to <code>true</code> to keep
      * these highlights.
+     * 
+     * @group Postprocessing
+     * @level Advanced
      */
     @Input
     @Processing
@@ -57,7 +60,7 @@ public final class BossDocumentSource extends MultipageSearchEngine
     @Attribute
     @ImplementingClasses(classes =
     {
-        BossWebSearchService.class
+        BossWebSearchService.class, BossNewsSearchService.class, BossImageSearchService.class
     })
     public BossSearchService service = new BossWebSearchService();
 

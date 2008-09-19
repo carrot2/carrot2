@@ -63,9 +63,10 @@ public abstract class BossSearchService
     public String sites;
 
     // http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html
-    // TODO: Add support for languages based on the LanguageCode parameter?
+    // TODO: CARROT-383 Add support for language selection based on the LanguageCode parameter?
     /*
-     * public String lang; public String region;
+     * public String lang;
+     * public String region;
      */
 
     /**

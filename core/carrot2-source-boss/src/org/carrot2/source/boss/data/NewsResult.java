@@ -4,31 +4,34 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- * A single Web search result.
+ * A single News search result.
  */
 @Root(name = "result", strict = false)
-public final class WebResult
+public final class NewsResult
 {
     @Element(name = "abstract", required = false)
     public String summary;
 
-    @Element(required = false)
-    public String date;
-    
-    @Element(name = "dispurl", required = false)
-    public String displayURL;
-    
     @Element(name = "clickurl", required = false)
     public String clickURL;
 
-    /**
-     * Image size. The size can be given in textual format, e.g., <code>2MB</code>.
-     */
-    @Element(required = false)
-    public String size;
-
     @Element(required = false)
     public String title;
+
+    @Element(required = false)
+    public String language;
+
+    @Element(required = false)
+    public String date;
+
+    @Element(required = false)
+    public String time;
+
+    @Element(required = false)
+    public String source;
+
+    @Element(name = "sourceurl", required = false)
+    public String sourceURL;
 
     @Element(required = false)
     public String url;

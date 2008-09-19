@@ -23,27 +23,6 @@ import org.carrot2.util.attribute.*;
 public final class BossWebSearchService extends BossSearchService
 {
     /**
-     * @see BossWebSearchService#filter
-     */
-    public enum FilterConst
-    {
-        PORN, HATE;
-
-        public String toString()
-        {
-            switch (this)
-            {
-                case PORN:
-                    return "-port";
-                case HATE:
-                    return "-hate";
-            }
-
-            throw new RuntimeException();
-        }
-    }
-
-    /**
      * Boss Web search service URI.
      * 
      * @label Service URI
