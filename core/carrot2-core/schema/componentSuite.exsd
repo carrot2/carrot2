@@ -52,7 +52,7 @@
          <attribute name="resource" type="string" use="required">
             <annotation>
                <documentation>
-                  Localizable.
+                  Suite path inside the bundle.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -62,7 +62,14 @@
          <attribute name="name" type="string" use="default" value="Component Suite">
             <annotation>
                <documentation>
-                  
+                  Suite name.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="resourceRoot" type="string" use="default" value="">
+            <annotation>
+               <documentation>
+                  Bundle resource prefix for include directives inside suites. 
                </documentation>
             </annotation>
          </attribute>

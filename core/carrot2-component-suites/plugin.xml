@@ -6,7 +6,8 @@
          point="org.carrot2.core.componentSuite">
       <suite
             name="Carrot2 Component Suite"
-            resource="suites/carrot2-default/suite-workbench.xml">
+            resourceRoot="suites/"
+            resource="carrot2-default/suite-workbench.xml">
       </suite>
    </extension>
 </plugin>

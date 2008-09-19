@@ -35,8 +35,8 @@ public final class ResourceUtilsFactory
      */
     static
     {
-        addLast( 
-            // Absolute resource files
+        addLast(
+        // Absolute resource files
             new AbsoluteFilePathLocator(),
             // Current working directory
             new DirLocator(new File(".").getAbsolutePath()),
@@ -83,6 +83,21 @@ public final class ResourceUtilsFactory
         synchronized (ResourceUtilsFactory.class)
         {
             defaultResourceLocators.addAll(index, Arrays.asList(locators));
+            defaultResourceUtils = new ResourceUtils(defaultResourceLocators
+                .toArray(new ResourceLocator [defaultResourceLocators.size()]));
+        }
+    }
+
+    /**
+     * Removes a given {@link ResourceLocator} from the list of existing default locators.
+     * Re-creates {@link ResourceUtils} factory returned from
+     * {@link #getDefaultResourceUtils()}.
+     */
+    public static void remove(ResourceLocator... locators)
+    {
+        synchronized (ResourceUtilsFactory.class)
+        {
+            defaultResourceLocators.removeAll(Arrays.asList(locators));
             defaultResourceUtils = new ResourceUtils(defaultResourceLocators
                 .toArray(new ResourceLocator [defaultResourceLocators.size()]));
         }

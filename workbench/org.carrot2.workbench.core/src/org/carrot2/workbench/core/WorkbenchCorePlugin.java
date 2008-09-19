@@ -196,7 +196,9 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                 .getConfigurationElements();
             if (configElements.length == 1 && "suite".equals(configElements[0].getName()))
             {
+                final String suiteRoot = configElements[0].getAttribute("resourceRoot");
                 final String suiteResource = configElements[0].getAttribute("resource");
+
                 if (StringUtils.isEmpty(suiteResource))
                 {
                     continue;
@@ -217,35 +219,56 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                     }
                 }
 
-                final URL bundleURL = b.getEntry(suiteResource);
+                final URL bundleURL = b.getEntry(suiteRoot + suiteResource);
 
-                /*
-                 * We rely on Eclipse-BuddyPolicy declared on the simplexml framework
-                 * here. This policy could be removed if we passed an explicit Persister
+                /* This piece of code is currently quite fragile and hacky, but works. 
+                 * 
+                 * First, we rely on Eclipse-BuddyPolicy declared on the simplexml framework
+                 * to instantiate arbitrary classes (from sources and algorithms). 
+                 * This policy could be removed if we passed an explicit Persister
                  * with a strategy substituting the context class loader with the given
                  * Bundle's loadClass() call. I leave it for now.
+                 * 
+                 * Second, the suite inclusion mechanism uses resource lookup, but the suite
+                 * plugin does not export suites as part of the classpath (it
+                 * contains plugin resources, but they are not on the classpath). We temporarily
+                 * add a custom resource locator that searches the contributing
+                 * plugin for resources matching the included resource.
                  */
                 try
                 {
-                    final ProcessingComponentSuite suite = ProcessingComponentSuite
-                        .deserialize(new URLResource(bundleURL));
-
                     /*
-                     * Cache icons.
+                     * Add temporary resource locator.
                      */
-                    for (ProcessingComponentDescriptor d : suite.getComponents())
+                    final ResourceLocator bundleLocator = 
+                        new PrefixDecoratorLocator(new BundleResourceLocator(b), suiteRoot);
+                    ResourceUtilsFactory.addFirst(bundleLocator);
+                    try
                     {
-                        final String iconPath = d.getIconPath();
-                        if (StringUtils.isEmpty(iconPath))
+                        final ProcessingComponentSuite suite = ProcessingComponentSuite
+                            .deserialize(new URLResource(bundleURL));
+
+                        /*
+                         * Cache icons.
+                         */
+                        for (ProcessingComponentDescriptor d : suite.getComponents())
                         {
-                            continue;
+                            final String iconPath = d.getIconPath();
+                            if (StringUtils.isEmpty(iconPath))
+                            {
+                                continue;
+                            }
+    
+                            componentImages.put(d.getId(), imageDescriptorFromPlugin(c
+                                .getName(), iconPath));
                         }
-
-                        componentImages.put(d.getId(), imageDescriptorFromPlugin(c
-                            .getName(), iconPath));
+    
+                        suites.add(suite);
                     }
-
-                    suites.add(suite);
+                    finally
+                    {
+                        ResourceUtilsFactory.remove(bundleLocator);
+                    }
                 }
                 catch (Exception e)
                 {

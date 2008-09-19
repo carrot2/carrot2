@@ -1,7 +1,7 @@
 <!-- Components included in all applications -->
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="yahoo-web">
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
       <label>Yahoo!</label>
       <title>Yahoo Web Search</title>
       <mnemonic>Y</mnemonic>
@@ -12,7 +12,31 @@
         <example-query>olympics</example-query>
         <example-query>London</example-query>
       </example-queries>
-    </source>    
+    </source>
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-news">
+      <label>News (Boss)</label>
+      <title>Yahoo! News (Boss)</title>
+      <mnemonic>N</mnemonic>
+      <description>Carrot2 clustering engine will search Yahoo News with Boss API and organize the results into thematic categories</description>
+      <icon-path>icons/yahoo.png</icon-path>
+      <example-queries>
+        <example-query>iphone</example-query>
+        <example-query>olympics</example-query>
+        <example-query>election</example-query>
+      </example-queries>
+    </source>
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-images">
+      <label>Images (Boss)</label>
+      <title>Yahoo! Image search (Boss)</title>
+      <mnemonic>N</mnemonic>
+      <description>Carrot2 clustering engine will search Yahoo image search with Boss API and organize the results into thematic categories</description>
+      <icon-path>icons/yahoo.png</icon-path>
+      <example-queries>
+        <example-query>apple</example-query>
+        <example-query>amiga</example-query>
+        <example-query>president</example-query>
+      </example-queries>
+    </source>  
     <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-news">
       <label>News</label>
       <title>Yahoo News Search</title>
@@ -37,6 +61,7 @@
         <example-query>java</example-query>
       </example-queries>
     </source>
+    <!-- 
     <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="indeed">
       <label>Jobs</label>
       <title>Jobs from indeed.com</title>
@@ -48,6 +73,7 @@
         <example-query>ruby</example-query>
       </example-queries>
     </source>
+     -->
     <source component-class="org.carrot2.source.pubmed.PubMedDocumentSource" id="pubmed" position="END">
       <label>PubMed</label>
       <title>PubMed medical database</title>

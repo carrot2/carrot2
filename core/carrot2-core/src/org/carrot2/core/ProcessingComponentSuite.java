@@ -2,12 +2,12 @@ package org.carrot2.core;
 
 import java.io.InputStream;
 import java.io.Writer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.carrot2.core.ProcessingComponentDescriptor.Position;
 import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.resource.Resource;
-import org.carrot2.util.resource.ResourceUtilsFactory;
+import org.carrot2.util.resource.*;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Commit;
@@ -86,10 +86,15 @@ public class ProcessingComponentSuite
 
         // Load included suites. Currently, we don't check for cycles.
         final List<ProcessingComponentSuite> suites = Lists.newArrayList();
+        final ResourceUtils ru = ResourceUtilsFactory.getDefaultResourceUtils();
         for (ProcessingComponentSuiteInclude include : includes)
         {
-            suites.add(deserialize(ResourceUtilsFactory.getDefaultResourceUtils()
-                .getFirst(include.suite), false));
+            final Resource resource = ru.getFirst(include.suite);
+            if (resource == null)
+            {
+                throw new Exception("Could not locate resource: " + include.suite);
+            }
+            suites.add(deserialize(resource, false));
         }
 
         // Merge sources
