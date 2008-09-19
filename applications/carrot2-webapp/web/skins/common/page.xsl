@@ -395,7 +395,7 @@
         </h3>
       </div>
       <xsl:if test="field[@key = 'thumbnail-url']">
-        <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value/@value}" />
+        <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value}" />
       </xsl:if>
       <xsl:if test="string-length(snippet) &gt; 0">
         <div class="snippet">
