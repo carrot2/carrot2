@@ -19,14 +19,7 @@
 
 
 	#foreach ($document in $cluster.getAllDocuments($comparator))
-	    <span class="id"> [$document.Id]</span>
-	    <a href="$esc.html(${document.getField("url")})">
-	    	<b>$esc.html($document.getField("title"))</b></a>
-	    <br>
-	    #if ($document.getField("snippet") && $document.getField("snippet") != "")
-	        $esc.html($document.getField("snippet"))<br>
-	    #end
-	    <span class="du">$esc.html(${document.getField("url")})</span><br><br>
+		#parse("_document.vm")
 	#end
 #end
 

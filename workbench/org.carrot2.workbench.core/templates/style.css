@@ -20,6 +20,12 @@ div.cl, div.status {
 div.status {
 	text-align: right;
 }
+
+div.snippet {
+	clear: both;
+	margin: 0px;
+	padding: 0px;
+}
 		
 span.du {
 	color: green;
@@ -32,4 +38,10 @@ span.id {
 		
 a {
     color: #1678C4;
+}
+
+img.t {
+	float: left;
+	margin-right: 4px;
+	margin-bottom: 4px;
 }

@@ -1,6 +1,7 @@
 package org.carrot2.workbench.velocity;
 
 import org.apache.commons.collections.ExtendedProperties;
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeInstance;
@@ -52,6 +53,7 @@ public final class VelocityInitializer
         final VelocityContext context = new VelocityContext();
         
         context.put("esc", new EscapeTool());
+        context.put("stringutils", new StringUtils());
 
         return context;
     }
