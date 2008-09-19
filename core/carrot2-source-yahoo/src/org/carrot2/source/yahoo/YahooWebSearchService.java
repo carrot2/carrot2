@@ -32,13 +32,12 @@ public final class YahooWebSearchService extends YahooSearchService
     @Init
     @Input
     @Attribute
-    public String serviceURI =
-        "http://api.search.yahoo.com/WebSearchService/V1/webSearch";
+    public String serviceURI = "http://api.search.yahoo.com/WebSearchService/V1/webSearch";
 
     /**
      * The language the results are written in. Value must be one of the <a
-     * href="http://developer.yahoo.com/search/languages.html">supported language codes</a>.
-     * Omitting language returns results in any language.
+     * href="http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html">supported
+     * language codes</a>. Omitting language returns results in any language.
      * 
      * @group Results filtering
      * @label Language
@@ -52,7 +51,8 @@ public final class YahooWebSearchService extends YahooSearchService
     /**
      * The country in which to restrict your search results. Only results on web sites
      * within this country are returned. Value must be one of the <a
-     * href="http://developer.yahoo.com/search/countries.html">supported country codes</a>.
+     * href="http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html">
+     * supported country codes</a>.
      * 
      * @group Results filtering
      * @label Country
