@@ -3,8 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="META-INF/"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
-	<classpathentry kind="src" path="/carrot2-source-xml"/>
-	<classpathentry kind="src" path="/carrot2-util-common"/>
+   	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

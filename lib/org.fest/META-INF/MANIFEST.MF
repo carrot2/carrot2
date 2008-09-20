@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: FEST libraries
+Bundle-Name: FEST libraries (Carrot2)
 Bundle-SymbolicName: org.fest
-Bundle-Version: 1.0.0
+Bundle-Version: 3.0.0
 Require-Bundle: org.eclipse.core.runtime
 Bundle-ClassPath: fest-assert-1.0a1.jar,
  fest-mocks-0.1.jar,
@@ -10,3 +10,4 @@ Bundle-ClassPath: fest-assert-1.0a1.jar,
 Export-Package: org.fest.assertions,
  org.fest.mocks,
  org.fest.util
+Bundle-Vendor: fest.easytesting.org

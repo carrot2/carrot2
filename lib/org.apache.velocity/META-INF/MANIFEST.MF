@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Apache Velocity (Carrot2)
+Bundle-Name: Apache Velocity
 Bundle-SymbolicName: org.apache.velocity
 Bundle-Version: 1.5.0
 Bundle-ClassPath: velocity-1.5.jar,

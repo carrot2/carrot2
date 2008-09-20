@@ -2,7 +2,7 @@
 <feature
       id="org.carrot2.workbench"
       label="Workbench Feature"
-      version="1.0.0"
+      version="3.0.0"
       provider-name="Carrot2.org"
       plugin="org.carrot2.workbench.core">
 
@@ -26,91 +26,91 @@
          id="org.carrot2.workbench.core"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="com.bea.xml"
          download-size="0"
          install-size="0"
-         version="1.2.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="com.google.collections"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="com.thoughtworks.qdox"
          download-size="0"
          install-size="0"
-         version="1.6.3"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="net.sf.ehcache"
          download-size="0"
          install-size="0"
-         version="1.4.1"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.apache.commons"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.apache.log4j"
          download-size="0"
          install-size="0"
-         version="1.2.14"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.carrot2.algorithm.synthetic"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.carrot2.core"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.carrot2.source.yahoo"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.carrot2.util.attribute"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.carrot2.util.common"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.carrot2.util.log4j"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -118,14 +118,14 @@
          id="org.easymock"
          download-size="0"
          install-size="0"
-         version="2.3.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.simpleframework.xml"
          download-size="0"
          install-size="0"
-         version="1.7.2"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -139,7 +139,7 @@
          id="org.junit4.ext"
          download-size="0"
          install-size="0"
-         version="4.3.1"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -160,14 +160,14 @@
          id="org.carrot2.source.xml"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.carrot2.workbench.editors"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin

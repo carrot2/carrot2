@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Attribute Editors
+Bundle-Name: Workbench Attribute Editors
 Bundle-SymbolicName: org.carrot2.workbench.editors;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 3.0.0
 Bundle-Activator: org.carrot2.workbench.editors.impl.EditorsPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

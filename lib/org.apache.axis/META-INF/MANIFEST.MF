@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Apache Axis (Carrot2)
+Bundle-Name: Apache Axis
 Bundle-SymbolicName: org.apache.axis
 Bundle-Version: 1.4.0
 Bundle-Vendor: Apache Foundation

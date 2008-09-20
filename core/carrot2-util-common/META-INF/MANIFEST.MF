@@ -1,16 +1,20 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Common Utils
+Bundle-Name: Common utilities
 Bundle-SymbolicName: org.carrot2.util.common
-Bundle-Version: 1.0.0
+Bundle-Version: 3.0.0
 Export-Package: org.carrot2.util,
  org.carrot2.util.httpclient,
  org.carrot2.util.pool,
- org.carrot2.util.resource
+ org.carrot2.util.resource,
+ org.carrot2.util.test
 Require-Bundle: org.apache.commons;visibility:=reexport,
  org.apache.log4j;visibility:=reexport,
  com.google.collections;visibility:=reexport,
- bak.pcj;bundle-version="1.2.0";visibility:=reexport
+ bak.pcj;bundle-version="1.2.0";visibility:=reexport,
+ org.fest;resolution:=optional;visibility:=reexport,
+ org.junit4.ext;resolution:=optional;visibility:=reexport,
+ org.easymock;resolution:=optional;visibility:=reexport
 Bundle-ClassPath: .
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: dependent

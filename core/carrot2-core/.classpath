@@ -3,13 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry exported="true" kind="lib" path="META-INF/"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.easymock"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-attribute"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.junit4-ext"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/net.sf.ehcache"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.codehaus.jackson"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

@@ -3,12 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/cern.colt"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="lib/nni.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.google.collections"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.fest"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.junit4-ext"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

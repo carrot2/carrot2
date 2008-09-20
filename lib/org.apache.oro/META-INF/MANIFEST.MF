@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Apache ORO (Carrot2)
+Bundle-Name: Apache ORO
 Bundle-SymbolicName: org.apache.oro
 Bundle-Version: 2.0.8
 Bundle-ClassPath: oro-2.0.8.jar

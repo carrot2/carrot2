@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Workbench Circles Visualization
 Bundle-SymbolicName: org.carrot2.workbench.vis.circles;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 3.0.0
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.apache.commons,
@@ -18,6 +18,6 @@ Bundle-ClassPath: .,
  META-INF/,
  icons/
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Bundle-Vendor: Carrot Search s.c.
+Bundle-Vendor: Carrot2.org
 Export-Package: org.carrot2.workbench.vis.circles
 Bundle-Activator: org.carrot2.workbench.vis.circles.CirclesActivator

@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Google Collections
+Bundle-Name: Google Collections (20080820)
 Bundle-SymbolicName: com.google.collections
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.20080820
 Bundle-ClassPath: google-collections.jar
 Bundle-Vendor: Google Inc.
 Export-Package: com.google.common.base,
