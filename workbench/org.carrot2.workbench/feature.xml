@@ -502,7 +502,8 @@
          id="org.carrot2.util.matrix"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.carrot2.suites.default"
@@ -581,7 +582,8 @@
          id="org.codehaus.jackson"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.carrot2.source.solr"
