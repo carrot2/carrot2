@@ -61,7 +61,7 @@
         <example-query>java</example-query>
       </example-queries>
     </source>
-    <!-- 
+
     <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="indeed">
       <label>Jobs</label>
       <title>Jobs from indeed.com</title>
@@ -73,7 +73,7 @@
         <example-query>ruby</example-query>
       </example-queries>
     </source>
-     -->
+
     <source component-class="org.carrot2.source.pubmed.PubMedDocumentSource" id="pubmed" position="END">
       <label>PubMed</label>
       <title>PubMed medical database</title>
