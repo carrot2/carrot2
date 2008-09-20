@@ -39,12 +39,18 @@ ul.tabs li.tab .web {
   background-image: url('../img/sources/web.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
+ul.tabs li.tab .boss-news,
 ul.tabs li.tab .yahoo-news {
   background-image: url('../img/sources/bulb.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
+ul.tabs li.tab .boss-web,
 ul.tabs li.tab .yahoo-web {
   background-image: url('../img/sources/yahoo.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 1px */
+}
+
+ul.tabs li.tab .boss-images {
+  background-image: url('../img/sources/images.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 2px; sprite-margin-left: 1px */
 }
 
 ul.tabs li.tab .google {

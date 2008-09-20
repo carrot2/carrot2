@@ -26,7 +26,7 @@
       </example-queries>
     </source>
     <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-images">
-      <label>Images (Boss)</label>
+      <label>Images</label>
       <title>Yahoo! Image search (Boss)</title>
       <mnemonic>N</mnemonic>
       <description>Carrot2 clustering engine will search Yahoo image search with Boss API and organize the results into thematic categories</description>
