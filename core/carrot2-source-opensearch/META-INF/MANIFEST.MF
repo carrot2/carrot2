@@ -5,10 +5,8 @@ Bundle-SymbolicName: org.carrot2.opensearch;singleton:=true
 Bundle-Version: 3.0.0
 Export-Package: org.carrot2.source.opensearch
 Require-Bundle: org.carrot2.core,
- org.carrot2.util.common
+ org.carrot2.util.common,
+ com.sun.syndication;visibility:=reexport
 Bundle-ClassPath: META-INF/,
- .,
- lib/jdom-1.1.jar,
- lib/rome-1.0RC1.jar,
- lib/rome-fetcher-0.7.jar
+ .
 Bundle-Vendor: Carrot2.org
