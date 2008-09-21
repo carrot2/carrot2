@@ -24,12 +24,12 @@
         <example-query>amiga</example-query>
         <example-query>president</example-query>
       </example-queries>
-    </source>  
+    </source>
     <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-news">
       <label>News</label>
       <title>Yahoo News Search</title>
       <mnemonic>N</mnemonic>
-      <description>Yahoo News Search document source searches news using Yahoo Boss News Search API.</description>
+      <description>Yahoo News Search document source searches news using Yahoo News Search API.</description>
       <icon-path>icons/yahoo.png</icon-path>
       <example-queries>
         <example-query>iphone</example-query>
