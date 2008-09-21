@@ -3,7 +3,7 @@
     <value-set>
       <label>Jobs</label>
       <attribute key="OpenSearchDocumentSource.feedUrlTemplate" type="java.lang.String">
-        <value>http://www.indeed.com/opensearch?q=${searchTerms}&amp;start=${startIndex}&amp;limit=${count}"</value>
+        <value>http://www.indeed.com/opensearch?q=${searchTerms}&amp;start=${startIndex}&amp;limit=${count}</value>
       </attribute>
       <attribute key="OpenSearchDocumentSource.resultsPerPage" type="java.lang.Integer">
         <value>50</value>

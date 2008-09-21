@@ -47,7 +47,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * 
      * @label XML Resource
      * @level Basic
-     * @group Input data
+     * @group XML data
      */
     @Input
     @Processing

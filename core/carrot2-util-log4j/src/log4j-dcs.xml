@@ -14,7 +14,7 @@
     <!-- Customized console appender. -->
 	<appender  name="appender-console" class="org.apache.log4j.ConsoleAppender">
 	    <layout class="org.apache.log4j.PatternLayout">
-	        <param name="ConversionPattern" value="[%d{ABSOLUTE} %-5p] %m%n"/>
+	        <param name="ConversionPattern" value="[%p] %m%n"/>
 	    </layout>
 	</appender>
 
@@ -37,7 +37,7 @@
       <level value="info" />
       <appender-ref ref="appender-console" />
   </logger>
-
+  
   <!-- Root logger config. -->
   <root>
       <priority value="debug" />

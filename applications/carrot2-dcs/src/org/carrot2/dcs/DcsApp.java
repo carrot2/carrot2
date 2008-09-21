@@ -1,5 +1,6 @@
 package org.carrot2.dcs;
 
+import org.apache.log4j.Logger;
 import org.kohsuke.args4j.*;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
@@ -10,6 +11,8 @@ import org.mortbay.jetty.webapp.WebAppContext;
  */
 public class DcsApp
 {
+    private final Logger log = Logger.getLogger("dcs");
+
     @Option(name = "-port", usage = "Port number to bind to")
     int port = 8080;
 
@@ -40,6 +43,9 @@ public class DcsApp
 
     void start(String webPathPrefix) throws Exception
     {
+        System.setProperty("org.mortbay.log.class", Log4jJettyLog.class.getName());
+        log.info("Starting DCS...");
+        
         server = new Server();
         SelectChannelConnector connector = new SelectChannelConnector();
         connector.setPort(port);
@@ -61,17 +67,18 @@ public class DcsApp
             wac.setWar(webPathPrefix != null ? webPathPrefix + "/web" : "web");
             wac.setClassLoader(Thread.currentThread().getContextClassLoader());
         }
-        
+
         if (System.getProperty("dcs.development.mode") != null)
         {
             wac.setDefaultsDescriptor("etc/webdefault.xml");
         }
-        
+
         server.setHandler(wac);
         server.setStopAtShutdown(true);
 
         // Start the http server
         server.start();
+        log.info("DCS started, point browser to: http://localhost:" + port + "/");
     }
 
     void stop() throws Exception
