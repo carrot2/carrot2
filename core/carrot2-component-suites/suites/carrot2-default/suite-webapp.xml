@@ -6,7 +6,6 @@
       <label>Web</label>
       <title>Search the Web with etools.ch</title>
       <mnemonic>W</mnemonic>
-      <description>Carrot2 clustering engine will search the Web with www.etools.ch and automatically organize the results into thematic categories</description>
       <example-queries>
         <example-query>data mining</example-query>
         <example-query>london</example-query>
@@ -17,7 +16,6 @@
       <label>Blogs</label>
       <title>Blogs from icerocket.com</title>
       <mnemonic>B</mnemonic>
-      <description>Carrot2 clustering engine will search blogs from icerocket.com and organize the results into thematic categories</description>
       <example-queries>
         <example-query>olympics</example-query>
         <example-query>music</example-query>

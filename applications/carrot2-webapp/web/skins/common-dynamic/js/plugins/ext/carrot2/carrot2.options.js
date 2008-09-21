@@ -11,7 +11,7 @@
       $resultsArea = $("#results-area");
 
       if (optionsShowing) {
-        $("#extra-info").show();
+        $("#example-queries, #main-info").show();
         if ($resultsArea.size() != 0) {
           var optionsHeight = $("#options").innerHeight();
           jQuery.options.updateResultsArea($resultsArea, optionsHeight, -1);
@@ -20,7 +20,7 @@
         $(this).data("optionsShowing", false);
         $.cookie(COOKIE_OPTIONS_SHOWN, null);
       } else {
-        $("#extra-info").hide();
+        $("#example-queries, #main-info").hide();
         $("#options").show();
 
         if ($resultsArea.size() != 0) {

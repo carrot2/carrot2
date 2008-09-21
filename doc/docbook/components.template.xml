@@ -7,22 +7,13 @@
   %custom;
 ]>
 <chapter xml:id="chapter.components" xmlns="http://docbook.org/ns/docbook" version="5.0">
-  <title>Components</title>
-  <subtitle>Tailoring &C2; components to your needs</subtitle>
+  <title>Component reference</title>
+  <subtitle>Detailed description of all &C2; components</subtitle>
 
   <para>
     To tune clustering the behaviour of &C2; components for your specific
     application needs, you can change their attributes.
   </para>
 
-  <section xml:id="section.attribute-reference">
-    <title>Attribute reference</title>
-
-    <para>
-      This reference lists all attributes of all &C2; components.
-    </para>
-
-    <attribute-reference />
-
-  </section>
+  <attribute-reference />
 </chapter>

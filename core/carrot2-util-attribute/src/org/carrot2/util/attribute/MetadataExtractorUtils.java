@@ -21,7 +21,13 @@ final class MetadataExtractorUtils
      * Converts a JavaDoc link to text.
      */
     private static final Pattern LINK_TO_TEXT_PATTERN = Pattern
-        .compile("\\{@link\\s(.+)\\}");
+        .compile("\\{@link\\s(.+?)\\}");
+
+    /**
+     * Matching of '#' characters in links.
+     */
+    private static final Pattern SPACE_HASH_PATTERN = Pattern.compile(">#");
+    private static final Pattern TYPE_HASH_PATTERN = Pattern.compile("([^>])#");
 
     private MetadataExtractorUtils()
     {
@@ -87,7 +93,11 @@ final class MetadataExtractorUtils
      */
     static String renderInlineTags(String comment)
     {
-        return LINK_TO_TEXT_PATTERN.matcher(comment).replaceAll("$1");
+        String content = comment;
+        content = LINK_TO_TEXT_PATTERN.matcher(comment).replaceAll("<code>$1</code>");
+        content = SPACE_HASH_PATTERN.matcher(content).replaceAll(">");
+        content = TYPE_HASH_PATTERN.matcher(content).replaceAll("$1.");
+        return content;
     }
 
     /**

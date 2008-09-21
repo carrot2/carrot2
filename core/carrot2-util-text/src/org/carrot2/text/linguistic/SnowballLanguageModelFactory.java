@@ -14,12 +14,6 @@ import com.google.common.collect.Maps;
 @Bindable(prefix = "SnowballLanguageModelFactory")
 public final class SnowballLanguageModelFactory implements LanguageModelFactory
 {
-    /**
-     * Currently active language.
-     * 
-     * @level Basic
-     * @group Preprocessing
-     */
     @Required
     @Processing
     @Input
@@ -27,16 +21,34 @@ public final class SnowballLanguageModelFactory implements LanguageModelFactory
     public LanguageCode current = LanguageCode.ENGLISH;
 
     /**
-     * Reload stopwords. Reloads stop words file on every processing request. For best
-     * performance, stop word reloading should be disabled in production.
+     * Reloads stopwords on every processing request.For best performance, stop word
+     * reloading should be disabled in production.
      * 
      * @level Medium
      * @group Preprocessing
+     * @label Reload stopwords
      */
     @Processing
     @Input
     @Attribute
     public boolean reloadStopwords = false;
+
+    /**
+     * Merges stopwords from all known languages. If set to <code>false</code>, only
+     * stopwords of the active language will be used. If set to <code>true</code>,
+     * stopwords from all {@link LanguageCode}s will be used together, no matter the
+     * active language. Stopword merging is useful when clustering data in a mix of
+     * different languages and should increase clustering quality in such settings.
+     * 
+     * @level Medium
+     * @group Preprocessing
+     * @label Merge stopwords
+     */
+    @Init
+    @Processing
+    @Input
+    @Attribute
+    public boolean mergeStopwords = true;
 
     /**
      *
@@ -73,10 +85,10 @@ public final class SnowballLanguageModelFactory implements LanguageModelFactory
     /**
      * Initialize languages. For now this assumes no language ever fails to load.
      */
-    private static LanguageModel createLanguageModel(LanguageCode languageCode)
+    private LanguageModel createLanguageModel(LanguageCode languageCode)
     {
         final ResourceUtils resourceLoaders = ResourceUtilsFactory
             .getDefaultResourceUtils();
-        return new SnowballLanguageModel(languageCode, resourceLoaders);
+        return new SnowballLanguageModel(languageCode, resourceLoaders, mergeStopwords);
     }
 }

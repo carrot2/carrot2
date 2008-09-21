@@ -2,10 +2,10 @@
 <component-suite>
   <sources>
     <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
-      <label>Yahoo!</label>
+      <label>Yahoo</label>
       <title>Yahoo Web Search</title>
       <mnemonic>Y</mnemonic>
-      <description>Carrot2 clustering engine will search the Web using Yahoo Boss</description>
+      <description>Yahoo Web Search document source searches the web using Yahoo Boss Web Search API.</description>
       <icon-path>icons/yahoo.png</icon-path>
       <example-queries>
         <example-query>data mining</example-query>
@@ -13,23 +13,11 @@
         <example-query>London</example-query>
       </example-queries>
     </source>
-    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-news">
-      <label>News (Boss)</label>
-      <title>Yahoo! News (Boss)</title>
-      <mnemonic>N</mnemonic>
-      <description>Carrot2 clustering engine will search Yahoo News with Boss API and organize the results into thematic categories</description>
-      <icon-path>icons/yahoo.png</icon-path>
-      <example-queries>
-        <example-query>iphone</example-query>
-        <example-query>olympics</example-query>
-        <example-query>election</example-query>
-      </example-queries>
-    </source>
     <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-images">
       <label>Images</label>
-      <title>Yahoo! Image search (Boss)</title>
-      <mnemonic>N</mnemonic>
-      <description>Carrot2 clustering engine will search Yahoo image search with Boss API and organize the results into thematic categories</description>
+      <title>Yahoo Image Search</title>
+      <mnemonic>I</mnemonic>
+      <description>Yahoo Image Search document source searches web images using Yahoo Boss Image Search API.</description>
       <icon-path>icons/yahoo.png</icon-path>
       <example-queries>
         <example-query>apple</example-query>
@@ -41,7 +29,7 @@
       <label>News</label>
       <title>Yahoo News Search</title>
       <mnemonic>N</mnemonic>
-      <description>Carrot2 clustering engine will search Yahoo News and organize the results into thematic categories</description>
+      <description>Yahoo News Search document source searches news using Yahoo Boss News Search API.</description>
       <icon-path>icons/yahoo.png</icon-path>
       <example-queries>
         <example-query>iphone</example-query>
@@ -53,7 +41,7 @@
       <label>MSN</label>
       <title>MSN Live Search</title>
       <mnemonic>M</mnemonic>
-      <description>Carrot2 clustering engine will search MSN Live and organize the results into thematic categories</description>
+      <description>MSN Live Search document source searches the web using MSN Live.</description>
       <icon-path>icons/live.png</icon-path>
       <example-queries>
         <example-query>data mining</example-query>
@@ -66,7 +54,7 @@
       <label>Jobs</label>
       <title>Jobs from indeed.com</title>
       <mnemonic>J</mnemonic>
-      <description>Carrot2 clustering engine will search jobs from indeed.com and organize the results into thematic categories</description>
+      <description>Searches jobs from indeed.com</description>
       <example-queries>
         <example-query>java</example-query>
         <example-query>manager</example-query>
@@ -78,7 +66,7 @@
       <label>PubMed</label>
       <title>PubMed medical database</title>
       <mnemonic>P</mnemonic>
-      <description>Carrot2 clustering engine will search the PubMed medical abstracts database and cluster the results</description>
+      <description>PubMed document source seaches the PubMed medical abstracts database.</description>
       <icon-path>icons/pubmed.png</icon-path>
       <example-queries>
         <example-query>cancer</example-query>

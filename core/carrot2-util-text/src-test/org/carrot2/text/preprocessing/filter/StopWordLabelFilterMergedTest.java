@@ -6,9 +6,9 @@ import org.carrot2.text.preprocessing.*;
 import org.junit.Test;
 
 /**
- * Test cases for {@link StopWordLabelFilter}.
+ * Test cases for {@link StopWordLabelFilter} with stop word list merging.
  */
-public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
+public class StopWordLabelFilterMergedTest extends LabelFilterTestBase
 {
     @Override
     protected void initializeFilters(LabelFilterProcessor filterProcessor)
@@ -41,7 +41,7 @@ public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
     @Test
     public void testStopWords()
     {
-        createDocuments("I . HAVE . data", "I . HAVE . data");
+        createDocuments("I . dog . data", "I . dog . data . y . y . el . el . der . der");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
@@ -54,7 +54,7 @@ public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
     @Test
     public void testStopWordsInPhrases()
     {
-        createDocuments("of data mining for", "of data mining for");
+        createDocuments("y data mining der", "y data mining der");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
@@ -68,7 +68,7 @@ public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
     protected LanguageModelFactory createLanguageModelFactory()
     {
         final SnowballLanguageModelFactory snowballLanguageModelFactory = new SnowballLanguageModelFactory();
-        snowballLanguageModelFactory.mergeStopwords = false;
+        snowballLanguageModelFactory.mergeStopwords = true;
         return snowballLanguageModelFactory;
     }
 }

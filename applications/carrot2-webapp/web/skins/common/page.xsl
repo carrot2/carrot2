@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
-    doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
-    media-type="text/html" encoding="utf-8" />
+              doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+              doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+              media-type="text/html" encoding="utf-8" />
+              
   <xsl:strip-space elements="*" />
+  
   <xsl:variable name="context-path" select="/page/@context-path" />
   <xsl:variable name="skin-path" select="/page/@skin-path" />
   <xsl:variable name="search-url" select="/page/config/@search-url" />
+  
   <xsl:variable name="query-param" select="/page/config/@query-param" />
   <xsl:variable name="source-param" select="/page/config/@source-param" />
   <xsl:variable name="algorithm-param" select="/page/config/@algorithm-param" />
   <xsl:variable name="results-param" select="/page/config/@results-param" />
   <xsl:variable name="view-param" select="/page/config/@view-param" />
   <xsl:variable name="skin-param" select="/page/config/@skin-param" />
+  
   <xsl:variable name="request-url" select="/page/@request-url" />
   <xsl:variable name="xml-url-encoded" select="/page/@xml-url-encoded" />
-  <xsl:variable name="documents-url"
-    select="concat($request-url, '&amp;type=DOCUMENTS')" />
-  <xsl:variable name="clusters-url"
-    select="concat($request-url, '&amp;type=CLUSTERS')" />
+  <xsl:variable name="documents-url" select="concat($request-url, '&amp;type=DOCUMENTS')" />
+  <xsl:variable name="clusters-url" select="concat($request-url, '&amp;type=CLUSTERS')" />
+  
   <xsl:variable name="debug" select="false" />
 
   <!-- HTML scaffolding -->
@@ -30,11 +32,10 @@
         <html xmlns="http://www.w3.org/1999/xhtml">
           <head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <title>
-              <xsl:call-template name="page-title" />
-            </title>
+            <title><xsl:call-template name="page-title" /></title>
             <xsl:apply-templates select="page/asset-urls/css-urls/css-url" />
           </head>
+          
           <body>
             <xsl:attribute name="id"><xsl:call-template
               name="page-body-id" /></xsl:attribute>
@@ -42,22 +43,20 @@
               <xsl:apply-templates select="/page/request/parameter" />
             </xsl:if>
     
-    <!-- Page content -->
+            <!-- Page content -->
             <xsl:apply-templates />
     
-    <!-- Custom in-line javascript -->
-            <xsl:apply-templates select="/page"
-              mode="js" />
-            <script type="text/javascript"> var gaJsHost = (("https:" ==
-              document.location.protocol) ? "https://ssl." :
-              "http://www."); document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    </script>
-    <script type="text/javascript">
-      var pageTracker = _gat._getTracker("UA-317750-3");
-      pageTracker._trackPageview();
-    </script>
-  </body>
-</html>
+            <!-- Custom in-line javascript -->
+            <xsl:apply-templates select="/page" mode="js" />
+            <script type="text/javascript"> var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www."); 
+              document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+            </script>
+            <script type="text/javascript">
+              var pageTracker = _gat._getTracker("UA-317750-3");
+              pageTracker._trackPageview();
+            </script>
+          </body>
+        </html>
       </xsl:when>
       
       <xsl:otherwise>
@@ -122,9 +121,11 @@
       <h1><a href="{$context-path}/{$search-url}"><span class="hide"><xsl:call-template name="main-title" /></span></a></h1>
     </div>
     
-    <p class="hide">
-      <xsl:call-template name="main-intro" />
-    </p>
+    <div id="main-info">
+      Carrot<sup>2</sup> organizes your search results into topics. With
+      an instant overview of what's available, you will quickly find what 
+      you're looking for.  
+    </div>
 
     <hr class="hide" />
 
@@ -182,6 +183,9 @@
               </xsl:if>
             </div>
           </form>
+          <xsl:if test="string-length(/page/request/@query) = 0">
+            <div id="example-queries"><xsl:comment></xsl:comment></div>
+          </xsl:if>
         </div>
 
         <xsl:if test="string-length(/page/request/@query) > 0">
@@ -195,6 +199,11 @@
 
     <div id="util-links">
       <h3 class="hide">About Carrot<sup>2</sup>:</h3>
+      
+      <p class="hide">
+        <xsl:call-template name="about-text" />
+      </p>
+
       <ul class="util-links">
         <li><a href="#">About</a><xsl:call-template name="pipe" /></li>
         <li class="hot"><a href="#">New features!</a><xsl:call-template name="pipe" /></li>
@@ -323,7 +332,6 @@
         </xsl:choose>
       </a>
       <span class="hide">
-        <span class="tab-info"><xsl:value-of select="$source/description" /></span><br />
         <span class="example-queries">Example queries: 
           <xsl:apply-templates select="$source/example-queries/example-query" />
         </span>
@@ -345,10 +353,11 @@
     Carrot2 Search Results Clustering Engine
   </xsl:template>
 
-  <xsl:template name="main-intro">
+  <xsl:template name="about-text">
     Carrot2 is an Open Source Search Results Clustering Engine. It can
     automatically organize (cluster) search results into thematic
-    categories.
+    categories. For more information, please check the 
+    <a href="http://project.carrot2.org">project website</a>.
   </xsl:template>
   
   <!-- Documents -->

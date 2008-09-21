@@ -9,26 +9,29 @@ import org.carrot2.core.*;
 public final class AttributeNames
 {
     /**
-     * Index (zero-based) of the first document/ search result to fetch.
+     * Index of the first document/ search result to fetch. The index starts with zero.
      * 
      * @label Start Index
      * @level Medium
+     * @group Search query
      */
     public static final String START = "start";
 
     /**
-     * Number of documents/ search results to fetch.
+     * Number maximum of documents/ search results to fetch.
      * 
      * @label Results
      * @level Basic
+     * @group Search query
      */
     public static final String RESULTS = "results";
 
     /**
-     * Query to be executed by the search engine/ document retrieval system.
+     * Query to perform.
      * 
      * @label Query
      * @level Basic
+     * @group Search query
      */
     public static final String QUERY = "query";
 
@@ -36,6 +39,7 @@ public final class AttributeNames
      * Estimated total number of matching documents.
      * 
      * @label Total Results
+     * @group Search request statistics
      */
     public static final String RESULTS_TOTAL = "results-total";
 
@@ -43,6 +47,7 @@ public final class AttributeNames
      * Documents returned by the search engine/ document retrieval system.
      * 
      * @label Documents
+     * @group Documents
      */
     public static final String DOCUMENTS = "documents";
 
@@ -50,6 +55,7 @@ public final class AttributeNames
      * Clusters created by the clustering algorithm.
      * 
      * @label Clusters
+     * @group Clusters
      */
     public static final String CLUSTERS = "clusters";
 
@@ -59,6 +65,7 @@ public final class AttributeNames
      * {@link #PROCESSING_TIME_SOURCE} and {@link #PROCESSING_TIME_ALGORITHM}.
      * 
      * @label Total Processing Time
+     * @group Processing status
      */
     public static final String PROCESSING_TIME_TOTAL = "processing-time-total";
 
@@ -69,6 +76,7 @@ public final class AttributeNames
      * {@link ProcessingComponent#afterProcessing()} hooks.
      * 
      * @label Data Source Processing Time
+     * @group Data source status
      */
     public static final String PROCESSING_TIME_SOURCE = "processing-time-source";
 
@@ -79,14 +87,20 @@ public final class AttributeNames
      * {@link ProcessingComponent#afterProcessing()} hooks.
      * 
      * @label Clustering Algorithm Processing Time
+     * @group Clustering algorithm status
      */
     public static final String PROCESSING_TIME_ALGORITHM = "processing-time-algorithm";
 
     /**
-     * Current active language (hint).
+     * Processing language hint. Suggestion for the clustering algorithm to perform
+     * clustering in the specified language. Based on the suggestion, the algorithm can
+     * determine e.g. the stemmer or list of stop words the algorithm uses. A mismatch
+     * between the processing language hint and the actual language of processed documents
+     * may result in poor clustering quality.
      * 
      * @label Processing Language
      * @level Basic
+     * @group Preprocessing
      * @see LanguageCode
      */
     public static final String ACTIVE_LANGUAGE = "active-language";

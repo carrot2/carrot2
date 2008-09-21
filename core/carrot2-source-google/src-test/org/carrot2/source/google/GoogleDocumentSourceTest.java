@@ -5,7 +5,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import java.util.List;
 
 import org.carrot2.core.Document;
-import org.carrot2.core.test.MultipartDocumentSourceTestBase;
+import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import org.junitext.runners.AnnotationRunner;
  */
 @RunWith(AnnotationRunner.class)
 public class GoogleDocumentSourceTest extends
-    MultipartDocumentSourceTestBase<GoogleDocumentSource>
+    MultipageDocumentSourceTestBase<GoogleDocumentSource>
 {
     @Override
     public Class<GoogleDocumentSource> getComponentClass()

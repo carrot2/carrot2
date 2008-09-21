@@ -29,7 +29,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     /**
      * The resource to load XML data from. You can either create instances of
      * {@link Resource} implementations directly or use {@link ResourceUtils} to look up
-     * {@link Resource} instances from a variety of locations.
+     * {@link Resource} instances from a variety of locations.  
      * <p>
      * One special {@link Resource} implementation you can use is
      * {@link ParameterizedUrlResource}. It allows you to specify attribute place holders
@@ -47,6 +47,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * 
      * @label XML Resource
      * @level Basic
+     * @group Input data
      */
     @Input
     @Processing
@@ -74,8 +75,9 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * {@link #xsltParameters} attribute.
      * </p>
      * 
-     * @label XSLT stylesheet
+     * @label XSLT Stylesheet
      * @level Medium
+     * @group XML transformation 
      */
     @Input
     @Init
@@ -88,10 +90,12 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     public Resource xslt;
 
     /**
-     * Parameters to be passed to the XSLT transformer.
+     * Parameters to be passed to the XSLT transformer. Keys of the map will be used
+     * as parameter names, values of the map as parameter values.
      * 
-     * @label XSLT parameters
+     * @label XSLT Parameters
      * @level Advanced
+     * @group XML transformation 
      */
     @Input
     @Init
@@ -100,8 +104,8 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     public Map<String, String> xsltParameters = ImmutableMap.of();
 
     /**
-     * Query to be used to fetch the documents (see {@link #xml}). After processing, the
-     * query read from the XML data, if any.
+     * Before processing: query to be used to fetch the from a remote XML stream. After
+     * processing: the query read from the XML data, if any.
      */
     @Input
     @Output
@@ -110,7 +114,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     public String query;
 
     /**
-     * The number of {@link Document}s to read from the XML data.
+     * The maximum number of documents to read from the XML data.
      */
     @Input
     @Processing
@@ -119,7 +123,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     public int results = 100;
 
     /**
-     * {@link Document}s read from the XML data.
+     * Documents read from the XML data.
      */
     @Processing
     @Output

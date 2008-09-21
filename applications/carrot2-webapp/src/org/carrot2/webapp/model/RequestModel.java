@@ -68,7 +68,12 @@ public class RequestModel
     @ElementList(entry = "parameter", inline = true, required = false)
     private ArrayList<TypeStringValuePair> otherParametersToSerialize;
 
-    public void afterParametersBound(Map<String, Object> remainingHttpParameters)
+    @SuppressWarnings("unused")
+    @ElementList(entry = "cookie", inline = true, required = false)
+    private ArrayList<TypeStringValuePair> cookies;
+
+    public void afterParametersBound(Map<String, Object> remainingHttpParameters,
+        Map<String, String> cookies)
     {
         if (type == null)
         {
@@ -83,5 +88,8 @@ public class RequestModel
         otherParameters = remainingHttpParameters;
         otherParametersToSerialize = ListUtils.asArrayList(TypeStringValuePair
             .toTypeStringValuePairs(remainingHttpParameters));
+
+        this.cookies = ListUtils.asArrayList(TypeStringValuePair
+            .toTypeStringValuePairs(cookies));
     }
 }

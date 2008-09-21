@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
                 xmlns:db="http://docbook.org/ns/docbook"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
                 exclude-result-prefixes="db">
 
   <xsl:strip-space elements="*"/>
@@ -23,58 +24,29 @@
     <section xml:id="section.{component-descriptor/@id}">
       <title><xsl:apply-templates select="component-descriptor/title" /></title>
 
-      <xsl:call-template name="attribute-section">
-        <xsl:with-param name="section-title" select="'Initialization input attributes'" />
-        <xsl:with-param name="doc" select="." />
-        <xsl:with-param name="scope" select="'Init'" />
-        <xsl:with-param name="direction" select="'Input'" />
-      </xsl:call-template>
+      <para>
+        <xsl:apply-templates select="component-descriptor/description" />
+      </para>
 
-      <xsl:call-template name="attribute-section">
-        <xsl:with-param name="section-title" select="'Processing input attributes'" />
-        <xsl:with-param name="doc" select="." />
-        <xsl:with-param name="scope" select="'Processing'" />
-        <xsl:with-param name="direction" select="'Input'" />
-      </xsl:call-template>
-
-      <xsl:call-template name="attribute-section">
-        <xsl:with-param name="section-title" select="'Processing output attributes'" />
-        <xsl:with-param name="doc" select="." />
-        <xsl:with-param name="scope" select="'Processing'" />
-        <xsl:with-param name="direction" select="'Output'" />
-      </xsl:call-template>
-    </section>
-  </xsl:template>
-
-  <xsl:template name="attribute-section">
-    <xsl:param name="doc" />
-    <xsl:param name="scope" />
-    <xsl:param name="direction" />
-    <xsl:param name="section-title" />
-    
-    <xsl:if test="$doc/attribute[contains(string(attribute-descriptor/annotations), $scope) and contains(string(attribute-descriptor/annotations), $direction)]">
-      <section>
-        <title><xsl:value-of select="$section-title" /></title>
+      <xsl:variable name="doc" select="." />
+      <xsl:for-each select="$doc/groups/string">
+        <xsl:variable name="group" select="string(.)" />
         
-        <xsl:for-each select="$doc/groups/string">
-          <xsl:variable name="group" select="string(.)" />
-          
-          <xsl:if test="$doc/attribute[contains(string(attribute-descriptor/annotations), $scope) and contains(string(attribute-descriptor/annotations), $direction) and attribute-descriptor/metadata/group = $group]">
-            <section>
-              <title><xsl:value-of select="$group" /></title>
-              <xsl:apply-templates select="$doc/attribute[contains(string(attribute-descriptor/annotations), $scope) and contains(string(attribute-descriptor/annotations), $direction) and attribute-descriptor/metadata/group = $group]" />
-            </section>
-          </xsl:if>
-        </xsl:for-each>
-        
-        <xsl:if test="$doc/attribute[contains(string(attribute-descriptor/annotations), $scope) and contains(string(attribute-descriptor/annotations), $direction) and not(attribute-descriptor/metadata/group)]">
+        <xsl:if test="$doc/attribute[attribute-descriptor/metadata/group = $group]">
           <section>
-            <title>Ungrouped</title>
-            <xsl:apply-templates select="$doc/attribute[contains(string(attribute-descriptor/annotations), $scope) and contains(string(attribute-descriptor/annotations), $direction) and not(attribute-descriptor/metadata/group)]" />
+            <title><xsl:value-of select="$group" /></title>
+            <xsl:apply-templates select="$doc/attribute[attribute-descriptor/metadata/group = $group]" />
           </section>
         </xsl:if>
-      </section>
-    </xsl:if>
+      </xsl:for-each>
+      
+      <xsl:if test="$doc/attribute[not(attribute-descriptor/metadata/group)]">
+        <section>
+          <title>Ungrouped</title>
+          <xsl:apply-templates select="$doc/attribute[not(attribute-descriptor/metadata/group)]" />
+        </section>
+      </xsl:if>
+    </section>
   </xsl:template>
 
   <xsl:template match="attribute">
@@ -83,7 +55,7 @@
 
   <xsl:template match="attribute-descriptor">
     <section>
-      <title><xsl:value-of select="metadata/title" /></title>
+      <title><xsl:value-of select="metadata/label" /></title>
       <informaltable frame="none">
         <tgroup cols="2">
           <tbody>
@@ -93,24 +65,66 @@
             </row>
             
             <row>
-              <entry role="rowhead">Required</entry>
-              <entry><constant><xsl:value-of select="@required" /></constant></entry>
+              <entry role="rowhead">Direction</entry>
+              <entry>
+                <xsl:if test="annotations[annotation = 'Input']">
+                  Input
+                </xsl:if>
+                <xsl:if test="annotations[annotation = 'Input' and annotation = 'Output']">
+                  and
+                </xsl:if>
+                <xsl:if test="annotations[annotation = 'Output']">
+                  Output
+                </xsl:if>
+              </entry>
             </row>
             
-            <row>
-              <entry role="rowhead">Level</entry>
-              <entry><constant><xsl:value-of select="metadata/level" /></constant></entry>
-            </row>
+            <xsl:if test="annotations[annotation = 'Input']">
+              <row>
+                <entry role="rowhead">Level</entry>
+                <entry><constant><xsl:value-of select="metadata/level" /></constant></entry>
+              </row>
+            </xsl:if>
             
             <row>
               <entry role="rowhead">Description</entry>
               <entry>
+                <xsl:apply-templates select="metadata/title" />.
                 <xsl:apply-templates select="metadata/description" />
               </entry>
             </row>
             
+            <xsl:if test="annotations[annotation = 'Input']">
+              <row>
+                <entry role="rowhead">Required</entry>
+                <entry>
+                  <constant>
+                    <xsl:choose>
+                      <xsl:when test="@required = 'true'">yes</xsl:when>
+                      <xsl:otherwise>no</xsl:otherwise>
+                    </xsl:choose>
+                  </constant>
+                </entry>
+              </row>
+            </xsl:if>
+            
             <row>
-              <entry role="rowhead">Type</entry>
+              <entry role="rowhead">Scope</entry>
+              <entry>
+                <xsl:if test="annotations[annotation = 'Init']">
+                  Initialization time
+                </xsl:if>
+                <xsl:if test="annotations[annotation = 'Init' and annotation = 'Processing']">
+                  and
+                </xsl:if>
+                <xsl:if test="annotations[annotation = 'Processing']">
+                  Processing time
+                </xsl:if>
+              </entry>
+            </row>
+            
+            <row>
+              <entry role="rowhead">Value type</entry>
               <entry><constant><xsl:value-of select="@type" /></constant></entry>
             </row>
             
@@ -127,11 +141,26 @@
               </entry>
             </row>
             
+            <xsl:if test="allowed-values">
+              <row>
+                <entry role="rowhead">Allowed values</entry>
+                <entry>
+                  <itemizedlist>
+                    <xsl:apply-templates select="allowed-values/value" />
+                  </itemizedlist>
+                </entry>
+              </row>
+            </xsl:if>
+            
             <xsl:apply-templates select="constraints/constraint" />
           </tbody>
         </tgroup>
       </informaltable>
     </section>
+  </xsl:template>
+  
+  <xsl:template match="allowed-values/value">
+    <listitem><code><xsl:apply-templates /></code></listitem>
   </xsl:template>
   
   <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.ImplementingClassesConstraint']">
@@ -181,10 +210,10 @@
   </xsl:template>
     
   <xsl:template match="constraint">
-    <xsl:message>Unsupported constraint type:<xsl:value-of select="@class" /></xsl:message>
+    <xsl:message>Unsupported constraint type:    <xsl:value-of select="@class" /></xsl:message>
   </xsl:template>
   
-  <!-- Some mappings between HTML elements and their DocBook counterparts-->
+  <!-- Some mappings between HTML elements and their DocBook counterparts -->
   <xsl:template match="ul">
     <itemizedlist>
       <xsl:apply-templates />
@@ -208,9 +237,52 @@
       <xsl:apply-templates />
     </para>
   </xsl:template>
+  
+  <xsl:template match="table">
+    <informaltable frame="none">
+      <tgroup cols="{count(.//th)}">
+        <xsl:apply-templates />
+      </tgroup>
+    </informaltable>
+  </xsl:template>
+  
+  <xsl:template match="thead">
+    <thead>
+      <xsl:apply-templates />
+    </thead>
+  </xsl:template>
 
+  <xsl:template match="tbody">
+    <tbody>
+      <xsl:apply-templates />
+    </tbody>
+  </xsl:template>
+
+  <xsl:template match="tr">
+    <row>
+      <xsl:apply-templates />
+    </row>
+  </xsl:template>
+
+  <xsl:template match="th|td">
+    <entry>
+      <xsl:if test="@align">
+        <xsl:attribute name="align"><xsl:value-of select="@align" /></xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates />
+    </entry>
+  </xsl:template>
+
+  <xsl:template match="a[@href]">
+    <link xlink:href="{@href}"><xsl:apply-templates /></link>
+  </xsl:template>
+  
+  <xsl:template match="strong">
+    <emphasis role="bold"><xsl:apply-templates /></emphasis>
+  </xsl:template>
+  
   <!-- Copy certain Docbook elements -->
-  <xsl:template match="db:chapter|db:para|db:section|db:title|db:subtitle|db:example|db:xref|db:programlisting|db:sgmltag|db:classname|db:filename|db:note|db:phrase">
+  <xsl:template match="db:chapter|db:appendix|db:para|db:section|db:title|db:subtitle|db:example|db:xref|db:programlisting|db:sgmltag|db:classname|db:filename|db:note|db:phrase">
     <xsl:copy>
       <xsl:copy-of select="@*" />
       <xsl:apply-templates />

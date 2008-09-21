@@ -117,23 +117,35 @@ input, select, label {
 }
 
 #startup #search-area {
-  padding-left: 236px;
+  padding-left: 238px;
   padding-top: 15px;
 }
 
-#startup #extra-info {
-  padding-top: 10px;
-  padding-left: 1px;
-  width: 400px;
+#startup #main-info,
+#startup #example-queries,
+#startup #search-area ul.util-links {
+  left: 238px;
+  position: absolute;
+}
+
+#startup #main-info {
+  width: 435px;
+  top: 210px;
   font-size: 13px;
 }
 
+#startup form {
+  position: relative;
+  left: -2px;
+}
+
 #startup #example-queries {
-  margin-top: 7px;
+  bottom: 70px;
+  font-size: 13px;
 }
 
 #startup #search-area ul.util-links {
-  margin-top: 14px;
+  bottom: 25px;
   padding-top: 13px;
   width: 400px;
 }

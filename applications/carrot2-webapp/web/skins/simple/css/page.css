@@ -52,26 +52,39 @@ body, input, select, label, button {
 }
 
 #startup #search-area {
-  margin-left: 234px;
+  margin-left: 235px;
   margin-top: 15px;
 }
 
-#startup #extra-info {
-  clear: both;
-  color: #606060;
-  width: 360px;
-  margin-top: 10px;
+#startup #example-queries,
+#startup #main-info,
+#startup #search-area ul.util-links {
+  left: 235px;
+}
+      
+#startup #main-info {
+  top: 197px;
+  width: 355px;
+}
+
+#startup form {
+  position: relative;
+  left: -1px;
 }
 
 #startup #example-queries {
-  margin-top: 10px;
+  position: absolute;
+  bottom: 50px;
+  color: #606060;
+  width: 360px;
 }
 
 #startup #search-area ul.util-links {
+  position: absolute;
+  bottom: 14px;
   border-top: 1px #d0d0d0 solid;
   width: 360px;
-  margin-top: 10px;
-  padding-top: 5px;
+  padding-top: 7px;
 }
 
 #startup #main-area {

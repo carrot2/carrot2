@@ -101,13 +101,13 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
     @Test
     public void testPhraseWithStopWords()
     {
-        createDocuments("food for dog", "food for dog");
-        final String expectedLabel = "Food for Dog";
+        createDocuments("food for fish", "food for fish");
+        final String expectedLabel = "Food for Fish";
 
         checkFullPreprocessing(expectedLabel);
         checkWithoutPreprocessing(new char [] []
         {
-            "food".toCharArray(), "for".toCharArray(), "dog".toCharArray()
+            "food".toCharArray(), "for".toCharArray(), "fish".toCharArray()
         }, new boolean []
         {
             false, true, false

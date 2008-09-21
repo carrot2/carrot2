@@ -7,6 +7,8 @@ import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.resource.*;
 import org.tartarus.snowball.SnowballStemmer;
 
+import com.google.common.collect.Sets;
+
 /**
  * Implements language models on top of Snowball stemmers.
  */
@@ -50,10 +52,15 @@ final class SnowballLanguageModel extends ThreadSafeLanguageModel
      * associated with <code>languageCode</code>'s ISO code.
      */
     @SuppressWarnings("unchecked")
-    SnowballLanguageModel(LanguageCode languageCode, ResourceUtils resourceLoaders)
+    SnowballLanguageModel(LanguageCode languageCode, ResourceUtils resourceLoaders,
+        boolean mergeStopwords)
     {
-        super(languageCode, loadCommonWords(languageCode.getIsoCode(), resourceLoaders));
-        
+        super(languageCode, loadCommonWords(resourceLoaders,
+            mergeStopwords ? getAllKnownIsoCodes() : new String []
+            {
+                languageCode.getIsoCode()
+            }));
+
         try
         {
             final String stemmerClazzName = "org.tartarus.snowball.ext."
@@ -93,25 +100,45 @@ final class SnowballLanguageModel extends ThreadSafeLanguageModel
     /**
      * Loads common words associated with the given language.
      */
-    private static Set<String> loadCommonWords(String isoCode,
-        ResourceUtils resourceLoaders)
+    private static Set<String> loadCommonWords(ResourceUtils resourceLoaders,
+        String... isoCodes)
     {
         try
         {
-            final Resource commonWordsResource = resourceLoaders.getFirst("stopwords."
-                + isoCode, SnowballLanguageModel.class);
+            final Set<String> result = Sets.newHashSet();
 
-            if (commonWordsResource == null)
+            for (String isoCode : isoCodes)
             {
-                // Language resources not found.
-                throw new RuntimeException("Common words not found: " + isoCode);
+                final Resource commonWordsResource = resourceLoaders.getFirst(
+                    "stopwords." + isoCode, SnowballLanguageModel.class);
+
+                if (commonWordsResource == null)
+                {
+                    // Language resources not found.
+                    throw new RuntimeException("Common words not found: " + isoCode);
+                }
+                result.addAll(TextResourceUtils.load(commonWordsResource));
             }
 
-            return TextResourceUtils.load(commonWordsResource);
+            return result;
         }
         catch (IOException e)
         {
             throw ExceptionUtils.wrapAsRuntimeException(e);
         }
+    }
+
+    /**
+     * Returns an array ISO codes of all {@link LanguageCode}s.
+     */
+    private static String [] getAllKnownIsoCodes()
+    {
+        final LanguageCode [] values = LanguageCode.values();
+        final String [] result = new String [values.length];
+        for (int i = 0; i < values.length; i++)
+        {
+            result[i] = values[i].getIsoCode();
+        }
+        return result;
     }
 }

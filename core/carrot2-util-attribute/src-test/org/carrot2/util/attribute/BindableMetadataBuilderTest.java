@@ -21,8 +21,8 @@ public class BindableMetadataBuilderTest
     static Map<String, BindableMetadata> bindableMetadata;
 
     /**
-     * @return Return <code>true</code> if source path property is available and tests
-     *         can proceed.
+     * @return Return <code>true</code> if source path property is available and tests can
+     *         proceed.
      */
     public static boolean isSourcePathAvailable()
     {
@@ -207,10 +207,20 @@ public class BindableMetadataBuilderTest
     {
         // Note that this scenario is not supported
         checkTitle(AttributeTitles.class, "titleWithLink",
-            "Title with link to ProcessingComponent#init()");
+            "Title with link to <code>ProcessingComponent.init()</code>");
         checkDescription(AttributeTitles.class, "titleWithLink", "Description.");
     }
 
+    @Prerequisite(requires = "isSourcePathAvailable")
+    @Test
+    public void testDescriptionWithLinks()
+    {
+        // Note that this scenario is not supported
+        checkTitle(AttributeTitles.class, "descriptionWithLinks", "Title");
+        checkDescription(AttributeTitles.class, "descriptionWithLinks",
+            "Description with <code>titleAtTheBottom</code> and <code>String</code> links.");
+    }
+    
     @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testTitleAtTheBottomNotSupported()
@@ -382,14 +392,14 @@ public class BindableMetadataBuilderTest
     {
         checkGroup(AttributeGroups.class, "oneWordGroup", "Group");
     }
-    
+
     @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testMultiWordGroup()
     {
         checkGroup(AttributeGroups.class, "multiWordGroup", "Multi word group");
     }
-    
+
     @Prerequisite(requires = "isSourcePathAvailable")
     @Test
     public void testNoGroup()

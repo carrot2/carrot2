@@ -108,29 +108,40 @@ body, input, select, label {
 }
 
 #startup #search-area {
-  padding-left: 236px;
+  padding-left: 238px;
   padding-top: 10px;
 }
 
-#startup #extra-info {
-  padding-top: 10px;
-  padding-left: 1px;
+#startup #example-queries,
+#startup #main-info,
+#startup #search-area ul.util-links {
+  left: 238px;
+}
+    
+#startup #main-info {
   width: 400px;
-  font-size: 11px;
+  top: 200px;
+}
+
+#startup form {
+  position: relative;
+  left: -2px;
 }
 
 #startup #example-queries {
-  margin-top: 7px;
+  position: absolute;
+  bottom: 65px;
 }
 
 #startup #search-area ul.util-links {
-  margin-top: 14px;
+  position: absolute;
+  bottom: 22px;
   padding-top: 13px;
   width: 400px;
 }
 
 #startup #search-area ul.util-links li {
-  font-size: 11px;
+  font-size: 10px;
 }
 
 #startup #main-area {

@@ -24,36 +24,18 @@ import org.carrot2.util.attribute.constraint.NotBlank;
 public abstract class SearchEngineBase extends ProcessingComponentBase implements
     DocumentSource
 {
-    /**
-     * Starting index of the first result to fetch.
-     * 
-     * @group Results paging
-     * @label Start index
-     */
     @Processing
     @Input
     @Attribute(key = AttributeNames.START)
     @IntRange(min = 0)
     public int start = 0;
 
-    /**
-     * Number of results to fetch.
-     * 
-     * @group Results paging
-     * @label Results count
-     */
     @Processing
     @Input
     @Attribute(key = AttributeNames.RESULTS)
     @IntRange(min = 1)
     public int results = 100;
 
-    /**
-     * Search query to execute.
-     * 
-     * @group Search query
-     * @label Query
-     */
     @Processing
     @Input
     @Attribute(key = AttributeNames.QUERY)
@@ -61,19 +43,11 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
     @NotBlank
     public String query;
 
-    /**
-     * Number of total matching documents. This may be an approximation.
-     * 
-     * @label Results Total
-     */
     @Processing
     @Output
     @Attribute(key = AttributeNames.RESULTS_TOTAL)
     public long resultsTotal;
 
-    /**
-     * A collection of documents retrieved for the query.
-     */
     @Processing
     @Output
     @Attribute(key = AttributeNames.DOCUMENTS)
@@ -87,6 +61,9 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
 
     /**
      * Indicates whether the search engine returned a compressed result stream.
+     * 
+     * @label Compression used
+     * @group Data source status
      */
     @Processing
     @Output

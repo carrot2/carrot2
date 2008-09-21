@@ -41,11 +41,12 @@ public abstract class BossSearchService
     public static final String YBOSS_RESPONSE = "boss.response";
     
     /**
-     * Application ID required for BOSS services. <b>Generate your own ID if you are
-     * making a branch off the Carrot2.org's code, please</b>.
+     * Application ID required for BOSS services. Please <strong>generate your own ID</strong> 
+     * for production deployments and branches off the Carrot2.org's code.
      * 
      * @label Application ID
      * @level Advanced
+     * @group Service
      */
     @Init
     @Input
@@ -53,7 +54,8 @@ public abstract class BossSearchService
     public String appid = "txRLTt7V34GgabH9baqIrsnRLuy87i4dQ2kQyok0IIqlUXdw4HmxjE59xhq2_6mT0LM-";
 
     /**
-     * Comma-separated list of sites to query. For example: <code>abc.com,cnn.com</code>.
+     * Restricts search results to a set of sites. Must be a comma-separated list of site's domain
+     * names, e.g. <code>abc.com,cnn.com</code>.
      * 
      * @group Results filtering
      * @label Domain restriction
@@ -65,18 +67,22 @@ public abstract class BossSearchService
     public String sites;
 
     /**
-     * Language restriction. This field can take one of the values defined at <a
-     * href="http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html">
-     * http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html</a>.
+     * Restricts search to the specified language.
+     * Must be one of the <a href="http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html">
+     * language codes supported by Yahoo API</a>. You can also use the {@link #region} attribute
+     * to narrow down the results to a specific region.
      * <p>
-     * Full table of allowed values (as of Sept/2008) for the region and language.
+     * The following languages and regions are currently (September 2008) supported:
      * <table>
-     *   <tr>
-     *   <td align="center"><strong>Country</strong></td>
-     *   <td align="center"><strong>Region</strong></td>
-     *   <td align="center"><strong>Language</strong></td>
-     *   </tr>
+     *   <thead>
+     *     <tr>
+     *       <th align="left">Country</th>
+     *       <th align="left">Region</th>
+     *       <th align="left">Language</th>
+     *     </tr>
+     *   </thead>
      *   
+     *   <tbody>
      *   <tr><td>Argentina</td><td>ar</td> <td>es</td></tr>
      *   <tr><td>Austria</td><td>at</td> <td>de</td></tr>
      *   <tr><td>Australia</td><td>au</td> <td>en</td></tr>
@@ -118,7 +124,9 @@ public abstract class BossSearchService
      *   <tr><td>United States - Spanish</td><td>us</td><td>es</td></tr>
      *   <tr><td>Vietnam</td><td>vn</td><td>vi</td></tr>
      *   <tr><td>Venezuela</td><td>ve</td><td>es</td></tr>
+     *   </tbody>
      * </table>
+     * </p>
      * 
      * @label Language
      * @level Medium
@@ -131,15 +139,66 @@ public abstract class BossSearchService
     public String language;
 
     /**
-     * Region restriction. This field can take one of the values defined at <a
-     * href="http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html">
-     * http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html</a>.
+     * Restricts search to the specified region. 
+     * Must be one of the <a href="http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html">
+     * region codes supported by Yahoo API</a>. You can also use the {@link #language} attribute
+     * to narrow down the results to a specific language.
      * <p>
-     * Region is somewhat more generic than {@link #language}, for example
-     * Swiss region contains three languages: German, Italian and French.
-     * <p>
-     * Full table of regions and languages is given in the documentation
-     * of {@link #language}.
+     * The following languages and regions are currently (September 2008) supported:
+     * <table>
+     *   <thead>
+     *     <tr>
+     *       <th align="left">Country</th>
+     *       <th align="left">Region</th>
+     *       <th align="left">Language</th>
+     *     </tr>
+     *   </thead>
+     *   
+     *   <tbody>
+     *   <tr><td>Argentina</td><td>ar</td> <td>es</td></tr>
+     *   <tr><td>Austria</td><td>at</td> <td>de</td></tr>
+     *   <tr><td>Australia</td><td>au</td> <td>en</td></tr>
+     *   <tr><td>Brazil</td><td>br</td><td>pt</td></tr>
+     *   <tr><td>Canada - English</td><td>ca</td><td>en</td></tr>
+     *   <tr><td>Canada - French</td><td>ca</td><td>fr</td></tr>
+     *   <tr><td>Catalan</td><td>ct</td><td>ca</td></tr>
+     *   <tr><td>Chile</td><td>cl</td><td>es</td></tr>
+     *   <tr><td>Columbia</td><td>co</td><td>es</td></tr>
+     *   <tr><td>Denmark</td><td>dk</td><td>da</td></tr>
+     *   <tr><td>Finland</td><td>fi</td><td>fi</td></tr>
+     *   <tr><td>Indonesia - English</td><td>id</td><td>en</td></tr>
+     *   <tr><td>Indonesia - Indonesian</td><td>id</td><td>id</td></tr>
+     *   <tr><td>India</td><td>in</td><td>en</td></tr>
+     *   <tr><td>Japan</td><td>jp</td><td>jp</td></tr>
+     *   <tr><td>Korea</td><td>kr</td><td>kr</td></tr>
+     *   <tr><td>Mexico</td><td>mx</td><td>es</td></tr>
+     *   <tr><td>Malaysia - English</td><td>my</td><td>en</td></tr>
+     *   <tr><td>Malaysia</td><td>my</td><td>ms</td></tr>
+     *   <tr><td>Netherlands</td><td>nl</td><td>nl</td></tr>
+     *   <tr><td>Norway</td><td>no</td><td>no</td></tr>
+     *   <tr><td>New Zealand</td><td>nz</td><td>en</td></tr>
+     *   <tr><td>Peru</td><td>pe</td><td>es</td></tr>
+     *   <tr><td>Philippines</td><td>ph</td><td>tl</td></tr>
+     *   <tr><td>Philippines - English</td><td>ph</td><td>en</td></tr>
+     *   <tr><td>Russia</td><td>ru</td><td>ru</td></tr>
+     *   <tr><td>Sweden</td><td>se</td><td>sv</td></tr>
+     *   <tr><td>Singapore</td><td>sg</td><td>en</td></tr>
+     *   <tr><td>Thailand</td><td>th</td><td>th</td></tr>
+     *   <tr><td>Switzerland - German</td><td>ch</td><td>de</td></tr>
+     *   <tr><td>Switzerland - French</td><td>ch</td><td>fr</td></tr>
+     *   <tr><td>Switzerland - Italian</td><td>ch</td><td>it</td></tr>
+     *   <tr><td>German</td><td>de</td><td>de</td></tr>
+     *   <tr><td>Spanish</td><td>es</td><td>es</td></tr>
+     *   <tr><td>French</td><td>fr</td><td>fr</td></tr>
+     *   <tr><td>Italian</td><td>it</td><td>it</td></tr>
+     *   <tr><td>United Kingdom</td><td>uk</td><td>en</td></tr>
+     *   <tr><td>United States - English</td><td>us</td><td>en</td></tr>
+     *   <tr><td>United States - Spanish</td><td>us</td><td>es</td></tr>
+     *   <tr><td>Vietnam</td><td>vn</td><td>vi</td></tr>
+     *   <tr><td>Venezuela</td><td>ve</td><td>es</td></tr>
+     *   </tbody>
+     * </table>
+     * </p>
      * 
      * @label Region
      * @level Medium

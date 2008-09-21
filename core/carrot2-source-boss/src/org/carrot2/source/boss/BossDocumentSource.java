@@ -35,12 +35,13 @@ public final class BossDocumentSource extends MultipageSearchEngine
         .createExecutorService(MAX_CONCURRENT_THREADS, BossDocumentSource.class);
 
     /**
-     * Keep query word highlighting. Yahoo by default highlights query words in
-     * snippets using the bold HTML tag. Set this attribute to <code>true</code> to keep
-     * these highlights.
+     * Determines whether to keep the original query word highlights. Yahoo by default
+     * highlights query words in search results using the &lt;b&gt; HTML tag. Set this
+     * attribute to <code>true</code> to keep these highlights.
      * 
      * @group Postprocessing
      * @level Advanced
+     * @label Keep highlights
      */
     @Input
     @Processing
@@ -48,19 +49,20 @@ public final class BossDocumentSource extends MultipageSearchEngine
     public boolean keepHighlights = false;
 
     /**
-     * The specific search service to be used by this document source. You can use this
-     * attribute to choose which BOSS's service to query (e.g., Web search,
-     * news search).
+     * The specific search service to be used by this document source. Use this attribute
+     * to choose which BOSS's service to query, e.g. Web, News or Image search.
      * 
      * @label Boss Search Service
      * @level Advanced
+     * @group Service
      */
     @Init
     @Input
     @Attribute
     @ImplementingClasses(classes =
     {
-        BossWebSearchService.class, BossNewsSearchService.class, BossImageSearchService.class
+        BossWebSearchService.class, BossNewsSearchService.class,
+        BossImageSearchService.class
     })
     public BossSearchService service = new BossWebSearchService();
 

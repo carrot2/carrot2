@@ -102,12 +102,6 @@
     return (tabElement && tabElement.className.indexOf("passive") >= 0 ? "passive" : "active");
   };
 
-  copyTabInfo = function(e) {
-    var $siblings = $(e.target).siblings();
-    $("#tab-info").html($siblings.find("span.tab-info").clone().removeClass("hide"));
-    $("#example-queries").html($siblings.find("span.example-queries").clone().removeClass("hide"));
-  }
-
   /**
    * Core functions for handling tabs exported to the outside.
    */

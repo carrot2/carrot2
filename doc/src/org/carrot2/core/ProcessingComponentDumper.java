@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.*;
 
-import org.carrot2.core.attribute.Internal;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.simpleframework.xml.*;
@@ -73,21 +72,9 @@ public class ProcessingComponentDumper
             this.attributeSets = descriptor.getAttributeSets();
 
             // Instantiate the component and get bindable metadata
-            
             final ProcessingComponent instance = descriptor.newInitializedInstance();
             this.attributeDescriptors = Maps.newHashMap(BindableDescriptorBuilder
                 .buildDescriptor(instance).attributeDescriptors);
-
-            // Remove internal attributes
-            for (Iterator<AttributeDescriptor> it = attributeDescriptors.values()
-                .iterator(); it.hasNext();)
-            {
-                final AttributeDescriptor value = it.next();
-                if (value.attributeField.getAnnotation(Internal.class) != null)
-                {
-                    it.remove();
-                }
-            }
 
             // Determine groups (it's easier to do that here than in XSLT)
             final HashSet<String> groupSet = Sets.newHashSet();

@@ -26,7 +26,8 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     ClusteringAlgorithm
 {
     /**
-     * Query that produced the documents, optional.
+     * Query that produced the documents. The query will help the algorithm to create
+     * better clusters. Therefore, providing the query is optional but desirable.
      */
     @Processing
     @Input
@@ -35,7 +36,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public String query = null;
 
     /**
-     * {@link Document}s to cluster.
+     * Documents to cluster.
      */
     @Processing
     @Input
@@ -44,9 +45,6 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Attribute(key = AttributeNames.DOCUMENTS)
     public List<Document> documents;
 
-    /**
-     * {@link Cluster}s created by the algorithm.
-     */
     @Processing
     @Output
     @Internal
@@ -71,15 +69,15 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public TermWeighting termWeighting = new LogTfIdfTermWeighting();
 
     /**
-     * Indicates whether Lingo used fast native matrix computation routines. Value
-     * of this attribute is equal to {@link NNIInterface#isNativeBlasAvailable()} at
-     * the time of running the algorithm.
+     * Indicates whether Lingo used fast native matrix computation routines. Value of this
+     * attribute is equal to {@link NNIInterface#isNativeBlasAvailable()} at the time of
+     * running the algorithm.
      */
     @Processing
     @Output
     @Attribute
     public boolean nativeMatrixUsed;
-    
+
     /**
      * Tokenizer used by the algorithm, contains bindable attributes.
      */
@@ -162,7 +160,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public void process() throws ProcessingException
     {
         nativeMatrixUsed = NNIInterface.isNativeBlasAvailable();
-        
+
         // Preprocessing of documents
         final PreprocessingContext context = new PreprocessingContext(
             languageModelFactory.getCurrentLanguage(), documents, query);
@@ -207,7 +205,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
             // Add label and score
             cluster.addPhrases(labelFormatter.format(context, labelFeature));
             cluster.setAttribute(Cluster.SCORE, clusterLabelScore[i]);
-            
+
             // Add documents
             for (IntIterator it = clusterDocuments[i].iterator(); it.hasNext();)
             {

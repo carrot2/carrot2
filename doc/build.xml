@@ -117,6 +117,10 @@
     <xslt in="${doc.build.dir}/docbook/components.template.xml"
           style="${doc.build.dir}/xsl/attributes-to-docbook.xsl"
           out="${doc.build.dir}/docbook/components.xml">
+      <xmlcatalog>
+        <dtd publicId="-//OASIS//DTD DocBook V5.0//EN"
+             location="${docbook.dtd.dir}/docbook.dtd" />
+      </xmlcatalog>
     </xslt>
   </target>
 

@@ -14,7 +14,7 @@ import org.junitext.Prerequisite;
  * Common tests for {@link DocumentSource}s that can make more than one search requests to
  * get results for one query.
  */
-public abstract class MultipartDocumentSourceTestBase<T extends DocumentSource> extends
+public abstract class MultipageDocumentSourceTestBase<T extends DocumentSource> extends
     QueryableDocumentSourceTestBase<T>
 {
     /**
@@ -32,9 +32,15 @@ public abstract class MultipartDocumentSourceTestBase<T extends DocumentSource> 
         // Allow some slack (duplicated URLs).
         final int documentsReturned = runQuery("test", needed);
 
-        assertThat(documentsReturned).isGreaterThan(needed - 10);
+        assertThat(documentsReturned).isGreaterThan((int) (needed / slack()));
     }
 
+    protected double slack()
+    {
+        return 1.25;
+    }
+    
+    
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testConservativeMode() throws Exception

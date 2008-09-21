@@ -1,6 +1,6 @@
 package org.carrot2.source.microsoft;
 
-import org.carrot2.core.test.MultipartDocumentSourceTestBase;
+import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.junit.runner.RunWith;
 import org.junitext.runners.AnnotationRunner;
@@ -10,7 +10,7 @@ import org.junitext.runners.AnnotationRunner;
  */
 @RunWith(AnnotationRunner.class)
 public class MicrosoftLiveDocumentSourceTest extends
-    MultipartDocumentSourceTestBase<MicrosoftLiveDocumentSource>
+    MultipageDocumentSourceTestBase<MicrosoftLiveDocumentSource>
 {
     @Override
     public Class<MicrosoftLiveDocumentSource> getComponentClass()

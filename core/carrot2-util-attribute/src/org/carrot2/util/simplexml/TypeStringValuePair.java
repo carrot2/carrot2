@@ -43,12 +43,12 @@ public class TypeStringValuePair
      * {@link TypeStringValuePair}s.
      */
     public static List<TypeStringValuePair> toTypeStringValuePairs(
-        Map<String, Object> source, String... ignoredKeys)
+        Map<String, ?> source, String... ignoredKeys)
     {
         final Set<String> ignored = ImmutableSet.of(ignoredKeys);
 
         List<TypeStringValuePair> result = Lists.newArrayList();
-        for (final Map.Entry<String, Object> entry : source.entrySet())
+        for (final Map.Entry<String, ?> entry : source.entrySet())
         {
             if (ignored.contains(entry.getKey()))
             {

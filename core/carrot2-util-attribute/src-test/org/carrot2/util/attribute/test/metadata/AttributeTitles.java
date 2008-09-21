@@ -82,6 +82,14 @@ public class AttributeTitles
     private int titleWithLink;
 
     /**
+     * Title. Description with {@link #titleAtTheBottom} and {@link String} links.
+     */
+    @TestInit
+    @Input
+    @Attribute
+    private int descriptionWithLinks;
+    
+    /**
      * Title with description. Description follows.
      */
     @TestInit

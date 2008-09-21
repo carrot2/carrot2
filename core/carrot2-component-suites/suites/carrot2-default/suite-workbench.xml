@@ -1,10 +1,4 @@
 <component-suite>
-<!--
-  TODO: We resolve includes using the default resource utils, but this doesn't
-  seem to work with Workbench, so hardcoding the included files for a moment.
-  Also, the common suite contains an OpenSearch-based document source so we'd
-  need to convert that project to a plugin.
--->   
   <include suite="carrot2-default/suite-local.xml" />
   <include suite="carrot2-default/suite-common.xml" />
 </component-suite>

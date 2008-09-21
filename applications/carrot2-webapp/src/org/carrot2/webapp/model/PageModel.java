@@ -1,5 +1,7 @@
 package org.carrot2.webapp.model;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.carrot2.core.ProcessingException;
@@ -90,6 +92,11 @@ public class PageModel
             requestModel.algorithm);
         appendParameter(stringBuilder, WebappConfig.VIEW_PARAM, requestModel.view);
         appendParameter(stringBuilder, WebappConfig.SKIN_PARAM, requestModel.skin);
+
+        for (Map.Entry<String, Object> entry: requestModel.otherParameters.entrySet())
+        {
+            appendParameter(stringBuilder, entry.getKey(), entry.getValue().toString());
+        }
         return stringBuilder;
     }
 

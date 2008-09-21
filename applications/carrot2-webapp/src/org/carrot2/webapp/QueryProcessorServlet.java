@@ -1,24 +1,28 @@
 package org.carrot2.webapp;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 
-import javax.servlet.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.webapp.filter.QueryWordHighlighter;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.carrot2.webapp.model.*;
-import org.carrot2.webapp.util.RequestParameterUtils;
 import org.carrot2.webapp.util.UserAgentUtils;
 import org.simpleframework.xml.load.Persister;
 import org.simpleframework.xml.stream.Format;
+
+import com.google.common.collect.Maps;
 
 /**
  * Processes search requests.
@@ -81,8 +85,8 @@ public class QueryProcessorServlet extends HttpServlet
         }
 
         // Unpack parameters from string arrays
-        final Map<String, Object> requestParameters = RequestParameterUtils
-            .unpack(request);
+        final Map<String, Object> requestParameters = MapUtils.unpack(request
+            .getParameterMap());
         try
         {
             // Build model for this request
@@ -97,7 +101,8 @@ public class QueryProcessorServlet extends HttpServlet
                 {
                     attributeBinderActionBind
                 }, Input.class);
-            requestModel.afterParametersBound(attributeBinderActionBind.remainingValues);
+            requestModel.afterParametersBound(attributeBinderActionBind.remainingValues,
+                extractCookies(request));
 
             if (RequestType.STATS.equals(requestModel.type))
             {
@@ -253,5 +258,20 @@ public class QueryProcessorServlet extends HttpServlet
             + "<?xml-stylesheet type=\"text/xsl\" href=\"@"
             + WebappConfig.getContextRelativeSkinStylesheet(pageModel.requestModel.skin)
             + "\" ?>");
+    }
+
+    private Map<String, String> extractCookies(HttpServletRequest request)
+    {
+        final Map<String, String> result = Maps.newHashMap();
+        final Cookie [] cookies = request.getCookies();
+        if (cookies != null)
+        {
+            for (Cookie cookie : cookies)
+            {
+                result.put(cookie.getName(), cookie.getValue());
+            }
+        }
+
+        return result;
     }
 }

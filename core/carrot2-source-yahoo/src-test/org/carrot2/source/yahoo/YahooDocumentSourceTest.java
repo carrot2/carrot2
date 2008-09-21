@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.test.MultipartDocumentSourceTestBase;
+import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Ignore;
@@ -23,7 +23,7 @@ import org.junitext.runners.AnnotationRunner;
  */
 @RunWith(AnnotationRunner.class)
 public class YahooDocumentSourceTest extends
-    MultipartDocumentSourceTestBase<YahooDocumentSource>
+    MultipageDocumentSourceTestBase<YahooDocumentSource>
 {
     @Test
     @Prerequisite(requires = "externalApiTestsEnabled")

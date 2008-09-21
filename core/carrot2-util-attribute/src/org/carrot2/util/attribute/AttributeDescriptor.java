@@ -73,7 +73,7 @@ public class AttributeDescriptor
     /**
      * Field representing the attribute.
      */
-    public final Field attributeField;
+    final Field attributeField;
 
     /**
      * Name of field representing the attribute, for serialization.
@@ -96,11 +96,17 @@ public class AttributeDescriptor
     private ArrayList<String> annotations;
 
     /**
-     * Instances of this attribute's constraings, for serialization.
+     * Instances of this attribute's constraints, for serialization.
      */
     @ElementList(name = "constraints", required = false)
     @SuppressWarnings("unused")
     private ArrayList<Constraint> constraintInstances;
+
+    /**
+     * In case of Enum attributes, a list of allowed values, for serialization.
+     */
+    @ElementList(name = "allowed-values", entry = "value", required = false)
+    private ArrayList<String> allowedValues;
 
     /**
      * 
@@ -140,7 +146,10 @@ public class AttributeDescriptor
     }
 
     @Persist
-    @SuppressWarnings("unused")
+    @SuppressWarnings(
+    {
+        "unused", "unchecked"
+    })
     private void beforeSerialization()
     {
         attributeFieldString = attributeField.getName();
@@ -177,5 +186,16 @@ public class AttributeDescriptor
         // Constraints
         constraintInstances = ListUtils.asArrayList(ConstraintFactory
             .createConstraints(attributeField.getAnnotations()));
+
+        // Allowed values of enum types
+        if (type.isEnum())
+        {
+            allowedValues = Lists.newArrayList();
+            final Enum<?> [] enumConstants = ((Class<Enum<?>>) type).getEnumConstants();
+            for (Enum<?> object : enumConstants)
+            {
+                allowedValues.add(object.name());
+            }
+        }
     }
 }
