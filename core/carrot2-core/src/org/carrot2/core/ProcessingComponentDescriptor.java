@@ -210,6 +210,8 @@ public class ProcessingComponentDescriptor
             initAttributes.putAll(defaultAttributeValueSet.getAttributeValues());
         }
 
+        ControllerUtils.init(instance, initAttributes);
+
         return instance;
     }
 }
