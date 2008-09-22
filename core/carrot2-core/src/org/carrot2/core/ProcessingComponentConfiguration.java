@@ -1,5 +1,6 @@
 package org.carrot2.core;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -36,5 +37,17 @@ public class ProcessingComponentConfiguration
         this.componentClass = componentClass;
         this.componentId = componentId;
         this.attributes = attributes;
+    }
+    
+    /**
+     * Creates a new component configuration with an empty set of initialization attributes.
+     * 
+     * @param componentClass the specific {@link ProcessingComponent} class.
+     * @param componentId identifier of the component.
+     */
+    public ProcessingComponentConfiguration(
+        Class<? extends ProcessingComponent> componentClass, String componentId)
+    {
+        this(componentClass, componentId, Collections.<String, Object> emptyMap());
     }
 }
