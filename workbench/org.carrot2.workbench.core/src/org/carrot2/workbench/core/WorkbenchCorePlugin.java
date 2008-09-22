@@ -259,8 +259,9 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                             .deserialize(new URLResource(bundleURL));
 
                         /*
-                         * Cache icons.
+                         * Remove invalid descriptors, cache icons.
                          */
+                        suite.removeUnavailableComponents();
                         for (ProcessingComponentDescriptor d : suite.getComponents())
                         {
                             final String iconPath = d.getIconPath();

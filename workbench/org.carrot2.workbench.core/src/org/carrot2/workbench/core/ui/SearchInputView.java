@@ -422,50 +422,56 @@ public class SearchInputView extends ViewPart
 
         if (StringUtils.isEmpty(getSourceId()))
         {
-            // No active source.
-            return;
+            final Label label = new Label(editorCompositeContainer, SWT.CENTER);
+            label.setText("No active sources");
+            final GridData gd = new GridData();
+            gd.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
+            gd.grabExcessHorizontalSpace = true;
+            label.setLayoutData(gd);
         }
-
-        this.editorComposite = new AttributeGroups(editorCompositeContainer,
-            sourceDescriptor, groupingMethod, filter);
-
-        final GridData gd = new GridData();
-        gd.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-        gd.grabExcessHorizontalSpace = true;
-        editorComposite.setLayoutData(gd);
-
-        /*
-         * Set initial values for editors.
-         */
-        for (Map.Entry<String, Object> e : filterAttributesOf(sourceID).entrySet())
+        else
         {
-            editorComposite.setAttribute(e.getKey(), e.getValue());
+            this.editorComposite = new AttributeGroups(editorCompositeContainer,
+                sourceDescriptor, groupingMethod, filter);
+    
+            final GridData gd = new GridData();
+            gd.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
+            gd.grabExcessHorizontalSpace = true;
+            editorComposite.setLayoutData(gd);
+    
+            /*
+             * Set initial values for editors.
+             */
+            for (Map.Entry<String, Object> e : filterAttributesOf(sourceID).entrySet())
+            {
+                editorComposite.setAttribute(e.getKey(), e.getValue());
+            }
+    
+            /*
+             * Hook up listeners updating attributes on changes in editors.
+             */
+            editorComposite.addAttributeChangeListener(new AttributeListenerAdapter()
+            {
+                public void attributeChange(AttributeChangedEvent event)
+                {
+                    attributes.setAttributeValue(event.key, event.value);
+                    checkAllRequiredAttributes();
+                }
+    
+                public void contentChanging(IAttributeEditor editor, Object value)
+                {
+                    /*
+                     * On content changing, eagerly substitute the value of the given
+                     * attribute with the new value. In the input view, early commit of
+                     * attribute values should not trigger any additional consequences, so we
+                     * can do it.
+                     */
+                    final String attributeKey = editor.getAttributeKey();
+                    attributes.setAttributeValue(attributeKey, value);
+                    checkAllRequiredAttributes();
+                }
+            });
         }
-
-        /*
-         * Hook up listeners updating attributes on changes in editors.
-         */
-        editorComposite.addAttributeChangeListener(new AttributeListenerAdapter()
-        {
-            public void attributeChange(AttributeChangedEvent event)
-            {
-                attributes.setAttributeValue(event.key, event.value);
-                checkAllRequiredAttributes();
-            }
-
-            public void contentChanging(IAttributeEditor editor, Object value)
-            {
-                /*
-                 * On content changing, eagerly substitute the value of the given
-                 * attribute with the new value. In the input view, early commit of
-                 * attribute values should not trigger any additional consequences, so we
-                 * can do it.
-                 */
-                final String attributeKey = editor.getAttributeKey();
-                attributes.setAttributeValue(attributeKey, value);
-                checkAllRequiredAttributes();
-            }
-        });
 
         /*
          * Redraw GUI.
@@ -650,6 +656,11 @@ public class SearchInputView extends ViewPart
      */
     private boolean hasAllRequiredAttributes(String sourceId)
     {
+        if (StringUtils.isEmpty(sourceId))
+        {
+            return false;
+        }
+
         final Collection<AttributeDescriptor> desc = descriptors.get(sourceId).flatten().attributeDescriptors
             .values();
 
@@ -952,7 +963,7 @@ public class SearchInputView extends ViewPart
     @Override
     public void dispose()
     {
-        this.editorComposite.dispose();
+        if (this.editorComposite != null) editorComposite.dispose();
         super.dispose();
     }
 }

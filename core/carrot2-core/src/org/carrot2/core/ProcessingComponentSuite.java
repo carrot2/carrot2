@@ -2,8 +2,7 @@ package org.carrot2.core;
 
 import java.io.InputStream;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.carrot2.core.ProcessingComponentDescriptor.Position;
 import org.carrot2.util.CloseableUtils;
@@ -82,7 +81,8 @@ public class ProcessingComponentSuite
         }
 
         final ArrayList<DocumentSourceDescriptor> mergedSources = Lists.newArrayList();
-        final ArrayList<ProcessingComponentDescriptor> mergedAlgorithms = Lists.newArrayList();
+        final ArrayList<ProcessingComponentDescriptor> mergedAlgorithms = Lists
+            .newArrayList();
 
         // Load included suites. Currently, we don't check for cycles.
         final List<ProcessingComponentSuite> suites = Lists.newArrayList();
@@ -216,5 +216,25 @@ public class ProcessingComponentSuite
     public void serialize(Writer writer) throws Exception
     {
         new Persister().write(this, writer);
+    }
+
+    /**
+     * Remove components marked as unavailable from the suite.
+     * 
+     * @see ProcessingComponentDescriptor#isComponentAvailable()
+     */
+    public void removeUnavailableComponents()
+    {
+        for (Iterator<? extends ProcessingComponentDescriptor> i = sources.iterator(); i
+            .hasNext();)
+        {
+            if (!i.next().isComponentAvailable()) i.remove();
+        }
+
+        for (Iterator<? extends ProcessingComponentDescriptor> i = algorithms.iterator(); i
+            .hasNext();)
+        {
+            if (!i.next().isComponentAvailable()) i.remove();
+        }
     }
 }

@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeValueSet;
@@ -22,7 +23,13 @@ import com.google.common.collect.Maps;
 public class ProcessingComponentDescriptor
 {
     @Attribute(name = "component-class")
+    private String componentClassName;
+
+    /** Cached component class instantiated from {@link #componentClassName}. */
     private Class<? extends ProcessingComponent> componentClass;
+
+    /** If <code>true</code> component class and its instances are available. */
+    private boolean componentAvailable;
 
     @Attribute
     private String id;
@@ -74,7 +81,8 @@ public class ProcessingComponentDescriptor
 
     public ProcessingComponentConfiguration getComponentConfiguration()
     {
-        return new ProcessingComponentConfiguration(componentClass, id, getAttributes());
+        return new ProcessingComponentConfiguration(getComponentClass(), id,
+            getAttributes());
     }
 
     private Map<String, Object> getAttributes()
@@ -91,9 +99,28 @@ public class ProcessingComponentDescriptor
         return result;
     }
 
-    public Class<? extends ProcessingComponent> getComponentClass()
+    /**
+     * @return Returns the {@link Class} object for this component.
+     * @throws {@link RuntimeException} if the class cannot be defined for some reason
+     *             (class loader issues).
+     */
+    @SuppressWarnings("unchecked")
+    public synchronized Class<? extends ProcessingComponent> getComponentClass()
     {
-        return componentClass;
+        if (this.componentClass == null)
+        {
+            try
+            {
+                this.componentClass = (Class) Class.forName(componentClassName, true,
+                    Thread.currentThread().getContextClassLoader());
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException("Component class cannot be acquired: "
+                    + componentClassName, e);
+            }
+        }
+        return this.componentClass;
     }
 
     public String getId()
@@ -142,10 +169,39 @@ public class ProcessingComponentDescriptor
     }
 
     /**
+     * Creates a new initialized instance of the processing component corresponding to
+     * this descriptor. The instance will be initialized with the {@link Init} attributes
+     * from this descriptor's default attribute set.
+     */
+    public ProcessingComponent newInitializedInstance() throws InstantiationException,
+        IllegalAccessException
+    {
+        final ProcessingComponent instance = getComponentClass().newInstance();
+        final Map<String, Object> initAttributes = Maps.newHashMap();
+        final AttributeValueSet defaultAttributeValueSet = attributeSets
+            .getDefaultAttributeValueSet();
+        if (defaultAttributeValueSet != null)
+        {
+            initAttributes.putAll(defaultAttributeValueSet.getAttributeValues());
+        }
+
+        ControllerUtils.init(instance, initAttributes);
+
+        return instance;
+    }
+
+    /**
+     * @return Return <code>true</code> if instances of this descriptor are available
+     *         (class can be resolved, instances can be created).
+     */
+    public boolean isComponentAvailable()
+    {
+        return componentAvailable;
+    }
+
+    /**
      * Invoked by the XML loading framework when the object is deserialized.
      */
-    @Commit
-    @SuppressWarnings("unused")
     private void loadAttributeSets() throws Exception
     {
         final ResourceUtils resourceUtils = ResourceUtilsFactory
@@ -194,24 +250,23 @@ public class ProcessingComponentDescriptor
     }
 
     /**
-     * Creates a new initialized instance of the processing component corresponding to
-     * this descriptor. The instance will be initialized with the {@link Init} attributes
-     * from this descriptor's default attribute set.
+     * On commit, attempt to verify component class and instance availability.
      */
-    public ProcessingComponent newInitializedInstance() throws InstantiationException,
-        IllegalAccessException
+    @Commit
+    @SuppressWarnings("unused")
+    private void onCommit()
     {
-        final ProcessingComponent instance = componentClass.newInstance();
-        final Map<String, Object> initAttributes = Maps.newHashMap();
-        final AttributeValueSet defaultAttributeValueSet = attributeSets
-            .getDefaultAttributeValueSet();
-        if (defaultAttributeValueSet != null)
+        this.componentAvailable = true;
+        try
         {
-            initAttributes.putAll(defaultAttributeValueSet.getAttributeValues());
+            newInitializedInstance();
+            loadAttributeSets();
         }
-
-        ControllerUtils.init(instance, initAttributes);
-
-        return instance;
+        catch (Throwable e)
+        {
+            Logger.getLogger(this.getClass()).warn(
+                "Component availability failure: " + componentClassName, e);
+            this.componentAvailable = false;
+        }
     }
 }
