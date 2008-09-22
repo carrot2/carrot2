@@ -1,21 +1,27 @@
-<project name="Carrot2 Documentation" default="fail">
+<project name="docs" default="fail">
+
+  <!-- 
+       Basedir for the doc build file. Set by master build
+       or defaults to the current directory. 
+    -->
+  <property name="doc.basedir" location="${basedir}" />
 
   <!-- Documentation source dir -->
-  <property name="doc.docbook.dir" location="doc/docbook" />
-  <property name="doc.xsl.dir" location="doc/xsl" />
-  <property name="doc.src.dir" location="doc/src" />
-  <property name="doc.assets.dir" location="doc/assets" />
+  <property name="doc.docbook.dir" location="${doc.basedir}/doc/docbook" />
+  <property name="doc.xsl.dir" location="${doc.basedir}/doc/xsl" />
+  <property name="doc.src.dir" location="${doc.basedir}/doc/src" />
+  <property name="doc.assets.dir" location="${doc.basedir}/doc/assets" />
 
   <!-- Output directory for the documentation -->
-  <property name="doc.build.dir" location="tmp/doc/build" />
-  <property name="doc.output.dir" location="tmp/doc/html" />
+  <property name="doc.build.dir" location="${doc.basedir}/tmp/doc/build" />
+  <property name="doc.output.dir" location="${doc.basedir}/tmp/doc/html" />
 
   <property name="doc.classes.dir" location="${doc.build.dir}/classes" />
 
   <!--
        Builds Carrot2 Manual
     -->
-  <target name="doc"
+  <target name="build"
           depends="docbook.check, doc.prepare, doc.components"
           description="Builds Carrot2 Manual">
     <mkdir dir="${doc.output.dir}" />

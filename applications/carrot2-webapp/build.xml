@@ -1,17 +1,23 @@
-<project name="Carrot2 Web Application" default="fail">
+
+<project name="webapp" default="templates">
+  <!-- 
+       Basedir for the build file. Set by master build
+       or defaults to the current directory. 
+    -->
+  <property name="webapp.basedir" location="${basedir}" />
+
+  <!-- Build number -->
   <property name="build.number" value="" />
 
-  <!-- Webapp project location -->
-  <property name="webapp.project" location="applications/carrot2-webapp" />
-
   <!-- Webapp build dirs -->
-  <property name="webapp.dir" location="tmp/webapp" />
+  <property name="webapp.dir" location="${webapp.basedir}/tmp/webapp" />
   <property name="webapp.skins.dir" location="${webapp.dir}/skins${build.number}" />
 
   <!-- 
        Web application WAR file.
     -->
-  <target name="webapp" depends="webapp.templates, webapp.skins.prepare, webapp.sprites">
+  <target name="build" depends="webapp.templates, webapp.skins.prepare, webapp.sprites"
+    description="Builds the Web application.">
     <antcall target="jar" />
     <antcall target="lib.flattened" />
 
@@ -19,7 +25,7 @@
     <mkdir dir="${webapp.dir}/classes" />
 
     <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac srcdir="${webapp.project}/src"
+    <javac srcdir="${webapp.basedir}/src"
            destdir="${webapp.dir}/classes"
            compiler="modern"
            source="1.5"
@@ -38,8 +44,8 @@
       </fileset>
     </copy>
 
-    <war destfile="${webapp.dir}/carrot2-webapp.war" webxml="${webapp.project}/web/WEB-INF/web.xml">
-      <fileset dir="${webapp.project}/web">
+    <war destfile="${webapp.dir}/carrot2-webapp.war" webxml="${webapp.basedir}/web/WEB-INF/web.xml">
+      <fileset dir="${webapp.basedir}/web">
         <include name="index.html" />
       </fileset>
       <fileset dir="${webapp.skins.dir}/..">
@@ -49,7 +55,7 @@
       <classes dir="${webapp.dir}/classes">
         <exclude name="*.java" />
       </classes>
-      <classes dir="${webapp.project}/src">
+      <classes dir="${webapp.basedir}/src">
         <exclude name="*.java" />
         <exclude name="*.template.*" />
       </classes>
@@ -66,7 +72,7 @@
   <target name="webapp.skins.prepare">
     <mkdir dir="${webapp.skins.dir}" />
     <copy todir="${webapp.skins.dir}">
-      <fileset dir="${webapp.project}/web/skins" />
+      <fileset dir="${webapp.basedir}/web/skins" />
     </copy>
   </target>
 
@@ -104,9 +110,9 @@
   </target>
 
   <target name="webapp.sprites.eclipse" if="smartsprites.home">
-    <build-sprites base.dir="${webapp.project}/web/skins" root.dir="fancy-compact" />
-    <build-sprites base.dir="${webapp.project}/web/skins" root.dir="fancy-large" />
-    <build-sprites base.dir="${webapp.project}/web/skins" root.dir="simple" />
+    <build-sprites base.dir="${webapp.basedir}/web/skins" root.dir="fancy-compact" />
+    <build-sprites base.dir="${webapp.basedir}/web/skins" root.dir="fancy-large" />
+    <build-sprites base.dir="${webapp.basedir}/web/skins" root.dir="simple" />
   </target>
 
   <target name="webapp.eclipse.setup" depends="webapp.templates, webapp.sprites.eclipse" />
@@ -114,8 +120,8 @@
   <!-- 
        Processing of file templates
     -->
-  <target name="webapp.templates"
-          description="Processes configuration files required for the webapp">
+  <target name="templates"
+          description="Generate dynamic webapp files">
 
     <condition property="sprite.suffix" value="sprite/" else="">
       <isset property="smartsprites.home" />
@@ -125,8 +131,8 @@
       <filter token="VERSION" value="${build.number}" />
     </filterset>
 
-    <copy file="${webapp.project}/src/jawr.template.properties"
-          tofile="${webapp.project}/src/jawr.properties"
+    <copy file="${webapp.basedir}/src/jawr.template.properties"
+          tofile="${webapp.basedir}/src/jawr.properties"
           overwrite="true">
       <filterset refid="version.filterset" />
       <filterset>
@@ -134,14 +140,14 @@
       </filterset>
     </copy>
 
-    <copy file="${webapp.project}/src/config.template.xml"
-          tofile="${webapp.project}/src/config.xml"
+    <copy file="${webapp.basedir}/src/config.template.xml"
+          tofile="${webapp.basedir}/src/config.xml"
           overwrite="true">
       <filterset refid="version.filterset" />
     </copy>
 
-    <copy file="${webapp.project}/web/WEB-INF/web.template.xml"
-          tofile="${webapp.project}/web/WEB-INF/web.xml"
+    <copy file="${webapp.basedir}/web/WEB-INF/web.template.xml"
+          tofile="${webapp.basedir}/web/WEB-INF/web.xml"
           overwrite="true">
       <filterset refid="version.filterset" />
     </copy>
@@ -151,7 +157,4 @@
     <delete dir="${webapp.dir}" />
   </target>
 
-  <target name="fail">
-    <fail>Please use the top-level build file to build the web application.</fail>
-  </target>
 </project>
