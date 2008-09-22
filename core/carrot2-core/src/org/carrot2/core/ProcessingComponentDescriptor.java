@@ -259,8 +259,8 @@ public class ProcessingComponentDescriptor
         this.componentAvailable = true;
         try
         {
-            newInitializedInstance();
             loadAttributeSets();
+            newInitializedInstance();
         }
         catch (Throwable e)
         {
