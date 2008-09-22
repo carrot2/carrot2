@@ -15,14 +15,14 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
- * An example showing how developers can use the low-level core utilities for processing
- * Carrot2 component attribute descriptors.
+ * An example showing how to use the low-level core utilities for processing Carrot2
+ * component attribute descriptors.
  * <p>
- * For the time being, before you run this example, you need to run
- * {@link BindableMetadataXmlSerializer} giving source code locations of at least
- * <code>carrot2-core</code> and <code>carrot2-source-yahoo</code> as parameters. There is
- * an Eclipse launch configuration that does just that in carrot2-util-attributes/ etc/
- * eclipse.
+ * Before you run this example, you need to run {@link BindableMetadataXmlSerializer} (to
+ * generate metadata about components). There is an Eclipse launch configuration that does
+ * just that in <code>carrot2-util-attributes/etc/eclipse</code>. Alternatively, run
+ * the master ANT build script (<code>build.xml</code>):
+ * <code>ant attrs attrs.eclipse</code>.
  */
 public class WorkingWithAttributeDescriptors
 {

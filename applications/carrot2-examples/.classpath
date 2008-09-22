@@ -3,11 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-algorithm-synthetic"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-source-yahoo"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-attribute"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.google.collections"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-component-suites"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
