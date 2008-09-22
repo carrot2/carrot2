@@ -14,4 +14,4 @@ Require-Bundle: org.carrot2.util.common;visibility:=reexport,
  org.simpleframework.xml;visibility:=reexport,
  com.thoughtworks.qdox;visibility:=reexport
 Bundle-Vendor: Carrot2.org
-Eclipse-BuddyPolicy: dependent
+Eclipse-BuddyPolicy: registered

@@ -17,4 +17,4 @@ Require-Bundle: org.apache.commons;visibility:=reexport,
  org.easymock;resolution:=optional;visibility:=reexport
 Bundle-ClassPath: .
 Bundle-Vendor: Carrot2.org
-Eclipse-BuddyPolicy: dependent
+Eclipse-BuddyPolicy: dependent,registered
