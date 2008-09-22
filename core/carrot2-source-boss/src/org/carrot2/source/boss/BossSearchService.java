@@ -34,6 +34,13 @@ public abstract class BossSearchService
     protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
     /**
+     * Yahoo BOSS application ID assigned to Carrot2/ Carrot Search. Use your own,
+     * please. 
+     */
+    public final static String CARROTSEARCH_APPID = 
+        "txRLTt7V34GgabH9baqIrsnRLuy87i4dQ2kQyok0IIqlUXdw4HmxjE59xhq2_6mT0LM-";
+    
+    /**
      * Metadata key for the originally returned {@link YSearchResponse}.
      * 
      * @see SearchEngineResponse#metadata
@@ -51,7 +58,7 @@ public abstract class BossSearchService
     @Init
     @Input
     @Attribute
-    public String appid = "txRLTt7V34GgabH9baqIrsnRLuy87i4dQ2kQyok0IIqlUXdw4HmxjE59xhq2_6mT0LM-";
+    public String appid = CARROTSEARCH_APPID;
 
     /**
      * Restricts search results to a set of sites. Must be a comma-separated list of site's domain
