@@ -10,7 +10,7 @@
   <property name="build.number" value="" />
 
   <!-- Webapp build dirs -->
-  <property name="webapp.dir" location="${webapp.basedir}/tmp/webapp" />
+  <property name="webapp.dir" location="tmp/webapp" />
   <property name="webapp.skins.dir" location="${webapp.dir}/skins${build.number}" />
 
   <!-- 
