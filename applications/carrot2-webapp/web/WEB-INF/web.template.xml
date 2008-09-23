@@ -11,6 +11,8 @@
     <display-name>QueryProcessorServlet</display-name>
     <servlet-name>QueryProcessorServlet</servlet-name>
     <servlet-class>org.carrot2.webapp.QueryProcessorServlet</servlet-class>
+
+    <load-on-startup>2</load-on-startup>
   </servlet>
 
   <servlet>

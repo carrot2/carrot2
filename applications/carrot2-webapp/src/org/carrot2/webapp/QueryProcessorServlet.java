@@ -54,6 +54,9 @@ public class QueryProcessorServlet extends HttpServlet
     private final static String MIME_XML_CHARSET_UTF = MIME_XML + "; charset="
         + ENCODING_UTF;
 
+    /*
+     * Servlet lifecycle.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public void init(ServletConfig config) throws ServletException
@@ -65,25 +68,45 @@ public class QueryProcessorServlet extends HttpServlet
 
         jawrUrlGenerator = new JawrUrlGenerator(config.getServletContext());
     }
+    
+    /*
+     * Servlet lifecycle.
+     */
+    @Override
+    public void destroy()
+    {
+        if (this.controller != null)
+        {
+            this.controller.dispose();
+            this.controller = null;
+        }
 
+        this.jawrUrlGenerator = null;
+        this.queryLogger = null;
+
+        super.destroy();
+    }
+
+    /*
+     * Perform GET request.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        // Initialize query logger.
-        // TODO: refactor this to init() and use Servlet API 2.5 to get context
-        // path from servlet config
+        // TODO: Move me to #init() after upgrading to servlet api 2.5
         synchronized (this)
         {
+            // Initialize query logger.
             String contextPath = request.getContextPath();
             if (StringUtils.isBlank(contextPath))
             {
                 contextPath = "ROOT";
             }
-            contextPath = contextPath.replaceAll("[^a-zA-Z0-9]", "");
-
+            contextPath = contextPath.replaceAll("[^a-zA-Z0-9]", "");            
             this.queryLogger = Logger.getLogger("queryLog." + contextPath);
         }
-
+        
+        
         // Unpack parameters from string arrays
         final Map<String, Object> requestParameters = MapUtils.unpack(request
             .getParameterMap());
