@@ -282,6 +282,65 @@ public class SuffixTree<T extends Node> implements Iterable<T>
         return nodeFactory.createNode(this);
     }
 
+    /**
+     * Empty sequence.
+     */
+    private final static Sequence EMPTY_SEQUENCE = new IntSequence(new int [0]);
+    
+    /**
+     * Returns a {@link Sequence} of elements from the node's parent edge to the
+     * node.
+     */
+    public Sequence getSequenceToParent(Node node)
+    {
+        if (node.container != this)
+        {
+            throw new IllegalArgumentException();
+        }
+        
+        if (node.edgeToParent == null)
+        {
+            return EMPTY_SEQUENCE;
+        }
+
+        final int length = node.edgeToParent.length();
+        final int [] array = new int [length];
+
+        int i = 0;
+        int j = node.edgeToParent.getStartIndex();
+        for (; j <= node.edgeToParent.getEndIndex(); i++, j++)
+        {
+            array[i] = input.objectAt(j);
+        }
+
+        return new IntSequence(array);
+    }
+
+    /**
+     * Returns a {@link Sequence} of elements from the root node to this node (full path).
+     */
+    public Sequence getSequenceToRoot(Node node)
+    {
+        if (node.container != this)
+        {
+            throw new IllegalArgumentException();
+        }
+        
+        final int start = node.getSuffixStartIndex();
+        final int end = node.getSuffixEndIndex();
+        final int length = end - start + 1;
+        final int [] array = new int [length];
+
+        int i = 0;
+        int j = start;
+        for (; j <= end; i++, j++)
+        {
+            array[i] = input.objectAt(j);
+        }
+
+        return new IntSequence(array);
+    }
+    
     /*
      * 
      */

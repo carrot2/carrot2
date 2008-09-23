@@ -1,5 +1,8 @@
 package org.carrot2.text.suffixtrees2;
 
+import java.util.*;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -8,24 +11,46 @@ import org.junit.Test;
 public class GeneralizedSuffixTreeTest
 {
     @Test
-    public void testNodeCount()
+    public void testLeafNodes()
     {
         final String sequence1 = "abcabc";
         final String sequence2 = "defabcabc";
+        final String sequence3 = "deabcfdef";
 
         final GeneralizedSuffixTree<BitSetNode> gst = new GeneralizedSuffixTree<BitSetNode>(
             new BitSetNodeFactory());
 
-        gst.build(new CharacterSequence(sequence1), new CharacterSequence(sequence2));
+        gst.build(new CharacterSequence(sequence1), new CharacterSequence(sequence2),
+            new CharacterSequence(sequence3));
 
+        final List<String> leaves = new ArrayList<String>();
         for (BitSetNode n : gst)
         {
-            System.out.println("leaf: "
-                + n.isLeaf()
-                + ", card: "
-                + n.bitset.cardinality()
-                + ", count: "
-                + n.count);
+            if (!n.isLeaf()) continue;
+
+            final Sequence s = gst.getSequenceToRoot(n);
+            leaves.add(SequenceFormatter.asString(s, CharacterSequence.FORMATTER));
         }
+
+        final String [] sequences =
+        {
+            sequence1, sequence2, sequence3
+        };
+
+        final List<String> correct = new ArrayList<String>();
+        for (int i = 0; i < sequences.length; i++) 
+        {
+            final String s = sequences[i];
+            for (int j = 0; j <= s.length(); j++)
+            {
+                final String leaf = s.substring(j) + "$" + i;
+                correct.add(leaf);
+            }
+        }
+
+        Collections.sort(leaves);
+        Collections.sort(correct);
+        
+        Assert.assertEquals(correct, leaves);
     }
 }

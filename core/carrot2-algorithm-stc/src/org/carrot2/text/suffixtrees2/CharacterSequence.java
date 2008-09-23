@@ -6,6 +6,22 @@ package org.carrot2.text.suffixtrees2;
 public final class CharacterSequence implements Sequence
 {
     private final CharSequence seq;
+    
+    public final static SequenceFormatter FORMATTER = new SequenceFormatter()
+    {
+        @Override
+        protected void append(StringBuilder builder, int code)
+        {
+            if (code < 0)
+            {
+                builder.append('$').append(-(code + 1));
+            }
+            else
+            {
+                builder.append((char) code);
+            }            
+        }
+    };
 
     public CharacterSequence(CharSequence chs)
     {
