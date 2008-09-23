@@ -10,6 +10,7 @@ public class SuffixTreeFormatter
     /**
      * Convert to GraphViz's DOT language.
      */
+    @SuppressWarnings("unchecked")
     public String toDot(SuffixTree<Node> tree)
     {
         StringBuilder gv = new StringBuilder();
@@ -26,7 +27,7 @@ public class SuffixTreeFormatter
 
                 ids.put(n, "node" + ids.size());
 
-                if (tree instanceof GeneralizedSuffixTree<?>)
+                if (tree instanceof GeneralizedSuffixTree)
                 {
                     BitSetNode bn = (BitSetNode) n;
                     final int docs = bn.bitset.cardinality();
