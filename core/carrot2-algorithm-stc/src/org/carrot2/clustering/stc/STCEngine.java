@@ -216,7 +216,7 @@ public class STCEngine
                 }
             });
 
-        // take only N first base clusters and only those existing in more than
+        // Take only N first base clusters and only those existing in more than
         // X documents
         final int noMoreBaseClustersThan = params.maxBaseClusters;
         final int minimalGroupSize = params.minBaseClusterSize;
@@ -226,11 +226,20 @@ public class STCEngine
                 .getSuffixedDocumentsCount() < minimalGroupSize)
             {
                 baseClusters.eraseElementAt(i);
+                continue;
             }
 
             if (i >= noMoreBaseClustersThan)
             {
                 baseClusters.eraseElementAt(i);
+                continue;
+            }
+            
+            if (((BaseCluster) baseClusters.elementAt(i)).getPhrase().getTerms().size() >
+                params.maxDescPhraseLength)
+            {
+                baseClusters.eraseElementAt(i);
+                continue;
             }
         }
 

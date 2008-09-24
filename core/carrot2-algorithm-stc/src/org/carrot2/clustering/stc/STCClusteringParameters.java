@@ -122,8 +122,7 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @DoubleRange(min = 0, max = 1)
-    // @AttributeGroup(label="Label creation")    
+    @DoubleRange(min = 0, max = 1)    
     public double mostGeneralPhraseCoverage = 0.5d;
 
     /**
