@@ -60,7 +60,6 @@ public class STCEngine
         // Add stemmed sentences to suffix tree
         for (StemmedTerm [] document : documentData)
         {
-            // add sentence suffixes to suffix tree
             long tmp = System.currentTimeMillis();
 
             ArrayStemmedSnippet ass = new ArrayStemmedSnippet(document);

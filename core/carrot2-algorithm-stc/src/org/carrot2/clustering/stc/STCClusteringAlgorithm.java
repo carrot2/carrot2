@@ -8,6 +8,7 @@ import org.carrot2.text.analysis.*;
 import org.carrot2.text.linguistic.LanguageModelFactory;
 import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
+import org.carrot2.text.suffixtrees.Node;
 import org.carrot2.util.attribute.*;
 
 import com.google.common.collect.Lists;
@@ -94,14 +95,13 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context);
         stopListMarker.mark(context);
-        
+
         final Document [] documentArray = this.documents
             .toArray(new Document [this.documents.size()]);
 
         /*
-         * Step 1: Convert documents to "legacy" STC input. 
-         * 
-         * TODO: This should be eventually converted to use the new suffix tree code. See:
+         * Step 1: Convert documents to "legacy" STC input. TODO: This should be
+         * eventually converted to use the new suffix tree code. See:
          * http://issues.carrot2.org/browse/CARROT-389
          */
         final List<StemmedTerm []> documentData = convertToLegacyFormat(context);
@@ -145,7 +145,20 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             for (Iterator j = phrases.iterator(); j.hasNext() && (maxPhr > 0); maxPhr--)
             {
                 final Phrase p = (Phrase) j.next();
-                newCluster.addPhrases(p.userFriendlyTerms().trim());
+
+                final boolean [] stopwords = new boolean[p.getTerms().size()];
+                final char [][] images = new char [stopwords.length][];
+
+                Node.Phrase terms = p.getTerms();
+                int oindex = 0;
+                for (Iterator<Object> o = terms.iterator(); o.hasNext(); oindex++)
+                {
+                    final StemmedTerm t = (StemmedTerm) o.next();
+                    stopwords[oindex] = t.stopword;
+                    images[oindex] = t.getTerm().toCharArray();
+                }
+
+                newCluster.addPhrases(LabelFormatter.format(images, stopwords));
             }
 
             for (Iterator j = b.getDocuments().iterator(); j.hasNext();)
@@ -213,14 +226,26 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                         continue;
                     }
 
-                    final String term = (wordIndex >= 0 ? new String(
-                        wordImages[wordIndex]) : ".");
-                    final String stem = (wordIndex >= 0 ? new String(
-                        stemImages[wordStemIndices[wordIndex]]) : ".");
+                    boolean stop = isPunctuation || wordIndex < 0;
 
-                    boolean stop = isPunctuation || commonWords[wordIndex];
+                    /*
+                     * Break sentences on punctuation, do not break them on stop words
+                     * (trimming edge stopwords is performed later on).
+                     */
+                    if (stop)
+                    {
+                        currentDocument.add(null);
+                    }
+                    else
+                    {
+                        final String term = new String(wordImages[wordIndex]);
+                        final String stem = new String(
+                            stemImages[wordStemIndices[wordIndex]]);
 
-                    currentDocument.add(new StemmedTerm(term, stem, stop));
+                        stop = stop | commonWords[wordIndex];
+
+                        currentDocument.add(new StemmedTerm(term, stem, stop));
+                    }
                 }
                 currentDocument.add(null);
             }
