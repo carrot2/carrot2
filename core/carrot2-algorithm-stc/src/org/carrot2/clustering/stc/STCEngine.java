@@ -406,7 +406,8 @@ public class STCEngine
             }
         }
 
-        Arrays.sort(clusters.getInternalArray(), 0, clusters.size());
+        clusters.trimToSize();
+        Arrays.sort(clusters.getInternalArray(), (Comparator) MergedCluster.BY_SCORE_DESC);
 
         return System.currentTimeMillis() - time;
     }

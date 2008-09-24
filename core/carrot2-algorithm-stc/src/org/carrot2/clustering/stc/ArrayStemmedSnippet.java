@@ -67,14 +67,14 @@ final class ArrayStemmedSnippet
          */
         public String toString()
         {
-            String p = "";
+            StringBuilder p = new StringBuilder();
 
             for (int i = start; i <= end; i++)
             {
-                p = p + snippet[i].toString();
+                p.append(snippet[i].toString());
             }
 
-            return p;
+            return p.toString();
         }
 
         /**

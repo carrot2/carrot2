@@ -24,6 +24,12 @@ public interface SuffixableElement
 
             return false;
         }
+        
+        public int hashCode()
+        {
+            // Random number, but fixed for this object.
+            return 0x11223344;
+        }
 
         public String toString()
         {

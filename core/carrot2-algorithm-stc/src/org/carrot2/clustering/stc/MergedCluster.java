@@ -12,7 +12,7 @@ import org.carrot2.text.suffixtrees.ExtendedBitSet;
  * A merged cluster (composition of {@link org.carrot2.filter.stc.algorithm.BaseCluster}s).
  */
 @SuppressWarnings("unchecked")
-public class MergedCluster implements Comparable
+public class MergedCluster
 {
     /** Merged base clusters list. */
     private ArrayList baseClusters = new ArrayList();
@@ -25,6 +25,25 @@ public class MergedCluster implements Comparable
 
     /** Number of documents in cluster */
     private final ExtendedBitSet documents = new ExtendedBitSet();
+
+    public final static Comparator<MergedCluster> BY_SCORE_DESC = new Comparator<MergedCluster>()
+    {
+        public int compare(MergedCluster o1, MergedCluster o2)
+        {
+            if (o1.score < o2.score)
+            {
+                return 1;
+            }
+            else if (o1.score > o2.score)
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    };
 
     /**
      * Getter for score variable
@@ -62,27 +81,6 @@ public class MergedCluster implements Comparable
     {
         this.allPhrases = this.createDescriptionPhrases(parameters.maxPhraseOverlap,
             parameters.mostGeneralPhraseCoverage);
-    }
-
-    /**
-     * Implementation of Comparable interface
-     */
-    public int compareTo(Object ob)
-    {
-        float obScore = ((MergedCluster) ob).score;
-
-        if (score < obScore)
-        {
-            return 1;
-        }
-        else if (score > obScore)
-        {
-            return -1;
-        }
-        else
-        {
-            return 0;
-        }
     }
 
     /**
