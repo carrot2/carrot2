@@ -99,7 +99,10 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             .toArray(new Document [this.documents.size()]);
 
         /*
-         * Step 1: Convert documents to legacy STC input.
+         * Step 1: Convert documents to "legacy" STC input. 
+         * 
+         * TODO: This should be eventually converted to use the new suffix tree code. See:
+         * http://issues.carrot2.org/browse/CARROT-389
          */
         final List<StemmedTerm []> documentData = convertToLegacyFormat(context);
 
