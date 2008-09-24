@@ -16,7 +16,7 @@ import com.google.common.collect.*;
 
 /**
  * A {@link DocumentSource} that folds in a few initial hits from Google API into the
- * eTools results. Ultimately, this type of processing should be done in the eTools side.
+ * eTools results. Ultimately, this type of processing should be done on the eTools side.
  */
 @Bindable
 public class WebDocumentSource extends SimpleSearchEngine

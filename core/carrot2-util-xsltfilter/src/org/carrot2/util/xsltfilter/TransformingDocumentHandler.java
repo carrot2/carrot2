@@ -328,7 +328,7 @@ final class TransformingDocumentHandler implements ContentHandler
                 transformer.setParameter((String) entry.getKey(), entry.getValue());
             }
         }
-
+        
         this.defaultHandler = fallbackHandler;
     }
 
@@ -345,7 +345,13 @@ final class TransformingDocumentHandler implements ContentHandler
      */
     public final void cleanup()
     {
-        // Not used. Could be reuse Transformers here?
+        if (this.defaultHandler != null)
+        {
+            /*
+             * Reset the default handler's transformer.
+             */
+            this.defaultHandler.getTransformer().reset();
+        }
     }
 
     /**
