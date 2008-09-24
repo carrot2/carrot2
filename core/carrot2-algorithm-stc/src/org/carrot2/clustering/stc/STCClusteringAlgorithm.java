@@ -140,8 +140,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             final MergedCluster b = (MergedCluster) i.next();
             final Cluster newCluster = new Cluster();
 
-            // TODO: This should be a configuration parameter?
-            int maxPhr = 3;
+            int maxPhr = params.maxPhrases;
             final List phrases = b.getDescriptionPhrases();
             for (Iterator j = phrases.iterator(); j.hasNext() && (maxPhr > 0); maxPhr--)
             {

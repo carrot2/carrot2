@@ -122,11 +122,12 @@ public final class STCClusteringParameters
     @Processing
     @Input
     @Attribute
-    @DoubleRange(min = 0, max = 1)    
+    @DoubleRange(min = 0, max = 1)
     public double mostGeneralPhraseCoverage = 0.5d;
 
     /**
-     * Maximum words per label. Labels containing more words than this ratio are trimmed.
+     * Maximum words per label. Base clusters formed by phrases with more words than this
+     * ratio are trimmed.
      * 
      * @group Label creation
      * @level Basic
@@ -136,6 +137,19 @@ public final class STCClusteringParameters
     @Attribute
     @IntRange(min = 1)
     public int maxDescPhraseLength = 4;
+
+    /**
+     * Maximum phrases per label. Maximum number of phrases from base clusters promoted
+     * to the cluster's label.
+     *  
+     * @group Label creation
+     * @level Basic
+     */
+    @Processing
+    @Input
+    @Attribute
+    @IntRange(min = 1)
+    public int maxPhrases = 3;
 
     /**
      * Single term boost. A factor in calculation of the base cluster score. If greater
