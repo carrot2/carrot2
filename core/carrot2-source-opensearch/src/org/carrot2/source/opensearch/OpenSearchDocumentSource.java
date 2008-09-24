@@ -173,6 +173,14 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
                     feedUrlTemplate);
 
                 logger.debug("Fetching url: " + url);
+
+                /*
+                 * TODO: Rome fetcher uses SUN's HttpClient and opens a persistent HTTP connection
+                 * (background thread that keeps reference to the class loader). This causes minor
+                 * memory leaks when reloading Web applications. Consider: 1) patching rome fetcher
+                 * sources and adding Connection: close to request headers, 2) using Apache HttpClient,
+                 * 3) using manual fetch of the syndication feed.
+                 */
                 final SyndFeed feed = feedFetcher.retrieveFeed(new URL(url));
                 final List entries = feed.getEntries();
 
