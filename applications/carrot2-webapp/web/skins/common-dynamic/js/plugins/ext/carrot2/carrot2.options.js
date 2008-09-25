@@ -11,10 +11,12 @@
       $resultsArea = $("#results-area");
 
       if (optionsShowing) {
-        $("#example-queries, #main-info").show();
+        $("#example-queries").show();
         if ($resultsArea.size() != 0) {
           var optionsHeight = $("#options").innerHeight();
           jQuery.options.updateResultsArea($resultsArea, optionsHeight, -1);
+        } else {
+          $("#main-info").show();
         }
         $("#options").hide();
         $(this).data("optionsShowing", false);
