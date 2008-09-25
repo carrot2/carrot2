@@ -26,6 +26,14 @@ final class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor
     }
 
     /*
+     * Main preference page.
+     */
+    public String getMainPreferencePageId()
+    {
+        return "org.carrot2.workbench.core.preferences.WorkbenchPreferencePage";
+    }
+    
+    /*
      * 
      */
     @Override

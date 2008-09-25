@@ -1,22 +1,26 @@
 package org.carrot2.workbench.core;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.ICoolBarManager;
+import org.eclipse.jface.action.*;
+import org.eclipse.jface.preference.IPreferenceNode;
+import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
 import org.eclipse.ui.application.*;
+import org.eclipse.ui.views.IViewDescriptor;
 
 /**
- * Configures various aspects of the main application's window. 
+ * Configures various aspects of the main application's window.
  */
 final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
 {
+    private final static Logger logger = Logger
+        .getLogger(ApplicationWorkbenchWindowAdvisor.class);
+
     /*
      * 
      */
@@ -32,15 +36,15 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
     {
         return new ApplicationActionBarAdvisor(configurer);
     }
-    
+
     /*
      * 
      */
     public void preWindowOpen()
     {
         final IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-        final Rectangle fullScreenSize =
-            Display.getDefault().getPrimaryMonitor().getClientArea();
+        final Rectangle fullScreenSize = Display.getDefault().getPrimaryMonitor()
+            .getClientArea();
         int width = calculateInitialSize(fullScreenSize.width, 800);
         int height = calculateInitialSize(fullScreenSize.height, 600);
         configurer.setInitialSize(new Point(width, height));
@@ -52,7 +56,7 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
         configurer.setShowProgressIndicator(true);
         configurer.setShowCoolBar(true);
     }
-    
+
     /*
      * 
      */
@@ -60,27 +64,91 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
     public void postWindowCreate()
     {
         /*
-         * Manually remove text editor contributions to the coolbar.
-         * TODO: Is there a nicer way to remove editor contributions in RCP? 
+         * Log contribution identifiers in case we need to remove them using the
+         * activities API (declarative extension point in plugin.xml).
          */
+        logContributionIdentifiers();
+    }
 
-        final Collection<String> toolbarRemoveItems = Arrays.asList(new String [] {
-            "org.eclipse.ui.edit.text.actionSet.annotationNavigation",
-            "org.eclipse.ui.edit.text.actionSet.navigation"
-        });
+    /**
+     * Log contribution identifiers from various extension points (that we may wish to
+     * hide using the activities API).
+     */
+    @SuppressWarnings("unchecked")
+    private void logContributionIdentifiers()
+    {
+        final StringBuilder b = new StringBuilder();
 
-        final ICoolBarManager mm = getWindowConfigurer().getActionBarConfigurer().getCoolBarManager();
-        for (IContributionItem item : mm.getItems())
+        /*
+         * Toolbar contributions.
+         */
+        final ICoolBarManager cm = getWindowConfigurer().getActionBarConfigurer()
+            .getCoolBarManager();
+
+        b.append("Toolbar contributions:\n");
+        for (IContributionItem item : cm.getItems())
         {
-            Logger.getLogger(this.getClass()).info("Toolbar contribution: " + item.getId());
-            if (toolbarRemoveItems.contains(item.getId()))
+            b.append(item.getId() + " (" + item.getClass().getSimpleName() + ")");
+            b.append("\n");
+        }
+
+        logger.debug(b.toString());
+        b.setLength(0);
+
+        /*
+         * Menu contributions.
+         */
+        final Stack<IContributionItem> mms = new Stack<IContributionItem>();
+        mms.push(getWindowConfigurer().getActionBarConfigurer().getMenuManager());
+
+        b.append("Menu contributions:\n");
+        while (!mms.isEmpty())
+        {
+            final IContributionItem item = mms.pop();
+
+            b.append(item.getId() + " (" + item.getClass().getSimpleName() + ")");
+            b.append("\n");
+
+            if (item instanceof IMenuManager)
             {
-                mm.remove(item);
+                IMenuManager mmgr = (IMenuManager) item;
+                mms.addAll(Arrays.asList(mmgr.getItems()));
             }
         }
-        mm.update(true);
+
+        logger.debug(b.toString());
+        b.setLength(0);
+
+        /*
+         * Preference pages.
+         */
+        b.append("Preference page contributions:\n");
+        final PreferenceManager pm = PlatformUI.getWorkbench().getPreferenceManager();
+
+        List<?> elements = pm.getElements(PreferenceManager.PRE_ORDER);
+        for (IPreferenceNode pref : (List<IPreferenceNode>) elements)
+        {
+            b.append(pref.getId() + " (" + pref.getLabelText() + ")\n");
+        }
+
+        logger.debug(b.toString());
+        b.setLength(0);
+
+        /*
+         * Views.
+         */
+        b.append("View contributions:\n");
+        for (IViewDescriptor view : getWindowConfigurer().getWorkbenchConfigurer()
+            .getWorkbench().getViewRegistry().getViews())
+        {
+            b.append(view.getId() + " (" + view.getLabel() + ")");
+            b.append("\n");
+        }
+
+        logger.debug(b.toString());
+        b.setLength(0);
     }
-    
+
     /*
      * 
      */
@@ -90,8 +158,8 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
         super.postWindowOpen();
 
         /*
-         * After the Workbench window is opened we eagerly re-activate editors
-         * to initialize tab icons.
+         * After the Workbench window is opened we eagerly re-activate editors to
+         * initialize tab icons.
          */
         for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows())
         {

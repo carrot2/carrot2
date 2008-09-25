@@ -29,7 +29,6 @@ final class ApplicationActionBarAdvisor extends ActionBarAdvisor
     private IWorkbenchAction helpContentsAction;
     private IWorkbenchAction openPreferencesAction;
     private IWorkbenchAction exitAction;
-    private IWorkbenchAction propertiesAction;
     private IWorkbenchAction aboutAction;
     private IWorkbenchAction saveAsAction;
 
@@ -73,9 +72,6 @@ final class ApplicationActionBarAdvisor extends ActionBarAdvisor
         openPreferencesAction = ActionFactory.PREFERENCES.create(window);
         register(openPreferencesAction);
 
-        propertiesAction = ActionFactory.PROPERTIES.create(window);
-        register(propertiesAction);
-
         changePerspMenuItem =
             ContributionItemFactory.PERSPECTIVES_SHORTLIST.create(window);
 
@@ -107,27 +103,25 @@ final class ApplicationActionBarAdvisor extends ActionBarAdvisor
      */
     protected void fillMenuBar(IMenuManager menuBar)
     {
-        final MenuManager fileMenu = new MenuManager("&File", "carrot2-File");
+        final MenuManager fileMenu = new MenuManager("&File", "org.carrot2.menus.file");
         fileMenu.add(closeAction);
         fileMenu.add(closeAllAction);
         fileMenu.add(new Separator());
         fileMenu.add(saveAsAction);
         fileMenu.add(new Separator());
-        fileMenu.add(propertiesAction);
-        fileMenu.add(new Separator());
         fileMenu.add(exitAction);
 
-        final MenuManager aboutMenu = new MenuManager("&About", "carrot2-about");
+        final MenuManager aboutMenu = new MenuManager("&About", "org.carrot2.menus.about");
         aboutMenu.add(helpContentsAction);
         aboutMenu.add(aboutAction);
 
-        final MenuManager changePerspMenuMgr = new MenuManager("Open Perspective");
+        final MenuManager changePerspMenuMgr = new MenuManager("Open Perspective", "org.carrot2.menus.openperspective");
         changePerspMenuMgr.add(changePerspMenuItem);
 
-        MenuManager showViewMenuMgr = new MenuManager("Show view");
+        MenuManager showViewMenuMgr = new MenuManager("Show view", "org.carrot2.menus.showview");
         showViewMenuMgr.add(showViewMenu);
 
-        final MenuManager windowMenu = new MenuManager("&Window", "carrot2-window");
+        final MenuManager windowMenu = new MenuManager("&Window", "org.carrot2.menus.window");
         windowMenu.add(changePerspMenuMgr);
         windowMenu.add(showViewMenuMgr);
         windowMenu.add(openPreferencesAction);

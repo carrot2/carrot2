@@ -324,4 +324,67 @@
       </actionSet>
    </extension>
 
+	<extension point="org.eclipse.ui.activities">
+		<activity
+			name="Carrot2 Activity"
+			description="Document Search and Clustering Activity"
+			id="org.carrot2.activities.search">
+		</activity>
+
+		<category id="org.carrot2.categories.search" name="Search and Cluster"
+			description="Document Search and Clustering">
+		</category>
+
+		<categoryActivityBinding
+			activityId="org.carrot2.activities.search"
+			categoryId="org.carrot2.categories.search">
+		</categoryActivityBinding>
+
+		<activityPatternBinding
+			activityId="org.carrot2.activities.search"
+			pattern="org\.carrot2\..*">
+		</activityPatternBinding>
+
+		<defaultEnablement id="org.carrot2.activities.search">
+		</defaultEnablement>
+		
+		<activity
+			name="Generic Eclipse Activity"
+			description="Generic Eclipse Views and contributions"
+			id="org.carrot2.activities.eclipse">
+		</activity>
+
+		<activityPatternBinding
+			activityId="org.carrot2.activities.eclipse"
+			pattern=".+BuildOrder">
+		</activityPatternBinding>
+
+		<!-- cluttering toolbar contributions -->
+		<activityPatternBinding
+			activityId="org.carrot2.activities.eclipse"
+			pattern="org\.eclipse\.ui\.editors/org\.eclipse\.ui\.edit\.text\.actionSet\..+">
+		</activityPatternBinding>
+
+		<!-- cluttering view contributions -->
+		<activityPatternBinding
+			activityId="org.carrot2.activities.eclipse"
+			pattern=".+/org\.eclipse\.ui\.views\.(ContentOutline|ProblemView|ResourceNavigator|TaskList|BookmarkView)">
+		</activityPatternBinding>
+
+		<!-- cluttering preference pages -->
+		<activityPatternBinding
+			activityId="org.carrot2.activities.eclipse"
+			pattern=".+/org\.eclipse\.ui\.preferencePages\.(Decorators|ContentTypes|BuildOrder|LinkedResources|Editors|FileEditors|Workspace|FileStates)">
+		</activityPatternBinding>
+
+		<activityPatternBinding
+			activityId="org.carrot2.activities.eclipse"
+			pattern=".+/org\.eclipse\.update\.internal\.ui\.preferences\.MainPreferencePage">
+		</activityPatternBinding>
+		
+		<activityPatternBinding
+			activityId="org.carrot2.activities.eclipse"
+			pattern=".+/org\.eclipse\.pde\.runtime\.RegistryBrowse">
+		</activityPatternBinding>
+	</extension>
 </plugin>
