@@ -55,7 +55,7 @@ public enum BossLanguageCodes implements ValueHintMapping
     public final String langCode;
     public final String regionCode;
 
-    private BossLanguageCodes(String friendlyName, String langCode, String regionCode)
+    private BossLanguageCodes(String friendlyName, String regionCode, String langCode)
     {
         this.friendlyName = friendlyName;
         this.langCode = langCode;
