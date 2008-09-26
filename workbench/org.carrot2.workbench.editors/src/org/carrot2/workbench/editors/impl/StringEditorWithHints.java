@@ -75,7 +75,10 @@ public class StringEditorWithHints extends AttributeEditorAdapter
     @Override
     public void createEditor(Composite parent, int gridColumns)
     {
-        textBox = new Combo(parent, SWT.BORDER);
+        int flags = SWT.BORDER;
+        if (hint.strict()) flags |= SWT.READ_ONLY;
+
+        textBox = new Combo(parent, flags);
 
         textBox.setLayoutData(GUIFactory.editorGridData().grab(true, false).hint(200,
             SWT.DEFAULT).align(SWT.FILL, SWT.CENTER).span(gridColumns, 1).create());
