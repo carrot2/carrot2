@@ -18,22 +18,31 @@ public abstract class Constraint
     /**
      * Checks if the provided <code>value</code> can be assigned to the type defined by
      * <code>clazz</code>. If not, an {@link IllegalArgumentException} will be thrown.
+     * <code>null</code> values are assignable to any class.
      */
     protected void checkAssignableFrom(Class<?> clazz, Object value)
     {
+        /*
+         * Null is assignable to anything.
+         */
+        if (value == null)
+        {
+            return;
+        }
+
         if (!clazz.isAssignableFrom(value.getClass()))
         {
             throw new IllegalArgumentException("Expected an instance of "
                 + clazz.getClass().getName() + " but found " + value.getClass().getName());
         }
     }
-    
+
     public final void populate(Annotation annotation)
     {
         this.annotation = annotation;
         populateCustom(annotation);
     }
-    
+
     protected void populateCustom(Annotation annotation)
     {
     }
