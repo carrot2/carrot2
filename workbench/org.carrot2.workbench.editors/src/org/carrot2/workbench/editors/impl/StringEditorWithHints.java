@@ -3,9 +3,9 @@ package org.carrot2.workbench.editors.impl;
 import java.util.Collection;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.attribute.AttributeDescriptor;
-import org.carrot2.util.attribute.constraint.ValueHintEnum;
-import org.carrot2.util.attribute.constraint.ValueHintEnumConstraint;
+import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.swt.SWT;
@@ -35,6 +35,11 @@ public class StringEditorWithHints extends AttributeEditorAdapter
      * Value hints for the combo box.
      */
     private ValueHintEnum hint;
+    
+    /**
+     * Not blank annotation.
+     */
+    private NotBlank notBlank;
 
     /**
      * @see ValueHintEnumConstraint#getValueToFriendlyName(ValueHintEnum)
@@ -63,6 +68,8 @@ public class StringEditorWithHints extends AttributeEditorAdapter
     public AttributeEditorInfo init(AttributeDescriptor descriptor)
     {
         this.hint = (ValueHintEnum) descriptor.getAnnotation(ValueHintEnum.class);
+        this.notBlank = (NotBlank) descriptor.getAnnotation(NotBlank.class);
+
         this.valueToNameMapping = ValueHintEnumConstraint.getValueToFriendlyName(hint);
         this.valueOrder = ValueHintEnumConstraint.getValidValuesMap(hint).keySet();
 
@@ -113,6 +120,14 @@ public class StringEditorWithHints extends AttributeEditorAdapter
             }
         });
 
+        if (hint.strict() && notBlank == null)
+        {
+            /*
+             * Add an artificial option to the combo to clear selection.
+             */
+            textBox.add("");
+        }
+
         /*
          * Add hints from the annotation.
          */
@@ -129,6 +144,11 @@ public class StringEditorWithHints extends AttributeEditorAdapter
      */
     private String mapToValue(String text)
     {
+        if (StringUtils.isEmpty(text))
+        {
+            return null;
+        }
+
         String value = this.valueToNameMapping.inverse().get(text);
         if (value == null)
         {
