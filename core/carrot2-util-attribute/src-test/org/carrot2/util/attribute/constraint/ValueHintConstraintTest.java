@@ -7,12 +7,6 @@ import org.junit.Test;
  */
 public class ValueHintConstraintTest extends ConstraintTestBase<ValueHintEnum>
 {
-    public enum TestValueSet
-    {
-        VALUE_1,
-        VALUE_2
-    }
-
     static class AnnotationContainer
     {
         @ValueHintEnum(values = TestValueSet.class, strict = true)
@@ -59,5 +53,11 @@ public class ValueHintConstraintTest extends ConstraintTestBase<ValueHintEnum>
     String getConstrainedFieldName()
     {
         return "strict";
+    }
+    
+    public enum TestValueSet
+    {
+        VALUE_1,
+        VALUE_2
     }
 }
