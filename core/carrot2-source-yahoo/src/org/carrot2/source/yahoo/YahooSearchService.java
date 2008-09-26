@@ -22,7 +22,6 @@ import org.carrot2.util.httpclient.HttpClientFactory;
 import org.carrot2.util.httpclient.HttpHeaders;
 import org.xml.sax.*;
 
-
 /**
  * A superclass shared between Web and News searching services.
  */
@@ -33,24 +32,25 @@ public abstract class YahooSearchService
     protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
     /**
-     * Query types. 
+     * Query types.
      */
-    public enum QueryType {
+    public enum QueryType
+    {
         /**
-         * Returns results with all query terms. 
+         * Returns results with all query terms.
          */
         ALL,
-        
+
         /**
          * Returns results with one or more of the query terms.
          */
         ANY,
-        
+
         /**
          * Returns results containing the query terms as a phrase.
          */
         PHRASE;
-        
+
         @Override
         public String toString()
         {
@@ -60,21 +60,21 @@ public abstract class YahooSearchService
 
     /**
      * Metadata key for the first result's index.
-     *
+     * 
      * @see SearchEngineResponse#metadata
      */
     public static final String FIRST_INDEX_KEY = "firstIndex";
 
     /**
      * Metadata key for the number of results actually returned.
-     *
+     * 
      * @see SearchEngineResponse#metadata
      */
     public static final String RESULTS_RETURNED_KEY = "resultsReturned";
 
     /**
      * Application ID required for Yahoo! services.
-     *
+     * 
      * @label Application ID
      * @level Advanced
      */
@@ -82,8 +82,8 @@ public abstract class YahooSearchService
     @Input
     @Attribute
     public String appid = "carrotsearch";
-    
-    /** 
+
+    /**
      * Query words interpretation.
      * 
      * @group Search query
@@ -94,16 +94,34 @@ public abstract class YahooSearchService
     @Attribute
     public QueryType type = QueryType.ALL;
 
+    /*
+     * TODO: Yahoo API has a broken link to language codes. The format of these
+     * language codes is also undetermined -- the official search page allows you to pass
+     * more than one language, is it possible via the API as well?
+     */
+    /**
+     * The language the results are written in. Value must be one of the 
+     * supported language codes. Omitting language returns results in any language.
+     * 
+     * @group Results filtering
+     * @label Language
+     * @level Medium
+     */
+    @Processing
+    @Input
+    @Attribute
+    public String language;
 
     /**
      * Yahoo! engine current metadata.
      */
     protected MultipageSearchEngineMetadata metadata = DEFAULT_METADATA;
-    
+
     /**
      * Yahoo! engine default metadata.
      */
-    final static MultipageSearchEngineMetadata DEFAULT_METADATA = new MultipageSearchEngineMetadata(50, 1000);
+    final static MultipageSearchEngineMetadata DEFAULT_METADATA = new MultipageSearchEngineMetadata(
+        50, 1000);
 
     /**
      * Keeps subclasses to this package.
@@ -113,11 +131,10 @@ public abstract class YahooSearchService
     }
 
     /**
-     * Prepare an array of {@link NameValuePair} (parameters for
-     * the request).
+     * Prepare an array of {@link NameValuePair} (parameters for the request).
      */
-    protected abstract ArrayList<NameValuePair> createRequestParams(
-        String query, int start, int results);
+    protected abstract ArrayList<NameValuePair> createRequestParams(String query,
+        int start, int results);
 
     /**
      * @return Return service URI for this service.
@@ -127,8 +144,7 @@ public abstract class YahooSearchService
     /**
      * Sends a search query to Yahoo! and parses the result.
      */
-    protected final SearchEngineResponse query(
-        String query, int start, int results)
+    protected final SearchEngineResponse query(String query, int start, int results)
         throws IOException
     {
         // Yahoo's results start from 1.
@@ -179,13 +195,14 @@ public abstract class YahooSearchService
             {
                 // Parse the data stream.
                 final SearchEngineResponse response = parseResponseXML(is);
-                response.metadata.put(SearchEngineResponse.COMPRESSION_KEY, compressionUsed);
+                response.metadata.put(SearchEngineResponse.COMPRESSION_KEY,
+                    compressionUsed);
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Received, results: "
-                        + response.results.size()
-                        + ", total: " + response.getResultsTotal()
-                        + ", first: " + response.metadata.get(FIRST_INDEX_KEY));
+                if (logger.isDebugEnabled())
+                {
+                    logger.debug("Received, results: " + response.results.size()
+                        + ", total: " + response.getResultsTotal() + ", first: "
+                        + response.metadata.get(FIRST_INDEX_KEY));
                 }
 
                 return response;
@@ -194,7 +211,8 @@ public abstract class YahooSearchService
             {
                 // Read the output and throw an exception.
                 final String m = "Yahoo returned HTTP Error: " + statusCode
-                    + ", HTTP payload: " + new String(StreamUtils.readFully(is), "iso8859-1");
+                    + ", HTTP payload: "
+                    + new String(StreamUtils.readFully(is), "iso8859-1");
                 logger.warn(m);
                 throw new IOException(m);
             }
@@ -212,12 +230,14 @@ public abstract class YahooSearchService
     /**
      * Parse the response stream, assuming it is XML.
      */
-    private static SearchEngineResponse parseResponseXML(final InputStream is) throws IOException
+    private static SearchEngineResponse parseResponseXML(final InputStream is)
+        throws IOException
     {
         try
         {
             final XMLResponseParser parser = new XMLResponseParser();
-            final XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+            final XMLReader reader = SAXParserFactory.newInstance().newSAXParser()
+                .getXMLReader();
 
             reader.setFeature("http://xml.org/sax/features/validation", false);
             reader.setFeature("http://xml.org/sax/features/namespaces", true);

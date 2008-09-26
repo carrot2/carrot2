@@ -59,20 +59,6 @@ public final class YahooNewsSearchService extends YahooSearchService
         "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
 
     /**
-     * The language the results are written in. Value must be one of the <a
-     * href="http://developer.yahoo.com/search/languages.html">supported language</a>
-     * codes. Omitting language returns results in any language.
-     * 
-     * @label Results Language
-     * @level Medium
-     */
-    // TODO: maybe this should be enum?
-    @Processing
-    @Input
-    @Attribute
-    public String language;
-
-    /**
      * A domain to restrict your searches to (e.g. www.yahoo.com). TODO: maybe it would
      * make sense to implement multiple values here (allowed by Yahoo)?
      * 

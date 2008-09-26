@@ -4,7 +4,6 @@ import static org.eclipse.swt.SWT.BORDER;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.workbench.core.helpers.GUIFactory;
-import org.carrot2.workbench.core.ui.AttributeInfoTooltip;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.*;

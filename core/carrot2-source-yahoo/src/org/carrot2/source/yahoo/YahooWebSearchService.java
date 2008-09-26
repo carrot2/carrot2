@@ -6,6 +6,7 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.ValueHintEnum;
 
 /**
  * Sends queries to Yahoo! Web search service. Instances of this class are thread-safe.
@@ -35,36 +36,6 @@ public final class YahooWebSearchService extends YahooSearchService
     public String serviceURI = "http://api.search.yahoo.com/WebSearchService/V1/webSearch";
 
     /**
-     * The language the results are written in. Value must be one of the <a
-     * href="http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html">supported
-     * language codes</a>. Omitting language returns results in any language.
-     * 
-     * @group Results filtering
-     * @label Language
-     * @level Medium
-     */
-    @Processing
-    @Input
-    @Attribute
-    public String language;
-
-    /**
-     * The country in which to restrict your search results. Only results on web sites
-     * within this country are returned. Value must be one of the <a
-     * href="http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html">
-     * supported country codes</a>.
-     * 
-     * @group Results filtering
-     * @label Country
-     * @level Medium
-     */
-    // TODO: maybe this should be enum?
-    @Processing
-    @Input
-    @Attribute
-    public String country;
-
-    /**
      * A domain to restrict your searches to (e.g. www.yahoo.com). TODO: maybe it would
      * make sense to implement multiple values here (allowed by Yahoo)?
      * 
@@ -79,20 +50,36 @@ public final class YahooWebSearchService extends YahooSearchService
 
     /**
      * The regional search engine on which the service performs the search. For example,
-     * region=uk will give you the search engine at uk.search.yahoo.com. Value must be one
-     * of the <a href="http://developer.yahoo.com/search/regions.html">supported region
-     * codes</a>.
+     * setting region to <code>uk</code> will give you the search engine at
+     * uk.search.yahoo.com. Value must be one of the <a
+     * href="http://developer.yahoo.com/search/regions.html">supported region codes</a>.
      * 
+     * @see http://developer.yahoo.com/search/regions.html
      * @group Results filtering
      * @label Region
      * @level Medium
      */
-    // TODO: maybe this should be enum?
     @Processing
     @Input
     @Attribute
+    @ValueHintEnum(values = YahooRegionCodes.class, strict = false)
     public String region;
 
+    /**
+     * The country in which to restrict your search results. Only results on web sites
+     * within this country are returned. Value must be one of the <a
+     * href="http://developer.yahoo.com/search/countries.html">supported country codes</a>.
+     * 
+     * @group Results filtering
+     * @label Country
+     * @level Medium
+     */ 
+    @Processing
+    @Input
+    @Attribute
+    @ValueHintEnum(values = YahooCountryCodes.class, strict = false)
+    public String country;
+    
     /**
      * Assembles an array of {@link NameValuePair} with request parameters.
      */
