@@ -1,31 +1,39 @@
 <!--
   Builds main components and applications of Carrot2 3.0.
   Carrot2 Workbench is built using a dedicated script.
- -->
-<project name="Carrot2 3.0" default="test">
+  -->
+<project name="carrot2.master" default="test">
 
-  <!-- Bind relative folders for imported build scripts. -->
-  <property name="doc.basedir" location="doc" />
-  <property name="webapp.basedir" location="applications/carrot2-webapp" />
-  <property name="dcs.basedir" location="applications/carrot2-dcs" />
+  <!-- Basedir relative to this build file -->
+  <dirname property="carrot2.master.basedir" file="${ant.file.carrot2.master}"/>
+  
+  <!-- Directory with flattened lib files, to be visible in imported scripts -->
+  <property name="lib.flattened" location="${carrot2.master.basedir}/tmp/lib" />
 
   <!-- Import other build scripts. -->
-  <import file="applications/carrot2-webapp/build.xml" />
-  <import file="applications/carrot2-dcs/build.xml" />
-  <import file="doc/build.xml" />
+  <import file="${carrot2.master.basedir}/applications/carrot2-webapp/build.xml" />
+  <import file="${carrot2.master.basedir}/applications/carrot2-dcs/build.xml" />
+  <import file="${carrot2.master.basedir}/doc/build.xml" />
 
   <!-- Import local properties -->
-  <property file="local.properties" />
+  <property file="${carrot2.master.basedir}/local.properties" />
 
+  <!-- Source code and lib dirs -->
+  <property name="core.dir" location="${carrot2.master.basedir}/core" />
+  <property name="applications.dir" location="${carrot2.master.basedir}/applications" />
+  <property name="workbench.dir" location="${carrot2.master.basedir}/workbench" />
+  <property name="lib.dir" location="${carrot2.master.basedir}/lib" />
+  <property name="etc.dir" location="${carrot2.master.basedir}/etc" />
+  
   <!-- Ouptut dirs -->
-  <property name="build.dir" location="tmp/classes" />
-  <property name="jar.dir" location="tmp/jar" />
+  <property name="build.dir" location="${carrot2.master.basedir}/tmp/classes" />
+  <property name="jar.dir" location="${carrot2.master.basedir}/tmp/jar" />
 
-  <property name="javadoc.dir" location="tmp/javadoc" />
-  <property name="tests.report.dir" location="tmp/test-report" />
-  <property name="coverage.report.dir" location="tmp/coverage-report" />
-  <property name="duplication.report.dir" location="tmp/duplication-report" />
-  <property name="findbugs.report.dir" location="tmp/findbugs-report" />
+  <property name="javadoc.dir" location="${carrot2.master.basedir}/tmp/javadoc" />
+  <property name="tests.report.dir" location="${carrot2.master.basedir}/tmp/test-report" />
+  <property name="coverage.report.dir" location="${carrot2.master.basedir}/tmp/coverage-report" />
+  <property name="duplication.report.dir" location="${carrot2.master.basedir}/tmp/duplication-report" />
+  <property name="findbugs.report.dir" location="${carrot2.master.basedir}/tmp/findbugs-report" />
 
   <!-- Extra tools the build can use if available -->
   <property name="clover.jar" location="${clover.home}/lib/clover.jar" />
@@ -33,15 +41,15 @@
 
   <!-- Source files to compile for tests -->
   <path id="src.test.folders">
-    <dirset dir="core" includes="**/src" />
-    <dirset dir="core" includes="**/src-test" />
-    <dirset dir="applications" includes="**/src" />
-    <dirset dir="applications" includes="**/src-test" />
+    <dirset dir="${core.dir}" includes="**/src" />
+    <dirset dir="${core.dir}" includes="**/src-test" />
+    <dirset dir="${applications.dir}" includes="**/src" />
+    <dirset dir="${applications.dir}" includes="**/src-test" />
   </path>
 
   <!-- Core source files to compile for production -->
   <path id="src.core.folders">
-    <dirset dir="core" includes="**/src" />
+    <dirset dir="${core.dir}" includes="**/src" />
   </path>
 
   <!-- 
@@ -49,7 +57,7 @@
       list. Also, if external API tests are disabled, the document source classes are
       also excluded from coverage calculation.
     -->
-  <fileset id="src.coverage" dir=".">
+  <fileset id="src.coverage" dir="${carrot2.master.basedir}">
     <include name="core/**/*.java" />
     <include name="applications/**/*.java" />
     <exclude name="**/carrot2-examples/**/*.java" if="external.api.tests.disabled" />
@@ -64,13 +72,13 @@
   </fileset>
 
   <!-- All JARs required by the code -->
-  <fileset dir="." id="lib.files">
+  <fileset dir="${carrot2.master.basedir}" id="lib.files">
     <include name="lib/**/*.jar" />
     <include name="core/carrot2-util-matrix/lib/*.jar" />
     <include name="core/carrot2-source-google/lib/*.jar" />
     <include name="core/carrot2-source-opensearch/lib/*.jar" />
     <include name="applications/carrot2-webapp/lib/*.jar" />
-    <include name="applications/carrot2-dcs/lib/*.jar" />
+    <include name="applications/applications/carrot2-dcs/lib/*.jar" />
     <exclude name="lib/**/axis-ant.jar" />
     <exclude name="lib/**/easymock.jar" />
     <exclude name="lib/**/fest-*.jar" />
@@ -82,7 +90,7 @@
     <exclude name="lib/org.apache.velocity/*.jar" />
   </fileset>
 
-  <fileset dir="." id="lib.test.files">
+  <fileset dir="${carrot2.master.basedir}" id="lib.test.files">
     <include name="lib/**/*.jar" />
     <include name="core/carrot2-util-matrix/lib/*.jar" />
     <include name="core/carrot2-source-google/lib/*.jar" />
@@ -91,9 +99,6 @@
     <include name="applications/carrot2-dcs/lib/*.jar" />
   </fileset>
 
-  <!-- Directory with flatten lib files -->
-  <property name="lib.flattened" location="tmp/lib" />
-  
   <path id="lib.classpath">
     <fileset refid="lib.test.files" />
   </path>
@@ -101,7 +106,7 @@
   <!-- Extra classpath entries for unit tests -->
   <path id="test.classpath">
     <path refid="lib.classpath" />
-    <path location="core/carrot2-component-suites/suites" />
+    <path location="${core.dir}/carrot2-component-suites/suites" />
     <path location="${build.dir}" />
     <path location="${clover.jar}" />
   </path>
@@ -117,11 +122,11 @@
        Output cleanup.
     -->
   <target name="clean" depends="coverage.clean" description="Cleans all build results">
-    <delete dir="tmp" failonerror="false" />
+    <delete dir="${carrot2.master.basedir}/tmp" failonerror="false" />
   </target>
 
   <target name="clean.classes">
-    <delete dir="tmp/classes" failonerror="false" />
+    <delete dir="${carrot2.master.basedir}/tmp/classes" failonerror="false" />
   </target>
 
   <!-- 
@@ -183,7 +188,7 @@
     <mkdir dir="${build.dir}" />
 
     <copy todir="${build.dir}" includeemptydirs="false">
-      <fileset dir="core">
+      <fileset dir="${core.dir}">
         <include name="**/src/**" />
         <include name="**/src-resources/**" />
         <include name="**/suites/**" />
@@ -194,23 +199,23 @@
       <regexpmapper from="^.*src(-resources)?(.*)$$" to="\2" />
     </copy>
     <copy todir="${build.dir}" includeemptydirs="false">
-      <fileset dir="core/carrot2-component-suites/suites" />
+      <fileset dir="${core.dir}/carrot2-component-suites/suites" />
     </copy>
   </target>
 
   <!-- Copies the test resources to the compiled classes directory. -->
   <target name="resources.test"
-          depends="resources, resources.dcs">
+          depends="resources, carrot2.dcs.resources">
     <mkdir dir="${build.dir}" />
 
     <copy todir="${build.dir}" includeemptydirs="false">
-      <fileset dir="core">
+      <fileset dir="${core.dir}">
         <include name="**/src-test/**" />
         <exclude name="**/*.java" />
         <exclude name="**/*.clover" />
         <exclude name="**/carrot2-util-log4j/**" />
       </fileset>
-      <fileset dir="applications">
+      <fileset dir="${applications.dir}">
         <include name="**/src-test/**" />
       </fileset>
       <regexpmapper from="^.*src(-test)?(.*)$$" to="\2" />
@@ -222,12 +227,12 @@
     -->
   <target name="test"
           depends="compile.test, attrs, resources.test"
-          description="Runs all unit tests.">
+          description="Runs all unit tests">
     <mkdir dir="${tests.report.dir}" />
 
-    <property name="source.paths" location="core/carrot2-util-attribute/src-test" />
+    <property name="source.paths" location="${core.dir}/carrot2-util-attribute/src-test" />
     <property name="test.common.attribute.names.source.path"
-              location="core/carrot2-util-attribute/src-test/org/carrot2/util/attribute/test/metadata/TestAttributeNames.java" />
+              location="${core.dir}/carrot2-util-attribute/src-test/org/carrot2/util/attribute/test/metadata/TestAttributeNames.java" />
     <condition property="carrot2.xml.feed.url.base.internal"
                value="${carrot2.xml.feed.url.base}"
                else="">
@@ -249,7 +254,7 @@
                    value="${test.common.attribute.names.source.path}" />
       <sysproperty key="external.api.tests.disabled" value="${external.api.tests.disabled}" />
       <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
-      <sysproperty key="dcs.test.web.dir.prefix" value="applications/carrot2-dcs" />
+      <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
 
       <batchtest todir="${tests.report.dir}">
         <fileset dir="${build.dir}">
@@ -306,98 +311,96 @@
   </macrodef>
 
   <target name="attrs"
-          depends="compile"
-          description="Generates attribute metadata">
+          depends="compile">
     <property name="common.attribute.names.source.path"
-              location="core/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
+              location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
     <parallel threadsPerProcessor="1">
-      <attributes-xml java.source="core/carrot2-algorithm-lingo/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-algorithm-stc/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-algorithm-synthetic/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-core/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-source-etools/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-source-yahoo/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-source-microsoft/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-source-pubmed/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-source-opensearch/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-source-boss/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-source-google-desktop/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-source-solr/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-source-xml/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-util-text/src" output.dir="${build.dir}" />
-      <attributes-xml java.source="core/carrot2-util-attribute/src-test" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-algorithm-lingo/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-algorithm-stc/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-algorithm-synthetic/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-core/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-source-etools/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-source-yahoo/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-source-microsoft/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-source-pubmed/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-source-opensearch/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-source-boss/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-source-google-desktop/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-source-solr/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-source-xml/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-util-text/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-util-attribute/src-test" output.dir="${build.dir}" />
     </parallel>
   </target>
 
   <target name="attrs.eclipse"
-          depends="compile"
-          description="Generates attribute metadata for Eclipse">
+          depends="compile">
     <property name="common.attribute.names.source.path"
-              location="core/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
+              location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
 
     <parallel threadsPerProcessor="1">
-      <attributes-xml-copy java.source="core/carrot2-algorithm-lingo/src"
-                           output.dir="core/carrot2-algorithm-lingo/tmp/eclipse"
-                           copy.to="core/carrot2-algorithm-lingo/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-algorithm-lingo/src"
+                           output.dir="${core.dir}/carrot2-algorithm-lingo/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-algorithm-lingo/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-algorithm-stc/src"
-                           output.dir="core/carrot2-algorithm-stc/tmp/eclipse"
-                           copy.to="core/carrot2-algorithm-stc/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-algorithm-stc/src"
+                           output.dir="${core.dir}/carrot2-algorithm-stc/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-algorithm-stc/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-algorithm-synthetic/src"
-                           output.dir="core/carrot2-algorithm-synthetic/tmp/eclipse"
-                           copy.to="core/carrot2-algorithm-synthetic/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-algorithm-synthetic/src"
+                           output.dir="${core.dir}/carrot2-algorithm-synthetic/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-algorithm-synthetic/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-core/src"
-                           output.dir="core/carrot2-core/tmp/eclipse"
-                           copy.to="core/carrot2-core/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-core/src"
+                           output.dir="${core.dir}/carrot2-core/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-core/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-source-etools/src"
-                           output.dir="core/carrot2-source-etools/tmp/eclipse"
-                           copy.to="core/carrot2-source-etools/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-source-etools/src"
+                           output.dir="${core.dir}/carrot2-source-etools/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-source-etools/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-source-yahoo/src"
-                           output.dir="core/carrot2-source-yahoo/tmp/eclipse"
-                           copy.to="core/carrot2-source-yahoo/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-source-yahoo/src"
+                           output.dir="${core.dir}/carrot2-source-yahoo/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-source-yahoo/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-source-microsoft/src"
-                           output.dir="core/carrot2-source-microsoft/tmp/eclipse"
-                           copy.to="core/carrot2-source-microsoft/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-source-microsoft/src"
+                           output.dir="${core.dir}/carrot2-source-microsoft/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-source-microsoft/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-source-pubmed/src"
-                           output.dir="core/carrot2-source-pubmed/tmp/eclipse"
-                           copy.to="core/carrot2-source-pubmed/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-source-pubmed/src"
+                           output.dir="${core.dir}/carrot2-source-pubmed/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-source-pubmed/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-source-opensearch/src"
-                           output.dir="core/carrot2-source-opensearch/tmp/eclipse"
-                           copy.to="core/carrot2-source-opensearch/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-source-opensearch/src"
+                           output.dir="${core.dir}/carrot2-source-opensearch/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-source-opensearch/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-source-boss/src"
-                           output.dir="core/carrot2-source-boss/tmp/eclipse"
-                           copy.to="core/carrot2-source-boss/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-source-boss/src"
+                           output.dir="${core.dir}/carrot2-source-boss/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-source-boss/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-source-google-desktop/src"
-                           output.dir="core/carrot2-source-google-desktop/tmp/eclipse"
-                           copy.to="core/carrot2-source-google-desktop/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-source-google-desktop/src"
+                           output.dir="${core.dir}/carrot2-source-google-desktop/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-source-google-desktop/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-source-solr/src"
-                           output.dir="core/carrot2-source-solr/tmp/eclipse"
-                           copy.to="core/carrot2-source-solr/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-source-solr/src"
+                           output.dir="${core.dir}/carrot2-source-solr/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-source-solr/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-source-xml/src"
-                           output.dir="core/carrot2-source-xml/tmp/eclipse"
-                           copy.to="core/carrot2-source-xml/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-source-xml/src"
+                           output.dir="${core.dir}/carrot2-source-xml/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-source-xml/META-INF" />
 
-      <attributes-xml-copy java.source="core/carrot2-util-text/src"
-                           output.dir="core/carrot2-util-text/tmp/eclipse"
-                           copy.to="core/carrot2-util-text/META-INF" />
+      <attributes-xml-copy java.source="${core.dir}/carrot2-util-text/src"
+                           output.dir="${core.dir}/carrot2-util-text/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-util-text/META-INF" />
 
-      <attributes-xml java.source="core/carrot2-util-attribute/src-test"
-                      output.dir="core/carrot2-util-attribute/tmp/eclipse" />
+      <attributes-xml java.source="${core.dir}/carrot2-util-attribute/src-test"
+                      output.dir="${core.dir}/carrot2-util-attribute/tmp/eclipse" />
 
-      <attributes-xml-copy java.source="workbench/org.carrot2.workbench.editors/src"
-                           output.dir="workbench/org.carrot2.workbench.editors/tmp/eclipse"
-                           copy.to="workbench/org.carrot2.workbench.editors/META-INF" />
+      <attributes-xml-copy java.source="${workbench.dir}/org.carrot2.workbench.editors/src"
+                           output.dir="${workbench.dir}/org.carrot2.workbench.editors/tmp/eclipse"
+                           copy.to="${workbench.dir}/org.carrot2.workbench.editors/META-INF" />
     </parallel>
   </target>
 
@@ -421,16 +424,20 @@
          outputFile="${duplication.report.dir}/duplication.xml"
          format="xml"
          encoding="UTF-8">
-      <fileset dir=".">
-        <include name="core/**/*.java" />
-        <exclude name="core/carrot2-source-microsoft/src/com/microsoft/msnsearch/**" />
-        <exclude name="core/carrot2-stemmer-snowball/src/**" />
-        <include name="applications/**/*.java" />
-        <include name="workbench/**/*.java" />
+      <fileset dir="${core.dir}">
+        <include name="**/*.java" />
+        <exclude name="carrot2-source-microsoft/src/com/microsoft/msnsearch/**" />
+        <exclude name="carrot2-stemmer-snowball/src/**" />
+      </fileset>
+      <fileset dir="${applications.dir}">
+        <include name="**/*.java" />
+      </fileset>
+      <fileset dir="${workbench.dir}">
+        <include name="**/*.java" />
       </fileset>
     </cpd>
     <xslt in="${duplication.report.dir}/duplication.xml"
-          style="etc/cpd/cpd2html.xsl"
+          style="${etc.dir}/cpd/cpd2html.xsl"
           out="${duplication.report.dir}/duplication.html" />
   </target>
 
@@ -448,28 +455,28 @@
 
     <!-- Delete some classes we don't want to have analyzed -->
     <delete>
-      <fileset dir="tmp/classes">
+      <fileset dir="${build.dir}">
         <include name="com/microsoft/msnsearch/**/*.class" />
         <include name="org/tartarus/snowball/**/*.class" />
         <include name="**/ExtendedWhitespaceTokenizerImpl.class" />
       </fileset>
     </delete>
 
-    <fileset id="lib.contents" dir="." includes="lib/**/*.jar" />
+    <fileset id="lib.contents" dir="${carrot2.master.basedir}" includes="lib/**/*.jar" />
     <property name="lib.jars" refid="lib.contents" />
 
     <findbugs home="${findbugs.home}"
               jvmargs="-Xmx512m"
-              excludeFilter="etc/findbugs/excludes.xml"
+              excludeFilter="${etc.dir}/findbugs/excludes.xml"
               effort="max"
               output="xml:withMessages"
               outputFile="${findbugs.report.dir}/findbugs.xml">
       <auxClasspath path="${lib.jars}" />
-      <class location="tmp/classes" />
+      <class location="${build.dir}" />
     </findbugs>
 
     <xslt in="${findbugs.report.dir}/findbugs.xml"
-          style="etc/findbugs/findbugs2html.xsl"
+          style="${etc.dir}/findbugs/findbugs2html.xsl"
           out="${findbugs.report.dir}/findbugs.html" />
   </target>
 
@@ -490,7 +497,7 @@
 
   <target name="coverage"
           depends="coverage.html, coverage.xml"
-          description="Generates all coverage reports" />
+          description="Generates code coverage reports" />
 
   <target name="coverage.html"
           depends="clover.tasks"
@@ -523,11 +530,12 @@
     -->
   <target name="javadoc" description="Generates JavaDocs for all core classes">
     <delete dir="${javadoc.dir}" failonerror="false" />
-
-    <mkdir dir="tmp/src" />
+    <property name="tmp.src" location="${carrot2.master.basedir}/tmp/src" />
+    
+    <mkdir dir="${tmp.src}" />
     <mkdir dir="${javadoc.dir}" />
 
-    <copy failonerror="true" filtering="false" overwrite="true" todir="tmp/src">
+    <copy failonerror="true" filtering="false" overwrite="true" todir="${tmp.src}">
       <fileset dir="core">
         <include name="**/src/**/*.java" />
         <include name="**/src/**/*.html" />
@@ -551,15 +559,13 @@
              footer="&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
              bottom="&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
              failonerror="true"
-             stylesheetfile="etc/javadoc/stylesheet.css"
+             stylesheetfile="${etc.dir}/javadoc/stylesheet.css"
              useexternalfile="true">
       <classpath>
-        <fileset dir=".">
-          <include name="lib/*/*.jar" />
-        </fileset>
+        <fileset dir="${lib.dir}" />
       </classpath>
 
-      <fileset dir="tmp/src">
+      <fileset dir="${tmp.src}">
         <include name="**/*.java" />
       </fileset>
 
@@ -576,9 +582,9 @@
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Utility classes" packages="org.carrot2.util*" />
     </javadoc>
 
-    <delete dir="tmp/src" />
+    <delete dir="${tmp.src}" />
     <copy todir="${javadoc.dir}">
-      <fileset dir="etc/javadoc/">
+      <fileset dir="${etc.dir}/javadoc/">
         <include name="*.gif" />
       </fileset>
     </copy>
@@ -588,7 +594,7 @@
        Build core JAR.
     -->
   <target name="jar" depends="jar.check, jar.build"
-    description="Build core JAR.">
+    description="Builds Carrot2 core JAR">
     <mkdir dir="${jar.dir}" />
     <jar destfile="${jar.dir}/carrot2-core.jar">
       <fileset dir="${build.dir}" />
@@ -615,9 +621,12 @@
   <!--
        Build all apps.
     -->
-  <target name="build" depends="dcs.build,webapp.build,docs.build" description="Build all apps.">
-  </target>
+  <target name="all" depends="carrot2.dcs.build,carrot2.webapp.build,carrot2.doc.build" description="Builds all Carrot2 applications" />
 
+  <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
+  <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
+  <target name="doc" depends="carrot2.doc.build" description="Builds Carrot2 documentation" />
+  
   <!-- 
        Flattened lib directory.
     -->
@@ -626,7 +635,14 @@
     <copy todir="${lib.flattened}">
       <fileset refid="lib.files" />
       <fileset dir="${jar.dir}" />
-      <mapper type="flatten" />
+      <fileset dir="${lib.dir}">
+        <include name="**/*.LICENSE" />
+      </fileset>
+      <fileset dir="${carrot2.master.basedir}">
+        <include name="carrot2.LICENSE" />
+      </fileset>
+      <mapper type="flatten"/>
     </copy>
   </target>
 </project>
+

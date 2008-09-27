@@ -29,7 +29,7 @@
 
         <!-- Build and deploy webapp -->
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="clean.classes" inheritall="true" />
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="webapp.build" inheritall="true" />
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="webapp" inheritall="true" />
 
         <copy file="${carrot2.code.dir}/tmp/webapp/carrot2-webapp.war"
               tofile="${webapps.dir}/${webapp.name}.war"

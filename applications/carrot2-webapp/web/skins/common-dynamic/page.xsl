@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:include href="../common/page.xsl" />
   <xsl:include href="../common/source-cookies.xsl" />
+  <xsl:include href="../common/util.xsl" />
   
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
        doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -52,14 +53,19 @@ $(document).ready(function() {
       </xsl:if>
       <div id="loading-documents">Loading...</div>
       
-      <ul id="views">
-        <xsl:if test="/page/request/@view = /page/config/views/view[1]/@id">
-          <xsl:attribute name="class">first-active</xsl:attribute>        
-        </xsl:if>
-        <xsl:apply-templates select="/page/config/views/view" />
-      </ul>
+      <xsl:if test="count(/page/config/views/view) > 1">
+        <ul id="views">
+          <xsl:if test="/page/request/@view = /page/config/views/view[1]/@id">
+            <xsl:attribute name="class">first-active</xsl:attribute>        
+          </xsl:if>
+          <xsl:apply-templates select="/page/config/views/view" />
+        </ul>
+      </xsl:if>
       
       <div id="clusters-panel">
+        <xsl:if test="count(/page/config/views/view) &lt; 2">
+          <xsl:attribute name="class">single-view</xsl:attribute>
+        </xsl:if>
         <xsl:comment></xsl:comment>
         <xsl:if test="/page/request/@view = 'visu'">
           <div id="clusters-visu"><xsl:comment></xsl:comment></div>

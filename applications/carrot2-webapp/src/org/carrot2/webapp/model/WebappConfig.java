@@ -34,6 +34,9 @@ public class WebappConfig
     @Attribute(name = "skins-folder")
     public String skinsFolder;
 
+    @Attribute(name = "component-suite")
+    public String componentSuite = "carrot2-default/suite-webapp.xml";
+
     @Attribute(name = "search-url", required = false)
     public final String searchUrl = "search";
 
@@ -87,7 +90,7 @@ public class WebappConfig
 
             INSTANCE.components = ProcessingComponentSuite
                 .deserialize(ResourceUtilsFactory.getDefaultResourceUtils().getFirst(
-                    "carrot2-default/suite-webapp.xml"));
+                    INSTANCE.componentSuite));
             log.info("Loaded " + INSTANCE.components.getSources().size()
                 + " sources and " + INSTANCE.components.getAlgorithms().size()
                 + " algorithms");

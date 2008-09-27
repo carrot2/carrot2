@@ -136,7 +136,7 @@ public abstract class BossSearchService
      * </table>
      * </p>
      * <p>Use {@link BossLanguageCodes#getAttributeValue()} to acquire proper constant
-     * for this field.
+     * for this field.</p>
      * 
      * @see BossLanguageCodes
      * 

@@ -4,7 +4,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-public class Main
+public class WebApp
 {
     /**
      * Starts embedded JETTY server.
@@ -40,6 +40,6 @@ public class Main
          */
         System.setProperty("org.mortbay.log.LogFactory.noDiscovery", "false");
         
-        new Main().startJetty(8080);
+        new WebApp().startJetty(8080);
     }
 }

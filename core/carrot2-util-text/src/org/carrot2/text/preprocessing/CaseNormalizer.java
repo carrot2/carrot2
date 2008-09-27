@@ -243,6 +243,7 @@ public final class CaseNormalizer
     private boolean isIndexed(final int tokenType)
     {
         return tokenType == TokenType.TT_PUNCTUATION
+            || tokenType == TokenType.TT_FULL_URL
             || (tokenType & TokenType.TF_SEPARATOR_SENTENCE) != 0;
     }
 }

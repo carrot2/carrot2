@@ -77,6 +77,7 @@ input, select, label {
   min-height: 63px;
 }
 
+#hide-options,
 #show-options {
   width: 5ex;
   padding-top: 5px;

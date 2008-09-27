@@ -193,6 +193,7 @@ input, select {
   vertical-align: middle;
 }
 
+#hide-options,
 #show-options {
   display: block;
   line-height: 0.9;

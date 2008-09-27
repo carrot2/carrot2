@@ -60,8 +60,13 @@ body, input, select, label, button {
 #startup #main-info,
 #startup #search-area ul.util-links {
   left: 235px;
+  font-size: 11px;
 }
       
+#startup #search-area ul.util-links {
+  font-size: 10px;  
+}
+
 #startup #main-info {
   top: 197px;
   width: 355px;
@@ -116,6 +121,7 @@ body, input, select, label, button {
   width: 350px;
 }
 
+#hide-options,
 #show-options {
   width: 5ex;
   font-size: 10px;

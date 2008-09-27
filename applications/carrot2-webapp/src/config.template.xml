@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config skins-folder="skins@VERSION@">
+<config skins-folder="skins@VERSION@" component-suite="carrot2-default/suite-webapp.xml">
   <skins>
     <skin id="fancy-large" sprited="true" />
     <skin id="fancy-compact" sprited="true" default="true" />

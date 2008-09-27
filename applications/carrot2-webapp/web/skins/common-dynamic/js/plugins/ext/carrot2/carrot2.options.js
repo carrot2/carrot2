@@ -7,36 +7,39 @@
 
   $(document).ready( function() {
     $("#show-options").click( function() {
-      var optionsShowing = $(this).data("optionsShowing");
       $resultsArea = $("#results-area");
-
-      if (optionsShowing) {
-        $("#example-queries").show();
-        if ($resultsArea.size() != 0) {
-          var optionsHeight = $("#options").innerHeight();
-          jQuery.options.updateResultsArea($resultsArea, optionsHeight, -1);
-        } else {
-          $("#main-info").show();
-        }
-        $("#options").hide();
-        $(this).data("optionsShowing", false);
-        $.cookie(COOKIE_OPTIONS_SHOWN, null);
-      } else {
-        $("#example-queries, #main-info").hide();
-        $("#options").show();
-
-        if ($resultsArea.size() != 0) {
-          var optionsHeight = $("#options").innerHeight();
-          jQuery.options.updateResultsArea($resultsArea, optionsHeight, 1);
-        }
-        $(this).data("optionsShowing", true);
-        $.cookie(COOKIE_OPTIONS_SHOWN, "t", {
-          expires :30 * 12 * 10
-        });
+      if ($resultsArea.size() != 0) {
+        var optionsHeight = $("#options").innerHeight();
+        jQuery.options.updateResultsArea($resultsArea, optionsHeight, 1);
       }
+      
+      $("#example-queries, #main-info, #show-options").hide();
+      $("#options, #hide-options").show();
+      $("#query").focus();
+
+      $.cookie(COOKIE_OPTIONS_SHOWN, "t", {
+        expires :30 * 12 * 10
+      });
       return false;
     });
 
+    $("#hide-options").click( function() {
+      $resultsArea = $("#results-area");
+      if ($resultsArea.size() != 0) {
+        var optionsHeight = $("#options").innerHeight();
+        jQuery.options.updateResultsArea($resultsArea, optionsHeight, -1);
+      } else {
+        $("#main-info").show();
+      }
+      
+      $("#example-queries, #show-options").show();
+      $("#options, #hide-options").hide();
+      $("#query").focus();
+      
+      $.cookie(COOKIE_OPTIONS_SHOWN, null);
+      return false;
+    });
+    
     if ($.cookie(COOKIE_OPTIONS_SHOWN)) {
       $("#show-options").trigger("click");
     }

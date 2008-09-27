@@ -1,29 +1,29 @@
-<project name="docs" default="fail">
-
-  <!-- 
-       Basedir for the doc build file. Set by master build
-       or defaults to the current directory. 
-    -->
-  <property name="doc.basedir" location="${basedir}" />
+<!--
+  Internal build script for Carrot2 documentation. 
+  Please use the 'doc' target from the main build script to build the documentation.
+  -->
+<project name="carrot2.doc" default="fail">
+  <!-- Base dir determined from the build file location -->
+  <dirname property="carrot2.doc.basedir"
+           file="${ant.file.carrot2.doc}" />
 
   <!-- Documentation source dir -->
-  <property name="doc.docbook.dir" location="${doc.basedir}/doc/docbook" />
-  <property name="doc.xsl.dir" location="${doc.basedir}/doc/xsl" />
-  <property name="doc.src.dir" location="${doc.basedir}/doc/src" />
-  <property name="doc.assets.dir" location="${doc.basedir}/doc/assets" />
+  <property name="doc.docbook.dir" location="${carrot2.doc.basedir}/docbook" />
+  <property name="doc.xsl.dir" location="${carrot2.doc.basedir}/xsl" />
+  <property name="doc.src.dir" location="${carrot2.doc.basedir}/src" />
+  <property name="doc.assets.dir" location="${carrot2.doc.basedir}/assets" />
 
   <!-- Output directory for the documentation -->
-  <property name="doc.build.dir" location="${doc.basedir}/tmp/doc/build" />
-  <property name="doc.output.dir" location="${doc.basedir}/tmp/doc/html" />
+  <property name="doc.build.dir" location="${carrot2.master.basedir}/tmp/doc/build" />
+  <property name="doc.output.dir" location="${carrot2.master.basedir}/tmp/doc/html" />
 
   <property name="doc.classes.dir" location="${doc.build.dir}/classes" />
 
   <!--
        Builds Carrot2 Manual
     -->
-  <target name="build"
-          depends="docbook.check, doc.prepare, doc.components"
-          description="Builds Carrot2 Manual">
+  <target name="carrot2.doc.build"
+          depends="carrot2.doc.docbook.check, carrot2.doc.prepare, carrot2.doc.components">
     <mkdir dir="${doc.output.dir}" />
 
     <!-- Build the actual manual -->
@@ -50,10 +50,13 @@
       </fileset>
     </copy>
 
-    <antcall target="doc.cleanup" />
+    <antcall target="carrot2.doc.cleanup" />
   </target>
 
-  <target name="doc.prepare">
+  <!--
+       Copies all files necessary to produce the DocBook documentation.
+    -->
+  <target name="carrot2.doc.prepare">
     <mkdir dir="${doc.build.dir}" />
 
     <copy todir="${doc.build.dir}/docbook">
@@ -71,7 +74,10 @@
     </copy>
   </target>
 
-  <target name="doc.components">
+  <!--
+       Builds the XML with component descriptions.
+    -->
+  <target name="carrot2.doc.components">
     <antcall target="jar" />
     <mkdir dir="${doc.classes.dir}" />
 
@@ -130,21 +136,21 @@
     </xslt>
   </target>
 
-  <target name="doc.cleanup">
+  <target name="carrot2.doc.cleanup">
     <delete dir="${docbook.xsl.dir}/html-custom" />
   </target>
 
   <!--
        Checks for required DocBook resources.
     -->
-  <target name="docbook.check">
+  <target name="carrot2.doc.docbook.check">
     <fail unless="docbook.xsl.dir" message="Please specify docbook.xsl.dir" />
     <fail unless="docbook.dtd.dir" message="Please specify docbook.dtd.dir" />
     <fail unless="xalan.home" message="Please specify xalan.home" />
   </target>
 
   <target name="fail">
-    <fail>Please use the top-level build file to build documentation.</fail>
+    <fail>Please use the 'doc' target from the main build script to build the documentation.</fail>
   </target>
 </project>
 

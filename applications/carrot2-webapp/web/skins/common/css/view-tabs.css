@@ -22,3 +22,7 @@
 #views li.active a {
   color: #404040;
 }
+
+#clusters-panel.single-view {
+  top: 2px;
+}

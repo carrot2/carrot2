@@ -1,32 +1,76 @@
+<!--
+  Internal build script for Carrot2 web application. 
+  Please use the 'webapp' target from the main build script to build the web application.
+  -->
+<project name="carrot2.webapp" default="carrot2.webapp.eclipse.setup">
+  <!-- Base dir determined from the build file location -->
+  <dirname property="carrot2.webapp.basedir"
+           file="${ant.file.carrot2.webapp}" />
 
-<project name="webapp" default="templates">
-  <!-- 
-       Basedir for the build file. Set by master build
-       or defaults to the current directory. 
-    -->
-  <property name="webapp.basedir" location="${basedir}" />
+  <!-- Master build base dir -->
+  <property name="carrot2.master.basedir"
+            location="${carrot2.webapp.basedir}/../../" />
+
+  <!-- Load properties from the master base dir, otherwiser sprites generator will not work -->
+  <property file="${carrot2.master.basedir}/local.properties" />
+
+  <!-- Customizable properties -->
+  <property name="jawr.properties.template.path"
+            location="${carrot2.webapp.basedir}/src/jawr.template.properties" />
+  <property name="config.xml.template.path"
+            location="${carrot2.webapp.basedir}/src/config.template.xml" />
 
   <!-- Build number -->
   <property name="build.number" value="" />
 
   <!-- Webapp build dirs -->
   <property name="webapp.dir" location="tmp/webapp" />
-  <property name="webapp.skins.dir" location="${webapp.dir}/skins${build.number}" />
+  <property name="webapp.classes.dir" location="${webapp.dir}/classes" />
+  <property name="webapp.lib.dir" location="${lib.flattened}" />
+  <property name="webapp.skins.dir"
+            location="${webapp.dir}/skins${build.number}" />
 
   <!-- 
-       Web application WAR file.
+       Build the web application WAR file.
     -->
-  <target name="build" depends="webapp.templates, webapp.skins.prepare, webapp.sprites"
-    description="Builds the Web application.">
-    <antcall target="jar" />
-    <antcall target="lib.flattened" />
+  <target name="carrot2.webapp.build" depends="carrot2.webapp.prepare, carrot2.webapp.war, carrot2.webapp.cleanup" />
 
-    <mkdir dir="${webapp.dir}" />
-    <mkdir dir="${webapp.dir}/classes" />
+  <!--
+       Assembles the web applications WAR file.
+    -->
+  <target name="carrot2.webapp.war">
+    <antcall target="lib.flattened" />
+    <war destfile="${webapp.dir}/carrot2-webapp.war"
+         webxml="${carrot2.webapp.basedir}/web/WEB-INF/web.xml">
+      <fileset dir="${carrot2.webapp.basedir}/web">
+        <include name="index.html" />
+      </fileset>
+      <fileset dir="${webapp.skins.dir}/..">
+        <include name="skins${build.number}/**" />
+      </fileset>
+      <lib dir="${webapp.lib.dir}" />
+      <classes dir="${webapp.classes.dir}" />
+    </war>
+  </target>
+
+  <!--
+       Prepares resources the web applications WAR file. "Build scripts "extending" this
+       script may want to add their own preparation steps (e.g. copy extra skins)
+       before they let this script assemble the complete WAR file.
+    -->
+  <target name="carrot2.webapp.prepare"
+          depends="carrot2.webapp.templates.war, carrot2.webapp.classes, carrot2.webapp.suites, carrot2.webapp.skins, carrot2.webapp.sprites.war" />
+
+  <!--
+       Compiles the main web application classes and copies log4j configuration.
+    -->
+  <target name="carrot2.webapp.classes">
+    <mkdir dir="${webapp.classes.dir}" />
+    <antcall target="jar" />
 
     <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac srcdir="${webapp.basedir}/src"
-           destdir="${webapp.dir}/classes"
+    <javac srcdir="${carrot2.webapp.basedir}/src"
+           destdir="${webapp.classes.dir}"
            compiler="modern"
            source="1.5"
            target="1.5"
@@ -34,62 +78,58 @@
       <classpath refid="lib.classpath" />
       <classpath path="${jar.dir}/carrot2-core.jar" />
     </javac>
+
+    <!-- Log4j specific config -->
     <copy tofile="${webapp.dir}/classes/log4j.xml"
-          file="core/carrot2-util-log4j/src/log4j-webapp.xml" />
-    <copy todir="${webapp.dir}/classes">
-      <fileset dir="core/carrot2-component-suites/suites">
+          file="${carrot2.master.basedir}/core/carrot2-util-log4j/src/log4j-webapp.xml" />
+    <copy todir="${webapp.classes.dir}">
+      <fileset dir="${carrot2.master.basedir}/core/carrot2-util-log4j/src">
+        <include name="appender-*" />
+        <include name="filters-*" />
+      </fileset>
+    </copy>
+  </target>
+
+  <!--
+       Copies the default component suites. Can be disabled by "extending" build scripts.
+    -->
+  <target name="carrot2.webapp.suites" unless="carrot2.webapp.no-default-suites">
+    <copy todir="${webapp.classes.dir}">
+      <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
         <include name="carrot2-default/suite-local.xml" />
         <include name="carrot2-default/suite-common.xml" />
         <include name="carrot2-default/suite-webapp.xml" />
       </fileset>
     </copy>
-
-    <war destfile="${webapp.dir}/carrot2-webapp.war" webxml="${webapp.basedir}/web/WEB-INF/web.xml">
-      <fileset dir="${webapp.basedir}/web">
-        <include name="index.html" />
-      </fileset>
-      <fileset dir="${webapp.skins.dir}/..">
-        <include name="skins${build.number}/**" />
-      </fileset>
-      <lib dir="${lib.flattened}" />
-      <classes dir="${webapp.dir}/classes">
-        <exclude name="*.java" />
-      </classes>
-      <classes dir="${webapp.basedir}/src">
-        <exclude name="*.java" />
-        <exclude name="*.template.*" />
-      </classes>
-      <classes dir="core/carrot2-util-log4j/src">
-        <include name="appender-*" />
-        <include name="filters-*" />
-      </classes>
-    </war>
-
-    <delete dir="${webapp.dir}/classes" />
-    <delete dir="${webapp.skins.dir}" />
   </target>
 
-  <target name="webapp.skins.prepare">
+  <!--
+       Copies "source" skin files to a work directory.
+    -->
+  <target name="carrot2.webapp.skins">
     <mkdir dir="${webapp.skins.dir}" />
     <copy todir="${webapp.skins.dir}">
-      <fileset dir="${webapp.basedir}/web/skins" />
+      <fileset dir="${carrot2.webapp.basedir}/web/skins" />
     </copy>
   </target>
 
   <!-- 
-       Build sprite images
+       Builds sprite images for a single skin.
     -->
-  <macrodef name="build-sprites">
+  <macrodef name="carrot2.webapp.sprites">
     <attribute name="base.dir" />
     <attribute name="root.dir" />
 
     <sequential>
-      <taskdef name="smartsprites" classname="org.carrot2.labs.smartsprites.ant.SmartSpritesTask">
+      <taskdef name="smartsprites"
+               classname="org.carrot2.labs.smartsprites.ant.SmartSpritesTask">
         <classpath>
           <fileset dir="${smartsprites.home}/lib" />
         </classpath>
       </taskdef>
 
+      <delete dir="@{base.dir}/@{root.dir}/sprite" />
+      <mkdir dir="@{base.dir}/@{root.dir}/sprite" />
       <smartsprites rootdir="@{base.dir}/@{root.dir}"
                     outputdir="@{base.dir}/@{root.dir}/sprite"
                     cssfilesuffix=""
@@ -103,58 +143,101 @@
     </sequential>
   </macrodef>
 
-  <target name="webapp.sprites" if="smartsprites.home" depends="webapp.skins.prepare">
-    <build-sprites base.dir="${webapp.skins.dir}" root.dir="fancy-compact" />
-    <build-sprites base.dir="${webapp.skins.dir}" root.dir="fancy-large" />
-    <build-sprites base.dir="${webapp.skins.dir}" root.dir="simple" />
-  </target>
-
-  <target name="webapp.sprites.eclipse" if="smartsprites.home">
-    <build-sprites base.dir="${webapp.basedir}/web/skins" root.dir="fancy-compact" />
-    <build-sprites base.dir="${webapp.basedir}/web/skins" root.dir="fancy-large" />
-    <build-sprites base.dir="${webapp.basedir}/web/skins" root.dir="simple" />
-  </target>
-
-  <target name="webapp.eclipse.setup" depends="webapp.templates, webapp.sprites.eclipse" />
-  
-  <!-- 
-       Processing of file templates
+  <!--
+       Builds sprite images in the skins work directory.
     -->
-  <target name="templates"
-          description="Generate dynamic webapp files">
-
-    <condition property="sprite.suffix" value="sprite/" else="">
-      <isset property="smartsprites.home" />
-    </condition>
-
-    <filterset id="version.filterset">
-      <filter token="VERSION" value="${build.number}" />
-    </filterset>
-
-    <copy file="${webapp.basedir}/src/jawr.template.properties"
-          tofile="${webapp.basedir}/src/jawr.properties"
-          overwrite="true">
-      <filterset refid="version.filterset" />
-      <filterset>
-        <filter token="SPRITE" value="${sprite.suffix}" />
-      </filterset>
-    </copy>
-
-    <copy file="${webapp.basedir}/src/config.template.xml"
-          tofile="${webapp.basedir}/src/config.xml"
-          overwrite="true">
-      <filterset refid="version.filterset" />
-    </copy>
-
-    <copy file="${webapp.basedir}/web/WEB-INF/web.template.xml"
-          tofile="${webapp.basedir}/web/WEB-INF/web.xml"
-          overwrite="true">
-      <filterset refid="version.filterset" />
-    </copy>
+  <target name="carrot2.webapp.sprites.war" if="smartsprites.home" depends="carrot2.webapp.skins">
+    <carrot2.webapp.sprites base.dir="${webapp.skins.dir}" root.dir="fancy-compact" />
+    <carrot2.webapp.sprites base.dir="${webapp.skins.dir}" root.dir="fancy-large" />
+    <carrot2.webapp.sprites base.dir="${webapp.skins.dir}" root.dir="simple" />
   </target>
 
-  <target name="clean.webapp">
+  <!--
+       Builds sprite images in the skin source directory.
+    -->
+  <target name="carrot2.webapp.sprites.eclipse" if="smartsprites.home">
+    <carrot2.webapp.sprites base.dir="${carrot2.webapp.basedir}/web/skins"
+             root.dir="fancy-compact" />
+    <carrot2.webapp.sprites base.dir="${carrot2.webapp.basedir}/web/skins"
+             root.dir="fancy-large" />
+    <carrot2.webapp.sprites base.dir="${carrot2.webapp.basedir}/web/skins" root.dir="simple" />
+  </target>
+
+  <!--
+       Processes all the files required to run the web application from Eclipse.
+    -->
+  <target name="carrot2.webapp.eclipse.setup" depends="carrot2.webapp.templates.eclipse, carrot2.webapp.sprites.eclipse" />
+
+  <!--
+       Substitutes variables in config.xml, jawr.properties and web.xml files.
+    -->
+  <macrodef name="carrot2.webapp.templates">
+    <attribute name="target.dir" />
+    <attribute name="template.caching" default="true" />
+    <sequential>
+      <condition property="sprite.suffix" value="sprite/" else="">
+        <isset property="smartsprites.home" />
+      </condition>
+
+      <filterset id="version.filterset">
+        <filter token="VERSION" value="${build.number}" />
+      </filterset>
+
+      <copy file="${jawr.properties.template.path}"
+            tofile="@{target.dir}/jawr.properties"
+            overwrite="true">
+        <filterset refid="version.filterset" />
+        <filterset>
+          <filter token="SPRITE" value="${sprite.suffix}" />
+        </filterset>
+      </copy>
+
+      <copy file="${config.xml.template.path}"
+            tofile="@{target.dir}/config.xml"
+            overwrite="true">
+        <filterset refid="version.filterset" />
+      </copy>
+
+      <copy file="${carrot2.webapp.basedir}/web/WEB-INF/web.template.xml"
+            tofile="${carrot2.webapp.basedir}/web/WEB-INF/web.xml"
+            overwrite="true">
+        <filterset refid="version.filterset" />
+        <filterset>
+          <filter token="TEMPLATE_CACHING" value="@{template.caching}" />
+        </filterset>
+      </copy>
+    </sequential>
+  </macrodef>
+
+  <!--
+       Substitutes variables in config.xml, jawr.properties and web.xml files and saves
+       the results to the classes working dir.
+    -->
+  <target name="carrot2.webapp.templates.war">
+    <carrot2.webapp.templates target.dir="${webapp.classes.dir}" />
+  </target>
+
+  <!--
+       Substitutes variables in config.xml, jawr.properties and web.xml files and saves
+       the results to the source dirs.
+    -->
+  <target name="carrot2.webapp.templates.eclipse">
+    <carrot2.webapp.templates target.dir="${carrot2.webapp.basedir}/src"
+               template.caching="false" />
+  </target>
+
+  <!--
+       Removes temporary files left after building the web application.
+    -->
+  <target name="carrot2.webapp.cleanup">
+    <delete dir="${webapp.classes.dir}" />
+    <delete dir="${webapp.skins.dir}" />
+  </target>
+
+  <!--
+       Removes the WAR file and all temporary files.
+    -->
+  <target name="carrot2.webapp.clean">
     <delete dir="${webapp.dir}" />
   </target>
-
 </project>

@@ -37,3 +37,7 @@ a#tree-top {
   background-image: url('../img/tree-more.gif'); /** sprite-ref: vert; sprite-margin-top: 2px; sprite-margin-bottom: 5px */
 }
 
+#always-show-all {
+  font-size: 11px;
+  margin-left: 37px;
+}

@@ -2,6 +2,7 @@ package org.carrot2.dcs;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -12,6 +13,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.carrot2.core.*;
 import org.carrot2.dcs.DcsRequestModel.OutputFormat;
 import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.ExecutorServiceUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.resource.ClassResource;
@@ -28,8 +30,6 @@ public final class RestProcessorServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
 
-    final String DCS_CONFIG_ATTRIBUTE = "dcs.config";
-
     private transient DcsConfig config;
 
     private transient ProcessingComponentSuite componentSuite;
@@ -40,24 +40,15 @@ public final class RestProcessorServlet extends HttpServlet
     @SuppressWarnings("unchecked")
     public void init() throws ServletException
     {
-        // Check if config already injected by the console starter
-        config = (DcsConfig) getServletContext().getAttribute(DCS_CONFIG_ATTRIBUTE);
-        if (config != null)
+        // Run in servlet container, load config from config.xml
+        try
         {
-            config.logger.info("Console mode, skipping configuration in config.xml.");
+            config = DcsConfig.deserialize(ResourceUtilsFactory.getDefaultResourceUtils()
+                .getFirst("config.xml"));
         }
-        else
+        catch (Exception e)
         {
-            // Run in servlet container, load config from config.xml
-            try
-            {
-                config = DcsConfig.deserialize(ResourceUtilsFactory
-                    .getDefaultResourceUtils().getFirst("config.xml"));
-            }
-            catch (Exception e)
-            {
-                throw new ServletException("Could not read config.xml", e);
-            }
+            throw new ServletException("Could not read config.xml", e);
         }
 
         // Load component suite
@@ -85,6 +76,26 @@ public final class RestProcessorServlet extends HttpServlet
 
         controller = new CachingController(cachedComponentClasses.toArray(new Class [2]));
         controller.init(Collections.<String, Object> emptyMap(), componentSuite);
+    }
+
+    @Override
+    public void destroy()
+    {
+        if (this.controller != null)
+        {
+            this.controller.dispose();
+            this.controller = null;
+        }
+
+        /*
+         * See http://issues.carrot2.org/browse/CARROT-388
+         */
+        for (ExecutorService service : ExecutorServiceUtils.getAllCreated())
+        {
+            service.shutdownNow();
+        }
+
+        super.destroy();
     }
 
     @Override

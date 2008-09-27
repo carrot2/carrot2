@@ -29,4 +29,9 @@ public class MicrosoftLiveDocumentSourceTest extends
     {
         return true;
     }
+    
+    protected double slack()
+    {
+        return 1.4;
+    }
 }

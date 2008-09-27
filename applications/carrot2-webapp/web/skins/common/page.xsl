@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:include href="customization.xsl" />
+  <xsl:include href="documents.xsl" />
+  <xsl:include href="clusters.xsl" />
+
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
               doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
               doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
@@ -22,8 +26,6 @@
   <xsl:variable name="xml-url-encoded" select="/page/@xml-url-encoded" />
   <xsl:variable name="documents-url" select="concat($request-url, '&amp;type=DOCUMENTS')" />
   <xsl:variable name="clusters-url" select="concat($request-url, '&amp;type=CLUSTERS')" />
-  
-  <xsl:variable name="debug" select="false" />
 
   <!-- HTML scaffolding -->
   <xsl:template match="/">
@@ -32,16 +34,12 @@
         <html xmlns="http://www.w3.org/1999/xhtml">
           <head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <title><xsl:call-template name="page-title" /></title>
+            <title><xsl:apply-templates select="page" mode="head-title" /></title>
             <xsl:apply-templates select="page/asset-urls/css-urls/css-url" />
           </head>
           
           <body>
-            <xsl:attribute name="id"><xsl:call-template
-              name="page-body-id" /></xsl:attribute>
-            <xsl:if test="$debug = 'true'">
-              <xsl:apply-templates select="/page/request/parameter" />
-            </xsl:if>
+            <xsl:attribute name="id"><xsl:call-template name="page-body-id" /></xsl:attribute>
     
             <!-- Page content -->
             <xsl:apply-templates />
@@ -65,19 +63,6 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="parameter">
-    Param: <xsl:value-of select="@name" />, value: <xsl:apply-templates select="value/@value" /><br />
-  </xsl:template>
-  
-  <!-- HTML head title -->
-  <xsl:template name="page-title">
-    <xsl:if test="string-length(/page/request/@query) > 0">
-      <xsl:value-of select="/page/request/@query" />
-      -
-    </xsl:if>
-    Carrot2 Clustering Engine 
-  </xsl:template>
-  
   <!-- Stylesheets -->
   <xsl:template match="css-url">
     <link rel="stylesheet" href="{.}" type="text/css" />
@@ -100,17 +85,13 @@
 
   <!-- Error message -->
   <xsl:template match="page[@type = 'ERROR']">
-    <div class="processing-error">
-    Our apologies, the following processing error has occurred: 
-    <span class="message"><xsl:value-of select="/page/@exception-message" /></span>
-    If the error persists, please <a href="http://project.carrot2.org/support.html">contact us</a>.
-    </div>
+    <xsl:apply-templates select=".." mode="error-text" />
   </xsl:template>
 
   <!-- Main page contents -->
   <xsl:template match="page[@type = 'PAGE' or @type = 'FULL']">
     <noscript>
-      <div class="noscript"><xsl:call-template name="no-javascript-message" /></div>
+      <div class="noscript"><xsl:apply-templates select=".." mode="no-javascript-text" /></div>
     </noscript>
 
     <xsl:if test="/page/request/@modern = 'false'">
@@ -118,13 +99,11 @@
     </xsl:if>
               
     <div id="logo">
-      <h1><a href="{$context-path}/{$search-url}"><span class="hide"><xsl:call-template name="main-title" /></span></a></h1>
+      <h1><a href="{$context-path}/{$search-url}"><span class="hide"><xsl:apply-templates select=".." mode="page-title" /></span></a></h1>
     </div>
     
     <div id="main-info">
-      Carrot<sup>2</sup> organizes your search results into topics. With
-      an instant overview of what's available, you will quickly find what 
-      you're looking for.  
+      <xsl:apply-templates select=".." mode="startup-text" />
     </div>
 
     <hr class="hide" />
@@ -146,7 +125,8 @@
               <xsl:apply-templates select=".." mode="query" />
               <xsl:apply-templates select=".." mode="search" />
               
-              <span id="show-options"><a href="#more-options">More options</a></span>
+              <span id="show-options"><a href="#" accesskey="o">More options</a></span>
+              <span id="hide-options" style="display: none"><a href="#" accesskey="o">Hide options</a></span>
             </div>
 
             <div id="options" class="hide">
@@ -198,23 +178,7 @@
     <hr class="hide" />
 
     <div id="util-links">
-      <h3 class="hide">About Carrot<sup>2</sup>:</h3>
-      
-      <p class="hide">
-        <xsl:call-template name="about-text" />
-      </p>
-
-      <ul class="util-links">
-        <li><a href="#">About</a><xsl:call-template name="pipe" /></li>
-        <li class="hot"><a href="#">New features!</a><xsl:call-template name="pipe" /></li>
-        <li class="main"><a href="#">Beta</a><xsl:call-template name="pipe" /></li>
-        <li><a href="#">More demos</a><xsl:call-template name="pipe" /></li>
-        <li><a href="#">Plugins</a><xsl:call-template name="pipe" /></li>
-        <li><a href="#">Download</a><xsl:call-template name="pipe" /></li>
-        <li><a href="#">FAQ</a><xsl:call-template name="pipe" /></li>
-        <li class="main"><a href="#">Carrot Search</a><xsl:call-template name="pipe" /></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
+      <xsl:apply-templates select=".." mode="about" />
     </div>
 
     <div id="loading">Loading...</div>
@@ -225,8 +189,6 @@
       </div>
     </xsl:if>
   </xsl:template>
-
-  <xsl:template name="pipe"><span class='pipe'> | </span></xsl:template>
 
   <xsl:template match="page" mode="sources">
     <div id="source-tabs">
@@ -342,177 +304,5 @@
 
   <xsl:template match="source/example-queries/example-query">
     <a href="{$context-path}/{$search-url}?{concat($source-param, '=', string(../../@id), '&amp;', $query-param, '=', string(.))}"><xsl:apply-templates /></a>
-  </xsl:template>
-
-  <xsl:template name="no-javascript-message">
-    To use Carrot<sup>2</sup>, please enable 
-    JavaScript in your browser.
-  </xsl:template>
-
-  <xsl:template name="main-title">
-    Carrot2 Search Results Clustering Engine
-  </xsl:template>
-
-  <xsl:template name="about-text">
-    Carrot2 is an Open Source Search Results Clustering Engine. It can
-    automatically organize (cluster) search results into thematic
-    categories. For more information, please check the 
-    <a href="http://project.carrot2.org">project website</a>.
-  </xsl:template>
-  
-  <!-- Documents -->
-  <xsl:template match="page[@type = 'DOCUMENTS']">
-    <div id="documents">
-      <xsl:choose>
-        <xsl:when test="count(searchresult/document) > 0">
-          <xsl:apply-templates select="searchresult/document" />
-        
-          <script>
-            var fetchedDocumentsCount = <xsl:value-of select="count(searchresult/document)" />;
-            var totalDocumentsCount = "<xsl:value-of select="searchresult/attribute[@key = 'results-total']/value/@value" />";
-            var sourceTime = "<xsl:value-of select="searchresult/attribute[@key = 'processing-time-source']/value/@value" />";
-          </script>
-        </xsl:when>
-        
-        <xsl:otherwise>
-          <div id="no-documents">Your query returned no documents. <br />Please try a more general query.</div>
-        </xsl:otherwise>
-      </xsl:choose>    
-    </div>
-  </xsl:template>
-
-  <xsl:template match="document">
-    <div id="d{@id}" class="document">
-      <div class="title">
-        <h3>
-          <span class="rank"><xsl:value-of select="number(@id) + 1" /></span>
-          <span class="title-in-clusters">
-            <a href="{url}" class="title">
-              <xsl:choose>
-                <xsl:when test="field[@key = 'title-highlight']">
-                  <xsl:value-of disable-output-escaping="yes" select="field[@key = 'title-highlight']/value" />
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="string(title)" />
-                </xsl:otherwise>
-              </xsl:choose>
-            </a>
-            <a href="#" class="in-clusters" title="Show in clusters">&#160;<small>Show in clusters</small></a>
-          </span>
-          <a href="{url}" target="_blank" class="in-new-window" title="Open in new window">&#160;<small>Open in new window</small></a>
-          <a href="#" class="show-preview" title="Show preview">&#160;<small>Show preview</small></a>
-        </h3>
-      </div>
-      <xsl:if test="field[@key = 'thumbnail-url']">
-        <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value}" />
-      </xsl:if>
-      <xsl:if test="string-length(snippet) &gt; 0">
-        <div class="snippet">
-          <xsl:choose>
-            <xsl:when test="field[@key = 'snippet-highlight']">
-              <xsl:value-of disable-output-escaping="yes" select="field[@key = 'snippet-highlight']/value" />
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="string(snippet)" />
-            </xsl:otherwise>
-          </xsl:choose>
-        </div>
-      </xsl:if>
-      <div class="url">
-        <xsl:apply-templates select="url" />
-        <xsl:if test="count(sources/source) > 0">
-          <span class="sources"> [<xsl:apply-templates select="sources/source" />]</span>
-        </xsl:if>
-      </div>
-      <div style="clear: both"><xsl:comment></xsl:comment></div>
-    </div>
-  </xsl:template>
-  
-  <xsl:template match="document/sources/source[position() = last()]">
-    <xsl:apply-templates />
-  </xsl:template>
-  
-  <xsl:template match="document/sources/source[position() != last()]">
-    <xsl:apply-templates />,
-  </xsl:template>
-  
-  <!-- Clusters -->
-  <xsl:template match="page[@type = 'CLUSTERS']">
-    <div id="clusters">
-      <xsl:choose>
-        <xsl:when test="count(searchresult/group) > 0">
-          <a id="tree-top" href="#"><span class="label">All Topics</span><span class="size">(<xsl:value-of select="count(searchresult/document)" />)</span></a>
-          <ul>
-            <xsl:apply-templates select="searchresult/group" />
-          </ul>
-      
-          <script>
-            var documentCount = <xsl:value-of select="count(searchresult/document)" />;
-            var documents = {
-              <xsl:apply-templates select="searchresult/group" mode="json" />
-            };
-            var algorithmTime = "<xsl:value-of select="searchresult/attribute[@key = 'processing-time-algorithm']/value/@value" />";
-          </script>
-        </xsl:when>
-        
-        <xsl:otherwise>
-          <div id="no-clusters">No clusters found</div>
-        </xsl:otherwise>
-      </xsl:choose>
-    </div>
-  </xsl:template>
-
-  <xsl:template match="group">
-    <li class="folded" id="{generate-id(.)}">
-      <a href="#"><span class="label"><xsl:apply-templates select="title" /></span><span class="size">(<xsl:value-of select="@size" />)</span></a>
-      <xsl:if test="group">
-        <ul>
-          <xsl:apply-templates select="group" />
-        </ul>
-      </xsl:if>
-    </li>
-  </xsl:template>
-
-  <xsl:template match="group/title">
-    <xsl:choose>
-      <xsl:when test="../attribute[@key = 'other-topics']">
-        Other topics
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="phrase[1]" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template match="group" mode="json">
-    '<xsl:value-of select="generate-id(.)" />': {
-      <xsl:if test="document">
-        d: [<xsl:apply-templates mode="json" select="document" />]<xsl:if test="group">,</xsl:if>
-      </xsl:if>
-      <xsl:if test="group">
-        c: { 
-          <xsl:apply-templates select="group" mode="json" /> 
-        }
-      </xsl:if>
-    }<xsl:if test="not(position() = last())">,</xsl:if>
-  </xsl:template>
-
-  <xsl:template match="group/document" mode="json">
-    <xsl:value-of select="@refid" /><xsl:if test="not(position() = last())">,</xsl:if>
-  </xsl:template>
-  
-  <!-- Replaces one parameter in the provided url -->
-  <xsl:template name="replace-in-url">
-    <xsl:param name="url" />
-    <xsl:param name="param" />
-    <xsl:param name="value" />
-    
-    <xsl:variable name="left"><xsl:value-of select="substring-before($url, concat($param, '='))" /></xsl:variable>
-    <xsl:variable name="after-param"><xsl:value-of select="substring-after($url, concat($param, '='))" /></xsl:variable>
-    <xsl:variable name="right"><xsl:value-of select="substring-after(substring($after-param, 1), '&amp;')" /></xsl:variable>
-    
-    <xsl:value-of select="concat($left, $param, '=', $value)" /><xsl:if test="string-length($right) > 0">
-      <xsl:value-of select="concat('&amp;', $right)" />
-    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
