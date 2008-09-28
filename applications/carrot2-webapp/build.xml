@@ -11,7 +11,7 @@
   <property name="carrot2.master.basedir"
             location="${carrot2.webapp.basedir}/../../" />
 
-  <!-- Load properties from the master base dir, otherwiser sprites generator will not work -->
+  <!-- Load properties from the master base dir, otherwise sprites generator will not work -->
   <property file="${carrot2.master.basedir}/local.properties" />
 
   <!-- Customizable properties -->
@@ -19,7 +19,8 @@
             location="${carrot2.webapp.basedir}/src/jawr.template.properties" />
   <property name="config.xml.template.path"
             location="${carrot2.webapp.basedir}/src/config.template.xml" />
-
+  <property name="war.name.base" value="carrot2-webapp" />
+  
   <!-- Build number -->
   <property name="build.number" value="" />
 
@@ -40,7 +41,7 @@
     -->
   <target name="carrot2.webapp.war">
     <antcall target="lib.flattened" />
-    <war destfile="${webapp.dir}/carrot2-webapp.war"
+    <war destfile="${webapp.dir}/${war.name.base}.war"
          webxml="${carrot2.webapp.basedir}/web/WEB-INF/web.xml">
       <fileset dir="${carrot2.webapp.basedir}/web">
         <include name="index.html" />

@@ -6,7 +6,7 @@
               media-type="text/html" encoding="utf-8" />
               
   <xsl:strip-space elements="*" />
-  
+
   <!-- Documents -->
   <xsl:template match="page[@type = 'DOCUMENTS']">
     <div id="documents">
@@ -50,9 +50,17 @@
           <a href="#" class="show-preview" title="Show preview">&#160;<small>Show preview</small></a>
         </h3>
       </div>
-      <xsl:if test="field[@key = 'thumbnail-url']">
-        <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value}" />
-      </xsl:if>
+      <xsl:variable name="unique-urls-for-thumbnails"><xsl:apply-templates select="/page" mode="unique-urls-for-thumbnails" /></xsl:variable>
+      <xsl:variable name="document-source-ids-for-thumbnails"><xsl:apply-templates select="/page" mode="document-source-ids-for-thumbnails" /></xsl:variable>
+      <xsl:choose>
+        <xsl:when test="field[@key = 'thumbnail-url']">
+          <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value}" />
+        </xsl:when>
+        <xsl:when test="@id != 'document-template' and contains($document-source-ids-for-thumbnails, /page/request/@source) and $unique-urls >= ($document-count * $unique-urls-for-thumbnails)">
+          <xsl:variable name="url-root" select="substring-before(concat(substring-after(url, 'http://'), '/'), '/')" />
+          <img class="thumbnail" src="http://www.shrinktheweb.com/xino.php?embed=1&amp;u=3682f&amp;STWAccessKeyId=5c6a365af1001d3&amp;Size=sm&amp;Url={$url-root}" />
+        </xsl:when>
+      </xsl:choose>
       <xsl:if test="string-length(snippet) &gt; 0">
         <div class="snippet">
           <xsl:choose>

@@ -27,6 +27,14 @@
   <xsl:variable name="documents-url" select="concat($request-url, '&amp;type=DOCUMENTS')" />
   <xsl:variable name="clusters-url" select="concat($request-url, '&amp;type=CLUSTERS')" />
 
+  <!-- 
+       Counts documents with unique url roots. For some reason xalan does not like this
+       definition in documents.xsl, where it should really be.
+   -->
+  <xsl:key name="urls-by-root" match="document" use="substring-before(concat(url, '/'), '/')" />
+  <xsl:variable name="unique-urls" select="count(/page/searchresult/document[generate-id(.) = generate-id(key('urls-by-root', substring-before(concat(substring-after(url, 'http://'), '/'), '/'))[1])])" />
+  <xsl:variable name="document-count" select="count(/page/searchresult/document)" />
+
   <!-- HTML scaffolding -->
   <xsl:template match="/">
     <xsl:choose>

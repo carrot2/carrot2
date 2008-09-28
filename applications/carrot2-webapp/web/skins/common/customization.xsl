@@ -77,4 +77,10 @@
     </xsl:if>
     <xsl:apply-templates select=".." mode="head-title-suffix" />
   </xsl:template>
+  
+  <!-- The percentage of unique urls required for thumbnails to show -->
+  <xsl:template match="page" mode="unique-urls-for-thumbnails">0.5</xsl:template>
+  
+  <!-- Ids of document sources for which thumbnails should show -->
+  <xsl:template match="page" mode="document-source-ids-for-thumbnails"></xsl:template>
 </xsl:stylesheet>
