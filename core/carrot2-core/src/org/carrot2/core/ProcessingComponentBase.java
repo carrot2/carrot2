@@ -49,7 +49,7 @@ public abstract class ProcessingComponentBase implements ProcessingComponent
         if (context == null)
         {
             throw new IllegalStateException(
-                "Context not available (check if you call super.init(ControllerContext).");
+                "Context not available (check if you call super.init(ControllerContext)).");
         }
 
         return context;

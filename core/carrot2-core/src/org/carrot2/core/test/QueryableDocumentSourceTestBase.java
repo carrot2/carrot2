@@ -167,6 +167,8 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
 
             index++;
         }
+
+        cachingController.dispose();
     }
 
     /**

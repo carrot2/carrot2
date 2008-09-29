@@ -39,6 +39,8 @@ public class WebDocumentSource extends SimpleSearchEngine
     @Override
     public void init(ControllerContext context)
     {
+        super.init(context);
+        
         google.init(context);
         etools.init(context);
     }
