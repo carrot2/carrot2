@@ -8,7 +8,6 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
@@ -17,7 +16,6 @@ import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.boss.data.YSearchResponse;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.ValueHintEnum;
 import org.carrot2.util.httpclient.HttpClientFactory;
 import org.carrot2.util.httpclient.HttpHeaders;
 import org.carrot2.util.resource.ParameterizedUrlResource;
@@ -148,8 +146,7 @@ public abstract class BossSearchService
     @Init
     @Processing
     @Attribute
-    @ValueHintEnum(values = BossLanguageCodes.class, strict = true)
-    public String languageAndRegion;
+    public BossLanguageCodes languageAndRegion;
 
     /**
      * BOSS engine current metadata.
@@ -214,13 +211,12 @@ public abstract class BossSearchService
             params.add(new NameValuePair("format", "xml"));
             params.add(new NameValuePair("sites", sites));
 
-            if (!StringUtils.isEmpty(languageAndRegion))
+            if (languageAndRegion != null)
             {
                 try
                 {
-                    BossLanguageCodes code = BossLanguageCodes.valueOf(languageAndRegion);
-                    params.add(new NameValuePair("lang", code.langCode));
-                    params.add(new NameValuePair("region", code.regionCode));
+                    params.add(new NameValuePair("lang", languageAndRegion.langCode));
+                    params.add(new NameValuePair("region", languageAndRegion.regionCode));
                 }
                 catch (IllegalArgumentException e)
                 {

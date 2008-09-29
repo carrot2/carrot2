@@ -2,6 +2,8 @@ package org.carrot2.util.attribute.constraint;
 
 import java.lang.annotation.*;
 
+import org.carrot2.util.attribute.Required;
+
 /**
  * A set of values for an attribute of type {@link String}. This can be either a hint
  * (for user interfaces) or a restriction (which causes the attribute to behave much like
@@ -12,7 +14,7 @@ import java.lang.annotation.*;
  * interface, values checked are retrieved from the
  * {@link ValueHintMapping#getAttributeValue()} method of each individual constant.
  * 
- * @see NotBlank
+ * @see Required
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -20,6 +22,4 @@ import java.lang.annotation.*;
 public @interface ValueHintEnum
 {
     Class<? extends Enum<?>> values();
-
-    boolean strict() default false;
 }

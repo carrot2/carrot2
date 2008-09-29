@@ -33,11 +33,8 @@ public class ValueHintWithMappedValuesConstraintTest extends ConstraintTestBase<
 
     static class AnnotationContainer
     {
-        @ValueHintEnum(values = TestMappedValueSet.class, strict = true)
-        String strict;
-        
         @ValueHintEnum(values = TestMappedValueSet.class)
-        String hint;
+        String field;
     }
 
     @Override
@@ -53,32 +50,26 @@ public class ValueHintWithMappedValuesConstraintTest extends ConstraintTestBase<
     }
 
     @Test
-    public void testValueIsAHint() throws Exception
+    public void testHintValue() throws Exception
     {
-        assertMet("v1", "strict");
-        assertMet("v2", "strict");
-        assertNotMet("VALUE_1", "strict");
-
-        assertMet("v1", "hint");
+        assertMet("v1", "field");
     }
 
     @Test
-    public void testValueNotAHint() throws Exception
+    public void testNotHintValue() throws Exception
     {
-        assertNotMet("", "strict");
-        assertMet("", "hint");
+        assertMet("", "field");
     }
 
     @Test
     public void testNull() throws Exception
     {
-        assertMet(null, "strict");
-        assertMet(null, "hint");
+        assertMet(null, "field");
     }
     
     @Override
     String getConstrainedFieldName()
     {
-        return "strict";
+        return "field";
     }
 }

@@ -27,6 +27,16 @@
       </type-editor>
 
       <type-editor
+            attribute-class="java.lang.String"
+            class="org.carrot2.workbench.editors.impl.EnumEditor">
+         <constraints all-constraints-required="true">
+            <constraint
+                  constraint-class="org.carrot2.util.attribute.constraint.ValueHintEnum">
+            </constraint>
+         </constraints>            
+      </type-editor>
+
+      <type-editor
             attribute-class="java.lang.Integer"
             class="org.carrot2.workbench.editors.impl.numeric.NumericEditorProxy">
          <constraints>
@@ -55,17 +65,6 @@
             attribute-class="java.lang.String"
             class="org.carrot2.workbench.editors.impl.StringEditor">
       </type-editor>
-      
-      <type-editor
-            attribute-class="java.lang.String"
-            class="org.carrot2.workbench.editors.impl.StringEditorWithHints">
-         <constraints all-constraints-required="true">
-            <constraint
-                  constraint-class="org.carrot2.util.attribute.constraint.ValueHintEnum">
-            </constraint>
-         </constraints>            
-      </type-editor>
-
    </extension>
 
 </plugin>

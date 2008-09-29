@@ -9,11 +9,8 @@ public class ValueHintConstraintTest extends ConstraintTestBase<ValueHintEnum>
 {
     static class AnnotationContainer
     {
-        @ValueHintEnum(values = TestValueSet.class, strict = true)
-        String strict;
-        
         @ValueHintEnum(values = TestValueSet.class)
-        String hint;
+        String field;
     }
 
     @Override
@@ -29,32 +26,29 @@ public class ValueHintConstraintTest extends ConstraintTestBase<ValueHintEnum>
     }
 
     @Test
-    public void testValueIsAHint() throws Exception
+    public void testHintValue() throws Exception
     {
-        assertMet("VALUE_1", "strict");
-        assertMet("VALUE_1", "hint");
+        assertMet("VALUE_1", "field");
     }
 
     @Test
-    public void testValueNotAHint() throws Exception
+    public void testOtherValues() throws Exception
     {
-        assertNotMet("", "strict");
-        assertMet("", "hint");
+        assertMet("anything", "field");
     }
 
     @Test
     public void testNull() throws Exception
     {
-        assertMet(null, "strict");
-        assertMet(null, "hint");
+        assertMet(null, "field");
     }
-    
+
     @Override
     String getConstrainedFieldName()
     {
-        return "strict";
+        return "field";
     }
-    
+
     public enum TestValueSet
     {
         VALUE_1,

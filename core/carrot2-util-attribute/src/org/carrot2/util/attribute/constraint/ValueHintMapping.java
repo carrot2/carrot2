@@ -6,6 +6,8 @@ package org.carrot2.util.attribute.constraint;
  * (user-friendly) names and attribute values. All these elements have their own
  * constraints (enum constants must be valid Java identifiers, for example) and just
  * overriding {@link Enum#toString()} method is not enough to provide this functionality.
+ * 
+ * @see ValueHintMappingUtils
  */
 public interface ValueHintMapping
 {

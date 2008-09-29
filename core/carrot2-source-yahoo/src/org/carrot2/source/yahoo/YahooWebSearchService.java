@@ -62,7 +62,7 @@ public final class YahooWebSearchService extends YahooSearchService
     @Processing
     @Input
     @Attribute
-    @ValueHintEnum(values = YahooRegionCodes.class, strict = false)
+    @ValueHintEnum(values = YahooRegionCodes.class)
     public String region;
 
     /**
@@ -77,7 +77,7 @@ public final class YahooWebSearchService extends YahooSearchService
     @Processing
     @Input
     @Attribute
-    @ValueHintEnum(values = YahooCountryCodes.class, strict = false)
+    @ValueHintEnum(values = YahooCountryCodes.class)
     public String country;
     
     /**
