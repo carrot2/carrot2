@@ -18,7 +18,7 @@ public class AttributeTitles
     private int noTitle;
 
     /**
-     * Description follows.
+     * . Description follows.
      *
      * @label label
      */
