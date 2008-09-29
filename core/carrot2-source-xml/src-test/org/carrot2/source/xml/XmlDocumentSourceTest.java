@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import org.carrot2.core.Controller;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
@@ -163,6 +164,8 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             XmlDocumentSourceTest.class);
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
             initXslt);
+        
+        Controller controller = getCachingController(initAttributes);
 
         // Run with identity XSLT
         {
@@ -171,7 +174,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             processingAttributes.put(AttributeUtils
                 .getKey(XmlDocumentSource.class, "xml"), xml);
 
-            final int documentCount = runQueryInCachingController();
+            final int documentCount = runQuery(controller);
             assertEquals(2, documentCount);
             assertEquals(Lists.newArrayList("Title 0", "Title 1"), Lists.transform(
                 getDocuments(), DOCUMENT_TO_TITLE));
@@ -190,7 +193,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class,
                 "xslt"), xslt);
 
-            final int documentCount = runQueryInCachingController();
+            final int documentCount = runQuery(controller);
             assertEquals(2, documentCount);
             assertEquals(Lists.newArrayList("Snippet 0", "Snippet 1"), Lists.transform(
                 getDocuments(), DOCUMENT_TO_TITLE));
@@ -207,6 +210,8 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
             initXslt);
 
+        Controller controller = getCachingController(initAttributes);
+        
         // Run with swapping XSLT
         {
             Resource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
@@ -214,7 +219,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             processingAttributes.put(AttributeUtils
                 .getKey(XmlDocumentSource.class, "xml"), xml);
 
-            final int documentCount = runQueryInCachingController();
+            final int documentCount = runQuery(controller);
             assertEquals(2, documentCount);
             assertEquals(Lists.newArrayList("Snippet 0", "Snippet 1"), Lists.transform(
                 getDocuments(), DOCUMENT_TO_TITLE));
@@ -231,7 +236,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class,
                 "xslt"), null);
 
-            final int documentCount = runQueryInCachingController();
+            final int documentCount = runQuery(controller);
             assertEquals(2, documentCount);
             assertEquals(Lists.newArrayList("Title 0", "Title 1"), Lists.transform(
                 getDocuments(), DOCUMENT_TO_TITLE));

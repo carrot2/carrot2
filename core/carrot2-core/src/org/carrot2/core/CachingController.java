@@ -353,7 +353,11 @@ public final class CachingController implements Controller
         if (context != null)
         {
             componentPool.dispose();
-            cacheManager.shutdown();
+
+            if (cacheManager != null)
+            {
+                cacheManager.shutdown();
+            }
 
             context.dispose();
             this.context = null;
