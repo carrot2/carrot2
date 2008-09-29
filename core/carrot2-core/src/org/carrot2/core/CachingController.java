@@ -33,9 +33,9 @@ import com.google.common.collect.*;
  * allowed to see this object and {@link #dispose()} should be called after all threads
  * leave {@link #process(Map, Class...)}.
  * <p>
- * Notice for {@link ProcessingComponent} developers: If data caching is used (see
+ * Notice for {@link ProcessingComponent} developers: if data caching is used (see
  * {@link #CachingController(Class...)}), values of {@link Output} attributes produced by
- * the components whose output is to be cached (e.g. the {@link Document} instances in
+ * the components whose output is to be cached (e.g., the {@link Document} instances in
  * case {@link DocumentSource} output is cached) may be accessed concurrently and
  * therefore must be thread-safe.
  */
@@ -53,15 +53,15 @@ public final class CachingController implements Controller
      * <p>
      * Access monitor: {#link #reentrantLock}.
      */
-    private final Map<Pair<Class<? extends ProcessingComponent>, String>, Map<String, Object>> resetAttributes = Maps
-        .newHashMap();
+    private final Map<Pair<Class<? extends ProcessingComponent>, String>, Map<String, Object>> 
+        resetAttributes = Maps.newHashMap();
 
     /**
      * Descriptors of {@link Input} and {@link Output} {@link Processing} attributes of
      * components whose output is to be cached.
      */
-    private final Map<Pair<Class<? extends ProcessingComponent>, String>, InputOutputAttributeDescriptors> cachedComponentAttributeDescriptors = Maps
-        .newHashMap();
+    private final Map<Pair<Class<? extends ProcessingComponent>, String>, 
+        InputOutputAttributeDescriptors> cachedComponentAttributeDescriptors = Maps.newHashMap();
 
     /**
      * Maintains a mapping between component ids and their classes. Initialized in
@@ -86,6 +86,9 @@ public final class CachingController implements Controller
 
     /** Ehcache manager */
     private CacheManager cacheManager;
+    
+    /** Controller context for this controller. */
+    private ControllerContextImpl context;
 
     /** Tracks various processing statistics */
     private ProcessingStatistics statistics = new ProcessingStatistics();
@@ -155,6 +158,8 @@ public final class CachingController implements Controller
         ProcessingComponentConfiguration... componentConfigurations)
         throws ComponentInitializationException
     {
+        context = new ControllerContextImpl();        
+        
         // Prepare component-specific init attributes
         final Map<Pair<Class<? extends ProcessingComponent>, String>, Map<String, Object>> componentSpecificInitAttributes = Maps
             .newHashMap();
@@ -243,6 +248,11 @@ public final class CachingController implements Controller
     private <T> ProcessingResult processInternal(Map<String, Object> attributes,
         ProcessingComponentClassResolver<T> resolver, T... componentIds)
     {
+        if (this.context == null)
+        {
+            throw new IllegalStateException("Controller not initialized.");
+        }
+        
         final SoftUnboundedPool<ProcessingComponent, String> componentPool = this.componentPool;
         if (componentPool == null)
         {
@@ -340,8 +350,14 @@ public final class CachingController implements Controller
      */
     public void dispose()
     {
-        componentPool.dispose();
-        cacheManager.shutdown();
+        if (context != null)
+        {
+            componentPool.dispose();
+            cacheManager.shutdown();
+
+            context.dispose();
+            this.context = null;
+        }
     }
 
     /**
@@ -485,7 +501,7 @@ public final class CachingController implements Controller
                 }
 
                 // Initialize the component first.
-                ControllerUtils.init(component, actualInitAttributes);
+                ControllerUtils.init(component, actualInitAttributes, context);
 
                 // To support a very natural scenario where processing attributes are
                 // provided/overridden during initialization, we'll also bind processing

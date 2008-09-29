@@ -23,9 +23,10 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
     private Templates toCarrot2Xslt;
 
     @Override
-    public void init()
+    public void init(ControllerContext context)
     {
-        super.init();
+        super.init(context);
+
         toCarrot2Xslt = xmlDocumentSourceHelper.loadXslt(getXsltResource());
     }
 

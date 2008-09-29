@@ -27,7 +27,7 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
      */
     protected int runQuery()
     {
-        return runQuery(simpleController);
+        return runQuery(getSimpleController(initAttributes));
     }
 
     /**
@@ -39,7 +39,7 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
      */
     protected int runQueryInCachingController()
     {
-        return runQuery(cachingController);
+        return runQuery(getCachingController(initAttributes));
     }
 
     /**
@@ -52,15 +52,8 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
     @SuppressWarnings("unchecked")
     protected int runQuery(Controller controller)
     {
-        // A little hacky, but looks like the simplest way to ensure a single
-        // initialization per one test case
-        if (!initAttributes.isEmpty())
-        {
-            controller.init(initAttributes);
-        }
         final ProcessingResult result = controller.process(processingAttributes,
             getComponentClass());
-        initAttributes.clear();
 
         final Collection<Document> documents = (Collection<Document>) processingAttributes
             .get(AttributeNames.DOCUMENTS);

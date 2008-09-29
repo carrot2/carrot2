@@ -1,7 +1,6 @@
 package org.carrot2.source.boss;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
@@ -9,7 +8,6 @@ import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.MultipageSearchEngine;
 import org.carrot2.source.SearchEngineResponse;
-import org.carrot2.util.ExecutorServiceUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
@@ -27,12 +25,6 @@ public final class BossDocumentSource extends MultipageSearchEngine
      * Maximum concurrent threads from all instances of this component.
      */
     private static final int MAX_CONCURRENT_THREADS = 5;
-
-    /**
-     * Static executor for running search threads.
-     */
-    private final static ExecutorService executor = ExecutorServiceUtils
-        .createExecutorService(MAX_CONCURRENT_THREADS, BossDocumentSource.class);
 
     /**
      * Determines whether to keep the original query word highlights. Yahoo by default
@@ -72,7 +64,7 @@ public final class BossDocumentSource extends MultipageSearchEngine
     @Override
     public void process() throws ProcessingException
     {
-        super.process(service.metadata, executor);
+        super.process(service.metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()));
     }
 
     /**

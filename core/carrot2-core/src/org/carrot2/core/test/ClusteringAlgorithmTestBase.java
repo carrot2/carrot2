@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.core.test;
 
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
@@ -79,6 +76,8 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm>
         final int numberOfThreads = 4;
         final int queriesPerThread = 25;
 
+        final CachingController controller = getCachingController(initAttributes);
+
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         List<Callable<ProcessingResult>> callables = Lists.newArrayList();
         for (int i = 0; i < numberOfThreads * queriesPerThread; i++)
@@ -92,13 +91,10 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm>
                     localAttributes.put(AttributeNames.DOCUMENTS, SampleDocumentData.ALL
                         .get(dataSetIndex % SampleDocumentData.ALL.size()));
                     localAttributes.put("dataSetIndex", dataSetIndex);
-                    return cachingController
-                        .process(localAttributes, getComponentClass());
+                    return controller.process(localAttributes, getComponentClass());
                 }
             });
         }
-
-        cachingController.init(initAttributes);
 
         try
         {
@@ -148,16 +144,9 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm>
      */
     public ProcessingResult cluster(Collection<Document> documents)
     {
-        // A little hacky, but looks like the simplest way to ensure a single
-        // initialization per one test case
-        if (!initAttributes.isEmpty())
-        {
-            simpleController.init(initAttributes);
-            initAttributes.clear();
-        }
-
         processingAttributes.put(AttributeNames.DOCUMENTS, documents);
-        return simpleController.process(processingAttributes, getComponentClass());
+        return getSimpleController(initAttributes).process(processingAttributes,
+            getComponentClass());
     }
 
     /**

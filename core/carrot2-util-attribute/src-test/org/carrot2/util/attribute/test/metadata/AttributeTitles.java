@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.carrot2.util.attribute.test.metadata;
 
 import org.carrot2.util.attribute.*;
@@ -21,7 +18,7 @@ public class AttributeTitles
     private int noTitle;
 
     /**
-     * . Description follows.
+     * Description follows.
      *
      * @label label
      */

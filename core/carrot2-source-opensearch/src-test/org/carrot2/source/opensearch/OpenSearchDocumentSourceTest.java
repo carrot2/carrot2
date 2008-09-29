@@ -1,6 +1,7 @@
 package org.carrot2.source.opensearch;
 
 import org.carrot2.core.ComponentInitializationException;
+import org.carrot2.core.DummyControllerContext;
 import org.junit.Test;
 
 /**
@@ -11,41 +12,47 @@ public class OpenSearchDocumentSourceTest
     @Test(expected = ComponentInitializationException.class)
     public void testSearchTermsNotPresent()
     {
-        OpenSearchDocumentSource source = new OpenSearchDocumentSource();
-        source.feedUrlTemplate = "http://test.com?sp=${startPage}";
-        source.init();
+        testFeedTemplate("http://test.com?sp=${startPage}");
     }
 
     @Test(expected = ComponentInitializationException.class)
     public void testNoStartPresent()
     {
-        OpenSearchDocumentSource source = new OpenSearchDocumentSource();
-        source.feedUrlTemplate = "http://test.com?q=${searchTerms}";
-        source.init();
+        testFeedTemplate("http://test.com?q=${searchTerms}");
     }
 
     @Test(expected = ComponentInitializationException.class)
     public void testBothStartsPresent()
     {
-        OpenSearchDocumentSource source = new OpenSearchDocumentSource();
-        source.feedUrlTemplate = "http://test.com?sp=${startPage}&si=${startIndex}";
-        source.init();
+        testFeedTemplate("http://test.com?sp=${startPage}&si=${startIndex}");
     }
 
     @Test(expected = ComponentInitializationException.class)
     public void testResultsPerPageNotSet()
     {
-        OpenSearchDocumentSource source = new OpenSearchDocumentSource();
-        source.feedUrlTemplate = "http://test.com?sp=${startPage}&q=${searchTerms}&c=${count}";
-        source.init();
+        testFeedTemplate("http://test.com?sp=${startPage}&q=${searchTerms}&c=${count}");
     }
 
     @Test
     public void testCorrectConfiguration()
     {
-        OpenSearchDocumentSource source = new OpenSearchDocumentSource();
+        final OpenSearchDocumentSource source = new OpenSearchDocumentSource();
+
         source.feedUrlTemplate = "http://test.com?sp=${startPage}&q=${searchTerms}&c=${count}";
         source.resultsPerPage = 20;
-        source.init();
+
+        final DummyControllerContext ctx = new DummyControllerContext();
+        source.init(ctx);
+        ctx.dispose();
+    }
+
+    private void testFeedTemplate(String template)
+    {
+        final OpenSearchDocumentSource source = new OpenSearchDocumentSource();
+        source.feedUrlTemplate = template;
+
+        final DummyControllerContext ctx = new DummyControllerContext();
+        source.init(ctx);
+        ctx.dispose();
     }
 }

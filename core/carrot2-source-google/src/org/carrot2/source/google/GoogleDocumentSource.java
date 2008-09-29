@@ -4,14 +4,14 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 
 import org.apache.commons.httpclient.Header;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
-import org.carrot2.util.*;
+import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.codehaus.jackson.JsonFactory;
@@ -81,16 +81,10 @@ public class GoogleDocumentSource extends MultipageSearchEngine
      */
     private static final int MAX_CONCURRENT_THREADS = 10;
 
-    /**
-     * Static executor for running search threads.
-     */
-    private final static ExecutorService executor = ExecutorServiceUtils
-        .createExecutorService(MAX_CONCURRENT_THREADS, GoogleDocumentSource.class);
-
     @Override
     public void process() throws ProcessingException
     {
-        super.process(metadata, executor);
+        super.process(metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()));
     }
 
     @Override

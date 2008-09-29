@@ -307,11 +307,9 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         {
             try
             {
-                final ProcessingComponent pc = pcd.newInitializedInstance();
-
-                processingDescriptors.put(pcd.getId(), pcd);
-                bindableDescriptors.put(pcd.getId(), BindableDescriptorBuilder
-                    .buildDescriptor(pc));
+                final String id = pcd.getId();
+                processingDescriptors.put(id, pcd);
+                bindableDescriptors.put(id, pcd.getBindableDescriptor());
             }
             catch (Exception e)
             {

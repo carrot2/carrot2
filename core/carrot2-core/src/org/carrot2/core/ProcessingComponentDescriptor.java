@@ -7,8 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.attribute.AttributeValueSet;
-import org.carrot2.util.attribute.AttributeValueSets;
+import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -171,9 +170,11 @@ public class ProcessingComponentDescriptor
     /**
      * Creates a new initialized instance of the processing component corresponding to
      * this descriptor. The instance will be initialized with the {@link Init} attributes
-     * from this descriptor's default attribute set.
+     * from this descriptor's default attribute set. The instance may or may not be usable
+     * for processing because the {@link ControllerContext} on which it is initialized is
+     * disposed before the value is returned.
      */
-    public ProcessingComponent newInitializedInstance() throws InstantiationException,
+    private ProcessingComponent newInitializedInstance() throws InstantiationException,
         IllegalAccessException
     {
         final ProcessingComponent instance = getComponentClass().newInstance();
@@ -185,9 +186,28 @@ public class ProcessingComponentDescriptor
             initAttributes.putAll(defaultAttributeValueSet.getAttributeValues());
         }
 
-        ControllerUtils.init(instance, initAttributes);
+        final ControllerContextImpl context = new ControllerContextImpl();
+        try
+        {
+            ControllerUtils.init(instance, initAttributes, context);
+        }
+        finally
+        {
+            context.dispose();
+        }
 
         return instance;
+    }
+
+    /**
+     * Builds and returns a {@link BindableDescriptor} for an instance of this
+     * descriptor's {@link ProcessingComponent}, with default {@link Init} attributes
+     * initialized with the default attribute set.
+     */
+    public BindableDescriptor getBindableDescriptor() throws InstantiationException,
+        IllegalAccessException
+    {
+        return BindableDescriptorBuilder.buildDescriptor(newInitializedInstance());
     }
 
     /**

@@ -2,7 +2,6 @@ package org.carrot2.dcs;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -13,7 +12,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.carrot2.core.*;
 import org.carrot2.dcs.DcsRequestModel.OutputFormat;
 import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.ExecutorServiceUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.resource.ClassResource;
@@ -85,14 +83,6 @@ public final class RestProcessorServlet extends HttpServlet
         {
             this.controller.dispose();
             this.controller = null;
-        }
-
-        /*
-         * See http://issues.carrot2.org/browse/CARROT-388
-         */
-        for (ExecutorService service : ExecutorServiceUtils.getAllCreated())
-        {
-            service.shutdownNow();
         }
 
         super.destroy();

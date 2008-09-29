@@ -26,14 +26,15 @@ public final class ControllerUtils
      */
     @SuppressWarnings("unchecked")
     public static void init(ProcessingComponent processingComponent,
-        Map<String, Object> attributes) throws ProcessingException
+        Map<String, Object> attributes, ControllerContext context)
+        throws ProcessingException
     {
         try
         {
             AttributeBinder
                 .bind(processingComponent, attributes, Input.class, Init.class);
 
-            processingComponent.init();
+            processingComponent.init(context);
 
             AttributeBinder.bind(processingComponent, attributes, Output.class,
                 Init.class);
@@ -148,7 +149,7 @@ public final class ControllerUtils
         {
             return;
         }
-        
+
         final Long time = (Long) attributes.get(key);
         if (time == null)
         {

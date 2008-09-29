@@ -1,18 +1,18 @@
 package org.carrot2.webapp.source;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 
 import org.carrot2.core.*;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
 import org.carrot2.source.etools.EToolsDocumentSource;
 import org.carrot2.source.google.GoogleDocumentSource;
-import org.carrot2.util.ExecutorServiceUtils;
 import org.carrot2.util.attribute.Bindable;
 
-import com.google.common.collect.*;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * A {@link DocumentSource} that folds in a few initial hits from Google API into the
@@ -36,17 +36,11 @@ public class WebDocumentSource extends SimpleSearchEngine
      */
     private static final int MAX_CONCURRENT_THREADS = 10;
 
-    /**
-     * Static executor for running search threads.
-     */
-    private final static ExecutorService executor = ExecutorServiceUtils
-        .createExecutorService(MAX_CONCURRENT_THREADS, WebDocumentSource.class);
-
     @Override
-    public void init()
+    public void init(ControllerContext context)
     {
-        google.init();
-        etools.init();
+        google.init(context);
+        etools.init(context);
     }
 
     @Override
@@ -82,7 +76,7 @@ public class WebDocumentSource extends SimpleSearchEngine
 
         try
         {
-            executor.invokeAll(tasks);
+            getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()).invokeAll(tasks);
 
             final Map<String, Document> googleDocumentsByUrl = Maps.newHashMap();
             for (Document googleDocument : google.documents)

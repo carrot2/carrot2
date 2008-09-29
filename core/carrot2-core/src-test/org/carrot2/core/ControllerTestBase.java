@@ -1,6 +1,6 @@
 package org.carrot2.core;
 
-import static org.easymock.EasyMock.createStrictControl;
+import static org.easymock.EasyMock.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
@@ -10,8 +10,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.easymock.IAnswer;
-import org.easymock.IMocksControl;
+import org.easymock.*;
 import org.junit.*;
 
 import com.google.common.collect.Maps;
@@ -26,6 +25,9 @@ public abstract class ControllerTestBase
     protected ProcessingComponent processingComponent1Mock;
     protected ProcessingComponent processingComponent2Mock;
     protected ProcessingComponent processingComponent3Mock;
+    protected ProcessingComponent processingComponent4Mock;
+
+    protected ControllerContextListener contextListenerMock;
 
     protected Controller controller;
 
@@ -93,6 +95,42 @@ public abstract class ControllerTestBase
     }
 
     @Bindable
+    public static class ProcessingComponent4 extends DelegatingProcessingComponent
+    {
+        @Init
+        @Input
+        @Attribute(key = "delegate4")
+        @ImplementingClasses(classes =
+        {
+            ProcessingComponent.class
+        }, strict = false)
+        protected ProcessingComponent delegate4;
+
+        @Init
+        @Input
+        @Attribute(key = "contextListener")
+        @ImplementingClasses(classes =
+        {
+            ControllerContextListener.class
+        }, strict = false)
+        protected ControllerContextListener contextListener;
+
+        @Override
+        public void init(ControllerContext context)
+        {
+            super.init(context);
+
+            context.addListener(contextListener);
+        }
+
+        @Override
+        ProcessingComponent getDelegate()
+        {
+            return delegate4;
+        }
+    }
+    
+    @Bindable
     public static class ProcessingComponentWithoutDefaultConstructor extends
         ProcessingComponentBase
     {
@@ -109,11 +147,18 @@ public abstract class ControllerTestBase
         processingComponent1Mock = mocksControl.createMock(ProcessingComponent.class);
         processingComponent2Mock = mocksControl.createMock(ProcessingComponent.class);
         processingComponent3Mock = mocksControl.createMock(ProcessingComponent.class);
+        processingComponent4Mock = mocksControl.createMock(ProcessingComponent.class);
+
+        contextListenerMock = mocksControl.createMock(ControllerContextListener.class);
 
         Map<String, Object> initAttributes = Maps.newHashMap();
         initAttributes.put("delegate1", processingComponent1Mock);
         initAttributes.put("delegate2", processingComponent2Mock);
         initAttributes.put("delegate3", processingComponent3Mock);
+        initAttributes.put("delegate4", processingComponent4Mock);
+
+        initAttributes.put("contextListener", contextListenerMock);
+
         initAttributes.put("instanceAttribute", "i");
         beforeControllerInit(initAttributes);
 
@@ -121,6 +166,16 @@ public abstract class ControllerTestBase
         controller.init(initAttributes);
 
         attributes = Maps.newHashMap();
+    }
+    
+    @After
+    public void cleanup()
+    {
+        if (controller != null)
+        {
+            controller.dispose();
+            controller = null;
+        }
     }
 
     protected void beforeControllerInit(Map<String, Object> initAttributes)
@@ -130,7 +185,7 @@ public abstract class ControllerTestBase
     @Test
     public void testNormalExecution1Component()
     {
-        processingComponent1Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
         processingComponent1Mock.afterProcessing();
@@ -151,9 +206,9 @@ public abstract class ControllerTestBase
     public void testNormalExecution3Components()
     {
         mocksControl.checkOrder(false); // we don't care about the order of initialization
-        processingComponent1Mock.init();
-        processingComponent2Mock.init();
-        processingComponent3Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
+        processingComponent2Mock.init(isA(ControllerContext.class));
+        processingComponent3Mock.init(isA(ControllerContext.class));
         mocksControl.checkOrder(true);
 
         processingComponent1Mock.beforeProcessing();
@@ -193,7 +248,7 @@ public abstract class ControllerTestBase
     {
         // Depending on implementation, the controller may or may not create/ initialize
         // the instance of the first component. That doesn't make a big difference.
-        processingComponent1Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
         mocksControl.times(0, 1);
         processingComponent1Mock.dispose();
         mocksControl.times(0, 1);
@@ -214,9 +269,9 @@ public abstract class ControllerTestBase
     public void testExceptionBeforeProcessing()
     {
         mocksControl.checkOrder(false); // we don't care about the order of initialization
-        processingComponent1Mock.init();
-        processingComponent2Mock.init();
-        processingComponent3Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
+        processingComponent2Mock.init(isA(ControllerContext.class));
+        processingComponent3Mock.init(isA(ControllerContext.class));
         mocksControl.checkOrder(true);
 
         processingComponent1Mock.beforeProcessing();
@@ -250,9 +305,9 @@ public abstract class ControllerTestBase
     public void testExceptionDuringProcessing()
     {
         mocksControl.checkOrder(false); // we don't care about the order of initialization
-        processingComponent1Mock.init();
-        processingComponent2Mock.init();
-        processingComponent3Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
+        processingComponent2Mock.init(isA(ControllerContext.class));
+        processingComponent3Mock.init(isA(ControllerContext.class));
         mocksControl.checkOrder(true);
 
         processingComponent1Mock.beforeProcessing();
@@ -287,8 +342,8 @@ public abstract class ControllerTestBase
     public void testExceptionWhileInit()
     {
         mocksControl.checkOrder(false); // we don't care about the order of initialization
-        processingComponent1Mock.init();
-        processingComponent2Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
+        processingComponent2Mock.init(isA(ControllerContext.class));
         mocksControl.andThrow(new ComponentInitializationException((String) null));
         mocksControl.checkOrder(false); // we don't care about the order of disposal
         processingComponent1Mock.dispose();
@@ -318,9 +373,9 @@ public abstract class ControllerTestBase
         final double tolerance = 0.3;
 
         mocksControl.checkOrder(false); // we don't care about the order of initialization
-        processingComponent1Mock.init();
-        processingComponent2Mock.init();
-        processingComponent3Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
+        processingComponent2Mock.init(isA(ControllerContext.class));
+        processingComponent3Mock.init(isA(ControllerContext.class));
         mocksControl.checkOrder(true);
 
         processingComponent1Mock.beforeProcessing();
@@ -364,9 +419,9 @@ public abstract class ControllerTestBase
         final double tolerance = 0.3;
 
         mocksControl.checkOrder(false); // we don't care about the order of initialization
-        processingComponent1Mock.init();
-        processingComponent2Mock.init();
-        processingComponent3Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
+        processingComponent2Mock.init(isA(ControllerContext.class));
+        processingComponent3Mock.init(isA(ControllerContext.class));
         mocksControl.checkOrder(true);
 
         processingComponent1Mock.beforeProcessing();
@@ -404,6 +459,29 @@ public abstract class ControllerTestBase
         }
     }
 
+    @Test
+    public void testContextDisposal()
+    {
+        processingComponent4Mock.init(isA(ControllerContext.class));
+        processingComponent4Mock.beforeProcessing();
+        processingComponent4Mock.process();
+        processingComponent4Mock.afterProcessing();
+        
+        processingComponent4Mock.dispose();
+        expectLastCall().times(0, 1);
+
+        contextListenerMock.beforeDisposal(isA(ControllerContext.class));
+        
+        mocksControl.replay();
+
+        attributes.put("runtimeAttribute", "r");
+        attributes.put("data", "d");
+        
+        performProcessingAndDispose(ProcessingComponent4.class);
+
+        mocksControl.verify();
+    }
+
     protected void checkTimes(final long c1Time, final long c2Time, final long totalTime,
         final double tolerance)
     {
@@ -438,6 +516,7 @@ public abstract class ControllerTestBase
         finally
         {
             controller.dispose();
+            controller = null;
         }
     }
 

@@ -27,20 +27,24 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
     @Attribute(key = "data")
     private String data = null;
 
-    public void init()
+    public void init(ControllerContext context)
     {
-        // We perform synchronization here because the mock object passed as the delegate
-        // is not thread-safe and may fail to record some invocations if not synchronized
+        /*
+         * We perform synchronization here because the mock object passed as the delegate
+         * is not thread-safe and may fail to record some invocations if not synchronized.
+         */
         synchronized (getDelegate())
         {
-            getDelegate().init();
+            getDelegate().init(context);
         }
     }
 
     public void beforeProcessing() throws ProcessingException
     {
-        // We perform synchronization here because the mock object passed as the delegate
-        // is not thread-safe and may fail to record some invocations if not synchronized
+        /*
+         * We perform synchronization here because the mock object passed as the delegate
+         * is not thread-safe and may fail to record some invocations if not synchronized.
+         */
         synchronized (getDelegate())
         {
             getDelegate().beforeProcessing();
@@ -49,8 +53,10 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
 
     public void process() throws ProcessingException
     {
-        // We perform synchronization here because the mock object passed as the delegate
-        // is not thread-safe and may fail to record some invocations if not synchronized
+        /*
+         * We perform synchronization here because the mock object passed as the delegate
+         * is not thread-safe and may fail to record some invocations if not synchronized.
+         */
         synchronized (getDelegate())
         {
             getDelegate().process();
@@ -63,8 +69,10 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
 
     public void afterProcessing()
     {
-        // We perform synchronization here because the mock object passed as the delegate
-        // is not thread-safe and may fail to record some invocations if not synchronized
+        /*
+         * We perform synchronization here because the mock object passed as the delegate
+         * is not thread-safe and may fail to record some invocations if not synchronized.
+         */
         synchronized (getDelegate())
         {
             getDelegate().afterProcessing();
@@ -73,8 +81,10 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
 
     public void dispose()
     {
-        // We perform synchronization here because the mock object passed as the delegate
-        // is not thread-safe and may fail to record some invocations if not synchronized
+        /*
+         * We perform synchronization here because the mock object passed as the delegate
+         * is not thread-safe and may fail to record some invocations if not synchronized.
+         */
         synchronized (getDelegate())
         {
             getDelegate().dispose();

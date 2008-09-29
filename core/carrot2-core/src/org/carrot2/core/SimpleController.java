@@ -7,7 +7,6 @@ import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
 import org.simpleframework.xml.Attribute;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
@@ -27,7 +26,22 @@ import com.google.common.collect.Sets;
 public final class SimpleController implements Controller
 {
     /** Attributes provided upon {@link #init(Map)} */
-    private Map<String, Object> initAttributes = Maps.newHashMap();
+    private Map<String, Object> initAttributes;
+
+    /**
+     * {@link ControllerContext} for this controller.
+     */
+    private ControllerContextImpl context;
+
+    /**
+     * {@inheritDoc}
+     */
+    public void init(Map<String, Object> attributes)
+        throws ComponentInitializationException
+    {
+        this.initAttributes = attributes;
+        this.context = new ControllerContextImpl();
+    }
 
     /**
      * Creates instances of processing components, initializes them, performs processing
@@ -90,6 +104,11 @@ public final class SimpleController implements Controller
     public ProcessingResult process(Map<String, Object> attributes,
         ProcessingComponent... processingComponents) throws ProcessingException
     {
+        if (this.context == null)
+        {
+            throw new IllegalStateException("Controller not initialized.");
+        }
+
         final Set<ProcessingComponent> initializedComponents = Sets.newHashSet();
         try
         {
@@ -97,11 +116,10 @@ public final class SimpleController implements Controller
             for (final ProcessingComponent element : processingComponents)
             {
                 initializedComponents.add(element);
-                ControllerUtils.init(element, initAttributes);
+                ControllerUtils.init(element, initAttributes, context);
             }
 
-            ControllerUtils.performProcessing(attributes,
-                true, processingComponents);
+            ControllerUtils.performProcessing(attributes, true, processingComponents);
 
             return new ProcessingResult(attributes);
 
@@ -116,14 +134,15 @@ public final class SimpleController implements Controller
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void dispose()
     {
-        // Nothing to do
-    }
-
-    public void init(Map<String, Object> attributes)
-        throws ComponentInitializationException
-    {
-        this.initAttributes = attributes;
+        if (this.context != null)
+        {
+            this.context.dispose();
+            this.context = null;
+        }
     }
 }

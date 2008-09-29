@@ -7,7 +7,7 @@ import org.carrot2.util.attribute.Output;
 
 /**
  * Defines the life cycle of a Carrot<sup>2</sup> processing component. The life cycle
- * governs how {@link ProcessingComponent} instances are initialized and disposed of ({@link #init()},
+ * governs how {@link ProcessingComponent} instances are initialized and disposed of ({@link #init(ControllerContext)},
  * {@link #dispose()}) and how processing proceeds ({@link #beforeProcessing()},
  * {@link #process()}, {@link #afterProcessing()}). See {@link SimpleController} for a
  * reference implementation of this life cycle.
@@ -23,6 +23,8 @@ public interface ProcessingComponent
      * attributes. This method is called <b>once</b> in the life time of a processing
      * component instance.
      * 
+     * @param ctx An instance of {@link ControllerContext} of the controller to which this
+     *            component instance will be bound.
      * @throws ComponentInitializationException when initialization failed. If thrown, the
      *             {@link #dispose()} method will be called on this component instance to
      *             allow clean-up actions. The instance will not be used for any further
@@ -30,7 +32,7 @@ public interface ProcessingComponent
      *             Finally, the exception will be rethrown from the controller method that
      *             caused the component to initialize.
      */
-    public void init() throws ComponentInitializationException;
+    public void init(ControllerContext ctx) throws ComponentInitializationException;
 
     /**
      * Invoked after the attributes marked with {@link Processing} and {@link Input}

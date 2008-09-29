@@ -3,6 +3,7 @@ package org.carrot2.core;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.MapAssert.entry;
 import static org.junit.Assert.assertEquals;
+import static org.easymock.EasyMock.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -140,7 +141,7 @@ public class CachingControllerTest extends ControllerTestBase
     @Test
     public void testRepeatedExecution1Component()
     {
-        processingComponent1Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
         processingComponent1Mock.afterProcessing();
@@ -168,13 +169,13 @@ public class CachingControllerTest extends ControllerTestBase
     @Test
     public void testRepeatedExecution3Components()
     {
-        processingComponent1Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
         processingComponent1Mock.afterProcessing();
         mocksControl.checkOrder(false); // we don't care about the order of initialization
-        processingComponent2Mock.init();
-        processingComponent3Mock.init();
+        processingComponent2Mock.init(isA(ControllerContext.class));
+        processingComponent3Mock.init(isA(ControllerContext.class));
         mocksControl.checkOrder(true);
         processingComponent2Mock.beforeProcessing();
         processingComponent2Mock.process();
@@ -207,7 +208,7 @@ public class CachingControllerTest extends ControllerTestBase
     @Test
     public void testAttributeRestoring()
     {
-        processingComponent1Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
         processingComponent1Mock.afterProcessing();
@@ -250,7 +251,7 @@ public class CachingControllerTest extends ControllerTestBase
     @Test(expected = AttributeBindingException.class)
     public void testRestoringRequiredProcessingAttributeToNull()
     {
-        processingComponent1Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
         processingComponent1Mock.afterProcessing();
@@ -288,8 +289,8 @@ public class CachingControllerTest extends ControllerTestBase
     public void testConcurrency() throws InterruptedException
     {
         mocksControl.checkOrder(false);
-        processingComponent1Mock.init();
-        processingComponent1Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
+        processingComponent1Mock.init(isA(ControllerContext.class));
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
         mocksControl.andAnswer(new DelayedAnswer<Object>(500));
@@ -334,7 +335,7 @@ public class CachingControllerTest extends ControllerTestBase
     @Test
     public void testCachingNoConcurrency()
     {
-        cachedProcessingComponent1Mock.init();
+        cachedProcessingComponent1Mock.init(isA(ControllerContext.class));
         cachedProcessingComponent1Mock.beforeProcessing();
         cachedProcessingComponent1Mock.process();
         cachedProcessingComponent1Mock.afterProcessing();
@@ -361,7 +362,7 @@ public class CachingControllerTest extends ControllerTestBase
     @Test
     public void testOptionalAttributeNotDefined()
     {
-        cachedProcessingComponent1Mock.init();
+        cachedProcessingComponent1Mock.init(isA(ControllerContext.class));
         cachedProcessingComponent1Mock.beforeProcessing();
         cachedProcessingComponent1Mock.process();
         cachedProcessingComponent1Mock.afterProcessing();
@@ -387,7 +388,7 @@ public class CachingControllerTest extends ControllerTestBase
     @Test
     public void testNoCachingNoConcurrency()
     {
-        cachedProcessingComponent1Mock.init();
+        cachedProcessingComponent1Mock.init(isA(ControllerContext.class));
         cachedProcessingComponent1Mock.beforeProcessing();
         cachedProcessingComponent1Mock.process();
         cachedProcessingComponent1Mock.afterProcessing();
@@ -418,7 +419,7 @@ public class CachingControllerTest extends ControllerTestBase
     @SuppressWarnings("unchecked")
     public void testCachingWithConcurrency() throws InterruptedException
     {
-        cachedProcessingComponent1Mock.init();
+        cachedProcessingComponent1Mock.init(isA(ControllerContext.class));
         cachedProcessingComponent1Mock.beforeProcessing();
         cachedProcessingComponent1Mock.process();
         mocksControl.andAnswer(new DelayedAnswer<Object>(500));
@@ -472,7 +473,7 @@ public class CachingControllerTest extends ControllerTestBase
 
         // Record a call for each unique query
         mocksControl.checkOrder(false);
-        cachedProcessingComponent1Mock.init();
+        cachedProcessingComponent1Mock.init(isA(ControllerContext.class));
         mocksControl.times(1, numberOfThreads);
         for (int i = 0; i < uniqueQueries.size(); i++)
         {
@@ -612,8 +613,8 @@ public class CachingControllerTest extends ControllerTestBase
         final double tolerance = 0.3;
 
         mocksControl.checkOrder(false); // we don't care about the order of initialization
-        cachedProcessingComponent1Mock.init();
-        processingComponent2Mock.init();
+        cachedProcessingComponent1Mock.init(isA(ControllerContext.class));
+        processingComponent2Mock.init(isA(ControllerContext.class));
         mocksControl.checkOrder(true);
 
         cachedProcessingComponent1Mock.beforeProcessing();
@@ -668,8 +669,8 @@ public class CachingControllerTest extends ControllerTestBase
         attributes.put("data", "d");
 
         mocksControl.checkOrder(false);
-        processingComponent1Mock.init();
-        processingComponent2Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
+        processingComponent2Mock.init(isA(ControllerContext.class));
         mocksControl.checkOrder(true);
 
         processingComponent1Mock.beforeProcessing();
@@ -755,14 +756,14 @@ public class CachingControllerTest extends ControllerTestBase
     {
         attributes.put("data", "d");
 
-        processingComponent3Mock.init();
+        processingComponent3Mock.init(isA(ControllerContext.class));
         processingComponent3Mock.beforeProcessing();
         processingComponent3Mock.process();
         processingComponent3Mock.afterProcessing();
         
         mocksControl.checkOrder(false);
-        processingComponent1Mock.init();
-        processingComponent2Mock.init();
+        processingComponent1Mock.init(isA(ControllerContext.class));
+        processingComponent2Mock.init(isA(ControllerContext.class));
         mocksControl.checkOrder(true);
         
         processingComponent1Mock.beforeProcessing();

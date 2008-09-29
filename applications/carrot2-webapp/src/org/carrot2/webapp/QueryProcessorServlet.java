@@ -3,7 +3,6 @@ package org.carrot2.webapp;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,7 +12,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.util.ExecutorServiceUtils;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
@@ -81,14 +79,6 @@ public class QueryProcessorServlet extends HttpServlet
         {
             this.controller.dispose();
             this.controller = null;
-        }
-
-        /*
-         * See http://issues.carrot2.org/browse/CARROT-388 
-         */
-        for (ExecutorService service : ExecutorServiceUtils.getAllCreated())
-        {
-            service.shutdownNow();
         }
 
         this.jawrUrlGenerator = null;

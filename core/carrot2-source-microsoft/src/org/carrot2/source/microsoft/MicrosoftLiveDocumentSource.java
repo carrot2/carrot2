@@ -3,17 +3,15 @@ package org.carrot2.source.microsoft;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
-import org.apache.commons.lang.StringUtils;
-import org.carrot2.util.ExecutorServiceUtils;
 import org.carrot2.util.attribute.*;
 
 import com.microsoft.msnsearch.*;
@@ -44,12 +42,6 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
      * Maximum concurrent threads from all instances of this component.
      */
     private static final int MAX_CONCURRENT_THREADS = 10;
-
-    /**
-     * Static executor for running search threads.
-     */
-    private final static ExecutorService executor = ExecutorServiceUtils.createExecutorService(
-        MAX_CONCURRENT_THREADS, MicrosoftLiveDocumentSource.class);
 
     /**
      * Microsoft-assigned application ID for querying the API.
@@ -90,7 +82,7 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
     @Override
     public void process() throws ProcessingException
     {
-        super.process(metadata, executor);
+        super.process(metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()));
     }
     
     /**

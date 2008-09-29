@@ -141,7 +141,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     private static final Logger log = Logger.getLogger(LingoClusteringAlgorithm.class);
 
     @Override
-    public void init()
+    public void init(ControllerContext context)
     {
         if (NNIInterface.isNativeBlasAvailable())
         {

@@ -3,14 +3,12 @@ package org.carrot2.source.opensearch;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.source.*;
-import org.carrot2.util.ExecutorServiceUtils;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -40,12 +38,6 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * Maximum concurrent threads from all instances of this component.
      */
     private static final int MAX_CONCURRENT_THREADS = 10;
-
-    /**
-     * Static executor for running search threads.
-     */
-    private final static ExecutorService executor = ExecutorServiceUtils
-        .createExecutorService(MAX_CONCURRENT_THREADS, OpenSearchDocumentSource.class);
 
     /**
      * URL to fetch the search feed from. The URL template can contain variable place
@@ -108,8 +100,10 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     private static final String COUNT_VARIABLE_NAME = "count";
 
     @Override
-    public void init()
+    public void init(ControllerContext context)
     {
+        super.init(context);
+
         // Verify that the attributes are legal
         final boolean hasStartPage = ParameterizedUrlResource
             .containsAttributePlaceholder(feedUrlTemplate, START_PAGE_VARIABLE_NAME);
@@ -151,7 +145,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     @Override
     public void process() throws ProcessingException
     {
-        super.process(metadata, executor);
+        super.process(metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, this.getClass()));
     }
 
     @Override

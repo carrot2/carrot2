@@ -151,9 +151,9 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     }
 
     @Override
-    public void init()
+    public void init(ControllerContext context)
     {
-        super.init();
+        super.init(context);
 
         // Try to initialize the XSLT template, if provided in init attributes
         if (xslt != null)
