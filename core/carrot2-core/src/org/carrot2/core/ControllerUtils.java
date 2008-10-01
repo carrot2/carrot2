@@ -43,7 +43,6 @@ public final class ControllerUtils
         {
             throw new ProcessingException("Attribute binding failed", e);
         }
-
     }
 
     /**
@@ -64,7 +63,6 @@ public final class ControllerUtils
         {
             throw new ProcessingException("Attribute binding failed", e);
         }
-
     }
 
     /**
