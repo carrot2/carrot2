@@ -2,17 +2,33 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Lucene
 Bundle-SymbolicName: org.apache.lucene.v2
-Bundle-Version: 2.3.1
-Bundle-ClassPath: lucene-core-2.3.1.jar
+Bundle-Version: 2.3.2
+Bundle-ClassPath: lucene-analyzers-2.3.2.jar,
+ lucene-core-2.3.2.jar,
+ lucene-highlighter-2.3.2.jar
 Bundle-Vendor: Apache Foundation
 Export-Package: org.apache.lucene,
  org.apache.lucene.analysis,
+ org.apache.lucene.analysis.br,
+ org.apache.lucene.analysis.cjk,
+ org.apache.lucene.analysis.cn,
+ org.apache.lucene.analysis.cz,
+ org.apache.lucene.analysis.de,
+ org.apache.lucene.analysis.el,
+ org.apache.lucene.analysis.fr,
+ org.apache.lucene.analysis.ngram,
+ org.apache.lucene.analysis.nl,
+ org.apache.lucene.analysis.payloads,
+ org.apache.lucene.analysis.ru,
+ org.apache.lucene.analysis.sinks,
  org.apache.lucene.analysis.standard,
+ org.apache.lucene.analysis.th,
  org.apache.lucene.document,
  org.apache.lucene.index,
  org.apache.lucene.queryParser,
  org.apache.lucene.search,
  org.apache.lucene.search.function,
+ org.apache.lucene.search.highlight,
  org.apache.lucene.search.payloads,
  org.apache.lucene.search.spans,
  org.apache.lucene.store,
