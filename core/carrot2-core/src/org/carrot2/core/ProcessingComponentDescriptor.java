@@ -101,7 +101,7 @@ public class ProcessingComponentDescriptor
     /**
      * @return Returns the {@link Class} object for this component.
      * @throws {@link RuntimeException} if the class cannot be defined for some reason
-     *             (class loader issues).
+     *         (class loader issues).
      */
     @SuppressWarnings("unchecked")
     public synchronized Class<? extends ProcessingComponent> getComponentClass()
@@ -170,9 +170,15 @@ public class ProcessingComponentDescriptor
     /**
      * Creates a new initialized instance of the processing component corresponding to
      * this descriptor. The instance will be initialized with the {@link Init} attributes
-     * from this descriptor's default attribute set. The instance may or may not be usable
-     * for processing because the {@link ControllerContext} on which it is initialized is
-     * disposed before the value is returned.
+     * from this descriptor's default attribute set. Checking whether all {@link Required}
+     * attribute have been provided will not be made, which, when attributes of
+     * {@link Bindable} are <code>null</code>, may cause {@link #getBindableDescriptor()}
+     * to return incomplete descriptor.
+     * <p>
+     * The instance may or may not be usable for processing because the
+     * {@link ControllerContext} on which it is initialized is disposed before the value
+     * is returned.
+     * </p>
      */
     private ProcessingComponent newInitializedInstance() throws InstantiationException,
         IllegalAccessException
@@ -189,7 +195,7 @@ public class ProcessingComponentDescriptor
         final ControllerContextImpl context = new ControllerContextImpl();
         try
         {
-            ControllerUtils.init(instance, initAttributes, context);
+            ControllerUtils.init(instance, initAttributes, false, context);
         }
         finally
         {
@@ -202,7 +208,9 @@ public class ProcessingComponentDescriptor
     /**
      * Builds and returns a {@link BindableDescriptor} for an instance of this
      * descriptor's {@link ProcessingComponent}, with default {@link Init} attributes
-     * initialized with the default attribute set.
+     * initialized with the default attribute set. If the default attribute set does provide
+     * values for some required {@link Bindable} {@link Init} attributes, the returned
+     * descriptor will be incomplete.
      */
     public BindableDescriptor getBindableDescriptor() throws InstantiationException,
         IllegalAccessException

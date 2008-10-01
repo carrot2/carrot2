@@ -31,7 +31,7 @@ public abstract class ControllerTestBase
 
     protected Controller controller;
 
-    protected Map<String, Object> attributes;
+    protected Map<String, Object> processingAttributes;
 
     protected abstract Controller createController();
 
@@ -165,7 +165,7 @@ public abstract class ControllerTestBase
         controller = createController();
         controller.init(initAttributes);
 
-        attributes = Maps.newHashMap();
+        processingAttributes = Maps.newHashMap();
     }
     
     @After
@@ -193,12 +193,12 @@ public abstract class ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("runtimeAttribute", "r");
-        attributes.put("data", "d");
+        processingAttributes.put("runtimeAttribute", "r");
+        processingAttributes.put("data", "d");
 
         performProcessingAndDispose(ProcessingComponent1.class);
 
-        assertEquals("dir", attributes.get("data"));
+        assertEquals("dir", processingAttributes.get("data"));
         mocksControl.verify();
     }
 
@@ -231,15 +231,15 @@ public abstract class ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("instanceAttribute", "i");
-        attributes.put("runtimeAttribute", "r");
+        processingAttributes.put("instanceAttribute", "i");
+        processingAttributes.put("runtimeAttribute", "r");
 
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
 
         performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
 
-        assertEquals("diririr", attributes.get("data"));
+        assertEquals("diririr", processingAttributes.get("data"));
         mocksControl.verify();
     }
 
@@ -289,7 +289,7 @@ public abstract class ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
         try
         {
             performProcessingAndDispose(ProcessingComponent1.class,
@@ -326,7 +326,7 @@ public abstract class ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
         try
         {
             performProcessingAndDispose(ProcessingComponent1.class,
@@ -401,7 +401,7 @@ public abstract class ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
         performProcessingAndDispose(ProcessingComponent1.class,
             ProcessingComponent2.class, ProcessingComponent3.class);
 
@@ -448,7 +448,7 @@ public abstract class ControllerTestBase
 
         try
         {
-            attributes.put("data", "d");
+            processingAttributes.put("data", "d");
             performProcessingAndDispose(ProcessingComponent1.class,
                 ProcessingComponent2.class, ProcessingComponent3.class);
         }
@@ -474,8 +474,8 @@ public abstract class ControllerTestBase
         
         mocksControl.replay();
 
-        attributes.put("runtimeAttribute", "r");
-        attributes.put("data", "d");
+        processingAttributes.put("runtimeAttribute", "r");
+        processingAttributes.put("data", "d");
         
         performProcessingAndDispose(ProcessingComponent4.class);
 
@@ -486,17 +486,17 @@ public abstract class ControllerTestBase
         final double tolerance)
     {
         assertThat(
-            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_TOTAL))).longValue())
+            ((Long) (processingAttributes.get(AttributeNames.PROCESSING_TIME_TOTAL))).longValue())
             .as("Total time").isLessThan((long) (totalTime * (1 + tolerance)))
             .isGreaterThan((long) (totalTime * (1 - tolerance)));
 
         assertThat(
-            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_SOURCE))).longValue())
+            ((Long) (processingAttributes.get(AttributeNames.PROCESSING_TIME_SOURCE))).longValue())
             .as("Source time").isLessThan((long) (c1Time * (1 + tolerance)))
             .isGreaterThan((long) (c1Time * (1 - tolerance)));
 
         assertThat(
-            ((Long) (attributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
+            ((Long) (processingAttributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
                 .longValue()).as("Alorithm time").isLessThan(
             (long) (c2Time * (1 + tolerance))).isGreaterThan(
             (long) (c2Time * (1 - tolerance)));
@@ -504,7 +504,7 @@ public abstract class ControllerTestBase
 
     protected void performProcessing(Class<?>... classes)
     {
-        controller.process(attributes, classes);
+        controller.process(processingAttributes, classes);
     }
 
     protected void performProcessingAndDispose(Class<?>... classes)

@@ -112,6 +112,29 @@ public class CachingControllerTest extends ControllerTestBase
             result = processing + processing;
         }
     }
+    
+    @Bindable
+    public static class ComponentWithInitProcessingInputRequiredAttribute extends ProcessingComponentBase
+    {
+        @Input
+        @Init
+        @Processing
+        @Required
+        @Attribute(key = "initProcessing")
+        private String initProcessingRequired;
+
+        @Output
+        @Processing
+        @Attribute(key = "result")
+        @SuppressWarnings("unused")
+        private String result;
+        
+        @Override
+        public void process() throws ProcessingException
+        {
+            result = initProcessingRequired;
+        }
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -152,15 +175,15 @@ public class CachingControllerTest extends ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("instanceAttribute", "i");
-        attributes.put("runtimeAttribute", "r");
-        attributes.put("data", "d");
+        processingAttributes.put("instanceAttribute", "i");
+        processingAttributes.put("runtimeAttribute", "r");
+        processingAttributes.put("data", "d");
 
         performProcessing(ProcessingComponent1.class);
-        assertEquals("dir", attributes.get("data"));
-        attributes.put("data", "d");
+        assertEquals("dir", processingAttributes.get("data"));
+        processingAttributes.put("data", "d");
         performProcessing(ProcessingComponent1.class);
-        assertEquals("dir", attributes.get("data"));
+        assertEquals("dir", processingAttributes.get("data"));
 
         controller.dispose();
         mocksControl.verify();
@@ -191,15 +214,15 @@ public class CachingControllerTest extends ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("instanceAttribute", "i");
-        attributes.put("runtimeAttribute", "r");
-        attributes.put("data", "d");
+        processingAttributes.put("instanceAttribute", "i");
+        processingAttributes.put("runtimeAttribute", "r");
+        processingAttributes.put("data", "d");
 
         performProcessing(ProcessingComponent1.class);
-        assertEquals("dir", attributes.get("data"));
-        attributes.put("data", "d");
+        assertEquals("dir", processingAttributes.get("data"));
+        processingAttributes.put("data", "d");
         performProcessing(ProcessingComponent2.class, ProcessingComponent3.class);
-        assertEquals("dirir", attributes.get("data"));
+        assertEquals("dirir", processingAttributes.get("data"));
 
         controller.dispose();
         mocksControl.verify();
@@ -219,18 +242,18 @@ public class CachingControllerTest extends ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("instanceAttribute", "i");
-        attributes.put("runtimeAttribute", "r");
-        attributes.put("data", "d");
+        processingAttributes.put("instanceAttribute", "i");
+        processingAttributes.put("runtimeAttribute", "r");
+        processingAttributes.put("data", "d");
 
         performProcessing(ProcessingComponent1.class);
-        assertEquals("dir", attributes.get("data"));
+        assertEquals("dir", processingAttributes.get("data"));
 
         // Clear attributes and check if they've been restored
-        attributes.clear();
-        attributes.put("data", "d");
+        processingAttributes.clear();
+        processingAttributes.put("data", "d");
         performProcessing(ProcessingComponent1.class);
-        assertEquals("di", attributes.get("data"));
+        assertEquals("di", processingAttributes.get("data"));
 
         controller.dispose();
         mocksControl.verify();
@@ -262,15 +285,15 @@ public class CachingControllerTest extends ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("instanceAttribute", "i");
-        attributes.put("runtimeAttribute", "r");
-        attributes.put("data", "d");
+        processingAttributes.put("instanceAttribute", "i");
+        processingAttributes.put("runtimeAttribute", "r");
+        processingAttributes.put("data", "d");
 
         performProcessing(ProcessingComponent1.class);
-        assertEquals("dir", attributes.get("data"));
+        assertEquals("dir", processingAttributes.get("data"));
 
         // Clear attributes and check if they've been restored
-        attributes.clear();
+        processingAttributes.clear();
 
         // This processing will throw an exception -- required attribute not provided
         try
@@ -309,7 +332,7 @@ public class CachingControllerTest extends ControllerTestBase
         {
             public void run()
             {
-                final Map<String, Object> localAttributes = Maps.newHashMap(attributes);
+                final Map<String, Object> localAttributes = Maps.newHashMap(processingAttributes);
                 localAttributes.put("instanceAttribute", "i");
                 localAttributes.put("runtimeAttribute", "r");
                 localAttributes.put("data", "d");
@@ -319,7 +342,7 @@ public class CachingControllerTest extends ControllerTestBase
         });
         thread.start();
 
-        final Map<String, Object> localAttributes = Maps.newHashMap(attributes);
+        final Map<String, Object> localAttributes = Maps.newHashMap(processingAttributes);
         localAttributes.put("instanceAttribute", "i");
         localAttributes.put("runtimeAttribute", "r");
         localAttributes.put("data", "d");
@@ -344,16 +367,16 @@ public class CachingControllerTest extends ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("instanceAttribute", "i");
-        attributes.put("runtimeAttribute", "r");
-        attributes.put("data", "d");
+        processingAttributes.put("instanceAttribute", "i");
+        processingAttributes.put("runtimeAttribute", "r");
+        processingAttributes.put("data", "d");
 
         performProcessing(CachedProcessingComponent1.class);
-        assertEquals("dir", attributes.get("data"));
+        assertEquals("dir", processingAttributes.get("data"));
 
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
         performProcessing(CachedProcessingComponent1.class);
-        assertEquals("dir", attributes.get("data"));
+        assertEquals("dir", processingAttributes.get("data"));
 
         controller.dispose();
         mocksControl.verify();
@@ -371,15 +394,15 @@ public class CachingControllerTest extends ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("instanceAttribute", "i");
-        attributes.put("data", "d");
+        processingAttributes.put("instanceAttribute", "i");
+        processingAttributes.put("data", "d");
 
         performProcessing(CachedProcessingComponent1.class);
-        assertEquals("di", attributes.get("data"));
+        assertEquals("di", processingAttributes.get("data"));
 
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
         performProcessing(CachedProcessingComponent1.class);
-        assertEquals("di", attributes.get("data"));
+        assertEquals("di", processingAttributes.get("data"));
 
         controller.dispose();
         mocksControl.verify();
@@ -399,17 +422,17 @@ public class CachingControllerTest extends ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("instanceAttribute", "i");
-        attributes.put("runtimeAttribute", "r");
-        attributes.put("data", "d");
+        processingAttributes.put("instanceAttribute", "i");
+        processingAttributes.put("runtimeAttribute", "r");
+        processingAttributes.put("data", "d");
 
         performProcessing(CachedProcessingComponent1.class);
-        assertEquals("dir", attributes.get("data"));
+        assertEquals("dir", processingAttributes.get("data"));
 
-        attributes.put("data", "d");
-        attributes.put("runtimeAttribute", "z");
+        processingAttributes.put("data", "d");
+        processingAttributes.put("runtimeAttribute", "z");
         performProcessing(CachedProcessingComponent1.class);
-        assertEquals("diz", attributes.get("data"));
+        assertEquals("diz", processingAttributes.get("data"));
 
         controller.dispose();
         mocksControl.verify();
@@ -433,7 +456,7 @@ public class CachingControllerTest extends ControllerTestBase
         {
             public void run()
             {
-                final Map<String, Object> localAttributes = Maps.newHashMap(attributes);
+                final Map<String, Object> localAttributes = Maps.newHashMap(processingAttributes);
                 localAttributes.put("instanceAttribute", "i");
                 localAttributes.put("runtimeAttribute", "r");
                 localAttributes.put("data", "d");
@@ -443,7 +466,7 @@ public class CachingControllerTest extends ControllerTestBase
         });
         thread.start();
 
-        final Map<String, Object> localAttributes = Maps.newHashMap(attributes);
+        final Map<String, Object> localAttributes = Maps.newHashMap(processingAttributes);
         localAttributes.put("instanceAttribute", "i");
         localAttributes.put("runtimeAttribute", "r");
         localAttributes.put("data", "d");
@@ -494,7 +517,7 @@ public class CachingControllerTest extends ControllerTestBase
             {
                 public String call() throws Exception
                 {
-                    Map<String, Object> localAttributes = Maps.newHashMap(attributes);
+                    Map<String, Object> localAttributes = Maps.newHashMap(processingAttributes);
                     localAttributes.put("runtimeAttribute", string);
                     localAttributes.put("data", "d");
                     controller.process(localAttributes, CachedProcessingComponent1.class);
@@ -634,7 +657,7 @@ public class CachingControllerTest extends ControllerTestBase
 
         mocksControl.replay();
 
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
         performProcessingAndDispose(CachedProcessingComponent1.class,
             ProcessingComponent2.class);
 
@@ -666,7 +689,7 @@ public class CachingControllerTest extends ControllerTestBase
     @SuppressWarnings("unchecked")
     public void testStatsOneGoodQueryNotCached()
     {
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
 
         mocksControl.checkOrder(false);
         processingComponent1Mock.init(isA(ControllerContext.class));
@@ -714,7 +737,7 @@ public class CachingControllerTest extends ControllerTestBase
     @Test
     public void testStatsOneGoodQueryCached()
     {
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
         performProcessing(CachedProcessingComponent1.class);
 
         final CachingControllerStatistics statistics = getCachingController()
@@ -733,9 +756,9 @@ public class CachingControllerTest extends ControllerTestBase
     @Test
     public void testStatsTwoGoodQueriesCached()
     {
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
         performProcessing(CachedProcessingComponent1.class);
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
         performProcessing(CachedProcessingComponent1.class);
 
         final CachingControllerStatistics statistics = getCachingController()
@@ -754,7 +777,7 @@ public class CachingControllerTest extends ControllerTestBase
     @Test(expected = RuntimeException.class)
     public void testStatsGoodQueryOneErrorQueryNotCached()
     {
-        attributes.put("data", "d");
+        processingAttributes.put("data", "d");
 
         processingComponent3Mock.init(isA(ControllerContext.class));
         processingComponent3Mock.beforeProcessing();
@@ -800,6 +823,15 @@ public class CachingControllerTest extends ControllerTestBase
         }
     }
 
+    @Test
+    public void testInitProcessingInputRequiredAttributeProvidedDuringProcessing()
+    {
+        processingAttributes.put("initProcessing", "test");
+        performProcessingAndDispose(ComponentWithInitProcessingInputRequiredAttribute.class);
+        
+        assertThat((String)processingAttributes.get("result")).isEqualTo("test");
+    }
+    
     private CachingController getCachingController()
     {
         return (CachingController) controller;

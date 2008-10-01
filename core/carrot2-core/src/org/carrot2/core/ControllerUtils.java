@@ -26,18 +26,18 @@ public final class ControllerUtils
      */
     @SuppressWarnings("unchecked")
     public static void init(ProcessingComponent processingComponent,
-        Map<String, Object> attributes, ControllerContext context)
-        throws ProcessingException
+        Map<String, Object> attributes, boolean checkRequiredAttributes,
+        ControllerContext context) throws ProcessingException
     {
         try
         {
-            AttributeBinder
-                .bind(processingComponent, attributes, Input.class, Init.class);
+            AttributeBinder.bind(processingComponent, attributes,
+                checkRequiredAttributes, Input.class, Init.class);
 
             processingComponent.init(context);
 
-            AttributeBinder.bind(processingComponent, attributes, Output.class,
-                Init.class);
+            AttributeBinder.bind(processingComponent, attributes,
+                checkRequiredAttributes, Output.class, Init.class);
         }
         catch (final InstantiationException e)
         {

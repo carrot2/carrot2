@@ -116,7 +116,7 @@ public final class SimpleController implements Controller
             for (final ProcessingComponent element : processingComponents)
             {
                 initializedComponents.add(element);
-                ControllerUtils.init(element, initAttributes, context);
+                ControllerUtils.init(element, initAttributes, true, context);
             }
 
             ControllerUtils.performProcessing(attributes, true, processingComponents);

@@ -53,15 +53,15 @@ public final class CachingController implements Controller
      * <p>
      * Access monitor: {#link #reentrantLock}.
      */
-    private final Map<Pair<Class<? extends ProcessingComponent>, String>, Map<String, Object>> 
-        resetAttributes = Maps.newHashMap();
+    private final Map<Pair<Class<? extends ProcessingComponent>, String>, Map<String, Object>> resetAttributes = Maps
+        .newHashMap();
 
     /**
      * Descriptors of {@link Input} and {@link Output} {@link Processing} attributes of
      * components whose output is to be cached.
      */
-    private final Map<Pair<Class<? extends ProcessingComponent>, String>, 
-        InputOutputAttributeDescriptors> cachedComponentAttributeDescriptors = Maps.newHashMap();
+    private final Map<Pair<Class<? extends ProcessingComponent>, String>, InputOutputAttributeDescriptors> cachedComponentAttributeDescriptors = Maps
+        .newHashMap();
 
     /**
      * Maintains a mapping between component ids and their classes. Initialized in
@@ -86,7 +86,7 @@ public final class CachingController implements Controller
 
     /** Ehcache manager */
     private CacheManager cacheManager;
-    
+
     /** Controller context for this controller. */
     private ControllerContextImpl context;
 
@@ -158,8 +158,8 @@ public final class CachingController implements Controller
         ProcessingComponentConfiguration... componentConfigurations)
         throws ComponentInitializationException
     {
-        context = new ControllerContextImpl();        
-        
+        context = new ControllerContextImpl();
+
         // Prepare component-specific init attributes
         final Map<Pair<Class<? extends ProcessingComponent>, String>, Map<String, Object>> componentSpecificInitAttributes = Maps
             .newHashMap();
@@ -252,7 +252,7 @@ public final class CachingController implements Controller
         {
             throw new IllegalStateException("Controller not initialized.");
         }
-        
+
         final SoftUnboundedPool<ProcessingComponent, String> componentPool = this.componentPool;
         if (componentPool == null)
         {
@@ -505,19 +505,15 @@ public final class CachingController implements Controller
                 }
 
                 // Initialize the component first.
-                ControllerUtils.init(component, actualInitAttributes, context);
+                ControllerUtils.init(component, actualInitAttributes, false, context);
 
                 // To support a very natural scenario where processing attributes are
                 // provided/overridden during initialization, we'll also bind processing
                 // attributes here. Also, we need to switch off checking for required
                 // attributes as the required processing attributes will be most likely
                 // provided at request time.
-                AttributeBinder.bind(component,
-                    new AttributeBinder.AttributeBinderAction []
-                    {
-                        new AttributeBinder.AttributeBinderActionBind(Input.class,
-                            actualInitAttributes, false)
-                    }, Input.class, Processing.class);
+                AttributeBinder.bind(component, actualInitAttributes, false, Input.class,
+                    Processing.class);
 
                 // If this is the first component we initialize, remember attribute
                 // values so that they can be reset on returning to the pool.
@@ -598,12 +594,8 @@ public final class CachingController implements Controller
                             processingComponent.getClass(), parameter));
                 }
 
-                AttributeBinder.bind(processingComponent,
-                    new AttributeBinder.AttributeBinderAction []
-                    {
-                        new AttributeBinder.AttributeBinderActionBind(Input.class, map,
-                            false)
-                    }, Input.class, Processing.class);
+                AttributeBinder.bind(processingComponent, map, false, Input.class,
+                    Processing.class);
             }
             catch (Exception e)
             {

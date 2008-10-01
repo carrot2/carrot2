@@ -108,8 +108,21 @@ public class AttributeBinder
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
     {
+        return bind(object, values, true, bindingDirectionAnnotation,
+            filteringAnnotations);
+    }
+
+    /**
+     * A version of {@link #bind(Object, Map, Class, Class...)} that can optionally skip
+     * {@link Required} attribute checking. For experts only.
+     */
+    public static <T> Map<String, Object> bind(T object, Map<String, Object> values,
+        boolean checkRequired, Class<? extends Annotation> bindingDirectionAnnotation,
+        Class<? extends Annotation>... filteringAnnotations)
+        throws InstantiationException, AttributeBindingException
+    {
         final AttributeBinderActionBind attributeBinderActionBind = new AttributeBinderActionBind(
-            Input.class, values, true, AttributeTransformerFromString.INSTANCE);
+            Input.class, values, checkRequired, AttributeTransformerFromString.INSTANCE);
         final AttributeBinderAction [] actions = new AttributeBinderAction []
         {
             attributeBinderActionBind,
@@ -594,12 +607,12 @@ public class AttributeBinder
      */
     static class ConsistencyCheckImplementingClasses extends ConsistencyCheck
     {
-        static Set<Class<?>> ALLOWED_PLAIN_TYPES = ImmutableSet.<Class<?>>of(
-            Byte.class, Short.class, Integer.class, Long.class, Float.class,
-            Double.class, Boolean.class, String.class, Class.class, Resource.class,
-            Collection.class, Map.class, File.class);
+        static Set<Class<?>> ALLOWED_PLAIN_TYPES = ImmutableSet.<Class<?>> of(Byte.class,
+            Short.class, Integer.class, Long.class, Float.class, Double.class,
+            Boolean.class, String.class, Class.class, Resource.class, Collection.class,
+            Map.class, File.class);
 
-        static Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = ImmutableSet.<Class<?>>of(
+        static Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = ImmutableSet.<Class<?>> of(
             Enum.class, Resource.class, Collection.class, Map.class);
 
         @Override
