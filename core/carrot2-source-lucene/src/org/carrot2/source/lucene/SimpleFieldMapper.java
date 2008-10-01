@@ -124,7 +124,6 @@ public class SimpleFieldMapper implements FieldMapper
     /*
      * 
      */
-    @Override
     public String [] getSearchFields()
     {
         if (searchFields == null || searchFields.size() == 0)
@@ -148,7 +147,6 @@ public class SimpleFieldMapper implements FieldMapper
     /*
      * 
      */
-    @Override
     public void map(Query luceneQuery, Analyzer analyzer, Document luceneDoc,
         org.carrot2.core.Document doc)
     {
