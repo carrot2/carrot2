@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.util.IdentityHashMap;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
-import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.*;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
 import org.carrot2.util.ExceptionUtils;
@@ -33,19 +32,19 @@ public final class LuceneDocumentSource extends SimpleSearchEngine
     private final static Logger logger = Logger.getLogger(LuceneDocumentSource.class);
 
     /**
-     * Search index {@link Directory}. Must be unlocked for reading.
-     * 
+     * Search index {@link Directory}. Must be unlocked for reading. 
+     *
      * @label Index directory
+     * @group Index properties
      * @level Basic
      */
     @Input
     @Attribute
     @Init
     @Processing
-    @Required
     @ImplementingClasses(classes =
     {
-        Directory.class
+        RAMDirectory.class, FSDirectory.class
     }, strict = false)
     public Directory directory;
 
@@ -54,6 +53,7 @@ public final class LuceneDocumentSource extends SimpleSearchEngine
      * querying.
      * 
      * @label Analyzer
+     * @group Index properties
      * @level Medium
      */
     @Input
@@ -63,7 +63,7 @@ public final class LuceneDocumentSource extends SimpleSearchEngine
     @Attribute
     @ImplementingClasses(classes =
     {
-        Analyzer.class
+        SimpleAnalyzer.class, StandardAnalyzer.class, WhitespaceAnalyzer.class
     }, strict = false)
     public Analyzer analyzer = new StandardAnalyzer();
 
@@ -72,15 +72,17 @@ public final class LuceneDocumentSource extends SimpleSearchEngine
      * Lucene index fields.
      * 
      * @label Field mapper
+     * @group Index field mapping
      * @level Advanced
      */
     @Input
     @Init
     @Required
     @Attribute
+    @Internal
     @ImplementingClasses(classes =
     {
-        FieldMapper.class
+        SimpleFieldMapper.class
     }, strict = false)
     public FieldMapper fieldMapper = new SimpleFieldMapper();
 
@@ -91,11 +93,13 @@ public final class LuceneDocumentSource extends SimpleSearchEngine
      * {@link #fieldMapper}.
      * 
      * @label Lucene query
+     * @group Search query
      * @level Advanced
      */
     @Input
     @Processing
     @Attribute
+    @Internal    
     @ImplementingClasses(classes =
     {
         Query.class

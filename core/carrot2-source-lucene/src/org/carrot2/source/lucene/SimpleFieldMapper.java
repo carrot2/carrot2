@@ -34,6 +34,7 @@ public class SimpleFieldMapper implements FieldMapper
      * Document title field name.
      * 
      * @label Document title field
+     * @group Index field mapping
      * @level Medium
      */
     @Input
@@ -46,6 +47,7 @@ public class SimpleFieldMapper implements FieldMapper
      * Document content field name.
      * 
      * @label Document content field
+     * @group Index field mapping
      * @level Medium
      */
     @Input
@@ -58,6 +60,7 @@ public class SimpleFieldMapper implements FieldMapper
      * Document URL field name.
      * 
      * @label Document URL field
+     * @group Index field mapping
      * @level Medium
      */
     @Input
@@ -70,6 +73,7 @@ public class SimpleFieldMapper implements FieldMapper
      * Index search field names. If not specified, title and content fields are used.
      * 
      * @label Search fields
+     * @group Index field mapping
      * @level Medium
      */
     @Input
@@ -80,6 +84,10 @@ public class SimpleFieldMapper implements FieldMapper
 
     /**
      * Snippet formatter for the highlighter. Highlighter is not used if <code>null</code>.
+     * 
+     * @label Formatter
+     * @group Highlighter
+     * @level Advanced
      */
     @Input
     @Attribute
@@ -93,6 +101,10 @@ public class SimpleFieldMapper implements FieldMapper
 
     /**
      * Number of context fragments for the highlighter.
+     * 
+     * @label Context fragments
+     * @group Highlighter
+     * @level Advanced
      */
     @Input
     @Attribute
@@ -103,6 +115,10 @@ public class SimpleFieldMapper implements FieldMapper
 
     /**
      * A string used to join context fragments when highlighting.
+     * 
+     * @label Join string
+     * @group Highlighter
+     * @level Advanced
      */
     @Input
     @Attribute

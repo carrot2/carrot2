@@ -18,4 +18,5 @@ Require-Bundle: org.carrot2.core,
  org.carrot2.source.google.api;resolution:=optional;visibility:=reexport,
  org.carrot2.opensearch;resolution:=optional;visibility:=reexport,
  org.carrot2.source.pubmed;resolution:=optional;visibility:=reexport,
- org.carrot2.source.solr;visibility:=reexport
+ org.carrot2.source.solr;visibility:=reexport,
+ org.carrot2.source.lucene;resolution:=optional;visibility:=reexport
