@@ -42,8 +42,6 @@ public final class LuceneDocumentSource extends SimpleSearchEngine
     @Attribute
     @Init
     @Processing
-    // TODO: uncomment when Controller#init() is fixed.
-    // @Required
     @ImplementingClasses(classes =
     {
         RAMDirectory.class, FSDirectory.class
