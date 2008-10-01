@@ -1,12 +1,12 @@
 package org.carrot2.workbench.editors.impl;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.lang.ClassUtils;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.AttributeDescriptor;
+import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
@@ -14,20 +14,32 @@ import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
+import com.google.common.collect.Lists;
+
 /**
  * An editor for any fields that have {@link ImplementingClasses} annotation. The field is
- * then initialized with an instance of one of the classes listed in
+ * initialized with an instance of one of the classes listed in
  * {@link ImplementingClasses#classes()}.
  */
 public final class ImplementingClassesEditor extends AttributeEditorAdapter
 {
+    /**
+     * Special value for no-selection.
+     */
+    private final static String NULL_VALUE = "";
+
     /**
      * The constraint.
      */
     private ImplementingClasses constraint;
 
     /**
-     * Extracted from {@link #constraint}.
+     * Labels from {@link #constraint}.
+     */
+    private List<String> hints;
+
+    /**
+     * Classes from {@link #constraint}.
      */
     private List<Class<?>> classes;
 
@@ -36,10 +48,11 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
      */
     private ComboViewer combo;
 
-    /*
-     * Event cycle avoidance.
+    /**
+     * If <code>true</code> valid value selection is required (the attribute cannot be
+     * <code>null</code>).
      */
-    private boolean updating;
+    private boolean valueRequired;
 
     /*
      * 
@@ -62,13 +75,28 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
                 constraint = (ImplementingClasses) ann;
             }
         }
-        
+
         if (constraint == null)
         {
             throw new RuntimeException("Missing constraint.");
         }
 
-        classes = Arrays.asList(constraint.classes());
+        valueRequired = (descriptor.getAnnotation(Required.class) != null);
+
+        hints = new ArrayList<String>();
+        classes = Lists.newArrayList();
+
+        if (!valueRequired)
+        {
+            hints.add(NULL_VALUE);
+            classes.add(null);
+        }
+
+        for (Class<?> clazz : constraint.classes())
+        {
+            hints.add(StringUtils.splitCamelCase(ClassUtils.getShortClassName(clazz)));
+            classes.add(clazz);
+        }
 
         return super.init(descriptor);
     }
@@ -82,16 +110,7 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
         combo = new ComboViewer(parent, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
         
         combo.setContentProvider(new ArrayContentProvider());
-        combo.setLabelProvider(new LabelProvider()
-        {
-            public String getText(Object element)
-            {
-                return StringUtils.splitCamelCase(ClassUtils
-                    .getShortClassName((Class<?>) element));
-            }
-        });
-
-        combo.setInput(constraint.classes());
+        combo.setInput(hints);
 
         combo.addSelectionChangedListener(new ISelectionChangedListener()
         {
@@ -113,14 +132,7 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
      */
     private void propagateNewValue()
     {
-        if (updating) 
-        {
-            return;
-        }
-
-        updating = true;
         fireAttributeChange(new AttributeChangedEvent(this));
-        updating = false;
     }
 
     /*
@@ -129,11 +141,33 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
     @Override
     public void setValue(Object newValue)
     {
-        if (newValue != null && newValue != getValue())
+        if (newValue != getValue())
         {
-            int current = classes.indexOf(newValue.getClass());
-            combo.getCombo().select(current);
+            int index;
 
+            if (newValue == null)
+            {
+                index = -1;
+            }
+            else
+            {
+                if (!(newValue instanceof Class<?>))
+                {
+                    newValue = newValue.getClass();
+                }
+                index = classes.indexOf(newValue);
+            }
+
+            if (index == -1)
+            {
+                if (valueRequired) 
+                {
+                    return;
+                }
+                index = 0;
+            }
+
+            combo.getCombo().select(index);
             propagateNewValue();
         }
     }
@@ -145,12 +179,14 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
     public Object getValue()
     {
         final int current = combo.getCombo().getSelectionIndex();
-        
+
         if (current == -1)
         {
             return null;
         }
-
-        return classes.get(current);
+        else
+        {
+            return classes.get(current);
+        }
     }
 }
