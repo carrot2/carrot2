@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public final class StringUtils
 {
     private static final Pattern CAMEL_CASE_SEGMENT_PATTERN = Pattern
-        .compile("[A-Z][a-z0-9]*");
+        .compile("([A-Z]*)([A-Z0-9][a-z0-9]*)");
 
     private static final Pattern HTML_TAG_PATTERN = Pattern.compile("<.+?>",
         Pattern.CASE_INSENSITIVE);
@@ -45,7 +45,13 @@ public final class StringUtils
         final List<String> parts = new ArrayList<String>();
         while (matcher.find())
         {
-            parts.add(matcher.group());
+            for (int i = 1; i <= matcher.groupCount(); i++)
+            {
+                final String group = matcher.group(i);
+                if (group.length() == 0) continue;
+                
+                parts.add(group);
+            }
         }
         return org.apache.commons.lang.StringUtils.join(parts, ' ');
     }

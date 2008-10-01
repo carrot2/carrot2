@@ -15,6 +15,19 @@ public class StringUtilsTest
     }
 
     @Test
+    public void testSplitCamelCaseWithCapitals()
+    {
+        assertEquals("HTML Editor Test", StringUtils.splitCamelCase("HTMLEditorTest"));
+        assertEquals("Simple HTML Formatter", StringUtils.splitCamelCase("SimpleHTMLFormatter"));
+    }
+
+    @Test
+    public void testSplitCamelCaseWithDigits()
+    {
+        assertEquals("HTML 123 Test", StringUtils.splitCamelCase("HTML123Test"));
+    }
+
+    @Test
     public void testRemoveHtmlNoTags()
     {
         assertThat(StringUtils.removeHtmlTags(">test <string"))
