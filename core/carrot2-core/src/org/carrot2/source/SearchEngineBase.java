@@ -76,7 +76,8 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
     private static Pattern HIGHLIGHTS_PATTERN = Pattern.compile("</?b>");
 
     /**
-     * Cleans <code>fields</code> of all documents in the provided <code>response</code>.
+     * Unescape HTML entities and tags from a given set of <code>fields</code> of all
+     * documents in the provided <code>response</code>.
      * 
      * @param response the search engine response to clean
      * @param keepHighlights set to <code>true</code> to keep query terms highlights
@@ -109,13 +110,13 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
 
     /**
      * Called after a single search engine response has been fetched. The concrete
-     * implementation may want to override this empty implementation to e.g. clean or
+     * implementation may want to override this empty implementation to e.g., clean or
      * otherwise postprocess the returned results.
      */
     protected void afterFetch(SearchEngineResponse response)
     {
     }
-    
+
     /**
      * URL-encodes a string into UTF-8.
      */

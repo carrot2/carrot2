@@ -2,6 +2,7 @@ package org.carrot2.source;
 
 import org.carrot2.core.DocumentSource;
 import org.carrot2.core.ProcessingException;
+import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.Bindable;
 
 /**
@@ -39,13 +40,7 @@ public abstract class SimpleSearchEngine extends SearchEngineBase
         }
         catch (Exception e)
         {
-            Throwable cause = e.getCause();
-            if (cause == null)
-            {
-                cause = e;
-            }
-
-            throw new ProcessingException(cause.getMessage(), e);
+            throw ExceptionUtils.wrapAs(ProcessingException.class, e);
         }
     }
 }

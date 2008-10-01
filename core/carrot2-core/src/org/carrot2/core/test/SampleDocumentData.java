@@ -11,9 +11,9 @@ import com.google.common.collect.ImmutableList;
  * hard-coded so that no other external components are needed to run tests (i.e., circular
  * dependency between the XML input component and the core).
  */
-final class SampleDocumentData
+public final class SampleDocumentData
 {
-    final static Collection<Document> DOCUMENTS_DATA_MINING;
+    public final static Collection<Document> DOCUMENTS_DATA_MINING;
     static
     {
         final String [][] data = new String [] []
@@ -624,7 +624,7 @@ final class SampleDocumentData
         DOCUMENTS_DATA_MINING = Collections.unmodifiableList(documents);
     }
 
-    final static Collection<Document> DOCUMENTS_DAWID;
+    public final static Collection<Document> DOCUMENTS_DAWID;
     static
     {
         final String [][] data = new String [] []
@@ -1230,6 +1230,6 @@ final class SampleDocumentData
         DOCUMENTS_DAWID = Collections.unmodifiableList(documents);
     }
     
-    final static List<Collection<Document>> ALL = ImmutableList.of(
+    public final static List<Collection<Document>> ALL = ImmutableList.of(
         DOCUMENTS_DATA_MINING, DOCUMENTS_DAWID);
 }

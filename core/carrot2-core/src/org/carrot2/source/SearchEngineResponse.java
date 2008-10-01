@@ -39,7 +39,7 @@ public final class SearchEngineResponse
     {
         if (metadata.containsKey(RESULTS_TOTAL_KEY))
         {
-            return (Long) metadata.get(RESULTS_TOTAL_KEY);
+            return ((Number) metadata.get(RESULTS_TOTAL_KEY)).longValue();
         }
         else
         {

@@ -159,12 +159,6 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
                 }
             }
             documents = documentsLocal;
-
-            // Processing time greater than 0
-            final Long time = (Long) processingResult.getAttributes().get(
-                AttributeNames.PROCESSING_TIME_SOURCE);
-            assertThat(time.longValue()).isGreaterThan(0);
-
             index++;
         }
 

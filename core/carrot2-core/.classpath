@@ -5,5 +5,6 @@
 	<classpathentry exported="true" kind="lib" path="META-INF/"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-log4j"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

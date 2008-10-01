@@ -3,6 +3,7 @@ package org.carrot2.core.test;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
+import static org.carrot2.core.test.SampleDocumentData.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -20,16 +21,6 @@ import com.google.common.collect.*;
 public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm> extends
     ProcessingComponentTestBase<T>
 {
-    /**
-     * A set of sample documents returned for the query <i>data mining</i>.
-     */
-    protected final static Collection<Document> DOCUMENTS_DATA_MINING = SampleDocumentData.DOCUMENTS_DATA_MINING;
-
-    /**
-     * A set of sample documents returned for the query <i>dawid</i>.
-     */
-    protected final static Collection<Document> DOCUMENTS_DAWID = SampleDocumentData.DOCUMENTS_DAWID;
-
     /**
      * A test to check if the algorithm does not fail with no documents.
      */
