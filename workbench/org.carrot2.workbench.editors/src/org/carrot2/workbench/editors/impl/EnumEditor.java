@@ -9,10 +9,9 @@ import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
-import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.*;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.google.common.collect.BiMap;
@@ -43,9 +42,9 @@ public final class EnumEditor extends AttributeEditorAdapter implements IAttribu
     private Map<Object, Enum<?>> valueToEnum;
 
     /**
-     * A {@link ComboViewer} component for displaying enum constants.
+     * A combo component for displaying enum constants.
      */
-    private CCombo box;
+    private Combo box;
 
     /**
      * Current attribute value;
@@ -120,7 +119,7 @@ public final class EnumEditor extends AttributeEditorAdapter implements IAttribu
     public void createEditor(Composite parent, int gridColumns)
     {
         final int style = SWT.DROP_DOWN | SWT.BORDER | (anyValueAllowed ? 0 : SWT.READ_ONLY);
-        box = new CCombo(parent, style);
+        box = new Combo(parent, style);
         box.setLayoutData(GUIFactory.editorGridData().grab(true, false).hint(200,
             SWT.DEFAULT).align(SWT.FILL, SWT.CENTER).span(gridColumns, 1).create());
 
