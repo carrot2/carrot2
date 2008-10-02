@@ -1,8 +1,10 @@
 package org.carrot2.source.lucene;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.IdentityHashMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -13,10 +15,10 @@ import org.apache.lucene.store.*;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.SearchEngineResponse;
-import org.carrot2.source.SimpleSearchEngine;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.google.common.collect.Maps;
 
@@ -26,14 +28,31 @@ import com.google.common.collect.Maps;
  * plugin.
  */
 @Bindable(prefix = "LuceneDocumentSource")
-public final class LuceneDocumentSource extends SimpleSearchEngine
+public final class LuceneDocumentSource extends ProcessingComponentBase implements DocumentSource
 {
     /** Logger for this class. */
     private final static Logger logger = Logger.getLogger(LuceneDocumentSource.class);
 
+    @Processing
+    @Input
+    @Attribute(key = AttributeNames.RESULTS)
+    @IntRange(min = 1)
+    public int results = 100;
+
+    @Processing
+    @Output
+    @Attribute(key = AttributeNames.RESULTS_TOTAL)
+    public long resultsTotal;
+
+    @Processing
+    @Output
+    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Internal
+    public Collection<Document> documents;
+
     /**
-     * Search index {@link Directory}. Must be unlocked for reading. 
-     *
+     * Search index {@link Directory}. Must be unlocked for reading.
+     * 
      * @label Index directory
      * @group Index properties
      * @level Basic
@@ -100,12 +119,21 @@ public final class LuceneDocumentSource extends SimpleSearchEngine
     @Input
     @Processing
     @Attribute
-    @Internal    
+    @Internal
     @ImplementingClasses(classes =
     {
         Query.class
     }, strict = false)
     public Query luceneQuery;
+
+    /**
+     * A plain text query, parsed with {@link QueryParser} in case {@link #luceneQuery} is
+     * empty.
+     */
+    @Processing
+    @Input
+    @Attribute(key = AttributeNames.QUERY)
+    public String query;
 
     /**
      * A context-shared map between {@link Directory} objects and any opened
@@ -148,10 +176,26 @@ public final class LuceneDocumentSource extends SimpleSearchEngine
         }
     }
 
+    /*
+     * 
+     */
+    public void process() throws ProcessingException
+    {
+        try
+        {
+            final SearchEngineResponse response = fetchSearchResponse();
+            documents = response.results;
+            resultsTotal = response.getResultsTotal();
+        }
+        catch (Exception e)
+        {
+            throw ExceptionUtils.wrapAs(ProcessingException.class, e);
+        }
+    }
+
     /**
      * Fetch search engine response.
      */
-    @Override
     protected SearchEngineResponse fetchSearchResponse() throws Exception
     {
         if (directory == null)
@@ -165,19 +209,24 @@ public final class LuceneDocumentSource extends SimpleSearchEngine
             if (searchFields == null || searchFields.length == 0)
             {
                 throw new ProcessingException(
-                    "An instantiated Lucene Query object or at least one mapped " +
-                    "search field must be given.");
+                    "An instantiated Lucene Query object or at least one mapped "
+                        + "search field must be given.");
             }
 
+            if (StringUtils.isEmpty(query))
+            {
+                throw new ProcessingException(
+                    "An instantiated Lucene Query object or a text query is required.");
+            }
+            
             if (searchFields.length == 1)
             {
-                luceneQuery = new QueryParser(searchFields[0], analyzer)
-                    .parse(super.query);
+                luceneQuery = new QueryParser(searchFields[0], analyzer).parse(query);
             }
             else
             {
                 luceneQuery = new MultiFieldQueryParser(searchFields, analyzer)
-                    .parse(super.query);
+                    .parse(query);
             }
         }
 

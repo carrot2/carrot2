@@ -10,6 +10,10 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.Field.TermVector;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.RAMDirectory;
 import org.carrot2.core.Document;
@@ -139,5 +143,18 @@ public class LuceneDocumentSourceTest extends
         }
 
         assertThat(highlights).as("Number of highlights").isGreaterThan(10);
+    }
+
+    @Test
+    public void testCustomQuery() throws Exception
+    {
+        final BooleanQuery query = new BooleanQuery();
+        query.add(new TermQuery(new Term("snippet", "data")), Occur.MUST);
+
+        this.processingAttributes.put(AttributeUtils.getKey(LuceneDocumentSource.class,
+            "luceneQuery"), query);
+
+        assertThat(runQuery(null, getLargeQuerySize())).as("Number of results")
+            .isGreaterThan(10);
     }
 }
