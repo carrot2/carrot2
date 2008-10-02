@@ -18,8 +18,8 @@ import com.google.common.collect.Lists;
  * human-readable {@link #metadata} about the attribute such as title, label or
  * description.
  * <p>
- * {@link AttributeDescriptor}s can be obtained from {@link BindableDescriptor}s, which in
- * turn are built by {@link BindableDescriptorBuilder#buildDescriptor(Object)};
+ * {@link AttributeDescriptor}s can be obtained from {@link BindableDescriptor}s, which
+ * in turn are built by {@link BindableDescriptorBuilder#buildDescriptor(Object)};
  */
 @Root(name = "attribute-descriptor")
 public class AttributeDescriptor
@@ -137,6 +137,29 @@ public class AttributeDescriptor
     public Annotation getAnnotation(Class<? extends Annotation> annotationClass)
     {
         return attributeField.getAnnotation(annotationClass);
+    }
+
+    /**
+     * Returns <code>true</code> if the given value is valid for the attribute described
+     * by this descriptor (non-<code>null</code> for {@link Required} attributes and
+     * fulfilling all other constraints).
+     */
+    public final boolean isValid(Object value)
+    {
+        if (requiredAttribute && value == null)
+        {
+            return false;
+        }
+
+        if (value == null)
+        {
+            value = defaultValue;
+        }
+
+        final Annotation [] constraints = this.constraints
+            .toArray(new Annotation [this.constraints.size()]);
+
+        return ConstraintValidator.isMet(value, constraints).length == 0;
     }
 
     @Override

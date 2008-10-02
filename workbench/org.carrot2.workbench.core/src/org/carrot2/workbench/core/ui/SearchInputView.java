@@ -2,7 +2,6 @@ package org.carrot2.workbench.core.ui;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.List;
 
@@ -11,7 +10,6 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
-import org.carrot2.util.attribute.constraint.ConstraintValidator;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
@@ -690,7 +688,7 @@ public class SearchInputView extends ViewPart
         {
             final Object value = attributes.getAttributeValue(d.key);
 
-            if (!isValid(d, value))
+            if (!d.isValid(value))
             {
                 remaining.add(d);
             }
@@ -718,29 +716,6 @@ public class SearchInputView extends ViewPart
                     + remaining.iterator().next().metadata.getLabelOrTitle());
             }
         }
-    }
-
-    /**
-     * Returns <code>true</code> if the value described by a given attribute descriptor
-     * is valid (non-<code>null</code> for {@link Required} attributes and fulfilling
-     * all other constraints.
-     */
-    private boolean isValid(AttributeDescriptor d, Object value)
-    {
-        if (d.requiredAttribute && value == null)
-        {
-            return false;
-        }
-
-        if (value == null)
-        {
-            value = d.defaultValue;
-        }
-
-        final Annotation [] constraints = d.constraints
-            .toArray(new Annotation [d.constraints.size()]);
-
-        return ConstraintValidator.isMet(value, constraints).length == 0;
     }
 
     /**
