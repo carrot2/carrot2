@@ -48,7 +48,7 @@
 			optional
 			#end
 		</dd>
-		
+
 		<dt>Binding direction:</dt>
 		<dd>
 			#if ($fields.inputAttribute)
@@ -56,6 +56,16 @@
 			#end
 			#if ($fields.outputAttribute)
 			OUTPUT
+			#end
+		</dd>
+		
+		<dt>Binding time:</dt>
+		<dd>
+			#if ($fields.initAttribute)
+			INIT 
+			#end
+			#if ($fields.processingAttribute)
+			PROCESSING
 			#end
 		</dd>
 	</dl>

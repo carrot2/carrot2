@@ -8,6 +8,8 @@ import java.util.Map;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.runtime.RuntimeInstance;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.*;
@@ -124,6 +126,12 @@ public class AttributeInfoView extends ViewPart
         final HashMap<String, Object> fields = Maps.newHashMap();
         copyFields(fields, "", descriptor);
         context.put("fields", fields);
+        
+        /*
+         * Add artificial fields.
+         */
+        fields.put("processingAttribute", descriptor.getAnnotation(Processing.class) != null);
+        fields.put("initAttribute", descriptor.getAnnotation(Init.class) != null);
 
         StringWriter sw = new StringWriter();
         try
