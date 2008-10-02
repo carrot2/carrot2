@@ -1,4 +1,4 @@
-package org.carrot2.workbench.editors.impl.lucene;
+package org.carrot2.workbench.editors.lucene;
 
 import java.io.File;
 
@@ -6,8 +6,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.editors.*;
-import org.carrot2.workbench.editors.impl.EditorsPlugin;
-import org.carrot2.workbench.editors.impl.EditorsPluginConstants;
+import org.carrot2.workbench.editors.impl.*;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -24,6 +23,11 @@ import org.eclipse.swt.widgets.*;
  */
 public class IndexDirectoryEditor extends AttributeEditorAdapter
 {
+    /*
+     * 
+     */
+    public static final String PREF_LAST_SELECTED_LUCENE_DIR = "resource-editor.last-selected-lucene-dir";
+
     /*
      * Disposal of resources.
      */
@@ -116,20 +120,20 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
         else
         {
             // In case we can't restore last file, refer to global last key.
-            dialog.setFilterPath(EditorsPlugin.getDefault().getPreferenceStore().getString(
-                EditorsPluginConstants.PREF_LAST_SELECTED_LUCENE_DIR));
+            dialog.setFilterPath(EditorsPlugin.getDefault().getPreferenceStore()
+                .getString(PREF_LAST_SELECTED_LUCENE_DIR));
         }
-        
+
         final String path = dialog.open();
         if (path != null)
         {
             try
             {
                 final File file = new File(path);
-    
+
                 EditorsPlugin.getDefault().getPreferenceStore().setValue(
-                    EditorsPluginConstants.PREF_LAST_SELECTED_LUCENE_DIR, file.getAbsolutePath());
-    
+                    PREF_LAST_SELECTED_LUCENE_DIR, file.getAbsolutePath());
+
                 setValue(FSDirectory.getDirectory(file));
             }
             catch (Exception e)
@@ -156,7 +160,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
         }
 
         this.current = (Directory) newValue;
-        
+
         final String representation;
         if (current == null)
         {

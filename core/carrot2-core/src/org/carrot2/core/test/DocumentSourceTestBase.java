@@ -71,7 +71,10 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
      */
     protected final int runQuery(String query, int results)
     {
-        processingAttributes.put(AttributeNames.QUERY, query);
+        if (query != null)
+        {
+            processingAttributes.put(AttributeNames.QUERY, query);
+        }
         processingAttributes.put(AttributeNames.RESULTS, results);
         return runQuery();
     }

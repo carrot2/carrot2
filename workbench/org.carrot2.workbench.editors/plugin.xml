@@ -66,10 +66,6 @@
             class="org.carrot2.workbench.editors.impl.StringEditor">
       </type-editor>
       
-      <type-editor
-            attribute-class="org.apache.lucene.store.Directory"
-            class="org.carrot2.workbench.editors.impl.lucene.IndexDirectoryEditor">
-      </type-editor>      
    </extension>
 
 </plugin>

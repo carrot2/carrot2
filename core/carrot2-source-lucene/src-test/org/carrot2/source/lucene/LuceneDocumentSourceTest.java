@@ -17,6 +17,7 @@ import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.RAMDirectory;
 import org.carrot2.core.Document;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.*;
@@ -151,8 +152,7 @@ public class LuceneDocumentSourceTest extends
         final BooleanQuery query = new BooleanQuery();
         query.add(new TermQuery(new Term("snippet", "data")), Occur.MUST);
 
-        this.processingAttributes.put(AttributeUtils.getKey(LuceneDocumentSource.class,
-            "luceneQuery"), query);
+        this.processingAttributes.put(AttributeNames.QUERY, query);
 
         assertThat(runQuery(null, getLargeQuerySize())).as("Number of results")
             .isGreaterThan(10);

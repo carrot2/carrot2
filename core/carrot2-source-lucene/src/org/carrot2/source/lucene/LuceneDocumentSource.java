@@ -28,7 +28,8 @@ import com.google.common.collect.Maps;
  * plugin.
  */
 @Bindable(prefix = "LuceneDocumentSource")
-public final class LuceneDocumentSource extends ProcessingComponentBase implements DocumentSource
+public final class LuceneDocumentSource extends ProcessingComponentBase implements
+    DocumentSource
 {
     /** Logger for this class. */
     private final static Logger logger = Logger.getLogger(LuceneDocumentSource.class);
@@ -107,33 +108,22 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public FieldMapper fieldMapper = new SimpleFieldMapper();
 
     /**
-     * A pre-parsed {@link Query} object or <code>null</code> if default
-     * <code>query</code> attribute should be parsed using a built-in
+     * A pre-parsed {@link Query} object or a {@link String} parsed using the built-in
      * {@link QueryParser} over a set of search fields returned from the
      * {@link #fieldMapper}.
      * 
-     * @label Lucene query
+     * @label Query
      * @group Search query
-     * @level Advanced
      */
     @Input
     @Processing
-    @Attribute
-    @Internal
+    @Attribute(key = AttributeNames.QUERY)
+    @Required
     @ImplementingClasses(classes =
     {
-        Query.class
+        Query.class, String.class
     }, strict = false)
-    public Query luceneQuery;
-
-    /**
-     * A plain text query, parsed with {@link QueryParser} in case {@link #luceneQuery} is
-     * empty.
-     */
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.QUERY)
-    public String query;
+    public Object query;
 
     /**
      * A context-shared map between {@link Directory} objects and any opened
@@ -203,42 +193,37 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             throw new ProcessingException("Directory attribute must not be empty.");
         }
 
-        if (this.luceneQuery == null)
+        if (this.query instanceof String)
         {
             final String [] searchFields = fieldMapper.getSearchFields();
             if (searchFields == null || searchFields.length == 0)
             {
                 throw new ProcessingException(
-                    "An instantiated Lucene Query object or at least one mapped "
+                    "An instantiated Lucene Query object or a String and at least one "
                         + "search field must be given.");
             }
 
-            if (StringUtils.isEmpty(query))
+            final String textQuery = (String) query;
+            if (StringUtils.isEmpty(textQuery))
             {
                 throw new ProcessingException(
-                    "An instantiated Lucene Query object or a text query is required.");
+                    "An instantiated Lucene Query object or a non-empty "
+                        + "text query is required.");
             }
-            
+
             if (searchFields.length == 1)
             {
-                luceneQuery = new QueryParser(searchFields[0], analyzer).parse(query);
+                query = new QueryParser(searchFields[0], analyzer).parse(textQuery);
             }
             else
             {
-                luceneQuery = new MultiFieldQueryParser(searchFields, analyzer)
-                    .parse(query);
+                query = new MultiFieldQueryParser(searchFields, analyzer).parse(textQuery);
             }
         }
 
-        /*
-         * TODO: We currently ignore the start parameter. This could be implemented
-         * efficiently with a custom HitCollector (so that irrelevant documents are not
-         * fetched).
-         */
-
         final SearchEngineResponse response = new SearchEngineResponse();
         final IndexSearcher searcher = indexOpen(directory);
-        final TopDocs docs = searcher.search(luceneQuery, null, results);
+        final TopDocs docs = searcher.search((Query) query, null, results);
 
         response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, docs.totalHits);
 
@@ -248,7 +233,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             final org.apache.lucene.document.Document luceneDoc = searcher
                 .doc(scoreDoc.doc);
 
-            this.fieldMapper.map(luceneQuery, analyzer, luceneDoc, doc);
+            this.fieldMapper.map((Query) query, analyzer, luceneDoc, doc);
             response.results.add(doc);
         }
 
