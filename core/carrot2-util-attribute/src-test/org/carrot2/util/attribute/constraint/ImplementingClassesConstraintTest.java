@@ -48,7 +48,7 @@ public class ImplementingClassesConstraintTest extends
     @Test
     public void testNull() throws Exception
     {
-        assertNotMet(null, STRICT_FIELD_NAME);
+        assertMet(null, STRICT_FIELD_NAME);
     }
 
     @Test

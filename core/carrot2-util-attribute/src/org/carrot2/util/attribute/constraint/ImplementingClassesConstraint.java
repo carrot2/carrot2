@@ -29,12 +29,12 @@ class ImplementingClassesConstraint extends Constraint
     protected boolean isMet(Object value)
     {
         /*
-         * I assume <code>null</code> values are not satisfying this constraint (even
-         * though <code>null</code>s can be assigned to any class).
+         * <code>null</code> values satisfy this constraint. Use @Required
+         * to avoid null values.
          */
         if (value == null)
         {
-            return false;
+            return true;
         }
 
         final Class<?> target = value.getClass();
