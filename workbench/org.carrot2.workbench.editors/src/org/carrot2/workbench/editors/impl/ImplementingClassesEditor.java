@@ -125,6 +125,8 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
                 .grab(true, false)
                 .hint(100, SWT.DEFAULT)
                 .span(gridColumns, 1).create());
+
+        combo.setSelection(StructuredSelection.EMPTY);
     }
 
     /*
@@ -141,6 +143,11 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
     @Override
     public void setValue(Object newValue)
     {
+        if (newValue != null && !(newValue instanceof Class<?>))
+        {
+            newValue = newValue.getClass();
+        }
+
         if (newValue != getValue())
         {
             int index;
@@ -151,10 +158,6 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
             }
             else
             {
-                if (!(newValue instanceof Class<?>))
-                {
-                    newValue = newValue.getClass();
-                }
                 index = classes.indexOf(newValue);
             }
 
@@ -162,6 +165,7 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
             {
                 if (valueRequired) 
                 {
+                    combo.setSelection(StructuredSelection.EMPTY);
                     return;
                 }
                 index = 0;

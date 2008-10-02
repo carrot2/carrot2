@@ -42,8 +42,7 @@ public final class LuceneDocumentSource extends SimpleSearchEngine
     @Attribute
     @Init
     @Processing
-    // TODO: uncomment when Controller#init() is fixed.
-    // @Required
+    @Required
     @ImplementingClasses(classes =
     {
         RAMDirectory.class, FSDirectory.class
@@ -166,7 +165,8 @@ public final class LuceneDocumentSource extends SimpleSearchEngine
             if (searchFields == null || searchFields.length == 0)
             {
                 throw new ProcessingException(
-                    "A Lucene query or at least one search field must be specified.");
+                    "An instantiated Lucene Query object or at least one mapped " +
+                    "search field must be given.");
             }
 
             if (searchFields.length == 1)

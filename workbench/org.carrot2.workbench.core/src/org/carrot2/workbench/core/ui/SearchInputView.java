@@ -37,6 +37,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -438,7 +439,18 @@ public class SearchInputView extends ViewPart
             gd.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
             gd.grabExcessHorizontalSpace = true;
             editorComposite.setLayoutData(gd);
-    
+
+            /*
+             * Set default values for those attributes that have null values.
+             */
+            for (AttributeDescriptor attr : sourceDescriptor.flatten().attributeDescriptors.values())
+            {
+                if (attributes.getAttributeValue(attr.key) == null)
+                {
+                    attributes.setAttributeValue(attr.key, attr.defaultValue);
+                }
+            }
+
             /*
              * Set initial values for editors.
              */
@@ -446,7 +458,7 @@ public class SearchInputView extends ViewPart
             {
                 editorComposite.setAttribute(e.getKey(), e.getValue());
             }
-    
+
             /*
              * Hook up listeners updating attributes on changes in editors.
              */
@@ -463,8 +475,8 @@ public class SearchInputView extends ViewPart
                     /*
                      * On content changing, eagerly substitute the value of the given
                      * attribute with the new value. In the input view, early commit of
-                     * attribute values should not trigger any additional consequences, so we
-                     * can do it.
+                     * attribute values should not trigger any additional consequences, so
+                     * we can do it.
                      */
                     final String attributeKey = editor.getAttributeKey();
                     attributes.setAttributeValue(attributeKey, value);
@@ -661,20 +673,30 @@ public class SearchInputView extends ViewPart
             return false;
         }
 
+        return getEmptyRequiredAttributes(sourceId).isEmpty();
+    }
+
+    /**
+     * Returns descriptors of all required attributes that still have no values or have
+     * invalid values.
+     */
+    private Collection<AttributeDescriptor> getEmptyRequiredAttributes(String sourceId)
+    {
         final Collection<AttributeDescriptor> desc = descriptors.get(sourceId).flatten().attributeDescriptors
             .values();
 
+        final ArrayList<AttributeDescriptor> remaining = Lists.newArrayList();
         for (AttributeDescriptor d : desc)
         {
             final Object value = attributes.getAttributeValue(d.key);
 
             if (!isValid(d, value))
             {
-                return false;
+                remaining.add(d);
             }
         }
 
-        return true;
+        return remaining;
     }
 
     /**
@@ -683,7 +705,19 @@ public class SearchInputView extends ViewPart
      */
     private void checkAllRequiredAttributes()
     {
-        processButton.setEnabled(hasAllRequiredAttributes(getSourceId()));
+        final String source = getSourceId();
+        processButton.setEnabled(hasAllRequiredAttributes(source));
+
+        processButton.setToolTipText("");
+        if (!StringUtils.isEmpty(source))
+        {
+            final Collection<AttributeDescriptor> remaining = getEmptyRequiredAttributes(source);
+            if (remaining.size() > 0)
+            {
+                processButton.setToolTipText("Invalid required attribute value: "
+                    + remaining.iterator().next().metadata.getLabelOrTitle());
+            }
+        }
     }
 
     /**
@@ -748,7 +782,7 @@ public class SearchInputView extends ViewPart
                     }
                     catch (Exception e)
                     {
-                        Utils.logError(e, false);
+                        Utils.logError("Could not restore view state.", e, false);
                     }
                 }
             }
