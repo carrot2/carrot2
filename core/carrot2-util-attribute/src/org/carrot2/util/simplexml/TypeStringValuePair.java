@@ -119,6 +119,7 @@ public class TypeStringValuePair
                 }
                 else
                 {
+                    // TODO: See bug: http://issues.carrot2.org/browse/CARROT-395
                     // Everything else needs to have a static valueOf(String) method
                     final Method valueOfMethod = clazz.getMethod("valueOf", String.class);
                     value = valueOfMethod.invoke(null, stringValue.trim());
