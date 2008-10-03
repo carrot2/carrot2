@@ -4,7 +4,6 @@ import java.util.*;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.workbench.core.helpers.GUIFactory;
@@ -66,17 +65,9 @@ public final class EnumEditor extends AttributeEditorAdapter implements IAttribu
     /*
      * 
      */
-    public EnumEditor()
-    {
-        super(new AttributeEditorInfo(1, false));
-    }
-
-    /*
-     * 
-     */
     @SuppressWarnings("unchecked")
     @Override
-    public AttributeEditorInfo init(AttributeDescriptor descriptor)
+    public AttributeEditorInfo init()
     {
         Class<? extends Enum<?>> clazz = (Class) descriptor.type;
         if (clazz.isEnum())
@@ -87,8 +78,6 @@ public final class EnumEditor extends AttributeEditorAdapter implements IAttribu
                 .getValueToFriendlyName(clazz);
             valueRequired = (descriptor.getAnnotation(Required.class) != null);
             anyValueAllowed = false;
-
-            return super.init(descriptor);
         }
         else if (String.class.equals(clazz))
         {
@@ -105,11 +94,13 @@ public final class EnumEditor extends AttributeEditorAdapter implements IAttribu
                 valueRequired = (descriptor.getAnnotation(Required.class) != null);
                 anyValueAllowed = true;
             }
-            
-            return super.init(descriptor);
+        }
+        else
+        {
+            throw new IllegalArgumentException("Attribute type not supported: " + descriptor);
         }
 
-        throw new IllegalArgumentException("Attribute type not supported: " + descriptor);
+        return new AttributeEditorInfo(1, false);
     }
 
     /*
@@ -138,7 +129,8 @@ public final class EnumEditor extends AttributeEditorAdapter implements IAttribu
         {
             public void modifyText(ModifyEvent e)
             {
-                fireContentChange(userFriendlyToValue(box.getText()));
+                fireContentChanging(new AttributeEvent(
+                    EnumEditor.this, getAttributeKey(), userFriendlyToValue(box.getText())));
             }
         });
 
@@ -267,7 +259,7 @@ public final class EnumEditor extends AttributeEditorAdapter implements IAttribu
         if (!ObjectUtils.equals(currentValue, asValue))
         {
             this.currentValue = asValue;
-            fireAttributeChange(new AttributeChangedEvent(this));
+            fireAttributeChanged(new AttributeEvent(this));
         }
     }
 }

@@ -33,7 +33,7 @@ import com.google.common.collect.Sets;
  * {@link GroupingMethod} and filtered using {@link #setFilter(Predicate)}.
  */
 public final class AttributeGroups extends Composite implements
-    IAttributeChangeProvider
+    IAttributeEventProvider
 {
     /**
      * Padding between a given group (when it is expanded) and the following group.
@@ -58,24 +58,7 @@ public final class AttributeGroups extends Composite implements
     /**
      * Forward events from editors to external listeners.
      */
-    private final IAttributeListener forwardListener = new IAttributeListener()
-    {
-        public void attributeChange(AttributeChangedEvent event)
-        {
-            for (IAttributeListener listener : listeners)
-            {
-                listener.attributeChange(event);
-            }
-        }
-
-        public void contentChanging(IAttributeEditor editor, Object value)
-        {
-            for (IAttributeListener listener : listeners)
-            {
-                listener.contentChanging(editor, value);
-            }
-        }
-    };
+    private final IAttributeListener forwardListener = new ForwardingAttributeListener(listeners);
 
     /**
      * Descriptors of attribute editors to be created.
@@ -109,12 +92,6 @@ public final class AttributeGroups extends Composite implements
         createComponents();
 
         refreshUI();
-    }
-
-    public AttributeGroups(Composite parent, BindableDescriptor descriptor,
-        GroupingMethod grouping)
-    {
-        this(parent, descriptor, grouping, null);
     }
 
     /**
@@ -233,7 +210,7 @@ public final class AttributeGroups extends Composite implements
             }
 
             createEditorGroup(mainControl, groupLabel, descriptor,
-                descriptor.attributeGroups.get(groupKey));
+                descriptor.attributeGroups.get(groupKey), this);
         }
 
         /*
@@ -249,7 +226,7 @@ public final class AttributeGroups extends Composite implements
             if (!descriptor.attributeDescriptors.isEmpty())
             {
                 createUntitledEditorGroup(mainControl, descriptor,
-                    descriptor.attributeDescriptors);
+                    descriptor.attributeDescriptors, this);
             }
         }
         else
@@ -260,7 +237,7 @@ public final class AttributeGroups extends Composite implements
             if (!descriptor.attributeDescriptors.isEmpty())
             {
                 createEditorGroup(mainControl, "Ungrouped", 
-                    descriptor, descriptor.attributeDescriptors);
+                    descriptor, descriptor.attributeDescriptors, this);
             }
         }
     }
@@ -270,7 +247,8 @@ public final class AttributeGroups extends Composite implements
      * group of attributes.
      */
     private void createUntitledEditorGroup(final Composite parent,
-        BindableDescriptor descriptor, Map<String, AttributeDescriptor> attributes)
+        BindableDescriptor descriptor, Map<String, AttributeDescriptor> attributes,
+        IAttributeEventProvider globalEventsProvider)
     {
         final GridLayout layout = GUIFactory.zeroMarginGridLayout();
         layout.numColumns = 1;
@@ -285,8 +263,8 @@ public final class AttributeGroups extends Composite implements
         gd.grabExcessVerticalSpace = false;
         inner.setLayoutData(gd);
 
-        final AttributeList editorList = new AttributeList(inner, attributes,
-            descriptor.type);
+        final AttributeList editorList = new AttributeList(inner, descriptor, attributes, 
+            globalEventsProvider);
 
         final GridData data = new GridData();
         data.horizontalAlignment = GridData.FILL;
@@ -307,7 +285,7 @@ public final class AttributeGroups extends Composite implements
         /*
          * Register for event notifications from editors.
          */
-        editorList.addAttributeChangeListener(forwardListener);
+        editorList.addAttributeListener(forwardListener);
     }
 
     /**
@@ -315,7 +293,8 @@ public final class AttributeGroups extends Composite implements
      */
     @SuppressWarnings("unchecked")
     private void createEditorGroup(final Composite parent, String groupName, 
-        BindableDescriptor descriptor, Map<String, AttributeDescriptor> attributes)
+        BindableDescriptor descriptor, Map<String, AttributeDescriptor> attributes,
+        IAttributeEventProvider globalEventsProvider)
     {
         final int style = ExpandableComposite.TWISTIE | ExpandableComposite.CLIENT_INDENT;
         final Section group = new Section(parent, style);
@@ -337,8 +316,8 @@ public final class AttributeGroups extends Composite implements
         final Composite inner = new Composite(group, SWT.NONE);
         inner.setLayout(layout);
 
-        final AttributeList editorList = new AttributeList(inner, attributes,
-            descriptor.type);
+        final AttributeList editorList = new AttributeList(inner, descriptor, attributes,
+            globalEventsProvider);
 
         final GridData data = new GridData();
         data.horizontalAlignment = GridData.FILL;
@@ -359,7 +338,7 @@ public final class AttributeGroups extends Composite implements
         /*
          * Register for event notifications from editors.
          */
-        editorList.addAttributeChangeListener(forwardListener);
+        editorList.addAttributeListener(forwardListener);
 
         group.setClient(inner);
 
@@ -388,7 +367,7 @@ public final class AttributeGroups extends Composite implements
     /**
      * 
      */
-    public void addAttributeChangeListener(IAttributeListener listener)
+    public void addAttributeListener(IAttributeListener listener)
     {
         this.listeners.add(listener);
     }
@@ -396,7 +375,7 @@ public final class AttributeGroups extends Composite implements
     /**
      * 
      */
-    public void removeAttributeChangeListener(IAttributeListener listener)
+    public void removeAttributeListener(IAttributeListener listener)
     {
         this.listeners.remove(listener);
     }
@@ -427,7 +406,7 @@ public final class AttributeGroups extends Composite implements
             .values());
         for (AttributeList attEditor : values)
         {
-            attEditor.removeAttributeChangeListener(forwardListener);
+            attEditor.removeAttributeListener(forwardListener);
         }
 
         /*

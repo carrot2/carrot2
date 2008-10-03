@@ -3,6 +3,7 @@ package org.carrot2.workbench.editors.impl;
 import java.io.File;
 import java.net.*;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.util.resource.*;
 import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.GUIFactory;
@@ -38,11 +39,6 @@ public class ResourceEditor extends AttributeEditorAdapter
     private Resource resource = null;
 
     /*
-     * Event cycle avoidance.
-     */
-    private boolean updating;
-
-    /*
      * Validator for URIs.
      */
     private final static IInputValidator validatorURI = new IInputValidator()
@@ -70,9 +66,10 @@ public class ResourceEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    public ResourceEditor()
+    @Override
+    protected AttributeEditorInfo init()
     {
-        super(new AttributeEditorInfo(1, false));
+        return new AttributeEditorInfo(1, false);
     }
 
     /*
@@ -231,12 +228,7 @@ public class ResourceEditor extends AttributeEditorAdapter
     @Override
     public void setValue(Object newValue)
     {
-        if (updating || newValue == resource)
-        {
-            return;
-        }
-
-        if (resource != null && resource.equals(newValue))
+        if (ObjectUtils.equals(newValue, resource))
         {
             return;
         }
@@ -246,15 +238,10 @@ public class ResourceEditor extends AttributeEditorAdapter
             return;
         }
 
-        updating = true;
-
         this.resource = (Resource) newValue;
-
         this.resourceInfo.setText(resource == null ? "" : resource.toString());
 
-        fireAttributeChange(new AttributeChangedEvent(this));
-
-        updating = false;
+        fireAttributeChanged(new AttributeEvent(this));
     }
 
     /*

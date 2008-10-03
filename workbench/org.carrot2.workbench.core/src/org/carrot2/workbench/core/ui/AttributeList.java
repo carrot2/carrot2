@@ -7,6 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.AttributeDescriptor;
+import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
@@ -24,7 +25,7 @@ import com.google.common.collect.Maps;
 /**
  * An SWT composite displaying an alphabetically ordered list of {@link IAttributeEditor}s.
  */
-public final class AttributeList extends Composite implements IAttributeChangeProvider
+public final class AttributeList extends Composite implements IAttributeEventProvider
 {
     /**
      * Space before the editor label (if separate).
@@ -55,55 +56,36 @@ public final class AttributeList extends Composite implements IAttributeChangePr
     /**
      * Forward events from editors to external listeners.
      */
-    private final IAttributeListener forwardListener = new IAttributeListener()
-    {
-        public void attributeChange(AttributeChangedEvent event)
-        {
-            for (IAttributeListener listener : listeners)
-            {
-                listener.attributeChange(event);
-            }
-        }
+    private final IAttributeListener forwardListener = new ForwardingAttributeListener(listeners);
 
-        public void contentChanging(IAttributeEditor editor, Object value)
-        {
-            for (IAttributeListener listener : listeners)
-            {
-                listener.contentChanging(editor, value);
-            }
-        }
-    };
+    /** */
+    private BindableDescriptor bindable;
+
+    /** */
+    private IAttributeEventProvider globalEventsProvider;
 
     /**
-     * Create a new editor list for a given set of attribute descriptors and an (optional)
-     * component class.
+     * Create a new editor.
      */
     @SuppressWarnings("unchecked")
     public AttributeList(Composite parent,
-        Map<String, AttributeDescriptor> attributeDescriptors)
-    {
-        this(parent, attributeDescriptors, null);
-    }
-
-    /**
-     * Create a new editor list for a given set of attribute descriptors and an (optional)
-     * component class.
-     */
-    @SuppressWarnings("unchecked")
-    public AttributeList(Composite parent,
-        Map<String, AttributeDescriptor> attributeDescriptors, Class<?> componentClazz)
+        BindableDescriptor bindable, Map<String, AttributeDescriptor> attributeDescriptors,
+        IAttributeEventProvider globalEventsProvider)
     {
         super(parent, SWT.NONE);
 
+        this.bindable = bindable;
+        this.globalEventsProvider = globalEventsProvider;
         this.attributeDescriptors = attributeDescriptors;
 
         /*
          * Only store component clazz if it is assignable to {@link ProcessingComponent}.
          */
-        if (componentClazz != null
-            && ProcessingComponent.class.isAssignableFrom(componentClazz))
+        Class<?> clazz = bindable.type;
+        if (clazz != null
+            && ProcessingComponent.class.isAssignableFrom(clazz))
         {
-            this.componentClazz = (Class<? extends ProcessingComponent>) componentClazz;
+            this.componentClazz = (Class<? extends ProcessingComponent>) clazz;
         }
 
         createComponents();
@@ -124,7 +106,7 @@ public final class AttributeList extends Composite implements IAttributeChangePr
     /*
      * 
      */
-    public void addAttributeChangeListener(IAttributeListener listener)
+    public void addAttributeListener(IAttributeListener listener)
     {
         this.listeners.add(listener);
     }
@@ -132,7 +114,7 @@ public final class AttributeList extends Composite implements IAttributeChangePr
     /*
      * 
      */
-    public void removeAttributeChangeListener(IAttributeListener listener)
+    public void removeAttributeListener(IAttributeListener listener)
     {
         this.listeners.remove(listener);
     }
@@ -147,7 +129,7 @@ public final class AttributeList extends Composite implements IAttributeChangePr
          */
         for (IAttributeEditor editor : this.editors.values())
         {
-            editor.removeAttributeChangeListener(forwardListener);
+            editor.removeAttributeListener(forwardListener);
         }
 
         super.dispose();
@@ -209,7 +191,7 @@ public final class AttributeList extends Composite implements IAttributeChangePr
             try
             {
                 editor = EditorFactory.getEditorFor(this.componentClazz, descriptor);
-                final AttributeEditorInfo info = editor.init(descriptor);
+                final AttributeEditorInfo info = editor.init(bindable, descriptor, globalEventsProvider);
 
                 editorInfos.put(key, info);
                 maxColumns = Math.max(maxColumns, info.columns);
@@ -276,7 +258,7 @@ public final class AttributeList extends Composite implements IAttributeChangePr
             /*
              * Forward events from this editor to all our listeners.
              */
-            editor.addAttributeChangeListener(forwardListener);
+            editor.addAttributeListener(forwardListener);
 
             firstEditor = false;
         }

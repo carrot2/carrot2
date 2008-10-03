@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
+import org.carrot2.util.attribute.BindableDescriptor;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IMemento;
 
 /**
  * Template implementation of {@link IAttributeEditor}.
@@ -15,36 +15,37 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     /**
      * Array of listeners interested in receiving change events from this editor.
      */
-    private final List<IAttributeListener> listeners = 
-        new CopyOnWriteArrayList<IAttributeListener>();
+    private final List<IAttributeListener> listeners = new CopyOnWriteArrayList<IAttributeListener>();
 
-    /**
-     * Attribute descriptor saved by {@link #init(AttributeDescriptor)}.
-     */
     protected AttributeDescriptor descriptor;
+    protected BindableDescriptor bindable;
+    protected IAttributeEventProvider eventProvider;
 
     /**
      * Layout and visual info.
      */
-    protected final AttributeEditorInfo attributeEditorInfo;
+    private AttributeEditorInfo attributeEditorInfo;
 
-    /*
-     * 
-     */
-    public AttributeEditorAdapter(AttributeEditorInfo info)
-    {
-        this.attributeEditorInfo = info;
-    }
-    
     /**
      * Store attribute descriptor in {@link #descriptor}.
      */
-    public AttributeEditorInfo init(AttributeDescriptor descriptor)
+    public final AttributeEditorInfo init(BindableDescriptor bindable,
+        AttributeDescriptor attribute, IAttributeEventProvider eventProvider)
     {
-        this.descriptor = descriptor;
+        this.descriptor = attribute;
+        this.bindable = bindable;
+        this.eventProvider = eventProvider;
+        this.attributeEditorInfo = init();
 
         return attributeEditorInfo;
     }
+
+    /**
+     * @return Overriden
+     *         {@link #init(BindableDescriptor, AttributeDescriptor, IAttributeEventProvider)}
+     *         with original parameters saved to protected fields.
+     */
+    protected abstract AttributeEditorInfo init();
 
     /**
      * Returns attribute key from the attribute descriptor.
@@ -52,31 +53,6 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     public String getAttributeKey()
     {
         return this.descriptor.key;
-    }
-
-    /**
-     * Clear listeners array and clean references.
-     */
-    public void dispose()
-    {
-        listeners.clear();
-        descriptor = null;
-    }
-
-    /*
-     * 
-     */
-    public void saveState(IMemento memento)
-    {
-        // Do nothing.
-    }
-
-    /*
-     * 
-     */
-    public void restoreState(IMemento memento)
-    {
-        // Do nothing.
     }
 
     /*
@@ -91,48 +67,83 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     {
         // Ignore.
     }
-    
-    public abstract Object getValue();
 
-    public abstract void setValue(Object object);
-
-    /**
+    /*
      * 
      */
-    public void addAttributeChangeListener(IAttributeListener listener)
+    public abstract Object getValue();
+
+    /*
+     * 
+     */
+    public abstract void setValue(Object object);
+
+    /*
+     * 
+     */
+    public void addAttributeListener(IAttributeListener listener)
     {
         listeners.add(listener);
     }
 
-    /**
+    /*
      * 
      */
-    public void removeAttributeChangeListener(IAttributeListener listener)
+    public void removeAttributeListener(IAttributeListener listener)
     {
         listeners.remove(listener);
     }
 
-    /**
-     * Unconditionally fire attribute change event.
+    /*
+     *
      */
-    protected void fireAttributeChange(AttributeChangedEvent event)
+    private boolean flag1;
+    protected void fireAttributeChanged(AttributeEvent event)
     {
-        for (IAttributeListener listener : listeners)
+        if (flag1) return;
+
+        flag1 = true;
+        try
         {
-            listener.attributeChange(event);
+            for (IAttributeListener listener : listeners)
+            {
+                listener.valueChanged(event);
+            }
+        }
+        finally
+        {
+            flag1 = false;
+        }
+    }
+
+    /*
+     * 
+     */
+    private boolean flag2;
+    protected void fireContentChanging(AttributeEvent event)
+    {
+        if (flag2) return;
+
+        flag2 = true;
+        try
+        {
+            for (IAttributeListener listener : listeners)
+            {
+                listener.valueChanging(event);
+            }
+        }
+        finally
+        {
+            flag2 = false;
         }
     }
 
     /**
-     * Unconditionally fire content change event.
-     * 
-     * @param value Value to pass to {@link IAttributeListener#contentChanging(IAttributeEditor, Object)}.
+     * Clear listeners array and clean references.
      */
-    protected void fireContentChange(Object value)
+    public void dispose()
     {
-        for (IAttributeListener listener : listeners)
-        {
-            listener.contentChanging(this, value);
-        }
+        listeners.clear();
+        descriptor = null;
     }
 }

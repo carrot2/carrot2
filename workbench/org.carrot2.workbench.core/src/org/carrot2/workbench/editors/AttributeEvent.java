@@ -3,20 +3,29 @@ package org.carrot2.workbench.editors;
 import java.util.EventObject;
 
 /**
- * Post-attribute change event data.
+ * Event holding data related to events on attributes.
  */
 @SuppressWarnings("serial")
-public class AttributeChangedEvent extends EventObject
+public class AttributeEvent extends EventObject
 {
+    /** Attribute key. */
     public final String key;
+    
+    /** Attribute value. */
     public final Object value;
 
-    public AttributeChangedEvent(IAttributeEditor source)
+    /*
+     * 
+     */
+    public AttributeEvent(IAttributeEditor source)
     {
         this(source, source.getAttributeKey(), source.getValue());
     }
 
-    public AttributeChangedEvent(Object source, String key, Object value)
+    /*
+     * 
+     */
+    public AttributeEvent(Object source, String key, Object value)
     {
         super(source);
         this.key = key;

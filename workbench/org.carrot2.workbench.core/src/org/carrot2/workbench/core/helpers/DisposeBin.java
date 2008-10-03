@@ -3,7 +3,7 @@ package org.carrot2.workbench.core.helpers;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.carrot2.workbench.editors.IAttributeChangeProvider;
+import org.carrot2.workbench.editors.IAttributeEventProvider;
 import org.carrot2.workbench.editors.IAttributeListener;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -144,12 +144,11 @@ public final class DisposeBin
     {
         this.resources.put(w, new WidgetDisposer(w));
     }
-    
+
     public void add(IWorkbenchAction action)
     {
         this.resources.put(action, new ActionDisposer(action));
     }
-    
 
     public void dispose()
     {
@@ -183,10 +182,10 @@ public final class DisposeBin
                     ((IPreferenceStore) p.registrar)
                         .removePropertyChangeListener((IPropertyChangeListener) p.listener);
                 }
-                else if (p.registrar instanceof IAttributeChangeProvider)
+                else if (p.registrar instanceof IAttributeEventProvider)
                 {
-                    ((IAttributeChangeProvider) p.registrar)
-                        .removeAttributeChangeListener((IAttributeListener) p.listener);
+                    ((IAttributeEventProvider) p.registrar)
+                        .removeAttributeListener((IAttributeListener) p.listener);
                 }
                 else if (p.registrar instanceof IPostSelectionProvider)
                 {
@@ -217,7 +216,8 @@ public final class DisposeBin
     /*
      * 
      */
-    public void registerPropertyChangeListener(IPreferenceStore provider, IPropertyChangeListener l)
+    public void registerPropertyChangeListener(IPreferenceStore provider,
+        IPropertyChangeListener l)
     {
         provider.addPropertyChangeListener(l);
         listeners.add(new ListenerPair(provider, l));
@@ -226,9 +226,10 @@ public final class DisposeBin
     /*
      * 
      */
-    public void registerAttributeChangeListener(IAttributeChangeProvider provider, IAttributeListener l)
+    public void registerAttributeChangeListener(IAttributeEventProvider provider,
+        IAttributeListener l)
     {
-        provider.addAttributeChangeListener(l);
+        provider.addAttributeListener(l);
         listeners.add(new ListenerPair(provider, l));
     }
 

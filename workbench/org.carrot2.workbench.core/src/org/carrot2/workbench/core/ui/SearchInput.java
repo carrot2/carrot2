@@ -15,7 +15,7 @@ import org.eclipse.ui.*;
  * Instances of this class constitute the input to a search/clustering process (required
  * when opening a new editor).
  */
-public class SearchInput implements IEditorInput, IPersistableElement, IAttributeChangeProvider
+public class SearchInput implements IEditorInput, IPersistableElement, IAttributeEventProvider
 {
     /**
      * Document source identifier for a {@link Controller} instance.
@@ -184,7 +184,7 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
     /*
      * 
      */
-    public void addAttributeChangeListener(IAttributeListener listener)
+    public void addAttributeListener(IAttributeListener listener)
     {
         this.listeners.add(listener);
     }
@@ -192,7 +192,7 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
     /*
      * 
      */
-    public void removeAttributeChangeListener(IAttributeListener listener)
+    public void removeAttributeListener(IAttributeListener listener)
     {
         this.listeners.remove(listener);
     }
@@ -202,11 +202,11 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
      */
     public void fireAttributeChanged(String key, Object value)
     {
-        final AttributeChangedEvent event = new AttributeChangedEvent(this, key, value);
+        final AttributeEvent event = new AttributeEvent(this, key, value);
 
         for (IAttributeListener listener : listeners)
         {
-            listener.attributeChange(event);
+            listener.valueChanged(event);
         }
     }
 }

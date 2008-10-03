@@ -1,29 +1,41 @@
 package org.carrot2.workbench.editors;
 
-import org.carrot2.util.attribute.AttributeDescriptor;
+import org.carrot2.util.attribute.*;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * An attribute editor is a visual control which can be used to display and edit the value
- * of given attribute (described by an {@link AttributeDescriptor}).
+ * An attribute editor is a visual control used to display (and possibly edit) the value
+ * of a given attribute (described by an {@link AttributeDescriptor}).
  * <p>
  * The life cycle of an attribute editor is as follows:
- * <ol>
- * <li>call {@link #init(AttributeDescriptor)}, if exception is thrown -> stop.
- * <li>call {@link #createEditor(Composite, Object)}, if exception -> goto 5
+ * <ul>
+ * <li>call {@link #init(BindableDescriptor, AttributeDescriptor, IAttributeEventProvider))}.
+ * <li>call {@link #createEditor(Composite, Object)}
+ * </ul>
+ * Then, repeatedly:
+ * <ul>
  * <li>call {@link #setValue(Object)}
  * <li>call {@link #getValue()}
+ * </ul>
+ * Finally or upon error in initialization:
+ * <ul>
  * <li>call {@link #dispose()}
- * <ol>
+ * </ul>
  */
-public interface IAttributeEditor
+public interface IAttributeEditor extends IAttributeEventProvider
 {
     /**
-     * Initialize editor to work with a given attribute descriptor and return
-     * hints for graphical layout of this editor.
+     * Initialize the editor to work with a given <code>bindable</code>'s attribute
+     * 
+     * @param bindable A descriptor of a {@link Bindable} object to which the attribute
+     *            belongs.
+     * @param attribute The attribute that the editor should display and allow editing.
+     * @param eventProvider Global provider of events on all attributes of the
+     *            <code>bindable</code>.
      */
-    AttributeEditorInfo init(AttributeDescriptor descriptor);
+    AttributeEditorInfo init(BindableDescriptor bindable, AttributeDescriptor attribute,
+        IAttributeEventProvider eventProvider);
 
     /**
      * Create the editor's visual aspects using the given parent composite and the
@@ -35,11 +47,11 @@ public interface IAttributeEditor
     void createEditor(Composite parent, int gridColumns);
 
     /**
-     * The container request to set the focus to the internal component 
-     * that should have initial focus.
+     * The container request to set the focus to the internal component that should have
+     * initial focus.
      */
     void setFocus();
-    
+
     /**
      * Returns the associated {@link AttributeDescriptor}'s key.
      * 
@@ -56,17 +68,6 @@ public interface IAttributeEditor
      * Return the current editor's value.
      */
     Object getValue();
-
-    /**
-     * Subscribe the <code>listener</code> to change events. Change events may come in
-     * rapid succession.
-     */
-    void addAttributeChangeListener(IAttributeListener listener);
-
-    /**
-     * Unsubscribe the <code>listener</code> from change events.
-     */
-    void removeAttributeChangeListener(IAttributeListener listener);
 
     /**
      * Dispose visual components and any other resources.

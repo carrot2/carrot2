@@ -58,10 +58,14 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
      */
     public NumericRangeEditorBase(int precisionDigits)
     {
-        super(new AttributeEditorInfo(2, false));
-
         this.precisionDigits = precisionDigits;
         this.multiplier = Math.pow(10, precisionDigits);
+    }
+    
+    @Override
+    protected AttributeEditorInfo init()
+    {
+        return new AttributeEditorInfo(2, false);
     }
 
     /**
@@ -228,7 +232,7 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
 
             this.duringSelection = false;
 
-            fireAttributeChange(new AttributeChangedEvent(this));
+            fireAttributeChanged(new AttributeEvent(this));
         }
     }
 

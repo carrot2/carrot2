@@ -1,6 +1,7 @@
 package org.carrot2.workbench.editors.impl.numeric;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
+import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.attribute.constraint.DoubleRange;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.workbench.editors.*;
@@ -26,7 +27,8 @@ public final class NumericEditorProxy implements IAttributeEditor
     /**
      * Initialize and instantiate the delegate editor class.
      */
-    public AttributeEditorInfo init(AttributeDescriptor descriptor)
+    public AttributeEditorInfo init(BindableDescriptor bindable,
+        AttributeDescriptor descriptor, IAttributeEventProvider eventProvider)
     {
         final boolean floatingPointType = descriptor.type.equals(Double.class)
             || descriptor.type.equals(Float.class);
@@ -106,7 +108,7 @@ public final class NumericEditorProxy implements IAttributeEditor
         }
 
         this.delegate = delegate;
-        return delegate.init(descriptor);
+        return delegate.init(bindable, descriptor, eventProvider);
     }
 
     public void createEditor(Composite parent, int gridColumns)
@@ -119,14 +121,14 @@ public final class NumericEditorProxy implements IAttributeEditor
         delegate.setFocus();
     }
 
-    public void removeAttributeChangeListener(IAttributeListener listener)
+    public void removeAttributeListener(IAttributeListener listener)
     {
-        delegate.removeAttributeChangeListener(listener);
+        delegate.removeAttributeListener(listener);
     }
 
-    public void addAttributeChangeListener(IAttributeListener listener)
+    public void addAttributeListener(IAttributeListener listener)
     {
-        delegate.addAttributeChangeListener(listener);
+        delegate.addAttributeListener(listener);
     }
 
     public void setValue(Object currentValue)

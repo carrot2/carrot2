@@ -1,16 +1,16 @@
 package org.carrot2.workbench.editors;
 
 /**
- * Empty-implementation adapter for {@link IAttributeListener}.
+ * Empty implementation adapter for {@link IAttributeListener}.
  */
-public class AttributeListenerAdapter implements IAttributeListener
+public abstract class AttributeListenerAdapter implements IAttributeListener
 {
-    public void attributeChange(AttributeChangedEvent event)
+    public void valueChanged(AttributeEvent event)
     {
         // Empty.
     }
     
-    public void contentChanging(IAttributeEditor editor, Object value)
+    public void valueChanging(AttributeEvent event)
     {
         // Empty.
     }

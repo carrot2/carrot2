@@ -21,11 +21,12 @@ public final class BooleanEditor extends AttributeEditorAdapter implements IAttr
     /*
      * 
      */
-    public BooleanEditor()
+    @Override
+    protected AttributeEditorInfo init()
     {
-        super(new AttributeEditorInfo(1, true));
+        return new AttributeEditorInfo(1, true);
     }
-
+    
     /*
      * 
      */
@@ -48,7 +49,7 @@ public final class BooleanEditor extends AttributeEditorAdapter implements IAttr
         {
             public void widgetSelected(SelectionEvent e)
             {
-                fireAttributeChange(new AttributeChangedEvent(BooleanEditor.this));
+                fireAttributeChanged(new AttributeEvent(BooleanEditor.this));
             }
         });
     }
@@ -62,7 +63,7 @@ public final class BooleanEditor extends AttributeEditorAdapter implements IAttr
         }
 
         button.setSelection((Boolean) newValue);
-        fireAttributeChange(new AttributeChangedEvent(this));
+        fireAttributeChanged(new AttributeEvent(this));
     }
 
     @Override

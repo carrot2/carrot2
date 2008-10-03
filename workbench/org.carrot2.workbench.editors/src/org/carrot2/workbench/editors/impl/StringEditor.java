@@ -23,7 +23,7 @@ public class StringEditor extends AttributeEditorAdapter
      * 
      */
     private Text textBox;
-    
+
     /*
      * 
      */
@@ -32,9 +32,10 @@ public class StringEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    public StringEditor()
+    @Override
+    protected AttributeEditorInfo init()
     {
-        super(new AttributeEditorInfo(1, false));
+        return new AttributeEditorInfo(1, false);
     }
 
     /*
@@ -44,11 +45,8 @@ public class StringEditor extends AttributeEditorAdapter
     public void createEditor(Composite parent, int gridColumns)
     {
         textBox = new Text(parent, BORDER);
-        textBox.setLayoutData(GUIFactory.editorGridData()
-            .grab(true, false)
-            .hint(200, SWT.DEFAULT)
-            .align(SWT.FILL, SWT.CENTER)
-            .span(gridColumns, 1).create());
+        textBox.setLayoutData(GUIFactory.editorGridData().grab(true, false).hint(200,
+            SWT.DEFAULT).align(SWT.FILL, SWT.CENTER).span(gridColumns, 1).create());
 
         /*
          * React to focus lost.
@@ -65,7 +63,8 @@ public class StringEditor extends AttributeEditorAdapter
         {
             public void modifyText(ModifyEvent e)
             {
-                fireContentChange(textBox.getText());
+                fireContentChanging(new AttributeEvent(StringEditor.this, getAttributeKey(), textBox
+                    .getText()));
             }
         });
 
@@ -79,7 +78,7 @@ public class StringEditor extends AttributeEditorAdapter
                 }
             }
         });
-        
+
         this.content = textBox.getText();
     }
 
@@ -126,7 +125,7 @@ public class StringEditor extends AttributeEditorAdapter
         if (!ObjectUtils.equals(textBoxValue, content))
         {
             this.content = textBoxValue;
-            fireAttributeChange(new AttributeChangedEvent(this));
+            fireAttributeChanged(new AttributeEvent(this));
         }
     }
 }

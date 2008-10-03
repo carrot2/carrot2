@@ -205,7 +205,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             }
         });
 
-        public void attributeChange(AttributeChangedEvent event)
+        public void valueChanged(AttributeEvent event)
         {
             final IPreferenceStore store = WorkbenchCorePlugin.getDefault().getPreferenceStore();
             if (store.getBoolean(PreferenceConstants.AUTO_UPDATE))
@@ -829,8 +829,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         /*
          * Set up an event callback making editor dirty when attributes change. 
          */
-        this.getSearchResult().getInput().addAttributeChangeListener(new AttributeListenerAdapter() {
-            public void attributeChange(AttributeChangedEvent event)
+        this.getSearchResult().getInput().addAttributeListener(new AttributeListenerAdapter() {
+            public void valueChanged(AttributeEvent event)
             {
                 setDirty(true);
             }
@@ -957,7 +957,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final String groupingValue = getPartProperty(GROUPING_LOCAL);
         final GroupingMethod grouping = GroupingMethod.valueOf(groupingValue); 
 
-        attributesPanel = new AttributeGroups(spacer, descriptor, grouping);
+        attributesPanel = new AttributeGroups(spacer, descriptor, grouping, null);
         attributesPanel.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
             .create());        
         resources.add(attributesPanel);
@@ -973,30 +973,30 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          * attribute panel -> search result
          */
         final IAttributeListener panelToEditorSync = new AttributeListenerAdapter() {
-            public void attributeChange(AttributeChangedEvent event)
+            public void valueChanged(AttributeEvent event)
             {
                 getSearchResult().getInput().setAttribute(event.key, event.value);
             }
         };
-        attributesPanel.addAttributeChangeListener(panelToEditorSync);
+        attributesPanel.addAttributeListener(panelToEditorSync);
 
         /*
          * Link attribute value changes:
          * search result -> attribute panel
          */
         final IAttributeListener editorToPanelSync = new AttributeListenerAdapter() {
-            public void attributeChange(AttributeChangedEvent event)
+            public void valueChanged(AttributeEvent event)
             {
                 /*
                  * temporarily unsubscribe from events from the attributes
                  * list to avoid event looping.
                  */
-                attributesPanel.removeAttributeChangeListener(panelToEditorSync);
+                attributesPanel.removeAttributeListener(panelToEditorSync);
                 attributesPanel.setAttribute(event.key, event.value);
-                attributesPanel.addAttributeChangeListener(panelToEditorSync);
+                attributesPanel.addAttributeListener(panelToEditorSync);
             }
         };
-        getSearchResult().getInput().addAttributeChangeListener(editorToPanelSync);
+        getSearchResult().getInput().addAttributeListener(editorToPanelSync);
 
         /*
          * Perform GUI adaptations.

@@ -19,14 +19,12 @@ final class ReadOnlyEditor extends AttributeEditorAdapter
     /** */
     private Object lastValue;
 
-    /*
-     * 
-     */
-    public ReadOnlyEditor()
+    @Override
+    protected AttributeEditorInfo init()
     {
-        super(new AttributeEditorInfo(1, false));
+        return new AttributeEditorInfo(1, false);
     }
-
+    
     /*
      * Return the current editor value.
      */
@@ -46,7 +44,8 @@ final class ReadOnlyEditor extends AttributeEditorAdapter
 
         this.lastValue = object;
         this.text.setText(lastValue == null ? "(null)" : lastValue.toString());
-        fireAttributeChange(new AttributeChangedEvent(this));
+
+        fireAttributeChanged(new AttributeEvent(this));
     }
 
     /*

@@ -16,7 +16,8 @@ import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.actions.ActiveSearchEditorActionDelegate;
 import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
-import org.carrot2.workbench.editors.*;
+import org.carrot2.workbench.editors.AttributeEvent;
+import org.carrot2.workbench.editors.AttributeListenerAdapter;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.action.*;
@@ -450,7 +451,7 @@ public class SearchInputView extends ViewPart
             }
 
             /*
-             * Set initial values for editors.
+             * Set initial values of editors.
              */
             for (Map.Entry<String, Object> e : filterAttributesOf(sourceID).entrySet())
             {
@@ -460,15 +461,15 @@ public class SearchInputView extends ViewPart
             /*
              * Hook up listeners updating attributes on changes in editors.
              */
-            editorComposite.addAttributeChangeListener(new AttributeListenerAdapter()
+            editorComposite.addAttributeListener(new AttributeListenerAdapter()
             {
-                public void attributeChange(AttributeChangedEvent event)
+                public void valueChanged(AttributeEvent event)
                 {
                     attributes.setAttributeValue(event.key, event.value);
                     checkAllRequiredAttributes();
                 }
-    
-                public void contentChanging(IAttributeEditor editor, Object value)
+                
+                public void valueChanging(AttributeEvent event)
                 {
                     /*
                      * On content changing, eagerly substitute the value of the given
@@ -476,8 +477,7 @@ public class SearchInputView extends ViewPart
                      * attribute values should not trigger any additional consequences, so
                      * we can do it.
                      */
-                    final String attributeKey = editor.getAttributeKey();
-                    attributes.setAttributeValue(attributeKey, value);
+                    attributes.setAttributeValue(event.key, event.value);
                     checkAllRequiredAttributes();
                 }
             });

@@ -35,9 +35,10 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
     /*
      * 
      */
-    public UnboundedEditorBase()
+    @Override
+    protected AttributeEditorInfo init()
     {
-        super(new AttributeEditorInfo(1, false));
+        return new AttributeEditorInfo(1, false);
     }
 
     /*
@@ -196,7 +197,7 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
                 try
                 {
                     this.lastValidValue = toRange(to_v(value));
-                    fireAttributeChange(new AttributeChangedEvent(this));
+                    fireAttributeChanged(new AttributeEvent(this));
                 }
                 catch (NumberFormatException e)
                 {

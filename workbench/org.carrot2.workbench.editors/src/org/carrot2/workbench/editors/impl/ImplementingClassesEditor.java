@@ -1,11 +1,11 @@
 package org.carrot2.workbench.editors.impl;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.ClassUtils;
 import org.carrot2.util.StringUtils;
-import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.workbench.core.helpers.GUIFactory;
@@ -57,16 +57,8 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    public ImplementingClassesEditor()
-    {
-        super(new AttributeEditorInfo(1, false));
-    }
-
-    /*
-     * 
-     */
     @Override
-    public AttributeEditorInfo init(AttributeDescriptor descriptor)
+    protected AttributeEditorInfo init()
     {
         for (Annotation ann : descriptor.constraints)
         {
@@ -97,8 +89,8 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
             hints.add(StringUtils.splitCamelCase(ClassUtils.getShortClassName(clazz)));
             classes.add(clazz);
         }
-
-        return super.init(descriptor);
+        
+        return new AttributeEditorInfo(1, false);
     }
 
     /*
@@ -116,7 +108,7 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
         {
             public void selectionChanged(SelectionChangedEvent event)
             {
-                propagateNewValue();
+                fireAttributeChanged(new AttributeEvent(ImplementingClassesEditor.this));
             }
         });
 
@@ -127,14 +119,6 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
                 .span(gridColumns, 1).create());
 
         combo.setSelection(StructuredSelection.EMPTY);
-    }
-
-    /*
-     * 
-     */
-    private void propagateNewValue()
-    {
-        fireAttributeChange(new AttributeChangedEvent(this));
     }
 
     /*
@@ -172,7 +156,7 @@ public final class ImplementingClassesEditor extends AttributeEditorAdapter
             }
 
             combo.getCombo().select(index);
-            propagateNewValue();
+            fireAttributeChanged(new AttributeEvent(ImplementingClassesEditor.this));
         }
     }
 

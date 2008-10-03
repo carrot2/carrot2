@@ -139,7 +139,7 @@ final class AttributeViewPage extends Page
         final GroupingMethod defaultGrouping = GroupingMethod.valueOf(prefStore.getString(key));
 
         attributeEditors = new AttributeGroups(spacer, editor.getAlgorithmDescriptor(),
-            defaultGrouping);
+            defaultGrouping, null);
         attributeEditors.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
             .create());
 
@@ -190,30 +190,30 @@ final class AttributeViewPage extends Page
          */
         final IAttributeListener viewToEditorSync = new AttributeListenerAdapter()
         {
-            public void attributeChange(AttributeChangedEvent event)
+            public void valueChanged(AttributeEvent event)
             {
                 editor.getSearchResult().getInput().setAttribute(event.key, event.value);
             }
         };
-        this.attributeEditors.addAttributeChangeListener(viewToEditorSync);
+        this.attributeEditors.addAttributeListener(viewToEditorSync);
 
         /*
          * Link attribute value changes: search result -> attribute view
          */
         editorToViewSync = new AttributeListenerAdapter()
         {
-            public void attributeChange(AttributeChangedEvent event)
+            public void valueChanged(AttributeEvent event)
             {
                 /*
                  * temporarily unsubscribe from events from the attributes list to avoid
                  * event looping.
                  */
-                attributeEditors.removeAttributeChangeListener(viewToEditorSync);
+                attributeEditors.removeAttributeListener(viewToEditorSync);
                 attributeEditors.setAttribute(event.key, event.value);
-                attributeEditors.addAttributeChangeListener(viewToEditorSync);
+                attributeEditors.addAttributeListener(viewToEditorSync);
             }
         };
-        editor.getSearchResult().getInput().addAttributeChangeListener(editorToViewSync);
+        editor.getSearchResult().getInput().addAttributeListener(editorToViewSync);
     }
 
     /*
@@ -221,7 +221,7 @@ final class AttributeViewPage extends Page
      */
     private void unregisterListeners()
     {
-        editor.getSearchResult().getInput().removeAttributeChangeListener(
+        editor.getSearchResult().getInput().removeAttributeListener(
             editorToViewSync);
     }
 }

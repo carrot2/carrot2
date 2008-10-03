@@ -1,7 +1,6 @@
 package org.carrot2.workbench.editors.impl.numeric;
 
 import org.carrot2.util.RangeUtils;
-import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.workbench.editors.AttributeEditorInfo;
 
@@ -27,10 +26,8 @@ final class IntegerRangeEditor extends NumericRangeEditorBase
      * 
      */
     @Override
-    public AttributeEditorInfo init(AttributeDescriptor descriptor)
+    public AttributeEditorInfo init()
     {
-        final AttributeEditorInfo info = super.init(descriptor);
-
         constraint = NumberUtils.getIntRange(descriptor);
 
         final int min = constraint.min();
@@ -40,7 +37,7 @@ final class IntegerRangeEditor extends NumericRangeEditorBase
 
         setRanges(min, max, increment, pageIncrement);
 
-        return info;
+        return super.init();
     }
 
     /*

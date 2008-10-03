@@ -46,9 +46,10 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    public IndexDirectoryEditor()
+    @Override
+    protected AttributeEditorInfo init()
     {
-        super(new AttributeEditorInfo(1, false));
+        return new AttributeEditorInfo(1, false);
     }
 
     /*
@@ -174,7 +175,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
 
         this.resourceInfo.setText(representation);
 
-        fireAttributeChange(new AttributeChangedEvent(this));
+        fireAttributeChanged(new AttributeEvent(this));
     }
 
     /*
