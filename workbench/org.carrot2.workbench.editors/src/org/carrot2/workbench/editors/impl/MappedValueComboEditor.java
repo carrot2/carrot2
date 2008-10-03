@@ -68,14 +68,21 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
         return new AttributeEditorInfo(1, false);
     }
 
-    /*
-     * 
+    /**
+     * Set mapped values and their user-interface equivalents.
      */
-    protected final void setValues(BiMap<? extends Object, String> valueToName,
+    protected final void setMappedValues(BiMap<? extends Object, String> valueToName,
         List<Object> valueOrder)
     {
         this.valueToName = valueToName;
         this.valueOrder = valueOrder;
+        
+        if (this.box != null)
+        {
+            final Object prev = getValue();
+            recreate();
+            setValue(prev);
+        }
     }
 
     /*
@@ -154,7 +161,8 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
         {
             box.add(valueToName.get(value));
         }
-
+        
+        boxContainer.layout(true);
         currentValue = null;
     }
 

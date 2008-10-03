@@ -52,7 +52,7 @@ public final class ImplementingClassesEditor extends MappedValueComboEditor
             valueOrder.add(clazz);
             valueToName.put(clazz, StringUtils.splitCamelCase(ClassUtils.getShortClassName(clazz)));
         }
-        setValues(valueToName, valueOrder);
+        setMappedValues(valueToName, valueOrder);
 
         return new AttributeEditorInfo(1, false);
     }

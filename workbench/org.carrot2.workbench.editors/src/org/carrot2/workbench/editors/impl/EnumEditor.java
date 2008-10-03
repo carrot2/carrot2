@@ -26,7 +26,7 @@ public final class EnumEditor extends MappedValueComboEditor
             valueRequired = (descriptor.getAnnotation(Required.class) != null);
             anyValueAllowed = false;
 
-            super.setValues(ValueHintMappingUtils.getValueToFriendlyName(clazz),
+            super.setMappedValues(ValueHintMappingUtils.getValueToFriendlyName(clazz),
                 new ArrayList<Object>(ValueHintMappingUtils.getValidValuesMap(clazz)
                     .keySet()));
         }
@@ -47,7 +47,7 @@ public final class EnumEditor extends MappedValueComboEditor
             valueRequired = (descriptor.getAnnotation(Required.class) != null);
             anyValueAllowed = true;
 
-            super.setValues(ValueHintMappingUtils.getValueToFriendlyName(clazz),
+            super.setMappedValues(ValueHintMappingUtils.getValueToFriendlyName(clazz),
                 new ArrayList<Object>(ValueHintMappingUtils.getValidValuesMap(clazz)
                     .keySet()));
         }
