@@ -61,6 +61,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Input
     @Processing
     @Attribute
+    @Required
     @ImplementingClasses(classes =
     {
         LogTfIdfTermWeighting.class, LinearTfIdfTermWeighting.class,

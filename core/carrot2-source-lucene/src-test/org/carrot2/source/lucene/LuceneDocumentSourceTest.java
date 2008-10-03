@@ -92,7 +92,7 @@ public class LuceneDocumentSourceTest extends
     @Override
     protected boolean hasUtfResults()
     {
-        return true;
+        return false;
     }
 
     @Override
@@ -117,13 +117,6 @@ public class LuceneDocumentSourceTest extends
     protected int getLargeQuerySize()
     {
         return 100;
-    }
-
-    @Ignore
-    @Override
-    public void testUtfCharacters() throws Exception
-    {
-        // Ignore this test.
     }
 
     @Test

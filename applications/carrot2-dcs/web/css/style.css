@@ -297,6 +297,9 @@ ul.tabs li.tab .input {
 ul.tabs li.tab .output {
   background-image: url('../img/table-row-delete.png');
 }
+ul.tabs li.tab .status {
+  background-image: url('../img/information.png');
+}
 
 /** Parameters */
 dd ul {

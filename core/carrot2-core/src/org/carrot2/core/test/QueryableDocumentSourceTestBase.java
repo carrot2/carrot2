@@ -116,9 +116,8 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
         attributes.put(AttributeNames.RESULTS, getSmallQuerySize());
 
         // Cache results from all DataSources
-        final CachingController cachingController = new CachingController(
+        final CachingController cachingController = getCachingController(initAttributes, 
             DocumentSource.class);
-        cachingController.init(initAttributes);
 
         int count = 3;
         ExecutorService executorService = Executors.newFixedThreadPool(count);
@@ -136,7 +135,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
             });
         }
 
-        List<Future<ProcessingResult>> results = executorService.invokeAll(callables);
+        final List<Future<ProcessingResult>> results = executorService.invokeAll(callables);
 
         List<Document> documents = null;
         int index = 0;

@@ -151,7 +151,7 @@ public final class RestProcessorServlet extends HttpServlet
                 return;
             }
         }
-        else if ("statistics".equals(command))
+        else if ("status".equals(command))
         {
             try
             {
@@ -160,7 +160,7 @@ public final class RestProcessorServlet extends HttpServlet
             }
             catch (Exception e)
             {
-                sendInternalServerError("Could not serialize component information",
+                sendInternalServerError("Could not serialize status information",
                     response, e);
                 return;
             }

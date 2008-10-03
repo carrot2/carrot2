@@ -7,8 +7,8 @@ import org.carrot2.util.attribute.Bindable;
 
 /**
  * A base class facilitating implementation of {@link DocumentSource}s wrapping external
- * search engines. This implementation assumes that all requested results can be fetched
- * from the search engine using one request.
+ * search engines with remote/ network-based interfaces. This implementation assumes that
+ * all requested results can be fetched from the search engine using one request.
  * 
  * @see MultipageSearchEngine
  */

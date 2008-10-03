@@ -27,6 +27,7 @@ public class TermDocumentMatrixReducer
     @Input
     @Processing
     @Attribute
+    @Required
     @ImplementingClasses(classes =
     {
         PartialSingularValueDecompositionFactory.class,

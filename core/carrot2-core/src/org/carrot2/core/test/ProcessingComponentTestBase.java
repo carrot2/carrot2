@@ -12,8 +12,8 @@ import org.junit.Before;
 
 /**
  * A very basic base class for testing {@link ProcessingComponent}s. This class provides
- * an instance of a {@link Controller}, a map for attributes and a method that
- * initializes them.
+ * an instance of a {@link Controller}, a map for attributes and a method that initializes
+ * them.
  */
 public abstract class ProcessingComponentTestBase<T extends ProcessingComponent> extends
     ExternalApiTestBase
@@ -39,25 +39,23 @@ public abstract class ProcessingComponentTestBase<T extends ProcessingComponent>
      * Controller and attributes are cleared before every test.
      */
     @Before
-    @SuppressWarnings("unchecked")
     public void prepareComponent()
     {
         this.initAttributes = new HashMap<String, Object>();
         this.processingAttributes = new HashMap<String, Object>();
     }
-    
+
     /**
      * Cleanup.
      */
     @After
-    @SuppressWarnings("unchecked")
     public void cleanup()
     {
         if (simpleController != null)
         {
             this.simpleController.dispose();
         }
-        
+
         if (cachingController != null)
         {
             this.cachingController.dispose();
@@ -67,33 +65,35 @@ public abstract class ProcessingComponentTestBase<T extends ProcessingComponent>
     /**
      * Return an instance of a {@link SimpleController}, initializing it on the way.
      */
-    protected final SimpleController getSimpleController(Map<String,Object> initAttributes)
+    protected final SimpleController getSimpleController(
+        Map<String, Object> initAttributes)
     {
         if (this.simpleController != null)
         {
             throw new RuntimeException("One simple controller per test case, please.");
         }
-        
+
         simpleController = new SimpleController();
         simpleController.init(initAttributes);
-        
+
         return simpleController;
     }
 
     /**
      * Return an instance of a {@link CachedController}, initializing it on the way.
      */
-    @SuppressWarnings("unchecked")
-    protected final CachingController getCachingController(Map<String,Object> initAttributes)
+    protected final CachingController getCachingController(
+        Map<String, Object> initAttributes,
+        Class<? extends ProcessingComponent>... cachedComponentClasses)
     {
         if (this.cachingController != null)
         {
-            throw new RuntimeException("One simple controller per test case, please.");
+            throw new RuntimeException("One caching controller per test case, please.");
         }
-        
-        cachingController = new CachingController();
+
+        cachingController = new CachingController(cachedComponentClasses);
         cachingController.init(initAttributes);
-        
+
         return cachingController;
     }
 

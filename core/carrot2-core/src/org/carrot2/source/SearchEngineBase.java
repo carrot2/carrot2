@@ -14,8 +14,8 @@ import org.carrot2.util.attribute.constraint.NotBlank;
 
 /**
  * A base class facilitating implementation of {@link DocumentSource}s wrapping external
- * search engines. The base class defines the common attribute fields used by more
- * specific base classes and concrete implementations.
+ * search engines with remote/ network-based interfaces. The base class defines the common
+ * attribute fields used by more specific base classes and concrete implementations.
  * 
  * @see SimpleSearchEngine
  * @see MultipageSearchEngine
@@ -55,11 +55,6 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
     public Collection<Document> documents;
 
     /**
-     * This component usage statistics.
-     */
-    public SearchEngineStats statistics = new SearchEngineStats();
-
-    /**
      * Indicates whether the search engine returned a compressed result stream.
      * 
      * @label Compression used
@@ -69,6 +64,11 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
     @Output
     @Attribute
     public boolean compressed;
+
+    /**
+     * This component usage statistics.
+     */
+    public SearchEngineStats statistics = new SearchEngineStats();
 
     /**
      * Regexp pattern for matching query word highlighting.
