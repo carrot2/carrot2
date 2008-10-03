@@ -589,4 +589,18 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.carrot2.source.lucene"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.carrot2.workbench.editors.lucene"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
