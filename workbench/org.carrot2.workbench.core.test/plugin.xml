@@ -6,7 +6,7 @@
          id="testEditors"
          point="org.carrot2.workbench.core.attributeEditor">
       <dedicated-editor
-            attribute-id="specificAttribute"
+            attribute-id="my.specificAttribute"
             class="org.carrot2.workbench.editors.EditorsTest$DedicatedEditor"
             component-class="org.carrot2.workbench.editors.EditorsTest$TestComponent">
       </dedicated-editor>

@@ -35,7 +35,7 @@ public class ProcessingJobTest extends TestCase
      * Sources excluded from automatic Workbench tests, e.g. sources requiring some
      * specific software installed locally.
      */
-    private final static Set<String> EXCLUDED_SOURCES = ImmutableSet.of("solr");
+    private final static Set<String> EXCLUDED_SOURCES = ImmutableSet.of("solr", "lucene");
 
     @Override
     protected void setUp() throws Exception

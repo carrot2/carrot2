@@ -29,7 +29,7 @@ public class EditorsTest
         ClusteringAlgorithm
     {
 
-        @Attribute
+        @Attribute(key = "my.specificAttribute")
         @Input
         @Processing
         TestType specificAttribute;

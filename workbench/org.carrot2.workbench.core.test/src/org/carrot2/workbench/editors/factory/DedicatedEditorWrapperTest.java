@@ -33,7 +33,7 @@ public class DedicatedEditorWrapperTest extends TestCase
         IConfigurationElement element =
             findEditor("org.carrot2.workbench.editors.EditorsTest$DedicatedEditor");
         DedicatedEditorWrapper wrapper = new DedicatedEditorWrapper(element);
-        assertEquals("specificAttribute", wrapper.attributeId);
+        assertEquals("my.specificAttribute", wrapper.attributeId);
         assertEquals("org.carrot2.workbench.editors.EditorsTest$TestComponent", wrapper.componentClass);
     }
 

@@ -21,7 +21,10 @@ public class FactoryTest extends TestCase
 
     public void testFindDedicatedEditor()
     {
-        checkEditor(DedicatedEditor.class, "specificAttribute");
+        IAttributeEditor editor =
+            EditorFactory.getEditorFor(c, desc.attributeDescriptors.get("my.specificAttribute"));
+        assertNotNull(editor);
+        assertEquals(DedicatedEditor.class, editor.getClass());
     }
 
     public void testEditorFactory()
