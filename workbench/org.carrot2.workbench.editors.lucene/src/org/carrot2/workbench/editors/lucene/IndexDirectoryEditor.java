@@ -1,12 +1,13 @@
 package org.carrot2.workbench.editors.lucene;
 
 import java.io.File;
+import java.util.Map;
 
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.editors.*;
-import org.carrot2.workbench.editors.impl.*;
+import org.carrot2.workbench.editors.impl.EditorsPlugin;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -47,7 +48,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
      * 
      */
     @Override
-    protected AttributeEditorInfo init()
+    protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
     }

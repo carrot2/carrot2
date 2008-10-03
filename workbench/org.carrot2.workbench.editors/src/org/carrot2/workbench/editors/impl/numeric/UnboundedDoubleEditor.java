@@ -1,5 +1,6 @@
 package org.carrot2.workbench.editors.impl.numeric;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.carrot2.util.attribute.constraint.DoubleRange;
@@ -29,7 +30,7 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
      * 
      */
     @Override
-    public AttributeEditorInfo init()
+    public AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         constraint = NumberUtils.getDoubleRange(descriptor);
 
@@ -47,7 +48,7 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
         pageIncrement = 1.0d;
         tooltip = NumberUtils.getTooltip(min, max);
 
-        return super.init();
+        return super.init(defaultValues);
     }
 
     /**

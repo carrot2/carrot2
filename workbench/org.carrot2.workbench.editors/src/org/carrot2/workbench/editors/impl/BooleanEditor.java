@@ -1,5 +1,7 @@
 package org.carrot2.workbench.editors.impl;
 
+import java.util.Map;
+
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.ui.AttributeInfoTooltip;
 import org.carrot2.workbench.editors.*;
@@ -22,7 +24,7 @@ public final class BooleanEditor extends AttributeEditorAdapter implements IAttr
      * 
      */
     @Override
-    protected AttributeEditorInfo init()
+    protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, true);
     }

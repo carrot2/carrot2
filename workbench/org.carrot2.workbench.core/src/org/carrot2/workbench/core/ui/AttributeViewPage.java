@@ -1,5 +1,6 @@
 package org.carrot2.workbench.core.ui;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.carrot2.core.ProcessingResult;
@@ -139,7 +140,7 @@ final class AttributeViewPage extends Page
         final GroupingMethod defaultGrouping = GroupingMethod.valueOf(prefStore.getString(key));
 
         attributeEditors = new AttributeGroups(spacer, editor.getAlgorithmDescriptor(),
-            defaultGrouping, null);
+            defaultGrouping, null, Collections.<String, Object> emptyMap());
         attributeEditors.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
             .create());
 

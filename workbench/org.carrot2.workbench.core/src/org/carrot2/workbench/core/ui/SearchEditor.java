@@ -957,7 +957,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final String groupingValue = getPartProperty(GROUPING_LOCAL);
         final GroupingMethod grouping = GroupingMethod.valueOf(groupingValue); 
 
-        attributesPanel = new AttributeGroups(spacer, descriptor, grouping, null);
+        attributesPanel = new AttributeGroups(spacer, descriptor, grouping, null, 
+            Collections.<String, Object> emptyMap());
         attributesPanel.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
             .create());        
         resources.add(attributesPanel);

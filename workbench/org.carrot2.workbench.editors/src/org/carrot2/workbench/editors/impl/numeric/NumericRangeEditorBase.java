@@ -1,5 +1,7 @@
 package org.carrot2.workbench.editors.impl.numeric;
 
+import java.util.Map;
+
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -63,7 +65,7 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
     }
     
     @Override
-    protected AttributeEditorInfo init()
+    protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(2, false);
     }

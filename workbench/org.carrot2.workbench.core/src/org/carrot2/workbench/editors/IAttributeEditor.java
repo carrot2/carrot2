@@ -1,5 +1,7 @@
 package org.carrot2.workbench.editors;
 
+import java.util.Map;
+
 import org.carrot2.util.attribute.*;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -10,7 +12,8 @@ import org.eclipse.swt.widgets.Composite;
  * <p>
  * The life cycle of an attribute editor is as follows:
  * <ul>
- * <li>call {@link #init(BindableDescriptor, AttributeDescriptor, IAttributeEventProvider))}.
+ * <li>call
+ * {@link #init(BindableDescriptor, AttributeDescriptor, IAttributeEventProvider, Map)}.
  * <li>call {@link #createEditor(Composite, Object)}
  * </ul>
  * Then, repeatedly:
@@ -33,9 +36,11 @@ public interface IAttributeEditor extends IAttributeEventProvider
      * @param attribute The attribute that the editor should display and allow editing.
      * @param eventProvider Global provider of events on all attributes of the
      *            <code>bindable</code>.
+     * @param currentValues Current values of all attributes of a {@link Bindable} or an
+     *            empty map.
      */
     AttributeEditorInfo init(BindableDescriptor bindable, AttributeDescriptor attribute,
-        IAttributeEventProvider eventProvider);
+        IAttributeEventProvider eventProvider, Map<String, Object> currentValues);
 
     /**
      * Create the editor's visual aspects using the given parent composite and the

@@ -2,6 +2,8 @@ package org.carrot2.workbench.editors.impl;
 
 import static org.eclipse.swt.SWT.BORDER;
 
+import java.util.Map;
+
 import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
@@ -33,7 +35,7 @@ public class StringEditor extends AttributeEditorAdapter
      * 
      */
     @Override
-    protected AttributeEditorInfo init()
+    protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
     }

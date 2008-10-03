@@ -1,5 +1,7 @@
 package org.carrot2.workbench.editors.impl.numeric;
 
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
@@ -36,7 +38,7 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
      * 
      */
     @Override
-    protected AttributeEditorInfo init()
+    protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
     }

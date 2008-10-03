@@ -1,6 +1,7 @@
 package org.carrot2.workbench.editors.impl;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.util.attribute.Required;
@@ -17,7 +18,7 @@ public final class EnumEditor extends MappedValueComboEditor
      */
     @SuppressWarnings("unchecked")
     @Override
-    public AttributeEditorInfo init()
+    public AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         Class<? extends Enum<?>> clazz = (Class) descriptor.type;
         if (clazz.isEnum())

@@ -1,6 +1,7 @@
 package org.carrot2.workbench.editors;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
@@ -30,12 +31,13 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
      * Store attribute descriptor in {@link #descriptor}.
      */
     public final AttributeEditorInfo init(BindableDescriptor bindable,
-        AttributeDescriptor attribute, IAttributeEventProvider eventProvider)
+        AttributeDescriptor attribute, IAttributeEventProvider eventProvider, Map<String,Object> defaultValues)
     {
         this.descriptor = attribute;
         this.bindable = bindable;
         this.eventProvider = eventProvider;
-        this.attributeEditorInfo = init();
+
+        this.attributeEditorInfo = init(defaultValues);
 
         return attributeEditorInfo;
     }
@@ -45,7 +47,7 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
      *         {@link #init(BindableDescriptor, AttributeDescriptor, IAttributeEventProvider)}
      *         with original parameters saved to protected fields.
      */
-    protected abstract AttributeEditorInfo init();
+    protected abstract AttributeEditorInfo init(Map<String,Object> defaultValues);
 
     /**
      * Returns attribute key from the attribute descriptor.

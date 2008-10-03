@@ -2,6 +2,7 @@ package org.carrot2.workbench.editors.impl;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.ClassUtils;
 import org.carrot2.util.StringUtils;
@@ -27,7 +28,7 @@ public final class ImplementingClassesEditor extends MappedValueComboEditor
      * 
      */
     @Override
-    protected AttributeEditorInfo init()
+    protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         for (Annotation ann : descriptor.constraints)
         {

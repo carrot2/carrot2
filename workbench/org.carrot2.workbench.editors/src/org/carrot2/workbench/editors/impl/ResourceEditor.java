@@ -1,7 +1,9 @@
 package org.carrot2.workbench.editors.impl;
 
 import java.io.File;
-import java.net.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.util.resource.*;
@@ -67,7 +69,7 @@ public class ResourceEditor extends AttributeEditorAdapter
      * 
      */
     @Override
-    protected AttributeEditorInfo init()
+    protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
     }

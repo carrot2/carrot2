@@ -1,5 +1,7 @@
 package org.carrot2.workbench.editors.impl.numeric;
 
+import java.util.Map;
+
 import org.carrot2.util.RangeUtils;
 import org.carrot2.util.attribute.constraint.DoubleRange;
 import org.carrot2.workbench.editors.AttributeEditorInfo;
@@ -31,7 +33,7 @@ final class DoubleRangeEditor extends NumericRangeEditorBase
      * 
      */
     @Override
-    public AttributeEditorInfo init()
+    public AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         constraint = NumberUtils.getDoubleRange(descriptor);
 
@@ -42,7 +44,7 @@ final class DoubleRangeEditor extends NumericRangeEditorBase
 
         setRanges(to_i(min), to_i(max), to_i(increment), to_i(pageIncrement));
 
-        return super.init();
+        return super.init(defaultValues);
     }
 
     /*

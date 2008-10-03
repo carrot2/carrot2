@@ -1,5 +1,7 @@
 package org.carrot2.workbench.editors.impl.numeric;
 
+import java.util.Map;
+
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.attribute.constraint.DoubleRange;
@@ -28,7 +30,8 @@ public final class NumericEditorProxy implements IAttributeEditor
      * Initialize and instantiate the delegate editor class.
      */
     public AttributeEditorInfo init(BindableDescriptor bindable,
-        AttributeDescriptor descriptor, IAttributeEventProvider eventProvider)
+        AttributeDescriptor descriptor, IAttributeEventProvider eventProvider,
+        Map<String, Object> defaultValues)
     {
         final boolean floatingPointType = descriptor.type.equals(Double.class)
             || descriptor.type.equals(Float.class);
@@ -78,9 +81,9 @@ public final class NumericEditorProxy implements IAttributeEditor
         {
             /*
              * If the range covers negative values, or if the range is too big to fit in
-             * the integer range, use unbounded double editor.
-             * 
-             * TODO: Negative scale/sliders are available in Eclipse 3.4M5: https://bugs.eclipse.org/bugs/show_bug.cgi?id=91317
+             * the integer range, use unbounded double editor. TODO: Negative
+             * scale/sliders are available in Eclipse 3.4M5:
+             * https://bugs.eclipse.org/bugs/show_bug.cgi?id=91317
              */
             if (floatingPointType)
             {
@@ -108,14 +111,14 @@ public final class NumericEditorProxy implements IAttributeEditor
         }
 
         this.delegate = delegate;
-        return delegate.init(bindable, descriptor, eventProvider);
+        return delegate.init(bindable, descriptor, eventProvider, defaultValues);
     }
 
     public void createEditor(Composite parent, int gridColumns)
     {
         delegate.createEditor(parent, gridColumns);
     }
-    
+
     public void setFocus()
     {
         delegate.setFocus();

@@ -61,6 +61,22 @@ public final class AttributeGroups extends Composite implements
     private final IAttributeListener forwardListener = new ForwardingAttributeListener(listeners);
 
     /**
+     * Update {@link #currentValues}.
+     */
+    private final IAttributeListener updateListener = new AttributeListenerAdapter() {
+        public void valueChanged(AttributeEvent event)
+        {
+            currentValues.put(event.key, event.value);
+        }
+
+        @Override
+        public void valueChanging(AttributeEvent event)
+        {
+            valueChanged(event);
+        }
+    };
+
+    /**
      * Descriptors of attribute editors to be created.
      */
     private BindableDescriptor descriptor;
@@ -79,10 +95,16 @@ public final class AttributeGroups extends Composite implements
     private Predicate<AttributeDescriptor> filterPredicate;
 
     /**
+     * A copy of the initial default values, kept in sync with changes reported by
+     * the editors.
+     */
+    private HashMap<String, Object> currentValues;
+
+    /**
      * Builds the component for a given {@link BindableDescriptor}.
      */
     public AttributeGroups(Composite parent, BindableDescriptor descriptor,
-        GroupingMethod grouping, Predicate<AttributeDescriptor> filter)
+        GroupingMethod grouping, Predicate<AttributeDescriptor> filter, Map<String, Object> defaultValues)
     {
         super(parent, SWT.NONE);
 
@@ -91,6 +113,7 @@ public final class AttributeGroups extends Composite implements
         this.filterPredicate = filter;
         createComponents();
 
+        this.currentValues = Maps.newHashMap(defaultValues);
         refreshUI();
     }
 
@@ -264,7 +287,7 @@ public final class AttributeGroups extends Composite implements
         inner.setLayoutData(gd);
 
         final AttributeList editorList = new AttributeList(inner, descriptor, attributes, 
-            globalEventsProvider);
+            globalEventsProvider, currentValues);
 
         final GridData data = new GridData();
         data.horizontalAlignment = GridData.FILL;
@@ -286,6 +309,7 @@ public final class AttributeGroups extends Composite implements
          * Register for event notifications from editors.
          */
         editorList.addAttributeListener(forwardListener);
+        editorList.addAttributeListener(updateListener);
     }
 
     /**
@@ -317,7 +341,7 @@ public final class AttributeGroups extends Composite implements
         inner.setLayout(layout);
 
         final AttributeList editorList = new AttributeList(inner, descriptor, attributes,
-            globalEventsProvider);
+            globalEventsProvider, currentValues);
 
         final GridData data = new GridData();
         data.horizontalAlignment = GridData.FILL;
@@ -339,6 +363,7 @@ public final class AttributeGroups extends Composite implements
          * Register for event notifications from editors.
          */
         editorList.addAttributeListener(forwardListener);
+        editorList.addAttributeListener(updateListener);
 
         group.setClient(inner);
 

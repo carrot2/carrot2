@@ -70,7 +70,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
     @SuppressWarnings("unchecked")
     public AttributeList(Composite parent,
         BindableDescriptor bindable, Map<String, AttributeDescriptor> attributeDescriptors,
-        IAttributeEventProvider globalEventsProvider)
+        IAttributeEventProvider globalEventsProvider, Map<String, Object> currentValues)
     {
         super(parent, SWT.NONE);
 
@@ -88,7 +88,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
             this.componentClazz = (Class<? extends ProcessingComponent>) clazz;
         }
 
-        createComponents();
+        createComponents(currentValues);
     }
 
     /**
@@ -153,7 +153,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
     /**
      * Create internal GUI.
      */
-    private void createComponents()
+    private void createComponents(Map<String,Object> currentValues)
     {
         /*
          * Sort alphabetically by label.
@@ -191,7 +191,8 @@ public final class AttributeList extends Composite implements IAttributeEventPro
             try
             {
                 editor = EditorFactory.getEditorFor(this.componentClazz, descriptor);
-                final AttributeEditorInfo info = editor.init(bindable, descriptor, globalEventsProvider);
+                final AttributeEditorInfo info = editor.init(
+                    bindable, descriptor, globalEventsProvider, currentValues);
 
                 editorInfos.put(key, info);
                 maxColumns = Math.max(maxColumns, info.columns);

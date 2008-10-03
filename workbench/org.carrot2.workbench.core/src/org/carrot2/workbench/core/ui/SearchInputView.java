@@ -438,7 +438,7 @@ public class SearchInputView extends ViewPart
         else
         {
             this.editorComposite = new AttributeGroups(editorCompositeContainer,
-                sourceDescriptor, groupingMethod, filter);
+                sourceDescriptor, groupingMethod, filter, attributes.getAttributeValues());
     
             final GridData gd = new GridData();
             gd.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;

@@ -1,6 +1,7 @@
 package org.carrot2.workbench.editors.lucene;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.impl.MappedValueComboEditor;
@@ -17,7 +18,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
      */
     @SuppressWarnings("unchecked")
     @Override
-    public AttributeEditorInfo init()
+    public AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         valueRequired = false;
         anyValueAllowed = true;
@@ -39,5 +40,11 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
         });
 
         return new AttributeEditorInfo(1, false);
+    }
+    
+    @Override
+    public void setValue(Object newValue)
+    {
+        super.setValue(newValue);
     }
 }

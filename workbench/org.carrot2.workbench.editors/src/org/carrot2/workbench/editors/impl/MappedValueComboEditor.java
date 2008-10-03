@@ -1,6 +1,7 @@
 package org.carrot2.workbench.editors.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
@@ -62,7 +63,7 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
     public boolean anyValueAllowed = false;
 
     @Override
-    protected AttributeEditorInfo init()
+    protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
     }
@@ -203,19 +204,6 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
             return userFriendlyToValue(text);
         }
     }
-    
-    /**
-     * Map a given user-friendly name.
-     */
-    private String valueToUserFriendly(Object object)
-    {
-        String value = this.valueToName.get(object);
-        if (value == null)
-        {
-            value = NULL_VALUE;
-        }
-        return value;
-    }
 
     /*
      * 
@@ -245,9 +233,30 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
         {
             return;
         }
-
-        box.setText(valueToUserFriendly(newValue));
-        checkContentChange();
+        
+        if (newValue == null)
+        {
+            box.deselectAll();
+        }
+        else
+        {
+            String value = this.valueToName.get(newValue);
+            if (value != null)
+            {
+                box.setText(value);
+            }
+            else
+            {
+                if (anyValueAllowed)
+                {
+                    box.setText(newValue.toString());
+                }
+                else
+                {
+                    box.deselectAll();
+                }
+            }
+        }
     }
 
     /**
