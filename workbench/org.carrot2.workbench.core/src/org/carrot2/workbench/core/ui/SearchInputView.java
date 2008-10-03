@@ -155,6 +155,11 @@ public class SearchInputView extends ViewPart
         }
     };
 
+    /*
+     * 
+     */
+    private IAction linkWithEditorAction;
+
     /**
      * Link the GUI of {@link SearchInputView} with the currently active
      * {@link SearchEditor}.
@@ -298,6 +303,7 @@ public class SearchInputView extends ViewPart
             .getImageDescriptor("icons/link_e.gif"));
         linkWithEditor.setToolTipText("Link the interface with current editor");
         toolBarManager.add(linkWithEditor);
+        this.linkWithEditorAction = linkWithEditor;
 
         toolBarManager.add(new GroupingMethodAction(
             PreferenceConstants.GROUPING_INPUT_VIEW));
@@ -763,6 +769,7 @@ public class SearchInputView extends ViewPart
             }
 
             this.linkWithEditor = Boolean.valueOf(state.getString(MEMENTO_EDITOR_LINK));
+            this.linkWithEditorAction.setChecked(linkWithEditor);
         }
 
         /*

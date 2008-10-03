@@ -49,26 +49,33 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
     @Init
     @Input
     @Attribute
+    @Required
     public String appid = CARROTSEARCH_APPID;
 
     /**
      * Culture and language restriction.
      * 
      * @label Culture
+     * @group Results filtering
+     * @level Medium
      */
     @Input
     @Processing
     @Attribute
+    @Required
     public CultureInfo culture = CultureInfo.ENGLISH_UNITED_STATES;
 
     /**
      * Safe search restriction (porn filter).
      * 
      * @label Safe Search
+     * @group Results filtering
+     * @level Medium
      */
     @Processing
     @Input
     @Attribute
+    @Required
     public SafeSearch safeSearch = SafeSearch.MODERATE;
 
     /**
