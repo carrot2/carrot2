@@ -7,7 +7,6 @@ import java.util.*;
 
 import org.carrot2.core.ProcessingComponent;
 import org.carrot2.util.attribute.AttributeDescriptor;
-import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.workbench.editors.IAttributeEditor;
 
 import com.google.common.base.Predicate;
@@ -193,8 +192,7 @@ public final class EditorFactory
                 public boolean apply(DedicatedEditorWrapper editor)
                 {
                     return isCompatible(clazz, editor.componentClass)
-                        && AttributeUtils.getKey(clazz, editor.attributeId).equals(
-                            attribute.key);
+                        && editor.attributeId.equals(attribute.key);
                 }
             });
     }

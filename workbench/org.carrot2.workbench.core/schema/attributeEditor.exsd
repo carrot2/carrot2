@@ -132,8 +132,7 @@ When looking for an editor for an attribute that has constraints, editor with ma
          <attribute name="attribute-id" type="string" use="required">
             <annotation>
                <documentation>
-                  Identifier of attribute.
-Value from the editor will be stored with the key &lt;code&gt;AttributeUtils.getKey(ComponentSample.class, attributeId)&lt;/code&gt;
+                  Full identifier of the attribute to match.
                </documentation>
             </annotation>
          </attribute>
@@ -150,7 +149,7 @@ Value from the editor will be stored with the key &lt;code&gt;AttributeUtils.get
          <attribute name="component-class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Component class against which this dedicated editor will match. This is not the attribute owner class, but rather the ProcessingComponent to whose hierarchy the attribute belongs.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":org.carrot2.core.ProcessingComponent"/>
