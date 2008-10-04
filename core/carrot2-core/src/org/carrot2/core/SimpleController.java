@@ -25,22 +25,32 @@ import com.google.common.collect.Sets;
  */
 public final class SimpleController implements Controller
 {
-    /** Attributes provided upon {@link #init(Map)} */
-    private Map<String, Object> initAttributes;
-
     /**
      * {@link ControllerContext} for this controller.
      */
     private ControllerContextImpl context;
 
     /**
-     * {@inheritDoc}
+     * Initialization attributes.
      */
-    public void init(Map<String, Object> attributes)
+    private Map<String, Object> initAttributes;
+
+    public SimpleController()
+    {
+        this.context = new ControllerContextImpl();
+    }
+
+    /**
+     * Initializes this controller. Initialization of {@link SimpleController}s is
+     * optional. If performed, the provided <code>initAttributes</code> will be used
+     * during processing, if not overridden by the attributes provided at processing time.
+     * An alternative to calling this method is providing both initialization- and
+     * processing-time attributes when calling {@link #process(Map, Class...)}.
+     */
+    public void init(Map<String, Object> initAttributes)
         throws ComponentInitializationException
     {
-        this.initAttributes = attributes;
-        this.context = new ControllerContextImpl();
+        this.initAttributes = initAttributes;
     }
 
     /**
@@ -110,13 +120,23 @@ public final class SimpleController implements Controller
         }
 
         final Set<ProcessingComponent> initializedComponents = Sets.newHashSet();
+
+        // Merge initialization and processing attributes first
+        for (String initKey : initAttributes.keySet())
+        {
+            if (!attributes.containsKey(initKey))
+            {
+                attributes.put(initKey, initAttributes.get(initKey));
+            }
+        }
+
         try
         {
             // Initialize all components.
             for (final ProcessingComponent element : processingComponents)
             {
                 initializedComponents.add(element);
-                ControllerUtils.init(element, initAttributes, true, context);
+                ControllerUtils.init(element, attributes, true, context);
             }
 
             ControllerUtils.performProcessing(attributes, true, processingComponents);

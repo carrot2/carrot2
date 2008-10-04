@@ -2,25 +2,35 @@ package org.carrot2.util.resource;
 
 import java.io.*;
 
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.load.Commit;
+
 /**
  * A local filesystem resource.
  */
+@Root(name = "file-resource")
 public final class FileResource implements Resource
 {
     /**
-     * Public immutable file pointed to by this resource.
+     * File pointed to by this resource.
      */
-    public final File file;
+    private File file;
 
-    /*
-     * 
+    /**
+     * Absolute path, for serialization only.
      */
-    private final String info;
+    @Attribute(name = "absolute-path")
+    private String info;
 
+    FileResource()
+    {
+    }
+    
     public FileResource(File file)
     {
         this.file = file;
-        this.info = "[file: " + file.getAbsolutePath() + "]";
+        this.info = file.getAbsolutePath();
     }
 
     public InputStream open() throws IOException
@@ -28,11 +38,6 @@ public final class FileResource implements Resource
         return ResourceUtils.prefetch(new FileInputStream(file));
     }
 
-    @Override
-    public String toString()
-    {
-        return info;
-    }
 
     @Override
     public boolean equals(Object obj)
@@ -54,12 +59,20 @@ public final class FileResource implements Resource
         return this.file.hashCode();
     }
 
-    /**
-     * 
-     */
-    public static FileResource valueOf(String string)
+    @Override
+    public String toString()
+   {
+        return info;
+    }
+
+    @Commit
+    void afterDeserialization()
     {
-        String path = string.substring("[file: ".length(), string.length() - 1);
-        return new FileResource(new File(path));
+        file = new File(info);
+    }
+
+    public File getFile()
+    {
+        return file;
     }
 }

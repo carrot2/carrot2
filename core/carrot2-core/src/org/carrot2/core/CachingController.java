@@ -5,8 +5,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import javax.sql.DataSource;
-
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
@@ -98,7 +96,7 @@ public final class CachingController implements Controller
      * 
      * @param cachedComponentClasses classes of components whose output should be cached
      *            by the controller. If a superclass is provided here, e.g.
-     *            {@link DataSource}, all its subclasses will be subject to caching. If
+     *            {@link DocumentSource}, all its subclasses will be subject to caching. If
      *            {@link ProcessingComponent} is provided here, output of all components
      *            will be cached.
      */

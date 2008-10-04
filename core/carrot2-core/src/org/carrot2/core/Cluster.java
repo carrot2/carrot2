@@ -2,8 +2,9 @@ package org.carrot2.core;
 
 import java.util.*;
 
+import org.carrot2.util.MapUtils;
 import org.carrot2.util.StringUtils;
-import org.carrot2.util.simplexml.TypeStringValuePair;
+import org.carrot2.util.simplexml.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -87,8 +88,8 @@ public final class Cluster
     private Double score;
 
     /** Attributes of this cluster for serialization/ deserialization purposes. */
-    @ElementList(entry = "attribute", inline = true, required = false)
-    private List<TypeStringValuePair> otherAttributesAsStrings = new ArrayList<TypeStringValuePair>();
+    @ElementMap(entry = "attribute", key = "key", attribute = true, inline = true, required = false)
+    private HashMap<String, SimpleXmlWrapperValue> otherAttributesForSerialization;
 
     /** The actual size of this cluster, for serialization purposes only */
     @SuppressWarnings("unused")
@@ -652,11 +653,12 @@ public final class Cluster
         size = size();
 
         // Remove score from attributes for serialization
-        otherAttributesAsStrings = TypeStringValuePair.toTypeStringValuePairs(attributes,
-            SCORE);
-        if (otherAttributesAsStrings.isEmpty())
+        otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
+            .wrap(attributes));
+        otherAttributesForSerialization.remove(SCORE);
+        if (otherAttributesForSerialization.isEmpty())
         {
-            otherAttributesAsStrings = null;
+            otherAttributesForSerialization = null;
         }
     }
 
@@ -664,15 +666,14 @@ public final class Cluster
     @SuppressWarnings("unused")
     private void afterDeserialization() throws Exception
     {
-        if (otherAttributesAsStrings != null)
+        if (otherAttributesForSerialization != null)
         {
-            attributes = TypeStringValuePair.fromTypeStringValuePairs(
-                new HashMap<String, Object>(), otherAttributesAsStrings);
+            attributes = SimpleXmlWrappers.unwrap(otherAttributesForSerialization);
         }
 
         if (score != null)
         {
-            // We're creating a new object which reference to which should not
+            // We're creating a new object reference to which should not
             // yet escape, so no need to synchronize here
             attributes.put(SCORE, score);
         }

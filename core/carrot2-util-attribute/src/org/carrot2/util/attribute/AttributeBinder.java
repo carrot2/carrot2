@@ -340,6 +340,18 @@ public class AttributeBinder
                     // Just skip this possibility
                 }
 
+                // Try if we can assign anyway. If the attribute is of a non-primitive
+                // type, it must have an ImplementingClasses annotation, see
+                // ConsistencyCheckImplementingClasses. If the value meets the constraint,
+                // we'll return the original value.
+                final ImplementingClasses implementingClasses = field
+                    .getAnnotation(ImplementingClasses.class);
+                if (implementingClasses != null
+                    && ConstraintValidator.isMet(stringValue, implementingClasses).length == 0)
+                {
+                    return stringValue;
+                }
+
                 // Try loading the class
                 try
                 {
@@ -609,8 +621,8 @@ public class AttributeBinder
     {
         static Set<Class<?>> ALLOWED_PLAIN_TYPES = ImmutableSet.<Class<?>> of(Byte.class,
             Short.class, Integer.class, Long.class, Float.class, Double.class,
-            Boolean.class, String.class, Class.class, Resource.class, Collection.class,
-            Map.class, File.class);
+            Boolean.class, String.class, Character.class, Class.class, Resource.class,
+            Collection.class, Map.class, File.class);
 
         static Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = ImmutableSet.<Class<?>> of(
             Enum.class, Resource.class, Collection.class, Map.class);

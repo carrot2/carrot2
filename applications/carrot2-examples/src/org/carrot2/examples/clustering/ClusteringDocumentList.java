@@ -12,16 +12,16 @@ import org.carrot2.util.attribute.AttributeUtils;
 
 /**
  * This example shows how to cluster a set of documents available as an {@link ArrayList}.
- * Normally you would want to use a specific {@link DocumentSource} and a
- * {@link CachingController} so that your input is cached between identical requests to
- * the same source.
+ * This setting is particularly useful for quick experiments with custom data for which
+ * there is no corresponding {@link DocumentSource} implementation. For production use,
+ * it's better to implement a {@link DocumentSource} for the custom document source, so
+ * that e.g the {@link CachingController} can cache it, if needed.
  * 
  * @see ClusteringDataFromDocumentSources
  * @see UsingCachingController
  */
 public class ClusteringDocumentList
 {
-    @SuppressWarnings("unused")
     public static void main(String [] args)
     {
         /*
@@ -36,15 +36,9 @@ public class ClusteringDocumentList
         }
 
         /*
-         * We clustering using a simple controller (no caching, one-time shot).
+         * We are clustering using a simple controller (no caching, one-time shot).
          */
         final SimpleController controller = new SimpleController();
-        
-        /*
-         * No one-time initialization attributes for the components we will use,
-         * so initialize with empty map.
-         */
-        controller.init(new HashMap<String,Object>());
 
         /*
          * All data for components (and between them) is passed using a Map. Place the
@@ -64,30 +58,36 @@ public class ClusteringDocumentList
             ByUrlClusteringAlgorithm.class);
 
         ExampleUtils.displayResults(result);
-        
+
         /*
-         * Now we will cluster the same documents using a more complex text clustering 
+         * Now we will cluster the same documents using a more complex text clustering
          * algorithm: Lingo. Note that the process is essentially the same, but we will
-         * set an algorithm parameter for term weighting to a non-default
-         * value to show how it is done. 
+         * set an algorithm parameter for term weighting to a non-default value to show
+         * how it is done.
          */
         final Class<?> algorithm = LingoClusteringAlgorithm.class;
 
-        attributes.put(AttributeUtils.getKey(algorithm, "termWeighting"), 
+        attributes.put(AttributeUtils.getKey(algorithm, "termWeighting"),
             LinearTfIdfTermWeighting.class);
+
+        /*
+         * If you know what query generated the documents you're about to cluster, pass
+         * the query to the algorithm, which will usually increase clustering quality.
+         */
+        attributes.put(AttributeNames.QUERY, "data mining");
 
         result = controller.process(attributes, algorithm);
 
         ExampleUtils.displayResults(result);
-        
+
         /*
          * The ProcessingResult object contains everything that has been contributed to
          * the output Map of values. We can, for example, check if native libraries have
-         * been used (Lingo uses native matrix libraries on supported platforms and defaults
-         * to Java equivalents on all others).
+         * been used (Lingo uses native matrix libraries on supported platforms and
+         * defaults to Java equivalents on all others).
          */
-        Boolean nativeUsed = (Boolean) result.getAttributes()
-            .get(AttributeUtils.getKey(algorithm, "nativeMatrixUsed"));
+        Boolean nativeUsed = (Boolean) result.getAttributes().get(
+            AttributeUtils.getKey(algorithm, "nativeMatrixUsed"));
 
         System.out.println("Native libraries used: " + nativeUsed);
     }

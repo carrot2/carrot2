@@ -2,7 +2,8 @@ package org.carrot2.core;
 
 import java.util.*;
 
-import org.carrot2.util.simplexml.TypeStringValuePair;
+import org.carrot2.util.MapUtils;
+import org.carrot2.util.simplexml.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -92,8 +93,8 @@ public final class Document
     /**
      * Field used during serialization/ deserialization.
      */
-    @ElementList(entry = "field", inline = true, required = false)
-    private List<TypeStringValuePair> otherFieldsAsStrings = new ArrayList<TypeStringValuePair>();
+    @ElementMap(entry = "field", key = "key", attribute = true, inline = true, required = false)
+    private HashMap<String, SimpleXmlWrapperValue> otherFieldsForSerialization;
 
     /**
      * Creates an empty document with no fields.
@@ -238,8 +239,11 @@ public final class Document
         url = (String) fields.get(CONTENT_URL);
         sources = (List<String>) fields.get(SOURCES);
 
-        otherFieldsAsStrings = TypeStringValuePair.toTypeStringValuePairs(fields, TITLE,
-            SUMMARY, CONTENT_URL, SOURCES);
+        otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers.wrap(fields));
+        otherFieldsForSerialization.remove(TITLE);
+        otherFieldsForSerialization.remove(SUMMARY);
+        otherFieldsForSerialization.remove(CONTENT_URL);
+        otherFieldsForSerialization.remove(SOURCES);
     }
 
     /**
@@ -249,10 +253,9 @@ public final class Document
     @SuppressWarnings("unused")
     private void afterDeserialization() throws Throwable
     {
-        if (otherFieldsAsStrings != null)
+        if (otherFieldsForSerialization != null)
         {
-            fields = TypeStringValuePair.fromTypeStringValuePairs(
-                new HashMap<String, Object>(), otherFieldsAsStrings);
+            fields = SimpleXmlWrappers.unwrap(otherFieldsForSerialization);
         }
         fields.put(TITLE, title);
         fields.put(SUMMARY, snippet);

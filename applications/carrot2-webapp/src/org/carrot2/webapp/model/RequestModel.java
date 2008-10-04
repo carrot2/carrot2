@@ -1,14 +1,15 @@
 package org.carrot2.webapp.model;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.util.ListUtils;
+import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.simplexml.TypeStringValuePair;
+import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
+import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.carrot2.webapp.QueryProcessorServlet;
-import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementMap;
 
 /**
  * Represents the data the application received in the HTTP request.
@@ -65,12 +66,12 @@ public class RequestModel
     public Map<String, Object> otherParameters;
 
     @SuppressWarnings("unused")
-    @ElementList(entry = "parameter", inline = true, required = false)
-    private ArrayList<TypeStringValuePair> otherParametersToSerialize;
+    @ElementMap(entry = "parameter", key = "key", attribute = true, inline = true, required = false)
+    private HashMap<String, SimpleXmlWrapperValue> otherParametersToSerialize;
 
     @SuppressWarnings("unused")
-    @ElementList(entry = "cookie", inline = true, required = false)
-    private ArrayList<TypeStringValuePair> cookies;
+    @ElementMap(entry = "cookie", key = "key", attribute = true, inline = true, required = false)
+    private HashMap<String, SimpleXmlWrapperValue> cookies;
 
     public void afterParametersBound(Map<String, Object> remainingHttpParameters,
         Map<String, String> cookies)
@@ -86,10 +87,9 @@ public class RequestModel
         }
 
         otherParameters = remainingHttpParameters;
-        otherParametersToSerialize = ListUtils.asArrayList(TypeStringValuePair
-            .toTypeStringValuePairs(remainingHttpParameters));
+        otherParametersToSerialize = MapUtils.asHashMap(SimpleXmlWrappers
+            .wrap(remainingHttpParameters));
 
-        this.cookies = ListUtils.asArrayList(TypeStringValuePair
-            .toTypeStringValuePairs(cookies));
+        this.cookies = MapUtils.asHashMap(SimpleXmlWrappers.wrap(cookies));
     }
 }

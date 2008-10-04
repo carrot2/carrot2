@@ -3,14 +3,15 @@ package org.carrot2.util.attribute;
 import static junit.framework.Assert.*;
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.junit.Test;
+import org.simpleframework.xml.Root;
 
 public class AttributeValueSetsTest
 {
@@ -151,10 +152,12 @@ public class AttributeValueSetsTest
         checkSerializationDeserialization(sets);
     }
 
-    public static enum CustomEnum {
+    public static enum CustomEnum
+    {
         ABC, DEF;
-    
-        public String toString() {
+
+        public String toString()
+        {
             return this.name().toLowerCase();
         }
     }
@@ -173,10 +176,18 @@ public class AttributeValueSetsTest
         checkSerializationDeserialization(sets);
     }
 
-    public static class CustomClass
+    @Root(name = "simple")
+    static class CustomClass
     {
+        @org.simpleframework.xml.Attribute
         String value1;
+
+        @org.simpleframework.xml.Attribute
         String value2;
+
+        CustomClass()
+        {
+        }
 
         CustomClass(String value1, String value2)
         {
@@ -188,12 +199,6 @@ public class AttributeValueSetsTest
         public String toString()
         {
             return value1 + ":" + value2;
-        }
-
-        public static CustomClass valueOf(String string)
-        {
-            final String [] split = string.split(":");
-            return new CustomClass(split[0], split[1]);
         }
 
         @Override
@@ -216,7 +221,7 @@ public class AttributeValueSetsTest
             return ObjectUtils.hashCode(value1) ^ ObjectUtils.hashCode(value2);
         }
     }
-
+    
     @Test
     public void testSerializationDeserializationOfCustomClass() throws Exception
     {
@@ -300,11 +305,13 @@ public class AttributeValueSetsTest
     private void checkSerializationDeserialization(AttributeValueSets sets)
         throws Exception
     {
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        sets.serialize(byteArrayOutputStream);
+        final StringWriter stringWriter = new StringWriter();
+        sets.serialize(stringWriter);
 
+        System.out.println(stringWriter.toString());
+        
         final AttributeValueSets deserialized = AttributeValueSets
-            .deserialize(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+            .deserialize(new StringReader(stringWriter.getBuffer().toString()));
 
         assertEquals(sets.defaultAttributeValueSetId,
             deserialized.defaultAttributeValueSetId);

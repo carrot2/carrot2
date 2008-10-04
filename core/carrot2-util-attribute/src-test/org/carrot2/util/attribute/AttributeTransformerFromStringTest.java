@@ -5,6 +5,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import java.lang.reflect.Field;
 
 import org.carrot2.util.attribute.AttributeBinder.AttributeTransformerFromString;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.junit.Test;
 
 /**
@@ -29,6 +30,27 @@ public class AttributeTransformerFromStringTest
     @SuppressWarnings("unused")
     private AttributeTransformerFromStringTest loadableClassField;
 
+    @ImplementingClasses(classes =
+    {
+        String.class, Integer.class
+    }, strict = true)
+    @SuppressWarnings("unused")
+    private Object stringStrictlyAssignable;
+
+    @ImplementingClasses(classes =
+    {
+        Integer.class, Double.class
+    }, strict = false)
+    @SuppressWarnings("unused")
+    private Object stringNonStrictlyAssignable;
+
+    @ImplementingClasses(classes =
+    {
+        Integer.class, Double.class
+    }, strict = true)
+    @SuppressWarnings("unused")
+    private Object stringNotAssignable;
+    
     @Test
     public void testNonStringValue()
     {
@@ -72,6 +94,27 @@ public class AttributeTransformerFromStringTest
     {
         final String value = "x" + AttributeTransformerFromStringTest.class.getName();
         check("loadableClassField", value, value);
+    }
+
+    @Test
+    public void testStringStrictlyAssignable() throws Exception
+    {
+        final String string = "test";
+        check("stringStrictlyAssignable", string, string);
+    }
+
+    @Test
+    public void testStringNonStrictlyAssignable() throws Exception
+    {
+        final String string = "test";
+        check("stringNonStrictlyAssignable", string, string);
+    }
+    
+    @Test
+    public void testStringNotAssignable() throws Exception
+    {
+        final String string = Object.class.getName();
+        check("stringNotAssignable", string, Object.class);
     }
 
     private void check(String fieldName, String stringValue,

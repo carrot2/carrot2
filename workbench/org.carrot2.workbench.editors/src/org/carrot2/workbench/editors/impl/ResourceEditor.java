@@ -149,7 +149,7 @@ public class ResourceEditor extends AttributeEditorAdapter
 
         if (this.resource != null && resource instanceof FileResource)
         {
-            dialog.setFileName(((FileResource) resource).file.getAbsolutePath());
+            dialog.setFileName(((FileResource) resource).getFile().getAbsolutePath());
         }
         else
         {

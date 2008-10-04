@@ -2,8 +2,8 @@
   <attribute-set id="boss-news">
     <value-set>
       <label>Yahoo Boss News</label>
-      <attribute key="BossDocumentSource.service" type="java.lang.Class">
-        <value>class org.carrot2.source.boss.BossNewsSearchService</value>
+      <attribute key="BossDocumentSource.service">
+        <value type="java.lang.Class" value="org.carrot2.source.boss.BossNewsSearchService" />
       </attribute>
     </value-set>
   </attribute-set>

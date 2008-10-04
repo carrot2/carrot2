@@ -33,7 +33,7 @@ public abstract class Constraint
         if (!clazz.isAssignableFrom(value.getClass()))
         {
             throw new IllegalArgumentException("Expected an instance of "
-                + clazz.getClass().getName() + " but found " + value.getClass().getName());
+                + clazz.getName() + " but found " + value.getClass().getName());
         }
     }
 

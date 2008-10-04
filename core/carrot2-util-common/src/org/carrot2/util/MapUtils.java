@@ -1,5 +1,6 @@
 package org.carrot2.util;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,6 +11,22 @@ import com.google.common.collect.Maps;
  */
 public class MapUtils
 {
+    private MapUtils()
+    {
+    }
+    
+    public static <K, V> HashMap<K, V> asHashMap(Map<K, V> map)
+    {
+        if (map instanceof HashMap)
+        {
+            return (HashMap<K, V>) map;
+        }
+        else
+        {
+            return new HashMap<K, V>(map);
+        }
+    }
+     
     /**
      * Iterates through entries of the input <code>map</code> and for values being String
      * arrays puts the first element of the map in the result map. Scalar values get

@@ -6,40 +6,51 @@ package org.carrot2.examples;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
+import org.carrot2.core.attribute.AttributeNames;
 
 /**
  * A few utility methods required for API examples.
  */
 public class ExampleUtils
 {
-    @SuppressWarnings("unchecked")
     public static void displayResults(ProcessingResult processingResult)
     {
         final Collection<Document> documents = processingResult.getDocuments();
         final Collection<Cluster> clusters = processingResult.getClusters();
         final Map<String, Object> attributes = processingResult.getAttributes();
 
-        // Show attributes
-        System.out.println("Attributes:");
-        for (final Map.Entry<String, Object> attribute : attributes.entrySet())
-        {
-            System.out.println(attribute.getKey() + ":   " + attribute.getValue());
-        }
-
         // Show documents
-        System.out.println("Collected " + documents.size() + " documents\n");
-        for (final Document document : documents)
+        if (documents != null)
         {
-            displayDocument(0, document);
+            System.out.println("Collected " + documents.size() + " documents\n");
+            for (final Document document : documents)
+            {
+                displayDocument(0, document);
+            }
         }
 
         // Show clusters
-        System.out.println("\n\nCreated " + clusters.size() + " clusters\n");
-        int clusterNumber = 1;
-        for (final Cluster cluster : clusters)
+        if (clusters != null)
         {
-            displayCluster(0, "" + clusterNumber++, cluster);
+            System.out.println("\n\nCreated " + clusters.size() + " clusters\n");
+            int clusterNumber = 1;
+            for (final Cluster cluster : clusters)
+            {
+                displayCluster(0, "" + clusterNumber++, cluster);
+            }
+        }
+
+        // Show attributes other attributes
+        System.out.println("Attributes:");
+        for (final Map.Entry<String, Object> attribute : attributes.entrySet())
+        {
+            if (!AttributeNames.DOCUMENTS.equals(attribute.getKey())
+                && !AttributeNames.CLUSTERS.equals(attribute.getKey()))
+            {
+                System.out.println(attribute.getKey() + ":   " + attribute.getValue());
+            }
         }
     }
 
@@ -49,8 +60,12 @@ public class ExampleUtils
 
         System.out.printf(indent + "[%2d] ", document.getId());
         System.out.println(document.getField(Document.TITLE));
-        System.out.println(indent + "     " + document.getField(Document.CONTENT_URL)
-            + "]\n");
+        final String url = document.getField(Document.CONTENT_URL);
+        if (StringUtils.isNotBlank(url))
+        {
+            System.out.println(indent + "     " + url);
+        }
+        System.out.println();
     }
 
     private static void displayCluster(final int level, String tag, Cluster cluster)

@@ -1,9 +1,11 @@
 package org.carrot2.util.attribute;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
-import org.carrot2.util.simplexml.TypeStringValuePair;
+import org.carrot2.util.MapUtils;
+import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
+import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -54,8 +56,8 @@ public class AttributeValueSet
      * {@link #convertAttributeValuesToStrings()} and
      * {@link #convertAttributeValuesFromStrings()}.
      */
-    @ElementList(entry = "attribute", inline = true, required = false)
-    private List<TypeStringValuePair> overridenAttributeValuesAsStrings;
+    @ElementMap(entry = "attribute", key = "key", attribute = true, inline = true, required = false)
+    private HashMap<String, SimpleXmlWrapperValue> overridenAttributeValuesForSerialization;
 
     AttributeValueSet()
     {
@@ -64,8 +66,8 @@ public class AttributeValueSet
     }
 
     /**
-     * Creates a new empty {@link AttributeValueSet} with a <code>null</code>
-     * description and a <code>null</code> base attribute value set.
+     * Creates a new empty {@link AttributeValueSet} with a <code>null</code> description
+     * and a <code>null</code> base attribute value set.
      * 
      * @param label human-readable label for this attribute value set
      */
@@ -75,8 +77,7 @@ public class AttributeValueSet
     }
 
     /**
-     * Creates a new empty {@link AttributeValueSet} with a <code>null</code>
-     * description.
+     * Creates a new empty {@link AttributeValueSet} with a <code>null</code> description.
      * 
      * @param label human-readable label for this attribute value set
      * @param base the attribute value set this set should be based on.
@@ -105,16 +106,16 @@ public class AttributeValueSet
     }
 
     /**
-     * Returns value of the attribute with the provided <code>key</code>. Attribute
-     * values are resolved in the following order:
+     * Returns value of the attribute with the provided <code>key</code>. Attribute values
+     * are resolved in the following order:
      * <ul>
-     * <li>If this set contains a value for the attribute with given <code>key</code>
-     * set by {{@link #setAttributeValue(String, Object)} or
-     * {@link #setAttributeValues(Map)}, the value is returned.</li>
-     * <li>Otherwise, if the base attribute value set is not <code>null</code>,
-     * attribute value is retrieved from the base set by calling the same method on it. If
-     * any of the base attribute sets in the hierarchy contains a value for the provided
-     * key, that value is returned.</li>
+     * <li>If this set contains a value for the attribute with given <code>key</code> set
+     * by {{@link #setAttributeValue(String, Object)} or {@link #setAttributeValues(Map)},
+     * the value is returned.</li>
+     * <li>Otherwise, if the base attribute value set is not <code>null</code>, attribute
+     * value is retrieved from the base set by calling the same method on it. If any of
+     * the base attribute sets in the hierarchy contains a value for the provided key,
+     * that value is returned.</li>
      * <li>Otherwise, <code>null</code> is returned.</li>
      * </ul>
      * 
@@ -155,10 +156,10 @@ public class AttributeValueSet
     }
 
     /**
-     * Sets a <code>value</code> corresponding to the provided <code>key</code> in
-     * this attribute value set. If the set previously contained some value under the
-     * provided <code>key</code>, that value is returned. Values set using this method
-     * override values found in the base attribute sets of this set.
+     * Sets a <code>value</code> corresponding to the provided <code>key</code> in this
+     * attribute value set. If the set previously contained some value under the provided
+     * <code>key</code>, that value is returned. Values set using this method override
+     * values found in the base attribute sets of this set.
      * 
      * @param key attribute key
      * @param value attribute value
@@ -170,9 +171,9 @@ public class AttributeValueSet
     }
 
     /**
-     * Copies all <code>values</code> to this attribute value set. If this attribute
-     * value set already contains mappings for some of the provided key, the mappings will
-     * be overwritten. Values set using this method override values found in the base
+     * Copies all <code>values</code> to this attribute value set. If this attribute value
+     * set already contains mappings for some of the provided key, the mappings will be
+     * overwritten. Values set using this method override values found in the base
      * attribute sets of this set.
      * 
      * @param values values to be set on this attribute value set.
@@ -199,8 +200,8 @@ public class AttributeValueSet
     @SuppressWarnings("unused")
     private void convertAttributeValuesToStrings()
     {
-        overridenAttributeValuesAsStrings = TypeStringValuePair
-            .toTypeStringValuePairs(overridenAttributeValues);
+        overridenAttributeValuesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
+            .wrap(overridenAttributeValues));
     }
 
     /**
@@ -210,14 +211,15 @@ public class AttributeValueSet
     @SuppressWarnings("unused")
     private void convertAttributeValuesFromStrings() throws Exception
     {
-        overridenAttributeValues = Maps.newHashMap();
-        if (overridenAttributeValuesAsStrings == null)
+        if (overridenAttributeValuesForSerialization == null)
         {
-            return;
+            overridenAttributeValues = Maps.newHashMap();
         }
-
-        TypeStringValuePair.fromTypeStringValuePairs(overridenAttributeValues,
-            overridenAttributeValuesAsStrings);
+        else
+        {
+            overridenAttributeValues = SimpleXmlWrappers
+                .unwrap(overridenAttributeValuesForSerialization);
+        }
     }
 
     /*

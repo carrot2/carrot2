@@ -1,0 +1,192 @@
+package org.carrot2.util.simplexml;
+
+import java.lang.reflect.Method;
+import java.util.Set;
+
+import org.carrot2.util.ExceptionUtils;
+import org.simpleframework.xml.*;
+
+import com.google.common.collect.ImmutableSet;
+
+/**
+ * A wrapper around typical serialized types, such as primitives. Without this wrapper
+ * each value would get a class attribute indicating the specific wrapper class name
+ * (longish), which would be a pain for people editing the XML files by hand. With this
+ * wrapper, the type attribute corresponds to the actual Java class name.
+ */
+@Root(name = "value")
+public class SimpleXmlWrapperValue
+{
+    /**
+     * Type of a primitive value.
+     */
+    @Attribute(required = false)
+    String type;
+
+    /**
+     * Value of a primitive value.
+     */
+    @Attribute(required = false)
+    String value;
+
+    /**
+     * Generic type wrapped with a SimpleXML-annotated type or an already
+     * SimpleXML-annotated type.
+     */
+    @Element(required = false)
+    Object wrapper;
+
+    /**
+     * Type we can handle using toStirng() and valueOf() methods.
+     */
+    private static final Set<Class<?>> TO_STRING_VALUE_OF_TYPES = ImmutableSet
+        .<Class<?>> of(Byte.class, Short.class, Integer.class, Long.class, Float.class,
+            Double.class, Boolean.class);
+
+    /**
+     * Wraps the provided value with the serialization wrapper.
+     */
+    static SimpleXmlWrapperValue wrap(Object value)
+    {
+        final SimpleXmlWrapperValue wrapper = new SimpleXmlWrapperValue();
+
+        if (value == null)
+        {
+            return wrapper;
+        }
+
+        final Class<?> valueType = value.getClass();
+
+        if (TO_STRING_VALUE_OF_TYPES.contains(valueType))
+        {
+            wrapper.value = value.toString();
+            wrapper.type = valueType.getName();
+        }
+        else if (value instanceof Character)
+        {
+            wrapper.value = value.toString();
+            wrapper.type = Character.class.getName();
+        }
+        else if (value instanceof String)
+        {
+            wrapper.value = (String) value;
+            wrapper.type = String.class.getName();
+        }
+        else if (value instanceof Class)
+        {
+            wrapper.value = ((Class<?>) value).getName();
+            wrapper.type = Class.class.getName();
+        }
+        else if (value instanceof Enum<?>)
+        {
+            final Enum<?> e = (Enum<?>) value;
+            wrapper.value = e.name();
+            wrapper.type = e.getDeclaringClass().getName();
+        }
+        else if (value.getClass().getAnnotation(Root.class) != null)
+        {
+            wrapper.wrapper = value;
+        }
+        else
+        {
+            // Try to get a wrapper.
+            wrapper.wrapper = SimpleXmlWrapperValue.wrapCustom(value);
+        }
+
+        return wrapper;
+    }
+
+    /**
+     * Unwraps the actual value represented by this wrapper.
+     * 
+     * @return the actual value or <code>null</code> if value cannot be unwrapped
+     */
+    @SuppressWarnings("unchecked")
+    Object unwrap()
+    {
+        if (value != null && type != null)
+        {
+            final Class<?> valueType = loadClassWrapAsRuntime(type);
+
+            if (TO_STRING_VALUE_OF_TYPES.contains(valueType))
+            {
+                Method valueOfMethod;
+                try
+                {
+                    valueOfMethod = valueType.getMethod("valueOf", String.class);
+                    return valueOfMethod.invoke(null, value);
+                }
+                catch (Exception e)
+                {
+                    throw ExceptionUtils.wrapAsRuntimeException(e);
+                }
+            }
+            else if (Character.class.getName().equals(type))
+            {
+                return value.length() > 0 ? value.charAt(0) : null;
+            }
+            else if (String.class.getName().equals(type))
+            {
+                return value;
+            }
+            else if (Class.class.getName().equals(type))
+            {
+                return loadClassWrapAsRuntime(value);
+            }
+            else if (Enum.class.isAssignableFrom(valueType))
+            {
+                return Enum.valueOf((Class<? extends Enum>) valueType, value);
+            }
+        }
+        else if (wrapper != null)
+        {
+            if (wrapper instanceof SimpleXmlWrapper)
+            {
+                return ((SimpleXmlWrapper) wrapper).getValue();
+            }
+            else
+            {
+                return wrapper;
+            }
+        }
+
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T> SimpleXmlWrapper<T> wrapCustom(T value)
+    {
+        final Class<? extends SimpleXmlWrapper<?>> wrapperClass = SimpleXmlWrappers.getWrapper(value);
+        if (wrapperClass != null)
+        {
+            SimpleXmlWrapper<T> newInstance;
+            try
+            {
+                newInstance = (SimpleXmlWrapper<T>) wrapperClass.newInstance();
+            }
+            catch (Exception e)
+            {
+                throw ExceptionUtils.wrapAsRuntimeException(e);
+            }
+            newInstance.setValue(value);
+    
+            return newInstance;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private static Class<?> loadClassWrapAsRuntime(String className)
+    {
+        try
+        {
+            return Thread.currentThread().getContextClassLoader().loadClass(className);
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw ExceptionUtils.wrapAsRuntimeException(e);
+        }
+    }
+}

@@ -1,6 +1,7 @@
 package org.carrot2.core;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -208,9 +209,9 @@ public class ProcessingComponentDescriptor
     /**
      * Builds and returns a {@link BindableDescriptor} for an instance of this
      * descriptor's {@link ProcessingComponent}, with default {@link Init} attributes
-     * initialized with the default attribute set. If the default attribute set does provide
-     * values for some required {@link Bindable} {@link Init} attributes, the returned
-     * descriptor will be incomplete.
+     * initialized with the default attribute set. If the default attribute set does
+     * provide values for some required {@link Bindable} {@link Init} attributes, the
+     * returned descriptor will be incomplete.
      */
     public BindableDescriptor getBindableDescriptor() throws InstantiationException,
         IllegalAccessException
@@ -263,7 +264,8 @@ public class ProcessingComponentDescriptor
             final InputStream inputStream = resource.open();
             try
             {
-                attributeSets = AttributeValueSets.deserialize(inputStream);
+                attributeSets = AttributeValueSets.deserialize(new InputStreamReader(
+                    inputStream, "UTF-8"));
             }
             finally
             {

@@ -37,7 +37,7 @@
             <a href="{url}" class="title">
               <xsl:choose>
                 <xsl:when test="field[@key = 'title-highlight']">
-                  <xsl:value-of disable-output-escaping="yes" select="field[@key = 'title-highlight']/value" />
+                  <xsl:value-of disable-output-escaping="yes" select="field[@key = 'title-highlight']/value/@value" />
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="string(title)" />
@@ -54,7 +54,7 @@
       <xsl:variable name="document-source-ids-for-thumbnails"><xsl:apply-templates select="/page" mode="document-source-ids-for-thumbnails" /></xsl:variable>
       <xsl:choose>
         <xsl:when test="field[@key = 'thumbnail-url']">
-          <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value}" />
+          <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value/@value}" />
         </xsl:when>
         <xsl:when test="@id != 'document-template' and contains($document-source-ids-for-thumbnails, /page/request/@source) and $unique-urls >= ($document-count * $unique-urls-for-thumbnails)">
           <xsl:variable name="url-root" select="substring-before(concat(substring-after(url, 'http://'), '/'), '/')" />
@@ -65,7 +65,7 @@
         <div class="snippet">
           <xsl:choose>
             <xsl:when test="field[@key = 'snippet-highlight']">
-              <xsl:value-of disable-output-escaping="yes" select="field[@key = 'snippet-highlight']/value" />
+              <xsl:value-of disable-output-escaping="yes" select="field[@key = 'snippet-highlight']/value/@value" />
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="string(snippet)" />

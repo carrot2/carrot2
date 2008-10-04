@@ -63,15 +63,14 @@ public class WorkingWithAttributeValueSets
          * The most important functionality of AttributeValueSets is serialization/
          * deserialization from XML.
          */
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        sets.serialize(byteArrayOutputStream);
-        CloseableUtils.close(byteArrayOutputStream); // need to close!
+        final StringWriter stringWriter = new StringWriter();
+        sets.serialize(stringWriter);
+        CloseableUtils.close(stringWriter); // need to close!
 
-        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
-            byteArrayOutputStream.toByteArray());
+        final StringReader reader = new StringReader(stringWriter.getBuffer().toString());
         final AttributeValueSets deserialized = AttributeValueSets
-            .deserialize(byteArrayInputStream);
-        CloseableUtils.close(byteArrayInputStream); // need to close!
+            .deserialize(reader);
+        CloseableUtils.close(reader); // need to close!
 
         assertEquals("value", deserialized.getAttributeValueSet("set1")
             .getAttributeValue("string.attribute"));
@@ -132,12 +131,12 @@ public class WorkingWithAttributeValueSets
          */
         sets.addAttributeValueSet("set3", customAttributeValueSet, "Set 3",
             "Description if any");
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        sets.serialize(byteArrayOutputStream);
-        CloseableUtils.close(byteArrayOutputStream); // need to close!
+        final StringWriter stringWriter = new StringWriter();
+        sets.serialize(stringWriter);
+        CloseableUtils.close(stringWriter); // need to close!
     }
 
-    private InputStream getAttributeValueSetsStream() throws Exception
+    private Reader getAttributeValueSetsStream() throws Exception
     {
         final AttributeValueSet set1 = new AttributeValueSet("Set 1", "Description 1",
             null);
@@ -152,10 +151,10 @@ public class WorkingWithAttributeValueSets
         sets.addAttributeValueSet("set1", set1);
         sets.addAttributeValueSet("set2", set2);
 
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        sets.serialize(byteArrayOutputStream);
-        CloseableUtils.close(byteArrayOutputStream); // need to close!
+        final StringWriter stringWriter = new StringWriter();
+        sets.serialize(stringWriter);
+        CloseableUtils.close(stringWriter); // need to close!
 
-        return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+        return new StringReader(stringWriter.getBuffer().toString());
     }
 }

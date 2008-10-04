@@ -199,8 +199,8 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             if (searchFields == null || searchFields.length == 0)
             {
                 throw new ProcessingException(
-                    "An instantiated Lucene Query object or a String and at least one "
-                        + "search field must be given.");
+                    "At least one search field must be given for a plain text query. "
+                        + "Alternatively, use a Lucene Query object.");
             }
 
             final String textQuery = (String) query;
@@ -208,7 +208,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             {
                 throw new ProcessingException(
                     "An instantiated Lucene Query object or a non-empty "
-                        + "text query is required.");
+                        + "plain text query is required.");
             }
 
             if (searchFields.length == 1)
@@ -217,7 +217,8 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             }
             else
             {
-                query = new MultiFieldQueryParser(searchFields, analyzer).parse(textQuery);
+                query = new MultiFieldQueryParser(searchFields, analyzer)
+                    .parse(textQuery);
             }
         }
 

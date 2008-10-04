@@ -273,18 +273,6 @@ public class AttributeValueSets
     /**
      * Serializes this collection of {@link AttributeValueSet}s to an XML stream.
      * 
-     * @param outputStream the stream to serialize this {@link AttributeValueSets} to. The
-     *            stream will <strong>not</strong> be closed.
-     * @throws Exception in case of any problems with serialization
-     */
-    public void serialize(OutputStream outputStream) throws Exception
-    {
-        new Persister().write(this, outputStream);
-    }
-
-    /**
-     * Serializes this collection of {@link AttributeValueSet}s to an XML stream.
-     * 
      * @param w the writer to serialize this {@link AttributeValueSets} to. The
      *            stream will <strong>not</strong> be closed.
      * @throws Exception in case of any problems with serialization
@@ -294,31 +282,6 @@ public class AttributeValueSets
         new Persister().write(this, w);
     }
 
-    /**
-     * Deserializes a collection of {@link AttributeValueSet}s from an XML stream.
-     * 
-     * @param inputStream the stream to deserialize a {@link AttributeValueSets} from. The
-     *            stream will <strong>not</strong> be closed.
-     * @return deserialized collection of {@link AttributeValueSet}s
-     * @throws Exception is case of any problems with deserialization
-     */
-    public static AttributeValueSets deserialize(InputStream inputStream)
-        throws Exception
-    {
-        final AttributeValueSets attributeValueSet = new Persister().read(
-            AttributeValueSets.class, inputStream);
-
-        if (attributeValueSet.defaultAttributeValueSetId != null
-            && !attributeValueSet.attributeValueSets
-                .containsKey(attributeValueSet.defaultAttributeValueSetId))
-        {
-            throw new RuntimeException("Default attribute value set not found: "
-                + attributeValueSet.defaultAttributeValueSetId);
-        }
-
-        return attributeValueSet;
-    }
-    
     /**
      * Deserializes a collection of {@link AttributeValueSet}s from XML.
      * 

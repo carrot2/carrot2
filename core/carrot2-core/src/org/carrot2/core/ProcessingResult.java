@@ -5,7 +5,9 @@ import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.util.simplexml.TypeStringValuePair;
+import org.carrot2.util.MapUtils;
+import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
+import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.codehaus.jackson.*;
 import org.codehaus.jackson.impl.DefaultPrettyPrinter;
 import org.codehaus.jackson.map.*;
@@ -24,7 +26,7 @@ import com.google.common.collect.*;
 public final class ProcessingResult
 {
     /** Attributes collected after processing */
-    private Map<String, Object> attributes;
+    private Map<String, Object> attributes = Maps.newHashMap();
 
     /** Read-only view of attributes exposed in {@link #getAttributes()} */
     private Map<String, Object> attributesView;
@@ -51,8 +53,8 @@ public final class ProcessingResult
     private List<Cluster> clusters;
 
     /** Attributes of this result for serialization/ deserialization purposes. */
-    @ElementList(entry = "attribute", inline = true, required = false)
-    private List<TypeStringValuePair> otherAttributesAsStrings = new ArrayList<TypeStringValuePair>();
+    @ElementMap(entry = "attribute", key = "key", attribute = true, inline = true, required = false)
+    private HashMap<String, SimpleXmlWrapperValue> otherAttributesForSerialization;
 
     /**
      * Parameterless constructor required for XML serialization/ deserialization.
@@ -159,11 +161,14 @@ public final class ProcessingResult
             clusters = Lists.newArrayList(getClusters());
         }
 
-        otherAttributesAsStrings = TypeStringValuePair.toTypeStringValuePairs(attributes,
-            AttributeNames.QUERY, AttributeNames.CLUSTERS, AttributeNames.DOCUMENTS);
-        if (otherAttributesAsStrings.isEmpty())
+        otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
+            .wrap(attributes));
+        otherAttributesForSerialization.remove(AttributeNames.QUERY);
+        otherAttributesForSerialization.remove(AttributeNames.CLUSTERS);
+        otherAttributesForSerialization.remove(AttributeNames.DOCUMENTS);
+        if (otherAttributesForSerialization.isEmpty())
         {
-            otherAttributesAsStrings = null;
+            otherAttributesForSerialization = null;
         }
     }
 
@@ -174,8 +179,11 @@ public final class ProcessingResult
     @SuppressWarnings("unused")
     private void afterDeserialization() throws Exception
     {
-        attributes = TypeStringValuePair.fromTypeStringValuePairs(
-            new HashMap<String, Object>(), otherAttributesAsStrings);
+        if (otherAttributesForSerialization != null)
+        {
+            attributes = SimpleXmlWrappers.unwrap(otherAttributesForSerialization);
+        }
+
         attributesView = Collections.unmodifiableMap(attributes);
 
         attributes.put(AttributeNames.QUERY, query != null ? query.trim() : null);

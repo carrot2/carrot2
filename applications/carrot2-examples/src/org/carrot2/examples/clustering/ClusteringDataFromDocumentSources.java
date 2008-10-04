@@ -16,17 +16,17 @@ import org.carrot2.util.attribute.AttributeUtils;
 
 /**
  * This example shows how to cluster {@link Document}s retrieved from
- * {@link DocumentSource} providers. There are a number of implementations of this
- * interface in the Carrot2 project, we will cluster Microsoft Live (Web search) and Yahoo
- * Boss (news search) here.
+ * {@link DocumentSource}s. There are a number of implementations of this interface in the
+ * Carrot2 project, in this example we will cluster results from Microsoft Live (Web
+ * search) and Yahoo Boss (news search).
  * <p>
  * It is assumed that you are familiar with {@link ClusteringDocumentList} example.
  * 
+ * @see ClusteringDocumentList
  * @see UsingCachingController
  */
 public class ClusteringDataFromDocumentSources
 {
-    @SuppressWarnings("unused")
     public static void main(String [] args)
     {
         /*
@@ -38,18 +38,14 @@ public class ClusteringDataFromDocumentSources
         SimpleController controller = new SimpleController();
 
         /*
-         * One-time initialization attributes (marked with @Init annotation). For
-         * BasicController these attributes are injected into component instances in each
-         * processing round anyway (because instances are not reused), but for the
-         * CachingController they will be injected only once for each pooled component
-         * instance.
+         * As the simple controller discards component instances after processing, the
+         * @Init attributes can be provided at the same time as the @Processing ones. For
+         * the same reason, you don't need to initialize the simple controller. Please
+         * check CachingController for more advanced handling of component life cycle.
          */
-        Map<String, Object> initAttrs = new HashMap<String, Object>();
-        initAttrs.put(AttributeUtils.getKey(MicrosoftLiveDocumentSource.class, "appid"),
-            MicrosoftLiveDocumentSource.CARROTSEARCH_APPID);
-        controller.init(initAttrs);
-
         Map<String, Object> attributes = new HashMap<String, Object>();
+        attributes.put(AttributeUtils.getKey(MicrosoftLiveDocumentSource.class, "appid"),
+            MicrosoftLiveDocumentSource.CARROTSEARCH_APPID);
         attributes.put(AttributeNames.QUERY, "data mining");
         attributes.put(AttributeNames.RESULTS, 100);
 
@@ -63,25 +59,20 @@ public class ClusteringDataFromDocumentSources
          * Attributes for the first query: query, number of results to fetch from the
          * source. Again, note the API key. Please use your own key for production use.
          */
-        controller = new SimpleController();
-
-        /*
-         * One-time initialization attributes.
-         */
-        initAttrs = new HashMap<String, Object>();
-        initAttrs.put(AttributeUtils.getKey(BossSearchService.class, "appid"),
-            BossSearchService.CARROTSEARCH_APPID);
+        attributes = new HashMap<String, Object>();
 
         /*
          * Boss document source is generic and can retrieve Web search, news and image
          * results. Pick the service to use by passing the right service implementation.
          */
-        initAttrs.put(AttributeUtils.getKey(BossDocumentSource.class, "service"),
+        attributes.put(AttributeUtils.getKey(BossDocumentSource.class, "service"),
             BossNewsSearchService.class);
 
-        controller.init(initAttrs);
-
-        attributes = new HashMap<String, Object>();
+        /*
+         * Other attributes.
+         */
+        attributes.put(AttributeUtils.getKey(BossSearchService.class, "appid"),
+            BossSearchService.CARROTSEARCH_APPID);
         attributes.put(AttributeNames.QUERY, "war");
         attributes.put(AttributeNames.RESULTS, 50);
 
