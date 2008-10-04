@@ -200,7 +200,7 @@ public class ResourceEditor extends AttributeEditorAdapter
         String previous = "";
         if (resource != null && resource instanceof URLResource)
         {
-            previous = ((URLResource) resource).url.toExternalForm();
+            previous = ((URLResource) resource).getUrl().toExternalForm();
         }
 
         if (resource != null && resource instanceof ParameterizedUrlResource)

@@ -15,8 +15,13 @@ package org.carrot2.util.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.jar.JarFile;
+
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.load.Commit;
 
 
 /**
@@ -26,22 +31,24 @@ import java.util.jar.JarFile;
  *
  * @see <a href="http://issues.carrot2.org/browse/CARROT-143">Issue CARROT-143</a>
  */
+@Root(name = "url-resource")
 public class URLResource implements Resource
 {
     /**
-     * Immutable public address of the resource.
+     * URL for the resource.
      */
-    public final URL url;
+    private URL url;
 
-    /*
-     * 
+    /**
+     * URL string, for serialization only.
      */
+    @Attribute(name = "url")
     private final String info;
 
     public URLResource(URL url)
     {
         this.url = url;
-        this.info = "[URL: " + url.toExternalForm() + "]";
+        this.info = url.toExternalForm();
     }
 
     public InputStream open() throws IOException
@@ -71,5 +78,16 @@ public class URLResource implements Resource
     public final int hashCode()
     {
         return this.info.hashCode();
+    }
+
+    public URL getUrl()
+    {
+        return url;
+    }
+    
+    @Commit
+    void afterDeserialization() throws MalformedURLException
+    {
+        url = new URL(info);
     }
 }
