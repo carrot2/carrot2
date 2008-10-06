@@ -19,6 +19,7 @@ import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.util.simplexml.SimpleXmlWrappers;
 
 import com.google.common.collect.Maps;
 
@@ -34,6 +35,14 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     /** Logger for this class. */
     private final static Logger logger = Logger.getLogger(LuceneDocumentSource.class);
 
+    /*
+     * Register selected SimpleXML wrappers for Lucene data types.
+     */
+    static
+    {
+        SimpleXmlWrappers.addWrapper(FSDirectory.class, FSDirectoryWrapper.class);
+    }
+    
     @Processing
     @Input
     @Attribute(key = AttributeNames.RESULTS)
