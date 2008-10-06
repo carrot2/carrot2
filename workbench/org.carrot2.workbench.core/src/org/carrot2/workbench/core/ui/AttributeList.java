@@ -261,7 +261,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
 
                     FieldDecoration requiredDecoration = FieldDecorationRegistry
                         .getDefault().getFieldDecoration(
-                            FieldDecorationRegistry.DEC_WARNING);
+                            FieldDecorationRegistry.DEC_ERROR);
 
                     decoration.setImage(requiredDecoration.getImage());
                     decoration.setDescriptionText("Invalid value");

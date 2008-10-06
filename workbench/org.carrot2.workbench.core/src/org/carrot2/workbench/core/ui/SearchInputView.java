@@ -28,7 +28,9 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.*;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
@@ -164,6 +166,23 @@ public class SearchInputView extends ViewPart
      * 
      */
     private IAction linkWithEditorAction;
+
+    /**
+     * Validation validationStatus.
+     */
+    private CLabel validationStatus;
+
+    /**
+     * If <code>true</code>, validation validationStatus is immediately propagated to
+     * the user interface (this happens after the first click on {@link #processButton}.
+     */
+    private boolean showValidationStatus;
+
+    /*
+     * 
+     */
+    private Image errorStatusImage = WorkbenchCorePlugin.getImageDescriptor(
+        "icons/error.gif").createImage();
 
     /**
      * Link the GUI of {@link SearchInputView} with the currently active
@@ -347,11 +366,12 @@ public class SearchInputView extends ViewPart
                 final String source = getSourceId();
                 if (hasAllRequiredAttributes(source))
                 {
-                    fireProcessing();                    
+                    fireProcessing();
                 }
                 else
                 {
-                    editorComposite.setAttribute(ENABLE_VALIDATION_OVERLAYS, true);
+                    showValidationStatus = true;
+                    checkAllRequiredAttributes();
                 }
             }
         });
@@ -452,7 +472,7 @@ public class SearchInputView extends ViewPart
         {
             this.editorComposite = new AttributeGroups(editorCompositeContainer,
                 sourceDescriptor, groupingMethod, filter, attributes.getAttributeValues());
-    
+
             final GridData gd = new GridData();
             gd.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
             gd.grabExcessHorizontalSpace = true;
@@ -461,7 +481,8 @@ public class SearchInputView extends ViewPart
             /*
              * Set default values for those attributes that have null values.
              */
-            for (AttributeDescriptor attr : sourceDescriptor.flatten().attributeDescriptors.values())
+            for (AttributeDescriptor attr : sourceDescriptor.flatten().attributeDescriptors
+                .values())
             {
                 if (attributes.getAttributeValue(attr.key) == null)
                 {
@@ -484,10 +505,15 @@ public class SearchInputView extends ViewPart
             {
                 public void valueChanged(AttributeEvent event)
                 {
+                    if (event.key.equals(ENABLE_VALIDATION_OVERLAYS))
+                    {
+                        return;
+                    }
+
                     attributes.setAttributeValue(event.key, event.value);
                     checkAllRequiredAttributes();
                 }
-                
+
                 public void valueChanging(AttributeEvent event)
                 {
                     /*
@@ -496,8 +522,7 @@ public class SearchInputView extends ViewPart
                      * attribute values should not trigger any additional consequences, so
                      * we can do it.
                      */
-                    attributes.setAttributeValue(event.key, event.value);
-                    checkAllRequiredAttributes();
+                    valueChanged(event);
                 }
             });
         }
@@ -588,14 +613,24 @@ public class SearchInputView extends ViewPart
         this.editorCompositeContainer
             .setLayout(GridLayoutFactory.fillDefaults().create());
 
+        final Composite processStatus = new Composite(innerComposite, SWT.NONE);
+        processStatus.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true,
+            false).create());
+        processStatus.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).spacing(3,
+            0).create());
+
+        this.validationStatus = new CLabel(processStatus, SWT.LEFT);
+        validationStatus.setLayoutData(GridDataFactory.fillDefaults().hint(250,
+            SWT.DEFAULT).grab(true, false).create());
+
         // Initialize process button.
-        processButton = new Button(innerComposite, SWT.PUSH);
+        processButton = new Button(processStatus, SWT.PUSH);
         processButton.setText("Process");
 
         final GridData processButtonGridData = new GridData();
         processButtonGridData.horizontalAlignment = GridData.END;
         processButtonGridData.verticalAlignment = GridData.END;
-        processButtonGridData.horizontalSpan = 2;
+        processButtonGridData.horizontalSpan = 1;
         processButton.setLayoutData(processButtonGridData);
 
         /*
@@ -722,17 +757,30 @@ public class SearchInputView extends ViewPart
      */
     private void checkAllRequiredAttributes()
     {
-        final String source = getSourceId();
-        processButton.setEnabled(true);
-
-        processButton.setToolTipText("");
-        if (!StringUtils.isEmpty(source))
+        if (!showValidationStatus)
         {
-            final Collection<AttributeDescriptor> remaining = getEmptyRequiredAttributes(source);
-            if (remaining.size() > 0)
+            this.validationStatus.setText("");
+            this.validationStatus.setImage(null);
+        }
+        else
+        {
+            editorComposite.setAttribute(ENABLE_VALIDATION_OVERLAYS, true);
+
+            final String source = getSourceId();
+            if (!StringUtils.isEmpty(source))
             {
-                processButton.setToolTipText("Invalid required attribute value: "
-                    + remaining.iterator().next().metadata.getLabelOrTitle());
+                final Collection<AttributeDescriptor> remaining = getEmptyRequiredAttributes(source);
+                if (remaining.size() > 0)
+                {
+                    final String firstBad = remaining.iterator().next().metadata.getLabelOrTitle();
+                    validationStatus.setText("Invalid attribute value: " + firstBad);
+                    validationStatus.setImage(errorStatusImage);
+                }
+                else
+                {
+                    this.validationStatus.setText("");
+                    this.validationStatus.setImage(null);
+                }
             }
         }
     }
@@ -884,6 +932,7 @@ public class SearchInputView extends ViewPart
         sourceViewer.removeSelectionChangedListener(sourceSelectionListener);
         sourceViewer.setSelection(new StructuredSelection(sources.get(sourceID)));
         sourceViewer.addSelectionChangedListener(sourceSelectionListener);
+        showValidationStatus = false;
 
         displayEditorSet();
     }
@@ -993,6 +1042,8 @@ public class SearchInputView extends ViewPart
     public void dispose()
     {
         if (this.editorComposite != null) editorComposite.dispose();
+        if (this.errorStatusImage != null) this.errorStatusImage.dispose();
+        
         super.dispose();
     }
 }
