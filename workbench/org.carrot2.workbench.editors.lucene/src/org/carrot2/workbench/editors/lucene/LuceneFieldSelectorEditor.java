@@ -61,7 +61,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
         BiMap<Object, String> valueToName = Maps.newHashBiMap();
         ArrayList<Object> valueOrder = Lists.newArrayList();
 
-        if (directory instanceof Directory)
+        if (directory != null && directory instanceof Directory)
         {
             try
             {

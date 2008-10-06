@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.swt.SWT;
@@ -265,6 +266,8 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
                 }
             }
         }
+
+        checkContentChange();
     }
 
     /**
