@@ -20,7 +20,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
  * A simple {@link FieldMapper} with one-to-one mapping between the default title, url and
  * summary fields.
  */
-@Bindable(prefix = "LuceneDocumentSource")
+@Bindable
 public class SimpleFieldMapper implements FieldMapper
 {
     /**
