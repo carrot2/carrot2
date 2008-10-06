@@ -15,7 +15,7 @@ import com.google.common.collect.Maps;
  * {@link String} and {@link Enum}, are handled directly by {@link SimpleXmlWrapperValue},
  * no extra code is required for serialization / deserialization.</li>
  * <li><strong>SimpleXML-annotated types.</strong> Types annotated with SimpleXML's
- * {@link Root} annotation will no be wrapped and serialized / deserialized directly by
+ * {@link Root} annotation will now be wrapped and serialized / deserialized directly by
  * SimpleXML</li>
  * <li><strong>Other types.</strong> For any other types, a {@link SimpleXmlWrapper}
  * implementation must be registered using the {@link #addWrapper(Class, Class)} method.</li>
