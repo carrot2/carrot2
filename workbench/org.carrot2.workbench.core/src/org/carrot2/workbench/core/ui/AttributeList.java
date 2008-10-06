@@ -12,8 +12,11 @@ import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.carrot2.workbench.editors.factory.EditorNotFoundException;
+import org.eclipse.jface.fieldassist.*;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -56,7 +59,8 @@ public final class AttributeList extends Composite implements IAttributeEventPro
     /**
      * Forward events from editors to external listeners.
      */
-    private final IAttributeListener forwardListener = new ForwardingAttributeListener(listeners);
+    private final IAttributeListener forwardListener = new ForwardingAttributeListener(
+        listeners);
 
     /** */
     private BindableDescriptor bindable;
@@ -68,8 +72,8 @@ public final class AttributeList extends Composite implements IAttributeEventPro
      * Create a new editor.
      */
     @SuppressWarnings("unchecked")
-    public AttributeList(Composite parent,
-        BindableDescriptor bindable, Map<String, AttributeDescriptor> attributeDescriptors,
+    public AttributeList(Composite parent, BindableDescriptor bindable,
+        Map<String, AttributeDescriptor> attributeDescriptors,
         IAttributeEventProvider globalEventsProvider, Map<String, Object> currentValues)
     {
         super(parent, SWT.NONE);
@@ -82,8 +86,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
          * Only store component clazz if it is assignable to {@link ProcessingComponent}.
          */
         Class<?> clazz = bindable.type;
-        if (clazz != null
-            && ProcessingComponent.class.isAssignableFrom(clazz))
+        if (clazz != null && ProcessingComponent.class.isAssignableFrom(clazz))
         {
             this.componentClazz = (Class<? extends ProcessingComponent>) clazz;
         }
@@ -134,10 +137,9 @@ public final class AttributeList extends Composite implements IAttributeEventPro
 
         super.dispose();
     }
-    
+
     /**
-     * Set the focus to the editor containing {@link AttributeNames#QUERY},
-     * if possible.
+     * Set the focus to the editor containing {@link AttributeNames#QUERY}, if possible.
      */
     @Override
     public boolean setFocus()
@@ -153,7 +155,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
     /**
      * Create internal GUI.
      */
-    private void createComponents(Map<String,Object> currentValues)
+    private void createComponents(Map<String, Object> currentValues)
     {
         /*
          * Sort alphabetically by label.
@@ -191,8 +193,8 @@ public final class AttributeList extends Composite implements IAttributeEventPro
             try
             {
                 editor = EditorFactory.getEditorFor(this.componentClazz, descriptor);
-                final AttributeEditorInfo info = editor.init(
-                    bindable, descriptor, globalEventsProvider, currentValues);
+                final AttributeEditorInfo info = editor.init(bindable, descriptor,
+                    globalEventsProvider, currentValues);
 
                 editorInfos.put(key, info);
                 maxColumns = Math.max(maxColumns, info.columns);
@@ -220,7 +222,8 @@ public final class AttributeList extends Composite implements IAttributeEventPro
         /*
          * Create visual components for editors.
          */
-        final GridDataFactory labelFactory = GridDataFactory.fillDefaults().span(maxColumns, 1);
+        final GridDataFactory labelFactory = GridDataFactory.fillDefaults().span(
+            maxColumns, 1);
 
         boolean firstEditor = true;
         for (String key : sortedKeys)
@@ -239,14 +242,48 @@ public final class AttributeList extends Composite implements IAttributeEventPro
             if (!editorInfo.displaysOwnLabel)
             {
                 final Label label = new Label(this, SWT.LEAD);
-                label.setText(getLabel(descriptor));
-
                 final GridData gd = labelFactory.create();
                 if (!firstEditor)
                 {
                     gd.verticalIndent = SPACE_BEFORE_LABEL;
                 }
                 label.setLayoutData(gd);
+
+                label.setText(getLabel(descriptor)
+                    + (descriptor.requiredAttribute ? " (required)" : ""));
+
+                /*
+                 * Add validation overlay.
+                 */
+                {
+                    final ControlDecoration decoration = new ControlDecoration(label,
+                        SWT.LEFT | SWT.BOTTOM);
+
+                    FieldDecoration requiredDecoration = FieldDecorationRegistry
+                        .getDefault().getFieldDecoration(
+                            FieldDecorationRegistry.DEC_WARNING);
+
+                    decoration.setImage(requiredDecoration.getImage());
+                    decoration.setDescriptionText("Invalid value");
+                    decoration.hide();
+
+                    final IAttributeListener validationListener = 
+                        new InvalidStateDecorationListener(decoration, descriptor);
+
+                    globalEventsProvider.addAttributeListener(validationListener);
+                    editor.addAttributeListener(validationListener);
+
+                    label.addDisposeListener(new DisposeListener()
+                    {
+                        public void widgetDisposed(DisposeEvent e)
+                        {
+                            globalEventsProvider.removeAttributeListener(validationListener);
+                            editor.removeAttributeListener(validationListener);
+                            decoration.dispose();
+                        }
+                    });                    
+                }
+
                 AttributeInfoTooltip.attach(label, descriptor);
             }
 

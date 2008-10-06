@@ -89,6 +89,11 @@ public class SearchInputView extends ViewPart
         .alwaysTrue();
 
     /**
+     * Enable validation overlays (artificial attribute key for editor listeners).
+     */
+    public static final String ENABLE_VALIDATION_OVERLAYS = "enable.validation.overlays";
+
+    /**
      * State persistence.
      */
     private IMemento state;
@@ -339,7 +344,15 @@ public class SearchInputView extends ViewPart
         {
             public void widgetSelected(SelectionEvent e)
             {
-                fireProcessing();
+                final String source = getSourceId();
+                if (hasAllRequiredAttributes(source))
+                {
+                    fireProcessing();                    
+                }
+                else
+                {
+                    editorComposite.setAttribute(ENABLE_VALIDATION_OVERLAYS, true);
+                }
             }
         });
 
@@ -710,7 +723,7 @@ public class SearchInputView extends ViewPart
     private void checkAllRequiredAttributes()
     {
         final String source = getSourceId();
-        processButton.setEnabled(hasAllRequiredAttributes(source));
+        processButton.setEnabled(true);
 
         processButton.setToolTipText("");
         if (!StringUtils.isEmpty(source))

@@ -415,6 +415,10 @@ public final class AttributeGroups extends Composite implements
         {
             attributeEditorList.setAttribute(key, value);
         }
+        else
+        {
+            forwardListener.valueChanged(new AttributeEvent(this, key, value));
+        }
     }
 
     /**
