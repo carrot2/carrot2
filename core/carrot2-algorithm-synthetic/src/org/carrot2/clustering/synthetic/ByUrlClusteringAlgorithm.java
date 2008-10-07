@@ -43,7 +43,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     @Input
     @Internal
     @Attribute(key = AttributeNames.DOCUMENTS)
-    public Collection<Document> documents = Collections.<Document> emptyList();
+    public List<Document> documents;
 
     /**
      * {@link Cluster}s created by the algorithm.
@@ -52,7 +52,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     @Output
     @Internal
     @Attribute(key = AttributeNames.CLUSTERS)
-    public Collection<Cluster> clusters = null;
+    public List<Cluster> clusters = null;
 
     /**
      * Performs by URL clustering.
@@ -74,6 +74,10 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
             documentIndexes.add(i);
         }
         this.clusters = createClusters(documentArray, documentIndexes, urlParts, 0, "");
+        
+        if (clusters.size() == 0) {
+            Cluster.appendOtherTopics(documents, clusters, "Other Sites");
+        }
     }
 
     /**
@@ -139,7 +143,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
 
         if (documentsInClusters.isEmpty())
         {
-            return Collections.<Cluster> emptyList();
+            return Lists.newArrayList();
         }
 
         // Sort clusters

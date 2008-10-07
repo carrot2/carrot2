@@ -201,6 +201,13 @@
     <copy todir="${build.dir}" includeemptydirs="false">
       <fileset dir="${core.dir}/carrot2-component-suites/suites" />
     </copy>
+    <!--
+    <copy todir="${build.dir}" includeemptydirs="false">
+      <fileset dir="${core.dir}/carrot2-source-ambient/src/">
+        <include name="ambient/**" />
+      </fileset>
+    </copy>
+    -->
   </target>
 
   <!-- Copies the test resources to the compiled classes directory. -->

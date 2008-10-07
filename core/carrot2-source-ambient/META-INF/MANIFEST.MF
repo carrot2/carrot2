@@ -6,6 +6,5 @@ Bundle-Version: 3.0.0
 Export-Package: org.carrot2.source.ambient
 Require-Bundle: org.carrot2.core
 Bundle-ClassPath: META-INF/,
- ambient/,
  .
 Bundle-Vendor: Carrot2.org

@@ -39,13 +39,13 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
      * Resource with Ambient's subtopic to result mapping.
      */
     private final static Resource RESULTS_MAPPING_RESOURCE = new ClassResource(
-        AmbientDocumentSource.class, "/STRel.txt");
+        AmbientDocumentSource.class, "/ambient/STRel.txt");
 
     /**
      * Resource with Ambient's results texts.
      */
     private final static Resource RESULTS_RESOURCE = new ClassResource(
-        AmbientDocumentSource.class, "/results.txt");
+        AmbientDocumentSource.class, "/ambient/results.txt");
 
     /**
      * Subtopic ids by topic id.
