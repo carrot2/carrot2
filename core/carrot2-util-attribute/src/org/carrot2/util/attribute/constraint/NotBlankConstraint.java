@@ -20,9 +20,14 @@ class NotBlankConstraint extends Constraint
             return false;
         }
 
-        checkAssignableFrom(CharSequence.class, value);
-
-        return StringUtils.isNotBlank(value.toString());
+        if (value instanceof CharSequence)
+        {
+            return StringUtils.isNotBlank(value.toString());
+        }
+        else
+        {
+            return true;
+        }
     }
 
     @Override

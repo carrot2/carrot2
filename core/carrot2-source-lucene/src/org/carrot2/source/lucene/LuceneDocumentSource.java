@@ -17,8 +17,7 @@ import org.carrot2.core.attribute.*;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 
 import com.google.common.collect.Maps;
@@ -132,6 +131,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     {
         Query.class, String.class
     }, strict = false)
+    @NotBlank
     public Object query;
 
     /**

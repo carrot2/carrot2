@@ -36,6 +36,12 @@ public class NotBlankConstraintTest extends ConstraintTestBase<NotBlank>
     {
         assertNotMet("  \t");
     }
+    
+    @Override
+    boolean isInvalidTypeChecked()
+    {
+        return false;
+    }
 
     @Test
     public void testValidCharSequence() throws Exception
