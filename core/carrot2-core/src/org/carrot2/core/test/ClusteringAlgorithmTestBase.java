@@ -34,6 +34,26 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm>
         assertEquals(0, clusters.size());
     }
 
+    /**
+     * @see http://issues.carrot2.org/browse/CARROT-400
+     */
+    @Test
+    public void testEmptyDocuments()
+    {
+        final List<Document> documents = Lists.newArrayList();
+        final int documentCount = 100;
+        for (int i = 0; i < documentCount; i++)
+        {
+            documents.add(new Document());
+        }
+
+        final List<Cluster> clusters = cluster(documents).getClusters();
+
+        assertNotNull(clusters);
+        assertEquals(1, clusters.size());
+        assertThat(clusters.get(0).size()).isEqualTo(documentCount);
+    }
+
     @Test
     public void testClusteringDataMining()
     {

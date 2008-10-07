@@ -111,10 +111,11 @@ public class IndirectSorter
             T v = array[order[j]];
             for (;;)
             {
-                while (comparator.compare(array[order[++i]], v) < 0)
+                while (i < order.length - 1
+                    && comparator.compare(array[order[++i]], v) < 0)
                 {
                 }
-                while (comparator.compare(array[order[--j]], v) > 0)
+                while (j >= 1 && comparator.compare(array[order[--j]], v) > 0)
                 {
                 }
                 if (j < i)

@@ -227,6 +227,8 @@
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-boss" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-google-desktop" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-solr" />
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-lucene" />
+		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-source-ambient" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-util-text" />
 		<buildMetadata project.loc="${buildDirectory}/plugins/carrot2-core" />
 	</target>

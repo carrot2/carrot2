@@ -50,6 +50,20 @@
 			<icon-path>icons/lucene.png</icon-path>
 			<example-queries></example-queries>
 		</source>
+<!-- 
+		<source
+			component-class="org.carrot2.source.ambient.AmbientDocumentSource"
+			id="ambient">
+			<label>Ambient</label>
+			<title>Ambient Test Set</title>
+			<mnemonic>A</mnemonic>
+			<description>
+				Ambient Test Set Document Source
+			</description>
+			<icon-path>icons/ambient.png</icon-path>
+			<example-queries></example-queries>
+		</source>
+ -->    
 	</sources>
 
 </component-suite>

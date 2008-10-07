@@ -51,6 +51,11 @@ public final class Document
      */
     public static final String SOURCES = "sources";
 
+    /**
+     * Field name for an optional indicator of the document's topic. Value type: String.
+     */
+    public static final String TOPIC = "topic";
+
     /** Fields of this document */
     private Map<String, Object> fields = Maps.newHashMap();
 
