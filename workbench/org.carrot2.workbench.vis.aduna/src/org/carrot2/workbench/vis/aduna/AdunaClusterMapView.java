@@ -1,0 +1,42 @@
+package org.carrot2.workbench.vis.aduna;
+
+import org.carrot2.workbench.core.ui.PageBookViewBase;
+import org.carrot2.workbench.core.ui.SearchEditor;
+import org.eclipse.ui.IWorkbenchPart;
+
+/**
+ * {@link AdunaClusterMapView} displays clusters using Aduna's Cluster View component.
+ * 
+ * @see http://www.aduna-software.com/technologies/clustermap/overview.view
+ */
+public final class AdunaClusterMapView extends PageBookViewBase
+{
+    /**
+     * Public identifier of this view.
+     */
+    public static final String ID = "org.carrot2.workbench.views.aduna";
+
+    /**
+     * Create a document list for the given part.
+     */
+    @Override
+    protected PageRec doCreatePage(IWorkbenchPart part)
+    {
+        final SearchEditor editor = (SearchEditor) part;
+
+        final AdunaClusterMapViewPage page = new AdunaClusterMapViewPage(editor);
+        initPage(page);
+        page.createControl(getPageBook());
+
+        return new PageRec(part, page);
+    }
+
+    /**
+     * Only react to {@link SearchEditor} instances.
+     */
+    @Override
+    protected boolean isImportant(IWorkbenchPart part)
+    {
+        return (part instanceof SearchEditor);
+    }
+}
