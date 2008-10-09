@@ -3,6 +3,7 @@ package org.carrot2.webapp.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.*;
@@ -26,6 +27,12 @@ public class RequestModel
     @Attribute(key = AttributeNames.QUERY)
     @org.simpleframework.xml.Attribute(required = false)
     public String query = "";
+
+    /**
+     * Query that can be safely put into a JavaScript string.
+     */
+    @org.simpleframework.xml.Attribute(name = AttributeNames.QUERY + "-escaped", required = false)
+    public String queryEscaped = "";
 
     /**
      * Note that this is the number of results user requested, the actual number may be
@@ -91,5 +98,7 @@ public class RequestModel
             .wrap(remainingHttpParameters));
 
         this.cookies = MapUtils.asHashMap(SimpleXmlWrappers.wrap(cookies));
+
+        this.queryEscaped = StringEscapeUtils.escapeJavaScript(query);
     }
 }

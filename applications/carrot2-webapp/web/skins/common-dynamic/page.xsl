@@ -23,7 +23,7 @@
       <xsl:if test="string-length(/page/request/@query) > 0">
         jQuery.documents.url = "<xsl:value-of select="$documents-url" disable-output-escaping="no" />";
         jQuery.documents.source = "<xsl:value-of select="/page/request/@source" />";
-        jQuery.documents.query = "<xsl:value-of select="/page/request/@query" />";
+        jQuery.documents.query = "<xsl:value-of select="/page/request/@query-escaped" />";
         
         <xsl:if test="/page/request/@view != 'visu'">
           jQuery.clusters.url = "<xsl:value-of select="$clusters-url" disable-output-escaping="no" />"; 
