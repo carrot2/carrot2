@@ -43,8 +43,12 @@ public class URLResource implements Resource
      * URL string, for serialization only.
      */
     @Attribute(name = "url")
-    private final String info;
+    private String info;
 
+    public URLResource()
+    {
+    }
+    
     public URLResource(URL url)
     {
         this.url = url;
