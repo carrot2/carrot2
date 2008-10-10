@@ -35,7 +35,7 @@ public class BindableDescriptor
          * <p>
          * Group key type: {@link Class}.
          */
-        STRUCTURE,
+        STRUCTURE("Declaring class"),
 
         /**
          * Grouping by the {@link AttributeLevel}. Attributes without
@@ -44,7 +44,7 @@ public class BindableDescriptor
          * <p>
          * Group key type: {@link AttributeLevel}
          */
-        LEVEL,
+        LEVEL("Attribute level"),
 
         /**
          * Grouping by the "semantic" group assigned to the attribute. Attributes with
@@ -55,7 +55,7 @@ public class BindableDescriptor
          * 
          * @see AttributeMetadata#getGroup()
          */
-        GROUP,
+        GROUP("Attribute semantics"),
 
         /**
          * No grouping, all attributes will be put in
@@ -63,7 +63,19 @@ public class BindableDescriptor
          * 
          * @see BindableDescriptor#flatten()
          */
-        NONE
+        NONE("None");
+
+        private final String label;
+        
+        private GroupingMethod(String label)
+        {
+            this.label = label;
+        }
+        
+        public String toString()
+        {
+            return label;
+        }
     }
 
     /**
