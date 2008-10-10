@@ -122,11 +122,14 @@ public final class SimpleController implements Controller
         final Set<ProcessingComponent> initializedComponents = Sets.newHashSet();
 
         // Merge initialization and processing attributes first
-        for (String initKey : initAttributes.keySet())
+        if (initAttributes != null)
         {
-            if (!attributes.containsKey(initKey))
+            for (String initKey : initAttributes.keySet())
             {
-                attributes.put(initKey, initAttributes.get(initKey));
+                if (!attributes.containsKey(initKey))
+                {
+                    attributes.put(initKey, initAttributes.get(initKey));
+                }
             }
         }
 

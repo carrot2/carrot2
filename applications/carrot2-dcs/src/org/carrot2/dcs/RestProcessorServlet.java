@@ -330,6 +330,7 @@ public final class RestProcessorServlet extends HttpServlet
             {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "Unknown output format: '" + requestModel.outputFormat + "'");
+                return;
             }
         }
         catch (Exception e)
