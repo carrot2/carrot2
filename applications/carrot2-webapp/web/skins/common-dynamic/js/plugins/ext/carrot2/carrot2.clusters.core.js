@@ -77,9 +77,11 @@
     $("#clusters li > a").click($.delegate({
       ".tree": function() {
         $(this).parent().toggleFolding();
+        return false;
       },
       "span, a": function() {
         $(this).parent().toggleSelection();
+        return false;
       }
     }));
 

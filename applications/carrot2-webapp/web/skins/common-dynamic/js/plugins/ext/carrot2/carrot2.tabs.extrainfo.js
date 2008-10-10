@@ -18,7 +18,6 @@
    */
   function copyTabInfo (e, tabId) {
     var $siblings = $("#" + tabId).find("a.label").siblings();
-//    $("#tab-info").html($siblings.find("span.tab-info").clone().removeClass("hide"));
     $("#example-queries").html($siblings.find("span.example-queries").clone().removeClass("hide"));
   }
 })(jQuery);

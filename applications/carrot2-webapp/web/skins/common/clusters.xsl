@@ -34,7 +34,15 @@
   </xsl:template>
 
   <xsl:template match="group">
-    <li class="folded" id="{generate-id(.)}">
+    <li id="{generate-id(.)}">
+      <xsl:choose>
+        <xsl:when test="attribute[@key = 'other-topics']">
+          <xsl:attribute name="class">folded other</xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="class">folded</xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
       <a href="#"><span class="label"><xsl:apply-templates select="title" /></span><span class="size">(<xsl:value-of select="@size" />)</span></a>
       <xsl:if test="group">
         <ul>
@@ -46,9 +54,7 @@
 
   <xsl:template match="group/title">
     <xsl:choose>
-      <xsl:when test="../attribute[@key = 'other-topics']">
-        Other topics
-      </xsl:when>
+      <xsl:when test="../attribute[@key = 'other-topics']">Other topics</xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="phrase[1]" />
       </xsl:otherwise>

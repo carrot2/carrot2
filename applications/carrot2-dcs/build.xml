@@ -45,6 +45,12 @@
     <copy todir="${dcs.dir}" file="${carrot2.dcs.basedir}/etc/dcs.cmd" />
     <copy todir="${dcs.dir}" file="${carrot2.dcs.basedir}/etc/dcs.sh" />
 
+    <copy todir="${dcs.dir}">
+      <fileset dir="${carrot2.dcs.basedir}">
+        <include name="examples/**" />
+      </fileset>
+    </copy>
+  
     <delete dir="${dcs.dir}/classes" />
   </target>
 
