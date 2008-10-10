@@ -1,7 +1,8 @@
 package org.carrot2.workbench.core.helpers;
 
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuCreator;
+import org.carrot2.workbench.core.ui.actions.IPropertyHost;
+import org.carrot2.workbench.core.ui.actions.ValueSwitchAction;
+import org.eclipse.jface.action.*;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.*;
@@ -14,11 +15,10 @@ public final class DropDownMenuAction
 {
     private DropDownMenuAction()
     {
-
     }
 
     /**
-     * 
+     * Show a menu for the given action.
      */
     public static void showMenu(IAction action, Event e)
     {
@@ -40,5 +40,59 @@ public final class DropDownMenuAction
                 }
             }
         }
+    }
+
+    /**
+     * Create a {@link IMenuCreator} that shows actions related to a given property, with
+     * names and values derived from an enum constant.
+     */
+    public static <E extends Enum<E>> IMenuCreator getMenuFor(final String propertyKey,
+        final String menuTitle, final E [] constants, final IPropertyHost host)
+    {
+        return new IMenuCreator()
+        {
+            private DisposeBin bin = new DisposeBin();
+    
+            public Menu getMenu(Control parent)
+            {
+                final Menu m = createMenu(propertyKey).createContextMenu(parent);
+                bin.add(m);
+                return m;
+            }
+    
+            public Menu getMenu(Menu parent)
+            {
+                final Menu m = createMenu(propertyKey).getMenu();
+                bin.add(m);
+                return createMenu(propertyKey).getMenu();
+            }
+    
+            public void dispose()
+            {
+                bin.dispose();
+            }
+    
+            private MenuManager createMenu(String preferenceKey)
+            {
+                final MenuManager menu = new MenuManager(menuTitle);
+    
+                for (E e : constants)
+                {
+                    if (e == null)
+                    {
+                        menu.add(new Separator());
+                        continue;
+                    }
+    
+                    final ValueSwitchAction action = new ValueSwitchAction(propertyKey, e
+                        .name(), e.toString(), Action.AS_RADIO_BUTTON, host);
+    
+                    menu.add(action);
+                    bin.add(action);
+                }
+    
+                return menu;
+            }
+        };
     }
 }

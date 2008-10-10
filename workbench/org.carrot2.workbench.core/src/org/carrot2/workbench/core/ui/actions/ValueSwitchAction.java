@@ -2,17 +2,18 @@ package org.carrot2.workbench.core.ui.actions;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.*;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 
 /**
- * A value switch action that implements {@link IPropertyChangeListener}
- * and actively reacts to changes on a given property, selecting the action
- * if the property's value equals the given value.
+ * A value switch action that implements {@link IPropertyChangeListener} and actively
+ * reacts to changes on a given property, selecting the action if the property's value
+ * equals the given value.
  */
-public class ValueSwitchAction extends Action implements IPropertyChangeListener, IWorkbenchAction
+public class ValueSwitchAction extends Action implements IPropertyChangeListener,
+    IWorkbenchAction
 {
     /**
      * The value of this action in the preference store.
@@ -32,16 +33,17 @@ public class ValueSwitchAction extends Action implements IPropertyChangeListener
     /*
      * 
      */
-    public ValueSwitchAction(String key, String value, String label, int style, IPropertyHost host)
+    public ValueSwitchAction(String propertyKey, String propertyValue, String label,
+        int style, IPropertyHost propertyHost)
     {
         super(label, style);
 
-        this.key = key;
-        this.value = value;
-        this.propertyHost = host;
+        this.key = propertyKey;
+        this.value = propertyValue;
+        this.propertyHost = propertyHost;
 
-        host.addPropertyChangeListener(this);
-        
+        propertyHost.addPropertyChangeListener(this);
+
         updateState();
     }
 

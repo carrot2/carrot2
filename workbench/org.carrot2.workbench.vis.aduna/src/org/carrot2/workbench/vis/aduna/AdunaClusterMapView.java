@@ -2,7 +2,9 @@ package org.carrot2.workbench.vis.aduna;
 
 import org.carrot2.workbench.core.ui.PageBookViewBase;
 import org.carrot2.workbench.core.ui.SearchEditor;
-import org.eclipse.ui.IWorkbenchPart;
+import org.carrot2.workbench.core.ui.actions.PreferenceStorePropertyHost;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.ui.*;
 
 /**
  * {@link AdunaClusterMapView} displays clusters using Aduna's Cluster View component.
@@ -15,6 +17,23 @@ public final class AdunaClusterMapView extends PageBookViewBase
      * Public identifier of this view.
      */
     public static final String ID = "org.carrot2.workbench.views.aduna";
+
+    @Override
+    public void init(IViewSite site) throws PartInitException
+    {
+        super.init(site);
+
+        final IActionBars bars = getViewSite().getActionBars();
+        createToolbar(bars.getToolBarManager());
+        bars.updateActionBars();
+    }
+
+    private void createToolbar(IToolBarManager toolBarManager)
+    {
+        toolBarManager.add(new VisualizationModeAction(
+            PreferenceConstants.VISUALIZATION_MODE, new PreferenceStorePropertyHost(
+                AdunaActivator.plugin.getPreferenceStore())));
+    }
 
     /**
      * Create a document list for the given part.

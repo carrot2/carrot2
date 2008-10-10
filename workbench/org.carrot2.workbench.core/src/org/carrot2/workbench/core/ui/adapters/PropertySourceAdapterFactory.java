@@ -15,7 +15,7 @@ import org.eclipse.ui.views.properties.IPropertySource2;
  * Adapters for transforming {@link SearchResult} into other classes.
  */
 @SuppressWarnings("unchecked")
-public final class SearchResultAdapterFactory implements IAdapterFactory
+public final class PropertySourceAdapterFactory implements IAdapterFactory
 {
     private final static Class [] adapted = new Class [] { 
         IPropertySource2.class, IPropertySource.class }; 
@@ -69,7 +69,7 @@ public final class SearchResultAdapterFactory implements IAdapterFactory
      */
     public static void register(IAdapterManager adapterManager)
     {
-        final SearchResultAdapterFactory factory = new SearchResultAdapterFactory();
+        final PropertySourceAdapterFactory factory = new PropertySourceAdapterFactory();
         adapterManager.registerAdapters(factory, SearchResult.class);
         adapterManager.registerAdapters(factory, ClusterWithParent.class);
         adapterManager.registerAdapters(factory, Cluster.class);

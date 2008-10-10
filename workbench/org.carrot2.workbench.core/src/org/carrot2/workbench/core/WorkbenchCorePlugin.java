@@ -10,14 +10,15 @@ import org.carrot2.core.*;
 import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.StreamUtils;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.resource.*;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.SearchEditorSections;
 import org.carrot2.workbench.core.ui.SearchEditor.SectionReference;
-import org.carrot2.workbench.core.ui.adapters.SearchResultAdapterFactory;
+import org.carrot2.workbench.core.ui.adapters.ClusterAdapterFactory;
+import org.carrot2.workbench.core.ui.adapters.PropertySourceAdapterFactory;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -94,7 +95,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         /*
          * Register adapters.
          */
-        SearchResultAdapterFactory.register(Platform.getAdapterManager());
+        PropertySourceAdapterFactory.register(Platform.getAdapterManager());
+        ClusterAdapterFactory.register(Platform.getAdapterManager());
     }
 
     /*

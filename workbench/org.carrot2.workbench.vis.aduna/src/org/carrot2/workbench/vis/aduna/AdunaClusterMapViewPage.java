@@ -3,18 +3,19 @@ package org.carrot2.workbench.vis.aduna;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 import javax.swing.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.Cluster;
+import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
-import org.carrot2.workbench.core.ui.SearchEditor;
-import org.carrot2.workbench.core.ui.SearchResultListenerAdapter;
+import org.carrot2.workbench.core.ui.*;
 import org.eclipse.core.runtime.*;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -28,9 +29,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
 
-import com.google.common.collect.Maps;
-
 import biz.aduna.map.cluster.*;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * A single {@link AdunaClusterMapViewPage} page embeds Aduna's Swing component with
@@ -44,68 +46,156 @@ final class AdunaClusterMapViewPage extends Page
     private final int REFRESH_DELAY = 500;
 
     /**
-     * Visualization refresh job. Postponed a bit to make the user interface more
-     * responsive.
+     * Classification root.
      */
-    private PostponableJob refreshJob = new PostponableJob(
-        new UIJob("Aduna (refresh)...")
-        {
-            private Map<Integer, Classification> clusterMap;
-            private Map<Integer, DefaultObject> documentMap;
+    private DefaultClassification root;
 
-            @SuppressWarnings("unchecked")
-            public IStatus runInUIThread(IProgressMonitor monitor)
+    /**
+     * A map of the most recently shown {@link Cluster}s.
+     */
+    private Map<Integer, DefaultClassification> clusterMap = Maps.newHashMap();
+
+    /**
+     * A map of the most recently shown {@link Document}s.
+     */
+    private Map<Integer, DefaultObject> documentMap = Maps.newHashMap();
+
+    private PostponableJob selectionJob = new PostponableJob(new UIJob(
+        "Aduna ClusterMap (selection)...")
+    {
+        @SuppressWarnings("unchecked")
+        @Override
+        public IStatus runInUIThread(IProgressMonitor monitor)
+        {
+            final VisualizationMode mode = VisualizationMode
+                .valueOf(AdunaActivator.plugin.getPreferenceStore().getString(
+                    PreferenceConstants.VISUALIZATION_MODE));
+
+            if (root != null)
             {
-                final ProcessingResult result = editor.getSearchResult()
-                    .getProcessingResult();
-                if (result != null)
+                switch (mode)
                 {
-                    final DefaultClassification root = new DefaultClassification("All clusters");
-                    updateMaps(result);
-                    toClassification(root, result.getClusters());
-                    mapMediator.setClassificationTree(root);
-                    mapMediator.visualize(new ArrayList(root.getChildren()));
+                    case SHOW_ALL_CLUSTERS:
+                        showAllClusters();
+                        break;
+
+                    case SHOW_FIRST_LEVEL_CLUSTERS:
+                        mapMediator.visualize(new ArrayList(root.getChildren()));
+                        break;
+
+                    case SHOW_SELECTED_CLUSTERS:
+                        showSelectedClusters();
+                        break;
                 }
-                return Status.OK_STATUS;
             }
 
-            private void updateMaps(ProcessingResult result)
+            return Status.OK_STATUS;
+        }
+
+        private void showSelectedClusters()
+        {
+            final ISelection selection = editor.getSelection();
+            if (selection == null || selection.isEmpty() || !(selection instanceof StructuredSelection))
             {
+                mapMediator.visualize(Collections.EMPTY_LIST);
+            }
+            else
+            {
+                final StructuredSelection ss = (StructuredSelection) selection;
+                final IAdapterManager mgr = Platform.getAdapterManager();
+                
+                final java.util.List<Classification> clusters = Lists.newArrayList();
+                for (Object o : ss.toList())
+                {
+                    final Cluster c = (Cluster) mgr.getAdapter(o, Cluster.class);
+                    if (c != null)
+                    {
+                        final Classification object = clusterMap.get(c.getId());
+                        if (object != null) clusters.add(object);
+                    }
+                }
+
+                mapMediator.visualize(clusters);
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        protected void showAllClusters()
+        {
+            final java.util.List<Classification> clusters = Lists.newArrayList();
+
+            final java.util.List<Classification> left = Lists.newLinkedList();
+            left.add(root);
+            while (!left.isEmpty())
+            {
+                final Classification c = left.remove(0);
+                clusters.add(c);
+
+                left.addAll(c.getChildren());
+            }
+
+            mapMediator.visualize(clusters);
+        }
+    });
+
+    /**
+     * Refresh the entire structure of clusters.
+     */
+    private PostponableJob refreshJob = new PostponableJob(new UIJob(
+        "Aduna ClusterMap (full refresh)...")
+    {
+        @SuppressWarnings("unchecked")
+        public IStatus runInUIThread(IProgressMonitor monitor)
+        {
+            final ProcessingResult result = editor.getSearchResult()
+                .getProcessingResult();
+
+            if (result != null)
+            {
+                root = new DefaultClassification("All clusters");
                 clusterMap = Maps.newHashMap();
                 documentMap = Maps.newHashMap();
+                toClassification(root, result.getClusters());
+
+                mapMediator.setClassificationTree(root);
+                selectionJob.reschedule(0);
             }
 
-            private void toClassification(DefaultClassification parent, java.util.List<Cluster> clusters)
+            return Status.OK_STATUS;
+        }
+
+        private void toClassification(DefaultClassification parent,
+            java.util.List<Cluster> clusters)
+        {
+            for (Cluster cluster : clusters)
             {
-                for (Cluster cluster : clusters)
+                if (clusterMap.containsKey(cluster.getId())) continue;
+
+                final DefaultClassification cc = new DefaultClassification(cluster
+                    .getLabel(), parent);
+                clusterMap.put(cluster.getId(), cc);
+
+                for (Document d : cluster.getAllDocuments())
                 {
-                    if (clusterMap.containsKey(cluster.getId()))
-                        continue;
-
-                    final DefaultClassification cc = new DefaultClassification(cluster.getLabel(), parent);
-                    clusterMap.put(cluster.getId(), cc);
-
-                    for (Document d : cluster.getAllDocuments())
+                    if (!documentMap.containsKey(d.getId()))
                     {
-                        if (!documentMap.containsKey(d.getId()))
+                        String dt = (String) (String) d.getField(Document.TITLE);
+                        String title = "[" + d.getId() + "]";
+                        if (!StringUtils.isEmpty(dt))
                         {
-                            String dt = (String) (String) d.getField(Document.TITLE);
-                            String title = "[" + d.getId() + "]";
-                            if (!StringUtils.isEmpty(dt))
-                            {
-                                title = title + " " + dt;
-                            }
-
-                            documentMap.put(d.getId(), new DefaultObject(title));
+                            title = title + " " + dt;
                         }
 
-                        cc.add(documentMap.get(d.getId()));
+                        documentMap.put(d.getId(), new DefaultObject(title));
                     }
 
-                    toClassification(cc, cluster.getSubclusters());
+                    cc.add(documentMap.get(d.getId()));
                 }
+
+                toClassification(cc, cluster.getSubclusters());
             }
-        });
+        }
+    });
 
     /*
      * Sync with search result updated event.
@@ -126,10 +216,11 @@ final class AdunaClusterMapViewPage extends Page
         /* */
         public void selectionChanged(SelectionChangedEvent event)
         {
-            final ISelection selection = event.getSelection();
-            if (selection != null && selection instanceof IStructuredSelection)
+            if (VisualizationMode.SHOW_SELECTED_CLUSTERS.name().equals(
+                AdunaActivator.plugin.getPreferenceStore().getString(
+                    PreferenceConstants.VISUALIZATION_MODE)))
             {
-                final IStructuredSelection ss = (IStructuredSelection) selection;
+                selectionJob.reschedule(REFRESH_DELAY);
             }
         }
     };
@@ -145,12 +236,29 @@ final class AdunaClusterMapViewPage extends Page
     private Composite embedder;
 
     /**
+     * Resource disposal.
+     */
+    private DisposeBin disposeBin = new DisposeBin();
+
+    /**
      * Aduna's GUI mediator component.
      */
     private ClusterMapMediator mapMediator;
 
+    /**
+     * @see VisualizationMode
+     */
+    private IPropertyChangeListener viewModeListener = new PropertyChangeListenerAdapter(
+        PreferenceConstants.VISUALIZATION_MODE)
+    {
+        protected void propertyChangeFiltered(PropertyChangeEvent event)
+        {
+            selectionJob.reschedule(REFRESH_DELAY);
+        }
+    };
+
     /*
-     * 
+     *
      */
     public AdunaClusterMapViewPage(SearchEditor editor)
     {
@@ -164,6 +272,13 @@ final class AdunaClusterMapViewPage extends Page
     public void createControl(Composite parent)
     {
         embedder = createAdunaControl(parent);
+        disposeBin.add(embedder);
+
+        /*
+         * Add listeners.
+         */
+        disposeBin.registerPropertyChangeListener(AdunaActivator.plugin
+            .getPreferenceStore(), viewModeListener);
 
         /*
          * Add a listener to the editor to update the view after new clusters are
@@ -299,7 +414,7 @@ final class AdunaClusterMapViewPage extends Page
         editor.getSearchResult().removeListener(editorSyncListener);
         editor.removePostSelectionChangedListener(selectionListener);
 
-        embedder.dispose();
+        disposeBin.dispose();
 
         super.dispose();
     }

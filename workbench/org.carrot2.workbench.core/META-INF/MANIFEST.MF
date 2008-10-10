@@ -19,6 +19,7 @@ Bundle-ClassPath: .
 Export-Package: org.carrot2.workbench.core,
  org.carrot2.workbench.core.helpers,
  org.carrot2.workbench.core.ui,
+ org.carrot2.workbench.core.ui.actions,
  org.carrot2.workbench.editors,
  org.carrot2.workbench.editors.factory,
  org.carrot2.workbench.velocity
