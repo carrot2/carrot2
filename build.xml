@@ -286,6 +286,7 @@
     <attribute name="java.source" />
     <attribute name="output.dir" />
     <sequential>
+      <mkdir dir="@{output.dir}" />
       <java classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer"
             classpathref="test.classpath">
         <arg file="@{java.source}" />
@@ -336,7 +337,7 @@
   </target>
 
   <target name="attrs.eclipse"
-          depends="compile">
+          depends="compile" description="Generate attribute descriptors for Eclipse">
     <property name="common.attribute.names.source.path"
               location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
 
