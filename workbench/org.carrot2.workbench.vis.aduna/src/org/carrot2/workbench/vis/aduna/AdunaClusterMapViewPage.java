@@ -1,22 +1,38 @@
 package org.carrot2.workbench.vis.aduna;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Panel;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.*;
+import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JRootPane;
+import javax.swing.JScrollPane;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
+import org.apache.log4j.Logger;
 import org.carrot2.core.Cluster;
+import org.carrot2.core.Document;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
-import org.carrot2.workbench.core.ui.*;
-import org.eclipse.core.runtime.*;
+import org.carrot2.workbench.core.ui.PropertyChangeListenerAdapter;
+import org.carrot2.workbench.core.ui.SearchEditor;
+import org.carrot2.workbench.core.ui.SearchResultListenerAdapter;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -29,7 +45,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
 
-import biz.aduna.map.cluster.*;
+import biz.aduna.map.cluster.Classification;
+import biz.aduna.map.cluster.ClusterGraphPanel;
+import biz.aduna.map.cluster.ClusterMap;
+import biz.aduna.map.cluster.ClusterMapFactory;
+import biz.aduna.map.cluster.ClusterMapMediator;
+import biz.aduna.map.cluster.DefaultClassification;
+import biz.aduna.map.cluster.DefaultObject;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -44,6 +66,8 @@ final class AdunaClusterMapViewPage extends Page
      * 
      */
     private final int REFRESH_DELAY = 500;
+
+    private final static Logger logger = Logger.getLogger(AdunaClusterMapViewPage.class);
 
     /**
      * Classification root.
@@ -60,9 +84,14 @@ final class AdunaClusterMapViewPage extends Page
      */
     private Map<Integer, DefaultObject> documentMap = Maps.newHashMap();
 
+    /**
+     * UI job for applying selection to the cluster map component.
+     */
     private PostponableJob selectionJob = new PostponableJob(new UIJob(
         "Aduna ClusterMap (selection)...")
     {
+        private StructuredSelection lastSelection = null;
+
         @SuppressWarnings("unchecked")
         @Override
         public IStatus runInUIThread(IProgressMonitor monitor)
@@ -73,68 +102,122 @@ final class AdunaClusterMapViewPage extends Page
 
             if (root != null)
             {
+                final StructuredSelection currentSelection;
                 switch (mode)
                 {
                     case SHOW_ALL_CLUSTERS:
-                        showAllClusters();
+                        currentSelection = getAll();
                         break;
 
                     case SHOW_FIRST_LEVEL_CLUSTERS:
-                        mapMediator.visualize(new ArrayList(root.getChildren()));
+                        currentSelection = getFirstLevel();
                         break;
 
                     case SHOW_SELECTED_CLUSTERS:
-                        showSelectedClusters();
+                        currentSelection = getSelected();
                         break;
+
+                    default:
+                        throw new RuntimeException("Unhanded case: " + mode);
+                }
+
+                if (!currentSelection.equals(lastSelection))
+                {
+                    final java.util.List selected = selectionToClassification(currentSelection);
+                    logger.debug("Applying selection: " + selected);
+                    mapMediator.visualize(selected);
+
+                    this.lastSelection = currentSelection;
                 }
             }
 
             return Status.OK_STATUS;
         }
 
-        private void showSelectedClusters()
+        /*
+         * 
+         */
+        private java.util.List<Classification> selectionToClassification(
+            StructuredSelection s)
         {
-            final ISelection selection = editor.getSelection();
-            if (selection == null || selection.isEmpty() || !(selection instanceof StructuredSelection))
+            final IAdapterManager mgr = Platform.getAdapterManager();
+
+            final java.util.List<Classification> selected = Lists.newArrayList();
+            for (Object o : s.toList())
             {
-                mapMediator.visualize(Collections.EMPTY_LIST);
-            }
-            else
-            {
-                final StructuredSelection ss = (StructuredSelection) selection;
-                final IAdapterManager mgr = Platform.getAdapterManager();
-                
-                final java.util.List<Classification> clusters = Lists.newArrayList();
-                for (Object o : ss.toList())
+                if (o != null && o instanceof Classification)
+                {
+                    selected.add((Classification) o);
+                }
+                else
                 {
                     final Cluster c = (Cluster) mgr.getAdapter(o, Cluster.class);
                     if (c != null)
                     {
                         final Classification object = clusterMap.get(c.getId());
-                        if (object != null) clusters.add(object);
+                        if (object != null) selected.add(object);
                     }
                 }
+            }
+            return selected;
+        }
 
-                mapMediator.visualize(clusters);
+        /*
+         * 
+         */
+        private StructuredSelection getSelected()
+        {
+            final ISelection selection = editor.getSelection();
+            if (selection == null || selection.isEmpty()
+                || !(selection instanceof StructuredSelection))
+            {
+                return StructuredSelection.EMPTY;
+            }
+            else
+            {
+                final StructuredSelection ss = (StructuredSelection) selection;
+                return ss;
+            }
+        }
+
+        /*
+         * 
+         */
+        private StructuredSelection getFirstLevel()
+        {
+            if (root == null)
+            {
+                return StructuredSelection.EMPTY;
+            }
+            else
+            {
+                return new StructuredSelection(root.getChildren().toArray());
             }
         }
 
         @SuppressWarnings("unchecked")
-        protected void showAllClusters()
+        protected StructuredSelection getAll()
         {
-            final java.util.List<Classification> clusters = Lists.newArrayList();
-
-            final java.util.List<Classification> left = Lists.newLinkedList();
-            left.add(root);
-            while (!left.isEmpty())
+            if (root == null)
             {
-                final Classification c = left.remove(0);
-                clusters.add(c);
-
-                left.addAll(c.getChildren());
+                return StructuredSelection.EMPTY;
             }
+            else
+            {
+                final java.util.List<Classification> clusters = Lists.newArrayList();
+                final java.util.List<Classification> left = Lists.newLinkedList();
 
-            mapMediator.visualize(clusters);
+                left.add(root);
+                while (!left.isEmpty())
+                {
+                    final Classification c = left.remove(0);
+                    clusters.add(c);
+
+                    left.addAll(c.getChildren());
+                }
+
+                return new StructuredSelection(clusters);
+            }
         }
     });
 
