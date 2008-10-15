@@ -7,7 +7,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.BindableDescriptor;
+import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
@@ -304,12 +305,26 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             }
         };
         this.searchResult.addListener(rootFormTitleUpdater);
-        
+
         /*
-         * Create jobs and schedule initial processing.
+         * Create jobs and schedule initial processing after the editor is shown.
          */
         createJobs();
-        reprocess();
+
+        getSite().getPage().addPartListener(new PartListenerAdapter() {
+            public void partClosed(IWorkbenchPart part)
+            {
+                getSite().getPage().removePartListener(this);
+            }
+
+            public void partOpened(IWorkbenchPart part)
+            {
+                if (part == SearchEditor.this)
+                {
+                    reprocess();
+                }
+            }
+        });
     }
 
     /**
