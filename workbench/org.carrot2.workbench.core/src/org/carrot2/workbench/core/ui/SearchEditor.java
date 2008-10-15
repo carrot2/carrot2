@@ -1035,8 +1035,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         this.searchJob = new SearchJob(
             "Searching for '" + title + "'...", searchResult);
 
-        // I assume search jobs qualify as 'long' jobs (over one second).
-        this.searchJob.setPriority(Job.LONG);
+        // Try to push search jobs into the background, if possible.
+        this.searchJob.setPriority(Job.DECORATE);
 
         /*
          * Add a job listener to update root form's busy state.
