@@ -46,6 +46,7 @@ public final class CaseNormalizer
      * 
      * @level Advanced
      * @group Preprocessing
+     * @label Word Document Frequency threshold
      */
     @Processing
     @Input

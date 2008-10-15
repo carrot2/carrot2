@@ -73,10 +73,12 @@ public abstract class YahooSearchService
     public static final String RESULTS_RETURNED_KEY = "resultsReturned";
 
     /**
-     * Application ID required for Yahoo! services.
+     * Application ID required for Yahoo! services. Please obtain your own appid for
+     * production deployments.
      * 
      * @label Application ID
      * @level Advanced
+     * @group Service
      */
     @Init
     @Input

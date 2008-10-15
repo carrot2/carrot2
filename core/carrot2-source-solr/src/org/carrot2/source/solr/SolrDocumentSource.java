@@ -23,6 +23,7 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * 
      * @label Service URL
      * @level Advanced
+     * @group Service
      */
     @Input
     @Processing
@@ -31,8 +32,10 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
 
     /**
      * Title field name. Name of the Solr field that will provide document titles.
-     * 
+     *
+     * @label Title field name
      * @level Medium
+     * @group Index field mapping
      */
     @Input
     @Processing
@@ -42,6 +45,8 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     /**
      * Summary field name. Name of the Solr field that will provide document summary.
      * 
+     * @label Summary field name
+     * @group Index field mapping
      * @level Medium
      */
     @Input
@@ -50,8 +55,10 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     public String solrSummaryFieldName = "description";
 
     /**
-     * Title field name. Name of the Solr field that will provide document URLs.
+     * URL field name. Name of the Solr field that will provide document URLs.
      * 
+     * @label URL field name
+     * @group Index field mapping
      * @level Medium
      */
     @Input

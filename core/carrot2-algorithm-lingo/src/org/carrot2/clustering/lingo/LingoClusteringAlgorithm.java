@@ -29,6 +29,10 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * Query that produced the documents. The query will help the algorithm to create
      * better clusters. Therefore, providing the query is optional but desirable.
+     * 
+     * @group Search query
+     * @level Medium
+     * @label Search query
      */
     @Processing
     @Input
@@ -58,6 +62,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      * 
      * @level Advanced
      * @group Matrix model
+     * @label Term weighting
      */
     @Input
     @Processing
@@ -74,6 +79,9 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      * Indicates whether Lingo used fast native matrix computation routines. Value of this
      * attribute is equal to {@link NNIInterface#isNativeBlasAvailable()} at the time of
      * running the algorithm.
+     * 
+     * @group Matrix model
+     * @label Native matrix operations used
      */
     @Processing
     @Output

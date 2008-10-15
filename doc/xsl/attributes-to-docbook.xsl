@@ -55,7 +55,18 @@
 
   <xsl:template match="attribute-descriptor">
     <section>
-      <title><xsl:value-of select="metadata/label" /></title>
+      <title>
+        <xsl:choose>
+          <xsl:when test="metadata/label">
+            <xsl:value-of select="metadata/label" />
+          </xsl:when>
+          
+          <xsl:otherwise>
+            <xsl:value-of select="metadata/title" />
+          </xsl:otherwise>
+        </xsl:choose>
+        
+      </title>
       <informaltable frame="none">
         <tgroup cols="2">
           <tbody>

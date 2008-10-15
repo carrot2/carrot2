@@ -23,6 +23,7 @@ public class TermDocumentMatrixReducer
      * 
      * @level Advanced
      * @group Matrix model
+     * @label Factorization method
      */
     @Input
     @Processing
@@ -44,6 +45,7 @@ public class TermDocumentMatrixReducer
      * 
      * @level Advanced
      * @group Matrix model
+     * @label Factorization quality
      */
     @Input
     @Processing
@@ -58,6 +60,7 @@ public class TermDocumentMatrixReducer
      * 
      * @level Basic
      * @group Clusters
+     * @label Cluster count base
      */
     @Input
     @Processing

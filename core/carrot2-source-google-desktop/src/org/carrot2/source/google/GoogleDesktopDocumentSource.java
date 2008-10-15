@@ -22,10 +22,14 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * Query URL. Installation-specific URL at which Google Desktop search service is
      * available. On Windows machines, the URL is available at the
      * <code>HKEY_CURRENT_USER\Software\Google\Google Desktop\API\search_url</code> system
-     * registry key. Please consult Google Desktop API documents for further instructions
-     * if needed.
+     * registry key and Carrot2 will attempt to automatically read the value from the
+     * registry. Please consult Google Desktop API documents for further instructions if
+     * needed.
      * 
      * @see http://code.google.com/apis/desktop/docs/queryapi.html#httpxml
+     * @label Query URL
+     * @level Advanced
+     * @group Service
      */
     @Input
     @Processing
@@ -36,6 +40,10 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * Keep query word highlighting. Google by default highlights query words in snippets
      * using the bold HTML tag. Set this attribute to <code>true</code> to keep these
      * highlights.
+     * 
+     * @group Postprocessing
+     * @level Advanced
+     * @label Keep highlights
      */
     @Input
     @Processing

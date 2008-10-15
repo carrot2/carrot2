@@ -30,6 +30,7 @@ public class TermDocumentMatrixBuilder
      * 
      * @level Medium
      * @group Labels
+     * @label Title word boost
      */
     @Input
     @Processing
@@ -43,6 +44,7 @@ public class TermDocumentMatrixBuilder
      * 
      * @level Advanced
      * @group Matrix model
+     * @label Maximum matrix size
      */
     @Input
     @Processing
@@ -57,6 +59,7 @@ public class TermDocumentMatrixBuilder
      * 
      * @level Advanced
      * @group Matrix model
+     * @label Maximum word document frequency
      */
     @Input
     @Processing

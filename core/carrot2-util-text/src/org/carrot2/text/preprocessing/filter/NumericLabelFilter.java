@@ -17,6 +17,7 @@ public class NumericLabelFilter extends SingleLabelFilterBase
      * 
      * @level Basic
      * @group Label filtering
+     * @label Remove numeric labels
      */
     @Input
     @Processing

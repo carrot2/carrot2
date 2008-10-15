@@ -29,6 +29,10 @@ public final class YahooDocumentSource extends MultipageSearchEngine
      * Keep query word highlighting. Yahoo by default highlights query words in
      * snippets using the bold HTML tag. Set this attribute to <code>true</code> to keep
      * these highlights.
+     * 
+     * @group Postprocessing
+     * @level Advanced
+     * @label Keep highlights
      */
     @Input
     @Processing
@@ -42,6 +46,7 @@ public final class YahooDocumentSource extends MultipageSearchEngine
      * 
      * @label Yahoo Search Service
      * @level Advanced
+     * @group Service
      */
     @Init
     @Input

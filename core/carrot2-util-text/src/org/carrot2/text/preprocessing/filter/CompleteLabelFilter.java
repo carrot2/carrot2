@@ -20,6 +20,7 @@ public class CompleteLabelFilter implements LabelFilter
      * 
      * @level Basic
      * @group Label filtering
+     * @label Remove truncated phrases
      */
     @Input
     @Processing
@@ -34,6 +35,7 @@ public class CompleteLabelFilter implements LabelFilter
      * 
      * @level Advanced
      * @group Phrase extraction
+     * @label Truncated label threshold
      */
     @Input
     @Processing

@@ -36,6 +36,7 @@ public class DocumentAssigner
      * 
      * @level Medium
      * @group Preprocessing
+     * @label Exact phrase assignment
      */
     @Input
     @Processing

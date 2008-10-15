@@ -17,6 +17,7 @@ public class QueryLabelFilter extends SingleLabelFilterBase
      * 
      * @level Basic
      * @group Label filtering
+     * @label Remove query words
      */
     @Input
     @Processing

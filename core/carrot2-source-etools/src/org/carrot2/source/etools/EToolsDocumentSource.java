@@ -21,6 +21,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * 
      * @label Service URL
      * @level Advanced
+     * @group Service
      */
     @Input
     @Processing
@@ -61,6 +62,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * 
      * @label Country
      * @level Medium
+     * @group Results filtering
      */
     @Input
     @Processing
@@ -99,7 +101,8 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * Determines the language of the returned search results.
      * 
      * @label Language
-     * @level Basic
+     * @level Medium
+     * @group Results filtering
      */
     @Input
     @Processing
@@ -111,6 +114,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * 
      * @label Timeout
      * @level Advanced
+     * @group Service
      */
     @Input
     @Processing
@@ -123,6 +127,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * 
      * @label Data sources
      * @level Medium
+     * @group Service
      */
     @Input
     @Processing
@@ -169,6 +174,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * 
      * @label Safe search
      * @level Basic
+     * @group Results filtering
      */
     @Input
     @Processing
@@ -181,6 +187,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * 
      * @label Partner
      * @level Advanced
+     * @group Service
      */
     @Input
     @Processing

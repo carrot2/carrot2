@@ -35,6 +35,7 @@ public class ClusterBuilder
      * 
      * @group Labels
      * @level Medium
+     * @label Phrase label boost
      */
     @Input
     @Processing
@@ -49,6 +50,7 @@ public class ClusterBuilder
      * 
      * @group Labels
      * @level Advanced
+     * @label Phrase length penalty start
      */
     @Input
     @Processing
@@ -63,6 +65,7 @@ public class ClusterBuilder
      * 
      * @group Labels
      * @level Advanced
+     * @label Phrase length penalty stop
      */
     @Input
     @Processing
@@ -79,6 +82,7 @@ public class ClusterBuilder
      * 
      * @group Labels
      * @level Medium
+     * @label Cluster merging threshold
      */
     @Input
     @Processing

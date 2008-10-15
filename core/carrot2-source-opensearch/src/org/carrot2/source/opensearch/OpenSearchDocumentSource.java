@@ -51,6 +51,10 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * to be searched. Mutually exclusive with <code>startIndex</code>.</li><li><code>
      * count</code> the number of search results per page</li>
      * </ul>
+     * 
+     * @label Feed URL template
+     * @level Medium
+     * @group Service
      */
     @Input
     @Init
@@ -61,6 +65,10 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     /**
      * Results per page. The number of results per page the document source will expect
      * the feed to return.
+     * 
+     * @label Results per page
+     * @level Medium
+     * @group Service
      */
     @Input
     @Init
@@ -72,6 +80,10 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     /**
      * Maximum number of results. The maximum number of results the document source can
      * deliver.
+     * 
+     * @label Maximum results
+     * @level Medium
+     * @group Service
      */
     @Input
     @Init

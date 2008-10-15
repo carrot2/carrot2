@@ -44,7 +44,13 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
     private static final int MAX_CONCURRENT_THREADS = 10;
 
     /**
-     * Microsoft-assigned application ID for querying the API.
+     * Microsoft-assigned application ID for querying the API. Please <strong>generate
+     * your own ID</strong> for production deployments and branches off the Carrot2.org's
+     * code.
+     * 
+     * @label Application ID
+     * @level Advanced
+     * @group Service
      */
     @Init
     @Input
@@ -81,7 +87,8 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
     /**
      * Microsoft Live! metadata.
      */
-    static final MultipageSearchEngineMetadata metadata = new MultipageSearchEngineMetadata(50, 1000); 
+    static final MultipageSearchEngineMetadata metadata = new MultipageSearchEngineMetadata(
+        50, 1000);
 
     /**
      * Run a single query.
@@ -91,7 +98,7 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
     {
         super.process(metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()));
     }
-    
+
     /**
      * Create a single page fetcher for the search range.
      */
@@ -102,7 +109,8 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
         {
             public SearchEngineResponse search() throws Exception
             {
-                return MicrosoftLiveDocumentSource.this.search(query, bucket.start, bucket.results);
+                return MicrosoftLiveDocumentSource.this.search(query, bucket.start,
+                    bucket.results);
             }
         };
     }

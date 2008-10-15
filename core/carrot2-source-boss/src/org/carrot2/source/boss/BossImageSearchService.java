@@ -17,24 +17,26 @@ import org.carrot2.util.attribute.*;
  * <li>display the title or abstract of the image when presented in the search results;
  * <li>display at least the first 40 characters of the referurl field which indicates the
  * source page;
- * <li>for the source page referurl, use the unmodified referclickurl field to navigate
- * to the respective source page;
- * <li>If the image is made clickable, either use unmodified refereclickurl (to the
- * source HTML page) or clickurl (to the image) for the navigation link.
+ * <li>for the source page referurl, use the unmodified referclickurl field to navigate to
+ * the respective source page;
+ * <li>If the image is made clickable, either use unmodified refereclickurl (to the source
+ * HTML page) or clickurl (to the image) for the navigation link.
  * </ol>
  * 
  * @label Yahoo Boss Image Search Service
- * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/">Yahoo Boss
- *      Documentation</a>
+ * @see http://developer.yahoo.com/search/boss/boss_guide/
  */
 @Bindable(prefix = "BossImageSearchService")
 public final class BossImageSearchService extends BossSearchService
 {
     /**
-     * Boss Image search service URI.
+     * Boss Image search service URI. Specifies the URI at which Yahoo Boss Image Search
+     * API is available. The <code>${query}</code> place holder will be replaced with the
+     * URL-encoded text of the processed query.
      * 
      * @label Service URI
      * @level Advanced
+     * @group Service
      */
     @Init
     @Input
@@ -56,9 +58,9 @@ public final class BossImageSearchService extends BossSearchService
     public boolean filter = true;
 
     /**
-     * Small images are generally thumbnail or icon sized. Medium sized images are average
-     * sized; usually not exceeding an average screen size. Large images are screen size
-     * or larger. Size pairs other than those listed are ignored.
+     * The size of images to fetch. Small images are generally thumbnail or icon sized.
+     * Medium sized images are average sized; usually not exceeding an average screen
+     * size. Large images are screen size or larger.
      * 
      * @see http://developer.yahoo.com/search/boss/boss_guide/Submit_Image_Queries.html
      * @group Results filtering
@@ -81,7 +83,7 @@ public final class BossImageSearchService extends BossSearchService
         final ArrayList<NameValuePair> params = new ArrayList<NameValuePair>(10);
 
         params.add(new NameValuePair("filter", filter ? "yes" : "no"));
-        
+
         if (dimensions != null)
         {
             params.add(new NameValuePair("dimensions", dimensions.parameterValue));

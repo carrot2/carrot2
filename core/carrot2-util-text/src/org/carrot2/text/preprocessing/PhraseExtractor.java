@@ -49,6 +49,7 @@ public class PhraseExtractor
      * 
      * @level Advanced
      * @group Phrase extraction
+     * @label Phrase Document Frequency threshold
      */
     @Processing
     @Input

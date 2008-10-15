@@ -51,6 +51,7 @@ public final class YahooNewsSearchService extends YahooSearchService
      * 
      * @label Service URI
      * @level Advanced
+     * @group Service
      */
     @Init
     @Input
@@ -59,10 +60,10 @@ public final class YahooNewsSearchService extends YahooSearchService
         "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
 
     /**
-     * A domain to restrict your searches to (e.g., www.yahoo.com). TODO: maybe it would
-     * make sense to add support for multiple values here (this is allowed by Yahoo)?
+     * A domain to restrict your searches to (e.g., www.yahoo.com).
      * 
-     * @label Site
+     * @group Results filtering
+     * @label Domain restriction
      * @level Medium
      */
     @Processing

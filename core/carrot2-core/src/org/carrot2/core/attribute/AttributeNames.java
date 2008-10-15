@@ -9,7 +9,7 @@ import org.carrot2.core.*;
 public final class AttributeNames
 {
     /**
-     * Index of the first document/ search result to fetch. The index starts with zero.
+     * Index of the first document/ search result to fetch. The index starts at zero.
      * 
      * @label Start Index
      * @level Medium
@@ -18,7 +18,7 @@ public final class AttributeNames
     public static final String START = "start";
 
     /**
-     * Number maximum of documents/ search results to fetch.
+     * Maximum number of documents/ search results to fetch.
      * 
      * @label Results
      * @level Basic

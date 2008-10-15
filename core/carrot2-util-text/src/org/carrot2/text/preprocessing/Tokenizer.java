@@ -38,11 +38,12 @@ import com.google.common.collect.Maps;
 public final class Tokenizer
 {
     /**
-     * Analyzer used to split {@link #documents} into individual tokens (terms). This
+     * Analyzer used to split documents into individual tokens (terms). This
      * analyzer must provide token {@link Payload} implementing {@link TokenType}.
      * 
      * @level Medium
      * @group Preprocessing
+     * @label Analyzer
      */
     @Init
     @Input
@@ -54,11 +55,12 @@ public final class Tokenizer
     public Analyzer analyzer = new ExtendedWhitespaceAnalyzer();
 
     /**
-     * Textual fields of a {@link Document} that should be tokenized and parsed for
+     * Textual fields of documents that should be tokenized and parsed for
      * clustering.
      * 
      * @level Advanced
      * @group Preprocessing
+     * @label Document fields
      */
     @Init
     @Input

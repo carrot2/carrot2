@@ -26,6 +26,7 @@ public final class BossNewsSearchService extends BossSearchService
      * 
      * @label Service URI
      * @level Advanced
+     * @group Service
      */
     @Init
     @Input
