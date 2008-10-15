@@ -2,7 +2,7 @@ package org.carrot2.workbench.vis.circles;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
-import org.carrot2.core.ClusterWithParent;
+import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.ui.SearchEditor;
@@ -11,8 +11,9 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
 
@@ -106,6 +107,8 @@ final class CirclesViewPage extends Page
     private final ISelectionChangedListener selectionListener = 
         new ISelectionChangedListener()
     {
+        private IStructuredSelection lastSelection;  
+
         /* */
         public void selectionChanged(SelectionChangedEvent event)
         {
@@ -113,17 +116,24 @@ final class CirclesViewPage extends Page
             if (selection != null && selection instanceof IStructuredSelection)
             {
                 final IStructuredSelection ss = (IStructuredSelection) selection;
-                final Object current = ss.getFirstElement();
-                
-                if (current != null && current instanceof ClusterWithParent)
+                if (lastSelection == null || !lastSelection.equals(ss))
                 {
-                    final int id = ((ClusterWithParent) current).cluster.getId();
+                    final IAdapterManager mgr = Platform.getAdapterManager();
+                    final Cluster cluster = (Cluster)
+                        mgr.getAdapter(ss.getFirstElement(), Cluster.class);
 
-                    if (!ObjectUtils.equals(id, last))
+                    if (cluster != null)
                     {
-                        selectionJob.reschedule(BROWSER_SELECTION_DELAY);
-                        last = id;
+                        final int id = cluster.getId();
+    
+                        if (!ObjectUtils.equals(id, last))
+                        {
+                            selectionJob.reschedule(BROWSER_SELECTION_DELAY);
+                            last = id;
+                        }
                     }
+
+                    lastSelection = new StructuredSelection(ss.toArray());
                 }
             }
         }
@@ -148,6 +158,32 @@ final class CirclesViewPage extends Page
          * Open the browser and redirect it to the internal HTTP server.
          */
         browser = new Browser(parent, SWT.NONE);
+        browser.addControlListener(new ControlListener()
+        {
+            public void controlMoved(ControlEvent e)
+            {
+                System.out.println("moved" + e);
+            }
+            public void controlResized(ControlEvent e)
+            {
+                System.out.println("resized: " + e);
+            }
+        });
+
+        final Listener l = new Listener() {
+            public void handleEvent(Event event)
+            {
+                System.out.println("event: " + event);
+            }
+        };
+
+        browser.addListener(SWT.PaintItem, l);
+        browser.addListener(SWT.EraseItem, l);
+        browser.addListener(SWT.Deactivate, l);
+        browser.addListener(SWT.Activate, l);
+        browser.addListener(SWT.Show, l);
+        browser.addListener(SWT.Hide, l);
+        
 
         /*
          * Add a listener to the editor to update the view
