@@ -11,9 +11,8 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
 
@@ -158,32 +157,6 @@ final class CirclesViewPage extends Page
          * Open the browser and redirect it to the internal HTTP server.
          */
         browser = new Browser(parent, SWT.NONE);
-        browser.addControlListener(new ControlListener()
-        {
-            public void controlMoved(ControlEvent e)
-            {
-                System.out.println("moved" + e);
-            }
-            public void controlResized(ControlEvent e)
-            {
-                System.out.println("resized: " + e);
-            }
-        });
-
-        final Listener l = new Listener() {
-            public void handleEvent(Event event)
-            {
-                System.out.println("event: " + event);
-            }
-        };
-
-        browser.addListener(SWT.PaintItem, l);
-        browser.addListener(SWT.EraseItem, l);
-        browser.addListener(SWT.Deactivate, l);
-        browser.addListener(SWT.Activate, l);
-        browser.addListener(SWT.Show, l);
-        browser.addListener(SWT.Hide, l);
-        
 
         /*
          * Add a listener to the editor to update the view
