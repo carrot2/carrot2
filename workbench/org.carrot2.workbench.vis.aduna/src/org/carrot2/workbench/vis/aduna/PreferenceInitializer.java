@@ -13,7 +13,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         final Preferences pluginPreferences = AdunaActivator.plugin
             .getPluginPreferences();
 
-        pluginPreferences.setValue(PreferenceConstants.VISUALIZATION_MODE,
+        pluginPreferences.setDefault(PreferenceConstants.VISUALIZATION_MODE,
             VisualizationMode.SHOW_FIRST_LEVEL_CLUSTERS.name());
     }
 }
