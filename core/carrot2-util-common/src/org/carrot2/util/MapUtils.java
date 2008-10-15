@@ -14,7 +14,7 @@ public class MapUtils
     private MapUtils()
     {
     }
-    
+
     public static <K, V> HashMap<K, V> asHashMap(Map<K, V> map)
     {
         if (map instanceof HashMap)
@@ -26,7 +26,7 @@ public class MapUtils
             return new HashMap<K, V>(map);
         }
     }
-     
+
     /**
      * Iterates through entries of the input <code>map</code> and for values being String
      * arrays puts the first element of the map in the result map. Scalar values get
@@ -54,5 +54,25 @@ public class MapUtils
             }
         }
         return result;
+    }
+
+    public static <K> Integer increment(Map<K, Integer> map, K key)
+    {
+        return increment(map, key, 1);
+    }
+
+    public static <K> Integer increment(Map<K, Integer> map, K key, int value)
+    {
+        final Integer current = map.get(key);
+        if (current == null)
+        {
+            map.put(key, value);
+            return value;
+        }
+        else
+        {
+            map.put(key, current + value);
+            return current + value;
+        }
     }
 }

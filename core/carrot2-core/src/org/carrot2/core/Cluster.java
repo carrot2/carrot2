@@ -4,7 +4,8 @@ import java.util.*;
 
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.StringUtils;
-import org.carrot2.util.simplexml.*;
+import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
+import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -466,6 +467,26 @@ public final class Cluster
      */
     public static final Comparator<Cluster> BY_REVERSED_SCORE_AND_LABEL_COMPARATOR = Comparators
         .compound(Collections.reverseOrder(BY_SCORE_COMPARATOR), BY_LABEL_COMPARATOR);
+
+    public static Comparator<Cluster> byWeightedScoreAndSizeComparator(
+        final double scoreWeight, final int documentCount)
+    {
+        if (scoreWeight < 0 || scoreWeight > 1)
+        {
+            throw new IllegalArgumentException(
+                "Score weight must be between 0.0 (inclusive) and 1.0 (inclusive) ");
+        }
+
+        return Comparators.compound(Comparators.nullLeastOrder(Comparators
+            .fromFunction(new Function<Cluster, Double>()
+            {
+                public Double apply(Cluster cluster)
+                {
+                    return Math.pow(documentCount - cluster.size(), (1 - scoreWeight))
+                        * Math.pow((Double) cluster.getAttribute(SCORE), scoreWeight);
+                }
+            })), BY_LABEL_COMPARATOR);
+    }
 
     /**
      * Assigns sequential identifiers to the provided <code>clusters</code> (and their

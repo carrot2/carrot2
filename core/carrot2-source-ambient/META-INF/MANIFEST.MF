@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Ambient Ttest Set Document Source
+Bundle-Name: Ambient Test Set Document Source
 Bundle-SymbolicName: org.carrot2.source.ambient;singleton:=true
 Bundle-Version: 3.0.0
 Export-Package: org.carrot2.source.ambient

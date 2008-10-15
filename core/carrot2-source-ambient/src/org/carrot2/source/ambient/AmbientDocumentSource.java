@@ -93,6 +93,11 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
     @Attribute(key = AttributeNames.DOCUMENTS)
     @Internal
     public List<Document> documents;
+    
+    @Processing
+    @Output
+    @Attribute(key = AttributeNames.QUERY)
+    public String query;
 
     /**
      * All available Ambient topics.
@@ -139,6 +144,7 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
     public void process() throws ProcessingException
     {
         documents = documentsByTopicId.get(topic.getTopicId());
+        query = topic.query;
         if (documents.size() >= results)
         {
             documents = documents.subList(0, results);

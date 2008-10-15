@@ -11,6 +11,7 @@ import org.carrot2.text.linguistic.LanguageModelFactory;
 import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.DoubleRange;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 import bak.pcj.IntIterator;
@@ -78,6 +79,21 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Output
     @Attribute
     public boolean nativeMatrixUsed;
+
+    /**
+     * Balance between cluster score and size during cluster sorting. Value equal to 0.0
+     * will cause Lingo to sort clusters based only on cluster size. Value equal to 1.0
+     * will cause Lingo to sort clusters basec only on cluster score.
+     * 
+     * @label Size-Score sorting ratio
+     * @level Medium
+     * @group Clusters
+     */
+    @Input
+    @Processing
+    @Attribute
+    @DoubleRange(min = 0.0, max = 1.0)
+    public double scoreWeight = 0.0;
 
     /**
      * Tokenizer used by the algorithm, contains bindable attributes.
@@ -224,7 +240,8 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                 }
             }
 
-            Collections.sort(clusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
+            Collections.sort(clusters, Cluster.byWeightedScoreAndSizeComparator(
+                scoreWeight, documents.size()));
         }
 
         Cluster.appendOtherTopics(documents, clusters);
