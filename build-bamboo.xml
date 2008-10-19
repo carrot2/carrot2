@@ -9,31 +9,32 @@
         <!-- clean everything -->
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="clean" inheritall="true" />
 
-        <!-- full build and test of all components -->
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="test" inheritall="true" />
+        <!-- full build, test and reports -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="reports" inheritall="true" />
 
-        <!-- build coverage report -->
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="coverage" inheritall="true" />
-
-        <!-- code duplication report -->
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="duplication" inheritall="true" />
-
-        <!-- FindBugs -->
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="findbugs" inheritall="true" />
+        <!-- build all distributions and docs -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist" inheritall="true" />
     </target>
+
+    <target name="publish" depends="publish.artifacts, publish.demo" />
 
     <target name="publish.demo">
         <fail unless="webapp.name">Define: webapp.name property.</fail>
         <fail unless="webapps.dir">Define: webapps.dir property.</fail>
         <fail unless="tomcat.init">Define: tomcat.init property.</fail>
 
-        <!-- Build and deploy webapp -->
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="clean.classes" inheritall="true" />
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="webapp" inheritall="true" />
-
-        <copy file="${carrot2.code.dir}/tmp/webapp/carrot2-webapp.war"
+        <!-- We're assuming the webapp has already been built -->
+        <copy file="${carrot2.code.dir}/tmp/carrot2-webapp.war"
               tofile="${webapps.dir}/${webapp.name}.war"
               overwrite="true" />
+    </target>
+
+    <target name="publish.artifacts">
+        <fail unless="dist.dir">Define: dist.dir property.</fail>
+
+        <copy todir="${dist.dir}" overwrite="true">
+          <fileset dir="${carrot2.code.dir}/tmp" />
+        </copy>
     </target>
 
     <target name="workbench" description="Perform a full build of the workbench">
@@ -54,7 +55,7 @@
 
         <!-- copy to the distribution dir -->
         <mkdir dir="${dist.dir}" />
-        <copy todir="${dist.dir}">
+        <copy todir="${dist.dir}" overwrite="true">
             <fileset dir="${carrot2.code.dir}/tmp/workbench/build-dir">
                 <include name="*carrot2-workbench/*.zip" />
             </fileset>
