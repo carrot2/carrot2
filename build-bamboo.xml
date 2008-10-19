@@ -33,7 +33,10 @@
         <fail unless="dist.dir">Define: dist.dir property.</fail>
 
         <copy todir="${dist.dir}" overwrite="true">
-          <fileset dir="${carrot2.code.dir}/tmp" />
+          <fileset dir="${carrot2.code.dir}/tmp">
+            <!-- Exclude reports, we'll link these directly to the build server -->
+            <exclude name="*-report/**" />
+          </fileset>
         </copy>
     </target>
 
