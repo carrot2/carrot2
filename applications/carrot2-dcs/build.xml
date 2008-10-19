@@ -7,8 +7,15 @@
   <dirname property="carrot2.dcs.basedir"
            file="${ant.file.carrot2.dcs}" />
 
+  <!-- Master build base dir -->
+  <property name="carrot2.master.basedir"
+            location="${carrot2.dcs.basedir}/../../" />
+
   <!-- DCS build dirs -->
   <property name="dcs.dir" location="tmp/dcs" />
+
+  <!-- DCS dist file name base -->
+  <property name="dcs.dist.base" value="carrot2-dcs" />
 
   <!--
        Builds the DCS.
@@ -49,9 +56,26 @@
       <fileset dir="${carrot2.dcs.basedir}">
         <include name="examples/**" />
       </fileset>
+      <fileset dir="${carrot2.dcs.basedir}/etc">
+        <include name="readme.txt" />
+      </fileset>
+      <fileset dir="${carrot2.master.basedir}">
+        <include name="carrot2.LICENSE" />
+        <include name="carrot2.CONTRIBUTORS" />
+      </fileset>
     </copy>
   
     <delete dir="${dcs.dir}/classes" />
+  </target>
+
+  <!--
+       Builds the DCS ZIP archive.
+    -->
+  <target name="carrot2.dcs.dist" depends="carrot2.dcs.build">
+    <zip destfile="${dcs.dir}/../${dcs.dist.base}.zip">
+      <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}" />
+    </zip>
+    <delete dir="${dcs.dir}" failonerror="false" />
   </target>
 
   <!-- 

@@ -55,6 +55,15 @@
   </target>
 
   <!--
+       Builds the webapp distribution. Currently, it just moves the WAR file
+       to the output directory, not sure it if makes sense to wrap it with an extra ZIP file.
+    -->
+  <target name="carrot2.webapp.dist" depends="carrot2.webapp.build">
+    <move file="${webapp.dir}/${war.name.base}.war" todir="${webapp.dir}/.." />
+    <delete dir="${webapp.dir}" failonerror="false" />
+  </target>
+
+  <!--
        Prepares resources the web applications WAR file. "Build scripts "extending" this
        script may want to add their own preparation steps (e.g. copy extra skins)
        before they let this script assemble the complete WAR file.

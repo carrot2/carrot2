@@ -14,8 +14,11 @@
   <property name="doc.assets.dir" location="${carrot2.doc.basedir}/assets" />
 
   <!-- Output directory for the documentation -->
-  <property name="doc.build.dir" location="${carrot2.master.basedir}/tmp/doc/build" />
-  <property name="doc.output.dir" location="${carrot2.master.basedir}/tmp/doc/html" />
+  <property name="doc.build.dir" location="${carrot2.master.basedir}/tmp/manual/build" />
+  <property name="doc.output.dir" location="${carrot2.master.basedir}/tmp/manual/html" />
+
+  <!-- Manual dist file name base -->
+  <property name="doc.dist.base" value="carrot2-manual" />
 
   <property name="doc.classes.dir" location="${doc.build.dir}/classes" />
 
@@ -53,6 +56,14 @@
     <antcall target="carrot2.doc.cleanup" />
   </target>
 
+  <!--
+       Builds the DCS ZIP archive.
+    -->
+  <target name="carrot2.doc.dist" depends="carrot2.doc.build">
+    <zip destfile="${doc.output.dir}/../../${doc.dist.base}.zip">
+      <zipfileset dir="${doc.output.dir}" prefix="${doc.dist.base}" />
+    </zip>
+  </target>
   <!--
        Copies all files necessary to produce the DocBook documentation.
     -->
@@ -138,6 +149,7 @@
 
   <target name="carrot2.doc.cleanup">
     <delete dir="${docbook.xsl.dir}/html-custom" />
+    <delete dir="${doc.build.dir}" failonerror="false" />
   </target>
 
   <!--

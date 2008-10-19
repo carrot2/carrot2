@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<chapter xml:id="chapter.application-suite" xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <title>&C2; application suite</title>
+  <subtitle>Applications shipped with &C2;</subtitle>
+
+  <para>
+    &C2; comes with a number of supporting applications that you can use to
+    quickly set up clustering on your own data, further tune clustering results
+    and expose &C2; clustering through different protocols. 
+  </para>
+  
+  <para>
+    &C2; application suite contains:
+  </para>
+  
+  <itemizedlist>
+    <listitem>
+      <formalpara>
+        <title>&DCW;</title>
+        <para>
+          is a standalone GUI application you can use to experiment with &C2;
+          clustering on data from common search engines or your own data.
+        </para>
+      </formalpara>
+    </listitem>
+
+    <listitem>
+      <formalpara>
+        <title>&DCS;</title>
+        <para>
+          exposes &C2; clustering as a REST service.
+        </para>
+      </formalpara>
+    </listitem>
+
+    <listitem>
+      <formalpara>
+        <title>&WA;</title>
+        <para>
+          exposes &C2; clustering as a web application for end users.
+        </para>
+      </formalpara>
+    </listitem>
+  </itemizedlist>
+
+  <section>
+    <title>&DCW;</title>
+
+    <para>
+      &DCW; is a standalone GUI application you can use to experiment with &C2;
+      clustering on data from common search engines or your own data. 
+    </para>
+
+    <para>
+      &DCW; features include:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <formalpara>
+          <title>All &C2; document sources and algorithms included</title>
+          <para>
+            &DCW; contains a large number of document sources, including major search
+            engines, indexing engines (Lucene, Solr, Google Desktop) as well as generic
+            XML feeds and files.
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Live tuning of clustering algorithm attributes</title>
+          <para>
+            &DCW; enables modifying clustering algorithm's attributes and observing the
+            results in real time.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Attractive visualizations</title>
+          <para>
+            &DCW; comes with two visualizations of the cluster structure, one developed
+            within the &C2; project and another one from 
+            <link xlink:href="http://www.aduna-software.com/technologies/clustermap/overview.view">Aduna Software</link>.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Modular architecture and extendability</title>
+          <para>
+            &DCW; is based on Eclipse Rich Client Platform, which makes it easily
+            extendable.
+          </para>
+        </formalpara>
+      </listitem>
+    </itemizedlist>
+
+    <figure>
+      <title>&DCW; screenshot</title>
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata format="PNG" fileref="img/workbench.png" />
+        </imageobject>
+      </mediaobject>  
+    </figure>
+    
+  </section>
+</chapter>

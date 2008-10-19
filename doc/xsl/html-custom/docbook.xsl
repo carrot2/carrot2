@@ -36,6 +36,7 @@
     </img>
   </xsl:template>
 
+  <xsl:param name="toc.section.depth">1</xsl:param>
   <xsl:param name="generate.toc">
 appendix  toc,title
 article/appendix  nop

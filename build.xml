@@ -336,8 +336,7 @@
     </parallel>
   </target>
 
-  <target name="attrs.eclipse"
-          depends="compile" description="Generate attribute descriptors for Eclipse">
+  <target name="attrs.eclipse" depends="compile">
     <property name="common.attribute.names.source.path"
               location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
 
@@ -456,9 +455,10 @@
        FindBugs static analysis.
     -->
   <target name="findbugs"
-          depends="clean.classes, compile.findbugs"
           if="findbugs.home"
           description="Generates FindBugs report">
+    <antcall target="clean.classes" />
+    <antcall target="compile.findbugs" />
     <taskdef name="findbugs"
              classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
              classpath="${findbugs.home}/lib/findbugs-ant.jar" />
@@ -605,7 +605,7 @@
        Build core JAR.
     -->
   <target name="jar" depends="jar.check, jar.build"
-    description="Builds Carrot2 core JAR">
+    description="Builds Carrot2 core JAR" unless="jar.exists">
     <mkdir dir="${jar.dir}" />
     <jar destfile="${jar.dir}/carrot2-core.jar">
       <fileset dir="${build.dir}" />
@@ -629,10 +629,25 @@
     <available file="${jar.dir}/carrot2-core.jar" property="jar.exists" />
   </target>
   
+  <target name="clean.jar">
+    <delete dir="${jar.dir}" failonerror="false" />
+  </target>
+  
   <!--
        Build all apps.
     -->
-  <target name="all" depends="carrot2.dcs.build,carrot2.webapp.build,carrot2.doc.build" description="Builds all Carrot2 applications" />
+  <target name="all" depends="clean.classes, webapp, dcs, javadoc, doc" description="Builds all Carrot2 applications and documentation" />
+  <target name="dist" depends="clean.classes, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, carrot2.doc.dist" description="Builds Carrot2 distribution files">
+    <!-- 
+         After this target runs, we'll copy the entire content of tmp/ 
+         to the distribution dir on the server, so we need to remove
+         useless dirs.
+      -->
+    <antcall target="clean.jar" />
+    <antcall target="clean.classes" />
+    <antcall target="clean.lib" />
+  </target>
+  <target name="reports" depends="clean.classes, test, coverage, duplication, findbugs" description="Builds all Carrot2 test and code quality reports" />
 
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
@@ -655,5 +670,10 @@
       <mapper type="flatten"/>
     </copy>
   </target>
+
+  <target name="clean.lib">
+    <delete dir="${lib.flattened}" failonerror="false" />
+  </target>
+  
 </project>
 

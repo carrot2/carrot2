@@ -19,45 +19,44 @@
   </para>
 
   <para>
-    &C2; contains component for fetching search results from several search
+    &C2; contains components for fetching search results from several search
     engines, such as Yahoo!, MSN Live, Google, but it also supports other
     sources of documents like Lucene, Solr or Google Desktop index. &C2;
-    contains two document clustering algorighms designed specifically for
+    contains also two document clustering algorighms designed specifically for
     search results clustering: Suffix Tree Clustering and Lingo.
   </para>
 
-  <section>
-    <title>&C2; application suite</title>
+  <para>
+    &C2; <emphasis role="bold">is not a search engine</emphasis> itself, it
+    does not have a crawler and indexer. There is a number of Open Source projects
+    you can use to crawl (Nutch), index and search (Lucene, Solr) your content, which
+    can then be queried and clustered by &C2;
+  </para>
 
-    <para>
-      &C2; comes with a number of supporting applications that you can use to tune
-      clustering results and expose &C2; clustering through different protocols. 
-    </para>
-    
-    <para>
-      &C2; application suite contains:
-    </para>
-    
-    <itemizedlist>
-      <listitem>
-        <formalpara>
-          <title>&DCW;</title>
-          <para>
-            You can use &DCW; to experiment with &C2; clustering using data from common search
-            engines or your own data. &DCW; allows you to tune the clustering algorithm
-            attributes and see how the results change in real time.
-          </para>
-        </formalpara>
-      </listitem>
-        
-      <listitem>
-        <formalpara>
-          <title>&DCS;</title>
-          <para>
-            &DCS; exposes &C2; clustering as a REST service.
-          </para>
-        </formalpara>
-      </listitem>
-    </itemizedlist>
-  </section>
+  <para>
+    In most cases your workflow with &C2; would be the following:
+  </para>
+  
+  <orderedlist>
+    <listitem>
+      Use &DCW; and possibly other applications from &C2; application suite
+      to see what the clustering results are like for your content.  If the
+      results are promising, you can use the &DCW; to further tune the
+      clustering algorithm's settings.
+    </listitem>
+    <listitem>
+      If developing Java software, use &C2; API and JAR to integrate
+      clustering into your code.  For non-Java environments, set-up the &DCS;
+      and call &C2; clustering using the REST protocol.
+    </listitem>
+  </orderedlist>
+
+  <para>
+    <xref linkend="chapter.application-suite" /> of this manual introduces
+    applications available in &C2; distribution. <xref
+    linkend="chapter.getting-started" /> shows how to quickly set up &C2; to
+    cluster your own data. <xref linkend="chapter.architecture" /> discusses
+    &C2; architecture and internals, while <xref linkend="chapter.components"
+    /> is an in-depth reference of &C2; components.
+  </para>
 </chapter>
