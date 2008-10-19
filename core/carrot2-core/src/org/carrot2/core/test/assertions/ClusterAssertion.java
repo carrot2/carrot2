@@ -19,7 +19,7 @@ public class ClusterAssertion implements AssertExtension
         this.actualCluster = actual;
     }
 
-    /**
+/**
      * Asserts that the cluster is equivalent to the provided cluster. Two clusters are
      * equivalent if their {@link Cluster#getPhrases()} and
      * {@link Cluster#getAttributes()} are equal, and their
@@ -34,7 +34,7 @@ public class ClusterAssertion implements AssertExtension
         return isEquivalentTo(expectedCluster, true);
     }
 
-    /**
+/**
      * Asserts that the cluster is equivalent to the provided cluster. Two clusters are
      * equivalent if their {@link Cluster#getPhrases()} and
      * {@link Cluster#getAttributes()} are equal, and their
@@ -51,7 +51,8 @@ public class ClusterAssertion implements AssertExtension
         assertThat(actualCluster.getPhrases()).isEqualTo(expectedCluster.getPhrases());
         if (checkDocuments)
         {
-            assertThat(actualCluster.getDocuments()).isEquivalentTo(
+            assertThat(actualCluster.getDocuments()).as(
+                "cluster: " + actualCluster.getLabel()).isEquivalentTo(
                 expectedCluster.getDocuments());
         }
         assertThat(actualCluster.getAttributes()).isEqualTo(

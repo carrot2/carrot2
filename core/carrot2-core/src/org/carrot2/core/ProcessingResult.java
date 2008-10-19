@@ -156,9 +156,17 @@ public final class ProcessingResult
         {
             documents = Lists.newArrayList(getDocuments());
         }
+        else
+        {
+            documents = null;
+        }
         if (getClusters() != null)
         {
             clusters = Lists.newArrayList(getClusters());
+        }
+        else
+        {
+            clusters = null;
         }
 
         otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers

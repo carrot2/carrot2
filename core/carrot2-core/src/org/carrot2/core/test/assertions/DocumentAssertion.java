@@ -13,6 +13,9 @@ public class DocumentAssertion implements AssertExtension
     /** The actual documents */
     private final Document actualDocument;
 
+    /** Assert description */
+    private String description;
+
     DocumentAssertion(Document actualDocument)
     {
         this.actualDocument = actualDocument;
@@ -28,8 +31,19 @@ public class DocumentAssertion implements AssertExtension
      */
     public DocumentAssertion isEquivalentTo(Document expectedDocument)
     {
-        assertThat(actualDocument.getId()).isEqualTo(expectedDocument.getId());
-        assertThat(actualDocument.getFields()).isEqualTo(expectedDocument.getFields());
+        assertThat(actualDocument.getId()).as(description + ", id").isEqualTo(
+            expectedDocument.getId());
+        assertThat(actualDocument.getFields()).as(description).isEqualTo(
+            expectedDocument.getFields());
+        return this;
+    }
+
+    /**
+     * Provides description for this assertion.
+     */
+    public DocumentAssertion as(String description)
+    {
+        this.description = description;
         return this;
     }
 }

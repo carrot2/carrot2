@@ -21,7 +21,8 @@ import org.carrot2.util.attribute.AttributeUtils;
  * search) and Yahoo Boss (news search).
  * <p>
  * It is assumed that you are familiar with {@link ClusteringDocumentList} example.
- * 
+ * </p>
+ *  
  * @see ClusteringDocumentList
  * @see UsingCachingController
  */

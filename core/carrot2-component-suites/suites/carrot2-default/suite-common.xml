@@ -23,8 +23,7 @@
         <example-query>apple</example-query>
         <example-query>amiga</example-query>
         <example-query>president</example-query>
-      </example-queries>
-    </source>
+      </example-queries>    </source>
     <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-news">
       <label>News</label>
       <title>Yahoo News Search</title>
@@ -87,6 +86,10 @@
     <algorithm component-class="org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm" id="url">
       <label>By URL</label>
       <title>By URL Clustering</title>
+    </algorithm>
+    <algorithm component-class="org.carrot2.clustering.synthetic.ByFieldClusteringAlgorithm" id="source">
+      <label>By Source</label>
+      <title>By Source Clustering</title>
     </algorithm>
   </algorithms>
 </component-suite>

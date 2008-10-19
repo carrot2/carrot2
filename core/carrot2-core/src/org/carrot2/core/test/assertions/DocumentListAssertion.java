@@ -17,6 +17,9 @@ public class DocumentListAssertion implements AssertExtension
     /** The actual list of documents */
     private final List<Document> actualDocumentList;
 
+    /** Description for this assertion */
+    private String description;
+
     DocumentListAssertion(List<Document> actualDocumentList)
     {
         this.actualDocumentList = actualDocumentList;
@@ -36,7 +39,7 @@ public class DocumentListAssertion implements AssertExtension
         assertThat(actualDocumentList).hasSize(expectedDocumentList.size());
         for (int i = 0; i < actualDocumentList.size(); i++)
         {
-            assertThat(actualDocumentList.get(i)).isEquivalentTo(
+            assertThat(actualDocumentList.get(i)).as(description + ", document: " + i).isEquivalentTo(
                 expectedDocumentList.get(i));
         }
         return this;
@@ -50,7 +53,16 @@ public class DocumentListAssertion implements AssertExtension
      */
     public DocumentListAssertion hasSize(int expectedSize)
     {
-        Assertions.assertThat(actualDocumentList).hasSize(expectedSize);
+        Assertions.assertThat(actualDocumentList).as(description).hasSize(expectedSize);
+        return this;
+    }
+
+    /**
+     * Provides description for this assertion.
+     */
+    public DocumentListAssertion as(String description)
+    {
+        this.description = description;
         return this;
     }
 }

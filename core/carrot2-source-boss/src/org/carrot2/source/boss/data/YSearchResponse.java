@@ -1,8 +1,11 @@
 package org.carrot2.source.boss.data;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.Document;
 import org.carrot2.source.SearchEngineResponse;
 import org.simpleframework.xml.*;
+
+import com.google.common.collect.Lists;
 
 /**
  * Search response model for Yahoo Boss.
@@ -71,6 +74,10 @@ public final class YSearchResponse
                         result.url);
 
                     document.addField(Document.CLICK_URL, result.clickURL);
+                    if (StringUtils.isNotBlank(result.source))
+                    {
+                        document.addField(Document.SOURCES, Lists.newArrayList(result.source));
+                    }
                     response.results.add(document);
                 }
             }

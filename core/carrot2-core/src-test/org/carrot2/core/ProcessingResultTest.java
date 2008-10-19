@@ -7,6 +7,7 @@ import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.io.output.NullWriter;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.TestDocumentFactory;
 import org.carrot2.util.CloseableUtils;
@@ -268,6 +269,7 @@ public class ProcessingResultTest
 
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         final Writer writer = new OutputStreamWriter(outputStream);
+        sourceProcessingResult.serialize(new NullWriter());
         sourceProcessingResult.serialize(writer, documentsDeserialized,
             clustersDeserialized);
         CloseableUtils.close(writer);
