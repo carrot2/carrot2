@@ -1,4 +1,4 @@
-package org.carrot2.source.boss.data;
+package org.carrot2.source.boss;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -7,7 +7,7 @@ import org.simpleframework.xml.Root;
  * A single image search result.
  */
 @Root(name = "result", strict = false)
-public final class ImageResult
+final class ImageResult
 {
     /**
      * Description of the image.

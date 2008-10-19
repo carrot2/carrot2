@@ -13,7 +13,6 @@ import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
-import org.carrot2.source.boss.data.YSearchResponse;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpClientFactory;
@@ -79,6 +78,7 @@ public abstract class BossSearchService
      * language codes supported by the Yahoo Boss API</a>. 
      * <p>
      * The following languages and regions are currently (September 2008) supported:
+     * </p>
      * <table>
      *   <thead>
      *     <tr>
@@ -132,7 +132,7 @@ public abstract class BossSearchService
      *   <tr><td>Venezuela</td><td>ve</td><td>es</td></tr>
      *   </tbody>
      * </table>
-     * </p>
+     * 
      * <p>Use {@link BossLanguageCodes#getAttributeValue()} to acquire proper constant
      * for this field.</p>
      * 

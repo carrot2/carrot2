@@ -1,11 +1,11 @@
-package org.carrot2.source.boss.data;
+package org.carrot2.source.boss;
 
 import java.util.List;
 
 import org.simpleframework.xml.*;
 
-@Root(name = "resultset_images", strict = false)
-public class ImagesResultSet
+@Root(name = "resultset_web", strict = false)
+class WebResultSet
 {
     @Attribute(required = false)
     public Long count;
@@ -18,7 +18,7 @@ public class ImagesResultSet
 
     @Attribute(required = false)
     public Long deephits;
-
+    
     @ElementList(inline = true, entry = "result", required = false)
-    public List<ImageResult> results;
+    public List<WebResult> results;
 }

@@ -1,4 +1,4 @@
-package org.carrot2.source.boss.data;
+package org.carrot2.source.boss;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -7,7 +7,7 @@ import org.simpleframework.xml.Root;
  * A single News search result.
  */
 @Root(name = "result", strict = false)
-public final class NewsResult
+final class NewsResult
 {
     @Element(name = "abstract", required = false)
     public String summary;

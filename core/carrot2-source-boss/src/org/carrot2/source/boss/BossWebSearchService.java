@@ -41,6 +41,7 @@ public final class BossWebSearchService extends BossSearchService
      * to filter out.
      * <p>
      * The following content types are supported:
+     * </p>
      * <table>
      * <thead>
      * <tr>
@@ -57,7 +58,6 @@ public final class BossWebSearchService extends BossSearchService
      * </tr>
      * </tbody>
      * </table>
-     * </p>
      * <p>
      * Adult content filtering is supported for all languages, hate content filtering is
      * supported for English only.
@@ -78,6 +78,7 @@ public final class BossWebSearchService extends BossSearchService
      * list of the required document types or type groups.
      * <p>
      * The following document types are supported:
+     * </p>
      * <table>
      * <thead>
      * <tr>
@@ -110,9 +111,9 @@ public final class BossWebSearchService extends BossSearchService
      * </tr>
      * </tbody>
      * </table>
-     * </p>
      * <p>
      * The following document type groups are supported:
+     * </p>
      * <table>
      * <thead>
      * <tr>
@@ -131,7 +132,6 @@ public final class BossWebSearchService extends BossSearchService
      * </tr>
      * </tbody>
      * </table>
-     * </p>
      * <p>
      * You can also specify a format group and then exclude an item:
      * <code>type=msoffice,-ppt</code>.

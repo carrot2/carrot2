@@ -1,4 +1,4 @@
-package org.carrot2.source.boss.data;
+package org.carrot2.source.boss;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.Document;
@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
  * Search response model for Yahoo Boss.
  */
 @Root(name = "ysearchresponse", strict = false)
-public final class YSearchResponse
+final class YSearchResponse
 {
     @Attribute(name = "responsecode", required = false)
     public Integer responseCode;

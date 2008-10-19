@@ -1,11 +1,11 @@
-package org.carrot2.source.boss.data;
+package org.carrot2.source.boss;
 
 import java.util.List;
 
 import org.simpleframework.xml.*;
 
 @Root(name = "resultset_news", strict = false)
-public class NewsResultSet
+class NewsResultSet
 {
     @Attribute(required = false)
     public Long count;

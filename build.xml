@@ -578,18 +578,20 @@
 
       <fileset dir="${tmp.src}">
         <include name="**/*.java" />
+        <exclude name="**/com/microsoft/msnsearch/**" />
+        <exclude name="**/org/tartarus/snowball/**" />
       </fileset>
 
       <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
 
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Core" packages="org.carrot2.core*" />
-      <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Demos and Examples"
-             packages="org.carrot2.examples*" />
+      <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Demos and Examples" packages="org.carrot2.examples*" />
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Data Sources" packages="org.carrot2.source*" />
-      <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Clustering Algorithms"
-             packages="org.carrot2.clustering*" />
-      <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Attribute Binding"
-             packages="org.carrot2.util.attribute*" />
+      <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Clustering Algorithms" packages="org.carrot2.clustering*" />
+      <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Results post-processing" packages="org.carrot2.output*" />
+      <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Text preprocessing utilities" packages="org.carrot2.text*" />
+      <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Attribute Binding" packages="org.carrot2.util.attribute*" />
+      <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Matrix utilities" packages="org.carrot2.matrix*" />
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Utility classes" packages="org.carrot2.util*" />
     </javadoc>
 
