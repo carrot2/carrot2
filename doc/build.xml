@@ -144,6 +144,7 @@
         <dtd publicId="-//OASIS//DTD DocBook V5.0//EN"
              location="${docbook.dtd.dir}/docbook.dtd" />
       </xmlcatalog>
+      <param name="javadoc.url.base" expression="${javadoc.url.base}" />
     </xslt>
   </target>
 

@@ -11,7 +11,44 @@
   <subtitle>Trying &C2; clustering with your own data</subtitle>
 
   <para>
-    This chapter will show you how to apply &C2; clustering on your own data, based
-    on a number of typical scenarios.
+    This chapter will show you how to use &C2; in a number of typical scenarios such as
+    trying clustering on your own documents, integrating &C2; with your software or customizing
+    &C2; applications.
   </para>
+  
+  <section>
+    <title>Trying &C2; clustering</title>
+    
+    <para>
+      This section will show how to apply &C2; clustering on documents from various sources.
+    </para>
+    
+    <section>
+      <title>Clustering plain text, HTML and MS Word documents</title>
+      
+      <para>
+      </para>
+    </section>
+  </section>
+  
+  <section>
+    <title>Integrating &C2; with your software</title>
+    
+    <para>
+    </para>
+    
+    <section>
+      <title>Compiling a Java program using &C2; API</title>
+      
+      <para>
+      </para>
+    </section>
+    
+    <section>
+      <title>Calling &C2; clustering from non-Java software</title>
+      
+      <para>
+      </para>
+    </section>
+  </section>
 </chapter>

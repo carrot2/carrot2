@@ -33,7 +33,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     public String query = null;
 
     /**
-     * {@link Document}s to cluster.
+     * Documents to cluster.
      */
     @Processing
     @Input
@@ -43,7 +43,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     public List<Document> documents;
 
     /**
-     * {@link Cluster}s created by the algorithm.
+     * Clusters created by the algorithm.
      */
     @Processing
     @Output

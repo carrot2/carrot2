@@ -10,6 +10,7 @@
        encoding="utf-8" cdata-section-elements="programlisting" />
        
   <xsl:param name="metadata" select="document('components-metadata.xml')" />
+  <xsl:param name="javadoc.url.base" />
   
   <xsl:template match="/">
     <xsl:apply-templates />
@@ -136,7 +137,7 @@
             
             <row>
               <entry role="rowhead">Value type</entry>
-              <entry><constant><xsl:value-of select="@type" /></constant></entry>
+              <entry><constant><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="@type" /></xsl:call-template></constant></entry>
             </row>
             
             <row>
@@ -144,7 +145,7 @@
               <entry>
                 <xsl:choose>
                   <xsl:when test="@default">
-                    <constant><xsl:value-of select="@default" /></constant>
+                    <constant><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="@default" /></xsl:call-template></constant>
                   </xsl:when>
                   
                   <xsl:otherwise><emphasis>none</emphasis></xsl:otherwise>
@@ -169,9 +170,21 @@
       </informaltable>
     </section>
   </xsl:template>
+
+  <xsl:template name="javadoc-link">
+    <xsl:param name="value" />
+    <xsl:choose>
+      <xsl:when test="starts-with($value, 'org.carrot2') and string-length($javadoc.url.base) > 0">
+        <link xlink:href="{$javadoc.url.base}/{translate($value, '.$', '/.')}.html"><xsl:value-of select="$value" /></link>
+      </xsl:when>
+      
+      <xsl:otherwise><xsl:value-of select="$value" /></xsl:otherwise>
+    </xsl:choose>
+    
+  </xsl:template>  
   
   <xsl:template match="allowed-values/value">
-    <listitem><code><xsl:apply-templates /></code></listitem>
+    <listitem><code><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="string(.)" /></xsl:call-template></code></listitem>
   </xsl:template>
   
   <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.ImplementingClassesConstraint']">
@@ -182,7 +195,7 @@
         <itemizedlist>
           <xsl:for-each select="classes/class">
             <listitem>
-              <constant><xsl:apply-templates /></constant>
+              <constant><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="string(.)" /></xsl:call-template></constant>
             </listitem>
           </xsl:for-each>
         </itemizedlist>

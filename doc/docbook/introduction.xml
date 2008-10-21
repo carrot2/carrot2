@@ -39,15 +39,19 @@
   
   <orderedlist>
     <listitem>
-      Use &DCW; and possibly other applications from &C2; application suite
-      to see what the clustering results are like for your content.  If the
-      results are promising, you can use the &DCW; to further tune the
-      clustering algorithm's settings.
+      <para>
+        Use <link linkend="section.workbench">&DCW;</link> and possibly other applications from &C2; application suite
+        to see what the clustering results are like for your content.  If the
+        results are promising, you can use the &DCW; to further tune the
+        clustering algorithm's settings.
+      </para>
     </listitem>
     <listitem>
-      If developing Java software, use &C2; API and JAR to integrate
-      clustering into your code.  For non-Java environments, set-up the &DCS;
-      and call &C2; clustering using the REST protocol.
+      <para>
+        If developing Java software, use &C2; API and JAR to integrate
+        clustering into your code.  For non-Java environments, set-up the <link linkend="section.dcs">&DCS;</link>
+        and call &C2; clustering using the REST protocol.
+      </para>
     </listitem>
   </orderedlist>
 

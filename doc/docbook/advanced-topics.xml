@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<chapter xml:id="chapter.advanced-topics" xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <title>Advanced topics</title>
+  <subtitle>Customizing &C2; components and applications</subtitle>
+
+  <para>
+    This chapter discusses more advanced usage scenarios of &C2; such as building &C2; from
+    source code or customizing &C2; applications.
+  </para>
+  
+  <section>
+    <title>Building &C2; applications</title>
+    
+    <para>
+    </para>
+    
+    <section>
+      <title>Building &WA;</title>
+      
+      <para>
+      </para>
+    </section>
+  </section>
+  
+  <section>
+    <title>Customizing &C2; applications</title>
+    
+    <para>
+    </para>
+    
+    <section>
+      <title>Removing or adding document source tabs to &WA;</title>
+      
+      <para>
+      </para>
+    </section>
+  </section>
+</chapter>

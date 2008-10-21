@@ -25,7 +25,7 @@
       <formalpara>
         <title>&DCW;</title>
         <para>
-          is a standalone GUI application you can use to experiment with &C2;
+          which is a standalone GUI application you can use to experiment with &C2;
           clustering on data from common search engines or your own data.
         </para>
       </formalpara>
@@ -35,7 +35,7 @@
       <formalpara>
         <title>&DCS;</title>
         <para>
-          exposes &C2; clustering as a REST service.
+          which exposes &C2; clustering as a REST service.
         </para>
       </formalpara>
     </listitem>
@@ -44,13 +44,13 @@
       <formalpara>
         <title>&WA;</title>
         <para>
-          exposes &C2; clustering as a web application for end users.
+          which exposes &C2; clustering as a web application for end users.
         </para>
       </formalpara>
     </listitem>
   </itemizedlist>
 
-  <section>
+  <section xml:id="section.workbench">
     <title>&DCW;</title>
 
     <para>
@@ -159,7 +159,7 @@
     </section>
   </section>
   
-  <section>
+  <section xml:id="section.dcs">
     <title>&DCS;</title>
     
     <para>
@@ -287,7 +287,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="section.webapp">
     <title>&WA;</title>
     
     <para>
