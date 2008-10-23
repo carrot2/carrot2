@@ -228,7 +228,7 @@ public abstract class BossSearchService
 
             if (logger.isInfoEnabled())
             {
-                logger.info("Request params: " + request.getQueryString());
+                logger.debug("Request params: " + request.getQueryString());
             }
             final int statusCode = client.executeMethod(request);
 

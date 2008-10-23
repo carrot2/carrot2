@@ -18,16 +18,6 @@
 	    </layout>
 	</appender>
 
-	<appender  name="appender-file" class="org.apache.log4j.FileAppender">
-  		<param name="File" value="logs/dcs.log" />
-  		<param name="Encoding" value="UTF-8" />
-  		<param name="Append" value="false" />
-  
-      <layout class="org.apache.log4j.PatternLayout">
-          <param name="ConversionPattern" value="%d{ISO8601} [%-5p] [%c] %m%n"/>
-      </layout>
-	</appender>
-
   <!-- Add logger filters here. -->
   &filters-common;
   &filters-silent;
@@ -40,8 +30,7 @@
   
   <!-- Root logger config. -->
   <root>
-      <priority value="debug" />
-
-      <appender-ref ref="appender-file" />
+      <priority value="info" />
+      <appender-ref ref="appender-console" />
   </root>
 </log4j:configuration>

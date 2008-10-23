@@ -9,6 +9,8 @@ import javax.servlet.http.*;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.*;
 import org.carrot2.core.*;
 import org.carrot2.dcs.DcsRequestModel.OutputFormat;
 import org.carrot2.util.CloseableUtils;
@@ -33,6 +35,8 @@ public final class RestProcessorServlet extends HttpServlet
     private transient ProcessingComponentSuite componentSuite;
 
     private transient CachingController controller;
+
+    private transient boolean loggerInitialized;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -86,6 +90,21 @@ public final class RestProcessorServlet extends HttpServlet
         }
 
         super.destroy();
+    }
+
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse arg1)
+        throws ServletException, IOException
+    {
+        synchronized (this)
+        {
+            if (!loggerInitialized)
+            {
+                Logger.getRootLogger().addAppender(getLogAppender(request));
+                loggerInitialized = true;
+            }
+        }
+        super.service(request, arg1);
     }
 
     @Override
@@ -373,6 +392,24 @@ public final class RestProcessorServlet extends HttpServlet
         final String finalMessage = message + ": " + e.getMessage();
         config.logger.warn(finalMessage);
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, finalMessage);
+    }
+
+    private FileAppender getLogAppender(HttpServletRequest request) throws IOException
+    {
+        String contextPath = request.getContextPath();
+        if (StringUtils.isBlank(contextPath))
+        {
+            contextPath = "root";
+        }
+        contextPath = contextPath.replaceAll("[^a-zA-Z0-9\\-]", "");
+        final String catalinaHome = System.getProperty("catalina.home");
+        final String logPrefix = (catalinaHome != null ? catalinaHome + "/logs" : "logs");
+
+        final FileAppender appender = new FileAppender(new PatternLayout(
+            "%d{ISO8601} [%-5p] [%c] %m%n"), logPrefix + "/c2-dcs-" + contextPath
+            + "-full.log", true);
+        appender.setEncoding("UTF-8");
+        return appender;
     }
 
     /**

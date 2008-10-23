@@ -9,7 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.MapUtils;
@@ -68,7 +68,7 @@ public class QueryProcessorServlet extends HttpServlet
 
         jawrUrlGenerator = new JawrUrlGenerator(config.getServletContext());
     }
-    
+
     /*
      * Servlet lifecycle.
      */
@@ -96,17 +96,14 @@ public class QueryProcessorServlet extends HttpServlet
         // TODO: Move me to #init() after upgrading to servlet api 2.5
         synchronized (this)
         {
-            // Initialize query logger.
-            String contextPath = request.getContextPath();
-            if (StringUtils.isBlank(contextPath))
+            if (queryLogger == null)
             {
-                contextPath = "ROOT";
+                queryLogger = Logger.getLogger("queryLog");
+                queryLogger.addAppender(getQueryLogAppender(request));
+                Logger.getRootLogger().addAppender(getFullLogAppender(request));
             }
-            contextPath = contextPath.replaceAll("[^a-zA-Z0-9]", "");            
-            this.queryLogger = Logger.getLogger("queryLog." + contextPath);
         }
-        
-        
+
         // Unpack parameters from string arrays
         final Map<String, Object> requestParameters = MapUtils.unpack(request
             .getParameterMap());
@@ -140,6 +137,48 @@ public class QueryProcessorServlet extends HttpServlet
         {
             throw new ServletException(e);
         }
+    }
+
+    private FileAppender getFullLogAppender(HttpServletRequest request)
+        throws IOException
+    {
+        final String contextPath = getContextPathSegment(request);
+        final String logPrefix = getLogDirPrefix();
+
+        final FileAppender appender = new FileAppender(new PatternLayout(
+            "%d{ISO8601},[%p],[%t],%c,%m%n"), logPrefix + "/c2-" + contextPath
+            + "-full.log", true);
+        appender.setEncoding("UTF-8");
+        return appender;
+    }
+
+    private FileAppender getQueryLogAppender(HttpServletRequest request)
+        throws IOException
+    {
+        final String contextPath = getContextPathSegment(request);
+        final String logPrefix = getLogDirPrefix();
+    
+        final FileAppender appender = new FileAppender(new PatternLayout(
+            "%d{ISO8601},%m%n"), logPrefix + "/c2-" + contextPath + "-queries.log", true);
+        appender.setEncoding("UTF-8");
+        return appender;
+    }
+
+    private String getLogDirPrefix()
+    {
+        final String catalinaHome = System.getProperty("catalina.home");
+        return catalinaHome != null ? catalinaHome + "/logs" : "";
+    }
+
+    private String getContextPathSegment(HttpServletRequest request)
+    {
+        String contextPath = request.getContextPath();
+        if (StringUtils.isBlank(contextPath))
+        {
+            contextPath = "root";
+        }
+        contextPath = contextPath.replaceAll("[^a-zA-Z0-9\\-]", "");
+        return contextPath;
     }
 
     /**
