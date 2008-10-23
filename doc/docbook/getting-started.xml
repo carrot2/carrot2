@@ -20,15 +20,346 @@
     <title>Trying &C2; clustering</title>
     
     <para>
-      This section will show how to apply &C2; clustering on documents from various sources.
+      This section shows how to apply &C2; clustering on documents from various sources.
     </para>
+
+    <section>
+      <title>Clustering results from common search engines</title>
+      
+      <para>
+        To try &C2; clustering on results from common search engines, such as Google, 
+        Yahoo or MSN, you can either:
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            Use the <link xlink:href="http://demo.carrot2.org">on-line version of &WA;</link>
+          </para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>or</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>
+            Use the &DCW; which can fetch documents from the same search engines as the &WA;
+          </para>
+        </listitem>
+      </itemizedlist>
+    </section>      
     
     <section>
       <title>Clustering plain text, HTML and MS Word documents</title>
       
       <para>
+        To try &C2; clustering on a collection of plain text, HTML or MS Word documents, you will
+        need to install Google Desktop:
       </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Download and install <link xlink:href="http://desktop.google.com/">Google Desktop</link> 
+            if you have not done so.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Configure Google Desktop to index your documents.
+          </para>
+          
+          <tip>
+            <para>
+              You can use <link xlink:href="http://desktop.google.com/plugins/i/tweakgds.html">TweakGDS</link>
+              to make Google Desktop index only the folder with your documents.
+            </para>
+          </tip>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Use <link linkend="section.workbench">&DCW;</link> to cluster documents fetched
+            from your Google Desktop installation. Simply choose <guilabel>Google Desktop</guilabel>
+            source in the search view (<xref linkend="figure.search-view-google-desktop" />), type your query
+            and press the <guilabel>Process</guilabel> button to see the results.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.search-view-google-desktop">
+        <title>&DCW; Google Desktop search view</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-google-destkop-search-view.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
     </section>
+    
+    <section>
+      <title>Clustering documents from XML files</title>
+      
+      <para>
+        To try &C2; clustering on documents or search results stored in a single XML file
+        you can use the &DCW;.
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            In the <guilabel>Search</guilabel> view of &DCW;, choose XML source.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Set path to your XML file in the <guilabel>XML Resource</guilabel> field.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            (Optional) If your file is not in <link linkend="figure.input-xml-format">&C2; format</link>,
+            create an XSLT style sheet that transforms your data into &C2; format,
+            See <xref linkend="section.clustering-xml-feed" /> for an example.
+            Provide a path to your style sheet in the <guilabel>XSLT Stylesheet</guilabel>
+            field. This is an optional field, you can show optional fields by 
+            clicking the arrow button of the <guilabel>Search</guilabel> view toolbar
+            (<xref linkend="figure.search-view-xml" />).
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            If you know the query that generated the documents in your XML file,
+            you can provide it in the <guilabel>Query</guilabel> field, which may
+            improve the clustering results. Press the <guilabel>Process</guilabel> 
+            button to see the results.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.search-view-xml">
+        <title>&DCW; XML search view</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-xml-search-view.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </section>
+    
+    <section xml:id="section.clustering-xml-feed">
+      <title>Clustering documents from XML feeds</title>
+      
+      <para>
+        To try &C2; clustering on documents or search results fetched from a remote
+        XML feed, you can use &DCW;. As an example, we will cluster a news feed from
+        BBC:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            In the <guilabel>Search</guilabel> view of &DCW;, choose XML source.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Set URL to your XML feed in the <guilabel>XML Resource</guilabel> field.
+            Optionally, the URL can contain two special 
+            <link linkend="section.attribute.XmlDocumentSource.xml">place holders</link> that will be replaced
+            with the <guilabel>Query</guilabel> and <guilabel>Results</guilabel> number 
+            you set in the search view.
+          </para>
+          
+          <para>
+            In our example, we will use <link xlink:href="http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml">BBC News RSS feed</link>.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Create an XSLT style sheet that will transform the XML feed into 
+            <link linkend="figure.input-xml-format">&C2; format</link>. For the news feed
+            we can use the stylesheet shown in <xref linkend="figure.bbc-to-c2" />. To
+            add more colour to our results, the XSLT transform extracts thumbnail URLs
+            from the feed and passes them to &C2; in a special attribute.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Provide a path to the transformation style sheet in the <guilabel>XSLT Stylesheet</guilabel>
+            field. This is an optional field, you can show optional fields by 
+            clicking the arrow button of the <guilabel>Search</guilabel> view toolbar
+            (<xref linkend="figure.search-view-xml" />).
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Press the <guilabel>Process</guilabel> button to see the results.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.bbc-to-c2">
+        <title>News feed XML to &C2; format transformation</title>
+        <programlisting><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0"
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+     xmlns:media="http://search.yahoo.com/mrss">
+
+  <xsl:output indent="yes" omit-xml-declaration="no"
+       media-type="application/xml" encoding="utf-8" />
+
+  <xsl:template match="/">
+    <searchresult>
+      <xsl:apply-templates select="/rss/channel/item" />
+    </searchresult>
+  </xsl:template>
+
+  <xsl:template match="item">
+    <document>
+      <title><xsl:value-of select="title" /></title>
+      <snippet>
+        <xsl:value-of select="description" />
+      </snippet>
+      <url><xsl:value-of select="link" /></url>
+      <xsl:if test="media:thumbnail">
+        <field key="thumbnail-url">
+           <value type="java.lang.String"
+                  value="{media:thumbnail/@url}"/>
+        </field>
+      </xsl:if>
+    </document>
+  </xsl:template>
+</searchresult>]]></programlisting>      
+      </figure>      
+    </section>
+    
+    <section>
+      <title>Clustering documents from a Lucene index</title>
+      
+      <para>
+        To try &C2; clustering on documents from a local Lucene index, you can use &DCW;:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            In the <guilabel>Search</guilabel> view of &DCW;, choose Lucene source. Using
+            the arrow button of the <guilabel>Search</guilabel> view toolbar
+            (<xref linkend="figure.search-view-lucene" />), show optional attributes.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Choose the path to your Lucene index in the <guilabel>Index directory</guilabel>
+            field.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Choose fields from your Lucene index in at least one of <guilabel>Document title field</guilabel>
+            and <guilabel>Document content field</guilabel> combo boxes.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Type a query and press the <guilabel>Process</guilabel> button to see the results.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.search-view-lucene">
+        <title>&DCW; Lucene search view</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-lucene-search-view.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </section>
+    
+    <section>
+      <title>Clustering documents from a Solr index</title>
+      
+      <para>
+        To try &C2; clustering on documents from an instance of Apache Solr, you can use &DCW;:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            In the <guilabel>Search</guilabel> view of &DCW;, choose Solr source. Using
+            the arrow button of the <guilabel>Search</guilabel> view toolbar
+            (<xref linkend="figure.search-view-solr" />), show optional attributes.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Provide the URL at which your Solr instance is available in the 
+            <guilabel>Service URL</guilabel> field.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Provide fields that should be used as document title, content and URL (optional)
+            in the <guilabel>Title field name</guilabel>, <guilabel>Summary field name</guilabel> 
+            and <guilabel>URL field name</guilabel> field, respectively.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Type a query and press the <guilabel>Process</guilabel> button to see the results.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.search-view-solr">
+        <title>&DCW; Solr search view</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-solr-search-view.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </section>
+    
+    <section>
+      <title>Saving clusters for further processing</title>
+      
+      <para>
+        To save clusters produced by &C2; for further processing:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Use &DCW; to perform clustering on documents from the source of your choice.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Use the <guilabel>File &lt; Save as...</guilabel> dialog to save the 
+            documents and clusters into a file in <link linkend="figure.output-xml-format">&C2; XML format</link>.
+          </para>
+        </listitem>
+      </orderedlist>
+    </section>    
   </section>
   
   <section>

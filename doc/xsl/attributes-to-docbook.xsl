@@ -22,7 +22,7 @@
   </xsl:template>
 
   <xsl:template match="processing-component-doc">
-    <section xml:id="section.{component-descriptor/@id}">
+    <section xml:id="section.component.{component-descriptor/@id}">
       <title><xsl:apply-templates select="component-descriptor/title" /></title>
 
       <para>
@@ -55,7 +55,7 @@
   </xsl:template>
 
   <xsl:template match="attribute-descriptor">
-    <section>
+    <section xml:id="section.attribute.{@key}">
       <title>
         <xsl:choose>
           <xsl:when test="metadata/label">

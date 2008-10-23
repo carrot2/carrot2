@@ -16,7 +16,7 @@
       var algorithm = $("#algorithm").val();
       var label;
       var prefix;
-      if (algorithm == 'url') {
+      if (algorithm != 'url') {
         label = "search for more like this";
         prefix = '';
       }

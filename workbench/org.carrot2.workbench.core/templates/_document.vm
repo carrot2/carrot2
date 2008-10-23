@@ -4,7 +4,7 @@
 	    	<b>$esc.html($document.getField("title"))</b></a>
 	    <br>
 	    #if ($document.getField("thumbnail-url") && $document.getField("thumbnail-url") != "")
-	        <img class="t" width="100" src="$esc.html($document.getField("thumbnail-url"))">
+	        <img class="t" src="$esc.html($document.getField("thumbnail-url"))">
 	    #end
 	    #if ($document.getField("snippet") && $document.getField("snippet") != "")
 	        $stringutils.abbreviate($esc.html($document.getField("snippet")), 280)<br>
