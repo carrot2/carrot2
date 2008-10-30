@@ -370,6 +370,11 @@
 			activityId="org.carrot2.activities.eclipse"
 			pattern=".+/org\.eclipse\.ui\.views\.(ContentOutline|ProblemView|ResourceNavigator|TaskList|BookmarkView)">
 		</activityPatternBinding>
+		
+		<activityPatternBinding
+			activityId="org.carrot2.activities.eclipse"
+			pattern=".*helpContents">
+		</activityPatternBinding>
 
 		<!-- cluttering preference pages -->
 		<activityPatternBinding
