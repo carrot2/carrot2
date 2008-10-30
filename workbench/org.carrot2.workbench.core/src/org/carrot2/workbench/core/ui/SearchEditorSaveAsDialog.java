@@ -9,6 +9,8 @@ import java.io.File;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.ui.SearchEditor.SaveOptions;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
@@ -20,16 +22,17 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.PlatformUI;
 
 /**
- * Displays a dialog prompting for the location of the output XML file
- * and options indicating what to save (clusters, documents or both).
+ * Displays a dialog prompting for the location of the output XML file and options
+ * indicating what to save (clusters, documents or both).
  */
 final class SearchEditorSaveAsDialog extends TrayDialog
 {
     /**
      * Global most recent path in case the editor did not have a previous one.
      */
-    private static final String GLOBAL_PATH_PREF = 
-        SearchEditorSaveAsDialog.class.getName() + ".savePath";
+    private static final String GLOBAL_PATH_PREF = SearchEditorSaveAsDialog.class
+        .getName()
+        + ".savePath";
 
     private Text fileNameText;
     private Button browseButton;
@@ -69,14 +72,14 @@ final class SearchEditorSaveAsDialog extends TrayDialog
     @Override
     protected void okPressed()
     {
-        WorkbenchCorePlugin.getDefault().getPluginPreferences()
-            .setValue(GLOBAL_PATH_PREF, options.directory);
-
         final File f = new File(this.fileNameText.getText());
         options.directory = f.getParent();
         options.fileName = f.getName();
         options.includeClusters = clusterOption.getSelection();
         options.includeDocuments = docOption.getSelection();
+
+        WorkbenchCorePlugin.getDefault().getPluginPreferences().setValue(
+            GLOBAL_PATH_PREF, options.directory);
 
         super.okPressed();
     }
@@ -108,10 +111,16 @@ final class SearchEditorSaveAsDialog extends TrayDialog
         {
             public void handleEvent(Event event)
             {
-                final FileDialog dialog = new FileDialog(
-                    PlatformUI.getWorkbench().getDisplay().getActiveShell());
+                final Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
+                final FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 
-                dialog.setFileName(options.getFullPath());
+                final IPath file = new Path(fileNameText.getText());
+                if (file.isValidPath(fileNameText.getText()))
+                {
+                    dialog.setFileName(file.lastSegment());
+                    dialog.setFilterPath(file.removeLastSegments(1).toOSString());
+                }
+
                 dialog.setFilterExtensions(new String []
                 {
                     "*.xml", "*.*"
@@ -129,7 +138,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             }
         });
 
-        Listener correctnessChecker = new Listener()
+        final Listener correctnessChecker = new Listener()
         {
             public void handleEvent(Event event)
             {
@@ -149,7 +158,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
     private void validateInput()
     {
         boolean invalid = false;
-        
+
         invalid |= (docOption.getSelection() == false && clusterOption.getSelection() == false);
 
         if (isBlank(fileNameText.getText()))
@@ -158,7 +167,8 @@ final class SearchEditorSaveAsDialog extends TrayDialog
         }
         else
         {
-            invalid |= (!new File(fileNameText.getText()).getAbsoluteFile().getParentFile().isDirectory());            
+            invalid |= (!new File(fileNameText.getText()).getAbsoluteFile()
+                .getParentFile().isDirectory());
         }
 
         getButton(IDialogConstants.OK_ID).setEnabled(!invalid);
@@ -194,7 +204,8 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             dialogButtonLData.horizontalAlignment = GridData.FILL;
             dialogButtonLData.verticalAlignment = GridData.FILL;
             browseButton.setText("Browse...");
-            dialogButtonLData.widthHint = browseButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x
+            dialogButtonLData.widthHint = browseButton.computeSize(SWT.DEFAULT,
+                SWT.DEFAULT).x
                 + 2 * IDialogConstants.BUTTON_MARGIN;
             browseButton.setLayoutData(dialogButtonLData);
         }
