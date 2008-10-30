@@ -531,6 +531,8 @@ public class SearchInputView extends ViewPart
          * Redraw GUI.
          */
         this.editorCompositeContainer.setRedraw(true);
+        this.editorCompositeContainer.layout(true);
+
         checkAllRequiredAttributes();
         scroller.reflow(true);
     }
