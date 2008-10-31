@@ -1,0 +1,18 @@
+
+How to put some stress on the webapp?
+
+- Extract sample queries from Carrot2 logs:
+
+extract-queries.rb /path/to/logs/c2-logs* | sort -u | shuf > queries
+
+- Edit the replay script and define algorithms and sources you wish
+  to involve in the stress test (some of them perhaps should be spared so that
+  we don't put too much traffic on the shoulders of smaller search engines)
+
+vi stress.rb
+
+- Run the replay script, piping queries pool to pick from.
+
+cat queries | ./stress.rb 
+
+
