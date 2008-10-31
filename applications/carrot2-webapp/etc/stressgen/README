@@ -13,6 +13,8 @@ vi stress.rb
 
 - Run the replay script, piping queries pool to pick from.
 
-cat queries | ./stress.rb 
+cat queries | ./stress.rb -t 5 -m 5
+
+(see ./stress.rb -h for help)
 
 
