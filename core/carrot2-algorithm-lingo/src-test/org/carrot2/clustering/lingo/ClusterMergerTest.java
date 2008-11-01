@@ -2,6 +2,7 @@ package org.carrot2.clustering.lingo;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,6 +22,8 @@ public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
     {
         clusterBuilder = new ClusterBuilder();
         reducer = new TermDocumentMatrixReducer();
+        reducer.factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
+        reducer.desiredClusterCountBase = 25;
     }
 
     @Test
