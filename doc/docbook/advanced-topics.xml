@@ -12,7 +12,7 @@
 
   <para>
     This chapter discusses more advanced usage scenarios of &C2; such as building &C2; from
-    source code or customizing &C2; applications.
+    source code, fine-tuning clustering or customizing &C2; applications.
   </para>
   
   <section>
@@ -26,6 +26,76 @@
       
       <para>
       </para>
+    </section>
+  </section>
+  
+  <section>
+    <title>Fine-tuning &C2; clustering</title>
+    
+    <para>
+      This section discusses a number of typical fine-tuning scenarios for &C2; clustering
+      algorithms. Some of the scenarios are relevant to all &C2; algorithms, while others
+      are specific to individual algorithms.
+    </para>
+    
+    <section>
+      <title>Modifying the list of stop words</title>
+      
+      <para>
+        Stop words are the common meaningless words, such as <emphasis>the</emphasis>, 
+        <emphasis>to</emphasis>, <emphasis>for</emphasis> in English that should be 
+        ignored while clustering. To fine-tune the stop words list you can use the 
+        <xref linkend="section.workbench">&DCW;</xref>:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Start &DCW; and run some query on which you'll be observing the results
+            of your changes..
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Go to the <filename>workspace/</filename> directory which is located in
+            the directory to which you extracted &DCW;. Modify the <filename>stopwords.*</filename>
+            file for the language you are working on (e.g. <filename>stopwords.en</filename>
+            for English). Add or remove stop words as required and save changes.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Open the <guilabel>Attributes</guilabel> view in &DCW; and use the view's toolbar
+            button shown in <xref linkend="figure.preprocessing-attributes" /> 
+            to group the attributes by semantics. In the <guilabel>Preprocessing</guilabel>
+            make sure the <guilabel>Processing language</guilabel> is correctly set and
+            check the <guilabel>Reload stopwords</guilabel> checkbox. Doing the latter
+            will let you to see the updated clustering results without restarting &DCW;
+            every time you save the changed stop word list.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Uncheck the <guilabel>Restart Processing Automatically</guilabel>
+            option in the <guilabel>Search</guilabel> menu. To rerun clustering after
+            you've saved changes to the <filename>stopwords.*</filename>, choose the
+            <guilabel>Restart Clustering</guilabel> option from the <guilabel>Search</guilabel>
+            menu, or press <guilabel>Ctrl+F11</guilabel>.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.preprocessing-attributes">
+        <title>&DCW; Preprocessing Attributes/title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-preprocessing-attributes.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
     </section>
   </section>
   
