@@ -9,13 +9,13 @@
         $("#status-fetched-documents").html(window.fetchedDocumentsCount);
       }
       
-      if (window.totalDocumentsCount && window.totalDocumentsCount.length > 0) {
+      if (window.totalDocumentsCount && window.totalDocumentsCount > 0) {
         $("#status-total-documents").html(window.totalDocumentsCount);
         $("#status-total").show();
+        $("#documents-status-overall").show();
       }
       
       $("#status-query").html($("#query").val());
-      $("#documents-status-overall").show();
     });
     
     $("#clusters-panel").bind("carrot2-clusters-loaded", function() {

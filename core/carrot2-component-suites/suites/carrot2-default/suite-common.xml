@@ -1,16 +1,16 @@
 <!-- Components included in all applications -->
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
-      <label>Yahoo</label>
-      <title>Yahoo Web Search</title>
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="wiki">
+      <label>Wiki</label>
+      <title>Wikipedia Search (with Yahoo Boss)</title>
       <mnemonic>Y</mnemonic>
-      <description>Yahoo Web Search document source searches the web using Yahoo Boss Web Search API.</description>
-      <icon-path>icons/yahoo.png</icon-path>
+      <description>Wikipedia document source searches the Wikipedia web using Yahoo Boss Web Search API.</description>
+      <icon-path>icons/wiki.png</icon-path>
       <example-queries>
-        <example-query>data mining</example-query>
+        <example-query>poland</example-query>
         <example-query>olympics</example-query>
-        <example-query>London</example-query>
+        <example-query>clustering</example-query>
       </example-queries>
     </source>
     <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-images">
@@ -34,6 +34,18 @@
         <example-query>iphone</example-query>
         <example-query>olympics</example-query>
         <example-query>election</example-query>
+      </example-queries>
+    </source>
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
+      <label>Yahoo</label>
+      <title>Yahoo Web Search</title>
+      <mnemonic>Y</mnemonic>
+      <description>Yahoo Web Search document source searches the web using Yahoo Boss Web Search API.</description>
+      <icon-path>icons/yahoo.png</icon-path>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>olympics</example-query>
+        <example-query>London</example-query>
       </example-queries>
     </source>
     <source component-class="org.carrot2.source.microsoft.MicrosoftLiveDocumentSource" id="msn-web">

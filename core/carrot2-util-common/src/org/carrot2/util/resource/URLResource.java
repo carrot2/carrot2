@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -23,13 +22,12 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Commit;
 
-
 /**
- * This class opens a connection to a resource pointed to by an URI. Note
- * that JAR resources <b>should not</b> be accessed this way because the default
- * handler caches {@link JarFile} instances and thus locks the file.
- *
- * @see <a href="http://issues.carrot2.org/browse/CARROT-143">Issue CARROT-143</a>
+ * This class opens a connection to a resource pointed to by an URI. Note that JAR
+ * resources <b>should not</b> be accessed this way because the default handler caches
+ * {@link JarFile} instances and thus locks the file.
+ * 
+ * @see <a href="http://issues.carrot2.org/browse/CARROT-143">Issue CARROT-143< /a>
  */
 @Root(name = "url-resource")
 public class URLResource implements Resource
@@ -45,10 +43,13 @@ public class URLResource implements Resource
     @Attribute(name = "url")
     private String info;
 
-    public URLResource()
+    /**
+     * For XML serialization/deserialization only, use {@link #URLResource(URL)}.
+     */
+    URLResource()
     {
     }
-    
+
     public URLResource(URL url)
     {
         this.url = url;
@@ -61,7 +62,8 @@ public class URLResource implements Resource
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return info;
     }
 
@@ -72,7 +74,8 @@ public class URLResource implements Resource
         {
             return true;
         }
-        if (obj instanceof URLResource) {
+        if (obj instanceof URLResource)
+        {
             return ((URLResource) obj).info.equals(this.info);
         }
         return false;
@@ -88,7 +91,7 @@ public class URLResource implements Resource
     {
         return url;
     }
-    
+
     @Commit
     void afterDeserialization() throws MalformedURLException
     {

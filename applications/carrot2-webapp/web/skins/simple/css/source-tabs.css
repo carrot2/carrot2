@@ -61,6 +61,10 @@ ul.tabs li.tab .msn-web {
   background-image: url('../img/sources/msn.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
+ul.tabs li.tab .wiki {
+  background-image: url('../img/sources/wiki.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 1px */
+}
+
 ul.tabs li.tab .indeed {
   background-image: url('../img/sources/indeed.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px */
   padding-left: 13px;

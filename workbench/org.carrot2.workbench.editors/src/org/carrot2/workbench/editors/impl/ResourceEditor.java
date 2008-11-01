@@ -205,7 +205,7 @@ public class ResourceEditor extends AttributeEditorAdapter
 
         if (resource != null && resource instanceof ParameterizedUrlResource)
         {
-            previous = ((ParameterizedUrlResource) resource).url.toExternalForm();
+            previous = ((ParameterizedUrlResource) resource).getUrl().toExternalForm();
         }
 
         final InputDialog dialog = new InputDialog(resourceInfo.getShell(),

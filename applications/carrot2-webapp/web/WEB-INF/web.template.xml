@@ -6,6 +6,10 @@
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 
+  <listener>
+    <listener-class>org.carrot2.webapp.FileAppenderInitializationContextListener</listener-class>
+  </listener>
+  
   <servlet>
     <description>Processes query requests</description>
     <display-name>QueryProcessorServlet</display-name>

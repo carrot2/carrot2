@@ -51,6 +51,11 @@ public class LabelFilterProcessor
     public CompleteLabelFilter completeLabelFilter = new CompleteLabelFilter();
 
     /**
+     * Min length label filter.
+     */
+    public MinLengthLabelFilter minLengthLabelFilter = new MinLengthLabelFilter();
+    
+    /**
      * Processes all filters declared as fields of this class.
      */
     public void process(PreprocessingContext context)
@@ -61,6 +66,7 @@ public class LabelFilterProcessor
         Arrays.fill(acceptedStems, true);
         Arrays.fill(acceptedPhrases, true);
 
+        minLengthLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         queryLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         stopWordLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         numericLabelFilter.filter(context, acceptedStems, acceptedPhrases);

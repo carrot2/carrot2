@@ -69,6 +69,7 @@ public class StopWordLabelFilterMergedTest extends LabelFilterTestBase
     {
         final SnowballLanguageModelFactory snowballLanguageModelFactory = new SnowballLanguageModelFactory();
         snowballLanguageModelFactory.mergeStopwords = true;
+        snowballLanguageModelFactory.reloadStopwords = true;
         return snowballLanguageModelFactory;
     }
 }

@@ -2,25 +2,42 @@ package org.carrot2.util.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.carrot2.util.StringUtils;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.load.Commit;
 
 /**
  * A {@link Resource} implementation that allows URLs to be parameterized. The attribute
  * place holders are of format: <code>${attribute}</code> and will be replaced before the
  * contents is fetched from the URL when the {@link #open(Map)} method is used.
  */
+@Root(name = "parameterized-url-resource")
 public class ParameterizedUrlResource implements Resource
 {
     /**
-     * Immutable public address of the resource.
+     * Public address of the resource.
      */
-    public final URL url;
+    private URL url;
 
-    private final String info;
+    /**
+     * URL string, for serialization only.
+     */
+    @Attribute(name = "url")
+    private String info;
+
+    /**
+     * For XML serialization/deserialization only, use
+     * {@link #ParameterizedUrlResource(URL)}
+     */
+    ParameterizedUrlResource()
+    {
+    }
 
     /**
      * Creates an instance with the provided <code>url</code>;
@@ -28,7 +45,7 @@ public class ParameterizedUrlResource implements Resource
     public ParameterizedUrlResource(URL url)
     {
         this.url = url;
-        this.info = "[URL: " + url.toExternalForm() + "]";
+        this.info = url.toExternalForm();
     }
 
     /**
@@ -92,7 +109,7 @@ public class ParameterizedUrlResource implements Resource
     @Override
     public String toString()
     {
-        return info;
+        return this.info;
     }
 
     @Override
@@ -113,5 +130,16 @@ public class ParameterizedUrlResource implements Resource
     public final int hashCode()
     {
         return this.info.hashCode();
+    }
+
+    public URL getUrl()
+    {
+        return url;
+    }
+
+    @Commit
+    void afterDeserialization() throws MalformedURLException
+    {
+        url = new URL(info);
     }
 }

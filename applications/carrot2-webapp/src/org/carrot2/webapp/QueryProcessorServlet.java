@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.MapUtils;
@@ -38,7 +36,13 @@ public class QueryProcessorServlet extends HttpServlet
     private transient JawrUrlGenerator jawrUrlGenerator;
 
     /** Logger for processed queries */
-    private transient volatile Logger queryLogger;
+    static final String QUERY_LOG_NAME = "queryLog";
+    private transient volatile Logger queryLogger = Logger.getLogger(QUERY_LOG_NAME);
+
+    /** Error log */
+    private transient volatile Logger logger = Logger.getLogger(getClass());
+
+    private transient volatile boolean loggerAppendersInitialized = false;
 
     /**
      * Define this system property to enable statistical information from the query
@@ -62,11 +66,18 @@ public class QueryProcessorServlet extends HttpServlet
     public void init(ServletConfig config) throws ServletException
     {
         super.init(config);
+        final ServletContext servletContext = config.getServletContext();
+
+        // A context listener may have initialized the logger appenders for us already
+        // (if running under Servlet 2.5 API). If so, this will save us one 
+        // synchronization at request time.
+        loggerAppendersInitialized = (Boolean) servletContext
+            .getAttribute(FileAppenderInitializationContextListener.LOGGER_APPENDERS_INITIALIZED);
 
         controller = new CachingController(DocumentSource.class);
         controller.init(new HashMap<String, Object>(), WebappConfig.INSTANCE.components);
 
-        jawrUrlGenerator = new JawrUrlGenerator(config.getServletContext());
+        jawrUrlGenerator = new JawrUrlGenerator(servletContext);
     }
 
     /*
@@ -93,15 +104,11 @@ public class QueryProcessorServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        // TODO: Move me to #init() after upgrading to servlet api 2.5
-        synchronized (this)
+        // Lots of people still use Tomcat 5.5. which has Servlet 2.4 API, so
+        // we need to keep appender initialization as a workaround here.
+        if (!loggerAppendersInitialized)
         {
-            if (queryLogger == null)
-            {
-                queryLogger = Logger.getLogger("queryLog");
-                queryLogger.addAppender(getQueryLogAppender(request));
-                Logger.getRootLogger().addAppender(getFullLogAppender(request));
-            }
+            initLoggerAppenders(request.getContextPath());
         }
 
         // Unpack parameters from string arrays
@@ -139,46 +146,19 @@ public class QueryProcessorServlet extends HttpServlet
         }
     }
 
-    private FileAppender getFullLogAppender(HttpServletRequest request)
-        throws IOException
+    private void initLoggerAppenders(String contextPath) throws IOException
     {
-        final String contextPath = getContextPathSegment(request);
-        final String logPrefix = getLogDirPrefix();
-
-        final FileAppender appender = new FileAppender(new PatternLayout(
-            "%d{ISO8601},[%p],[%t],%c,%m%n"), logPrefix + "/c2-" + contextPath
-            + "-full.log", true);
-        appender.setEncoding("UTF-8");
-        return appender;
-    }
-
-    private FileAppender getQueryLogAppender(HttpServletRequest request)
-        throws IOException
-    {
-        final String contextPath = getContextPathSegment(request);
-        final String logPrefix = getLogDirPrefix();
-    
-        final FileAppender appender = new FileAppender(new PatternLayout(
-            "%d{ISO8601},%m%n"), logPrefix + "/c2-" + contextPath + "-queries.log", true);
-        appender.setEncoding("UTF-8");
-        return appender;
-    }
-
-    private String getLogDirPrefix()
-    {
-        final String catalinaHome = System.getProperty("catalina.home");
-        return catalinaHome != null ? catalinaHome + "/logs" : "";
-    }
-
-    private String getContextPathSegment(HttpServletRequest request)
-    {
-        String contextPath = request.getContextPath();
-        if (StringUtils.isBlank(contextPath))
+        synchronized (this)
         {
-            contextPath = "root";
+            if (!loggerAppendersInitialized)
+            {
+                queryLogger.addAppender(FileAppenderInitializationContextListener
+                    .getQueryLogAppender(contextPath));
+                Logger.getRootLogger().addAppender(
+                    FileAppenderInitializationContextListener.getFullLogAppender(contextPath));
+                loggerAppendersInitialized = true;
+            }
         }
-        contextPath = contextPath.replaceAll("[^a-zA-Z0-9\\-]", "");
-        return contextPath;
     }
 
     /**
@@ -277,6 +257,8 @@ public class QueryProcessorServlet extends HttpServlet
         catch (ProcessingException e)
         {
             processingException = e;
+            logger.error("Processing error", e);
+
         }
 
         // Send response

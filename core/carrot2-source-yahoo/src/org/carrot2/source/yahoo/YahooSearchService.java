@@ -170,9 +170,9 @@ public abstract class YahooSearchService
             params.add(new NameValuePair("output", "xml"));
             request.setQueryString(params.toArray(new NameValuePair [params.size()]));
 
-            if (logger.isInfoEnabled())
+            if (logger.isDebugEnabled())
             {
-                logger.info("Request params: " + request.getQueryString());
+                logger.debug("Request params: " + request.getQueryString());
             }
             final int statusCode = client.executeMethod(request);
 

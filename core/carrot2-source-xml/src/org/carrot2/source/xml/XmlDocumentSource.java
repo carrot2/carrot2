@@ -15,8 +15,7 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.*;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 
 /**
  * Fetches documents from XML files and streams. For additional flexibility, an XSLT
@@ -29,7 +28,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     /**
      * The resource to load XML data from. You can either create instances of
      * {@link Resource} implementations directly or use {@link ResourceUtils} to look up
-     * {@link Resource} instances from a variety of locations.  
+     * {@link Resource} instances from a variety of locations.
      * <p>
      * One special {@link Resource} implementation you can use is
      * {@link ParameterizedUrlResource}. It allows you to specify attribute place holders
@@ -50,6 +49,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * @group XML data
      */
     @Input
+    @Init
     @Processing
     @Attribute
     @Required
@@ -77,7 +77,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * 
      * @label XSLT Stylesheet
      * @level Medium
-     * @group XML transformation 
+     * @group XML transformation
      */
     @Input
     @Init
@@ -90,12 +90,12 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     public Resource xslt;
 
     /**
-     * Parameters to be passed to the XSLT transformer. Keys of the map will be used
-     * as parameter names, values of the map as parameter values.
+     * Parameters to be passed to the XSLT transformer. Keys of the map will be used as
+     * parameter names, values of the map as parameter values.
      * 
      * @label XSLT Parameters
      * @level Advanced
-     * @group XML transformation 
+     * @group XML transformation
      */
     @Input
     @Init
@@ -175,6 +175,11 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
             query = (String) processingResult.getAttributes().get(AttributeNames.QUERY);
             documents = processingResult.getDocuments();
 
+            if (documents == null)
+            {
+                documents = Lists.newArrayList();
+            }
+            
             // Truncate to the requested number of documents if needed
             if (documents.size() > results)
             {
