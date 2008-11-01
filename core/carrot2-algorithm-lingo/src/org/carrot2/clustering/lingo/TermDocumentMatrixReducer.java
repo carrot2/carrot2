@@ -37,7 +37,7 @@ public class TermDocumentMatrixReducer
         LocalNonnegativeMatrixFactorizationFactory.class,
         KMeansMatrixFactorizationFactory.class
     }, strict = false)
-    public MatrixFactorizationFactory factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
+    public MatrixFactorizationFactory factorizationFactory = new NonnegativeMatrixFactorizationEDFactory();
 
     /**
      * Factorization quality. The number of iterations of matrix factorization to perform.
@@ -66,7 +66,7 @@ public class TermDocumentMatrixReducer
     @Processing
     @Attribute
     @IntRange(min = 2, max = 100)
-    public int desiredClusterCountBase = 25;
+    public int desiredClusterCountBase = 40;
 
     /**
      * Performs the reduction.

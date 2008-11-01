@@ -41,7 +41,7 @@ public class ClusterBuilder
     @Processing
     @Attribute
     @DoubleRange(min = 0.0, max = 10.00)
-    public double phraseLabelBoost = 1.0;
+    public double phraseLabelBoost = 1.5;
 
     /**
      * Phrase length penalty start. The phrase length at which the overlong multi-word
@@ -89,6 +89,20 @@ public class ClusterBuilder
     @Attribute
     @DoubleRange(min = 0.0, max = 1.0)
     public double clusterMergingThreshold = 0.7;
+
+    /**
+     * Optional feature scorer. We don't make it an attribute for now as the core Lingo
+     * will not have any implementations for this interface.
+     */
+    public FeatureScorer featureScorer = null;
+
+    /**
+     * Normalize.
+     */
+    @Input
+    @Processing
+    @Attribute
+    public boolean normalize = true;
 
     /**
      * Coefficients for label weighting based on the cluster size.
@@ -146,11 +160,45 @@ public class ClusterBuilder
 
         }
 
+        // Request additional feature scores
+        final double [] featureScores = featureScorer != null ? featureScorer
+            .getFeatureScores(context) : null;
+        final int [] wordLabelIndex = new int [wordCount];
+        if (featureScores != null)
+        {
+            // Word index to feature index mapping
+            Arrays.fill(wordLabelIndex, -1);
+            for (int i = 0; i < labelsFeatureIndex.length; i++)
+            {
+                final int featureIndex = labelsFeatureIndex[i];
+                if (featureIndex < wordCount)
+                {
+                    wordLabelIndex[featureIndex] = i;
+                }
+            }
+        }
+
         // Find single word label candidates
         int [] candidateStemIndices = new int [desiredClusterCount];
         double [] candidateStemScores = new double [desiredClusterCount];
-        MatrixUtils.maxInColumns(reducedTdMatrix.viewSelection(filteredRows.toArray(),
-            null), candidateStemIndices, candidateStemScores, Functions.abs);
+        final DoubleMatrix2D reducedTdMatrixForSingleLabels = reducedTdMatrix
+            .viewSelection(filteredRows.toArray(), null).copy();
+        for (int r = 0; r < reducedTdMatrixForSingleLabels.rows(); r++)
+        {
+            final int labelIndex = wordLabelIndex[mostFrequentOriginalWordIndex[filteredRowToStemIndex
+                .get(r)]];
+            double penalty = getDocumentCountPenalty(labelIndex, documentCount,
+                labelsDocumentIndices);
+            if (featureScores != null)
+            {
+                penalty *= featureScores[labelIndex];
+            }
+
+            reducedTdMatrixForSingleLabels.viewRow(r).assign(Functions.mult(penalty));
+        }
+
+        MatrixUtils.maxInColumns(reducedTdMatrixForSingleLabels, candidateStemIndices,
+            candidateStemScores, Functions.abs);
 
         // Find multiword label candidates
         int [] candidatePhraseIndices = new int [desiredClusterCount];
@@ -180,20 +228,19 @@ public class ClusterBuilder
                 final int phraseFeature = labelsFeatureIndex[row + firstPhraseIndex];
                 int [] phraseWordIndices = phrasesWordIndices[phraseFeature - wordCount];
 
-                double penalty = documentSizeCoefficients
-                    .getValue(labelsDocumentIndices[row + firstPhraseIndex].size()
-                        / (double) documentCount);
+                double penalty = getDocumentCountPenalty(row + firstPhraseIndex,
+                    documentCount, labelsDocumentIndices);
 
                 if (phraseWordIndices.length >= phraseLengthPenaltyStart)
                 {
                     penalty *= 1 - penaltyStep
                         * (phraseWordIndices.length - phraseLengthPenaltyStart + 1);
                 }
+                if (featureScores != null) {
+                    penalty *= featureScores[row + firstPhraseIndex];
+                }
                 phraseCos.viewRow(row).assign(Functions.mult(penalty));
             }
-
-            // Normalize again
-            MatrixUtils.normalizeColumnL2(phraseCos, null);
 
             MatrixUtils.maxInColumns(phraseCos, candidatePhraseIndices,
                 candidatePhraseScores, Functions.abs);
@@ -225,10 +272,17 @@ public class ClusterBuilder
         context.clusterLabelScore = clusterLabelScore;
     }
 
+    private double getDocumentCountPenalty(int labelIndex, int documentCount,
+        IntSet [] labelsDocumentIndices)
+    {
+        return documentSizeCoefficients.getValue(labelsDocumentIndices[labelIndex].size()
+            / (double) documentCount);
+    }
+
     /**
      * Assigns documents to cluster labels.
      */
-    void assignDocuments(LingoProcessingContext context, TermWeighting termWeighting)
+    void assignDocuments(LingoProcessingContext context)
     {
         final int [] clusterLabelFeatureIndex = context.clusterLabelFeatureIndex;
         final IntSet [] clusterDocuments = new IntBitSet [clusterLabelFeatureIndex.length];

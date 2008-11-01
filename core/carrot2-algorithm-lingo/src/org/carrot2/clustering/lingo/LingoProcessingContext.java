@@ -10,10 +10,10 @@ import cern.colt.matrix.DoubleMatrix2D;
 /**
  * Stores intermediate data required during Lingo clustering.
  */
-class LingoProcessingContext
+public class LingoProcessingContext
 {
     /** Preprocessing context */
-    final PreprocessingContext preprocessingContext;
+    public final PreprocessingContext preprocessingContext;
 
     /** Term-document matrix */
     DoubleMatrix2D tdMatrix;

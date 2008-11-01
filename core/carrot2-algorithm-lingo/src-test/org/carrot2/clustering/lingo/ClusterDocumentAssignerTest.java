@@ -105,7 +105,7 @@ public class ClusterDocumentAssignerTest extends TermDocumentMatrixBuilderTestBa
         
         final TfTermWeighting termWeighting = new TfTermWeighting();
         clusterBuilder.buildLabels(lingoContext, termWeighting);
-        clusterBuilder.assignDocuments(lingoContext, termWeighting);
+        clusterBuilder.assignDocuments(lingoContext);
 
         for (int i = 0; i < expectedDocumentIndices.length; i++)
         {

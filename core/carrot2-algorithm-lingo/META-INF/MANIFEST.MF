@@ -6,7 +6,7 @@ Bundle-Version: 3.0.0
 Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.core,
  org.carrot2.util.common,
- org.carrot2.text,
+ org.carrot2.text;visibility:=reexport,
  cern.colt;bundle-version="1.2.0",
  bak.pcj;bundle-version="1.2.0",
  org.carrot2.util.matrix

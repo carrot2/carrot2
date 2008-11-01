@@ -211,7 +211,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
             clusterBuilder.buildLabels(lingoContext, termWeighting);
 
             // Document assignment
-            clusterBuilder.assignDocuments(lingoContext, termWeighting);
+            clusterBuilder.assignDocuments(lingoContext);
 
             // Cluster merging
             clusterBuilder.merge(lingoContext);

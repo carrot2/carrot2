@@ -61,8 +61,9 @@ public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
     {
         createDocuments("aa", "aa", "aa bb", "aa bb");
         reducer.desiredClusterCountBase = 20;
-        clusterBuilder.phraseLabelBoost = 0.8;
+        clusterBuilder.phraseLabelBoost = 0.08;
         clusterBuilder.clusterMergingThreshold = 0.4;
+        labelFilterProcessor.minLengthLabelFilter.enabled = false;
 
         final int [][] expectedDocumentIndices = new int [] []
         {
@@ -82,7 +83,9 @@ public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
     {
         createDocuments("aa", "aa", "aa bb", "aa bb", "aa bb cc", "aa bb cc", "dd dd");
         reducer.desiredClusterCountBase = 20;
+        clusterBuilder.phraseLabelBoost = 0.05;
         clusterBuilder.clusterMergingThreshold = 0.2;
+        labelFilterProcessor.minLengthLabelFilter.enabled = false;
         labelFilterProcessor.completeLabelFilter.enabled = false;
 
         final int [][] expectedDocumentIndices = new int [] []
@@ -111,7 +114,7 @@ public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
         reducer.reduce(lingoContext);
         final TfTermWeighting termWeighting = new TfTermWeighting();
         clusterBuilder.buildLabels(lingoContext, termWeighting);
-        clusterBuilder.assignDocuments(lingoContext, termWeighting);
+        clusterBuilder.assignDocuments(lingoContext);
         clusterBuilder.merge(lingoContext);
 
         for (int i = 0; i < expectedDocumentIndices.length; i++)

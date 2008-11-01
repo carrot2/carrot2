@@ -22,6 +22,7 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     {
         matrixBuilder = new TermDocumentMatrixBuilder();
         labelFilterProcessor = new LabelFilterProcessor();
+        labelFilterProcessor.minLengthLabelFilter.enabled = false;
     }
 
     protected void buildTermDocumentMatrix()
