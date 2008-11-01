@@ -45,7 +45,7 @@
         Stop words are the common meaningless words, such as <emphasis>the</emphasis>, 
         <emphasis>to</emphasis>, <emphasis>for</emphasis> in English that should be 
         ignored while clustering. To fine-tune the stop words list you can use the 
-        <xref linkend="section.workbench">&DCW;</xref>:
+        <link linkend="section.workbench">&DCW;</link>:
       </para>
       
       <orderedlist>
@@ -89,7 +89,7 @@
       </orderedlist>
       
       <figure xml:id="figure.preprocessing-attributes">
-        <title>&DCW; Preprocessing Attributes/title>
+        <title>&DCW; Preprocessing Attributes</title>
         <mediaobject>
           <imageobject role="html">
             <imagedata format="PNG" fileref="img/workbench-preprocessing-attributes.png" />

@@ -2,7 +2,6 @@ package org.carrot2.clustering.lingo;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorization;
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.junit.Before;
 import org.junit.Test;
