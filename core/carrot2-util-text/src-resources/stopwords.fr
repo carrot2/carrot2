@@ -36,7 +36,7 @@ bat
 beau
 beaucoup
 bien
-car
+#car
 ce
 celle
 celle-ci

@@ -2,6 +2,8 @@ package org.carrot2.text.preprocessing;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.carrot2.text.linguistic.LanguageModelFactory;
+import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -115,6 +117,22 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
     }
 
     @Test
+    public void testPhraseWithoutStopWords()
+    {
+        createDocuments("Jaguar car", "Jaguar car");
+        final String expectedLabel = "Jaguar Car";
+
+        checkFullPreprocessing(expectedLabel);
+        checkWithoutPreprocessing(new char [] []
+        {
+            "Jaguar".toCharArray(), "Car".toCharArray()
+        }, new boolean []
+        {
+            false, true, false
+        }, expectedLabel);
+    }
+
+    @Test
     public void testPhraseWithCapitalizedWords()
     {
         createDocuments("iMac stuff", "iMac stuff");
@@ -154,5 +172,13 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
             assertThat(labelFormatter.format(context, labelsFeatureIndex[i])).as(
                 "featureIndex[" + i + "]").isEqualTo(expectedFormattedLabels[i]);
         }
+    }
+
+    @Override
+    protected LanguageModelFactory createLanguageModelFactory()
+    {
+        final SnowballLanguageModelFactory snowballLanguageModelFactory = new SnowballLanguageModelFactory();
+        snowballLanguageModelFactory.mergeStopwords = false;
+        return snowballLanguageModelFactory;
     }
 }

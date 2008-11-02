@@ -30,7 +30,7 @@
 #
 # Otherwise, XIncludes will not be resolved properly.
 #docbook.xsl.dir=
-#docbook.dtd.dir
+#docbook.dtd.dir=
 #xalan.home=
 
 # JavaDoc url base for links in the DocBook documentation

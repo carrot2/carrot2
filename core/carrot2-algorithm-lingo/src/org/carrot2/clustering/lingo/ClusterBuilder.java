@@ -97,14 +97,6 @@ public class ClusterBuilder
     public FeatureScorer featureScorer = null;
 
     /**
-     * Normalize.
-     */
-    @Input
-    @Processing
-    @Attribute
-    public boolean normalize = true;
-
-    /**
      * Coefficients for label weighting based on the cluster size.
      */
     private LinearApproximation documentSizeCoefficients = new LinearApproximation(

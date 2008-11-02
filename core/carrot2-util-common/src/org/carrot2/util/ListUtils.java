@@ -23,4 +23,15 @@ public final class ListUtils
             return new ArrayList<E>(list);
         }
     }
+
+    public static int [] asArray(List<Integer> list)
+    {
+        final int [] result = new int [list.size()];
+        int index = 0;
+        for (Integer integer : list)
+        {
+            result[index++] = integer;
+        }
+        return result;
+    }
 }
