@@ -25,10 +25,9 @@ import com.google.common.collect.Maps;
 /**
  * Processes search requests.
  */
+@SuppressWarnings("serial")
 public class QueryProcessorServlet extends HttpServlet
 {
-    private static final long serialVersionUID = 1L;
-
     /** Controller that performs all searches */
     private transient CachingController controller;
 
@@ -69,7 +68,7 @@ public class QueryProcessorServlet extends HttpServlet
         final ServletContext servletContext = config.getServletContext();
 
         // A context listener may have initialized the logger appenders for us already
-        // (if running under Servlet 2.5 API). If so, this will save us one 
+        // (if running under Servlet 2.5 API). If so, this will save us one
         // synchronization at request time.
         loggerAppendersInitialized = (Boolean) servletContext
             .getAttribute(FileAppenderInitializationContextListener.LOGGER_APPENDERS_INITIALIZED);
@@ -104,8 +103,10 @@ public class QueryProcessorServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        // Lots of people still use Tomcat 5.5. which has Servlet 2.4 API, so
-        // we need to keep appender initialization as a workaround here.
+        /*
+         * Lots of people still use Tomcat 5.5. which has Servlet 2.4 API, so
+         * we need to keep appender initialization as a workaround here.
+         */
         if (!loggerAppendersInitialized)
         {
             initLoggerAppenders(request.getContextPath());
@@ -146,16 +147,16 @@ public class QueryProcessorServlet extends HttpServlet
         }
     }
 
+    /*
+     * 
+     */
     private void initLoggerAppenders(String contextPath) throws IOException
     {
         synchronized (this)
         {
             if (!loggerAppendersInitialized)
             {
-                queryLogger.addAppender(FileAppenderInitializationContextListener
-                    .getQueryLogAppender(contextPath));
-                Logger.getRootLogger().addAppender(
-                    FileAppenderInitializationContextListener.getFullLogAppender(contextPath));
+                FileAppenderInitializationContextListener.initLoggers(contextPath);
                 loggerAppendersInitialized = true;
             }
         }
