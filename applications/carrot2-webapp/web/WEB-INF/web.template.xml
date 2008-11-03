@@ -46,11 +46,12 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-        
+
   <servlet-mapping>
     <servlet-name>QueryProcessorServlet</servlet-name>
     <url-pattern>/xml</url-pattern>
   </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>QueryProcessorServlet</servlet-name>
     <url-pattern>/search</url-pattern>
@@ -59,12 +60,28 @@
   <servlet-mapping>
     <servlet-name>JavascriptServlet</servlet-name>
     <url-pattern>*.jjs</url-pattern>
-  </servlet-mapping> 
+  </servlet-mapping>
+  
   <servlet-mapping>
     <servlet-name>CSSServlet</servlet-name>
     <url-pattern>*.jcss</url-pattern>
   </servlet-mapping> 
-  
+
+  <filter>
+    <filter-name>RootRedirect</filter-name>
+    <filter-class>org.carrot2.webapp.RootRedirectFilter</filter-class>
+
+    <init-param>
+      <param-name>redirect.target</param-name>
+      <param-value>/search</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>RootRedirect</filter-name>
+    <url-pattern>/</url-pattern>
+  </filter-mapping> 
+
   <filter>
     <filter-name>CompressingFilter</filter-name>
     <filter-class>com.planetj.servlet.filter.compression.CompressingFilter</filter-class>
@@ -85,7 +102,6 @@
 
   <filter>
     <filter-name>xslt-filter</filter-name>
-    <display-name>XSLT Filter</display-name>
     <filter-class>org.carrot2.util.xsltfilter.XSLTFilter</filter-class>
     
     <init-param>

@@ -1,0 +1,54 @@
+package org.carrot2.webapp;
+
+import java.io.IOException;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+
+/**
+ * Redirect from root URI to the search servlet.
+ */
+public class RootRedirectFilter implements Filter
+{
+    public final static String PARAM_TARGET_URI = "redirect.target";
+
+    /**
+     * Target URI for the redirect.
+     */
+    private String targetURI;
+
+    public void doFilter(ServletRequest req, ServletResponse resp,
+        FilterChain chain) throws IOException, ServletException
+    {
+        final HttpServletRequest request = (HttpServletRequest) req;
+        final HttpServletResponse response = (HttpServletResponse) resp;
+
+        final String uri = request.getRequestURI();
+        if ("/".equals(uri) || StringUtils.isEmpty(uri))
+        {
+            // According to the spec, this is a temporary redirect -- fine by us.
+            response.sendRedirect(response.encodeRedirectURL(targetURI));
+        }
+        else
+        {
+            chain.doFilter(req, resp);
+        }
+    }
+
+    public void init(FilterConfig config) throws ServletException
+    {
+        this.targetURI = config.getInitParameter(PARAM_TARGET_URI);
+        if (StringUtils.isEmpty(targetURI))
+        {
+            throw new ServletException("Missing parameter: " + PARAM_TARGET_URI);
+        }
+    }
+
+    public void destroy()
+    {
+        // Empty
+    }
+}
