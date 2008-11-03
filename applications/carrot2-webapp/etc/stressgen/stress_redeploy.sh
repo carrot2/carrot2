@@ -10,10 +10,10 @@ DEPLOY_WAR=/home/dweiss/Applications/apache-tomcat-6.0.18/webapps/stable.war
 # Test URI to check if the application is available.
 TEST_URI=http://localhost:8080/stable/
 
-
 #
 # Loop deploy/short stress/undeploy
 #
+trap "{ echo; exit 1; }" SIGINT SIGTERM
 while true
 do
     # undeploy
