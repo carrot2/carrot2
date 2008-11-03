@@ -142,8 +142,7 @@
            source="1.5"
            target="1.5"
            encoding="UTF-8"
-           debug="true"
-           debuglevel="lines">
+           debug="true">
       <src refid="src.core.folders" />
 
       <classpath refid="lib.classpath" />
@@ -160,8 +159,7 @@
            source="1.5"
            target="1.5"
            encoding="UTF-8"
-           debug="on"
-           debuglevel="lines,vars,source">
+           debug="true">
       <src refid="src.test.folders" />
 
       <classpath refid="lib.classpath" />
