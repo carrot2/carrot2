@@ -26,11 +26,13 @@ public class RootRedirectFilter implements Filter
         final HttpServletRequest request = (HttpServletRequest) req;
         final HttpServletResponse response = (HttpServletResponse) resp;
 
-        final String uri = request.getRequestURI();
+        final String contextPath = request.getContextPath();
+        final String uri = request.getRequestURI().substring(contextPath.length());
         if ("/".equals(uri) || StringUtils.isEmpty(uri))
         {
             // According to the spec, this is a temporary redirect -- fine by us.
-            response.sendRedirect(response.encodeRedirectURL(targetURI));
+            response.sendRedirect(
+                request.getContextPath() + response.encodeRedirectURL(targetURI));
         }
         else
         {
