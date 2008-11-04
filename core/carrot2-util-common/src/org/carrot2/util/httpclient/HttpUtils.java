@@ -1,12 +1,12 @@
 package org.carrot2.util.httpclient;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.carrot2.util.StreamUtils;
 
 /**
  * Various utilities for working with HTTP data streams.
@@ -85,12 +85,12 @@ public class HttpUtils
                     status.put(STATUS_COMPRESSION_USED, "uncompressed");
                 }
             }
+
+            return new ByteArrayInputStream(StreamUtils.readFully(stream));
         }
         finally
         {
             request.releaseConnection();
         }
-
-        return stream;
     }
 }
