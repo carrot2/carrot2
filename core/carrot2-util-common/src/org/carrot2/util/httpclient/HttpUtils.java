@@ -26,6 +26,11 @@ public class HttpUtils
      */
     public static final String STATUS_CODE = "code";
 
+    private HttpUtils()
+    {
+        // No instances.
+    }
+    
     /**
      * Opens a stream for the provided URL using the GET method, unwraps a gzip compressed
      * stream if supported by the other end of the connection.
@@ -42,48 +47,50 @@ public class HttpUtils
     public static InputStream openGzipHttpStream(String url, Map<String, Object> status,
         Header... headers) throws HttpException, IOException
     {
-        InputStream stream = null;
         final HttpClient client = HttpClientFactory.getTimeoutingClient();
         client.getParams().setVersion(HttpVersion.HTTP_1_1);
 
         final GetMethod request = new GetMethod();
-
-        request.setURI(new URI(url, true));
-        request.setRequestHeader(HttpHeaders.URL_ENCODED);
-        request.setRequestHeader(HttpHeaders.GZIP_ENCODING);
-        for (Header header : headers)
+        InputStream stream;
+        try
         {
-            request.setRequestHeader(header);
-        }
-
-        final int statusCode = client.executeMethod(request);
-        if (status != null)
-        {
-            status.put(STATUS_CODE, statusCode);
-        }
-
-        stream = request.getResponseBodyAsStream();
-        final Header encoded = request.getResponseHeader("Content-Encoding");
-        if (encoded != null && "gzip".equalsIgnoreCase(encoded.getValue()))
-        {
-            stream = new GZIPInputStream(stream);
+            request.setURI(new URI(url, true));
+            request.setRequestHeader(HttpHeaders.URL_ENCODED);
+            request.setRequestHeader(HttpHeaders.GZIP_ENCODING);
+            for (Header header : headers)
+            {
+                request.setRequestHeader(header);
+            }
+    
+            final int statusCode = client.executeMethod(request);
             if (status != null)
             {
-                status.put(STATUS_COMPRESSION_USED, "gzip");
+                status.put(STATUS_CODE, statusCode);
+            }
+    
+            stream = request.getResponseBodyAsStream();
+            final Header encoded = request.getResponseHeader("Content-Encoding");
+            if (encoded != null && "gzip".equalsIgnoreCase(encoded.getValue()))
+            {
+                stream = new GZIPInputStream(stream);
+                if (status != null)
+                {
+                    status.put(STATUS_COMPRESSION_USED, "gzip");
+                }
+            }
+            else
+            {
+                if (status != null)
+                {
+                    status.put(STATUS_COMPRESSION_USED, "uncompressed");
+                }
             }
         }
-        else
+        finally
         {
-            if (status != null)
-            {
-                status.put(STATUS_COMPRESSION_USED, "uncompressed");
-            }
+            request.releaseConnection();
         }
 
         return stream;
-    }
-
-    private HttpUtils()
-    {
     }
 }
