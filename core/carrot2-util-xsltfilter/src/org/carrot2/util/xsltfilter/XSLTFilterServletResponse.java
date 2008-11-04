@@ -22,6 +22,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.log4j.Logger;
+import org.carrot2.util.xml.TemplatesPool;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -371,7 +372,7 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
             docHandler = new TransformingDocumentHandler(baseApplicationURL, context,
                 stylesheetParams, transformers);
 
-            docHandler.setContentTypeListener(new ContentTypeListener()
+            docHandler.setContentTypeListener(new IContentTypeListener()
             {
                 public void setContentType(String contentType, String encoding)
                 {

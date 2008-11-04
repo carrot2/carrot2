@@ -1,33 +1,18 @@
-/*
- * Carrot2 project.
- *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
- * All rights reserved.
- *
- * Refer to the full license file "carrot2.LICENSE"
- * in the root folder of the repository checkout or at:
- * http://www.carrot2.org/carrot2.LICENSE
- */
-
 package org.carrot2.util.xsltfilter;
 
 import java.io.*;
 
 import javax.servlet.ServletOutputStream;
 
-import org.apache.log4j.Logger;
-
 /**
  * Implementation of a {@link ServletOutputStream} that buffers all the output in memory
  * and delegates it to another stream if needed.
  * 
- * @author The original code from CompressionFilter example by Amy Roh and Dmitri Valdin.
+ * @author The original code from <code>CompressionFilter</code> example by Amy Roh and
+ *         Dmitri Valdin.
  */
 final class DeferredOutputStream extends ServletOutputStream
 {
-    private static final Logger log = Logger.getLogger(DeferredOutputStream.class);
-
     /**
      * If set, this is the stream we delegate to (without buffering).
      */
@@ -207,9 +192,9 @@ final class DeferredOutputStream extends ServletOutputStream
         {
             throw new IOException("Cannot write to a closed output stream");
         }
+
         if (nextException != null)
         {
-            log.debug("Throwing pending exception.", nextException);
             throw this.nextException;
         }
     }

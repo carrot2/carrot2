@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.carrot2.util.xml.TemplatesPool;
 
 /**
  * A filter which applies XSLT stylesheets to the result of a request. The filter is
@@ -31,7 +32,7 @@ import org.apache.log4j.Logger;
  * </ol>
  * Filter configuration is given through the web application descriptor file (<code>web.xml</code>).
  */
-public class XSLTFilter implements Filter
+public final class XSLTFilter implements Filter
 {
     private final static Logger logger = Logger.getLogger(XSLTFilter.class);
 

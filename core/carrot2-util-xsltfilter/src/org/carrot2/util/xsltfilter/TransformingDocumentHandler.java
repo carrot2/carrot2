@@ -12,7 +12,6 @@
 
 package org.carrot2.util.xsltfilter;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -21,27 +20,25 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.xml.transform.*;
-import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.carrot2.util.xml.TemplatesPool;
+import org.carrot2.util.xml.TransformerErrorListener;
 import org.xml.sax.*;
 
 /**
- * A SAX handler that detects stylesheet directive and delegates SAX events to a declared
- * transformer.
+ * A SAX handler that detects <code>xml-stylesheet</code> directive and delegates SAX
+ * events to a declared transformer.
  */
 final class TransformingDocumentHandler implements ContentHandler
 {
     private static final Logger log = Logger.getLogger(TransformingDocumentHandler.class);
 
     /**
-     * A hashmap of XSLT output methods and their MIME content types.
+     * A map of XSLT output methods and their corresponding MIME content types.
      */
     private final static HashMap<String, String> methodMapping;
-
     static
     {
         methodMapping = new HashMap<String, String>();
@@ -96,9 +93,9 @@ final class TransformingDocumentHandler implements ContentHandler
     private Result result;
 
     /**
-     * Pending transformer exception (thrown upon next SAX event).
+     * Transformer error listener.
      */
-    private TransformerException transformerException;
+    private TransformerErrorListener transformerErrorListener = new TransformerErrorListener();
 
     /**
      * Locator instance used by this handler is also shared with the transformation
@@ -114,7 +111,7 @@ final class TransformingDocumentHandler implements ContentHandler
     /**
      * 
      */
-    private ContentTypeListener contentTypeListener;
+    private IContentTypeListener contentTypeListener;
 
     /**
      * A set of stylesheet parameters, copied from the request context when the
@@ -123,7 +120,7 @@ final class TransformingDocumentHandler implements ContentHandler
     private final Map<String, Object> stylesheetParams;
 
     /**
-     * Creates a sax handler with the given base application URL and context path. The
+     * Creates a SAX handler with the given base application URL and context path. The
      * base URL is needed to resolve host-relative stylesheet URIs. Application context
      * path is used to initialize local streams instead of requesting the stylesheet via
      * HTTP.
@@ -151,7 +148,7 @@ final class TransformingDocumentHandler implements ContentHandler
     public void characters(final char [] ch, final int start, final int length)
         throws SAXException
     {
-        checkContentHandlerSet();
+        initContentHandler();
         contentHandler.characters(ch, start, length);
     }
 
@@ -160,16 +157,17 @@ final class TransformingDocumentHandler implements ContentHandler
      */
     public void endDocument() throws SAXException
     {
-        checkContentHandlerSet();
+        initContentHandler();
         try
         {
             contentHandler.endDocument();
         }
         catch (RuntimeException t)
         {
-            if (this.transformerException != null)
+            final TransformerException transformerException = transformerErrorListener.exception;
+            if (transformerException != null)
             {
-                final Throwable cause = this.transformerException.getCause();
+                final Throwable cause = transformerException.getCause();
                 if (cause != null && cause instanceof Exception)
                 {
                     throw new SAXException("XSLT transformation error.",
@@ -178,7 +176,7 @@ final class TransformingDocumentHandler implements ContentHandler
                 else
                 {
                     throw new SAXException("XSLT transformation error.",
-                        this.transformerException);
+                        transformerException);
                 }
             }
         }
@@ -190,7 +188,7 @@ final class TransformingDocumentHandler implements ContentHandler
     public void endElement(String namespaceURI, String localName, String qName)
         throws SAXException
     {
-        checkContentHandlerSet();
+        initContentHandler();
         contentHandler.endElement(namespaceURI, localName, qName);
     }
 
@@ -199,7 +197,7 @@ final class TransformingDocumentHandler implements ContentHandler
      */
     public void endPrefixMapping(String prefix) throws SAXException
     {
-        checkContentHandlerSet();
+        initContentHandler();
         contentHandler.endPrefixMapping(prefix);
     }
 
@@ -225,7 +223,7 @@ final class TransformingDocumentHandler implements ContentHandler
      */
     public void startPrefixMapping(String prefix, String uri) throws SAXException
     {
-        this.checkContentHandlerSet();
+        this.initContentHandler();
         contentHandler.startPrefixMapping(prefix, uri);
     }
 
@@ -240,7 +238,7 @@ final class TransformingDocumentHandler implements ContentHandler
             inspectProcessingInstruction(this, target, data);
         }
 
-        checkContentHandlerSet();
+        initContentHandler();
         contentHandler.processingInstruction(target, data);
     }
 
@@ -257,7 +255,7 @@ final class TransformingDocumentHandler implements ContentHandler
      */
     public void skippedEntity(String name) throws SAXException
     {
-        this.checkContentHandlerSet();
+        this.initContentHandler();
         contentHandler.skippedEntity(name);
     }
 
@@ -267,7 +265,7 @@ final class TransformingDocumentHandler implements ContentHandler
     public void startElement(String namespaceURI, String localName, String qName,
         Attributes atts) throws SAXException
     {
-        this.checkContentHandlerSet();
+        this.initContentHandler();
         contentHandler.startElement(namespaceURI, localName, qName, atts);
     }
 
@@ -285,40 +283,10 @@ final class TransformingDocumentHandler implements ContentHandler
                     + "directive immediately at the top of the XML file.");
         }
 
-        /*
-         * We want to raise transformer exceptions on <xml:message terminate="true"> so we
-         * add a custom listener.
-         */
-
-        /*
-         * This is a workaround for Xalan's TransformerHandlerImpl which rethrows
-         * TransformerExceptions as RuntimeExceptions.
-         */
         final Transformer transformer = fallbackHandler.getTransformer();
-        transformer.setErrorListener(new ErrorListener()
-        {
-            public void error(TransformerException e) throws TransformerException
-            {
-                // Rethrow exception on errors.
-                setTransformerException(e);
-                throw e;
-            }
-
-            public void fatalError(TransformerException e) throws TransformerException
-            {
-                setTransformerException(e);
-                // Rethrow exception on fatal errors.
-                throw e;
-            }
-
-            public void warning(TransformerException e) throws TransformerException
-            {
-                setTransformerException(e);
-                throw e;
-            }
-        });
-
-        // Pass any stylesheet parameters to the transformer.
+        /*
+         * Pass any stylesheet parameters to the transformer.
+         */
         if (stylesheetParams != null)
         {
             for (Iterator<Map.Entry<String, Object>> i = stylesheetParams.entrySet()
@@ -328,14 +296,14 @@ final class TransformingDocumentHandler implements ContentHandler
                 transformer.setParameter((String) entry.getKey(), entry.getValue());
             }
         }
-        
+
         this.defaultHandler = fallbackHandler;
     }
 
     /**
-     * Sets a {@link ContentTypeListener} for this transformation.
+     * Sets a {@link IContentTypeListener} for this transformation.
      */
-    public final void setContentTypeListener(ContentTypeListener l)
+    public final void setContentTypeListener(IContentTypeListener l)
     {
         this.contentTypeListener = l;
     }
@@ -363,18 +331,181 @@ final class TransformingDocumentHandler implements ContentHandler
     }
 
     /**
-     * Sets transformer exception thrown at the end of processing.
+     * Inspect a processing instruction looking for <code>xml-stylesheet</code>
+     * directives. If found, update the
+     * {@link TransformingDocumentHandler#setTransformerHandler(TransformerHandler)}
+     * appropriately.
      */
-    protected void setTransformerException(TransformerException e)
+    public void inspectProcessingInstruction(TransformingDocumentHandler handler,
+        String target, String data) throws SAXException
     {
-        this.transformerException = e;
+        if (!target.equals("xml-stylesheet"))
+        {
+            return;
+        }
+
+        /*
+         * Break up pseudo-attributes and look for content-type
+         */
+        final Matcher typeMatcher = typePattern.matcher(data);
+        if (!typeMatcher.find())
+        {
+            log
+                .warn("xml-stylesheet directive with no type attribute (should be text/xsl).");
+            return;
+        }
+        final String type = typeMatcher.group(2);
+        if (!"text/xsl".equals(type))
+        {
+            log
+                .warn("xml-stylesheet directive with incorrect type (should be text/xsl): "
+                    + type);
+            return;
+        }
+
+        final Matcher hrefMatcher = hrefPattern.matcher(data);
+        if (!hrefMatcher.find())
+        {
+            log.warn("xml-stylesheet directive with no 'href' pseudo-attribute.");
+            return;
+        }
+
+        /*
+         * Resolve the stylesheet URI.
+         */
+        final String unresolvedURI = hrefMatcher.group(2);
+        final String resolvedURI = resolveTemplateURL(unresolvedURI);
+        if (resolvedURI == null)
+        {
+            throw new SAXException(
+                "Stylesheet not recognized (try webapp-relative path starting with '@/'): "
+                    + unresolvedURI);
+        }
+
+        /*
+         * Check the pool for precompiled cached Templates
+         */
+        Templates template;
+        try
+        {
+            template = pool.getTemplate(resolvedURI);
+            if (template == null)
+            {
+                template = pool.compileTemplate(resolvedURI);
+                pool.addTemplate(resolvedURI, template);
+            }
+
+            // Find out about the content type and encoding.
+            if (contentTypeListener != null)
+            {
+                final Properties outputProps = template.getOutputProperties();
+                final String encoding;
+
+                String contentType = null;
+                if (outputProps.containsKey(OutputKeys.MEDIA_TYPE))
+                {
+                    contentType = outputProps.getProperty(OutputKeys.MEDIA_TYPE);
+                }
+                else if (outputProps.containsKey(OutputKeys.METHOD))
+                {
+                    final String method = outputProps.getProperty(OutputKeys.METHOD);
+                    contentType = (String) methodMapping.get(method);
+                }
+
+                if (contentType == null)
+                {
+                    // Default content type.
+                    contentType = (String) methodMapping.get("xml");
+                }
+
+                if (outputProps.containsKey(OutputKeys.ENCODING))
+                {
+                    encoding = outputProps.getProperty(OutputKeys.ENCODING);
+                }
+                else
+                {
+                    encoding = "UTF-8";
+                }
+                contentTypeListener.setContentType(contentType, encoding);
+            }
+
+            final TransformerHandler tHandler = pool.newTransformerHandler(template);
+            tHandler.getTransformer().setErrorListener(transformerErrorListener);
+            handler.setTransformerHandler(tHandler);
+        }
+        catch (TransformerConfigurationException e)
+        {
+            log.error("Transformer configuration exception.", e);
+        }
+    }
+
+    /**
+     * Attempt to resolve the template URI. <code>null</code> is returned if this method
+     * fails to find a resource matching the given path.
+     */
+    private String resolveTemplateURL(String path) throws SAXException
+    {
+        String templatesURL = null;
+
+        if (path.startsWith("@/"))
+        {
+            /*
+             * The stylesheet is in the application context which is unknown to the XML
+             * source. Expand to the current application context and replace with a local
+             * resource URL (should be safe; I assume XMLs come from the same source as
+             * the application).
+             */
+            try
+            {
+                final String resourcePath = path.substring(1);
+                final URL resource = context.getResource(resourcePath);
+                if (resource == null)
+                {
+                    throw new SAXException("Context-relative stylesheet does not exist: "
+                        + resourcePath);
+                }
+
+                templatesURL = resource.toExternalForm();
+                log.debug("Context-path relative (expanded) xml-stylesheet URL: " + path
+                    + " resolved as: " + templatesURL);
+            }
+            catch (MalformedURLException e)
+            {
+                // Will never happen, but just in case.
+                throw new RuntimeException();
+            }
+        }
+        else if (path.startsWith("/"))
+        {
+            /*
+             * Try host-relative URL. Simply concatenate with the context URI.
+             */
+            templatesURL = this.baseApplicationURL + path;
+            log.debug("Context-relative xml-stylesheet URL: " + path + " resolved as: "
+                + templatesURL);
+        }
+        else
+        {
+            // Try absolute URL.
+            try
+            {
+                templatesURL = new URL(path).toExternalForm();
+                log.debug("Absolute xml-stylesheet URL: " + templatesURL);
+            }
+            catch (MalformedURLException e)
+            {
+                // Ignore, malformed URL.
+            }
+        }
+
+        return templatesURL;
     }
 
     /**
      * Initializes the content handler because content is about to be sent to the result.
      * If no content handler is available, throws an exception.
      */
-    private final void checkContentHandlerSet() throws SAXException
+    private final void initContentHandler() throws SAXException
     {
         if (contentHandler == null)
         {
@@ -396,7 +527,8 @@ final class TransformingDocumentHandler implements ContentHandler
                 }
             }
 
-            log.debug("XSLT transformation using handler: " + defaultHandler);
+            log.debug("XSLT transformation using handler: "
+                + defaultHandler.getClass().getName());
 
             this.contentHandler = defaultHandler;
             this.contentHandler.setResult(result);
@@ -406,169 +538,11 @@ final class TransformingDocumentHandler implements ContentHandler
                 this.contentHandler.setDocumentLocator(locator);
             }
         }
-        if (this.transformerException != null)
+
+        if (transformerErrorListener.exception != null)
         {
             throw new SAXException("XSLT transformation error.",
-                this.transformerException);
-        }
-    }
-
-    /**
-     * Inspect a processing instruction looking for <code>xml-stylesheet</code>. If
-     * found, update the handler appropriately.
-     */
-    public void inspectProcessingInstruction(TransformingDocumentHandler handler,
-        String target, String data) throws SAXException
-    {
-        if (!target.equals("xml-stylesheet"))
-        {
-            return;
-        }
-
-        // Break up pseudo-attributes and look for content-type
-        final Matcher typeMatcher = typePattern.matcher(data);
-        if (!typeMatcher.find())
-        {
-            log
-                .warn("xml-stylesheet directive contains no type attribute (should be text/xsl).");
-            return;
-        }
-        final String type = typeMatcher.group(2);
-        if (!"text/xsl".equals(type))
-        {
-            log
-                .warn("xml-stylesheet directive contains incorrect type (should be text/xsl): "
-                    + type);
-            return;
-        }
-
-        final Matcher hrefMatcher = hrefPattern.matcher(data);
-        if (!hrefMatcher.find())
-        {
-            log.warn("xml-stylesheet directive with no 'href' pseudo-attribute.");
-            return;
-        }
-        final String url = hrefMatcher.group(2);
-        String templatesURL;
-        if (url.startsWith("@/"))
-        {
-            /*
-             * The stylesheet is in the application context which is unknown to the XML
-             * source. Expand to the current application context and replace with a local
-             * file URL (should be safe; I assume XMLs come from the same source as the
-             * application).
-             */
-            try
-            {
-                URL resource = context.getResource(url.substring(1));
-                if (resource == null)
-                {
-                    throw new SAXException("Webapp-relative stylesheet does not exist: "
-                        + url.substring(1));
-                }
-                templatesURL = resource.toExternalForm();
-                log.log(Level.INFO,
-                    "Context-path relative (expanded) xml-stylesheet URL: " + url
-                        + " resolved as: " + templatesURL);
-            }
-            catch (MalformedURLException e)
-            {
-                // Will never happen, but just in case.
-                throw new RuntimeException();
-            }
-        }
-        else if (url.startsWith("/"))
-        {
-            // Host-relative URL. Simply concatenate with the base
-            templatesURL = this.baseApplicationURL + url;
-            log.log(Level.INFO, "Host-relative xml-stylesheet URL: " + url
-                + " resolved as: " + templatesURL);
-        }
-        else
-        {
-            // Try absolute URL.
-            try
-            {
-                templatesURL = new URL(url).toExternalForm();
-                log.log(Level.INFO, "Absolute xml-stylesheet URL: " + templatesURL);
-            }
-            catch (MalformedURLException e)
-            {
-                // Ignore.
-                templatesURL = null;
-            }
-        }
-        if (templatesURL == null)
-        {
-            throw new SAXException(
-                "Stylesheet not recognized (try webapp-relative path starting with '@/'): "
-                    + url);
-        }
-
-        // Check the pool for Templates object?
-        final SAXTransformerFactory tFactory = this.pool.tFactory;
-        Templates template;
-        try
-        {
-            template = pool.getTemplate(templatesURL);
-            if (template == null)
-            {
-                final StreamSource source = new StreamSource(new URL(templatesURL)
-                    .toExternalForm());
-                try
-                {
-                    template = tFactory.newTemplates(source);
-                }
-                catch (Exception e)
-                {
-                    throw new SAXException("Could not load stylesheet: " + templatesURL,
-                        e);
-                }
-
-                pool.addTemplate(templatesURL, template);
-            }
-
-            // Find out about the content type and encoding.
-            if (contentTypeListener != null)
-            {
-                final Properties outputProps = template.getOutputProperties();
-                final String encoding;
-                String contentType = null;
-                if (outputProps.containsKey(OutputKeys.MEDIA_TYPE))
-                {
-                    contentType = outputProps.getProperty(OutputKeys.MEDIA_TYPE);
-                }
-                else if (outputProps.containsKey(OutputKeys.METHOD))
-                {
-                    final String method = outputProps.getProperty(OutputKeys.METHOD);
-                    contentType = (String) methodMapping.get(method);
-                }
-                if (contentType == null)
-                {
-                    // Default content type.
-                    contentType = (String) methodMapping.get("xml");
-                }
-                if (outputProps.containsKey(OutputKeys.ENCODING))
-                {
-                    encoding = outputProps.getProperty(OutputKeys.ENCODING);
-                }
-                else
-                {
-                    encoding = "UTF-8";
-                }
-                contentTypeListener.setContentType(contentType, encoding);
-            }
-
-            final TransformerHandler tHandler = tFactory.newTransformerHandler(template);
-            handler.setTransformerHandler(tHandler);
-        }
-        catch (TransformerConfigurationException e)
-        {
-            log.error("Transformer configuration exception.", e);
-        }
-        catch (IOException e)
-        {
-            log.warn("Cannot open stylesheet.", e);
+                transformerErrorListener.exception);
         }
     }
 }
