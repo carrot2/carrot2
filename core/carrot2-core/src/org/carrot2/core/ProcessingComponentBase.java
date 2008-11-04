@@ -55,18 +55,15 @@ public abstract class ProcessingComponentBase implements ProcessingComponent
         return context;
     }
 
-    /**
+    /*
      * 
-     * @param maxConcurrentThreads
-     * @param class1
-     * @return
      */
     protected ExecutorService getSharedExecutor(int maxConcurrentThreads, Class<?> clazz)
     {
-        synchronized (this)
+        final ControllerContext context = getContext();
+        synchronized (context)
         {
             final String contextKey = clazz.getName() + ".executorService";
-            final ControllerContext context = getContext();
             ExecutorService service = (ExecutorService) context.getAttribute(contextKey);
             if (service == null)
             {
