@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.Map;
 
 import javax.xml.transform.*;
-import javax.xml.transform.sax.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -15,6 +14,8 @@ import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.Resource;
+import org.carrot2.util.xml.TemplatesPool;
+import org.xml.sax.SAXException;
 
 import com.google.common.collect.Maps;
 
@@ -25,8 +26,8 @@ import com.google.common.collect.Maps;
  */
 public class XmlDocumentSourceHelper
 {
-    /** Transformer factory */
-    private final TransformerFactory transformerFactory;
+    /** Precompiled XSLT templates. */
+    private final TemplatesPool pool;
 
     /**
      * URI resolver. Does nothing.
@@ -44,8 +45,16 @@ public class XmlDocumentSourceHelper
      */
     public XmlDocumentSourceHelper()
     {
-        this.transformerFactory = TransformerFactory.newInstance();
-        this.transformerFactory.setURIResolver(uriResolver);
+        try
+        {
+            // No template caching.
+            this.pool = new TemplatesPool(false);
+            this.pool.tFactory.setURIResolver(uriResolver);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -53,8 +62,8 @@ public class XmlDocumentSourceHelper
      * transform if specified. This method can handle gzip-compressed streams if supported
      * by the data source.
      * 
-     * @param metadata if a non-<code>null</code> map is provided, request metadata will
-     *            be put into the map.
+     * @param metadata if a non-<code>null</code> map is provided, request metadata
+     *            will be put into the map.
      */
     public ProcessingResult loadProcessingResult(String url, Templates stylesheet,
         Map<String, String> xsltParameters, Map<String, Object> metadata)
@@ -108,14 +117,14 @@ public class XmlDocumentSourceHelper
         Templates stylesheet, Map<String, String> xsltParameters)
         throws TransformerConfigurationException, IOException, TransformerException
     {
-        // Perform transformation if stylesheet found
+        // Perform transformation if stylesheet found.
         InputStream carrot2XmlInputStream;
         if (stylesheet != null)
         {
             try
             {
                 // Initialize transformer
-                final Transformer transformer = stylesheet.newTransformer();
+                final Transformer transformer = pool.newTransformer(stylesheet);
                 final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
                 // Set XSLT parameters, if any
@@ -151,70 +160,23 @@ public class XmlDocumentSourceHelper
      */
     public Templates loadXslt(Resource xslt)
     {
-        InputStream templateInputStream = null;
+        InputStream is = null;
         try
         {
-            templateInputStream = xslt.open();
-
-            if (!transformerFactory.getFeature(SAXSource.FEATURE)
-                || !transformerFactory.getFeature(SAXResult.FEATURE))
-            {
-                throw new RuntimeException(
-                    "Required source types not supported by the Transformer Factory.");
-            }
-
-            if (!transformerFactory.getFeature(SAXResult.FEATURE)
-                || !transformerFactory.getFeature(StreamResult.FEATURE))
-            {
-                throw new RuntimeException(
-                    "Required result types not supported by the Transformer Factory.");
-            }
-
-            if (!(transformerFactory instanceof SAXTransformerFactory))
-            {
-                throw new RuntimeException(
-                    "TransformerFactory not an instance of SAXTransformerFactory");
-            }
-
-            transformerFactory.setErrorListener(new ErrorListener()
-            {
-                public void warning(TransformerException exception)
-                    throws TransformerException
-                {
-                    throw exception;
-                }
-
-                public void error(TransformerException exception)
-                    throws TransformerException
-                {
-                    throw exception;
-                }
-
-                public void fatalError(TransformerException exception)
-                    throws TransformerException
-                {
-                    throw exception;
-                }
-            });
-
-            try
-            {
-                final Templates newTemplates = transformerFactory
-                    .newTemplates(new StreamSource(templateInputStream));
-                return newTemplates;
-            }
-            catch (TransformerConfigurationException e)
-            {
-                throw new RuntimeException("Could not compile stylesheet.", e);
-            }
+            is = xslt.open();
+            return pool.compileTemplate(is);
         }
         catch (IOException e)
         {
-            throw new RuntimeException("Could not load stylesheet", e);
+            throw new RuntimeException(e);
+        }
+        catch (SAXException e)
+        {
+            throw new RuntimeException(e);
         }
         finally
         {
-            CloseableUtils.close(templateInputStream);
+            CloseableUtils.close(is);
         }
     }
 
