@@ -23,10 +23,8 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
-
 /**
- * A pool of precompiled XSLT stylesheets ({@link Template}s). Caching can be disabled
+ * A pool of precompiled XSLT stylesheets ({@link Templates}). Caching can be disabled
  * via constructor parameter or via setting a system property:
  * 
  * <pre>
@@ -172,7 +170,7 @@ public final class TemplatesPool
     }
 
     /**
-     * Compile a {@link Template} from a given system identifier. The template is not
+     * Compile a {@link Templates} from a given system identifier. The template is not
      * added to the pool, a manual call to {@link #addTemplate(String, Templates)} is
      * required.
      */
@@ -190,7 +188,7 @@ public final class TemplatesPool
     }
 
     /**
-     * Compile a {@link Template} from a given stream. The template is not added to the
+     * Compile a {@link Templates} from a given stream. The template is not added to the
      * pool automatically.
      */
     public Templates compileTemplate(InputStream stream) throws SAXException
@@ -208,7 +206,7 @@ public final class TemplatesPool
 
     /**
      * Return a new {@link TransformerHandler} based on a given precompiled
-     * {@link Template}. The handler {@link Transformer}'s {@link ErrorListener} is set
+     * {@link Templates}. The handler {@link Transformer}'s {@link ErrorListener} is set
      * to {@link TransformerErrorListener} to raise exceptions and give proper warnings.
      */
     public TransformerHandler newTransformerHandler(Templates template)
