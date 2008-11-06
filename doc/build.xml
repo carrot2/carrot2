@@ -36,7 +36,7 @@
           classpath="${xalan.home}"
           force="yes">
       <xmlcatalog>
-        <dtd publicId="-//OASIS//DTD DocBook V5.0//EN"
+        <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
              location="${docbook.dtd.dir}/docbook.dtd" />
       </xmlcatalog>
       <classpath>
@@ -142,8 +142,8 @@
     <xslt in="${doc.build.dir}/docbook/components.template.xml"
           style="${doc.build.dir}/xsl/attributes-to-docbook.xsl"
           out="${doc.build.dir}/docbook/components.xml">
-      <xmlcatalog>
-        <dtd publicId="-//OASIS//DTD DocBook V5.0//EN"
+      <xmlcatalog>     
+        <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
              location="${docbook.dtd.dir}/docbook.dtd" />
       </xmlcatalog>
       <param name="javadoc.url.base" expression="${javadoc.url.base}" />

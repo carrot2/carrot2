@@ -372,6 +372,110 @@
       <title>Compiling a Java program using &C2; API</title>
       
       <para>
+        The easiest way to integrate &C2; with your Java programs is to use the &JA; package:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Download &JA; from <link xlink:href="http://project.carrot2.org/download.html" />
+            and unpack to some local directory.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Make sure that <filename>carrot2-core.jar</filename> and all JARs from the
+            <filename>lib/</filename> directory are available in the classpath of
+            your program.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Look in the <filename>examples/</filename> directory for some sample code.
+            Good places to start are <filename>ClusteringDocumentList</filename> and <filename>ClusteringDataFromDocumentSources</filename>.
+            For a complete description of &JA;, please
+            see Javadoc documentation in the <filename>javadoc/</filename> directory.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            You can use the <filename>build.xml</filename> Ant script to compile and run
+            code from the <filename>examples/</filename> directory. 
+          </para>
+          
+          <tip>
+            <para>
+              For easier experimenting with &JA;, you may want to 
+              <link linkend="section.seting-up-c2-project-in-eclipse">set up a &C2; project in Eclipse</link>.
+            </para> 
+          </tip>
+        </listitem>
+      </orderedlist>
+
+    </section>
+    
+    <section xml:id="section.seting-up-c2-project-in-eclipse">
+      <title>Setting up a &C2; project in Eclipse</title>
+      
+      <para>
+        &JA; examples can be easily set up in Eclipse IDE. The description below assumes
+        you are using Eclipse IDE version 3.4 or newer.  
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Download &JA; from <link xlink:href="http://project.carrot2.org/download.html" />
+            and unpack to some local directory.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            In your Eclipse IDE choose <guilabel>File</guilabel> &gt; <guilabel>New</guilabel> &gt; 
+            <guilabel>Java Project</guilabel>.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            In the <guilabel>New Java Project</guilabel> dialog (<xref linkend="figure.eclipse-new-java-project" />),
+            type name for the new project, e.g. <filename>carrot2-examples</filename>.
+            Then choose the <guilabel>Create project from existing source</guilabel> option,
+            provide the directory to which you unpacked the &JA; archive and click 
+            <guilabel>Finish</guilabel>.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            When Eclipse compiles the example classes, you can open one of them, e.g.
+            <classname>ClusteringDocumentList</classname> and choose <guilabel>Run</guilabel>
+            &gt; <guilabel>Run As</guilabel> &gt; <guilabel>Java Application</guilabel>.
+            The output of the example program should be visible in the <guilabel>Console</guilabel> 
+            view.
+          </para>
+        </listitem>
+      </orderedlist>
+
+      
+      <figure xml:id="figure.eclipse-new-java-project">
+        <title>Setting up &JA; in Eclipse IDE</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/eclipse-new-java-project.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </section>
+    
+    <section>
+      <title>Setting up a &C2; source code in Eclipse</title>
+      
+      <para>
       </para>
     </section>
     

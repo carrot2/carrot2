@@ -44,3 +44,5 @@
 #webtest.home=
 #tomcat.home=
 
+# To run webtests on a machine without display, uncomment the property below
+#wt.headless=true
