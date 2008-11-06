@@ -1,8 +1,10 @@
 package org.carrot2.text.linguistic;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
+import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.resource.*;
 import org.tartarus.snowball.SnowballStemmer;
@@ -12,9 +14,12 @@ import com.google.common.collect.Sets;
 /**
  * Implements language models on top of Snowball stemmers.
  */
-final class SnowballLanguageModel extends ThreadSafeLanguageModel
+final class SnowballLanguageModel implements LanguageModel
 {
-    private Class<SnowballStemmer> stemmerClazz;
+    private final LanguageCode languageCode;
+    private final Stemmer stemmer;
+    private final HashSet<MutableCharArray> stopwords = new HashSet<MutableCharArray>();
+    private final MutableCharArray buffer = new MutableCharArray("");
 
     /**
      * An adapter converting Snowball programs into {@link Stemmer} interface.
@@ -31,18 +36,25 @@ final class SnowballLanguageModel extends ThreadSafeLanguageModel
         public CharSequence stem(CharSequence word)
         {
             /*
-             * TODO: I think Sebastiano Vigna or one of the mg4j-fellows mentioned a nice
-             * improvement to snowball on the mailing list once, where stemming was
-             * performed on CharSequences directly.
+             * Snowball programs are single-threaded, so make sure only one thread
+             * performs stemming at one time.
              */
-            snowballStemmer.setCurrent(word.toString());
-            if (snowballStemmer.stem())
+            synchronized (snowballStemmer)
             {
-                return snowballStemmer.getCurrent();
-            }
-            else
-            {
-                return null;
+                /*
+                 * TODO: I think Sebastiano Vigna or one of the mg4j-fellows mentioned a
+                 * nice improvement to snowball on the mailing list once, where stemming
+                 * was performed on CharSequences directly.
+                 */
+                snowballStemmer.setCurrent(word.toString());
+                if (snowballStemmer.stem())
+                {
+                    return snowballStemmer.getCurrent();
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
     }
@@ -55,21 +67,22 @@ final class SnowballLanguageModel extends ThreadSafeLanguageModel
     SnowballLanguageModel(LanguageCode languageCode, ResourceUtils resourceLoaders,
         boolean mergeStopwords)
     {
-        super(languageCode, loadCommonWords(resourceLoaders,
+        this.languageCode = languageCode;
+
+        final Set<String> stopwords = loadCommonWords(resourceLoaders,
             mergeStopwords ? getAllKnownIsoCodes() : new String []
             {
                 languageCode.getIsoCode()
-            }));
+            });
+
+        for (String s : stopwords)
+        {
+            this.stopwords.add(new MutableCharArray(s));
+        }
 
         try
         {
-            final String stemmerClazzName = "org.tartarus.snowball.ext."
-                + languageCode.name().toLowerCase() + "Stemmer";
-            final Class<?> stemmerClazz = Thread.currentThread().getContextClassLoader()
-                .loadClass(stemmerClazzName);
-
-            this.stemmerClazz = (Class<SnowballStemmer>) stemmerClazz;
-            createStemmer();
+            this.stemmer = createStemmer(languageCode);
         }
         catch (Throwable e)
         {
@@ -77,12 +90,19 @@ final class SnowballLanguageModel extends ThreadSafeLanguageModel
         }
     }
 
-    /*
-     * 
+    /**
+     * Create and return a {@link Stemmer} adapter for a {@link SnowballStemmer} for a
+     * given language code.
      */
-    @Override
-    protected Stemmer createStemmer()
+    private static Stemmer createStemmer(LanguageCode language) throws Exception
     {
+        final String stemmerClazzName = "org.tartarus.snowball.ext."
+            + language.name().toLowerCase() + "Stemmer";
+
+        final Class<? extends SnowballStemmer> stemmerClazz = Thread.currentThread()
+            .getContextClassLoader().loadClass(stemmerClazzName).asSubclass(
+                SnowballStemmer.class);
+
         final SnowballStemmer snowballStemmer;
 
         try
@@ -140,5 +160,28 @@ final class SnowballLanguageModel extends ThreadSafeLanguageModel
             result[i] = values[i].getIsoCode();
         }
         return result;
+    }
+
+    public LanguageCode getLanguageCode()
+    {
+        return languageCode;
+    }
+
+    public Stemmer getStemmer()
+    {
+        return stemmer;
+    }
+
+    public boolean isCommonWord(CharSequence sequence)
+    {
+        if (sequence instanceof MutableCharArray)
+        {
+            return stopwords.contains((MutableCharArray) sequence);
+        }
+        else
+        {
+            buffer.reset(sequence);
+            return stopwords.contains(buffer);
+        }
     }
 }
