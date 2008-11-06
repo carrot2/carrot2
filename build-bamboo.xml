@@ -30,9 +30,11 @@
         <fail unless="webapp.name">Define: webapp.name property.</fail>
         <fail unless="webapps.dir">Define: webapps.dir property.</fail>
         <fail unless="tomcat.init">Define: tomcat.init property.</fail>
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+        <property file="${carrot2.code.dir}/carrot2.version" />
 
         <!-- We're assuming the webapp has already been built -->
-        <copy file="${carrot2.code.dir}/tmp/carrot2-webapp.war"
+        <copy file="${carrot2.code.dir}/tmp/carrot2-webapp-${carrot2.version}.war"
               tofile="${webapps.dir}/${webapp.name}.war"
               overwrite="true" />
     </target>
