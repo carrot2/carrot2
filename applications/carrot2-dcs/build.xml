@@ -17,6 +17,12 @@
   <!-- DCS dist file name base -->
   <property name="dcs.dist.base" value="carrot2-dcs" />
 
+  <!-- DCS-specific dependencies -->
+  <patternset id="lib.dcs">
+    <include name="applications/carrot2-dcs/lib/*.jar" />
+    <include name="applications/carrot2-dcs/lib/*.LICENSE" />
+  </patternset>
+      
   <!--
        Builds the DCS.
     -->
@@ -72,7 +78,7 @@
        Builds the DCS ZIP archive.
     -->
   <target name="carrot2.dcs.dist" depends="carrot2.dcs.build">
-    <zip destfile="${dcs.dir}/../${dcs.dist.base}.zip">
+    <zip destfile="${dcs.dir}/../${dcs.dist.base}-${carrot2.version}.zip">
       <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}" />
     </zip>
     <delete dir="${dcs.dir}" failonerror="false" />
@@ -85,19 +91,16 @@
     <antcall target="jar" />
     <antcall target="lib.flattened" />
 
+    <!-- Add DCS-specific JARs -->
+    <copy todir="${lib.flattened}">
+      <fileset dir="${carrot2.master.basedir}">
+        <patternset refid="lib.dcs" />
+      </fileset>
+      <mapper type="flatten"/>
+    </copy>
+    
     <mkdir dir="${dcs.dir}" />
     <mkdir dir="${dcs.dir}/war" />
-
-    <!-- Remove unused libs -->
-    <delete>
-      <fileset dir="${lib.flattened}">
-        <include name="jetty*" />
-        <include name="jawr*" />
-        <include name="args4j*" />
-        <include name="carrot2-xslt-filter.jar" />
-        <include name="pjl-comp-filter*" />
-      </fileset>
-    </delete>
 
     <mkdir dir="${dcs.dir}/manifest" />
     <mkdir dir="${dcs.dir}/classes" />

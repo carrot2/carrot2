@@ -1,6 +1,8 @@
 package org.carrot2.dcs;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.carrot2.util.xml.TemplatesPool;
 import org.kohsuke.args4j.*;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
@@ -44,6 +46,11 @@ public class DcsApp
     void start(String webPathPrefix) throws Exception
     {
         System.setProperty("org.mortbay.log.class", Log4jJettyLog.class.getName());
+        
+        // Silence memory leak messages from TemplatesPool in command line mode
+        // We use a hardcoded class name to avoid a dependency on Carrot2 core in DCS starter.
+        Logger.getLogger("org.carrot2.util.xml.TemplatesPool").setLevel(Level.ERROR);
+        
         log.info("Starting DCS...");
         
         server = new Server();

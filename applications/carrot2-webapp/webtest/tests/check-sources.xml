@@ -1,0 +1,27 @@
+<!DOCTYPE project SYSTEM "../dtd/Project.dtd">
+
+<project name="Check all available document sources" default="webtest">
+  <target name="webtest">
+    <property name="webtest.skip.source.icerocket" value="true" />
+    <webtest name="Check all available document sources">
+      <config easyajax="true" easyajaxdelay="5000"/>
+      &getStartupPage;
+      <setInputField htmlId="query" value="test" />
+      <setSelectField name="results" value="50" />
+      <clickButton htmlId="search" />
+
+      <!-- Default search already tested elsewhere -->
+      <repeat xpath="id('source-tabs')//li[contains(@class,'tab')]" counterName="tab" 
+              description="Iterate over all main tabs">
+        <storeXPath xpath="$tab/@id" property="tabId" />
+        <ifStep unless="${webtest.skip.source.#{tabId}}">
+          <clickLink xpath="$tab/a" description="Search document source: #{tabId}" />
+          <verifyXPath xpath="count(id('documents')/div) &gt; 24" 
+                       description="More than 24 documents expected" />
+          <verifyXPath xpath="count(id('clusters')//li) &gt; 3"
+                       description="More than 3 clusters expected" />
+        </ifStep>
+      </repeat>
+    </webtest>
+  </target>
+</project>

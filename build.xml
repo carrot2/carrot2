@@ -15,8 +15,9 @@
   <import file="${carrot2.master.basedir}/applications/carrot2-dcs/build.xml" />
   <import file="${carrot2.master.basedir}/doc/build.xml" />
 
-  <!-- Import local properties -->
+  <!-- Import local properties and version -->
   <property file="${carrot2.master.basedir}/local.properties" />
+  <property file="${carrot2.master.basedir}/carrot2.version" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />
@@ -28,6 +29,7 @@
   <!-- Ouptut dirs -->
   <property name="build.dir" location="${carrot2.master.basedir}/tmp/classes" />
   <property name="jar.dir" location="${carrot2.master.basedir}/tmp/jar" />
+  <property name="api.dir" location="${carrot2.master.basedir}/tmp/api" />
 
   <property name="javadoc.dir" location="${carrot2.master.basedir}/tmp/javadoc" />
   <property name="tests.report.dir" location="${carrot2.master.basedir}/tmp/test-report" />
@@ -35,6 +37,9 @@
   <property name="duplication.report.dir" location="${carrot2.master.basedir}/tmp/duplication-report" />
   <property name="findbugs.report.dir" location="${carrot2.master.basedir}/tmp/findbugs-report" />
 
+  <!-- Java API distribution -->
+  <property name="api.dist.base" value="carrot2-java-api" />
+  
   <!-- Extra tools the build can use if available -->
   <property name="clover.jar" location="${clover.home}/lib/clover.jar" />
   <property name="pmd.jar" location="${pmd.home}/lib/" />
@@ -71,32 +76,47 @@
     <exclude name="**/carrot2-source-microsoft/src/com/microsoft/msnsearch/**/*.java" />
   </fileset>
 
-  <!-- All JARs required by the code -->
-  <fileset dir="${carrot2.master.basedir}" id="lib.files">
+  <patternset id="lib.test">
+    <include name="core/**/*.jar" />
+    <include name="lib/**/*.jar" />
+    <include name="applications/**/*.jar" />
+  </patternset>
+
+  <!-- Excludes both JAR and LICENSE files -->
+  <patternset id="lib.core.excludes">
+    <exclude name="lib/**/axis-ant.jar" />
+    <exclude name="lib/**/easymock*" />
+    <exclude name="lib/**/fest-*" />
+    <exclude name="lib/**/servlet-api-*.jar" />
+    <exclude name="lib/org.junit4*/**" />
+    <exclude name="lib/org.gargoylesoftware.htmlunit/**" />
+    <exclude name="lib/com.thoughtworks.qdox/**" />
+    <exclude name="lib/org.apache.velocity/**" />
+    <exclude name="lib/com.planetj.compression/**" />
+    <exclude name="lib/org.mortbay.jetty/**" />
+    <exclude name="lib/org.kohsuke.args4j/**" />
+    <exclude name="lib/org.apache.xml/**" />
+  </patternset>
+
+  <patternset id="lib.core">
     <include name="lib/**/*.jar" />
     <include name="core/carrot2-util-matrix/lib/*.jar" />
-    <include name="core/carrot2-source-google/lib/*.jar" />
-    <include name="core/carrot2-source-opensearch/lib/*.jar" />
-    <include name="applications/carrot2-webapp/lib/*.jar" />
-    <include name="applications/applications/carrot2-dcs/lib/*.jar" />
-    <exclude name="lib/**/axis-ant.jar" />
-    <exclude name="lib/**/easymock.jar" />
-    <exclude name="lib/**/fest-*.jar" />
-    <exclude name="lib/**/servlet-api-*.jar" />
-    <exclude name="lib/org.junit4-ext/*.jar" />
-    <exclude name="lib/org.gargoylesoftware.htmlunit/*.jar" />
-    <exclude name="lib/org.apache.xml/*.jar" />
-    <exclude name="lib/com.thoughtworks.qdox/*.jar" />
-    <exclude name="lib/org.apache.velocity/*.jar" />
+    <patternset refid="lib.core.excludes" />
+  </patternset>
+  
+  <patternset id="licenses.core">
+    <include name="lib/**/*.LICENSE" />
+    <patternset refid="lib.core.excludes" />
+    <include name="core/carrot2-util-matrix/lib/*.LICENSE" />
+  </patternset>
+
+  <!-- All JARs required by the core code -->
+  <fileset dir="${carrot2.master.basedir}" id="lib.core.files">
+    <patternset refid="lib.core" />
   </fileset>
 
   <fileset dir="${carrot2.master.basedir}" id="lib.test.files">
-    <include name="lib/**/*.jar" />
-    <include name="core/carrot2-util-matrix/lib/*.jar" />
-    <include name="core/carrot2-source-google/lib/*.jar" />
-    <include name="core/carrot2-source-opensearch/lib/*.jar" />
-    <include name="applications/carrot2-webapp/lib/*.jar" />
-    <include name="applications/carrot2-dcs/lib/*.jar" />
+    <patternset refid="lib.test" />
   </fileset>
 
   <path id="lib.classpath">
@@ -286,7 +306,8 @@
     <sequential>
       <mkdir dir="@{output.dir}" />
       <java classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer"
-            classpathref="test.classpath">
+            classpathref="test.classpath"
+            outputproperty="dev.null">
         <arg file="@{java.source}" />
         <arg file="@{output.dir}" />
         <arg value="${common.attribute.names.source.path}" />
@@ -634,10 +655,56 @@
   </target>
   
   <!--
+       Builds API distribution: core JAR, dependencies, example source code.
+    -->
+  <target name="core" depends="jar, lib-no-jar.flattened" description="Builds Carrot2 Java API JAR with dependencies">
+    <delete dir="${api.dir}" failonerror="false" />
+    <mkdir dir="${api.dir}" />
+    <mkdir dir="${api.dir}/lib" />
+    <mkdir dir="${api.dir}/examples" />
+    
+    <copy todir="${api.dir}/lib">
+      <fileset dir="${lib.flattened}" />
+      <fileset dir="${carrot2.master.basedir}">
+        <include name="lib/org.apache.xml/*.jar" />
+        <include name="lib/org.apache.xml/*.LICENSE" />
+      </fileset>
+      <mapper type="flatten" />
+    </copy>
+    <copy todir="${api.dir}">
+      <fileset dir="${jar.dir}" />
+      <fileset dir="${carrot2.master.basedir}">
+        <include name="carrot2.LICENSE" />
+      </fileset>
+    </copy>
+    <copy todir="${api.dir}/examples">
+      <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/src" />
+    </copy>
+    <copy todir="${api.dir}" file="${carrot2.master.basedir}/applications/carrot2-examples/build.xml" />
+    <copy todir="${api.dir}" file="${carrot2.master.basedir}/applications/carrot2-examples/etc/readme.txt" />
+  </target>
+
+  <target name="carrot2.core.dist" depends="core.test, javadoc">
+    <zip destfile="${api.dir}/../${api.dist.base}-${carrot2.version}.zip">
+      <zipfileset dir="${api.dir}" prefix="${api.dist.base}" />
+      <zipfileset dir="${javadoc.dir}" prefix="${api.dist.base}/javadoc" />
+    </zip>
+    <delete dir="${api.dir}" />
+  </target>
+
+  <target name="core.test" depends="core">
+    <ant antfile="${api.dir}/build.xml" dir="${api.dir}" inheritall="false" /> 
+  </target>
+  
+  <target name="clean.core">
+    <delete dir="${api.dir}" />
+  </target>
+  
+  <!--
        Build all apps.
     -->
   <target name="all" depends="clean.classes, webapp, dcs, javadoc, doc" description="Builds all Carrot2 applications and documentation" />
-  <target name="dist" depends="clean.classes, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, carrot2.doc.dist" description="Builds Carrot2 distribution files">
+  <target name="dist" depends="clean.classes, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, carrot2.doc.dist, carrot2.core.dist" description="Builds Carrot2 distribution files">
     <!-- 
          After this target runs, we'll copy the entire content of tmp/ 
          to the distribution dir on the server, so we need to remove
@@ -656,18 +723,23 @@
   <!-- 
        Flattened lib directory.
     -->
-  <target name="lib.flattened">
+  <target name="lib-no-jar.flattened" depends="clean.lib">
     <mkdir dir="${lib.flattened}" />
     <copy todir="${lib.flattened}">
-      <fileset refid="lib.files" />
-      <fileset dir="${jar.dir}" />
-      <fileset dir="${lib.dir}">
-        <include name="**/*.LICENSE" />
+      <fileset refid="lib.core.files" />
+      <fileset dir="${carrot2.master.basedir}">
+        <patternset refid="licenses.core" />
       </fileset>
+      <mapper type="flatten"/>
+    </copy>
+  </target>
+  
+  <target name="lib.flattened" depends="lib-no-jar.flattened, jar">
+    <copy todir="${lib.flattened}">
+      <fileset dir="${jar.dir}" />
       <fileset dir="${carrot2.master.basedir}">
         <include name="carrot2.LICENSE" />
       </fileset>
-      <mapper type="flatten"/>
     </copy>
   </target>
 

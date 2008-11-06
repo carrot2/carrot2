@@ -308,8 +308,6 @@ public class AttributeValueSetsTest
         final StringWriter stringWriter = new StringWriter();
         sets.serialize(stringWriter);
 
-        System.out.println(stringWriter.toString());
-        
         final AttributeValueSets deserialized = AttributeValueSets
             .deserialize(new StringReader(stringWriter.getBuffer().toString()));
 

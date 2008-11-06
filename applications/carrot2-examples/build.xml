@@ -1,0 +1,48 @@
+<!--
+     A build script that checks whether Carrot2 API examples compile
+     and run without exceptions.
+  -->
+<project name="carrot2.api" default="carrot2.api.test">
+  <!--
+       Builds the examples.
+    -->
+  <target name="carrot2.api.build">
+    <mkdir dir="tmp" />
+    <mkdir dir="tmp/classes" />
+
+    <javac srcdir="examples"
+           destdir="tmp/classes"
+           compiler="modern"
+           source="1.5"
+           target="1.5"
+           encoding="UTF-8">
+      <classpath>
+        <fileset dir=".">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="carrot2.api.test" depends="carrot2.api.build">
+    <!-- Run two example classes -->
+    <java classname="org.carrot2.examples.clustering.ClusteringDocumentList"
+          outputproperty="dev.null">
+      <classpath>
+        <fileset dir=".">
+          <include name="**/*.jar" />
+        </fileset>
+        <pathelement location="tmp/classes"/>
+      </classpath>
+    </java>
+    <java classname="org.carrot2.examples.clustering.UsingCachingController"
+          outputproperty="dev.null">
+      <classpath>
+        <fileset dir=".">
+          <include name="**/*.jar" />
+        </fileset>
+        <pathelement location="tmp/classes"/>
+      </classpath>
+    </java>
+  </target>
+</project>

@@ -4,7 +4,7 @@
     <source component-class="org.carrot2.source.boss.BossDocumentSource" id="wiki">
       <label>Wiki</label>
       <title>Wikipedia Search (with Yahoo Boss)</title>
-      <mnemonic>Y</mnemonic>
+      <mnemonic>k</mnemonic>
       <description>Wikipedia document source searches the Wikipedia web using Yahoo Boss Web Search API.</description>
       <icon-path>icons/wiki.png</icon-path>
       <example-queries>

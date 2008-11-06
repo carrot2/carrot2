@@ -44,7 +44,7 @@
       <itemizedlist>
         <listitem>
           <para>
-            Use the &DCW; which can fetch documents from the same search engines as the &WA;
+            Use the &DCW; which can fetch and cluster documents from the same search engines as the &WA;
           </para>
         </listitem>
       </itemizedlist>
@@ -124,9 +124,9 @@
           <para>
             (Optional) If your file is not in <link linkend="figure.input-xml-format">&C2; format</link>,
             create an XSLT style sheet that transforms your data into &C2; format,
-            See <xref linkend="section.clustering-xml-feed" /> for an example.
+            see <xref linkend="section.clustering-xml-feed" /> for an example.
             Provide a path to your style sheet in the <guilabel>XSLT Stylesheet</guilabel>
-            field. This is an optional field, you can show optional fields by 
+            field, which is an optional field &ndash; you can show optional fields by 
             clicking the arrow button of the <guilabel>Search</guilabel> view toolbar
             (<xref linkend="figure.search-view-xml" />).
           </para>
@@ -157,7 +157,7 @@
       
       <para>
         To try &C2; clustering on documents or search results fetched from a remote
-        XML feed, you can use &DCW;. As an example, we will cluster a news feed from
+        XML feed, you can use the &DCW;. As an example, we will cluster a news feed from
         BBC:
       </para>
       
@@ -178,7 +178,7 @@
           </para>
           
           <para>
-            In our example, we will use <link xlink:href="http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml">BBC News RSS feed</link>.
+            In our example, we will use the <link xlink:href="http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml">BBC News RSS feed</link>.
           </para>
         </listitem>
         
@@ -195,7 +195,7 @@
         <listitem>
           <para>
             Provide a path to the transformation style sheet in the <guilabel>XSLT Stylesheet</guilabel>
-            field. This is an optional field, you can show optional fields by 
+            field, which is an optional field &ndash; you can show optional fields by 
             clicking the arrow button of the <guilabel>Search</guilabel> view toolbar
             (<xref linkend="figure.search-view-xml" />).
           </para>
@@ -354,7 +354,7 @@
         
         <listitem>
           <para>
-            Use the <guilabel>File &lt; Save as...</guilabel> dialog to save the 
+            Use the <guilabel>File &gt; Save as...</guilabel> dialog to save the 
             documents and clusters into a file in <link linkend="figure.output-xml-format">&C2; XML format</link>.
           </para>
         </listitem>

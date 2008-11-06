@@ -35,3 +35,12 @@
 
 # JavaDoc url base for links in the DocBook documentation
 #javadoc.url.base=
+
+# To run webtests of the webapp, define paths to:
+#   * Canoo Webtest home directory
+#   * Cargo libraries directory that should contain: cargo-core-uberjar and cargo-ant
+#   * Tomcat home directory
+#cargo.home=
+#webtest.home=
+#tomcat.home=
+

@@ -13,7 +13,7 @@
   <para>
     &C2; comes with a number of supporting applications that you can use to
     quickly set up clustering on your own data, further tune clustering results
-    and expose &C2; clustering through different protocols. 
+    and expose &C2; clustering as a remote service. 
   </para>
   
   <para>
@@ -292,7 +292,7 @@
     
     <para>
       &WA; exposes &C2; clustering as a web application for end users. It allows users
-      to browse clusters using a conventional tree view, but also an attractive visualization.
+      to browse clusters using a conventional tree view, but also in an attractive visualization.
     </para>
     
     <para>
@@ -315,8 +315,8 @@
           <title>All &C2; document sources and algorithms included.</title>
           <para>
             &WA; contains a large number of document sources, including major search
-            engines and, optionally, indexing engines (Lucene, Solr). It also contains all 
-            &C2;'s clustering algorithms.
+            engines. Optionally, further document sources can be added, such as
+            Lucene or Solr ones. It also contains all &C2;'s clustering algorithms.
           </para>
         </formalpara>
       </listitem>
@@ -337,7 +337,7 @@
           <title>High-performance front-end.</title>
           <para>
             The front-end of the &WA; has been optimized for fast loading by using such techniques as
-            JavaScript and CSS merging and minification, using 
+            JavaScript and CSS merging and minification, as well as using 
             <link xlink:href="http://smartsprites.osinski.name">CSS sprites</link>. 
           </para>
         </formalpara>

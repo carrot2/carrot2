@@ -60,10 +60,11 @@
        Builds the DCS ZIP archive.
     -->
   <target name="carrot2.doc.dist" depends="carrot2.doc.build">
-    <zip destfile="${doc.output.dir}/../../${doc.dist.base}.zip">
+    <zip destfile="${doc.output.dir}/../../${doc.dist.base}-${carrot2.version}.zip">
       <zipfileset dir="${doc.output.dir}" prefix="${doc.dist.base}" />
     </zip>
   </target>
+  
   <!--
        Copies all files necessary to produce the DocBook documentation.
     -->
@@ -107,7 +108,8 @@
     </javac>
 
     <mkdir dir="${doc.build.dir}/xsl" />
-    <java classname="org.carrot2.core.ProcessingComponentDumper">
+    <java classname="org.carrot2.core.ProcessingComponentDumper"
+          outputproperty="dev.null">
       <classpath>
         <path refid="core.jar.classpath" />
         <path refid="lib.classpath" />
