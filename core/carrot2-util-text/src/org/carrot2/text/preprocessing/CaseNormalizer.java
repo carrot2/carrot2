@@ -20,7 +20,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.TokenType;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
-import org.carrot2.text.util.*;
+import org.carrot2.text.util.CharArrayComparators;
 import org.carrot2.util.IndirectSorter;
 import org.carrot2.util.IntArrayUtils;
 import org.carrot2.util.attribute.*;

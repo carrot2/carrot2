@@ -13,7 +13,8 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.text.preprocessing.*;
+import org.carrot2.text.preprocessing.LabelFilterProcessor;
+import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.junit.Test;
 
 /**

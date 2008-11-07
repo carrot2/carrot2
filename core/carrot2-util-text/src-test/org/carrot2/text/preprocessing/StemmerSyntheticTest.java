@@ -13,7 +13,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.linguistic.*;
+import org.carrot2.text.linguistic.LanguageModelFactory;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.junit.Test;
 

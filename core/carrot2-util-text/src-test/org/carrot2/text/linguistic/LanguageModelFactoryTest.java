@@ -13,7 +13,8 @@
 
 package org.carrot2.text.linguistic;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 

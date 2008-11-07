@@ -13,10 +13,12 @@
 
 package org.carrot2.text.preprocessing;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.text.preprocessing.PreprocessingContext.*;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllPhrases;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.util.IntMapUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;

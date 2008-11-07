@@ -13,16 +13,11 @@
 
 package org.carrot2.text.linguistic;
 
-import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.ExceptionUtils;
-import org.carrot2.util.resource.*;
 import org.tartarus.snowball.SnowballStemmer;
-
-import com.google.common.collect.Sets;
 
 /**
  * Implements language models on top of Snowball stemmers.
@@ -31,7 +26,7 @@ final class SnowballLanguageModel implements LanguageModel
 {
     private final LanguageCode languageCode;
     private final Stemmer stemmer;
-    private final HashSet<MutableCharArray> stopwords = new HashSet<MutableCharArray>();
+    private final Set<MutableCharArray> stopwords;
     private final MutableCharArray buffer = new MutableCharArray("");
 
     /**
@@ -48,26 +43,14 @@ final class SnowballLanguageModel implements LanguageModel
 
         public CharSequence stem(CharSequence word)
         {
-            /*
-             * Snowball programs are single-threaded, so make sure only one thread
-             * performs stemming at one time.
-             */
-            synchronized (snowballStemmer)
+            snowballStemmer.setCurrent(word.toString());
+            if (snowballStemmer.stem())
             {
-                /*
-                 * TODO: I think Sebastiano Vigna or one of the mg4j-fellows mentioned a
-                 * nice improvement to snowball on the mailing list once, where stemming
-                 * was performed on CharSequences directly.
-                 */
-                snowballStemmer.setCurrent(word.toString());
-                if (snowballStemmer.stem())
-                {
-                    return snowballStemmer.getCurrent();
-                }
-                else
-                {
-                    return null;
-                }
+                return snowballStemmer.getCurrent();
+            }
+            else
+            {
+                return null;
             }
         }
     }
@@ -77,21 +60,10 @@ final class SnowballLanguageModel implements LanguageModel
      * associated with <code>languageCode</code>'s ISO code.
      */
     @SuppressWarnings("unchecked")
-    SnowballLanguageModel(LanguageCode languageCode, ResourceUtils resourceLoaders,
-        boolean mergeStopwords)
+    SnowballLanguageModel(LanguageCode languageCode, Set<MutableCharArray> stopwords)
     {
         this.languageCode = languageCode;
-
-        final Set<String> stopwords = loadCommonWords(resourceLoaders,
-            mergeStopwords ? getAllKnownIsoCodes() : new String []
-            {
-                languageCode.getIsoCode()
-            });
-
-        for (String s : stopwords)
-        {
-            this.stopwords.add(new MutableCharArray(s));
-        }
+        this.stopwords = stopwords;
 
         try
         {
@@ -128,51 +100,6 @@ final class SnowballLanguageModel implements LanguageModel
         }
 
         return new SnowballStemmerAdapter(snowballStemmer);
-    }
-
-    /**
-     * Loads common words associated with the given language.
-     */
-    private static Set<String> loadCommonWords(ResourceUtils resourceLoaders,
-        String... isoCodes)
-    {
-        try
-        {
-            final Set<String> result = Sets.newHashSet();
-
-            for (String isoCode : isoCodes)
-            {
-                final Resource commonWordsResource = resourceLoaders.getFirst(
-                    "stopwords." + isoCode, SnowballLanguageModel.class);
-
-                if (commonWordsResource == null)
-                {
-                    // Language resources not found.
-                    throw new RuntimeException("Common words not found: " + isoCode);
-                }
-                result.addAll(TextResourceUtils.load(commonWordsResource));
-            }
-
-            return result;
-        }
-        catch (IOException e)
-        {
-            throw ExceptionUtils.wrapAsRuntimeException(e);
-        }
-    }
-
-    /**
-     * Returns an array ISO codes of all {@link LanguageCode}s.
-     */
-    private static String [] getAllKnownIsoCodes()
-    {
-        final LanguageCode [] values = LanguageCode.values();
-        final String [] result = new String [values.length];
-        for (int i = 0; i < values.length; i++)
-        {
-            result[i] = values[i].getIsoCode();
-        }
-        return result;
     }
 
     public LanguageCode getLanguageCode()

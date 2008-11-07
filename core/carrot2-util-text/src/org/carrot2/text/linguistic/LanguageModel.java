@@ -31,10 +31,10 @@ public interface LanguageModel
      * @return Returns an engine for conflating inflected forms to their dictionary head
      *         form. Stemming is usually a heuristic and is different from lemmatisation.
      *         An empty (identity) stemmer is returned if stemming is not available for
-     *         this language. <b>The returned stemmer must be thread safe.</b>
+     *         this language. <b>The returned stemmer is not guaranteed to be thread-safe.</b>
      */
     public Stemmer getStemmer();
-    
+
     /**
      * @return Returns {@link LanguageCode} for this model.
      */

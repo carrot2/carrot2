@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,13 +12,17 @@
 
 package org.carrot2.text.linguistic;
 
-import java.util.HashMap;
+import java.io.IOException;
+import java.util.*;
 
+import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.*;
+import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * Accessor to all {@link LanguageModel} objects.
@@ -27,6 +30,9 @@ import com.google.common.collect.Maps;
 @Bindable(prefix = "SnowballLanguageModelFactory")
 public final class SnowballLanguageModelFactory implements LanguageModelFactory
 {
+    /**
+     * The default language. This language is returned from {@link #getCurrentLanguage()}.
+     */
     @Required
     @Processing
     @Input
@@ -34,8 +40,8 @@ public final class SnowballLanguageModelFactory implements LanguageModelFactory
     public LanguageCode current = LanguageCode.ENGLISH;
 
     /**
-     * Reloads stopwords on every processing request.For best performance, stop word
-     * reloading should be disabled in production.
+     * Reloads cached stopwords on every processing request for this factory. For best
+     * performance, stop word reloading should be disabled in production.
      * 
      * @level Medium
      * @group Preprocessing
@@ -64,7 +70,18 @@ public final class SnowballLanguageModelFactory implements LanguageModelFactory
     public boolean mergeStopwords = true;
 
     /**
-     *
+     * Preloaded and cached stopword lists, shared among all instances of this factory.
+     */
+    private final static HashMap<LanguageCode, Set<MutableCharArray>> stopwords_cache = Maps
+        .newHashMap();
+
+    /**
+     * Preloaded and cached merged stopword lists.
+     */
+    private static Set<MutableCharArray> stopwords_merged = Sets.newHashSet();
+
+    /**
+     * @see #current
      */
     public LanguageModel getCurrentLanguage()
     {
@@ -72,36 +89,92 @@ public final class SnowballLanguageModelFactory implements LanguageModelFactory
     }
 
     /**
-     *
+     * @return Return a language model for one of the languages in {@link LanguageCode}.
      */
     public LanguageModel getLanguage(LanguageCode language)
     {
         synchronized (SnowballLanguageModelFactory.class)
         {
-            LanguageModel model = languages.get(language);
-            if (model == null || reloadStopwords)
+            if (reloadStopwords || !stopwords_cache.containsKey(language)
+                || (mergeStopwords && stopwords_merged == null))
             {
-                model = createLanguageModel(language);
-                languages.put(language, model);
+                /*
+                 * We must reload stopwords or a language not already cached has been
+                 * requested.
+                 */
+                final ResourceUtils resourceLoaders = ResourceUtilsFactory
+                    .getDefaultResourceUtils();
+                if (mergeStopwords)
+                {
+                    // Load stopwords for all languages.
+                    for (LanguageCode lang : LanguageCode.values())
+                    {
+                        // Only reload if requested.
+                        if (stopwords_cache.containsKey(lang) && !reloadStopwords) continue;
+
+                        stopwords_cache.put(lang, loadStopWords(resourceLoaders, lang));
+                    }
+
+                    stopwords_merged = Sets.newHashSet();
+                    for (Set<MutableCharArray> stopwords : stopwords_cache.values())
+                    {
+                        stopwords_merged.addAll(stopwords);
+                    }
+                }
+                else
+                {
+                    // Load stopwords for this language only.
+                    stopwords_cache.put(language, loadStopWords(resourceLoaders, language));
+                }
             }
 
-            return model;
+            final Set<MutableCharArray> stopwords;
+            if (mergeStopwords)
+            {
+                stopwords = stopwords_merged;
+            }
+            else
+            {
+                stopwords = stopwords_cache.get(language);
+            }
+
+            return new SnowballLanguageModel(language, stopwords);
         }
     }
 
     /**
-     * Instantiated and available languages.
+     * Loads common words associated with the given language. Logs an error and recovers
+     * silently if the given resource cannot be found.
      */
-    private final static HashMap<LanguageCode, LanguageModel> languages = Maps
-        .newHashMap();
-
-    /**
-     * Initialize languages. For now this assumes no language ever fails to load.
-     */
-    private LanguageModel createLanguageModel(LanguageCode languageCode)
+    private static Set<MutableCharArray> loadStopWords(ResourceUtils resourceLoaders,
+        LanguageCode lang)
     {
-        final ResourceUtils resourceLoaders = ResourceUtilsFactory
-            .getDefaultResourceUtils();
-        return new SnowballLanguageModel(languageCode, resourceLoaders, mergeStopwords);
+        try
+        {
+            final Set<MutableCharArray> result = Sets.newHashSet();
+
+            final String resourceName = "stopwords." + lang.getIsoCode();
+            final Resource resource = resourceLoaders.getFirst(resourceName,
+                SnowballLanguageModelFactory.class);
+
+            if (resource == null)
+            {
+                throw new IOException("Common words resource not found: " + resourceName);
+            }
+
+            for (String word : TextResourceUtils.load(resource))
+            {
+                result.add(new MutableCharArray(word));
+            }
+
+            return result;
+        }
+        catch (IOException e)
+        {
+            Logger.getLogger(SnowballLanguageModelFactory.class).error(
+                "Failed to load " + "common words for language: " + lang.toString());
+
+            return Collections.emptySet();
+        }
     }
 }
