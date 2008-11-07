@@ -2,4 +2,10 @@
 <antlib>
 	<typedef name="findVersion"
 		classname="org.carrot2.antlib.tasks.FindVersionTask" />
+
+	<taskdef name="licenseList"
+		classname="org.carrot2.antlib.tasks.LicenseListTask" />
+
+	<taskdef name="licenseReplace"
+		classname="org.carrot2.antlib.tasks.LicenseReplaceTask" />
 </antlib>
