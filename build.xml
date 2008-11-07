@@ -355,7 +355,7 @@
     </parallel>
   </target>
 
-  <target name="attrs.eclipse" depends="compile">
+  <target name="attrs.eclipse" depends="compile" description="Compiles attribute descriptors for use with Eclipse.">
     <property name="common.attribute.names.source.path"
               location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
 
