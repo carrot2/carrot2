@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.lang.StringUtils;
+import org.carrot2.core.ProcessingComponent;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.util.attribute.AttributeDescriptor;
@@ -15,6 +16,8 @@ import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.*;
+import org.carrot2.workbench.editors.factory.EditorFactory;
+import org.carrot2.workbench.editors.factory.EditorNotFoundException;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -99,6 +102,34 @@ public final class AttributeGroups extends Composite implements
      * the editors.
      */
     private HashMap<String, Object> currentValues;
+
+    /**
+     * A predicate that filters out all descriptors without an editor.
+     */
+    private class HasEditorPredicate implements Predicate<AttributeDescriptor>
+    {
+        public boolean apply(AttributeDescriptor descriptor)
+        {
+            try
+            {
+                Class<?> clazz = descriptor.type;
+                if (clazz != null && ProcessingComponent.class.isAssignableFrom(clazz))
+                {
+                    EditorFactory.getEditorFor(clazz.asSubclass(ProcessingComponent.class), descriptor);
+                }
+                else
+                {
+                    EditorFactory.getEditorFor(null, descriptor);
+                }
+
+                return true;
+            }
+            catch (EditorNotFoundException e)
+            {
+                return false;
+            }
+        }
+    };
 
     /**
      * Builds the component for a given {@link BindableDescriptor}.
@@ -209,7 +240,8 @@ public final class AttributeGroups extends Composite implements
         /*
          * Create a filtered view of attribute descriptors.
          */
-        BindableDescriptor descriptor = this.descriptor.not(Internal.class);
+        BindableDescriptor descriptor = this.descriptor
+            .not(Internal.class).only(new HasEditorPredicate());
         if (filterPredicate != null)
         {
             descriptor = descriptor.only(filterPredicate);
@@ -316,7 +348,7 @@ public final class AttributeGroups extends Composite implements
      * Create an editor group associated with a group of attributes.
      */
     @SuppressWarnings("unchecked")
-    private void createEditorGroup(final Composite parent, String groupName, 
+    private void createEditorGroup(final Composite parent, String groupName,
         BindableDescriptor descriptor, Map<String, AttributeDescriptor> attributes,
         IAttributeEventProvider globalEventsProvider)
     {
