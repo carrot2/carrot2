@@ -85,15 +85,15 @@ public class ResourceEditor extends AttributeEditorAdapter
             gridColumns, 1).create());
 
         GridLayout gl = GUIFactory.zeroMarginGridLayout();
-        gl.numColumns = 3;
+        gl.numColumns = 4;
         gl.horizontalSpacing = 3;
 
         holder.setLayout(gl);
 
         createTextBox(holder);
-
         createFileButton(holder);
         createUrlButton(holder);
+        createClearButton(holder);
     }
 
     /*
@@ -108,6 +108,28 @@ public class ResourceEditor extends AttributeEditorAdapter
             SWT.DEFAULT).align(SWT.FILL, SWT.CENTER).create();
         resourceInfo.setLayoutData(gd);
     }
+
+    /*
+     * 
+     */
+    private void createClearButton(Composite holder)
+    {
+        final Image image = EditorsPlugin.getImageDescriptor("icons/clear.gif").createImage();
+        disposeBin.add(image);
+
+        final Button button = new Button(holder, SWT.PUSH | SWT.CENTER);
+        button.setImage(image);
+        button.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER)
+            .create());
+
+        button.addSelectionListener(new SelectionAdapter()
+        {
+            public void widgetSelected(SelectionEvent e)
+            {
+                setValue(null);
+            }
+        });
+    }    
 
     /*
      * 
@@ -235,7 +257,7 @@ public class ResourceEditor extends AttributeEditorAdapter
             return;
         }
 
-        if (!(newValue instanceof Resource))
+        if (newValue != null && !(newValue instanceof Resource))
         {
             return;
         }
