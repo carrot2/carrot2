@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <antlib>
-	<typedef name="findVersion"
+	<taskdef name="findVersion"
 		classname="org.carrot2.antlib.tasks.FindVersionTask" />
 
 	<taskdef name="licenseList"
