@@ -2,10 +2,13 @@
 	<property file="workbench.properties" />
 
 	<property name="custom.tasks.dir"
-	          location="${basedir}/workbench/custom.ant.tasks" />
+	          location="${basedir}/lib/org.carrot2.antlib" />
+
 	<property name="workbench.build.dir" value="tmp/workbench" />
+
 	<property name="workbench.tests.html.report.dir"
 	          value="tmp/workbench/test-report" />
+
 	<property name="workbench.tests.txt.report.dir"
 	          value="tmp/workbench/test-report-txt" />
 
@@ -58,13 +61,19 @@
           target: init                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="init">
-		<ant antfile="${custom.tasks.dir}/build.xml" target="build" />
-		<taskdef name="findVersion"
-		         classname="org.carrot2.custom.tasks.FindVersionTask">
+		<ant dir="${custom.tasks.dir}" antfile="build.xml" target="jar" />
+
+		<path id="bootstrap">
+			<pathelement location="${bootstrap.dir}" />
+			<fileset dir="${carrot2.code.dir}/lib/compile-time" includes="resolver.jar" />        
+		</path>
+
+		<taskdef resource="org.carrot2.antlib.xml">
 			<classpath>
-				<pathelement location="${custom.tasks.dir}/tmp/eclipse" />
+				<pathelement location="${custom.tasks.dir}/org.carrot2.antlib.jar" />
 			</classpath>
 		</taskdef>
+
 		<findVersion property="equinox.launcher.plugin.jar"
 		             eclipsehome="${eclipse.home}"
 		             pluginid="org.eclipse.equinox.launcher"

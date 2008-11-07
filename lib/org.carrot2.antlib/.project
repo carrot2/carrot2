@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>custom.ant.tasks</name>
+	<name>org.carrot2.antlib</name>
 	<comment></comment>
 	<projects>
 	</projects>

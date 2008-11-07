@@ -1,9 +1,12 @@
-package org.carrot2.custom.tasks;
+package org.carrot2.antlib.tasks;
 
 import java.io.File;
-
 import org.apache.tools.ant.*;
 
+
+/**
+ * Find Eclipse version number (?)
+ */
 public class FindVersionTask
 {
     private File eclipseDir;
@@ -145,7 +148,7 @@ public class FindVersionTask
         }
         else
         {
-            //after update plugins can be duplicated - choose newest one than
+            // After update plugins can be duplicated - choose newest one than
             File newest = new File(result[0]);
             for (int i = 1; i < result.length; i++)
             {
@@ -165,17 +168,20 @@ public class FindVersionTask
         {
             throw new BuildException("property attribute not set!");
         }
+
         if (!"jar".equals(pluginForm) && !"dir".equals(pluginForm))
         {
             throw new BuildException(
                 "pluginForm attribute must have one of these values: 'dir' or 'jar'");
         }
+
         if ((pluginId == null || pluginId.length() == 0)
             && (featureId == null || featureId.length() == 0))
         {
             throw new BuildException(
                 "PluginId nor featureId specified. One of them must be set!");
         }
+
         if ((pluginId != null && pluginId.length() > 0)
             && (featureId != null && featureId.length() > 0))
         {

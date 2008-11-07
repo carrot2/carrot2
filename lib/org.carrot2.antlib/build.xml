@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project default="jar" name="org.carrot2.antlib">
+	<target name="clean">
+		<delete dir="tmp" />
+	</target>
+
+	<target name="jar">
+		<mkdir dir="tmp/classes" />
+		<javac debug="true" destdir="tmp/classes" source="1.5" target="1.5" includeantruntime="true">
+			<src path="src" />
+		</javac>
+		<copy todir="tmp/classes">
+			<fileset dir="src">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<jar jarfile="org.carrot2.antlib.jar" basedir="tmp/classes" />
+	</target>
+</project>
