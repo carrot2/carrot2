@@ -1,3 +1,16 @@
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
+ * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
+
 package org.tartarus.snowball;
 
 import java.lang.reflect.Method;
@@ -28,4 +41,4 @@ public class Among {
     public final int result; /* result of the lookup */
     public final Method method; /* method to use if substring matches */
     public final SnowballProgram methodobject; /* object to invoke method on */
-};
+}

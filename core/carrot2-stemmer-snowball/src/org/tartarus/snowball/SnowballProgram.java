@@ -1,4 +1,16 @@
 
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
+ * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
+
 package org.tartarus.snowball;
 import java.lang.reflect.InvocationTargetException;
 
@@ -425,4 +437,4 @@ extern void debug(struct SN_env * z, int number, int line_count)
 }
 */
 
-};
+}
