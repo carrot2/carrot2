@@ -4,7 +4,11 @@
 	<!-- The property ${eclipse-home} should be passed into this script -->
 	<!-- Set a meaningful default value for when it is not. -->
 
-	<property name="eclipse-home" location="${basedir}\..\.." />
+	<!--
+	<property name="eclipse-home" location="" />
+	<property name="custom.tasks.dir" location="" />
+	-->
+	
 	<property name="test-output-dir" location="${eclipse-home}\test-output" />
 	<property name="raw-output-dir" location="${eclipse-home}\raw-output" />
 
@@ -15,6 +19,8 @@
 	<!-- all tests that are to be run. Initialization for individual tests -->
 	<!-- should be done within the body of the suite target. -->
 	<target name="init">
+		<fail unless="eclipse-home">'eclipse-home' property must be privided.</fail>
+		<fail unless="org.carrot2.antlib">'org.carrot2.antlib' property must be privided.</fail>
 		<tstamp />
 		<delete>
 			<fileset dir="${eclipse-home}" includes="org*.xml" />
@@ -22,21 +28,23 @@
 	</target>
 
 	<!-- This target defines the tests that need to be run. -->
-	<target name="suite">
-		<property name="custom.tasks.path"
-		          location="${eclipse-home}/../../../../../workbench/custom.ant.tasks/tmp/eclipse" />
-		<taskdef name="findVersion"
-		         classname="org.carrot2.custom.tasks.FindVersionTask">
+	<target name="suite" depends="init">
+		<ant dir="${org.carrot2.antlib}" antfile="build.xml" target="jar" />
+
+		<taskdef resource="org.carrot2.antlib.xml">
 			<classpath>
-				<pathelement location="${custom.tasks.path}" />
+				<pathelement location="${org.carrot2.antlib}/org.carrot2.antlib.jar" />
 			</classpath>
 		</taskdef>
+
 		<findVersion property="eclipse.test.plugin"
 		             eclipsehome="${eclipse-home}"
 		             pluginid="org.eclipse.test"
 		             pluginform="dir" />
+
 		<property name="library-file"
 		          location="${eclipse-home}/plugins/${eclipse.test.plugin}/library.xml" />
+
 		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
 			<property name="plugin-name" value="${plugin-name}" />
 			<property name="classname"

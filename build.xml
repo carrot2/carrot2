@@ -752,11 +752,11 @@
     -->
   <target name="license.tasks">
   	<property name="verbose" value="false" />
-  	<property name="custom.tasks.dir" location="lib/org.carrot2.antlib" />
-	<ant dir="${custom.tasks.dir}" antfile="build.xml" target="jar" />
+  	<property name="org.carrot2.antlib" location="lib/org.carrot2.antlib" />
+	<ant dir="${org.carrot2.antlib}" antfile="build.xml" target="jar" />
 	<taskdef resource="org.carrot2.antlib.xml">
 		<classpath>
-			<pathelement location="${custom.tasks.dir}/org.carrot2.antlib.jar" />
+			<pathelement location="${org.carrot2.antlib}/org.carrot2.antlib.jar" />
 		</classpath>
 	</taskdef>
 

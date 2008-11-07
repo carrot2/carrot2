@@ -130,12 +130,14 @@
 		 	<mapper type="glob" from="carrot2-workbench*" to="eclipse*"></mapper>
 		  </move>
 -->		
+		<property name="org.carrot2.antlib" location="lib/org.carrot2.antlib" />
 		<java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
 		      fork="true"
 		      failonerror="true">
 			<arg line="-application org.eclipse.ant.core.antRunner" />
 			<arg line="-buildfile ${test.eclipse.home}/plugins/${workbench.core.test.dir}/test.xml" />
 			<arg line="-Declipse-home=${test.eclipse.home}" />
+			<arg line="-Dorg.carrot2.antlib=${org.carrot2.antlib}" />
 			<arg line="-Dos=${test.os} -Dws=${test.ws} -Darch=${test.arch}" />
 		</java>
 		<!-- JUnit report -->
