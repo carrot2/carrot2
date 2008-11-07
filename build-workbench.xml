@@ -63,11 +63,6 @@
 	<target name="init">
 		<ant dir="${custom.tasks.dir}" antfile="build.xml" target="jar" />
 
-		<path id="bootstrap">
-			<pathelement location="${bootstrap.dir}" />
-			<fileset dir="${carrot2.code.dir}/lib/compile-time" includes="resolver.jar" />        
-		</path>
-
 		<taskdef resource="org.carrot2.antlib.xml">
 			<classpath>
 				<pathelement location="${custom.tasks.dir}/org.carrot2.antlib.jar" />
@@ -83,6 +78,7 @@
 		             pluginid="org.eclipse.pde.build"
 		             pluginform="dir" />
 
+		<echo>Equinox version: ${equinox.launcher.plugin.jar}, PDE build plugin: ${pde.build.plugin}</echo>
 	</target>
 
 	<target name="build"
