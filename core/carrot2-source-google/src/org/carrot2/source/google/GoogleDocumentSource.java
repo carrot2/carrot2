@@ -103,15 +103,11 @@ public class GoogleDocumentSource extends MultipageSearchEngine
         {
             public SearchEngineResponse search() throws Exception
             {
-                //return serviceUrl + "?v=1.0&rsz=large&start=" + start + "&key="
-                //+ StringUtils.urlEncodeWrapException(apiKey, "UTF-8") + "&q="
-                //+ StringUtils.urlEncodeWrapException(query, "UTF-8");
-
                 final SearchEngineResponse response = new SearchEngineResponse();
                 final NameValuePair [] queryParams = new NameValuePair [] {
                     new NameValuePair("v", "1.0"),
                     new NameValuePair("rsz", "large"),
-                    new NameValuePair("start", Integer.toString(start)),
+                    new NameValuePair("start", Integer.toString(bucket.start)),
                     new NameValuePair("key", apiKey),
                     new NameValuePair("q", query),
                 };
