@@ -26,6 +26,13 @@ import com.google.common.collect.Lists;
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     ClusteringAlgorithm
 {
+    private static final Logger log = Logger.getLogger(LingoClusteringAlgorithm.class);
+    
+    /**
+     * Report the warning about native libraries only once.
+     */
+    private static boolean nativeLibrariesReported;
+
     /**
      * Query that produced the documents. The query will help the algorithm to create
      * better clusters. Therefore, providing the query is optional but desirable.
@@ -163,18 +170,23 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      */
     public LabelFormatter labelFormatter = new LabelFormatter();
 
-    private static final Logger log = Logger.getLogger(LingoClusteringAlgorithm.class);
-
     @Override
     public void init(ControllerContext context)
     {
-        if (NNIInterface.isNativeBlasAvailable())
+        synchronized (this.getClass())
         {
-            log.info("Native BLAS routines available");
-        }
-        else
-        {
-            log.info("Native BLAS routines not available");
+            if (!nativeLibrariesReported)
+            {
+                if (NNIInterface.isNativeBlasAvailable())
+                {
+                    log.info("Native BLAS routines available");
+                }
+                else
+                {
+                    log.info("Native BLAS routines not available");
+                }
+                nativeLibrariesReported = true;
+            }
         }
     }
 

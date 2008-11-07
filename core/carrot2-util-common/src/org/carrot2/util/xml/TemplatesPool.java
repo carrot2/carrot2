@@ -13,7 +13,7 @@
 package org.carrot2.util.xml;
 
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.*;
 
 import javax.xml.transform.*;
 import javax.xml.transform.sax.*;
@@ -36,12 +36,18 @@ import org.xml.sax.SAXException;
 public final class TemplatesPool
 {
     private final static Logger logger = Logger.getLogger(TemplatesPool.class); 
-    
+
     /**
      * Global system property disabling template caching. This property can also be set at
      * runtime (after the pool is initialized).
      */
     public static String TEMPLATE_CACHING_PROPERTY = "template.caching";
+
+    /**
+     * A set of used XSLT processors.
+     */
+    private final static Set<String> reportedProcessors = Collections.synchronizedSet(
+        new HashSet<String>());
 
     /**
      * A map of precompiled stylesheets ({@link Templates} objects).
@@ -75,10 +81,14 @@ public final class TemplatesPool
     {
         final TransformerFactory tFactory = TransformerFactory.newInstance();
         final String processorClass = tFactory.getClass().getName();
-        logger.info("XSLT transformer factory: " + processorClass);
-        if (processorClass.indexOf(".xsltc.") >= 0)
+
+        /*
+         * Only report XSLT processor class once.
+         */
+        if (!reportedProcessors.contains(processorClass))
         {
-            logger.warn("XSLTC processor is used. Expect memory leaks when redeploying Web applications.");
+            logger.info("XSLT transformer factory: " + processorClass);
+            reportedProcessors.add(processorClass);
         }
 
         if (!tFactory.getFeature(SAXSource.FEATURE)
