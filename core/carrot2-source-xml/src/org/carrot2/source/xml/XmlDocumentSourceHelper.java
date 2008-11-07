@@ -30,8 +30,6 @@ import org.carrot2.util.resource.Resource;
 import org.carrot2.util.xml.TemplatesPool;
 import org.xml.sax.SAXException;
 
-import com.google.common.collect.Maps;
-
 /**
  * Exposes the common functionality a {@link DocumentSource} based on XML/XSLT is likely
  * to need. This helper does note expose any attributes, so that different implementations
@@ -82,18 +80,16 @@ public class XmlDocumentSourceHelper
         Map<String, String> xsltParameters, Map<String, Object> metadata)
         throws Exception
     {
-        final Map<String, Object> status = Maps.newHashMap();
-        final InputStream carrot2XmlStream = HttpUtils.openGzipHttpStream(url, status);
+        final HttpUtils.Response response = HttpUtils.doGET(url, null, null);
+        final InputStream carrot2XmlStream = response.getPayloadAsStream();
 
-        final Integer statusCode = (Integer) status.get(HttpUtils.STATUS_CODE);
-        final String compressionUsed = (String) status
-            .get(HttpUtils.STATUS_COMPRESSION_USED);
+        final int statusCode = response.status;
 
         if (statusCode == HttpStatus.SC_OK
             || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE
             || statusCode == HttpStatus.SC_BAD_REQUEST)
         {
-            metadata.put(SearchEngineResponse.COMPRESSION_KEY, compressionUsed);
+            metadata.put(SearchEngineResponse.COMPRESSION_KEY, response.compression);
             return loadProcessingResult(carrot2XmlStream, stylesheet, xsltParameters);
         }
         else

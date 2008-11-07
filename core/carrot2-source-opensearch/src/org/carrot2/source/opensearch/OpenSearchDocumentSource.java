@@ -188,10 +188,9 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
                 values.put(START_PAGE_VARIABLE_NAME, bucket.start + 1);
                 values.put(COUNT_VARIABLE_NAME, bucket.results);
 
-                final String url = ParameterizedUrlResource.substituteAttributes(values,
-                    feedUrlTemplate);
+                final String url = ParameterizedUrlResource.substituteAttributes(feedUrlTemplate, values);
 
-                logger.debug("Fetching url: " + url);
+                logger.debug("Fetching URL: " + url);
 
                 /*
                  * TODO: Rome fetcher uses SUN's HttpClient and opens a persistent HTTP connection

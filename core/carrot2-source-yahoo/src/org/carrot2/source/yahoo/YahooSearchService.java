@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,23 +15,20 @@ package org.carrot2.source.yahoo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.zip.GZIPInputStream;
+import java.util.Arrays;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.httpclient.*;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
-import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.StreamUtils;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.httpclient.HttpClientFactory;
 import org.carrot2.util.httpclient.HttpHeaders;
+import org.carrot2.util.httpclient.HttpUtils;
 import org.xml.sax.*;
 
 /**
@@ -110,13 +106,13 @@ public abstract class YahooSearchService
     public QueryType type = QueryType.ALL;
 
     /*
-     * TODO: Yahoo API has a broken link to language codes. The format of these
-     * language codes is also undetermined -- the official search page allows you to pass
-     * more than one language, is it possible via the API as well?
+     * TODO: Yahoo API has a broken link to language codes. The format of these language
+     * codes is also undetermined -- the official search page allows you to pass more than
+     * one language, is it possible via the API as well?
      */
     /**
-     * The language the results are written in. Value must be one of the 
-     * supported language codes. Omitting language returns results in any language.
+     * The language the results are written in. Value must be one of the supported
+     * language codes. Omitting language returns results in any language.
      * 
      * @group Results filtering
      * @label Language
@@ -166,79 +162,41 @@ public abstract class YahooSearchService
         start++;
         results = Math.min(results, metadata.resultsPerPage);
 
-        final HttpClient client = HttpClientFactory.getTimeoutingClient();
-        client.getParams().setVersion(HttpVersion.HTTP_1_1);
+        final ArrayList<NameValuePair> params = createRequestParams(query, start, results);
+        params.add(new NameValuePair("output", "xml"));
 
-        InputStream is = null;
-        final GetMethod request = new GetMethod();
-        try
+        final HttpUtils.Response response = HttpUtils.doGET(getServiceURI(), params,
+            Arrays.asList(new Header []
+            {
+                HttpHeaders.USER_AGENT_HEADER_MOZILLA
+            }));
+
+        final int statusCode = response.status;
+        if (statusCode == HttpStatus.SC_OK
+            || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE
+            || statusCode == HttpStatus.SC_BAD_REQUEST)
         {
-            request.setURI(new URI(getServiceURI(), false));
-            request.setRequestHeader(HttpHeaders.URL_ENCODED);
-            request.setRequestHeader(HttpHeaders.GZIP_ENCODING);
-            request.setRequestHeader(HttpHeaders.USER_AGENT_HEADER_MOZILLA);
-
-            final ArrayList<NameValuePair> params = createRequestParams(query, start,
-                results);
-            params.add(new NameValuePair("output", "xml"));
-            request.setQueryString(params.toArray(new NameValuePair [params.size()]));
+            // Parse the data stream.
+            final SearchEngineResponse ser = parseResponseXML(response
+                .getPayloadAsStream());
+            ser.metadata.put(SearchEngineResponse.COMPRESSION_KEY, response.compression);
 
             if (logger.isDebugEnabled())
             {
-                logger.debug("Request params: " + request.getQueryString());
-            }
-            final int statusCode = client.executeMethod(request);
-
-            // Unwrap compressed streams.
-            is = request.getResponseBodyAsStream();
-            final Header encoded = request.getResponseHeader("Content-Encoding");
-            final String compressionUsed;
-            if (encoded != null && "gzip".equalsIgnoreCase(encoded.getValue()))
-            {
-                logger.debug("Unwrapping GZIP compressed stream.");
-                compressionUsed = "gzip";
-                is = new GZIPInputStream(is);
-            }
-            else
-            {
-                compressionUsed = "(uncompressed)";
+                logger.debug("Received, results: " + ser.results.size()
+                    + ", total: " + ser.getResultsTotal() + ", first: "
+                    + ser.metadata.get(FIRST_INDEX_KEY));
             }
 
-            if (statusCode == HttpStatus.SC_OK
-                || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE
-                || statusCode == HttpStatus.SC_BAD_REQUEST)
-            {
-                // Parse the data stream.
-                final SearchEngineResponse response = parseResponseXML(is);
-                response.metadata.put(SearchEngineResponse.COMPRESSION_KEY,
-                    compressionUsed);
-
-                if (logger.isDebugEnabled())
-                {
-                    logger.debug("Received, results: " + response.results.size()
-                        + ", total: " + response.getResultsTotal() + ", first: "
-                        + response.metadata.get(FIRST_INDEX_KEY));
-                }
-
-                return response;
-            }
-            else
-            {
-                // Read the output and throw an exception.
-                final String m = "Yahoo returned HTTP Error: " + statusCode
-                    + ", HTTP payload: "
-                    + new String(StreamUtils.readFully(is), "iso8859-1");
-                logger.warn(m);
-                throw new IOException(m);
-            }
+            return ser;
         }
-        finally
+        else
         {
-            if (is != null)
-            {
-                CloseableUtils.close(is);
-            }
-            request.releaseConnection();
+            // Read the output and throw an exception.
+            final String m = "Yahoo returned HTTP Error: " + statusCode
+                + ", HTTP payload: " + new String(response.payload, "iso8859-1");
+            logger.warn(m);
+            throw new IOException(m);
         }
     }
 
@@ -276,5 +234,4 @@ public abstract class YahooSearchService
             throw new IOException("Could not acquire XML parser.");
         }
     }
-
 }

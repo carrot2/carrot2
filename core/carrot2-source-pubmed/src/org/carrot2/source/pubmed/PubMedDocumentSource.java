@@ -14,21 +14,18 @@
 package org.carrot2.source.pubmed;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 
-import javax.xml.parsers.*;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
-import org.carrot2.util.*;
+import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.httpclient.HttpUtils;
-import org.xml.sax.*;
-
-import com.google.common.collect.Maps;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 /**
  * Performs searches on the PubMed database using its on-line e-utilities:
@@ -63,32 +60,21 @@ public class PubMedDocumentSource extends SimpleSearchEngine
         PubMedSearchHandler searchHandler = new PubMedSearchHandler();
         reader.setContentHandler(searchHandler);
 
-        InputStream stream = null;
-        try
+        final String url = E_SEARCH_URL + "?db=pubmed&usehistory=n&term="
+            + StringUtils.urlEncodeWrapException(query, "UTF-8") + "&retmax="
+            + Integer.toString(requestedResults);
+
+        final HttpUtils.Response response = HttpUtils.doGET(url, null, null);
+
+        // Get document IDs
+        if (response.status == HttpStatus.SC_OK)
         {
-            final String url = E_SEARCH_URL + "?db=pubmed&usehistory=n&term="
-                + StringUtils.urlEncodeWrapException(query, "UTF-8") + "&retmax="
-                + Integer.toString(requestedResults);
-            final Map<String, Object> status = Maps.newHashMap();
-
-            stream = HttpUtils.openGzipHttpStream(url, status);
-
-            // Get document IDs
-            int statusCode = (Integer) status.get(HttpUtils.STATUS_CODE);
-            if (statusCode == HttpStatus.SC_OK)
-            {
-                reader.parse(new InputSource(stream));
-            }
-            else
-            {
-                final byte [] message = StreamUtils.readFully(stream);
-                throw new IOException("PubMed returned HTTP Error: " + statusCode
-                    + ", HTTP payload: " + new String(message, "iso8859-1"));
-            }
+            reader.parse(new InputSource(response.getPayloadAsStream()));
         }
-        finally
+        else
         {
-            CloseableUtils.close(stream);
+            throw new IOException("PubMed returned HTTP Error: " + response.status
+                + ", HTTP payload: " + new String(response.payload, "iso8859-1"));
         }
 
         return searchHandler.getPubMedPrimaryIds();
@@ -107,32 +93,21 @@ public class PubMedDocumentSource extends SimpleSearchEngine
         final PubMedFetchHandler fetchHandler = new PubMedFetchHandler();
         reader.setContentHandler(fetchHandler);
 
-        InputStream stream = null;
-        try
+        final String url = E_FETCH_URL
+            + "?db=pubmed&retmode=xml&rettype=abstract&id=" + getIdsString(ids);
+
+        final HttpUtils.Response response = HttpUtils.doGET(url, null, null);
+
+        // Get document contents
+        // No URL logging here, as the url can get really long
+        if (response.status == HttpStatus.SC_OK)
         {
-            final String url = E_FETCH_URL
-                + "?db=pubmed&retmode=xml&rettype=abstract&id=" + getIdsString(ids);
-            final Map<String, Object> status = Maps.newHashMap();
-
-            stream = HttpUtils.openGzipHttpStream(url, status);
-
-            // Get document contents
-            // No URL logging here, as the url can get really long
-            int statusCode = (Integer) status.get(HttpUtils.STATUS_CODE);
-            if (statusCode == HttpStatus.SC_OK)
-            {
-                reader.parse(new InputSource(stream));
-            }
-            else
-            {
-                final byte [] message = StreamUtils.readFully(stream);
-                throw new IOException("PubMed returned HTTP Error: " + statusCode
-                    + ", HTTP payload: " + new String(message, "iso8859-1"));
-            }
+            reader.parse(new InputSource(response.getPayloadAsStream()));
         }
-        finally
+        else
         {
-            CloseableUtils.close(stream);
+            throw new IOException("PubMed returned HTTP Error: " + response.status
+                + ", HTTP payload: " + new String(response.payload, "iso8859-1"));
         }
 
         return fetchHandler.getResponse();

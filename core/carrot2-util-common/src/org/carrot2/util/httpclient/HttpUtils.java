@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,7 +13,7 @@
 package org.carrot2.util.httpclient;
 
 import java.io.*;
-import java.util.Map;
+import java.util.Collection;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.*;
@@ -27,79 +26,96 @@ import org.carrot2.util.StreamUtils;
 public class HttpUtils
 {
     /**
-     * The type of compression. A {@link String} indicating the type of compression used
-     * when calling {@link #openGzipHttpStream(String, Map)}. Possible values:
-     * <code>uncompressed</code>, <code>gzip</code>.
+     * A static holder storing HTTP response fields.
      */
-    public static final String STATUS_COMPRESSION_USED = "compression-used";
+    public final static class Response
+    {
+        public byte [] payload;
+        public int status;
+        public String compression;
+
+        public InputStream getPayloadAsStream()
+        {
+            return new ByteArrayInputStream(payload);
+        }
+    }
 
     /**
-     * Status code. An {@link Integer} indicating response status code when calling
-     * {@link #openGzipHttpStream(String, Map)}.
+     * GZIP compression was used.
+     * 
+     * @see HttpUtils.Response#compression
      */
-    public static final String STATUS_CODE = "code";
+    private static final String COMPRESSION_GZIP = "gzip";
 
+    /**
+     * No compression was used.
+     * 
+     * @see HttpUtils.Response#compression
+     */
+    private static final String COMPRESSION_NONE = "uncompressed";
+
+    /*
+     * 
+     */
     private HttpUtils()
     {
         // No instances.
     }
-    
+
     /**
-     * Opens a stream for the provided URL using the GET method, unwraps a gzip compressed
-     * stream if supported by the other end of the connection.
+     * Opens a HTTP/1.1 connection to the given URL using the GET method, decompresses
+     * compressed response streams, if supported by the server.
      * 
-     * @param url the URL to open. The URL must be properly escaped, this method will
+     * @param url The URL to open. The URL must be properly escaped, this method will
      *            <b>not</b> perform any escaping.
-     * @param status if not <code>null</code>, additional response status will be stored
-     *            in the provided map. See {@link #STATUS_CODE} and
-     *            {@link #STATUS_COMPRESSION_USED}.
-     * @param headers extra headers to add to the request
-     * @return the http stream, unwrapped if necessary. The stream needs to be closed by
-     *         the caller.
+     * @param params Query string parameters to be attached to the url.
+     * @param headers Any extra HTTP headers to add to the request.
+     * @return The {@link HttpUtils.Response} object. Note that entire payload is read and
+     *         buffered so that the HTTP connection can be closed when leaving this
+     *         method.
      */
-    public static InputStream openGzipHttpStream(String url, Map<String, Object> status,
-        Header... headers) throws HttpException, IOException
+    public static Response doGET(String url, Collection<NameValuePair> params,
+        Collection<Header> headers) throws HttpException, IOException
     {
         final HttpClient client = HttpClientFactory.getTimeoutingClient();
         client.getParams().setVersion(HttpVersion.HTTP_1_1);
 
         final GetMethod request = new GetMethod();
-        InputStream stream;
+        final Response response = new Response();
         try
         {
             request.setURI(new URI(url, true));
+
+            if (params != null)
+            {
+                request.setQueryString(params.toArray(new NameValuePair [params.size()]));
+            }
+
             request.setRequestHeader(HttpHeaders.URL_ENCODED);
             request.setRequestHeader(HttpHeaders.GZIP_ENCODING);
-            for (Header header : headers)
+            if (headers != null)
             {
-                request.setRequestHeader(header);
+                for (Header header : headers)
+                    request.setRequestHeader(header);
             }
-    
+
             final int statusCode = client.executeMethod(request);
-            if (status != null)
-            {
-                status.put(STATUS_CODE, statusCode);
-            }
-    
-            stream = request.getResponseBodyAsStream();
+            response.status = statusCode;
+
+            InputStream stream = request.getResponseBodyAsStream();
             final Header encoded = request.getResponseHeader("Content-Encoding");
             if (encoded != null && "gzip".equalsIgnoreCase(encoded.getValue()))
             {
                 stream = new GZIPInputStream(stream);
-                if (status != null)
-                {
-                    status.put(STATUS_COMPRESSION_USED, "gzip");
-                }
+                response.compression = COMPRESSION_GZIP;
             }
             else
             {
-                if (status != null)
-                {
-                    status.put(STATUS_COMPRESSION_USED, "uncompressed");
-                }
+                response.compression = COMPRESSION_NONE;
             }
 
-            return new ByteArrayInputStream(StreamUtils.readFully(stream));
+            response.payload = StreamUtils.readFullyAndClose(stream);
+            return response;
         }
         finally
         {

@@ -13,26 +13,22 @@
 
 package org.carrot2.source.google;
 
-import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.NameValuePair;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
-import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.JsonNode;
 import org.codehaus.jackson.map.JsonTypeMapper;
-
-import com.google.common.collect.Maps;
 
 /**
  * A {@link DocumentSource} fetching search results from Google JSON API. Please note that
@@ -107,56 +103,59 @@ public class GoogleDocumentSource extends MultipageSearchEngine
         {
             public SearchEngineResponse search() throws Exception
             {
-                final String serviceURL = buildServiceUrl(bucket.start);
+                //return serviceUrl + "?v=1.0&rsz=large&start=" + start + "&key="
+                //+ StringUtils.urlEncodeWrapException(apiKey, "UTF-8") + "&q="
+                //+ StringUtils.urlEncodeWrapException(query, "UTF-8");
+
                 final SearchEngineResponse response = new SearchEngineResponse();
+                final NameValuePair [] queryParams = new NameValuePair [] {
+                    new NameValuePair("v", "1.0"),
+                    new NameValuePair("rsz", "large"),
+                    new NameValuePair("start", Integer.toString(start)),
+                    new NameValuePair("key", apiKey),
+                    new NameValuePair("q", query),
+                };
+                final Header [] headers = new Header [] {
+                    new Header("Referer", referer),
+                };
 
-                InputStream stream = null;
-                try
+                final HttpUtils.Response httpResp = HttpUtils.doGET(serviceUrl,
+                    Arrays.asList(queryParams), Arrays.asList(headers));
+
+                final JsonParser jsonParser = new JsonFactory().createJsonParser(httpResp.getPayloadAsStream());
+                final JsonTypeMapper mapper = new JsonTypeMapper();
+                final JsonNode root = mapper.read(jsonParser);
+                final JsonNode responseData = root.getFieldValue("responseData");
+                final JsonNode resultsArray = responseData.getFieldValue("results");
+
+                if (resultsArray != null)
                 {
-                    final Map<String, Object> status = Maps.newHashMap();
-                    stream = HttpUtils.openGzipHttpStream(serviceURL, status, new Header(
-                        "Referer", referer));
-
-                    final JsonParser jsonParser = new JsonFactory()
-                        .createJsonParser(stream);
-                    final JsonTypeMapper mapper = new JsonTypeMapper();
-                    final JsonNode root = mapper.read(jsonParser);
-                    final JsonNode responseData = root.getFieldValue("responseData");
-                    final JsonNode resultsArray = responseData.getFieldValue("results");
-
-                    if (resultsArray != null)
+                    final Iterator<JsonNode> results = resultsArray.getElements();
+                    while (results.hasNext())
                     {
-                        final Iterator<JsonNode> results = resultsArray.getElements();
+                        final JsonNode result = results.next();
+                        final Document document = new Document(result.getFieldValue(
+                            "titleNoFormatting").getTextValue(), result
+                            .getFieldValue("content").getTextValue(), result
+                            .getFieldValue("url").getTextValue());
+                        response.results.add(document);
+                    }
 
-                        for (; results.hasNext();)
-                        {
-                            final JsonNode result = results.next();
-                            final Document document = new Document(result.getFieldValue(
-                                "titleNoFormatting").getTextValue(), result
-                                .getFieldValue("content").getTextValue(), result
-                                .getFieldValue("url").getTextValue());
-                            response.results.add(document);
-                        }
-
-                    }
-                    final JsonNode cursor = responseData.getFieldValue("cursor")
-                        .getFieldValue("estimatedResultCount");
-                    if (cursor != null)
-                    {
-                        response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY,
-                            Long.parseLong(cursor.getTextValue()));
-                    }
-                    else
-                    {
-                        response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, 0L);
-                    }
-                    response.metadata.put(SearchEngineResponse.COMPRESSION_KEY, status
-                        .get(HttpUtils.STATUS_COMPRESSION_USED));
                 }
-                finally
+                final JsonNode cursor = responseData.getFieldValue("cursor")
+                    .getFieldValue("estimatedResultCount");
+                if (cursor != null)
                 {
-                    CloseableUtils.close(stream);
+                    response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY,
+                        Long.parseLong(cursor.getTextValue()));
                 }
+                else
+                {
+                    response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, 0L);
+                }
+
+                response.metadata.put(SearchEngineResponse.COMPRESSION_KEY, httpResp.compression);
+
                 return response;
             }
         };
@@ -166,12 +165,5 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     protected void afterFetch(SearchEngineResponse response)
     {
         clean(response, keepHighlights, Document.TITLE, Document.SUMMARY);
-    }
-
-    private String buildServiceUrl(int start)
-    {
-        return serviceUrl + "?v=1.0&rsz=large&start=" + start + "&key="
-            + StringUtils.urlEncodeWrapException(apiKey, "UTF-8") + "&q="
-            + StringUtils.urlEncodeWrapException(query, "UTF-8");
     }
 }

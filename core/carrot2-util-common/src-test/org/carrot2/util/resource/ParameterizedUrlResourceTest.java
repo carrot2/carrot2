@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -32,8 +31,8 @@ public class ParameterizedUrlResourceTest
     {
         final String url = "http://test.com/main?query=${query}&results=${results}";
         final Map<String, Object> attributes = Maps.newHashMap();
-        final String processedUrl = ParameterizedUrlResource.substituteAttributes(
-            attributes, url);
+        final String processedUrl = ParameterizedUrlResource.substituteAttributes(url,
+            attributes);
 
         assertEquals(url, processedUrl);
     }
@@ -46,8 +45,8 @@ public class ParameterizedUrlResourceTest
         attributes.put("query", "test");
         attributes.put("results", "");
 
-        final String processedUrl = ParameterizedUrlResource.substituteAttributes(
-            attributes, url);
+        final String processedUrl = ParameterizedUrlResource.substituteAttributes(url,
+            attributes);
         final String expectedProcessedUrl = "http://test.com/main?query=test&results=";
 
         assertEquals(expectedProcessedUrl, processedUrl);

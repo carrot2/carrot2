@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -17,18 +16,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.commons.httpclient.NameValuePair;
 import org.carrot2.util.StringUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Commit;
 
+import com.google.common.collect.Maps;
+
 /**
  * A {@link Resource} implementation that allows URLs to be parameterized. The attribute
- * place holders are of format: <code>${attribute}</code> and will be replaced before the
- * contents is fetched from the URL when the {@link #open(Map)} method is used.
+ * place holders are of format: <code>${attribute}</code> and will be replaced before
+ * the contents is fetched from the URL when the {@link #open(Map)} method is used.
  */
 @Root(name = "parameterized-url-resource")
 public class ParameterizedUrlResource implements Resource
@@ -80,25 +83,39 @@ public class ParameterizedUrlResource implements Resource
     public InputStream open(Map<String, Object> attributes) throws IOException
     {
         String urlString = url.toExternalForm();
-        urlString = substituteAttributes(attributes, urlString);
+        urlString = substituteAttributes(urlString, attributes);
         return new URL(urlString).openStream();
     }
 
     /**
      * Performs attribute substitution.
      */
-    public static String substituteAttributes(Map<String, Object> attributes,
-        String urlString)
+    public static String substituteAttributes(String parameterizedURL,
+        Map<String, Object> attributes)
     {
         for (Map.Entry<String, Object> entry : attributes.entrySet())
         {
             // In theory, we could cache the patterns, but the gains are not worth it
-            Pattern pattern = Pattern.compile(formatAttributePlaceholder(entry.getKey()),
-                Pattern.LITERAL);
-            urlString = pattern.matcher(urlString).replaceAll(
+            final Pattern pattern = Pattern.compile(formatAttributePlaceholder(entry
+                .getKey()), Pattern.LITERAL);
+            parameterizedURL = pattern.matcher(parameterizedURL).replaceAll(
                 StringUtils.urlEncodeWrapException(entry.getValue().toString(), "UTF-8"));
         }
-        return urlString;
+        return parameterizedURL;
+    }
+
+    /**
+     * Performs attribute substitution.
+     */
+    public static String substituteAttributes(String parameterizedURL,
+        NameValuePair... pairs)
+    {
+        final HashMap<String, Object> attributes = Maps.newHashMap();
+        for (NameValuePair nameValue : pairs)
+        {
+            attributes.put(nameValue.getName(), nameValue.getValue());
+        }
+        return substituteAttributes(parameterizedURL, attributes);
     }
 
     /**
