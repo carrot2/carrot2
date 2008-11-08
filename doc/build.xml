@@ -33,9 +33,7 @@
     <xslt in="${doc.build.dir}/docbook/carrot2-manual.xml"
           style="${docbook.xsl.dir}/html-custom/docbook.xsl"
           out="${doc.output.dir}/carrot2-manual.html"
-          classpath="${xalan.home}"
           force="yes">
-
       <xmlcatalog>
         <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
              location="${docbook.dtd.dir}/docbook.dtd" />
@@ -46,9 +44,6 @@
           <include name="*.jar" />
         </fileset>
       </classpath>
-
-      <!-- Enforce xalan in interpreted mode. -->
-      <factory name="org.apache.xalan.processor.TransformerFactoryImpl" />
     </xslt>
 
     <copy todir="${doc.output.dir}">
