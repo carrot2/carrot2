@@ -18,6 +18,7 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.log4j.Logger;
 import org.carrot2.util.StreamUtils;
 
 /**
@@ -99,6 +100,9 @@ public class HttpUtils
                     request.setRequestHeader(header);
             }
 
+            Logger.getLogger(HttpUtils.class).debug("GET: "
+                + request.getURI());
+            
             final int statusCode = client.executeMethod(request);
             response.status = statusCode;
 
