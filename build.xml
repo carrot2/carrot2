@@ -44,6 +44,10 @@
   <property name="clover.jar" location="${clover.home}/lib/clover.jar" />
   <property name="pmd.jar" location="${pmd.home}/lib/" />
 
+  <!-- Extra stuff for building the documentation. -->
+  <property name="xalan.home" location="lib/org.apache.xml" />
+
+	
   <!-- Source files to compile for tests -->
   <path id="src.test.folders">
     <dirset dir="${core.dir}" includes="**/src" />
@@ -719,9 +723,10 @@
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
   
-  <!-- For docs we may specify Xalan's path inside the project, can't we? -->
-  <property name="xalan.home" location="lib/org.apache.xml" />
-  <target name="doc" depends="carrot2.doc.build" description="Builds Carrot2 documentation" />
+  <target name="enable.xincludes" depends="antlib">
+	<setProperty sysproperty="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
+  </target>
+  <target name="doc" depends="enable.xincludes,carrot2.doc.build" description="Builds Carrot2 documentation" />
   
   <!-- 
        Flattened lib directory.
@@ -749,19 +754,27 @@
   <target name="clean.lib">
     <delete dir="${lib.flattened}" failonerror="false" />
   </target>
-	
+
   <!--
-    	Source code management: license headers list and replace.
-    -->
-  <target name="license.tasks">
-  	<property name="verbose" value="false" />
+  		Compile and define custom ANT tasks.
+   -->
+  <target name="antlib">
   	<property name="org.carrot2.antlib" location="lib/org.carrot2.antlib" />
+
 	<ant dir="${org.carrot2.antlib}" antfile="build.xml" target="jar" />
+
 	<taskdef resource="org.carrot2.antlib.xml">
 		<classpath>
 			<pathelement location="${org.carrot2.antlib}/org.carrot2.antlib.jar" />
 		</classpath>
-	</taskdef>
+	</taskdef>  	
+  </target>
+	
+  <!--
+    	Source code management: license headers list and replace.
+    -->
+  <target name="license.tasks" depends="antlib">
+  	<property name="verbose" value="false" />
 
     <fileset dir="." id="licensed.sources">
         <include name="applications/**/*.java" />

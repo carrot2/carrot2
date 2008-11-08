@@ -8,4 +8,7 @@
 
 	<taskdef name="licenseReplace"
 		classname="org.carrot2.antlib.tasks.LicenseReplaceTask" />
+		
+	<taskdef name="setProperty"
+		classname="org.carrot2.antlib.tasks.SetPropertyTask" />
 </antlib>
