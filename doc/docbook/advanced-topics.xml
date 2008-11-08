@@ -100,6 +100,36 @@
   </section>
   
   <section>
+    <title>Working with HTTP proxies</title>
+    
+    <para>
+    If your server (or development machine) connects to HTTP servers via a HTTP
+    proxy, you can configure several (not all) &C2; document source implementations
+    to take this information into account by defining the following global
+    system properties:
+    </para>
+
+    <variablelist>
+        <varlistentry>
+          <term>http.proxyhost</term>
+          <listitem><para>URL of the HTTP proxy (numeric or full address, but
+          without the port number).</para></listitem>
+        </varlistentry>
+    
+        <varlistentry>
+          <term>http.proxyport</term>
+          <listitem><para>Proxy server's port number.</para></listitem>
+        </varlistentry>
+    </variablelist>
+    
+    <note>
+        <para>Password-based authentication is not supported at the moment.
+        You can alter the source code to change this 
+        in the <filename>HttpUtils</filename> class.</para>
+    </note>
+  </section>
+  
+  <section>
     <title>Customizing &C2; applications</title>
     
     <para>
