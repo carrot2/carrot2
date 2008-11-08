@@ -83,7 +83,8 @@
   <patternset id="lib.test">
     <include name="core/**/*.jar" />
     <include name="lib/**/*.jar" />
-    <include name="applications/**/*.jar" />
+    <include name="applications/carrot2-dcs/lib/*.jar" />
+    <include name="applications/carrot2-webapp/lib/*.jar" />
   </patternset>
 
   <!-- Excludes both JAR and LICENSE files -->
@@ -281,6 +282,7 @@
       <batchtest todir="${tests.report.dir}">
         <fileset dir="${build.dir}">
           <include name="**/*Test.class" />
+          <exclude name="**/OpenSearchDocumentSourceByPageIncrementTest.class" unless="icerocket.tests.enabled" />
         </fileset>
       </batchtest>
     </junit>
@@ -723,8 +725,10 @@
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
   
+  <!-- We need the newest Xalan to build the docs -->
+  <property name="xalan.home" location="lib/org.apache.xml" />
   <target name="enable.xincludes" depends="antlib">
-	<setProperty sysproperty="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
+    <setProperty sysproperty="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
   </target>
   <target name="doc" depends="enable.xincludes,carrot2.doc.build" description="Builds Carrot2 documentation" />
   

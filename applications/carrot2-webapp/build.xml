@@ -134,6 +134,7 @@
          In theory we should be able to delete ${cargo.dir} here, but for some
          reason it's still locked at this point.
       -->
+    <delete dir="${cargo.dir}" failonerror="false" />
   </target>
   
   <target name="carrot2.webapp.webtest.prepare">

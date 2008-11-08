@@ -239,7 +239,7 @@
       </xsl:if>
     </document>
   </xsl:template>
-</searchresult>]]></programlisting>      
+</xsl:stylesheet>]]></programlisting>      
       </figure>      
     </section>
     
@@ -409,7 +409,7 @@
           <tip>
             <para>
               For easier experimenting with &JA;, you may want to 
-              <link linkend="section.seting-up-c2-project-in-eclipse">set up a &C2; project in Eclipse</link>.
+              <link linkend="section.seting-up-c2-project-in-eclipse">set up a &C2; project in Eclipse IDE</link>.
             </para> 
           </tip>
         </listitem>
@@ -418,7 +418,7 @@
     </section>
     
     <section xml:id="section.seting-up-c2-project-in-eclipse">
-      <title>Setting up a &C2; project in Eclipse</title>
+      <title>Setting up a &C2; project in Eclipse IDE</title>
       
       <para>
         &JA; examples can be easily set up in Eclipse IDE. The description below assumes

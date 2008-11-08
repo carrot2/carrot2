@@ -554,7 +554,7 @@ public class AttributeBinder
                 catch (final Exception e)
                 {
                     throw new AttributeBindingException(key, "Could not get field value "
-                        + object.getClass().getName() + "#" + field.getName());
+                        + object.getClass().getName() + "#" + field.getName(), e);
                 }
             }
         }

@@ -32,6 +32,10 @@ p {
   margin-bottom: 3mm;
 }
 
+.variablelist dt {
+  font-weight: bold;
+}
+
 #title-logo {
   float: left;
 }
