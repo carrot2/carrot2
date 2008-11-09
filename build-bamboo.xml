@@ -46,6 +46,7 @@
           <fileset dir="${dist.dir}">
             <include name="**/*" />
             <exclude name=".htaccess" />
+            <exclude name="*workbench*" />
           </fileset>
         </delete>
         <copy todir="${dist.dir}" overwrite="true">
