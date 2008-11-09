@@ -17,7 +17,7 @@
 
   <!-- Import local properties and version -->
   <property file="${carrot2.master.basedir}/local.properties" />
-  <property file="${carrot2.master.basedir}/carrot2.version" />
+  <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />

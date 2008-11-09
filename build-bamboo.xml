@@ -31,7 +31,7 @@
         <fail unless="webapps.dir">Define: webapps.dir property.</fail>
         <fail unless="tomcat.init">Define: tomcat.init property.</fail>
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
-        <property file="${carrot2.code.dir}/carrot2.version" />
+        <property file="${carrot2.code.dir}/etc/version/carrot2.version" />
 
         <!-- We're assuming the webapp has already been built -->
         <copy file="${carrot2.code.dir}/tmp/carrot2-webapp-${carrot2.version}.war"
@@ -42,6 +42,9 @@
     <target name="publish.artifacts">
         <fail unless="dist.dir">Define: dist.dir property.</fail>
 
+        <delete includeemptydirs="true" failonerror="false">
+          <fileset dir="${dist.dir}" includes="**/*"/>
+        </delete>
         <copy todir="${dist.dir}" overwrite="true">
           <fileset dir="${carrot2.code.dir}/tmp">
             <!-- Exclude reports, we'll link these directly to the build server -->
