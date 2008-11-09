@@ -15,7 +15,7 @@
 
   <!-- Output directory for the documentation -->
   <property name="doc.build.dir" location="${carrot2.master.basedir}/tmp/manual/build" />
-  <property name="doc.output.dir" location="${carrot2.master.basedir}/tmp/manual/html" />
+  <property name="doc.output.dir" location="${carrot2.master.basedir}/tmp/manual" />
 
   <!-- Manual dist file name base -->
   <property name="doc.dist.base" value="carrot2-manual" />
@@ -32,7 +32,7 @@
     <!-- Build the actual manual -->
     <xslt in="${doc.build.dir}/docbook/carrot2-manual.xml"
           style="${docbook.xsl.dir}/html-custom/docbook.xsl"
-          out="${doc.output.dir}/carrot2-manual.html"
+          out="${doc.output.dir}/index.html"
           force="yes">
       <xmlcatalog>
         <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
