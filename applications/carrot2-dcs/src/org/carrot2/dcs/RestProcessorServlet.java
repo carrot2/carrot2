@@ -78,15 +78,15 @@ public final class RestProcessorServlet extends HttpServlet
         }
 
         // Initialize controller
-        final List<Class<? extends ProcessingComponent>> cachedComponentClasses = Lists
+        final List<Class<? extends IProcessingComponent>> cachedComponentClasses = Lists
             .newArrayListWithExpectedSize(2);
         if (config.cacheDocuments)
         {
-            cachedComponentClasses.add(DocumentSource.class);
+            cachedComponentClasses.add(IDocumentSource.class);
         }
         if (config.cacheClusters)
         {
-            cachedComponentClasses.add(ClusteringAlgorithm.class);
+            cachedComponentClasses.add(IClusteringAlgorithm.class);
         }
 
         controller = new CachingController(cachedComponentClasses.toArray(new Class [2]));
@@ -291,7 +291,7 @@ public final class RestProcessorServlet extends HttpServlet
         try
         {
             AttributeBinder.bind(requestModel,
-                new AttributeBinder.AttributeBinderAction []
+                new AttributeBinder.IAttributeBinderAction []
                 {
                     attributeBinderActionBind
                 }, Input.class);

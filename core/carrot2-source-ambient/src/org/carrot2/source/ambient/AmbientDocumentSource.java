@@ -24,7 +24,7 @@ import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.ClassResource;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 
 import com.google.common.collect.*;
 
@@ -36,7 +36,7 @@ import com.google.common.collect.*;
  */
 @Bindable
 public class AmbientDocumentSource extends ProcessingComponentBase implements
-    DocumentSource
+    IDocumentSource
 {
     /**
      * The number of results per one Ambient topic.
@@ -51,13 +51,13 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
     /**
      * Resource with Ambient's subtopic to result mapping.
      */
-    private final static Resource RESULTS_MAPPING_RESOURCE = new ClassResource(
+    private final static IResource RESULTS_MAPPING_RESOURCE = new ClassResource(
         AmbientDocumentSource.class, "/ambient/STRel.txt");
 
     /**
      * Resource with Ambient's results texts.
      */
-    private final static Resource RESULTS_RESOURCE = new ClassResource(
+    private final static IResource RESULTS_RESOURCE = new ClassResource(
         AmbientDocumentSource.class, "/ambient/results.txt");
 
     /**

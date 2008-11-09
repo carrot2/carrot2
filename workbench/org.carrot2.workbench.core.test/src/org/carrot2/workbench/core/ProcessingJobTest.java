@@ -24,7 +24,7 @@ import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.source.xml.XmlDocumentSource;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.attribute.AttributeValueSet;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.URLResource;
 import org.carrot2.workbench.core.ui.*;
 import org.eclipse.core.runtime.*;
@@ -58,7 +58,7 @@ public class ProcessingJobTest extends TestCase
         attributes = new AttributeValueSet("request");
         attributes.setAttributeValue("query", "data mining");
 
-        Resource xmlInput = new URLResource(FileLocator.toFileURL(FileLocator.find(
+        IResource xmlInput = new URLResource(FileLocator.toFileURL(FileLocator.find(
             Platform.getBundle("org.carrot2.workbench.core.test"), new Path(
                 "input/data_mining.xml"), null)));
 

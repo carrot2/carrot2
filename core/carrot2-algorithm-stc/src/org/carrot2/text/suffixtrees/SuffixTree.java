@@ -21,7 +21,7 @@ package org.carrot2.text.suffixtrees;
  * August 1996 http://softlab.od.ua/algo/data/suftrees/suffixt.htm (2000)
  * <p>
  * This class can build suffix trees from any sequences of {@link Comparable} objects. The
- * sequence should implement {@link SuffixableElement} interface.
+ * sequence should implement {@link ISuffixableElement} interface.
  * <p>
  * It is obvious that the performance of this class will <b>highly</b> depend on the type
  * of sequence collection.
@@ -43,23 +43,23 @@ public class SuffixTree
     }
 
     /**
-     * Currently processed {@link SuffixableElement} object.
+     * Currently processed {@link ISuffixableElement} object.
      */
-    private SuffixableElement currentSuffixableElement = null;
+    private ISuffixableElement currentSuffixableElement = null;
 
     /**
      * Returns currently active SuffixableElement. In case of single-collection suffix
      * trees, the element will always be the same.
      */
-    protected SuffixableElement getCurrentElement()
+    protected ISuffixableElement getCurrentElement()
     {
         return this.currentSuffixableElement;
     }
 
     /**
-     * Adds a single {@link SuffixableElement} to the tree.
+     * Adds a single {@link ISuffixableElement} to the tree.
      */
-    public Node add(SuffixableElement element)
+    public Node add(ISuffixableElement element)
     {
         if (this.currentSuffixableElement != null) throw new RuntimeException(
             "This class doesn't implement generalized SuffixTrees.");

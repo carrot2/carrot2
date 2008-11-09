@@ -50,7 +50,7 @@ public class TermDocumentMatrixReducer
         LocalNonnegativeMatrixFactorizationFactory.class,
         KMeansMatrixFactorizationFactory.class
     }, strict = false)
-    public MatrixFactorizationFactory factorizationFactory = new NonnegativeMatrixFactorizationEDFactory();
+    public IMatrixFactorizationFactory factorizationFactory = new NonnegativeMatrixFactorizationEDFactory();
 
     /**
      * Factorization quality. The number of iterations of matrix factorization to perform.

@@ -167,7 +167,7 @@ public class AttributeBinderTest
         {
             CoercedInterfaceImpl.class
         })
-        private CoercedInterface coerced = null;
+        private ICoercedInterface coerced = null;
     }
 
     @Bindable
@@ -184,12 +184,12 @@ public class AttributeBinderTest
         private CircularReferenceContainer circular;
     }
 
-    public static interface CoercedInterface
+    public static interface ICoercedInterface
     {
     }
 
     @Bindable
-    public static class CoercedInterfaceImpl implements CoercedInterface
+    public static class CoercedInterfaceImpl implements ICoercedInterface
     {
         @TestInit
         @Input
@@ -773,7 +773,7 @@ public class AttributeBinderTest
         addAttribute(RequiredInitProcessingAttributes.class, "initProcessingInputString",
             null);
 
-        AttributeBinder.bind(instance, new AttributeBinder.AttributeBinderAction []
+        AttributeBinder.bind(instance, new AttributeBinder.IAttributeBinderAction []
         {
             new AttributeBinder.AttributeBinderActionBind(Input.class, attributes, false)
         }, Input.class, TestProcessing.class);

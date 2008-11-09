@@ -30,7 +30,7 @@ import org.simpleframework.xml.load.Commit;
  * @see <a href="http://issues.carrot2.org/browse/CARROT-143">Issue CARROT-143< /a>
  */
 @Root(name = "url-resource")
-public class URLResource implements Resource
+public class URLResource implements IResource
 {
     /**
      * URL for the resource.

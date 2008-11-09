@@ -22,14 +22,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * {@link ControllerContext} implementation for tests only.
+ * {@link IControllerContext} implementation for tests only.
  */
-public final class DummyControllerContext implements ControllerContext
+public final class DummyControllerContext implements IControllerContext
 {
     /**
      * Listeners on this context.
      */
-    private final ArrayList<ControllerContextListener> listeners = Lists.newArrayList();
+    private final ArrayList<IControllerContextListener> listeners = Lists.newArrayList();
 
     /**
      * Attributes of this context.
@@ -55,7 +55,7 @@ public final class DummyControllerContext implements ControllerContext
     /**
      * {@inheritDoc}
      */
-    public synchronized void removeListener(ControllerContextListener listener)
+    public synchronized void removeListener(IControllerContextListener listener)
     {
         listeners.remove(listener);
     }
@@ -63,7 +63,7 @@ public final class DummyControllerContext implements ControllerContext
     /**
      * {@inheritDoc}
      */
-    public synchronized void addListener(ControllerContextListener listener)
+    public synchronized void addListener(IControllerContextListener listener)
     {
         listeners.add(listener);
     }
@@ -73,7 +73,7 @@ public final class DummyControllerContext implements ControllerContext
      */
     public synchronized void dispose()
     {
-        for (ControllerContextListener listener : listeners)
+        for (IControllerContextListener listener : listeners)
         {
             try
             {

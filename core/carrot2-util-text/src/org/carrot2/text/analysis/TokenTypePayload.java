@@ -18,7 +18,7 @@ import org.apache.lucene.index.Payload;
 /**
  * Lucene's {@link Payload} implementing {@link TokenInfo}. 
  */
-final class TokenTypePayload extends Payload implements TokenType
+final class TokenTypePayload extends Payload implements ITokenType
 {
     private static final long serialVersionUID = 0x200804101135L;
 
@@ -28,7 +28,7 @@ final class TokenTypePayload extends Payload implements TokenType
     private int flags;
 
     /**
-     * @see TokenType#getRawFlags()
+     * @see ITokenType#getRawFlags()
      */
     public int getRawFlags()
     {

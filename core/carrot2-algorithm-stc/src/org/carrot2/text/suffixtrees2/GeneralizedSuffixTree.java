@@ -30,7 +30,7 @@ public final class GeneralizedSuffixTree<T extends BitSetNode> extends SuffixTre
     /*
      * 
      */
-    public GeneralizedSuffixTree(NodeFactory<? extends T> nodeFactory)
+    public GeneralizedSuffixTree(INodeFactory<? extends T> nodeFactory)
     {
         super(nodeFactory);
     }
@@ -40,13 +40,13 @@ public final class GeneralizedSuffixTree<T extends BitSetNode> extends SuffixTre
      * <b>Sequences must return non-negative object codes</b> because artificial sequence
      * separators are negative and start from <code>-1</code>.
      */
-    public void build(Sequence... sequences)
+    public void build(ISequence... sequences)
     {
         /*
          * Calculate total size of the concatenated sequence.
          */
         int totalSize = sequences.length;
-        for (final Sequence s : sequences)
+        for (final ISequence s : sequences)
         {
             totalSize += s.size();
         }
@@ -58,7 +58,7 @@ public final class GeneralizedSuffixTree<T extends BitSetNode> extends SuffixTre
         this.concatenated = new int [totalSize];
         int sequenceNumber = 0;
         int j = 0;
-        for (final Sequence s : sequences)
+        for (final ISequence s : sequences)
         {
             final int max = s.size();
             for (int i = 0; i < max; i++)

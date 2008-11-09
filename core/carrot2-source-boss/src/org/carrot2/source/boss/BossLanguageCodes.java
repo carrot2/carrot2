@@ -13,14 +13,14 @@
 
 package org.carrot2.source.boss;
 
-import org.carrot2.util.attribute.constraint.ValueHintMapping;
+import org.carrot2.util.attribute.constraint.IValueHintMapping;
 
 /**
  * Yahoo Boss region and language codes.
  * 
  * @see http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html
  */
-public enum BossLanguageCodes implements ValueHintMapping
+public enum BossLanguageCodes implements IValueHintMapping
 {
     ARGENTINA("Argentina", "ar", "es"),
     AUSTRIA("Austria", "at", "de"),

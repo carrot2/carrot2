@@ -22,7 +22,7 @@ import java.util.*;
 import org.apache.commons.lang.ClassUtils;
 import org.carrot2.util.Pair;
 import org.carrot2.util.attribute.constraint.*;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 
 import com.google.common.collect.*;
 
@@ -70,7 +70,7 @@ public class AttributeBinder
      * is not {@link String}, the {@link AttributeTransformerFromString} will be applied
      * to the value prior to transferring it to the attribute field. If you want to bypass
      * this conversion, use
-     * {@link #bind(Object, AttributeBinderAction[], Class, Class...)}.</li>
+     * {@link #bind(Object, IAttributeBinderAction[], Class, Class...)}.</li>
      * <li>If the type of the attribute field is not {@link Class} and the corresponding
      * value in the <code>values</code> map is of type {@link Class}, an attempt will be
      * made to coerce the class to a corresponding instance by calling its parameterless
@@ -136,7 +136,7 @@ public class AttributeBinder
     {
         final AttributeBinderActionBind attributeBinderActionBind = new AttributeBinderActionBind(
             Input.class, values, checkRequired, AttributeTransformerFromString.INSTANCE);
-        final AttributeBinderAction [] actions = new AttributeBinderAction []
+        final IAttributeBinderAction [] actions = new IAttributeBinderAction []
         {
             attributeBinderActionBind,
             new AttributeBinderActionCollect(Output.class, values),
@@ -162,7 +162,7 @@ public class AttributeBinder
     {
         final AttributeBinderActionBind attributeBinderActionBind = new AttributeBinderActionBind(
             Output.class, values, true, AttributeTransformerFromString.INSTANCE);
-        final AttributeBinderAction [] actions = new AttributeBinderAction []
+        final IAttributeBinderAction [] actions = new IAttributeBinderAction []
         {
             new AttributeBinderActionCollect(Input.class, values),
             attributeBinderActionBind,
@@ -175,10 +175,10 @@ public class AttributeBinder
 
     /**
      * A more flexible version of {@link #bind(Object, Map, Class, Class...)} that accepts
-     * custom {@link AttributeBinderAction}s. For experts only.
+     * custom {@link IAttributeBinderAction}s. For experts only.
      */
     public static <T> void bind(T object,
-        AttributeBinderAction [] attributeBinderActions,
+        IAttributeBinderAction [] attributeBinderActions,
         Class<? extends Annotation> bindingDirectionAnnotation,
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
@@ -191,7 +191,7 @@ public class AttributeBinder
      * Internal implementation that tracks object that have already been bound.
      */
     static <T> void bind(Set<Object> boundObjects, BindingTracker bindingTracker,
-        int level, T object, AttributeBinderAction [] attributeBinderActions,
+        int level, T object, IAttributeBinderAction [] attributeBinderActions,
         Class<? extends Annotation> bindingDirectionAnnotation,
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
@@ -277,7 +277,7 @@ public class AttributeBinder
     /**
      * An action to be applied during attribute binding.
      */
-    public static interface AttributeBinderAction
+    public static interface IAttributeBinderAction
     {
         public <T> void performAction(BindingTracker bindingTracker, int level, T object,
             String key, Field field, Object value,
@@ -289,7 +289,7 @@ public class AttributeBinder
     /**
      * Transforms attribute values.
      */
-    public static interface AttributeTransformer
+    public static interface IAttributeTransformer
     {
         public Object transform(Object value, String key, Field field,
             Class<? extends Annotation> bindingDirectionAnnotation,
@@ -307,7 +307,7 @@ public class AttributeBinder
      * </li> <li>If the class cannot be loaded, leaving the the value unchanged.</li>
      * </ol>
      */
-    public static class AttributeTransformerFromString implements AttributeTransformer
+    public static class AttributeTransformerFromString implements IAttributeTransformer
     {
         /** Shared instance of the transformer. */
         public static final AttributeTransformerFromString INSTANCE = new AttributeTransformerFromString();
@@ -384,17 +384,17 @@ public class AttributeBinder
     /**
      * An action that binds all {@link Input} attributes.
      */
-    public static class AttributeBinderActionBind implements AttributeBinderAction
+    public static class AttributeBinderActionBind implements IAttributeBinderAction
     {
         private final Map<String, Object> values;
         public final Map<String, Object> remainingValues;
         private final Class<?> bindingDirectionAnnotation;
         private final boolean checkRequired;
-        private final AttributeTransformer [] transformers;
+        private final IAttributeTransformer [] transformers;
 
         public AttributeBinderActionBind(Class<?> bindingDirectionAnnotation,
             Map<String, Object> values, boolean checkRequired,
-            AttributeTransformer... transformers)
+            IAttributeTransformer... transformers)
         {
             this.values = values;
             this.bindingDirectionAnnotation = bindingDirectionAnnotation;
@@ -444,7 +444,7 @@ public class AttributeBinder
 
                 // Apply value transformers before any other checks, conversions
                 // to allow type-changing transformations as well.
-                for (AttributeTransformer transformer : transformers)
+                for (IAttributeTransformer transformer : transformers)
                 {
                     value = transformer.transform(value, key, field,
                         bindingDirectionAnnotation, filteringAnnotations);
@@ -512,14 +512,14 @@ public class AttributeBinder
     /**
      * An action that binds all {@link Output} attributes.
      */
-    public static class AttributeBinderActionCollect implements AttributeBinderAction
+    public static class AttributeBinderActionCollect implements IAttributeBinderAction
     {
         final private Map<String, Object> values;
         final private Class<?> bindingDirectionAnnotation;
-        final AttributeTransformer [] transformers;
+        final IAttributeTransformer [] transformers;
 
         public AttributeBinderActionCollect(Class<?> bindingDirectionAnnotation,
-            Map<String, Object> values, AttributeTransformer... transformers)
+            Map<String, Object> values, IAttributeTransformer... transformers)
         {
             this.values = values;
             this.bindingDirectionAnnotation = bindingDirectionAnnotation;
@@ -540,7 +540,7 @@ public class AttributeBinder
                     field.setAccessible(true);
 
                     // Apply transforms
-                    for (AttributeTransformer transformer : transformers)
+                    for (IAttributeTransformer transformer : transformers)
                     {
                         value = transformer.transform(value, key, field,
                             bindingDirectionAnnotation, filteringAnnotations);
@@ -634,11 +634,11 @@ public class AttributeBinder
     {
         static Set<Class<?>> ALLOWED_PLAIN_TYPES = ImmutableSet.<Class<?>> of(Byte.class,
             Short.class, Integer.class, Long.class, Float.class, Double.class,
-            Boolean.class, String.class, Character.class, Class.class, Resource.class,
+            Boolean.class, String.class, Character.class, Class.class, IResource.class,
             Collection.class, Map.class, File.class);
 
         static Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = ImmutableSet.<Class<?>> of(
-            Enum.class, Resource.class, Collection.class, Map.class);
+            Enum.class, IResource.class, Collection.class, Map.class);
 
         @Override
         boolean check(Field field, Class<? extends Annotation> bindingDirection,

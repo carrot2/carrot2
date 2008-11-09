@@ -13,7 +13,7 @@
 
 package org.carrot2.clustering.lingo;
 
-import org.carrot2.text.linguistic.LanguageModelFactory;
+import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.junit.Before;
 
@@ -60,7 +60,7 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     }
 
     @Override
-    protected LanguageModelFactory createLanguageModelFactory()
+    protected ILanguageModelFactory createLanguageModelFactory()
     {
         return new TestLanguageModelFactory();
     }

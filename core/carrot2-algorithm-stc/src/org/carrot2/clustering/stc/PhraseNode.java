@@ -16,7 +16,7 @@ package org.carrot2.clustering.stc;
 import org.carrot2.text.suffixtrees.Edge;
 import org.carrot2.text.suffixtrees.ExtendedBitSet;
 import org.carrot2.text.suffixtrees.GSTNode;
-import org.carrot2.text.suffixtrees.SuffixableElement;
+import org.carrot2.text.suffixtrees.ISuffixableElement;
 
 /**
  * Extends Generalized Suffix Tree in order to provide count of suffixed documents in each
@@ -102,6 +102,6 @@ public class PhraseNode extends GSTNode
      */
     public boolean isEOSOnly()
     {
-        return getSuffixableElement().get(getEdgeToParent().getStartIndex()) == SuffixableElement.END_OF_SUFFIX;
+        return getSuffixableElement().get(getEdgeToParent().getStartIndex()) == ISuffixableElement.END_OF_SUFFIX;
     }
 }

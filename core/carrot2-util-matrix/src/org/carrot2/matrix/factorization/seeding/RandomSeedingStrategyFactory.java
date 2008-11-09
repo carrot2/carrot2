@@ -16,7 +16,7 @@ package org.carrot2.matrix.factorization.seeding;
 /**
  * Creates random seeding strategies.
  */
-public class RandomSeedingStrategyFactory implements SeedingStrategyFactory
+public class RandomSeedingStrategyFactory implements ISeedingStrategyFactory
 {
     /** The random seed to be used */
     private int seed;
@@ -41,7 +41,7 @@ public class RandomSeedingStrategyFactory implements SeedingStrategyFactory
         this.dateSeed = false;
     }
 
-    public SeedingStrategy createSeedingStrategy()
+    public ISeedingStrategy createSeedingStrategy()
     {
         RandomSeedingStrategy seeding;
 

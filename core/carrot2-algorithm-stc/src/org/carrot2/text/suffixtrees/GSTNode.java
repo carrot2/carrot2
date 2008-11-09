@@ -100,9 +100,9 @@ public class GSTNode extends Node
     }
 
     /**
-     * Returns the {@link SuffixableElement} which is indexed by outgoing edges.
+     * Returns the {@link ISuffixableElement} which is indexed by outgoing edges.
      */
-    public SuffixableElement getSuffixableElement()
+    public ISuffixableElement getSuffixableElement()
     {
         return getContainer().getElementByIndex(suffixableElementIndex);
     }

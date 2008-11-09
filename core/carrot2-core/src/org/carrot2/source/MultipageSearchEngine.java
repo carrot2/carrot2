@@ -24,7 +24,7 @@ import org.carrot2.util.attribute.*;
 import com.google.common.base.Predicate;
 
 /**
- * A base class facilitating implementation of {@link DocumentSource}s wrapping external
+ * A base class facilitating implementation of {@link IDocumentSource}s wrapping external
  * search engines with remote/ network-based interfaces. This class implements helper
  * methods for concurrent querying of search services that limit the number of search
  * results returned in one request.

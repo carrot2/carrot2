@@ -16,7 +16,7 @@ package org.carrot2.core;
 /**
  * Exception thrown if component initialization was unsuccessful.
  *
- * @see ProcessingComponent#init(ControllerContext)
+ * @see IProcessingComponent#init(ControllerContext)
  */
 @SuppressWarnings("serial")
 public class ComponentInitializationException extends ProcessingException

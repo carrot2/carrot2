@@ -86,7 +86,7 @@ public class QueryProcessorServlet extends HttpServlet
         loggerAppendersInitialized = (Boolean) servletContext
             .getAttribute(FileAppenderInitializationContextListener.LOGGER_APPENDERS_INITIALIZED);
 
-        controller = new CachingController(DocumentSource.class);
+        controller = new CachingController(IDocumentSource.class);
         controller.init(new HashMap<String, Object>(), WebappConfig.INSTANCE.components);
 
         jawrUrlGenerator = new JawrUrlGenerator(servletContext);
@@ -138,7 +138,7 @@ public class QueryProcessorServlet extends HttpServlet
                 Input.class, requestParameters, true,
                 AttributeBinder.AttributeTransformerFromString.INSTANCE);
             AttributeBinder.bind(requestModel,
-                new AttributeBinder.AttributeBinderAction []
+                new AttributeBinder.IAttributeBinderAction []
                 {
                     attributeBinderActionBind
                 }, Input.class);

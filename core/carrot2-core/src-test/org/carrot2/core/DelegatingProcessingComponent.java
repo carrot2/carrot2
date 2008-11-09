@@ -18,7 +18,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
 @Bindable
-public abstract class DelegatingProcessingComponent implements ProcessingComponent
+public abstract class DelegatingProcessingComponent implements IProcessingComponent
 {
     @Init
     @Input
@@ -37,7 +37,7 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
     @Attribute(key = "data")
     private String data = null;
 
-    public void init(ControllerContext context)
+    public void init(IControllerContext context)
     {
         /*
          * We perform synchronization here because the mock object passed as the delegate
@@ -101,5 +101,5 @@ public abstract class DelegatingProcessingComponent implements ProcessingCompone
         }
     }
 
-    abstract ProcessingComponent getDelegate();
+    abstract IProcessingComponent getDelegate();
 }

@@ -22,7 +22,7 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.ExternalApiTestBase;
 import org.carrot2.util.StreamUtils;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -239,7 +239,7 @@ public class DcsAppTest extends ExternalApiTestBase
      */
     private String getXmlData()
     {
-        final Resource xml = getXmlDataResource();
+        final IResource xml = getXmlDataResource();
         try
         {
             return new String(StreamUtils.readFullyAndClose(new InputStreamReader(xml
@@ -263,7 +263,7 @@ public class DcsAppTest extends ExternalApiTestBase
         return tmp;
     }
 
-    private Resource getXmlDataResource()
+    private IResource getXmlDataResource()
     {
         return ResourceUtilsFactory.getDefaultResourceUtils().getFirst(
             "/xml/carrot2-kaczynski.xml", DcsAppTest.class);

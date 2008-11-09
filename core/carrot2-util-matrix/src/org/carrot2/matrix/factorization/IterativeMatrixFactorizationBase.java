@@ -15,7 +15,7 @@ package org.carrot2.matrix.factorization;
 
 import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategy;
-import org.carrot2.matrix.factorization.seeding.SeedingStrategy;
+import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.doublealgo.Sorting;
@@ -23,10 +23,10 @@ import cern.colt.matrix.linalg.Algebra;
 import cern.jet.math.Functions;
 
 /**
- * Base functionality for {@link IterativeMatrixFactorization}s.
+ * Base functionality for {@link IIterativeMatrixFactorization}s.
  */
 abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase implements
-    IterativeMatrixFactorization
+    IIterativeMatrixFactorization
 {
     /** The desired number of base vectors */
     protected int k;
@@ -47,8 +47,8 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
     protected static double DEFAULT_STOP_THRESHOLD = -1.0;
 
     /** Seeding strategy */
-    protected SeedingStrategy seedingStrategy;
-    protected static final SeedingStrategy DEFAULT_SEEDING_STRATEGY = new RandomSeedingStrategy(
+    protected ISeedingStrategy seedingStrategy;
+    protected static final ISeedingStrategy DEFAULT_SEEDING_STRATEGY = new RandomSeedingStrategy(
         0);
 
     /** Order base vectors according to their 'activity'? */
@@ -160,17 +160,17 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
     }
 
     /**
-     * Returns current {@link SeedingStrategy}.
+     * Returns current {@link ISeedingStrategy}.
      */
-    public SeedingStrategy getSeedingStrategy()
+    public ISeedingStrategy getSeedingStrategy()
     {
         return seedingStrategy;
     }
 
     /**
-     * Sets new {@link SeedingStrategy}.
+     * Sets new {@link ISeedingStrategy}.
      */
-    public void setSeedingStrategy(SeedingStrategy seedingStrategy)
+    public void setSeedingStrategy(ISeedingStrategy seedingStrategy)
     {
         this.seedingStrategy = seedingStrategy;
     }

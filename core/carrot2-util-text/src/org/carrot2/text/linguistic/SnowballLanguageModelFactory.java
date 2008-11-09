@@ -25,10 +25,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
- * Accessor to all {@link LanguageModel} objects.
+ * Accessor to all {@link ILanguageModel} objects.
  */
 @Bindable(prefix = "SnowballLanguageModelFactory")
-public final class SnowballLanguageModelFactory implements LanguageModelFactory
+public final class SnowballLanguageModelFactory implements ILanguageModelFactory
 {
     /**
      * The default language. This language is returned from {@link #getCurrentLanguage()}.
@@ -83,7 +83,7 @@ public final class SnowballLanguageModelFactory implements LanguageModelFactory
     /**
      * @see #current
      */
-    public LanguageModel getCurrentLanguage()
+    public ILanguageModel getCurrentLanguage()
     {
         return getLanguage(current);
     }
@@ -91,7 +91,7 @@ public final class SnowballLanguageModelFactory implements LanguageModelFactory
     /**
      * @return Return a language model for one of the languages in {@link LanguageCode}.
      */
-    public LanguageModel getLanguage(LanguageCode language)
+    public ILanguageModel getLanguage(LanguageCode language)
     {
         synchronized (SnowballLanguageModelFactory.class)
         {
@@ -154,7 +154,7 @@ public final class SnowballLanguageModelFactory implements LanguageModelFactory
             final Set<MutableCharArray> result = Sets.newHashSet();
 
             final String resourceName = "stopwords." + lang.getIsoCode();
-            final Resource resource = resourceLoaders.getFirst(resourceName,
+            final IResource resource = resourceLoaders.getFirst(resourceName,
                 SnowballLanguageModelFactory.class);
 
             if (resource == null)

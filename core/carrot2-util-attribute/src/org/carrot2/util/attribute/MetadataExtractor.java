@@ -132,9 +132,9 @@ abstract class MetadataExtractor
     private static class SimpleTagExtractor extends MetadataExtractor
     {
         private String tagName;
-        private MetadataValueSetter valueSetter;
+        private IMetadataValueSetter valueSetter;
 
-        public SimpleTagExtractor(String tagName, MetadataValueSetter valueSetter)
+        public SimpleTagExtractor(String tagName, IMetadataValueSetter valueSetter)
         {
             this.tagName = tagName;
             this.valueSetter = valueSetter;
@@ -155,13 +155,13 @@ abstract class MetadataExtractor
             }
         }
 
-        static interface MetadataValueSetter
+        static interface IMetadataValueSetter
         {
             void setMetadataValue(CommonMetadata metadata, String value);
         }
     }
 
-    private static class LabelSetter implements SimpleTagExtractor.MetadataValueSetter
+    private static class LabelSetter implements SimpleTagExtractor.IMetadataValueSetter
     {
         public void setMetadataValue(CommonMetadata metadata, String value)
         {
@@ -169,7 +169,7 @@ abstract class MetadataExtractor
         }
     }
 
-    private static class GroupSetter implements SimpleTagExtractor.MetadataValueSetter
+    private static class GroupSetter implements SimpleTagExtractor.IMetadataValueSetter
     {
         public void setMetadataValue(CommonMetadata metadata, String value)
         {
@@ -180,7 +180,7 @@ abstract class MetadataExtractor
         }
     }
 
-    private static class LevelSetter implements SimpleTagExtractor.MetadataValueSetter
+    private static class LevelSetter implements SimpleTagExtractor.IMetadataValueSetter
     {
         public void setMetadataValue(CommonMetadata metadata, String value)
         {

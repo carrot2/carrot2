@@ -23,9 +23,9 @@ import org.carrot2.util.attribute.Required;
  * an enum type).
  * <p>
  * By default the constraint accepts values returned from {@link Enum#name()}. If the
- * enum type returned from {@link #values()} implements {@link ValueHintMapping}
+ * enum type returned from {@link #values()} implements {@link IValueHintMapping}
  * interface, values checked are retrieved from the
- * {@link ValueHintMapping#getAttributeValue()} method of each individual constant.
+ * {@link IValueHintMapping#getAttributeValue()} method of each individual constant.
  * 
  * @see Required
  */

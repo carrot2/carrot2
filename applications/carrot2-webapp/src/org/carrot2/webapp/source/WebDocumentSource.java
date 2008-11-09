@@ -28,7 +28,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * A {@link DocumentSource} that folds in a few initial hits from Google API into the
+ * A {@link IDocumentSource} that folds in a few initial hits from Google API into the
  * eTools results. Ultimately, this type of processing should be done on the eTools side.
  */
 @Bindable
@@ -50,7 +50,7 @@ public class WebDocumentSource extends SimpleSearchEngine
     private static final int MAX_CONCURRENT_THREADS = 10;
 
     @Override
-    public void init(ControllerContext context)
+    public void init(IControllerContext context)
     {
         super.init(context);
         

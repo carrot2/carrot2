@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -25,31 +24,33 @@ import com.google.common.collect.Maps;
  * An extremely simple, unbounded object pool. The pool can provide objects of may types,
  * objects get created using parameterless constructors. The pool holds objects using
  * {@link SoftReference}s, so they can be garbage collected when memory is needed.
- * <p>
- * TODO: [dw] Performance impact of storing soft references may not be worth it. If you
- * need a pool, you tune it to your memory capacity. A pre-warmed pool with a fixed-size
- * would be more practical to my intuition. [so] True -- there is an issue for it:
- * CARROT-192
  */
 public final class SoftUnboundedPool<T, P>
 {
+    /*
+     * TODO: [dw] Performance impact of storing soft references may not be worth it. If
+     * you need a pool, you tune it to your memory capacity. A pre-warmed pool with a
+     * fixed-size would be more practical to my intuition. [so] True -- there is an issue
+     * for it: CARROT-192
+     */
+
     private Map<Pair<Class<? extends T>, P>, List<SoftReference<? extends T>>> instances = Maps
         .newHashMap();
 
-    private final InstantiationListener<T, P> instantiationListener;
-    private final ActivationListener<T, P> activationListener;
-    private final PassivationListener<T, P> passivationListener;
-    private final DisposalListener<T, P> disposalListener;
+    private final IInstantiationListener<T, P> instantiationListener;
+    private final IActivationListener<T, P> activationListener;
+    private final IPassivationListener<T, P> passivationListener;
+    private final IDisposalListener<T, P> disposalListener;
 
     public SoftUnboundedPool()
     {
         this(null, null, null, null);
     }
 
-    public SoftUnboundedPool(InstantiationListener<T, P> objectInstantiationListener,
-        ActivationListener<T, P> objectActivationListener,
-        PassivationListener<T, P> objectPassivationListener,
-        DisposalListener<T, P> objectDisposalListener)
+    public SoftUnboundedPool(IInstantiationListener<T, P> objectInstantiationListener,
+        IActivationListener<T, P> objectActivationListener,
+        IPassivationListener<T, P> objectPassivationListener,
+        IDisposalListener<T, P> objectDisposalListener)
     {
         this.instantiationListener = objectInstantiationListener;
         this.activationListener = objectActivationListener;

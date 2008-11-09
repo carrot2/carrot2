@@ -46,19 +46,19 @@ public class ResourceUtilsFactoryTest
 
         final AtomicInteger wasUsed = new AtomicInteger();
 
-        ResourceUtilsFactory.addLast(new ResourceLocator() {
-            public Resource [] getAll(String resource, Class<?> clazz)
+        ResourceUtilsFactory.addLast(new IResourceLocator() {
+            public IResource [] getAll(String resource, Class<?> clazz)
             {
                 wasUsed.addAndGet(1);
-                return new Resource[0];
+                return new IResource[0];
             }
         });
 
-        ResourceUtilsFactory.addFirst(new ResourceLocator() {
-            public Resource [] getAll(String resource, Class<?> clazz)
+        ResourceUtilsFactory.addFirst(new IResourceLocator() {
+            public IResource [] getAll(String resource, Class<?> clazz)
             {
                 wasUsed.addAndGet(1);
-                return new Resource[0];
+                return new IResource[0];
             }
         });
 

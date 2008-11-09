@@ -13,7 +13,7 @@
 
 package org.carrot2.clustering.stc;
 
-import org.carrot2.text.suffixtrees.SuffixableElement;
+import org.carrot2.text.suffixtrees.ISuffixableElement;
 
 /**
  * An array representation of stemmed snippet's terms.
@@ -29,7 +29,7 @@ final class ArrayStemmedSnippet
     /**
      * Nested class representing a sentence in this snippet.
      */
-    public class StemmedSentence implements SuffixableElement
+    public class StemmedSentence implements ISuffixableElement
     {
         /** The index of the first word of a sentence */
         int start;
@@ -53,7 +53,7 @@ final class ArrayStemmedSnippet
         {
             if (index == (size() - 1))
             {
-                return SuffixableElement.END_OF_SUFFIX;
+                return ISuffixableElement.END_OF_SUFFIX;
             }
 
             return snippet[start + index];
@@ -164,7 +164,7 @@ final class ArrayStemmedSnippet
     /**
      * Returns n-th sentence of this snippet
      */
-    public SuffixableElement getSentence(int n)
+    public ISuffixableElement getSentence(int n)
     {
         return sentences[n];
     }

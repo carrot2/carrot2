@@ -13,14 +13,14 @@
 
 package org.carrot2.source.boss;
 
-import org.carrot2.core.DocumentSource;
+import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.junit.runner.RunWith;
 import org.junitext.runners.AnnotationRunner;
 
 /**
- * Tests Yahoo Boss {@link DocumentSource}.
+ * Tests Yahoo Boss {@link IDocumentSource}.
  */
 @RunWith(AnnotationRunner.class)
 public class BossDocumentSourceTest extends

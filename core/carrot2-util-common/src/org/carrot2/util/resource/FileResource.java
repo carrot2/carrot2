@@ -23,7 +23,7 @@ import org.simpleframework.xml.load.Commit;
  * A local filesystem resource.
  */
 @Root(name = "file-resource")
-public final class FileResource implements Resource
+public final class FileResource implements IResource
 {
     /**
      * File pointed to by this resource.

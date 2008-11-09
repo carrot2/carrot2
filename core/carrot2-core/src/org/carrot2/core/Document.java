@@ -77,7 +77,7 @@ public final class Document
 
     /**
      * Internal identifier of the document. This identifier is assigned dynamically after
-     * documents are returned from {@link DocumentSource}.
+     * documents are returned from {@link IDocumentSource}.
      * 
      * @see ProcessingResult
      */

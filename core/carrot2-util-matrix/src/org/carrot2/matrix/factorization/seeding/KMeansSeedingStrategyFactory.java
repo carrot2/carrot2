@@ -16,7 +16,7 @@ package org.carrot2.matrix.factorization.seeding;
 /**
  * Seeding based on a k-means clustering algorithm.
  */
-public class KMeansSeedingStrategyFactory implements SeedingStrategyFactory
+public class KMeansSeedingStrategyFactory implements ISeedingStrategyFactory
 {
     /** The default maximum number of iterations */
     private static int DEFAULT_MAX_ITERATIONS = 5;
@@ -27,7 +27,7 @@ public class KMeansSeedingStrategyFactory implements SeedingStrategyFactory
      */
     private int maxIterations = DEFAULT_MAX_ITERATIONS;
 
-    public SeedingStrategy createSeedingStrategy()
+    public ISeedingStrategy createSeedingStrategy()
     {
         KMeansSeedingStrategy seeding = new KMeansSeedingStrategy(maxIterations);
 

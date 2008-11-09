@@ -17,7 +17,7 @@ import java.io.InputStream;
 
 import org.apache.log4j.Logger;
 import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Persister;
@@ -46,7 +46,7 @@ class DcsConfig
         logger = Logger.getLogger(DCS_APP_NAME);
     }
 
-    static DcsConfig deserialize(Resource configResource) throws Exception
+    static DcsConfig deserialize(IResource configResource) throws Exception
     {
         final InputStream stream = configResource.open();
         try

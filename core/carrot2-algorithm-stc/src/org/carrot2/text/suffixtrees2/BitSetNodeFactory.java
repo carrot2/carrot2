@@ -14,9 +14,9 @@
 package org.carrot2.text.suffixtrees2;
 
 /**
- * {@link NodeFactory} returning {@link CounterNode}s.
+ * {@link INodeFactory} returning {@link CounterNode}s.
  */
-public final class BitSetNodeFactory implements NodeFactory<BitSetNode>
+public final class BitSetNodeFactory implements INodeFactory<BitSetNode>
 {
     public BitSetNode createNode(SuffixTree<? super BitSetNode> container)
     {

@@ -31,7 +31,7 @@ public class SuffixTreeTest
     @Test
     public void testLeafNodes()
     {
-        final SuffixableElement sequence = new SuffixableCharacterSequence("mississippi");
+        final ISuffixableElement sequence = new SuffixableCharacterSequence("mississippi");
         final SuffixTree t = new SuffixTree();
         t.add(sequence);
 

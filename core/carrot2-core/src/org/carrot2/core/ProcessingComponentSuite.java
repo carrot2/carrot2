@@ -29,7 +29,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.*;
 
 /**
- * A set of {@link ProcessingComponent}s used in Carrot2 applications.
+ * A set of {@link IProcessingComponent}s used in Carrot2 applications.
  */
 @Root(name = "component-suite")
 public class ProcessingComponentSuite
@@ -102,7 +102,7 @@ public class ProcessingComponentSuite
         final ResourceUtils ru = ResourceUtilsFactory.getDefaultResourceUtils();
         for (ProcessingComponentSuiteInclude include : includes)
         {
-            final Resource resource = ru.getFirst(include.suite);
+            final IResource resource = ru.getFirst(include.suite);
             if (resource == null)
             {
                 throw new Exception("Could not locate resource: " + include.suite);
@@ -185,7 +185,7 @@ public class ProcessingComponentSuite
     /**
      * Deserializes component suite information from an XML stream.
      */
-    public static ProcessingComponentSuite deserialize(Resource resource)
+    public static ProcessingComponentSuite deserialize(IResource resource)
         throws Exception
     {
         return deserialize(resource, true);
@@ -195,7 +195,7 @@ public class ProcessingComponentSuite
      * Deserializes component suite information from an XML stream and optionally clears
      * the internal implementation information that should not be exposed to the caller.
      */
-    private static ProcessingComponentSuite deserialize(Resource resource,
+    private static ProcessingComponentSuite deserialize(IResource resource,
         boolean clearInternals) throws Exception
     {
         final InputStream inputStream = resource.open();

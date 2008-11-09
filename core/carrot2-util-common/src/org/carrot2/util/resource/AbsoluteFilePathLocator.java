@@ -18,22 +18,22 @@ import java.io.File;
 /**
  * Tries to load the resource assuming that an absolute file path was provided
  */
-public final class AbsoluteFilePathLocator implements ResourceLocator
+public final class AbsoluteFilePathLocator implements IResourceLocator
 {
     /**
      * If the resource is an absolute file path, returns an array with the corresponding
-     * {@link Resource}. Otherwise an empty array is returned.
+     * {@link IResource}. Otherwise an empty array is returned.
      */
-    public Resource [] getAll(String resource, Class<?> clazz)
+    public IResource [] getAll(String resource, Class<?> clazz)
     {
         final File resourceFile = new File(resource);
         if (resourceFile.isAbsolute() && resourceFile.isFile() && resourceFile.canRead())
         {
-            return new Resource []
+            return new IResource []
             {
                 new FileResource(resourceFile)
             };
         }
-        return new Resource [0];
+        return new IResource [0];
     }
 }

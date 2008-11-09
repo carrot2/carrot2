@@ -25,7 +25,7 @@ import org.carrot2.source.*;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
-import org.carrot2.util.resource.ParameterizedUrlResource;
+import org.carrot2.util.resource.URLResourceWithParams;
 
 import com.google.common.collect.Maps;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -34,7 +34,7 @@ import com.sun.syndication.fetcher.FeedFetcher;
 import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
 
 /**
- * A {@link DocumentSource} fetching {@link Document}s (search results) from an OpenSearch
+ * A {@link IDocumentSource} fetching {@link Document}s (search results) from an OpenSearch
  * feed.
  * <p>
  * Based on code donated by Julien Nioche.
@@ -125,34 +125,34 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     private static final String COUNT_VARIABLE_NAME = "count";
 
     @Override
-    public void init(ControllerContext context)
+    public void init(IControllerContext context)
     {
         super.init(context);
 
         // Verify that the attributes are legal
-        final boolean hasStartPage = ParameterizedUrlResource
+        final boolean hasStartPage = URLResourceWithParams
             .containsAttributePlaceholder(feedUrlTemplate, START_PAGE_VARIABLE_NAME);
-        final boolean hasStartIndex = ParameterizedUrlResource
+        final boolean hasStartIndex = URLResourceWithParams
             .containsAttributePlaceholder(feedUrlTemplate, START_INDEX_VARIABLE_NAME);
 
         if (!(hasStartPage ^ hasStartIndex))
         {
             throw new ComponentInitializationException(
                 "The feedUrlTemplate must contain either "
-                    + ParameterizedUrlResource
+                    + URLResourceWithParams
                         .formatAttributePlaceholder(START_INDEX_VARIABLE_NAME)
                     + " or "
-                    + ParameterizedUrlResource
+                    + URLResourceWithParams
                         .formatAttributePlaceholder(START_PAGE_VARIABLE_NAME)
                     + " variable");
         }
 
-        if (!ParameterizedUrlResource.containsAttributePlaceholder(feedUrlTemplate,
+        if (!URLResourceWithParams.containsAttributePlaceholder(feedUrlTemplate,
             SEARCH_TERMS_VARIABLE_NAME))
         {
             throw new ComponentInitializationException(
                 "The feedUrlTemplate must contain "
-                    + ParameterizedUrlResource
+                    + URLResourceWithParams
                         .formatAttributePlaceholder(SEARCH_TERMS_VARIABLE_NAME)
                     + " variable");
         }
@@ -188,7 +188,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
                 values.put(START_PAGE_VARIABLE_NAME, bucket.start + 1);
                 values.put(COUNT_VARIABLE_NAME, bucket.results);
 
-                final String url = ParameterizedUrlResource.substituteAttributes(feedUrlTemplate, values);
+                final String url = URLResourceWithParams.substituteAttributes(feedUrlTemplate, values);
 
                 logger.debug("Fetching URL: " + url);
 

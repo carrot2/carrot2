@@ -21,11 +21,11 @@ import org.junit.After;
 import org.junit.Before;
 
 /**
- * A very basic base class for testing {@link ProcessingComponent}s. This class provides
- * an instance of a {@link Controller}, a map for attributes and a method that initializes
+ * A very basic base class for testing {@link IProcessingComponent}s. This class provides
+ * an instance of a {@link IController}, a map for attributes and a method that initializes
  * them.
  */
-public abstract class ProcessingComponentTestBase<T extends ProcessingComponent> extends
+public abstract class ProcessingComponentTestBase<T extends IProcessingComponent> extends
     ExternalApiTestBase
 {
     /** Simple controller used for tests. */
@@ -94,7 +94,7 @@ public abstract class ProcessingComponentTestBase<T extends ProcessingComponent>
      */
     protected final CachingController getCachingController(
         Map<String, Object> initAttributes,
-        Class<? extends ProcessingComponent>... cachedComponentClasses)
+        Class<? extends IProcessingComponent>... cachedComponentClasses)
     {
         if (this.cachingController != null)
         {

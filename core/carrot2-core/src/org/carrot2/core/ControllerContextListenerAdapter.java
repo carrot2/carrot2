@@ -14,11 +14,11 @@
 package org.carrot2.core;
 
 /**
- * An empty adapter implementation of {@link ControllerContextListener}.
+ * An empty adapter implementation of {@link IControllerContextListener}.
  */
-public class ControllerContextListenerAdapter implements ControllerContextListener
+public class ControllerContextListenerAdapter implements IControllerContextListener
 {
-    public void beforeDisposal(ControllerContext context)
+    public void beforeDisposal(IControllerContext context)
     {
         // Empty.
     }

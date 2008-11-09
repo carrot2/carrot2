@@ -21,7 +21,7 @@ import bak.pcj.set.IntSet;
 import com.google.common.collect.Lists;
 
 /**
- * Various utilities for processing graphs
+ * Various utilities for processing graphs.
  */
 public class GraphUtils
 {
@@ -36,7 +36,7 @@ public class GraphUtils
      * @return a list of {@link IntSet}s containing vertices of the coherent subgraphs
      */
     public static List<IntList> findCoherentSubgraphs(int vertexCount,
-        ArcPredicate arcPredicate, boolean pruneOneNodeSubrgaphs)
+        IArcPredicate arcPredicate, boolean pruneOneNodeSubrgaphs)
     {
         // Find coherent sub-graphs using breadth-first search
         final boolean [] nodesChecked = new boolean [vertexCount];
@@ -86,7 +86,7 @@ public class GraphUtils
     /**
      * A predicate defining arcs of an undirected graph.
      */
-    public static interface ArcPredicate
+    public static interface IArcPredicate
     {
         /**
          * Returns <code>true</code> if there is an arc connecting <code>vertexA</code>

@@ -763,15 +763,15 @@ final class ExtendedWhitespaceTokenizerImpl {
 
       switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
         case 8: 
-          { return TokenType.TT_EMAIL;
+          { return ITokenType.TT_EMAIL;
           }
         case 12: break;
         case 5: 
-          { return TokenType.TT_PUNCTUATION | TokenType.TF_SEPARATOR_SENTENCE;
+          { return ITokenType.TT_PUNCTUATION | ITokenType.TF_SEPARATOR_SENTENCE;
           }
         case 13: break;
         case 3: 
-          { return TokenType.TT_NUMERIC;
+          { return ITokenType.TT_NUMERIC;
           }
         case 14: break;
         case 1: 
@@ -779,31 +779,31 @@ final class ExtendedWhitespaceTokenizerImpl {
           }
         case 15: break;
         case 4: 
-          { return TokenType.TT_PUNCTUATION;
+          { return ITokenType.TT_PUNCTUATION;
           }
         case 16: break;
         case 9: 
-          { return TokenType.TT_ACRONYM;
+          { return ITokenType.TT_ACRONYM;
           }
         case 17: break;
         case 6: 
-          { return TokenType.TT_FILE;
+          { return ITokenType.TT_FILE;
           }
         case 18: break;
         case 7: 
-          { return TokenType.TT_HYPHTERM;
+          { return ITokenType.TT_HYPHTERM;
           }
         case 19: break;
         case 11: 
-          { return TokenType.TT_FULL_URL;
+          { return ITokenType.TT_FULL_URL;
           }
         case 20: break;
         case 10: 
-          { return TokenType.TT_BARE_URL;
+          { return ITokenType.TT_BARE_URL;
           }
         case 21: break;
         case 2: 
-          { return TokenType.TT_TERM;
+          { return ITokenType.TT_TERM;
           }
         case 22: break;
         default: 

@@ -297,7 +297,7 @@ public class BindableDescriptor
     /**
      * Internal interface for extracting grouping key values.
      */
-    static interface Grouper<T>
+    static interface IGrouper<T>
     {
         T getGroupingObject(BindableDescriptor bindableDescriptor,
             AttributeDescriptor attributeDescriptor);
@@ -356,7 +356,7 @@ public class BindableDescriptor
         }
     }
 
-    static Grouper<Class<?>> GROUPER_BY_STRUCTURE = new Grouper<Class<?>>()
+    static IGrouper<Class<?>> GROUPER_BY_STRUCTURE = new IGrouper<Class<?>>()
     {
         public Class<?> getGroupingObject(BindableDescriptor bindableDescriptor,
             AttributeDescriptor attributeDescriptor)
@@ -365,7 +365,7 @@ public class BindableDescriptor
         }
     };
 
-    static Grouper<AttributeLevel> GROUPER_BY_LEVEL = new Grouper<AttributeLevel>()
+    static IGrouper<AttributeLevel> GROUPER_BY_LEVEL = new IGrouper<AttributeLevel>()
     {
         public AttributeLevel getGroupingObject(BindableDescriptor bindableDescriptor,
             AttributeDescriptor attributeDescriptor)
@@ -381,7 +381,7 @@ public class BindableDescriptor
         }
     };
 
-    static Grouper<String> GROUPER_BY_GROUP = new Grouper<String>()
+    static IGrouper<String> GROUPER_BY_GROUP = new IGrouper<String>()
     {
         public String getGroupingObject(BindableDescriptor bindableDescriptor,
             AttributeDescriptor attributeDescriptor)
@@ -397,7 +397,7 @@ public class BindableDescriptor
         }
     };
 
-    static Grouper<String> GROUPER_BY_NONE = new Grouper<String>()
+    static IGrouper<String> GROUPER_BY_NONE = new IGrouper<String>()
     {
         public String getGroupingObject(BindableDescriptor bindableDescriptor,
             AttributeDescriptor attributeDescriptor)
@@ -409,7 +409,7 @@ public class BindableDescriptor
     private static <T> void addGroups(BindableDescriptor sourceBindableDescriptor,
         Map<String, AttributeDescriptor> newAttributeDescriptors,
         Map<Object, Map<String, AttributeDescriptor>> newAttributeGroups,
-        Grouper<T> grouper)
+        IGrouper<T> grouper)
     {
         // Run through direct attribute descriptors first
         for (AttributeDescriptor attributeDescriptor1 : sourceBindableDescriptor.attributeDescriptorsInternal

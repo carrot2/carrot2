@@ -30,7 +30,7 @@ import org.simpleframework.xml.load.Commit;
 import com.google.common.collect.Maps;
 
 /**
- * Descriptor of a {@link ProcessingComponent} being part of a
+ * Descriptor of a {@link IProcessingComponent} being part of a
  * {@link ProcessingComponentSuite}.
  */
 public class ProcessingComponentDescriptor
@@ -39,7 +39,7 @@ public class ProcessingComponentDescriptor
     private String componentClassName;
 
     /** Cached component class instantiated from {@link #componentClassName}. */
-    private Class<? extends ProcessingComponent> componentClass;
+    private Class<? extends IProcessingComponent> componentClass;
 
     /** If <code>true</code> component class and its instances are available. */
     private boolean componentAvailable;
@@ -118,7 +118,7 @@ public class ProcessingComponentDescriptor
      *         (class loader issues).
      */
     @SuppressWarnings("unchecked")
-    public synchronized Class<? extends ProcessingComponent> getComponentClass()
+    public synchronized Class<? extends IProcessingComponent> getComponentClass()
     {
         if (this.componentClass == null)
         {
@@ -190,14 +190,14 @@ public class ProcessingComponentDescriptor
      * to return incomplete descriptor.
      * <p>
      * The instance may or may not be usable for processing because the
-     * {@link ControllerContext} on which it is initialized is disposed before the value
+     * {@link IControllerContext} on which it is initialized is disposed before the value
      * is returned.
      * </p>
      */
-    private ProcessingComponent newInitializedInstance() throws InstantiationException,
+    private IProcessingComponent newInitializedInstance() throws InstantiationException,
         IllegalAccessException
     {
-        final ProcessingComponent instance = getComponentClass().newInstance();
+        final IProcessingComponent instance = getComponentClass().newInstance();
         final Map<String, Object> initAttributes = Maps.newHashMap();
         final AttributeValueSet defaultAttributeValueSet = attributeSets
             .getDefaultAttributeValueSet();
@@ -221,7 +221,7 @@ public class ProcessingComponentDescriptor
 
     /**
      * Builds and returns a {@link BindableDescriptor} for an instance of this
-     * descriptor's {@link ProcessingComponent}, with default {@link Init} attributes
+     * descriptor's {@link IProcessingComponent}, with default {@link Init} attributes
      * initialized with the default attribute set. If the default attribute set does
      * provide values for some required {@link Bindable} {@link Init} attributes, the
      * returned descriptor will be incomplete.
@@ -250,7 +250,7 @@ public class ProcessingComponentDescriptor
             .getDefaultResourceUtils();
 
         final Class<?> clazz = getComponentClass();
-        Resource resource = null;
+        IResource resource = null;
 
         if (!StringUtils.isBlank(attributeSetsResource))
         {

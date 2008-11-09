@@ -18,9 +18,9 @@ import org.carrot2.matrix.NNIDoubleFactory2D;
 import cern.colt.matrix.*;
 
 /**
- * Abstract implementation of the {@link MatrixFactorization} interface.
+ * Abstract implementation of the {@link IMatrixFactorization} interface.
  */
-abstract class MatrixFactorizationBase implements MatrixFactorization
+abstract class MatrixFactorizationBase implements IMatrixFactorization
 {
     /** The matrix factory to be used when creating the result matrices */
     protected DoubleFactory2D doubleFactory2D;

@@ -14,7 +14,7 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.text.analysis.TokenType;
+import org.carrot2.text.analysis.ITokenType;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.*;
 
@@ -54,7 +54,7 @@ public class NumericLabelFilter extends SingleLabelFilterBase
 
     private final boolean isNumeric(int type)
     {
-        return (type & TokenType.TT_NUMERIC) != 0;
+        return (type & ITokenType.TT_NUMERIC) != 0;
     }
 
     public boolean isEnabled()

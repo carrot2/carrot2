@@ -22,10 +22,10 @@ import org.carrot2.core.Document;
  */
 public class TestDocumentFactory
 {
-    protected static final Map<String, DataGenerator<?>> DEFAULT_GENERATORS;
+    protected static final Map<String, IDataGenerator<?>> DEFAULT_GENERATORS;
     static
     {
-        DEFAULT_GENERATORS = new HashMap<String, DataGenerator<?>>();
+        DEFAULT_GENERATORS = new HashMap<String, IDataGenerator<?>>();
         DEFAULT_GENERATORS.put(Document.TITLE, new SentenceGenerator(3, true));
         DEFAULT_GENERATORS.put(Document.SUMMARY, new SentenceGenerator(10));
         DEFAULT_GENERATORS.put(Document.CONTENT_URL, new UrlGenerator(3));
@@ -42,10 +42,10 @@ public class TestDocumentFactory
     public static final TestDocumentFactory DEFAULT = new TestDocumentFactory(DEFAULT_GENERATORS,
         DEFAULT_FIELDS);
 
-    private final Map<String, DataGenerator<?>> generators;
+    private final Map<String, IDataGenerator<?>> generators;
     private final Set<String> fields;
 
-    public TestDocumentFactory(Map<String, DataGenerator<?>> generators, Set<String> fields)
+    public TestDocumentFactory(Map<String, IDataGenerator<?>> generators, Set<String> fields)
     {
         this.generators = generators;
         this.fields = fields;
@@ -59,11 +59,11 @@ public class TestDocumentFactory
     public List<Document> generate(int number, Set<String> fieldsToGenerate)
     {
         return generate(number, fieldsToGenerate, Collections
-            .<String, DataGenerator<?>> emptyMap());
+            .<String, IDataGenerator<?>> emptyMap());
     }
 
     public List<Document> generate(int number, Set<String> fieldsToGenerate,
-        Map<String, DataGenerator<?>> customGenerators)
+        Map<String, IDataGenerator<?>> customGenerators)
     {
         final List<Document> result = new ArrayList<Document>(number);
 
@@ -72,7 +72,7 @@ public class TestDocumentFactory
             final Document document = new Document();
             for (final String field : fieldsToGenerate)
             {
-                final DataGenerator<?> generator = resolveGenerator(customGenerators, field);
+                final IDataGenerator<?> generator = resolveGenerator(customGenerators, field);
                 document.addField(field, generator.generate(i));
             }
 
@@ -82,10 +82,10 @@ public class TestDocumentFactory
         return result;
     }
 
-    private DataGenerator<?> resolveGenerator(
-        Map<String, DataGenerator<?>> customGenerators, String field)
+    private IDataGenerator<?> resolveGenerator(
+        Map<String, IDataGenerator<?>> customGenerators, String field)
     {
-        DataGenerator<?> generator = customGenerators.get(field);
+        IDataGenerator<?> generator = customGenerators.get(field);
 
         if (generator == null)
         {
@@ -99,12 +99,12 @@ public class TestDocumentFactory
         return generator;
     }
 
-    public static interface DataGenerator<T>
+    public static interface IDataGenerator<T>
     {
         public T generate(int sequentialNumber);
     }
 
-    private static class SentenceGenerator implements DataGenerator<String>
+    private static class SentenceGenerator implements IDataGenerator<String>
     {
         private static final String [] WORDS = new String []
         {
@@ -148,7 +148,7 @@ public class TestDocumentFactory
         }
     }
 
-    private static class UrlGenerator implements DataGenerator<String>
+    private static class UrlGenerator implements IDataGenerator<String>
     {
         private static final String [] ELEMENTS = new String []
         {

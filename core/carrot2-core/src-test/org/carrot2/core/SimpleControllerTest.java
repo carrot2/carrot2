@@ -20,7 +20,7 @@ package org.carrot2.core;
 public class SimpleControllerTest extends ControllerTestBase
 {
     @Override
-    protected Controller createController()
+    protected IController createController()
     {
         return new SimpleController();
     }

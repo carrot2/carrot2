@@ -16,10 +16,10 @@ package org.carrot2.core;
 import java.util.concurrent.ExecutorService;
 
 /**
- * {@link ControllerContextListener} that shuts down a given {@link ExecutorService}
- * reference in the {@link ControllerContext}.
+ * {@link IControllerContextListener} that shuts down a given {@link ExecutorService}
+ * reference in the {@link IControllerContext}.
  */
-class ExecutorServiceShutdownListener implements ControllerContextListener
+class ExecutorServiceShutdownListener implements IControllerContextListener
 {
     private final  String contextKey;
 
@@ -28,7 +28,7 @@ class ExecutorServiceShutdownListener implements ControllerContextListener
         this.contextKey = contextKey;
     }
 
-    public void beforeDisposal(ControllerContext context)
+    public void beforeDisposal(IControllerContext context)
     {
         ExecutorService service = ((ExecutorService) context.getAttribute(contextKey));
         if (service != null && !service.isShutdown())

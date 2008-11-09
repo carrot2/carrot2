@@ -15,7 +15,7 @@ package org.carrot2.text.preprocessing;
 
 import java.util.*;
 
-import org.carrot2.text.linguistic.Stemmer;
+import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
@@ -52,7 +52,7 @@ public final class LanguageModelStemmer
     public void stem(PreprocessingContext context)
     {
         final MutableCharArray current = new MutableCharArray("");
-        final Stemmer stemmer = context.language.getStemmer();
+        final IStemmer stemmer = context.language.getStemmer();
 
         final char [][] wordImages = context.allWords.image;
         final char [][] stemImages = new char [wordImages.length] [];
@@ -228,7 +228,7 @@ public final class LanguageModelStemmer
         }
     }
 
-    private Set<MutableCharArray> prepareQueryWords(String query, Stemmer stemmer)
+    private Set<MutableCharArray> prepareQueryWords(String query, IStemmer stemmer)
     {
         final Set<MutableCharArray> queryWords = Sets.newHashSet();
 

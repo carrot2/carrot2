@@ -19,7 +19,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.ClassResource;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 
 import com.google.common.collect.Maps;
 
@@ -87,7 +87,7 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     }
 
     @Override
-    protected Resource getXsltResource()
+    protected IResource getXsltResource()
     {
         return new ClassResource(SolrDocumentSource.class, "solr-to-c2.xsl");
     }

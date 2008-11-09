@@ -38,9 +38,9 @@ public final class ControllerUtils
      * Performs all life cycle actions required upon initialization.
      */
     @SuppressWarnings("unchecked")
-    public static void init(ProcessingComponent processingComponent,
+    public static void init(IProcessingComponent processingComponent,
         Map<String, Object> attributes, boolean checkRequiredAttributes,
-        ControllerContext context) throws ProcessingException
+        IControllerContext context) throws ProcessingException
     {
         try
         {
@@ -62,7 +62,7 @@ public final class ControllerUtils
      * Performs all life cycle actions required before processing starts.
      */
     @SuppressWarnings("unchecked")
-    public static void beforeProcessing(ProcessingComponent processingComponent,
+    public static void beforeProcessing(IProcessingComponent processingComponent,
         Map<String, Object> attributes) throws ProcessingException
     {
         try
@@ -81,16 +81,16 @@ public final class ControllerUtils
     /**
      * Perform all life cycle required to do processing.
      */
-    public static void performProcessing(ProcessingComponent processingComponent,
+    public static void performProcessing(IProcessingComponent processingComponent,
         Map<String, Object> attributes) throws ProcessingException
     {
         processingComponent.process();
     }
 
     /**
-     * Perform processing on the provided {@link ProcessingComponent}s, including
-     * {@link ProcessingComponent#beforeProcessing()} and
-     * {@link ProcessingComponent#afterProcessing()} hooks. If requested, stores
+     * Perform processing on the provided {@link IProcessingComponent}s, including
+     * {@link IProcessingComponent#beforeProcessing()} and
+     * {@link IProcessingComponent#afterProcessing()} hooks. If requested, stores
      * processing times in the attributes map on return.
      * 
      * @param measureTime if <code>true</code>, processing time will be measured and
@@ -100,18 +100,18 @@ public final class ControllerUtils
      * @see AttributeNames#PROCESSING_TIME_TOTAL
      */
     public static void performProcessing(Map<String, Object> attributes,
-        boolean measureTime, ProcessingComponent... processingComponents)
+        boolean measureTime, IProcessingComponent... processingComponents)
     {
-        for (final ProcessingComponent element : processingComponents)
+        for (final IProcessingComponent element : processingComponents)
         {
             performProcessing(element, attributes, measureTime);
         }
     }
 
     /**
-     * Performs processing with the provided {@link ProcessingComponent}, including
-     * {@link ProcessingComponent#beforeProcessing()} and
-     * {@link ProcessingComponent#afterProcessing()} hooks. If requested, stores
+     * Performs processing with the provided {@link IProcessingComponent}, including
+     * {@link IProcessingComponent#beforeProcessing()} and
+     * {@link IProcessingComponent#afterProcessing()} hooks. If requested, stores
      * processing times in the attributes map.
      * 
      * @param measureTime if <code>true</code>, processing time will be measured and
@@ -120,7 +120,7 @@ public final class ControllerUtils
      * @see AttributeNames#PROCESSING_TIME_SOURCE
      * @see AttributeNames#PROCESSING_TIME_TOTAL
      */
-    public static void performProcessing(ProcessingComponent processingComponent,
+    public static void performProcessing(IProcessingComponent processingComponent,
         Map<String, Object> attributes, boolean measureTime)
     {
         long componentStart = System.currentTimeMillis();
@@ -138,11 +138,11 @@ public final class ControllerUtils
                 long componentStop = System.currentTimeMillis();
 
                 final long time = componentStop - componentStart;
-                if (processingComponent instanceof DocumentSource)
+                if (processingComponent instanceof IDocumentSource)
                 {
                     addTime(AttributeNames.PROCESSING_TIME_SOURCE, time, attributes);
                 }
-                else if (processingComponent instanceof ClusteringAlgorithm)
+                else if (processingComponent instanceof IClusteringAlgorithm)
                 {
                     addTime(AttributeNames.PROCESSING_TIME_ALGORITHM, time, attributes);
                 }
@@ -176,7 +176,7 @@ public final class ControllerUtils
      * Perform all life cycle actions after processing is completed.
      */
     @SuppressWarnings("unchecked")
-    public static void afterProcessing(ProcessingComponent processingComponent,
+    public static void afterProcessing(IProcessingComponent processingComponent,
         Map<String, Object> attributes)
     {
         try

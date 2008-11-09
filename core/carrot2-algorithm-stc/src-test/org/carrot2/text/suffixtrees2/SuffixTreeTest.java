@@ -107,7 +107,7 @@ public class SuffixTreeTest
         final int [] randomData = generate(0x11223344, 1024 * 1024, 0xff);
         randomData[randomData.length - 1] = -1;
 
-        final Sequence seq = new IntSequence(randomData);
+        final ISequence seq = new IntSequence(randomData);
         final SuffixTree<Node> t = SuffixTree.newSuffixTree();
         t.build(seq);
     }
@@ -131,7 +131,7 @@ public class SuffixTreeTest
     /**
      * 
      */
-    private void assertAllSuffixes(Sequence sequence)
+    private void assertAllSuffixes(ISequence sequence)
     {
         final SuffixTree<Node> t = SuffixTree.newSuffixTree();
         t.build(sequence);
@@ -144,7 +144,7 @@ public class SuffixTreeTest
 
         for (int i = 0; i < codes.length; i++)
         {
-            final Sequence subsequence = new IntSequence(codes, i, codes.length - i);
+            final ISequence subsequence = new IntSequence(codes, i, codes.length - i);
             assertTrue(t.hasSuffix(subsequence));
         }
     }

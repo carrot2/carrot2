@@ -14,9 +14,9 @@
 package org.carrot2.text.suffixtrees;
 
 /**
- * A {@link SuffixableElement} wrapper around a {@link CharSequence}.
+ * A {@link ISuffixableElement} wrapper around a {@link CharSequence}.
  */
-final class SuffixableCharacterSequence implements SuffixableElement
+final class SuffixableCharacterSequence implements ISuffixableElement
 {
     private final Character [] chars;
     private final String asString;

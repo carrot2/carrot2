@@ -30,9 +30,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * Common tests for {@link DocumentSource}s that accept a string query.
+ * Common tests for {@link IDocumentSource}s that accept a string query.
  */
-public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> extends
+public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource> extends
     DocumentSourceTestBase<T>
 {
     @Test
@@ -130,7 +130,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends DocumentSource> 
 
         // Cache results from all DataSources
         final CachingController cachingController = getCachingController(initAttributes, 
-            DocumentSource.class);
+            IDocumentSource.class);
 
         int count = 3;
         ExecutorService executorService = Executors.newFixedThreadPool(count);

@@ -30,28 +30,28 @@ import com.google.common.collect.Maps;
  * <li><strong>SimpleXML-annotated types.</strong> Types annotated with SimpleXML's
  * {@link Root} annotation will not be wrapped and serialized / deserialized directly by
  * SimpleXML</li>
- * <li><strong>Other types.</strong> For any other types, a {@link SimpleXmlWrapper}
+ * <li><strong>Other types.</strong> For any other types, a {@link ISimpleXmlWrapper}
  * implementation must be registered using the {@link #addWrapper(Class, Class)} method.</li>
  * </ul>
  */
 public class SimpleXmlWrappers
 {
     /**
-     * The supported {@link SimpleXmlWrapper}s.
+     * The supported {@link ISimpleXmlWrapper}s.
      */
-    private static final Map<Class<?>, Class<? extends SimpleXmlWrapper<?>>> wrappers = Maps
+    private static final Map<Class<?>, Class<? extends ISimpleXmlWrapper<?>>> wrappers = Maps
         .newHashMap();
 
     /**
-     * Registers a new {@link SimpleXmlWrapper}. If a wrapper for the provide
+     * Registers a new {@link ISimpleXmlWrapper}. If a wrapper for the provide
      * <code>wrappedClass</code> already exists, it will be replaced with the new value.
      * 
      * @param wrappedClass type to be wrapped
-     * @param wrapperClass class name of the {@link SimpleXmlWrapper} implementation to
+     * @param wrapperClass class name of the {@link ISimpleXmlWrapper} implementation to
      *            wrap <code>wrappedClass</code>
      */
     public static synchronized <T> void addWrapper(Class<T> wrappedClass,
-        Class<? extends SimpleXmlWrapper<? super T>> wrapperClass)
+        Class<? extends ISimpleXmlWrapper<? super T>> wrapperClass)
     {
         wrappers.put(wrappedClass, wrapperClass);
     }
@@ -187,7 +187,7 @@ public class SimpleXmlWrappers
         }
     }
 
-    static synchronized <T> Class<? extends SimpleXmlWrapper<?>> getWrapper(T value)
+    static synchronized <T> Class<? extends ISimpleXmlWrapper<?>> getWrapper(T value)
     {
         return wrappers.get(value.getClass());
     }

@@ -21,17 +21,17 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.httpclient.HttpStatus;
-import org.carrot2.core.DocumentSource;
+import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.httpclient.HttpUtils;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 import org.carrot2.util.xml.TemplatesPool;
 import org.xml.sax.SAXException;
 
 /**
- * Exposes the common functionality a {@link DocumentSource} based on XML/XSLT is likely
+ * Exposes the common functionality a {@link IDocumentSource} based on XML/XSLT is likely
  * to need. This helper does note expose any attributes, so that different implementations
  * can decide which attributes they expose.
  */
@@ -165,9 +165,9 @@ public class XmlDocumentSourceHelper
     }
 
     /**
-     * Loads the XSLT stylesheet from the provided {@link Resource}.
+     * Loads the XSLT stylesheet from the provided {@link IResource}.
      */
-    public Templates loadXslt(Resource xslt)
+    public Templates loadXslt(IResource xslt)
     {
         InputStream is = null;
         try

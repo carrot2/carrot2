@@ -19,7 +19,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.Maps;
 
 /**
- * Utilities for dealing with {@link ValueHintMapping} and {@link Enum} classes.
+ * Utilities for dealing with {@link IValueHintMapping} and {@link Enum} classes.
  */
 public final class ValueHintMappingUtils
 {
@@ -40,9 +40,9 @@ public final class ValueHintMappingUtils
         for (Enum<?> e : clazz.getEnumConstants())
         {
             String value = e.name();
-            if (e instanceof ValueHintMapping)
+            if (e instanceof IValueHintMapping)
             {
-                value = ((ValueHintMapping) e).getAttributeValue();
+                value = ((IValueHintMapping) e).getAttributeValue();
             }
 
             valueSet.put(value, e);
@@ -65,10 +65,10 @@ public final class ValueHintMappingUtils
             String value = e.name();
             String name = e.toString();
 
-            if (e instanceof ValueHintMapping)
+            if (e instanceof IValueHintMapping)
             {
-                value = ((ValueHintMapping) e).getAttributeValue();
-                name = ((ValueHintMapping) e).getUserFriendlyName();
+                value = ((IValueHintMapping) e).getAttributeValue();
+                name = ((IValueHintMapping) e).getUserFriendlyName();
             }
 
             valueToName.put(value, name);

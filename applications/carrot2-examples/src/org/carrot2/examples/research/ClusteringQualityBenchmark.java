@@ -44,7 +44,7 @@ public class ClusteringQualityBenchmark
         SimpleController controller = new SimpleController();
 
         // List of algorithms to test
-        final ArrayList<Class<? extends ProcessingComponent>> algorithms = Lists
+        final ArrayList<Class<? extends IProcessingComponent>> algorithms = Lists
             .newArrayList();
         algorithms.add(LingoClusteringAlgorithm.class);
         algorithms.add(STCClusteringAlgorithm.class);
@@ -62,7 +62,7 @@ public class ClusteringQualityBenchmark
             .println("Topic\tAlgorithm\tOrder\tContamination\tATCoverage\tTCoverage\tDCoverage");
         for (AmbientTopic topic : topics)
         {
-            for (Class<? extends ProcessingComponent> algorithm : algorithms)
+            for (Class<? extends IProcessingComponent> algorithm : algorithms)
             {
                 attributes.put(AttributeUtils
                     .getKey(AmbientDocumentSource.class, "topic"), topic);

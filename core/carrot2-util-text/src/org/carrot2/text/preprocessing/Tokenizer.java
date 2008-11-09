@@ -23,7 +23,7 @@ import org.apache.lucene.index.Payload;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
-import org.carrot2.text.analysis.TokenType;
+import org.carrot2.text.analysis.ITokenType;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.util.ExceptionUtils;
@@ -53,7 +53,7 @@ public final class Tokenizer
 {
     /**
      * Analyzer used to split documents into individual tokens (terms). This
-     * analyzer must provide token {@link Payload} implementing {@link TokenType}.
+     * analyzer must provide token {@link Payload} implementing {@link ITokenType}.
      * 
      * @level Medium
      * @group Preprocessing
@@ -92,7 +92,7 @@ public final class Tokenizer
     /**
      * An array of token types.
      * 
-     * @see TokenType
+     * @see ITokenType
      */
     private IntArrayList tokenTypes;
 
@@ -176,7 +176,7 @@ public final class Tokenizer
                     catch (ClassCastException e)
                     {
                         throw new RuntimeException("The analyzer must provide "
-                            + TokenType.class.getName() + " instances as payload.");
+                            + ITokenType.class.getName() + " instances as payload.");
                     }
 
                     if (it.hasNext())
@@ -226,11 +226,11 @@ public final class Tokenizer
 
     /**
      * Add the token's code to the list. The <code>token</code> must carry
-     * {@link TokenType} payload.
+     * {@link ITokenType} payload.
      */
     void add(int documentIndex, byte fieldIndex, Token token)
     {
-        final TokenType type = (TokenType) token.getPayload();
+        final ITokenType type = (ITokenType) token.getPayload();
         final char [] buffer = new char [token.termLength()];
         System.arraycopy(token.termBuffer(), 0, buffer, 0, token.termLength());
         add(documentIndex, fieldIndex, buffer, type.getRawFlags());
@@ -241,7 +241,7 @@ public final class Tokenizer
      */
     void addTerminator()
     {
-        add(-1, (byte) -1, null, TokenType.TF_TERMINATOR);
+        add(-1, (byte) -1, null, ITokenType.TF_TERMINATOR);
     }
 
     /**
@@ -249,7 +249,7 @@ public final class Tokenizer
      */
     void addDocumentSeparator()
     {
-        add(-1, (byte) -1, null, TokenType.TF_SEPARATOR_DOCUMENT);
+        add(-1, (byte) -1, null, ITokenType.TF_SEPARATOR_DOCUMENT);
     }
 
     /**
@@ -257,7 +257,7 @@ public final class Tokenizer
      */
     void addFieldSeparator(int documentIndex)
     {
-        add(documentIndex, (byte) -1, null, TokenType.TF_SEPARATOR_FIELD);
+        add(documentIndex, (byte) -1, null, ITokenType.TF_SEPARATOR_FIELD);
     }
 
     /**
@@ -265,7 +265,7 @@ public final class Tokenizer
      */
     void addSentenceSeparator(int documentIndex, byte fieldIndex)
     {
-        add(documentIndex, fieldIndex, null, TokenType.TF_SEPARATOR_FIELD);
+        add(documentIndex, fieldIndex, null, ITokenType.TF_SEPARATOR_FIELD);
     }
 
     /**

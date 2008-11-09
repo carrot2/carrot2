@@ -26,8 +26,8 @@ public final class ResourceUtilsFactory
     /** Default {@link ResourceUtils}. */
     public static volatile ResourceUtils defaultResourceUtils;
 
-    /** Default list of {@link ResourceLocator}s. */
-    public static final ArrayList<ResourceLocator> defaultResourceLocators = Lists
+    /** Default list of {@link IResourceLocator}s. */
+    public static final ArrayList<IResourceLocator> defaultResourceLocators = Lists
         .newArrayList();
 
     /*
@@ -49,57 +49,57 @@ public final class ResourceUtilsFactory
     /**
      * Return the default resource-lookup locators.
      */
-    public static ResourceLocator [] getDefaultResourceLocators()
+    public static IResourceLocator [] getDefaultResourceLocators()
     {
         return defaultResourceLocators
-            .toArray(new ResourceLocator [defaultResourceLocators.size()]);
+            .toArray(new IResourceLocator [defaultResourceLocators.size()]);
     }
 
     /**
-     * Inserts a set of {@link ResourceLocator}s before existing defaults. Re-creates
+     * Inserts a set of {@link IResourceLocator}s before existing defaults. Re-creates
      * {@link ResourceUtils} factory returned from {@link #getDefaultResourceUtils()}.
      */
-    public static void addFirst(ResourceLocator... locators)
+    public static void addFirst(IResourceLocator... locators)
     {
         add(0, locators);
     }
 
     /**
-     * Appends a set of {@link ResourceLocator}s after existing defaults. Re-creates
+     * Appends a set of {@link IResourceLocator}s after existing defaults. Re-creates
      * {@link ResourceUtils} factory returned from {@link #getDefaultResourceUtils()}.
      */
-    public static void addLast(ResourceLocator... locators)
+    public static void addLast(IResourceLocator... locators)
     {
         add(defaultResourceLocators.size(), locators);
     }
 
     /**
-     * Adds a set of new {@link ResourceLocator} to the set of default resource locators,
+     * Adds a set of new {@link IResourceLocator} to the set of default resource locators,
      * at the given index. Re-creates {@link ResourceUtils} factory returned from
      * {@link #getDefaultResourceUtils()}.
      */
-    private static void add(int index, ResourceLocator... locators)
+    private static void add(int index, IResourceLocator... locators)
     {
         synchronized (ResourceUtilsFactory.class)
         {
             defaultResourceLocators.addAll(index, Arrays.asList(locators));
             defaultResourceUtils = new ResourceUtils(defaultResourceLocators
-                .toArray(new ResourceLocator [defaultResourceLocators.size()]));
+                .toArray(new IResourceLocator [defaultResourceLocators.size()]));
         }
     }
 
     /**
-     * Removes a given {@link ResourceLocator} from the list of existing default locators.
+     * Removes a given {@link IResourceLocator} from the list of existing default locators.
      * Re-creates {@link ResourceUtils} factory returned from
      * {@link #getDefaultResourceUtils()}.
      */
-    public static void remove(ResourceLocator... locators)
+    public static void remove(IResourceLocator... locators)
     {
         synchronized (ResourceUtilsFactory.class)
         {
             defaultResourceLocators.removeAll(Arrays.asList(locators));
             defaultResourceUtils = new ResourceUtils(defaultResourceLocators
-                .toArray(new ResourceLocator [defaultResourceLocators.size()]));
+                .toArray(new IResourceLocator [defaultResourceLocators.size()]));
         }
     }
 

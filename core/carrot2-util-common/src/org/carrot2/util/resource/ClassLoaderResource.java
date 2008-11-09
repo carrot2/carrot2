@@ -25,7 +25,7 @@ import org.simpleframework.xml.Root;
  * returned resources and closes the stream handle in {@link #open()}.
  */
 @Root(name = "class-loader-resource")
-public final class ClassLoaderResource implements Resource
+public final class ClassLoaderResource implements IResource
 {
     private ClassLoader clazzLoader;
 

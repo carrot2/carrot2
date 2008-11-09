@@ -22,17 +22,17 @@ import org.tartarus.snowball.SnowballStemmer;
 /**
  * Implements language models on top of Snowball stemmers.
  */
-final class SnowballLanguageModel implements LanguageModel
+final class SnowballLanguageModel implements ILanguageModel
 {
     private final LanguageCode languageCode;
-    private final Stemmer stemmer;
+    private final IStemmer stemmer;
     private final Set<MutableCharArray> stopwords;
     private final MutableCharArray buffer = new MutableCharArray("");
 
     /**
-     * An adapter converting Snowball programs into {@link Stemmer} interface.
+     * An adapter converting Snowball programs into {@link IStemmer} interface.
      */
-    private static class SnowballStemmerAdapter implements Stemmer
+    private static class SnowballStemmerAdapter implements IStemmer
     {
         private final SnowballStemmer snowballStemmer;
 
@@ -76,10 +76,10 @@ final class SnowballLanguageModel implements LanguageModel
     }
 
     /**
-     * Create and return a {@link Stemmer} adapter for a {@link SnowballStemmer} for a
+     * Create and return a {@link IStemmer} adapter for a {@link SnowballStemmer} for a
      * given language code.
      */
-    private static Stemmer createStemmer(LanguageCode language) throws Exception
+    private static IStemmer createStemmer(LanguageCode language) throws Exception
     {
         final String stemmerClazzName = "org.tartarus.snowball.ext."
             + language.name().toLowerCase() + "Stemmer";
@@ -107,7 +107,7 @@ final class SnowballLanguageModel implements LanguageModel
         return languageCode;
     }
 
-    public Stemmer getStemmer()
+    public IStemmer getStemmer()
     {
         return stemmer;
     }

@@ -16,9 +16,9 @@ package org.carrot2.text.preprocessing;
 import java.util.List;
 
 import org.carrot2.core.Document;
-import org.carrot2.text.analysis.TokenType;
-import org.carrot2.text.linguistic.LanguageModel;
-import org.carrot2.text.linguistic.Stemmer;
+import org.carrot2.text.analysis.ITokenType;
+import org.carrot2.text.linguistic.ILanguageModel;
+import org.carrot2.text.linguistic.IStemmer;
 
 import bak.pcj.set.IntSet;
 
@@ -33,18 +33,18 @@ public final class PreprocessingContext
 {
     /** Predicate for splitting on document separator. */
     public static final Predicate<Integer> ON_DOCUMENT_SEPARATOR = Predicates
-        .isEqualTo(TokenType.TF_SEPARATOR_DOCUMENT);
+        .isEqualTo(ITokenType.TF_SEPARATOR_DOCUMENT);
 
     /** Predicate for splitting on field separator. */
     public static final Predicate<Integer> ON_FIELD_SEPARATOR = Predicates
-        .isEqualTo(TokenType.TF_SEPARATOR_FIELD);
+        .isEqualTo(ITokenType.TF_SEPARATOR_FIELD);
 
     /** Predicate for splitting on sentence separator. */
     public static final Predicate<Integer> ON_SENTENCE_SEPARATOR = new Predicate<Integer>()
     {
         public boolean apply(Integer tokenType)
         {
-            return (tokenType.intValue() & TokenType.TF_SEPARATOR_SENTENCE) != 0;
+            return (tokenType.intValue() & ITokenType.TF_SEPARATOR_SENTENCE) != 0;
         }
     };
 
@@ -55,13 +55,13 @@ public final class PreprocessingContext
     public final List<Document> documents;
 
     /** Language model to be used */
-    public final LanguageModel language;
+    public final ILanguageModel language;
 
     /**
      * Creates a preprocessing context for the provided <code>documents</code> and with
      * the provided <code>languageModel</code>.
      */
-    public PreprocessingContext(LanguageModel languageModel, List<Document> documents,
+    public PreprocessingContext(ILanguageModel languageModel, List<Document> documents,
         String query)
     {
         this.query = query;
@@ -82,8 +82,8 @@ public final class PreprocessingContext
     {
         /**
          * Token image as it appears in the input. On positions where {@link #type} is
-         * equal to one of {@link TokenType#TF_TERMINATOR},
-         * {@link TokenType#TF_SEPARATOR_DOCUMENT} or {@link TokenType#TF_SEPARATOR_FIELD}
+         * equal to one of {@link ITokenType#TF_TERMINATOR},
+         * {@link ITokenType#TF_SEPARATOR_DOCUMENT} or {@link ITokenType#TF_SEPARATOR_FIELD}
          * , image is <code>null</code>.
          * <p>
          * This array is produced by {@link Tokenizer}.
@@ -91,7 +91,7 @@ public final class PreprocessingContext
         public char [][] image;
 
         /**
-         * Token's {@link TokenType} bit flags.
+         * Token's {@link ITokenType} bit flags.
          * <p>
          * This array is produced by {@link Tokenizer}.
          */
@@ -116,7 +116,7 @@ public final class PreprocessingContext
 
         /**
          * A pointer to {@link AllWords} arrays for this token. Equal to <code>-1</code>
-         * for document, field and {@link TokenType#TT_PUNCTUATION} tokens (including
+         * for document, field and {@link ITokenType#TT_PUNCTUATION} tokens (including
          * sentence separators).
          * <p>
          * This array is produced by {@link CaseNormalizer}.
@@ -221,7 +221,7 @@ public final class PreprocessingContext
         public boolean [] commonTermFlag;
 
         /**
-         * Token type of this word. See {@link TokenType} for available types.
+         * Token type of this word. See {@link ITokenType} for available types.
          * <p>
          * This array is produced by {@link CaseNormalizer}.
          */
@@ -260,7 +260,7 @@ public final class PreprocessingContext
     /**
      * Information about all unique stems found in the input
      * {@link PreprocessingContext#documents}. Each entry in each array corresponds to one
-     * base form different words can be transformed to by the {@link Stemmer} used while
+     * base form different words can be transformed to by the {@link IStemmer} used while
      * processing. E.g. the English <em>mining</em> and <em>mine</em> will be aggregated
      * to one entry in the arrays, while they will have separate entries in
      * {@link AllWords}.
@@ -271,7 +271,7 @@ public final class PreprocessingContext
     public static class AllStems
     {
         /**
-         * Stem image as produced by the {@link Stemmer}, may not correspond to any
+         * Stem image as produced by the {@link IStemmer}, may not correspond to any
          * correct word.
          * <p>
          * This array is produced by {@link LanguageModelStemmer}.

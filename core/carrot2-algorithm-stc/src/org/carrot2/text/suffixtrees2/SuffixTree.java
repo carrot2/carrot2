@@ -27,7 +27,7 @@ public class SuffixTree<T extends Node> implements Iterable<T>
     /**
      * {@link Node} factory for internal tree nodes.
      */
-    private final NodeFactory<? extends T> nodeFactory;
+    private final INodeFactory<? extends T> nodeFactory;
 
     /**
      * Number of created nodes.
@@ -47,7 +47,7 @@ public class SuffixTree<T extends Node> implements Iterable<T>
     /**
      * Sequence of elements to consider.
      */
-    Sequence input;
+    ISequence input;
 
     /*
      * Temporary reusable object for lookups.
@@ -57,7 +57,7 @@ public class SuffixTree<T extends Node> implements Iterable<T>
     /*
      * 
      */
-    public SuffixTree(NodeFactory<? extends T> nodeFactory)
+    public SuffixTree(INodeFactory<? extends T> nodeFactory)
     {
         this.nodeFactory = nodeFactory;
     }
@@ -66,7 +66,7 @@ public class SuffixTree<T extends Node> implements Iterable<T>
      * Recreates this suffix tree for another list of elements. Returns the root node of
      * the resulting tree.
      */
-    public Node build(Sequence input)
+    public Node build(ISequence input)
     {
         // Reset internal structures.
         this.input = input;
@@ -90,7 +90,7 @@ public class SuffixTree<T extends Node> implements Iterable<T>
      *         node to a leaf node) matching the given sequence. Note that object codes in
      *         both sequences must match each other.
      */
-    public boolean hasSuffix(Sequence seq)
+    public boolean hasSuffix(ISequence seq)
     {
         final Node n = getMatchingNode(seq);
         return n.isLeaf();
@@ -115,7 +115,7 @@ public class SuffixTree<T extends Node> implements Iterable<T>
     /**
      * Returns a suffix tree on top of an arbitrary node factory.
      */
-    public static <E extends Node> SuffixTree<E> newSuffixTree(NodeFactory<E> factory)
+    public static <E extends Node> SuffixTree<E> newSuffixTree(INodeFactory<E> factory)
     {
         return new SuffixTree<E>(factory);
     }
@@ -127,7 +127,7 @@ public class SuffixTree<T extends Node> implements Iterable<T>
      *         an explicit node in the tree). Otherwise this method returns
      *         <code>null</code>.
      */
-    private Node getMatchingNode(Sequence seq)
+    private Node getMatchingNode(ISequence seq)
     {
         Node node = this.rootNode;
         int index = 0;
@@ -298,13 +298,13 @@ public class SuffixTree<T extends Node> implements Iterable<T>
     /**
      * Empty sequence.
      */
-    private final static Sequence EMPTY_SEQUENCE = new IntSequence(new int [0]);
+    private final static ISequence EMPTY_SEQUENCE = new IntSequence(new int [0]);
     
     /**
-     * Returns a {@link Sequence} of elements from the node's parent edge to the
+     * Returns a {@link ISequence} of elements from the node's parent edge to the
      * node.
      */
-    public Sequence getSequenceToParent(Node node)
+    public ISequence getSequenceToParent(Node node)
     {
         if (node.container != this)
         {
@@ -330,9 +330,9 @@ public class SuffixTree<T extends Node> implements Iterable<T>
     }
 
     /**
-     * Returns a {@link Sequence} of elements from the root node to this node (full path).
+     * Returns a {@link ISequence} of elements from the root node to this node (full path).
      */
-    public Sequence getSequenceToRoot(Node node)
+    public ISequence getSequenceToRoot(Node node)
     {
         if (node.container != this)
         {

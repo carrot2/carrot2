@@ -20,7 +20,7 @@ import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.ClassResource;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 
 /**
  * A Carrot2 input component for the eTools service (http://www.etools.ch). For commercial
@@ -214,7 +214,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     private static final int ALL_SOURCES_COUNT = 10;
 
     @Override
-    protected Resource getXsltResource()
+    protected IResource getXsltResource()
     {
         return new ClassResource(EToolsDocumentSource.class, "etools-to-c2.xsl");
     }

@@ -16,8 +16,8 @@ package org.carrot2.matrix.factorization;
 import static org.carrot2.matrix.MatrixAssertions.assertThat;
 
 import org.carrot2.matrix.*;
-import org.carrot2.matrix.factorization.seeding.SeedingStrategy;
-import org.carrot2.matrix.factorization.seeding.SeedingStrategyFactory;
+import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
+import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
 import org.carrot2.util.test.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -381,7 +381,7 @@ public class MatrixFactorizationTest extends NNITestBase
             new LocalNonnegativeMatrixFactorizationFactory());
     }
 
-    private MatrixFactorization checkIterative(DoubleMatrix2D expectedU,
+    private IMatrixFactorization checkIterative(DoubleMatrix2D expectedU,
         DoubleMatrix2D expectedV, IterativeMatrixFactorizationFactory factory)
     {
         factory.setK(K);
@@ -389,21 +389,21 @@ public class MatrixFactorizationTest extends NNITestBase
         factory.setStopThreshold(STOP_THRESHOLD);
         factory.setSeedingFactory(ConstantSeedingStrategyFactory.INSTANCE);
 
-        MatrixFactorization factorization = factory.factorize(A);
+        IMatrixFactorization factorization = factory.factorize(A);
         check(expectedU, expectedV, factorization);
 
         return factorization;
     }
 
     private void check(DoubleMatrix2D expectedU, DoubleMatrix2D expectedV,
-        MatrixFactorization factorization)
+        IMatrixFactorization factorization)
     {
         assertThat(factorization.getU()).as("U").isEquivalentTo(expectedU, DELTA);
         assertThat(factorization.getV()).as("V").isEquivalentTo(expectedV, DELTA);
     }
 
     /** Returns constant matrices of fixed size */
-    static class ConstantSeedingStrategyFactory implements SeedingStrategyFactory
+    static class ConstantSeedingStrategyFactory implements ISeedingStrategyFactory
     {
         static ConstantSeedingStrategyFactory INSTANCE = new ConstantSeedingStrategyFactory();
 
@@ -451,9 +451,9 @@ public class MatrixFactorizationTest extends NNITestBase
             }
         };
 
-        public SeedingStrategy createSeedingStrategy()
+        public ISeedingStrategy createSeedingStrategy()
         {
-            return new SeedingStrategy()
+            return new ISeedingStrategy()
             {
 
                 public void seed(DoubleMatrix2D A, DoubleMatrix2D U, DoubleMatrix2D V)

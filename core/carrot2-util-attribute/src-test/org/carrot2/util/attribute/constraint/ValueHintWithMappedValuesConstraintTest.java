@@ -17,11 +17,11 @@ import org.junit.Test;
 
 /**
  * Test cases for {@link ValueHintEnum} constraint with restriction 
- * enum implementing {@link ValueHintMapping}.
+ * enum implementing {@link IValueHintMapping}.
  */
 public class ValueHintWithMappedValuesConstraintTest extends ConstraintTestBase<ValueHintEnum>
 {
-    public enum TestMappedValueSet implements ValueHintMapping
+    public enum TestMappedValueSet implements IValueHintMapping
     {
         VALUE_1("v1"),
         VALUE_2("v2");

@@ -19,7 +19,7 @@ import java.io.File;
 /**
  * Looks up resources in a filesystem folder.
  */
-public final class DirLocator implements ResourceLocator
+public final class DirLocator implements IResourceLocator
 {
     /** The folder relative to which resources are resolved. */
     private File dir;
@@ -42,7 +42,7 @@ public final class DirLocator implements ResourceLocator
     /**
      *
      */
-    public Resource [] getAll(String resource, Class<?> clazz)
+    public IResource [] getAll(String resource, Class<?> clazz)
     {
         if (dir != null) {
             resource = resource.replace('/', File.separatorChar);
@@ -54,11 +54,11 @@ public final class DirLocator implements ResourceLocator
             final File resourceFile = new File(dir, resource);
             if (resourceFile.isFile() && resourceFile.canRead())
             {
-                return new Resource [] {
+                return new IResource [] {
                     new FileResource(resourceFile)
                 };
             }
         }
-        return new Resource [0];
+        return new IResource [0];
     }
 }

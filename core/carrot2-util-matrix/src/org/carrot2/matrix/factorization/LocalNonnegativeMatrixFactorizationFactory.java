@@ -21,7 +21,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 public class LocalNonnegativeMatrixFactorizationFactory extends
     IterativeMatrixFactorizationFactory
 {
-    public MatrixFactorization factorize(DoubleMatrix2D A)
+    public IMatrixFactorization factorize(DoubleMatrix2D A)
     {
         LocalNonnegativeMatrixFactorization factorization = new LocalNonnegativeMatrixFactorization(
             A);

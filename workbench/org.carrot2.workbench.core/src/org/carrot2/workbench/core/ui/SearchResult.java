@@ -16,7 +16,7 @@ package org.carrot2.workbench.core.ui;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.carrot2.core.Controller;
+import org.carrot2.core.IController;
 import org.carrot2.core.ProcessingResult;
 import org.eclipse.ui.PlatformUI;
 
@@ -33,7 +33,7 @@ public final class SearchResult
     private final SearchInput input;
 
     /**
-     * Processing result from a {@link Controller}, associated with {@link #input}.
+     * Processing result from a {@link IController}, associated with {@link #input}.
      */
     private ProcessingResult result;
 

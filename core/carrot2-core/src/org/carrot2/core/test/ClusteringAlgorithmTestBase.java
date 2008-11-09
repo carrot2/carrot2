@@ -31,7 +31,7 @@ import com.google.common.collect.*;
 /**
  * Simple baseline tests that apply to all clustering algorithms.
  */
-public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm> extends
+public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm> extends
     ProcessingComponentTestBase<T>
 {
     /**
@@ -80,7 +80,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm>
     @SuppressWarnings("unchecked")
     public void testRepeatedClusteringWithCache()
     {
-        final Controller controller = new CachingController(DocumentSource.class);
+        final IController controller = new CachingController(IDocumentSource.class);
         controller.init(new HashMap());
 
         final HashMap processingAttributes = Maps.newHashMap();

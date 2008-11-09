@@ -20,7 +20,7 @@ import cern.colt.matrix.DoubleMatrix2D;
  */
 public class KMeansMatrixFactorizationFactory extends IterativeMatrixFactorizationFactory
 {
-    public MatrixFactorization factorize(DoubleMatrix2D A)
+    public IMatrixFactorization factorize(DoubleMatrix2D A)
     {
         KMeansMatrixFactorization factorization = new KMeansMatrixFactorization(A);
         factorization.setK(k);

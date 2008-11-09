@@ -34,14 +34,14 @@ public final class ResourceUtils
     /**
      * An array of resource locators (used first to last).
      */
-    private final ResourceLocator [] locators;
+    private final IResourceLocator [] locators;
 
     /**
      * No direct instantiation.
      */
-    public ResourceUtils(ResourceLocator [] locators)
+    public ResourceUtils(IResourceLocator [] locators)
     {
-        this.locators = new ResourceLocator [locators.length];
+        this.locators = new IResourceLocator [locators.length];
         System.arraycopy(locators, 0, this.locators, 0, locators.length);
     }
 
@@ -52,12 +52,12 @@ public final class ResourceUtils
      * @param clazz Optional class for class-relative resources.
      * @return Returns an empty array if no resource matched the given name.
      */
-    public Resource [] getAll(String resource, Class<?> clazz)
+    public IResource [] getAll(String resource, Class<?> clazz)
     {
-        final ArrayList<Resource> result = Lists.newArrayList();
-        for (final ResourceLocator element : locators)
+        final ArrayList<IResource> result = Lists.newArrayList();
+        for (final IResourceLocator element : locators)
         {
-            final Resource [] current = element.getAll(resource, clazz);
+            final IResource [] current = element.getAll(resource, clazz);
             // There shouldn't be too many matching resources,
             // so linear search is ok.
             for (int j = 0; j < current.length; j++)
@@ -88,7 +88,7 @@ public final class ResourceUtils
             logger.debug(buf.toString());
         }
 
-        return result.toArray(new Resource [result.size()]);
+        return result.toArray(new IResource [result.size()]);
     }
 
     /**
@@ -98,11 +98,11 @@ public final class ResourceUtils
      * @param clazz Optional class for class-relative resources.
      * @return Returns null if no resource was found for the given name.
      */
-    public Resource getFirst(String resource, Class<?> clazz)
+    public IResource getFirst(String resource, Class<?> clazz)
     {
-        for (final ResourceLocator element : locators)
+        for (final IResourceLocator element : locators)
         {
-            final Resource [] result = element.getAll(resource, clazz);
+            final IResource [] result = element.getAll(resource, clazz);
             if (result != null && result.length > 0)
             {
                 logger.debug("First matching " + resource + ", " + result[0].toString());
@@ -116,7 +116,7 @@ public final class ResourceUtils
     /**
      * Same as {@link #getFirst(String, Class)} but without the clazz argument.
      */
-    public Resource getFirst(String resource)
+    public IResource getFirst(String resource)
     {
         return getFirst(resource, null);
     }

@@ -20,14 +20,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Superclass for testing {@link LanguageModel}s.
+ * Superclass for testing {@link ILanguageModel}s.
  */
 public abstract class LanguageModelTestBase
 {
     /**
      * 
      */
-    protected LanguageModel languageModel;
+    protected ILanguageModel languageModel;
 
     /**
      * @return Returns language code for this test.
@@ -68,7 +68,7 @@ public abstract class LanguageModelTestBase
     public void testStemming()
     {
         final String [][] testData = getStemmingTestData();
-        final Stemmer stemmer = languageModel.getStemmer();
+        final IStemmer stemmer = languageModel.getStemmer();
 
         for (String [] pair : testData)
         {
@@ -92,7 +92,7 @@ public abstract class LanguageModelTestBase
     }
 
     /**
-     * Override and provide word pairs for {@link LanguageModel#getStemmer()} tests.
+     * Override and provide word pairs for {@link ILanguageModel#getStemmer()} tests.
      * Sample data should follow this format:
      * 
      * <pre>
@@ -116,7 +116,7 @@ public abstract class LanguageModelTestBase
 
     /**
      * Override and provide words for testing against
-     * {@link LanguageModel#isCommonWord(MutableCharArray)}).
+     * {@link ILanguageModel#isCommonWord(MutableCharArray)}).
      */
     protected String [] getCommonWordsTestData()
     {

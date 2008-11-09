@@ -21,7 +21,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 /**
  * Random matrix factorization seeding.
  */
-public class RandomSeedingStrategy implements SeedingStrategy
+public class RandomSeedingStrategy implements ISeedingStrategy
 {
     /** Colt's random number generator */
     private DoubleFunction random;

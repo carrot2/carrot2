@@ -22,7 +22,7 @@ import bak.pcj.IntComparator;
  * Utilities for sorting arrays that rather than swap elements in these arrays, return
  * <code>int []</code> arrays with the actual order and keep the input arrays intact.
  * Currently a combination of Quicksort and Insertion sort is used, at some point, if
- * better cache characteristics are required, we may want to switch to e.g. merge sort.
+ * better cache characteristics are required, we may want to switch to e.g., merge sort.
  */
 public class IndirectSorter
 {

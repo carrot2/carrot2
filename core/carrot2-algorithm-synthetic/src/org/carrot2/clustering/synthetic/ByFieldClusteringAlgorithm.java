@@ -31,7 +31,7 @@ import com.google.common.collect.Maps;
  */
 @Bindable(prefix = "ByAttributeClusteringAlgorithm")
 public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implements
-    ClusteringAlgorithm
+    IClusteringAlgorithm
 {
     /**
      * {@link Document}s to cluster.

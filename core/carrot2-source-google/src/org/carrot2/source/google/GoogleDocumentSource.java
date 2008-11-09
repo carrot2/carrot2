@@ -31,7 +31,7 @@ import org.codehaus.jackson.map.JsonNode;
 import org.codehaus.jackson.map.JsonTypeMapper;
 
 /**
- * A {@link DocumentSource} fetching search results from Google JSON API. Please note that
+ * A {@link IDocumentSource} fetching search results from Google JSON API. Please note that
  * this document source cannot deliver more than 32 search results.
  * 
  * @see http://code.google.com/apis/ajaxsearch/documentation/#fonje

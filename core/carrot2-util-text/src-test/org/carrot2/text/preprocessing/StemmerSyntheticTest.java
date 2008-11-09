@@ -13,7 +13,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.linguistic.LanguageModelFactory;
+import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.junit.Test;
 
@@ -334,7 +334,7 @@ public class StemmerSyntheticTest extends StemmerTestBase
     }
 
     @Override
-    protected LanguageModelFactory createLanguageModelFactory()
+    protected ILanguageModelFactory createLanguageModelFactory()
     {
         return new TestLanguageModelFactory();
     }

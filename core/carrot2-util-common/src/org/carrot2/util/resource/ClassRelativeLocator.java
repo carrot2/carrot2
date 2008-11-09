@@ -25,24 +25,24 @@ import com.google.common.collect.Lists;
 /**
  * Looks up resources relative to the given class and its class loader.
  */
-public class ClassRelativeLocator implements ResourceLocator
+public class ClassRelativeLocator implements IResourceLocator
 {
     private final static Logger logger = Logger.getLogger(ClassRelativeLocator.class);
 
     /**
      *
      */
-    public Resource [] getAll(String resource, Class<?> clazz)
+    public IResource [] getAll(String resource, Class<?> clazz)
     {
         if (clazz == null)
         {
             logger.warn("The class was null.");
-            return new Resource [0];
+            return new IResource [0];
         }
         
         try
         {
-            final ArrayList<Resource> result = Lists.newArrayList();
+            final ArrayList<IResource> result = Lists.newArrayList();
 
             // Try the class first.
             URL resourceURL = clazz.getResource(resource);
@@ -59,12 +59,12 @@ public class ClassRelativeLocator implements ResourceLocator
                 resourceURL = e.nextElement();
                 result.add(new URLResource(resourceURL));
             }
-            return result.toArray(new Resource [result.size()]);
+            return result.toArray(new IResource [result.size()]);
         }
         catch (final IOException e)
         {
             logger.warn("Locator failed to find resources.", e);
-            return new Resource [0];
+            return new IResource [0];
         }
     }
 }

@@ -32,7 +32,7 @@ public class ComponentSuitesTest
     @Test
     public void testCarrot2DefaultComponentSuite() throws Exception
     {
-        Resource resource = resourceUtils.getFirst("/carrot2-default/suite-dcs.xml",
+        IResource resource = resourceUtils.getFirst("/carrot2-default/suite-dcs.xml",
             ComponentSuitesTest.class);
         assertThat(resource).isNotNull();
         ProcessingComponentSuite suite = ProcessingComponentSuite.deserialize(resource);
@@ -65,7 +65,7 @@ public class ComponentSuitesTest
     @Test
     public void testIncludes() throws Exception
     {
-        Resource resource = resourceUtils.getFirst("/suite-including.xml",
+        IResource resource = resourceUtils.getFirst("/suite-including.xml",
             ComponentSuitesTest.class);
         assertThat(resource).isNotNull();
         ProcessingComponentSuite suite = ProcessingComponentSuite.deserialize(resource);

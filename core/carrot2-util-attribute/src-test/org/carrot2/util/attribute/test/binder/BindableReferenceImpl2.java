@@ -19,7 +19,7 @@ import org.carrot2.util.attribute.*;
  *
  */
 @Bindable
-public class BindableReferenceImpl2 implements BindableReference
+public class BindableReferenceImpl2 implements IBindableReference
 {
     /**
      * Init input int.

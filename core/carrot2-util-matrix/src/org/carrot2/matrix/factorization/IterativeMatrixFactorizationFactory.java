@@ -19,10 +19,10 @@ import org.carrot2.matrix.factorization.seeding.*;
 import cern.colt.matrix.DoubleFactory2D;
 
 /**
- * A factory for {@link MatrixFactorization}s.
+ * A factory for {@link IMatrixFactorization}s.
  */
 public abstract class IterativeMatrixFactorizationFactory implements
-    MatrixFactorizationFactory
+    IMatrixFactorizationFactory
 {
     /** The number of base vectors */
     protected int k;
@@ -43,10 +43,10 @@ public abstract class IterativeMatrixFactorizationFactory implements
     protected final static double DEFAULT_STOP_THRESHOLD = -1;
 
     /** Matrix seeding strategy factory */
-    protected SeedingStrategyFactory seedingFactory;
+    protected ISeedingStrategyFactory seedingFactory;
 
     /** Default matrix seeding strategy factory */
-    protected final static SeedingStrategyFactory DEFAULT_SEEDING_FACTORY = new RandomSeedingStrategyFactory(
+    protected final static ISeedingStrategyFactory DEFAULT_SEEDING_FACTORY = new RandomSeedingStrategyFactory(
         0);
 
     /** MatrixFactory to be used */
@@ -90,7 +90,7 @@ public abstract class IterativeMatrixFactorizationFactory implements
     /**
      * Returns {@link RandomSeedingStrategy} with constant seed.
      */
-    protected SeedingStrategy createSeedingStrategy()
+    protected ISeedingStrategy createSeedingStrategy()
     {
         return seedingFactory.createSeedingStrategy();
     }
@@ -128,19 +128,19 @@ public abstract class IterativeMatrixFactorizationFactory implements
     }
 
     /**
-     * Returns the {@link SeedingStrategyFactory} used by this factory.
+     * Returns the {@link ISeedingStrategyFactory} used by this factory.
      */
-    public SeedingStrategyFactory getSeedingFactory()
+    public ISeedingStrategyFactory getSeedingFactory()
     {
         return seedingFactory;
     }
 
     /**
-     * Sets the {@link SeedingStrategyFactory} to be used by this factory.
+     * Sets the {@link ISeedingStrategyFactory} to be used by this factory.
      * 
      * @param seedingFactory
      */
-    public void setSeedingFactory(SeedingStrategyFactory seedingFactory)
+    public void setSeedingFactory(ISeedingStrategyFactory seedingFactory)
     {
         this.seedingFactory = seedingFactory;
     }

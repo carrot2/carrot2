@@ -24,7 +24,7 @@ import com.google.common.collect.Sets;
 
 /**
  * A simple controller implementing the life cycle described in
- * {@link ProcessingComponent}.
+ * {@link IProcessingComponent}.
  * <p>
  * This controller is useful for one-time processing either with existing component
  * instances or classes of components to be created for processing. In case component
@@ -36,10 +36,10 @@ import com.google.common.collect.Sets;
  * there is an additional overhead of creating new component instances for each query
  * (which may or may not be a performance issue, this depends on a given component).
  */
-public final class SimpleController implements Controller
+public final class SimpleController implements IController
 {
     /**
-     * {@link ControllerContext} for this controller.
+     * {@link IControllerContext} for this controller.
      */
     private ControllerContextImpl context;
 
@@ -84,12 +84,12 @@ public final class SimpleController implements Controller
         Class<?>... processingComponentClasses) throws ProcessingException
     {
         // Create instances of processing components.
-        final ProcessingComponent [] processingComponents = new ProcessingComponent [processingComponentClasses.length];
+        final IProcessingComponent [] processingComponents = new IProcessingComponent [processingComponentClasses.length];
         for (int i = 0; i < processingComponents.length; i++)
         {
             try
             {
-                processingComponents[i] = (ProcessingComponent) processingComponentClasses[i]
+                processingComponents[i] = (IProcessingComponent) processingComponentClasses[i]
                     .newInstance();
             }
             catch (final InstantiationException e)
@@ -125,14 +125,14 @@ public final class SimpleController implements Controller
      *            processing.
      */
     public ProcessingResult process(Map<String, Object> attributes,
-        ProcessingComponent... processingComponents) throws ProcessingException
+        IProcessingComponent... processingComponents) throws ProcessingException
     {
         if (this.context == null)
         {
             throw new IllegalStateException("Controller not initialized.");
         }
 
-        final Set<ProcessingComponent> initializedComponents = Sets.newHashSet();
+        final Set<IProcessingComponent> initializedComponents = Sets.newHashSet();
 
         // Merge initialization and processing attributes first
         if (initAttributes != null)
@@ -149,7 +149,7 @@ public final class SimpleController implements Controller
         try
         {
             // Initialize all components.
-            for (final ProcessingComponent element : processingComponents)
+            for (final IProcessingComponent element : processingComponents)
             {
                 initializedComponents.add(element);
                 ControllerUtils.init(element, attributes, true, context);
@@ -163,7 +163,7 @@ public final class SimpleController implements Controller
         finally
         {
             // Finally, dispose of all components
-            for (final ProcessingComponent element : initializedComponents)
+            for (final IProcessingComponent element : initializedComponents)
             {
                 element.dispose();
             }

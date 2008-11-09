@@ -26,7 +26,7 @@ import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.AttributeBinder.AttributeBinderAction;
+import org.carrot2.util.attribute.AttributeBinder.IAttributeBinderAction;
 import org.carrot2.util.attribute.AttributeBinder.AttributeBinderActionCollect;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.pool.*;
@@ -36,7 +36,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.*;
 
 /**
- * A controller implementing the life cycle described in {@link ProcessingComponent} with
+ * A controller implementing the life cycle described in {@link IProcessingComponent} with
  * support for component pooling and, optionally, data caching.
  * <p>
  * Calls to {@link #process(Map, Class...)} are thread-safe, although some care should be
@@ -44,19 +44,19 @@ import com.google.common.collect.*;
  * allowed to see this object and {@link #dispose()} should be called after all threads
  * leave {@link #process(Map, Class...)}.
  * <p>
- * Notice for {@link ProcessingComponent} developers: if data caching is used (see
+ * Notice for {@link IProcessingComponent} developers: if data caching is used (see
  * {@link #CachingController(Class...)}), values of {@link Output} attributes produced by
  * the components whose output is to be cached (e.g., the {@link Document} instances in
- * case {@link DocumentSource} output is cached) may be accessed concurrently and
+ * case {@link IDocumentSource} output is cached) may be accessed concurrently and
  * therefore must be thread-safe.
  */
-public final class CachingController implements Controller
+public final class CachingController implements IController
 {
     /** Private monitor for multi-threaded critical sections. */
     final Object reentrantLock = new Object();
 
     /** Pool for component instances. */
-    private volatile SoftUnboundedPool<ProcessingComponent, String> componentPool;
+    private volatile SoftUnboundedPool<IProcessingComponent, String> componentPool;
 
     /**
      * Original values of {@link Processing} attributes that will be restored in the
@@ -64,14 +64,14 @@ public final class CachingController implements Controller
      * <p>
      * Access monitor: {#link #reentrantLock}.
      */
-    private final Map<Pair<Class<? extends ProcessingComponent>, String>, Map<String, Object>> resetAttributes = Maps
+    private final Map<Pair<Class<? extends IProcessingComponent>, String>, Map<String, Object>> resetAttributes = Maps
         .newHashMap();
 
     /**
      * Descriptors of {@link Input} and {@link Output} {@link Processing} attributes of
      * components whose output is to be cached.
      */
-    private final Map<Pair<Class<? extends ProcessingComponent>, String>, InputOutputAttributeDescriptors> cachedComponentAttributeDescriptors = Maps
+    private final Map<Pair<Class<? extends IProcessingComponent>, String>, InputOutputAttributeDescriptors> cachedComponentAttributeDescriptors = Maps
         .newHashMap();
 
     /**
@@ -82,9 +82,9 @@ public final class CachingController implements Controller
     private FromIdProcessingComponentClassResolver processingComponentClassResolver;
 
     /**
-     * A set of {@link ProcessingComponent}s whose data should be cached internally.
+     * A set of {@link IProcessingComponent}s whose data should be cached internally.
      */
-    private final Set<Class<? extends ProcessingComponent>> cachedComponentClasses;
+    private final Set<Class<? extends IProcessingComponent>> cachedComponentClasses;
 
     /**
      * Populates on-demand and caches the data from components of classes provided in
@@ -109,12 +109,12 @@ public final class CachingController implements Controller
      * 
      * @param cachedComponentClasses classes of components whose output should be cached
      *            by the controller. If a superclass is provided here, e.g.
-     *            {@link DocumentSource}, all its subclasses will be subject to caching. If
-     *            {@link ProcessingComponent} is provided here, output of all components
+     *            {@link IDocumentSource}, all its subclasses will be subject to caching. If
+     *            {@link IProcessingComponent} is provided here, output of all components
      *            will be cached.
      */
     public CachingController(
-        Class<? extends ProcessingComponent>... cachedComponentClasses)
+        Class<? extends IProcessingComponent>... cachedComponentClasses)
     {
         this.cachedComponentClasses = Sets.newHashSet(cachedComponentClasses);
     }
@@ -155,11 +155,11 @@ public final class CachingController implements Controller
 
     /**
      * An additional method to initialize this component, which enables processing with
-     * differently configured instances of the same {@link ProcessingComponent} class.
+     * differently configured instances of the same {@link IProcessingComponent} class.
      * Processing with components initialized in this method can be performed using
      * {@link #process(Map, String...)}.
      * 
-     * @param globalInitAttributes see {@link Controller#init(Map)}. Global initialization
+     * @param globalInitAttributes see {@link IController#init(Map)}. Global initialization
      *            attributes will be overridden by component-specific initialization
      *            attributes, if provided.
      * @param componentConfigurations component configurations to be used. Identifiers of
@@ -172,9 +172,9 @@ public final class CachingController implements Controller
         context = new ControllerContextImpl();
 
         // Prepare component-specific init attributes
-        final Map<Pair<Class<? extends ProcessingComponent>, String>, Map<String, Object>> componentSpecificInitAttributes = Maps
+        final Map<Pair<Class<? extends IProcessingComponent>, String>, Map<String, Object>> componentSpecificInitAttributes = Maps
             .newHashMap();
-        final Map<String, Class<? extends ProcessingComponent>> idToComponentClass = Maps
+        final Map<String, Class<? extends IProcessingComponent>> idToComponentClass = Maps
             .newHashMap();
         for (ProcessingComponentConfiguration componentConfiguration : componentConfigurations)
         {
@@ -183,7 +183,7 @@ public final class CachingController implements Controller
             mergedAttributes.putAll(componentConfiguration.attributes);
 
             componentSpecificInitAttributes.put(
-                new Pair<Class<? extends ProcessingComponent>, String>(
+                new Pair<Class<? extends IProcessingComponent>, String>(
                     componentConfiguration.componentClass,
                     componentConfiguration.componentId), mergedAttributes);
 
@@ -198,7 +198,7 @@ public final class CachingController implements Controller
             idToComponentClass);
 
         // Create the pool
-        componentPool = new SoftUnboundedPool<ProcessingComponent, String>(
+        componentPool = new SoftUnboundedPool<IProcessingComponent, String>(
             new ComponentInstantiationListener(Maps.newHashMap(globalInitAttributes),
                 componentSpecificInitAttributes), null,
             new ComponentPassivationListener(), ComponentDisposalListener.INSTANCE);
@@ -241,7 +241,7 @@ public final class CachingController implements Controller
      * An additional method for performing processing using configurations provided in
      * {@link #init(Map, ComponentConfiguration...)}.
      * 
-     * @param attributes see {@link Controller#process(Map, Class...)}
+     * @param attributes see {@link IController#process(Map, Class...)}
      * @param processingComponentIds identifiers of components to be involved in
      *            processing, in the order they should be arranged in the pipeline.
      */
@@ -257,28 +257,28 @@ public final class CachingController implements Controller
      * returning components etc.) at one place.
      */
     private <T> ProcessingResult processInternal(Map<String, Object> attributes,
-        ProcessingComponentClassResolver<T> resolver, T... componentIds)
+        IProcessingComponentClassResolver<T> resolver, T... componentIds)
     {
         if (this.context == null)
         {
             throw new IllegalStateException("Controller not initialized.");
         }
 
-        final SoftUnboundedPool<ProcessingComponent, String> componentPool = this.componentPool;
+        final SoftUnboundedPool<IProcessingComponent, String> componentPool = this.componentPool;
         if (componentPool == null)
         {
             throw new IllegalStateException("Initialize the controller first.");
         }
 
         final String actualComponentIds[] = new String [componentIds.length];
-        final ProcessingComponent [] processingComponents = new ProcessingComponent [componentIds.length];
+        final IProcessingComponent [] processingComponents = new IProcessingComponent [componentIds.length];
         ProcessingResult processingResult = null;
         try
         {
             // Borrow instances of processing components.
             for (int i = 0; i < processingComponents.length; i++)
             {
-                final Pair<Class<? extends ProcessingComponent>, String> resolved = resolver
+                final Pair<Class<? extends IProcessingComponent>, String> resolved = resolver
                     .resolve(componentIds[i]);
 
                 actualComponentIds[i] = resolved.objectB;
@@ -286,7 +286,7 @@ public final class CachingController implements Controller
                     resolved.objectB, attributes);
             }
 
-            for (ProcessingComponent processingComponent : processingComponents)
+            for (IProcessingComponent processingComponent : processingComponents)
             {
                 ControllerUtils.performProcessing(processingComponent, attributes,
                     !(processingComponent instanceof CachedProcessingComponent));
@@ -314,8 +314,8 @@ public final class CachingController implements Controller
      * Borrows a processing component from the pool or creates a
      * {@link CachedProcessingComponent} for caching.
      */
-    private ProcessingComponent getProcessingComponent(
-        Class<? extends ProcessingComponent> componentClass, String id,
+    private IProcessingComponent getProcessingComponent(
+        Class<? extends IProcessingComponent> componentClass, String id,
         Map<String, Object> attributes)
     {
         for (Class<?> clazz : cachedComponentClasses)
@@ -333,8 +333,8 @@ public final class CachingController implements Controller
      * Borrows a component from the pool and converts exceptions to
      * {@link ComponentInitializationException}.
      */
-    private ProcessingComponent borrowProcessingComponent(
-        Class<? extends ProcessingComponent> componentClass, String componentId)
+    private IProcessingComponent borrowProcessingComponent(
+        Class<? extends IProcessingComponent> componentClass, String componentId)
     {
         try
         {
@@ -386,51 +386,51 @@ public final class CachingController implements Controller
     }
 
     /**
-     * Resolves {@link ProcessingComponent} classes based on the provided componentId.
+     * Resolves {@link IProcessingComponent} classes based on the provided componentId.
      */
-    private static interface ProcessingComponentClassResolver<T>
+    private static interface IProcessingComponentClassResolver<T>
     {
-        Pair<Class<? extends ProcessingComponent>, String> resolve(T componentId);
+        Pair<Class<? extends IProcessingComponent>, String> resolve(T componentId);
     }
 
     /**
-     * Resolves {@link ProcessingComponent} classes from component ids being the classes
+     * Resolves {@link IProcessingComponent} classes from component ids being the classes
      * themselves.
      */
     private static class IdentityProcessingComponentClassResolver implements
-        ProcessingComponentClassResolver<Class<?>>
+        IProcessingComponentClassResolver<Class<?>>
     {
         final static IdentityProcessingComponentClassResolver INSTANCE = new IdentityProcessingComponentClassResolver();
 
         @SuppressWarnings("unchecked")
-        public Pair<Class<? extends ProcessingComponent>, String> resolve(
+        public Pair<Class<? extends IProcessingComponent>, String> resolve(
             Class<?> componentId)
         {
-            return new Pair<Class<? extends ProcessingComponent>, String>(
-                (Class<? extends ProcessingComponent>) componentId, null);
+            return new Pair<Class<? extends IProcessingComponent>, String>(
+                (Class<? extends IProcessingComponent>) componentId, null);
         }
     }
 
     /**
-     * Resolves {@link ProcessingComponent} classes from the component ids, based on the
+     * Resolves {@link IProcessingComponent} classes from the component ids, based on the
      * provided id-class mapping.
      */
     private static class FromIdProcessingComponentClassResolver implements
-        ProcessingComponentClassResolver<String>
+        IProcessingComponentClassResolver<String>
     {
-        private final Map<String, Class<? extends ProcessingComponent>> idToComponentClass;
+        private final Map<String, Class<? extends IProcessingComponent>> idToComponentClass;
 
         public FromIdProcessingComponentClassResolver(
-            Map<String, Class<? extends ProcessingComponent>> idToComponentClass)
+            Map<String, Class<? extends IProcessingComponent>> idToComponentClass)
         {
             this.idToComponentClass = idToComponentClass;
         }
 
         @SuppressWarnings("unchecked")
-        public Pair<Class<? extends ProcessingComponent>, String> resolve(
+        public Pair<Class<? extends IProcessingComponent>, String> resolve(
             String componentId)
         {
-            Class<? extends ProcessingComponent> resultClass;
+            Class<? extends IProcessingComponent> resultClass;
             String resultComponentId = componentId;
 
             resultClass = idToComponentClass.get(componentId);
@@ -438,7 +438,7 @@ public final class CachingController implements Controller
             {
                 try
                 {
-                    resultClass = (Class<? extends ProcessingComponent>) Thread
+                    resultClass = (Class<? extends IProcessingComponent>) Thread
                         .currentThread().getContextClassLoader().loadClass(componentId);
 
                     // The component id was coerced to a generic class,
@@ -451,7 +451,7 @@ public final class CachingController implements Controller
                 }
             }
 
-            return new Pair<Class<? extends ProcessingComponent>, String>(resultClass,
+            return new Pair<Class<? extends IProcessingComponent>, String>(resultClass,
                 resultComponentId);
         }
     }
@@ -461,7 +461,7 @@ public final class CachingController implements Controller
      * have {@link ImplementingClasses} constraints into the classes of the values.
      */
     private final static class ToClassAttributeTransformer implements
-        AttributeBinder.AttributeTransformer
+        AttributeBinder.IAttributeTransformer
     {
         static ToClassAttributeTransformer INSTANCE = new ToClassAttributeTransformer();
 
@@ -483,26 +483,26 @@ public final class CachingController implements Controller
      * they can be reset after the component gets returned to the pool.
      */
     private final class ComponentInstantiationListener implements
-        InstantiationListener<ProcessingComponent, String>
+        IInstantiationListener<IProcessingComponent, String>
     {
         private final Map<String, Object> initAttributes;
-        private final Map<Pair<Class<? extends ProcessingComponent>, String>, Map<String, Object>> componentSpecificInitAttributes;
+        private final Map<Pair<Class<? extends IProcessingComponent>, String>, Map<String, Object>> componentSpecificInitAttributes;
 
         ComponentInstantiationListener(
             Map<String, Object> initAttributes,
-            Map<Pair<Class<? extends ProcessingComponent>, String>, Map<String, Object>> componentSpecificInitAttributes)
+            Map<Pair<Class<? extends IProcessingComponent>, String>, Map<String, Object>> componentSpecificInitAttributes)
         {
             this.initAttributes = initAttributes;
             this.componentSpecificInitAttributes = componentSpecificInitAttributes;
         }
 
         @SuppressWarnings("unchecked")
-        public void objectInstantiated(ProcessingComponent component, String parameter)
+        public void objectInstantiated(IProcessingComponent component, String parameter)
         {
             try
             {
                 final Map<String, Object> specificInitAttributes = componentSpecificInitAttributes
-                    .get(new Pair<Class<? extends ProcessingComponent>, String>(component
+                    .get(new Pair<Class<? extends IProcessingComponent>, String>(component
                         .getClass(), parameter));
 
                 final Map<String, Object> actualInitAttributes;
@@ -531,10 +531,10 @@ public final class CachingController implements Controller
                 synchronized (reentrantLock)
                 {
                     // Attribute values for resetting
-                    final Class<? extends ProcessingComponent> componentClass = component
+                    final Class<? extends IProcessingComponent> componentClass = component
                         .getClass();
                     Map<String, Object> attributes = resetAttributes
-                        .get(new Pair<Class<? extends ProcessingComponent>, String>(
+                        .get(new Pair<Class<? extends IProcessingComponent>, String>(
                             componentClass, parameter));
                     if (attributes == null)
                     {
@@ -544,14 +544,14 @@ public final class CachingController implements Controller
                         // must not change @Init attributes during processing.
                         // We could unbind @Init attributes also, but this may be
                         // costly when Class -> Object coercion happens.
-                        AttributeBinder.bind(component, new AttributeBinderAction []
+                        AttributeBinder.bind(component, new IAttributeBinderAction []
                         {
                             new AttributeBinderActionCollect(Input.class, attributes,
                                 ToClassAttributeTransformer.INSTANCE),
                         }, Input.class, Processing.class);
 
                         resetAttributes.put(
-                            new Pair<Class<? extends ProcessingComponent>, String>(
+                            new Pair<Class<? extends IProcessingComponent>, String>(
                                 componentClass, parameter), attributes);
                     }
                 }
@@ -571,11 +571,11 @@ public final class CachingController implements Controller
      * Disposes of components on shut down.
      */
     private final static class ComponentDisposalListener implements
-        DisposalListener<ProcessingComponent, String>
+        IDisposalListener<IProcessingComponent, String>
     {
         final static ComponentDisposalListener INSTANCE = new ComponentDisposalListener();
 
-        public void dispose(ProcessingComponent component, String parameter)
+        public void dispose(IProcessingComponent component, String parameter)
         {
             component.dispose();
         }
@@ -586,10 +586,10 @@ public final class CachingController implements Controller
      * pool.
      */
     private final class ComponentPassivationListener implements
-        PassivationListener<ProcessingComponent, String>
+        IPassivationListener<IProcessingComponent, String>
     {
         @SuppressWarnings("unchecked")
-        public void passivate(ProcessingComponent processingComponent, String parameter)
+        public void passivate(IProcessingComponent processingComponent, String parameter)
         {
             // Reset attribute values
             try
@@ -601,7 +601,7 @@ public final class CachingController implements Controller
                 synchronized (reentrantLock)
                 {
                     map = resetAttributes
-                        .get(new Pair<Class<? extends ProcessingComponent>, String>(
+                        .get(new Pair<Class<? extends IProcessingComponent>, String>(
                             processingComponent.getClass(), parameter));
                 }
 
@@ -627,11 +627,11 @@ public final class CachingController implements Controller
     @Bindable
     private final class CachedProcessingComponent extends ProcessingComponentBase
     {
-        private final Class<? extends ProcessingComponent> componentClass;
+        private final Class<? extends IProcessingComponent> componentClass;
         private final String componentId;
         private final Map<String, Object> attributes;
 
-        CachedProcessingComponent(Class<? extends ProcessingComponent> componentClass,
+        CachedProcessingComponent(Class<? extends IProcessingComponent> componentClass,
             String componentId, Map<String, Object> attributes)
         {
             this.componentClass = componentClass;
@@ -684,19 +684,19 @@ public final class CachingController implements Controller
          */
         @SuppressWarnings("unchecked")
         private InputOutputAttributeDescriptors prepareDescriptors(
-            Class<? extends ProcessingComponent> componentClass)
+            Class<? extends IProcessingComponent> componentClass)
         {
             InputOutputAttributeDescriptors descriptors = null;
 
             synchronized (reentrantLock)
             {
                 descriptors = cachedComponentAttributeDescriptors
-                    .get(new Pair<Class<? extends ProcessingComponent>, String>(
+                    .get(new Pair<Class<? extends IProcessingComponent>, String>(
                         componentClass, componentId));
                 if (descriptors == null)
                 {
                     // Need to borrow a component for a while to build descriptors
-                    ProcessingComponent component = null;
+                    IProcessingComponent component = null;
                     try
                     {
                         component = borrowProcessingComponent(componentClass, componentId);
@@ -709,7 +709,7 @@ public final class CachingController implements Controller
                                 .only(Output.class, Processing.class).flatten().attributeDescriptors);
 
                         cachedComponentAttributeDescriptors.put(
-                            new Pair<Class<? extends ProcessingComponent>, String>(
+                            new Pair<Class<? extends IProcessingComponent>, String>(
                                 componentClass, componentId), descriptors);
                     }
                     finally
@@ -753,11 +753,11 @@ public final class CachingController implements Controller
         {
             final Map<String, Object> inputAttributes = (Map<String, Object>) key;
 
-            final Class<? extends ProcessingComponent> componentClass = (Class<? extends ProcessingComponent>) inputAttributes
+            final Class<? extends IProcessingComponent> componentClass = (Class<? extends IProcessingComponent>) inputAttributes
                 .get(COMPONENT_CLASS_KEY);
             final String componentId = (String) inputAttributes.get(COMPONENT_ID_KEY);
 
-            ProcessingComponent component = null;
+            IProcessingComponent component = null;
             try
             {
                 component = componentPool.borrowObject(componentClass, componentId);

@@ -15,12 +15,12 @@ package org.carrot2.core.attribute;
 
 import java.lang.annotation.*;
 
-import org.carrot2.core.ProcessingComponent;
+import org.carrot2.core.IProcessingComponent;
 
 /**
  * Marks attributes that will be bound before and after Carrot<sup>2</sup> component
- * performs processing. Please see {@link ProcessingComponent#beforeProcessing()} and
- * {@link ProcessingComponent#afterProcessing()} for details.
+ * performs processing. Please see {@link IProcessingComponent#beforeProcessing()} and
+ * {@link IProcessingComponent#afterProcessing()} for details.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

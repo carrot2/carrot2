@@ -21,7 +21,7 @@ import javax.xml.transform.Templates;
 import org.carrot2.core.*;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 
 /**
  * A base class for implementing data sources based on XML/XSLT. The XSLT stylesheet will
@@ -36,7 +36,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
     private Templates toCarrot2Xslt;
 
     @Override
-    public void init(ControllerContext context)
+    public void init(IControllerContext context)
     {
         super.init(context);
 
@@ -85,7 +85,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
      * XML. This method will be called once during component initialization.
      * Initialization time attributes will have been bound before the call to this method.
      */
-    protected abstract Resource getXsltResource();
+    protected abstract IResource getXsltResource();
 
     /**
      * Returns parameters to be passed to the XSLT transformer. This method will be called

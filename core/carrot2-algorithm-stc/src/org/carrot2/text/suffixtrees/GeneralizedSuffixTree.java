@@ -18,14 +18,14 @@ import java.util.ArrayList;
 /**
  * <p>
  * This class implements a <i>generalized suffix tree</i> data structure. In a GST, all
- * suffixes of one or more {@link SuffixableElement}s are present in the tree..
+ * suffixes of one or more {@link ISuffixableElement}s are present in the tree..
  */
 public class GeneralizedSuffixTree extends SuffixTree
 {
     /**
-     * An {@link ArrayList} of {@link SuffixableElement} elements inserted to this tree.
+     * An {@link ArrayList} of {@link ISuffixableElement} elements inserted to this tree.
      */
-    private ArrayList<SuffixableElement> allElements = new ArrayList<SuffixableElement>();
+    private ArrayList<ISuffixableElement> allElements = new ArrayList<ISuffixableElement>();
 
     /**
      * Creates a new {@link GSTNode}.
@@ -36,9 +36,9 @@ public class GeneralizedSuffixTree extends SuffixTree
     }
 
     /**
-     * Adds a single {@link SuffixableElement} to the tree.
+     * Adds a single {@link ISuffixableElement} to the tree.
      */
-    public Node add(SuffixableElement element)
+    public Node add(ISuffixableElement element)
     {
         Suffix activePoint;
 
@@ -144,21 +144,21 @@ public class GeneralizedSuffixTree extends SuffixTree
     /**
      * Returns the SuffixableElement which was added to the tree as the index-th one.
      */
-    protected SuffixableElement getElementByIndex(int index)
+    protected ISuffixableElement getElementByIndex(int index)
     {
-        return (SuffixableElement) allElements.get(index);
+        return (ISuffixableElement) allElements.get(index);
     }
 
     /**
      * Returns the currently processed SuffixableElement.
      */
-    protected SuffixableElement getCurrentElement()
+    protected ISuffixableElement getCurrentElement()
     {
-        return (SuffixableElement) this.allElements.get(getCurrentElementNumber());
+        return (ISuffixableElement) this.allElements.get(getCurrentElementNumber());
     }
 
     /**
-     * Returns the number of currently inserted {@link SuffixableElement}.
+     * Returns the number of currently inserted {@link ISuffixableElement}.
      */
     protected int getCurrentElementNumber()
     {

@@ -84,9 +84,9 @@ public final class AttributeNames
 
     /**
      * Data source processing time. A sum of processing times of all
-     * {@link DocumentSource}s in the chain, including the
-     * {@link ProcessingComponent#beforeProcessing()} and
-     * {@link ProcessingComponent#afterProcessing()} hooks.
+     * {@link IDocumentSource}s in the chain, including the
+     * {@link IProcessingComponent#beforeProcessing()} and
+     * {@link IProcessingComponent#afterProcessing()} hooks.
      * 
      * @label Data Source Processing Time
      * @group Data source status
@@ -95,9 +95,9 @@ public final class AttributeNames
 
     /**
      * Algorithm processing time. A sum of processing times of all
-     * {@link ClusteringAlgorithm}s in the chain, including the
-     * {@link ProcessingComponent#beforeProcessing()} and
-     * {@link ProcessingComponent#afterProcessing()} hooks.
+     * {@link IClusteringAlgorithm}s in the chain, including the
+     * {@link IProcessingComponent#beforeProcessing()} and
+     * {@link IProcessingComponent#afterProcessing()} hooks.
      * 
      * @label Clustering Algorithm Processing Time
      * @group Clustering algorithm status

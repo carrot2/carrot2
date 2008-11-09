@@ -26,7 +26,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.attribute.constraint.NotBlank;
 
 /**
- * A base class facilitating implementation of {@link DocumentSource}s wrapping external
+ * A base class facilitating implementation of {@link IDocumentSource}s wrapping external
  * search engines with remote/ network-based interfaces. The base class defines the common
  * attribute fields used by more specific base classes and concrete implementations.
  * 
@@ -35,7 +35,7 @@ import org.carrot2.util.attribute.constraint.NotBlank;
  */
 @Bindable(prefix = "SearchEngineBase")
 public abstract class SearchEngineBase extends ProcessingComponentBase implements
-    DocumentSource
+    IDocumentSource
 {
     @Processing
     @Input

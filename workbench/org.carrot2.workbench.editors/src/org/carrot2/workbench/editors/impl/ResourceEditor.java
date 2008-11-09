@@ -34,7 +34,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 
 /**
- * Editor for attributes that are of {@link Resource} type.
+ * Editor for attributes that are of {@link IResource} type.
  */
 public class ResourceEditor extends AttributeEditorAdapter
 {
@@ -51,7 +51,7 @@ public class ResourceEditor extends AttributeEditorAdapter
     /**
      * The actual resource (most recent valid value or <code>null</code>).
      */
-    private Resource resource = null;
+    private IResource resource = null;
 
     /*
      * Validator for URIs.
@@ -238,9 +238,9 @@ public class ResourceEditor extends AttributeEditorAdapter
             previous = ((URLResource) resource).getUrl().toExternalForm();
         }
 
-        if (resource != null && resource instanceof ParameterizedUrlResource)
+        if (resource != null && resource instanceof URLResourceWithParams)
         {
-            previous = ((ParameterizedUrlResource) resource).getUrl().toExternalForm();
+            previous = ((URLResourceWithParams) resource).getUrl().toExternalForm();
         }
 
         final InputDialog dialog = new InputDialog(resourceInfo.getShell(),
@@ -250,7 +250,7 @@ public class ResourceEditor extends AttributeEditorAdapter
         {
             try
             {
-                setValue(new ParameterizedUrlResource(new URL(dialog.getValue())));
+                setValue(new URLResourceWithParams(new URL(dialog.getValue())));
             }
             catch (MalformedURLException e)
             {
@@ -270,12 +270,12 @@ public class ResourceEditor extends AttributeEditorAdapter
             return;
         }
 
-        if (newValue != null && !(newValue instanceof Resource))
+        if (newValue != null && !(newValue instanceof IResource))
         {
             return;
         }
 
-        this.resource = (Resource) newValue;
+        this.resource = (IResource) newValue;
         this.resourceInfo.setText(resource == null ? "" : resource.toString());
 
         fireAttributeChanged(new AttributeEvent(this));

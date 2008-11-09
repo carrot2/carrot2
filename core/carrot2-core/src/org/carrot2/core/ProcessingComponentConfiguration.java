@@ -17,14 +17,14 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Represents a specific configuration of a {@link ProcessingComponent}.
+ * Represents a specific configuration of a {@link IProcessingComponent}.
  */
 public class ProcessingComponentConfiguration
 {
     /**
-     * The specific {@link ProcessingComponent} class.
+     * The specific {@link IProcessingComponent} class.
      */
-    public final Class<? extends ProcessingComponent> componentClass;
+    public final Class<? extends IProcessingComponent> componentClass;
 
     /**
      * Identifier of the component.
@@ -39,12 +39,12 @@ public class ProcessingComponentConfiguration
     /**
      * Creates a new component configuration.
      * 
-     * @param componentClass the specific {@link ProcessingComponent} class.
+     * @param componentClass the specific {@link IProcessingComponent} class.
      * @param componentId identifier of the component.
      * @param attributes initialization attributes for this component configuration.
      */
     public ProcessingComponentConfiguration(
-        Class<? extends ProcessingComponent> componentClass, String componentId,
+        Class<? extends IProcessingComponent> componentClass, String componentId,
         Map<String, Object> attributes)
     {
         this.componentClass = componentClass;
@@ -55,11 +55,11 @@ public class ProcessingComponentConfiguration
     /**
      * Creates a new component configuration with an empty set of initialization attributes.
      * 
-     * @param componentClass the specific {@link ProcessingComponent} class.
+     * @param componentClass the specific {@link IProcessingComponent} class.
      * @param componentId identifier of the component.
      */
     public ProcessingComponentConfiguration(
-        Class<? extends ProcessingComponent> componentClass, String componentId)
+        Class<? extends IProcessingComponent> componentClass, String componentId)
     {
         this(componentClass, componentId, Collections.<String, Object> emptyMap());
     }

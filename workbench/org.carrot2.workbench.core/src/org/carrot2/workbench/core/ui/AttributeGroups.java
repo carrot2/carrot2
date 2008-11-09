@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.ProcessingComponent;
+import org.carrot2.core.IProcessingComponent;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.util.attribute.AttributeDescriptor;
@@ -126,9 +126,9 @@ public final class AttributeGroups extends Composite implements
             try
             {
                 Class<?> clazz = descriptor.type;
-                if (clazz != null && ProcessingComponent.class.isAssignableFrom(clazz))
+                if (clazz != null && IProcessingComponent.class.isAssignableFrom(clazz))
                 {
-                    EditorFactory.getEditorFor(clazz.asSubclass(ProcessingComponent.class), descriptor);
+                    EditorFactory.getEditorFor(clazz.asSubclass(IProcessingComponent.class), descriptor);
                 }
                 else
                 {

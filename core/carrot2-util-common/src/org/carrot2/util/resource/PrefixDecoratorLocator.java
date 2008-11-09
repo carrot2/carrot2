@@ -18,18 +18,18 @@ package org.carrot2.util.resource;
  * Prefixes all resource names with a given prefix at lookup time and
  * delegates to another resource locator.
  */
-public final class PrefixDecoratorLocator implements ResourceLocator
+public final class PrefixDecoratorLocator implements IResourceLocator
 {
-    private final ResourceLocator delegate;
+    private final IResourceLocator delegate;
     private final String prefix;
 
-    public PrefixDecoratorLocator(ResourceLocator locator, String prefix)
+    public PrefixDecoratorLocator(IResourceLocator locator, String prefix)
     {
         this.delegate = locator;
         this.prefix = prefix;
     }
 
-    public Resource [] getAll(String resource, Class<?> clazz)
+    public IResource [] getAll(String resource, Class<?> clazz)
     {
         while (resource.startsWith("/"))
         {

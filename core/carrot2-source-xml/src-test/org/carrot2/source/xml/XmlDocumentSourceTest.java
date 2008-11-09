@@ -19,7 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import org.carrot2.core.Controller;
+import org.carrot2.core.IController;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
@@ -49,7 +49,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testLegacyXml()
     {
-        Resource xml = resourceUtils.getFirst("/xml/carrot2-apple-computer.xml",
+        IResource xml = resourceUtils.getFirst("/xml/carrot2-apple-computer.xml",
             XmlDocumentSourceTest.class);
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
@@ -64,7 +64,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testResultsTruncation()
     {
-        Resource xml = resourceUtils.getFirst("/xml/carrot2-apple-computer.xml",
+        IResource xml = resourceUtils.getFirst("/xml/carrot2-apple-computer.xml",
             XmlDocumentSourceTest.class);
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
@@ -78,9 +78,9 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testXsltNoParameters()
     {
-        Resource xml = resourceUtils.getFirst("/xml/custom-parameters-not-required.xml",
+        IResource xml = resourceUtils.getFirst("/xml/custom-parameters-not-required.xml",
             XmlDocumentSourceTest.class);
-        Resource xslt = resourceUtils.getFirst("/xsl/custom-xslt.xsl",
+        IResource xslt = resourceUtils.getFirst("/xsl/custom-xslt.xsl",
             XmlDocumentSourceTest.class);
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
@@ -94,9 +94,9 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testXsltWithParameters()
     {
-        Resource xml = resourceUtils.getFirst("/xml/custom-parameters-required.xml",
+        IResource xml = resourceUtils.getFirst("/xml/custom-parameters-required.xml",
             XmlDocumentSourceTest.class);
-        Resource xslt = resourceUtils.getFirst("/xsl/custom-xslt.xsl",
+        IResource xslt = resourceUtils.getFirst("/xsl/custom-xslt.xsl",
             XmlDocumentSourceTest.class);
 
         Map<String, String> xsltParameters = Maps.newHashMap();
@@ -118,7 +118,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testNoIdsInSourceXml()
     {
-        Resource xml = resourceUtils.getFirst("/xml/carrot2-no-ids.xml",
+        IResource xml = resourceUtils.getFirst("/xml/carrot2-no-ids.xml",
             XmlDocumentSourceTest.class);
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
@@ -132,7 +132,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testGappedIdsInSourceXml()
     {
-        Resource xml = resourceUtils.getFirst("/xml/carrot2-gapped-ids.xml",
+        IResource xml = resourceUtils.getFirst("/xml/carrot2-gapped-ids.xml",
             XmlDocumentSourceTest.class);
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
@@ -146,7 +146,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test(expected = RuntimeException.class)
     public void testDuplicatedIdsInSourceXml()
     {
-        Resource xml = resourceUtils.getFirst("/xml/carrot2-duplicated-ids.xml",
+        IResource xml = resourceUtils.getFirst("/xml/carrot2-duplicated-ids.xml",
             XmlDocumentSourceTest.class);
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
@@ -157,11 +157,11 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testInitializationTimeXslt()
     {
-        Resource xslt = resourceUtils.getFirst("/xsl/custom-xslt.xsl",
+        IResource xslt = resourceUtils.getFirst("/xsl/custom-xslt.xsl",
             XmlDocumentSourceTest.class);
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"), xslt);
 
-        Resource xml = resourceUtils.getFirst("/xml/custom-parameters-not-required.xml",
+        IResource xml = resourceUtils.getFirst("/xml/custom-parameters-not-required.xml",
             XmlDocumentSourceTest.class);
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
             xml);
@@ -173,16 +173,16 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testOverridingInitializationTimeXslt()
     {
-        Resource initXslt = resourceUtils.getFirst("/xsl/carrot2-identity.xsl",
+        IResource initXslt = resourceUtils.getFirst("/xsl/carrot2-identity.xsl",
             XmlDocumentSourceTest.class);
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
             initXslt);
         
-        Controller controller = getCachingController(initAttributes);
+        IController controller = getCachingController(initAttributes);
 
         // Run with identity XSLT
         {
-            Resource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
+            IResource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
                 XmlDocumentSourceTest.class);
             processingAttributes.put(AttributeUtils
                 .getKey(XmlDocumentSource.class, "xml"), xml);
@@ -197,9 +197,9 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
 
         // Run with swapping XSLT
         {
-            Resource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
+            IResource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
                 XmlDocumentSourceTest.class);
-            Resource xslt = resourceUtils.getFirst(
+            IResource xslt = resourceUtils.getFirst(
                 "/xsl/carrot2-title-snippet-switch.xsl", XmlDocumentSourceTest.class);
             processingAttributes.put(AttributeUtils
                 .getKey(XmlDocumentSource.class, "xml"), xml);
@@ -218,16 +218,16 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testDisablingInitializationTimeXslt()
     {
-        Resource initXslt = resourceUtils.getFirst(
+        IResource initXslt = resourceUtils.getFirst(
             "/xsl/carrot2-title-snippet-switch.xsl", XmlDocumentSourceTest.class);
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
             initXslt);
 
-        Controller controller = getCachingController(initAttributes);
+        IController controller = getCachingController(initAttributes);
         
         // Run with swapping XSLT
         {
-            Resource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
+            IResource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
                 XmlDocumentSourceTest.class);
             processingAttributes.put(AttributeUtils
                 .getKey(XmlDocumentSource.class, "xml"), xml);
@@ -242,7 +242,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
 
         // Run without XSLT
         {
-            Resource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
+            IResource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
                 XmlDocumentSourceTest.class);
             processingAttributes.put(AttributeUtils
                 .getKey(XmlDocumentSource.class, "xml"), xml);
@@ -262,7 +262,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Prerequisite(requires = "carrot2XmlFeedTestsEnabled")
     public void testRemoteUrl() throws MalformedURLException
     {
-        Resource xml = new ParameterizedUrlResource(new URL(getCarrot2XmlFeedUrlBase()
+        IResource xml = new URLResourceWithParams(new URL(getCarrot2XmlFeedUrlBase()
             + "&q=${query}&results=${results}"));
         final String query = "apple computer";
 

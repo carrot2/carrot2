@@ -36,13 +36,13 @@ import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import com.google.common.collect.Maps;
 
 /**
- * A {@link DocumentSource} fetching {@link Document}s from a local Apache Lucene index.
+ * A {@link IDocumentSource} fetching {@link Document}s from a local Apache Lucene index.
  * The index should be binary-compatible with the Lucene version actually imported by this
  * plugin.
  */
 @Bindable(prefix = "LuceneDocumentSource")
 public final class LuceneDocumentSource extends ProcessingComponentBase implements
-    DocumentSource
+    IDocumentSource
 {
     /** Logger for this class. */
     private final static Logger logger = Logger.getLogger(LuceneDocumentSource.class);
@@ -110,7 +110,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public Analyzer analyzer = new StandardAnalyzer();
 
     /**
-     * {@link FieldMapper} provides the link between Carrot2 {@link Document} fields and
+     * {@link IFieldMapper} provides the link between Carrot2 {@link Document} fields and
      * Lucene index fields.
      * 
      * @label Field mapper
@@ -126,7 +126,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     {
         SimpleFieldMapper.class
     }, strict = false)
-    public FieldMapper fieldMapper = new SimpleFieldMapper();
+    public IFieldMapper fieldMapper = new SimpleFieldMapper();
 
     /**
      * A pre-parsed {@link Query} object or a {@link String} parsed using the built-in
@@ -156,14 +156,14 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     /**
      * Controller context serving as the synchronization monitor when opening indices.
      */
-    private ControllerContext context;
+    private IControllerContext context;
 
     /*
      * 
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void init(ControllerContext context)
+    public void init(IControllerContext context)
     {
         super.init(context);
         this.context = context;
@@ -174,9 +174,9 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             if (context.getAttribute(key) == null)
             {
                 context.setAttribute(key, Maps.newIdentityHashMap());
-                context.addListener(new ControllerContextListener()
+                context.addListener(new IControllerContextListener()
                 {
-                    public void beforeDisposal(ControllerContext context)
+                    public void beforeDisposal(IControllerContext context)
                     {
                         closeAllIndexes();
                     }

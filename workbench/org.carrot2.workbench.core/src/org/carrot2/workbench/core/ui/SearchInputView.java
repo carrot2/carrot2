@@ -146,13 +146,13 @@ public class SearchInputView extends ViewPart
     private Map<String, BindableDescriptor> descriptors = Maps.newHashMap();
 
     /**
-     * All {@link DocumentSourceDescriptor}s related to {@link DocumentSource}s in
+     * All {@link DocumentSourceDescriptor}s related to {@link IDocumentSource}s in
      * {@link #sourceViewer}.
      */
     private HashMap<String, DocumentSourceDescriptor> sources;
 
     /**
-     * All {@link ProcessingComponentDescriptor}s related to {@link ClusteringAlgorithm}s
+     * All {@link ProcessingComponentDescriptor}s related to {@link IClusteringAlgorithm}s
      * in {@link #algorithmViewer}.
      */
     private HashMap<String, ProcessingComponentDescriptor> algorithms;

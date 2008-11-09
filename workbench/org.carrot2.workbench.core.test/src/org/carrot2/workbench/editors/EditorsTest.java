@@ -13,7 +13,7 @@
 
 package org.carrot2.workbench.editors;
 
-import org.carrot2.core.ClusteringAlgorithm;
+import org.carrot2.core.IClusteringAlgorithm;
 import org.carrot2.core.ProcessingComponentBase;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
@@ -39,7 +39,7 @@ public class EditorsTest
 
     @Bindable
     public static class TestComponent extends ProcessingComponentBase implements
-        ClusteringAlgorithm
+        IClusteringAlgorithm
     {
 
         @Attribute(key = "my.specificAttribute")

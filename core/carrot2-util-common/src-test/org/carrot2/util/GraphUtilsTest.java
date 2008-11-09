@@ -190,7 +190,7 @@ public class GraphUtilsTest
                 vertexCount, arcs), pruneOneNodeSubgraphs)).isEqualTo(expected);
     }
 
-    private static class ArrayArcPredicate implements GraphUtils.ArcPredicate
+    private static class ArrayArcPredicate implements GraphUtils.IArcPredicate
     {
         private boolean [][] arcs;
 

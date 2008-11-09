@@ -16,7 +16,7 @@ package org.carrot2.clustering.lingo;
 /**
  * Calculates term-document matrix element values based on Linear Inverse Term Frequency.
  */
-public class LinearTfIdfTermWeighting implements TermWeighting
+public class LinearTfIdfTermWeighting implements ITermWeighting
 {
     public double calculateTermWeight(int termFrequency, int documentFrequency,
         int documentCount)

@@ -14,9 +14,9 @@
 package org.carrot2.text.suffixtrees2;
 
 /**
- * A {@link Sequence} wrapping arbitrary array of integers.
+ * A {@link ISequence} wrapping arbitrary array of integers.
  */
-public final class IntSequence implements Sequence
+public final class IntSequence implements ISequence
 {
     private final int [] seq;
     private final int start;

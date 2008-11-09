@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Persister;
@@ -142,7 +142,7 @@ public class WebappConfig
         return requestModel;
     }
 
-    private static WebappConfig deserialize(Resource resource) throws Exception
+    private static WebappConfig deserialize(IResource resource) throws Exception
     {
         final InputStream inputStream = resource.open();
         final WebappConfig loaded;

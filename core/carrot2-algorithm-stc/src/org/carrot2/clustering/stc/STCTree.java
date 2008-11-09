@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import org.carrot2.text.suffixtrees.GeneralizedSuffixTree;
 import org.carrot2.text.suffixtrees.Node;
-import org.carrot2.text.suffixtrees.SuffixableElement;
+import org.carrot2.text.suffixtrees.ISuffixableElement;
 
 /**
  * Extends Generalized Suffix Tree in order to provide count of suffixed documents in each
@@ -44,7 +44,7 @@ public class STCTree extends GeneralizedSuffixTree
         return currentDocumentIndex;
     }
 
-    public Node add(SuffixableElement element)
+    public Node add(ISuffixableElement element)
     {
         mapping.add(currentDocumentIndex);
 

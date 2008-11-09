@@ -13,7 +13,7 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.text.linguistic.LanguageModelFactory;
+import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
 import org.carrot2.text.preprocessing.LabelFilterProcessor;
 import org.carrot2.text.preprocessing.LabelFilterTestBase;
@@ -79,7 +79,7 @@ public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
     }
 
     @Override
-    protected LanguageModelFactory createLanguageModelFactory()
+    protected ILanguageModelFactory createLanguageModelFactory()
     {
         final SnowballLanguageModelFactory snowballLanguageModelFactory = new SnowballLanguageModelFactory();
         snowballLanguageModelFactory.mergeStopwords = false;

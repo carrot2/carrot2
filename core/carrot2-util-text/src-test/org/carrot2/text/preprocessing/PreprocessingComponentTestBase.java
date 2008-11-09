@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.carrot2.core.Document;
-import org.carrot2.text.linguistic.LanguageModelFactory;
+import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
 import org.junit.Before;
 
@@ -30,7 +30,7 @@ import com.google.common.collect.Maps;
 public class PreprocessingComponentTestBase
 {
     /** Language model factory for preprocessing components being tested */
-    protected LanguageModelFactory languageFactory;
+    protected ILanguageModelFactory languageFactory;
 
     /** Preprocessing context for the component being tested */
     protected PreprocessingContext context;
@@ -53,7 +53,7 @@ public class PreprocessingComponentTestBase
      */
     protected void createPreprocessingContext(String query)
     {
-        final LanguageModelFactory languageModelFactory = createLanguageModelFactory();
+        final ILanguageModelFactory languageModelFactory = createLanguageModelFactory();
         if (languageModelFactory != null)
         {
             languageFactory = languageModelFactory;
@@ -68,10 +68,10 @@ public class PreprocessingComponentTestBase
     }
 
     /**
-     * Creates the {@link LanguageModelFactory} to be used in tests. Override to use a
+     * Creates the {@link ILanguageModelFactory} to be used in tests. Override to use a
      * factory that's different from the default.
      */
-    protected LanguageModelFactory createLanguageModelFactory()
+    protected ILanguageModelFactory createLanguageModelFactory()
     {
         return null;
     }

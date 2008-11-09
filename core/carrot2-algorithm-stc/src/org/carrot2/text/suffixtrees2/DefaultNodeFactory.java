@@ -14,9 +14,9 @@
 package org.carrot2.text.suffixtrees2;
 
 /**
- * Default {@link NodeFactory} returning {@link Node}s.
+ * Default {@link INodeFactory} returning {@link Node}s.
  */
-public final class DefaultNodeFactory implements NodeFactory<Node>
+public final class DefaultNodeFactory implements INodeFactory<Node>
 {
     public Node createNode(SuffixTree<? super Node> owner)
     {

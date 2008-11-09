@@ -16,7 +16,7 @@ package org.carrot2.core.test;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
-import org.carrot2.core.DocumentSource;
+import org.carrot2.core.IDocumentSource;
 import org.carrot2.source.*;
 import org.carrot2.source.MultipageSearchEngine.SearchMode;
 import org.carrot2.util.attribute.AttributeUtils;
@@ -24,10 +24,10 @@ import org.junit.Test;
 import org.junitext.Prerequisite;
 
 /**
- * Common tests for {@link DocumentSource}s that can make more than one search requests to
+ * Common tests for {@link IDocumentSource}s that can make more than one search requests to
  * get results for one query.
  */
-public abstract class MultipageDocumentSourceTestBase<T extends DocumentSource> extends
+public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource> extends
     QueryableDocumentSourceTestBase<T>
 {
     /**

@@ -20,7 +20,7 @@ import java.util.*;
 
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.constraint.IsConstraint;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.simpleframework.xml.load.Persister;
 
@@ -175,7 +175,7 @@ public class BindableDescriptorBuilder
      */
     private static BindableMetadata getBindableMetadata(final Class<?> clazz)
     {
-        final Resource metadataXml = ResourceUtilsFactory.getDefaultResourceUtils()
+        final IResource metadataXml = ResourceUtilsFactory.getDefaultResourceUtils()
             .getFirst(clazz.getName() + ".xml", clazz);
         BindableMetadata bindableMetadata = null;
         if (metadataXml != null)

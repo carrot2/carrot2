@@ -13,13 +13,13 @@
 
 package org.carrot2.source;
 
-import org.carrot2.core.DocumentSource;
+import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.Bindable;
 
 /**
- * A base class facilitating implementation of {@link DocumentSource}s wrapping external
+ * A base class facilitating implementation of {@link IDocumentSource}s wrapping external
  * search engines with remote/ network-based interfaces. This implementation assumes that
  * all requested results can be fetched from the search engine using one request.
  * 

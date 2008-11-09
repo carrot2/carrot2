@@ -26,7 +26,7 @@ public class LanguageModelFactoryTest
     @Test
     public void testDefaultLanguageEnglish()
     {
-        final LanguageModel model = new SnowballLanguageModelFactory().getCurrentLanguage();
+        final ILanguageModel model = new SnowballLanguageModelFactory().getCurrentLanguage();
         assertNotNull(model);
         assertEquals(LanguageCode.ENGLISH, model.getLanguageCode());
     }
@@ -34,7 +34,7 @@ public class LanguageModelFactoryTest
     @Test
     public void testLanguageDutch()
     {
-        final LanguageModel model = new SnowballLanguageModelFactory().getLanguage(LanguageCode.DUTCH);
+        final ILanguageModel model = new SnowballLanguageModelFactory().getLanguage(LanguageCode.DUTCH);
         assertNotNull(model);
         assertEquals(LanguageCode.DUTCH, model.getLanguageCode());
     }    

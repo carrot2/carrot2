@@ -79,8 +79,8 @@ public class SoftUnboundedPoolTest
     {
         IMocksControl mocksControl = createStrictControl();
 
-        final InstantiationListener<String, String> instantiationListener = mocksControl
-            .createMock(InstantiationListener.class);
+        final IInstantiationListener<String, String> instantiationListener = mocksControl
+            .createMock(IInstantiationListener.class);
         instantiationListener.objectInstantiated(isA(String.class), eq("p1"));
         instantiationListener.objectInstantiated(isA(String.class), (String) isNull());
         mocksControl.replay();

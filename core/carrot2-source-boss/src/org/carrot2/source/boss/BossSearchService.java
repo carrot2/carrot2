@@ -27,7 +27,7 @@ import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpHeaders;
 import org.carrot2.util.httpclient.HttpUtils;
-import org.carrot2.util.resource.ParameterizedUrlResource;
+import org.carrot2.util.resource.URLResourceWithParams;
 import org.simpleframework.xml.load.Persister;
 
 /**
@@ -371,7 +371,7 @@ public abstract class BossSearchService
             }
         }
 
-        final String serviceURI = ParameterizedUrlResource.substituteAttributes(
+        final String serviceURI = URLResourceWithParams.substituteAttributes(
             getServiceURI(), new NameValuePair("query", query));
 
         final HttpUtils.Response response = HttpUtils.doGET(serviceURI, params, Arrays

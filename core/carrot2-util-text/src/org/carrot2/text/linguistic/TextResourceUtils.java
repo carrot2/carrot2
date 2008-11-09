@@ -16,7 +16,7 @@ package org.carrot2.text.linguistic;
 import java.io.*;
 import java.util.Set;
 
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 
 import com.google.common.collect.Sets;
 
@@ -28,9 +28,9 @@ import com.google.common.collect.Sets;
 final class TextResourceUtils
 {
     /**
-     * Loads words from a given {@link Resource} (one word per line).
+     * Loads words from a given {@link IResource} (one word per line).
      */
-    public static Set<String> load(Resource wordsResource) throws IOException
+    public static Set<String> load(IResource wordsResource) throws IOException
     {
         final InputStream is = wordsResource.open();
         if (is == null)

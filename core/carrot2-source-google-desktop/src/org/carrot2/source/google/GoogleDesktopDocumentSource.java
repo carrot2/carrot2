@@ -23,7 +23,7 @@ import org.carrot2.util.StreamUtils;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.ClassResource;
-import org.carrot2.util.resource.Resource;
+import org.carrot2.util.resource.IResource;
 
 /**
  * Fetches documents from an instance of Google Desktop search engine.
@@ -89,7 +89,7 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
     }
 
     @Override
-    protected Resource getXsltResource()
+    protected IResource getXsltResource()
     {
         return new ClassResource(GoogleDesktopDocumentSource.class,
             "google-desktop-to-c2.xsl");

@@ -92,7 +92,7 @@ public class BLASQuickCheck
         factory.setStopThreshold(-1);
 
         DoubleMatrix2D A;
-        MatrixFactorization factorization;
+        IMatrixFactorization factorization;
         long elapsed;
         long elapsedNative;
 

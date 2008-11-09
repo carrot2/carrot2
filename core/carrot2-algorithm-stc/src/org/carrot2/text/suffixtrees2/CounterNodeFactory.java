@@ -14,9 +14,9 @@
 package org.carrot2.text.suffixtrees2;
 
 /**
- * {@link NodeFactory} returning {@link CounterNode}s.
+ * {@link INodeFactory} returning {@link CounterNode}s.
  */
-public final class CounterNodeFactory implements NodeFactory<CounterNode>
+public final class CounterNodeFactory implements INodeFactory<CounterNode>
 {
     public CounterNode createNode(SuffixTree<? super CounterNode> container)
     {

@@ -28,7 +28,7 @@ import com.google.common.base.Function;
 /**
  * Simple baseline tests that apply to a generic data sources.
  */
-public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
+public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
     ProcessingComponentTestBase<T>
 {
     /**
@@ -58,12 +58,12 @@ public abstract class DocumentSourceTestBase<T extends DocumentSource> extends
     /**
      * Runs a query without specifying any additional attributes.
      * 
-     * @param controller the {@link Controller} to perform the query
+     * @param controller the {@link IController} to perform the query
      * @return Returns the number of fetched documents. Access
      *         {@link #processingAttributes} map to get hold of the actual documents.
      */
     @SuppressWarnings("unchecked")
-    protected int runQuery(Controller controller)
+    protected int runQuery(IController controller)
     {
         final ProcessingResult result = controller.process(processingAttributes,
             getComponentClass());

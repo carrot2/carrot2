@@ -14,17 +14,17 @@
 package org.carrot2.text.suffixtrees2;
 
 /**
- * Converts a {@link Sequence} to a {@link String} using {@link SequenceFormatter}.
+ * Converts a {@link ISequence} to a {@link String} using {@link SequenceFormatter}.
  */
 public abstract class SequenceFormatter
 {
     
     /**
-     * Converts a given {@link Sequence} to a {@link String} as if it were characters.
+     * Converts a given {@link ISequence} to a {@link String} as if it were characters.
      * Negative characters are given special opcodes: <code>$N</code> where N is a number
      * starting from 0.
      */
-    public static String asString(Sequence sequence, SequenceFormatter formatter)
+    public static String asString(ISequence sequence, SequenceFormatter formatter)
     {
         final StringBuilder builder = new StringBuilder();
 

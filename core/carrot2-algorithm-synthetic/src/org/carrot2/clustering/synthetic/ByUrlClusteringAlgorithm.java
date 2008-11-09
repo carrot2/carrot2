@@ -39,7 +39,7 @@ import com.google.common.collect.*;
  */
 @Bindable
 public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
-    ClusteringAlgorithm
+    IClusteringAlgorithm
 {
     /** A set of URL segments to be ignored. */
     private static final Set<String> STOP_URL_PARTS;

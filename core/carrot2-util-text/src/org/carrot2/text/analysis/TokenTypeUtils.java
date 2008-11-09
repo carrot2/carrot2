@@ -14,7 +14,7 @@
 package org.carrot2.text.analysis;
 
 /**
- * Utility methods for working with {@link TokenType}s.
+ * Utility methods for working with {@link ITokenType}s.
  */
 public final class TokenTypeUtils
 {
@@ -29,6 +29,6 @@ public final class TokenTypeUtils
      */
     public static int maskType(int rawType) 
     {
-        return rawType & TokenType.TYPE_MASK;
+        return rawType & ITokenType.TYPE_MASK;
     }
 }

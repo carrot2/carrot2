@@ -43,7 +43,7 @@ import com.google.common.collect.Maps;
 
 /**
  * The activator class (plug-in's entry point), controls the life-cycle and contains a
- * reference to the Carrot2 {@link Controller}.
+ * reference to the Carrot2 {@link IController}.
  */
 public class WorkbenchCorePlugin extends AbstractUIPlugin
 {
@@ -62,7 +62,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     private CachingController controller;
 
     /**
-     * All loaded components ({@link DocumentSource}s and {@link ClusteringAlgorithm}.
+     * All loaded components ({@link IDocumentSource}s and {@link IClusteringAlgorithm}.
      */
     private ProcessingComponentSuite componentSuite;
 
@@ -102,7 +102,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         // Scan the list of suite extension points.
         scanSuites();
 
-        controller = new CachingController(DocumentSource.class);
+        controller = new CachingController(IDocumentSource.class);
         controller.init(new HashMap<String, Object>(), componentSuite);
 
         /*
@@ -145,8 +145,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     }
 
     /**
-     * Returns all loaded components ({@link ClusteringAlgorithm} and
-     * {@link DocumentSource}.
+     * Returns all loaded components ({@link IClusteringAlgorithm} and
+     * {@link IDocumentSource}.
      */
     public ProcessingComponentSuite getComponentSuite()
     {
@@ -265,7 +265,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                     /*
                      * Add temporary resource locator.
                      */
-                    final ResourceLocator bundleLocator = 
+                    final IResourceLocator bundleLocator = 
                         new PrefixDecoratorLocator(new BundleResourceLocator(b), suiteRoot);
                     ResourceUtilsFactory.addFirst(bundleLocator);
                     try
@@ -369,20 +369,20 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
          * missing). Make sure this is done <b>before</b> installing the new resource
          * locator because we'd be chasing our tail here.
          */
-        final Map<String, Resource> resources = Maps.newLinkedHashMap();
+        final Map<String, IResource> resources = Maps.newLinkedHashMap();
         final ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
 
         for (LanguageCode language : LanguageCode.values())
         {
             final String stopwords = "stopwords." + language.getIsoCode();
-            final Resource resource = resUtils.getFirst(stopwords);
+            final IResource resource = resUtils.getFirst(stopwords);
             if (resource != null)
             {
                 resources.put(stopwords, resource);
             }
         }
 
-        for (Map.Entry<String, Resource> e : resources.entrySet())
+        for (Map.Entry<String, IResource> e : resources.entrySet())
         {
             final String fileName = e.getKey();
             final File targetFile = new File(workspacePath, fileName);

@@ -18,7 +18,7 @@ import java.util.*;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.text.analysis.*;
-import org.carrot2.text.linguistic.LanguageModelFactory;
+import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.text.suffixtrees.Node;
@@ -34,7 +34,7 @@ import com.google.common.collect.Lists;
 @SuppressWarnings("unchecked")
 @Bindable
 public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
-    ClusteringAlgorithm
+    IClusteringAlgorithm
 {
     /**
      * Query that produced the documents, optional.
@@ -87,7 +87,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Language model factory used by the algorithm, contains bindable attributes.
      */
-    public LanguageModelFactory languageModelFactory = new SnowballLanguageModelFactory();
+    public ILanguageModelFactory languageModelFactory = new SnowballLanguageModelFactory();
 
     /**
      * Parameters and thresholds of the algorithm.
@@ -231,7 +231,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                 for (int i = start; i < start + length; i++)
                 {
                     final boolean isPunctuation = TokenTypeUtils
-                        .maskType(context.allTokens.type[i]) == TokenType.TT_PUNCTUATION;
+                        .maskType(context.allTokens.type[i]) == ITokenType.TT_PUNCTUATION;
                     final int wordIndex = tokenWordIndices[i];
 
                     if (wordIndex < 0 && !isPunctuation)

@@ -15,30 +15,30 @@ package org.carrot2.text.preprocessing;
 
 import org.carrot2.text.linguistic.*;
 
-public final class TestLanguageModelFactory implements LanguageModelFactory
+public final class TestLanguageModelFactory implements ILanguageModelFactory
 {
     private static final TestLanguageModel TEST_LANGUAGE_MODEL = new TestLanguageModel();
 
-    public LanguageModel getCurrentLanguage()
+    public ILanguageModel getCurrentLanguage()
     {
         return TEST_LANGUAGE_MODEL;
     }
 
-    public LanguageModel getLanguage(LanguageCode language)
+    public ILanguageModel getLanguage(LanguageCode language)
     {
         return getCurrentLanguage();
     }
 
-    private final static class TestLanguageModel implements LanguageModel
+    private final static class TestLanguageModel implements ILanguageModel
     {
         public LanguageCode getLanguageCode()
         {
             return null;
         }
 
-        public Stemmer getStemmer()
+        public IStemmer getStemmer()
         {
-            return new Stemmer()
+            return new IStemmer()
             {
                 public CharSequence stem(CharSequence word)
                 {

@@ -20,7 +20,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 /**
  * Matrix seeding based on the k-means algorithms.
  */
-public class KMeansSeedingStrategy implements SeedingStrategy
+public class KMeansSeedingStrategy implements ISeedingStrategy
 {
     /** The maximum number of KMeans iterations */
     private int maxIterations;

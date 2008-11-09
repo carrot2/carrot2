@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.matrix.NNIInterface;
-import org.carrot2.text.linguistic.LanguageModelFactory;
+import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.*;
@@ -37,7 +37,7 @@ import com.google.common.collect.Lists;
  */
 @Bindable(prefix = "LingoClusteringAlgorithm")
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
-    ClusteringAlgorithm
+    IClusteringAlgorithm
 {
     private static final Logger log = Logger.getLogger(LingoClusteringAlgorithm.class);
     
@@ -93,7 +93,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
         LogTfIdfTermWeighting.class, LinearTfIdfTermWeighting.class,
         TfTermWeighting.class
     }, strict = false)
-    public TermWeighting termWeighting = new LogTfIdfTermWeighting();
+    public ITermWeighting termWeighting = new LogTfIdfTermWeighting();
 
     /**
      * Indicates whether Lingo used fast native matrix computation routines. Value of this
@@ -161,7 +161,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * Language model factory used by the algorithm, contains bindable attributes.
      */
-    public LanguageModelFactory languageModelFactory = new SnowballLanguageModelFactory();
+    public ILanguageModelFactory languageModelFactory = new SnowballLanguageModelFactory();
 
     /**
      * Term-document matrix builder for the algorithm, contains bindable attributes.
@@ -184,7 +184,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public LabelFormatter labelFormatter = new LabelFormatter();
 
     @Override
-    public void init(ControllerContext context)
+    public void init(IControllerContext context)
     {
         synchronized (this.getClass())
         {

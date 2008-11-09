@@ -30,7 +30,7 @@ import org.carrot2.util.attribute.*;
 import com.microsoft.msnsearch.*;
 
 /**
- * A {@link DocumentSource} fetching {@link Document}s (search results) from Microsoft
+ * A {@link IDocumentSource} fetching {@link Document}s (search results) from Microsoft
  * Live!.
  */
 @Bindable(prefix = "MicrosoftLiveDocumentSource")

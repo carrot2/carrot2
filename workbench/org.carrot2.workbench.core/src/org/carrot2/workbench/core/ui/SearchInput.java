@@ -16,7 +16,7 @@ package org.carrot2.workbench.core.ui;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.carrot2.core.Controller;
+import org.carrot2.core.IController;
 import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.editors.*;
@@ -31,12 +31,12 @@ import org.eclipse.ui.*;
 public class SearchInput implements IEditorInput, IPersistableElement, IAttributeEventProvider
 {
     /**
-     * Document source identifier for a {@link Controller} instance.
+     * Document source identifier for a {@link IController} instance.
      */
     private final String sourceId;
 
     /**
-     * Algorithm identifier for a {@link Controller} instance.
+     * Algorithm identifier for a {@link IController} instance.
      */
     private final String algorithmId;
 

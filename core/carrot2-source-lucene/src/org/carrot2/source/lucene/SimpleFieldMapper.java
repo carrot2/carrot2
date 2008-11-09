@@ -30,11 +30,11 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 /**
- * A simple {@link FieldMapper} with one-to-one mapping between the default title, url and
+ * A simple {@link IFieldMapper} with one-to-one mapping between the default title, url and
  * summary fields.
  */
 @Bindable
-public class SimpleFieldMapper implements FieldMapper
+public class SimpleFieldMapper implements IFieldMapper
 {
     /**
      * Each {@link org.carrot2.core.Document} will have an additional

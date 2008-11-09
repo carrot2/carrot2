@@ -153,9 +153,9 @@ public class SimpleXmlWrapperValue
         }
         else if (wrapper != null)
         {
-            if (wrapper instanceof SimpleXmlWrapper)
+            if (wrapper instanceof ISimpleXmlWrapper)
             {
-                return ((SimpleXmlWrapper) wrapper).getValue();
+                return ((ISimpleXmlWrapper) wrapper).getValue();
             }
             else
             {
@@ -167,15 +167,15 @@ public class SimpleXmlWrapperValue
     }
 
     @SuppressWarnings("unchecked")
-    static <T> SimpleXmlWrapper<T> wrapCustom(T value)
+    static <T> ISimpleXmlWrapper<T> wrapCustom(T value)
     {
-        final Class<? extends SimpleXmlWrapper<?>> wrapperClass = SimpleXmlWrappers.getWrapper(value);
+        final Class<? extends ISimpleXmlWrapper<?>> wrapperClass = SimpleXmlWrappers.getWrapper(value);
         if (wrapperClass != null)
         {
-            SimpleXmlWrapper<T> newInstance;
+            ISimpleXmlWrapper<T> newInstance;
             try
             {
-                newInstance = (SimpleXmlWrapper<T>) wrapperClass.newInstance();
+                newInstance = (ISimpleXmlWrapper<T>) wrapperClass.newInstance();
             }
             catch (Exception e)
             {

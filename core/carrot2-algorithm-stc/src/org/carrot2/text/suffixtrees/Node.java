@@ -61,7 +61,7 @@ public class Node
             start = Node.this.getSuffixStartIndex();
 
             int end = Node.this.getSuffixEndIndex();
-            if (Node.this.getSuffixableElement().get(end) == SuffixableElement.END_OF_SUFFIX)
+            if (Node.this.getSuffixableElement().get(end) == ISuffixableElement.END_OF_SUFFIX)
             {
                 // skip EOS marker
                 end--;
@@ -91,7 +91,7 @@ public class Node
 
     /**
      * Finds an edge starting in this node and labeled with the particular element from
-     * current container's {@link SuffixableElement}. <code>null</code> is returned if
+     * current container's {@link ISuffixableElement}. <code>null</code> is returned if
      * no edge has been found.
      */
     protected Edge findEdgeMatchingFirstElement(int index)
@@ -120,10 +120,10 @@ public class Node
     /**
      * Finds an edge <b>entirely </b> matching the SuffixableElement at some index. E.g.,
      * if the {@link Edge} holds three elements, the three of them are matched against
-     * elements of {@link SuffixableElement} at <code>index, index+1 and index+3</code>.
+     * elements of {@link ISuffixableElement} at <code>index, index+1 and index+3</code>.
      * The method returns <code>null</code> if matching failed.
      */
-    public Edge findEdgeMatchingEntirely(SuffixableElement t, int startIndex)
+    public Edge findEdgeMatchingEntirely(ISuffixableElement t, int startIndex)
     {
         final Edge matchingEdge = findEdgeMatchingFirstElement(t.get(startIndex));
         if (matchingEdge != null)
@@ -180,9 +180,9 @@ public class Node
     }
 
     /**
-     * Returns a {@link SuffixableElement} all outgoing edges point to.
+     * Returns a {@link ISuffixableElement} all outgoing edges point to.
      */
-    public SuffixableElement getSuffixableElement()
+    public ISuffixableElement getSuffixableElement()
     {
         // In case of a single-element suffix tree, this doesn't matter.
         return container.getCurrentElement();

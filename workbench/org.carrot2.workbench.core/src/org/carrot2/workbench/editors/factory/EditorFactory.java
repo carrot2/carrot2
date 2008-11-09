@@ -18,7 +18,7 @@ import static org.apache.commons.lang.ClassUtils.*;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-import org.carrot2.core.ProcessingComponent;
+import org.carrot2.core.IProcessingComponent;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.workbench.editors.IAttributeEditor;
 
@@ -41,7 +41,7 @@ public final class EditorFactory
     
     /**
      * Return the best matching {@link IAttributeEditor} for a given
-     * {@link AttributeDescriptor} and {@link ProcessingComponent}.
+     * {@link AttributeDescriptor} and {@link IProcessingComponent}.
      * 
      * @param componentClazz Component class or <code>null</code> if no specific component is 
      * available and generic editor should be returned.
@@ -49,7 +49,7 @@ public final class EditorFactory
      * @throws EditorNotFoundException If no editor for a given attribute could be found. 
      */
     public static IAttributeEditor getEditorFor(
-        Class<? extends ProcessingComponent> componentClazz, AttributeDescriptor attribute)
+        Class<? extends IProcessingComponent> componentClazz, AttributeDescriptor attribute)
     {
         IAttributeEditor editor = null;
 
@@ -88,10 +88,10 @@ public final class EditorFactory
     }
 
     /**
-     * Find a {@link ProcessingComponent}-dedicated attribute editor.
+     * Find a {@link IProcessingComponent}-dedicated attribute editor.
      */
     private static IAttributeEditor findDedicatedEditor(
-        final Class<? extends ProcessingComponent> clazz,
+        final Class<? extends IProcessingComponent> clazz,
         final AttributeDescriptor attribute)
     {
         List<DedicatedEditorWrapper> candidates =
@@ -196,7 +196,7 @@ public final class EditorFactory
      * be zero or at most one.
      */
     private static List<DedicatedEditorWrapper> getCompatibleDedicatedEditors(
-        final Class<? extends ProcessingComponent> clazz,
+        final Class<? extends IProcessingComponent> clazz,
         final AttributeDescriptor attribute)
     {
         return AttributeEditorLoader.INSTANCE

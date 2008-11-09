@@ -25,7 +25,7 @@ import org.carrot2.util.attribute.constraint.DoubleRange;
  * a definition of a complete phrase.
  */
 @Bindable(prefix = "CompleteLabelFilter")
-public class CompleteLabelFilter implements LabelFilter
+public class CompleteLabelFilter implements ILabelFilter
 {
     /**
      * Remove truncated phrases. Try to remove "incomplete" cluster labels, e.g. prefer

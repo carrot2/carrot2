@@ -89,9 +89,9 @@ public final class EnumEditor extends MappedValueComboEditor
         {
             asString = null;
         }
-        else if (newValue instanceof ValueHintMapping)
+        else if (newValue instanceof IValueHintMapping)
         {
-            asString = ((ValueHintMapping) newValue).getAttributeValue();
+            asString = ((IValueHintMapping) newValue).getAttributeValue();
         }
         else if (newValue instanceof Enum)
         {

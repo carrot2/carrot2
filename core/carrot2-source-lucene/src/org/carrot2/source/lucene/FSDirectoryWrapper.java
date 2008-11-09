@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.FSDirectory;
-import org.carrot2.util.simplexml.SimpleXmlWrapper;
+import org.carrot2.util.simplexml.ISimpleXmlWrapper;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Commit;
@@ -28,7 +28,7 @@ import org.simpleframework.xml.load.Persist;
  * Wraps {@link FSDirectory} for serialization with SimpleXML.
  */
 @Root(name = "fsdirectory")
-public final class FSDirectoryWrapper implements SimpleXmlWrapper<FSDirectory>
+public final class FSDirectoryWrapper implements ISimpleXmlWrapper<FSDirectory>
 {
     private FSDirectory value;
 

@@ -25,7 +25,7 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
- * A {@link DocumentSource} fetching {@link Document}s (search results) from Yahoo!.
+ * A {@link IDocumentSource} fetching {@link Document}s (search results) from Yahoo!.
  */
 @Bindable(prefix = "YahooDocumentSource")
 public final class YahooDocumentSource extends MultipageSearchEngine

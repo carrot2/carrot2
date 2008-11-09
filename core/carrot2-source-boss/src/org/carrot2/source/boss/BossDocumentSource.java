@@ -25,7 +25,7 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
- * A {@link DocumentSource} fetching {@link Document}s (search results) from <a
+ * A {@link IDocumentSource} fetching {@link Document}s (search results) from <a
  * href="http://developer.yahoo.com/search/boss/">Yahoo BOSS</a>.
  */
 @Bindable(prefix = "BossDocumentSource")

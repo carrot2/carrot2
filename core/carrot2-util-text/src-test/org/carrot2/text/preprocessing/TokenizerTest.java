@@ -18,7 +18,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.Arrays;
 
-import org.carrot2.text.analysis.TokenType;
+import org.carrot2.text.analysis.ITokenType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,7 +51,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         };
         final int [] expectedTokensTypes = new int []
         {
-            TokenType.TF_TERMINATOR
+            ITokenType.TF_TERMINATOR
         };
         final byte [] expectedTokensFieldIndices = new byte []
         {
@@ -77,7 +77,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         };
         final int [] expectedTokensTypes = new int []
         {
-            TokenType.TF_SEPARATOR_DOCUMENT, TokenType.TF_TERMINATOR
+            ITokenType.TF_SEPARATOR_DOCUMENT, ITokenType.TF_TERMINATOR
         };
         final byte [] expectedTokensFieldIndices = new byte []
         {
@@ -104,8 +104,8 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         };
         final int [] expectedTokensTypes = new int []
         {
-            TokenType.TT_TERM, TokenType.TT_TERM, TokenType.TF_SEPARATOR_FIELD,
-            TokenType.TT_TERM, TokenType.TT_TERM, TokenType.TF_TERMINATOR
+            ITokenType.TT_TERM, ITokenType.TT_TERM, ITokenType.TF_SEPARATOR_FIELD,
+            ITokenType.TT_TERM, ITokenType.TT_TERM, ITokenType.TF_TERMINATOR
         };
         final byte [] expectedTokensFieldIndices = new byte []
         {
@@ -135,11 +135,11 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         };
         final int [] expectedTokensTypes = new int []
         {
-            TokenType.TT_TERM, TokenType.TT_TERM, TokenType.TF_SEPARATOR_FIELD,
-            TokenType.TT_TERM, TokenType.TT_TERM, TokenType.TF_SEPARATOR_DOCUMENT,
-            TokenType.TT_TERM, TokenType.TT_TERM, TokenType.TF_SEPARATOR_FIELD,
-            TokenType.TT_TERM, TokenType.TF_SEPARATOR_DOCUMENT, TokenType.TT_TERM,
-            TokenType.TF_SEPARATOR_FIELD, TokenType.TT_TERM, TokenType.TF_TERMINATOR
+            ITokenType.TT_TERM, ITokenType.TT_TERM, ITokenType.TF_SEPARATOR_FIELD,
+            ITokenType.TT_TERM, ITokenType.TT_TERM, ITokenType.TF_SEPARATOR_DOCUMENT,
+            ITokenType.TT_TERM, ITokenType.TT_TERM, ITokenType.TF_SEPARATOR_FIELD,
+            ITokenType.TT_TERM, ITokenType.TF_SEPARATOR_DOCUMENT, ITokenType.TT_TERM,
+            ITokenType.TF_SEPARATOR_FIELD, ITokenType.TT_TERM, ITokenType.TF_TERMINATOR
         };
         final byte [] expectedTokensFieldIndices = new byte []
         {
@@ -170,8 +170,8 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         };
         final int [] expectedTokensTypes = new int []
         {
-            TokenType.TT_TERM, TokenType.TT_TERM, TokenType.TF_SEPARATOR_FIELD,
-            TokenType.TT_TERM, TokenType.TT_TERM, TokenType.TF_TERMINATOR
+            ITokenType.TT_TERM, ITokenType.TT_TERM, ITokenType.TF_SEPARATOR_FIELD,
+            ITokenType.TT_TERM, ITokenType.TT_TERM, ITokenType.TF_TERMINATOR
         };
         final byte [] expectedTokensFieldIndices = new byte []
         {
@@ -198,9 +198,9 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         };
         final int [] expectedTokensTypes = new int []
         {
-            TokenType.TT_TERM,
-            TokenType.TF_SEPARATOR_SENTENCE | TokenType.TT_PUNCTUATION,
-            TokenType.TT_TERM, TokenType.TF_TERMINATOR
+            ITokenType.TT_TERM,
+            ITokenType.TF_SEPARATOR_SENTENCE | ITokenType.TT_PUNCTUATION,
+            ITokenType.TT_TERM, ITokenType.TF_TERMINATOR
         };
         final byte [] expectedTokensFieldIndices = new byte []
         {

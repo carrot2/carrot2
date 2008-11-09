@@ -217,7 +217,7 @@ public class SimpleXmlWrappersTest
     }
 
     @Root(name = "with-wrapper")
-    static class ClassWithWrapperWrapper implements SimpleXmlWrapper<ClassWithWrapper>
+    static class ClassWithWrapperWrapper implements ISimpleXmlWrapper<ClassWithWrapper>
     {
         ClassWithWrapper classWithWrapper;
 

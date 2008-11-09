@@ -16,9 +16,9 @@ package org.carrot2.text.preprocessing.filter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
 /**
- * A base for {@link LabelFilter} implementations that handle each label independently.
+ * A base for {@link ILabelFilter} implementations that handle each label independently.
  */
-public abstract class SingleLabelFilterBase implements LabelFilter
+public abstract class SingleLabelFilterBase implements ILabelFilter
 {
     public void filter(PreprocessingContext context, boolean [] acceptedStems,
         boolean [] acceptedPhrases)

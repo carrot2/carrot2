@@ -36,15 +36,15 @@ import com.google.common.collect.*;
  * data.
  */
 @Bindable(prefix = "XmlDocumentSource")
-public class XmlDocumentSource extends ProcessingComponentBase implements DocumentSource
+public class XmlDocumentSource extends ProcessingComponentBase implements IDocumentSource
 {
     /**
      * The resource to load XML data from. You can either create instances of
-     * {@link Resource} implementations directly or use {@link ResourceUtils} to look up
-     * {@link Resource} instances from a variety of locations.
+     * {@link IResource} implementations directly or use {@link ResourceUtils} to look up
+     * {@link IResource} instances from a variety of locations.
      * <p>
-     * One special {@link Resource} implementation you can use is
-     * {@link ParameterizedUrlResource}. It allows you to specify attribute place holders
+     * One special {@link IResource} implementation you can use is
+     * {@link URLResourceWithParams}. It allows you to specify attribute place holders
      * in the URL that will be replaced during runtime. The place holder format is
      * <code>${attribute}</code>. The following attributes will be resolved:
      * </p>
@@ -68,9 +68,9 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Required
     @ImplementingClasses(classes =
     {
-        FileResource.class, ParameterizedUrlResource.class, URLResource.class
+        FileResource.class, URLResourceWithParams.class, URLResource.class
     }, strict = false)
-    public Resource xml;
+    public IResource xml;
 
     /**
      * The resource to load XSLT stylesheet from. The XSLT stylesheet is optional and is
@@ -78,7 +78,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * transformation will be applied to the source XML stream, the transformed XML stream
      * will be deserialized into {@link Document}s.
      * <p>
-     * The XSLT {@link Resource} can be provided both on initialization and processing
+     * The XSLT {@link IResource} can be provided both on initialization and processing
      * time. The stylesheet provided on initialization will be cached for the life time of
      * the component, while processing-time style sheets will be compiled every time
      * processing is requested and will override the initialization-time stylesheet.
@@ -98,9 +98,9 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     @Attribute
     @ImplementingClasses(classes =
     {
-        FileResource.class, ParameterizedUrlResource.class, URLResource.class
+        FileResource.class, URLResourceWithParams.class, URLResource.class
     }, strict = false)
-    public Resource xslt;
+    public IResource xslt;
 
     /**
      * Parameters to be passed to the XSLT transformer. Keys of the map will be used as
@@ -148,7 +148,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
      * init and processing, and want to cache the XSLT template provided on init, we must
      * store this reference.
      */
-    private Resource initXslt;
+    private IResource initXslt;
 
     /** A template defined at initialization time, can be null */
     private Templates instanceLevelXslt;
@@ -164,7 +164,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     }
 
     @Override
-    public void init(ControllerContext context)
+    public void init(IControllerContext context)
     {
         super.init(context);
 
@@ -227,12 +227,12 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
     }
 
     /**
-     * Opens a {@link Resource}, also handles {@link ParameterizedUrlResource}s.
+     * Opens a {@link IResource}, also handles {@link URLResourceWithParams}s.
      */
-    private InputStream openResource(Resource resource) throws IOException
+    private InputStream openResource(IResource resource) throws IOException
     {
         InputStream inputStream;
-        if (resource instanceof ParameterizedUrlResource)
+        if (resource instanceof URLResourceWithParams)
         {
             // If we got a specialized implementation of the Resource interface,
             // perform substitution of known attributes
@@ -241,7 +241,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements Docume
             attributes.put("query", (query != null ? query : ""));
             attributes.put("results", (results != -1 ? results : ""));
 
-            inputStream = ((ParameterizedUrlResource) resource).open(attributes);
+            inputStream = ((URLResourceWithParams) resource).open(attributes);
         }
         else
         {

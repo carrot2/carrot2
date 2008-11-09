@@ -24,7 +24,7 @@ import cern.colt.matrix.linalg.SingularValueDecomposition;
  * Performs matrix factorization using the Singular Value Decomposition algorithm.
  */
 public class PartialSingularValueDecomposition extends MatrixFactorizationBase implements
-    MatrixFactorization
+    IMatrixFactorization
 {
     /** The desired number of base vectors */
     protected int k;

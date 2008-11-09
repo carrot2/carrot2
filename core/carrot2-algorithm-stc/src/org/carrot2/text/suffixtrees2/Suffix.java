@@ -62,7 +62,7 @@ final class Suffix
     {
         if (!isExplicit())
         {
-            final Sequence input = originNode.container.input;
+            final ISequence input = originNode.container.input;
 
             Edge edge = originNode.getEdge(input.objectAt(firstElementIndex));
             int edgeSpan = edge.lastElementIndex - edge.firstElementIndex;

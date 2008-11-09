@@ -128,7 +128,7 @@ public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
         }
     }
 
-    private static class OneLabelFeatureScorer implements FeatureScorer
+    private static class OneLabelFeatureScorer implements IFeatureScorer
     {
         private int labelIndex;
         private double score;

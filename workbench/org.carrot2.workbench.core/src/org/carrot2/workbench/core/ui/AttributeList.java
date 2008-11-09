@@ -17,7 +17,7 @@ import java.text.Collator;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.carrot2.core.ProcessingComponent;
+import org.carrot2.core.IProcessingComponent;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
@@ -62,7 +62,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
     /**
      * Optional component class attribute descriptors come from.
      */
-    private Class<? extends ProcessingComponent> componentClazz;
+    private Class<? extends IProcessingComponent> componentClazz;
 
     /**
      * Attribute change listeners.
@@ -99,9 +99,9 @@ public final class AttributeList extends Composite implements IAttributeEventPro
          * Only store component clazz if it is assignable to {@link ProcessingComponent}.
          */
         Class<?> clazz = bindable.type;
-        if (clazz != null && ProcessingComponent.class.isAssignableFrom(clazz))
+        if (clazz != null && IProcessingComponent.class.isAssignableFrom(clazz))
         {
-            this.componentClazz = (Class<? extends ProcessingComponent>) clazz;
+            this.componentClazz = (Class<? extends IProcessingComponent>) clazz;
         }
 
         createComponents(currentValues);

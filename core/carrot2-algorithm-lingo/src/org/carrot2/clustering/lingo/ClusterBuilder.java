@@ -107,7 +107,7 @@ public class ClusterBuilder
      * Optional feature scorer. We don't make it an attribute for now as the core Lingo
      * will not have any implementations for this interface.
      */
-    public FeatureScorer featureScorer = null;
+    public IFeatureScorer featureScorer = null;
 
     /**
      * Coefficients for label weighting based on the cluster size.
@@ -121,7 +121,7 @@ public class ClusterBuilder
     /**
      * Discovers labels for clusters.
      */
-    void buildLabels(LingoProcessingContext context, TermWeighting termWeighting)
+    void buildLabels(LingoProcessingContext context, ITermWeighting termWeighting)
     {
         final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final DoubleMatrix2D reducedTdMatrix = context.baseMatrix;
@@ -321,7 +321,7 @@ public class ClusterBuilder
         final double [] clusterLabelScore = context.clusterLabelScore;
 
         final List<IntList> mergedClusters = GraphUtils.findCoherentSubgraphs(
-            clusterDocuments.length, new GraphUtils.ArcPredicate()
+            clusterDocuments.length, new GraphUtils.IArcPredicate()
             {
                 private IntBitSet temp = new IntBitSet();
 
@@ -388,7 +388,7 @@ public class ClusterBuilder
      * Builds a term-document like matrix for phrases. Returns <code>null</code> if there
      * are no phrases on the input.
      */
-    void buildPhraseMatrix(LingoProcessingContext context, TermWeighting termWeighting)
+    void buildPhraseMatrix(LingoProcessingContext context, ITermWeighting termWeighting)
     {
         final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final IntKeyIntMap stemToRowIndex = context.tdMatrixStemToRowIndex;

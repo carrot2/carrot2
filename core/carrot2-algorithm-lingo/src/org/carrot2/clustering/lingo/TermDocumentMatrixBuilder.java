@@ -84,7 +84,7 @@ public class TermDocumentMatrixBuilder
      * Builds a term document matrix from data provided in the <code>context</code>,
      * stores the result in there.
      */
-    void build(LingoProcessingContext lingoContext, TermWeighting termWeighting)
+    void build(LingoProcessingContext lingoContext, ITermWeighting termWeighting)
     {
         final PreprocessingContext preprocessingContext = lingoContext.preprocessingContext;
 
@@ -249,7 +249,7 @@ public class TermDocumentMatrixBuilder
      * same term space as the original term-document matrix.
      */
     static DoubleMatrix2D buildAlignedMatrix(LingoProcessingContext lingoContext,
-        int [] featureIndex, TermWeighting termWeighting)
+        int [] featureIndex, ITermWeighting termWeighting)
     {
         final IntKeyIntMap stemToRowIndex = lingoContext.tdMatrixStemToRowIndex;
         if (featureIndex.length == 0)

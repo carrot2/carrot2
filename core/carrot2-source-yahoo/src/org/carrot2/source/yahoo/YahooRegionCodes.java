@@ -13,14 +13,14 @@
 
 package org.carrot2.source.yahoo;
 
-import org.carrot2.util.attribute.constraint.ValueHintMapping;
+import org.carrot2.util.attribute.constraint.IValueHintMapping;
 
 /**
  * Yahoo region codes.
  * 
  * http://developer.yahoo.com/search/regions.html
  */
-public enum YahooRegionCodes implements ValueHintMapping
+public enum YahooRegionCodes implements IValueHintMapping
 {
     ARGENTINA("Argentina", "ar"),
     AUSTRALIA("Australia", "au"),

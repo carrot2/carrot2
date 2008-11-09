@@ -41,7 +41,7 @@ public class GeneralizedSuffixTreeTest
         {
             if (!n.isLeaf()) continue;
 
-            final Sequence s = gst.getSequenceToRoot(n);
+            final ISequence s = gst.getSequenceToRoot(n);
             leaves.add(SequenceFormatter.asString(s, CharacterSequence.FORMATTER));
         }
 

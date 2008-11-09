@@ -19,7 +19,7 @@ import cern.colt.matrix.DoubleMatrix2D;
  * Factory for {@link PartialSingularValueDecomposition}s.
  */
 public class PartialSingularValueDecompositionFactory implements
-    MatrixFactorizationFactory
+    IMatrixFactorizationFactory
 {
     /** The desired number of base vectors */
     protected int k;
@@ -36,7 +36,7 @@ public class PartialSingularValueDecompositionFactory implements
         this.k = DEFAULT_K;
     }
 
-    public MatrixFactorization factorize(DoubleMatrix2D A)
+    public IMatrixFactorization factorize(DoubleMatrix2D A)
     {
         PartialSingularValueDecomposition partialSingularValueDecomposition = new PartialSingularValueDecomposition(
             A);
