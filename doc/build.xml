@@ -44,6 +44,12 @@
           <include name="*.jar" />
         </fileset>
       </classpath>
+	  
+	  <!-- 
+	    <factory> enforcement will not work due to this
+		bug in ANT: https://issues.apache.org/bugzilla/show_bug.cgi?id=46172 
+	  -->
+	  <!-- <factory name="org.apache.xalan.processor.TransformerFactoryImpl" /> -->
       
       <param name="dist.url" expression="${dist.url}" />
       <param name="carrot2.java-api.base" expression="${carrot2.java-api.base}" />
