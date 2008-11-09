@@ -23,16 +23,15 @@
 #carrot2.xml.feed.url.base=
 
 # To build DocBook documentation, please specify locations of DocBook XSL
-# (the xsl-ns variant) and DocBook DTD 5.0. You will also need to set ANT_OPTS to:
-#
-# -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration
-#
-# Otherwise, XIncludes will not be resolved properly.
+# (the xsl-ns variant) and DocBook DTD 5.0.
 #docbook.xsl.dir=
 #docbook.dtd.dir=
 
-# JavaDoc url base for links in the DocBook documentation
-#javadoc.url.base=
+# Distribution url for links in the DocBook documentation
+#dist.url=
+
+# JavaDoc url for links in the DocBook documentation
+#javadoc.url=
 
 # To run webtests of the webapp, define paths to:
 #   * Canoo Webtest home directory

@@ -15,7 +15,7 @@
   <property name="dcs.dir" location="tmp/dcs" />
 
   <!-- DCS dist file name base -->
-  <property name="dcs.dist.base" value="carrot2-dcs" />
+  <property name="dcs.dist.base" value="${carrot2.dcs.base}" />
 
   <!-- DCS-specific dependencies -->
   <patternset id="lib.dcs">

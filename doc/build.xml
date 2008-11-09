@@ -18,7 +18,7 @@
   <property name="doc.output.dir" location="${carrot2.master.basedir}/tmp/manual" />
 
   <!-- Manual dist file name base -->
-  <property name="doc.dist.base" value="carrot2-manual" />
+  <property name="doc.dist.base" value="${carrot2.manual.base}" />
 
   <property name="doc.classes.dir" location="${doc.build.dir}/classes" />
 
@@ -44,6 +44,15 @@
           <include name="*.jar" />
         </fileset>
       </classpath>
+      
+      <param name="dist.url" expression="${dist.url}" />
+      <param name="carrot2.java-api.base" expression="${carrot2.java-api.base}" />
+      <param name="carrot2.dcs.base" expression="${carrot2.dcs.base}" />
+      <param name="carrot2.webapp.base" expression="${carrot2.webapp.base}" />
+      <param name="carrot2.manual.base" expression="${carrot2.manual.base}" />
+      <param name="carrot2.workbench.base" expression="${carrot2.workbench.base}" />
+      
+      <param name="carrot2.version" expression="${carrot2.version}" />
     </xslt>
 
     <copy todir="${doc.output.dir}">
@@ -146,7 +155,7 @@
         <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
              location="${docbook.dtd.dir}/docbook.dtd" />
       </xmlcatalog>
-      <param name="javadoc.url.base" expression="${javadoc.url.base}" />
+      <param name="javadoc.url" expression="${javadoc.url}" />
     </xslt>
   </target>
 

@@ -10,14 +10,15 @@
   <!-- Directory with flattened lib files, to be visible in imported scripts -->
   <property name="lib.flattened" location="${carrot2.master.basedir}/tmp/lib" />
 
+  <!-- Import local properties and version -->
+  <property file="${carrot2.master.basedir}/local.properties" />
+  <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
+  <property file="${carrot2.master.basedir}/etc/version/carrot2.basenames" />
+
   <!-- Import other build scripts. -->
   <import file="${carrot2.master.basedir}/applications/carrot2-webapp/build.xml" />
   <import file="${carrot2.master.basedir}/applications/carrot2-dcs/build.xml" />
   <import file="${carrot2.master.basedir}/doc/build.xml" />
-
-  <!-- Import local properties and version -->
-  <property file="${carrot2.master.basedir}/local.properties" />
-  <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />
@@ -38,7 +39,7 @@
   <property name="findbugs.report.dir" location="${carrot2.master.basedir}/tmp/findbugs-report" />
 
   <!-- Java API distribution -->
-  <property name="api.dist.base" value="carrot2-java-api" />
+  <property name="api.dist.base" value="${carrot2.java-api.base}" />
   
   <!-- Extra tools the build can use if available -->
   <property name="clover.jar" location="${clover.home}/lib/clover.jar" />

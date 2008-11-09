@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
   <xsl:import href="../html/docbook.xsl"/>
+  <xsl:import href="distribution-links.xsl"/>
   <xsl:import href="i10n.xsl"/>
 
   <xsl:output indent="yes" omit-xml-declaration="yes"

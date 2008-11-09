@@ -1,1 +1,4 @@
 carrot2.version=3.0-rc1
+
+# we need the same value in a property with different name for website build
+carrot2.version.head=3.0-rc1

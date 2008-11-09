@@ -15,7 +15,7 @@
     more complex API use cases.
   </para>
   
-  <section>
+  <section xml:id="section.architecture.xml-formats">
     <title>&C2; XML data formats</title>
     
     <para>
@@ -23,7 +23,7 @@
       by all &C2; applications, including &DCW;, &DCS; and &WA;.  
     </para>
     
-    <section>
+    <section xml:id="section.architecture.input-xml">
       <title>&C2; input XML format</title>
       
       <para>
@@ -59,7 +59,7 @@
       </figure>
     </section>
     
-    <section>
+    <section xml:id="section.architecture.output-xml">
       <title>&C2; output XML format</title>
       
       <para>

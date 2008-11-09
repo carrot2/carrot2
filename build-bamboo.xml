@@ -43,7 +43,10 @@
         <fail unless="dist.dir">Define: dist.dir property.</fail>
 
         <delete includeemptydirs="true" failonerror="false">
-          <fileset dir="${dist.dir}" includes="**/*"/>
+          <fileset dir="${dist.dir}">
+            <include name="**/*" />
+            <exclude name=".htaccess" />
+          </fileset>
         </delete>
         <copy todir="${dist.dir}" overwrite="true">
           <fileset dir="${carrot2.code.dir}/tmp">

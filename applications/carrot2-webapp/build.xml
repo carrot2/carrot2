@@ -19,7 +19,7 @@
             location="${carrot2.webapp.basedir}/src/jawr.template.properties" />
   <property name="config.xml.template.path"
             location="${carrot2.webapp.basedir}/src/config.template.xml" />
-  <property name="war.name.base" value="carrot2-webapp" />
+  <property name="war.name.base" value="${carrot2.webapp.base}" />
   
   <!-- Build number -->
   <property name="build.number" value="" />

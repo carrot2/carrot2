@@ -6,7 +6,9 @@
   %local;
   %custom;
 ]>
-<chapter xml:id="chapter.getting-started" xmlns="http://docbook.org/ns/docbook" version="5.0">
+<chapter xml:id="chapter.getting-started" 
+         xmlns="http://docbook.org/ns/docbook" version="5.0"
+         xmlns:c2="http://www.carrot2.org">
   <title>Getting started</title>
   <subtitle>Trying &C2; clustering with your own data</subtitle>
 
@@ -16,14 +18,14 @@
     &C2; applications.
   </para>
   
-  <section>
+  <section xml:id="section.getting-started">
     <title>Trying &C2; clustering</title>
     
     <para>
       This section shows how to apply &C2; clustering on documents from various sources.
     </para>
 
-    <section>
+    <section xml:id="section.getting-started.common-search-engines">
       <title>Clustering results from common search engines</title>
       
       <para>
@@ -50,7 +52,7 @@
       </itemizedlist>
     </section>      
     
-    <section>
+    <section xml:id="section.getting-started.plain-text-ms-word-pdf">
       <title>Clustering plain text, HTML and MS Word documents</title>
       
       <para>
@@ -99,7 +101,7 @@
       </figure>
     </section>
     
-    <section>
+    <section xml:id="section.getting-started.xml-files">
       <title>Clustering documents from XML files</title>
       
       <para>
@@ -124,7 +126,7 @@
           <para>
             (Optional) If your file is not in <link linkend="figure.input-xml-format">&C2; format</link>,
             create an XSLT style sheet that transforms your data into &C2; format,
-            see <xref linkend="section.clustering-xml-feed" /> for an example.
+            see <xref linkend="section.getting-started.xml-feed" /> for an example.
             Provide a path to your style sheet in the <guilabel>XSLT Stylesheet</guilabel>
             field, which is an optional field &ndash; you can show optional fields by 
             clicking the arrow button of the <guilabel>Search</guilabel> view toolbar
@@ -152,7 +154,7 @@
       </figure>
     </section>
     
-    <section xml:id="section.clustering-xml-feed">
+    <section xml:id="section.getting-started.xml-feed">
       <title>Clustering documents from XML feeds</title>
       
       <para>
@@ -243,7 +245,7 @@
       </figure>      
     </section>
     
-    <section>
+    <section xml:id="section.getting-started.lucene">
       <title>Clustering documents from a Lucene index</title>
       
       <para>
@@ -290,7 +292,7 @@
       </figure>
     </section>
     
-    <section>
+    <section xml:id="section.getting-started.solr">
       <title>Clustering documents from a Solr index</title>
       
       <para>
@@ -338,7 +340,7 @@
       </figure>
     </section>
     
-    <section>
+    <section xml:id="section.getting-started.saving-clusters">
       <title>Saving clusters for further processing</title>
       
       <para>
@@ -362,13 +364,13 @@
     </section>    
   </section>
   
-  <section>
+  <section xml:id="section.integration">
     <title>Integrating &C2; with your software</title>
     
     <para>
     </para>
     
-    <section>
+    <section xml:id="section.integration.compiling-java-program-with-carrot2">
       <title>Compiling a Java program using &C2; API</title>
       
       <para>
@@ -378,8 +380,8 @@
       <orderedlist>
         <listitem>
           <para>
-            Download &JA; from <link xlink:href="http://project.carrot2.org/download.html" />
-            and unpack to some local directory.
+            <c2:java-api-download-link>Download &JA;</c2:java-api-download-link>
+            and unpack it to some local directory.
           </para>
         </listitem>
         
@@ -409,7 +411,7 @@
           <tip>
             <para>
               For easier experimenting with &JA;, you may want to 
-              <link linkend="section.seting-up-c2-project-in-eclipse">set up a &C2; project in Eclipse IDE</link>.
+              <link linkend="section.integration.seting-up-c2-project-in-eclipse">set up a &C2; project in Eclipse IDE</link>.
             </para> 
           </tip>
         </listitem>
@@ -417,7 +419,7 @@
 
     </section>
     
-    <section xml:id="section.seting-up-c2-project-in-eclipse">
+    <section xml:id="section.integration.seting-up-c2-project-in-eclipse">
       <title>Setting up a &C2; project in Eclipse IDE</title>
       
       <para>
@@ -428,8 +430,8 @@
       <orderedlist>
         <listitem>
           <para>
-            Download &JA; from <link xlink:href="http://project.carrot2.org/download.html" />
-            and unpack to some local directory.
+            <c2:java-api-download-link>Download &JA;</c2:java-api-download-link>
+            and unpack it to some local directory.
           </para>
         </listitem>
         
@@ -472,14 +474,14 @@
       </figure>
     </section>
     
-    <section>
+    <section xml:id="section.integration.setting-up-carrot2-sources-in-eclipse">
       <title>Setting up a &C2; source code in Eclipse</title>
       
       <para>
       </para>
     </section>
     
-    <section>
+    <section xml:id="section.integration.calling-carrot2-from-non-java-software">
       <title>Calling &C2; clustering from non-Java software</title>
       
       <para>

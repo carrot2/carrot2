@@ -6,7 +6,9 @@
   %local;
   %custom;
 ]>
-<chapter xml:id="chapter.application-suite" xmlns="http://docbook.org/ns/docbook" version="5.0">
+<chapter xml:id="chapter.application-suite" 
+         xmlns="http://docbook.org/ns/docbook" version="5.0"
+         xmlns:c2="http://www.carrot2.org">
   <title>&C2; application suite</title>
   <subtitle>Applications shipped with &C2;</subtitle>
 
@@ -132,7 +134,7 @@
       </listitem>
     </itemizedlist>
     
-    <section>
+    <section xml:id="section.workbench.installation">
       <title>Installation and running</title>
     
       <para>
@@ -145,11 +147,11 @@
         </listitem>
       
         <listitem>
-          <para>Download &DCW; binaries for your operating system from <link xlink:href="http://project.carrot2.org/download.html" /></para>
-        </listitem>
-        
-        <listitem>
-          <para>Extract the archive to some local disk location</para>
+          <para>
+            Download &DCW; <c2:workbench-download-link os="win32" wm="win32">Windows binaries</c2:workbench-download-link>
+            or <c2:workbench-download-link os="linux" wm="gtk">Linux binaries</c2:workbench-download-link>
+            and extract the archive to some local disk location.
+          </para>
         </listitem>
         
         <listitem>
@@ -242,7 +244,7 @@
       </listitem>
     </itemizedlist>
     
-    <section>
+    <section xml:id="section.dcs.installation">
       <title>Installation and running</title>
     
       <para>To run &DCS;:</para>
@@ -253,11 +255,10 @@
         </listitem>
       
         <listitem>
-          <para>Download &DCS; binaries from <link xlink:href="http://project.carrot2.org/download.html" /></para>
-        </listitem>
-        
-        <listitem>
-          <para>Extract the archive to some local disk location</para>
+          <para>
+            Download <c2:dcs-download-link>&DCS; binaries</c2:dcs-download-link> and
+            extract the archive to some local disk location.
+          </para>
         </listitem>
         
         <listitem>
@@ -353,7 +354,7 @@
       </mediaobject>  
     </figure>
 
-    <section>
+    <section xml:id="section.webapp.installation">
       <title>Installation and running</title>
     
       <para>To run &WA;:</para>
@@ -364,7 +365,7 @@
         </listitem>
       
         <listitem>
-          <para>Download &WA; WAR file from <link xlink:href="http://project.carrot2.org/download.html" /></para>
+          <para>Download <c2:webapp-download-link>&WA; WAR file</c2:webapp-download-link>.</para>
         </listitem>
         
         <listitem>
