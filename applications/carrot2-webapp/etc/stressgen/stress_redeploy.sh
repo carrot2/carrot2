@@ -28,7 +28,13 @@ do
     
     # deploy
     echo -n "D"
-    ln -s $SOURCE_WAR $DEPLOY_WAR
+	
+	# copy and rename works better under CygWin. We can't simply
+	# copy because sometimes the WAR is picked up before it is fully
+	# copied.
+	cp $SOURCE_WAR $DEPLOY_WAR.TMP
+    mv $DEPLOY_WAR.TMP $DEPLOY_WAR
+
     while ! `wget -O /dev/null -q $TEST_URI`
     do
         echo -n "."
@@ -44,7 +50,7 @@ do
     #
     # Issue 40 queries at random, then quit
     #
-    cat queries | ./stress.rb -t 5 -m 5 -u $TEST_URI --queries 40 2> /dev/null    
+    cat queries | ./stress.rb -t 5 -m 5 -u $TEST_URI --queries 40 2> /dev/null
 done
 
 
