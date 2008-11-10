@@ -6,8 +6,9 @@
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 
+  <!-- This listener initializes custom Log4J log appenders. -->
   <listener>
-    <listener-class>org.carrot2.webapp.FileAppenderInitializationContextListener</listener-class>
+    <listener-class>org.carrot2.webapp.LogInitContextListener</listener-class>
   </listener>
   
   <servlet>

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -47,14 +46,17 @@ public class QueryProcessorServlet extends HttpServlet
     /** Generates urls to combined CSS/Javascript files */
     private transient JawrUrlGenerator jawrUrlGenerator;
 
-    /** Logger for processed queries */
+    /** {@link #queryLogger} name. */
     static final String QUERY_LOG_NAME = "queryLog";
+    
+    /** Query logger. */
     private transient volatile Logger queryLogger = Logger.getLogger(QUERY_LOG_NAME);
 
     /** Error log */
     private transient volatile Logger logger = Logger.getLogger(getClass());
 
-    private transient volatile boolean loggerAppendersInitialized = false;
+    /** A reference to custom log appenders. */
+    private transient volatile LogInitContextListener logInitializer;
 
     /**
      * Define this system property to enable statistical information from the query
@@ -80,11 +82,12 @@ public class QueryProcessorServlet extends HttpServlet
         super.init(config);
         final ServletContext servletContext = config.getServletContext();
 
-        // A context listener may have initialized the logger appenders for us already
-        // (if running under Servlet 2.5 API). If so, this will save us one
-        // synchronization at request time.
-        loggerAppendersInitialized = (Boolean) servletContext
-            .getAttribute(FileAppenderInitializationContextListener.LOGGER_APPENDERS_INITIALIZED);
+        /*
+         * If initialized, custom logging initializer will be here. Save its
+         * reference for deferred initialization (for servlet APIs < 2.5). 
+         */
+        logInitializer = (LogInitContextListener) servletContext.getAttribute(
+            LogInitContextListener.CONTEXT_ID);
 
         controller = new CachingController(IDocumentSource.class);
         controller.init(new HashMap<String, Object>(), WebappConfig.INSTANCE.components);
@@ -117,12 +120,20 @@ public class QueryProcessorServlet extends HttpServlet
         throws ServletException, IOException
     {
         /*
-         * Lots of people still use Tomcat 5.5. which has Servlet 2.4 API, so
-         * we need to keep appender initialization as a workaround here.
+         * Lots of people still use Tomcat 5.5. which has Servlet 2.4 API. Deferred
+         * initialization with the now-available context path is here.
          */
-        if (!loggerAppendersInitialized)
+        if (logInitializer != null)
         {
-            initLoggerAppenders(request.getContextPath());
+            synchronized (this.getClass())
+            {
+                // Double locking, but the variable is volatile, so o.k.
+                if (logInitializer != null)
+                {
+                    logInitializer.addAppenders(request.getContextPath());
+                }
+                logInitializer = null;
+            }
         }
 
         // Unpack parameters from string arrays
@@ -157,21 +168,6 @@ public class QueryProcessorServlet extends HttpServlet
         catch (Exception e)
         {
             throw new ServletException(e);
-        }
-    }
-
-    /*
-     * 
-     */
-    private void initLoggerAppenders(String contextPath) throws IOException
-    {
-        synchronized (this)
-        {
-            if (!loggerAppendersInitialized)
-            {
-                FileAppenderInitializationContextListener.initLoggers(contextPath);
-                loggerAppendersInitialized = true;
-            }
         }
     }
 
@@ -271,12 +267,10 @@ public class QueryProcessorServlet extends HttpServlet
         catch (ProcessingException e)
         {
             processingException = e;
-            logger.error("Processing error", e);
-
+            logger.error("Processing error: " + e.getMessage(), e);
         }
 
-        // Send response
-        // Sets encoding of the response writer
+        // Send response, sets encoding of the response writer.
         response.setContentType(MIME_XML_CHARSET_UTF);
         final PageModel pageModel = new PageModel(request, requestModel,
             jawrUrlGenerator, processingResult, processingException);
@@ -293,6 +287,9 @@ public class QueryProcessorServlet extends HttpServlet
         }
     }
 
+    /*
+     * 
+     */
     private void logQuery(RequestModel requestModel, ProcessingResult processingResult)
     {
         this.queryLogger.info(requestModel.algorithm + "," + requestModel.source + ","
@@ -301,6 +298,9 @@ public class QueryProcessorServlet extends HttpServlet
             + "," + requestModel.query);
     }
 
+    /*
+     * 
+     */
     private void setExpires(HttpServletResponse response)
     {
         final HttpServletResponse httpResponse = response;
@@ -310,6 +310,9 @@ public class QueryProcessorServlet extends HttpServlet
         httpResponse.addDateHeader("Expires", expiresCalendar.getTimeInMillis());
     }
 
+    /*
+     * 
+     */
     private Format getPersisterFormat(PageModel pageModel)
     {
         return new Format(2, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -318,6 +321,9 @@ public class QueryProcessorServlet extends HttpServlet
             + "\" ?>");
     }
 
+    /*
+     * 
+     */
     private Map<String, String> extractCookies(HttpServletRequest request)
     {
         final Map<String, String> result = Maps.newHashMap();
