@@ -48,7 +48,7 @@ public class CoverageMetricTest
         final Cluster c2 = new Cluster("c2", d2);
         final Cluster c3 = new Cluster("c3", d3);
 
-        check(ImmutableList.of(d1, d2, d3, d4), ImmutableList.of(c1, c2, c3), 0.866,
+        check(ImmutableList.of(d1, d2, d3, d4), ImmutableList.of(c1, c2, c3), 0.75,
             0.75, 0.75);
     }
 
