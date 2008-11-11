@@ -37,15 +37,12 @@
   <!-- List of about links, most skins show them -->
   <xsl:template match="page" mode="about-links">
     <ul class="util-links">
-      <li><a href="#">About</a><xsl:call-template name="pipe" /></li>
-      <li class="hot"><a href="#">New features!</a><xsl:call-template name="pipe" /></li>
-      <li class="main"><a href="#">Beta</a><xsl:call-template name="pipe" /></li>
-      <li><a href="#">More demos</a><xsl:call-template name="pipe" /></li>
-      <li><a href="#">Plugins</a><xsl:call-template name="pipe" /></li>
-      <li><a href="#">Download</a><xsl:call-template name="pipe" /></li>
-      <li><a href="#">FAQ</a><xsl:call-template name="pipe" /></li>
-      <li class="main"><a href="#">Carrot Search</a><xsl:call-template name="pipe" /></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="http://project.carrot2.org">About</a><xsl:call-template name="pipe" /></li>
+      <li class="hot"><a href="http://project.carrot2.org/release-3.0-rc1-notes.html">New features!</a><xsl:call-template name="pipe" /></li>
+      <li><a href="http://project.carrot2.org/release-3.0-rc1-notes.html">More demos</a><xsl:call-template name="pipe" /></li>
+      <li><a href="http://project.carrot2.org/release-3.0-rc1-notes.html">Download</a><xsl:call-template name="pipe" /></li>
+      <li class="main"><a href="http://company.carrot-search.com">Carrot Search</a><xsl:call-template name="pipe" /></li>
+      <li><a href="http://project.carrot2.org/support.html">Contact</a></li>
     </ul>
   </xsl:template>
 

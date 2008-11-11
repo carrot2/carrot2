@@ -644,7 +644,7 @@ public class AttributeBinder
         boolean check(Field field, Class<? extends Annotation> bindingDirection,
             Class<? extends Annotation>... filteringAnnotations)
         {
-            if (!Input.class.equals(bindingDirection))
+            if (field.getAnnotation(Input.class) == null)
             {
                 return true;
             }

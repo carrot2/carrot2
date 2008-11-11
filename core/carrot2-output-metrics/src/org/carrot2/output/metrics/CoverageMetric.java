@@ -117,7 +117,7 @@ public class CoverageMetric implements ClusteringMetric
             }
         }
 
-        absoluteTopicCoverage = coveredTopics.size() / Math.sqrt(p * topicCount);
+        absoluteTopicCoverage = coveredTopics.size() / Math.sqrt(Math.max(topicCount, p) * topicCount);
         topicCoverage = coveredTopics.size() / (double) topicCount;
         documentCoverage = coveredDocuments.size() / (double) documents.size();
     }

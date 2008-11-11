@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -372,6 +371,17 @@ public class AttributeBinderTest
         @Output
         @Attribute(key = "int")
         private int int1 = 7;
+    }
+
+    @Bindable
+    public static class NonprimitiveOutputAttribute
+    {
+        @Output
+        @Attribute(key = "array")
+        public int [] int1 = new int []
+        {
+            10
+        };
     }
 
     @Before
@@ -916,6 +926,21 @@ public class AttributeBinderTest
         instance.child.int1 = 8;
         AttributeBinder.bind(instance, attributes, Output.class);
         assertThat(attributes).hasSize(1).contains(MapAssert.entry("int", 19));
+    }
+
+    @Test
+    public void testNonprimitiveOutputAttributeInputBinding()
+        throws AttributeBindingException, InstantiationException
+    {
+        NonprimitiveOutputAttribute instance = new NonprimitiveOutputAttribute();
+        AttributeBinder.bind(instance, attributes, Output.class);
+        int [] array = (int []) attributes.get("array");
+        assertThat(array).isEqualTo(new int []
+        {
+            10
+        });
+
+        AttributeBinder.bind(instance, attributes, Input.class);
     }
 
     private void addAttribute(Class<?> clazz, String field, Object value)
