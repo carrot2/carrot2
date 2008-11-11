@@ -374,12 +374,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
 
         for (LanguageCode language : LanguageCode.values())
         {
-            final String stopwords = "stopwords." + language.getIsoCode();
-            final IResource resource = resUtils.getFirst(stopwords);
-            if (resource != null)
-            {
-                resources.put(stopwords, resource);
-            }
+            addResourceToCopy(resources, resUtils, language, "stopwords");
+            addResourceToCopy(resources, resUtils, language, "stoplabels");
         }
 
         for (Map.Entry<String, IResource> e : resources.entrySet())
@@ -415,6 +411,17 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
          * Install a resource locator pointing to the workspace.
          */
         ResourceUtilsFactory.addFirst(new DirLocator(workspacePath.getAbsolutePath()));
+    }
+
+    private void addResourceToCopy(final Map<String, IResource> resources,
+        final ResourceUtils resUtils, LanguageCode language, final String prefix)
+    {
+        final String stopwords = prefix + "." + language.getIsoCode();
+        final IResource resource = resUtils.getFirst(stopwords);
+        if (resource != null)
+        {
+            resources.put(stopwords, resource);
+        }
     }
 
     /**

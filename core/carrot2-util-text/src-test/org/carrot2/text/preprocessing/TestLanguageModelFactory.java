@@ -58,5 +58,10 @@ public final class TestLanguageModelFactory implements ILanguageModelFactory
         {
             return word.toString().contains("stop");
         }
+
+        public boolean isStopLabel(CharSequence formattedLabel)
+        {
+            return formattedLabel.toString().startsWith("stoplabel");
+        }
     }
 }

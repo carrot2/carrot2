@@ -69,10 +69,12 @@ public class ExtendedWhitespaceTokenizerTest
     @Test
     public void TERM()
     {
-        String test = " simple terms simpleterm 9numterm numerm99x \"quoted string\"";
+        String test = " simple simple's simples` terms simpleterm 9numterm numerm99x \"quoted string\"";
         TokenImage [] tokens =
         {
             new TokenImage("simple", ITokenType.TT_TERM),
+            new TokenImage("simple's", ITokenType.TT_TERM),
+            new TokenImage("simples`", ITokenType.TT_TERM),
             new TokenImage("terms", ITokenType.TT_TERM),
             new TokenImage("simpleterm", ITokenType.TT_TERM),
             new TokenImage("9numterm", ITokenType.TT_TERM),

@@ -13,7 +13,9 @@
 
 package org.carrot2.text.linguistic;
 
+import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.ExceptionUtils;
@@ -27,6 +29,7 @@ final class SnowballLanguageModel implements ILanguageModel
     private final LanguageCode languageCode;
     private final IStemmer stemmer;
     private final Set<MutableCharArray> stopwords;
+    private final List<Pattern> stoplabels;
     private final MutableCharArray buffer = new MutableCharArray("");
 
     /**
@@ -59,11 +62,11 @@ final class SnowballLanguageModel implements ILanguageModel
      * Creates a new language model based on Snowball stemmers and loading resources
      * associated with <code>languageCode</code>'s ISO code.
      */
-    @SuppressWarnings("unchecked")
-    SnowballLanguageModel(LanguageCode languageCode, Set<MutableCharArray> stopwords)
+    SnowballLanguageModel(LanguageCode languageCode, Set<MutableCharArray> stopwords, List<Pattern> stoplabels)
     {
         this.languageCode = languageCode;
         this.stopwords = stopwords;
+        this.stoplabels = stoplabels;
 
         try
         {
@@ -123,5 +126,18 @@ final class SnowballLanguageModel implements ILanguageModel
             buffer.reset(sequence);
             return stopwords.contains(buffer);
         }
+    }
+    
+    public boolean isStopLabel(CharSequence formattedLabel)
+    {
+        for (Pattern pattern : stoplabels)
+        {
+            if (pattern.matcher(formattedLabel).matches())
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

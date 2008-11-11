@@ -1,0 +1,5 @@
+(?i)new
+(?i)information
+(?i)information (about|on).*
+(?i)(index|list) of.*
+(?i)official.+

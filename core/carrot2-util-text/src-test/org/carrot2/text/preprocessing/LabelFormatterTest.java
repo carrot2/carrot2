@@ -191,7 +191,7 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
     protected ILanguageModelFactory createLanguageModelFactory()
     {
         final SnowballLanguageModelFactory snowballLanguageModelFactory = new SnowballLanguageModelFactory();
-        snowballLanguageModelFactory.mergeStopwords = false;
+        snowballLanguageModelFactory.mergeResources = false;
         return snowballLanguageModelFactory;
     }
 }

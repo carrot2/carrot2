@@ -20,7 +20,7 @@ import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.junit.Test;
 
 /**
- * Test cases for {@link StopWordLabelFilter}.
+ * Test cases for {@link StopLabelFilter}.
  */
 public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
 {
@@ -82,7 +82,7 @@ public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
     protected ILanguageModelFactory createLanguageModelFactory()
     {
         final SnowballLanguageModelFactory snowballLanguageModelFactory = new SnowballLanguageModelFactory();
-        snowballLanguageModelFactory.mergeStopwords = false;
+        snowballLanguageModelFactory.mergeResources = false;
         return snowballLanguageModelFactory;
     }
 }

@@ -38,7 +38,7 @@ final class TextResourceUtils
             throw new IOException("Resource stream handle is null: " + wordsResource);
         }
 
-        final Set<String> words = Sets.newHashSet();
+        final Set<String> words = Sets.newLinkedHashSet();
         final BufferedReader reader = new BufferedReader(new InputStreamReader(is,
             "UTF-8"));
         try

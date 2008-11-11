@@ -14,6 +14,8 @@ package org.carrot2.text.linguistic;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.*;
@@ -21,8 +23,7 @@ import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 
 /**
  * Accessor to all {@link ILanguageModel} objects.
@@ -40,45 +41,49 @@ public final class SnowballLanguageModelFactory implements ILanguageModelFactory
     public LanguageCode current = LanguageCode.ENGLISH;
 
     /**
-     * Reloads cached stopwords on every processing request for this factory. For best
-     * performance, stop word reloading should be disabled in production.
+     * Reloads cached stop words and stop labels on every processing request. For best
+     * performance, lexical resource reloading should be disabled in production.
      * 
      * @level Medium
      * @group Preprocessing
-     * @label Reload stopwords
+     * @label Reload lexical resources
      */
     @Processing
     @Input
     @Attribute
-    public boolean reloadStopwords = false;
+    public boolean reloadResources = false;
 
     /**
-     * Merges stopwords from all known languages. If set to <code>false</code>, only
-     * stopwords of the active language will be used. If set to <code>true</code>,
-     * stopwords from all {@link LanguageCode}s will be used together, no matter the
-     * active language. Stopword merging is useful when clustering data in a mix of
-     * different languages and should increase clustering quality in such settings.
+     * Merges stop words and stop labels from all known languages. If set to
+     * <code>false</code>, only stop words and stop labels of the active language will be
+     * used. If set to <code>true</code>, stop words from all {@link LanguageCode}s will
+     * be used together and stop labels from all languages will be used together, no
+     * matter the active language. Lexical resource merging is useful when clustering data
+     * in a mix of different languages and should increase clustering quality in such
+     * settings.
      * 
      * @level Medium
      * @group Preprocessing
-     * @label Merge stopwords
+     * @label Merge lexical resources
      */
     @Init
     @Processing
     @Input
     @Attribute
-    public boolean mergeStopwords = true;
+    public boolean mergeResources = true;
 
     /**
-     * Preloaded and cached stopword lists, shared among all instances of this factory.
+     * Preloaded and cached lexical resources, shared among all instances of this factory.
+     * Instances of {@link Pattern} are immutable and thread safe, so we're fine to share
+     * them across concurrent threads.
      */
-    private final static HashMap<LanguageCode, Set<MutableCharArray>> stopwords_cache = Maps
+    private final static HashMap<LanguageCode, LexicalResources> LEXICAL_RESOURCES_CACHE = Maps
         .newHashMap();
 
     /**
-     * Preloaded and cached merged stopword lists.
+     * Preloaded and cached merged lexical resources.
      */
-    private static Set<MutableCharArray> stopwords_merged = Sets.newHashSet();
+    private static LexicalResources LEXICAL_RESOURCES_MERGED;
 
     /**
      * @see #current
@@ -95,86 +100,172 @@ public final class SnowballLanguageModelFactory implements ILanguageModelFactory
     {
         synchronized (SnowballLanguageModelFactory.class)
         {
-            if (reloadStopwords || !stopwords_cache.containsKey(language)
-                || (mergeStopwords && stopwords_merged == null))
+            if (reloadResources || !LEXICAL_RESOURCES_CACHE.containsKey(language)
+                || (mergeResources && LEXICAL_RESOURCES_MERGED == null))
             {
                 /*
-                 * We must reload stopwords or a language not already cached has been
+                 * We must reload resources or a language not already cached has been
                  * requested.
                  */
                 final ResourceUtils resourceLoaders = ResourceUtilsFactory
                     .getDefaultResourceUtils();
-                if (mergeStopwords)
+                if (mergeResources)
                 {
                     // Load stopwords for all languages.
                     for (LanguageCode lang : LanguageCode.values())
                     {
                         // Only reload if requested.
-                        if (stopwords_cache.containsKey(lang) && !reloadStopwords) continue;
+                        if (LEXICAL_RESOURCES_CACHE.containsKey(lang) && !reloadResources)
+                        {
+                            continue;
+                        }
 
-                        stopwords_cache.put(lang, loadStopWords(resourceLoaders, lang));
+                        LEXICAL_RESOURCES_CACHE.put(lang, LexicalResources.load(
+                            resourceLoaders, lang));
                     }
 
-                    stopwords_merged = Sets.newHashSet();
-                    for (Set<MutableCharArray> stopwords : stopwords_cache.values())
-                    {
-                        stopwords_merged.addAll(stopwords);
-                    }
+                    LEXICAL_RESOURCES_MERGED = LexicalResources
+                        .merge(LEXICAL_RESOURCES_CACHE.values());
                 }
                 else
                 {
                     // Load stopwords for this language only.
-                    stopwords_cache.put(language, loadStopWords(resourceLoaders, language));
+                    LEXICAL_RESOURCES_CACHE.put(language, LexicalResources.load(
+                        resourceLoaders, language));
                 }
             }
 
-            final Set<MutableCharArray> stopwords;
-            if (mergeStopwords)
+            final LexicalResources lexicalResources;
+            if (mergeResources)
             {
-                stopwords = stopwords_merged;
+                lexicalResources = LEXICAL_RESOURCES_MERGED;
             }
             else
             {
-                stopwords = stopwords_cache.get(language);
+                lexicalResources = LEXICAL_RESOURCES_CACHE.get(language);
             }
 
-            return new SnowballLanguageModel(language, stopwords);
+            return new SnowballLanguageModel(language, lexicalResources.stopwords,
+                lexicalResources.stoplabels);
         }
     }
 
     /**
-     * Loads common words associated with the given language. Logs an error and recovers
-     * silently if the given resource cannot be found.
+     * Holds lexical resources for one language.
      */
-    private static Set<MutableCharArray> loadStopWords(ResourceUtils resourceLoaders,
-        LanguageCode lang)
+    private static class LexicalResources
     {
-        try
+        final Set<MutableCharArray> stopwords;
+        final List<Pattern> stoplabels;
+
+        private LexicalResources(List<Pattern> stoplabels, Set<MutableCharArray> stopwords)
         {
-            final Set<MutableCharArray> result = Sets.newHashSet();
-
-            final String resourceName = "stopwords." + lang.getIsoCode();
-            final IResource resource = resourceLoaders.getFirst(resourceName,
-                SnowballLanguageModelFactory.class);
-
-            if (resource == null)
-            {
-                throw new IOException("Common words resource not found: " + resourceName);
-            }
-
-            for (String word : TextResourceUtils.load(resource))
-            {
-                result.add(new MutableCharArray(word));
-            }
-
-            return result;
+            this.stoplabels = stoplabels;
+            this.stopwords = stopwords;
         }
-        catch (IOException e)
-        {
-            Logger.getLogger(SnowballLanguageModelFactory.class).error(
-                "Failed to load " + "common words for language: " + lang.toString());
 
-            return Collections.emptySet();
+        private static LexicalResources merge(Collection<LexicalResources> values)
+        {
+            final Set<MutableCharArray> mergedStopwords = Sets.newHashSet();
+            final List<Pattern> mergedStoplabels = Lists.newArrayList();
+
+            for (LexicalResources lexicalResources : values)
+            {
+                mergedStopwords.addAll(lexicalResources.stopwords);
+                mergedStoplabels.addAll(lexicalResources.stoplabels);
+            }
+
+            return new LexicalResources(mergedStoplabels, mergedStopwords);
+        }
+
+        private static LexicalResources load(ResourceUtils resourceLoaders,
+            LanguageCode lang)
+        {
+            return new LexicalResources(loadStopLabels(resourceLoaders, lang),
+                loadStopWords(resourceLoaders, lang));
+        }
+
+        /**
+         * Loads common words associated with the given language. Logs an error and
+         * recovers silently if the given resource cannot be found.
+         */
+        private static Set<MutableCharArray> loadStopWords(ResourceUtils resourceLoaders,
+            LanguageCode lang)
+        {
+            try
+            {
+                final Set<MutableCharArray> result = Sets.newHashSet();
+
+                final String resourceName = "stopwords." + lang.getIsoCode();
+                final IResource resource = resourceLoaders.getFirst(resourceName,
+                    SnowballLanguageModelFactory.class);
+
+                if (resource == null)
+                {
+                    throw new IOException("Common words resource not found: "
+                        + resourceName);
+                }
+
+                for (String word : TextResourceUtils.load(resource))
+                {
+                    result.add(new MutableCharArray(word));
+                }
+
+                return result;
+            }
+            catch (IOException e)
+            {
+                Logger.getLogger(SnowballLanguageModelFactory.class).warn(
+                    "Common words for language: " + lang.toString() + " not found");
+
+                return Collections.emptySet();
+            }
+        }
+
+        /**
+         * Loads stop labels associated with the given language. Logs an error and
+         * recovers silently if the given resource cannot be found.
+         */
+        private static List<Pattern> loadStopLabels(ResourceUtils resourceLoaders,
+            LanguageCode lang)
+        {
+            try
+            {
+                final ArrayList<Pattern> result = Lists.newArrayList();
+
+                final String resourceName = "stoplabels." + lang.getIsoCode();
+                final IResource resource = resourceLoaders.getFirst(resourceName,
+                    SnowballLanguageModelFactory.class);
+
+                if (resource == null)
+                {
+                    throw new IOException("Stop labels resource not found: "
+                        + resourceName);
+                }
+
+                for (String word : TextResourceUtils.load(resource))
+                {
+                    try
+                    {
+                        result.add(Pattern.compile(word));
+                    }
+                    catch (PatternSyntaxException e)
+                    {
+                        Logger.getLogger(SnowballLanguageModelFactory.class).warn(
+                            "Ignoring regular expression with syntax error: " + word
+                                + " in " + resourceName);
+                    }
+                }
+
+                return result;
+            }
+            catch (IOException e)
+            {
+                Logger.getLogger(SnowballLanguageModelFactory.class).warn(
+                    "Stop labels for language: " + lang.toString() + " not found");
+
+                return Collections.emptyList();
+            }
         }
     }
 }

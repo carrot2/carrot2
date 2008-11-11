@@ -48,7 +48,7 @@ public class LabelFormatter
                     commonTermFlag[wordIndex]);
                 if (i < wordIndices.length - 1)
                 {
-                    label.append(" ");
+                    label.append(' ');
                 }
             }
         }
@@ -79,7 +79,7 @@ public class LabelFormatter
                 appendFormatted(label, image[i], i == 0, stopWord[i]);
                 if (i < image.length - 1)
                 {
-                    label.append(" ");
+                    label.append(' ');
                 }
             }
         }

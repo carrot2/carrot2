@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -67,6 +66,16 @@ public class LabelFilterProcessor
      * Min length label filter.
      */
     public MinLengthLabelFilter minLengthLabelFilter = new MinLengthLabelFilter();
+
+    /**
+     * Genitive length label filter.
+     */
+    public GenitiveLabelFilter genitiveLabelFilter = new GenitiveLabelFilter();
+
+    /**
+     * Stop label filter.
+     */
+    public StopLabelFilter stopLabelFilter = new StopLabelFilter();
     
     /**
      * Processes all filters declared as fields of this class.
@@ -80,9 +89,11 @@ public class LabelFilterProcessor
         Arrays.fill(acceptedPhrases, true);
 
         minLengthLabelFilter.filter(context, acceptedStems, acceptedPhrases);
+        genitiveLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         queryLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         stopWordLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         numericLabelFilter.filter(context, acceptedStems, acceptedPhrases);
+        stopLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         completeLabelFilter.filter(context, acceptedStems, acceptedPhrases);
 
         final IntArrayList acceptedFeatures = new IntArrayList(acceptedStems.length
