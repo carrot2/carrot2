@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Jackson JSON Processor
 Bundle-SymbolicName: org.codehaus.jackson;singleton:=true
 Bundle-Version: 0.9.2
-Bundle-ClassPath: jackson-0.9.2.jar
+Bundle-ClassPath: jackson-0.9.2-patched.jar
 Export-Package: org.codehaus.jackson,
  org.codehaus.jackson.impl,
  org.codehaus.jackson.io,
