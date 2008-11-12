@@ -57,7 +57,7 @@
       </type-editor>
 
       <type-editor
-            attribute-class="org.carrot2.util.resource.Resource"
+            attribute-class="org.carrot2.util.resource.IResource"
             class="org.carrot2.workbench.editors.impl.ResourceEditor">
       </type-editor>
 
