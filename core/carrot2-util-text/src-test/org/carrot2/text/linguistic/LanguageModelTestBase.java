@@ -40,7 +40,7 @@ public abstract class LanguageModelTestBase
     @Before
     public void setupLanguage()
     {
-        this.languageModel = new SnowballLanguageModelFactory().getLanguage(getLanguageCode());
+        this.languageModel = new DefaultLanguageModelFactory().getLanguage(getLanguageCode());
     }
 
     /**

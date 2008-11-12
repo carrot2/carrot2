@@ -19,7 +19,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.text.analysis.*;
 import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.text.suffixtrees.Node;
 import org.carrot2.util.attribute.*;
@@ -87,7 +87,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Language model factory used by the algorithm, contains bindable attributes.
      */
-    public ILanguageModelFactory languageModelFactory = new SnowballLanguageModelFactory();
+    public ILanguageModelFactory languageModelFactory = new DefaultLanguageModelFactory();
 
     /**
      * Parameters and thresholds of the algorithm.

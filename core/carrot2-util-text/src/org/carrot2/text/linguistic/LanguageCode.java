@@ -18,7 +18,14 @@ import java.util.Locale;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Codes for languages for which linguistic resources are available.
+ * Codes for languages for which linguistic resources are available 
+ * in {@link DefaultLanguageModelFactory}.
+ * <p>
+ * Notes about third-party or extra implementation needs.
+ * <ul>
+ *  <li>{@link #POLISH} makes use of Morfologik stemming library
+ *  if it is available in the classpath.</li>
+ * </ul> 
  */
 public enum LanguageCode
 {
@@ -31,6 +38,7 @@ public enum LanguageCode
     HUNGARIAN ("hu"),
     ITALIAN ("it"),
     NORWEGIAN ("no"),
+    POLISH ("pl"),
     PORTUGUESE ("pt"),
     ROMANIAN ("ro"),
     RUSSIAN ("ru"),
@@ -80,5 +88,4 @@ public enum LanguageCode
     {
         return StringUtils.capitalize(name().toLowerCase());
     }
-    
 }

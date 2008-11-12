@@ -19,14 +19,14 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 /**
- * Tests {@link SnowballLanguageModelFactory}.
+ * Tests {@link DefaultLanguageModelFactory}.
  */
 public class LanguageModelFactoryTest
 {
     @Test
     public void testDefaultLanguageEnglish()
     {
-        final ILanguageModel model = new SnowballLanguageModelFactory().getCurrentLanguage();
+        final ILanguageModel model = new DefaultLanguageModelFactory().getCurrentLanguage();
         assertNotNull(model);
         assertEquals(LanguageCode.ENGLISH, model.getLanguageCode());
     }
@@ -34,7 +34,7 @@ public class LanguageModelFactoryTest
     @Test
     public void testLanguageDutch()
     {
-        final ILanguageModel model = new SnowballLanguageModelFactory().getLanguage(LanguageCode.DUTCH);
+        final ILanguageModel model = new DefaultLanguageModelFactory().getLanguage(LanguageCode.DUTCH);
         assertNotNull(model);
         assertEquals(LanguageCode.DUTCH, model.getLanguageCode());
     }    

@@ -13,8 +13,13 @@
 
 package org.carrot2.text.linguistic;
 
+import java.util.regex.Pattern;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 /**
- * 
+ * Test support for {@link LanguageCode#ENGLISH}.
  */
 public class EnglishTest extends LanguageModelTestBase
 {
@@ -48,5 +53,12 @@ public class EnglishTest extends LanguageModelTestBase
         {
             "and", "or", "to", "from"
         };
+    }
+    
+    @Test
+    public void pattern()
+    {
+        Pattern p = Pattern.compile("(?i)strona główna.*");
+        Assert.assertTrue(p.matcher("Strona Główna").matches());
     }
 }

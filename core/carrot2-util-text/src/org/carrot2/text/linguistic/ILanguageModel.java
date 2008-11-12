@@ -13,21 +13,23 @@
 package org.carrot2.text.linguistic;
 
 /**
- * Linguistic resources and tools dedicated to a given language.
+ * Linguistic resources and tools dedicated to a given language. Instances of this
+ * interface (and their derived resources) are not thread safe.
  */
 public interface ILanguageModel
 {
     /**
-     * @return Returns <code>true</code> if <code>word</code> is common (meaningless) in
-     *         this language. Such words are referred to as "stop words" and are usually
-     *         ignored in information retrieval tasks. Depending on the implementation,
-     *         <code>word</code> may be lower-cased internally.
+     * @return Returns <code>true</code> if <code>word</code> is common (meaningless)
+     *         in this language. Such words are referred to as "stop words" and are
+     *         usually ignored in information retrieval tasks. Depending on the
+     *         implementation, <code>word</code> may be lower-cased internally.
      */
     public boolean isCommonWord(CharSequence word);
 
     /**
      * @return Returns <code>true</code> if the <code>formattedLabel</code> has been
-     *         declared a stop label (meaningless) in this language.
+     *         declared a stop label (meaningless) in this language. This is a very
+     *         low-level tuning method.
      */
     public boolean isStopLabel(CharSequence formattedLabel);
 
@@ -35,8 +37,7 @@ public interface ILanguageModel
      * @return Returns an engine for conflating inflected forms to their dictionary head
      *         form. Stemming is usually a heuristic and is different from lemmatisation.
      *         An empty (identity) stemmer is returned if stemming is not available for
-     *         this language. <b>The returned stemmer is not guaranteed to be
-     *         thread-safe.</b>
+     *         this language.
      */
     public IStemmer getStemmer();
 

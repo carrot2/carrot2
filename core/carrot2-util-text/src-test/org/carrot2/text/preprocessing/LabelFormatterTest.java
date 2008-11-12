@@ -16,7 +16,7 @@ package org.carrot2.text.preprocessing;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -190,7 +190,7 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
     @Override
     protected ILanguageModelFactory createLanguageModelFactory()
     {
-        final SnowballLanguageModelFactory snowballLanguageModelFactory = new SnowballLanguageModelFactory();
+        final DefaultLanguageModelFactory snowballLanguageModelFactory = new DefaultLanguageModelFactory();
         snowballLanguageModelFactory.mergeResources = false;
         return snowballLanguageModelFactory;
     }

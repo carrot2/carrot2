@@ -21,7 +21,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.matrix.NNIInterface;
 import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.DoubleRange;
@@ -161,7 +161,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * Language model factory used by the algorithm, contains bindable attributes.
      */
-    public ILanguageModelFactory languageModelFactory = new SnowballLanguageModelFactory();
+    public ILanguageModelFactory languageModelFactory = new DefaultLanguageModelFactory();
 
     /**
      * Term-document matrix builder for the algorithm, contains bindable attributes.

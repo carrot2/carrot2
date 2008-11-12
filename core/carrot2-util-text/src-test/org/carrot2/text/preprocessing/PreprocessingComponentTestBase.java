@@ -18,7 +18,7 @@ import java.util.Map;
 
 import org.carrot2.core.Document;
 import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.linguistic.SnowballLanguageModelFactory;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.junit.Before;
 
 import com.google.common.collect.Lists;
@@ -60,7 +60,7 @@ public class PreprocessingComponentTestBase
         }
         else
         {
-            languageFactory = new SnowballLanguageModelFactory();
+            languageFactory = new DefaultLanguageModelFactory();
         }
 
         context = new PreprocessingContext(languageFactory.getCurrentLanguage(),
