@@ -18,7 +18,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.swt.SWT;
@@ -144,8 +143,20 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
         {
             public void modifyText(ModifyEvent e)
             {
-                fireContentChanging(new AttributeEvent(clazz, getAttributeKey(),
-                    getBoxValue()));
+                /*
+                 * If any value is allowed in the combo box,
+                 * send intermediate content changing events. Otherwise
+                 * send full change event.
+                 */
+                if (anyValueAllowed)
+                {
+                    fireContentChanging(new AttributeEvent(clazz, getAttributeKey(),
+                        getBoxValue()));
+                }
+                else
+                {
+                    checkContentChange();
+                }
             }
         });
 
