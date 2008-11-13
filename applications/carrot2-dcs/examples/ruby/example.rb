@@ -13,7 +13,9 @@ require 'json'
 def dump(jsonResponse)
 	response = JSON.parse(jsonResponse)
 
-	descriptions = response['clusters'].map {|cluster| "%s [%i document(s)]" % [cluster['phrases'].join(", "), cluster['documents'].length]}
+	descriptions = response['clusters'].map do
+        |cluster| "%s [%i document(s)]" % [cluster['phrases'].join(", "), cluster['documents'].length]
+    end
 	puts descriptions.join("\n")
 end
 
@@ -39,7 +41,6 @@ dump(dcs_request(uri, {
 	 "query" => "data mining",
 	 "dcs.output.format" => "JSON",
 	 "dcs.clusters.only" => "false"
-     # "file_1"   => open("barfoo"),        
 }))
 
 #
