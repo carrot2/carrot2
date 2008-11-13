@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -76,7 +75,7 @@ public final class SearchInputFactory implements IElementFactory
 
         if (attributes == null)
         {
-            attributes = new AttributeValueSet("defaults");            
+            attributes = new AttributeValueSet("defaults");
         }
         search = new SearchInput(source, algorithm, attributes);
 
@@ -103,18 +102,27 @@ public final class SearchInputFactory implements IElementFactory
         try
         {
             final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
-            final String id = search.getSourceId();
 
             /*
              * Limit saved attributes to @Input and @Processing ones.
              */
-            final BindableDescriptor desc =
-                core.getComponentDescriptor(id).flatten().only(Input.class, Processing.class);
-
-            final Map<String,Object> actual = search.getAttributeValueSet().getAttributeValues();
+            final Map<String, Object> actual = search.getAttributeValueSet()
+                .getAttributeValues();
             final AttributeValueSet filtered = new AttributeValueSet("memento-saved");
 
-            for (String key : desc.attributeDescriptors.keySet())
+            final BindableDescriptor input = core.getComponentDescriptor(
+                search.getSourceId()).flatten().only(Input.class, Processing.class);
+            for (String key : input.attributeDescriptors.keySet())
+            {
+                if (actual.containsKey(key))
+                {
+                    filtered.setAttributeValue(key, actual.get(key));
+                }
+            }
+
+            final BindableDescriptor algorithm = core.getComponentDescriptor(
+                search.getAlgorithmId()).flatten().only(Input.class, Processing.class);
+            for (String key : algorithm.attributeDescriptors.keySet())
             {
                 if (actual.containsKey(key))
                 {

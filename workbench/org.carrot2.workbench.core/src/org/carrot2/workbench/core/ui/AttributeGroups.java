@@ -467,6 +467,17 @@ public final class AttributeGroups extends Composite implements
     }
 
     /**
+     * 
+     */
+    public void setAttributes(Map<String, Object> attributeValues)
+    {
+        for (Map.Entry<String, Object> e : attributeValues.entrySet())
+        {
+            setAttribute(e.getKey(), e.getValue());
+        }
+    }    
+
+    /**
      * Dispose and unregister any editors currently held.
      */
     private void disposeEditors()

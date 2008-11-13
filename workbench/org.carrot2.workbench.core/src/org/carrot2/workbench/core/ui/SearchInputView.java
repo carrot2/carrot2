@@ -506,10 +506,7 @@ public class SearchInputView extends ViewPart
             /*
              * Set initial values of editors.
              */
-            for (Map.Entry<String, Object> e : filterAttributesOf(sourceID).entrySet())
-            {
-                editorComposite.setAttribute(e.getKey(), e.getValue());
-            }
+            editorComposite.setAttributes(filterAttributesOf(sourceID));
 
             /*
              * Hook up listeners updating attributes on changes in editors.

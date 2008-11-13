@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,9 +13,7 @@
 package org.carrot2.workbench.core.ui;
 
 import java.util.Collections;
-import java.util.Map;
 
-import org.carrot2.core.ProcessingResult;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
@@ -60,6 +57,11 @@ final class AttributeViewPage extends Page
     private IAttributeListener editorToViewSync;
 
     /**
+     * Synchronization of attribute values from this page to the {@link SearchEditor}.
+     */
+    private AttributeListenerAdapter viewToEditorSync;
+
+    /**
      * Main control in this page.
      */
     private Composite mainControl;
@@ -100,29 +102,19 @@ final class AttributeViewPage extends Page
         /*
          * Add attribute grouping action.
          */
-        toolBarManager.add(new GroupingMethodAction(PreferenceConstants.GROUPING_ATTRIBUTE_VIEW));
+        toolBarManager.add(new GroupingMethodAction(
+            PreferenceConstants.GROUPING_ATTRIBUTE_VIEW));
     }
 
     /**
-     * Update grouping state in toolbars/ menus, push initial values 
-     * to editors.
+     * Update grouping state in toolbars/ menus, push initial values to editors.
      */
     private void updateGroupingState(GroupingMethod grouping)
     {
         attributeEditors.setGrouping(grouping);
-
-        /*
-         * Refresh current attribute values. 
-         */
-
-        final ProcessingResult pr = this.editor.getSearchResult().getProcessingResult();
-        if (pr != null)
-        {
-            for (Map.Entry<String, Object> e : pr.getAttributes().entrySet())
-            {
-                attributeEditors.setAttribute(e.getKey(), e.getValue());
-            }
-        }
+        attributeEditors.setAttributes(
+            editor.getSearchResult().getInput()
+            .getAttributeValueSet().getAttributeValues());
     }
 
     /*
@@ -131,10 +123,12 @@ final class AttributeViewPage extends Page
     @Override
     public void createControl(Composite parent)
     {
-        final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault()
+            .getPreferenceStore();
 
         final String key = PreferenceConstants.GROUPING_ATTRIBUTE_VIEW;
-        prefStore.addPropertyChangeListener(new PropertyChangeListenerAdapter(key) {
+        prefStore.addPropertyChangeListener(new PropertyChangeListenerAdapter(key)
+        {
             protected void propertyChangeFiltered(PropertyChangeEvent event)
             {
                 updateGroupingState(GroupingMethod.valueOf(prefStore.getString(key)));
@@ -150,7 +144,8 @@ final class AttributeViewPage extends Page
         scroller.setExpandHorizontal(true);
         scroller.setExpandVertical(false);
 
-        final GroupingMethod defaultGrouping = GroupingMethod.valueOf(prefStore.getString(key));
+        final GroupingMethod defaultGrouping = GroupingMethod.valueOf(prefStore
+            .getString(key));
 
         attributeEditors = new AttributeGroups(spacer, editor.getAlgorithmDescriptor(),
             defaultGrouping, null, Collections.<String, Object> emptyMap());
@@ -202,7 +197,7 @@ final class AttributeViewPage extends Page
         /*
          * Link attribute value changes: attribute view -> search result
          */
-        final IAttributeListener viewToEditorSync = new AttributeListenerAdapter()
+        viewToEditorSync = new AttributeListenerAdapter()
         {
             public void valueChanged(AttributeEvent event)
             {
@@ -235,7 +230,7 @@ final class AttributeViewPage extends Page
      */
     private void unregisterListeners()
     {
-        editor.getSearchResult().getInput().removeAttributeListener(
-            editorToViewSync);
+        editor.getSearchResult().getInput().removeAttributeListener(editorToViewSync);
+        attributeEditors.removeAttributeListener(viewToEditorSync);
     }
 }

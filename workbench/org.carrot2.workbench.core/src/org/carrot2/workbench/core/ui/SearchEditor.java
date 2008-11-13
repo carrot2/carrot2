@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -76,7 +75,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         public String directory;
         public String fileName;
-        
+
         public boolean includeDocuments = true;
         public boolean includeClusters = true;
 
@@ -117,7 +116,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      * Part property indicating current grouping of attributes on the
      * {@link SearchEditorSections#ATTRIBUTES}.
      */
-    private static final String GROUPING_LOCAL = PreferenceConstants.GROUPING_EDITOR_PANEL + ".local";
+    private static final String GROUPING_LOCAL = PreferenceConstants.GROUPING_EDITOR_PANEL
+        + ".local";
 
     /**
      * All attributes of a single panel.
@@ -142,7 +142,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             this(null, -1, other.visibility, other.weight);
         }
     }
-    
+
     /**
      * Sections (panels) present inside the editor.
      */
@@ -172,8 +172,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private Image sourceImage;
 
     /**
-     * If <code>true</code>, then the editor's {@link #searchResult} contain
-     * a stale value with regard to its input.
+     * If <code>true</code>, then the editor's {@link #searchResult} contain a stale
+     * value with regard to its input.
      */
     private boolean dirty = true;
 
@@ -191,27 +191,28 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private IMemento state;
 
     /**
-     * {@link SearchEditor} forwards its selection provider methods to this component 
-     * ({@link SearchEditorSections#CLUSTERS} panel).
+     * {@link SearchEditor} forwards its selection provider methods to this component ({@link SearchEditorSections#CLUSTERS}
+     * panel).
      */
     private IPostSelectionProvider selectionProvider;
 
     /**
-     * There is only one {@link SearchJob} assigned to each editor. The job
-     * is re-scheduled when re-processing is required.
+     * There is only one {@link SearchJob} assigned to each editor. The job is
+     * re-scheduled when re-processing is required.
      * 
      * @see #reprocess()
      */
     private SearchJob searchJob;
 
     /**
-     * Auto-update listener calls {@link #reprocess()} after 
+     * Auto-update listener calls {@link #reprocess()} after
      * {@link PreferenceConstants#AUTO_UPDATE} property changes.
      */
     private IAttributeListener autoUpdateListener = new AttributeListenerAdapter()
     {
         /** Postponable reschedule job. */
-        private PostponableJob job = new PostponableJob(new UIJob("Auto update...") {
+        private PostponableJob job = new PostponableJob(new UIJob("Auto update...")
+        {
             public IStatus runInUIThread(IProgressMonitor monitor)
             {
                 reprocess();
@@ -221,7 +222,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         public void valueChanged(AttributeEvent event)
         {
-            final IPreferenceStore store = WorkbenchCorePlugin.getDefault().getPreferenceStore();
+            final IPreferenceStore store = WorkbenchCorePlugin.getDefault()
+                .getPreferenceStore();
             if (store.getBoolean(PreferenceConstants.AUTO_UPDATE))
             {
                 final int delay = store.getInt(PreferenceConstants.AUTO_UPDATE_DELAY);
@@ -234,7 +236,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      * When auto-update key in the preference store changes, force re-processing in case
      * the editor is dirty.
      */
-    private IPropertyChangeListener autoUpdateListener2 = new IPropertyChangeListener() {
+    private IPropertyChangeListener autoUpdateListener2 = new IPropertyChangeListener()
+    {
         public void propertyChange(PropertyChangeEvent event)
         {
             if (PreferenceConstants.AUTO_UPDATE.equals(event.getProperty()))
@@ -272,7 +275,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         toolkit.decorateFormHeading(rootForm);
 
-        sashForm = new SashForm(rootForm.getBody(), SWT.HORIZONTAL) {
+        sashForm = new SashForm(rootForm.getBody(), SWT.HORIZONTAL)
+        {
             protected boolean onDragSash(Event event)
             {
                 final boolean modified = super.onDragSash(event);
@@ -295,9 +299,9 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         };
         toolkit.adapt(sashForm);
 
-        final GridLayout layout = GridLayoutFactory.swtDefaults()
-            .margins(sashForm.SASH_WIDTH, sashForm.SASH_WIDTH).create();
-        rootForm.getBody().setLayout(layout);        
+        final GridLayout layout = GridLayoutFactory.swtDefaults().margins(
+            sashForm.SASH_WIDTH, sashForm.SASH_WIDTH).create();
+        rootForm.getBody().setLayout(layout);
 
         createControls(sashForm);
         updatePartHeaders();
@@ -324,7 +328,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          */
         createJobs();
 
-        getSite().getPage().addPartListener(new PartListenerAdapter() {
+        getSite().getPage().addPartListener(new PartListenerAdapter()
+        {
             public void partClosed(IWorkbenchPart part)
             {
                 getSite().getPage().removePartListener(this);
@@ -360,10 +365,9 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             final int documents = result.getDocuments().size();
             final int clusters = result.getClusters().size();
 
-            rootForm.setText(abbreviated 
-                + " (" + pluralize(documents, "document") + " from "
-                + componentName(getSearchResult().getInput().getSourceId())
-                + ", " + pluralize(clusters, "cluster") + " from " 
+            rootForm.setText(abbreviated + " (" + pluralize(documents, "document")
+                + " from " + componentName(getSearchResult().getInput().getSourceId())
+                + ", " + pluralize(clusters, "cluster") + " from "
                 + componentName(getSearchResult().getInput().getAlgorithmId()) + ")");
         }
         else
@@ -379,7 +383,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         final ProcessingComponentDescriptor component = WorkbenchCorePlugin.getDefault()
             .getComponent(componentId);
-        
+
         if (component != null && !StringUtils.isEmpty(component.getLabel()))
         {
             return component.getLabel();
@@ -406,8 +410,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
-     * Attempts to construct an input title from either query attribute
-     * or attributes found in processing results.
+     * Attempts to construct an input title from either query attribute or attributes
+     * found in processing results.
      */
     private String getFullInputTitle(SearchInput input)
     {
@@ -446,18 +450,18 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         setSite(site);
         setInput(input);
-        
+
         /*
-         * Set default local grouping if not already restored. We must set it here
-         * because it is used to create components later (and before restoreState()).
+         * Set default local grouping if not already restored. We must set it here because
+         * it is used to create components later (and before restoreState()).
          */
         if (StringUtils.isEmpty(getPartProperty(GROUPING_LOCAL)))
         {
-            final IPreferenceStore preferenceStore = 
-                WorkbenchCorePlugin.getDefault().getPreferenceStore();
+            final IPreferenceStore preferenceStore = WorkbenchCorePlugin.getDefault()
+                .getPreferenceStore();
 
-            setPartProperty(GROUPING_LOCAL, 
-                preferenceStore.getString(PreferenceConstants.GROUPING_EDITOR_PANEL));        
+            setPartProperty(GROUPING_LOCAL, preferenceStore
+                .getString(PreferenceConstants.GROUPING_EDITOR_PANEL));
         }
 
         this.searchResult = new SearchResult((SearchInput) input);
@@ -503,10 +507,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
-     * Creates a custom child in a given memento and persists information from
-     * a set of {@link SectionReference}s.
+     * Creates a custom child in a given memento and persists information from a set of
+     * {@link SectionReference}s.
      */
-    final static void saveSectionsState(IMemento memento, 
+    final static void saveSectionsState(IMemento memento,
         EnumMap<SearchEditorSections, SectionReference> sections)
     {
         final IMemento sectionsMemento = memento.createChild(MEMENTO_SECTIONS);
@@ -520,11 +524,11 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             sectionMemento.putString(SECTION_VISIBLE, Boolean.toString(sr.visibility));
         }
     }
-    
+
     /**
      * Restores partial attributes saved by {@link #saveSectionsState()}
      */
-    final static void restoreSectionsState(IMemento memento, 
+    final static void restoreSectionsState(IMemento memento,
         EnumMap<SearchEditorSections, SectionReference> sections)
     {
         final IMemento sectionsMemento = memento.getChild(MEMENTO_SECTIONS);
@@ -532,14 +536,15 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         {
             for (IMemento sectionMemento : sectionsMemento.getChildren(MEMENTO_SECTION))
             {
-                final SearchEditorSections section = SearchEditorSections.valueOf(
-                    sectionMemento.getString(SECTION_NAME));
+                final SearchEditorSections section = SearchEditorSections
+                    .valueOf(sectionMemento.getString(SECTION_NAME));
 
                 if (sections.containsKey(section))
                 {
                     final SectionReference r = sections.get(section);
                     r.weight = sectionMemento.getInteger(SECTION_WEIGHT);
-                    r.visibility = Boolean.valueOf(sectionMemento.getString(SECTION_VISIBLE));
+                    r.visibility = Boolean.valueOf(sectionMemento
+                        .getString(SECTION_VISIBLE));
                 }
             }
         }
@@ -608,17 +613,20 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
-     * Show a dialog prompting for file name and options and save the result to
-     * an XML file. 
+     * Show a dialog prompting for file name and options and save the result to an XML
+     * file.
      */
     public void doSaveAs()
     {
         if (isDirty() || this.searchJob.getState() == Job.RUNNING)
         {
             final MessageDialog dialog = new MessageDialog(getEditorSite().getShell(),
-                "Modified parameters", null, "Search parameters" +
-                		" have been changed. Save stale results?", MessageDialog.WARNING,
-                		new String[] { IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL }, 0);
+                "Modified parameters", null, "Search parameters"
+                    + " have been changed. Save stale results?", MessageDialog.WARNING,
+                new String []
+                {
+                    IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL
+                }, 0);
 
             if (dialog.open() == MessageDialog.CANCEL)
             {
@@ -630,12 +638,13 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         if (newOptions == null)
         {
             newOptions = new SaveOptions();
-            newOptions.fileName = SaveOptions.sanitizeFileName(
-                getFullInputTitle(getSearchResult().getInput())) + ".xml";
+            newOptions.fileName = SaveOptions
+                .sanitizeFileName(getFullInputTitle(getSearchResult().getInput()))
+                + ".xml";
         }
 
         final Shell shell = this.getEditorSite().getShell();
-        if (new SearchEditorSaveAsDialog(shell, newOptions).open() == Window.OK) 
+        if (new SearchEditorSaveAsDialog(shell, newOptions).open() == Window.OK)
         {
             this.saveOptions = newOptions;
             doSave(saveOptions);
@@ -654,7 +663,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                 "No search result yet."));
             return;
         }
-        
+
         final IAction saveAction = new SaveAsXMLActionDelegate(result, options);
         final Job job = new Job("Saving search result...")
         {
@@ -676,7 +685,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         return true;
     }
-    
+
     /*
      * Don't require save-on-close.
      */
@@ -715,8 +724,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
-     * Returns a map of this editor's panels ({@link SectionReference}s). This
-     * map and its objects are considered <b>read-only</b>.
+     * Returns a map of this editor's panels ({@link SectionReference}s). This map and
+     * its objects are considered <b>read-only</b>.
      * 
      * @see #setSectionVisibility(SearchEditorSections, boolean)
      */
@@ -742,13 +751,11 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         /*
          * There is a race condition between the search job and the dirty flag. The editor
-         * becomes 'clean' when the search job is initiated, so that further changes of parameters
-         * will simply re-schedule another job after the one started before ends.
-         * 
-         * This may lead to certain inconsistencies between the view
-         * and the attributes (temporal), but is much simpler than 
-         * trying to pool/ cache/ stack dirty tokens and manage them 
-         * in synchronization with running jobs.
+         * becomes 'clean' when the search job is initiated, so that further changes of
+         * parameters will simply re-schedule another job after the one started before
+         * ends. This may lead to certain inconsistencies between the view and the
+         * attributes (temporal), but is much simpler than trying to pool/ cache/ stack
+         * dirty tokens and manage them in synchronization with running jobs.
          */
         setDirty(false);
         searchJob.schedule();
@@ -779,16 +786,17 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         toolbar.add(new GroupingMethodAction(GROUPING_LOCAL, this));
 
         // Update global preferences when local change.
-        addPartPropertyListener(new PropertyChangeListenerAdapter(GROUPING_LOCAL) {
+        addPartPropertyListener(new PropertyChangeListenerAdapter(GROUPING_LOCAL)
+        {
             protected void propertyChangeFiltered(PropertyChangeEvent event)
             {
-                final IPreferenceStore prefStore = WorkbenchCorePlugin
-                    .getDefault().getPreferenceStore();
-                
+                final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault()
+                    .getPreferenceStore();
+
                 final String currentValue = getPartProperty(GROUPING_LOCAL);
                 prefStore.setValue(globalPreferenceKey, currentValue);
 
-                attributesPanel.setGrouping(GroupingMethod.valueOf(currentValue));
+                updateGroupingState(GroupingMethod.valueOf(currentValue));
                 Utils.adaptToFormUI(toolkit, attributesPanel);
 
                 if (!sections.get(SearchEditorSections.ATTRIBUTES).visibility)
@@ -807,6 +815,16 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
+     * Update grouping state of the {@link #attributesPanel} and reset its editor values.
+     */
+    private void updateGroupingState(GroupingMethod grouping)
+    {
+        attributesPanel.setGrouping(grouping);
+        attributesPanel.setAttributes(getSearchResult().getInput().getAttributeValueSet()
+            .getAttributeValues());
+    }
+
+    /**
      * Create internal panels and hook up listener infrastructure.
      */
     private void createControls(SashForm parent)
@@ -814,7 +832,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         /*
          * Create and add sections in order of their declaration in the enum type.
          */
-        this.sections = new EnumMap<SearchEditorSections, SectionReference>(SearchEditorSections.class);
+        this.sections = new EnumMap<SearchEditorSections, SectionReference>(
+            SearchEditorSections.class);
 
         int index = 0;
         for (final SearchEditorSections s : EnumSet.allOf(SearchEditorSections.class))
@@ -838,7 +857,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                     throw new RuntimeException("Unhandled section: " + s);
             }
 
-            final SectionReference sr = new SectionReference(section, index, true, 0);            
+            final SectionReference sr = new SectionReference(section, index, true, 0);
             sections.put(s, sr);
 
             index++;
@@ -855,27 +874,29 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         this.getSite().setSelectionProvider(this);
 
         /*
-         * Set up an event callback making editor dirty when attributes change. 
+         * Set up an event callback making editor dirty when attributes change.
          */
-        this.getSearchResult().getInput().addAttributeListener(new AttributeListenerAdapter() {
-            public void valueChanged(AttributeEvent event)
+        this.getSearchResult().getInput().addAttributeListener(
+            new AttributeListenerAdapter()
             {
-                setDirty(true);
-            }
-        });
+                public void valueChanged(AttributeEvent event)
+                {
+                    setDirty(true);
+                }
+            });
 
         /*
          * Set up an event callback to spawn auto-update jobs on changes to attributes.
          */
-        resources.registerAttributeChangeListener(
-            this.getSearchResult().getInput(), autoUpdateListener);
+        resources.registerAttributeChangeListener(this.getSearchResult().getInput(),
+            autoUpdateListener);
 
         /*
-         * Set up an event callback to restart processing after auto-update is
-         * enabled and the editor is dirty.
+         * Set up an event callback to restart processing after auto-update is enabled and
+         * the editor is dirty.
          */
-        resources.registerPropertyChangeListener(
-            WorkbenchCorePlugin.getDefault().getPreferenceStore(), autoUpdateListener2);
+        resources.registerPropertyChangeListener(WorkbenchCorePlugin.getDefault()
+            .getPreferenceStore(), autoUpdateListener2);
 
         /*
          * Install a synchronization agent between the current selection in the editor and
@@ -975,20 +996,22 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         final BindableDescriptor descriptor = getAlgorithmDescriptor();
 
-        final CScrolledComposite scroller = new CScrolledComposite(sec, 
-            SWT.H_SCROLL | SWT.V_SCROLL);
+        final CScrolledComposite scroller = new CScrolledComposite(sec, SWT.H_SCROLL
+            | SWT.V_SCROLL);
         resources.add(scroller);
-        
+
         final Composite spacer = GUIFactory.createSpacer(scroller);
         resources.add(spacer);
 
         final String groupingValue = getPartProperty(GROUPING_LOCAL);
-        final GroupingMethod grouping = GroupingMethod.valueOf(groupingValue); 
+        final GroupingMethod grouping = GroupingMethod.valueOf(groupingValue);
+        final Map<String, Object> defaultValues = getSearchResult().getInput()
+            .getAttributeValueSet().getAttributeValues();
 
-        attributesPanel = new AttributeGroups(spacer, descriptor, grouping, null, 
-            Collections.<String, Object> emptyMap());
+        attributesPanel = new AttributeGroups(spacer, descriptor, grouping, null,
+            defaultValues);
         attributesPanel.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
-            .create());        
+            .create());
         resources.add(attributesPanel);
 
         toolkit.paintBordersFor(scroller);
@@ -998,10 +1021,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         scroller.setContent(spacer);
 
         /*
-         * Link attribute value changes:
-         * attribute panel -> search result
+         * Link attribute value changes: attribute panel -> search result
          */
-        final IAttributeListener panelToEditorSync = new AttributeListenerAdapter() {
+        final IAttributeListener panelToEditorSync = new AttributeListenerAdapter()
+        {
             public void valueChanged(AttributeEvent event)
             {
                 getSearchResult().getInput().setAttribute(event.key, event.value);
@@ -1010,15 +1033,15 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         attributesPanel.addAttributeListener(panelToEditorSync);
 
         /*
-         * Link attribute value changes:
-         * search result -> attribute panel
+         * Link attribute value changes: search result -> attribute panel
          */
-        final IAttributeListener editorToPanelSync = new AttributeListenerAdapter() {
+        final IAttributeListener editorToPanelSync = new AttributeListenerAdapter()
+        {
             public void valueChanged(AttributeEvent event)
             {
                 /*
-                 * temporarily unsubscribe from events from the attributes
-                 * list to avoid event looping.
+                 * temporarily unsubscribe from events from the attributes list to avoid
+                 * event looping.
                  */
                 attributesPanel.removeAttributeListener(panelToEditorSync);
                 attributesPanel.setAttribute(event.key, event.value);
@@ -1046,8 +1069,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
         final String algorithmID = getSearchResult().getInput().getAlgorithmId();
 
-        return core.getComponentDescriptor(algorithmID).only(Input.class, Processing.class)
-            .not(Internal.class);
+        return core.getComponentDescriptor(algorithmID).only(Input.class,
+            Processing.class).not(Internal.class);
     }
 
     /**
@@ -1060,8 +1083,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          */
 
         final String title = getAbbreviatedInputTitle(searchResult.getInput());
-        this.searchJob = new SearchJob(
-            "Searching for '" + title + "'...", searchResult);
+        this.searchJob = new SearchJob("Searching for '" + title + "'...", searchResult);
 
         // Try to push search jobs into the background, if possible.
         this.searchJob.setPriority(Job.DECORATE);
@@ -1098,7 +1120,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             }
         });
     }
-    
+
     /*
      * 
      */

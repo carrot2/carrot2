@@ -303,7 +303,16 @@ public final class AttributeList extends Composite implements IAttributeEventPro
             // Add the editor, if available.
             editor.createEditor(this, maxColumns);
 
-            editor.setValue(attributeDescriptors.get(descriptor.key).defaultValue);
+            // Set the default value for the editor.
+            if (currentValues != null && currentValues.get(key) != null)
+            {
+                editor.setValue(currentValues.get(key));
+            }
+            else
+            {
+                editor.setValue(attributeDescriptors.get(key).defaultValue);
+            }
+
             editors.put(editor.getAttributeKey(), editor);
 
             /*
