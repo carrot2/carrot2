@@ -61,6 +61,8 @@
     <copy todir="${dcs.dir}">
       <fileset dir="${carrot2.dcs.basedir}">
         <include name="examples/**" />
+		<exclude name="**/tmp/**" />
+		<exclude name="**/obj/**" />
       </fileset>
       <fileset dir="${carrot2.dcs.basedir}/etc">
         <include name="readme.txt" />
