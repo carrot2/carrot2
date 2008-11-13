@@ -284,7 +284,7 @@ public final class RestProcessorServlet extends HttpServlet
 
         // Bind request parameters to the request model
         final DcsRequestModel requestModel = new DcsRequestModel();
-        requestModel.algorithm = componentSuite.getAlgorithms().get(0).getId();
+
         final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = new AttributeBinder.AttributeBinderActionBind(
             Input.class, parameters, true,
             AttributeBinder.AttributeTransformerFromString.INSTANCE);
@@ -309,6 +309,11 @@ public final class RestProcessorServlet extends HttpServlet
         if (input != null)
         {
             processingAttributes.putAll(input.getAttributes());
+        }
+        
+        if (StringUtils.isEmpty(requestModel.algorithm))
+        {
+            requestModel.algorithm = componentSuite.getAlgorithms().get(0).getId();            
         }
 
         // We need either sourceId or direct document feed

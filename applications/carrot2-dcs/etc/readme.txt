@@ -2,7 +2,7 @@ Carrot2 Document Clustering Server
 ----------------------------------
 
 Carrot2 Document Clustering Server exposes Carrot2 clustering as a REST
-service. It can cluster documents from an external source  (e.g. a search
+service. It can cluster documents from an external source  (e.g., a search
 engine) or documents provided directly as an XML stream. Results are returned
 in XML or JSON formats. 
 
