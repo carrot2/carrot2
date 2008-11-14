@@ -1,0 +1,10 @@
+
+<component name="c">
+
+	<provides>
+		<files>
+			<file location="c.jar" />
+		</files>
+	</provides>
+
+</component>

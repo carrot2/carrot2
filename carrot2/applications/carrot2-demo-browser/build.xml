@@ -1,0 +1,179 @@
+
+<project name="Carrot2 Demo Browser" default="build">
+
+    <property file="${user.home}/.carrot.properties" />
+    <property file="local.properties" />
+
+    <property name="project.dir"      location="${basedir}" />
+    <property name="carrot2.code.dir"  location="../.." />
+    <property name="dist.name"        value="carrot2-demo-browser" />
+
+    <property name="type" value="jartype" />
+    <property name="distribution.dir" location="${project.dir}/tmp/dist" />
+
+    <property name="distribution.zips.dir" location="${project.dir}/tmp/zips" />
+    <property name="distribution.zip.name" value="carrot2-local-demo.zip" /> 
+	<property name="distribution.webstart" location="${project.dir}/tmp/webstart" />
+
+    <import file="${carrot2.code.dir}/components/common-targets.inc" />
+
+	<target name="build" depends="build.full" />
+
+
+    <target name="webstart" depends="clean,webstart.prepare,webstart.sign" description="Build a WebStart version.">
+	</target>
+
+    <target name="webstart.prepare" depends="build.full">
+       	<copy todir="${distribution.webstart}">
+       		<fileset dir="${distribution.dir}" />
+       	</copy>
+
+       	<copy todir="${distribution.webstart}">
+       		<fileset dir=".">
+       			<include name="processes/**" />
+       			<include name="components/**" />
+       		</fileset>
+       	</copy>
+
+       	<java classname="bsh.Interpreter" dir="${distribution.webstart}" fork="true">
+       		<classpath>
+       			<fileset dir="${carrot2.code.dir}/lib" includes="*bsh*.jar" />
+       		</classpath>
+       		<arg file="webstart/create-resources.bsh" />
+       	</java>
+
+		<mkdir dir="${distribution.webstart}/lib" />
+       	<jar jarfile="${distribution.webstart}/lib/demo-resources.jar" update="false">
+       		<fileset dir="${distribution.webstart}" id="webstart.todel">
+       			<include name="components/**" />
+       			<include name="processes/**" />
+       			<include name="demo-resources.xml" />
+       		</fileset>
+       	</jar>
+    	
+    	<delete>
+    		<fileset refid="webstart.todel" />
+    	</delete>
+
+       	<delete file="webstart/demo-resources.xml" />
+
+       	<copy todir="${distribution.webstart}">
+       		<fileset dir="webstart">
+       			<include name="img/**" />
+       			<include name="*.php" />
+       			<include name="*.jsp" />
+       		</fileset>
+       	</copy>
+
+        <move file="${distribution.webstart}/deps-carrot2-demo-browser-jar" tofile="${distribution.webstart}/lib" />
+
+       	<java classname="bsh.Interpreter" dir="${distribution.webstart}" fork="true">
+       		<classpath>
+       			<fileset dir="${carrot2.code.dir}/lib" includes="*bsh*.jar" />
+       		</classpath>
+       		<arg file="webstart/create-files.bsh" />
+       	</java>
+
+	<!-- Assemble binary JDIC JARs -->
+        <jar jarfile="${distribution.webstart}/lib/windows/x86/jdic_native.jar">
+            <fileset id="jdic.todel" dir="${distribution.webstart}/lib/windows/x86">
+                <exclude name="jdic_native.jar" />
+            </fileset>
+	</jar>
+	<delete>
+	    <fileset refid="jdic.todel" />
+	</delete>
+    </target>
+
+	<target name="webstart.sign">
+		<property name="keystore.alias" value="carrot2.org" />
+		<property name="keystore.password" value="carrot2" />
+		<property name="keystore" value="webstart/carrot2.org.keystore" />
+
+	    <signjar alias="${keystore.alias}" storepass="${keystore.password}" keystore="${keystore}">
+			<fileset dir="${distribution.webstart}">
+				<include name="**/*.jar" />
+			</fileset>
+	   	</signjar>	
+	</target>
+
+
+
+    <target name="dist" depends="clean,build.full" description="Build a distribution version.">
+        <filterchain id="cutout.tmp-dist">
+            <tokenfilter>
+                <replacestring from="tmp\dist\" to="" />
+                <replacestring from="tmp/dist/" to="" />
+            </tokenfilter>
+        </filterchain>
+
+    	<copy file="demo.bat" todir="${distribution.dir}" filtering="true">
+            <filterchain refid="cutout.tmp-dist" />
+    	</copy>
+    	<copy file="demo.sh" todir="${distribution.dir}" overwrite="true" filtering="true">
+            <filterchain refid="cutout.tmp-dist" />
+            <filterchain>
+                <deletecharacters chars="\r" />
+            </filterchain>
+    	</copy>
+    	<copy todir="${distribution.dir}">
+    		<fileset dir=".">
+    			<include name="components/**" />
+    			<include name="processes/**" />
+                <include name="readme.txt" />
+    		</fileset>
+    	</copy>
+
+        <mkdir dir="${distribution.zips.dir}" />
+        <zip compress="true" duplicate="fail" update="false" whenempty="fail"
+            zipfile="${distribution.zips.dir}/${distribution.zip.name}">
+            <fileset dir="${distribution.dir}">
+                <exclude name="**/*.sh" />
+            </fileset>
+            <zipfileset dir="${distribution.dir}" filemode="755">
+                <include name="**/*.sh" />
+            </zipfileset>
+        </zip>
+    </target>
+
+
+    <target name="build.full">
+        <property name="copy.dependencies" value="true" />
+        <property name="single.jar" value="false" />
+		<property name="profile" value="full" />
+
+        <ant target="build.${type}"
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+        </ant>
+    </target>
+
+
+    <target name="obfuscate" depends="build.full">
+        <!-- Prepare filesets of obfuscated/library files -->
+        <property name="obf.distribution.dir" location="tmp/dist-obfuscated" />
+        <property name="obf.jar.location" location="${obf.distribution.dir}/${dist.name}.jar" />
+        <property name="obf.leave.files" value="" /> <!-- any combination of: map seeds rules -->
+
+        <fileset dir="${obf.distribution.dir}" id="library.jars">
+            <include name="**/*.jar" />
+            <exclude name="**/carrot2-*.jar" />
+        </fileset>
+        <fileset dir="${obf.distribution.dir}" id="input.jars">
+            <include name="**/carrot2-*.jar" />
+        </fileset>
+
+        <ant target="proguard.run" 
+            antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true" />
+    </target>
+
+
+    <target name="build.stripped">
+        <property name="copy.dependencies" value="true" />
+        <property name="single.jar" value="false" />
+		<property name="profile" value="stripped" />
+
+        <ant target="build.${type}"
+             antfile="${carrot2.code.dir}/components/master.xml" inheritall="true" inheritrefs="true">
+        </ant>
+    </target>
+</project>

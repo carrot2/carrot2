@@ -1,0 +1,7 @@
+
+<!--
+    Silencers for logs irrelevant from user point of view.
+-->
+
+<logger name="org.carrot2.util.WordLoadingUtils"><level value="warn"/></logger>
+<logger name="org.carrot2.util.xsltfilter"><level value="warn"/></logger>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="Carrot2 Bamboo builds" default="help">
+    <property file="${bamboo.build.properties}" />
+
+    <target name="dist" depends="build" description="Perform a full build with distribution building.">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+
+        <!-- build distribution ZIPs -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist" inheritall="true" />
+
+        <!-- build the webapp -->
+        <ant dir="${carrot2.code.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="clean" inheritall="true" />
+        <ant dir="${carrot2.code.dir}/applications/carrot2-demo-webapp" antfile="build.xml" target="build" inheritall="true">
+            <property name="webapp.log4j.exclude" value="true" />
+        </ant>
+
+        <!-- build javadoc -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="javadoc" inheritall="true" />
+
+        <!-- build webstart demo -->
+        <ant dir="${carrot2.code.dir}/applications/carrot2-demo-browser" antfile="build.xml" target="webstart" inheritall="true" />
+    </target>
+
+    <target name="build" description="Perform a full build.">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+
+        <!-- clean everything -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="cleanall" inheritall="true" />
+
+        <!-- full build of all components -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="build" inheritall="true" />
+
+        <!-- run tests -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="test" inheritall="true" />
+    </target>
+
+    <target name="publish.demo" description="Publish a demo web application internally on the demo server.">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+        <fail unless="webapp.name">Define: webapp.name property.</fail>
+        <fail unless="webapps.dir">Define: webapps.dir property.</fail>
+        <fail unless="tomcat.init">Define: tomcat.init property.</fail>
+
+        <!-- stop tomcat, copy the webapp, restart tomcat -->
+        <exec dir="${carrot2.code.dir}" executable="${tomcat.init}" vmlauncher="false" failonerror="true">
+            <arg line="stop" />
+        </exec>
+
+        <sleep seconds="10" />
+
+        <copy file="${carrot2.code.dir}/applications/carrot2-demo-webapp/tmp/dist/carrot2-demo-webapp.war"
+              tofile="${webapps.dir}/${webapp.name}.war"
+              overwrite="true" />
+        <delete dir="${webapps.dir}/${webapp.name}" />
+
+        <exec dir="${carrot2.code.dir}" executable="${tomcat.init}" vmlauncher="false" failonerror="true">
+            <arg line="start" />
+        </exec>
+    </target>
+
+    <target name="publish.artefacts" description="Publishes major project build artefacts -- WAR, Webstart and API.">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+
+        <fail unless="api.dir">Define: api.dir property.</fail>
+        <fail unless="webstart.dir">Define: webstart.dir property.</fail>
+        <fail unless="dist.dir">Define: dist.dir property.</fail>
+
+        <!-- copy the API -->
+        <delete dir="${api.dir}" />
+        <mkdir dir="${api.dir}" />
+        <copy todir="${api.dir}">
+            <fileset dir="${carrot2.code.dir}/tmp/javadoc" />
+        </copy>
+
+        <!-- copy the Webstart demo -->
+        <mkdir dir="${webstart.dir}" />
+        <copy todir="${webstart.dir}">
+            <fileset dir="${carrot2.code.dir}/applications/carrot2-demo-browser/tmp/webstart">
+                <include name="**/*" />
+                <include name="*" />
+            </fileset>
+        </copy>
+
+        <!-- copy the distribution files -->
+        <mkdir dir="${dist.dir}" />
+        <copy todir="${dist.dir}">
+            <fileset dir="${carrot2.code.dir}/dist">
+                <include name="*.zip" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="update" description="Perform SVN update to a given revision">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+        <fail unless="svn.revision">Define: svn.revision property for updates.</fail>
+
+        <echo>Updating local checkout to revision: ${svn.revision}</echo>
+        <exec dir="${carrot2.code.dir}" executable="svn" vmlauncher="false" failonerror="true">
+            <arg line="update -r ${svn.revision}" />
+        </exec>
+    </target>
+
+    <target name="help">
+        <echo>This file is used to drive automated Bamboo builds.</echo>
+    </target>
+
+    <target name="check">
+      <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+
+      <fail unless="api.dir">Define: api.dir property.</fail>
+      <fail unless="webstart.dir">Define: webstart.dir property.</fail>
+      <fail unless="dist.dir">Define: dist.dir property.</fail>
+
+      <fail unless="webapp.name">Define: webapp.name property.</fail>
+      <fail unless="webapps.dir">Define: webapps.dir property.</fail>
+      <fail unless="tomcat.init">Define: tomcat.init property.</fail>
+
+      <echo>All required variables defined.</echo>
+    </target>
+</project>

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <link REL="stylesheet" TYPE="text/css" TITLE="style" MEDIA="all" href="../css/style.css" />
+</head>
+<body>
+
+<h1>
+Document Clustering Server (REST interface)
+</h1>
+
+<div class="content">
+<p>
+  You can invoke clustering by sending a <span
+  class="code">multipart/form-data</span> HTTP POST request to the Document
+  Clustering Server (<span class="code">x-www-form-urlencoded</span> encoding will
+  not work). The format of this request is <a href="parameters.html">explained here</a>.
+</p>
+
+<p>
+  You can use the forms below to trigger clustering from your browser.
+</p>
+
+<form action="processor" enctype="multipart/form-data" method="POST">
+<div class="form">
+<fieldset>
+  <legend>Send a data file</legend>
+
+  <div class="row">
+    <label for="output">Output format</label>
+    <select id="output" name="dcs.default.output">
+      <option value="xml" selected="selected">XML</option>
+    <option value="json">JSON</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="clusters">Clusters only</label>
+    <input id="clusters" type="checkbox" value="true" name="dcs.clusters.only">
+  </div>
+
+  <div class="row">
+    <label for="algorithm">Algorithm</label>
+    <input id="algorithm" type="text" name="dcs.default.algorithm" size="42"> (optional)
+  </div>
+
+  <div class="row" style="margin-top: 4ex">
+    <label for="file">Input XML file</label>
+    <input id="file" type="file" name="c2stream" size="40">
+  </div>
+</fieldset>
+
+<input class="submit" type="submit" name="Send" value="Cluster >>">
+</div>
+</form>
+
+<form action="processor" enctype="multipart/form-data" method="POST">
+<div class="form">
+<fieldset>
+  <legend>Paste data</legend>
+
+  <div class="row">
+    <label for="output">Output format</label>
+    <select id="output" name="dcs.default.output">
+      <option value="xml" selected="selected">XML</option>
+    <option value="json">JSON</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="clusters">Clusters only</label>
+    <input id="clusters" type="checkbox" value="true" name="dcs.clusters.only">
+  </div>
+
+  <div class="row">
+    <label for="algorithm">Algorithm</label>
+    <input id="algorithm" type="text" name="dcs.default.algorithm" size="42"> (optional)
+  </div>
+
+  <div class="row" style="margin-top: 4ex">
+    <label>Input XML data</label>
+    <textarea name="c2stream" style="width: 34em; height: 35ex;"></textarea>
+  </div>
+</fieldset>
+
+<input class="submit" type="submit" name="Send" value="Cluster >>">
+</div>
+</form>
+</body></html>

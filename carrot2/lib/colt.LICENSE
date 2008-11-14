@@ -1,0 +1,44 @@
+packages cern.colt* , cern.jet*, cern.clhep
+
+	Written by Wolfgang Hoschek. Check the Colt home page for more info.
+	Copyright � 1999 CERN - European Organization for Nuclear Research.
+	Permission to use, copy, modify, distribute and sell this software and its
+	documentation for any purpose is hereby granted without fee, provided that
+	the above copyright notice appear in all copies and that both that
+	copyright notice and this permission notice appear in supporting
+	documentation. CERN makes no representations about the suitability of this
+	software for any purpose. It is provided "as is" without expressed or
+	implied warranty.
+
+package com.imsl.math
+
+	Written by Visual Numerics, Inc. Check the Visual Numerics home page for
+	more info.  Copyright (c) 1997 - 1998 by Visual Numerics, Inc. All rights
+	reserved.  Permission to use, copy, modify, and distribute this software is
+	freely granted by Visual Numerics, Inc., provided that the copyright notice
+	above and the following warranty disclaimer are preserved in human readable
+	form. Because this software is licenses free of charge, it is provided "AS
+	IS", with NO WARRANTY. TO THE EXTENT PERMITTED BY LAW, VNI DISCLAIMS ALL
+	WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ITS
+	PERFORMANCE, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. VNI WILL
+	NOT BE LIABLE FOR ANY DAMAGES WHATSOEVER ARISING OUT OF THE USE OF OR
+	INABILITY TO USE THIS SOFTWARE, INCLUDING BUT NOT LIMITED TO DIRECT,
+	INDIRECT, SPECIAL, CONSEQUENTIAL, PUNITIVE, AND EXEMPLARY DAMAGES, EVEN IF
+	ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+package edu.oswego.cs.dl.util.concurrent
+
+	Written by Doug Lea. Check the util.concurrent home page for more info.
+	Originally written by Doug Lea and released into the public domain. He says
+	about this package: All classes are released to the public domain and may
+	be used for any purpose whatsoever without permission or acknowledgment.
+
+packages hep.aida.*
+
+	Written by Pavel Binko, Dino Ferrero Merlino, Wolfgang Hoschek, Tony
+	Johnson, Andreas Pfeiffer, and others. Check the FreeHEP home page for more
+	info.  Permission to use and/or redistribute this work is granted under the
+	terms of the LGPL License, with the exception that any usage related to
+	military applications is expressly forbidden. The software and
+	documentation made available under the terms of this license are provided
+	with no warranty.

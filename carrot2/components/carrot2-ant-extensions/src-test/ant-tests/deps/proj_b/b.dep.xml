@@ -1,0 +1,13 @@
+
+<component name="b" description="Component B">
+
+	<provides>
+		<files prefix="tmp">
+			<file location="b-out.txt" />
+		</files>
+		<build>
+			<ant file="build.xml" target="build" />
+		</build>
+	</provides>
+
+</component>

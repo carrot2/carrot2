@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE component PUBLIC "-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" "http://www.carrot2.org/dtd/component-dependency.dtd" >
+
+<component
+    name="carrot2-util-matrix"
+    description="Carrot2 Matrix Routines">
+    
+    <provides>
+        <files build-path-exclude="true" prefix="tmp/dist">
+            <file location="carrot2-util-matrix.jar" />
+        </files>
+        <build>
+            <ant file="build.xml" target="build" />
+        </build>
+		<check-newer>
+			<fileset dir="src" />
+			<fileset dir="nni-lib" />
+			<fileset dir="src-matlab" />
+		</check-newer>
+    </provides>
+
+    <dependency name="colt" />
+    <dependency name="nni" />
+    <dependency name="carrot2-license" />
+    <dependency name="carrot2-util-common" profile="test"/>
+    <dependency name="junit" profile="test" />
+    <dependency name="junit-addons" profile="test" />
+    
+</component>

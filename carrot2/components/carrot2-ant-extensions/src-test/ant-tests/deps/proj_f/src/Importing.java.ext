@@ -1,0 +1,9 @@
+
+import imported.*;
+
+public class Importing {
+	public static void main(String [] arg) {
+		ImportedClass p = new ImportedClass();
+	}
+
+}

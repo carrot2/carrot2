@@ -1,0 +1,24 @@
+import org.carrot2.core.*;
+import org.carrot2.core.controller.*;
+import org.carrot2.input.pubmed.*;
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+    	return new PubMedInputComponent();
+    }
+};
+
+LoadedComponentFactory loaded = 
+	new LoadedComponentFactory("input-pubmed", factory);
+
+loaded.setProperties(new String [][] {
+	{"tab.name", "PubMed"},
+	{"tab.accel", "b"},
+	{"tab.description", "Search PubMed medical database"},
+	{"tab.description.startup", "The clustering engine will search the PubMed medical abstracts database and cluster the results"},
+	{"tab.exampleQueries", "cancer|heart|lung"},
+	{"tab.icon", "pubmed.gif"},
+	{"tab.default", "false"}
+});
+
+return loaded;

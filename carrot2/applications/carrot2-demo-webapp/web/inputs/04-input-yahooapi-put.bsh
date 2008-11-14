@@ -1,0 +1,29 @@
+import org.carrot2.core.*;
+import org.carrot2.core.controller.*;
+import org.carrot2.input.yahooapi.*;
+
+// This script requires a global variable 'inputsDirFile', which 
+// is registered by the webapp.
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+	    final File cfg = new File(inputsDirFile, "04-input-yahooapi-put.cfg");
+		return new YahooApiInputComponent(new FileInputStream(cfg));
+    }
+};
+
+LoadedComponentFactory loaded = 
+	new LoadedComponentFactory("input-yahooapi-put", factory);
+
+loaded.setProperties(new String [][] {
+	{"tab.name", "PUT"},
+	{"tab.accel", "P"},
+	{"tab.description", "Search *.put.poznan.pl (with Yahoo!)"},
+	{"tab.description.startup", "The clustering engine will search Poznan University of Technology domains and organize the results into thematic categories"},
+	{"tab.exampleQueries", "computing science|idss|seminaria|publikacje"},
+	{"tab.icon", "put.gif"},
+	{"tab.default", "false"},
+	{"tab.hidden", "true"}
+});
+
+return loaded;

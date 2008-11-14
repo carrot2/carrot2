@@ -1,0 +1,4 @@
+<local-component-factory 
+	id="filter-striphtml" 
+	component-class="org.carrot2.filter.striphtml.StripHTMLLocalFilterComponent">
+</local-component-factory> 

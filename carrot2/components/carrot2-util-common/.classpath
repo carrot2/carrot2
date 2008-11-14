@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-3.8.1.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/junit-addons-1.4.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/colt-1.0.3-trimmed.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-primitives-1.0.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/compile-time/servlet.jar"/>
+	<classpathentry kind="var" path="CARROT2_CHECKOUT_BASE/lib/commons-lang-2.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-log4j"/>
+	<classpathentry kind="output" path="tmp/eclipse/classes"/>
+</classpath>

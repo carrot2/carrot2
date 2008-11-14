@@ -1,0 +1,60 @@
+
+<project name="metainfo" default="testCollectMeta">
+
+    <target name="prepare">
+        <taskdef resource="res/carrot2-antlib.xml">
+            <classpath location="../../tmp/build/bootstrap" />
+        </taskdef>
+
+		<subant target="prepare">
+			<fileset dir="metaInfoTest" includes="**/build.xml"/>
+        </subant>
+    </target>
+	
+	<target name="testCollectMeta" depends="prepare">
+		<description>
+			In this test we check if meta collection task works properly.
+		</description>
+
+		<collectMeta componentDescriptor="metaInfoTest/a/a.dep.xml"
+				     type="proguard" property="proguard.meta" profile="">
+			<dependencies id="dependencies">
+				<fileset dir="metaInfoTest">
+					<include name="**/*.dep.xml" />
+				</fileset>
+			</dependencies>
+		</collectMeta>
+		
+		<condition property="test.result" value="ok">
+			<equals arg1="${proguard.meta}" arg2="c_meta/b_meta/a_meta/" />
+		</condition>
+		
+		<fail unless="test.result">
+			Meta information not collected properly: ${proguard.meta}
+		</fail>
+	</target>
+	
+	<target name="testCollectMetaInProfile" depends="prepare">
+		<description>
+			In this test we check if meta collection task works properly
+			with profiles.
+		</description>
+
+		<collectMeta componentDescriptor="metaInfoTest/a/a.dep.xml"
+				     type="proguard" property="proguard.meta" profile="ac">
+			<dependencies id="dependencies">
+				<fileset dir="metaInfoTest">
+					<include name="**/*.dep.xml" />
+				</fileset>
+			</dependencies>
+		</collectMeta>
+		
+		<condition property="test.result" value="ok">
+			<equals arg1="${proguard.meta}" arg2="c_meta/b_meta/d_meta/c_meta_ac/a_meta_ac/" />
+		</condition>
+		
+		<fail unless="test.result">
+			Meta information not collected properly: ${proguard.meta}
+		</fail>
+	</target>
+</project>

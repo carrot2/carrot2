@@ -1,0 +1,1 @@
+All process definitions should start with "alg-".

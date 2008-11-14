@@ -1,0 +1,13 @@
+
+import org.carrot2.core.*;
+import org.carrot2.core.controller.*;
+import org.carrot2.filter.normalizer.*;
+
+factory = new LocalComponentFactory() {
+    public LocalComponent getInstance() {
+        return new CaseNormalizerLocalFilterComponent(
+            new SmartCaseNormalizer());
+    }
+};
+
+return new LoadedComponentFactory("filter-case-normalizer",  factory);

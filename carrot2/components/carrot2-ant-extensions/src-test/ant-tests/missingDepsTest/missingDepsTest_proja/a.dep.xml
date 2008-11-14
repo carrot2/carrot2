@@ -1,0 +1,6 @@
+
+<component name="a" description="proja">
+    
+	<dependency name="b" />
+	<dependency name="c" />
+</component>
