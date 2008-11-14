@@ -19,11 +19,12 @@ import org.carrot2.core.ProcessingException;
 import org.carrot2.core.RequestContext;
 import org.carrot2.input.xml.XmlLocalInputComponent;
 import org.carrot2.util.StringUtils;
+import org.carrot2.util.resources.ClassResource;
 
 /**
  * Carrot2 input component for getting search results from a Solr service.
  * 
- * @author stachoo
+ * @author Stanislaw Osinski
  */
 public class SolrLocalInputComponent extends XmlLocalInputComponent
 {
@@ -50,7 +51,8 @@ public class SolrLocalInputComponent extends XmlLocalInputComponent
      * Default value of the {@link #PARAM_SOLR_QUERY_STRING} parameter:
      * <code>{@value}</code>
      */
-    public static final String DEFAULT_SOLR_QUERY_STRING = "?q=${query}&start=0&rows=${requested-results}&indent=off";
+    public static final String DEFAULT_SOLR_QUERY_STRING = 
+        "?q=${query}&start=0&rows=${requested-results}&indent=off";
 
     /**
      * A request-time parameter that specifies an URL to the custom XSLT style sheet to be
@@ -71,12 +73,16 @@ public class SolrLocalInputComponent extends XmlLocalInputComponent
     public static final String PARAM_SOLR_ID_FIELD = "solr.id-field";
     public static final String DEFAULT_SOLR_ID_FIELD = "id";
 
+    /** URL to SOLR service with substitutable parameters. */
+    private final String defaultSolrServiceUrl;
+
     /**
      * Create a new instance of the Solr input component with empty parameters. Parameters
      * must be provided at request time.
      */
     public SolrLocalInputComponent()
     {
+        defaultSolrServiceUrl = null;
     }
 
     /**
@@ -88,53 +94,42 @@ public class SolrLocalInputComponent extends XmlLocalInputComponent
      */
     public SolrLocalInputComponent(String solrServiceUrlBase)
     {
-        super(getFullSolrServiceUrl(solrServiceUrlBase, DEFAULT_SOLR_QUERY_STRING),
-            SolrLocalInputComponent.class.getResource("solr-to-c2.xsl"));
+        super(null, new ClassResource(SolrLocalInputComponent.class, "solr-to-c2.xsl"));
+
+        defaultSolrServiceUrl = getFullSolrServiceUrl(
+            solrServiceUrlBase, DEFAULT_SOLR_QUERY_STRING);
     }
 
-    private static String getFullSolrServiceUrl(String solrServiceUrlBase,
-        String solrQueryString)
-    {
-        return preprocessUrlBase(solrServiceUrlBase) + "/" + solrQueryString;
-    }
-
-    private static String preprocessUrlBase(String solrServiceUrlBase)
-    {
-        if (solrServiceUrlBase.endsWith("/"))
-        {
-            solrServiceUrlBase = solrServiceUrlBase.substring(0, solrServiceUrlBase
-                .length() - 1);
-        }
-        return solrServiceUrlBase;
-    }
-
+    /**
+     * 
+     */
     public void startProcessing(RequestContext requestContext) throws ProcessingException
     {
-        Map params = requestContext.getRequestParameters();
+        final Map params = requestContext.getRequestParameters();
 
-        if (defaultXml == null)
+        final String solrServiceUrlBase = (String) params.get(PARAM_SOLR_SERVICE_URL_BASE);
+        final String solrQueryString = (String) params.get(PARAM_SOLR_QUERY_STRING);
+        if (solrServiceUrlBase != null && solrQueryString != null)
         {
-            String solrServiceUrlBase = (String) params.get(PARAM_SOLR_SERVICE_URL_BASE);
-            String solrQueryString = (String) params.get(PARAM_SOLR_QUERY_STRING);
-            if (solrServiceUrlBase != null && solrQueryString != null)
-            {
-                params.put(XmlLocalInputComponent.PARAM_SOURCE_XML,
-                    getFullSolrServiceUrl(solrServiceUrlBase, solrQueryString));
-            }
+            params.put(XmlLocalInputComponent.PARAM_SOURCE_XML,
+                getFullSolrServiceUrl(solrServiceUrlBase, solrQueryString));
+        }
+        else
+        {
+            params.put(XmlLocalInputComponent.PARAM_SOURCE_XML, defaultSolrServiceUrl);
         }
 
-        if (defaultXslt == null)
+        if (defaultXSLT == null)
         {
-            String customXsltUrl = (String) params.get(PARAM_SOLR_XSLT);
-            if (!StringUtils.isBlank(customXsltUrl))
+            final String customXsltUrl = (String) params.get(PARAM_SOLR_XSLT);
+            if (StringUtils.isBlank(customXsltUrl))
             {
-                params.put(XmlLocalInputComponent.PARAM_XSLT, customXsltUrl);
+                // This means the caller did not comply with the class contract: used
+                // the empty constructor, but did not provide valid parameters.
+                throw new ProcessingException("Required parameter missing: " + PARAM_SOLR_XSLT);
             }
-            else
-            {
-                params.put(XmlLocalInputComponent.PARAM_XSLT,
-                    SolrLocalInputComponent.class.getResource("solr-to-c2.xsl"));
-            }
+
+            params.put(XmlLocalInputComponent.PARAM_XSLT, customXsltUrl);
         }
 
         putIfNotPresent(params, PARAM_SOLR_ID_FIELD, DEFAULT_SOLR_ID_FIELD);
@@ -145,11 +140,35 @@ public class SolrLocalInputComponent extends XmlLocalInputComponent
         super.startProcessing(requestContext);
     }
 
+    /*
+     * 
+     */
     private void putIfNotPresent(Map params, String key, Object value)
     {
         if (!params.containsKey(key))
         {
             params.put(key, value);
         }
+    }
+    
+    /*
+     * 
+     */
+    private static String getFullSolrServiceUrl(String solrServiceUrlBase, String solrQueryString)
+    {
+        return stripEndingSlash(solrServiceUrlBase) + "/" + solrQueryString;
+    }
+
+    /*
+     * 
+     */
+    private static String stripEndingSlash(String url)
+    {
+        if (url.endsWith("/"))
+        {
+            url = url.substring(0, url
+                .length() - 1);
+        }
+        return url;
     }
 }

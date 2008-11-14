@@ -1,4 +1,3 @@
-/** Covered by Snowball license. */
 
 package org.tartarus.snowball;
 import java.lang.reflect.InvocationTargetException;
@@ -8,17 +7,6 @@ public class SnowballProgram {
     {
 	current = new StringBuffer();
 	setCurrent("");
-    }
-
-    /**
-     * Introduced this method to allow direct method
-     * calls to all stemmer types without using Java
-     * Reflection, which is slowing things down.
-     * 
-     * [author Carrot2]
-     */
-    public boolean stem() {
-        return false;
     }
     
     /**
@@ -36,7 +24,7 @@ public class SnowballProgram {
     bra = cursor;
     ket = limit;
     }
-
+    
     /**
      * Set the current string.
      */
@@ -197,12 +185,12 @@ public class SnowballProgram {
 	return true;
     }
 
-    protected boolean eq_v(StringBuffer s)
+    protected boolean eq_v(CharSequence s)
     {
 	return eq_s(s.length(), s.toString());
     }
 
-    protected boolean eq_v_b(StringBuffer s)
+    protected boolean eq_v_b(CharSequence s)
     {   return eq_s_b(s.length(), s.toString());
     }
 
@@ -230,7 +218,7 @@ public class SnowballProgram {
 		    diff = -1;
 		    break;
 		}
-		diff = current.charAt(c + common) - w.s.charAt(i2);
+		diff = current.charAt(c + common) - w.s[i2];
 		if (diff != 0) break;
 		common++;
 	    }
@@ -303,7 +291,7 @@ public class SnowballProgram {
 		    diff = -1;
 		    break;
 		}
-		diff = current.charAt(c - 1 - common) - w.s.charAt(i2);
+		diff = current.charAt(c - 1 - common) - w.s[i2];
 		if (diff != 0) break;
 		common++;
 	    }
@@ -383,7 +371,7 @@ public class SnowballProgram {
 	replace_s(bra, ket, s);
     }
 
-    protected void slice_from(StringBuffer s)
+    protected void slice_from(CharSequence s)
     {
         slice_from(s.toString());
     }
@@ -400,7 +388,7 @@ public class SnowballProgram {
 	if (c_bra <= ket) ket += adjustment;
     }
 
-    protected void insert(int c_bra, int c_ket, StringBuffer s)
+    protected void insert(int c_bra, int c_ket, CharSequence s)
     {
 	insert(c_bra, c_ket, s.toString());
     }
@@ -409,7 +397,7 @@ public class SnowballProgram {
     protected StringBuffer slice_to(StringBuffer s)
     {
 	slice_check();
-	// UNUSED int len = ket - bra;
+	int len = ket - bra;
 	s.replace(0, s.length(), current.substring(bra, ket));
 	return s;
     }
@@ -442,5 +430,4 @@ extern void debug(struct SN_env * z, int number, int line_count)
 }
 */
 
-}
-
+};

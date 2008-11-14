@@ -19,6 +19,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.pool.impl.GenericObjectPool;
 import org.carrot2.core.*;
 import org.carrot2.core.clustering.RawCluster;
 import org.carrot2.core.impl.*;
@@ -32,21 +33,21 @@ import org.carrot2.webapp.*;
  * 
  * @author Stanislaw Osinski
  */
-public class C2XMLSerializer implements RawClustersSerializer
+public final class C2XMLSerializer implements RawClustersSerializer
 {
-    private LocalController controller;
+    private final static LocalController controller = initializeController();
+
     private Map params;
     private List clusters;
     private String query;
 
-    public C2XMLSerializer()
+    private static LocalController initializeController()
     {
-        initializeController();
-    }
-
-    private void initializeController()
-    {
-        controller = new LocalControllerBase();
+        // Make a local instance of the controller with no background
+        // eviction (so that the evictor thread does not keep backreferences
+        // and the controller can be garbage collected).
+        GenericObjectPool.Config config = LocalControllerBase.NO_TIMED_EVICTION_COMPONENT_POOL_CONFIG;
+        LocalControllerBase controller = new LocalControllerBase(config);
         try
         {
             controller.addLocalComponentFactory("input", new LocalComponentFactory()
@@ -91,6 +92,8 @@ public class C2XMLSerializer implements RawClustersSerializer
         {
             // Ignored -- can't happen as the local controller is private
         }
+        
+        return controller;
     }
 
     public void startResult(OutputStream os, List rawDocumentsList,

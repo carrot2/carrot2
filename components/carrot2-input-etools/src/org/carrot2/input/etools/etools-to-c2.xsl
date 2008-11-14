@@ -12,7 +12,7 @@
   </xsl:template>
 
   <xsl:template match="record">
-    <document id="{@id}">
+    <document id="{number(@id)-1}">
       <title><xsl:value-of select="title" /></title>
       <snippet><xsl:value-of select="text" /></snippet>
       <url><xsl:value-of select="url" /></url>

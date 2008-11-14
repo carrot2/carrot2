@@ -14,8 +14,7 @@
 package org.carrot2.stemming.snowball;
 
 import org.carrot2.core.linguistic.Stemmer;
-
-import org.tartarus.snowball.SnowballProgram;
+import org.tartarus.snowball.SnowballStemmer;
 
 
 /**
@@ -33,14 +32,14 @@ public class SnowballStemmerAdapter implements Stemmer {
      * An instance of the snowball stemmer to use for 
      * this adapter.
      */
-    private final SnowballProgram snowballStemmer;
+    private final SnowballStemmer snowballStemmer;
 
     /**
      * Creates a new {@link Stemmer} interface adapter.
      *
      * @param snowballStemmer An instance of a snowball stemmer program.
      */
-    protected SnowballStemmerAdapter(SnowballProgram snowballStemmer) {
+    protected SnowballStemmerAdapter(SnowballStemmer snowballStemmer) {
         this.snowballStemmer = snowballStemmer;
     }
 
@@ -53,10 +52,7 @@ public class SnowballStemmerAdapter implements Stemmer {
     public String getStem(char[] charArray, int startCharacter, int length) {
         snowballStemmer.setCurrent(charArray, startCharacter, length);
 
-        final boolean result = snowballStemmer.stem();
-        if (!result) {
-            return null;
-        }
+        snowballStemmer.stem();
         return snowballStemmer.getCurrent();
     }
 }

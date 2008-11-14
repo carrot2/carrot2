@@ -30,11 +30,10 @@
       <a href="{$carrot2.website.url}">About</a> |
       <xsl:choose>
         <xsl:when test="$beta = 'true'">
-          <a href="{$carrot2.stable.url}">Stable</a> |
+          <a href="{$carrot2.website.url}/release-3.0-rc1-notes.html" class="new">Release 3.0 preview!</a> |
         </xsl:when>
         <xsl:otherwise>
-          <a href="{$carrot2.website.url}/release-2.1-notes.html" class="new">New features!</a> |
-          <a href="{$carrot2.head.url}">Beta</a> |
+          <a href="{$carrot2.website.url}/release-3.0-rc1-notes.html" class="new">Release 3.0 preview!</a> |
         </xsl:otherwise>
       </xsl:choose>
       <a href="{$carrot2.website.url}/demos.html">More demos</a> |
@@ -60,10 +59,10 @@
       <a href="{$carrot2.website.url}">About</a> |
       <xsl:choose>
         <xsl:when test="$beta = 'true'">
-          <a href="{$carrot2.stable.url}">Stable</a> |
+          <a href="{$carrot2.website.url}/release-3.0-rc1-notes.html" class="new">Release 3.0 preview!</a> |
         </xsl:when>
         <xsl:otherwise>
-          <a href="{$carrot2.website.url}/release-2.1-notes.html" class="new">New features!</a> |
+          <a href="{$carrot2.website.url}/release-3.0-rc1-notes.html" class="new">Release 3.0 preview!</a> |
         </xsl:otherwise>
       </xsl:choose>
       <a href="{$carrot2.website.url}/demos.html">More demos</a> |

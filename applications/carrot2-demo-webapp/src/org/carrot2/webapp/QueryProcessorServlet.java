@@ -149,6 +149,29 @@ public final class QueryProcessorServlet extends HttpServlet {
             logger.error("Could not initialize query processor servlet: " + StringUtils.chainExceptionMessages(t), t);
         }
     }
+    
+    /**
+     * On destroy, cleanup controllers and cache.
+     */
+    public void destroy()
+    {
+        super.destroy();
+        
+        if (this.algorithmsController != null) {
+            algorithmsController.destroy();
+        }
+        this.algorithmsController = null;
+
+        if (this.tabsController != null) {
+            tabsController.destroy();
+        }
+        this.tabsController = null;
+
+        if (ehcache != null) {
+            this.ehcache.getCacheManager().shutdown();
+            this.ehcache = null;
+        }
+    }
 
     /**
      * Wrap entire request processing in time counter.

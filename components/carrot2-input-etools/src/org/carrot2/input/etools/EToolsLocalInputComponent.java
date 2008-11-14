@@ -13,11 +13,12 @@
 
 package org.carrot2.input.etools;
 
-import java.util.*;
+import java.util.Map;
 
-import org.carrot2.core.*;
-import org.carrot2.input.xml.*;
-import org.dom4j.*;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.RequestContext;
+import org.carrot2.input.xml.XmlLocalInputComponent;
+import org.carrot2.util.resources.ClassResource;
 
 
 /**
@@ -45,6 +46,11 @@ public class EToolsLocalInputComponent
     
     private EToolsConfig config;
     private String partnerId;
+    
+    /**
+     * Source URL with substitutable parameters. 
+     */
+    private final String sourceURL;
 
 
     /**
@@ -78,34 +84,36 @@ public class EToolsLocalInputComponent
      */
     public EToolsLocalInputComponent(String partnerId, EToolsConfig config)
     {
-        super(preprocessUrlBase(config.urlBase) 
-                + "?partner=${" + PARTNER_ID_PARAMETER_NAME + "}"
-                + "&query=${" + QUERY_PARAMETER_NAME + "}"
-                + "&dataSourceResults=${" + DATA_SOURCE_RESULTS_PARAMETER_NAME + "}"
-                + "&maxRecords=${" + MAX_RECORDS_PARAMETER_NAME + "}"
-                + "&language=${" + LANGUAGE_PARAMETER_NAME + "}" 
-                + "&timeout=${" + TIMEOUT_PARAMETER_NAME + "}" 
-                + "&dataSources=${" + DATA_SOURCES_PARAMETER_NAME + "}" 
-                + "&safeSearch=${" + SAFE_SEARCH_PARAMETER_NAME + "}" 
-                + "&country=${" + COUNTRY_PARAMETER_NAME + "}",
-                EToolsLocalInputComponent.class
-                        .getResource("etools-to-c2.xsl"));
-        
+        super(null, new ClassResource(EToolsLocalInputComponent.class, "etools-to-c2.xsl"));
+
+        this.sourceURL = stripEndingSlash(config.urlBase) 
+            + "?partner=${" + PARTNER_ID_PARAMETER_NAME + "}"
+            + "&query=${" + QUERY_PARAMETER_NAME + "}"
+            + "&dataSourceResults=${" + DATA_SOURCE_RESULTS_PARAMETER_NAME + "}"
+            + "&maxRecords=${" + MAX_RECORDS_PARAMETER_NAME + "}"
+            + "&language=${" + LANGUAGE_PARAMETER_NAME + "}" 
+            + "&timeout=${" + TIMEOUT_PARAMETER_NAME + "}" 
+            + "&dataSources=${" + DATA_SOURCES_PARAMETER_NAME + "}" 
+            + "&safeSearch=${" + SAFE_SEARCH_PARAMETER_NAME + "}" 
+            + "&country=${" + COUNTRY_PARAMETER_NAME + "}";
+
         if (partnerId == null)
         {
             throw new IllegalArgumentException(
                     "The partnerId parameter must not be null.");
         }
-        
+
         this.partnerId = partnerId;
         this.config = config;
     }
 
-
-    protected Document performQuery(Map params)
-        throws ProcessingException
+    /**
+     * Override processing method and add custom parameters to the parameters map.
+     */
+    public void startProcessing(RequestContext requestContext) throws ProcessingException
     {
-        int dataSourceResultsCount = getDataSourceResultsCount(params);
+        final Map params = requestContext.getRequestParameters();
+        final int dataSourceResultsCount = getDataSourceResultsCount(params);
 
         // Put eTools-specific parameters
         params.put(PARTNER_ID_PARAMETER_NAME, partnerId);
@@ -116,10 +124,12 @@ public class EToolsLocalInputComponent
         params.put(DATA_SOURCES_PARAMETER_NAME, config.dataSources);
         params.put(SAFE_SEARCH_PARAMETER_NAME, Boolean.toString(config.safeSearch));
         params.put(COUNTRY_PARAMETER_NAME, config.country);
-        
-        return super.performQuery(params);
-    }
 
+        // Pass the input URL.
+        params.put(XmlLocalInputComponent.PARAM_SOURCE_XML, sourceURL);
+        
+        super.startProcessing(requestContext);
+    }
 
     /**
      * Returns the number of results per data source, estimated based on 
@@ -129,27 +139,28 @@ public class EToolsLocalInputComponent
      */
     public int getDataSourceResultsCount(Map params)
     {
-        int sources = config.dataSources.equals("all") ? ALL_SOURCES_COUNT
+        int sources = config.dataSources.equals("all") 
+            ? ALL_SOURCES_COUNT 
             : FASTEST_SOURCES_COUNT;
         int requestedResults = getRequestedResults(params);
-        
+
         if (requestedResults == 0)
         {
             return 0;
         }
         
         int rawDataSourceResults = requestedResults / sources;
-        return Math
-            .min(((rawDataSourceResults + 9) / 10 + 1) * 10, MAX_DATA_SOURCE_RESULTS);
+        return Math.min(((rawDataSourceResults + 9) / 10 + 1) * 10, MAX_DATA_SOURCE_RESULTS);
     }
 
-
-    private static String preprocessUrlBase(String solrServiceUrlBase)
+    /**
+     * 
+     */
+    private static String stripEndingSlash(String url)
     {
-        if (solrServiceUrlBase.endsWith("/")) {
-            solrServiceUrlBase = solrServiceUrlBase.substring(0,
-                    solrServiceUrlBase.length() - 1);
+        if (url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
         }
-        return solrServiceUrlBase;
+        return url;
     }
 }
