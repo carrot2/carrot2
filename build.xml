@@ -604,6 +604,7 @@
 
       <fileset dir="${tmp.src}">
         <include name="**/*.java" />
+        <exclude name="**/org/carrot2/core/test/**" />
         <exclude name="**/com/microsoft/msnsearch/**" />
         <exclude name="**/org/tartarus/snowball/**" />
       </fileset>

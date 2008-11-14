@@ -102,6 +102,7 @@
     <mkdir dir="${tomcat.log.dir}"/>
     <mkdir dir="${tomcat.config.dir}"/>
     
+    <property name="wt.config.port" value="8181" />
     <cargo containerId="tomcat5x" home="${tomcat.home}" output="${tomcat.log.dir}/output.log" 
         log="${tomcat.log.dir}/cargo.log" action="start" wait="100">
       <configuration home="${tomcat.config.dir}">
@@ -114,7 +115,6 @@
 
     <!-- Run webtests -->
     <property name="wt.config.basepath" value="/${war.name.base}" />
-    <property name="wt.config.port" value="8181" />
     <antcall target="carrot2.webapp.webtest.internal" />
     
     <cargo containerId="tomcat5x" home="${tomcat.home}" output="${tomcat.log.dir}/output.log" 
