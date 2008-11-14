@@ -5,7 +5,7 @@
       <label>Wiki</label>
       <title>Wikipedia Search (with Yahoo Boss)</title>
       <mnemonic>k</mnemonic>
-      <description>Wikipedia document source searches the Wikipedia web using Yahoo Boss Web Search API.</description>
+      <description>Searches the Wikipedia web using Yahoo Boss Web Search API</description>
       <icon-path>icons/wiki.png</icon-path>
       <example-queries>
         <example-query>poland</example-query>
@@ -17,7 +17,7 @@
       <label>Images</label>
       <title>Yahoo Image Search</title>
       <mnemonic>I</mnemonic>
-      <description>Yahoo Image Search document source searches web images using Yahoo Boss Image Search API.</description>
+      <description>Searches web images using Yahoo Boss Image Search API</description>
       <icon-path>icons/yahoo.png</icon-path>
       <example-queries>
         <example-query>apple</example-query>
@@ -28,7 +28,7 @@
       <label>News</label>
       <title>Yahoo News Search</title>
       <mnemonic>N</mnemonic>
-      <description>Yahoo News Search document source searches news using Yahoo News Search API.</description>
+      <description>Searches news using Yahoo News Search API</description>
       <icon-path>icons/yahoo.png</icon-path>
       <example-queries>
         <example-query>iphone</example-query>
@@ -40,7 +40,7 @@
       <label>Yahoo</label>
       <title>Yahoo Web Search</title>
       <mnemonic>Y</mnemonic>
-      <description>Yahoo Web Search document source searches the web using Yahoo Boss Web Search API.</description>
+      <description>Searches the web using Yahoo Boss Web Search API</description>
       <icon-path>icons/yahoo.png</icon-path>
       <example-queries>
         <example-query>data mining</example-query>
@@ -52,7 +52,7 @@
       <label>MSN</label>
       <title>MSN Live Search</title>
       <mnemonic>M</mnemonic>
-      <description>MSN Live Search document source searches the web using MSN Live.</description>
+      <description>Searches the web using MSN Live API</description>
       <icon-path>icons/live.png</icon-path>
       <example-queries>
         <example-query>data mining</example-query>
@@ -77,7 +77,7 @@
       <label>PubMed</label>
       <title>PubMed medical database</title>
       <mnemonic>P</mnemonic>
-      <description>PubMed document source seaches the PubMed medical abstracts database.</description>
+      <description>Searches the PubMed medical abstracts database</description>
       <icon-path>icons/pubmed.png</icon-path>
       <example-queries>
         <example-query>cancer</example-query>

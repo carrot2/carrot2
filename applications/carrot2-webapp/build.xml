@@ -33,7 +33,6 @@
 
   <!-- Webtest parameters -->
   <property name="cargo.dir" location="${carrot2.webapp.basedir}/tmp/cargo" />
-  <property name="wt.config.port" value="8181" />
   <property name="webtest.report.dir" location="tmp/webtest-report" />
 
   <!-- Webapp-specific dependencies -->
@@ -114,15 +113,9 @@
     <echo>Started: http://localhost:${wt.config.port}/${war.name.base}/</echo>
 
     <!-- Run webtests -->
-    <property name="wt.config.resultfile" value="${webtest.report.dir}/webtest-results.xml" />  
-    <property name="wt.config.resultpath" location="${webtest.report.dir}" />
-
-    <property name="wt.config.host" value="localhost" />
-    <property name="wt.config.protocol" value="http" />
     <property name="wt.config.basepath" value="/${war.name.base}" />
-
-    <echo>${wt.config.headless}</echo>
-    <ant antfile="${carrot2.webapp.basedir}/webtest/webtest.xml" inheritall="true" dir="${carrot2.webapp.basedir}/webtest" />
+    <property name="wt.config.port" value="8181" />
+    <antcall target="carrot2.webapp.webtest.internal" />
     
     <cargo containerId="tomcat5x" home="${tomcat.home}" output="${tomcat.log.dir}/output.log" 
         log="${tomcat.log.dir}/cargo.log" action="stop" wait="100">
@@ -136,7 +129,24 @@
       -->
     <delete dir="${cargo.dir}" failonerror="false" />
   </target>
-  
+
+  <target name="carrot2.webapp.webtest.internal" depends="carrot2.webapp.webtest.prepare"> 
+    <property name="wt.config.resultfile" value="${webtest.report.dir}/webtest-results.xml" />  
+    <property name="wt.config.resultpath" location="${webtest.report.dir}" />
+
+    <property name="wt.config.host" value="localhost" />
+    <property name="wt.config.protocol" value="http" />
+
+    <echo>${wt.config.headless}</echo>
+    <ant antfile="${carrot2.webapp.basedir}/webtest/webtest.xml" inheritall="true" dir="${carrot2.webapp.basedir}/webtest" />
+  </target>
+    
+  <target name="carrot2.webapp.webtest.localhost" depends="carrot2.webapp.webtest.prepare"> 
+    <property name="wt.config.basepath" value="/" />
+      <property name="wt.config.port" value="8080" />
+    <antcall target="carrot2.webapp.webtest.internal" />
+  </target>
+    
   <target name="carrot2.webapp.webtest.prepare">
     <condition property="webtest.resources.available">
       <and>

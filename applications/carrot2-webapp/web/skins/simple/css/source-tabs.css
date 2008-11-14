@@ -34,6 +34,15 @@ ul.tabs .tab .label {
   padding-left: 16px;
 }
 
+ul#source-descriptions {
+  margin-bottom: 50px;
+}
+
+#source-descriptions li.tab {
+  background-color: transparent;
+  border-style: none;
+}
+
 /** Icons for document sources */
 ul.tabs li.tab .web {
   background-image: url('../img/sources/web.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */

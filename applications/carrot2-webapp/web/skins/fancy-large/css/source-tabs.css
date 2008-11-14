@@ -80,6 +80,9 @@ ul.tabs .tab .label {
   margin-left: 2px;
 }
 
+#source-descriptions-intro {
+  font-size: 14px;
+}
 
 /** Icons for document sources */
 

@@ -39,6 +39,7 @@
     <ul class="util-links">
       <li><a href="http://project.carrot2.org">About</a><xsl:call-template name="pipe" /></li>
       <li class="hot"><a href="http://project.carrot2.org/release-3.0-rc1-notes.html">New features!</a><xsl:call-template name="pipe" /></li>
+      <li><a href="{$context-path}/{$search-url}?{$type-param}=SOURCES">Search feeds</a><xsl:call-template name="pipe" /></li>
       <li><a href="http://project.carrot2.org/release-3.0-rc1-notes.html">More demos</a><xsl:call-template name="pipe" /></li>
       <li><a href="http://project.carrot2.org/release-3.0-rc1-notes.html">Download</a><xsl:call-template name="pipe" /></li>
       <li class="main"><a href="http://company.carrot-search.com">Carrot Search</a><xsl:call-template name="pipe" /></li>

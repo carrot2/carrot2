@@ -20,6 +20,7 @@
   <xsl:variable name="algorithm-param" select="/page/config/@algorithm-param" />
   <xsl:variable name="results-param" select="/page/config/@results-param" />
   <xsl:variable name="view-param" select="/page/config/@view-param" />
+  <xsl:variable name="type-param" select="/page/config/@type-param" />
   <xsl:variable name="skin-param" select="/page/config/@skin-param" />
   
   <xsl:variable name="request-url" select="/page/@request-url" />
@@ -97,7 +98,7 @@
   </xsl:template>
 
   <!-- Main page contents -->
-  <xsl:template match="page[@type = 'PAGE' or @type = 'FULL']">
+  <xsl:template match="page[@type = 'PAGE' or @type = 'FULL' or @type = 'SOURCES']">
     <noscript>
       <div class="noscript"><xsl:apply-templates select=".." mode="no-javascript-text" /></div>
     </noscript>
@@ -109,76 +110,27 @@
     <div id="logo">
       <h1><a href="{$context-path}/{$search-url}"><span class="hide"><xsl:apply-templates select=".." mode="page-title" /></span></a></h1>
     </div>
-    
-    <div id="main-info">
-      <xsl:apply-templates select=".." mode="startup-text" />
-    </div>
+
+    <xsl:if test="not(@type = 'SOURCES')">     
+      <div id="main-info">
+        <xsl:apply-templates select=".." mode="startup-text" />
+      </div>
+    </xsl:if>
 
     <hr class="hide" />
 
     <div id="main-area">
       <div id="main-area-top"><xsl:comment></xsl:comment></div>
       <div id="main-area-inside">
-        <xsl:apply-templates select="/page" mode="sources" />
-        
-        <div id="search-area">
-          <form action="{$context-path}/{$search-url}">
-            <h3 class="hide">Type your query:</h3>
-
-            <div id="required" class="clearfix">
-              <input type="hidden" name="{$source-param}" id="source" value="{/page/request/@source}" />
-              <input type="hidden" name="{$view-param}" id="view" value="{/page/request/@view}" />
-              <input type="hidden" name="{$skin-param}" value="{/page/request/@skin}" />
-              
-              <xsl:apply-templates select=".." mode="query" />
-              <xsl:apply-templates select=".." mode="search" />
-              
-              <span id="show-options"><a href="#" accesskey="o">More options</a></span>
-              <span id="hide-options" style="display: none"><a href="#" accesskey="o">Hide options</a></span>
-            </div>
-
-            <div id="options" class="hide">
-              <xsl:if test="count(/page/config/sizes/size) > 1">
-                <label>
-                  Download
-                  <select name="{$results-param}">
-                    <xsl:for-each select="/page/config/sizes/size">
-                      <option value="{string(@size)}">
-                        <xsl:if test="string(@size) = /page/request/@results">
-                          <xsl:attribute name="selected">selected</xsl:attribute>
-                        </xsl:if>
-                        <xsl:value-of select="@size" /> results
-                      </option>
-                    </xsl:for-each>
-                  </select>
-                </label>
-              </xsl:if>
-                          
-              <xsl:if test="count(/page/config/components/algorithms/algorithm) > 1">
-                <label>
-                  Cluster with
-                  <select name="{$algorithm-param}">
-                    <xsl:for-each select="/page/config/components/algorithms/algorithm">
-                      <option value="{@id}">
-                        <xsl:if test="@id = /page/request/@algorithm">
-                          <xsl:attribute name="selected">selected</xsl:attribute>
-                        </xsl:if>
-                        <xsl:value-of select="label" />
-                      </option>
-                    </xsl:for-each>
-                  </select>
-                </label>
-              </xsl:if>
-            </div>
-          </form>
-          <xsl:if test="string-length(/page/request/@query) = 0">
-            <div id="example-queries"><xsl:comment></xsl:comment></div>
-          </xsl:if>
-        </div>
-
-        <xsl:if test="string-length(/page/request/@query) > 0">
-          <xsl:apply-templates select="/page" mode="results" />
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="@type = 'SOURCES'">
+            <xsl:apply-templates select=".." mode="source-descriptions" />
+          </xsl:when>
+          
+          <xsl:otherwise>
+            <xsl:apply-templates select=".." mode="search-area" />
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
       <div id="main-area-bottom"><xsl:comment></xsl:comment></div>
     </div>
@@ -198,6 +150,69 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="page" mode="search-area">
+    <xsl:apply-templates select="/page" mode="sources" />
+    
+    <div id="search-area">
+      <form action="{$context-path}/{$search-url}">
+        <h3 class="hide">Type your query:</h3>
+
+        <div id="required" class="clearfix">
+          <input type="hidden" name="{$source-param}" id="source" value="{/page/request/@source}" />
+          <input type="hidden" name="{$view-param}" id="view" value="{/page/request/@view}" />
+          <input type="hidden" name="{$skin-param}" value="{/page/request/@skin}" />
+          
+          <xsl:apply-templates select=".." mode="query" />
+          <xsl:apply-templates select=".." mode="search" />
+          
+          <span id="show-options"><a href="#" accesskey="o">More options</a></span>
+          <span id="hide-options" style="display: none"><a href="#" accesskey="o">Hide options</a></span>
+        </div>
+
+        <div id="options" class="hide">
+          <xsl:if test="count(/page/config/sizes/size) > 1">
+            <label>
+              Download
+              <select name="{$results-param}">
+                <xsl:for-each select="/page/config/sizes/size">
+                  <option value="{string(@size)}">
+                    <xsl:if test="string(@size) = /page/request/@results">
+                      <xsl:attribute name="selected">selected</xsl:attribute>
+                    </xsl:if>
+                    <xsl:value-of select="@size" /> results
+                  </option>
+                </xsl:for-each>
+              </select>
+            </label>
+          </xsl:if>
+                      
+          <xsl:if test="count(/page/config/components/algorithms/algorithm) > 1">
+            <label>
+              Cluster with
+              <select name="{$algorithm-param}">
+                <xsl:for-each select="/page/config/components/algorithms/algorithm">
+                  <option value="{@id}">
+                    <xsl:if test="@id = /page/request/@algorithm">
+                      <xsl:attribute name="selected">selected</xsl:attribute>
+                    </xsl:if>
+                    <xsl:value-of select="label" />
+                  </option>
+                </xsl:for-each>
+              </select>
+            </label>
+          </xsl:if>
+        </div>
+      </form>
+      <xsl:if test="string-length(/page/request/@query) = 0">
+        <div id="example-queries"><xsl:comment></xsl:comment></div>
+      </xsl:if>
+    </div>
+
+    <xsl:if test="string-length(/page/request/@query) > 0">
+      <xsl:apply-templates select="/page" mode="results" />
+    </xsl:if>
+  </xsl:template>
+  
   <xsl:template match="page" mode="sources">
     <div id="source-tabs">
       <xsl:variable name="is-first-source-active"><xsl:apply-templates select=".." mode="is-first-source-active" /></xsl:variable>
@@ -312,5 +327,23 @@
 
   <xsl:template match="source/example-queries/example-query">
     <a href="{$context-path}/{$search-url}?{concat($source-param, '=', string(../../@id), '&amp;', $query-param, '=', string(.))}"><xsl:apply-templates /></a>
+  </xsl:template>
+  
+  <xsl:template match="page" mode="source-descriptions">
+    <div id="search-area">
+      <p id="source-descriptions-intro">
+        Carrot<sup>2</sup> clusters results from the following search feeds:
+      </p>
+      <ul id="source-descriptions" class="tabs">
+        <xsl:apply-templates select="//source" mode="source-descriptions" />
+      </ul>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="source" mode="source-descriptions">
+    <li class="tab">
+      <a class="label {@id}" href="{$context-path}/{$search-url}?{concat($source-param, '=', @id)}"><xsl:value-of select="label" /></a>
+      <span class="description"><xsl:apply-templates select="description" /></span>
+    </li>
   </xsl:template>
 </xsl:stylesheet>

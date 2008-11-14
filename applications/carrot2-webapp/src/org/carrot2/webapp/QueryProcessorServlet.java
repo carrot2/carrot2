@@ -48,7 +48,7 @@ public class QueryProcessorServlet extends HttpServlet
 
     /** {@link #queryLogger} name. */
     static final String QUERY_LOG_NAME = "queryLog";
-    
+
     /** Query logger. */
     private transient volatile Logger queryLogger = Logger.getLogger(QUERY_LOG_NAME);
 
@@ -83,11 +83,11 @@ public class QueryProcessorServlet extends HttpServlet
         final ServletContext servletContext = config.getServletContext();
 
         /*
-         * If initialized, custom logging initializer will be here. Save its
-         * reference for deferred initialization (for servlet APIs < 2.5). 
+         * If initialized, custom logging initializer will be here. Save its reference for
+         * deferred initialization (for servlet APIs < 2.5).
          */
-        logInitializer = (LogInitContextListener) servletContext.getAttribute(
-            LogInitContextListener.CONTEXT_ID);
+        logInitializer = (LogInitContextListener) servletContext
+            .getAttribute(LogInitContextListener.CONTEXT_ID);
 
         controller = new CachingController(IDocumentSource.class);
         controller.init(new HashMap<String, Object>(), WebappConfig.INSTANCE.components);
@@ -160,6 +160,10 @@ public class QueryProcessorServlet extends HttpServlet
             {
                 handleStatsRequest(request, response, requestParameters, requestModel);
             }
+            else if (RequestType.SOURCES.equals(requestModel.type))
+            {
+                handleSourcesRequest(request, response, requestParameters, requestModel);
+            }
             else
             {
                 handleSearchRequest(request, response, requestParameters, requestModel);
@@ -169,6 +173,21 @@ public class QueryProcessorServlet extends HttpServlet
         {
             throw new ServletException(e);
         }
+    }
+
+    /**
+     * Handles list of sources requests.
+     */
+    private void handleSourcesRequest(HttpServletRequest request,
+        HttpServletResponse response, Map<String, Object> requestParameters,
+        RequestModel requestModel) throws Exception
+    {
+        response.setContentType(MIME_XML_CHARSET_UTF);
+        final PageModel pageModel = new PageModel(request, requestModel,
+            jawrUrlGenerator, null, null);
+
+        final Persister persister = new Persister(getPersisterFormat(pageModel.requestModel));
+        persister.write(pageModel, response.getWriter());
     }
 
     /**
@@ -275,7 +294,7 @@ public class QueryProcessorServlet extends HttpServlet
         final PageModel pageModel = new PageModel(request, requestModel,
             jawrUrlGenerator, processingResult, processingException);
 
-        final Persister persister = new Persister(getPersisterFormat(pageModel));
+        final Persister persister = new Persister(getPersisterFormat(pageModel.requestModel));
 
         if (RequestType.CARROT2.equals(requestModel.type))
         {
@@ -313,11 +332,11 @@ public class QueryProcessorServlet extends HttpServlet
     /*
      * 
      */
-    private Format getPersisterFormat(PageModel pageModel)
+    private Format getPersisterFormat(RequestModel requestModel)
     {
         return new Format(2, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             + "<?xml-stylesheet type=\"text/xsl\" href=\"@"
-            + WebappConfig.getContextRelativeSkinStylesheet(pageModel.requestModel.skin)
+            + WebappConfig.getContextRelativeSkinStylesheet(requestModel.skin)
             + "\" ?>");
     }
 

@@ -36,6 +36,9 @@ public enum RequestType
     /** Error page */
     ERROR(false),
     
+    /** Information about document sources */
+    SOURCES(false),
+    
     /** Simple statistics page */
     STATS(false);
     

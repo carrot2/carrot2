@@ -42,3 +42,32 @@ ul.tabs .tab .label {
 ul.tabs li.active .label {
   color: #404040;
 }
+
+/** Document source descriptions */
+#source-descriptions-intro {
+  margin-top: 1ex;
+  margin-bottom: 1ex;
+}
+
+ul#source-descriptions {
+  margin-bottom: 70px;
+  float: none;
+}
+
+#source-descriptions li.tab {
+  float: none;
+  position: static;
+  background-image: none;
+  font-weight: normal;
+}
+
+#source-descriptions li .label {
+  font-weight: normal;
+  color: #1678C4;
+  text-decoration: underline;
+}
+
+#source-descriptions li .description {
+  color: #606060;
+  padding-left: 1.5ex;
+}

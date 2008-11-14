@@ -5,6 +5,7 @@
     <source component-class="org.carrot2.webapp.source.WebDocumentSource" id="web">
       <label>Web</label>
       <title>Search the Web with etools.ch</title>
+      <description>Searches the web using the etools.ch meta search engine</description>
       <mnemonic>W</mnemonic>
       <example-queries>
         <example-query>data mining</example-query>
@@ -15,6 +16,7 @@
     <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="icerocket" position="END">
       <label>Blogs</label>
       <title>Blogs from icerocket.com</title>
+      <description>Searches blog content using the icerocket.com search engine</description>
       <mnemonic>B</mnemonic>
       <example-queries>
         <example-query>olympics</example-query>
