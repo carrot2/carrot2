@@ -1,9 +1,0 @@
-
-<component name="master">
-
-	<provides>
-	</provides>
-
-	<dependency name="sub" />
-
-</component>

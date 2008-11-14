@@ -1,4 +1,0 @@
-<local-component-factory 
-	id="input-xml-stream" 
-	component-class="org.carrot2.core.impl.XmlStreamInputComponent">
-</local-component-factory> 
