@@ -13,6 +13,18 @@
         <example-query>clustering</example-query>
       </example-queries>
     </source>
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="put" attribute-sets-resource="/carrot2-default/put.attributes.xml" position="END">
+      <label>PUT</label>
+      <title>*.put.poznan.pl search (with Yahoo Boss)</title>
+      <mnemonic>U</mnemonic>
+      <description>Searches Poznan University of Technology domain using Yahoo Boss Web Search API</description>
+      <icon-path>icons/put.gif</icon-path>
+      <example-queries>
+        <example-query>idss</example-query>
+        <example-query>seminaria</example-query>
+        <example-query>publikacje</example-query>
+      </example-queries>
+    </source>
     <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="icerocket" position="END">
       <label>Blogs</label>
       <title>Blogs from icerocket.com</title>

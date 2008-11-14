@@ -125,3 +125,7 @@ ul.tabs li.tab .indeed {
   background-image: url('../img/sources/indeed.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
   padding-left: 13px;
 }
+
+ul.tabs li.tab .put {
+  background-image: url('../img/sources/put.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 1px */
+}

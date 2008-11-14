@@ -130,3 +130,7 @@ ul.tabs li.tab .indeed {
   background-image: url('../img/sources/jobs.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px */
   padding-left: 18px;
 }
+
+ul.tabs li.tab .put {
+  background-image: url('../img/sources/put.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px */
+}
