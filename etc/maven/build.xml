@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="carrot2.maven" default="default" xmlns:artifact="urn:maven-artifact-ant">
+	<!--
+     <configuration>
+          <downloadSources>true</downloadSources>
+          <downloadJavadocs>true</downloadJavadocs>
+        </configuration>
+	-->
+
+	<target name="deploy">
+        <dirname property="carrot2.maven.basedir" file="${ant.file.carrot2.maven}" />
+
+        <fail unless="carrot2.master.basedir">Required property missing: carrot2.master.basedir</fail>
+        <fail unless="maven.repository.dir">Required property missing: maven.repository.dir</fail>
+        <fail unless="carrot2.version">Required property missing: carrot2.version</fail>
+
+        <path id="maven-ant-tasks.classpath">
+            <fileset dir="${carrot2.maven.basedir}">
+                <include name="maven-ant-tasks-*.jar" />
+            </fileset>
+        </path>
+
+        <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+            uri="urn:maven-artifact-ant"
+            classpathref="maven-ant-tasks.classpath" />
+
+        <mkdir dir="${maven.repository.dir}" />
+        <fileurl property="maven.repository.url" file="${maven.repository.dir}" />
+
+        <copy file="${carrot2.maven.basedir}/pom.xml" tofile="${carrot2.maven.basedir}/.pom.xml" encoding="UTF-8" overwrite="true">
+            <filterset begintoken="@" endtoken="@">
+                <filter token="carrot2.version" value="${carrot2.version}" />
+            </filterset>
+        </copy>
+
+		<artifact:deploy file="${jar.dir}/carrot2-core.jar">
+			<artifact:pom file="${carrot2.maven.basedir}/.pom.xml" />
+            <artifact:remoteRepository url="${maven.repository.url}" />
+
+            <attach classifier="sources" file="${jar.dir}/carrot2-core-sources.jar " type="jar" />
+            <attach classifier="javadoc" file="${jar.dir}/carrot2-core-javadoc.jar " type="jar" />
+		</artifact:deploy>
+        
+        <delete file="${carrot2.maven.basedir}/.pom.xml" />
+	</target>
+
+    <target name="default">
+        <echo>This build file is part of the master build file. Do not run separately.</echo>
+    </target>
+</project>

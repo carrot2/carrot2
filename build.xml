@@ -19,6 +19,7 @@
   <import file="${carrot2.master.basedir}/applications/carrot2-webapp/build.xml" />
   <import file="${carrot2.master.basedir}/applications/carrot2-dcs/build.xml" />
   <import file="${carrot2.master.basedir}/doc/build.xml" />
+  <import file="${carrot2.master.basedir}/etc/maven/build.xml" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />
@@ -37,6 +38,7 @@
   <property name="coverage.report.dir" location="${carrot2.master.basedir}/tmp/coverage-report" />
   <property name="duplication.report.dir" location="${carrot2.master.basedir}/tmp/duplication-report" />
   <property name="findbugs.report.dir" location="${carrot2.master.basedir}/tmp/findbugs-report" />
+  <property name="maven.repository.dir" location="${carrot2.master.basedir}/tmp/maven" />
 
   <!-- Java API distribution -->
   <property name="api.dist.base" value="${carrot2.java-api.base}" />
@@ -727,13 +729,26 @@
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
   
+  <!--
+      Maven artefacts.
+    -->
+  <target name="maven" depends="antlib,jar,javadoc" description="Deploy Maven artifacts">
+    <jar destfile="${jar.dir}/carrot2-core-javadoc.jar">
+      <fileset dir="${javadoc.dir}" />
+    </jar>
+    <jar destfile="${jar.dir}/carrot2-core-sources.jar">
+      <fileset dir="${core.dir}" includes="**/src/**/*.java" />
+    </jar>
+    <antcall target="carrot2.maven.deploy" />
+  </target>
+
   <!-- We need the newest Xalan to build the docs -->
   <property name="xalan.home" location="lib/org.apache.xml" />
   <target name="enable.xincludes" depends="antlib">
     <setProperty sysproperty="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
   </target>
   <target name="doc" depends="enable.xincludes,carrot2.doc.build" description="Builds Carrot2 documentation" />
-  
+
   <!-- 
        Flattened lib directory.
     -->
