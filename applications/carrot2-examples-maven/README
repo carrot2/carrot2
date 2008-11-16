@@ -1,0 +1,11 @@
+Maven2 template for code utilizing Carrot2.
+
+Running:
+
+  mvn assembly:directory
+  cd target
+  cd carrot2-example-jar
+  java -jar carrot2*.jar
+  
+Eclipse:
+  mvn eclipse:eclipse 
