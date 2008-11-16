@@ -97,6 +97,7 @@
     <exclude name="lib/**/fest-*" />
     <exclude name="lib/**/servlet-api-*.jar" />
     <exclude name="lib/org.junit4*/**" />
+    <exclude name="lib/org.carrot2*/**" />
     <exclude name="lib/org.gargoylesoftware.htmlunit/**" />
     <exclude name="lib/com.thoughtworks.qdox/**" />
     <exclude name="lib/org.apache.velocity/**" />
@@ -740,6 +741,9 @@
       <fileset dir="${core.dir}" includes="**/src/**/*.java" />
     </jar>
     <antcall target="carrot2.maven.deploy" />
+    <delete>
+        <fileset dir="${jar.dir}" includes="carrot2-core-*.jar" />
+    </delete>
   </target>
 
   <!-- We need the newest Xalan to build the docs -->
