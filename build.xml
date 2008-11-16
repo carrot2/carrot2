@@ -715,7 +715,7 @@
        Build all apps.
     -->
   <target name="all" depends="clean.classes, webapp, dcs, javadoc, doc" description="Builds all Carrot2 applications and documentation" />
-  <target name="dist" depends="clean.classes, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, carrot2.doc.dist, carrot2.core.dist" description="Builds Carrot2 distribution files">
+  <target name="dist" depends="clean.classes, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, carrot2.doc.dist, carrot2.core.dist, maven" description="Builds Carrot2 distribution files">
     <!-- 
          After this target runs, we'll copy the entire content of tmp/ 
          to the distribution dir on the server, so we need to remove
