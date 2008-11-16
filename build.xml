@@ -737,9 +737,19 @@
     <jar destfile="${jar.dir}/carrot2-core-javadoc.jar">
       <fileset dir="${javadoc.dir}" />
     </jar>
+
+    <copy todir="${jar.dir}/sources" overwrite="true">
+        <fileset dir="${core.dir}" includes="**/src/**/*.java" />
+        <chainedmapper>
+            <filtermapper><replacestring from="\" to="/"/></filtermapper>
+            <mapper type="regexp" from="^(.+)/src/(.+)" to="\2"/>
+        </chainedmapper> 
+    </copy>
     <jar destfile="${jar.dir}/carrot2-core-sources.jar">
-      <fileset dir="${core.dir}" includes="**/src/**/*.java" />
+      <fileset dir="${jar.dir}/sources" />
     </jar>
+    <delete dir="${jar.dir}/sources" />
+    
     <antcall target="carrot2.maven.deploy" />
     <delete>
         <fileset dir="${jar.dir}" includes="carrot2-core-*.jar" />
