@@ -39,8 +39,8 @@
 			<artifact:pom file="${poms.dir}/carrot2-core.pom.xml" />
             <artifact:remoteRepository url="${maven.repository.url}" />
 
-            <attach classifier="sources" file="${jar.dir}/carrot2-core-sources.jar " type="jar" />
-            <attach classifier="javadoc" file="${jar.dir}/carrot2-core-javadoc.jar " type="jar" />
+            <attach classifier="sources" file="${jar.dir}/carrot2-core-sources.jar" type="jar" />
+            <attach classifier="javadoc" file="${jar.dir}/carrot2-core-javadoc.jar" type="jar" />
 		</artifact:deploy>
 
         <!-- Deploy custom libraries or those that are not present in the official Maven repositories -->
