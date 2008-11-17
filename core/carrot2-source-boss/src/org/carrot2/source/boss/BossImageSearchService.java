@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -30,22 +29,22 @@ import org.carrot2.util.attribute.*;
  * <li>display the title or abstract of the image when presented in the search results;
  * <li>display at least the first 40 characters of the referurl field which indicates the
  * source page;
- * <li>for the source page referurl, use the unmodified referclickurl field to navigate to
- * the respective source page;
- * <li>If the image is made clickable, either use unmodified refereclickurl (to the source
- * HTML page) or clickurl (to the image) for the navigation link.
+ * <li>for the source page referurl, use the unmodified referclickurl field to navigate
+ * to the respective source page;
+ * <li>If the image is made clickable, either use unmodified refereclickurl (to the
+ * source HTML page) or clickurl (to the image) for the navigation link.
  * </ol>
  * 
  * @label Yahoo Boss Image Search Service
- * @see http://developer.yahoo.com/search/boss/boss_guide/
+ * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/">BOSS API guide</a>
  */
 @Bindable(prefix = "BossImageSearchService")
 public final class BossImageSearchService extends BossSearchService
 {
     /**
      * Boss Image search service URI. Specifies the URI at which Yahoo Boss Image Search
-     * API is available. The <code>${query}</code> place holder will be replaced with the
-     * URL-encoded text of the processed query.
+     * API is available. The <code>${query}</code> place holder will be replaced with
+     * the URL-encoded text of the processed query.
      * 
      * @label Service URI
      * @level Advanced
@@ -60,7 +59,9 @@ public final class BossImageSearchService extends BossSearchService
      * Whether or not to activate the Offensive Content Reduction filter. If set to yes,
      * content marked as offensive is omitted from results.
      * 
-     * @see http://developer.yahoo.com/search/boss/boss_guide/Submit_Image_Queries.html
+     * @see <a
+     *      href="http://developer.yahoo.com/search/boss/boss_guide/Submit_Image_Queries.html">API
+     *      description</a>
      * @group Results filtering
      * @label Offensive content filter
      * @level Medium
@@ -75,7 +76,6 @@ public final class BossImageSearchService extends BossSearchService
      * Medium sized images are average sized; usually not exceeding an average screen
      * size. Large images are screen size or larger.
      * 
-     * @see http://developer.yahoo.com/search/boss/boss_guide/Submit_Image_Queries.html
      * @group Results filtering
      * @label Preferred size
      * @level Medium

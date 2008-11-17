@@ -18,7 +18,7 @@ import org.carrot2.util.attribute.constraint.IValueHintMapping;
 /**
  * Yahoo Boss region and language codes.
  * 
- * @see http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html
+ * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html">Supported regions</a>
  */
 public enum BossLanguageCodes implements IValueHintMapping
 {

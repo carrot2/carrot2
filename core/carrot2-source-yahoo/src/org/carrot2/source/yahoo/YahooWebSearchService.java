@@ -67,7 +67,7 @@ public final class YahooWebSearchService extends YahooSearchService
      * uk.search.yahoo.com. Value must be one of the <a
      * href="http://developer.yahoo.com/search/regions.html">supported region codes</a>.
      * 
-     * @see http://developer.yahoo.com/search/regions.html
+     * @see <a href="http://developer.yahoo.com/search/regions.html">Supported regions</a>
      * @group Results filtering
      * @label Region
      * @level Medium

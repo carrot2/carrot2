@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -21,8 +20,8 @@ import org.carrot2.util.attribute.constraint.DoubleRange;
 /**
  * A filter that removes "incomplete" labels.
  * <p>
- * See {@link http://project.carrot2.org/publications/osinski-2003-lingo.pdf}, page 31 for
- * a definition of a complete phrase.
+ * See <a href="http://project.carrot2.org/publications/osinski-2003-lingo.pdf">this
+ * document</a>, page 31 for a definition of a complete phrase.
  */
 @Bindable(prefix = "CompleteLabelFilter")
 public class CompleteLabelFilter implements ILabelFilter

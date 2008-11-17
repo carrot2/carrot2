@@ -21,7 +21,7 @@ import org.carrot2.util.IntArrayPredicateIterator;
 public class PreprocessedDocumentScanner
 {
     /**
-     * Iterate over all documents, fields and sentences in {@link #allTokens}.
+     * Iterate over all documents, fields and sentences in {@link PreprocessingContext#allTokens}.
      */
     public final void iterate(PreprocessingContext context)
     {

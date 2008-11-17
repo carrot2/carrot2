@@ -19,7 +19,7 @@ package org.carrot2.text.linguistic;
 public interface ILanguageModelFactory
 {
     /**
-     * @return Returns {@link ILanguageModel} for the {@link #current} language or
+     * @return Returns {@link ILanguageModel} for the current language or
      *         <code>null</code> if such language model is not available.
      */
     public ILanguageModel getCurrentLanguage();

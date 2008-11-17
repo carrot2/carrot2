@@ -24,7 +24,7 @@ public interface ISuffixableElement
 {
     /**
      * Static constant marker for end-of-suffix boundary. This object always returns
-     * <code>false</code> from its {@link #equals(Object)} method.
+     * <code>false</code> from its {@link Object#equals(Object)} method.
      */
     public static final Object END_OF_SUFFIX = new Object()
     {

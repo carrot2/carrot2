@@ -22,7 +22,7 @@ package org.carrot2.core;
  * </p>
  * <p>
  * The context instance is passed to all components that take part in query processing
- * inside the controller object ({@link IProcessingComponent#init(ControllerContext)}).
+ * inside the controller object ({@link IProcessingComponent#init(IControllerContext)}).
  * {@link IProcessingComponent} implementations may use the context object to store data
  * shared between <i>all</i> component instances (such as thread pools, counters, etc.).
  * In such scenario it is essential to remember to attach a
@@ -31,7 +31,7 @@ package org.carrot2.core;
  * </p>
  * 
  * @see IController#dispose()
- * @see IProcessingComponent#init(ControllerContext)
+ * @see IProcessingComponent#init(IControllerContext)
  */
 public interface IControllerContext
 {

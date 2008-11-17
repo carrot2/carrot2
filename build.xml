@@ -631,7 +631,7 @@
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Matrix utilities" packages="org.carrot2.matrix*" />
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Utility classes" packages="org.carrot2.util*" />
       
-      <tag name="label" enabled="true" scope="fields" description="Attribute label:" />
+      <tag name="label" enabled="true" scope="types,fields" description="Attribute label:" />
       <tag name="level" enabled="true" scope="fields" description="Attribute level:" />
       <tag name="group" enabled="true" scope="fields" description="Attribute group:" />
       

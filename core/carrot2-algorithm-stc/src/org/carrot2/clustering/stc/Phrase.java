@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,9 +17,9 @@ import java.util.Iterator;
 import org.carrot2.text.suffixtrees.Node;
 
 /**
- * A phrase is a single sentence describing a cluster. A
- * {@link org.carrot2.filter.stc.algorithm.BaseCluster} has one {@link Phrase} describing
- * it. A {@link MergedCluster} may have more then one {@link Phrase} as its description.
+ * A phrase is a single sentence describing a cluster. A {@link BaseCluster} has one
+ * {@link Phrase} describing it. A {@link MergedCluster} may have more then one
+ * {@link Phrase} as its description.
  */
 public final class Phrase
 {

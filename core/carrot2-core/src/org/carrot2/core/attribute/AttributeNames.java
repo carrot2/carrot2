@@ -13,6 +13,8 @@
 
 package org.carrot2.core.attribute;
 
+import javax.security.auth.callback.LanguageCallback;
+
 import org.carrot2.core.*;
 
 /**
@@ -114,7 +116,7 @@ public final class AttributeNames
      * @label Processing Language
      * @level Basic
      * @group Preprocessing
-     * @see LanguageCode
+     * @see org.carrot2.text.linguistic.LanguageCode
      */
     public static final String ACTIVE_LANGUAGE = "active-language";
 

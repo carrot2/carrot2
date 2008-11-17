@@ -151,9 +151,7 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
     }
 
     /**
-     * Transposes in place matrix A.
-     * 
-     * @param A matrix to be transposed in place
+     * Transposes the matrix in place.
      */
     public void transpose()
     {

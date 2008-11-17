@@ -40,7 +40,7 @@ import com.google.common.collect.Sets;
  * <li>{@link AllStems#mostFrequentOriginalWordIndex}</li>
  * <li>{@link AllStems#tf}</li>
  * <li>{@link AllStems#tfByDocument}</li>
- * <li>{@link AllWords#FLAG_QUERY} in {@link This class requires that {@link Tokenizer}
+ * <li>{@link AllWords#FLAG_QUERY} in This class requires that {@link Tokenizer}
  * and {@link CaseNormalizer} be invoked first.
  */
 @Bindable(prefix = "LanguageModelStemmer")

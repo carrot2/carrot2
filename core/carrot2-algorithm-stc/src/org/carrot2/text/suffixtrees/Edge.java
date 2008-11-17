@@ -97,7 +97,7 @@ public final class Edge
     /**
      * Returns the length of this edge, meaning the number of compressed nodes this edge
      * represents. Equals
-     * <code>{@link {#link getEndIndex()} - {@link #getStartIndex()} + 1</code>.
+     * <code>{@link #getEndIndex()} - {@link #getStartIndex()} + 1</code>.
      */
     public int length()
     {

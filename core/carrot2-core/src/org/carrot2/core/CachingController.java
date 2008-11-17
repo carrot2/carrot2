@@ -239,7 +239,7 @@ public final class CachingController implements IController
 
     /**
      * An additional method for performing processing using configurations provided in
-     * {@link #init(Map, ComponentConfiguration...)}.
+     * {@link #init(Map, ProcessingComponentConfiguration...)}.
      * 
      * @param attributes see {@link IController#process(Map, Class...)}
      * @param processingComponentIds identifiers of components to be involved in

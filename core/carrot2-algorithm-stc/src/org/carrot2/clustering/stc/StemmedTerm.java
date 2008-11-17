@@ -71,7 +71,7 @@ public class StemmedTerm
     }
 
     /**
-     * Implementation of {@Comparable} interface
+     * Implementation of {@link Comparable} interface
      */
     public int compareTo(Object p)
     {

@@ -15,9 +15,7 @@ package org.carrot2.util;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Static methods for closing various objects (including implementations of {@link Closeable}).
@@ -46,7 +44,7 @@ public final class CloseableUtils
     }
 
     /**
-     * Close all {@link Closeables}, ignoring exceptions.
+     * Close all {@link Closeable}, ignoring exceptions.
      */
     public static void close(Closeable... closeables) {
         for (Closeable c : closeables) close(c);

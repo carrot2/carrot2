@@ -20,9 +20,6 @@ public class CharArrayUtils
 {
     /**
      * In place to lower case conversion. In input array is returned for convenience.
-     * 
-     * @param array
-     * @return
      */
     public static char [] inPlaceToLowerCase(char [] array)
     {
@@ -35,9 +32,6 @@ public class CharArrayUtils
 
     /**
      * To lower case conversion. A copy of the input array will be created.
-     * 
-     * @param array
-     * @return
      */
     public static char [] toLowerCase(char [] array)
     {

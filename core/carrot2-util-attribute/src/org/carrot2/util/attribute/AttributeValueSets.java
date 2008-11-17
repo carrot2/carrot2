@@ -298,7 +298,7 @@ public class AttributeValueSets
     /**
      * Deserializes a collection of {@link AttributeValueSet}s from XML.
      * 
-     * @param inputStream the reader to deserialize a {@link AttributeValueSets} from. The
+     * @param reader the reader to deserialize a {@link AttributeValueSets} from. The
      *            stream will <strong>not</strong> be closed.
      * @return Deserialized collection of {@link AttributeValueSet}s
      * @throws Exception is case of any problems with deserialization.

@@ -13,16 +13,12 @@
 
 package org.carrot2.clustering.stc;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.carrot2.text.suffixtrees.ExtendedBitSet;
 
 /**
- * A merged cluster (composition of {@link org.carrot2.filter.stc.algorithm.BaseCluster}s).
+ * A merged cluster (composition of {@link BaseCluster}s).
  */
 @SuppressWarnings("unchecked")
 public class MergedCluster

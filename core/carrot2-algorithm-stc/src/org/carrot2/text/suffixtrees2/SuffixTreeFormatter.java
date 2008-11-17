@@ -16,7 +16,7 @@ package org.carrot2.text.suffixtrees2;
 import java.util.IdentityHashMap;
 
 /**
- * Utilities for converting {@Link SuffixTree}s to textual formats.
+ * Utilities for converting {@link SuffixTree}s to textual formats.
  */
 public class SuffixTreeFormatter
 {

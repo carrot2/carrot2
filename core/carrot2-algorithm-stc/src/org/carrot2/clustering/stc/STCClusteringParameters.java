@@ -171,7 +171,6 @@ public final class STCClusteringParameters
      * 
      * @group Base cluster boosts
      * @level Medium
-     * @see STCEngine#calculateModifiedBaseClusterScore(int, int, STCParameters)
      */
     @Processing
     @Input
@@ -184,7 +183,6 @@ public final class STCClusteringParameters
      * 
      * @group Base cluster boosts
      * @level Basic
-     * @see STCEngine#calculateModifiedBaseClusterScore(int, int, STCParameters)
      */
     @Processing
     @Input
@@ -197,7 +195,6 @@ public final class STCClusteringParameters
      * 
      * @group Base cluster boosts
      * @level Medium
-     * @see STCEngine#calculateModifiedBaseClusterScore(int, int, STCParameters)
      */
     @Processing
     @Input
@@ -211,7 +208,6 @@ public final class STCClusteringParameters
      * 
      * @group Base cluster boosts
      * @level Medium
-     * @see STCEngine#calculateModifiedBaseClusterScore(int, int, STCParameters)
      */
     @Processing
     @Input

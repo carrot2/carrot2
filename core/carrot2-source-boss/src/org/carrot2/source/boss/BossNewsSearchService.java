@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -28,6 +27,8 @@ import org.carrot2.util.attribute.constraint.IntRange;
  * Attributes of this class correspond to Yahoo's documentation (see links below).
  * 
  * @label Yahoo Boss News Search Service
+ * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/News_Search.html">API
+ *      description</a>
  * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/">Yahoo Boss
  *      Documentation</a>
  */
@@ -49,7 +50,6 @@ public final class BossNewsSearchService extends BossSearchService
     /**
      * Retrieve documents by age. The index stories for 30 days.
      * 
-     * @see http://developer.yahoo.com/search/boss/boss_guide/News_Search.html
      * @group Results filtering
      * @label Age
      * @level Medium

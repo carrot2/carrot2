@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,9 +14,13 @@ package org.carrot2.core.attribute;
 
 import java.lang.annotation.*;
 
+import org.carrot2.core.IControllerContext;
+import org.carrot2.core.IProcessingComponent;
+
 /**
  * Marks attributes that will be bound upon initialization of a Carrot<sup>2</sup>
- * component. Please see {@link ProcessingComponent#init(ControllerContext))} for details.
+ * component. Please see
+ * {@link IProcessingComponent#init(IControllerContext)} for details.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

@@ -39,7 +39,7 @@ import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
  * <p>
  * Based on code donated by Julien Nioche.
  * 
- * @see http://www.opensearch.org
+ * @see <a href="http://www.opensearch.org">OpenSearch.org</a>
  */
 @Bindable(prefix = "OpenSearchDocumentSource")
 public class OpenSearchDocumentSource extends MultipageSearchEngine

@@ -14,7 +14,7 @@
 package org.carrot2.text.suffixtrees;
 
 /**
- * A node in a Generalized Suffix Tree (multi-sequence {@link {@link SuffixTree}).
+ * A node in a Generalized Suffix Tree (multi-sequence {@link SuffixTree}).
  */
 public class GSTNode extends Node
 {
