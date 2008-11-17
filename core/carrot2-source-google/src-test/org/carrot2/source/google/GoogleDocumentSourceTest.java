@@ -22,6 +22,7 @@ import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junitext.Prerequisite;
 import org.junitext.runners.AnnotationRunner;
 
 /**
@@ -62,6 +63,7 @@ public class GoogleDocumentSourceTest extends
     }
 
     @Test
+    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testHighlightsRemoved()
     {
         runQuery("test", getSmallQuerySize());
