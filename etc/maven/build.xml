@@ -116,7 +116,7 @@
         </exec>
 
         <artifact:deploy file="${carrot2.maven.basedir}/tmp/archetype/target/generated-sources/archetype/target/carrot2-example-archetype-${carrot2.version}.jar">
-            <artifact:pom file="${carrot2.maven.basedir}/tmp/archetype/target/generated-sources/archetype/pom.xml" />
+            <artifact:pom file="${poms.dir}/carrot2-archetype-deployed.pom.xml" />
             <artifact:remoteRepository url="${maven.repository.url}" />
         </artifact:deploy>
     </target>
