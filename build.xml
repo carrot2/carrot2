@@ -146,6 +146,14 @@
       <include name="*.jar" />
     </fileset>
   </path>
+  
+  <path id="javadoc.classpath">
+    <path refid="lib.classpath" />
+
+    <!-- Include our own compiled sources so that we can exclude some classes from javadoc
+         and still compile without warnings. -->
+    <path refid="core.jar.classpath" />
+  </path>
 
   <!-- 
        Output cleanup.
@@ -568,10 +576,10 @@
   <!-- 
        JavaDoc generation.
     -->
-  <target name="javadoc" description="Generates JavaDocs for all core classes">
+  <target name="javadoc" depends="jar" description="Generates JavaDocs for all core classes">
     <delete dir="${javadoc.dir}" failonerror="false" />
     <property name="tmp.src" location="${carrot2.master.basedir}/tmp/src" />
-    
+
     <mkdir dir="${tmp.src}" />
     <mkdir dir="${javadoc.dir}" />
 
@@ -601,9 +609,8 @@
              failonerror="true"
              stylesheetfile="${etc.dir}/javadoc/stylesheet.css"
              useexternalfile="true">
-      <classpath>
-        <fileset dir="${lib.dir}" />
-      </classpath>
+
+      <classpath refid="javadoc.classpath" />
 
       <fileset dir="${tmp.src}">
         <include name="**/*.java" />
