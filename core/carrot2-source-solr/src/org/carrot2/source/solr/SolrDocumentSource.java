@@ -26,7 +26,7 @@ import com.google.common.collect.Maps;
 /**
  * Fetches documents from an instance of Solr.
  * 
- * @see http://lucene.apache.org/solr/
+ * @see <a href="http://lucene.apache.org/solr/">Apache SOLR</a>
  */
 @Bindable(prefix = "SolrDocumentSource")
 public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase

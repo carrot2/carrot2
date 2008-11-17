@@ -34,7 +34,7 @@ import org.codehaus.jackson.map.JsonTypeMapper;
  * A {@link IDocumentSource} fetching search results from Google JSON API. Please note that
  * this document source cannot deliver more than 32 search results.
  * 
- * @see http://code.google.com/apis/ajaxsearch/documentation/#fonje
+ * @see <a href="http://code.google.com/apis/ajaxsearch/documentation/#fonje">Google AJAX API</a>
  */
 @Bindable(prefix = "GoogleDocumentSource")
 public class GoogleDocumentSource extends MultipageSearchEngine
@@ -75,7 +75,7 @@ public class GoogleDocumentSource extends MultipageSearchEngine
      * Google API Key. Please do not use the default key when deploying this component in
      * production environments. Instead, apply for your own key.
      * 
-     * @see http://code.google.com/apis/ajaxsearch/signup.html
+     * @see <a href="http://code.google.com/apis/ajaxsearch/signup.html">Google AJAX signup</a>
      */
     public String apiKey = "ABQIAAAA_XmITjrzoipJYoBApAgGJhS8yIvkL4-1sNwOJWkV7nbkjq_Z_BQW0-uzOh5lKXRtEXQDTGbzIEz06Q";
 
