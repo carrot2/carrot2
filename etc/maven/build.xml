@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="carrot2.maven" default="default" xmlns:artifact="urn:maven-artifact-ant">
 
-	<target name="deploy">
+    <target name="check.properties">
         <dirname property="carrot2.maven.basedir" file="${ant.file.carrot2.maven}" />
 
         <fail unless="carrot2.master.basedir">Required property missing: carrot2.master.basedir</fail>
         <fail unless="maven.repository.dir">Required property missing: maven.repository.dir</fail>
         <fail unless="carrot2.version">Required property missing: carrot2.version</fail>
-
-        <path id="maven-ant-tasks.classpath">
-            <fileset dir="${carrot2.maven.basedir}">
-                <include name="maven-ant-tasks-*.jar" />
-            </fileset>
-        </path>
-
-        <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
-            uri="urn:maven-artifact-ant"
-            classpathref="maven-ant-tasks.classpath" />
-
+        
         <mkdir dir="${maven.repository.dir}" />
-        <fileurl property="maven.repository.url" file="${maven.repository.dir}" />
+        <fileurl property="maven.repository.url" file="${maven.repository.dir}" />        
+    </target>
 
+    <target name="check.maven">
+        <property environment="env" />
+        <condition property="mvn.available">
+            <or>
+                <available file="mvn.bat" filepath="${env.Path}" />
+                <available file="mvn"     filepath="${env.PATH}" />
+            </or>
+        </condition>
+
+        <fail unless="mvn.available">mvn (Maven2) not available in path.</fail>
+    </target>
+
+    <target name="filter.poms" depends="check.properties">
         <property name="poms.dir" location="${carrot2.maven.basedir}/tmp/poms" />
         <mkdir dir="${poms.dir}" />
         <copy todir="${poms.dir}" encoding="UTF-8" overwrite="true">
@@ -32,6 +36,20 @@
                 <filter token="carrot2.version" value="${carrot2.version}" />
             </filterset>
         </copy>
+    </target>
+
+	<target name="deploy" depends="check.maven, filter.poms">
+        <delete dir="${ant.file.carrot2.maven}/tmp" />
+
+        <path id="maven-ant-tasks.classpath">
+            <fileset dir="${carrot2.maven.basedir}">
+                <include name="maven-ant-tasks-*.jar" />
+            </fileset>
+        </path>
+
+        <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+            uri="urn:maven-artifact-ant"
+            classpathref="maven-ant-tasks.classpath" />
 
         <echo>Maven2 deployment location: ${maven.repository.url}</echo>
         
@@ -69,7 +87,35 @@
 			<artifact:pom file="${poms.dir}/nni.pom.xml" />
             <artifact:remoteRepository url="${maven.repository.url}" />
 		</artifact:deploy>
-	</target>
+
+        <copy todir="${carrot2.maven.basedir}/tmp/archetype">
+            <fileset dir="${carrot2.maven.basedir}/archetype" />
+        </copy>
+        <copy todir="${carrot2.maven.basedir}/tmp/archetype/src/main/java">
+            <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/src" />            
+        </copy>
+        <copy tofile="${carrot2.maven.basedir}/tmp/archetype/pom.xml" file="${poms.dir}/carrot2-archetype.pom.xml" />
+
+        <echo>Building archetype...</echo>
+        <exec executable="mvn" dir="${carrot2.maven.basedir}/tmp/archetype" failonerror="true" vmlauncher="false">
+            <arg value="archetype:create-from-project" />
+            <arg value="-q" />
+        </exec>
+
+        <echo>Deploying archetype...</echo>
+        <!--
+            We install the archetype locally because archetype:jar does not work at the moment.
+        -->
+        <exec executable="mvn" dir="${carrot2.maven.basedir}/tmp/archetype/target/generated-sources/archetype" failonerror="true" vmlauncher="false">
+            <arg value="install" />
+            <arg value="-q" />
+        </exec>
+
+        <artifact:deploy file="${carrot2.maven.basedir}/tmp/archetype/target/generated-sources/archetype/target/carrot2-example-archetype-${carrot2.version}.jar">
+            <artifact:pom file="${carrot2.maven.basedir}/tmp/archetype/target/generated-sources/archetype/pom.xml" />
+            <artifact:remoteRepository url="${maven.repository.url}" />
+        </artifact:deploy>
+    </target>
 
     <target name="default">
         <echo>This build file is part of the master build file. Do not run separately.</echo>
@@ -103,17 +149,5 @@
             </exec>
         </sequential>
     </macrodef>
-
-    <target name="maven.check">
-        <property environment="env" />
-        <condition property="mvn.available">
-            <or>
-                <available file="mvn.bat" filepath="${env.Path}" />
-                <available file="mvn"     filepath="${env.PATH}" />
-            </or>
-        </condition>
-
-        <fail unless="mvn.available">mvn (Maven2) not available in path.</fail>
-    </target>
     -->    
 </project>
