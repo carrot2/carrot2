@@ -25,6 +25,8 @@
     </target>
 
     <target name="filter.poms" depends="check.properties">
+		<delete dir="${carrot2.maven.basedir}/tmp" />
+
         <property name="poms.dir" location="${carrot2.maven.basedir}/tmp/poms" />
         <mkdir dir="${poms.dir}" />
         <copy todir="${poms.dir}" encoding="UTF-8" overwrite="true">
@@ -39,8 +41,6 @@
     </target>
 
 	<target name="deploy" depends="check.maven, filter.poms">
-	<delete dir="${carrot2.maven.basedir}/tmp" />
-
         <path id="maven-ant-tasks.classpath">
             <fileset dir="${carrot2.maven.basedir}">
                 <include name="maven-ant-tasks-*.jar" />
