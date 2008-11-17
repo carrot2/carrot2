@@ -39,7 +39,7 @@
     </target>
 
 	<target name="deploy" depends="check.maven, filter.poms">
-        <delete dir="${ant.file.carrot2.maven}/tmp" />
+	<delete dir="${carrot2.maven.basedir}/tmp" />
 
         <path id="maven-ant-tasks.classpath">
             <fileset dir="${carrot2.maven.basedir}">
