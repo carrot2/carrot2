@@ -1,7 +1,7 @@
 <?xml version='1.0'?> 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
                 xmlns:c2="http://www.carrot2.org"
-                version="1.0">
+                version="1.0" exclude-result-prefixes="c2">
                 
   <xsl:param name="dist.url" />
   <xsl:param name="carrot2.version" />

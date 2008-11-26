@@ -485,7 +485,7 @@
     </cpd>
     <xslt in="${duplication.report.dir}/duplication.xml"
           style="${etc.dir}/cpd/cpd2html.xsl"
-          out="${duplication.report.dir}/duplication.html" />
+          out="${duplication.report.dir}/index.html" />
   </target>
 
   <!-- 
@@ -525,7 +525,7 @@
 
     <xslt in="${findbugs.report.dir}/findbugs.xml"
           style="${etc.dir}/findbugs/findbugs2html.xsl"
-          out="${findbugs.report.dir}/findbugs.html" />
+          out="${findbugs.report.dir}/index.html" />
   </target>
 
   <!-- 
@@ -605,7 +605,7 @@
              doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; Framework API Specification"
              header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; Framework&lt;br&gt;API Specification&lt;/div&gt;"
              footer="&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
-             bottom="&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
+             bottom="&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;&lt;script type=&quot;text/javascript&quot;&gt; var gaJsHost = ((&quot;https:&quot; == document.location.protocol) ? &quot;https://ssl.&quot; : &quot;http://www.&quot;); document.write(unescape(&quot;%3Cscript src='&quot; + gaJsHost + &quot;google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E&quot;)); &lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; var pageTracker = _gat._getTracker(&quot;UA-317750-1&quot;); pageTracker._trackPageview(); &lt;/script&gt;"
              failonerror="true"
              stylesheetfile="${etc.dir}/javadoc/stylesheet.css"
              useexternalfile="true">
