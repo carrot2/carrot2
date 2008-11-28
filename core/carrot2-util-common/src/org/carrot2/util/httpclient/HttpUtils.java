@@ -119,7 +119,7 @@ public class HttpUtils
                 response.compression = COMPRESSION_NONE;
             }
 
-            final Header [] respHeaders = request.getRequestHeaders();
+            final Header [] respHeaders = request.getResponseHeaders();
             response.headers = new String [respHeaders.length][];
             for (int i = 0; i < respHeaders.length; i++)
             {
