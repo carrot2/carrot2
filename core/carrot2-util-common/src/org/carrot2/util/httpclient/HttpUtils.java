@@ -34,6 +34,7 @@ public class HttpUtils
         public byte [] payload;
         public int status;
         public String compression;
+        public String [][] headers;
 
         public InputStream getPayloadAsStream()
         {
@@ -116,6 +117,14 @@ public class HttpUtils
             else
             {
                 response.compression = COMPRESSION_NONE;
+            }
+
+            final Header [] respHeaders = request.getRequestHeaders();
+            response.headers = new String [respHeaders.length][];
+            for (int i = 0; i < respHeaders.length; i++)
+            {
+                response.headers[i] = new String [] { 
+                    respHeaders[i].getName(), respHeaders[i].getValue() };
             }
 
             response.payload = StreamUtils.readFullyAndClose(stream);
