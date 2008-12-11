@@ -214,7 +214,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
      */
     protected String getLargeQueryText()
     {
-        return "apache";
+        return "test";
     }
 
     /**
