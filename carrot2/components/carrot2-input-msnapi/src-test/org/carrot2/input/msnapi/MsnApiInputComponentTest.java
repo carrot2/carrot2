@@ -54,7 +54,7 @@ public class MsnApiInputComponentTest extends LocalInputComponentTestBase
 
     public void testResultsRequested() throws Exception
     {
-        performQuery("apache", 150, new Range(90, 150));
+        performQuery("test", 150, new Range(90, 150));
     }
 
     public void testMediumQuery() throws Exception
