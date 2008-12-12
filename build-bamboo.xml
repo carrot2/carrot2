@@ -46,6 +46,7 @@
           <fileset dir="${carrot2.code.dir}/tmp">
             <!-- Exclude reports, we'll link these directly to the build server -->
             <exclude name="*-report/**" />
+            <exclude name="workbench/**" />
           </fileset>
         </copy>
     </target>
