@@ -7,6 +7,12 @@
    */
   $(document).ready(function() {
     $("#clusters-panel").bind("carrot2-clusters-selected", function(target, clusterId, documents) {
+      // More like this currently works only with the tree view
+      // See: http://issues.carrot2.org/browse/CARROT-435
+      if ($("#clusters-visu").size() > 0) {
+        return;
+      }
+      
       $("#more-like-this").remove();
       if ($("#" + clusterId).is(".other")) {
         return;
@@ -21,7 +27,7 @@
         prefix = '';
       }
       else {
-        label = "search this only domain";
+        label = "search this domain only";
         prefix = $("#query").val().replace(/\s*site:\S*/gi, '') + " site:";
       }
       

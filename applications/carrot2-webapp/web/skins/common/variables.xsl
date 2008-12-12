@@ -5,5 +5,5 @@
   
   <xsl:param name="version-number">3.0-rc1</xsl:param>
   <xsl:param name="build-number"></xsl:param>
-  <xsl:param name="build-date">2008-12-12 11:33</xsl:param>
+  <xsl:param name="build-date">2008-12-12 01:01</xsl:param>
 </xsl:stylesheet>

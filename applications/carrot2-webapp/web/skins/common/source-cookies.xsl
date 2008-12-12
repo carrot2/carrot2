@@ -34,10 +34,15 @@
       </xsl:when>
       
       <xsl:otherwise>
-        <xsl:apply-templates select="config/components/sources/source" />
+        <xsl:call-template name="user-order-source">
+          <xsl:with-param name="source-order"><xsl:apply-templates select="config/components/sources/source" mode="build-order" /></xsl:with-param>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+  <xsl:template match="source[position() = last()]" mode="build-order"><xsl:value-of select="@id" /></xsl:template>
+  <xsl:template match="source" mode="build-order"><xsl:value-of select="@id" />*</xsl:template>
   
   <!-- 
     Overrides the default template determining if the first source is selected, 
