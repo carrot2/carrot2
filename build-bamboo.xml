@@ -5,22 +5,21 @@
 
     <target name="clean" description="Clean build results">
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
-
-        <!-- clean everything -->
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="clean" inheritall="true" />
     </target>
 
-    <target name="build" description="Perform a full build of the core">
+    <target name="reports" description="Run unit tests, generate code quality reports">
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
-
-        <!-- full build, test and reports -->
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="reports" inheritall="true" />
+    </target>
+
+    <target name="test" description="Run unit tests">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="test" inheritall="true" />
     </target>
 
     <target name="dist" description="Build Carrot2 distribution">
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
-
-        <!-- build all distributions and docs -->
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist" inheritall="true" />
     </target>
 
