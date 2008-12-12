@@ -186,7 +186,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Override
     public void init(IControllerContext context)
     {
-        synchronized (this.getClass())
+        synchronized (LingoClusteringAlgorithm.class)
         {
             if (!nativeLibrariesReported)
             {

@@ -41,7 +41,7 @@ public final class TemplatesPool
      * Global system property disabling template caching. This property can also be set at
      * runtime (after the pool is initialized).
      */
-    public static String TEMPLATE_CACHING_PROPERTY = "template.caching";
+    public static final String TEMPLATE_CACHING_PROPERTY = "template.caching";
 
     /**
      * A set of used XSLT processors.

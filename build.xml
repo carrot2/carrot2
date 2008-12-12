@@ -561,7 +561,7 @@
           depends="clover.tasks"
           if="clover.home">
     <clover-report>
-      <current outfile="${coverage.report.dir}/coverage.xml" title="Carrot2 3.0">
+      <current outfile="${coverage.report.dir}/coverage.xml" title="Carrot2 ${carrot2.version} Unit Test Coverage Report">
         <format type="xml" />
       </current>
     </clover-report>
@@ -602,8 +602,8 @@
              version="true"
              use="false"
              encoding="UTF-8"
-             doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; Framework API Specification"
-             header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; Framework&lt;br&gt;API Specification&lt;/div&gt;"
+             doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; ${carrot2.version} API Specification"
+             header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; ${carrot2.version} &lt;br&gt;API Specification&lt;/div&gt;"
              footer="&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
              bottom="&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;&lt;script type=&quot;text/javascript&quot;&gt; var gaJsHost = ((&quot;https:&quot; == document.location.protocol) ? &quot;https://ssl.&quot; : &quot;http://www.&quot;); document.write(unescape(&quot;%3Cscript src='&quot; + gaJsHost + &quot;google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E&quot;)); &lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; var pageTracker = _gat._getTracker(&quot;UA-317750-1&quot;); pageTracker._trackPageview(); &lt;/script&gt;"
              failonerror="true"
