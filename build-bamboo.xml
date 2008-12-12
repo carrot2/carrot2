@@ -83,7 +83,7 @@
 
             <chainedmapper>
               <mapper type="flatten" />
-              <mapper type="glob" from="*.zip" to="-${carrot2.version}.zip"/>
+              <mapper type="glob" from="*.zip" to="*-${carrot2.version}.zip"/>
             </chainedmapper>
         </copy>
     </target>
