@@ -1,4 +1,0 @@
-<local-component-factory 
-	id="filter-clustering-stc" 
-	component-class="org.carrot2.filter.stc.local.STCLocalFilterComponent">
-</local-component-factory> 

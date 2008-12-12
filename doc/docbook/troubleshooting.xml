@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<chapter xml:id="chapter.troubleshooting" xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <title>Troubleshooting</title>
+  <subtitle>Solving common problems with &C2;</subtitle>
+
+  <para>
+    This chapter discusses solutions to some common problems with &C2; code or applications.
+  </para>
+  
+  <section xml:id="section.troubleshooting.webapp">
+    <title>Troubleshooting &WA;</title>
+    
+    <section xml:id="section.troubleshooting.webapp.uri-encoding">
+      <title>"?" characters instead of Unicode special characters</title>
+      
+      <section>
+        <title>Symptoms</title>
+        
+        <para>
+          If you see question marks ("?") instead of Chinese, Polish or other special
+          Unicode characters in clusters and documents output by the &WA; 
+        </para>
+      </section>
+            
+      <section>
+        <title>Cause</title>
+        
+        <para>
+          The &WA; running under a Web application container (such as Tomcat) relies on 
+          proper decoding of Unicode characters from the request URI. This decoding is 
+          done by the container and must be properly configured <emphasis>at the container level</emphasis>.
+          Unfortunately, this configuration is not part of the J2EE standard and is therefore
+          different for each container.
+        </para>
+      </section>
+
+      <section>
+        <title>Solution for Apache Tomcat</title>
+        
+        <para>
+          For Apache Tomcat, you can enforce the URI decoding code page at the connector 
+          configuration level. Locate <filename>server.xml</filename> file inside 
+          Tomcat's <filename>conf</filename> folder and add the following attribute to 
+          the <tag>Connector</tag> section:
+        </para>
+        
+        <programlisting><![CDATA[URIEncoding="UTF-8"]]></programlisting>
+        
+        <para>
+          A typical connector configuration should look like this:
+        </para>
+        
+        <programlisting><![CDATA[<Connector port="8080" maxThreads="25" 
+    minSpareThreads="5" maxSpareThreads="10" 
+    minProcessors="5" maxProcessors="25" 
+    enableLookups="false" redirectPort="8443" 
+    acceptCount="10" debug="0" 
+    connectionTimeout="20000" URIEncoding="UTF-8" />]]></programlisting>
+      </section>      
+    </section>
+  </section>
+</chapter>

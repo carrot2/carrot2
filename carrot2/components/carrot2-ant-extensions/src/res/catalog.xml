@@ -1,7 +1,0 @@
-<?xml version='1.0'?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-
-<public publicId="-//Carrot2//DTD Component Dependency Descriptor V1.0//EN" 
-     	uri="component-dependency.dtd" />
-
-</catalog>

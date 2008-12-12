@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Bea Stax
+Bundle-SymbolicName: com.bea.xml
+Bundle-Version: 1.2.0
+Bundle-ClassPath: stax-1.2.0.jar,
+ stax-api-1.0.1.jar
+Bundle-Vendor: Bea
+Export-Package: com.bea.xml.stream,
+ com.bea.xml.stream.events,
+ com.bea.xml.stream.filters,
+ com.bea.xml.stream.reader,
+ com.bea.xml.stream.samples,
+ com.bea.xml.stream.util,
+ com.wutka.dtd,
+ javax.xml,
+ javax.xml.namespace,
+ javax.xml.stream,
+ javax.xml.stream.events,
+ javax.xml.stream.util
+Require-Bundle: org.eclipse.core.runtime

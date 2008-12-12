@@ -1,1 +1,0 @@
-Add your keys (text files, key on the first line) with *.key extension here.

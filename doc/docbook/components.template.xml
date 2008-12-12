@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<chapter xml:id="chapter.components" xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <title>Component reference</title>
+  <subtitle>Detailed description of all &C2; components</subtitle>
+
+  <para>
+    To tune clustering the behaviour of &C2; components for your specific
+    application needs, you can change their attributes.
+  </para>
+
+  <attribute-reference />
+</chapter>

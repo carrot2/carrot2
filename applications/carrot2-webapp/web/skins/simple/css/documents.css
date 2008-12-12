@@ -1,0 +1,36 @@
+/** 
+ * CSS for the documents list. 
+ */
+
+#documents {
+  top: 19px;
+  -width: expression(document.documentElement.clientWidth - 20 - 275 - 7);
+  -height: expression(document.documentElement.clientHeight - 149);
+}
+
+#documents-status {
+  margin-top: -2px;
+  margin-left: 14px;
+  font-size: 11px;
+}
+
+a.in-clusters,
+a.in-new-window,
+a.show-preview {
+  padding-left: 16px;
+  background-position: right 0;
+}
+
+a.in-clusters {
+  background-image: url('../../common/img/icon-in-clusters.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px */
+}
+
+a.in-new-window {
+  background-image: url('../../common/img/icon-in-new-window.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px */
+}
+
+a.show-preview {
+  background-image: url('../../common/img/icon-show-preview.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px; */
+}
+
+

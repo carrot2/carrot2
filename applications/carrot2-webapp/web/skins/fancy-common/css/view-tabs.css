@@ -1,0 +1,10 @@
+/** 
+ * Common CSS for view tabs
+ */
+#views li .right {
+  background-repeat: no-repeat;
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+}

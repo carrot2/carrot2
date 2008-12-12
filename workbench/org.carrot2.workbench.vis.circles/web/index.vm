@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+#set ( $page = ${request.getParameter("page")} )
+#set ( $swf = "org.carrotsearch.vis.circles.swf" )
+
+#set ( $source = "servlets/pull?page=" + $page )
+#set ( $selectionCallback = "servlets/select?action=group&page=" + $page )
+#set ( $selectionClearedCallback = "servlets/select?action=clear&page=" + $page )
+#set ( $documentClickedCallback = "servlets/select?action=document&page=" + $page )
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+		<style type="text/css" media="screen">
+			html, body, #content	{ height:100%; }
+			body					{ margin:0; padding:0; overflow:hidden; }
+			#alternativeContent	{ /* style alt content */ }
+		</style>
+
+		<script type="text/javascript" src="js/swfobject.js"></script>
+		<script type="text/javascript" src="js/jquery-1.2.3.min.js"></script>
+		<script type="text/javascript" src="js/hooks.js"></script>
+
+		<script type="text/javascript">
+			var selectionCallback = "$selectionCallback";
+			var selectionClearedCallback = "$selectionClearedCallback";
+			var documentClickedCallback = "$documentClickedCallback";
+
+			/* Publish SWF using the dynamic embedding method. */
+			var flashvars = {
+				data_sourceURL: "$source",
+				callback_onGroupClick: "groupClicked",
+		        callback_onDocumentClick: "documentClicked",
+		        callback_onSelectionClear: "selectionCleared"
+			};
+			var params = {};
+			var attributes = {};
+
+		    swfobject.embedSWF("$swf", "content", "100%", "100%", "9.0.0", "expressInstall.swf",
+		    	flashvars, params, attributes);
+		</script>
+	</head>
+
+	<body>
+		<div id="content">
+			<div id="alternativeContent">
+				<p>Adobe Flash player not installed on your system.<br/>
+				  (it is required for this view to work)</p>
+			</div>
+		</div>
+	</body>
+</html>

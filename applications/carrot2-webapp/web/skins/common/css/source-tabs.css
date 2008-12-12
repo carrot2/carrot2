@@ -1,0 +1,73 @@
+/**
+ * Common CSS for document source tabs.
+ */
+ul.tabs {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  float: left;
+}
+
+#tab-lead-in {
+  float: left;
+  display: block;
+  background-repeat: no-repeat;
+}
+
+ul.tabs li.tab {
+  display: block;
+  float: left;
+  position: relative;
+}
+
+ul.tabs li.drag {
+  cursor: move;
+}
+
+ul.tabs .tab a {
+  text-decoration: none;
+  color: black;
+}
+
+ul.tabs .tab a:hover {
+  text-decoration: underline;
+}
+
+ul.tabs .tab .label {
+  white-space: nowrap;
+  background-repeat: no-repeat;
+  color: #909090;
+}
+
+ul.tabs li.active .label {
+  color: #404040;
+}
+
+/** Document source descriptions */
+#source-descriptions-intro {
+  margin-top: 1ex;
+  margin-bottom: 1ex;
+}
+
+ul#source-descriptions {
+  margin-bottom: 70px;
+  float: none;
+}
+
+#source-descriptions li.tab {
+  float: none;
+  position: static;
+  background-image: none;
+  font-weight: normal;
+}
+
+#source-descriptions li .label {
+  font-weight: normal;
+  color: #1678C4;
+  text-decoration: underline;
+}
+
+#source-descriptions li .description {
+  color: #606060;
+  padding-left: 1.5ex;
+}

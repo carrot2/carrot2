@@ -1,0 +1,4 @@
+<component-suite>
+  <include suite="carrot2-default/suite-local.xml" />
+  <include suite="carrot2-default/suite-common.xml" />
+</component-suite>

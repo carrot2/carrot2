@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>carrot2-webapp</name>
+	<comment></comment>
+	<projects>
+		<project>carrot2-util-attribute</project>
+		<project>carrot2-algorithm-synthetic</project>
+		<project>carrot2-util-common</project>
+		<project>carrot2-util-log4j</project>
+		<project>carrot2-core</project>
+		<project>carrot2-algorithm-stc</project>
+		<project>carrot2-source-yahoo</project>
+		<project>carrot2-source-xml</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+</projectDescription>

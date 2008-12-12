@@ -1,0 +1,6 @@
+<!ENTITY  C2                  "Carrot<superscript>2</superscript>">
+<!ENTITY  DCW                 "&C2; Document Clustering Workbench">
+<!ENTITY  DCS                 "&C2; Document Clustering Server">
+<!ENTITY  WA                  "&C2; Web Application">
+<!ENTITY  JA                  "&C2; Java API">
+<!ENTITY  NA                  "Not yet covered, please <link xlink:href='http://project.carrot2.org/support.html'>contact us</link> if you need this section.">

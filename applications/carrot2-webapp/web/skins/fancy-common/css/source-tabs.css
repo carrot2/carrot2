@@ -1,0 +1,21 @@
+/**
+ * Common CSS for document source tabs.
+ */
+ul.tabs li.tab {
+  margin: 0;
+  padding: 0;
+  background-repeat: repeat-x;
+}
+
+ul.tabs li.tab .right {
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+}
+
+ul.tabs li.drag,
+ul.tabs li.drag .right {
+  background-image: none !important;
+}

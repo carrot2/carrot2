@@ -1,0 +1,45 @@
+ID	description
+1	Aida
+2	B-52
+3	Beagle
+4	Bronx
+5	Cain
+6	Camel
+7	Coral Sea
+8	Cube
+9	Eos
+10	Excalibur
+11	Fahrenheit
+12	Globe
+13	Hornet
+14	Indigo
+15	Iwo Jima
+16	Jaguar
+17	La Plata
+18	Labyrinth
+19	Landau
+20	Life on Mars
+21	Locust
+22	Magic Mountain
+23	Matador
+24	Metamorphosis
+25	Minotaur
+26	Mira
+27	Mirage
+28	Monte Carlo
+29	Oppenheim
+30	Out of Control
+31	Pelican
+32	Purple Haze
+33	Raam
+34	Rhea
+35	Scorpion
+36	The Little Mermaid
+37	Tortuga
+38	Urania
+39	Wink
+40	Xanadu
+41	Zebra
+42	Zenith
+43	Zodiac
+44	Zombie

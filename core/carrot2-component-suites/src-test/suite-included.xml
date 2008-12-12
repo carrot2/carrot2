@@ -1,0 +1,30 @@
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="included-beginning" position="BEGINNING">
+      <label>Yahoo!</label>
+      <title>Yahoo Web Search</title>
+    </source>    
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="included-middle">
+      <label>Yahoo!</label>
+      <title>Yahoo Web Search</title>
+    </source>    
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="included-end" position="END">
+      <label>Yahoo!</label>
+      <title>Yahoo Web Search</title>
+    </source>    
+  </sources>
+  <algorithms>
+    <algorithm component-class="org.carrot2.clustering.lingo.LingoClusteringAlgorithm" id="included-beginning" position="BEGINNING">
+      <label>Lingo</label>
+      <title>Lingo Clustering</title>
+    </algorithm>
+    <algorithm component-class="org.carrot2.clustering.stc.STCClusteringAlgorithm" id="included-beginning-2" position="BEGINNING">
+      <label>STC</label>
+      <title>Suffix Tree Clustering</title>
+    </algorithm>
+    <algorithm component-class="org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm" id="included-end" position="END">
+      <label>By URL</label>
+      <title>By URL Clustering</title>
+    </algorithm>
+  </algorithms>
+</component-suite>

@@ -1,0 +1,33 @@
+
+#parse("_header.vm")
+
+#*
+	Template displayed on show(ProcessingResult). 
+	
+	Available variables:
+
+	  result
+	  results-total-formatted
+	  query
+*#
+
+#if ($result)
+    #set ( $totalProcessingSec = ${result.Attributes.processing-time-total} / 1000.0 )
+    #set ( $documents = $result.Documents )
+#end
+
+#if ($documents.isEmpty())
+    Your query - <b>&quot;$esc.html($query)&quot;</b> - did not return any documents.<br><br> 
+
+    Suggestions:<ul>
+    <li>Make sure all words are spelled correctly.
+    <li>Try different keywords.
+    <li>Try more general keywords.
+    </ul>
+#else
+	#foreach ($document in $documents)
+		#parse("_document.vm")
+	#end
+#end
+
+#parse("_footer.vm")

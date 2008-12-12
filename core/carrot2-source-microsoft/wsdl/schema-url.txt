@@ -1,0 +1,7 @@
+
+WSDL schema:
+    http://soap.search.live.com/webservices.asmx?wsdl
+
+API documentation:
+
+    http://msdn.microsoft.com/en-us/library/aa905676.aspx

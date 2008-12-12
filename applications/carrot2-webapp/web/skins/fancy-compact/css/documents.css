@@ -1,0 +1,38 @@
+/** 
+ * CSS for the documents list. 
+ */
+
+#documents {
+  font-size: 11px;
+  top: 22px;
+}
+
+#documents-status {
+  margin-top: 0px;
+  margin-left: 14px;
+  font-size: 11px;
+}
+
+div.document {
+  border-left: 1px dotted #a0a0a0;
+}
+
+a.in-clusters,
+a.in-new-window,
+a.show-preview {
+  padding-left: 16px;
+  background-position: right 0;
+}
+
+a.in-clusters {
+  background-image: url('../../common/img/icon-in-clusters.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px */
+}
+
+a.in-new-window {
+  background-image: url('../../common/img/icon-in-new-window.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px */
+}
+
+a.show-preview {
+  background-image: url('../../common/img/icon-show-preview.gif'); /** sprite-ref: vert; sprite-alignment: right; sprite-margin-bottom: 20px */
+}
+

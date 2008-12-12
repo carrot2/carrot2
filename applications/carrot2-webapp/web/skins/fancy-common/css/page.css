@@ -1,0 +1,64 @@
+/**
+ * Common CSS for fancy skins.
+ */
+/** Form controls */
+#search-glow {
+  float: left; 
+  position: relative;
+}
+
+#search {
+  float: left;
+  border: 0;
+  background-color: #60A4D9;
+  color: white;
+}
+
+#query-glow {
+  float: left; 
+  position: relative; 
+}
+
+#query {
+  float: left;
+  border: 0;
+}
+
+#options {
+  clear: both;
+  text-align: right;
+}
+
+/** Startup screen */
+#startup #search-area ul.util-links {
+  border-top: 1px #a0a0a0 dotted;
+}
+
+#startup #main-area {
+  background-color: #F6F4EC;
+}
+
+/** Results screen */
+#results #main-area {
+  background-color: #F6F4EC;
+  bottom: 0;
+}
+
+#results-area {
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  height: 100%;
+}
+
+#status-bar { 
+  background-color: #F6F4EC;
+  border-top: 1px dotted #808080;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  color: #808080;
+}
+

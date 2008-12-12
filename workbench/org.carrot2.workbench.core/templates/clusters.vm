@@ -1,0 +1,26 @@
+
+#parse("_header.vm")
+
+#*
+	Template displayed on show(Cluster...). 
+	
+	Available variables:
+
+	  clusters
+	  comparator
+*#
+
+#foreach ($cluster in $clusters)
+	#if( ${clusters.size()} > 1 )
+		<div class="cl">
+			$cluster.getLabel()
+		</div>
+	#end
+
+
+	#foreach ($document in $cluster.getAllDocuments($comparator))
+		#parse("_document.vm")
+	#end
+#end
+
+#parse("_footer.vm")

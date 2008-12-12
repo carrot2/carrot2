@@ -1,0 +1,52 @@
+/** 
+ * CSS for view tabs
+ */
+ 
+#views {
+  padding-left: 6px;
+  height: 23px;
+  background-image: url('../img/tab-small-passive-lead-in.gif'); /** sprite-ref: vert; */
+}
+
+#views.first-active {
+  background-image: url('../img/tab-small-active-lead-in.gif'); /** sprite-ref: vert; */
+}
+
+#views li {
+  background-image: url('../img/tab-small-passive-body.gif'); /** sprite-ref: vert; sprite-alignment: repeat */
+  padding-right: 11px;
+  padding-top: 5px;
+  padding-left: 1px;
+  height: 18px;
+}
+
+#views li.active {
+  background-image: url('../img/tab-small-active-body.gif'); /** sprite-ref: vert; */
+}
+
+#views li .right {
+  width: 11px;
+  height: 23px;
+}
+
+#views li .right {
+  background-image: url('../img/tab-small-passive-passive-link.gif'); /** sprite-ref: vert; */
+}
+
+#views li.active .right {
+  background-image: url('../img/tab-small-active-passive-link.gif'); /** sprite-ref: vert; */
+}
+
+#views li.active-last .right {
+  background-image: url('../img/tab-small-active-lead-out.gif'); /** sprite-ref: vert; */
+  width: 10px;
+}
+
+#views li.passive-last .right {
+  background-image: url('../img/tab-small-passive-lead-out.gif'); /** sprite-ref: vert; */
+  width: 10px;
+}
+
+#views li.before-active .right {
+  background-image: url('../img/tab-small-passive-active-link.gif'); /** sprite-ref: vert; */
+}

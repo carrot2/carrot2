@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="org.carrot2.workbench.editors.lucene.extension"
+         name="Lucene Editors"
+         point="org.carrot2.workbench.core.attributeEditor">
+
+      <type-editor
+            attribute-class="org.apache.lucene.store.Directory"
+            class="org.carrot2.workbench.editors.lucene.IndexDirectoryEditor">
+      </type-editor>
+
+      <dedicated-editor
+            attribute-id="query"
+            class="org.carrot2.workbench.editors.impl.StringEditor"
+            component-class="org.carrot2.source.lucene.LuceneDocumentSource">
+      </dedicated-editor>
+      
+      <dedicated-editor
+            attribute-id="org.carrot2.source.lucene.SimpleFieldMapper.titleField"
+            class="org.carrot2.workbench.editors.lucene.LuceneFieldSelectorEditor"
+            component-class="org.carrot2.source.lucene.LuceneDocumentSource">
+      </dedicated-editor>
+
+      <dedicated-editor
+            attribute-id="org.carrot2.source.lucene.SimpleFieldMapper.contentField"
+            class="org.carrot2.workbench.editors.lucene.LuceneFieldSelectorEditor"
+            component-class="org.carrot2.source.lucene.LuceneDocumentSource">
+      </dedicated-editor>
+
+      <dedicated-editor
+            attribute-id="org.carrot2.source.lucene.SimpleFieldMapper.urlField"
+            class="org.carrot2.workbench.editors.lucene.LuceneFieldSelectorEditor"
+            component-class="org.carrot2.source.lucene.LuceneDocumentSource">
+      </dedicated-editor>
+
+   </extension>
+</plugin>

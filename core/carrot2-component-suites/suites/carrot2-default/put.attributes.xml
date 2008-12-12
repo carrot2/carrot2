@@ -1,0 +1,11 @@
+
+<attribute-sets>
+  <attribute-set id="put">
+    <value-set>
+      <label>PUT search</label>
+      <attribute key="BossSearchService.sites">
+        <value type="java.lang.String" value="put.poznan.pl" />
+      </attribute>
+    </value-set>
+  </attribute-set>
+</attribute-sets>
