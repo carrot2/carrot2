@@ -39,6 +39,7 @@
     </target>
 
     <target name="publish.artifacts">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
         <fail unless="dist.dir">Define: dist.dir property.</fail>
 
         <delete includeemptydirs="true" failonerror="false">
@@ -59,6 +60,7 @@
     <target name="workbench" description="Perform a full build of the workbench">
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
         <fail unless="dist.dir">Define: dist.dir property.</fail>
+        <property file="${carrot2.code.dir}/etc/version/carrot2.version" />
 
         <copy file="${workbench.properties}" todir="${carrot2.code.dir}" overwrite="true" />
         <copy file="${workbench.test.properties}" todir="${carrot2.code.dir}" overwrite="true" />
@@ -79,6 +81,7 @@
                 <include name="*carrot2-workbench/*.zip" />
             </fileset>
             <mapper type="flatten" />
+            <mapper type="glob" from="*.zip" to="-${carrot2.version}.zip"/>
         </copy>
     </target>
 
