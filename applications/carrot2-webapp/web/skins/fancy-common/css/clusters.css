@@ -1,0 +1,67 @@
+/** 
+ * CSS for the cluster tree.
+ */
+#clusters li a, a#tree-top {
+  padding-left: 18px;
+}
+
+a#tree-top {
+  padding-top: 2px;
+}
+
+#clusters li.leaf-last > a > span.tree {
+  background-color: transparent;
+}
+
+#clusters li.branch > a > span.tree {
+  background-color: transparent;
+}
+
+#clusters li.branch-last > a > span.tree {
+  background-color: transparent;
+}
+
+#clusters li.branch-last {
+  background-image: none;
+}
+
+#clusters li.more a {
+  background-position: left 2px;
+}
+
+#clusters li {
+  padding-left: 18px;
+  background-position: 2px top;
+}
+
+#clusters li > a > span.tree {
+  margin-left:  -34px;
+  margin-top: 3px;
+  width: 9px; height: 15px;
+}
+
+#clusters li.leaf-last > a > span.tree {
+  margin-top: -2px;
+  width: 9px; height: 24px;
+}
+
+#clusters li.branch > a > span.tree {
+  margin-top: 3px;
+  width: 9px; height: 15px;
+}
+
+#clusters li.branch-last > a > span.tree {
+  margin-top: 0px;
+  width: 9px; height: 24px;
+}
+
+
+
+#clusters a > span {
+  padding-left: 1px;
+}
+
+#always-show-all {
+  font-size: 11px;
+  margin-left: 37px;
+}

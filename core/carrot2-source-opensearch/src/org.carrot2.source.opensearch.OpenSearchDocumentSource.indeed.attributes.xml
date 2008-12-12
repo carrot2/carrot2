@@ -1,0 +1,16 @@
+<attribute-sets>
+  <attribute-set id="jobs">
+    <value-set>
+      <label>Jobs</label>
+      <attribute key="OpenSearchDocumentSource.feedUrlTemplate">
+        <value type="java.lang.String" value="http://www.indeed.com/opensearch?q=${searchTerms}&amp;start=${startIndex}&amp;limit=${count}" />
+      </attribute>
+      <attribute key="OpenSearchDocumentSource.resultsPerPage">
+        <value type="java.lang.Integer" value="50" />
+      </attribute>
+      <attribute key="OpenSearchDocumentSource.maximumResults">
+        <value type="java.lang.Integer" value="400" />
+      </attribute>
+    </value-set>
+  </attribute-set>
+</attribute-sets>

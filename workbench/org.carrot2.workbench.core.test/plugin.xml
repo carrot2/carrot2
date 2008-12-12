@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         id="testEditors"
+         point="org.carrot2.workbench.core.attributeEditor">
+      <dedicated-editor
+            attribute-id="my.specificAttribute"
+            class="org.carrot2.workbench.editors.EditorsTest$DedicatedEditor"
+            component-class="org.carrot2.workbench.editors.EditorsTest$TestComponent">
+      </dedicated-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$TestType"
+            class="org.carrot2.workbench.editors.EditorsTest$RangeEditor">
+         <constraints
+               all-constraints-required="false">
+            <constraint
+                  constraint-class="org.carrot2.util.attribute.constraint.IntRange">
+            </constraint>
+         </constraints>
+      </type-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$TestType"
+            class="org.carrot2.workbench.editors.EditorsTest$RangeModuloEditor">
+         <constraints
+               all-constraints-required="true">
+            <constraint
+                  constraint-class="org.carrot2.util.attribute.constraint.IntRange">
+            </constraint>
+            <constraint
+                  constraint-class="org.carrot2.util.attribute.constraint.IntModulo">
+            </constraint>
+         </constraints>
+      </type-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$TestType"
+            class="org.carrot2.workbench.editors.EditorsTest$IntEditor">
+      </type-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$TestType"
+            class="org.carrot2.workbench.editors.EditorsTest$RangeEditor2">
+         <constraints
+               all-constraints-required="true">
+            <constraint
+                  constraint-class="org.carrot2.util.attribute.constraint.DoubleRange">
+            </constraint>
+            <constraint
+                  constraint-class="org.carrot2.util.attribute.constraint.ImplementingClasses">
+            </constraint>
+         </constraints>
+      </type-editor>
+      <type-editor
+            attribute-class="java.lang.Object"
+            class="org.carrot2.workbench.editors.EditorsTest$ComboEditor">
+         <constraints all-constraints-required="true">
+            <constraint
+                  constraint-class="org.carrot2.util.attribute.constraint.IntModulo">
+            </constraint>
+         </constraints>
+      </type-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$SubTestType"
+            class="org.carrot2.workbench.editors.EditorsTest$SubEditor">
+      </type-editor>
+      <type-editor
+            attribute-class="org.carrot2.workbench.editors.EditorsTest$TestInterface"
+            class="org.carrot2.workbench.editors.EditorsTest$InterfaceEditor">
+      </type-editor>
+   </extension>
+   <extension
+         id="id2"
+         point="org.carrot2.core.componentSuite">
+      <suite
+            name="Test component suite"
+            resource="test-suite.xml">
+      </suite>
+   </extension>
+
+</plugin>

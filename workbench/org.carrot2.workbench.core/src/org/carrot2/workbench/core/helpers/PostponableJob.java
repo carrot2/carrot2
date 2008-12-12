@@ -1,0 +1,95 @@
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
+ * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
+
+package org.carrot2.workbench.core.helpers;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+
+/**
+ * Superclass of jobs that can be dynamically <i>postponed</i> (their execution schedule
+ * can be dynamically changed).
+ * <p>
+ * This class is not a subclass of {@link Job} because scheduling methods in {@link Job}
+ * are final and this could be confusing. Instead, either override the
+ * {@link #run(IProgressMonitor)} method of this class, or pass the job to be executed
+ * after a certain delay.
+ */
+public class PostponableJob
+{
+    /** Internal synchronization lock. */
+    private final Object jobLock = new Object();
+
+    /** Postponable delay job. */
+    private Job job;
+    
+    /** Actual job to execute. */
+    private final Job actualJob;
+
+    /*
+     * 
+     */
+    public PostponableJob(Job actualJob)
+    {
+        this.actualJob = actualJob;
+    }
+
+    /**
+     * Schedule (or postpone) the job to execute after a given delay. Any previous
+     * pending job is canceled.
+     */
+    public final void reschedule(int delay)
+    {
+        final Job newJob = new Job(actualJob.getName() + " (Delayed)")
+        {
+            protected IStatus run(IProgressMonitor monitor)
+            {
+                synchronized (jobLock)
+                {
+                    if (job == this)
+                    {
+                        actualJob.schedule();
+                        return Status.OK_STATUS;
+                    }
+                    else
+                    {
+                        return Status.CANCEL_STATUS;
+                    }
+                }
+            }
+        };
+        newJob.setPriority(Job.INTERACTIVE);
+
+        // System jobs are not visible in the GUI. I leave it for now, it's quite
+        // interesting to see auto update tasks in the jobs panel.
+        //
+        // newJob.setSystem(true);
+
+        synchronized (jobLock)
+        {
+            /*
+             * Cancel previous job, but start the new one regardless of the previous job's
+             * running state.
+             */
+            if (job != null && job.getState() == Job.SLEEPING)
+            {
+                job.cancel();
+            }
+
+            job = newJob;
+            job.schedule(delay);
+        }
+    }
+}

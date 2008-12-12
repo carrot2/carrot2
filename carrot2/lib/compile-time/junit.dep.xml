@@ -1,9 +1,0 @@
-
-<component name="junit" description="JUnit Testing Framework 3.8.1, http://www.junit.org">
-	<provides>
-		<files>
-			<file location="junit-3.8.1.jar" />
-			<file location="junit.LICENSE" />
-		</files>
-	</provides>
-</component>

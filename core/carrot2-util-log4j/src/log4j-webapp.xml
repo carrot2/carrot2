@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" [
+  <!ENTITY filters-common SYSTEM "filters-common.xml">
+  <!ENTITY filters-silent SYSTEM "filters-silent.xml">
+]>
+
+<!-- 
+    Log4j configuration for the Webapp.
+-->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- Add logger filters here. -->
+    &filters-common;
+    &filters-silent;
+
+    <!-- Root logger config. -->
+    <root>
+        <priority value="info" />
+    </root>
+</log4j:configuration>

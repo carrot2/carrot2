@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<chapter xml:id="chapter.advanced-topics" xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <title>Advanced topics</title>
+  <subtitle>Customizing &C2; components and applications</subtitle>
+
+  <para>
+    This chapter discusses more advanced usage scenarios of &C2; such as building &C2; from
+    source code, fine-tuning clustering or customizing &C2; applications.
+  </para>
+  
+  <section xml:id="section.advanced-topics.building-from-source-code">
+    <title>Building &C2; from source code</title>
+    
+    <para>
+      &NA;
+    </para>
+    
+    <section>
+      <title>Building &WA;</title>
+      
+      <para>
+        &NA;
+      </para>
+    </section>
+  </section>
+  
+  <section xml:id="section.advanced-topics.fine-tuning">
+    <title>Fine-tuning &C2; clustering</title>
+    
+    <para>
+      This section discusses a number of typical fine-tuning scenarios for &C2; clustering
+      algorithms. Some of the scenarios are relevant to all &C2; algorithms, while others
+      are specific to individual algorithms.
+    </para>
+    
+    <section>
+      <title>Modifying the list of stop words</title>
+      
+      <para>
+        Stop words are the common meaningless words, such as <emphasis>the</emphasis>, 
+        <emphasis>to</emphasis>, <emphasis>for</emphasis> in English that should be 
+        ignored while clustering. To fine-tune the stop words list you can use the 
+        <link linkend="section.workbench">&DCW;</link>:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Start &DCW; and run some query on which you'll be observing the results
+            of your changes..
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Go to the <filename>workspace/</filename> directory which is located in
+            the directory to which you extracted &DCW;. Modify the <filename>stopwords.*</filename>
+            file for the language you are working on (e.g. <filename>stopwords.en</filename>
+            for English). Add or remove stop words as required and save changes.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Open the <guilabel>Attributes</guilabel> view in &DCW; and use the view's toolbar
+            button shown in <xref linkend="figure.preprocessing-attributes" /> 
+            to group the attributes by semantics. In the <guilabel>Preprocessing</guilabel>
+            make sure the <guilabel>Processing language</guilabel> is correctly set and
+            check the <guilabel>Reload stopwords</guilabel> checkbox. Doing the latter
+            will let you to see the updated clustering results without restarting &DCW;
+            every time you save the changed stop word list.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Uncheck the <guilabel>Restart Processing Automatically</guilabel>
+            option in the <guilabel>Search</guilabel> menu. To rerun clustering after
+            you've saved changes to the <filename>stopwords.*</filename>, choose the
+            <guilabel>Restart Clustering</guilabel> option from the <guilabel>Search</guilabel>
+            menu, or press <guilabel>Ctrl+F11</guilabel>.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.preprocessing-attributes">
+        <title>&DCW; Preprocessing Attributes</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-preprocessing-attributes.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </section>
+  </section>
+  
+  <section xml:id="section.advanced-topics.http-proxies">
+    <title>Working with HTTP proxies</title>
+    
+    <para>
+    If your server or development machine connects to HTTP servers via a HTTP
+    proxy, you can most of &C2; document source implementations
+    to take this information into account by defining the following global
+    system properties:
+    </para>
+
+    <variablelist>
+      <varlistentry>
+        <term>http.proxyhost</term>
+        <listitem><para>URL of the HTTP proxy (numeric or full address, but
+        without the port number).</para></listitem>
+      </varlistentry>
+  
+      <varlistentry>
+        <term>http.proxyport</term>
+        <listitem><para>Proxy server's port number.</para></listitem>
+      </varlistentry>
+    </variablelist>
+    
+    <para>
+      Two sources that currently do not support the above properties are: 
+      MicrosoftLiveDocumentSource and OpenSearchDocumentSource.
+    </para>
+    
+    <note>
+      <para>Password-based authentication is not supported at the moment.
+      You can alter the source code to change this 
+      in the <filename>HttpUtils</filename> class.</para>
+    </note>
+  </section>
+  
+  <section xml:id="section.advanced-topics.customizing-applications">
+    <title>Customizing &C2; applications</title>
+    
+    <para>
+      &NA;
+    </para>
+    
+    <section>
+      <title>Removing or adding document source tabs to &WA;</title>
+      
+      <para>
+        &NA;
+      </para>
+    </section>
+  </section>
+  
+  <section xml:id="section.advanced-topics.native-matrix-computations">
+    <title>Enabling native matrix computations</title>
+    
+    <para>
+      To speed up clustering performed by the Lingo algorithm, you can
+      configure &C2; to use a native platform-specific matrix computation
+      library. Depending on the platform, you may see up to a 400% speed-up
+      compared to the Java-only mode.
+    </para>
+    
+    <para>
+      To enable native matrix computations for &C2;:
+    </para>
+
+    <orderedlist>
+      <listitem>
+        <para>
+          <link xlink:href="http://download.carrot2.org/nni/">Download</link> precompiled 
+          libraries for your platform and extract the archive to some local directory. 
+        </para>
+        
+        <note>
+          <para>
+            If no distribution matches your platform, and you would like to
+            compile your own version, please ask on the mailing list for
+            instructions. You can also try the PIII (Pentium III) versions, which
+            seem to work quite well on modern processors as well (e.g. Core2 Duo).
+          </para>
+        </note>
+      </listitem>
+
+      <listitem>
+        <para>
+          Add an additional option to your JVM command line invocation providing the 
+          path to the <emphasis role="bold">directory</emphasis> to which you extracted the native library:
+        </para>
+        <programlisting><![CDATA[java -Djava.library.path=[native-lib-dir-path] ...]]></programlisting>
+      </listitem>
+
+      <listitem>
+        <para>
+          When &C2; correctly loads the native library, upon initialization of the Lingo
+          clustering algorithm, the following entry should appear in application logs:
+        </para>
+        <programlisting><![CDATA[INFO org.carrot2.clustering.lingo.LingoClustering
+Algorithm: Native BLAS routines available]]></programlisting>
+      </listitem>
+    </orderedlist>
+  </section>
+</chapter>

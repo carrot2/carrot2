@@ -1,0 +1,9 @@
+<!DOCTYPE project SYSTEM "../dtd/Project.dtd">
+
+<project name="Startup page smoke test" default="webtest">
+  <target name="webtest">
+    <webtest name="Startup page smoke test">
+      &getStartupPage;
+    </webtest>
+  </target>
+</project>

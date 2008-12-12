@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+  <query>xslt test</query>
+  <doc>
+    <str name="id">498967</str>
+    <str name="title">IBM's MARS Block Cipher.</str>
+    <str name="description">The company's AES proposal using 128 bit blocks.</str>
+    <str name="url">http://www.research.ibm.com/security/mars.html</str>
+  </doc>
+  <doc>
+    <str name="id">831478</str>
+    <str name="title">IBM WebSphere Studio Device Developer</str>
+    <str name="description">An integrated development environment.</str>
+    <str name="url">http://www-3.ibm.com/software/wireless/wsdd/</str>
+  </doc>
+</response>

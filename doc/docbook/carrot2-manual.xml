@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<book>
+  <info>
+    <title>&C2;</title>
+    <subtitle>User and Developer Manual</subtitle>
+
+    <abstract>
+      <para>
+        This manual describes &C2; application suite and the API developers can use
+        to integrate &C2; clustering algorithms into their code. It also provides a
+        reference of all &C2; components and their attributes.
+      </para>
+    </abstract>
+    
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="legal.xml" /> 
+  </info>
+
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="introduction.xml" /> 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="application-suite.xml" /> 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="getting-started.xml" /> 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="architecture.xml" /> 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="advanced-topics.xml" /> 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="troubleshooting.xml" /> 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="components.xml" /> 
+</book> 

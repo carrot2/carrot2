@@ -1,0 +1,40 @@
+/** 
+ * CSS for the cluster tree.
+ */
+#clusters ul {
+  line-height: 1.7;
+}
+
+#no-clusters {
+  font-size: 13px;
+}
+
+#clusters li a, a#tree-top {
+  background-position: left 4px;
+  background-image: url('../img/tree-folder.gif'); /** sprite-ref: vert; sprite-margin-top: 4px; sprite-margin-bottom: 100px */
+}
+
+#clusters li.more a {
+  background-image: url('../img/tree-more.gif'); /** sprite-ref: vert; sprite-margin-top: 2px; sprite-margin-bottom: 5px */
+}
+
+#clusters li {
+  background-image: url('../img/tree-trunk.gif'); /** sprite-ref: horiz; sprite-alignment: repeat; sprite-margin-left: 2px; sprite-margin-right: 300px; */
+}
+
+#clusters li > a > span.tree {
+  background-image: url('../img/tree-leaf.gif'); /** sprite-ref: vert; */
+}
+
+#clusters li.leaf-last > a > span.tree {
+  background-image: url('../img/tree-leaf-last.gif'); /** sprite-ref: vert; */
+}
+
+#clusters li.branch > a > span.tree {
+  margin-top: 3px;
+  background-image: url('../img/tree-branch.gif'); /** sprite-ref: vert; */
+}
+
+#clusters li.branch-last > a > span.tree {
+  background-image: url('../img/tree-branch-last.gif'); /** sprite-ref: vert; */
+}

@@ -1,0 +1,791 @@
+ID	description
+1.1	Aida, female given name
+1.2	Aida can be a Japanese name
+1.3	A Persian name
+1.4	Aida, the opera by Giuseppe Verdi
+1.5	Aida, the musical by Elton John and Tim Rice whose story is based on that of the opera
+1.6	Aida(band), a Korean pop group
+1.7	AIDA(Organisation)- The All India DJs' Association- An Association comprising of DJs from India
+1.8	Aida, Okayama, a former town in Japan, known for the"Aida" racecar circuit
+1.9	Aida District, Okayama, Japan
+1.10	Aida(West Bank), a Palestinian refugee camp
+1.11	Aida(dancing), a figure in ballroom dancing
+1.12	Aida, the 1953 film with Sophia Loren
+1.13	Aida, the 1971 Philippine film
+1.14	Aida(film), the 1987 Swedish film
+1.15	Aída, a Spanish TV series, a spin-off from 7 Vidas
+1.16	Aida is a character from The Cairo Trilogy, by Naquib Mahfouz.
+1.17	AIDA32, computer software that provides information on hardware
+1.18	AIDA, a set of defined interfaces and formats for representing common data analysis objects, primarily used by researchers in high-energy particle physics.
+1.19	AIDA International The International Association for the Development of Freediving
+1.20	AIDA- the International Association of Insurance Law.
+1.21	AIDA, an acronym used in marketing.
+1.22	AIDA interactive educational freeware diabetes simulator, originally developed as an attempt at a Automated Insulin Dosage Advisor.
+1.23	Aida(café), a chain of coffeehouses in Vienna, Austria
+1.24	Aida cloth, used in Cross-stitch
+1.25	Aida, a cruise ship owned by P&amp;O, the Peninsular and Oriental Steam Navigation Company
+1.26	Tanaka International Aida circuit, a racecar circuit which hosted the Formula One Pacific Grand Prix in 1994 and 1995.
+1.27	AIDA, a global list of international development projects.
+1.28	Australasian Intervarsity Debating Championships, organized by Australasian Intervarsity Debating Association
+1.29	Military Operation, Operation Aida was Rommel's penultimate effort to take Egypt from the British using the Afrikakorps in mid-1942.
+1.30	AIDA, Artificially Intelligent Data Anomalies, fictional AIs in the.hack franchise
+1.31	Aida Association, Spanish non-profit organization
+2.1	B-52 Stratofortress, a strategic bomber aircraft designed by Boeing
+2.2	B-52 Units, USAF units that have flown the strategic bomber
+2.3	B-52(hairstyle), a hairstyle, named after the aircraft
+2.4	The B-52's, a rock band, named after the hairstyle named after the aircraft
+2.5	B-52(cocktail)
+2.6	One of the Encyclopaedia of Chess Openings codes for the Sicilian Defence in chess
+3.1	Beagle is a dog breed
+3.2	HMS Beagle, the ship in which Charles Darwin undertook the travels during which he made many observations which became important for his formulation of his theory of evolution
+3.3	The Beagle Channel in extreme southern South America near the Strait of Magellan, named after HMS Beagle which explored it twice
+3.4	The Beagle Gulf in the vicinity of Australian city of Darwin, Northern Territory, named after HMS Beagle which explored it in 1839
+3.5	Beagle 2, a failed British Mars lander named after HMS Beagle. It crashed on 25 December 2003
+3.6	The Soviet Ilyushin Il-28 bomber aircraft, which had the NATO reporting name of Beagle
+3.7	Beagle Aircraft, a former British aircraft manufacturer
+3.8	Beagle(software), a desktop search service for GNU/Linux users.
+3.9	Beagle(crater), the crater on Mars explored by the Opportunity rover
+3.10	Peter S. Beagle, fantasy writer
+3.11	Beagle(beer), an Argentinean beer
+4.1	The Bronx, one of the five boroughs of New York City
+4.2	Bronx River, a river that flows south through The Bronx
+4.3	The Bronx(band), an American punk rock band
+4.4	Bronx(cocktail), an alcoholic beverage
+4.5	Bronx Zoo
+4.6	Bronx Botanical Garden
+4.7	Bronx Beat, a Saturday Night Live skit
+4.8	A Bronx Morning, a 1931 avant-garde film
+4.9	"The Bronx Bombers", nickname of the New York Yankees baseball team
+4.10	Bronx, a dog-like beast from the Gargoyles(TV series)
+5.1	Cain, the first son of Adam and Eve, according to the Bible
+5.2	Dean Cain, an American actor
+5.3	Herb Cain, a professional Canadian ice hockey player
+5.4	James M. Cain, an American crime writer
+5.5	Liz Cain, Australian ice skater
+5.6	Matt Cain, a baseball pitcher
+5.7	Cain, a murderous drug-dealer in the film RoboCop 2
+5.8	Commissar Ciaphas Cain, fictional character from the Warhammer 40,000 universe
+5.9	Cain Dingle, Emmerdale character
+5.10	Cain(fictional character), the decoy assassin in Robert Ludlum's The Bourne Identity
+5.11	Cain Nightroad is the main villain from the anime Trinity Blood
+5.12	Kaine, a fictional character from Marvel Comics and clone of Spider-Man
+5.13	Cain of Cain and Abel(comics), most notably seen in the Sandman series, is a fictional character from DC Comics based on the biblical Cain
+5.14	David Cain(comics), a fictional character from DC Comics and father of the current Batgirl
+5.15	Cain Marko, a fictional character from Marvel Comics known as the Juggernaut
+5.16	Cain, a fictional character from the anime Bleach
+5.17	Commander Cain, of the Battlestar Pegasus in Battlestar Galactica
+5.18	Helena Cain, Admiral in Battlestar Galactica
+5.19	The Mark of Cain, an Australian hard rock band
+5.20	Cain(play), a play by Lord Byron
+5.21	Cain(software), password cracking software
+5.22	CAIN or Conflict Archive on the Internet, a website
+6.1	Camels are a species of humped ungulate
+6.2	Camel(band), an English progressive rock band
+6.3	CamelCase, lettering scheme
+6.4	Camel(cigarette), a brand of U.S. cigarette
+6.5	Sopwith Camel Scout, a British World War I single-seat fighter aircraft that was famous for its manoeuvrability
+6.6	Camel spin, a spin move in figure skating
+6.7	Camel Trophy
+6.8	Camel spider, an order of arachnids
+6.9	Programming Perl, known as the Camel Book, a manual for the Perl programming language
+6.10	Customised Applications for Mobile networks Enhanced Logic, a set of GSM standards
+6.11	Camel(paint), a brand of paint
+6.12	Camel, a fairy chess piece
+6.13	Camel(1872- 1892), one of the ten South Devon Railway Buffalo class steam locomotives
+7.1	Coral Sea, a region of the north-east coast of Australia with a namesake chain of islands
+7.2	Gay and Lesbian Kingdom of the Coral Sea Islands, a micronation established as a symbolic political protest by a group of gay rights activists based in southeast Queensland Australia
+7.3	The Coral Sea, a Santa Barbara, California based Art Rock band led by Rey Villalobos
+7.4	Battle of the Coral Sea(1942), fought between the USA and Japan, the first fleet action in which aircraft carriers engaged each other
+7.5	Coral sea gregory, a damselfish of the family Pomacentridae, found on coral and rocky reefs in the western Pacific Ocean
+7.6	USS Coral Sea, disambiguation
+8.1	Cube(geometry), a shape in three or higher dimensions
+8.2	Cube(algebra), the third power of a number
+8.3	Alamo, a Sculpture by Bernard(Tony) Rosenthal, commonly known as The Cube.
+8.4	The Cube, a 1969 movie by Jim Henson
+8.5	Cube(band), an Alternative/Heavy rock band from Athens, Greece
+8.6	Cube(film), a 1997 Canadian movie, the first in the Cube series of movies
+8.7	Cube Microplex, a cinema in Bristol, England
+8.8	Ice Cube, a rapper, often referred to simply as"Cube"
+8.9	The Cube(game), an old Sufi psychological exercise involving visualization and intuition
+8.10	Nintendo GameCube, often referred to as cube for short
+8.11	CUBE(magazine), an unofficial Nintendo GameCube magazine in the UK
+8.12	Cube(computer game), a free software first-person shooter
+8.13	Rubik's cube, a cube-shaped puzzle with movable sub-cubes
+8.14	Soul Cube, a fictional artifact in Doom 3
+8.15	The Receda Cube, the MacGuffin in Perplex City
+8.16	Cube Records, a record label
+8.17	Borg Cube, a Borg starship from Star Trek
+8.18	Aprilia RS3 Cube, a MotoGP race bike
+8.19	Nissan Cube, a type of automobile
+8.20	Power Mac G4 Cube, a compact computer from Apple
+8.21	OLAP cube, a representation of relational data used in Data Warehousing
+8.22	CuBe, an alloy of copper and beryllium
+8.23	Cube(Birmingham), a proposed building in Birmingham, England
+8.24	CUBE, the Club for Undergraduate Biomedical Engineering, Canada
+8.25	The Cubé plant or Lancepod( Lonchocarpus utilis)
+8.26	Time Cube, 4-corner knowledge of the universe[1]
+9.1	Eos is the goddess of dawn in Greek mythology
+9.2	European Optical Society
+9.3	Eos(journal), the weekly journal of the American Geophysical Union
+9.4	Eos(genus), a genus of lorikeets
+9.5	Eos(fictional dog), a dog in the historical novel Funeral Games
+9.6	Eos, a fictional planet within the Star Wars universe
+9.7	Canon EOS, a series of film and digital single-lens reflex cameras made by Canon
+9.8	Volkswagen Eos, a coupé convertible vehicle
+9.9	Eos Press, a publisher of card games and role-playing games
+9.10	Eos Airlines, an airline operating between the UK and USA
+9.11	221 Eos, an asteroid
+9.12	Earth Observing System of NASA
+9.13	E/OS, a computer operating system for virtual machine emulation
+9.14	EOS(operating system), a supercomputer operating system in the 1980s
+9.15	Eos, an imprint of HarperCollins Publishing
+9.16	Eos, the name of a character in THQ's videogame Red Faction
+9.17	EoS, the Ethernet over SONET/SDH protocol set
+9.18	EOS, Electrical Overstress, the primary cause of integrated circuit failure
+9.19	EOS, Economies of scale
+9.20	E.O.S.: Earth Orbit Stations, a space station simulation computer game by Electronic Arts
+9.21	Enclosed Operating Station, aboard US Navy nuclear-powered aircraft carriers, the control room from which each of its two nuclear propulsion plants is controlled
+10.1	Excalibur is the mythical sword of King Arthur
+10.2	Excalibur(film), a 1981 film about the legend of King Arthur
+10.3	Excalibur(album), a 1999 album about the legend by metal band Grave Digger
+10.4	Excalibur(automobile), a type of"contemporary classic" retro-styled car
+10.5	Excalibur(comics), both a Marvel Comics series set in the United Kingdom and a series featuring Professor X and Magneto in Genosha
+10.6	Excalibur(computer game), a 1983 video game by Chris Crawford
+10.7	Excalibur(computer system), a"rebuttal engine" used by the Labour Party(UK) in the United Kingdom general election, 1997
+10.8	Excalibur(Funtown Splashtown USA), a wooden roller coaster at Funtown Splashtown USA in Saco, Maine
+10.9	Excalibur(laser), a fictional chemical laser weapon in Ace Combat Zero
+10.10	Excalibur(newspaper), the student newspaper of York University
+10.11	Excalibur(novel), a fantasy novel by Sanders Anne Laubenthal
+10.12	Excalibur(nightclub), a large and well-known nightclub in Chicago, founded in 1989
+10.13	Excalibur(paintball), a make of paintball gun
+10.14	Excalibur(prehistoric tool), the so-named prehistoric axe made of red quartzite found at the Sima de los Huesos in the Sierra de Atapuerca. It is hypothesized to be some kind of ritual offering for a funeral.
+10.15	Excalibur(roller coaster), a hybrid(wooden frame with steel track) out-and-back roller coaster at the Valleyfair! amusement park in Shakopee, Minnesota
+10.16	Excalibur(wrestler), a wrestler for Pro Wrestling Guerrilla
+10.17	The IAS Excalibur, a fictional starship in the Babylon 5 universe
+10.18	HMS Excalibur, a ship in the Royal Navy
+10.19	U.S.S. Excalibur, the main ship in the Star Trek: New Frontier series of novels
+10.20	XM982 Excalibur, 155mm extended range artillery projectile being developed by Raytheon and Bofors
+10.21	Excalibur Hotel and Casino, a medieval-themed hotel-casino in Las Vegas, Nevada
+10.22	F-103 Excalibur heavy fighter, a fictional spaceplane from the Wing Commander spaceflight games
+10.23	Xcalibur, a CGI TV story series about a medieval-type kingdom
+10.24	Excalibur, a brand of consumer firework shells, popular among hobbyists
+10.25	Excalibur, a nuclear-pumped X-ray laser, investigated as part of the Strategic Defence Initiative.
+10.26	Excalibur is a trick with diabolo where the diabolos ax is vertical, normally known as Vertax.
+11.1	Gabriel Fahrenheit, a German physicist
+11.2	Fahrenheit, the temperature scale
+11.3	Fahrenheit graphics API
+11.4	Fahrenheit(Taiwanese band),a Taiwanese Male Singing Group
+11.5	7800 degrees Fahrenheit, an album by Bon Jovi
+11.6	Fahrenheit, a 2005 multi-format computer game by Quantic Dream. In the US and Canada it is known as Indigo Prophecy.
+11.7	Fahrenheit, a 1994 computer game for the Sega CD and Sega 32X
+11.8	Fahrenheit 9/11, a movie by Michael Moore
+11.9	Fahrenheit(Thai band)
+11.10	Fahrenheit 451, a novel by Ray Bradbury
+11.11	Fahrenheit 451, a film adaptation by François Truffaut of the novel
+11.12	Fahrenheit, a comic book character in the Wildstorm universe(see StormWatch)
+11.13	Fahrenheit, a scented cologne made by Christian Dior.
+12.1	A globe is a round model representing a spheroid celestial body, e.g. the earth with all regions, also sometimes used to refer to Earth itself, as in "around the globe," equivalent to "around the earth" as a whole unit
+12.2	Globe, Arizona, a city in Arizona, United States
+12.3	Globe Theatre, any one of three London theatres associated with William Shakespeare
+12.4	The Globe("Globen" in Swedish), a sports arena with the shape of a giant golfball located in Stockholm, Sweden.
+12.5	The Boston Globe, a daily newspaper published in Boston, Massachusetts, United States
+12.6	The Globe and Mail, a daily newspaper published in Toronto, Canada
+12.7	The Globe(tabloid), a supermarket tabloid newspaper published in New York City
+12.8	The Globe(Camp Lejeune), the military base newspaper for U.S. Marine Corps Base Camp Lejeune in North Carolina, United States
+12.9	Richmond Globe, a weekly newspaper published in Richmond, California, United States
+12.10	Le Globe, a defunct 19th century French newspaper
+12.11	globe, a Japanese trance/pop-rock group
+12.12	The Globe(album), a 1991 album by the band Big Audio Dynamite II
+12.13	"The Globe"(song), a song by the band Big Audio Dynamite II
+12.14	Globe Telecom, the third-largest telecommunications company in the Philippines
+12.15	GLOBE Program, a worldwide hands-on, primary and secondary school-based education and science program
+12.16	Globe Shoes, an Australian footwear company
+12.17	globe(band), a Japanese pop music group
+12.18	lightglobe, synonym for"incandescent light bulb" in Australian English vernacular
+13.1	A hornet is an insect, see hornet (notable species European hornet, Asian giant hornet)
+13.2	a colloquial term for an American wasp Bald-faced hornet or White-faced hornet
+13.3	HMS Hornet, any of ten ships of the Royal Navy
+13.4	USS Hornet, any of eight ships of the U.S. Navy
+13.5	F/A-18 Hornet, a jet fighter aircraft
+13.6	De Havilland Hornet, an aircraft
+13.7	De Havilland Hornet Moth, a cabin biplane
+13.8	Medium Mark C Hornet, a British tank
+13.9	AGM-64 Hornet, an experimental U.S. missile
+13.10	AMC Hornet, a compact car manufactured from 1970 to 1977
+13.11	Hudson Hornet, a car manufactured from 1951 to 1957
+13.12	Dodge Hornet, a concept car revealed in 2006
+13.13	A motorcycle from the Honda CB series
+13.14	The Wolseley Hornet,
+13.15	A fictional stock car from the game Daytona USA.
+13.16	A monster in the TV series Code Lyoko.
+13.17	Hornet Township, Minnesota
+13.18	New Orleans Hornets, National Basketball Association team
+13.19	Kalamazoo College Hornets: Mascot of the NCAA Division III athletic teams at Kalamazoo College
+13.20	Hornet Archive, a PC demo FTP site from 1992 to 1998, and the name of the group that maintained it
+13.21	Hornet(comics)- 3 Marvel characters
+13.22	Hornet(comic)- a British comic of the 160s-1970s
+13.23	Hornet SQL Bridge- An Object Relational mapping for Zope and Plone
+14.1	Indigo is a color between blue and violet
+14.2	Indigo dye
+14.3	Indigofera, the Indigo plant
+14.4	Indigo Bunting, a small North-American bird
+14.5	Indigo Snake, the genus Drymarchon
+14.6	Indigo(novel), a novel by Alice Hoffman
+14.7	Indigo(Marina Warner novel) is a novel by Marina Warner
+14.8	Indigo Books and Music, a bookstore chain in Canada
+14.9	the Indigo, a Japanese band
+14.10	Indigo Girls, a folk-rock duo
+14.11	Indigo, a Krautrock band
+14.12	Indigo(film)
+14.13	Indigo(actress), star in the Showtime series Weeds
+14.14	Indigo, one of the Color Kids in the Rainbow Brite and the Star Stealer movie, Rainbow Brite toy line and TV series
+14.15	Indigo(comics) is the name of a DC comic book character
+14.16	Fahrenheit(video game) is known as"Indigo Prophecy" in North America
+14.17	Indigo Shire is Local Government Area in Victoria, Australia.
+14.18	Indigo children, who are claimed to possess distinctive auras and psychic powers.
+14.19	Tata Indigo, a sedan manufactured by Tata Motors of India
+14.20	Ford Indigo, a concept car by Ford Motor Company
+14.21	Indigo 3000, a Swedish car
+14.22	SGI Indigo was a line of Silicon Graphics computers
+14.23	Indigo was the code name for a Microsoft development framework, prior to being renamed to Windows Communication Foundation
+14.24	Indigo Internet, an internet service provider in Ireland
+14.25	Indigo Digital Press, a family of digital presses manufactured by Hewlett-Packard HP Digital presses
+14.26	Indigo Renderer, an unbiased spectral render engine
+14.27	IndiGo Airlines, India-based airlines
+14.28	Indigo Clothing, London(UK) promotions company
+15.1	Iwo Jima(meaning"sulfur island"), a volcanic island of Japan
+15.2	Battle of Iwo Jima, fought by the United States of America and the Empire of Japan in February and March 1945
+15.3	Treaty of Iwo Jima, signed in Iwo Jima on February 28, 1880 between representatives of the United States and Japan
+15.4	Letters from Iwo Jima, 2006 Golden Globe- and Academy Award-winning war film directed by Clint Eastwood
+15.5	Raising the Flag on Iwo Jima, a historic photograph taken on February 23, 1945, by Joe Rosenthal
+15.6	Sands of Iwo Jima, 1949 war film which follows a group of Marines from training to the Battle of Iwo Jima during World War II
+15.7	To the Shores of Iwo Jima, a 1945 short war film produced by the US Navy and Marine Corp, documenting the Battle of Iwo Jima
+15.8	Iwo Jima class amphibious assault ship, helicopter landing platform ships(LPH) of the United States Navy
+15.9	Iwo Jima LORAN-C transmitter, a former LORAN-C transmitter at Iwo Jima, Japan
+15.10	USS Iwo Jima, disambiguation page
+16.1	Jaguar( Panthera onca), a New World mammal(a"big cat") of the Felidae family native to South and Central America
+16.2	Jaguar(car), a British luxury car manufacturer, owned by Ford as of 1990
+16.3	Jaguar, the mascot of Owens Community College in Toledo and Findlay, Ohio
+16.4	Aimée and Jaguar, a character in the 1999 German war and drama movie
+16.5	Atari Jaguar, a video game console made by Atari
+16.6	Fender Jaguar, guitar introduced in 1962, built by Fender
+16.7	Jaguar(cartoonist), Sérgio Jaguaribe, a Brazilian cartoonist
+16.8	Jaguar, a pseudonym for the German musician Alec Empire
+16.9	Jaguar, the Transformers character Ravage name in the Japanese version
+16.10	The Jaguar(Impact Comics), a DC Comics superheroine
+16.11	Jaguar, a brief incarnation of the Joshua Perahia fronted band Joshua(band).
+16.12	Jaguar(rocket), a British elevator research rocket
+16.13	Jaguar, the codename for Mac OS X v10.2
+16.14	JAGUAR, a computational chemistry software program
+16.15	Jaguar 1 and Jaguar 2, German tank destroyers
+16.16	Jaguar class fast attack craft, German S-boats
+16.17	SEPECAT Jaguar, a military aircraft
+16.18	XF10F Jaguar, Grumman F10F Jaguar, a military aircraft
+16.19	Claas Jaguar, a range of forage harvesting equipment by German manufacturer Claas
+16.20	Jacksonville Jaguars, a professional American football(NFL) team based in Jacksonville, Florida
+16.21	South American Jaguars, a combination international rugby union team in the 1980s.
+16.22	Calico, alternative name for the Jaguar cat
+17.1	La Plata, city in Argentina.
+17.2	La Plata, Missouri, city in United States
+17.3	La Plata, Maryland, city in United States
+17.4	La Plata County, Colorado, United States
+17.5	La Plata Mountains, Colorado, United States
+17.6	La Plata Peak, Colorado, United States
+17.7	La Plata River, Colorado, United States
+17.8	Río de la Plata or River Plate, between Argentina and Uruguay.
+17.9	Battle of La Plata in Cuba.
+17.10	Ciudad de la Plata de la Nueva Toledo, old name for Sucre, Bolivia.
+17.11	Viceroyalty of La Plata
+17.12	La Plata FC, 3rd tier football club from Argentina
+18.1	Labyrinth was an elaborate maze in Greek mythology constructed by the artificer Daedalus to hold the Minotaur
+18.2	Labyrinth(film), a 1986 fantasy film directed by Jim Henson
+18.3	Pan's Labyrinth, a 2006 Spanish film by Guillermo del Toro
+18.4	Labyrinth(inner ear), a system of fluid passages in the inner ear
+18.5	Labyrinth fish, a group of freshwater fishes that can inhale air directly with a special lung-like labyrinth organ
+18.6	Labyrinth seal, a mechanical seal that fits around a rotating shaft to prevent the leakage of oil or other fluids
+18.7	Labyrinth(Antarctica), a valley in Antarctica
+18.8	Labyrinths, a collection of short stories and essays by Jorge Luis Borges
+18.9	Labyrinth(book), a historical novel by writer and journalist Kate Mosse
+18.10	Labyrinth(band), an Italian power metal band
+18.11	Labyrinth(Juno Reactor album), a 2004 album by Goa trance group Juno Reactor
+18.12	"Labyrinth", a song by The Cure on their 2004 album The Cure(album)
+18.13	Labyrinth(solitaire), a solitaire card game
+18.14	Labyrinth(Acornsoft), a video game for the BBC Micro
+18.15	Labyrinth Zone, a level in the Sega Genesis and Sega Master System&amp; Game Gear versions of Sonic the Hedgehog
+18.16	Labyrinth(Broderbund), an early Apple II maze-based game
+19.1	Landau, city in Rhineland-Palatinate, Germany.
+19.2	Landau an der Isar, town in Bavaria, Germany.
+19.3	Dingolfing-Landau, district in Bavaria, Germany.
+19.4	Petit-Landau( Kleinlandau), village in Haut-Rhin, France.
+19.5	Landau Prison, Hauppauge, Long Island, New York
+19.6	Landau Forte College, Derby, United Kingdom
+19.7	Abe Landau, German-American-Jewish gangster
+19.8	Adolph Yefimovich Landau, Russian journalist and publisher; born at Rossienny, Russia
+19.9	Chaim Landau, Israeli Minister of Transportation
+19.10	David Landau, Israeli journalist
+19.11	Edmund Landau, German mathematician
+19.12	Jacob Landau
+19.13	Jon Landau, American music critic and record producer
+19.14	Jon Landau, American film producer
+19.15	Juliet Landau, American actress
+19.16	Kurt Landau, see Gruppe Funke( de)
+19.17	Leopold Landau, German gynecologist; born at Warsaw
+19.18	Lev Davidovich Landau, Soviet physicist
+19.19	Martin Landau, American actor
+19.20	Michael Landau, American session guitarist
+19.21	Ralph Landau,[1]
+19.22	Robin H. Landau, Professor of Physics at Oregon State University
+19.23	Siegfried Landau, founder of the Brooklyn Philharmonic
+19.24	Uzi Landau, Israeli politician
+19.25	Wolf Landau, German rabbi and author; born at Dresden
+19.26	Rabbi Yechezkel Landau, Jewish theologian&amp; decisor
+19.27	See Landauer(disambiguation)Landauer
+19.28	Landau's function
+19.29	Landau distribution
+19.30	Landau quantization
+19.31	Landau symbol
+19.32	Landau-Kleffner syndrome
+19.33	Landau-Ramanujan constant
+19.34	Landau's constants
+19.35	Ginzburg-Landau theory
+19.36	DLVO Derjaguin-Landau-Verwey-Overbeek theory
+19.37	The landau coachbuilding and car body style.
+20.1	Life on Mars, the possibility of life on the planet Mars
+20.2	Martians, fictional intelligent inhabitants of Mars
+20.3	" Life on Mars?", the David Bowie song from the album Hunky Dory
+20.4	Life on Mars(TV series), a British television drama series that takes its title from the Bowie song
+20.5	Life on Mars(US TV series), an American television drama series, based on the British series
+20.6	Life on Mars, a Lego Space theme released in 2001
+20.7	"Life on Mars"(The West Wing), episode 86 of the American TV-series The West Wing
+21.1	The locust, a swarming grasshopper.
+21.2	The cicada, often referred to as a seven-year locust.
+21.3	The magicicada, often referred to as a 13-year or 17-year locust.
+21.4	Various plants, especially of the genera Gleditsia and Robinia:
+21.5	The Locust, a US noise-rock band from California.
+21.6	Locust(musician), an alias of electronic artist Mark Van Hoen.[1] from Touch Records.
+21.7	Locust Music, a Chicago based record label.
+21.8	"Locust", a song by a-ha from their 1993 album Memorial Beach.
+21.9	Locust Abortion Technician, an album by the Butthole Surfers.
+21.10	Locust(community), a pioneering SMS chat community in the UK.
+21.11	The Locust(car), a kit car inspired by the Lotus 7.
+21.12	The M22 Locust, a light tank.
+21.13	Locust, North Carolina is a place in Stanly County; the zip code is 28097.
+21.14	Locust Horde, the main enemy force in the Xbox 360 third-person shooter video game Gears of War by Epic Games.
+21.15	Locust(mech) is a small mech in the Mechwarrior used mostly for recon.
+22.1	The novel The Magic Mountain by Thomas Mann
+22.2	Six Flags Magic Mountain, a theme park in Valencia, California
+22.3	Magic Mountain Water Park, a water park in Moncton, New Brunswick
+22.4	Magic Mountain(roller coaster), a steel roller coaster in Italy
+22.5	Magic Mountain, a former theme park in Gold Coast, Australia which closed down in the late 1980s
+22.6	Magic Mountain, Idaho, a small ski area south of Twin Falls, Idaho
+22.7	Magic Mountain, Glenelg, a former theme park in Adelaide, Australia
+22.8	Magic Mountain, Merimbula, a theme park in Australia.
+22.9	Magic Mountain, Vermont, a snow-challenged ski area in Londonderry, Vermont
+22.10	Magic Mountain(Washington), a high peak near Cascade Pass in the North Cascades of Washington
+23.1	A matador is the main bullfighter who must kill the bull
+23.2	The Matador, a 2005 film starring Pierce Brosnan
+23.3	Matador(TV series), a Danish TV series.
+23.4	Matador(film) a film directed by Pedro Almodóvar.
+23.5	Matador Records, a record label
+23.6	Matador(musical), based on the story of bullfighter El Cordobés
+23.7	Lloyd'Matador' Daley, a Jamaican record producer and sound system pioneer
+23.8	Matador(song) a song by the Argentine group Los Fabulosos Cadillacs.
+23.9	Mattador was a rock band from Puerto Rico.
+23.10	Matador(Wildstorm Comics), a mini-series by Devin Grayson and Brian Stelfreeze
+23.11	Matador(Marvel Comics), a super-villain in Marvel Comics
+23.12	MATADOR(weapon), an anti-armour missile system developed by Singapore
+23.13	MGM-1 Matador, one of the first cruise missiles ever introduced
+23.14	AEC Matador, a military vehicle used by the Allies during World War II
+23.15	Operation Matador is the name of several military or intelligence plans.
+23.16	Operation Matador(Iraq) is the most recent of the above mentioned.
+23.17	AMC Matador, an automobile manufactured by American Motors Corporation
+23.18	Matador(company), a Slovakia-based global tire producer
+23.19	FK Matador Púchov, a Slovak football club, sponsored by the tyre producer
+23.20	Matador(game), Danish version of the board game Monopoly
+23.21	Carinthian Matadors Rugby Football Club, Rugby Club in Carinthia, Austria
+23.22	Matador(bodyguard) is a member of an elite bodyguard team in the Matador series of science fiction novels by Steve Perry
+24.1	Metamorphosis is a biological process by which an animal physically develops after birth
+24.2	Metamorphosis I, a woodcut print by the Dutch artist M. C. Escher which was first printed in May, 1937
+24.3	Metamorphosis II, a woodcut print by the Dutch artist M. C. Escher
+24.4	Metamorphosis III, a woodcut print by the Dutch artist M. C. Escher which was created between 1967 and 1968
+24.5	Metamorphosen, the subtitle of Penderecki's Violin Concerto No. 2
+24.6	Metamorphosis(Hilary Duff album), the second album by American pop singer Hilary Duff
+24.7	Metamorphosis(Iron Butterfly album), the fourth studio album by Iron Butterfly
+24.8	Metamorphosis(Rolling Stones album), the third compilation album of Rolling Stones music
+24.9	Metamorphosis(Zero Hour album), a rerelease of Zero Hour's eponymous debut album
+24.10	Metamorphosis(Ulver EP), the first EP by avantgarde-electronica band Ulver
+24.11	"Metamorphosis"( Smallville episode), the second episode of the first season of the WB original series, Smallville
+24.12	"Metamorphosis"( Stargate SG-1), an episode of the science fiction television series Stargate SG-1
+24.13	"Metamorphosis"( TOS episode), a second season episode of Star Trek: The Original Series first broadcast November 10, 1967
+24.14	"The Metamorphosis"( The O.C. episode), the 80th episode of the FOX television series, The O.C.
+24.15	Metamorphosis(illusion), a stage illusion invented by John Nevil Maskelyne
+24.16	The Metamorphosis, a novella by Franz Kafka
+24.17	Metamorphism in geology
+25.1	Minotaur, a mythological monster, half-man and half-bull
+25.2	Minotaur(film), a 2006 horror film
+25.3	Minotaur(rocket), an American rocket designed to launch small satellites
+25.4	HMS Minotaur, a historical shipname of the Royal Navy
+25.5	Minotaur: The Labyrinths of Crete, a 1992 computer game
+25.6	Minotaur(store), a pop culture store in Melbourne.
+25.7	Minotaur International, an international distributor of British television programmes owned by Virgin Media.
+26.1	Mira, a variable star.
+26.2	Mitaka IR Array, a Japanese astronomy project( official site).
+26.3	Mira, Italy, a town near Venice, Italy.
+26.4	Mira, Portugal, a town and municipality in the district of Coimbra, Portugal.
+26.5	Mira, Spain, a municipality in Cuenca province, Castile-La Mancha, Spain
+26.6	Mira, Louisiana, a town in the United States
+26.7	Mira Ferry, Nova Scotia, a community on the Mira River now known as Albert Bridge in Nova Scotia, Canada
+26.8	Mira River, Canada, in southeastern Cape Breton Island, Nova Scotia, Canada; it is the subject of a folk song by Allister MacGillivray.
+26.9	Mira River, Portugal, in southwestern Alentejo.
+26.10	MIRA, a romance novel line published by Harlequin/ Mills&amp; Boon.
+26.11	Mira(Encantadia), a fictional character in the Philippine television series Encantadia.
+26.12	Mira(Star Wars), a playable character in the videogame Star Wars: Knights of the Old Republic II: The Sith Lords.
+26.13	Mira(movie), a movie from Fons Rademakers( 1971)
+26.14	Mira Sorvino(born 1967), an Academy Award-winning American actress.
+26.15	Mira Nair(born 1957), an Indian-American Academy Award-nominated director
+26.16	Daihatsu Mira, a Keicar(compact car) manufactured by Daihatsu.
+26.17	Movement for Islamic Reform in Arabia, a Saudi dissident group with terrorist affiliations
+26.18	Mira(mirror), a semi-transparent mirror used for teaching geometry
+26.19	MIRA Foundation, a foundation dedicated to assisting people with disabilities achieve all that an able-bodied person can do.
+26.20	Motor Industry Research Association, an automotive company based in the United Kingdom.
+26.21	Mira(band), a Tallahassee, FL darkwave band
+26.22	Smart Display(development codename: Mira), a failed 2002 Microsoft product for a portable touchscreen terminal.
+27.1	A mirage is an optical phenomenon
+27.2	The Mirage, a 3,044 room hotel and casino resort located on the Las Vegas Strip
+27.3	El Mirage, Arizona, a city in Maricopa County, Arizona
+27.4	Rancho Mirage, California, a city in Riverside County, California
+27.5	Mirage(Camel album), an album released in 1974 by Camel
+27.6	Mirage(Fleetwood Mac album), an album by Fleetwood Mac
+27.7	Mirage(Klaus Schulze album), the eighth album by Klaus Schulze
+27.8	Mirage(Meat Puppets album), an album by the Arizona alternative rock band Meat Puppets
+27.9	Mirages(album), the fourth full-length album by Tim Hecker
+27.10	Mirage(band), a 1990s progressive rock band
+27.11	Mirage(pop group), a Russian pop group founded in Moscow in 1987
+27.12	A 1991 album by Bobby Hutcherson
+27.13	The third track on Enigmatic Ocean, an album by Jazz-Fusion artist Jean-Luc Ponty
+27.14	Mirage(Aladdin), a fictional character in the Disney animated series Aladdin
+27.15	Mirage(character), an ex-villainess featured in the film The Incredibles
+27.16	Mirage(comics), the name of two DC Comics characters
+27.17	Mirage(Magic: The Gathering), the fifteenth Magic: The Gathering collectible card game set
+27.18	Mirage(Transformers),the name of several fictional characters in the various Transformers universes
+27.19	The codename of Danielle Moonstar, a Marvel Comics superhero associated with the X-Men
+27.20	A 1965 film starring Gregory Peck
+27.21	A one-off character from Static Shock
+27.22	Mirage(aircraft), a series of different military jets produced by the French aircraft manufacturer Dassault Aviation
+27.23	Mirage(chocolate), a chocolate bar is made by Nestle Canada
+27.24	Mirage(race car), modified Ford GT40 race cars
+27.25	Mirage Studios, an independent American comic book company founded in 1983 by Kevin Eastman and Peter Laird
+27.26	Fata Morgana(mirage), an optical phenomenon which results from a temperature inversion
+27.27	Mitsubishi Mirage, a subcompact car produced by Mitsubishi Motors from 1978 to 2002
+27.28	MirageOS, a graphical shell for TI-83+ and TI-84+ calculators
+27.29	Quantel Mirage, a digital real-time video effects processor introduced in 1982
+27.30	The former stage name of Briana Banks, a German-born pornographic actress and model
+27.31	Mirage Koas, character in tri-Ace's role playing video game Star Ocean: Till the End of Time
+28.1	Chevrolet Monte Carlo, an American automobile
+28.2	Monte Carlo, a place in Monaco.
+28.3	Monte Carlo(solitaire), a Solitaire card game
+28.4	Monte Carlo(song), a song by The Verve
+28.5	Monte Carlo(yacht), a superyacht
+28.6	Monte Carlo integration, a method of numerical integration
+28.7	Monte Carlo method, a class of computational algorithms
+28.8	Monte Carlo Resort and Casino, a casino on The Strip in Las Vegas
+28.9	Montecarlo, 1956 US film
+28.10	Montecarlo, Italy, a town.
+29.1	Oppenheim, Germany
+29.2	Oppenheim, New York
+29.3	Abraham Chayyim Oppenheim, Rabbi at Péczel, Hungary
+29.4	Alan V. Oppenheim, professor of Electrical Engineering at MIT and author
+29.5	Alfred Freiherr von Oppenheim(1934–2005), former associate of Sal. Oppenheim
+29.6	E. Phillips Oppenheim(1886–1946), English novelist
+29.7	Heinrich Bernhard Oppenheim(1819–1880), German jurist, politician and philosopher
+29.8	Hermann Oppenheim(1858–1919), German neurologist
+29.9	James Oppenheim(1882–1932), US poet author and editor
+29.10	Max von Oppenheim(1860–1946), German diplomat and archaeologist
+29.11	Meret Oppenheim(1913-1985), Swiss artist and lyricist
+29.12	Moritz Daniel Oppenheim, German painter
+29.13	Salomon Oppenheim(1772–1828), founder of the Sal. Oppenheim bank
+30.1	Out of Control, a Nickelodeon comedy television series.
+30.2	Out of Control(album), an album by the Anti-Nowhere League
+30.3	Out of Control(Peter Criss album), a 1980 album by former KISS drummer Peter Criss
+30.4	Out of Control(The Chemical Brothers song), a single by The Chemical Brothers
+30.5	Out of Control(U2 song), a song by U2.
+30.6	Out of Control(She Wants Revenge song) is a song by She Wants Revenge.
+30.7	Out of Control(Hoobastank song), a single by Hoobastank
+30.8	Out Of Control(TSR episode), an episode of That's So Raven.
+30.9	Out of Control: The New Biology of Machines, Social Systems, and the Economic World, a book by Kevin Kelly.
+30.10	Out of Control(John Reuben song), a song by John Reuben appearing on the album The Boy vs. The Cynic
+30.11	Out of Control(film), a film by Apurva Asrani and Ramanjit Juneja
+30.12	Out of Control, a song by Edguy featuring guest vocals from Blind Guardian's Hansi Kürsch.
+30.13	Out of Control, a BBC television miniseries starring Tamzin Outhwaite that was produced in the early 2000s
+30.14	Fast, Cheap and Out of Control, a non-fiction film by documentary filmmaker Errol Morris
+31.1	A pelican is a bird of the family Pelecanidae
+31.2	Pelican, Alaska
+31.3	Pelican, Wisconsin
+31.4	Pelican, Lake Macquarie
+31.5	Boeing Pelican, the large-capacity low-altitude transport aircraft currently being studied by the Boeing Phantom Works
+31.6	Pelican, the former name of Sir Francis Drake's ship Golden Hind
+31.7	Pélican, the flagship of Pierre Le Moyne d'Iberville on his expedition to the Mississippi
+31.8	Le Pélican a replica of Pélican built in Quebec and moored at Donaldsonville, Louisiana
+31.9	HMS Pelican, Royal Navy ship
+31.10	Pelican(privateer), a ship which sank in 1793
+31.11	DC-77 Pelican, in the fictional Halo universe, a classification of ship in the UNSC fleet. Used to transport infantry, vehicles, and other war supplies in terrestrial environments
+31.12	pelican, ancient A term of respect and admiration rendered to a revered, accomplished, experienced professional aviator, normally one with 5000 hours or more of flying, and noted for unparalleled airmanship. The term"ancient pelican" was notably used in referring to the lead character, Dan Roman, at the closing of The High and the Mighty, Ernest K. Gann's classic story of bravery and resolve. This book was made into a 1954 movie screenplay, with John Wayne playing that lead role. See also the website of The American Society of Ancient Pelicans http://www.valleyflyingclub.com/ancientpelican/]]
+31.13	Pelican Accessories, a company that makes 3rd party video game accessories
+31.14	Pelican(band), a post-metal band from Chicago
+31.15	Pelican Books, a non-fiction imprint of Penguin Books
+31.16	Pelican case, a watertight case made by Pelican Products
+31.17	Pelican crossing, a type of pedestrian road crossing
+31.18	Pelican Nebula, an HII region located toward the constellation Cygnus
+31.19	Pelican(newspaper), the University of Western Australia student newspaper
+31.20	Pelican Products, a producer of high quality cases and flashlights
+31.21	Pelicans(ice hockey), a Finnish ice-hockey team playing in the national elite league SM-liiga
+31.22	a possible misspelling of Pelikan, a human surname
+31.23	Pelikan, a German manufacturer of writing equipment
+31.24	an antiquated nickname for an inhabitant of Gibraltar
+32.1	Purple Haze, a large run of high quality LSD produced in 1966 by Owsley Stanley
+32.2	Purple Haze, a 1967 song by The Jimi Hendrix Experience
+32.3	Purple Haze(film), a 1982 film by David Burton Morris
+32.4	Purple Haze(promo), a 1993 promo-only release the Hendrix song from The Cure
+32.5	Purple Haze(album), a 2004 album by a rapper Cam'ron
+32.6	Purple Haze(marijuana), the street name of a high-potency strain of Cannabis sativa
+32.7	Purple Haze(Beer), an American beer
+32.8	Purple Haze(Eureka), an episode of Eureka TV series.
+32.9	Purplehaze, one of 17 colors of the Sonochrome spectrum of pre-tinted film stocks introduced by Kodak
+32.10	A slang term for the M-18 violet smoke hand grenade used by United States armed forces during the Vietnam War[1]
+32.11	Trapped in a Purple Haze, a TV movie
+33.1	United Arab List, Hebrew. acr. of Reshima Aravit Me'uchedet:רשימהערביתמאוחדת)(political party in Israel)
+33.2	Race Across America, a bicycle race
+33.3	rec.arts.anime.misc, a Usenet newsgroup
+33.4	Raam(film), a 2005 Tamil film
+33.5	Recursive Auto Associative Memory
+33.6	RAAM, a currency of the Netherlands.
+33.7	General RAAM, a general of the locust horde in Gears of War.
+33.8	Raam(Netherlands), a village
+34.1	Rhea, R&amp;B Singer
+34.2	Rhea Hughes, Philadelphia radio personality
+34.3	Rhea Perlman(b.1948), US television actress
+34.4	M. Rhea Seddon(b.1947), NASA astronaut
+34.5	Rhea Tregebov, Canadian poet and children's author
+34.6	Caroline Rhea(b.1964), stand-up comedian, television actress and host
+34.7	James Rhea(1791-1812), US soldier
+34.8	La Julia Rhea(1908-1992), US opera singer
+34.9	John Rhea(1753-1832), US Congressman
+34.10	Rhea County, Tennessee
+34.11	Rea, Italy
+34.12	Rhea of the Cöos, character in Stephen King's Dark Tower novels
+34.13	Rhea Jones, DC comics character
+34.14	Rhea(mythology), one of the manifestations of the Great Goddess who was worshiped broadly around the ancient world and later, in Greek mythology among the Titans, the sister and wife of Cronus, the mother goddess who gave birth to many of the other major gods and goddesses
+34.15	Rhea Silvia, in Roman mythology the mother of the twins Romulus and Remus
+34.16	Rhea, a separate figure to Rhea Silvia, mother of Aventinus by Hercules
+34.17	Rhea(bird), large flightless birds native to South America
+34.18	Rhea(moon), moon of Saturn
+34.19	577 Rhea, asteroid
+35.1	Scorpion, an eight-legged invertebrate animal belonging to the order Scorpiones
+35.2	Scorpius, an astronomical constellation and a sign of the zodiac
+35.3	Scorpion(computer), a Soviet clone of the ZX Spectrum computer
+35.4	Scorpions(South Africa), a South African government anti-corruption agency
+35.5	Akrabbim(Hebrew for Scorpion), a mountain in the Bible infested with scorpions
+35.6	King Scorpion(Serket), one or more Egyptian Pharaohs in the Protodynastic period
+35.7	Scorpion Sports, a motorcycle helmet manufacturing company
+35.8	" Scorpion(Voyager episode)", a two-part episode of Star Trek: Voyager
+35.9	Scorpion(roller coaster), an attraction at Busch Gardens Africa in Florida
+35.10	Scorpion kick, a footballing move made famous by Columbian goalkeeper René Higuita
+35.11	Scorpions(Iraq), a paramilitary organization of Iraqi exiles funded by the CIA
+35.12	VAQ-132 The Scorpions, a United States Navy EA-6B Prowler Electronic Attack squadron based at NAS Whidbey Island, Washington
+35.13	Scorpions(former Yugoslavia), a paramilitary unit from Serbia involved in the 1995 Srebrenica massacre
+35.14	Ballista, a Greco-Roman war machine also called a scorpion
+35.15	Scourge, a multi-tail whipping device, since Roman times also called scorpio or scorpion
+35.16	CZ-Scorpion, a Czech submachine gun
+35.17	CSS Scorpion, a torpedo boat of the Confederate Navy
+35.18	HMS Scorpion, several ships of the Royal Navy
+35.19	USS Scorpion, several vessels of the United States Navy
+35.20	F-89 Scorpion, a U.S. jet fighter
+35.21	FV101 Scorpion, a British light tank
+35.22	Soviet submarine B-427, a Foxtrot-class Soviet submarine since renamed the Scorpion after decommissioning
+35.23	Scorpions(band), a German hard rock band
+35.24	The Scorpions(Manchester band), a group from Manchester from the'60s
+35.25	The Scorpions(London band), an instrumental trio from London who recorded for Parlophone in 1961
+35.26	Scorpion(album), an album by rapper Eve
+35.27	"The Scorpion", a song from the Megadeth album The System Has Failed
+35.28	Scorpion(comics), a name used by multiple characters published by Marvel Comics including:
+35.29	Scorpion(Atlas Comics), a short lived Atlas comics series in the 1970s
+35.30	Scorpion(Mortal Kombat), a character from the fighting game series Mortal Kombat
+35.31	Scorpion(Slam Masters), a wrestler from the video game Slam Masters
+35.32	Scorpion(solitaire), a type of solitaire card game
+36.1	The Little Mermaid, a fairy tale about a young mermaid by the Danish author Hans Christian Andersen
+36.2	The Little Mermaid, a statue in Copenhagen honoring Hans Christian Andersen
+36.3	The Little Mermaid, a symbol featured in the Coat of Arms of the city of Warsaw
+36.4	The Little Mermaid(video game), based on the Disney movie
+36.5	The Little Mermaid(ballet), based on the tale by Hans Christian Andersen
+36.6	The Little Mermaid(1989 film), the Disney animated movie based on the original fairy tale
+36.7	The Little Mermaid II: Return to the Sea
+36.8	The Little Mermaid III
+36.9	The Little Mermaid(1992 film)( GoodTimes Entertainment)
+36.10	"The Little Mermaid"(1987 film)(USA)- short film
+36.11	The Little Mermaid(1980 film)( La petite sirène, France)
+36.12	The Little Mermaid(1976 film)( Rusalochka, USSR)
+36.13	The Little Mermaid(1975 film/I)( Anderusen douwa: Ningyo hime, Japan; anime, released in the USA in 1979)
+36.14	The Little Mermaid(1975 film/II)( Malá morská víla, Czechoslovakia)
+36.15	The Little Mermaid(1968 film)( Rusalochka, USSR); animated
+36.16	The Little Mermaid(series), a cartoon series based on Disney's animated film
+36.17	Saban's Adventures of the Little Mermaid, a series by Saban Entertainment
+36.18	The Little Mermaid(musical), a Broadway stage musical based on Disney's animated film
+37.1	Tortuga is an island in Haiti
+37.2	The Spanish word for a turtle or tortoise
+37.3	Freeport Tortuga, a project off the coast of Haiti located on Tortuga
+37.4	Dry Tortugas, part of the Florida Keys
+37.5	USS Tortuga, one of two United States Navy ships
+37.6	La Tortuga Island, an island off Venezuela, part of the Federal dependencies of Venezuela
+37.7	Tortuga(vehicle), a nickname given to a Venezuelan indigenous armored vehicle in 1934
+37.8	Tortuga Caribbean Rum Cake, a brand of rum cake
+37.9	Tortuga Island, Peru, and island in the department of Ancash
+37.10	Tortuga(Pirates of the Caribbean), the island Tortuga as depicted in the Pirates of the Caribbean universe
+38.1	Urania, a muse in Greek mythology
+38.2	Urania, an Oceanid
+38.3	A work by Lady Mary Wroth.
+38.4	Urania, Louisiana, a town
+38.5	Urania(magazine), a number of science fiction periodical magazines
+38.6	30 Urania, an asteroid
+38.7	Urania, a German science magazine
+38.8	Urania, a rock band from Honduras
+38.9	Urania(record label)
+38.10	Urania(Antwerp), an observatory
+38.11	Urania(Vienna), an observatory
+38.12	Urania, a butterfly genus
+38.13	Uranium dioxide, or urania, or uranic oxide
+38.14	Urânia, a city in the state of São Paulo, Brazil
+39.1	The wink is a facial expression
+39.2	Wink Davenport, American volleyball player
+39.3	Wink Martindale, US games-show host
+39.4	Josh Wink, electronic music figure who also performed as Winx and Wink
+39.5	Walter Wink, theologian and political theorist.
+39.6	Steffen Wink, German actor
+39.7	Chris Wink, co-founder of Blue Man Group.
+39.8	wink.com, a US based social search engine.
+39.9	WINK, local broadcaster in Fort Myers, Florida
+39.10	Wink(game), a modified wrestling game
+39.11	Wink(soft drink), a grapefruit base soft drink
+39.12	Wink(animated file), an instant messaging feature
+39.13	Wink(tutorial software), a free computer program for creating tutorials and presentations
+39.14	Wink(J-Pop), a female Japanese pop duo
+39.15	A disc shaped playing piece in the game tiddlywinks
+39.16	Wink, Texas
+39.17	A wink is a portmanteau of wiki and link, denoting an internal link within a wiki
+40.1	Xanadu is the name of the summer capital of Kublai Khan's empire
+40.2	Xanadu(Citizen Kane), the fictional mansion built by Charles Foster Kane in the film Citizen Kane
+40.3	Xanadu(film), film starring Olivia Newton-John and Gene Kelly
+40.4	Xanadu(musical), Broadway musical starring Kerry Butler, James Carpinello, and Tony Roberts
+40.5	Xanadu(soundtrack), the soundtrack of the film
+40.6	"Xanadu"(Olivia Newton-John/ELO), a hit single performed by Olivia Newton-John and Electric Light Orchestra from the film soundtrack
+40.7	"Xanadu"(song), a song recorded by the Canadian progressive rock trio Rush for their album A Farewell to Kings
+40.8	Xanadu Records a jazz record label.
+40.9	Xanadu(Titan), an enigmatic bright feature on the surface of Saturn's moon Titan
+40.10	Xanadu(artist), artist from New York that in 1980 recorded the song"Sure Shot"
+40.11	Xanadu(comics), a comic book series by Vicki Wyman
+40.12	Xanadu(video game), a computer role-playing game developed by Nihon Falcom Corporation
+40.13	Xanadu(snowpark), the biggest indoor snowpark in Europe, located at Arroyomolinos, near Madrid
+40.14	Xanadu(virtual world), in the French animated pilot Garage Kids
+40.15	The Legend of Xanadu, a song by Dave Dee, Dozy, Beaky, Mick and Tich
+40.16	The Legend of Xanadu(video game), a video game developed by Nihon Falcom Corporation for the PC Engine
+40.17	" Watching Xanadu", a single recorded by Mull Historical Society
+40.18	Project Xanadu, an ambitious early non-markup hypertext project
+40.19	Xanadu House, a series of experimental homes, built to showcase computers and automation in the home
+40.20	Xanadu 2.0, the nickname of Bill Gates' futuristic private estate
+40.21	Meadowlands Xanadu, a proposed entertainment, sports, and retail complex in New Jersey
+41.1	Zebra, a genus of the horse genus Equus whose members have vivid black-and-white stripes
+41.2	A species of fish in the genus Maylandia(family: Cichlidae)
+41.3	Zebra Danio a small minnow-like fish. Various other fish are also known as Zebra fish.
+41.4	Zebra mussel, a bivalve mussel native to freshwater lakes of southeast Russia
+41.5	GNU Zebra, a network routing software package
+41.6	Zebra Technologies, a printer manufacturer specializing in bar code and label printers
+41.7	The ZEBRA(computer), an early Dutch computer
+41.8	The Zebras, a pop band from Australia
+41.9	Zebra(band), a hard rock/heavy metal group from 1977 to the present
+41.10	Zebra(Yello album), a 1994 album by Yello
+41.11	Zebra(song), a 2003 album by The John Butler Trio
+41.12	"Zebra," a song by The Magnetic Fields from their 1999 album 69 Love Songs
+41.13	Zebra, a record label
+41.14	Zebra Records, a record label
+41.15	Zebra Traffic, a record label
+41.16	Zebra crossing, a type of pedestrian crossing used in the UK and parts of Europe
+41.17	Zebra battery
+41.18	HMS Zebra, the name of six ships of the Royal Navy
+41.19	USS Zebra(AKN-5), a cargo ship of the United States Navy
+41.20	Zebra(ship) a three-masted merchant ship, built in 1818
+41.21	Zebra, a South Devon Railway 4-4-0ST steam locomotive
+41.22	" Zebra(medical)", a medical term for an obscure and unlikely diagnosis from ordinary symptoms
+41.23	Zebra, a sodium-nickel-chloride molten salt battery using a beta-alumina solid electrolyte
+41.24	A fairy chess piece
+41.25	Zebra Pen Corporation, manufacturer of Gel Pens, Ball Point Pens, Liquid-Ink Rollerballs, etc.
+41.26	Zebra murders
+41.27	A common slang term for referees in American Football, due to the striped uniforms they wear
+41.28	Zebra, an event of Operation Sandstone, a nuclear weapon test series conducted by the United States in 1948
+41.29	Zebra patterning, a feature on some video cameras which aids in preventing over-exposure
+42.1	The zenith is the point in the sky that appears directly above the observer. (opposite: nadir). In general, zenith may mean "highest point", used in sentences like Mount Everest is the zenith of the world
+42.2	A Montgolfier balloon flown to a record of over 8,000m in 1875; see timeline of aviation—19th century(1870s)
+42.3	Zenith Aircraft Company, a manufacturer of light aircraft
+42.4	Zenith(watchmaker), a Swiss watchmaker
+42.5	Zenith Carburetters
+42.6	Zenith Data Systems
+42.7	Zenith Electronics Corporation
+42.8	Zenith FM, a local radio station in Kiato, Greece
+42.9	Zenit(camera), a Russian camera brand produced by KMZ(spelled as Zenith in some English-language literature)
+42.10	Monsieur Zenith the Albino is an ambiguous villain created by writer Anthony Skene for the Sexton Blake series of detective pulp fiction.
+42.11	Zenith(comics), a superhero comic series written by Grant Morrison that first appeared in 2000 AD
+42.12	Zenith(DC Comics) has also existed as a fictional city in the DC Universe since 1947.
+42.13	Zenith is a fictional city in Winnemac(fictional state), from the Babbitt, Arrowsmith and Elmer Gantry novels by Sinclair Lewis.
+42.14	Zenithia, or Zenith, a sky castle from the Dragon Quest videogame series.
+42.15	The Zenith Carrier Zord is based on a shark, and is a fictional machine in Power Rangers Lost Galaxy
+42.16	Zenith is a book written by Julie Bertagna
+42.17	Le Zénith, a famous concert hall in Paris
+42.18	Zenith Brass Ensemble, a youth brass choir in Michigan, USA
+42.19	Zenith(magazine)(later Speculation(magazine) was a Hugo Award-nominated science fiction fanzine edited by Peter Weston
+42.20	The Zenith number, also known as Enterprise or WX, referring to a toll-free telephone service
+42.21	Zenith(analog recording) is the angle that a tape head tilts in an analog recording tape machine
+43.1	Zodiac denotes several places where a circle of twelve animals occurs
+43.2	The Zodiac Killer, the nickname of a serial killer operating in California during the 1960s and 1970s
+43.3	Several professional wrestlers, including Mick Foley and Louie Spicolli
+43.4	Zodiac(schooner), a historic schooner homeported in Seattle, USA
+43.5	The"Zodiac Brave Story," a subtitle of Final Fantasy Tactics
+43.6	AMD Zodiac a light sport aircraft
+43.7	Zodiac(gang), a disbanded gang of hell's angels in Tokyo, Japan
+43.8	Zodiaq, a quartz-like countertop compound by Dupont
+43.9	Zodiac(novel), a 1988 novel by Neal Stephenson about guerilla environmentalism
+43.10	Short Trips: Zodiac, a Big Finish Short Trips anthology on Doctor Who
+43.11	Zodiac(comics), a group of supervillains in the Marvel Universe
+43.12	Zodiac Group, a corporation specializing in the production of aerosafety systems
+43.13	Zodiac Watch, a brand owned by Fossil, Inc.
+43.14	Zodiac Entertainment a production company best known for Widget the World Watcher
+43.15	Zodiac Hotels, Enugu, hotel in Enugu, Nigeria
+43.16	Tapwave Zodiac, a palmtop computer
+43.17	Zodiac(cipher), a Korean encryption algorithm
+43.18	Zodiac(musical group), a Latvian(USSR) musical group in 1980s
+43.19	The Zodiac, a one-shot musical group in the late 1960s
+43.20	The Zodiac(club), a nightclub and music venue in Oxford, United Kingdom
+43.21	Zodiac Records, a record label
+43.22	Mobile Suit Gundam Wing an organisation named OZ(its Organisation of Zodiac)
+44.1	A zombie is an undead person, or, figuratively, a very apathetic person
+44.2	Philosophical zombie, or p-zombie, a hypothetical person who only appears to think and feel
+44.3	Zombie cocktail, a mixed drink
+44.4	Zombie ball, a magic trick in which a metal sphere appears to levitate while covered with a silk cloth
+44.5	Zombie walk, an organized gathering of people dressed up as zombies
+44.6	A derisive name for Canadian conscripts during World War II. See Conscription Crisis of 1944.
+44.7	The Zombies, a 1960s British band
+44.8	Rob Zombie, a singer, songwriter, artist, and film director
+44.9	White Zombie(band), a noise rock/metal formed by Rob Zombie
+44.10	Zombie(album), an album by Fela Kuti and Afrika 70
+44.11	Zombie(song), a song originally by The Cranberries
+44.12	White Zombie(film), a 1932 film starring Bela Lugosi
+44.13	Dawn of the Dead(1978 film), titled Zombi or Zombies in the European version, directed by George Romero
+44.14	Zombi 2, a 1979 horror film
+44.15	Wicked Little Things, a 2006 horror film also known as Zombies
+44.16	Zombie(novel), a 1996 novel by Joyce Carol Oates
+44.17	Le Zombie, a science fiction fanzine published by Bob Tucker
+44.18	A comic book character owned by Marvel Comics
+44.19	Tim Arson, a professional wrestler who sometimes goes by the name of"The Zombie"
+44.20	"zombie", the pseudonymous photographer who runs the website zombietime
+44.21	Zombie computer, a computer taken over by an outside user
+44.22	Zombie process, an inactive computer process
+44.23	Zombies!!!, a series of board games by Twilight Creations
+44.24	Zombie, a variation of the game"Hide and seek"
+44.25	Zombies Ate My Neighbors, a video game

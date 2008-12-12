@@ -1,0 +1,12 @@
+body {
+	background-color: #ffffdc;
+	padding: 5px;
+}
+
+dd {
+}
+
+dt {
+	padding-top: .5em;
+	font-weight: bold;
+}

@@ -1,9 +1,0 @@
-
-<component name="junit-addons" description="JUnit Addons 1.4, http://sourceforge.net/projects/junit-addons">
-	<provides>
-		<files>
-			<file location="junit-addons-1.4.jar" />
-			<file location="junit-addons.LICENSE" />
-		</files>
-	</provides>
-</component>

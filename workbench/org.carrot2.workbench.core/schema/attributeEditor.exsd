@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.carrot2.workbench.core">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.carrot2.workbench.core" id="attributeEditor" name="Attribute Editor"/>
+      </appInfo>
+      <documentation>
+         Extention point for adding attribute editors. Attribute editors are used to display and possibly 
+edit the values of attributes affecting the input and processing components.
+
+The active attribute editor is selected to maximize its specificity with respect to a given attribute&apos;s descriptor: the type of the editor, number of constraints and possibly other aspects are taken into account. Look at the source code for more information.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="type-editor" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="dedicated-editor" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="type-editor">
+      <annotation>
+         <appInfo>
+            <meta.element labelAttribute="attributeClass"/>
+         </appInfo>
+         <documentation>
+            Used to add an editor that can be used for any attribute of a given type, possibly having a set of constraints.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="constraints" minOccurs="0" maxOccurs="1"/>
+         </sequence>
+         <attribute name="attribute-class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Class or ancestor of an attribute.&lt;br&gt;
+Must return true for &lt;code&gt;AttributeDescriptor.type.isInstance(attributeClass)&lt;/code&gt;.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Class that implement &lt;code&gt;org.carrot2.workbench.editors.IAttributeEditor&lt;/code&gt;.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.carrot2.workbench.editors.IAttributeEditor"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="constraints">
+      <annotation>
+         <documentation>
+            List of constraints that this editor supports.&lt;br&gt;
+When looking for an editor for an attribute that has constraints, editor with matching attributeClass, but with no constraints, will be chosen &lt;b&gt;only&lt;/b&gt; if there is no editor with matching attributeClass and matching constraints.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="constraint" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="all-constraints-required" type="boolean" use="default" value="false">
+            <annotation>
+               <documentation>
+                  If true, than attribute must have all specified constraints. Otherwise, only one of the constraints is enough.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="constraint">
+      <complexType>
+         <attribute name="constraint-class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Class of a constraint. Must be annotated with &lt;code&gt;@IsConstraint&lt;/code&gt;.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":java.lang.annotation.Annotation"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="dedicated-editor">
+      <annotation>
+         <appInfo>
+            <meta.element labelAttribute="attributeId"/>
+         </appInfo>
+         <documentation>
+            Used to add an editor that is dedicated to a specific attribute in a specific component (source or algorithm).
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="attribute-id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Full identifier of the attribute to match.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.carrot2.workbench.editors.IAttributeEditor"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="component-class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Component class against which this dedicated editor will match. This is not the attribute owner class, but rather the ProcessingComponent to whose hierarchy the attribute belongs.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.carrot2.core.ProcessingComponent"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         1.0.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>

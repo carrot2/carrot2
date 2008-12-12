@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="Carrot2 3.0 Bamboo builds" default="help">
+    <property file="${bamboo.build.properties}" />
+
+    <target name="clean" description="Clean build results">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+
+        <!-- clean everything -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="clean" inheritall="true" />
+    </target>
+
+    <target name="build" description="Perform a full build of the core">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+
+        <!-- full build, test and reports -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="reports" inheritall="true" />
+    </target>
+
+    <target name="dist" description="Build Carrot2 distribution">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+
+        <!-- build all distributions and docs -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist" inheritall="true" />
+    </target>
+
+    <target name="publish" depends="publish.artifacts, publish.demo" />
+
+    <target name="publish.demo">
+        <fail unless="webapp.name">Define: webapp.name property.</fail>
+        <fail unless="webapps.dir">Define: webapps.dir property.</fail>
+        <fail unless="tomcat.init">Define: tomcat.init property.</fail>
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+        <property file="${carrot2.code.dir}/etc/version/carrot2.version" />
+
+        <!-- We're assuming the webapp has already been built -->
+        <copy file="${carrot2.code.dir}/tmp/carrot2-webapp-${carrot2.version}.war"
+              tofile="${webapps.dir}/${webapp.name}.war"
+              overwrite="true" />
+    </target>
+
+    <target name="publish.artifacts">
+        <fail unless="dist.dir">Define: dist.dir property.</fail>
+
+        <delete includeemptydirs="true" failonerror="false">
+          <fileset dir="${dist.dir}">
+            <include name="**/*" />
+            <exclude name=".htaccess" />
+            <exclude name="*workbench*" />
+          </fileset>
+        </delete>
+        <copy todir="${dist.dir}" overwrite="true">
+          <fileset dir="${carrot2.code.dir}/tmp">
+            <!-- Exclude reports, we'll link these directly to the build server -->
+            <exclude name="*-report/**" />
+          </fileset>
+        </copy>
+    </target>
+
+    <target name="workbench" description="Perform a full build of the workbench">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+        <fail unless="dist.dir">Define: dist.dir property.</fail>
+
+        <copy file="${workbench.properties}" todir="${carrot2.code.dir}" overwrite="true" />
+        <copy file="${workbench.test.properties}" todir="${carrot2.code.dir}" overwrite="true" />
+        
+        <!-- clean everything -->
+        <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="clean" inheritall="true" />
+
+        <!-- test the workbench -->
+        <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="test" inheritall="true" />
+
+        <!-- build the workbench -->
+        <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="build" inheritall="true" />
+
+        <!-- copy to the distribution dir -->
+        <mkdir dir="${dist.dir}" />
+        <copy todir="${dist.dir}" overwrite="true">
+            <fileset dir="${carrot2.code.dir}/tmp/workbench/build-dir">
+                <include name="*carrot2-workbench/*.zip" />
+            </fileset>
+            <mapper type="flatten" />
+        </copy>
+    </target>
+
+    <target name="help">
+        <echo>This file is used to drive automated Bamboo builds.</echo>
+    </target>
+
+    <target name="check">
+      <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+
+      <echo>All required variables defined.</echo>
+    </target>
+</project>

@@ -1,0 +1,13 @@
+<!DOCTYPE project SYSTEM "../dtd/Project.dtd">
+
+<project name="Search feeds page" default="webtest">
+  <target name="webtest">
+    <webtest name="Search feeds page">
+      &getStartupPage;
+      <clickLink xpath="id('search-area')//a[string(.) = 'Search feeds']" 
+                 description="Click search feeds link" />
+      <verifyXPath xpath="count(id('source-descriptions')/li) &gt; 0" 
+                   description="At least one search feed expected" />
+    </webtest>
+  </target>
+</project>

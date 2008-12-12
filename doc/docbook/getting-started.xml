@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<chapter xml:id="chapter.getting-started" 
+         xmlns="http://docbook.org/ns/docbook" version="5.0"
+         xmlns:c2="http://www.carrot2.org">
+  <title>Getting started</title>
+  <subtitle>Trying &C2; clustering with your own data</subtitle>
+
+  <para>
+    This chapter will show you how to use &C2; in a number of typical scenarios such as
+    trying clustering on your own documents, integrating &C2; with your software or customizing
+    &C2; applications.
+  </para>
+  
+  <section xml:id="section.getting-started">
+    <title>Trying &C2; clustering</title>
+    
+    <para>
+      This section shows how to apply &C2; clustering on documents from various sources.
+    </para>
+
+    <section xml:id="section.getting-started.common-search-engines">
+      <title>Clustering results from common search engines</title>
+      
+      <para>
+        To try &C2; clustering on results from common search engines, such as Google, 
+        Yahoo or MSN, you can either:
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            Use the <link xlink:href="http://demo.carrot2.org">on-line version of &WA;</link>
+          </para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>or</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>
+            Use the &DCW; which can fetch and cluster documents from the same search engines as the &WA;
+          </para>
+        </listitem>
+      </itemizedlist>
+    </section>      
+    
+    <section xml:id="section.getting-started.plain-text-ms-word-pdf">
+      <title>Clustering plain text, HTML and MS Word documents</title>
+      
+      <para>
+        To try &C2; clustering on a collection of plain text, HTML or MS Word documents, you will
+        need to install Google Desktop:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Download and install <link xlink:href="http://desktop.google.com/">Google Desktop</link> 
+            if you have not done so.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Configure Google Desktop to index your documents.
+          </para>
+          
+          <tip>
+            <para>
+              You can use <link xlink:href="http://desktop.google.com/plugins/i/tweakgds.html">TweakGDS</link>
+              to make Google Desktop index only the folder with your documents.
+            </para>
+          </tip>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Use <link linkend="section.workbench">&DCW;</link> to cluster documents fetched
+            from your Google Desktop installation. Simply choose <guilabel>Google Desktop</guilabel>
+            source in the search view (<xref linkend="figure.search-view-google-desktop" />), type your query
+            and press the <guilabel>Process</guilabel> button to see the results.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.search-view-google-desktop">
+        <title>&DCW; Google Desktop search view</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-google-destkop-search-view.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </section>
+    
+    <section xml:id="section.getting-started.xml-files">
+      <title>Clustering documents from XML files</title>
+      
+      <para>
+        To try &C2; clustering on documents or search results stored in a single XML file
+        you can use the &DCW;.
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            In the <guilabel>Search</guilabel> view of &DCW;, choose XML source.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Set path to your XML file in the <guilabel>XML Resource</guilabel> field.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            (Optional) If your file is not in <link linkend="figure.input-xml-format">&C2; format</link>,
+            create an XSLT style sheet that transforms your data into &C2; format,
+            see <xref linkend="section.getting-started.xml-feed" /> for an example.
+            Provide a path to your style sheet in the <guilabel>XSLT Stylesheet</guilabel>
+            field, which is an optional field &ndash; you can show optional fields by 
+            clicking the arrow button of the <guilabel>Search</guilabel> view toolbar
+            (<xref linkend="figure.search-view-xml" />).
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            If you know the query that generated the documents in your XML file,
+            you can provide it in the <guilabel>Query</guilabel> field, which may
+            improve the clustering results. Press the <guilabel>Process</guilabel> 
+            button to see the results.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.search-view-xml">
+        <title>&DCW; XML search view</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-xml-search-view.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </section>
+    
+    <section xml:id="section.getting-started.xml-feed">
+      <title>Clustering documents from XML feeds</title>
+      
+      <para>
+        To try &C2; clustering on documents or search results fetched from a remote
+        XML feed, you can use the &DCW;. As an example, we will cluster a news feed from
+        BBC:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            In the <guilabel>Search</guilabel> view of &DCW;, choose XML source.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Set URL to your XML feed in the <guilabel>XML Resource</guilabel> field.
+            Optionally, the URL can contain two special 
+            <link linkend="section.attribute.XmlDocumentSource.xml">place holders</link> that will be replaced
+            with the <guilabel>Query</guilabel> and <guilabel>Results</guilabel> number 
+            you set in the search view.
+          </para>
+          
+          <para>
+            In our example, we will use the <link xlink:href="http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml">BBC News RSS feed</link>.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Create an XSLT style sheet that will transform the XML feed into 
+            <link linkend="figure.input-xml-format">&C2; format</link>. For the news feed
+            we can use the stylesheet shown in <xref linkend="figure.bbc-to-c2" />. To
+            add more colour to our results, the XSLT transform extracts thumbnail URLs
+            from the feed and passes them to &C2; in a special attribute.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Provide a path to the transformation style sheet in the <guilabel>XSLT Stylesheet</guilabel>
+            field, which is an optional field &ndash; you can show optional fields by 
+            clicking the arrow button of the <guilabel>Search</guilabel> view toolbar
+            (<xref linkend="figure.search-view-xml" />).
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Press the <guilabel>Process</guilabel> button to see the results.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.bbc-to-c2">
+        <title>News feed XML to &C2; format transformation</title>
+        <programlisting><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0"
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+     xmlns:media="http://search.yahoo.com/mrss">
+
+  <xsl:output indent="yes" omit-xml-declaration="no"
+       media-type="application/xml" encoding="utf-8" />
+
+  <xsl:template match="/">
+    <searchresult>
+      <xsl:apply-templates select="/rss/channel/item" />
+    </searchresult>
+  </xsl:template>
+
+  <xsl:template match="item">
+    <document>
+      <title><xsl:value-of select="title" /></title>
+      <snippet>
+        <xsl:value-of select="description" />
+      </snippet>
+      <url><xsl:value-of select="link" /></url>
+      <xsl:if test="media:thumbnail">
+        <field key="thumbnail-url">
+           <value type="java.lang.String"
+                  value="{media:thumbnail/@url}"/>
+        </field>
+      </xsl:if>
+    </document>
+  </xsl:template>
+</xsl:stylesheet>]]></programlisting>      
+      </figure>      
+    </section>
+    
+    <section xml:id="section.getting-started.lucene">
+      <title>Clustering documents from a Lucene index</title>
+      
+      <para>
+        To try &C2; clustering on documents from a local Lucene index, you can use &DCW;:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            In the <guilabel>Search</guilabel> view of &DCW;, choose Lucene source. Using
+            the arrow button of the <guilabel>Search</guilabel> view toolbar
+            (<xref linkend="figure.search-view-lucene" />), show optional attributes.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Choose the path to your Lucene index in the <guilabel>Index directory</guilabel>
+            field.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Choose fields from your Lucene index in at least one of <guilabel>Document title field</guilabel>
+            and <guilabel>Document content field</guilabel> combo boxes.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Type a query and press the <guilabel>Process</guilabel> button to see the results.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.search-view-lucene">
+        <title>&DCW; Lucene search view</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-lucene-search-view.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </section>
+    
+    <section xml:id="section.getting-started.solr">
+      <title>Clustering documents from a Solr index</title>
+      
+      <para>
+        To try &C2; clustering on documents from an instance of Apache Solr, you can use &DCW;:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            In the <guilabel>Search</guilabel> view of &DCW;, choose Solr source. Using
+            the arrow button of the <guilabel>Search</guilabel> view toolbar
+            (<xref linkend="figure.search-view-solr" />), show optional attributes.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Provide the URL at which your Solr instance is available in the 
+            <guilabel>Service URL</guilabel> field.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Provide fields that should be used as document title, content and URL (optional)
+            in the <guilabel>Title field name</guilabel>, <guilabel>Summary field name</guilabel> 
+            and <guilabel>URL field name</guilabel> field, respectively.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Type a query and press the <guilabel>Process</guilabel> button to see the results.
+          </para>
+        </listitem>
+      </orderedlist>
+      
+      <figure xml:id="figure.search-view-solr">
+        <title>&DCW; Solr search view</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-solr-search-view.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </section>
+    
+    <section xml:id="section.getting-started.saving-clusters">
+      <title>Saving clusters for further processing</title>
+      
+      <para>
+        To save clusters produced by &C2; for further processing:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Use &DCW; to perform clustering on documents from the source of your choice.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Use the <guilabel>File &gt; Save as...</guilabel> dialog to save the 
+            documents and clusters into a file in <link linkend="figure.output-xml-format">&C2; XML format</link>.
+          </para>
+        </listitem>
+      </orderedlist>
+    </section>    
+  </section>
+  
+  <section xml:id="section.integration">
+    <title>Integrating &C2; with your software</title>
+    
+    <para>
+    </para>
+    
+    <section xml:id="section.integration.compiling-java-program-with-carrot2">
+      <title>Compiling a Java program using &C2; API</title>
+      
+      <para>
+        The easiest way to integrate &C2; with your Java programs is to use the &JA; package:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            <c2:java-api-download-link>Download &JA;</c2:java-api-download-link>
+            and unpack it to some local directory.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Make sure that <filename>carrot2-core.jar</filename> and all JARs from the
+            <filename>lib/</filename> directory are available in the classpath of
+            your program.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Look in the <filename>examples/</filename> directory for some sample code.
+            Good places to start are <filename>ClusteringDocumentList</filename> and <filename>ClusteringDataFromDocumentSources</filename>.
+            For a complete description of &JA;, please
+            see Javadoc documentation in the <filename>javadoc/</filename> directory.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            You can use the <filename>build.xml</filename> Ant script to compile and run
+            code from the <filename>examples/</filename> directory. 
+          </para>
+          
+          <tip>
+            <para>
+              For easier experimenting with &JA;, you may want to 
+              <link linkend="section.integration.seting-up-c2-project-in-eclipse">set up a &C2; project in Eclipse IDE</link>.
+            </para> 
+          </tip>
+        </listitem>
+      </orderedlist>
+    </section>
+    
+    <section xml:id="section.integration.maven">
+      <title>Setting up a Maven2 project with &C2; dependency</title>
+      
+      <para>
+        &C2; provides Maven2 artifacts and an archetype project with examples of use.
+        To create a template &C2; project, use the following command (line breaks for clarity): 
+      </para>
+      
+<programlisting><![CDATA[mvn archetype:generate 
+ -DarchetypeRepository=http://download.carrot2.org/maven2/ 
+ -DarchetypeGroupId=org.carrot2 
+ -DarchetypeArtifactId=carrot2-example-archetype 
+ -DarchetypeVersion=]]><emphasis role="bold"><c2:carrot2-version /></emphasis><![CDATA[ 
+ -DgroupId=com.mycompany 
+ -DartifactId=myproject 
+ -DinteractiveMode=false]]></programlisting>
+  
+      <para>
+        Marked in bold is the &C2; release that will be used, please see 
+        <link xlink:href="http://download.carrot2.org/maven2/org/carrot2/carrot2-example-archetype/">our Maven2 repository</link> 
+        for available version numbers.
+      </para>
+      
+      <para>
+        After the example project gets created, you can use standard Maven2 goals e.g. to
+        generate Eclipse project files:
+      </para>
+<programlisting><![CDATA[mvn eclipse:eclipse]]></programlisting> 
+    </section>
+    
+    <section xml:id="section.integration.seting-up-c2-project-in-eclipse">
+      <title>Setting up a &C2; project in Eclipse IDE</title>
+      
+      <para>
+        &JA; examples can be easily set up in Eclipse IDE. The description below assumes
+        you are using Eclipse IDE version 3.4 or newer.  
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            <c2:java-api-download-link>Download &JA;</c2:java-api-download-link>
+            and unpack it to some local directory.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            In your Eclipse IDE choose <guilabel>File</guilabel> &gt; <guilabel>New</guilabel> &gt; 
+            <guilabel>Java Project</guilabel>.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            In the <guilabel>New Java Project</guilabel> dialog (<xref linkend="figure.eclipse-new-java-project" />),
+            type name for the new project, e.g. <filename>carrot2-examples</filename>.
+            Then choose the <guilabel>Create project from existing source</guilabel> option,
+            provide the directory to which you unpacked the &JA; archive and click 
+            <guilabel>Finish</guilabel>.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            When Eclipse compiles the example classes, you can open one of them, e.g.
+            <classname>ClusteringDocumentList</classname> and choose <guilabel>Run</guilabel>
+            &gt; <guilabel>Run As</guilabel> &gt; <guilabel>Java Application</guilabel>.
+            The output of the example program should be visible in the <guilabel>Console</guilabel> 
+            view.
+          </para>
+        </listitem>
+      </orderedlist>
+
+      
+      <figure xml:id="figure.eclipse-new-java-project">
+        <title>Setting up &JA; in Eclipse IDE</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/eclipse-new-java-project.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </section>
+    
+    <section xml:id="section.integration.setting-up-carrot2-sources-in-eclipse">
+      <title>Setting up a &C2; source code in Eclipse</title>
+      
+      <para>
+        &NA;
+      </para>
+    </section>
+    
+    <section xml:id="section.integration.calling-carrot2-from-non-java-software">
+      <title>Calling &C2; clustering from non-Java software</title>
+      
+      <para>
+        To integrate &C2; with your non-Java system,
+        you can use the &DCS;, which exposes &C2; clustering as a REST/XML service. Please
+        see <xref linkend="section.dcs.installation" /> for installation instructions and
+        the <filename>examples/</filename> directory in the distribution archive for
+        example code in PHP, C# and Ruby.
+      </para>
+    </section>
+  </section>
+</chapter>

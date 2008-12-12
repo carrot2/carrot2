@@ -1,0 +1,94 @@
+/** 
+ * Base CSS for the cluster tree.
+ */
+#clusters {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+ 
+#clusters li {
+  background-repeat: repeat-y;
+}
+
+#clusters li.folded > ul {
+  display: none;
+}
+
+#clusters li.unfolded > ul {
+  display: none;
+}
+
+#clusters li a, 
+a#tree-top {
+  font-weight: bold;
+  background-repeat: no-repeat;
+  display: block;
+}
+
+#clusters li.more a {
+  display: inline;
+}
+
+#clusters li > a > span.tree {
+  position: absolute;
+  background-repeat: no-repeat;
+  background-color: transparent !important;
+}
+
+#clusters li.more a.show-all {
+  background-image: none;
+  padding-left: 0;
+  font-weight: normal;
+}
+
+#clusters li.selected > a > span,
+a#tree-top.selected > span {
+  color: white;
+  background-color: #1678C4;
+}
+
+/** Cluster highlight */
+#clusters li.hl.selected > a > span.label,
+#clusters li.hl.selected > a > span.size {
+  background-color: #1678C4;
+  color: #FFF8B5;
+}
+
+
+#clusters li.hl > a > span.label,
+#clusters li.hl > a > span.size,
+.title .hl {
+  background-color: #FFF8B5;
+}
+
+#clusters li.hl > a > span.label,
+#clusters li.hl > a > span.size {
+  text-decoration: underline;
+}
+
+#clusters a span.size {
+  padding-left: 0.3em;
+  font-weight: normal;
+}
+
+/** Cluster utils */
+#always-show-all {
+  display: block;
+  color: #b0b0b0;
+}
+
+#always-show-all, 
+#always-show-all a {
+  color: #b0b0b0;
+}
+
+#status-cluster-label, 
+#status-cluster-size {
+  font-weight: bold;
+  -padding-right: 0.3em;
+}
+
+*:first-child+html #status-cluster-label,
+*:first-child+html #status-cluster-size {
+  padding-right: 0.3em;
+}

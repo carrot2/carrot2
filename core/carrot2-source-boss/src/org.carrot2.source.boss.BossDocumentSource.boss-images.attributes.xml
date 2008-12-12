@@ -1,0 +1,11 @@
+
+<attribute-sets>
+  <attribute-set id="boss-images">
+    <value-set>
+      <label>Yahoo Boss Images</label>
+      <attribute key="BossDocumentSource.service">
+        <value type="java.lang.Class" value="org.carrot2.source.boss.BossImageSearchService" />
+      </attribute>
+    </value-set>
+  </attribute-set>
+</attribute-sets>
