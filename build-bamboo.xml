@@ -80,8 +80,11 @@
             <fileset dir="${carrot2.code.dir}/tmp/workbench/build-dir">
                 <include name="*carrot2-workbench/*.zip" />
             </fileset>
-            <mapper type="flatten" />
-            <mapper type="glob" from="*.zip" to="-${carrot2.version}.zip"/>
+
+            <chainedmapper>
+              <mapper type="flatten" />
+              <mapper type="glob" from="*.zip" to="-${carrot2.version}.zip"/>
+            </chainedmapper>
         </copy>
     </target>
 
