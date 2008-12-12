@@ -88,6 +88,9 @@ $(document).ready(function() {
       </div>
 
       <div id="status-bar">
+        <div id="footer">
+          <xsl:apply-templates select=".." mode="footer-content" />
+        </div>
         Query: <b><xsl:value-of select="/page/request/@query" /></b> 
         -- 
         Source: <b><xsl:value-of select="/page/config/components/sources/source[@id = /page/request/@source]/label" /></b>

@@ -34,7 +34,7 @@
         <xsl:variable name="group" select="string(.)" />
         
         <xsl:if test="$doc/attribute[attribute-descriptor/metadata/group = $group]">
-          <section>
+          <section role="notoc">
             <title><xsl:value-of select="$group" /></title>
             <xsl:apply-templates select="$doc/attribute[attribute-descriptor/metadata/group = $group]" />
           </section>

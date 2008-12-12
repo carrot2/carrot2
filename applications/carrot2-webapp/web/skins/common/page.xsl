@@ -3,6 +3,7 @@
   <xsl:include href="customization.xsl" />
   <xsl:include href="documents.xsl" />
   <xsl:include href="clusters.xsl" />
+  <xsl:include href="variables.xsl" />
 
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
               doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -103,20 +104,22 @@
       <div class="noscript"><xsl:apply-templates select=".." mode="no-javascript-text" /></div>
     </noscript>
 
-    <xsl:if test="/page/request/@modern = 'false'">
-      <span id="use-modern">Use a <a href="http://browsehappy.com/">modern browser</a> for best experience!</span>
-    </xsl:if>
-              
-    <div id="logo">
-      <h1><a href="{$context-path}/{$search-url}"><span class="hide"><xsl:apply-templates select=".." mode="page-title" /></span></a></h1>
-    </div>
-
-    <xsl:if test="not(@type = 'SOURCES')">     
-      <div id="main-info">
-        <xsl:apply-templates select=".." mode="startup-text" />
+    <div><!-- We need this extra div to fix IE7 bug: http://www.brunildo.org/test/IEWapie2.html -->
+      <xsl:if test="/page/request/@modern = 'false'">
+        <span id="use-modern">Use a <a href="http://browsehappy.com/">modern browser</a> for best experience!</span>
+      </xsl:if>
+                
+      <div id="logo">
+        <h1><a href="{$context-path}/{$search-url}"><span class="hide"><xsl:apply-templates select=".." mode="page-title" /></span></a></h1>
       </div>
-    </xsl:if>
-
+  
+      <xsl:if test="not(@type = 'SOURCES')">     
+        <div id="main-info">
+          <xsl:apply-templates select=".." mode="startup-text" />
+        </div>
+      </xsl:if>
+    </div>
+    
     <hr class="hide" />
 
     <div id="main-area">
@@ -140,6 +143,12 @@
     <div id="util-links">
       <xsl:apply-templates select=".." mode="about" />
     </div>
+
+    <xsl:if test="string-length(/page/request/@query) = 0">
+      <div id="footer">
+        <xsl:apply-templates select=".." mode="footer-content" />
+      </div>
+    </xsl:if>
 
     <div id="loading">Loading...</div>
     

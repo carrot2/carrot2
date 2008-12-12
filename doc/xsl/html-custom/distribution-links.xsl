@@ -26,6 +26,8 @@
 
   <xsl:template match="c2:workbench-download-link">
     <a href="{$dist.url}/{$carrot2.workbench.base}-{@os}.{@wm}.x86.zip"><xsl:apply-templates /></a>
-  </xsl:template>  
+  </xsl:template>
+  
+  <xsl:template match="c2:carrot2-version"><xsl:value-of select="$carrot2.version" /></xsl:template>
 </xsl:stylesheet>
 

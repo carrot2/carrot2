@@ -134,7 +134,7 @@
       </listitem>
     </itemizedlist>
     
-    <section xml:id="section.workbench.installation">
+    <section xml:id="section.workbench.installation" role="notoc">
       <title>Installation and running</title>
     
       <para>
@@ -244,7 +244,7 @@
       </listitem>
     </itemizedlist>
     
-    <section xml:id="section.dcs.installation">
+    <section xml:id="section.dcs.installation" role="notoc">
       <title>Installation and running</title>
     
       <para>To run &DCS;:</para>
@@ -267,6 +267,13 @@
         
         <listitem>
           <para>Point your browser to <uri>http://localhost:8080</uri> for further instructions</para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            See the <filename>examples/</filename> directory in the distribution archive
+            for PHP, C# and Ruby code examples.
+          </para>
         </listitem>
       </orderedlist>
       
@@ -354,7 +361,7 @@
       </mediaobject>  
     </figure>
 
-    <section xml:id="section.webapp.installation">
+    <section xml:id="section.webapp.installation" role="notoc">
       <title>Installation and running</title>
     
       <para>To run &WA;:</para>

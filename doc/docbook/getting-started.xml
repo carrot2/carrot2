@@ -416,7 +416,36 @@
           </tip>
         </listitem>
       </orderedlist>
-
+    </section>
+    
+    <section xml:id="section.integration.maven">
+      <title>Setting up a Maven2 project with &C2; dependency</title>
+      
+      <para>
+        &C2; provides Maven2 artifacts and an archetype project with examples of use.
+        To create a template &C2; project, use the following command (line breaks for clarity): 
+      </para>
+      
+<programlisting><![CDATA[mvn archetype:generate 
+ -DarchetypeRepository=http://download.carrot2.org/maven2/ 
+ -DarchetypeGroupId=org.carrot2 
+ -DarchetypeArtifactId=carrot2-example-archetype 
+ -DarchetypeVersion=]]><emphasis role="bold"><c2:carrot2-version /></emphasis><![CDATA[ 
+ -DgroupId=com.mycompany 
+ -DartifactId=myproject 
+ -DinteractiveMode=false]]></programlisting>
+  
+      <para>
+        Marked in bold is the &C2; release that will be used, please see 
+        <link xlink:href="http://download.carrot2.org/maven2/org/carrot2/carrot2-example-archetype/">our Maven2 repository</link> 
+        for available version numbers.
+      </para>
+      
+      <para>
+        After the example project gets created, you can use standard Maven2 goals e.g. to
+        generate Eclipse project files:
+      </para>
+<programlisting><![CDATA[mvn eclipse:eclipse]]></programlisting> 
     </section>
     
     <section xml:id="section.integration.seting-up-c2-project-in-eclipse">
@@ -486,7 +515,11 @@
       <title>Calling &C2; clustering from non-Java software</title>
       
       <para>
-        &NA;
+        To integrate &C2; with your non-Java system,
+        you can use the &DCS;, which exposes &C2; clustering as a REST/XML service. Please
+        see <xref linkend="section.dcs.installation" /> for installation instructions and
+        the <filename>examples/</filename> directory in the distribution archive for
+        example code in PHP, C# and Ruby.
       </para>
     </section>
   </section>

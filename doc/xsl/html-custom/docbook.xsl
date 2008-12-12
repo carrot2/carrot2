@@ -1,5 +1,6 @@
 <?xml version='1.0'?> 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                xmlns:d="http://docbook.org/ns/docbook" version="1.0">
 
   <xsl:import href="../html/docbook.xsl"/>
   <xsl:import href="distribution-links.xsl"/>
@@ -37,7 +38,7 @@
     </img>
   </xsl:template>
 
-  <xsl:param name="toc.section.depth">1</xsl:param>
+  <xsl:param name="toc.section.depth">2</xsl:param>
   <xsl:param name="generate.toc">
 appendix  toc,title
 article/appendix  nop
@@ -58,6 +59,8 @@ section   nop
 set       toc,title
   </xsl:param>
 
+  <xsl:template match="d:section[@role = 'notoc']"  mode="toc" />
+  
   <xsl:template name="user.footer.content">
     <xsl:param name="node" select="."/>
     

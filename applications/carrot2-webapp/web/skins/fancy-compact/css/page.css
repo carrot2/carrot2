@@ -146,7 +146,7 @@ body, input, select, label {
 }
 
 #startup #main-area {
-  top: 150px;
+  margin-top: 150px;
 }
 
 /** Results screen */

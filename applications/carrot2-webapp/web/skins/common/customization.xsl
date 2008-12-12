@@ -47,6 +47,19 @@
     </ul>
   </xsl:template>
 
+  <!-- Content of page footer -->
+  <xsl:template match="page" mode="footer-content">
+    <small id="version">
+      v<xsl:value-of select="$version-number" /> |
+      build <xsl:value-of select="$build-number" /> |
+      <xsl:value-of select="$build-date" />
+    </small>
+    <small id="copyright">
+      &#169; 2002-<xsl:value-of select="$current-year" />&#160;<a href="http://stanislaw.osinski.name" target="_blank">Stanislaw Osinski</a>,
+      <a href="http://www.cs.put.poznan.pl/dweiss" target="_blank">Dawid Weiss</a>
+    </small>
+  </xsl:template>
+  
   <xsl:template name="pipe"><span class='pipe'> | </span></xsl:template>
 
   <!-- Error message text -->

@@ -94,7 +94,7 @@ body, input, select, label, button {
 }
 
 #startup #main-area {
-  top: 150px;
+  margin-top: 150px;
 }
 
 /** Form controls */

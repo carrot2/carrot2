@@ -21,8 +21,9 @@
             location="${carrot2.webapp.basedir}/src/config.template.xml" />
   <property name="war.name.base" value="${carrot2.webapp.base}" />
   
-  <!-- Build number -->
+  <!-- Build number, provided by Bamboo -->
   <property name="build.number" value="" />
+  <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
 
   <!-- Webapp build dirs -->
   <property name="webapp.dir" location="tmp/webapp" />
@@ -309,6 +310,20 @@
         <filterset refid="version.filterset" />
         <filterset>
           <filter token="TEMPLATE_CACHING" value="@{template.caching}" />
+        </filterset>
+      </copy>
+
+      <tstamp><format property="current.year" pattern="yyyy" /></tstamp>
+      <tstamp><format property="build.date" pattern="yyyy-MM-dd hh:mm" /></tstamp>
+        
+      <copy file="${carrot2.webapp.basedir}/web/skins/common/variables.template.xsl"
+            tofile="${carrot2.webapp.basedir}/web/skins/common/variables.xsl"
+            overwrite="true">
+        <filterset>
+          <filter token="CURRENT_YEAR" value="${current.year}" />
+          <filter token="VERSION_NUMBER" value="${carrot2.version}" />
+          <filter token="BUILD_NUMBER" value="${build.number}" />
+          <filter token="BUILD_DATE" value="${build.date}" />
         </filterset>
       </copy>
     </sequential>

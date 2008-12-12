@@ -15,8 +15,8 @@
     source code, fine-tuning clustering or customizing &C2; applications.
   </para>
   
-  <section xml:id="section.advanced-topics.building-applications">
-    <title>Building &C2; applications</title>
+  <section xml:id="section.advanced-topics.building-from-source-code">
+    <title>Building &C2; from source code</title>
     
     <para>
       &NA;
