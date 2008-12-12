@@ -19,6 +19,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
@@ -139,6 +140,15 @@ public class QueryProcessorServlet extends HttpServlet
         // Unpack parameters from string arrays
         final Map<String, Object> requestParameters = MapUtils.unpack(request
             .getParameterMap());
+
+        // Alias "q" to "query" parameter
+        final String queryFromAlias = (String) requestParameters
+            .get(WebappConfig.QUERY_PARAM_ALIAS);
+        if (StringUtils.isNotBlank(queryFromAlias))
+        {
+            requestParameters.put(WebappConfig.QUERY_PARAM, queryFromAlias);
+        }
+
         try
         {
             // Build model for this request
@@ -186,7 +196,8 @@ public class QueryProcessorServlet extends HttpServlet
         final PageModel pageModel = new PageModel(request, requestModel,
             jawrUrlGenerator, null, null);
 
-        final Persister persister = new Persister(getPersisterFormat(pageModel.requestModel));
+        final Persister persister = new Persister(
+            getPersisterFormat(pageModel.requestModel));
         persister.write(pageModel, response.getWriter());
     }
 
@@ -294,7 +305,8 @@ public class QueryProcessorServlet extends HttpServlet
         final PageModel pageModel = new PageModel(request, requestModel,
             jawrUrlGenerator, processingResult, processingException);
 
-        final Persister persister = new Persister(getPersisterFormat(pageModel.requestModel));
+        final Persister persister = new Persister(
+            getPersisterFormat(pageModel.requestModel));
 
         if (RequestType.CARROT2.equals(requestModel.type))
         {
@@ -336,8 +348,7 @@ public class QueryProcessorServlet extends HttpServlet
     {
         return new Format(2, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             + "<?xml-stylesheet type=\"text/xsl\" href=\"@"
-            + WebappConfig.getContextRelativeSkinStylesheet(requestModel.skin)
-            + "\" ?>");
+            + WebappConfig.getContextRelativeSkinStylesheet(requestModel.skin) + "\" ?>");
     }
 
     /*

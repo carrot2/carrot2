@@ -58,6 +58,7 @@ public class WebappConfig
 
     @Attribute(name = "query-param", required = false)
     public final static String QUERY_PARAM = AttributeNames.QUERY;
+    public final static String QUERY_PARAM_ALIAS = "q";
 
     @Attribute(name = "results-param", required = false)
     public final static String RESULTS_PARAM = AttributeNames.RESULTS;
