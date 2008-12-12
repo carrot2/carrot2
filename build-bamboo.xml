@@ -42,13 +42,6 @@
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
         <fail unless="dist.dir">Define: dist.dir property.</fail>
 
-        <delete includeemptydirs="true" failonerror="false">
-          <fileset dir="${dist.dir}">
-            <include name="**/*" />
-            <exclude name=".htaccess" />
-            <exclude name="*workbench*" />
-          </fileset>
-        </delete>
         <copy todir="${dist.dir}" overwrite="true">
           <fileset dir="${carrot2.code.dir}/tmp">
             <!-- Exclude reports, we'll link these directly to the build server -->
