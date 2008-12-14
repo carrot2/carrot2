@@ -179,7 +179,8 @@
            source="1.5"
            target="1.5"
            encoding="UTF-8"
-           debug="true">
+           debug="true"
+           debuglevel="lines">
       <src refid="src.core.folders" />
 
       <classpath refid="lib.classpath" />
@@ -196,7 +197,8 @@
            source="1.5"
            target="1.5"
            encoding="UTF-8"
-           debug="true">
+           debug="true"
+           debuglevel="lines">
       <src refid="src.test.folders" />
 
       <classpath refid="lib.classpath" />
@@ -208,7 +210,7 @@
           depends="with.clover">
     <mkdir dir="${build.dir}" />
 
-    <javac destdir="${build.dir}" source="1.5" target="1.5" encoding="UTF-8">
+    <javac destdir="${build.dir}" source="1.5" target="1.5" encoding="UTF-8" debug="true" debuglevel="lines">
       <src refid="src.test.folders" />
 
       <classpath refid="lib.classpath" />

@@ -11,8 +11,9 @@
   <subtitle>Detailed description of all &C2; components</subtitle>
 
   <para>
-    To tune clustering the behaviour of &C2; components for your specific
-    application needs, you can change their attributes.
+    This section lists and describes attributes of all &C2; components. Please see
+    <xref linkend="section.architecture.overview.component-attributes" /> for information
+    on you can set component attributes in different &C2; applications.
   </para>
 
   <attribute-reference />

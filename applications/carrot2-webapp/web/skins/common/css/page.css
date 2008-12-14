@@ -270,9 +270,8 @@ input, select {
 }
 
 #documents-panel .processing-error {
-  top: 22px;
+  top: 8px;
   left: 13px;
-  width: 320px;
 }
 
 #results #use-modern {

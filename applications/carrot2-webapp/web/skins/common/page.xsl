@@ -95,7 +95,7 @@
 
   <!-- Error message -->
   <xsl:template match="page[@type = 'ERROR']">
-    <xsl:apply-templates select=".." mode="error-text" />
+    <div class="processing-error"><xsl:apply-templates select=".." mode="error-text" /></div>
   </xsl:template>
 
   <!-- Main page contents -->

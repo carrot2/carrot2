@@ -200,20 +200,25 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
                  * 3) using manual fetch of the syndication feed.
                  */
                 final SyndFeed feed = feedFetcher.retrieveFeed(new URL(url));
-                final List entries = feed.getEntries();
-
                 final SearchEngineResponse response = new SearchEngineResponse();
-                for (Iterator it = entries.iterator(); it.hasNext();)
+
+                // The documentation does not mention that null value can be returned
+                // but we've seen a NPE here: http://builds.carrot2.org/browse/C2HEAD-SOURCES-4.
+                if (feed != null)
                 {
-                    final SyndEntry entry = (SyndEntry) it.next();
-                    final Document document = new Document();
+                    final List entries = feed.getEntries();
+                    for (Iterator it = entries.iterator(); it.hasNext();)
+                    {
+                        final SyndEntry entry = (SyndEntry) it.next();
+                        final Document document = new Document();
 
-                    document.addField(Document.TITLE, clean(entry.getTitle()));
-                    document.addField(Document.SUMMARY, clean(entry.getDescription()
-                        .getValue()));
-                    document.addField(Document.CONTENT_URL, entry.getLink());
+                        document.addField(Document.TITLE, clean(entry.getTitle()));
+                        document.addField(Document.SUMMARY, clean(entry.getDescription()
+                            .getValue()));
+                        document.addField(Document.CONTENT_URL, entry.getLink());
 
-                    response.results.add(document);
+                        response.results.add(document);
+                    }
                 }
 
                 return response;
