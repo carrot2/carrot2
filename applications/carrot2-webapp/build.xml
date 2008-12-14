@@ -314,7 +314,7 @@
       </copy>
 
       <tstamp><format property="current.year" pattern="yyyy" /></tstamp>
-      <tstamp><format property="build.date" pattern="yyyy-MM-dd hh:mm" /></tstamp>
+      <tstamp><format property="build.date" pattern="yyyy-MM-dd HH:mm" /></tstamp>
         
       <copy file="${carrot2.webapp.basedir}/web/skins/common/variables.template.xsl"
             tofile="${carrot2.webapp.basedir}/web/skins/common/variables.xsl"
