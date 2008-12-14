@@ -1,4 +1,4 @@
 # we need the same value in a property with a unique name for website build
-carrot2.version.head=3.0-rc1
+carrot2.version.head=3.0
 
 carrot2.version=${carrot2.version.head}
