@@ -50,7 +50,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     }
 
     /**
-     * {@link Document}s to cluster.
+     * Documents to cluster.
      */
     @Processing
     @Input
@@ -59,7 +59,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     public List<Document> documents;
 
     /**
-     * {@link Cluster}s created by the algorithm.
+     * Clusters created by the algorithm.
      */
     @Processing
     @Output

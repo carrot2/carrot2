@@ -34,7 +34,7 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
     IClusteringAlgorithm
 {
     /**
-     * {@link Document}s to cluster.
+     * Documents to cluster.
      */
     @Processing
     @Input
@@ -43,7 +43,7 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
     public List<Document> documents;
 
     /**
-     * {@link Cluster}s created by the algorithm.
+     * Clusters created by the algorithm.
      */
     @Processing
     @Output

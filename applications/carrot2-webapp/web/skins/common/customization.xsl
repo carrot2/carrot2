@@ -38,12 +38,12 @@
   <xsl:template match="page" mode="about-links">
     <ul class="util-links">
       <li><a href="http://project.carrot2.org">About</a><xsl:call-template name="pipe" /></li>
-      <li class="hot"><a href="http://project.carrot2.org/release-3.0-rc1-notes.html">New features!</a><xsl:call-template name="pipe" /></li>
-      <li><a href="{$context-path}/{$search-url}?{$type-param}=SOURCES">Search feeds</a><xsl:call-template name="pipe" /></li>
-      <li><a href="http://project.carrot2.org/release-3.0-rc1-notes.html">More demos</a><xsl:call-template name="pipe" /></li>
-      <li><a href="http://project.carrot2.org/release-3.0-rc1-notes.html">Download</a><xsl:call-template name="pipe" /></li>
+      <li class="hot"><a href="http://project.carrot2.org/release-3.0-notes.html">New features!</a><xsl:call-template name="pipe" /></li>
+      <li class="main"><a href="{$context-path}/{$search-url}?{$type-param}=SOURCES">Search feeds</a><xsl:call-template name="pipe" /></li>
+      <li><a href="http://project.carrot2.org/download-search-plugins.html">Search plugins</a><xsl:call-template name="pipe" /></li>
+      <li><a href="http://project.carrot2.org/download.html">Download</a><xsl:call-template name="pipe" /></li>
       <li class="main"><a href="http://company.carrot-search.com">Carrot Search</a><xsl:call-template name="pipe" /></li>
-      <li><a href="http://project.carrot2.org/support.html">Contact</a></li>
+      <li><a href="http://project.carrot2.org/contact.html">Contact</a></li>
     </ul>
   </xsl:template>
 
@@ -64,9 +64,9 @@
 
   <!-- Error message text -->
   <xsl:template match="page" mode="error-text">
-    Our apologies, the following processing error has occurred: 
+    Our apologies, a following processing error has occurred: 
     <span class="message"><xsl:value-of select="/page/@exception-message" /></span>
-    If the error persists, please <a href="http://project.carrot2.org/support.html">contact us</a>.
+    If the error persists, <a href="http://project.carrot2.org/contact.html">contact us</a>.
   </xsl:template>
   
   <!-- Text to show when JavaScript is disabled -->

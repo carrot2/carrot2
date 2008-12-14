@@ -134,8 +134,8 @@ public class LogInitContextListener implements ServletContextListener
      */
     private void addAppender(File file, Logger logger, String pattern) throws IOException
     {
-        final FileAppender appender = new FileAppender(new PatternLayout(pattern), file
-            .getAbsolutePath());
+        final FileAppender appender = new DailyRollingFileAppender(new PatternLayout(pattern), file
+            .getAbsolutePath(), "'.'yyyy-MM-dd");
         appender.setEncoding("UTF-8");
         appender.setAppend(true);
 

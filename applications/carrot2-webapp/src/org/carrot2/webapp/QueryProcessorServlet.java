@@ -38,9 +38,10 @@ import com.google.common.collect.Maps;
 /**
  * Processes search requests.
  */
-@SuppressWarnings("serial")
 public class QueryProcessorServlet extends HttpServlet
 {
+    private static final long serialVersionUID = 1L;
+
     /** Controller that performs all searches */
     private transient CachingController controller;
 

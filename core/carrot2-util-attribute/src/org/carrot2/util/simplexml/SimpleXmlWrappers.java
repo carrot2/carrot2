@@ -64,9 +64,9 @@ public class SimpleXmlWrappers
     public static <K> Map<K, SimpleXmlWrapperValue> wrap(Map<K, ?> toWrap)
     {
         final HashMap<K, SimpleXmlWrapperValue> wrapped = Maps.newHashMap();
-        for (K key : toWrap.keySet())
+        for (Map.Entry<K, ?> entry : toWrap.entrySet())
         {
-            wrapped.put(key, SimpleXmlWrapperValue.wrap(toWrap.get(key)));
+            wrapped.put(entry.getKey(), SimpleXmlWrapperValue.wrap(entry.getValue()));
         }
         return wrapped;
     }
