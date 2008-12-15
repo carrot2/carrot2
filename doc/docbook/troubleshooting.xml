@@ -13,6 +13,85 @@
   <para>
     This chapter discusses solutions to some common problems with &C2; code or applications.
   </para>
+
+  <section xml:id="section.troubleshooting.workbench">
+    <title>Troubleshooting &DCW;</title>
+    
+    <section xml:id="section.troubleshooting.workbench.stacktrace">
+      <title>Getting exception stack trace</title>
+      
+      <para>
+        To get the stack trace (useful for &C2; team to spot errors) corresponding
+        to a processing error in &DCW;, follow the following procedure:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Click <guilabel>OK</guilabel> on the <guilabel>Problem Occurred</guilabel>
+            dialog box (<xref linkend="figure.dcw-error-dialog" />).
+          </para>
+          
+          <figure xml:id="figure.dcw-error-dialog">
+            <title>&DCW; error dialog</title>
+            <mediaobject>
+              <imageobject role="html">
+                <imagedata format="PNG" fileref="img/workbench-simple-error-dialog.png" />
+              </imageobject>
+            </mediaobject>  
+          </figure>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Go to <guilabel>Window &gt; Show view &gt; Other...</guilabel> and choose
+            <guilabel>Error Log</guilabel> (<xref linkend="figure.dcw-show-view-dialog" />).
+          </para>
+          
+          <figure xml:id="figure.dcw-show-view-dialog">
+            <title>&DCW; Show View dialog</title>
+            <mediaobject>
+              <imageobject role="html">
+                <imagedata format="PNG" fileref="img/workbench-show-view.png" />
+              </imageobject>
+            </mediaobject>  
+          </figure>
+        </listitem>
+        
+        <listitem>
+          <para>
+            In the <guilabel>Error Log</guilabel> view double click the line corresponding
+            to the error (<xref linkend="figure.dcw-error-log-view" />).
+          </para>
+          
+          <figure xml:id="figure.dcw-error-log-view">
+            <title>&DCW; Error Log view</title>
+            <mediaobject>
+              <imageobject role="html">
+                <imagedata format="PNG" fileref="img/workbench-error-log.png" />
+              </imageobject>
+            </mediaobject>  
+          </figure>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Copy the exception stack trace from the <guilabel>Event Details</guilabel> dialog
+            and pass to &C2; team (<xref linkend="figure.dcw-event-details-dialog" />).
+          </para>
+          
+          <figure xml:id="figure.dcw-event-details-dialog">
+            <title>&DCW; Event Details dialog</title>
+            <mediaobject>
+              <imageobject role="html">
+                <imagedata format="PNG" fileref="img/workbench-exception-dialog.png" />
+              </imageobject>
+            </mediaobject>  
+          </figure>
+        </listitem>
+      </orderedlist>
+    </section>
+  </section>    
   
   <section xml:id="section.troubleshooting.webapp">
     <title>Troubleshooting &WA;</title>
