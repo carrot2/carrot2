@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -40,7 +39,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
     private static final Logger log = Logger.getLogger(LingoClusteringAlgorithm.class);
-    
+
     /**
      * Report the warning about native libraries only once.
      */
@@ -227,54 +226,57 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
             labelFilterProcessor.process(context);
             documentAssigner.assign(context);
 
-            // Term-document matrix building and reduction
-            LingoProcessingContext lingoContext = new LingoProcessingContext(context);
-            matrixBuilder.build(lingoContext, termWeighting);
-            matrixReducer.reduce(lingoContext);
-
-            // Cluster label building
-            clusterBuilder.buildLabels(lingoContext, termWeighting);
-
-            // Document assignment
-            clusterBuilder.assignDocuments(lingoContext);
-
-            // Cluster merging
-            clusterBuilder.merge(lingoContext);
-
-            // Format final clusters
-            final int [] clusterLabelIndex = lingoContext.clusterLabelFeatureIndex;
-            final IntSet [] clusterDocuments = lingoContext.clusterDocuments;
-            final double [] clusterLabelScore = lingoContext.clusterLabelScore;
-            for (int i = 0; i < clusterLabelIndex.length; i++)
+            if (context.allLabels.featureIndex.length > 0)
             {
-                final Cluster cluster = new Cluster();
+                // Term-document matrix building and reduction
+                LingoProcessingContext lingoContext = new LingoProcessingContext(context);
+                matrixBuilder.build(lingoContext, termWeighting);
+                matrixReducer.reduce(lingoContext);
 
-                final int labelFeature = clusterLabelIndex[i];
-                if (labelFeature < 0)
+                // Cluster label building
+                clusterBuilder.buildLabels(lingoContext, termWeighting);
+
+                // Document assignment
+                clusterBuilder.assignDocuments(lingoContext);
+
+                // Cluster merging
+                clusterBuilder.merge(lingoContext);
+
+                // Format final clusters
+                final int [] clusterLabelIndex = lingoContext.clusterLabelFeatureIndex;
+                final IntSet [] clusterDocuments = lingoContext.clusterDocuments;
+                final double [] clusterLabelScore = lingoContext.clusterLabelScore;
+                for (int i = 0; i < clusterLabelIndex.length; i++)
                 {
-                    // Cluster removed during merging
-                    continue;
+                    final Cluster cluster = new Cluster();
+
+                    final int labelFeature = clusterLabelIndex[i];
+                    if (labelFeature < 0)
+                    {
+                        // Cluster removed during merging
+                        continue;
+                    }
+
+                    // Add label and score
+                    cluster.addPhrases(labelFormatter.format(context, labelFeature));
+                    cluster.setAttribute(Cluster.SCORE, clusterLabelScore[i]);
+
+                    // Add documents
+                    for (IntIterator it = clusterDocuments[i].iterator(); it.hasNext();)
+                    {
+                        cluster.addDocuments(documents.get(it.next()));
+                    }
+
+                    // Add cluster
+                    if (cluster.getDocuments().size() > 1)
+                    {
+                        clusters.add(cluster);
+                    }
                 }
 
-                // Add label and score
-                cluster.addPhrases(labelFormatter.format(context, labelFeature));
-                cluster.setAttribute(Cluster.SCORE, clusterLabelScore[i]);
-
-                // Add documents
-                for (IntIterator it = clusterDocuments[i].iterator(); it.hasNext();)
-                {
-                    cluster.addDocuments(documents.get(it.next()));
-                }
-
-                // Add cluster
-                if (cluster.getDocuments().size() > 1)
-                {
-                    clusters.add(cluster);
-                }
+                Collections.sort(clusters, Cluster.byWeightedScoreAndSizeComparator(
+                    scoreWeight, documents.size()));
             }
-
-            Collections.sort(clusters, Cluster.byWeightedScoreAndSizeComparator(
-                scoreWeight, documents.size()));
         }
 
         Cluster.appendOtherTopics(documents, clusters);
