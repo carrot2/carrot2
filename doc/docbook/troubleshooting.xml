@@ -17,6 +17,22 @@
   <section xml:id="section.troubleshooting.workbench">
     <title>Troubleshooting &DCW;</title>
     
+    <section xml:id="section.troubleshooting.workbench.heap-size">
+      <title>Increasing memory size</title>
+
+      <para>
+        To increase Java heap size for &DCW;, use the following command line parameters:
+      </para>
+
+<programlisting><![CDATA[carrot2-workbench -vmargs -Xmx256m]]></programlisting>
+
+      <tip>
+        <para>
+          Using the above pattern you can specify any other JVM options if needed.
+        </para>
+      </tip>
+    </section>
+    
     <section xml:id="section.troubleshooting.workbench.stacktrace">
       <title>Getting exception stack trace</title>
       
