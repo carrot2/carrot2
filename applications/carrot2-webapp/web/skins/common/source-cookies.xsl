@@ -20,6 +20,8 @@
     </xsl:choose>
   </xsl:variable>
   
+  <xsl:template match="page" mode="active-source"><xsl:value-of select="$active-source-id" /></xsl:template>
+  
   <!-- 
     Overrides the default template for tabs, puts tabs in the order 
     determined by the cookie from the user 

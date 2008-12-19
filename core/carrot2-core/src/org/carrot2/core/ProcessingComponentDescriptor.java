@@ -222,9 +222,9 @@ public class ProcessingComponentDescriptor
     /**
      * Builds and returns a {@link BindableDescriptor} for an instance of this
      * descriptor's {@link IProcessingComponent}, with default {@link Init} attributes
-     * initialized with the default attribute set. If the default attribute set does
+     * initialized with the default attribute set. If the default attribute set does not
      * provide values for some required {@link Bindable} {@link Init} attributes, the
-     * returned descriptor will be incomplete.
+     * returned descriptor may be incomplete.
      */
     public BindableDescriptor getBindableDescriptor() throws InstantiationException,
         IllegalAccessException
