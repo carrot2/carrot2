@@ -864,5 +864,35 @@
     	<fileset refid="licensed.sources" />
     </licenseList>
   </target>	
+
+  <target name="fix-line-endings">
+    <patternset id="fix-line-endings-exludes">
+      <exclude name="**/*.jar" />
+      <exclude name="**/*.png" />
+      <exclude name="**/*.gif" />
+      <exclude name="**/*.jpg" />
+      <exclude name="**/*.swf" />
+      <exclude name="**/*.bmp" />
+      <exclude name="**/*.dll" />
+      <exclude name="**/*.jpeg" />
+      <exclude name="**/*.psd" />
+      <exclude name="**/*.pdf" />
+      <exclude name="**/*.ico" />
+      <exclude name="**/*.swp" />
+      <exclude name="**/tmp/**" />
+    </patternset>
+
+    <fixcrlf srcdir="." eol="unix" encoding="utf-8">
+      <patternset refid="fix-line-endings-exludes" />
+      <exclude name="**/*.cmd" />
+      <exclude name="**/*.bat" />
+      <exclude name="**/csharp/**" />
+    </fixcrlf>
+    <fixcrlf srcdir="." eol="dos" encoding="utf-8">
+      <patternset refid="fix-line-endings-exludes" />
+      <include name="**/*.cmd" />
+      <include name="**/*.bat" />
+    </fixcrlf>
+  </target>
 </project>
 

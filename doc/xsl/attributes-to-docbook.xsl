@@ -234,7 +234,8 @@
   </xsl:template>
     
   <xsl:template match="constraint">
-    <xsl:message>Unsupported constraint type:    <xsl:value-of select="@class" /></xsl:message>
+    <xsl:message>Unsupported constraint type:
+    <xsl:value-of select="@class" /></xsl:message>
   </xsl:template>
   
   <!-- Some mappings between HTML elements and their DocBook counterparts -->
