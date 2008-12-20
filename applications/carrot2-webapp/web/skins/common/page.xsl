@@ -167,7 +167,8 @@
         <h3 class="hide">Type your query:</h3>
 
         <div id="required" class="clearfix">
-          <input type="hidden" name="{$source-param}" id="source" value="{/page/request/@source}" />
+          <xsl:variable name="active-source-id"><xsl:apply-templates select="/page" mode="active-source" /></xsl:variable>
+          <input type="hidden" name="{$source-param}" id="source" value="{$active-source-id}" />
           <input type="hidden" name="{$view-param}" id="view" value="{/page/request/@view}" />
           <input type="hidden" name="{$skin-param}" value="{/page/request/@skin}" />
           
@@ -221,7 +222,9 @@
       <xsl:apply-templates select="/page" mode="results" />
     </xsl:if>
   </xsl:template>
-  
+
+  <xsl:template match="page" mode="active-source"><xsl:value-of select="/page/request/@source" /></xsl:template>
+    
   <xsl:template match="page" mode="sources">
     <div id="source-tabs">
       <xsl:variable name="is-first-source-active"><xsl:apply-templates select=".." mode="is-first-source-active" /></xsl:variable>
