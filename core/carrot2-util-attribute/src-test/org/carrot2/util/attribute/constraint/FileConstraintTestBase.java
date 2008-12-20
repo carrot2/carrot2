@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -34,7 +33,8 @@ public abstract class FileConstraintTestBase<T extends Annotation> extends
     @Before
     public void prepareFiles() throws IOException
     {
-        existingDirectory = new File("tmp-test-dir");
+        existingDirectory = new File(System.getProperty("java.io.tmpdir"),
+            "tmp-test-dir");
         if (!existingDirectory.mkdir())
         {
             throw new RuntimeException("Failed to create a directory: "

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
