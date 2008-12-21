@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -20,12 +19,13 @@ import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ExampleUtils;
+import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.source.pubmed.PubMedDocumentSource;
 
 /**
  * This example shows how to cluster {@link Document}s retrieved from
  * {@link PubMedDocumentSource}
- *  
+ * 
  * @see ClusteringDocumentList
  * @see UsingCachingController
  */
@@ -34,25 +34,31 @@ public class ClusteringDataFromPubMed
     public static void main(String [] args)
     {
         /*
-         * EXAMPLE 1: fetching documents from Microsoft Live, clustering with Lingo.
-         * Attributes for the first query: query, number of results to fetch from the
-         * source. 
+         * For this example we use the SimpleController, which does not perform any
+         * caching. If you need to cache documents, clusters or Carrot2 component
+         * instances, please see the CachingController example.
          */
         SimpleController controller = new SimpleController();
+        Map<String, Object> attributes = new HashMap<String, Object>();
 
         /*
-         * As the simple controller discards component instances after processing, the
-         * @Init attributes can be provided at the same time as the @Processing ones. For
-         * the same reason, you don't need to initialize the simple controller. Please
-         * check CachingController for more advanced handling of component life cycle.
+         * Search attributes.
          */
-        Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put(AttributeNames.QUERY, "heart");
         attributes.put(AttributeNames.RESULTS, 100);
 
+        /*
+         * Optionally, you can also pass some attributes for the clustering algorithm. See
+         * http://download.carrot2.org/head/manual/#section.component.lingo for a full
+         * list.
+         */
+        attributes.put("LingoClusteringAlgorithm.factorizationFactory",
+            LocalNonnegativeMatrixFactorizationFactory.class);
+        attributes.put("LingoClusteringAlgorithm.titleWordsBoost", 7.0);
+
         ProcessingResult result = controller.process(attributes,
             PubMedDocumentSource.class, LingoClusteringAlgorithm.class);
-        
+
         ExampleUtils.displayResults(result);
     }
 }
