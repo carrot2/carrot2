@@ -11,4 +11,4 @@ run the DCS, execute the 'dcs' script and point your browser at
 http://localhost:8080 for further instructions.
 
 For more information, please refer to Carrot2 Manual:
-http://download.carrot2.org/manual [not yet available]
+http://download.carrot2.org/stable/manual
