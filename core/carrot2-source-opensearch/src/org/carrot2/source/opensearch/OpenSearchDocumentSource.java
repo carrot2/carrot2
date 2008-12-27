@@ -66,7 +66,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * </ul>
      * 
      * @label Feed URL template
-     * @level Medium
+     * @level Advanced
      * @group Service
      */
     @Input
@@ -80,7 +80,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * the feed to return.
      * 
      * @label Results per page
-     * @level Medium
+     * @level Advanced
      * @group Service
      */
     @Input
@@ -95,7 +95,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * deliver.
      * 
      * @label Maximum results
-     * @level Medium
+     * @level Advanced
      * @group Service
      */
     @Input

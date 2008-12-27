@@ -4,6 +4,7 @@
   <xsl:include href="documents.xsl" />
   <xsl:include href="clusters.xsl" />
   <xsl:include href="variables.xsl" />
+  <xsl:include href="attributes.xsl" />
 
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
               doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -28,6 +29,7 @@
   <xsl:variable name="xml-url-encoded" select="/page/@xml-url-encoded" />
   <xsl:variable name="documents-url" select="concat($request-url, '&amp;type=DOCUMENTS')" />
   <xsl:variable name="clusters-url" select="concat($request-url, '&amp;type=CLUSTERS')" />
+  <xsl:variable name="attributes-url" select="concat($context-path, '/', $search-url, '?type=ATTRIBUTES')" />
 
   <!-- 
        Counts documents with unique url roots. For some reason xalan does not like this
@@ -183,7 +185,7 @@
           <xsl:if test="count(/page/config/sizes/size) > 1">
             <label>
               Download
-              <select name="{$results-param}">
+              <select name="{$results-param}" id="results-number">
                 <xsl:for-each select="/page/config/sizes/size">
                   <option value="{string(@size)}">
                     <xsl:if test="string(@size) = /page/request/@results">
@@ -211,6 +213,15 @@
               </select>
             </label>
           </xsl:if>
+
+          <div>
+          <div id="advanced-options" class="hide">
+            <xsl:comment></xsl:comment>
+            <xsl:apply-templates select="/page/attribute-metadata" />
+          </div>
+          <a id="show-advanced-options" href="#">More advanced options</a>
+          <a id="hide-advanced-options" href="#" class="hide">Hide advanced options</a>
+          </div>
         </div>
       </form>
       <xsl:if test="string-length(/page/request/@query) = 0">

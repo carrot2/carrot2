@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -31,8 +30,8 @@ import com.google.common.collect.Lists;
  * human-readable {@link #metadata} about the attribute such as title, label or
  * description.
  * <p>
- * {@link AttributeDescriptor}s can be obtained from {@link BindableDescriptor}s, which
- * in turn are built by {@link BindableDescriptorBuilder#buildDescriptor(Object)};
+ * {@link AttributeDescriptor}s can be obtained from {@link BindableDescriptor}s, which in
+ * turn are built by {@link BindableDescriptorBuilder#buildDescriptor(Object)};
  */
 @Root(name = "attribute-descriptor")
 public class AttributeDescriptor
@@ -119,7 +118,7 @@ public class AttributeDescriptor
      * In case of Enum attributes, a list of allowed values, for serialization.
      */
     @ElementList(name = "allowed-values", entry = "value", required = false)
-    private ArrayList<String> allowedValues;
+    private ArrayList<AllowedValue> allowedValues;
 
     /**
      * 
@@ -207,7 +206,14 @@ public class AttributeDescriptor
             }
             else
             {
-                defaultValueString = defaultValue.toString();
+                if (defaultValue instanceof Enum)
+                {
+                    defaultValueString = ((Enum) defaultValue).name();
+                }
+                else
+                {
+                    defaultValueString = defaultValue.toString();
+                }
             }
         }
 
@@ -230,8 +236,23 @@ public class AttributeDescriptor
             final Enum<?> [] enumConstants = ((Class<Enum<?>>) type).getEnumConstants();
             for (Enum<?> object : enumConstants)
             {
-                allowedValues.add(object.name());
+                allowedValues.add(new AllowedValue(object.name(), object.toString()));
             }
+        }
+    }
+
+    private static class AllowedValue
+    {
+        @org.simpleframework.xml.Attribute
+        String label;
+
+        @Text
+        String value;
+
+        public AllowedValue(String value, String label)
+        {
+            this.value = value;
+            this.label = label;
         }
     }
 }

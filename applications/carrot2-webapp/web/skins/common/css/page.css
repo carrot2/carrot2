@@ -193,6 +193,10 @@ input, select {
   -moz-border-radius: 3px;
 }
 
+input[type=checkbox] {
+  vertical-align: middle;
+}
+
 #query {
   float: left;
 }
@@ -227,6 +231,44 @@ input, select {
 }
 
 #required {
+}
+
+#options select {
+  width: 110px;
+}
+
+#options input {
+  width: 104px;
+}
+
+#options #results-number {
+  width: auto;
+}
+
+#advanced-options {
+  padding-bottom: 5px;
+}
+
+#advanced-options div {
+  margin-top: 6px;
+}
+
+#advanced-options select,
+#advanced-options input {
+  margin-left: 3px;
+}
+
+#advanced-options input[type=checkbox] {
+  width: auto;
+  margin-left: 3px;
+  *margin-left: -1px;
+  margin-right: 97px;
+  *margin-right: 94px;
+  border: 0;
+}
+
+#no-advanced-options {
+  color: #808080;
 }
 
 #use-modern,

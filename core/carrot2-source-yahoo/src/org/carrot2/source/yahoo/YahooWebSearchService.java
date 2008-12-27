@@ -122,7 +122,7 @@ public final class YahooWebSearchService extends YahooSearchService
         }
         if (type != null)
         {
-            params.add(new NameValuePair("type", type.toString()));
+            params.add(new NameValuePair("type", type.getApiOption()));
         }
 
         return params;

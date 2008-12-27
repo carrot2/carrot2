@@ -164,7 +164,7 @@
        before they let this script assemble the complete WAR file.
     -->
   <target name="carrot2.webapp.prepare"
-          depends="carrot2.webapp.templates.war, carrot2.webapp.classes, carrot2.webapp.suites, carrot2.webapp.skins, carrot2.webapp.sprites.war" />
+          depends="carrot2.webapp.templates.war, carrot2.webapp.classes, carrot2.webapp.attributes.war, carrot2.webapp.suites, carrot2.webapp.skins, carrot2.webapp.sprites.war" />
 
   <!--
        Compiles the main web application classes and copies log4j configuration.
@@ -272,7 +272,8 @@
   <!--
        Processes all the files required to run the web application from Eclipse.
     -->
-  <target name="carrot2.webapp.eclipse.setup" depends="carrot2.webapp.templates.eclipse, carrot2.webapp.sprites.eclipse" />
+  <target name="carrot2.webapp.eclipse.setup" 
+          depends="carrot2.webapp.templates.eclipse, carrot2.webapp.sprites.eclipse, carrot2.webapp.attributes.eclipse" />
 
   <!--
        Substitutes variables in config.xml, jawr.properties and web.xml files.
@@ -344,6 +345,24 @@
   <target name="carrot2.webapp.templates.eclipse">
     <carrot2.webapp.templates target.dir="${carrot2.webapp.basedir}/src"
                template.caching="false" />
+  </target>
+
+  <!--
+       Generates metadata files for webapp-specific document sources.
+    -->
+  <target name="carrot2.webapp.attributes.war">
+    <antcall target="compile" />
+    <attributes-xml java.source="${carrot2.webapp.basedir}/src/org/carrot2/webapp/source" 
+                    output.dir="${webapp.classes.dir}" />
+  </target>
+
+  <!--
+       Generates metadata files for webapp-specific document sources.
+    -->
+  <target name="carrot2.webapp.attributes.eclipse">
+    <antcall target="compile" />
+    <attributes-xml java.source="${carrot2.webapp.basedir}/src/org/carrot2/webapp/source" 
+                    output.dir="${carrot2.webapp.basedir}/tmp/eclipse" />
   </target>
 
   <!--

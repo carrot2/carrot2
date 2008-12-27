@@ -74,7 +74,7 @@ input, select, label {
 }
 
 #startup #options {
-  min-height: 63px;
+  min-height: 65px;
 }
 
 #hide-options,
@@ -85,6 +85,17 @@ input, select, label {
   padding-bottom: 1px;
   line-height: 1;
   font-size: 11px;
+}
+
+#hide-advanced-options,
+#show-advanced-options {
+  font-size: 11px;
+  color: #a0a0a0;
+}
+
+#hide-advanced-options {
+  position: relative;
+  top: -4px;
 }
 
 /** Startup screen */
@@ -126,7 +137,6 @@ input, select, label {
 #startup #example-queries,
 #startup #search-area ul.util-links {
   left: 238px;
-  position: absolute;
 }
 
 #startup #main-info {
@@ -141,13 +151,14 @@ input, select, label {
 }
 
 #startup #example-queries {
-  bottom: 70px;
+  margin-top: 54px;
+  *margin-top: 60px;
   font-size: 13px;
 }
 
 #startup #search-area ul.util-links {
-  bottom: 25px;
-  padding-top: 13px;
+  margin-top: 16px;
+  padding-top: 12px;
   width: 400px;
 }
 

@@ -155,6 +155,12 @@ public class QueryProcessorServlet extends HttpServlet
             // Build model for this request
             final RequestModel requestModel = WebappConfig.INSTANCE
                 .setDefaults(new RequestModel());
+
+            // Special handling for false boolean attributes whose default value is true
+            addFalseBooleanParameters(requestParameters
+                .containsKey(WebappConfig.SOURCE_PARAM) ? (String) requestParameters
+                .get(WebappConfig.SOURCE_PARAM) : requestModel.source, requestParameters);
+
             requestModel.modern = UserAgentUtils.isModernBrowser(request);
             final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = new AttributeBinder.AttributeBinderActionBind(
                 Input.class, requestParameters, true,
@@ -171,6 +177,11 @@ public class QueryProcessorServlet extends HttpServlet
             {
                 handleStatsRequest(request, response, requestParameters, requestModel);
             }
+            if (RequestType.ATTRIBUTES.equals(requestModel.type))
+            {
+                handleAttributesRequest(request, response, requestParameters,
+                    requestModel);
+            }
             else if (RequestType.SOURCES.equals(requestModel.type))
             {
                 handleSourcesRequest(request, response, requestParameters, requestModel);
@@ -184,6 +195,23 @@ public class QueryProcessorServlet extends HttpServlet
         {
             throw new ServletException(e);
         }
+    }
+
+    /**
+     * Handles requests for document source attributes.
+     * 
+     * @throws Exception
+     */
+    private void handleAttributesRequest(HttpServletRequest request,
+        HttpServletResponse response, Map<String, Object> requestParameters,
+        RequestModel requestModel) throws Exception
+    {
+        response.setContentType(MIME_XML_CHARSET_UTF);
+        final AttributeMetadataModel model = new AttributeMetadataModel(requestModel);
+
+        final Persister persister = new Persister(getPersisterFormat(requestModel));
+        persister.write(model, response.getWriter());
+        setExpires(response, 60 * 24 * 7); // 1 week
     }
 
     /**
@@ -292,7 +320,7 @@ public class QueryProcessorServlet extends HttpServlet
                     processingResult = controller.process(requestParameters,
                         requestModel.source, QueryWordHighlighter.class.getName());
                 }
-                setExpires(response);
+                setExpires(response, 5);
             }
         }
         catch (ProcessingException e)
@@ -319,9 +347,22 @@ public class QueryProcessorServlet extends HttpServlet
         }
     }
 
-    /*
-     * 
-     */
+    private void addFalseBooleanParameters(final String sourceId,
+        final Map<String, Object> requestParameters)
+    {
+        final Collection<String> booleanAttributeKeys = WebappConfig.INSTANCE.sourceBooleanAttributeKeys
+            .get(sourceId);
+        for (String key : booleanAttributeKeys)
+        {
+            if (!requestParameters.containsKey(key))
+            {
+                // If there is no value in HTTP parameters, checkbox was not checked
+                // and we need to set the corresponding attribute to false
+                requestParameters.put(key, false);
+            }
+        }
+    }
+
     private void logQuery(RequestModel requestModel, ProcessingResult processingResult)
     {
         this.queryLogger.info(requestModel.algorithm + "," + requestModel.source + ","
@@ -330,21 +371,15 @@ public class QueryProcessorServlet extends HttpServlet
             + "," + requestModel.query);
     }
 
-    /*
-     * 
-     */
-    private void setExpires(HttpServletResponse response)
+    private void setExpires(HttpServletResponse response, int minutes)
     {
         final HttpServletResponse httpResponse = response;
 
         final Calendar expiresCalendar = Calendar.getInstance();
-        expiresCalendar.add(Calendar.MINUTE, 5);
+        expiresCalendar.add(Calendar.MINUTE, minutes);
         httpResponse.addDateHeader("Expires", expiresCalendar.getTimeInMillis());
     }
 
-    /*
-     * 
-     */
     private Format getPersisterFormat(RequestModel requestModel)
     {
         return new Format(2, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -352,9 +387,6 @@ public class QueryProcessorServlet extends HttpServlet
             + WebappConfig.getContextRelativeSkinStylesheet(requestModel.skin) + "\" ?>");
     }
 
-    /*
-     * 
-     */
     private Map<String, String> extractCookies(HttpServletRequest request)
     {
         final Map<String, String> result = Maps.newHashMap();

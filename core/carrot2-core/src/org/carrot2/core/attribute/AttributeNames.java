@@ -13,8 +13,6 @@
 
 package org.carrot2.core.attribute;
 
-import javax.security.auth.callback.LanguageCallback;
-
 import org.carrot2.core.*;
 
 /**
@@ -27,7 +25,7 @@ public final class AttributeNames
      * Index of the first document/ search result to fetch. The index starts at zero.
      * 
      * @label Start Index
-     * @level Medium
+     * @level Advanced
      * @group Search query
      */
     public static final String START = "start";

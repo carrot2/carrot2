@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,16 +13,23 @@
 package org.carrot2.webapp.model;
 
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.*;
 
 import org.apache.log4j.Logger;
+import org.carrot2.core.DocumentSourceDescriptor;
 import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.simpleframework.xml.*;
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.load.Persister;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.*;
 
 /**
  * The application-wide configuration.
@@ -34,6 +40,26 @@ public class WebappConfig
 
     @Element(required = false)
     public ProcessingComponentSuite components;
+
+    /**
+     * Descriptors of attributes to display in the advanced document source options view,
+     * keyed by document source id.
+     */
+    public Map<String, List<AttributeDescriptor>> sourceAttributeMetadata;
+
+    /**
+     * Initialization attributes of document sources, keyed by document source id.
+     */
+    public Map<String, Map<String, Object>> sourceInitializationAttributes;
+
+    /**
+     * A list of boolean-typed attributes for each source. We need this to handle a
+     * special corner case when a boolean attribute's default value is true. When an HTML
+     * check box is not checked, no parameter will be appended to the request on form
+     * submit, so we'd need to set the attribute to false if the request did not contain
+     * the key we expected.
+     */
+    public Map<String, Collection<String>> sourceBooleanAttributeKeys;
 
     @ElementList(entry = "skin")
     public ArrayList<SkinModel> skins;
@@ -85,6 +111,7 @@ public class WebappConfig
     {
         try
         {
+            // Load configuration
             INSTANCE = deserialize(ResourceUtilsFactory.getDefaultResourceUtils()
                 .getFirst("config.xml"));
 
@@ -102,12 +129,18 @@ public class WebappConfig
                     "Configuration must contain at leas one result list size");
             }
 
+            // Load component suite
             INSTANCE.components = ProcessingComponentSuite
                 .deserialize(ResourceUtilsFactory.getDefaultResourceUtils().getFirst(
                     INSTANCE.componentSuite));
             log.info("Loaded " + INSTANCE.components.getSources().size()
                 + " sources and " + INSTANCE.components.getAlgorithms().size()
                 + " algorithms");
+
+            // Prepare attribute descriptors for document sources
+            INSTANCE.sourceAttributeMetadata = prepareSourceAttributeMetadata(INSTANCE.components);
+            INSTANCE.sourceInitializationAttributes = prepareSourceInitializationAttributes(INSTANCE.components);
+            INSTANCE.sourceBooleanAttributeKeys = prepareSourceBooleanAttributeKeys(INSTANCE.components);
         }
         catch (Exception e)
         {
@@ -157,5 +190,105 @@ public class WebappConfig
         }
 
         return loaded;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Map<String, List<AttributeDescriptor>> prepareSourceAttributeMetadata(
+        ProcessingComponentSuite components) throws Exception
+    {
+        final List<DocumentSourceDescriptor> sources = components.getSources();
+        final Map<String, List<AttributeDescriptor>> sourceDescriptors = Maps
+            .newLinkedHashMap();
+
+        for (DocumentSourceDescriptor documentSourceDescriptor : sources)
+        {
+            final BindableDescriptor bindableDescriptor = documentSourceDescriptor
+                .getBindableDescriptor().only(Input.class).only(
+                    new LevelsPredicate(AttributeLevel.BASIC, AttributeLevel.MEDIUM))
+                .only(new Predicate<AttributeDescriptor>()
+                {
+                    private final Set<String> IGNORED = ImmutableSet.<String> of(
+                        AttributeNames.QUERY, AttributeNames.RESULTS);
+
+                    public boolean apply(AttributeDescriptor d)
+                    {
+                        return !IGNORED.contains(d.key);
+                    }
+                });
+
+            final List<AttributeDescriptor> descriptors = Lists
+                .newArrayList(bindableDescriptor.attributeDescriptors.values());
+            Collections.sort(descriptors, new Comparator<AttributeDescriptor>()
+            {
+                public int compare(AttributeDescriptor d1, AttributeDescriptor d2)
+                {
+                    return getOrder(d1) - getOrder(d2);
+                }
+
+                private int getOrder(AttributeDescriptor d)
+                {
+                    if (d.type.isEnum())
+                    {
+                        return 0;
+                    }
+                    else if (d.type.equals(Boolean.class))
+                    {
+                        return 2;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+            });
+
+            sourceDescriptors.put(documentSourceDescriptor.getId(), descriptors);
+        }
+
+        return sourceDescriptors;
+    }
+
+    private static Map<String, Map<String, Object>> prepareSourceInitializationAttributes(
+        ProcessingComponentSuite components)
+    {
+        final List<DocumentSourceDescriptor> sources = components.getSources();
+        final Map<String, Map<String, Object>> initAttributes = Maps.newHashMap();
+
+        for (DocumentSourceDescriptor documentSourceDescriptor : sources)
+        {
+            initAttributes.put(documentSourceDescriptor.getId(), documentSourceDescriptor
+                .getComponentConfiguration().attributes);
+        }
+
+        return initAttributes;
+    }
+
+    private static Map<String, Collection<String>> prepareSourceBooleanAttributeKeys(
+        ProcessingComponentSuite components) throws Exception
+    {
+        final List<DocumentSourceDescriptor> sources = components.getSources();
+        final Map<String, Collection<String>> booleanAttributeKeys = Maps.newHashMap();
+
+        for (DocumentSourceDescriptor documentSourceDescriptor : sources)
+        {
+            booleanAttributeKeys.put(documentSourceDescriptor.getId(), Lists.transform(
+                Lists.newArrayList(documentSourceDescriptor.getBindableDescriptor().only(
+                    new Predicate<AttributeDescriptor>()
+                    {
+                        public boolean apply(AttributeDescriptor d)
+                        {
+                            return d.inputAttribute && d.type.equals(Boolean.class);
+                        }
+                    }).attributeDescriptors.values()),
+                new Function<AttributeDescriptor, String>()
+                {
+                    public String apply(AttributeDescriptor d)
+                    {
+                        return d.key;
+                    }
+                }));
+        }
+
+        return booleanAttributeKeys;
     }
 }

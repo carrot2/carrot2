@@ -39,6 +39,9 @@ public enum RequestType
     /** Information about document sources */
     SOURCES(false),
     
+    /** Information about attributes of a document source */
+    ATTRIBUTES(false),
+    
     /** Simple statistics page */
     STATS(false);
     

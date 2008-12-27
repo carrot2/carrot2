@@ -20,6 +20,7 @@
     </xsl:if>
     
     <script type="text/javascript">
+      jQuery.options.url = "<xsl:value-of select="$attributes-url" disable-output-escaping="no" />";
       <xsl:if test="string-length(/page/request/@query) > 0">
         jQuery.documents.url = "<xsl:value-of select="$documents-url" disable-output-escaping="no" />";
         jQuery.documents.source = "<xsl:value-of select="/page/request/@source" />";

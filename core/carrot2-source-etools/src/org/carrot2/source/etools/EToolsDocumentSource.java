@@ -13,10 +13,10 @@
 
 package org.carrot2.source.etools;
 
-import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
+import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.ClassResource;
@@ -48,8 +48,15 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      */
     public enum Country
     {
-        ALL("web"), SWITZERLAND("CH"), LICHTENSTEIN("LI"), GERMANY("DE"), AUSTRIA("AT"), FRANCE(
-            "FR"), ITALY("IT"), SPAIN("ES"), GREAT_BRITAIN("GB");
+        ALL("web"), 
+        AUSTRIA("AT"), 
+        FRANCE("FR"), 
+        GERMANY("DE"), 
+        GREAT_BRITAIN("GB"),
+        ITALY("IT"), 
+        LICHTENSTEIN("LI"), 
+        SPAIN("ES"),
+        SWITZERLAND("CH"); 
 
         private String code;
 
@@ -61,7 +68,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
         @Override
         public String toString()
         {
-            return StringUtils.capitalize(name().toLowerCase());
+            return StringUtils.identifierToHumanReadable(name());
         }
 
         public String getCode()
@@ -88,8 +95,12 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      */
     public enum Language
     {
-        ALL("all"), GERMAN("de"), ENGLISH("en"), FRENCH("fr"), ITALIAN("it"), SPANISH(
-            "es");
+        ALL("all"), 
+        ENGLISH("en"), 
+        FRENCH("fr"), 
+        GERMAN("de"), 
+        ITALIAN("it"), 
+        SPANISH("es");
 
         private String code;
 
@@ -101,7 +112,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
         @Override
         public String toString()
         {
-            return StringUtils.capitalize(name().toLowerCase());
+            return StringUtils.identifierToHumanReadable(name());
         }
 
         public String getCode()
@@ -139,7 +150,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * Determines which data sources to search.
      * 
      * @label Data sources
-     * @level Medium
+     * @level Advanced
      * @group Service
      */
     @Input
@@ -173,7 +184,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
         @Override
         public String toString()
         {
-            return StringUtils.capitalize(code);
+            return StringUtils.identifierToHumanReadable(name());
         }
 
         public String getCode()
@@ -183,7 +194,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     }
 
     /**
-     * Determines whether offensive content will be excluded from the returned results.
+     * If enabled, excludes offensive content from the results.
      * 
      * @label Safe search
      * @level Basic

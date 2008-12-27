@@ -46,10 +46,9 @@ body, input, select, label, button {
 
 #startup #main-area-inside {
   background-color: #F6F4EC;
-  min-height: 150px;
-  -height: 150px;
   border-top: 1px solid #b6afa8;
   border-bottom: 1px solid #b6afa8;
+  padding-bottom: 16px;
 }
 
 #startup #search-area {
@@ -79,18 +78,16 @@ body, input, select, label, button {
 }
 
 #startup #example-queries {
-  position: absolute;
-  bottom: 50px;
+  margin-top: 50px;
   color: #606060;
   width: 360px;
 }
 
 #startup #search-area ul.util-links {
-  position: absolute;
-  bottom: 14px;
   border-top: 1px #d0d0d0 solid;
   width: 360px;
   padding-top: 7px;
+  margin-top: 16px;
 }
 
 #startup #main-area {
@@ -131,11 +128,26 @@ body, input, select, label, button {
 #options {
   width: 356px;
   padding-top: 7px;
+  *padding-top: 0px;
+  *margin-top: -10px;
+  -margin-top: 7px;
   margin-bottom: 10px;
 }
 
 #startup #options {
-  min-height: 59px;
+  min-height: 58px;
+  -height: 58px;
+}
+
+#hide-advanced-options,
+#show-advanced-options {
+  font-size: 10px;
+  color: #a0a0a0;
+}
+
+#hide-advanced-options {
+  position: relative;
+  top: -4px;
 }
 
 /** Results screen */
