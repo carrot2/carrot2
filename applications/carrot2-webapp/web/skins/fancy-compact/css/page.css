@@ -10,7 +10,7 @@ body, input, select, label {
 /** Noscript message */
 #startup div.noscript {
   left: 237px;
-  top: 200px;
+  top: 240px;
 }
 
 #results div.noscript {

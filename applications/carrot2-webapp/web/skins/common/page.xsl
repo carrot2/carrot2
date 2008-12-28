@@ -102,10 +102,6 @@
 
   <!-- Main page contents -->
   <xsl:template match="page[@type = 'PAGE' or @type = 'FULL' or @type = 'SOURCES']">
-    <noscript>
-      <div class="noscript"><xsl:apply-templates select=".." mode="no-javascript-text" /></div>
-    </noscript>
-
     <div><!-- We need this extra div to fix IE7 bug: http://www.brunildo.org/test/IEWapie2.html -->
       <xsl:if test="/page/request/@modern = 'false'">
         <span id="use-modern">Use a <a href="http://browsehappy.com/">modern browser</a> for best experience!</span>
@@ -159,6 +155,10 @@
         <xsl:apply-templates select="document('template-document.xml')" />
       </div>
     </xsl:if>
+
+    <noscript>
+      <div class="noscript"><xsl:apply-templates select=".." mode="no-javascript-text" /></div>
+    </noscript>
   </xsl:template>
 
   <xsl:template match="page" mode="search-area">
