@@ -4,6 +4,7 @@
 
   <xsl:import href="../html/docbook.xsl"/>
   <xsl:import href="distribution-links.xsl"/>
+  <xsl:import href="attributes.xsl"/>
   <xsl:import href="i10n.xsl"/>
 
   <xsl:output indent="yes" omit-xml-declaration="yes"
@@ -13,6 +14,8 @@
 
   <xsl:param name="title-logo-file">img/logo.gif</xsl:param>
   <xsl:param name="title-logo-alt">...</xsl:param>
+
+  <xsl:template match="processing-instruction('linebreak')"><br /></xsl:template>
 
   <xsl:param name="section.autolabel.max.depth">2</xsl:param>
   <xsl:param name="section.autolabel">1</xsl:param>

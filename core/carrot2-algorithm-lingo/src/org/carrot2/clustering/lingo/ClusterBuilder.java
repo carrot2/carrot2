@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -233,16 +232,25 @@ public class ClusterBuilder
                 final int phraseFeature = labelsFeatureIndex[row + firstPhraseIndex];
                 int [] phraseWordIndices = phrasesWordIndices[phraseFeature - wordCount];
 
-                double penalty = getDocumentCountPenalty(row + firstPhraseIndex,
-                    documentCount, labelsDocumentIndices);
-
-                if (phraseWordIndices.length >= phraseLengthPenaltyStart)
+                double penalty;
+                if (phraseWordIndices.length >= phraseLengthPenaltyStop)
                 {
-                    penalty *= 1 - penaltyStep
-                        * (phraseWordIndices.length - phraseLengthPenaltyStart + 1);
+                    penalty = 0;
                 }
-                if (featureScores != null) {
-                    penalty *= featureScores[row + firstPhraseIndex];
+                else
+                {
+                    penalty = getDocumentCountPenalty(row + firstPhraseIndex,
+                        documentCount, labelsDocumentIndices);
+
+                    if (phraseWordIndices.length >= phraseLengthPenaltyStart)
+                    {
+                        penalty *= 1 - penaltyStep
+                            * (phraseWordIndices.length - phraseLengthPenaltyStart + 1);
+                    }
+                    if (featureScores != null)
+                    {
+                        penalty *= featureScores[row + firstPhraseIndex];
+                    }
                 }
                 phraseCos.viewRow(row).assign(Functions.mult(penalty));
             }

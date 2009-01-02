@@ -13,6 +13,7 @@
 
 package org.carrot2.webapp.model;
 
+import java.util.Calendar;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,6 +62,9 @@ public class PageModel
 
     @Attribute(name = "request-url")
     public final String requestUrl;
+    
+    @Attribute(name = "current-year")
+    public final int currentYear;
 
     public PageModel(HttpServletRequest request, RequestModel requestModel,
         JawrUrlGenerator urlGenerator, ProcessingResult processingResult,
@@ -89,6 +93,8 @@ public class PageModel
         appendParameter(xmlUrl, WebappConfig.TYPE_PARAM, RequestType.CARROT2.name());
         this.xmlUrlEncoded = StringUtils.urlEncodeWrapException(xmlUrl.toString(),
             "UTF-8");
+        
+        this.currentYear = Calendar.getInstance().get(Calendar.YEAR);
     }
 
     private StringBuilder buildSearchUrlBase(RequestModel requestModel, String action)

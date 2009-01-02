@@ -21,7 +21,7 @@ body, input, select, label, button {
 /** Noscript message */
 #startup div.noscript
 {
-  top: 195px;
+  top: 238px;
   left: 234px;
 }
 
@@ -50,6 +50,7 @@ body, input, select, label, button {
   -height: 150px;
   border-top: 1px solid #b6afa8;
   border-bottom: 1px solid #b6afa8;
+  min-height: 140px;
 }
 
 #startup #search-area {

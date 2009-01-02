@@ -55,7 +55,7 @@
       <xsl:value-of select="$build-date" />
     </small>
     <small id="copyright">
-      &#169; 2002-<xsl:value-of select="$current-year" />&#160;<a href="http://stanislaw.osinski.name" target="_blank">Stanislaw Osinski</a>,
+      &#169; 2002-<xsl:value-of select="/page/@current-year" />&#160;<a href="http://stanislaw.osinski.name" target="_blank">Stanislaw Osinski</a>,
       <a href="http://www.cs.put.poznan.pl/dweiss" target="_blank">Dawid Weiss</a>
     </small>
   </xsl:template>

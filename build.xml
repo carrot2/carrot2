@@ -320,6 +320,9 @@
   <!-- 
        Attribute metadata related targets and macros.
     -->
+  <property name="common.attribute.names.source.path"
+            location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
+  
   <macrodef name="attributes-xml">
     <attribute name="java.source" />
     <attribute name="output.dir" />
@@ -352,8 +355,6 @@
 
   <target name="attrs"
           depends="compile">
-    <property name="common.attribute.names.source.path"
-              location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
     <parallel threadsPerProcessor="1">
       <attributes-xml java.source="${core.dir}/carrot2-algorithm-lingo/src" output.dir="${build.dir}" />
       <attributes-xml java.source="${core.dir}/carrot2-algorithm-stc/src" output.dir="${build.dir}" />
@@ -365,6 +366,7 @@
       <attributes-xml java.source="${core.dir}/carrot2-source-pubmed/src" output.dir="${build.dir}" />
       <attributes-xml java.source="${core.dir}/carrot2-source-opensearch/src" output.dir="${build.dir}" />
       <attributes-xml java.source="${core.dir}/carrot2-source-boss/src" output.dir="${build.dir}" />
+      <attributes-xml java.source="${core.dir}/carrot2-source-google/src" output.dir="${build.dir}" />
       <attributes-xml java.source="${core.dir}/carrot2-source-google-desktop/src" output.dir="${build.dir}" />
       <attributes-xml java.source="${core.dir}/carrot2-source-solr/src" output.dir="${build.dir}" />
       <attributes-xml java.source="${core.dir}/carrot2-source-xml/src" output.dir="${build.dir}" />
@@ -376,9 +378,6 @@
   </target>
 
   <target name="attrs.eclipse" depends="compile" description="Compiles attribute descriptors for use with Eclipse.">
-    <property name="common.attribute.names.source.path"
-              location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
-
     <parallel threadsPerProcessor="1">
       <attributes-xml-copy java.source="${core.dir}/carrot2-algorithm-lingo/src"
                            output.dir="${core.dir}/carrot2-algorithm-lingo/tmp/eclipse"
@@ -419,6 +418,10 @@
       <attributes-xml-copy java.source="${core.dir}/carrot2-source-boss/src"
                            output.dir="${core.dir}/carrot2-source-boss/tmp/eclipse"
                            copy.to="${core.dir}/carrot2-source-boss/META-INF" />
+
+      <attributes-xml-copy java.source="${core.dir}/carrot2-source-google/src"
+                           output.dir="${core.dir}/carrot2-source-google/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-source-google/META-INF" />
 
       <attributes-xml-copy java.source="${core.dir}/carrot2-source-google-desktop/src"
                            output.dir="${core.dir}/carrot2-source-google-desktop/tmp/eclipse"
@@ -701,6 +704,7 @@
       <fileset dir="${jar.dir}" />
       <fileset dir="${carrot2.master.basedir}">
         <include name="carrot2.LICENSE" />
+        <include name="carrot2.CONTRIBUTORS" />
       </fileset>
     </copy>
     <copy todir="${api.dir}/examples">
