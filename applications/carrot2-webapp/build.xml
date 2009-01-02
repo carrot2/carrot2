@@ -314,14 +314,12 @@
         </filterset>
       </copy>
 
-      <tstamp><format property="current.year" pattern="yyyy" /></tstamp>
       <tstamp><format property="build.date" pattern="yyyy-MM-dd HH:mm" /></tstamp>
         
       <copy file="${carrot2.webapp.basedir}/web/skins/common/variables.template.xsl"
             tofile="${carrot2.webapp.basedir}/web/skins/common/variables.xsl"
             overwrite="true">
         <filterset>
-          <filter token="CURRENT_YEAR" value="${current.year}" />
           <filter token="VERSION_NUMBER" value="${carrot2.version}" />
           <filter token="BUILD_NUMBER" value="${build.number}" />
           <filter token="BUILD_DATE" value="${build.date}" />
