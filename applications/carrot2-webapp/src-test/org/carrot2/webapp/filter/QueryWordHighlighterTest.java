@@ -57,6 +57,12 @@ public class QueryWordHighlighterTest
     }
     
     @Test
+    public void testSpacesInQuery()
+    {
+        check("raghuram   mtv   bi ography", "raghuram   mtv   bi ography", "<b>raghuram</b>   <b>mtv</b>   <b>bi</b> <b>ography</b>");
+    }
+    
+    @Test
     public void testMultiWordQuery()
     {
         check("some test case", "many tests will fail in some case",
