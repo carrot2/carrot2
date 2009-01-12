@@ -746,7 +746,7 @@
   </target>
   <target name="reports" depends="clean.classes, test, coverage, duplication, findbugs" description="Builds all Carrot2 test and code quality reports" />
 
-  <target name="webapp" depends="carrot2.webapp.build, carrot2.webapp.eclipse.setup" description="Builds Carrot2 web application" />
+  <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
   
   <!--
