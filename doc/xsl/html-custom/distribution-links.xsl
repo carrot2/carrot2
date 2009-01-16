@@ -23,7 +23,7 @@
   </xsl:template>  
 
   <xsl:template match="c2:webapp-download-link">
-    <a href="{$dist.url}/{$carrot2.dcs.base}-{$carrot2.version}.zip"><xsl:apply-templates /></a>
+    <a href="{$dist.url}/{$carrot2.webapp.base}-{$carrot2.version}.war"><xsl:apply-templates /></a>
   </xsl:template>  
 
   <xsl:template match="c2:workbench-download-link">
