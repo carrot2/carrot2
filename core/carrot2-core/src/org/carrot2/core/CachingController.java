@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,21 +13,18 @@
 package org.carrot2.core;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.AttributeBinder.IAttributeBinderAction;
-import org.carrot2.util.attribute.AttributeBinder.AttributeBinderActionCollect;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.pool.*;
 import org.carrot2.util.resource.ClassResource;
 
@@ -59,17 +55,8 @@ public final class CachingController implements IController
     private volatile SoftUnboundedPool<IProcessingComponent, String> componentPool;
 
     /**
-     * Original values of {@link Processing} attributes that will be restored in the
-     * component after processing finishes.
-     * <p>
-     * Access monitor: {#link #reentrantLock}.
-     */
-    private final Map<Pair<Class<? extends IProcessingComponent>, String>, Map<String, Object>> resetAttributes = Maps
-        .newHashMap();
-
-    /**
      * Descriptors of {@link Input} and {@link Output} {@link Processing} attributes of
-     * components whose output is to be cached.
+     * components whose output is to be cached. Access monitor: {@link #reentrantLock}
      */
     private final Map<Pair<Class<? extends IProcessingComponent>, String>, InputOutputAttributeDescriptors> cachedComponentAttributeDescriptors = Maps
         .newHashMap();
@@ -109,9 +96,9 @@ public final class CachingController implements IController
      * 
      * @param cachedComponentClasses classes of components whose output should be cached
      *            by the controller. If a superclass is provided here, e.g.
-     *            {@link IDocumentSource}, all its subclasses will be subject to caching. If
-     *            {@link IProcessingComponent} is provided here, output of all components
-     *            will be cached.
+     *            {@link IDocumentSource}, all its subclasses will be subject to caching.
+     *            If {@link IProcessingComponent} is provided here, output of all
+     *            components will be cached.
      */
     public CachingController(
         Class<? extends IProcessingComponent>... cachedComponentClasses)
@@ -159,9 +146,9 @@ public final class CachingController implements IController
      * Processing with components initialized in this method can be performed using
      * {@link #process(Map, String...)}.
      * 
-     * @param globalInitAttributes see {@link IController#init(Map)}. Global initialization
-     *            attributes will be overridden by component-specific initialization
-     *            attributes, if provided.
+     * @param globalInitAttributes see {@link IController#init(Map)}. Global
+     *            initialization attributes will be overridden by component-specific
+     *            initialization attributes, if provided.
      * @param componentConfigurations component configurations to be used. Identifiers of
      *            the provided components must be unique.
      */
@@ -198,10 +185,11 @@ public final class CachingController implements IController
             idToComponentClass);
 
         // Create the pool
+        final ComponentResetListener componentResetListener = new ComponentResetListener();
         componentPool = new SoftUnboundedPool<IProcessingComponent, String>(
             new ComponentInstantiationListener(Maps.newHashMap(globalInitAttributes),
-                componentSpecificInitAttributes), null,
-            new ComponentPassivationListener(), ComponentDisposalListener.INSTANCE);
+                componentSpecificInitAttributes), componentResetListener,
+            componentResetListener, ComponentDisposalListener.INSTANCE);
 
         // Initialize cache if needed
         if (!cachedComponentClasses.isEmpty())
@@ -457,28 +445,6 @@ public final class CachingController implements IController
     }
 
     /**
-     * Transforms values of attributes that are bound only at {@link Processing} time and
-     * have {@link ImplementingClasses} constraints into the classes of the values.
-     */
-    private final static class ToClassAttributeTransformer implements
-        AttributeBinder.IAttributeTransformer
-    {
-        static ToClassAttributeTransformer INSTANCE = new ToClassAttributeTransformer();
-
-        public Object transform(Object value, String key, Field field,
-            Class<? extends Annotation> bindingDirectionAnnotation,
-            Class<? extends Annotation>... filteringAnnotations)
-        {
-            if (value != null && field.getAnnotation(ImplementingClasses.class) != null
-                && field.getAnnotation(Init.class) == null)
-            {
-                return value.getClass();
-            }
-            return value;
-        }
-    }
-
-    /**
      * Initializes newly created component instances, remembers attribute values so that
      * they can be reset after the component gets returned to the pool.
      */
@@ -502,8 +468,8 @@ public final class CachingController implements IController
             try
             {
                 final Map<String, Object> specificInitAttributes = componentSpecificInitAttributes
-                    .get(new Pair<Class<? extends IProcessingComponent>, String>(component
-                        .getClass(), parameter));
+                    .get(new Pair<Class<? extends IProcessingComponent>, String>(
+                        component.getClass(), parameter));
 
                 final Map<String, Object> actualInitAttributes;
                 if (specificInitAttributes != null)
@@ -525,36 +491,6 @@ public final class CachingController implements IController
                 // provided at request time.
                 AttributeBinder.bind(component, actualInitAttributes, false, Input.class,
                     Processing.class);
-
-                // If this is the first component we initialize, remember attribute
-                // values so that they can be reset on returning to the pool.
-                synchronized (reentrantLock)
-                {
-                    // Attribute values for resetting
-                    final Class<? extends IProcessingComponent> componentClass = component
-                        .getClass();
-                    Map<String, Object> attributes = resetAttributes
-                        .get(new Pair<Class<? extends IProcessingComponent>, String>(
-                            componentClass, parameter));
-                    if (attributes == null)
-                    {
-                        attributes = Maps.newHashMap();
-
-                        // We only unbind @Processing attributes here, so components
-                        // must not change @Init attributes during processing.
-                        // We could unbind @Init attributes also, but this may be
-                        // costly when Class -> Object coercion happens.
-                        AttributeBinder.bind(component, new IAttributeBinderAction []
-                        {
-                            new AttributeBinderActionCollect(Input.class, attributes,
-                                ToClassAttributeTransformer.INSTANCE),
-                        }, Input.class, Processing.class);
-
-                        resetAttributes.put(
-                            new Pair<Class<? extends IProcessingComponent>, String>(
-                                componentClass, parameter), attributes);
-                    }
-                }
             }
             catch (Exception e)
             {
@@ -585,27 +521,44 @@ public final class CachingController implements IController
      * Resets {@link Processing} attribute values before the component is returned to the
      * pool.
      */
-    private final class ComponentPassivationListener implements
-        IPassivationListener<IProcessingComponent, String>
+    private final class ComponentResetListener implements
+        IPassivationListener<IProcessingComponent, String>,
+        IActivationListener<IProcessingComponent, String>
     {
+        /**
+         * Stores values of {@link Processing} attributes for the duration of processing.
+         */
+        private ConcurrentHashMap<Integer, Map<String, Object>> resetValues = new ConcurrentHashMap<Integer, Map<String, Object>>();
+
+        @SuppressWarnings("unchecked")
+        public void activate(IProcessingComponent processingComponent, String parameter)
+        {
+            // Remember values of @Input @Processing attributes
+            final Map<String, Object> originalValues = Maps.newHashMap();
+            try
+            {
+                AttributeBinder.unbind(processingComponent, originalValues, Input.class,
+                    Processing.class);
+                resetValues.put(System.identityHashCode(processingComponent),
+                    originalValues);
+            }
+            catch (Exception e)
+            {
+                throw new ProcessingException("Could not unbind attribute values", e);
+            }
+        }
+
         @SuppressWarnings("unchecked")
         public void passivate(IProcessingComponent processingComponent, String parameter)
         {
-            // Reset attribute values
+            // Reset values of @Input @Processing attributes back to original values
             try
             {
                 // Here's a little hack: we need to disable checking
                 // for required attributes, otherwise, we won't be able
                 // to reset @Required input attributes to null
-                final Map<String, Object> map;
-                synchronized (reentrantLock)
-                {
-                    map = resetAttributes
-                        .get(new Pair<Class<? extends IProcessingComponent>, String>(
-                            processingComponent.getClass(), parameter));
-                }
-
-                AttributeBinder.bind(processingComponent, map, false, Input.class,
+                AttributeBinder.bind(processingComponent, resetValues.get(System
+                    .identityHashCode(processingComponent)), false, Input.class,
                     Processing.class);
             }
             catch (Exception e)

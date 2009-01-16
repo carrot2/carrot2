@@ -41,6 +41,11 @@ final class SuffixSorter
                 return 0;
             }
 
+            /*
+             * Suffix data ends with a unique negative value, so we don't need to do extra
+             * range checks and we still won't run into array index out of bounds
+             * exceptions.
+             */
             while (suffixData[suffixA] == suffixData[suffixB])
             {
                 suffixA++;

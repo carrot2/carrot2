@@ -300,6 +300,10 @@ public class QueryProcessorServlet extends HttpServlet
         // web application defaults and not component defaults.
         requestParameters.put(AttributeNames.RESULTS, requestModel.results);
 
+        // Remove values corresponding to internal attributes
+        requestParameters.keySet().removeAll(
+            WebappConfig.INSTANCE.componentInternalAttributeKeys);
+
         // Perform processing
         ProcessingResult processingResult = null;
         ProcessingException processingException = null;

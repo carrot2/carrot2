@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -463,26 +462,46 @@ public final class Cluster
 
     /**
      * Compares clusters first by their size as returned by {@link #size()} and labels as
-     * returned by {@link #getLabel()}. Please note that cluster with a larger number of
-     * documents is <b>smaller</b> according to this comparator, so that it ends up
-     * towards the beginning of the list being sorted. In case of equal sizes, natural
-     * order of the labels decides.
+     * returned by {@link #getLabel()}. In case of equal sizes, natural order of the
+     * labels decides.
+     * <p>
+     * <b>Please note</b>: this is a reversed comparator, so "larger" clusters end up
+     * nearer the beginning of the list being sorted (which is usually the order in which
+     * the applications want to display clusters).
+     * </p>
      */
     public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = Comparators
         .compound(Collections.reverseOrder(BY_SIZE_COMPARATOR), BY_LABEL_COMPARATOR);
 
     /**
      * Compares clusters first by their size as returned by {@link #SCORE} and labels as
-     * returned by {@link #getLabel()}. Please note that cluster with a larger score is
-     * <b>smaller</b> according to this comparator, so that it ends up towards the
-     * beginning of the list being sorted. In case of equal scores, natural order of the
+     * returned by {@link #getLabel()}. In case of equal scores, natural order of the
      * labels decides.
+     * <p>
+     * <b>Please note</b>: this is a reversed comparator, so "larger" clusters end up
+     * nearer the beginning of the list being sorted (which is usually the order in which
+     * the applications want to display clusters).
+     * </p>
      */
     public static final Comparator<Cluster> BY_REVERSED_SCORE_AND_LABEL_COMPARATOR = Comparators
         .compound(Collections.reverseOrder(BY_SCORE_COMPARATOR), BY_LABEL_COMPARATOR);
 
-    public static Comparator<Cluster> byWeightedScoreAndSizeComparator(
-        final double scoreWeight, final int documentCount)
+    /**
+     * Returns a comparator that compares clusters based on the aggregation of their size
+     * and score. If <code>scoreWeight</code> is 0.0, the order depends only on cluster
+     * sizes. If <code>scoreWeight</code> is 1.1, the order depends only on cluster
+     * scores. For <code>scoreWeight</code> values between 0.0 and 1.0, the higher the
+     * <code>scoreWeight</code>, the more contribution of cluster scores to the order. In
+     * case of a tie on the aggregated cluster size and score, clusters are compared by
+     * the natural order of their labels.
+     * <p>
+     * <b>Please note</b>: this is a reversed comparator, so "larger" clusters end up
+     * nearer the beginning of the list being sorted (which is usually the order in which
+     * the applications want to display clusters).
+     * </p>
+     */
+    public static Comparator<Cluster> byReversedWeightedScoreAndSizeComparator(
+        final double scoreWeight)
     {
         if (scoreWeight < 0 || scoreWeight > 1)
         {
@@ -490,15 +509,15 @@ public final class Cluster
                 "Score weight must be between 0.0 (inclusive) and 1.0 (inclusive) ");
         }
 
-        return Comparators.compound(Comparators.nullLeastOrder(Comparators
+        return Comparators.compound(Comparators
             .fromFunction(new Function<Cluster, Double>()
             {
                 public Double apply(Cluster cluster)
                 {
-                    return Math.pow(documentCount - cluster.size(), (1 - scoreWeight))
+                    return -Math.pow(cluster.size(), (1 - scoreWeight))
                         * Math.pow((Double) cluster.getAttribute(SCORE), scoreWeight);
                 }
-            })), BY_LABEL_COMPARATOR);
+            }), BY_LABEL_COMPARATOR);
     }
 
     /**

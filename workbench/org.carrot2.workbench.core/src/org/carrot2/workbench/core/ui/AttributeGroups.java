@@ -21,8 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.IProcessingComponent;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
@@ -41,6 +40,7 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.*;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -142,7 +142,7 @@ public final class AttributeGroups extends Composite implements
                 return false;
             }
         }
-    };
+    }
 
     /**
      * Builds the component for a given {@link BindableDescriptor}.
@@ -247,14 +247,14 @@ public final class AttributeGroups extends Composite implements
     /**
      * Create editors based on the given {@link GroupingMethod}.
      */
-    @SuppressWarnings("unchecked")
     private void createEditors(Composite parent)
     {
         /*
          * Create a filtered view of attribute descriptors.
          */
-        BindableDescriptor descriptor = this.descriptor
-            .not(Internal.class).only(new HasEditorPredicate());
+        BindableDescriptor descriptor = this.descriptor.only(
+            Predicates.not(new InternalAttributePredicate(false))).only(
+            new HasEditorPredicate());
         if (filterPredicate != null)
         {
             descriptor = descriptor.only(filterPredicate);
@@ -360,7 +360,6 @@ public final class AttributeGroups extends Composite implements
     /**
      * Create an editor group associated with a group of attributes.
      */
-    @SuppressWarnings("unchecked")
     private void createEditorGroup(final Composite parent, String groupName,
         BindableDescriptor descriptor, Map<String, AttributeDescriptor> attributes,
         IAttributeEventProvider globalEventsProvider)

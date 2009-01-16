@@ -84,6 +84,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     @Init
     @Processing
     @Required
+    @Internal(configuration = true)
     @ImplementingClasses(classes =
     {
         RAMDirectory.class, FSDirectory.class

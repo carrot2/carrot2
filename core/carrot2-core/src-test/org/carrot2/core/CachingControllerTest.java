@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,10 +12,10 @@
 
 package org.carrot2.core;
 
+import static org.easymock.EasyMock.isA;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.MapAssert.entry;
 import static org.junit.Assert.assertEquals;
-import static org.easymock.EasyMock.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -125,9 +124,10 @@ public class CachingControllerTest extends ControllerTestBase
             result = processing + processing;
         }
     }
-    
+
     @Bindable
-    public static class ComponentWithInitProcessingInputRequiredAttribute extends ProcessingComponentBase
+    public static class ComponentWithInitProcessingInputRequiredAttribute extends
+        ProcessingComponentBase
     {
         @Input
         @Init
@@ -141,7 +141,32 @@ public class CachingControllerTest extends ControllerTestBase
         @Attribute(key = "result")
         @SuppressWarnings("unused")
         private String result;
-        
+
+        @Override
+        public void process() throws ProcessingException
+        {
+            result = initProcessingRequired;
+        }
+    }
+
+    @Bindable
+    public static class ComponentWithInitProcessingInputAttribute extends
+        ProcessingComponentBase
+    {
+        static final String DEFAULT = "default";
+
+        @Input
+        @Init
+        @Processing
+        @Attribute(key = "initProcessing")
+        private String initProcessingRequired = DEFAULT;
+
+        @Output
+        @Processing
+        @Attribute(key = "result")
+        @SuppressWarnings("unused")
+        private String result;
+
         @Override
         public void process() throws ProcessingException
         {
@@ -277,14 +302,14 @@ public class CachingControllerTest extends ControllerTestBase
     {
         assertEquals(0, BindableClass.createdInstances);
         performProcessing(ComponentWithBindableReference.class);
-        assertEquals(2, BindableClass.createdInstances);
+        assertEquals(1, BindableClass.createdInstances);
         performProcessing(ComponentWithBindableReference.class);
-        assertEquals(3, BindableClass.createdInstances);
+        assertEquals(1, BindableClass.createdInstances);
         performProcessing(ComponentWithBindableReference.class);
-        assertEquals(4, BindableClass.createdInstances);
+        assertEquals(1, BindableClass.createdInstances);
     }
 
-    @Test(expected = AttributeBindingException.class)
+    @Test(expected = ProcessingException.class)
     public void testRestoringRequiredProcessingAttributeToNull()
     {
         processingComponent1Mock.init(isA(IControllerContext.class));
@@ -345,7 +370,8 @@ public class CachingControllerTest extends ControllerTestBase
         {
             public void run()
             {
-                final Map<String, Object> localAttributes = Maps.newHashMap(processingAttributes);
+                final Map<String, Object> localAttributes = Maps
+                    .newHashMap(processingAttributes);
                 localAttributes.put("instanceAttribute", "i");
                 localAttributes.put("runtimeAttribute", "r");
                 localAttributes.put("data", "d");
@@ -469,7 +495,8 @@ public class CachingControllerTest extends ControllerTestBase
         {
             public void run()
             {
-                final Map<String, Object> localAttributes = Maps.newHashMap(processingAttributes);
+                final Map<String, Object> localAttributes = Maps
+                    .newHashMap(processingAttributes);
                 localAttributes.put("instanceAttribute", "i");
                 localAttributes.put("runtimeAttribute", "r");
                 localAttributes.put("data", "d");
@@ -530,7 +557,8 @@ public class CachingControllerTest extends ControllerTestBase
             {
                 public String call() throws Exception
                 {
-                    Map<String, Object> localAttributes = Maps.newHashMap(processingAttributes);
+                    Map<String, Object> localAttributes = Maps
+                        .newHashMap(processingAttributes);
                     localAttributes.put("runtimeAttribute", string);
                     localAttributes.put("data", "d");
                     controller.process(localAttributes, CachedProcessingComponent1.class);
@@ -578,10 +606,10 @@ public class CachingControllerTest extends ControllerTestBase
         final Map<String, Object> attributes = Maps.newHashMap();
 
         final Map<String, Object> globalInitAttributes = Maps.newHashMap();
-        final Map<String, Object> conf1Attributes = ImmutableMap.of("init",
-            (Object) "v1");
-        final Map<String, Object> conf2Attributes = ImmutableMap.of("init",
-            (Object) "v2");
+        final Map<String, Object> conf1Attributes = ImmutableMap
+            .of("init", (Object) "v1");
+        final Map<String, Object> conf2Attributes = ImmutableMap
+            .of("init", (Object) "v2");
 
         controller.init(globalInitAttributes, new ProcessingComponentConfiguration(
             ComponentWithInitParameter.class, "conf1", conf1Attributes),
@@ -628,10 +656,10 @@ public class CachingControllerTest extends ControllerTestBase
         final CachingController controller = new CachingController();
 
         final Map<String, Object> globalInitAttributes = Maps.newHashMap();
-        final Map<String, Object> conf1Attributes = ImmutableMap.of("init",
-            (Object) "v1");
-        final Map<String, Object> conf2Attributes = ImmutableMap.of("init",
-            (Object) "v2");
+        final Map<String, Object> conf1Attributes = ImmutableMap
+            .of("init", (Object) "v1");
+        final Map<String, Object> conf2Attributes = ImmutableMap
+            .of("init", (Object) "v2");
 
         controller.init(globalInitAttributes, new ProcessingComponentConfiguration(
             ComponentWithInitParameter.class, "conf1", conf1Attributes),
@@ -723,7 +751,7 @@ public class CachingControllerTest extends ControllerTestBase
         processingComponent1Mock.dispose();
         processingComponent2Mock.dispose();
         mocksControl.checkOrder(true);
-        
+
         mocksControl.replay();
 
         performProcessing(ProcessingComponent1.class, ProcessingComponent2.class);
@@ -743,7 +771,7 @@ public class CachingControllerTest extends ControllerTestBase
         assertThat(statistics.cacheHitsTotal).isEqualTo(0);
         assertThat(statistics.cacheHitsMemory).isEqualTo(0);
         assertThat(statistics.cacheHitsDisk).isEqualTo(0);
-        
+
         controller.dispose();
     }
 
@@ -762,7 +790,7 @@ public class CachingControllerTest extends ControllerTestBase
         assertThat(statistics.cacheHitsTotal).isEqualTo(0);
         assertThat(statistics.cacheHitsMemory).isEqualTo(0);
         assertThat(statistics.cacheHitsDisk).isEqualTo(0);
-        
+
         controller.dispose();
     }
 
@@ -783,7 +811,7 @@ public class CachingControllerTest extends ControllerTestBase
         assertThat(statistics.cacheHitsTotal).isEqualTo(1);
         assertThat(statistics.cacheHitsMemory).isEqualTo(1);
         assertThat(statistics.cacheHitsDisk).isEqualTo(0);
-        
+
         controller.dispose();
     }
 
@@ -796,12 +824,12 @@ public class CachingControllerTest extends ControllerTestBase
         processingComponent3Mock.beforeProcessing();
         processingComponent3Mock.process();
         processingComponent3Mock.afterProcessing();
-        
+
         mocksControl.checkOrder(false);
         processingComponent1Mock.init(isA(IControllerContext.class));
         processingComponent2Mock.init(isA(IControllerContext.class));
         mocksControl.checkOrder(true);
-        
+
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
         mocksControl.andThrow(new RuntimeException());
@@ -812,9 +840,9 @@ public class CachingControllerTest extends ControllerTestBase
         processingComponent2Mock.dispose();
         processingComponent3Mock.dispose();
         mocksControl.checkOrder(true);
-        
+
         mocksControl.replay();
-        
+
         try
         {
             performProcessing(ProcessingComponent3.class);
@@ -831,7 +859,7 @@ public class CachingControllerTest extends ControllerTestBase
             assertThat(statistics.cacheHitsTotal).isEqualTo(0);
             assertThat(statistics.cacheHitsMemory).isEqualTo(0);
             assertThat(statistics.cacheHitsDisk).isEqualTo(0);
-            
+
             controller.dispose();
         }
     }
@@ -841,10 +869,25 @@ public class CachingControllerTest extends ControllerTestBase
     {
         processingAttributes.put("initProcessing", "test");
         performProcessingAndDispose(ComponentWithInitProcessingInputRequiredAttribute.class);
-        
-        assertThat((String)processingAttributes.get("result")).isEqualTo("test");
+
+        assertThat((String) processingAttributes.get("result")).isEqualTo("test");
     }
-    
+
+    @Test
+    public void testInitProcessingInputAttributeResetting()
+    {
+        performProcessing(ComponentWithInitProcessingInputAttribute.class);
+        assertThat((String) processingAttributes.get("result")).isEqualTo(
+            ComponentWithInitProcessingInputAttribute.DEFAULT);
+
+        final String overriddenInitValue = "test";
+        processingAttributes.put("initProcessing", overriddenInitValue);
+        performProcessingAndDispose(ComponentWithInitProcessingInputAttribute.class);
+        assertThat((String) processingAttributes.get("result")).isEqualTo(
+            overriddenInitValue);
+
+    }
+
     private CachingController getCachingController()
     {
         return (CachingController) controller;

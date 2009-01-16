@@ -64,7 +64,7 @@
 
   <!-- Error message text -->
   <xsl:template match="page" mode="error-text">
-    Our apologies, a following processing error has occurred: 
+    Our apologies, the following processing error has occurred: 
     <span class="message"><xsl:value-of select="/page/@exception-message" /></span>
     If the error persists, <a href="http://project.carrot2.org/contact.html">contact us</a>.
   </xsl:template>

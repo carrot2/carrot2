@@ -22,6 +22,7 @@ import org.carrot2.util.attribute.constraint.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Persist;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 /**
@@ -146,7 +147,7 @@ public class AttributeDescriptor
      * @return annotation of the attribute or <code>null</code> is annotation of the
      *         provided type is not defined for the attribute
      */
-    public Annotation getAnnotation(Class<? extends Annotation> annotationClass)
+    public <T extends Annotation> T getAnnotation(Class<T> annotationClass)
     {
         return attributeField.getAnnotation(annotationClass);
     }
@@ -172,6 +173,24 @@ public class AttributeDescriptor
             .toArray(new Annotation [this.constraints.size()]);
 
         return ConstraintValidator.isMet(value, constraints).length == 0;
+    }
+
+    /**
+     * Transforms {@link AttributeDescriptor}s into their keys.
+     */
+    public static final class AttributeDescriptorToKey implements
+        Function<AttributeDescriptor, String>
+    {
+        public static final AttributeDescriptorToKey INSANCE = new AttributeDescriptorToKey();
+
+        private AttributeDescriptorToKey()
+        {
+        }
+
+        public String apply(AttributeDescriptor d)
+        {
+            return d.key;
+        }
     }
 
     @Override

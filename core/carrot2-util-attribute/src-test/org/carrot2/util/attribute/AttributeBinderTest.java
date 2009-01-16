@@ -239,13 +239,6 @@ public class AttributeBinderTest
     }
 
     @Bindable
-    public static class OnlyBindingTimeAnnotationProvided
-    {
-        @TestInit
-        private int initInput;
-    }
-
-    @Bindable
     public static class AttributeAnnotationWithoutBindingDirection
     {
         @TestInit
@@ -542,9 +535,9 @@ public class AttributeBinderTest
             AttributeBinder.bind(instance, attributes, Input.class, TestProcessing.class);
             fail();
         }
-        catch (final ConstraintViolationException e)
+        catch (final AttributeBindingException e)
         {
-            assertEquals(12, e.offendingValue);
+            assertEquals(12, ((ConstraintViolationException)e.getCause()).offendingValue);
         }
         checkFieldValues(instance, new Object []
         {
@@ -570,9 +563,9 @@ public class AttributeBinderTest
             AttributeBinder.bind(instance, attributes, Input.class, TestProcessing.class);
             fail();
         }
-        catch (final ConstraintViolationException e)
+        catch (final AttributeBindingException e)
         {
-            assertEquals(8, e.offendingValue);
+            assertEquals(8, ((ConstraintViolationException)e.getCause()).offendingValue);
         }
         checkFieldValues(instance, new Object []
         {
@@ -585,9 +578,9 @@ public class AttributeBinderTest
             AttributeBinder.bind(instance, attributes, Input.class, TestProcessing.class);
             fail();
         }
-        catch (final ConstraintViolationException e)
+        catch (final AttributeBindingException e)
         {
-            assertEquals(12, e.offendingValue);
+            assertEquals(12, ((ConstraintViolationException)e.getCause()).offendingValue);
         }
         checkFieldValues(instance, new Object []
         {
@@ -667,14 +660,7 @@ public class AttributeBinderTest
         throws InstantiationException
     {
         final OnlyBindingDirectionAnnotationProvided instance = new OnlyBindingDirectionAnnotationProvided();
-        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testOnlyBindingTimeAnnotationProvided() throws InstantiationException
-    {
-        final OnlyBindingTimeAnnotationProvided instance = new OnlyBindingTimeAnnotationProvided();
-        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
+        AttributeBinder.bind(instance, attributes, Input.class);
     }
 
     @Test(expected = IllegalArgumentException.class)

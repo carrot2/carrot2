@@ -15,7 +15,6 @@ package org.carrot2.util.attribute;
 
 import java.util.Map;
 
-import org.carrot2.util.attribute.constraint.ConstraintViolationException;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.junit.Test;
 
@@ -61,7 +60,7 @@ public class ConstraintTest
         bindInputValues(instance, "object", "string", 10, Boolean.TRUE);
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test(expected = AttributeBindingException.class)
     public void testViolatedStrictImplementingClasses() throws AttributeBindingException,
         InstantiationException
     {

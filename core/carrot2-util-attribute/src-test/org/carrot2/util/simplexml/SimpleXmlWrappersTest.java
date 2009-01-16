@@ -259,7 +259,7 @@ public class SimpleXmlWrappersTest
         check(new ClassWithWrapper(null, "test"));
         check(new ClassWithWrapper(null, null));
     }
-
+    
     public void check(Object value) throws Exception
     {
         checkMap(Long.toString(value != null ? value.hashCode() : 0), value);

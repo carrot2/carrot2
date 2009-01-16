@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -74,7 +73,13 @@ public final class ControllerUtils
         }
         catch (final InstantiationException e)
         {
-            throw new ProcessingException("Attribute binding failed", e);
+            throw new ProcessingException("Attribute binding failed: " + e.getMessage(),
+                e);
+        }
+        catch (final AttributeBindingException e)
+        {
+            throw new ProcessingException("Attribute binding failed: " + e.getMessage(),
+                e);
         }
     }
 
