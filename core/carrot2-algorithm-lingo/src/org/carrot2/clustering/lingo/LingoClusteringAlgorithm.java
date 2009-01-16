@@ -110,7 +110,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * Balance between cluster score and size during cluster sorting. Value equal to 0.0
      * will cause Lingo to sort clusters based only on cluster size. Value equal to 1.0
-     * will cause Lingo to sort clusters basec only on cluster score.
+     * will cause Lingo to sort clusters based only on cluster score.
      * 
      * @label Size-Score sorting ratio
      * @level Medium
@@ -251,7 +251,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                     final Cluster cluster = new Cluster();
 
                     final int labelFeature = clusterLabelIndex[i];
-                    if (labelFeature < 0)
+                    if (labelFeature < 0 || clusterDocuments[i].size() < 2)
                     {
                         // Cluster removed during merging
                         continue;
@@ -268,14 +268,11 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                     }
 
                     // Add cluster
-                    if (cluster.getDocuments().size() > 1)
-                    {
-                        clusters.add(cluster);
-                    }
+                    clusters.add(cluster);
                 }
 
-                Collections.sort(clusters, Cluster.byWeightedScoreAndSizeComparator(
-                    scoreWeight, documents.size()));
+                Collections.sort(clusters, Cluster.byReversedWeightedScoreAndSizeComparator(
+                    scoreWeight));
             }
         }
 
