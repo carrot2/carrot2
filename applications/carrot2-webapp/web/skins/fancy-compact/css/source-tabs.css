@@ -78,10 +78,13 @@ ul.tabs .tab a {
 ul.tabs .tab .label {
   padding-left: 16px;
   margin-left: 2px;
-  background-position: 0 1px;
 }
 
 /** Icons for document sources */
+ul.tabs li.tab a {
+  background-image: url('../img/sources/default.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+}
+
 ul.tabs li.tab .web {
   background-image: url('../img/sources/web.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }

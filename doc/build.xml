@@ -52,6 +52,7 @@
 	  <!-- <factory name="org.apache.xalan.processor.TransformerFactoryImpl" /> -->
       
       <param name="dist.url" expression="${dist.url}" />
+      <param name="carrot2.javadoc.url" expression="${dist.url}/javadoc" />
       <param name="carrot2.java-api.base" expression="${carrot2.java-api.base}" />
       <param name="carrot2.dcs.base" expression="${carrot2.dcs.base}" />
       <param name="carrot2.webapp.base" expression="${carrot2.webapp.base}" />
@@ -161,7 +162,7 @@
         <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
              location="${docbook.dtd.dir}/docbook.dtd" />
       </xmlcatalog>
-      <param name="javadoc.url" expression="${javadoc.url}" />
+      <param name="carrot2.javadoc.url" expression="${dist.url}/javadoc" />
     </xslt>
   </target>
 

@@ -10,7 +10,7 @@
        encoding="utf-8" cdata-section-elements="programlisting" />
        
   <xsl:param name="metadata" select="document('components-metadata.xml')" />
-  <xsl:param name="javadoc.url" />
+  <xsl:param name="carrot2.javadoc.url" />
   
   <xsl:template match="/">
     <xsl:apply-templates />
@@ -174,8 +174,8 @@
   <xsl:template name="javadoc-link">
     <xsl:param name="value" />
     <xsl:choose>
-      <xsl:when test="starts-with($value, 'org.carrot2') and string-length($javadoc.url) > 0">
-        <link xlink:href="{$javadoc.url}/{translate($value, '.$', '/.')}.html"><xsl:value-of select="$value" /></link>
+      <xsl:when test="starts-with($value, 'org.carrot2') and string-length($carrot2.javadoc.url) > 0">
+        <link xlink:href="{$carrot2.javadoc.url}/{translate($value, '.$', '/.')}.html"><xsl:value-of select="$value" /></link>
       </xsl:when>
       
       <xsl:otherwise><xsl:value-of select="$value" /></xsl:otherwise>

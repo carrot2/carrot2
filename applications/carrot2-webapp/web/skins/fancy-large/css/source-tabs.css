@@ -85,6 +85,9 @@ ul.tabs .tab .label {
 }
 
 /** Icons for document sources */
+ul.tabs li.tab a {
+  background-image: url('../img/sources/default.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+}
 
 ul.tabs li.tab .web {
   background-image: url('../img/sources/web.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
