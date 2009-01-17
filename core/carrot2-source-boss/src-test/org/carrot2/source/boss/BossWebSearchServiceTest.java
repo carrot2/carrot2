@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 
 import org.carrot2.core.test.ExternalApiTestBase;
+import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
 import org.junit.Before;
@@ -44,7 +44,8 @@ public class BossWebSearchServiceTest extends ExternalApiTestBase
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNoResultsQuery() throws Exception
     {
-        final SearchEngineResponse response = service.query(ExternalApiTestBase.NO_RESULTS_QUERY, 0, 100);
+        final SearchEngineResponse response = service.query(
+            QueryableDocumentSourceTestBase.getNoResultsQuery(), 0, 100);
         assertEquals(0, response.results.size());
     }
 
@@ -65,7 +66,7 @@ public class BossWebSearchServiceTest extends ExternalApiTestBase
         assertEquals(needed, response.results.size());
     }
 
-    @Test(expected=IOException.class)
+    @Test(expected = IOException.class)
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testErrorResult() throws Exception
     {
@@ -79,7 +80,6 @@ public class BossWebSearchServiceTest extends ExternalApiTestBase
     public void testCompressedStreamsUsed() throws Exception
     {
         final SearchEngineResponse response = service.query("apache", 0, 50);
-        assertEquals("gzip",
-            response.metadata.get(SearchEngineResponse.COMPRESSION_KEY));
+        assertEquals("gzip", response.metadata.get(SearchEngineResponse.COMPRESSION_KEY));
     }
 }

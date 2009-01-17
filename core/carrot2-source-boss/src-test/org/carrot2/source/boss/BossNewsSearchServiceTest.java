@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,6 +15,7 @@ package org.carrot2.source.boss;
 import static org.junit.Assert.assertEquals;
 
 import org.carrot2.core.test.ExternalApiTestBase;
+import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.source.SearchEngineResponse;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +41,8 @@ public class BossNewsSearchServiceTest extends ExternalApiTestBase
     @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNoResultsQuery() throws Exception
     {
-        final SearchEngineResponse response = service.query(ExternalApiTestBase.NO_RESULTS_QUERY, 0, 100);
+        final SearchEngineResponse response = service.query(
+            QueryableDocumentSourceTestBase.getNoResultsQuery(), 0, 100);
         assertEquals(0, response.results.size());
     }
 
