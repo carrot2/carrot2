@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -252,12 +251,18 @@ public final class Document
     })
     private void beforeSerialization()
     {
-        title = (String) fields.get(TITLE);
-        snippet = (String) fields.get(SUMMARY);
-        url = (String) fields.get(CONTENT_URL);
-        sources = (List<String>) fields.get(SOURCES);
+        synchronized (fields)
+        {
+            title = (String) fields.get(TITLE);
+            snippet = (String) fields.get(SUMMARY);
+            url = (String) fields.get(CONTENT_URL);
+            sources = (List<String>) fields.get(SOURCES);
 
-        otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers.wrap(fields));
+            // Wrapper iterates over the whole map, so we need to synchronize
+            // to avoid concurrent modification exceptions in setters
+            otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
+                .wrap(fields));
+        }
         otherFieldsForSerialization.remove(TITLE);
         otherFieldsForSerialization.remove(SUMMARY);
         otherFieldsForSerialization.remove(CONTENT_URL);
@@ -271,6 +276,7 @@ public final class Document
     @SuppressWarnings("unused")
     private void afterDeserialization() throws Throwable
     {
+        // We're just creating this object, so no need to synchronize on fields here
         if (otherFieldsForSerialization != null)
         {
             fields = SimpleXmlWrappers.unwrap(otherFieldsForSerialization);
@@ -280,7 +286,6 @@ public final class Document
         fields.put(CONTENT_URL, url);
         if (sources != null)
         {
-            // We're just creating this object, so no need to synchronize here
             fields.put(SOURCES, sources);
         }
 
