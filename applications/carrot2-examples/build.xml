@@ -27,7 +27,7 @@
   <target name="carrot2.api.test" depends="carrot2.api.build">
     <!-- Run two example classes -->
     <java classname="org.carrot2.examples.clustering.ClusteringDocumentList"
-          outputproperty="dev.null">
+          outputproperty="dev.null" failonerror="true">
       <classpath>
         <fileset dir=".">
           <include name="**/*.jar" />
@@ -36,7 +36,7 @@
       </classpath>
     </java>
     <java classname="org.carrot2.examples.clustering.UsingCachingController"
-          outputproperty="dev.null">
+          outputproperty="dev.null" failonerror="true">
       <classpath>
         <fileset dir=".">
           <include name="**/*.jar" />

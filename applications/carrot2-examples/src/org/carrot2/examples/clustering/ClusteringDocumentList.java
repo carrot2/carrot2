@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -21,6 +20,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ExampleUtils;
 import org.carrot2.text.vsm.LinearTfIdfTermWeighting;
+import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.util.attribute.AttributeUtils;
 
 /**
@@ -80,8 +80,8 @@ public class ClusteringDocumentList
          */
         final Class<?> algorithm = LingoClusteringAlgorithm.class;
 
-        attributes.put(AttributeUtils.getKey(algorithm, "termWeighting"),
-            LinearTfIdfTermWeighting.class);
+        attributes.put(AttributeUtils.getKey(TermDocumentMatrixBuilder.class,
+            "termWeighting"), LinearTfIdfTermWeighting.class);
 
         /*
          * If you know what query generated the documents you're about to cluster, pass
