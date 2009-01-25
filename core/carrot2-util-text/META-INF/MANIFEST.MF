@@ -8,7 +8,8 @@ Require-Bundle:
  org.tartarus.snowball;bundle-version="1.8.0";visibility:=reexport,
  bak.pcj;bundle-version="1.2.0";visibility:=reexport,
  org.carrot2.core;bundle-version="3.0.0";visibility:=reexport,
- morfologik;bundle-version="1.1.2";resolution:=optional;visibility:=reexport
+ morfologik;bundle-version="1.1.2";resolution:=optional;visibility:=reexport,
+ org.carrot2.util.matrix;bundle-version="3.0.0";visibility:=reexport
 Bundle-ClassPath: META-INF/,
  .,
  src-resources/
@@ -16,5 +17,6 @@ Export-Package: org.carrot2.text.analysis,
  org.carrot2.text.linguistic,
  org.carrot2.text.preprocessing,
  org.carrot2.text.preprocessing.filter,
- org.carrot2.text.util
+ org.carrot2.text.util,
+ org.carrot2.text.vsm
 Bundle-Vendor: Carrot2.org

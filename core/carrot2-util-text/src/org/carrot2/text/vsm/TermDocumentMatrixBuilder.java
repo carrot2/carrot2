@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -11,18 +10,19 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.clustering.lingo;
+package org.carrot2.text.vsm;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.carrot2.core.Document;
+import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.DoubleComparators;
 import org.carrot2.util.IndirectSorter;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.DoubleRange;
-import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.util.attribute.constraint.*;
 
 import bak.pcj.map.IntKeyIntMap;
 import bak.pcj.map.IntKeyIntOpenHashMap;
@@ -34,7 +34,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 /**
  * Builds a term document matrix based on the provided {@link PreprocessingContext}.
  */
-@Bindable(prefix ="LingoClusteringAlgorithm")
+@Bindable(prefix = "TermDocumentMatrixBuilder")
 public class TermDocumentMatrixBuilder
 {
     /**
@@ -63,6 +63,7 @@ public class TermDocumentMatrixBuilder
     @Processing
     @Attribute
     @IntRange(min = 50 * 100)
+    @Internal(configuration = true)
     public int maximumMatrixSize = 250 * 150;
 
     /**
@@ -81,12 +82,31 @@ public class TermDocumentMatrixBuilder
     public double maxWordDf = 1.0;
 
     /**
+     * Term weighting. The method for calculating weight of words in the term-document
+     * matrices.
+     * 
+     * @level Advanced
+     * @group Matrix model
+     * @label Term weighting
+     */
+    @Input
+    @Processing
+    @Attribute
+    @Required
+    @ImplementingClasses(classes =
+    {
+        LogTfIdfTermWeighting.class, LinearTfIdfTermWeighting.class,
+        TfTermWeighting.class
+    }, strict = false)
+    public ITermWeighting termWeighting = new LogTfIdfTermWeighting();
+
+    /**
      * Builds a term document matrix from data provided in the <code>context</code>,
      * stores the result in there.
      */
-    void build(LingoProcessingContext lingoContext, ITermWeighting termWeighting)
+    public void buildTermDocumentMatrix(VectorSpaceModelContext vsmContext)
     {
-        final PreprocessingContext preprocessingContext = lingoContext.preprocessingContext;
+        final PreprocessingContext preprocessingContext = vsmContext.preprocessingContext;
 
         final int documentCount = preprocessingContext.documents.size();
         final int [] stemsTf = preprocessingContext.allStems.tf;
@@ -95,8 +115,8 @@ public class TermDocumentMatrixBuilder
 
         if (documentCount == 0)
         {
-            lingoContext.tdMatrix = NNIDoubleFactory2D.nni.make(0, 0);
-            lingoContext.tdMatrixStemToRowIndex = new IntKeyIntOpenHashMap();
+            vsmContext.termDocumentMatrix = NNIDoubleFactory2D.nni.make(0, 0);
+            vsmContext.stemToRowIndex = new IntKeyIntOpenHashMap();
             return;
         }
 
@@ -168,8 +188,38 @@ public class TermDocumentMatrixBuilder
         }
 
         // Store the results
-        lingoContext.tdMatrix = tdMatrix;
-        lingoContext.tdMatrixStemToRowIndex = stemToRowIndex;
+        vsmContext.termDocumentMatrix = tdMatrix;
+        vsmContext.stemToRowIndex = stemToRowIndex;
+    }
+
+    /**
+     * Builds a term-phrase matrix in the same space as the main term-document matrix. If
+     * the processing context contains no phrases,
+     * {@link VectorSpaceModelContext#termPhraseMatrix} will remain <code>null</code>.
+     */
+    public void buildTermPhraseMatrix(VectorSpaceModelContext context)
+    {
+        final PreprocessingContext preprocessingContext = context.preprocessingContext;
+        final IntKeyIntMap stemToRowIndex = context.stemToRowIndex;
+        final int [] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
+        final int firstPhraseIndex = preprocessingContext.allLabels.firstPhraseIndex;
+
+        if (firstPhraseIndex >= 0 && stemToRowIndex.size() > 0)
+        {
+            // Build phrase matrix
+            int [] phraseFeatureIndices = new int [labelsFeatureIndex.length
+                - firstPhraseIndex];
+            for (int featureIndex = 0; featureIndex < phraseFeatureIndices.length; featureIndex++)
+            {
+                phraseFeatureIndices[featureIndex] = labelsFeatureIndex[featureIndex
+                    + firstPhraseIndex];
+            }
+
+            final DoubleMatrix2D phraseMatrix = TermDocumentMatrixBuilder
+                .buildAlignedMatrix(context, phraseFeatureIndices, termWeighting);
+            MatrixUtils.normalizeColumnL2(phraseMatrix, null);
+            context.termPhraseMatrix = phraseMatrix.viewDice();
+        }
     }
 
     /**
@@ -188,7 +238,7 @@ public class TermDocumentMatrixBuilder
     }
 
     /**
-     * Computes stem indices of words that are one-word label candiates or are non-stop
+     * Computes stem indices of words that are one-word label candidates or are non-stop
      * words from phrase label candidates.
      */
     private int [] computeRequiredStemIndices(PreprocessingContext context)
@@ -248,10 +298,10 @@ public class TermDocumentMatrixBuilder
      * Builds a sparse term-document-like matrix for the provided matrixWordIndices in the
      * same term space as the original term-document matrix.
      */
-    static DoubleMatrix2D buildAlignedMatrix(LingoProcessingContext lingoContext,
+    static DoubleMatrix2D buildAlignedMatrix(VectorSpaceModelContext vsmContext,
         int [] featureIndex, ITermWeighting termWeighting)
     {
-        final IntKeyIntMap stemToRowIndex = lingoContext.tdMatrixStemToRowIndex;
+        final IntKeyIntMap stemToRowIndex = vsmContext.stemToRowIndex;
         if (featureIndex.length == 0)
         {
             return DoubleFactory2D.dense.make(stemToRowIndex.size(), 0);
@@ -260,7 +310,7 @@ public class TermDocumentMatrixBuilder
         final DoubleMatrix2D phraseMatrix = DoubleFactory2D.sparse.make(stemToRowIndex
             .size(), featureIndex.length);
 
-        final PreprocessingContext preprocessingContext = lingoContext.preprocessingContext;
+        final PreprocessingContext preprocessingContext = vsmContext.preprocessingContext;
         final int [] wordsStemIndex = preprocessingContext.allWords.stemIndex;
         final int [] stemsTf = preprocessingContext.allStems.tf;
         final int [][] stemsTfByDocument = preprocessingContext.allStems.tfByDocument;

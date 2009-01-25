@@ -76,7 +76,7 @@ public class LabelFilterProcessor
      * Stop label filter.
      */
     public StopLabelFilter stopLabelFilter = new StopLabelFilter();
-    
+
     /**
      * Processes all filters declared as fields of this class.
      */
@@ -117,5 +117,26 @@ public class LabelFilterProcessor
         }
 
         context.allLabels.featureIndex = acceptedFeatures.toArray();
+        updateFirstPhraseIndex(context);
+    }
+    
+    static void updateFirstPhraseIndex(PreprocessingContext context)
+    {
+        final int wordCount = context.allWords.image.length;
+        final int [] labelsFeatureIndex = context.allLabels.featureIndex;
+
+        // In theory we could do a binary search here, but the effort of writing
+        // a customized version may not be worth the gain
+        int firstPhraseIndex = -1;
+        for (int i = 0; i < labelsFeatureIndex.length; i++)
+        {
+            if (labelsFeatureIndex[i] >= wordCount)
+            {
+                firstPhraseIndex = i;
+                break;
+            }
+        }
+
+        context.allLabels.firstPhraseIndex = firstPhraseIndex;
     }
 }

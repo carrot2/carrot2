@@ -75,7 +75,7 @@ public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
             4
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 0);
     }
 
     @Override

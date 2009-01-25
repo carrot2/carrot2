@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,12 +12,18 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.ArrayList;
+
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.IntRange;
 
+import bak.pcj.list.IntArrayList;
 import bak.pcj.set.IntBitSet;
 import bak.pcj.set.IntSet;
+
+import com.google.common.collect.Lists;
 
 /**
  * Assigns document to label candidates. For each label candidate from
@@ -55,6 +60,19 @@ public class DocumentAssigner
     @Processing
     @Attribute
     public boolean exactPhraseAssignment = false;
+
+    /**
+     * Determines the minimum number of documents in each cluster.
+     * 
+     * @level Medium
+     * @group Preprocessing
+     * @label Minimum cluster size
+     */
+    @Input
+    @Processing
+    @Attribute
+    @IntRange(min = 1, max = 100)
+    public int minClusterSize = 2;
 
     /**
      * Assigns document to label candidates.
@@ -118,7 +136,31 @@ public class DocumentAssigner
             labelsDocumentIndices[i] = documentIndices;
         }
 
-        context.allLabels.documentIndices = labelsDocumentIndices;
+        // Filter out labels that do not meet the minimum cluster size
+        if (minClusterSize > 1)
+        {
+            final IntArrayList newFeatureIndex = new IntArrayList(
+                labelsFeatureIndex.length);
+            final ArrayList<IntSet> newDocumentIndices = Lists
+                .newArrayListWithExpectedSize(labelsFeatureIndex.length);
+
+            for (int i = 0; i < labelsFeatureIndex.length; i++)
+            {
+                if (labelsDocumentIndices[i].size() >= minClusterSize)
+                {
+                    newFeatureIndex.add(labelsFeatureIndex[i]);
+                    newDocumentIndices.add(labelsDocumentIndices[i]);
+                }
+            }
+            context.allLabels.documentIndices = newDocumentIndices
+                .toArray(new IntSet [newDocumentIndices.size()]);
+            context.allLabels.featureIndex = newFeatureIndex.toArray();
+            LabelFilterProcessor.updateFirstPhraseIndex(context);
+        }
+        else
+        {
+            context.allLabels.documentIndices = labelsDocumentIndices;
+        }
     }
 
     private static void addTfByDocumentToBitSet(final IntBitSet documentIndices,

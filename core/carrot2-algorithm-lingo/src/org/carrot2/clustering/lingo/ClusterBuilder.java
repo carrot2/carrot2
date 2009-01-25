@@ -16,13 +16,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
+import org.carrot2.text.vsm.ITermWeighting;
+import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.GraphUtils;
 import org.carrot2.util.LinearApproximation;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.DoubleRange;
-import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.util.attribute.constraint.*;
 
 import bak.pcj.IntIterator;
 import bak.pcj.list.IntArrayList;
@@ -68,7 +68,7 @@ public class ClusterBuilder
     @Processing
     @Attribute
     @IntRange(min = 2, max = 8)
-    public int phraseLengthPenaltyStart = 5;
+    public int phraseLengthPenaltyStart = 8;
 
     /**
      * Phrase length penalty stop. The phrase length at which the overlong multi-word
@@ -109,6 +109,22 @@ public class ClusterBuilder
     public IFeatureScorer featureScorer = null;
 
     /**
+     * Cluster label assignment method.
+     * 
+     * @group Labels
+     * @level Advanced
+     * @label Cluster label assignment method
+     */
+    @Input
+    @Processing
+    @Attribute
+    @ImplementingClasses(classes =
+    {
+        UniqueLabelAssigner.class, SimpleLabelAssigner.class
+    })
+    public ILabelAssigner labelAssigner = new UniqueLabelAssigner();
+
+    /**
      * Coefficients for label weighting based on the cluster size.
      */
     private LinearApproximation documentSizeCoefficients = new LinearApproximation(
@@ -123,14 +139,14 @@ public class ClusterBuilder
     void buildLabels(LingoProcessingContext context, ITermWeighting termWeighting)
     {
         final PreprocessingContext preprocessingContext = context.preprocessingContext;
+        final VectorSpaceModelContext vsmContext = context.vsmContext;
         final DoubleMatrix2D reducedTdMatrix = context.baseMatrix;
-        final int desiredClusterCount = reducedTdMatrix.columns();
         final int [] wordsStemIndex = preprocessingContext.allWords.stemIndex;
         final int [] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
         final int [] mostFrequentOriginalWordIndex = preprocessingContext.allStems.mostFrequentOriginalWordIndex;
         final int [][] phrasesWordIndices = preprocessingContext.allPhrases.wordIndices;
         final IntSet [] labelsDocumentIndices = preprocessingContext.allLabels.documentIndices;
-        final int wordCount = wordsStemIndex.length;
+        final int wordCount = preprocessingContext.allWords.image.length;
         final int documentCount = preprocessingContext.documents.size();
 
         // tdMatrixStemIndex contains individual stems that appeared in AllLabels
@@ -149,7 +165,7 @@ public class ClusterBuilder
             oneWordCandidateStemIndices.add(wordsStemIndex[featureIndex]);
         }
 
-        final IntKeyIntMap stemToRowIndex = context.tdMatrixStemToRowIndex;
+        final IntKeyIntMap stemToRowIndex = vsmContext.stemToRowIndex;
         final IntKeyIntMap filteredRowToStemIndex = new IntKeyIntOpenHashMap();
         final IntArrayList filteredRows = new IntArrayList();
         int filteredRowIndex = 0;
@@ -182,12 +198,10 @@ public class ClusterBuilder
             }
         }
 
-        // Find single word label candidates
-        int [] candidateStemIndices = new int [desiredClusterCount];
-        double [] candidateStemScores = new double [desiredClusterCount];
-        final DoubleMatrix2D reducedTdMatrixForSingleLabels = reducedTdMatrix
-            .viewSelection(filteredRows.toArray(), null).copy();
-        for (int r = 0; r < reducedTdMatrixForSingleLabels.rows(); r++)
+        // Prepare base vector -- single stem cosine matrix.
+        final DoubleMatrix2D stemCos = reducedTdMatrix.viewSelection(
+            filteredRows.toArray(), null).copy();
+        for (int r = 0; r < stemCos.rows(); r++)
         {
             final int labelIndex = wordLabelIndex[mostFrequentOriginalWordIndex[filteredRowToStemIndex
                 .get(r)]];
@@ -198,24 +212,17 @@ public class ClusterBuilder
                 penalty *= featureScores[labelIndex];
             }
 
-            reducedTdMatrixForSingleLabels.viewRow(r).assign(Functions.mult(penalty));
+            stemCos.viewRow(r).assign(Functions.mult(penalty));
         }
 
-        MatrixUtils.maxInColumns(reducedTdMatrixForSingleLabels, candidateStemIndices,
-            candidateStemScores, Functions.abs);
-
-        // Find multiword label candidates
-        int [] candidatePhraseIndices = new int [desiredClusterCount];
-        Arrays.fill(candidatePhraseIndices, -1);
-        double [] candidatePhraseScores = new double [desiredClusterCount];
-
-        buildPhraseMatrix(context, termWeighting);
-        final DoubleMatrix2D phraseMatrix = context.phraseMatrix;
-        final int firstPhraseIndex = context.firstPhraseIndex;
+        // Prepare base vector -- phrase cosine matrix
+        final DoubleMatrix2D phraseMatrix = vsmContext.termPhraseMatrix;
+        final int firstPhraseIndex = preprocessingContext.allLabels.firstPhraseIndex;
+        DoubleMatrix2D phraseCos = null;
         if (phraseMatrix != null)
         {
             // Build raw cosine similarities
-            final DoubleMatrix2D phraseCos = phraseMatrix.zMult(reducedTdMatrix, null);
+            phraseCos = phraseMatrix.zMult(reducedTdMatrix, null);
 
             // Apply phrase weighting
             if (phraseLengthPenaltyStop < phraseLengthPenaltyStart)
@@ -252,37 +259,12 @@ public class ClusterBuilder
                         penalty *= featureScores[row + firstPhraseIndex];
                     }
                 }
-                phraseCos.viewRow(row).assign(Functions.mult(penalty));
-            }
-
-            MatrixUtils.maxInColumns(phraseCos, candidatePhraseIndices,
-                candidatePhraseScores, Functions.abs);
-        }
-
-        // Choose between single words and phrases for each base vector
-        final int [] clusterLabelFeatureIndex = new int [reducedTdMatrix.columns()];
-        double [] clusterLabelScore = new double [reducedTdMatrix.columns()];
-        for (int i = 0; i < reducedTdMatrix.columns(); i++)
-        {
-            final int phraseFeatureIndex = candidatePhraseIndices[i];
-            final int stemIndex = filteredRowToStemIndex.get(candidateStemIndices[i]);
-
-            final double phraseScore = candidatePhraseScores[i] * phraseLabelBoost;
-            if (phraseFeatureIndex >= 0 && phraseScore > candidateStemScores[i])
-            {
-                clusterLabelFeatureIndex[i] = labelsFeatureIndex[phraseFeatureIndex
-                    + firstPhraseIndex];
-                clusterLabelScore[i] = phraseScore;
-            }
-            else
-            {
-                clusterLabelFeatureIndex[i] = mostFrequentOriginalWordIndex[stemIndex];
-                clusterLabelScore[i] = candidateStemScores[i];
+                phraseCos.viewRow(row).assign(Functions.mult(penalty * phraseLabelBoost));
             }
         }
 
-        context.clusterLabelFeatureIndex = clusterLabelFeatureIndex;
-        context.clusterLabelScore = clusterLabelScore;
+        // Assign labels to base vectors
+        labelAssigner.assignLabels(context, stemCos, filteredRowToStemIndex, phraseCos);
     }
 
     private double getDocumentCountPenalty(int labelIndex, int documentCount,
@@ -361,6 +343,7 @@ public class ClusterBuilder
                 }
             }, true);
 
+        
         // For each merge group, choose the cluster with the highets score and
         // merge the rest to it
         for (IntList clustersToMerge : mergedClusters)
@@ -389,48 +372,6 @@ public class ClusterBuilder
                 }
 
             }
-        }
-    }
-
-    /**
-     * Builds a term-document like matrix for phrases. Returns <code>null</code> if there
-     * are no phrases on the input.
-     */
-    void buildPhraseMatrix(LingoProcessingContext context, ITermWeighting termWeighting)
-    {
-        final PreprocessingContext preprocessingContext = context.preprocessingContext;
-        final IntKeyIntMap stemToRowIndex = context.tdMatrixStemToRowIndex;
-        final int [] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
-        final int wordCount = preprocessingContext.allWords.image.length;
-
-        // Compute first phrase index
-        int firstPhraseIndex = -1;
-        for (int i = 0; i < labelsFeatureIndex.length; i++)
-        {
-            if (labelsFeatureIndex[i] >= wordCount)
-            {
-                firstPhraseIndex = i;
-                break;
-            }
-        }
-
-        context.firstPhraseIndex = firstPhraseIndex;
-
-        if (firstPhraseIndex >= 0 && stemToRowIndex.size() > 0)
-        {
-            // Build phrase matrix
-            int [] phraseFeatureIndices = new int [labelsFeatureIndex.length
-                - firstPhraseIndex];
-            for (int featureIndex = 0; featureIndex < phraseFeatureIndices.length; featureIndex++)
-            {
-                phraseFeatureIndices[featureIndex] = labelsFeatureIndex[featureIndex
-                    + firstPhraseIndex];
-            }
-
-            final DoubleMatrix2D phraseMatrix = TermDocumentMatrixBuilder
-                .buildAlignedMatrix(context, phraseFeatureIndices, termWeighting);
-            MatrixUtils.normalizeColumnL2(phraseMatrix, null);
-            context.phraseMatrix = phraseMatrix.viewDice();
         }
     }
 }

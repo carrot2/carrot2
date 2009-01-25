@@ -85,6 +85,6 @@ public class NumericLabelFilterTest extends LabelFilterTestBase
             1, 2
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 1);
     }
 }

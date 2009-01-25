@@ -11,7 +11,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.clustering.lingo;
+package org.carrot2.text.vsm;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -90,6 +90,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
     {
         createDocuments("", "aa bb cc", "", "aa bb cc", "", "aa bb cc", "",
             "ff . gg . ff . gg");
+        preprocessingPipeline.documentAssigner.minClusterSize = 1;
 
         int [] expectedTdMatrixStemIndices = new int []
         {
@@ -143,6 +144,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
     public void testMatrixSizeLimit()
     {
         createDocuments("", "aa . aa", "", "bb . bb . bb", "", "cc . cc . cc . cc");
+        preprocessingPipeline.documentAssigner.minClusterSize = 1;
 
         int [] expectedTdMatrixStemIndices = new int []
         {
@@ -192,9 +194,9 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
     {
         buildTermDocumentMatrix();
 
-        assertThat(lingoContext.tdMatrix.rows()).as("tdMatrix.rowCount").isEqualTo(
+        assertThat(vsmContext.termDocumentMatrix.rows()).as("tdMatrix.rowCount").isEqualTo(
             expectedTdMatrixStemIndices.length);
-        MatrixAssertions.assertThat(lingoContext.tdMatrix).isEquivalentTo(
+        MatrixAssertions.assertThat(vsmContext.termDocumentMatrix).isEquivalentTo(
             expectedTdMatrixElements);
 
         final IntKeyIntMap expectedStemToRowIndex = new IntKeyIntOpenHashMap();
@@ -203,7 +205,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
             expectedStemToRowIndex.put(expectedTdMatrixStemIndices[i], i);
         }
 
-        assertThat(lingoContext.tdMatrixStemToRowIndex).as("stemToRowIndex").isEqualTo(
+        assertThat(vsmContext.stemToRowIndex).as("stemToRowIndex").isEqualTo(
             expectedStemToRowIndex);
     }
 }

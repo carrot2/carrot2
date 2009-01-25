@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -19,13 +18,13 @@ import java.util.*;
 
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
-import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.ExceptionUtils;
+import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.ClassResource;
 import org.carrot2.util.resource.IResource;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.*;
 
 /**
@@ -34,7 +33,7 @@ import com.google.common.collect.*;
  * with a set of subtopics and a list of 100 ranked documents. For more information,
  * please see <a href="http://credo.fub.it/ambient/">Ambient home page</a>.
  */
-@Bindable
+@Bindable(prefix = "AmbientDocumentSource")
 public class AmbientDocumentSource extends ProcessingComponentBase implements
     IDocumentSource
 {
@@ -61,21 +60,39 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
         AmbientDocumentSource.class, "/ambient/results.txt");
 
     /**
+     * Resource with Ambient's subtopic labels.
+     */
+    private final static IResource SUBTOPIC_LABELS_RESOURCE = new ClassResource(
+        AmbientDocumentSource.class, "/ambient/subTopics.txt");
+
+    /**
      * Subtopic ids by topic id.
      */
-    public static final Map<Integer, Set<Integer>> subtopicIdsByTopicId;
+    static final Map<Integer, Set<Integer>> subtopicIdsByTopicId;
 
     /**
      * Documents by topic id.
      */
-    public static final Map<Integer, List<Document>> documentsByTopicId;
+    static final Map<Integer, List<Document>> documentsByTopicId;
+
+    /**
+     * Numbers of documents for each subtopic.
+     */
+    private static final Map<String, Integer> subtopicSizes;
+
+    /**
+     * Human-readable descriptions of topics.
+     */
+    private static final Map<String, String> subtopicLabels;
 
     static
     {
         /** [topicId][resultIndex] = subopicId */
         int [][] resultSubtopicIds = loadSubtopicMapping();
         documentsByTopicId = loadDocuments(resultSubtopicIds);
+        subtopicSizes = prepareSubtopicSizes(resultSubtopicIds);
         subtopicIdsByTopicId = prepareSubtopicIdsByTopicId(resultSubtopicIds);
+        subtopicLabels = loadSubtopicLabels();
     }
 
     /**
@@ -106,11 +123,32 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
     @Attribute(key = AttributeNames.DOCUMENTS)
     @Internal
     public List<Document> documents;
-    
+
     @Processing
     @Output
     @Attribute(key = AttributeNames.QUERY)
     public String query;
+
+    /**
+     * Minimum topic size. Documents belonging to a topic with fewer documents than
+     * minimum topic size will not be returned.
+     * 
+     * @level Medium
+     * @group Filtering
+     */
+    @Input
+    @Processing
+    @Attribute
+    @IntRange(min = 1)
+    public int minTopicSize = 1;
+
+    /**
+     * Include documents without topics.
+     * 
+     * @level Medium
+     * @group Filtering
+     */
+    public boolean includeDocumentsWithoutTopic = false;
 
     /**
      * All available Ambient topics.
@@ -156,12 +194,89 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
     @Override
     public void process() throws ProcessingException
     {
-        documents = documentsByTopicId.get(topic.getTopicId());
         query = topic.query;
+
+        // Filter the results
+        documents = Lists.newArrayList(Collections2.filter(documentsByTopicId.get(topic
+            .getTopicId()), new Predicate<Document>()
+        {
+            public boolean apply(Document document)
+            {
+                final String documentTopic = document.getField(Document.TOPIC);
+                return subtopicSizes.get(documentTopic) >= minTopicSize
+                    && (includeDocumentsWithoutTopic || !documentTopic.endsWith(".0"));
+            }
+        }));
+
         if (documents.size() >= results)
         {
             documents = documents.subList(0, results);
         }
+    }
+
+    /**
+     * Returns a human-readable label for a subtopic.
+     */
+    public static String getTopicLabel(String topicId)
+    {
+        return subtopicLabels.get(topicId);
+    }
+    
+    /**
+     * Loads human-readable labels for subtopics.
+     */
+    private static Map<String, String> loadSubtopicLabels()
+    {
+        final Map<String, String> labels = Maps.newHashMap();
+        BufferedReader reader = null;
+
+        try
+        {
+            reader = new BufferedReader(new InputStreamReader(SUBTOPIC_LABELS_RESOURCE
+                .open(), "UTF-8"));
+
+            String line = reader.readLine(); // discard first line
+            while ((line = reader.readLine()) != null)
+            {
+                String [] split = line.split("\\t");
+                if (split.length > 1)
+                {
+                    labels.put(split[0], split[1]);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            throw ExceptionUtils.wrapAsRuntimeException(e);
+        }
+        finally
+        {
+            if (reader != null)
+            {
+                CloseableUtils.close(reader);
+            }
+        }
+
+        return labels;
+    }
+
+    /**
+     * Prepares a map with subtopic sizes, keyed by subtopic string.
+     */
+    private static Map<String, Integer> prepareSubtopicSizes(int [][] resultSubtopicIds)
+    {
+        final Map<String, Integer> map = Maps.newHashMap();
+
+        for (int topic = 1; topic < resultSubtopicIds.length; topic++)
+        {
+            for (int result = 0; result < resultSubtopicIds[topic].length; result++)
+            {
+                MapUtils.increment(map, buildTopicId(topic,
+                    resultSubtopicIds[topic][result]));
+            }
+        }
+
+        return map;
     }
 
     /**
@@ -195,8 +310,8 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
                 {
                     document.addField(Document.SUMMARY, split[3]);
                 }
-                document.addField(Document.TOPIC, topicId + "."
-                    + resultSubtopicIds[topicId][resultIndex]);
+                document.addField(Document.TOPIC, buildTopicId(topicId,
+                    resultSubtopicIds[topicId][resultIndex]));
 
                 // Add to list
                 List<Document> topicList = documents.get(topicId);
@@ -221,6 +336,11 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
         }
 
         return documents;
+    }
+
+    private static String buildTopicId(final int topic, final int subtopic)
+    {
+        return topic + "." + subtopic;
     }
 
     /**

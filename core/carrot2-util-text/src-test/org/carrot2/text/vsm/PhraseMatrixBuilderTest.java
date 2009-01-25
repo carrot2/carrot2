@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -11,13 +10,11 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.clustering.lingo;
+package org.carrot2.text.vsm;
 
 import static org.carrot2.matrix.MatrixAssertions.assertThat;
-import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.assertions.Assertions;
-import org.junit.Before;
 import org.junit.Test;
 
 import cern.colt.matrix.DoubleMatrix2D;
@@ -27,15 +24,6 @@ import cern.colt.matrix.DoubleMatrix2D;
  */
 public class PhraseMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase
 {
-    /** Label builder under tests */
-    private ClusterBuilder labelBuilder;
-
-    @Before
-    public void setUpClusterLabelBuilder()
-    {
-        labelBuilder = new ClusterBuilder();
-    }
-
     @Test
     public void testEmpty()
     {
@@ -85,13 +73,13 @@ public class PhraseMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase
     @Test
     public void testSinglePhraseSingleWords()
     {
-        createDocuments("", "aa bb cc", "", "aa bb cc", "", "aa bb cc", "",
-            "ff . gg . ff . gg");
+        createDocuments("", "aa bb cc", "", "aa bb cc", "", "aa bb cc",
+            "ff . gg . ff . gg", "", "ff . gg . ff . gg");
 
         double [][] expectedPhraseMatrixElements = new double [] []
         {
             {
-                0.577, 0.577, 0.577, 0, 0
+                0, 0, 0.577, 0.577, 0.577
             }
         };
 
@@ -116,8 +104,8 @@ public class PhraseMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase
     private void check(double [][] expectedPhraseMatrixElements)
     {
         buildTermDocumentMatrix();
-        labelBuilder.buildPhraseMatrix(lingoContext, new TfTermWeighting());
-        final DoubleMatrix2D phraseMatrix = lingoContext.phraseMatrix;
+        matrixBuilder.buildTermPhraseMatrix(vsmContext);
+        final DoubleMatrix2D phraseMatrix = vsmContext.termPhraseMatrix;
 
         if (expectedPhraseMatrixElements == null)
         {

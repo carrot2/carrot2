@@ -69,6 +69,6 @@ public class MinLengthLabelFilterTest extends LabelFilterTestBase
             2, 3
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 0);
     }
 }

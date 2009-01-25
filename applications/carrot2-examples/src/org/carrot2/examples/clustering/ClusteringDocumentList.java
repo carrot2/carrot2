@@ -15,12 +15,12 @@ package org.carrot2.examples.clustering;
 
 import java.util.*;
 
-import org.carrot2.clustering.lingo.LinearTfIdfTermWeighting;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ExampleUtils;
+import org.carrot2.text.vsm.LinearTfIdfTermWeighting;
 import org.carrot2.util.attribute.AttributeUtils;
 
 /**

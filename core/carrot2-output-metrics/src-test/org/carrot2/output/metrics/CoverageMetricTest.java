@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -27,7 +26,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * Test cases for {@link CoverageMetric}
  */
-public class CoverageMetricTest
+public class CoverageMetricTest extends IdealPartitioningBasedMetricTest
 {
     @Test
     public void testNoClusters()
@@ -48,8 +47,8 @@ public class CoverageMetricTest
         final Cluster c2 = new Cluster("c2", d2);
         final Cluster c3 = new Cluster("c3", d3);
 
-        check(ImmutableList.of(d1, d2, d3, d4), ImmutableList.of(c1, c2, c3), 0.75,
-            0.75, 0.75);
+        check(ImmutableList.of(d1, d2, d3, d4), ImmutableList.of(c1, c2, c3), 0.75, 0.75,
+            0.75);
     }
 
     @Test
@@ -102,10 +101,9 @@ public class CoverageMetricTest
         assertThat(metric.documentCoverage).isEqualTo(expectedDocumentCoverage);
     }
 
-    private Document documentWithTopic(final String topic)
+    @Override
+    protected String [] getClusterMetricKeys()
     {
-        final Document document = new Document();
-        document.addField(Document.TOPIC, topic);
-        return document;
+        return new String [] {};
     }
 }

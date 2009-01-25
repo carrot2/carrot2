@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,13 +15,14 @@ package org.carrot2.clustering.lingo;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
+import org.carrot2.text.vsm.TfTermWeighting;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test cases for cluster merging in {@link ClusterBuilder}.
  */
-public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
+public class ClusterMergerTest extends LingoProcessingComponentTestBase
 {
     /** Matrix reducer needed for test */
     private TermDocumentMatrixReducer reducer;
@@ -34,6 +34,7 @@ public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
     public void setUpClusterLabelBuilder()
     {
         clusterBuilder = new ClusterBuilder();
+        clusterBuilder.labelAssigner = new SimpleLabelAssigner();
         reducer = new TermDocumentMatrixReducer();
         reducer.factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
         reducer.desiredClusterCountBase = 25;
@@ -49,23 +50,23 @@ public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
     public void testNoMerge()
     {
         reducer.desiredClusterCountBase = 30;
-        createDocuments("", "aa . aa", "", "bb . bb", "", "cc . cc");
+        createDocuments("", "aa . bb", "", "bb . cc", "", "cc . aa");
 
         final int [][] expectedDocumentIndices = new int [] []
         {
             new int []
             {
-                0
+                0, 2
             },
 
             new int []
             {
-                2
+                0, 1
             },
 
             new int []
             {
-                1
+                1, 2
             }
         };
 
@@ -79,7 +80,7 @@ public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
         reducer.desiredClusterCountBase = 20;
         clusterBuilder.phraseLabelBoost = 0.08;
         clusterBuilder.clusterMergingThreshold = 0.4;
-        labelFilterProcessor.minLengthLabelFilter.enabled = false;
+        preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
 
         final int [][] expectedDocumentIndices = new int [] []
         {
@@ -97,28 +98,30 @@ public class ClusterMergerTest extends TermDocumentMatrixBuilderTestBase
     @Test
     public void testMultiMerge()
     {
-        createDocuments("aa", "aa", "aa bb", "aa bb", "aa bb cc", "aa bb cc", "dd dd");
+        createDocuments("aa", "aa", "aa bb", "aa bb", "aa bb cc", "aa bb cc", "dd dd",
+            "dd dd", "dd dd", "dd dd");
+        preprocessingPipeline.documentAssigner.minClusterSize = 2;
         reducer.desiredClusterCountBase = 20;
         clusterBuilder.phraseLabelBoost = 0.05;
         clusterBuilder.clusterMergingThreshold = 0.2;
-        labelFilterProcessor.minLengthLabelFilter.enabled = false;
-        labelFilterProcessor.completeLabelFilter.enabled = false;
+        preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
+        preprocessingPipeline.labelFilterProcessor.completeLabelFilter.enabled = false;
 
         final int [][] expectedDocumentIndices = new int [] []
         {
+            new int []
+            {
+                3, 4
+            },
+
+            null,
+
             new int []
             {
                 0, 1, 2
             },
 
             null,
-
-            null,
-
-            new int []
-            {
-                3
-            }
         };
 
         check(expectedDocumentIndices);

@@ -23,57 +23,51 @@ import com.google.common.collect.Lists;
 /**
  * Test cases for {@link IClusteringMetric}.
  */
-public class ContaminationMetricTest extends IdealPartitioningBasedMetricTest
+public class PrecisionRecallMetricTest extends IdealPartitioningBasedMetricTest
 {
     @Test
-    public void testCalculateWorstCaseH()
+    public void testCalculatePrecisionRecallEmptyCluster()
     {
-        assertThat(ContaminationMetric.calculateWorstCaseH(0, 1)).isEqualTo(0);
-        assertThat(ContaminationMetric.calculateWorstCaseH(1, 1)).isEqualTo(0);
-        assertThat(ContaminationMetric.calculateWorstCaseH(2, 1)).isEqualTo(0);
-        assertThat(ContaminationMetric.calculateWorstCaseH(2, 2)).isEqualTo(1);
-        assertThat(ContaminationMetric.calculateWorstCaseH(8, 4)).isEqualTo(24);
-        assertThat(ContaminationMetric.calculateWorstCaseH(6, 4)).isEqualTo(13);
+        check(new Cluster(), null, null, null);
     }
 
     @Test
-    public void testCalculateContaminationEmptyCluster()
+    public void testCalculatePrecisionRecallTrivialCluster()
     {
-        check(new Cluster(), null);
+        check(new Cluster("test", documentWithTopic("test")), 1.0, 1.0, 1.0);
     }
 
     @Test
-    public void testCalculateContaminationTrivialCluster()
+    public void testCalculatePrecisionRecallPartiallyContaminatedCluster()
     {
-        check(new Cluster("test", documentWithTopic("test")), 0.0);
+        check(partiallyContaminatedCluster(), 0.75, 1.0, 2 * 0.75 / (1 + 0.75));
+    }
+
+    @Test
+    public void testCalculatePrecisionRecallFullyContaminatedCluster()
+    {
+        check(fullyContaminatedCluster(), 0.25, 1.0, 2 * 0.25 / (1 + 0.25));
     }
 
     @Test
     public void testCalculateContaminationPureCluster()
     {
-        check(pureCluster(), 0.0);
+        check(pureCluster(), 1.0, 1.0, 1.0);
     }
 
-    @Test
-    public void testCalculateContaminationPartiallyContaminatedCluster()
+    private void check(Cluster cluster, Double expectedPrecision, Double expectedRecall,
+        Double expectedFMeasure)
     {
-        check(partiallyContaminatedCluster(), 0.75);
-    }
-
-    @Test
-    public void testCalculateContaminationFullyContaminatedCluster()
-    {
-        check(fullyContaminatedCluster(), 1.0);
-    }
-
-    private void check(Cluster cluster, Double expectedContamination)
-    {
-        final ContaminationMetric metric = new ContaminationMetric();
+        final PrecisionRecallMetric metric = new PrecisionRecallMetric();
         metric.documents = cluster.getAllDocuments();
         metric.clusters = Lists.newArrayList(cluster);
         metric.calculate();
-        assertThat(cluster.<Double> getAttribute(ContaminationMetric.CONTAMINATION))
-            .isEqualTo(expectedContamination);
+        assertThat(cluster.<Double> getAttribute(PrecisionRecallMetric.PRECISION)).as(
+            "precision").isEqualTo(expectedPrecision);
+        assertThat(cluster.<Double> getAttribute(PrecisionRecallMetric.RECALL)).as(
+            "recall").isEqualTo(expectedRecall);
+        assertThat(cluster.<Double> getAttribute(PrecisionRecallMetric.F_MEASURE)).as(
+            "f-measure").isEqualTo(expectedFMeasure);
     }
 
     private Cluster pureCluster()
@@ -111,7 +105,8 @@ public class ContaminationMetricTest extends IdealPartitioningBasedMetricTest
     {
         return new String []
         {
-            ContaminationMetric.CONTAMINATION
+            PrecisionRecallMetric.PRECISION, PrecisionRecallMetric.RECALL,
+            PrecisionRecallMetric.F_MEASURE
         };
     }
 }

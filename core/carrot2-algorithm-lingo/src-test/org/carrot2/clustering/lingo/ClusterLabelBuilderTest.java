@@ -15,13 +15,14 @@ package org.carrot2.clustering.lingo;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.carrot2.text.vsm.TfTermWeighting;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test cases for label building in {@link ClusterBuilder}.
  */
-public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
+public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
 {
     /** Matrix reducer needed for test */
     private TermDocumentMatrixReducer reducer;
@@ -33,6 +34,7 @@ public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
     public void setUpClusterLabelBuilder()
     {
         clusterBuilder = new ClusterBuilder();
+        clusterBuilder.labelAssigner = new SimpleLabelAssigner();
         reducer = new TermDocumentMatrixReducer();
     }
 
@@ -45,7 +47,7 @@ public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
     @Test
     public void testNoPhrases()
     {
-        createDocuments("", "aa . aa", "", "bb . bb", "", "cc . cc");
+        createDocuments("", "aa . bb", "", "bb . cc", "", "cc . aa");
         final int [] expectedFeatureIndex = new int []
         {
             0, 1, 2
@@ -72,7 +74,7 @@ public class ClusterLabelBuilderTest extends TermDocumentMatrixBuilderTestBase
     @Test
     public void testSinglePhraseSingleWords()
     {
-        createDocuments("aa bb", "aa bb", "cc", "cc", "aa bb", "aa bb");
+        createDocuments("aa bb", "aa bb", "cc", "cc", "aa bb", "aa bb . cc");
         clusterBuilder.phraseLabelBoost = 0.5;
 
         final int [] expectedFeatureIndex = new int []

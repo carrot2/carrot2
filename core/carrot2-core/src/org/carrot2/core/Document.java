@@ -59,12 +59,14 @@ public final class Document
 
     /**
      * Field name for a list of sources the document was found in. Value type:
-     * List<String>
+     * <code>List&lt;String&gt;</code>
      */
     public static final String SOURCES = "sources";
 
     /**
-     * Field name for an optional indicator of the document's topic. Value type: String.
+     * Field name for an optional indicator of the document's topic. Value type:
+     * <code>String</code> or <code>Collection&lt;String&gt;</code> if a document belongs
+     * to multiple topics.
      */
     public static final String TOPIC = "topic";
 
@@ -276,20 +278,22 @@ public final class Document
     @SuppressWarnings("unused")
     private void afterDeserialization() throws Throwable
     {
-        // We're just creating this object, so no need to synchronize on fields here
-        if (otherFieldsForSerialization != null)
+        synchronized (fields)
         {
-            fields = SimpleXmlWrappers.unwrap(otherFieldsForSerialization);
-        }
-        fields.put(TITLE, title);
-        fields.put(SUMMARY, snippet);
-        fields.put(CONTENT_URL, url);
-        if (sources != null)
-        {
-            fields.put(SOURCES, sources);
-        }
+            if (otherFieldsForSerialization != null)
+            {
+                fields = SimpleXmlWrappers.unwrap(otherFieldsForSerialization);
+            }
+            fields.put(TITLE, title);
+            fields.put(SUMMARY, snippet);
+            fields.put(CONTENT_URL, url);
+            if (sources != null)
+            {
+                fields.put(SOURCES, sources);
+            }
 
-        fieldsView = Collections.unmodifiableMap(fields);
+            fieldsView = Collections.unmodifiableMap(fields);
+        }
 
         sources = null;
     }

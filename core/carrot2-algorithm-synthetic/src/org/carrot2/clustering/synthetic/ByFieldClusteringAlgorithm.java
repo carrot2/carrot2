@@ -53,8 +53,8 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
 
     /**
      * Name of the field to cluster by. Each non-null scalar field value with distinct
-     * hash code will give raise to a single cluster, named using the
-     * {@link Object#toString()} value of the field. If the field value is a collection,
+     * hash code will give rise to a single cluster, named using the
+     * value returned by {@link #buildClusterLabel(Object)}. If the field value is a collection,
      * the document will be assigned to all clusters corresponding to the values in the
      * collection. Note that arrays will not be 'unfolded' in this way.
      * 
@@ -109,10 +109,20 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
         if (cluster == null)
         {
             cluster = new Cluster();
-            cluster.addPhrases(fieldValue.toString());
+            cluster.addPhrases(buildClusterLabel(fieldValue));
             clusters.put(fieldValue, cluster);
         }
 
         cluster.addDocuments(document);
     }
+
+    /**
+     * Builds cluster label based on the field value. This implementation returns
+     * <code>fieldValue.toString()</code>.
+     */
+    protected String buildClusterLabel(Object fieldValue)
+    {
+        return fieldValue.toString();
+    }
+    
 }

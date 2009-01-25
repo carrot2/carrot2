@@ -22,7 +22,7 @@ import org.carrot2.util.attribute.*;
  * the metric, such as type and range. Instead, specific implementations should annotate
  * the values to be returned with {@link Output} {@link Processing} {@link Attribute}.
  */
-public interface ClusteringMetric
+public interface IClusteringMetric
 {
     /**
      * Triggers calculation of the metric. All {@link Processing} {@link Input} attributes

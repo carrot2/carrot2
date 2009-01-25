@@ -15,8 +15,8 @@ package org.carrot2.clustering.lingo;
 
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
+import org.carrot2.text.vsm.VectorSpaceModelContext;
 
-import bak.pcj.map.IntKeyIntMap;
 import bak.pcj.set.IntSet;
 import cern.colt.matrix.DoubleMatrix2D;
 
@@ -28,12 +28,9 @@ public class LingoProcessingContext
     /** Preprocessing context */
     public final PreprocessingContext preprocessingContext;
 
-    /** Term-document matrix */
-    DoubleMatrix2D tdMatrix;
-
-    /** Stem index to row index mapping for the tdMatrix */
-    IntKeyIntMap tdMatrixStemToRowIndex;
-
+    /** Vector space model context */
+    public final VectorSpaceModelContext vsmContext;
+    
     /** Base vectors for the tdMatrix */
     DoubleMatrix2D baseMatrix;
 
@@ -46,20 +43,9 @@ public class LingoProcessingContext
     /** Documents assigned to clusters */
     IntSet [] clusterDocuments;
 
-    /**
-     * Term-document-like matrix for phrases from {@link AllLabels}. If there are no
-     * phrases in {@link AllLabels}, phrase matrix is <code>null</code>.
-     */
-    DoubleMatrix2D phraseMatrix;
-
-    /**
-     * Index of the first phrase in {@link AllLabels}, or -1 if there are no phrases in
-     * {@link AllLabels}.
-     */
-    int firstPhraseIndex = -1;
-
-    LingoProcessingContext(PreprocessingContext preprocessingContext)
+    LingoProcessingContext(VectorSpaceModelContext vsmContext)
     {
-        this.preprocessingContext = preprocessingContext;
+        this.preprocessingContext = vsmContext.preprocessingContext;
+        this.vsmContext = vsmContext;
     }
 }

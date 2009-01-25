@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -25,6 +24,10 @@ import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.source.ambient.AmbientDocumentSource.AmbientTopic;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Test;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimaps;
 
 /**
  * Test cases for {@link AmbientDocumentSource}.
@@ -65,7 +68,31 @@ public class AmbientDocumentSourceTest extends
     }
 
     @Test
-    public void testAllTopics()
+    public void testAllTopicsWithoutDocumentsWithoutTopic()
+    {
+        final int minTopicSize = 1;
+        final boolean includeDocumentsWithoutTopic = false;
+        checkAllTopics(minTopicSize, includeDocumentsWithoutTopic);
+    }
+
+    @Test
+    public void testAllTopicsWithDocumentsWithoutTopic()
+    {
+        final int minTopicSize = 1;
+        final boolean includeDocumentsWithoutTopic = true;
+        checkAllTopics(minTopicSize, includeDocumentsWithoutTopic);
+    }
+
+    @Test
+    public void testAllTopicsWithMinTopicSize()
+    {
+        final int minTopicSize = 3;
+        final boolean includeDocumentsWithoutTopic = false;
+        checkAllTopics(minTopicSize, includeDocumentsWithoutTopic);
+    }
+
+    private void checkAllTopics(final int minTopicSize,
+        final boolean includeDocumentsWithoutTopic)
     {
         final SimpleController controller = getSimpleController(initAttributes);
         int topicIndex = 1;
@@ -73,17 +100,48 @@ public class AmbientDocumentSourceTest extends
         {
             processingAttributes.put(AttributeUtils.getKey(AmbientDocumentSource.class,
                 "topic"), topic);
+            processingAttributes.put(AttributeUtils.getKey(AmbientDocumentSource.class,
+                "includeDocumentsWithoutTopic"), includeDocumentsWithoutTopic);
+            processingAttributes.put(AttributeUtils.getKey(AmbientDocumentSource.class,
+                "minTopicSize"), minTopicSize);
 
             runQuery(controller);
             final List<Document> documents = getDocuments();
-            for (Document document : documents)
-            {
-                assertThat((String) document.getField(Document.TITLE)).isNotEmpty();
-                assertThat((String) document.getField(Document.CONTENT_URL)).isNotEmpty();
-                final String topicId = document.getField(Document.TOPIC);
-                assertThat(topicId.startsWith(Integer.toString(topicIndex))).isTrue();
-            }
+            checkTopic(documents, topicIndex, minTopicSize, includeDocumentsWithoutTopic);
             topicIndex++;
+        }
+    }
+
+    private void checkTopic(List<Document> documents, int topicIndex, int minTopicSize,
+        boolean includeDocumentsWithoutTopic)
+    {
+        for (Document document : documents)
+        {
+            assertThat((String) document.getField(Document.TITLE)).isNotEmpty();
+            assertThat((String) document.getField(Document.CONTENT_URL)).isNotEmpty();
+            final String topicId = document.getField(Document.TOPIC);
+            assertThat(topicId.startsWith(Integer.toString(topicIndex))).isTrue();
+
+            if (!includeDocumentsWithoutTopic)
+            {
+                assertThat(topicId.endsWith(".0")).isFalse();
+            }
+
+            assertThat(AmbientDocumentSource.getTopicLabel(topicId)).isNotEmpty();
+        }
+
+        final ListMultimap<String, Document> documentsByTopic = Multimaps.index(
+            documents, new Function<Document, String>()
+            {
+                public String apply(Document document)
+                {
+                    return document.getField(Document.TOPIC);
+                }
+            });
+        for (String topic : documentsByTopic.keySet())
+        {
+            assertThat(documentsByTopic.get(topic).size()).isGreaterThanOrEqualTo(
+                minTopicSize);
         }
     }
 }

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -83,8 +82,8 @@ public final class PreprocessingContext
         /**
          * Token image as it appears in the input. On positions where {@link #type} is
          * equal to one of {@link ITokenType#TF_TERMINATOR},
-         * {@link ITokenType#TF_SEPARATOR_DOCUMENT} or {@link ITokenType#TF_SEPARATOR_FIELD}
-         * , image is <code>null</code>.
+         * {@link ITokenType#TF_SEPARATOR_DOCUMENT} or
+         * {@link ITokenType#TF_SEPARATOR_FIELD} , image is <code>null</code>.
          * <p>
          * This array is produced by {@link Tokenizer}.
          */
@@ -375,17 +374,41 @@ public final class PreprocessingContext
          * This array is produced by {@link LabelFilterProcessor}.
          */
         public int [] featureIndex;
-        
+
         /**
          * Indices of documents assigned to the label candidate.
          * <p>
          * This array is produced by {@link DocumentAssigner}.
          */
         public IntSet [] documentIndices;
+
+        /**
+         * Index of the first phrase in {@link AllLabels}, or -1 if there are no phrases
+         * in {@link AllLabels}.
+         * <p>
+         * This value is set by {@link LabelFilterProcessor}.
+         */
+        public int firstPhraseIndex;
     }
 
     /**
      * Information about words and phrases that might be good cluster label candidates.
      */
     public final AllLabels allLabels = new AllLabels();
+
+    /**
+     * Returns <code>true</code> if this context contains any words.
+     */
+    public boolean hasWords()
+    {
+        return allWords.image.length > 0;
+    }
+
+    /**
+     * Returns <code>true</code> if this context contains any label candidates.
+     */
+    public boolean hasLabels()
+    {
+        return allLabels.featureIndex != null && allLabels.featureIndex.length > 0;
+    }
 }

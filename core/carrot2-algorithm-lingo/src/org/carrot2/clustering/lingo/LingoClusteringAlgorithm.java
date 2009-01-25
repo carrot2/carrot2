@@ -19,12 +19,11 @@ import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.matrix.NNIInterface;
-import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
+import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
+import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.DoubleRange;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 import bak.pcj.IntIterator;
 import bak.pcj.set.IntSet;
@@ -76,25 +75,6 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public List<Cluster> clusters = null;
 
     /**
-     * Term weighting. The method for calculating weight of words in the term-document
-     * matrices.
-     * 
-     * @level Advanced
-     * @group Matrix model
-     * @label Term weighting
-     */
-    @Input
-    @Processing
-    @Attribute
-    @Required
-    @ImplementingClasses(classes =
-    {
-        LogTfIdfTermWeighting.class, LinearTfIdfTermWeighting.class,
-        TfTermWeighting.class
-    }, strict = false)
-    public ITermWeighting termWeighting = new LogTfIdfTermWeighting();
-
-    /**
      * Indicates whether Lingo used fast native matrix computation routines. Value of this
      * attribute is equal to {@link NNIInterface#isNativeBlasAvailable()} at the time of
      * running the algorithm.
@@ -123,44 +103,9 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public double scoreWeight = 0.0;
 
     /**
-     * Tokenizer used by the algorithm, contains bindable attributes.
+     * Common preprocessing tasks handler.
      */
-    public Tokenizer tokenizer = new Tokenizer();
-
-    /**
-     * Case normalizer used by the algorithm, contains bindable attributes.
-     */
-    public CaseNormalizer caseNormalizer = new CaseNormalizer();
-
-    /**
-     * Stemmer used by the algorithm, contains bindable attributes.
-     */
-    public LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
-
-    /**
-     * Stop list marker used by the algorithm, contains bindable attributes.
-     */
-    public StopListMarker stopListMarker = new StopListMarker();
-
-    /**
-     * Phrase extractor used by the algorithm, contains bindable attributes.
-     */
-    public PhraseExtractor phraseExtractor = new PhraseExtractor();
-
-    /**
-     * Label filter processor used by the algorithm, contains bindable attributes.
-     */
-    public LabelFilterProcessor labelFilterProcessor = new LabelFilterProcessor();
-
-    /**
-     * Document assigner used by the algorithm, contains bindable attributes.
-     */
-    public DocumentAssigner documentAssigner = new DocumentAssigner();
-
-    /**
-     * Language model factory used by the algorithm, contains bindable attributes.
-     */
-    public ILanguageModelFactory languageModelFactory = new DefaultLanguageModelFactory();
+    public PreprocessingPipeline preprocessingPipeline = new PreprocessingPipeline();
 
     /**
      * Term-document matrix builder for the algorithm, contains bindable attributes.
@@ -211,69 +156,62 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
         nativeMatrixUsed = NNIInterface.isNativeBlasAvailable();
 
         // Preprocessing of documents
-        final PreprocessingContext context = new PreprocessingContext(
-            languageModelFactory.getCurrentLanguage(), documents, query);
-        tokenizer.tokenize(context);
-        caseNormalizer.normalize(context);
+        final PreprocessingContext context = preprocessingPipeline.preprocess(documents,
+            query);
 
         // Further processing only if there are words to process
         clusters = Lists.newArrayList();
-        if (context.allWords.image.length > 0)
+        if (context.hasLabels())
         {
-            languageModelStemmer.stem(context);
-            stopListMarker.mark(context);
-            phraseExtractor.extractPhrases(context);
-            labelFilterProcessor.process(context);
-            documentAssigner.assign(context);
+            // Term-document matrix building and reduction
+            final VectorSpaceModelContext vsmContext = new VectorSpaceModelContext(
+                context);
+            matrixBuilder.buildTermDocumentMatrix(vsmContext);
+            matrixBuilder.buildTermPhraseMatrix(vsmContext);
 
-            if (context.allLabels.featureIndex.length > 0)
+            LingoProcessingContext lingoContext = new LingoProcessingContext(vsmContext);
+            matrixReducer.reduce(lingoContext);
+
+            // Cluster label building
+            clusterBuilder.buildLabels(lingoContext, matrixBuilder.termWeighting);
+
+            // Document assignment
+            clusterBuilder.assignDocuments(lingoContext);
+
+            // Cluster merging
+            clusterBuilder.merge(lingoContext);
+
+            // Format final clusters
+            final int [] clusterLabelIndex = lingoContext.clusterLabelFeatureIndex;
+            final IntSet [] clusterDocuments = lingoContext.clusterDocuments;
+            final double [] clusterLabelScore = lingoContext.clusterLabelScore;
+            for (int i = 0; i < clusterLabelIndex.length; i++)
             {
-                // Term-document matrix building and reduction
-                LingoProcessingContext lingoContext = new LingoProcessingContext(context);
-                matrixBuilder.build(lingoContext, termWeighting);
-                matrixReducer.reduce(lingoContext);
+                final Cluster cluster = new Cluster();
 
-                // Cluster label building
-                clusterBuilder.buildLabels(lingoContext, termWeighting);
-
-                // Document assignment
-                clusterBuilder.assignDocuments(lingoContext);
-
-                // Cluster merging
-                clusterBuilder.merge(lingoContext);
-
-                // Format final clusters
-                final int [] clusterLabelIndex = lingoContext.clusterLabelFeatureIndex;
-                final IntSet [] clusterDocuments = lingoContext.clusterDocuments;
-                final double [] clusterLabelScore = lingoContext.clusterLabelScore;
-                for (int i = 0; i < clusterLabelIndex.length; i++)
+                final int labelFeature = clusterLabelIndex[i];
+                if (labelFeature < 0)
                 {
-                    final Cluster cluster = new Cluster();
-
-                    final int labelFeature = clusterLabelIndex[i];
-                    if (labelFeature < 0 || clusterDocuments[i].size() < 2)
-                    {
-                        // Cluster removed during merging
-                        continue;
-                    }
-
-                    // Add label and score
-                    cluster.addPhrases(labelFormatter.format(context, labelFeature));
-                    cluster.setAttribute(Cluster.SCORE, clusterLabelScore[i]);
-
-                    // Add documents
-                    for (IntIterator it = clusterDocuments[i].iterator(); it.hasNext();)
-                    {
-                        cluster.addDocuments(documents.get(it.next()));
-                    }
-
-                    // Add cluster
-                    clusters.add(cluster);
+                    // Cluster removed during merging
+                    continue;
                 }
 
-                Collections.sort(clusters, Cluster.byReversedWeightedScoreAndSizeComparator(
-                    scoreWeight));
+                // Add label and score
+                cluster.addPhrases(labelFormatter.format(context, labelFeature));
+                cluster.setAttribute(Cluster.SCORE, clusterLabelScore[i]);
+
+                // Add documents
+                for (IntIterator it = clusterDocuments[i].iterator(); it.hasNext();)
+                {
+                    cluster.addDocuments(documents.get(it.next()));
+                }
+
+                // Add cluster
+                clusters.add(cluster);
             }
+
+            Collections.sort(clusters, Cluster
+                .byReversedWeightedScoreAndSizeComparator(scoreWeight));
         }
 
         Cluster.appendOtherTopics(documents, clusters);

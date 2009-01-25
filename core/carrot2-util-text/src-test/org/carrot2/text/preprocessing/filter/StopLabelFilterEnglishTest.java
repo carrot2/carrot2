@@ -61,7 +61,7 @@ public class StopLabelFilterEnglishTest extends LabelFilterTestBase
             wordIndices.get("data"), wordIndices.get("news"), 3
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 2);
     }
 
     @Test

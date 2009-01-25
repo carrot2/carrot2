@@ -72,7 +72,7 @@ public class StopWordLabelFilterSyntheticTest extends LabelFilterTestBase
             0, 1, 2, 3
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 2);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class StopWordLabelFilterSyntheticTest extends LabelFilterTestBase
             0, 1, 7
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 2);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class StopWordLabelFilterSyntheticTest extends LabelFilterTestBase
             0, 3
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 1);
     }
 
     @Test

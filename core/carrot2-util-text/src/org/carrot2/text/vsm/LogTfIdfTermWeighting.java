@@ -11,7 +11,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.clustering.lingo;
+package org.carrot2.text.vsm;
 
 /**
  * Calculates term-document matrix element values based on Term Frequency.

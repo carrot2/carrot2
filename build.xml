@@ -447,6 +447,10 @@
                            output.dir="${core.dir}/carrot2-util-text/tmp/eclipse"
                            copy.to="${core.dir}/carrot2-util-text/META-INF" />
 
+      <attributes-xml-copy java.source="${core.dir}/carrot2-output-metrics/src"
+                           output.dir="${core.dir}/carrot2-output-metrics/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-output-metrics/META-INF" />
+
       <attributes-xml java.source="${core.dir}/carrot2-util-attribute/src-test"
                       output.dir="${core.dir}/carrot2-util-attribute/tmp/eclipse" />
 

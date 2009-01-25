@@ -13,6 +13,7 @@
 
 package org.carrot2.matrix;
 
+import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 
 /**
@@ -20,6 +21,16 @@ import cern.colt.matrix.DoubleMatrix2D;
  */
 public class MatrixAssertions
 {
+    /**
+     * Creates a {@link DoubleMatrix1DAssertion}.
+     * 
+     * @param actualMatrix
+     * @return the assertion
+     */
+    public static DoubleMatrix1DAssertion assertThat(DoubleMatrix1D actualMatrix)
+    {
+        return new DoubleMatrix1DAssertion(actualMatrix);
+    }
     /**
      * Creates a {@link DoubleMatrix2DAssertion}.
      * 
