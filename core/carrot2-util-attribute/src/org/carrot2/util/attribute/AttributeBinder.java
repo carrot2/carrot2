@@ -418,6 +418,7 @@ public class AttributeBinder
                 final ImplementingClasses implementingClasses = field
                     .getAnnotation(ImplementingClasses.class);
                 if (implementingClasses != null
+                    && field.getType().isAssignableFrom(String.class)
                     && ConstraintValidator.isMet(stringValue, implementingClasses).length == 0)
                 {
                     return stringValue;

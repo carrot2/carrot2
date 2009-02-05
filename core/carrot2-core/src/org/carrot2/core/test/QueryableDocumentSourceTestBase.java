@@ -261,8 +261,6 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
             query.append(' ');
         }
         
-        System.out.println(query);
-        
         return query.toString();
     }
 

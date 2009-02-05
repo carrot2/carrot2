@@ -165,7 +165,7 @@ public class AttributeBinderTest
         @ImplementingClasses(classes =
         {
             CoercedInterfaceImpl.class
-        })
+        }, strict = false)
         private ICoercedInterface coerced = null;
     }
 
@@ -537,7 +537,7 @@ public class AttributeBinderTest
         }
         catch (final AttributeBindingException e)
         {
-            assertEquals(12, ((ConstraintViolationException)e.getCause()).offendingValue);
+            assertEquals(12, ((ConstraintViolationException) e.getCause()).offendingValue);
         }
         checkFieldValues(instance, new Object []
         {
@@ -565,7 +565,7 @@ public class AttributeBinderTest
         }
         catch (final AttributeBindingException e)
         {
-            assertEquals(8, ((ConstraintViolationException)e.getCause()).offendingValue);
+            assertEquals(8, ((ConstraintViolationException) e.getCause()).offendingValue);
         }
         checkFieldValues(instance, new Object []
         {
@@ -580,7 +580,7 @@ public class AttributeBinderTest
         }
         catch (final AttributeBindingException e)
         {
-            assertEquals(12, ((ConstraintViolationException)e.getCause()).offendingValue);
+            assertEquals(12, ((ConstraintViolationException) e.getCause()).offendingValue);
         }
         checkFieldValues(instance, new Object []
         {
@@ -595,6 +595,24 @@ public class AttributeBinderTest
 
         addAttribute(CoercedReferenceContainer.class, "coerced",
             CoercedInterfaceImpl.class);
+        addAttribute(CoercedInterfaceImpl.class, "initInput", 7);
+
+        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
+        assertNotNull(instance.coerced);
+        assertEquals(instance.coerced.getClass(), CoercedInterfaceImpl.class);
+        checkFieldValues(instance.coerced, new Object []
+        {
+            "initInput", 7
+        });
+    }
+
+    @Test
+    public void testClassCoercionFromString() throws InstantiationException
+    {
+        final CoercedReferenceContainer instance = new CoercedReferenceContainer();
+
+        addAttribute(CoercedReferenceContainer.class, "coerced",
+            CoercedInterfaceImpl.class.getName());
         addAttribute(CoercedInterfaceImpl.class, "initInput", 7);
 
         AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);

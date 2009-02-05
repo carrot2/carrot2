@@ -98,6 +98,9 @@
   $job = new Carrot2Job();
   addExampleDocuments($job);
   $job->setQuery("data mining"); // set the query as a hint for the clustering algorithm (optional)
+  $job->setAttributes(array (
+        'TermDocumentMatrixBuilder.termWeighting' => 'org.carrot2.text.vsm.LinearTfIdfTermWeighting'
+  ));
 
   $result = $processor->cluster($job);
   $clusters = $result->getClusters();

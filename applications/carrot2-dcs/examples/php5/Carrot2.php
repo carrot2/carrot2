@@ -111,7 +111,7 @@ class Carrot2Job
   public function setAttributes(array $attributes)
   {
     if (is_array($attributes)) {
-      $this->attributes = attributes;
+      $this->attributes = $attributes;
     }
   }
 
