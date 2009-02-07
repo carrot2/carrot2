@@ -77,18 +77,18 @@
       <div class="url">
         <xsl:apply-templates select="url" />
         <xsl:if test="count(sources/source) > 0">
-          <span class="sources"> [<xsl:apply-templates select="sources/source" />]</span>
+          <span class="sources"> [<xsl:apply-templates select="sources/source" mode="document-source" />]</span>
         </xsl:if>
       </div>
       <div style="clear: both"><xsl:comment></xsl:comment></div>
     </div>
   </xsl:template>
   
-  <xsl:template match="document/sources/source[position() = last()]">
+  <xsl:template match="document/sources/source[position() = last()]" mode="document-source">
     <xsl:apply-templates />
   </xsl:template>
   
-  <xsl:template match="document/sources/source[position() != last()]">
+  <xsl:template match="document/sources/source[position() != last()]" mode="document-source">
     <xsl:apply-templates />,
   </xsl:template>
 </xsl:stylesheet>
