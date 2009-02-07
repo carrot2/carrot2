@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-  <xsl:include href="customization.xsl" />
-  <xsl:include href="documents.xsl" />
-  <xsl:include href="clusters.xsl" />
-  <xsl:include href="variables.xsl" />
-  <xsl:include href="attributes.xsl" />
+  <xsl:import href="customization.xsl" />
+  <xsl:import href="documents.xsl" />
+  <xsl:import href="clusters.xsl" />
+  <xsl:import href="variables.xsl" />
+  <xsl:import href="attributes.xsl" />
 
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
               doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -170,7 +170,7 @@
 
         <div id="required" class="clearfix">
           <xsl:variable name="active-source-id"><xsl:apply-templates select="/page" mode="active-source" /></xsl:variable>
-          <input type="hidden" name="{$source-param}" id="source" value="{$active-source-id}" />
+          <xsl:apply-templates select=".." mode="source.field" />
           <input type="hidden" name="{$view-param}" id="view" value="{/page/request/@view}" />
           <input type="hidden" name="{$skin-param}" value="{/page/request/@skin}" />
           
@@ -200,7 +200,7 @@
                       
           <xsl:if test="count(/page/config/components/algorithms/algorithm) > 1">
             <label>
-              Cluster with
+              <xsl:apply-templates select=".." mode="algorithm.label" />
               <select name="{$algorithm-param}">
                 <xsl:for-each select="/page/config/components/algorithms/algorithm">
                   <option value="{@id}">
@@ -278,6 +278,14 @@
 
   <xsl:template match="page" mode="search.field">
     <button type="submit" id="search">Search</button>
+  </xsl:template>
+
+  <xsl:template match="page" mode="source.field">
+    <input type="hidden" name="{$source-param}" id="source" value="{$active-source-id}" />
+  </xsl:template>
+
+  <xsl:template match="page" mode="algorithm.label">
+    Cluster with
   </xsl:template>
 
   <xsl:template match="source">

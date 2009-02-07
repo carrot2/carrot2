@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-  <xsl:include href="documents.xsl" />
-  <xsl:include href="clusters.xsl" />
+  <xsl:import href="documents.xsl" />
+  <xsl:import href="clusters.xsl" />
 
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
               doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -90,8 +90,11 @@
   </xsl:template>
   
   <!-- The percentage of unique urls required for thumbnails to show -->
-  <xsl:template match="page" mode="unique-urls-for-thumbnails">0.5</xsl:template>
+  <xsl:param name="unique-urls-for-thumbnails">0.5</xsl:param>
   
   <!-- Ids of document sources for which thumbnails should show -->
-  <xsl:template match="page" mode="document-source-ids-for-thumbnails"></xsl:template>
+  <xsl:param name="document-source-ids-for-thumbnails"></xsl:param>
+  
+  <!-- Whether to always open links in a new window -->
+  <xsl:param name="open-results-in-new-window">false</xsl:param>
 </xsl:stylesheet>

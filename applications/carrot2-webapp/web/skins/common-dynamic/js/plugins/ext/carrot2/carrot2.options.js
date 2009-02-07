@@ -5,6 +5,32 @@
   /** Cookie name for remembering the state of the options */
   var COOKIE_OPTIONS_SHOWN = "show-options";
   var COOKIE_ADVANCED_OPTIONS_SHOWN = "show-advanced-options";
+  
+  /**
+   * Updates the top position of the results area after showing/ hiding options.
+   * Skins are likely to provide their own implementation here.
+   */
+  function updateResultsArea($resultsArea, optionsHeight, multiplier)
+  {
+    var top = $resultsArea.position().top;
+    $resultsArea.css("top", top + optionsHeight * multiplier);
+  }
+
+  /**
+   * Returns identifier of the currently selected source.
+   */
+  function getSourceId()
+  {
+    return $("#source").val();
+  }
+  
+  /**
+   * Core functions for handling tabs exported to the outside.
+   */
+  jQuery.options = {
+    updateResultsArea: updateResultsArea,
+    getSourceId: getSourceId
+  };
 
   $(document).ready( function() {
     $("#show-options").click( function() {
@@ -18,7 +44,7 @@
         expires: 30 * 12 * 10
       });
       if ($("#advanced-options").is(":visible") && $("#options").is(":visible")) {
-        updateAdvancedOptions($("#source").val());
+        updateAdvancedOptions($.options.getSourceId());
       }
       return false;
     });
@@ -40,7 +66,7 @@
     
     $("#show-advanced-options").click(function(event) {
       var $link = $(this);
-      updateAdvancedOptions($("#source").val(), function () {
+      updateAdvancedOptions($.options.getSourceId(), function () {
         this.show();
         $link.hide();
         $("#hide-advanced-options").show();
@@ -100,21 +126,4 @@
       }
     }
   }
-  
-  /**
-   * Updates the top position of the results area after showing/ hiding options.
-   * Skins are likely to provide their own implementation here.
-   */
-  function updateResultsArea($resultsArea, optionsHeight, multiplier)
-  {
-    var top = $resultsArea.position().top;
-    $resultsArea.css("top", top + optionsHeight * multiplier);
-  }
-  
-  /**
-   * Core functions for handling tabs exported to the outside.
-   */
-  jQuery.options = {
-    updateResultsArea: updateResultsArea
-  };
 })(jQuery);

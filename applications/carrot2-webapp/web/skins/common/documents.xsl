@@ -35,6 +35,9 @@
           <span class="rank"><xsl:value-of select="number(@id) + 1" /></span>
           <span class="title-in-clusters">
             <a href="{url}" class="title">
+              <xsl:if test="$open-results-in-new-window = 'true'">
+                <xsl:attribute name="target">_blank</xsl:attribute>
+              </xsl:if>
               <xsl:choose>
                 <xsl:when test="field[@key = 'title-highlight']">
                   <xsl:value-of disable-output-escaping="yes" select="field[@key = 'title-highlight']/value/@value" />
@@ -50,8 +53,6 @@
           <a href="#" class="show-preview" title="Show preview">&#160;<small>Show preview</small></a>
         </h3>
       </div>
-      <xsl:variable name="unique-urls-for-thumbnails"><xsl:apply-templates select="/page" mode="unique-urls-for-thumbnails" /></xsl:variable>
-      <xsl:variable name="document-source-ids-for-thumbnails"><xsl:apply-templates select="/page" mode="document-source-ids-for-thumbnails" /></xsl:variable>
       <xsl:choose>
         <xsl:when test="field[@key = 'thumbnail-url']">
           <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value/@value}" />

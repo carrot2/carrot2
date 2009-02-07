@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-  <xsl:include href="../common/page.xsl" />
-  <xsl:include href="../common/source-cookies.xsl" />
-  <xsl:include href="../common/util.xsl" />
+  <xsl:import href="../common/page.xsl" />
+  <xsl:import href="../common/source-cookies.xsl" />
+  <xsl:import href="../common/util.xsl" />
   
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
        doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
