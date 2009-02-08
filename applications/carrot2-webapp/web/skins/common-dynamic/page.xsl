@@ -20,6 +20,7 @@
     </xsl:if>
     
     <script type="text/javascript">
+      jQuery.carrot2.build = "<xsl:value-of select="concat($version-number, 'b', $build-number)" />";
       jQuery.options.url = "<xsl:value-of select="$attributes-url" disable-output-escaping="no" />";
       <xsl:if test="string-length(/page/request/@query) > 0">
         jQuery.documents.url = "<xsl:value-of select="$documents-url" disable-output-escaping="no" />";

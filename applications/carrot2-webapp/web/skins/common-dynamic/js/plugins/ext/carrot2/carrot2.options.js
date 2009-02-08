@@ -113,7 +113,7 @@
   function updateAdvancedOptions(sourceId, callback)
   {
     if ($("#results-area").size() == 0) {
-      $.get($.options.url, {source: sourceId}, function(data) {
+      $.get($.options.url, {source: sourceId, v: $.carrot2.build}, function(data) {
         var $opts = $("#advanced-options");
         $opts.html(data);
         if (callback) {
