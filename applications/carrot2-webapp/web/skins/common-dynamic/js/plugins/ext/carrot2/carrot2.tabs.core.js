@@ -3,7 +3,7 @@
     sourceTabs();
     
     $("body").bind("carrot2-loaded", function() {
-      $("#source-tabs").trigger("tabActivated", [ $("#source-tabs li.active").eq(0).attr("id") ]);
+      $("#source-tabs").trigger("tabActivated", [ $.tabs.getInitialActiveTab() ]);
     });
   });
 
@@ -38,9 +38,9 @@
     var $target = $(e.target);
     var $tabLi;
     if ($target.is("li.tab")) {
-    	$tabLi = $target;
+      $tabLi = $target;
     } else {
-    	$tabLi = $target.parents("li.tab").eq(0);
+      $tabLi = $target.parents("li.tab").eq(0);
     }
     
     $tabLi.addClass("active").removeClass("passive");
@@ -103,9 +103,18 @@
   };
 
   /**
+   * Returns the id of the initially selected tab.
+   */
+  getInitialActiveTab = function() {
+    return $("#source-tabs li.active").eq(0).attr("id");
+  }
+  
+  /**
    * Core functions for handling tabs exported to the outside.
    */
   jQuery.tabs = {
-    updateTabs: updateTabs
+    updateTabs: updateTabs,
+    getInitialActiveTab: getInitialActiveTab
   };
+
 })(jQuery);
