@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -21,6 +20,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
@@ -34,12 +34,12 @@ import com.sun.syndication.fetcher.FeedFetcher;
 import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
 
 /**
- * A {@link IDocumentSource} fetching {@link Document}s (search results) from an OpenSearch
- * feed.
+ * A {@link IDocumentSource} fetching {@link Document}s (search results) from an
+ * OpenSearch feed.
  * <p>
  * Based on code donated by Julien Nioche.
  * 
- * @see <a href="http://www.opensearch.org">OpenSearch.org</a>
+ * @see <a href="http://www.opensearch.org">OpenSearch.org< /a>
  */
 @Bindable(prefix = "OpenSearchDocumentSource")
 public class OpenSearchDocumentSource extends MultipageSearchEngine
@@ -105,6 +105,19 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     public int maximumResults = 1000;
 
     /**
+     * Additional parameters to be appended to {@link #feedUrlTemplate} on each request.
+     * 
+     * @label Feed URL parameters
+     * @level Advanced
+     * @group Service
+     */
+    @Input
+    @Init
+    @Processing
+    @Attribute
+    public Map<String, String> feedUrlParams = null;
+
+    /**
      * Search engine metadata create upon initialization.
      */
     private MultipageSearchEngineMetadata metadata;
@@ -130,10 +143,10 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
         super.init(context);
 
         // Verify that the attributes are legal
-        final boolean hasStartPage = URLResourceWithParams
-            .containsAttributePlaceholder(feedUrlTemplate, START_PAGE_VARIABLE_NAME);
-        final boolean hasStartIndex = URLResourceWithParams
-            .containsAttributePlaceholder(feedUrlTemplate, START_INDEX_VARIABLE_NAME);
+        final boolean hasStartPage = URLResourceWithParams.containsAttributePlaceholder(
+            feedUrlTemplate, START_PAGE_VARIABLE_NAME);
+        final boolean hasStartIndex = URLResourceWithParams.containsAttributePlaceholder(
+            feedUrlTemplate, START_INDEX_VARIABLE_NAME);
 
         if (!(hasStartPage ^ hasStartIndex))
         {
@@ -170,7 +183,8 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     @Override
     public void process() throws ProcessingException
     {
-        super.process(metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, this.getClass()));
+        super.process(metadata,
+            getSharedExecutor(MAX_CONCURRENT_THREADS, this.getClass()));
     }
 
     @Override
@@ -188,22 +202,37 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
                 values.put(START_PAGE_VARIABLE_NAME, bucket.start + 1);
                 values.put(COUNT_VARIABLE_NAME, bucket.results);
 
-                final String url = URLResourceWithParams.substituteAttributes(feedUrlTemplate, values);
+                final StringBuilder urlExtension = new StringBuilder(
+                    URLResourceWithParams.substituteAttributes(feedUrlTemplate, values));
+                if (feedUrlParams != null)
+                {
+                    for (Map.Entry<String, String> entry : feedUrlParams.entrySet())
+                    {
+                        urlExtension.append('&');
+                        urlExtension.append(entry.getKey());
+                        urlExtension.append('=');
+                        urlExtension.append(StringUtils.urlEncodeWrapException(entry
+                            .getValue(), "UTF-8"));
+                    }
+                }
 
+                final String url = urlExtension.toString();
                 logger.debug("Fetching URL: " + url);
 
                 /*
-                 * TODO: Rome fetcher uses SUN's HttpClient and opens a persistent HTTP connection
-                 * (background thread that keeps reference to the class loader). This causes minor
-                 * memory leaks when reloading Web applications. Consider: 1) patching rome fetcher
-                 * sources and adding Connection: close to request headers, 2) using Apache HttpClient,
-                 * 3) using manual fetch of the syndication feed.
+                 * TODO: Rome fetcher uses SUN's HttpClient and opens a persistent HTTP
+                 * connection (background thread that keeps reference to the class
+                 * loader). This causes minor memory leaks when reloading Web
+                 * applications. Consider: 1) patching rome fetcher sources and adding
+                 * Connection: close to request headers, 2) using Apache HttpClient, 3)
+                 * using manual fetch of the syndication feed.
                  */
                 final SyndFeed feed = feedFetcher.retrieveFeed(new URL(url));
                 final SearchEngineResponse response = new SearchEngineResponse();
 
                 // The documentation does not mention that null value can be returned
-                // but we've seen a NPE here: http://builds.carrot2.org/browse/C2HEAD-SOURCES-4.
+                // but we've seen a NPE here:
+                // http://builds.carrot2.org/browse/C2HEAD-SOURCES-4.
                 if (feed != null)
                 {
                     final List entries = feed.getEntries();
