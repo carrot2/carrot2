@@ -238,7 +238,32 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
      */
     protected String getNoResultsQueryText()
     {
-        return ExternalApiTestBase.NO_RESULTS_QUERY;
+        return getNoResultsQuery();
+    }
+    
+    /**
+     * Override to customize no results query.
+     */
+    public static String getNoResultsQuery()
+    {
+        final int words = 5;
+        final int chars = 8;
+        final Random random = new Random();
+        
+        final StringBuilder query = new StringBuilder();
+        for (int i = 0; i < words; i++)
+        {
+            for (int j = 0; j < chars; j++)
+            {
+                query.append((char)('a' + random.nextInt('z' - 'a')));
+            }
+            query.append(random.nextInt(1000000));
+            query.append(' ');
+        }
+        
+        System.out.println(query);
+        
+        return query.toString();
     }
 
     private void checkMinimumResults(String query, int resultsToRequest,
