@@ -20,6 +20,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
@@ -315,9 +316,10 @@ public class QueryProcessorServlet extends HttpServlet
                     || RequestType.FULL.equals(requestModel.type)
                     || RequestType.CARROT2.equals(requestModel.type))
                 {
+                    logQuery(Level.DEBUG, requestModel, null);
                     processingResult = controller.process(requestParameters,
                         requestModel.source, requestModel.algorithm);
-                    logQuery(requestModel, processingResult);
+                    logQuery(Level.INFO, requestModel, processingResult);
                 }
                 else if (RequestType.DOCUMENTS.equals(requestModel.type))
                 {
@@ -367,12 +369,18 @@ public class QueryProcessorServlet extends HttpServlet
         }
     }
 
-    private void logQuery(RequestModel requestModel, ProcessingResult processingResult)
+    private void logQuery(Level p, RequestModel requestModel, ProcessingResult processingResult)
     {
-        this.queryLogger.info(requestModel.algorithm + "," + requestModel.source + ","
-            + requestModel.results + ","
-            + processingResult.getAttributes().get(AttributeNames.PROCESSING_TIME_TOTAL)
-            + "," + requestModel.query);
+        if (!queryLogger.isEnabledFor(p)) return;
+
+        final String message = 
+                requestModel.algorithm + "," + requestModel.source + ","
+                + requestModel.results + ","
+                + (processingResult == null ? "-" : 
+                    processingResult.getAttributes().get(AttributeNames.PROCESSING_TIME_TOTAL))
+                + "," + requestModel.query;
+
+        this.queryLogger.log(p, message);
     }
 
     private void setExpires(HttpServletResponse response, int minutes)

@@ -705,6 +705,7 @@ public final class CachingController implements IController
         public Object createEntry(Object key) throws Exception
         {
             final Map<String, Object> inputAttributes = (Map<String, Object>) key;
+            final int keyHashIn = inputAttributes.hashCode();
 
             final Class<? extends IProcessingComponent> componentClass = (Class<? extends IProcessingComponent>) inputAttributes
                 .get(COMPONENT_CLASS_KEY);
@@ -716,6 +717,13 @@ public final class CachingController implements IController
                 component = componentPool.borrowObject(componentClass, componentId);
                 final Map<String, Object> attributes = Maps.newHashMap(inputAttributes);
                 ControllerUtils.performProcessing(component, attributes, true);
+
+                final int keyHashOut = key.hashCode();
+                if (keyHashIn != keyHashOut)
+                {
+                    throw new RuntimeException("Key hash in != out: " + keyHashIn + " : " + keyHashOut
+                        + ", componentId: " + componentId + ", " + componentClass.getName());
+                }
 
                 return attributes;
             }
