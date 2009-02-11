@@ -20,7 +20,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.MapUtils;
