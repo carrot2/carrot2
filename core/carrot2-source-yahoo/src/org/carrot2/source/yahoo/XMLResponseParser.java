@@ -123,7 +123,7 @@ final class XMLResponseParser implements ContentHandler
         String attributeName, SearchEngineResponse response, String metadataKey)
     {
         final String value = attributes.getValue(attributeName);
-        if (value != null)
+        if (value != null && !"".equals(value.trim()))
         {
             response.metadata.put(metadataKey, Long.parseLong(value));
         }
