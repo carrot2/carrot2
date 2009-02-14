@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,10 +12,10 @@
 
 package org.carrot2.util;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -63,7 +62,7 @@ public class MapUtils
             }
             else
             {
-                result.put(parameterName, parameterValues);
+                result.put(parameterName, Lists.newArrayList(parameterValues));
             }
         }
         return result;

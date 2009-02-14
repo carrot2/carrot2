@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -139,6 +138,78 @@ public class SimpleXmlWrappersTest
         check(null);
     }
 
+    @Test
+    public void testArrayList() throws Exception
+    {
+        check(Lists.newArrayList("test1", "test2"));
+    }
+
+    @Test
+    public void testLinkedList() throws Exception
+    {
+        check(Lists.newLinkedList(Arrays.asList("test1", "test2")));
+    }
+
+    @Test
+    public void testSubList() throws Exception
+    {
+        check(Lists.newArrayList("test1", "test2", "test3").subList(0, 2));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testMixedTypeList() throws Exception
+    {
+        check(Lists.newArrayList("test1", 10, true));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testNestedList() throws Exception
+    {
+        check(Lists
+            .newArrayList(Lists.newArrayList("e1", "e2"), Lists.newArrayList(1, 2)));
+    }
+
+    @Test
+    public void testHashMap() throws Exception
+    {
+        final Map<String, Object> map = Maps.newHashMap();
+        check(populateTestMap(map));
+    }
+    
+    @Test
+    public void testHashMapWithList() throws Exception
+    {
+        final Map<String, Object> map = Maps.newHashMap();
+        map.put("list", Lists.newArrayList("test1", "test2", "test3"));
+        check(map);
+    }
+    
+    @Test
+    public void testTreeMap() throws Exception
+    {
+        final Map<String, Object> map = Maps.newTreeMap();
+        check(populateTestMap(map));
+    }
+    
+    @Test
+    public void testNestedMaps() throws Exception
+    {
+        final Map<String, Object> map = Maps.newTreeMap();
+        final Map<String, Object> inner = Maps.newTreeMap();
+        map.put("inner", populateTestMap(inner));
+        check(map);
+    }
+
+    private Map<String, Object> populateTestMap(final Map<String, Object> map)
+    {
+        map.put("key1", "val1");
+        map.put("key2", 10);
+        map.put("key3", true);
+        return map;
+    }
+
     @Root(name = "annotated")
     static class AnnotatedClass
     {
@@ -259,7 +330,7 @@ public class SimpleXmlWrappersTest
         check(new ClassWithWrapper(null, "test"));
         check(new ClassWithWrapper(null, null));
     }
-    
+
     public void check(Object value) throws Exception
     {
         checkMap(Long.toString(value != null ? value.hashCode() : 0), value);
