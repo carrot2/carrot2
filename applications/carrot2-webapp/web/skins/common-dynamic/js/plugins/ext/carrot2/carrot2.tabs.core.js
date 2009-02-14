@@ -1,10 +1,6 @@
 (function($) {
   $(document).ready(function() {
     sourceTabs();
-    
-    $("body").bind("carrot2-loaded", function() {
-      $("#source-tabs").trigger("tabActivated", [ $.tabs.getInitialActiveTab() ]);
-    });
   });
 
   /**
@@ -22,6 +18,19 @@
       }
     }));
 
+    // Add autosubmit on tab activation
+    $tabContainer.bind("tabActivated", function() {
+      if ($("#results-area").size() > 0) {
+        // A little-hack, dependency-wise: we remove attribute names from advanced options
+        // so that when we submit the form after tab change, common attribute values
+        // are not passed between sources (e.g. site between boss-wiki and boss-images).
+        if ($tabContainer.data("previous-source") != $("#source").val()) {
+          $("#advanced-options :input").removeAttr("name");
+        }
+        $("#search-form")[0].submit();
+      }
+    });
+    
     // Initialize active tab
     updateTabs();
   
@@ -47,14 +56,12 @@
     $tabContainer.trigger("tabStructureChanged");
     
     var tabId = $tabLi.attr("id");
+    var $sourceHidden = $("#source");
+    $tabContainer.data("previous-source", $sourceHidden.val());
+    $sourceHidden.val(tabId);
     $tabContainer.trigger("tabActivated", [ tabId ]);
     
-    $("#source").val(tabId);
-    if ($("#results-area").size() > 0) {
-      $("#source").parents("form")[0].submit();
-    } else {
-      $("#query").focus();
-    }
+    $("#query").focus();
   };
 
   /**

@@ -3,19 +3,24 @@
 <project name="Check all available document sources" default="webtest">
   <target name="webtest">
     <property name="webtest.skip.source.icerocket" value="true" />
+    <property name="webtest.skip.source.pubmed" value="true" />
+
     <webtest name="Check all available document sources">
-      <config easyajax="true" easyajaxdelay="5000"/>
       &getStartupPage;
       <setInputField htmlId="query" value="test" />
       <setSelectField name="results" value="50" />
       <clickButton htmlId="search" />
+      <sleep seconds="5" />
 
       <!-- Default search already tested elsewhere -->
-      <repeat xpath="id('source-tabs')//li[contains(@class,'tab')]" counterName="tab" 
+      <repeat xpath="id('source-tabs')//li[contains(@class,'tab') and not(contains(@class,'active'))]" counterName="tab" 
               description="Iterate over all main tabs">
         <storeXPath xpath="$tab/@id" property="tabId" />
         <ifStep unless="${webtest.skip.source.#{tabId}}">
-          <clickLink xpath="$tab/a" description="Search document source: #{tabId}" />
+          <clickElement xpath="id('#{tabId}')" description="Search document source: #{tabId}" />
+          <sleep seconds="10" />
+          
+          <verifyXPath xpath="contains(id('#{tabId}')/@class, 'active')" />
           <verifyXPath xpath="count(id('documents')/div) &gt; 24" 
                        description="More than 24 documents expected" />
           <verifyXPath xpath="count(id('clusters')//li) &gt; 3"

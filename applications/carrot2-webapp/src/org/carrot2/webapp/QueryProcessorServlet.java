@@ -31,6 +31,8 @@ import org.carrot2.webapp.filter.QueryWordHighlighter;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.carrot2.webapp.model.*;
 import org.carrot2.webapp.util.UserAgentUtils;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Persister;
 import org.simpleframework.xml.stream.Format;
 
@@ -157,11 +159,6 @@ public class QueryProcessorServlet extends HttpServlet
             final RequestModel requestModel = WebappConfig.INSTANCE
                 .setDefaults(new RequestModel());
 
-            // Special handling for false boolean attributes whose default value is true
-            addFalseBooleanParameters(requestParameters
-                .containsKey(WebappConfig.SOURCE_PARAM) ? (String) requestParameters
-                .get(WebappConfig.SOURCE_PARAM) : requestModel.source, requestParameters);
-
             requestModel.modern = UserAgentUtils.isModernBrowser(request);
             final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = new AttributeBinder.AttributeBinderActionBind(
                 Input.class, requestParameters, true,
@@ -208,13 +205,28 @@ public class QueryProcessorServlet extends HttpServlet
         RequestModel requestModel) throws Exception
     {
         response.setContentType(MIME_XML_CHARSET_UTF);
-        final AttributeMetadataModel model = new AttributeMetadataModel(requestModel);
+        final AjaxAttributesModel model = new AjaxAttributesModel(requestModel);
 
         final Persister persister = new Persister(getPersisterFormat(requestModel));
         persister.write(model, response.getWriter());
         setExpires(response, 60 * 24 * 7); // 1 week
     }
 
+    @Root(name = "ajax-attribute-metadata")
+    private static class AjaxAttributesModel
+    {
+        @Element(name = "request")
+        public final RequestModel requestModel;
+        
+        @Element(name = "attribute-metadata")
+        public final AttributeMetadataModel attributesModel = new AttributeMetadataModel();
+
+        private AjaxAttributesModel(RequestModel requestModel)
+        {
+            this.requestModel = requestModel;
+        }
+    }
+    
     /**
      * Handles list of sources requests.
      */
@@ -350,22 +362,6 @@ public class QueryProcessorServlet extends HttpServlet
         else
         {
             persister.write(pageModel, response.getWriter());
-        }
-    }
-
-    private void addFalseBooleanParameters(final String sourceId,
-        final Map<String, Object> requestParameters)
-    {
-        final Collection<String> booleanAttributeKeys = WebappConfig.INSTANCE.sourceBooleanAttributeKeys
-            .get(sourceId);
-        for (String key : booleanAttributeKeys)
-        {
-            if (!requestParameters.containsKey(key))
-            {
-                // If there is no value in HTTP parameters, checkbox was not checked
-                // and we need to set the corresponding attribute to false
-                requestParameters.put(key, false);
-            }
         }
     }
 

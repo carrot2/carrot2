@@ -10,14 +10,14 @@
   <!--
        Renders HTML form elements for editing attributes of a specific document source. 
     -->
-  <xsl:template match="attribute-metadata">
-    <xsl:for-each select="attribute">
+  <xsl:template match="attribute-descriptors">
+    <xsl:for-each select="attribute-descriptors/attribute-descriptor">
       <xsl:variable name="key" select="@key" />
       <div>
         <label title="{metadata/title}">
         <xsl:value-of select="metadata/label" />
         
-        <xsl:variable name="current-value"><xsl:call-template name="attribute-value"><xsl:with-param name="key" select="$key" /></xsl:call-template></xsl:variable>
+        <xsl:variable name="current-value"><xsl:call-template name="attribute-value"><xsl:with-param name="key" select="$key" /><xsl:with-param name="source" select="../../@source" /></xsl:call-template></xsl:variable>
         <xsl:choose>
           <xsl:when test="allowed-values">
             <select name="{@key}">
@@ -36,7 +36,7 @@
             </select>
           </xsl:when>
           <xsl:when test="@type = 'java.lang.Boolean'">
-            <input name="{@key}" type="checkbox" value="true">
+            <input id="{@key}" name="{@key}" type="checkbox" value="true">
               <xsl:if test="$current-value = 'true'">
                 <xsl:attribute name="checked">checked</xsl:attribute>
               </xsl:if>
@@ -49,7 +49,7 @@
         </label>
       </div>
     </xsl:for-each>
-    <xsl:if test="count(attribute) = 0">
+    <xsl:if test="count(attribute-descriptors/attribute-descriptor) = 0 and $show-advanced-options-link = 'true'">
       <div id="no-advanced-options">No advanced options</div>
     </xsl:if>
   </xsl:template>
@@ -60,18 +60,25 @@
     -->  
   <xsl:template name="attribute-value">
     <xsl:param name="key" />
+    <xsl:param name="source" />
+    
     <xsl:choose>
       <xsl:when test="/page/request/parameter[@key = $key]/value/@value">
         <xsl:value-of select="/page/request/parameter[@key = $key]/value/@value" />
       </xsl:when>
       
-      <xsl:when test="//attribute-metadata/init-value[@key = $key]/value/@value">
-        <xsl:value-of select="//attribute-metadata/init-value[@key = $key]/value/@value" />
+      <xsl:when test="//init-values[@source = $source]//init-value[@key = $key]/value/@value">
+        <xsl:value-of select="//init-values[@source = $source]//init-value[@key = $key]/value/@value" />
       </xsl:when>
       
       <xsl:otherwise>
-        <xsl:value-of select="//attribute-metadata/attribute[@key = $key]/@default" />
+        <xsl:value-of select="//attribute-descriptors[@source = $source]//attribute-descriptor[@key = $key]/@default" />
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="ajax-attribute-metadata">
+    <xsl:variable name="source" select="request/@source" />
+    <xsl:apply-templates select="attribute-metadata/attribute-descriptors[@source=$source]" />
   </xsl:template>
 </xsl:stylesheet>

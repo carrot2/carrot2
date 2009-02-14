@@ -75,7 +75,7 @@ public class PageModel
     {
         this.processingResult = processingResult;
         this.requestModel = requestModel;
-        this.attributesModel = new AttributeMetadataModel(requestModel);
+        this.attributesModel = new AttributeMetadataModel();
         this.type = processingException == null ? requestModel.type : RequestType.ERROR;
         this.processingExceptionMessage = processingException == null ? null
             : processingException.getMessage();

@@ -165,11 +165,11 @@
     <xsl:apply-templates select="/page" mode="sources" />
     
     <div id="search-area">
-      <form action="{$context-path}/{$search-url}">
+      <form id="search-form" action="{$context-path}/{$search-url}">
+        <xsl:variable name="active-source-id"><xsl:apply-templates select="/page" mode="active-source" /></xsl:variable>
         <h3 class="hide">Type your query:</h3>
 
         <div id="required" class="clearfix">
-          <xsl:variable name="active-source-id"><xsl:apply-templates select="/page" mode="active-source" /></xsl:variable>
           <xsl:apply-templates select=".." mode="source.field" />
           <input type="hidden" name="{$view-param}" id="view" value="{/page/request/@view}" />
           <input type="hidden" name="{$skin-param}" value="{/page/request/@skin}" />
@@ -215,12 +215,17 @@
           </xsl:if>
 
           <div>
-          <div id="advanced-options" class="hide">
+          <div id="advanced-options">
+            <xsl:if test="$show-advanced-options-link = 'true'">
+              <xsl:attribute name="class">hide</xsl:attribute>
+            </xsl:if>
             <xsl:comment></xsl:comment>
-            <xsl:apply-templates select="/page/attribute-metadata" />
+            <xsl:apply-templates select="/page/attribute-metadata/attribute-descriptors[@source = $active-source-id]" />
           </div>
-          <a id="show-advanced-options" href="#">More advanced options</a>
-          <a id="hide-advanced-options" href="#" class="hide">Hide advanced options</a>
+          <xsl:if test="$show-advanced-options-link = 'true'">
+            <a id="show-advanced-options" href="#">More advanced options</a>
+            <a id="hide-advanced-options" href="#" class="hide">Hide advanced options</a>
+          </xsl:if>
           </div>
         </div>
       </form>

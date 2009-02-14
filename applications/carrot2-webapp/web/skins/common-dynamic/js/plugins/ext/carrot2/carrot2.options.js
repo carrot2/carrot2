@@ -29,17 +29,13 @@
    */
   jQuery.options = {
     updateResultsArea: updateResultsArea,
-    getSourceId: getSourceId
+    getSourceId: getSourceId,
+    showAdvancedOptionsLink: true
   };
 
   $(document).ready( function() {
     $("#show-options").click( function() {
-      fixResultsAreaSize(true, "#options");
-      
-      $("#example-queries, #main-info, #show-options").hide();
-      $("#options, #hide-options").show();
-      $("#query").focus();
-
+      showOptions();
       $.cookie(COOKIE_OPTIONS_SHOWN, "t", {
         expires: 30 * 12 * 10
       });
@@ -67,10 +63,7 @@
     $("#show-advanced-options").click(function(event) {
       var $link = $(this);
       updateAdvancedOptions($.options.getSourceId(), function () {
-        this.show();
-        $link.hide();
-        $("#hide-advanced-options").show();
-        fixResultsAreaSize(true, "#advanced-options");
+        showAdvancedOptions();
         $.cookie(COOKIE_ADVANCED_OPTIONS_SHOWN, "t", {
           expires: 30 * 12 * 10
         });
@@ -93,14 +86,33 @@
       }
     });
     
+    $("#advanced-options :checkbox").submitCheckboxAsHidden();
+    
     if ($.cookie(COOKIE_OPTIONS_SHOWN)) {
-      $("#show-options").trigger("click");
+      showOptions();
       if ($.cookie(COOKIE_ADVANCED_OPTIONS_SHOWN)) {
-        $("#show-advanced-options").trigger("click");
+        showAdvancedOptions();
       }
     }
   });
 
+  function showOptions()
+  {
+    fixResultsAreaSize(true, "#options");
+    
+    $("#example-queries, #main-info, #show-options").hide();
+    $("#options, #hide-options").show();
+    $("#query").focus();
+  }
+  
+  function showAdvancedOptions()
+  {
+    $("#advanced-options").show();
+    $("#show-advanced-options").hide();
+    $("#hide-advanced-options").show();
+    fixResultsAreaSize(true, "#advanced-options");
+  }
+  
   function fixResultsAreaSize(showing, updatedElementSelector)
   {
     var $resultsArea = $("#results-area");
@@ -115,7 +127,7 @@
     if ($("#results-area").size() == 0) {
       $.get($.options.url, {source: sourceId, v: $.carrot2.build}, function(data) {
         var $opts = $("#advanced-options");
-        $opts.html(data);
+        $opts.html(data).find(":checkbox").submitCheckboxAsHidden();
         if (callback) {
           callback.call($opts);
         }

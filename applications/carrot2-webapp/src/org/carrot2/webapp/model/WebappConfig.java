@@ -56,15 +56,6 @@ public class WebappConfig
     public Map<String, Map<String, Object>> sourceInitializationAttributes;
 
     /**
-     * A list of boolean-typed attributes for each source. We need this to handle a
-     * special corner case when a boolean attribute's default value is true. When an HTML
-     * check box is not checked, no parameter will be appended to the request on form
-     * submit, so we'd need to set the attribute to false if the request did not contain
-     * the key we expected.
-     */
-    public Map<String, Collection<String>> sourceBooleanAttributeKeys;
-
-    /**
      * A set of keys of all internal attributes of all components. We need this to prevent
      * these attributes to be bound from the HTTP request parameters.
      */
@@ -149,7 +140,6 @@ public class WebappConfig
             // Prepare attribute descriptors for document sources
             INSTANCE.sourceAttributeMetadata = prepareSourceAttributeMetadata(INSTANCE.components);
             INSTANCE.sourceInitializationAttributes = prepareSourceInitializationAttributes(INSTANCE.components);
-            INSTANCE.sourceBooleanAttributeKeys = prepareSourceBooleanAttributeKeys(INSTANCE.components);
             INSTANCE.componentInternalAttributeKeys = prepareComponentInternalAttributeKeys(INSTANCE.components);
         }
         catch (Exception e)
@@ -302,28 +292,5 @@ public class WebappConfig
         internalAttributeKeys.remove(AttributeNames.QUERY);
 
         return internalAttributeKeys;
-    }
-
-    private static Map<String, Collection<String>> prepareSourceBooleanAttributeKeys(
-        ProcessingComponentSuite components) throws Exception
-    {
-        final List<DocumentSourceDescriptor> sources = components.getSources();
-        final Map<String, Collection<String>> booleanAttributeKeys = Maps.newHashMap();
-
-        for (DocumentSourceDescriptor documentSourceDescriptor : sources)
-        {
-            booleanAttributeKeys.put(documentSourceDescriptor.getId(), Lists.transform(
-                Lists.newArrayList(documentSourceDescriptor.getBindableDescriptor().only(
-                    new Predicate<AttributeDescriptor>()
-                    {
-                        public boolean apply(AttributeDescriptor d)
-                        {
-                            return d.inputAttribute && d.type.equals(Boolean.class);
-                        }
-                    }).attributeDescriptors.values()),
-                AttributeDescriptor.AttributeDescriptorToKey.INSANCE));
-        }
-
-        return booleanAttributeKeys;
     }
 }

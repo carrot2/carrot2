@@ -97,4 +97,10 @@
   
   <!-- Whether to always open links in a new window -->
   <xsl:param name="open-results-in-new-window">false</xsl:param>
+  
+  <!-- 
+       Whether to show a separate link for advanced options. If set to false,
+       advanced options will be loaded and shown when opening the standard options.
+    -->
+  <xsl:param name="show-advanced-options-link">true</xsl:param>
 </xsl:stylesheet>

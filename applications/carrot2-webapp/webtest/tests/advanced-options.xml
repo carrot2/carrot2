@@ -12,13 +12,19 @@
                    description="3 advanced options expected for the default source" />
       <setSelectField name="EToolsDocumentSource.country" value="ITALY" />
       <setSelectField name="EToolsDocumentSource.language" value="ITALIAN" />
-      <setCheckbox name="EToolsDocumentSource.safeSearch" checked="true" />
+      <setCheckbox htmlid="EToolsDocumentSource.safeSearch" checked="true" />
       
       <clickButton htmlId="search" />
       
       <verifySelectField name="EToolsDocumentSource.country" value="ITALY" />
       <verifySelectField name="EToolsDocumentSource.language" value="ITALIAN" />
-      <verifyCheckbox name="EToolsDocumentSource.safeSearch" checked="true" />
+      <verifyCheckbox htmlid="EToolsDocumentSource.safeSearch" checked="true" />
+      <verifyInputField name="EToolsDocumentSource.safeSearch" value="true" />
+      
+      <!-- Verify that safe search on images is turned on by default -->
+      <clickElement htmlid="boss-images" />
+      <verifyCheckbox htmlid="BossImageSearchService.filter" checked="true" />
+      <verifyInputField name="BossImageSearchService.filter" value="true" />
     </webtest>
   </target>
 </project>
