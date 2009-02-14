@@ -552,7 +552,7 @@
     </section>
     
     <section xml:id="section.integration.setting-up-carrot2-sources-in-eclipse">
-      <title>Setting up a &C2; source code in Eclipse</title>
+      <title>Setting up &C2; source code in Eclipse</title>
       
       <para>
         &C2; source code can be easily set up in Eclipse IDE. The description below assumes
