@@ -65,8 +65,6 @@ namespace Org.Carrot2.Examples
             // service.AddFormValue("dcs.algorithm", "lingo");
             // service.AddFormValue("LingoClusteringAlgorithm.desiredClusterCountBase", "10");
             // service.AddFormValue("LingoClusteringAlgorithm.factorizationQuality", "LOW");
-
-            // [TODO] this currently fails to bind on the server side, will check it later.
             // service.AddFormValue("LingoClusteringAlgorithm.factorizationFactory",
             //     "org.carrot2.matrix.factorization.PartialSingularValueDecompositionFactory");
 
