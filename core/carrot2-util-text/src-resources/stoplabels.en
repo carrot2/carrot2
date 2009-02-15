@@ -1,6 +1,6 @@
-(?i)(new|information|list|skip|join|cheap|link|great|use|offer|offers|view|post|top|part|really|index|use|used|user|like|say|says|real|good|world|original|called|rights|right|rights reserved|reserved|version|day|listen|old)
+(?i)(new|information|list|skip|join|cheap|link|great|use|offer|offers|view|post|top|part|really|index|use|used|user|like|say|says|real|good|world|original|called|rights|right|rights reserved|reserved|version|day|listen|old|system|related|fwd)
 (?i)information (about|on).*
 (?i)(index|list) of.*
-(?i).*(page|part) \d+.*
+(?i).*(page|part|copyright) \d+.*
 (?i)official.*
 (?i).*(known|information)
