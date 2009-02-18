@@ -13,5 +13,5 @@ Export-Package: org.simpleframework.xml,
  org.simpleframework.xml.transform,
  org.simpleframework.xml.util
 Require-Bundle: org.eclipse.core.runtime,
- com.bea.xml;visibility:=reexport
+ org.codehaus.woodstox;visibility:=reexport
 Eclipse-BuddyPolicy: dependent

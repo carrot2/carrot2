@@ -10,7 +10,6 @@ Export-Package: org.carrot2.util.attribute,
  org.carrot2.util.attribute.test.metadata,
  org.carrot2.util.simplexml
 Require-Bundle: org.carrot2.util.common;visibility:=reexport,
- com.bea.xml;visibility:=reexport,
  org.simpleframework.xml;visibility:=reexport,
  com.thoughtworks.qdox;visibility:=reexport
 Bundle-Vendor: Carrot2.org

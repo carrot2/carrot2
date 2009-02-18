@@ -30,13 +30,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.bea.xml"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.google.collections"
          download-size="0"
          install-size="0"
@@ -616,5 +609,11 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="org.codehaus.woodstox"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>

@@ -3,15 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EhCache
 Bundle-SymbolicName: net.sf.ehcache
 Bundle-Version: 1.4.1
-Bundle-ClassPath: ehcache-1.4.1.jar,
- backport-util-concurrent-3.0.jar
+Bundle-ClassPath: ehcache-1.6.0-beta3.jar
 Bundle-Vendor: ehcache.sourceforge.net
-Export-Package: edu.emory.mathcs.backport.java.util,
- edu.emory.mathcs.backport.java.util.concurrent,
- edu.emory.mathcs.backport.java.util.concurrent.atomic,
- edu.emory.mathcs.backport.java.util.concurrent.helpers,
- edu.emory.mathcs.backport.java.util.concurrent.locks,
- net.sf.ehcache,
+Export-Package: net.sf.ehcache,
  net.sf.ehcache.bootstrap,
  net.sf.ehcache.config,
  net.sf.ehcache.constructs.asynchronous,
@@ -24,7 +18,6 @@ Export-Package: edu.emory.mathcs.backport.java.util,
  net.sf.ehcache.exceptionhandler,
  net.sf.ehcache.extension,
  net.sf.ehcache.hibernate,
- net.sf.ehcache.jcache,
  net.sf.ehcache.loader,
  net.sf.ehcache.management,
  net.sf.ehcache.store,

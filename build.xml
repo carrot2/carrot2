@@ -659,12 +659,7 @@
        Build core JAR.
     -->
   <target name="jar" depends="jar.check, jar.build"
-    description="Builds Carrot2 core JAR" unless="jar.exists">
-    <mkdir dir="${jar.dir}" />
-    <jar destfile="${jar.dir}/carrot2-core.jar">
-      <fileset dir="${build.dir}" />
-    </jar>
-  </target>
+    description="Builds Carrot2 core JAR" unless="jar.exists" />
 
   <target name="jar.build" unless="jar.exists">
     <!-- Dependant tasks are always executed, so we need to have antcalls here -->
@@ -675,8 +670,37 @@
 
     <mkdir dir="${jar.dir}" />
     <jar destfile="${jar.dir}/carrot2-core.jar">
-      <fileset dir="${build.dir}" />
+      <fileset dir="${build.dir}">
+        <exclude name="org.carrot2.util.attribute*.xml" />
+        <exclude name="**/carrot2-default/**" />
+        <exclude name="**/*.html" />
+      </fileset>
     </jar>
+  </target>
+
+  <target name="jar.nosources" depends="jar">
+    <property name="jar.ns.dir" location="${carrot2.master.basedir}/tmp/jar-nosources" />
+    <mkdir dir="${jar.ns.dir}" />
+    <unzip src="${jar.dir}/carrot2-core.jar" dest="${jar.ns.dir}" />
+
+  <!--
+  <target name="jar.nosources">
+    -->
+    <delete includeEmptyDirs="true">
+      <fileset dir="${jar.ns.dir}">
+        <include name="ambient/**" />
+        <include name="org.carrot2.source*.xml" />
+        <include name="org/carrot2/source/**" />
+        <include name="com/**" />
+      </fileset>
+    </delete>
+
+    <jar destfile="${jar.dir}/carrot2-core-algorithms.jar">
+      <fileset dir="${jar.ns.dir}" />
+    </jar>
+    <!--
+    <delete dir="${jar.ns.dir}" />
+    -->
   </target>
 
   <target name="jar.check">

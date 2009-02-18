@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Woodstox StAX
+Bundle-SymbolicName: org.codehaus.woodstox
+Bundle-Version: 4.0.1
+Bundle-Vendor: Codehaus
+Export-Package: javax.xml,
+ javax.xml.stream,
+ javax.xml.stream.events,
+ javax.xml.stream.util
+Bundle-ClassPath: stax-api-1.0.1.jar,
+ stax2-api-3.0.1.jar,
+ woodstox-core-asl-4.0.1.jar
