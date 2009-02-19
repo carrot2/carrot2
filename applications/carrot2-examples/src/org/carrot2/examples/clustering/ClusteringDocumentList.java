@@ -15,6 +15,7 @@ package org.carrot2.examples.clustering;
 import java.util.*;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
@@ -67,9 +68,9 @@ public class ClusteringDocumentList
          * We will cluster by URL components first. The algorithm that does this is called
          * ByUrlClusteringAlgorithm. It has no parameters.
          */
+        Class<?> algorithm = LingoClusteringAlgorithm.class;
         ProcessingResult result = controller.process(attributes,
             ByUrlClusteringAlgorithm.class);
-
         ExampleUtils.displayResults(result);
 
         /*
@@ -78,8 +79,9 @@ public class ClusteringDocumentList
          * set an algorithm parameter for term weighting to a non-default value to show
          * how it is done.
          */
-        final Class<?> algorithm = LingoClusteringAlgorithm.class;
-
+        algorithm = LingoClusteringAlgorithm.class;
+        attributes.clear();
+        attributes.put(AttributeNames.DOCUMENTS, documents);
         attributes.put(AttributeUtils.getKey(TermDocumentMatrixBuilder.class,
             "termWeighting"), LinearTfIdfTermWeighting.class);
 
@@ -88,9 +90,7 @@ public class ClusteringDocumentList
          * the query to the algorithm, which will usually increase clustering quality.
          */
         attributes.put(AttributeNames.QUERY, "data mining");
-
         result = controller.process(attributes, algorithm);
-
         ExampleUtils.displayResults(result);
 
         /*
@@ -101,7 +101,17 @@ public class ClusteringDocumentList
          */
         Boolean nativeUsed = (Boolean) result.getAttributes().get(
             AttributeUtils.getKey(algorithm, "nativeMatrixUsed"));
-
         System.out.println("Native libraries used: " + nativeUsed);
+        
+        /*
+         * Finally, we'll cluster the same documents with another text clustering 
+         * algorithm: Suffix Tree Clustering (STC).
+         */
+        algorithm = STCClusteringAlgorithm.class;
+        attributes.clear();
+        attributes.put(AttributeNames.QUERY, "data mining");
+        attributes.put(AttributeNames.DOCUMENTS, documents);
+        result = controller.process(attributes, algorithm);
+        ExampleUtils.displayResults(result);
     }
 }

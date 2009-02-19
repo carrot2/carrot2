@@ -22,32 +22,32 @@
   </xsl:template>
 
   <xsl:template match="processing-component-doc">
-    <section xml:id="section.component.{component-descriptor/@id}">
-      <title><xsl:apply-templates select="component-descriptor/title" /></title>
+    <db:section xml:id="section.component.{component-descriptor/@id}">
+      <db:title><xsl:apply-templates select="component-descriptor/title" /></db:title>
 
-      <para>
+      <db:para>
         <xsl:apply-templates select="component-descriptor/description" />
-      </para>
+      </db:para>
 
       <xsl:variable name="doc" select="." />
       <xsl:for-each select="$doc/groups/string">
         <xsl:variable name="group" select="string(.)" />
         
         <xsl:if test="$doc/attribute[attribute-descriptor/metadata/group = $group]">
-          <section role="notoc">
-            <title><xsl:value-of select="$group" /></title>
+          <db:section role="notoc">
+            <db:title><xsl:value-of select="$group" /></db:title>
             <xsl:apply-templates select="$doc/attribute[attribute-descriptor/metadata/group = $group]" />
-          </section>
+          </db:section>
         </xsl:if>
       </xsl:for-each>
       
       <xsl:if test="$doc/attribute[not(attribute-descriptor/metadata/group)]">
-        <section>
-          <title>Ungrouped</title>
+        <db:section>
+          <db:title>Ungrouped</db:title>
           <xsl:apply-templates select="$doc/attribute[not(attribute-descriptor/metadata/group)]" />
-        </section>
+        </db:section>
       </xsl:if>
-    </section>
+    </db:section>
   </xsl:template>
 
   <xsl:template match="attribute">
@@ -55,8 +55,8 @@
   </xsl:template>
 
   <xsl:template match="attribute-descriptor">
-    <section xml:id="section.attribute.{@key}">
-      <title>
+    <db:section xml:id="section.attribute.{@key}">
+      <db:title>
         <xsl:choose>
           <xsl:when test="metadata/label">
             <xsl:value-of select="metadata/label" />
@@ -67,18 +67,18 @@
           </xsl:otherwise>
         </xsl:choose>
         
-      </title>
-      <informaltable frame="none">
-        <tgroup cols="2">
-          <tbody>
-            <row>
-              <entry role="rowhead">Key</entry>
-              <entry><constant><xsl:value-of select="@key" /></constant></entry>
-            </row>
+      </db:title>
+      <db:informaltable frame="none">
+        <db:tgroup cols="2">
+          <db:tbody>
+            <db:row>
+              <db:entry role="rowhead">Key</db:entry>
+              <db:entry><db:constant><xsl:value-of select="@key" /></db:constant></db:entry>
+            </db:row>
             
-            <row>
-              <entry role="rowhead">Direction</entry>
-              <entry>
+            <db:row>
+              <db:entry role="rowhead">Direction</db:entry>
+              <db:entry>
                 <xsl:if test="annotations[annotation = 'Input']">
                   Input
                 </xsl:if>
@@ -88,41 +88,41 @@
                 <xsl:if test="annotations[annotation = 'Output']">
                   Output
                 </xsl:if>
-              </entry>
-            </row>
+              </db:entry>
+            </db:row>
             
             <xsl:if test="annotations[annotation = 'Input']">
-              <row>
-                <entry role="rowhead">Level</entry>
-                <entry><constant><xsl:value-of select="metadata/level" /></constant></entry>
-              </row>
+              <db:row>
+                <db:entry role="rowhead">Level</db:entry>
+                <db:entry><db:constant><xsl:value-of select="metadata/level" /></db:constant></db:entry>
+              </db:row>
             </xsl:if>
             
-            <row>
-              <entry role="rowhead">Description</entry>
-              <entry>
+            <db:row>
+              <db:entry role="rowhead">Description</db:entry>
+              <db:entry>
                 <xsl:apply-templates select="metadata/title" />.
                 <xsl:apply-templates select="metadata/description" />
-              </entry>
-            </row>
+              </db:entry>
+            </db:row>
             
             <xsl:if test="annotations[annotation = 'Input']">
-              <row>
-                <entry role="rowhead">Required</entry>
-                <entry>
-                  <constant>
+              <db:row>
+                <db:entry role="rowhead">Required</db:entry>
+                <db:entry>
+                  <db:constant>
                     <xsl:choose>
                       <xsl:when test="@required = 'true'">yes</xsl:when>
                       <xsl:otherwise>no</xsl:otherwise>
                     </xsl:choose>
-                  </constant>
-                </entry>
-              </row>
+                  </db:constant>
+                </db:entry>
+              </db:row>
             </xsl:if>
             
-            <row>
-              <entry role="rowhead">Scope</entry>
-              <entry>
+            <db:row>
+              <db:entry role="rowhead">Scope</db:entry>
+              <db:entry>
                 <xsl:if test="annotations[annotation = 'Init']">
                   Initialization time
                 </xsl:if>
@@ -132,50 +132,50 @@
                 <xsl:if test="annotations[annotation = 'Processing']">
                   Processing time
                 </xsl:if>
-              </entry>
-            </row>
+              </db:entry>
+            </db:row>
             
-            <row>
-              <entry role="rowhead">Value type</entry>
-              <entry><constant><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="@type" /></xsl:call-template></constant></entry>
-            </row>
+            <db:row>
+              <db:entry role="rowhead">Value type</db:entry>
+              <db:entry><db:constant><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="@type" /></xsl:call-template></db:constant></db:entry>
+            </db:row>
             
-            <row>
-              <entry role="rowhead">Default value</entry>
-              <entry>
+            <db:row>
+              <db:entry role="rowhead">Default value</db:entry>
+              <db:entry>
                 <xsl:choose>
                   <xsl:when test="@default">
-                    <constant><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="@default" /></xsl:call-template></constant>
+                    <db:constant><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="@default" /></xsl:call-template></db:constant>
                   </xsl:when>
                   
-                  <xsl:otherwise><emphasis>none</emphasis></xsl:otherwise>
+                  <xsl:otherwise><db:emphasis>none</db:emphasis></xsl:otherwise>
                 </xsl:choose>
-              </entry>
-            </row>
+              </db:entry>
+            </db:row>
             
             <xsl:if test="allowed-values">
-              <row>
-                <entry role="rowhead">Allowed values</entry>
-                <entry>
-                  <itemizedlist>
+              <db:row>
+                <db:entry role="rowhead">Allowed values</db:entry>
+                <db:entry>
+                  <db:itemizedlist>
                     <xsl:apply-templates select="allowed-values/value" />
-                  </itemizedlist>
-                </entry>
-              </row>
+                  </db:itemizedlist>
+                </db:entry>
+              </db:row>
             </xsl:if>
             
             <xsl:apply-templates select="constraints/constraint" />
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </section>
+          </db:tbody>
+        </db:tgroup>
+      </db:informaltable>
+    </db:section>
   </xsl:template>
 
   <xsl:template name="javadoc-link">
     <xsl:param name="value" />
     <xsl:choose>
       <xsl:when test="starts-with($value, 'org.carrot2') and string-length($carrot2.javadoc.url) > 0">
-        <link xlink:href="{$carrot2.javadoc.url}/{translate($value, '.$', '/.')}.html"><xsl:value-of select="$value" /></link>
+        <db:link xlink:href="{$carrot2.javadoc.url}/{translate($value, '.$', '/.')}.html"><xsl:value-of select="$value" /></db:link>
       </xsl:when>
       
       <xsl:otherwise><xsl:value-of select="$value" /></xsl:otherwise>
@@ -184,21 +184,21 @@
   </xsl:template>  
   
   <xsl:template match="allowed-values/value">
-    <listitem><code><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="string(.)" /></xsl:call-template></code></listitem>
+    <db:listitem><db:code><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="string(.)" /></xsl:call-template></db:code></db:listitem>
   </xsl:template>
   
   <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.ImplementingClassesConstraint']">
-    <row>
-      <entry role="rowhead">Allowed value types</entry>
-      <entry>
+    <db:row>
+      <db:entry role="rowhead">Allowed value types</db:entry>
+      <db:entry>
         Allowed value types:
-        <itemizedlist>
+        <db:itemizedlist>
           <xsl:for-each select="classes/class">
-            <listitem>
-              <constant><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="string(.)" /></xsl:call-template></constant>
-            </listitem>
+            <db:listitem>
+              <db:constant><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="string(.)" /></xsl:call-template></db:constant>
+            </db:listitem>
           </xsl:for-each>
-        </itemizedlist>
+        </db:itemizedlist>
         <xsl:choose>
           <xsl:when test="@strict = 'true'">
             No other assignable value types are allowed.
@@ -207,30 +207,30 @@
             Other assignable value types are allowed.
           </xsl:otherwise>
         </xsl:choose>
-      </entry>
-    </row>
+      </db:entry>
+    </db:row>
   </xsl:template>
 
   <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.IntRangeConstraint' or @class = 'org.carrot2.util.attribute.constraint.DoubleRangeConstraint']">
     <xsl:if test="@min">
-      <row>
-        <entry role="rowhead">Min value</entry>
-        <entry><constant><xsl:value-of select="@min" /></constant></entry>
-      </row>
+      <db:row>
+        <db:entry role="rowhead">Min value</db:entry>
+        <db:entry><db:constant><xsl:value-of select="@min" /></db:constant></db:entry>
+      </db:row>
     </xsl:if>
     <xsl:if test="@max">
-      <row>
-        <entry role="rowhead">Max value</entry>
-        <entry><constant><xsl:value-of select="@max" /></constant></entry>
-      </row>
+      <db:row>
+        <db:entry role="rowhead">Max value</db:entry>
+        <db:entry><db:constant><xsl:value-of select="@max" /></db:constant></db:entry>
+      </db:row>
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.NotBlankConstraint']">
-    <row>
-      <entry role="rowhead">Value content</entry>
-      <entry>Must not be blank</entry>
-    </row>
+    <db:row>
+      <db:entry role="rowhead">Value content</db:entry>
+      <db:entry>Must not be blank</db:entry>
+    </db:row>
   </xsl:template>
     
   <xsl:template match="constraint">
@@ -240,70 +240,70 @@
   
   <!-- Some mappings between HTML elements and their DocBook counterparts -->
   <xsl:template match="ul">
-    <itemizedlist>
+    <db:itemizedlist>
       <xsl:apply-templates />
-    </itemizedlist>
+    </db:itemizedlist>
   </xsl:template>
   
   <xsl:template match="li">
-    <listitem>
+    <db:listitem>
       <xsl:apply-templates />
-    </listitem>
+    </db:listitem>
   </xsl:template>
 
   <xsl:template match="code">
-    <code>
+    <db:code>
       <xsl:apply-templates />
-    </code>
+    </db:code>
   </xsl:template>
 
   <xsl:template match="p">
-    <para>
+    <db:para>
       <xsl:apply-templates />
-    </para>
+    </db:para>
   </xsl:template>
   
   <xsl:template match="table">
-    <informaltable frame="none">
-      <tgroup cols="{count(.//th)}">
+    <db:informaltable frame="none">
+      <db:tgroup cols="{count(.//th)}">
         <xsl:apply-templates />
-      </tgroup>
-    </informaltable>
+      </db:tgroup>
+    </db:informaltable>
   </xsl:template>
   
   <xsl:template match="thead">
-    <thead>
+    <db:thead>
       <xsl:apply-templates />
-    </thead>
+    </db:thead>
   </xsl:template>
 
   <xsl:template match="tbody">
-    <tbody>
+    <db:tbody>
       <xsl:apply-templates />
-    </tbody>
+    </db:tbody>
   </xsl:template>
 
   <xsl:template match="tr">
-    <row>
+    <db:row>
       <xsl:apply-templates />
-    </row>
+    </db:row>
   </xsl:template>
 
   <xsl:template match="th|td">
-    <entry>
+    <db:entry>
       <xsl:if test="@align">
         <xsl:attribute name="align"><xsl:value-of select="@align" /></xsl:attribute>
       </xsl:if>
       <xsl:apply-templates />
-    </entry>
+    </db:entry>
   </xsl:template>
 
   <xsl:template match="a[@href]">
-    <link xlink:href="{@href}"><xsl:apply-templates /></link>
+    <db:link xlink:href="{@href}"><xsl:apply-templates /></db:link>
   </xsl:template>
   
   <xsl:template match="strong">
-    <emphasis role="bold"><xsl:apply-templates /></emphasis>
+    <db:emphasis role="bold"><xsl:apply-templates /></db:emphasis>
   </xsl:template>
   
   <!-- Copy certain Docbook elements -->

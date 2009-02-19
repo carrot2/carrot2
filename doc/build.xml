@@ -129,6 +129,7 @@
       <classpath>
         <path refid="core.jar.classpath" />
         <path refid="lib.classpath" />
+        <path path="${carrot2.master.basedir}/core/carrot2-component-suites/suites" />
         <path path="${doc.classes.dir}" />
       </classpath>
       <arg value="carrot2-default/suite-doc.xml" />
