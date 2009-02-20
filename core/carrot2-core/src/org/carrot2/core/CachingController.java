@@ -606,7 +606,7 @@ public final class CachingController implements IController
             try
             {
                 final Map<String, Object> processingResult = (Map<String, Object>) dataCache
-                    .get(inputAttributes).getObjectValue();
+                    .get(new AttributeMapCacheKey(inputAttributes)).getObjectValue();
 
                 // Copy the actual results
                 attributes.putAll(getAttributesForDescriptors(
@@ -696,6 +696,45 @@ public final class CachingController implements IController
     }
 
     /**
+     * A compound cache key based on the input attributes map that ensures that possible
+     * modifications to the attributes map or its values do not change the hashCode and
+     * equality behavior of the key.
+     */
+    private final class AttributeMapCacheKey
+    {
+        private Map<String, Object> attributes;
+        private int hashCode;
+
+        private AttributeMapCacheKey(Map<String, Object> attributes)
+        {
+            // In theory, we could make a shallow copy of the provided map, but if
+            // someone wants make modifications they'll make them anyway on the objects
+            // contained in the map. To be completely safe, we'd have to make a deep copy.
+            this.attributes = attributes;
+            this.hashCode = attributes != null ? attributes.hashCode() : 0;
+        }
+
+        /*
+         * We assume that equal hash codes means equal objects, which is not true in case
+         * of conflicts, but there is no other way really if we don't want to make deep
+         * copies of the attribute map. If a conflict occurs, we'd overwrite the cache
+         * entry with a new value, which doesn't seem like a big problem (though it will
+         * lead to incorrect result).
+         */
+        @Override
+        public boolean equals(Object obj)
+        {
+            return obj.hashCode() == this.hashCode;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return hashCode;
+        }
+    }
+
+    /**
      * A cached data factory that actually performs the processing. This factory is called
      * only if the cache does not contain the requested value.
      */
@@ -704,8 +743,7 @@ public final class CachingController implements IController
         @SuppressWarnings("unchecked")
         public Object createEntry(Object key) throws Exception
         {
-            final Map<String, Object> inputAttributes = (Map<String, Object>) key;
-            final int keyHashIn = inputAttributes.hashCode();
+            final Map<String, Object> inputAttributes = ((AttributeMapCacheKey) key).attributes;
 
             final Class<? extends IProcessingComponent> componentClass = (Class<? extends IProcessingComponent>) inputAttributes
                 .get(COMPONENT_CLASS_KEY);
@@ -717,13 +755,6 @@ public final class CachingController implements IController
                 component = componentPool.borrowObject(componentClass, componentId);
                 final Map<String, Object> attributes = Maps.newHashMap(inputAttributes);
                 ControllerUtils.performProcessing(component, attributes, true);
-
-                final int keyHashOut = key.hashCode();
-                if (keyHashIn != keyHashOut)
-                {
-                    throw new RuntimeException("Key hash in != out: " + keyHashIn + " : " + keyHashOut
-                        + ", componentId: " + componentId + ", " + componentClass.getName());
-                }
 
                 return attributes;
             }
