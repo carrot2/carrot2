@@ -99,8 +99,23 @@
   <xsl:param name="open-results-in-new-window">false</xsl:param>
   
   <!-- 
-       Whether to show a separate link for advanced options. If set to false,
-       advanced options will be loaded and shown when opening the standard options.
+       Determines how basic search options should be handled. Allowed values:
+       
+         * always -- basic search options always shown
+         * hidden -- basic search options shown after clicking "More options" link
+         * never -- basic search options never
     -->
-  <xsl:param name="show-advanced-options-link">true</xsl:param>
+  <xsl:param name="show-basic-options">hidden</xsl:param>
+  
+  <!-- 
+       Determines how advanced search options should be handled. Allowed values:
+       
+         * always -- advanced search options always shown
+         * hidden -- advanced search options shown after clicking "More advanced options"
+         * never -- advanced search options never shown
+       
+       NOTE: this setting takes effect only when 'show-basic-options' setting is
+       set to either 'always' or 'hidden'.
+    -->
+  <xsl:param name="show-advanced-options">hidden</xsl:param>
 </xsl:stylesheet>

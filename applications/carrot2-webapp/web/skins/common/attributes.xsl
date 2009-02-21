@@ -49,7 +49,7 @@
         </label>
       </div>
     </xsl:for-each>
-    <xsl:if test="count(attribute-descriptors/attribute-descriptor) = 0 and $show-advanced-options-link = 'true'">
+    <xsl:if test="count(attribute-descriptors/attribute-descriptor) = 0 and $show-advanced-options = 'hidden'">
       <div id="no-advanced-options">No advanced options</div>
     </xsl:if>
   </xsl:template>

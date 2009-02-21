@@ -8,7 +8,7 @@
 
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
               doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-              doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+              doctype-system="DTD/xhtml1-transitional.dtd"
               media-type="text/html" encoding="utf-8" />
               
   <xsl:strip-space elements="*" />
@@ -31,13 +31,12 @@
   <xsl:variable name="clusters-url" select="concat($request-url, '&amp;type=CLUSTERS')" />
   <xsl:variable name="attributes-url" select="concat($context-path, '/', $search-url, '?type=ATTRIBUTES')" />
 
-  <!-- 
-       Counts documents with unique url roots. For some reason xalan does not like this
-       definition in documents.xsl, where it should really be.
-   -->
-  <xsl:key name="urls-by-root" match="document" use="substring-before(concat(url, '/'), '/')" />
-  <xsl:variable name="unique-urls" select="count(/page/searchresult/document[generate-id(.) = generate-id(key('urls-by-root', substring-before(concat(substring-after(url, 'http://'), '/'), '/'))[1])])" />
-  <xsl:variable name="document-count" select="count(/page/searchresult/document)" />
+  <xsl:variable name="basic-options-showing" 
+                select="$show-basic-options = 'always' or ($show-basic-options = 'hidden' and /page/request/cookie[@key = 'show-options']/value/@value = 't')" />
+  <xsl:variable name="advanced-options-showing" 
+                select="$show-advanced-options = 'always' or ($show-advanced-options = 'hidden' and /page/request/cookie[@key = 'show-advanced-options']/value/@value = 't')" />
+
+  <xsl:variable name="debug" select="'false'" />
 
   <!-- HTML scaffolding -->
   <xsl:template match="/">
@@ -52,6 +51,12 @@
           
           <body>
             <xsl:attribute name="id"><xsl:call-template name="page-body-id" /></xsl:attribute>
+    
+            <!-- Debug box -->
+            <xsl:if test="$debug = 'true'">
+              <div id="debug">
+              </div>
+            </xsl:if>
     
             <!-- Page content -->
             <xsl:apply-templates />
@@ -111,8 +116,9 @@
         <h1><a href="{$context-path}/{$search-url}"><span class="hide"><xsl:apply-templates select=".." mode="page-title" /></span></a></h1>
       </div>
   
-      <xsl:if test="not(@type = 'SOURCES')">     
+      <xsl:if test="not(@type = 'SOURCES') and not($show-basic-options = 'always')">     
         <div id="main-info">
+          <xsl:if test="$basic-options-showing"><xsl:attribute name="class">hide</xsl:attribute></xsl:if>
           <xsl:apply-templates select=".." mode="startup-text" />
         </div>
       </xsl:if>
@@ -177,60 +183,88 @@
           <xsl:apply-templates select=".." mode="query" />
           <xsl:apply-templates select=".." mode="search" />
           
-          <span id="show-options"><a href="#" accesskey="o">More options</a></span>
-          <span id="hide-options" style="display: none"><a href="#" accesskey="o">Hide options</a></span>
+          <xsl:if test="$show-basic-options = 'hidden'">
+            <span id="show-options">
+              <xsl:if test="$basic-options-showing"><xsl:attribute name="style">display: none</xsl:attribute></xsl:if>
+              <a href="#" accesskey="o">More options</a>
+            </span>
+            <span id="hide-options">
+              <xsl:if test="not($basic-options-showing)"><xsl:attribute name="style">display: none</xsl:attribute></xsl:if>
+              <a href="#" accesskey="o">Hide options</a>
+            </span>
+          </xsl:if>
         </div>
 
-        <div id="options" class="hide">
-          <xsl:if test="count(/page/config/sizes/size) > 1">
-            <label>
-              Download
-              <select name="{$results-param}" id="results-number">
-                <xsl:for-each select="/page/config/sizes/size">
-                  <option value="{string(@size)}">
-                    <xsl:if test="string(@size) = /page/request/@results">
-                      <xsl:attribute name="selected">selected</xsl:attribute>
-                    </xsl:if>
-                    <xsl:value-of select="@size" /> results
-                  </option>
-                </xsl:for-each>
-              </select>
-            </label>
-          </xsl:if>
-                      
-          <xsl:if test="count(/page/config/components/algorithms/algorithm) > 1">
-            <label>
-              <xsl:apply-templates select=".." mode="algorithm.label" />
-              <select name="{$algorithm-param}">
-                <xsl:for-each select="/page/config/components/algorithms/algorithm">
-                  <option value="{@id}">
-                    <xsl:if test="@id = /page/request/@algorithm">
-                      <xsl:attribute name="selected">selected</xsl:attribute>
-                    </xsl:if>
-                    <xsl:value-of select="label" />
-                  </option>
-                </xsl:for-each>
-              </select>
-            </label>
-          </xsl:if>
-
-          <div>
-          <div id="advanced-options">
-            <xsl:if test="$show-advanced-options-link = 'true'">
+        <xsl:if test="not($show-basic-options = 'never')">
+          <div id="options">
+            <xsl:if test="not($basic-options-showing)">
               <xsl:attribute name="class">hide</xsl:attribute>
             </xsl:if>
-            <xsl:comment></xsl:comment>
-            <xsl:apply-templates select="/page/attribute-metadata/attribute-descriptors[@source = $active-source-id]" />
+            <xsl:if test="count(/page/config/sizes/size) > 1">
+              <label>
+                Download
+                <select name="{$results-param}" id="results-number">
+                  <xsl:for-each select="/page/config/sizes/size">
+                    <option value="{string(@size)}">
+                      <xsl:if test="string(@size) = /page/request/@results">
+                        <xsl:attribute name="selected">selected</xsl:attribute>
+                      </xsl:if>
+                      <xsl:value-of select="@size" /> results
+                    </option>
+                  </xsl:for-each>
+                </select>
+              </label>
+            </xsl:if>
+                        
+            <xsl:if test="count(/page/config/components/algorithms/algorithm) > 1">
+              <label>
+                <xsl:apply-templates select=".." mode="algorithm.label" />
+                <select name="{$algorithm-param}">
+                  <xsl:for-each select="/page/config/components/algorithms/algorithm">
+                    <option value="{@id}">
+                      <xsl:if test="@id = /page/request/@algorithm">
+                        <xsl:attribute name="selected">selected</xsl:attribute>
+                      </xsl:if>
+                      <xsl:value-of select="label" />
+                    </option>
+                  </xsl:for-each>
+                </select>
+              </label>
+            </xsl:if>
+  
+  
+            <xsl:if test="not($show-advanced-options = 'never')">
+              <div>
+                <div id="advanced-options">
+                  <xsl:if test="not($advanced-options-showing)">
+                    <xsl:attribute name="class">hide</xsl:attribute>
+                  </xsl:if>
+                  <xsl:comment></xsl:comment>
+                  <xsl:apply-templates
+                    select="/page/attribute-metadata/attribute-descriptors[@source = $active-source-id]" />
+                </div>
+                <xsl:if test="$show-advanced-options = 'hidden'">
+                  <a id="show-advanced-options" href="#">
+                    <xsl:if test="$advanced-options-showing"><xsl:attribute name="class">hide</xsl:attribute></xsl:if>
+                    More advanced options
+                  </a>
+                  <a id="hide-advanced-options" href="#">
+                    <xsl:if test="not($advanced-options-showing)"><xsl:attribute name="class">hide</xsl:attribute></xsl:if>
+                    Hide advanced options
+                  </a>
+                </xsl:if>
+              </div>
+            </xsl:if>
           </div>
-          <xsl:if test="$show-advanced-options-link = 'true'">
-            <a id="show-advanced-options" href="#">More advanced options</a>
-            <a id="hide-advanced-options" href="#" class="hide">Hide advanced options</a>
-          </xsl:if>
-          </div>
-        </div>
+        </xsl:if>
       </form>
       <xsl:if test="string-length(/page/request/@query) = 0">
-        <div id="example-queries"><xsl:comment></xsl:comment></div>
+        <div id="example-queries">
+          <xsl:if test="$basic-options-showing">
+            <xsl:attribute name="class">hide</xsl:attribute>
+          </xsl:if>
+          <xsl:comment></xsl:comment>
+        </div>
       </xsl:if>
     </div>
 
@@ -352,11 +386,21 @@
           </xsl:otherwise>
         </xsl:choose>
       </a>
-      <span class="hide">
-        <span class="example-queries">Example queries: 
-          <xsl:apply-templates select="$source/example-queries/example-query" />
+      
+      <xsl:if test="not($show-basic-options = 'always')">
+        <span class="hide">
+          <span class="example-queries">
+            <xsl:choose>
+              <xsl:when test="count($source/example-queries/example-query) > 0">Example queries: 
+                <xsl:apply-templates select="$source/example-queries/example-query" />
+              </xsl:when>
+              <xsl:otherwise>
+              &#160;
+              </xsl:otherwise>
+            </xsl:choose>
+          </span>
         </span>
-      </span>
+      </xsl:if>
       <span class="right"><xsl:comment></xsl:comment></span>
     </li>
   </xsl:template>

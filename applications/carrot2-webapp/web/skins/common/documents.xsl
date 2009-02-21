@@ -7,6 +7,10 @@
               
   <xsl:strip-space elements="*" />
 
+  <xsl:key name="urls-by-root" match="document" use="substring-before(concat(url, '/'), '/')" />
+  <xsl:variable name="unique-urls" select="count(/page/searchresult/document[generate-id(.) = generate-id(key('urls-by-root', substring-before(concat(substring-after(url, 'http://'), '/'), '/'))[1])])" />
+  <xsl:variable name="document-count" select="count(/page/searchresult/document)" />
+
   <!-- Documents -->
   <xsl:template match="page[@type = 'DOCUMENTS']">
     <div id="documents">

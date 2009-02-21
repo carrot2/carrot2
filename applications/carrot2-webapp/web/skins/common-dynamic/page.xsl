@@ -5,9 +5,9 @@
   <xsl:import href="../common/util.xsl" />
   
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
-       doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
-       media-type="text/html" encoding="utf-8" />
+              doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+              doctype-system="DTD/xhtml1-transitional.dtd"
+              media-type="text/html" encoding="utf-8" />
 
   <xsl:strip-space elements="*"/>
 
@@ -22,7 +22,6 @@
     <script type="text/javascript">
       jQuery.carrot2.build = "<xsl:value-of select="concat($version-number, 'b', $build-number)" />";
       jQuery.options.url = "<xsl:value-of select="$attributes-url" disable-output-escaping="no" />";
-      jQuery.options.showAdvancedOptionsLink = <xsl:value-of select="$show-advanced-options-link" />;
       <xsl:if test="string-length(/page/request/@query) > 0">
         jQuery.documents.url = "<xsl:value-of select="$documents-url" disable-output-escaping="no" />";
         jQuery.documents.source = "<xsl:value-of select="/page/request/@source" />";

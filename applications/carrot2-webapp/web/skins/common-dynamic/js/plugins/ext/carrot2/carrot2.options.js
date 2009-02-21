@@ -29,8 +29,7 @@
    */
   jQuery.options = {
     updateResultsArea: updateResultsArea,
-    getSourceId: getSourceId,
-    showAdvancedOptionsLink: true
+    getSourceId: getSourceId
   };
 
   $(document).ready( function() {
@@ -88,12 +87,9 @@
     
     $("#advanced-options :checkbox").submitCheckboxAsHidden();
     
-    if ($.cookie(COOKIE_OPTIONS_SHOWN)) {
-      showOptions();
-      if ($.cookie(COOKIE_ADVANCED_OPTIONS_SHOWN)) {
-        showAdvancedOptions();
-      }
-    }
+    if ($("#options").is(":visible")) {
+      fixResultsAreaSize(true, "#options");
+    } 
   });
 
   function showOptions()

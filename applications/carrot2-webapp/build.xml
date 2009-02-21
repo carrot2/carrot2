@@ -377,4 +377,16 @@
   <target name="carrot2.webapp.clean">
     <delete dir="${webapp.dir}" />
   </target>
+
+  
+  <!--
+       Helps to debug XSLT compilation problems. For some reason, the embedded Xalan
+       does not output any information about the reason why the stylesheet doesn't compile.
+    -->
+  <target name="carrot2.webapp.xslt.debug">
+    <delete file="tmp/startup.html" />
+    <xslt style="${carrot2.webapp.basedir}/web/skins/fancy-compact/page.xsl"
+          in="etc/xslt-debug/startup.xml" 
+          out="tmp/startup.html" />
+  </target>
 </project>

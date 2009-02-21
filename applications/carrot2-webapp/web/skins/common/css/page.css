@@ -45,6 +45,19 @@ div.noscript
   visibility: hidden;
 }
 
+#debug {
+  position: absolute; 
+  top: 0; right: 0; 
+  width: 500px; 
+  border: 1px solid #b0b0b0;
+  border-top: none; 
+  border-right: none; 
+  padding: 10px; 
+  background-color: white; 
+  z-index: 10;
+  -moz-border-radius-bottomleft: 7px;
+}
+
 /** Loading indicators */
 #loading,
 #loading-clusters,
