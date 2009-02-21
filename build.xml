@@ -623,8 +623,9 @@
              version="true"
              use="false"
              encoding="UTF-8"
-             doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; ${carrot2.version} API Specification"
-             header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; ${carrot2.version} &lt;br&gt;API Specification&lt;/div&gt;"
+             windowtitle="Carrot2 v${carrot2.version} API Documentation (JavaDoc)"
+             doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} API Documentation"
+             header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} &lt;br&gt;API Documentation&lt;/div&gt;"
              footer="&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
              bottom="&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;&lt;script type=&quot;text/javascript&quot;&gt; var gaJsHost = ((&quot;https:&quot; == document.location.protocol) ? &quot;https://ssl.&quot; : &quot;http://www.&quot;); document.write(unescape(&quot;%3Cscript src='&quot; + gaJsHost + &quot;google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E&quot;)); &lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; var pageTracker = _gat._getTracker(&quot;UA-317750-1&quot;); pageTracker._trackPageview(); &lt;/script&gt;"
              failonerror="true"
@@ -690,6 +691,20 @@
     </jar>
   </target>
 
+  <target name="jar.src">
+    <copy todir="${jar.dir}/sources" overwrite="true">
+        <fileset dir="${core.dir}" includes="**/src/**/*.java" />
+        <chainedmapper>
+            <filtermapper><replacestring from="\" to="/"/></filtermapper>
+            <mapper type="regexp" from="^(.+)/src/(.+)" to="\2"/>
+        </chainedmapper> 
+    </copy>
+    <jar destfile="${jar.dir}/carrot2-core-sources.jar">
+      <fileset dir="${jar.dir}/sources" />
+    </jar>
+    <delete dir="${jar.dir}/sources" />
+  </target>
+  
   <!--
         Carrot2 mini JAR, just core and algorithms.
     -->
@@ -765,7 +780,7 @@
   <!--
        Builds API distribution: core JAR, dependencies, example source code.
     -->
-  <target name="core" depends="jar, lib-no-jar.flattened" description="Builds Carrot2 Java API JAR with dependencies">
+  <target name="core" depends="jar, jar.src, lib-no-jar.flattened" description="Builds Carrot2 Java API JAR with dependencies">
     <delete dir="${api.dir}" failonerror="false" />
     <mkdir dir="${api.dir}" />
     <mkdir dir="${api.dir}/lib" />
@@ -831,23 +846,11 @@
   <!--
       Maven artefacts.
     -->
-  <target name="maven" depends="antlib,jar,javadoc,jar.mini" description="Deploy Maven artifacts">
+  <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini" description="Deploy Maven artifacts">
     <jar destfile="${jar.dir}/carrot2-core-javadoc.jar">
       <fileset dir="${javadoc.dir}" />
     </jar>
 
-    <copy todir="${jar.dir}/sources" overwrite="true">
-        <fileset dir="${core.dir}" includes="**/src/**/*.java" />
-        <chainedmapper>
-            <filtermapper><replacestring from="\" to="/"/></filtermapper>
-            <mapper type="regexp" from="^(.+)/src/(.+)" to="\2"/>
-        </chainedmapper> 
-    </copy>
-    <jar destfile="${jar.dir}/carrot2-core-sources.jar">
-      <fileset dir="${jar.dir}/sources" />
-    </jar>
-    <delete dir="${jar.dir}/sources" />
-    
     <antcall target="carrot2.maven.deploy" />
     <delete>
         <fileset dir="${jar.dir}" includes="carrot2-core-*.jar" />
