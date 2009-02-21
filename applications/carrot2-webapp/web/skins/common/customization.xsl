@@ -101,18 +101,18 @@
   <!-- 
        Determines how basic search options should be handled. Allowed values:
        
-         * always -- basic search options always shown
-         * hidden -- basic search options shown after clicking "More options" link
-         * never -- basic search options never
+         * always - basic search options always shown
+         * hidden - basic search options shown after clicking "More options" link
+         * never - basic search options never
     -->
   <xsl:param name="show-basic-options">hidden</xsl:param>
   
   <!-- 
        Determines how advanced search options should be handled. Allowed values:
        
-         * always -- advanced search options always shown
-         * hidden -- advanced search options shown after clicking "More advanced options"
-         * never -- advanced search options never shown
+         * always - advanced search options always shown
+         * hidden - advanced search options shown after clicking "More advanced options"
+         * never - advanced search options never shown
        
        NOTE: this setting takes effect only when 'show-basic-options' setting is
        set to either 'always' or 'hidden'.
