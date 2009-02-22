@@ -114,6 +114,9 @@
             <include name="carrot2.LICENSE" />
             <include name="carrot2.CONTRIBUTORS" />
           </zipfileset>
+          <zipfileset dir="${basedir}/workbench" prefix="${archivePrefix}">
+            <include name="readme.txt" />
+          </zipfileset>
         </zip>
       </sequential>
     </for>
