@@ -167,7 +167,7 @@
     <!-- JUnit report -->
     <mkdir dir="${workbench.tests.html.report.dir}" />
     <junitreport todir="${workbench.tests.html.report.dir}">
-      <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/workbench">
+      <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/${archivePrefix}">
         <include name="*.xml" />
       </fileset>
       <report format="frames"
@@ -175,7 +175,7 @@
     </junitreport>
     <!-- Copy XML reports -->
     <copy todir="${workbench.tests.html.report.dir}">
-      <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/workbench">
+      <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/${archivePrefix}">
         <include name="*.xml" />
       </fileset>
       <mapper type="glob" from="*.xml" to="TEST-*.xml" />
@@ -183,7 +183,7 @@
     <!-- Copy text reports -->
     <mkdir dir="${workbench.tests.txt.report.dir}" />
     <copy todir="${workbench.tests.txt.report.dir}">
-      <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/workbench/raw-output">
+      <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/${archivePrefix}/raw-output">
         <include name="*.txt" />
       </fileset>
     </copy>
