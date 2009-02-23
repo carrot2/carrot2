@@ -105,7 +105,7 @@ public final class AttributeNames
     public static final String PROCESSING_TIME_ALGORITHM = "processing-time-algorithm";
 
     /**
-     * Processing language hint. Suggestion for the clustering algorithm to perform
+     * Language in which to perform clustering. Suggestion for the clustering algorithm to perform
      * clustering in the specified language. Based on the suggestion, the algorithm can
      * determine e.g. the stemmer or list of stop words the algorithm uses. A mismatch
      * between the processing language hint and the actual language of processed documents
