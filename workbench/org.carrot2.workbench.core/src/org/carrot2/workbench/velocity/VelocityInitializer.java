@@ -43,7 +43,8 @@ public final class VelocityInitializer
             p.setProperty("resource.loader", "bundle");
             p.setProperty("bundle.resource.loader.instance", new BundleResourceLoader(
                 bundleID, templatePrefix));
-    
+            p.setProperty(RuntimeConstants.SET_NULL_ALLOWED, "true");
+
             // Disable separate Velocity logging.
             p.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, 
                 NullLogChute.class.getName());
