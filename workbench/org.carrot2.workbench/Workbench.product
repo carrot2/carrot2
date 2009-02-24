@@ -32,7 +32,7 @@
    </vm>
 
    <plugins>
-      <plugin id="com.bea.xml"/>
+      <plugin id="org.codehaus.woodstox"/>
       <plugin id="com.google.collections"/>
       <plugin id="com.ibm.icu"/>
       <plugin id="com.ibm.icu36.data.update"/>
