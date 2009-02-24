@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?pde version="3.1"?>
+<?pde version="3.4"?>
 
 <product name="Carrot2 Workbench" id="org.carrot2.workbench.core.product" application="org.carrot2.workbench.core.application" useFeatures="true">
 
    <aboutInfo>
-      <image path="/org.carrot2.workbench.core/icons/product-logo.png"/>
+      <image path="/org.carrot2.workbench.core/icons/product_logo.png"/>
       <text>
          Carrot2 Workbench
+
+(c) Carrot2 developers.  All rights reserved.
+Visit http://carrot2.org for more information.
+
+This product includes software developed by the
+Apache Software Foundation http://www.apache.org/.
       </text>
    </aboutInfo>
 
-   <configIni use="default"/>
+   <configIni use="default">
+   </configIni>
 
    <launcherArgs>
+      <vmArgs>-Xms256m
+-Xmx512m</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
@@ -23,7 +32,13 @@
    <launcher name="carrot2-workbench">
       <solaris/>
       <win useIco="false">
-         <bmp/>
+         <bmp
+            winSmallHigh="/org.carrot2.workbench.core/icons/ico/carrot2-16x16x32.bmp"
+            winSmallLow="/org.carrot2.workbench.core/icons/ico/carrot2-16x16x8.bmp"
+            winMediumHigh="/org.carrot2.workbench.core/icons/ico/carrot2-32x32x32.bmp"
+            winMediumLow="/org.carrot2.workbench.core/icons/ico/carrot2-32x32x8.bmp"
+            winLargeHigh="/org.carrot2.workbench.core/icons/ico/carrot2-48x48x32.bmp"
+            winLargeLow="/org.carrot2.workbench.core/icons/ico/carrot2-48x48x8.bmp"/>
       </win>
    </launcher>
 
@@ -32,7 +47,6 @@
    </vm>
 
    <plugins>
-      <plugin id="org.codehaus.woodstox"/>
       <plugin id="com.google.collections"/>
       <plugin id="com.ibm.icu"/>
       <plugin id="com.ibm.icu36.data.update"/>
@@ -47,13 +61,14 @@
       <plugin id="org.carrot2.util.common"/>
       <plugin id="org.carrot2.util.log4j" fragment="true"/>
       <plugin id="org.carrot2.workbench.core"/>
+      <plugin id="org.codehaus.woodstox"/>
       <plugin id="org.eclipse.core.commands"/>
       <plugin id="org.eclipse.core.contenttype"/>
       <plugin id="org.eclipse.core.databinding"/>
       <plugin id="org.eclipse.core.expressions"/>
       <plugin id="org.eclipse.core.jobs"/>
       <plugin id="org.eclipse.core.runtime"/>
-      <plugin id="org.eclipse.core.runtime.compatibility.registry" fragment="true"/>
+      <plugin id="org.eclipse.core.runtime.compatibility.registry"/>
       <plugin id="org.eclipse.equinox.app"/>
       <plugin id="org.eclipse.equinox.common"/>
       <plugin id="org.eclipse.equinox.preferences"/>
