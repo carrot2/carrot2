@@ -30,6 +30,7 @@ Apache Software Foundation http://www.apache.org/.
    <splash
       location="org.carrot2.workbench.core" />
    <launcher name="carrot2-workbench">
+      <linux icon="/org.carrot2.workbench.core/icons/carrot2-32x32.xpm"/>
       <solaris/>
       <win useIco="false">
          <bmp
@@ -41,7 +42,6 @@ Apache Software Foundation http://www.apache.org/.
             winLargeLow="/org.carrot2.workbench.core/icons/ico/carrot2-48x48x8.bmp"/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>
