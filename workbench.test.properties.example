@@ -1,3 +1,4 @@
+
 # Note the usual layout of folders below -- they have the distribution version name
 # and an /eclipse *subfolder*.
 
@@ -6,9 +7,9 @@ eclipse.home = ${target.platform}/eclipse
 
 # Platform, windowing system and architecture on which Workbench JUnit tests are run.
 # Use the usual os, ws and arch strings Eclipse normally uses, see below for examples.
-test.os=win32
-test.ws=win32
-test.arch=x86
+test.os=linux
+test.ws=gtk
+test.arch=x86_64
 
 # The list of {os, ws, arch} configurations to build.  This
 # value is a '&' separated list of ',' separate triples.  For example,
@@ -26,7 +27,8 @@ test.arch=x86
 #	aix, motif, ppc & \
 #	hpux, motif, PA_RISC & \
 #	macosx, carbon, ppc
-configs                             =   win32, win32, x86
+
+configs                             =   linux, gtk, x86_64
 
 #The format of the archive. By default a zip is created using antZip.
 #The list can only contain the configuration for which the desired format is different than zip.
@@ -42,4 +44,5 @@ configs                             =   win32, win32, x86
 #	aix, motif, ppc - antZip& \
 #	hpux, motif, PA_RISC - antZip& \
 #	macosx, carbon, ppc - antZip
-archivesFormat                      =   win32, win32, x86 - folder
+
+archivesFormat                      =   linux, gtk, x86_64 - folder
