@@ -12,6 +12,7 @@
 
 package org.carrot2.text.linguistic;
 
+import org.apache.log4j.Logger;
 import org.carrot2.util.ReflectionUtils;
 import org.tartarus.snowball.SnowballProgram;
 
@@ -65,6 +66,9 @@ final class SnowballStemmerFactory
         }
         catch (Throwable e)
         {
+            Logger.getLogger(SnowballStemmerFactory.class)
+                .warn("No Snowball stemmer class for: " + language.name());
+
             return new IdentityStemmer();
         }
     }
