@@ -13,6 +13,7 @@
 package org.carrot2.text.linguistic;
 
 import org.apache.log4j.Logger;
+import org.carrot2.util.ReflectionUtils;
 
 
 /**
@@ -47,8 +48,8 @@ final class PolishStemmerFactory
         {
             final String stemmerClazzName = "morfologik.stemmers.Lametyzator";
 
-            final Class<? extends morfologik.stemmers.IStemmer> stemmerClazz = Thread
-                .currentThread().getContextClassLoader().loadClass(stemmerClazzName)
+            final Class<? extends morfologik.stemmers.IStemmer> stemmerClazz = 
+                ReflectionUtils.classForName(stemmerClazzName)
                 .asSubclass(morfologik.stemmers.IStemmer.class);
 
             this.stemmer = stemmerClazz.newInstance();

@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
 import java.util.Set;
 
 import org.carrot2.util.ExceptionUtils;
+import org.carrot2.util.ReflectionUtils;
 import org.simpleframework.xml.*;
 
 import com.google.common.collect.ImmutableSet;
@@ -195,7 +196,7 @@ public class SimpleXmlWrapperValue
     {
         try
         {
-            return Thread.currentThread().getContextClassLoader().loadClass(className);
+            return ReflectionUtils.classForName(className);
         }
         catch (ClassNotFoundException e)
         {

@@ -414,7 +414,6 @@ public final class CachingController implements IController
             this.idToComponentClass = idToComponentClass;
         }
 
-        @SuppressWarnings("unchecked")
         public Pair<Class<? extends IProcessingComponent>, String> resolve(
             String componentId)
         {
@@ -426,8 +425,8 @@ public final class CachingController implements IController
             {
                 try
                 {
-                    resultClass = (Class<? extends IProcessingComponent>) Thread
-                        .currentThread().getContextClassLoader().loadClass(componentId);
+                    resultClass = ReflectionUtils.classForName(componentId)
+                        .asSubclass(IProcessingComponent.class);
 
                     // The component id was coerced to a generic class,
                     // so we're not using a specific version of a component.

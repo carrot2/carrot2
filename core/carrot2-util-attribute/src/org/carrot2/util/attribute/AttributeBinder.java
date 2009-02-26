@@ -14,12 +14,11 @@ package org.carrot2.util.attribute;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.commons.lang.ClassUtils;
-import org.carrot2.util.Pair;
+import org.carrot2.util.*;
 import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.util.resource.IResource;
 
@@ -406,15 +405,26 @@ public class AttributeBinder
                 {
                     throw e;
                 }
-                catch (Exception e)
+                catch (NoSuchMethodException e)
                 {
-                    // Just skip this possibility
+                    // Just skip this possibility.
+                }
+                catch (IllegalAccessException e)
+                {
+                    throw new RuntimeException("No access to valueOf() method in: "
+                        + fieldType.getName());
+                }
+                catch (InvocationTargetException e)
+                {
+                    throw ExceptionUtils.wrapAsRuntimeException(e.getCause());
                 }
 
-                // Try if we can assign anyway. If the attribute is of a non-primitive
-                // type, it must have an ImplementingClasses annotation, see
-                // ConsistencyCheckImplementingClasses. If the value meets the constraint,
-                // we'll return the original value.
+                /*
+                 * Try if we can assign anyway. If the attribute is of a non-primitive
+                 * type, it must have an ImplementingClasses annotation, see
+                 * ConsistencyCheckImplementingClasses. If the value meets the constraint,
+                 * we'll return the original value.
+                 */
                 final ImplementingClasses implementingClasses = field
                     .getAnnotation(ImplementingClasses.class);
                 if (implementingClasses != null
@@ -424,15 +434,14 @@ public class AttributeBinder
                     return stringValue;
                 }
 
-                // Try loading the class
+                // Try loading the class indicated by this string.
                 try
                 {
-                    return Thread.currentThread().getContextClassLoader().loadClass(
-                        stringValue);
+                    return ReflectionUtils.classForName(stringValue);
                 }
                 catch (ClassNotFoundException e)
                 {
-                    // Just skip this possibility
+                    // Just skip this possibility.
                 }
 
                 return stringValue;
