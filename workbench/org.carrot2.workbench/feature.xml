@@ -19,7 +19,7 @@
    </license>
 
    <requires>
-      <import feature="org.eclipse.rcp" version="3.3.1.R33x_r20070802-8y8eE8sEV3Fz0z0GlHJrXvTAUS" match="compatible"/>
+      <import feature="org.eclipse.rcp" version="3.4.1" match="compatible"/>
    </requires>
 
    <plugin
@@ -208,7 +208,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.resources.win32"
+         id="org.eclipse.core.resources"
          os="win32"
          download-size="0"
          install-size="0"

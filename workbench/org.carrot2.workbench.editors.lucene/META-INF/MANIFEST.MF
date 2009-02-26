@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.ui,
  org.carrot2.workbench.core,
  org.carrot2.workbench.editors,
  org.carrot2.source.lucene
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  META-INF/
 Export-Package: org.carrot2.workbench.editors.lucene
