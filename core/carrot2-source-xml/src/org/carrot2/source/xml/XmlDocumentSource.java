@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -21,6 +20,7 @@ import java.util.Map;
 import javax.xml.transform.Templates;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
@@ -34,6 +34,8 @@ import com.google.common.collect.*;
  * Fetches documents from XML files and streams. For additional flexibility, an XSLT
  * stylesheet can be applied to the XML stream before it is deserialized into Carrot2
  * data.
+ * 
+ * @see #xml
  */
 @Bindable(prefix = "XmlDocumentSource")
 public class XmlDocumentSource extends ProcessingComponentBase implements IDocumentSource
@@ -44,14 +46,13 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      * {@link IResource} instances from a variety of locations.
      * <p>
      * One special {@link IResource} implementation you can use is
-     * {@link URLResourceWithParams}. It allows you to specify attribute place holders
-     * in the URL that will be replaced during runtime. The place holder format is
-     * <code>${attribute}</code>. The following attributes will be resolved:
+     * {@link URLResourceWithParams}. It allows you to specify attribute placeholders in
+     * the URL that will be replaced with actual values at runtime. The placeholder format
+     * is <code>${attribute}</code>. The following attributes will be substituted:
      * </p>
      * <ul>
      * <li><code>query</code> will be replaced with the current query being processed. If
-     * the query has not been provided, this attribute will be substituted with an empty
-     * string.</li>
+     * the query has not been provided, this attribute will fall back to an empty string.</li>
      * <li><code>results</code> will be replaced with the number of results requested. If
      * the number of results has not been provided, this attribute will be substituted
      * with an empty string.</li>
@@ -117,8 +118,8 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     public Map<String, String> xsltParameters = ImmutableMap.of();
 
     /**
-     * Before processing: query to be used to fetch the from a remote XML stream. After
-     * processing: the query read from the XML data, if any.
+     * After processing this field may hold the query read from the XML data, if any. For
+     * the semantics of this field on input, see {@link #xml}.
      */
     @Input
     @Output
@@ -127,13 +128,35 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     public String query;
 
     /**
-     * The maximum number of documents to read from the XML data.
+     * The maximum number of documents to read from the XML data if {@link #readAll} is
+     * <code>false</code>.
      */
     @Input
     @Processing
     @Attribute(key = AttributeNames.RESULTS)
     @IntRange(min = 1)
     public int results = 100;
+
+    /**
+     * If <code>true</code>, all documents are read from the input XML stream, regardless
+     * of the limit set by {@link #results}.
+     * 
+     * @label Read all documents
+     * @level Basic
+     */
+    @Input
+    @Processing
+    @Attribute
+    public boolean readAll = true;
+
+    /**
+     * The title (file name or query attribute, if present) for the search result fetched
+     * from the resource.
+     */
+    @Output
+    @Processing
+    @Attribute(key = AttributeNames.PROCESSING_RESULT_TITLE)
+    public String title;
 
     /**
      * Documents read from the XML data.
@@ -156,13 +179,6 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     /** A helper class that groups common functionality for XML/XSLT based data sources. */
     private final XmlDocumentSourceHelper xmlDocumentSourceHelper = new XmlDocumentSourceHelper();
 
-    /**
-     * Creates a new {@link XmlDocumentSource}.
-     */
-    public XmlDocumentSource()
-    {
-    }
-
     @Override
     public void init(IControllerContext context)
     {
@@ -181,20 +197,27 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     {
         try
         {
+            title = null;
+
             final ProcessingResult processingResult = xmlDocumentSourceHelper
                 .loadProcessingResult(openResource(xml), resolveStylesheet(),
                     xsltParameters);
 
             query = (String) processingResult.getAttributes().get(AttributeNames.QUERY);
             documents = processingResult.getDocuments();
-
+            
+            /*
+             * Override the result title if query is present.
+             */
+            if (!StringUtils.isEmpty(query)) title = null;
+            
             if (documents == null)
             {
                 documents = Lists.newArrayList();
             }
-            
+
             // Truncate to the requested number of documents if needed
-            if (documents.size() > results)
+            if (readAll == false && documents.size() > results)
             {
                 documents = documents.subList(0, results);
             }
@@ -231,23 +254,26 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      */
     private InputStream openResource(IResource resource) throws IOException
     {
-        InputStream inputStream;
+        title = resource.toString();
+
         if (resource instanceof URLResourceWithParams)
         {
             // If we got a specialized implementation of the Resource interface,
             // perform substitution of known attributes
-            Map<String, Object> attributes = Maps.newHashMap();
+            final Map<String, Object> attributes = Maps.newHashMap();
 
             attributes.put("query", (query != null ? query : ""));
             attributes.put("results", (results != -1 ? results : ""));
 
-            inputStream = ((URLResourceWithParams) resource).open(attributes);
+            return ((URLResourceWithParams) resource).open(attributes);
         }
-        else
+        
+        if (resource instanceof FileResource)
         {
-            // Open the generic Resource instance
-            inputStream = resource.open();
+            title = ((FileResource) resource).getFile().getName();
         }
-        return inputStream;
+
+        // Open the generic Resource instance
+        return resource.open();
     }
 }

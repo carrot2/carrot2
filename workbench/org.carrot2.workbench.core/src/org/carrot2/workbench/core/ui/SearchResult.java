@@ -125,4 +125,12 @@ public final class SearchResult
             dispatchResultUpdated.run();
         }
     }
+
+    /**
+     * Check if processing result is not null.
+     */
+    public boolean hasProcessingResult()
+    {
+        return getProcessingResult() != null;
+    }
 }

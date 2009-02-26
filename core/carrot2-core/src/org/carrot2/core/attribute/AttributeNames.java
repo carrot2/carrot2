@@ -118,6 +118,18 @@ public final class AttributeNames
      */
     public static final String ACTIVE_LANGUAGE = "active-language";
 
+    /**
+     * Processing result title. A typical title for a processing result will be the
+     * query used to fetch documents from that source. For certain document sources
+     * the query may not be needed (on-disk XML, feed of syndicated news); in such cases,
+     * the input component should set its title properly for visual interfaces such
+     * as the workbench.
+     * 
+     * @label Title
+     * @level Advanced
+     */
+    public static final String PROCESSING_RESULT_TITLE = "processing-result.title";
+    
     /*
      *
      */
