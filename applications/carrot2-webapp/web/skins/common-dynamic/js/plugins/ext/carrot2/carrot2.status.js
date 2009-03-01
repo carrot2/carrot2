@@ -15,7 +15,7 @@
         $("#documents-status-overall").show();
       }
 
-      $("#status-query").html($("#query").val());
+      $("#status-query").text($("#query").val());
     });
     
     $("#clusters-panel").bind("carrot2-clusters-loaded", function() {
