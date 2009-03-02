@@ -39,7 +39,7 @@ public class PubMedDocumentSourceTest extends
     @Override
     protected String getLargeQueryText()
     {
-        return "lungs";
+        return "blood";
     }
 
     @Override
