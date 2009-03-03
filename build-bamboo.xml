@@ -56,8 +56,8 @@
         <fail unless="dist.dir">Define: dist.dir property.</fail>
         <property file="${carrot2.code.dir}/etc/version/carrot2.version" />
 
-        <copy file="${workbench.properties}" todir="${carrot2.code.dir}" overwrite="true" />
-        <copy file="${workbench.test.properties}" todir="${carrot2.code.dir}" overwrite="true" />
+	<copy file="${workbench.properties}" tofile="${carrot2.code.dir}/workbench.properties" overwrite="true" />
+	<copy file="${workbench.test.properties}" tofile="${carrot2.code.dir}/workbench.test.properties" overwrite="true" />
         
         <!-- clean everything -->
         <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="clean" inheritall="true" />
