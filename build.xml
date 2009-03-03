@@ -75,7 +75,7 @@
     <exclude name="**/carrot2-examples/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-etools/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-google/**/*.java" if="external.api.tests.disabled" />
-    <exclude name="**/carrot2-source-yahoo/**/*.java" if="external.api.tests.disabled" />
+    <exclude name="**/carrot2-source-yahoo/**/*.java" unless="yahooapi.tests.enabled" />
     <exclude name="**/carrot2-source-boss/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-microsoft/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-opensearch/**/*.java" if="external.api.tests.disabled" />

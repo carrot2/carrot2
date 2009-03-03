@@ -25,34 +25,20 @@
         <example-query>president</example-query>
       </example-queries>
     </source>
-	<source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-news">
-		<label>News (Boss)</label>
-		<title>Yahoo Boss News Search</title>
-		<description>
-			Yahoo Boss News Search searches news using Yahoo Boss
-			API.
-		</description>
-		<icon-path>icons/yahoo.png</icon-path>
-		<example-queries>
-			<example-query>iphone</example-query>
-			<example-query>iraq</example-query>
-			<example-query>election</example-query>
-		</example-queries>
-	</source>
-	<!-- DISABLED DUE TO FREQUENT DOWNTIMES    
-    <source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-news">
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-news">
       <label>News</label>
-      <title>Yahoo News Search</title>
-      <mnemonic>N</mnemonic>
-      <description>Searches news using Yahoo News Search API</description>
+      <title>Yahoo Boss News Search</title>
+      <description>
+        Yahoo Boss News Search searches news using Yahoo Boss
+        API.
+      </description>
       <icon-path>icons/yahoo.png</icon-path>
       <example-queries>
         <example-query>iphone</example-query>
-        <example-query>olympic"suites/carrot2-default/suite-dcs.xml"s</example-query>
+        <example-query>iraq</example-query>
         <example-query>election</example-query>
       </example-queries>
     </source>
-    -->
     <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
       <label>Yahoo</label>
       <title>Yahoo Web Search</title>
