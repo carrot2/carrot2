@@ -3,21 +3,7 @@
 	<include suite="carrot2-default/suite-common.xml" />
 
 	<sources>
-		<source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-news">
-			<label>News (Boss)</label>
-			<title>Yahoo Boss News Search</title>
-			<description>
-				Yahoo Boss News Search searches news using Yahoo Boss
-				API.
-			</description>
-			<icon-path>icons/yahoo.png</icon-path>
-			<example-queries>
-				<example-query>iphone</example-query>
-				<example-query>iraq</example-query>
-				<example-query>election</example-query>
-			</example-queries>
-		</source>
-
+		<!-- DISABLED DUE TO FREQUENT DOWNTIMES 
 		<source component-class="org.carrot2.source.yahoo.YahooDocumentSource" id="yahoo-web">
 			<label>Yahoo Web (API)</label>
 			<title>Yahoo API Web Search</title>
@@ -33,6 +19,7 @@
 				<example-query>election</example-query>
 			</example-queries>
 		</source>
+		-->
 
 		<source component-class="org.carrot2.source.lucene.LuceneDocumentSource" id="lucene">
 			<label>Lucene</label>
