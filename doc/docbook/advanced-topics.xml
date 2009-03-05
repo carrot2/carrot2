@@ -345,8 +345,77 @@
       </orderedlist>
     </section>
     
+    <section xml:id="section.advanced-topics.customizing-applications.customizing-lingo-for-webapp">
+      <title>Customizing Lingo for the &WA;</title>
+        
+      <para>
+        To run the &WA; with custom <link linkend="section.component.lingo">attributes of the Lingo clustering algorithm</link>,
+        you will need to pass them in a special XML file and reference the file in the
+        processing component suite XML the web application is using.
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Use <link linkend="section.workbench">&DCW;</link> to tune the attributes of Lingo
+            to produce the desired results.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Modify the <classname>SavingAttributeValuesToXml</classname> class from the
+            <classname>carrot2-examples</classname> package to correspond to the attribute values
+            you would like to set for Lingo. Run the class to print the XML encoding of the 
+            attribute values to the standard output. The label and identifier
+            of the attribute can be set to any value, if there is only one attribute
+            set in the file, it will be loaded as the default.
+          </para>
+          
+          <para>  
+            Save the result to a local file named
+            e.g. <filename>lingo.attributes.xml</filename> and copy the file to the
+            <filename>WEB-INF/classes/carrot2-default</filename> directory of the 
+            web application's WAR file. 
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Open for editing the <filename>suite-common.xml</filename> file, located in the 
+            <filename>WEB-INF/classes/carrot2-default</filename> directory of the 
+            web application's WAR file. Modify the Lingo entry
+            to point to the custom attributes file:
+          </para>
+          
+          <figure xml:id="figure.lingo-algorithm-descriptor">
+            <title>Lingo clustering algorithm descriptor</title>
+            <programlisting><![CDATA[<algorithm id="lingo" 
+    attribute-sets-resource="/carrot2-default/lingo.attributes.xml"
+    component-class="org.carrot2.clustering.lingo.LingoClusteringAlgorithm">
+  <label>Lingo</label>
+  <title>Lingo Clustering</title>
+</algorithm>]]></programlisting>      
+          </figure>
+        </listitem>
+
+        <listitem>
+          <para>
+            Deploy the WAR file with the above modifications to your container. Lingo
+            clustering should be performed with the modified settings for all document
+            sources.
+          </para>
+        </listitem>        
+      </orderedlist>
+      
+      <para>
+        You can use the same procedure to customize other algorithms, e.g. 
+        <link linkend="section.component.stc">STC</link>.
+      </para>
+    </section>
+    
     <section>
-      <title>Adding document sources tabs to &DCW;</title>
+      <title>Adding document sources to &DCW;</title>
       
       <para>
         &NA;

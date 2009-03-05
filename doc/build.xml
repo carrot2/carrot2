@@ -177,10 +177,8 @@
   </target>
 
   <target name="carrot2.doc.cleanup">
-<!--
     <delete dir="${docbook.xsl.dir}/html-custom" />
     <delete dir="${doc.build.dir}" failonerror="false" />
-    -->
   </target>
 
   <!--
