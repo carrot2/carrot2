@@ -52,7 +52,7 @@ public final class AttributeNames
      * Estimated total number of matching documents.
      * 
      * @label Total Results
-     * @group Search request statistics
+     * @group Search request information
      */
     public static final String RESULTS_TOTAL = "results-total";
 
@@ -127,6 +127,7 @@ public final class AttributeNames
      * 
      * @label Title
      * @level Advanced
+     * @group Search request information
      */
     public static final String PROCESSING_RESULT_TITLE = "processing-result.title";
     

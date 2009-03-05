@@ -143,6 +143,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      * 
      * @label Read all documents
      * @level Basic
+     * @group Search query
      */
     @Input
     @Processing

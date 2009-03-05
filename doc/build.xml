@@ -151,7 +151,16 @@
       <filterset begintoken="]]&gt;" endtoken="&gt;">
         <filter token="&lt;/description" value="&lt;/description&gt;" />
       </filterset>
+      <filterset begintoken="&lt;title&gt;" endtoken="CDATA[">
+        <filter token="&lt;![" value="&lt;title&gt;" />
+      </filterset>
+      <filterset begintoken="]]&gt;" endtoken="&gt;">
+        <filter token="&lt;/title" value="&lt;/title&gt;" />
+      </filterset>
     </copy>
+    <copy file="${doc.build.dir}/xsl/components-metadata.xml"
+          tofile="${doc.build.dir}/xsl/components-metadata-orig.xml" 
+          overwrite="true" />
     <copy file="${doc.build.dir}/xsl/components-metadata-nocdata.xml"
           tofile="${doc.build.dir}/xsl/components-metadata.xml" 
           overwrite="true" />
@@ -168,8 +177,10 @@
   </target>
 
   <target name="carrot2.doc.cleanup">
+<!--
     <delete dir="${docbook.xsl.dir}/html-custom" />
     <delete dir="${doc.build.dir}" failonerror="false" />
+    -->
   </target>
 
   <!--

@@ -21,7 +21,7 @@ import org.simpleframework.xml.Element;
  */
 public class CommonMetadata
 {
-    @Element(required = false)
+    @Element(required = false, data = true)
     protected String title;
 
     @Element(required = false)
