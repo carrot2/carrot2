@@ -21,7 +21,7 @@ import org.carrot2.text.analysis.ITokenType;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
-import org.carrot2.util.IndirectSort;
+import org.carrot2.util.IndirectSorter;
 import org.carrot2.util.IntArrayUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -81,7 +81,7 @@ public final class CaseNormalizer
         final int documentCount = context.documents.size();
 
         // Sort token images
-        final int [] tokenImagesOrder = IndirectSort.sort(tokenImages, 0, tokenImages.length,
+        final int [] tokenImagesOrder = IndirectSorter.sort(tokenImages,
             CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR);
 
         // Create holders for new arrays

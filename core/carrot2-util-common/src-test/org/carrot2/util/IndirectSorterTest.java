@@ -20,11 +20,13 @@ import java.util.Comparator;
 
 import org.junit.Test;
 
+import bak.pcj.DoubleComparator;
+import bak.pcj.IntComparator;
+
 import com.google.common.collect.Comparators;
 
 /**
- * Test cases for the deprecated and removed {@link IndirectSorter}. The replacement
- * class {@link IndirectSort} should provide the same functionality.
+ * Test cases for {@link IndirectSorter}.
  */
 public class IndirectSorterTest
 {
@@ -138,7 +140,7 @@ public class IndirectSorterTest
         final int [] array = new int [] {};
         final int [] expectedOrder = new int [] {};
 
-        check(new IndirectComparator.AscendingIntComparator(array), expectedOrder);
+        check(array, expectedOrder, IntComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -153,7 +155,7 @@ public class IndirectSorterTest
             0
         };
 
-        check(new IndirectComparator.DescendingIntComparator(array), expectedOrder);
+        check(array, expectedOrder, IntComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -168,7 +170,7 @@ public class IndirectSorterTest
             6, 5, 4, 3, 2, 1, 0
         };
 
-        check(new IndirectComparator.DescendingIntComparator(array), expectedOrder);
+        check(array, expectedOrder, IntComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -183,7 +185,7 @@ public class IndirectSorterTest
             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
         };
 
-        check(new IndirectComparator.DescendingIntComparator(array), expectedOrder);
+        check(array, expectedOrder, IntComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -198,7 +200,7 @@ public class IndirectSorterTest
             5, 4, 1, 0, 2, 3, 6
         };
 
-        check(new IndirectComparator.DescendingIntComparator(array), expectedOrder);
+        check(array, expectedOrder, IntComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -213,7 +215,7 @@ public class IndirectSorterTest
             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
         };
 
-        check(new IndirectComparator.DescendingIntComparator(array), expectedOrder);
+        check(array, expectedOrder, IntComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -228,7 +230,7 @@ public class IndirectSorterTest
             4, 5, 1, 0, 2, 3, 6
         };
 
-        check(new IndirectComparator.DescendingIntComparator(array), expectedOrder);
+        check(array, expectedOrder, IntComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -237,7 +239,7 @@ public class IndirectSorterTest
         final double [] array = new double [] {};
         final int [] expectedOrder = new int [] {};
 
-        check(new IndirectComparator.DescendingDoubleComparator(array), expectedOrder);
+        check(array, expectedOrder, DoubleComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -252,7 +254,7 @@ public class IndirectSorterTest
             0
         };
 
-        check(new IndirectComparator.DescendingDoubleComparator(array), expectedOrder);
+        check(array, expectedOrder, DoubleComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -267,7 +269,7 @@ public class IndirectSorterTest
             6, 5, 4, 3, 2, 1, 0
         };
 
-        check(new IndirectComparator.DescendingDoubleComparator(array), expectedOrder);
+        check(array, expectedOrder, DoubleComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -282,39 +284,9 @@ public class IndirectSorterTest
             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
         };
 
-        check(new IndirectComparator.DescendingDoubleComparator(array), expectedOrder);
+        check(array, expectedOrder, DoubleComparators.REVERSED_ORDER);
     }
 
-    @Test
-    public void testFloatReversed()
-    {
-        final float [] array = new float []
-        {
-            21, 19, 18, 15, 14, 13, 12, 9, 8, 6, 5, 4, 3, 0
-        };
-        int [] expectedOrder = new int []
-        {
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
-        };
-
-        check(new IndirectComparator.DescendingFloatComparator(array), expectedOrder);
-    }
-
-    @Test
-    public void testShortReversed()
-    {
-        final short [] array = new short []
-        {
-            21, 19, 18, 15, 14, 13, 12, 9, 8, 6, 5, 4, 3, 0
-        };
-        int [] expectedOrder = new int []
-        {
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
-        };
-
-        check(new IndirectComparator.DescendingShortComparator(array), expectedOrder);
-    }
-    
     @Test
     public void testDoubleUnsorted()
     {
@@ -327,7 +299,7 @@ public class IndirectSorterTest
             5, 4, 1, 0, 2, 3, 6
         };
 
-        check(new IndirectComparator.DescendingDoubleComparator(array), expectedOrder);
+        check(array, expectedOrder, DoubleComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -342,7 +314,7 @@ public class IndirectSorterTest
             4, 5, 1, 0, 2, 3, 6
         };
 
-        check(new IndirectComparator.DescendingDoubleComparator(array), expectedOrder);
+        check(array, expectedOrder, DoubleComparators.REVERSED_ORDER);
     }
 
     @Test
@@ -357,28 +329,25 @@ public class IndirectSorterTest
             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
         };
 
-        check(new IndirectComparator.DescendingDoubleComparator(array), expectedOrder);
+        check(array, expectedOrder, DoubleComparators.REVERSED_ORDER);
     }
 
-    private void check(int start, int length, IndirectComparator comparator, int [] expectedOrder)
+    private <T> void check(T [] array, int [] expectedOrder, Comparator<T> comparator)
     {
-        int [] order = IndirectSort.sort(start, length, comparator);
+        int [] order = IndirectSorter.sort(array, comparator);
         assertThat(order).isEqualTo(expectedOrder);
     }
 
-    private void check(IndirectComparator comparator, int [] expectedOrder)
+    private <T> void check(int [] array, int [] expectedOrder, IntComparator comparator)
     {
-        check(0, expectedOrder.length, comparator, expectedOrder);
-    }
-    
-    private <T> void check(T [] input, int start, int length, Comparator<T> comparator, int [] expectedOrder)
-    {
-        int [] order = IndirectSort.sort(input, start, length, comparator);
+        int [] order = IndirectSorter.sort(array, comparator);
         assertThat(order).isEqualTo(expectedOrder);
     }
-    
-    private <T> void check(T [] input, int [] expectedOrder, Comparator<T> comparator)
+
+    private <T> void check(double [] array, int [] expectedOrder,
+        DoubleComparator comparator)
     {
-        check(input, 0, input.length, comparator, expectedOrder);
-    }    
+        int [] order = IndirectSorter.sort(array, comparator);
+        assertThat(order).isEqualTo(expectedOrder);
+    }
 }
