@@ -12,9 +12,8 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.util.IndirectSorter;
-
-import bak.pcj.IntComparator;
+import org.carrot2.util.IndirectComparator;
+import org.carrot2.util.IndirectSort;
 
 /**
  * A simple suffix sorting utility based on the generic sorting routines from
@@ -25,7 +24,7 @@ final class SuffixSorter
     /**
      * An int comparator that enables suffix sorting.
      */
-    private static class SuffixComparator implements IntComparator
+    private static class SuffixComparator implements IndirectComparator
     {
         private int [] suffixData;
 
@@ -79,16 +78,8 @@ final class SuffixSorter
             }
         }
 
-        // Temporary array for the sorting algorithm
-        int [] sortInput = new int [intCodes.length];
-        for (int i = 0; i < sortInput.length; i++)
-        {
-            sortInput[i] = i;
-        }
-
         // Create suffix order
-        int [] suffixOrder = IndirectSorter.sort(sortInput,
-            new SuffixComparator(intCodes));
+        int [] suffixOrder = IndirectSort.sort(0, intCodes.length, new SuffixComparator(intCodes));
         context.allTokens.suffixOrder = suffixOrder;
 
         // Add LCPs

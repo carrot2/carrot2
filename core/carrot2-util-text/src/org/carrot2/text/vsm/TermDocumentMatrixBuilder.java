@@ -19,8 +19,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.DoubleComparators;
-import org.carrot2.util.IndirectSorter;
+import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.*;
 
@@ -145,8 +144,8 @@ public class TermDocumentMatrixBuilder
                 stemsTfByDocument[stemIndex].length / 2, documentCount)
                 * getWeightBoost(titleFieldIndex, stemsFieldIndices[stemIndex]);
         }
-        final int [] stemWeightOrder = IndirectSorter.sort(stemsWeight,
-            DoubleComparators.REVERSED_ORDER);
+        final int [] stemWeightOrder = IndirectSort.sort(0,
+            stemsWeight.length, new IndirectComparator.DescendingDoubleComparator(stemsWeight));
 
         // Calculate the number of terms we can include to fulfill the max matrix size
         final int maxRows = maximumMatrixSize / documentCount;
