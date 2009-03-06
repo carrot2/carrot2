@@ -13,10 +13,11 @@
 
 package org.carrot2.text.util;
 
-import static org.carrot2.util.test.Assertions.assertThat;
+import static org.carrot2.util.test.Assertions.*;
 
 import java.util.Arrays;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -75,6 +76,14 @@ public class CharArrayComparatorsTest
 
         check(testWords, expectedOrderedWords);
     }
+    
+    @Test
+    public void testNullsAreEqual()
+    {
+        Assert.assertTrue(0 == CharArrayComparators.CASE_INSENSITIVE_CHAR_ARRAY_COMPARATOR.compare(null, null));
+        Assert.assertTrue(0 == CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR.compare(null, null));
+        Assert.assertTrue(0 == CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR.compare(null, null));
+    }    
 
     private void check(char [][] testWords, char [][] expectedOrderedWords)
     {
