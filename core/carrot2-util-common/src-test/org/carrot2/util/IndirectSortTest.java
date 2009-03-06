@@ -15,8 +15,7 @@ package org.carrot2.util;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
 /**
  * Test cases for {@link IndirectSort}.
@@ -53,6 +52,40 @@ public class IndirectSortTest
     {
         ordered, sawtooth, rand, stagger, plateau, shuffle
     }
+    
+    /**
+     * Test performance of the sorting routine. Requires large heap (integers take 4x
+     * the number of elements + the returned order array).
+     */
+    @Test @Ignore
+    public void testPerformance()
+    {
+        final int MB = 1024 * 1024;
+        int [] n_values = { 10 * MB, 100 * MB };
+
+        for (int n : n_values)
+        {
+            for (DataDistribution dist : DataDistribution.values())
+            {
+                final int [] m_values = 
+                    (dist == DataDistribution.ordered 
+                        ? new int [] {1} : new int [] { 1, 10, n/2, n });
+
+                for (int m : m_values)
+                {
+                    int [] x = generate(dist, n, m);
+
+                    String testName = dist + "-" + n + "-" + m;
+                    ptestOn(x, testName + "-normal");
+                    ptestOn(reverse(x, 0, n), testName + "-reversed");
+                    ptestOn(reverse(x, 0, n/2), testName + "-reversed_front");
+                    ptestOn(reverse(x, n/2, n), testName + "-reversed_back");
+                    ptestOn(sort(x), testName + "-sorted");
+                    ptestOn(dither(x), testName + "-dither");
+                }
+            }
+        }
+    }
 
     /**
      * Test "certification" program as in Bentley and McIlroy's paper.
@@ -64,43 +97,17 @@ public class IndirectSortTest
         {
             100, 1023, 1024, 1025, 1024 * 32
         };
-        Random rand = new Random();
+
         for (int n : n_values)
         {
             for (int m = 1; m < 2 * n; m *= 2)
             {
                 for (DataDistribution dist : DataDistribution.values())
                 {
-                    int [] x = new int [n];
-                    for (int i = 0, j = 0, k = 1; i < n; i++)
-                    {
-                        switch (dist)
-                        {
-                            case ordered:
-                                x[i] = i;
-                                break;
-                            case sawtooth:
-                                x[i] = i % m;
-                                break;
-                            case rand:
-                                x[i] = rand.nextInt() % m;
-                                break;
-                            case stagger:
-                                x[i] = (i * m + i) % n;
-                                break;
-                            case plateau:
-                                x[i] = Math.min(i, m);
-                                break;
-                            case shuffle:
-                                x[i] = (rand.nextInt() % m) != 0 ? (j += 2) : (k += 2);
-                                break;
-                            default:
-                                throw new RuntimeException();
-                        }
-                    }
+                    int [] x = generate(dist, n, m);
 
                     String testName = dist + "-" + n + "-" + m;
-                    testOn(copy(x), testName + "-normal");
+                    testOn(x, testName + "-normal");
                     testOn(reverse(x, 0, n), testName + "-reversed");
                     testOn(reverse(x, 0, n/2), testName + "-reversed_front");
                     testOn(reverse(x, n/2, n), testName + "-reversed_back");
@@ -109,6 +116,46 @@ public class IndirectSortTest
                 }
             }
         }
+    }
+
+    /**
+     * Generate <code>n</code>-length data set distributed according to <code>dist</code>. 
+
+     * @param m Step for sawtooth, stagger, plateau and shuffle.
+     */
+    private int [] generate(final DataDistribution dist, int n, int m)
+    {
+        // Start from a constant seed (repeatable tests).
+        final Random rand = new Random(0x11223344);
+        final int [] x = new int [n];
+        for (int i = 0, j = 0, k = 1; i < n; i++)
+        {
+            switch (dist)
+            {
+                case ordered:
+                    x[i] = i;
+                    break;
+                case sawtooth:
+                    x[i] = i % m;
+                    break;
+                case rand:
+                    x[i] = rand.nextInt() % m;
+                    break;
+                case stagger:
+                    x[i] = (i * m + i) % n;
+                    break;
+                case plateau:
+                    x[i] = Math.min(i, m);
+                    break;
+                case shuffle:
+                    x[i] = (rand.nextInt() % m) != 0 ? (j += 2) : (k += 2);
+                    break;
+                default:
+                    throw new RuntimeException();
+            }
+        }
+        
+        return x;
     }
 
     private static int [] sort(int [] x)
@@ -142,21 +189,30 @@ public class IndirectSortTest
         return (int []) x.clone();
     }
 
-    @SuppressWarnings("unused")
+    /*
+     * 
+     */
+    private static void ptestOn(int [] x, String testName)
+    {
+        final int rounds = 5;
+        for (int i = 0; i < rounds; i++)
+        {
+            final long start = System.currentTimeMillis();
+            final IndirectComparator c = new IndirectComparator.AscendingIntComparator(x);
+            IndirectSort.sort(0, x.length, c);
+            final long time = System.currentTimeMillis() - start;
+
+            System.out.println(testName + " : " + time);
+        }
+    }
+
+    /*
+     * 
+     */
     private static void testOn(int [] x, String testName)
     {
-        final long start = System.currentTimeMillis();
-        final int [] order;
         final IndirectComparator c = new IndirectComparator.AscendingIntComparator(x);
-        try
-        {
-            order = IndirectSort.sort(0, x.length, c);
-        }
-        finally
-        {
-            // System.out.println(testName + ": " + (System.currentTimeMillis() - start));
-        }
-
+        final int [] order = IndirectSort.sort(0, x.length, c);
         assertOrder(order, x.length, c);
     }
 
