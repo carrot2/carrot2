@@ -706,9 +706,17 @@ public final class CachingController implements IController
 
         private AttributeMapCacheKey(Map<String, Object> attributes)
         {
-            // In theory, we could make a shallow copy of the provided map, but if
-            // someone wants make modifications they'll make them anyway on the objects
-            // contained in the map. To be completely safe, we'd have to make a deep copy.
+            /*
+             * Empty attributes should never happen because the attributes object must
+             * hold component identifiers, etc.
+             */
+            assert attributes != null && attributes.size() > 0;
+
+            /*
+             * In theory, we could make a shallow copy of the provided map, but if someone
+             * wants to make modifications they'll make them anyway on the objects
+             * contained in the map. To be completely safe, we'd have to make a deep copy.
+             */
             this.attributes = attributes;
             this.hashCode = attributes != null ? attributes.hashCode() : 0;
         }
@@ -716,14 +724,21 @@ public final class CachingController implements IController
         /*
          * We assume that equal hash codes means equal objects, which is not true in case
          * of conflicts, but there is no other way really if we don't want to make deep
-         * copies of the attribute map. If a conflict occurs, we'd overwrite the cache
-         * entry with a new value, which doesn't seem like a big problem (though it will
-         * lead to incorrect result).
+         * copies of the attribute map. If a conflict occurs, we would retrieve a stale
+         * result from the cache (a result associated with a different query, possibly a
+         * different component even). The cache is in-memory only and is rather small (so
+         * that re-querying for documents and clusters does not cause duplicated
+         * processing), conflicts do not seem like a big problem.
          */
         @Override
         public boolean equals(Object obj)
         {
-            return obj.hashCode() == this.hashCode;
+            final boolean result = (obj.hashCode() == this.hashCode);
+            if (result)
+            {
+                assert ((AttributeMapCacheKey) obj).attributes.equals(this.attributes);
+            }
+            return result;
         }
 
         @Override
@@ -744,8 +759,8 @@ public final class CachingController implements IController
         {
             final Map<String, Object> inputAttributes = ((AttributeMapCacheKey) key).attributes;
 
-            final Class<? extends IProcessingComponent> componentClass = (Class<? extends IProcessingComponent>) inputAttributes
-                .get(COMPONENT_CLASS_KEY);
+            final Class<? extends IProcessingComponent> componentClass = 
+                (Class<? extends IProcessingComponent>) inputAttributes.get(COMPONENT_CLASS_KEY);
             final String componentId = (String) inputAttributes.get(COMPONENT_ID_KEY);
 
             IProcessingComponent component = null;
