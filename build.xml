@@ -687,7 +687,6 @@
       <fileset dir="${build.dir}">
         <exclude name="org.carrot2.util.attribute*.xml" />
         <exclude name="**/*.html" />
-        <exclude name="carrot2-default/**" />
       </fileset>
     </jar>
   </target>

@@ -27,7 +27,6 @@ public class IndirectSortTest
      */
     private static class OrderedInputComparator implements IndirectComparator
     {
-        @Override
         public int compare(int a, int b)
         {
             if (a < b) return -1;
