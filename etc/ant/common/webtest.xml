@@ -69,17 +69,17 @@
     <attribute name="webtest.basepath" default="/" />
 
     <sequential>
-      <property name="wt.config.resultfile" value="@{webtest.report.dir}/webtest-results.xml" />
-      <property name="wt.config.resultpath" location="@{webtest.report.dir}" />
-
-      <property name="wt.config.host" value="@{webtest.host}" />
-      <property name="wt.config.protocol" value="http" />
-      <property name="wt.config.basepath" value="@{webtest.basepath}" />
-      <property name="wt.config.port" value="@{webtest.port}" />
-
       <ant antfile="@{webtest.tests.dir}/webtest.xml"
            inheritall="true"
-           dir="@{webtest.tests.dir}" />
+           dir="@{webtest.tests.dir}">
+        <property name="wt.config.resultfile" value="@{webtest.report.dir}/webtest-results.xml" />
+        <property name="wt.config.resultpath" location="@{webtest.report.dir}" />
+  
+        <property name="wt.config.host" value="@{webtest.host}" />
+        <property name="wt.config.protocol" value="http" />
+        <property name="wt.config.basepath" value="@{webtest.basepath}" />
+        <property name="wt.config.port" value="@{webtest.port}" />
+      </ant>
     </sequential>
   </macrodef>
 
