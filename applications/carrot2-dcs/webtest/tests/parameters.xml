@@ -1,0 +1,16 @@
+<!DOCTYPE project SYSTEM "../dtd/Project.dtd">
+
+<project name="Parameters smoke test" default="webtest">
+  <import file="../includes/ajax.xml" />
+    
+  <target name="webtest">
+    <webtest name="Parameters smoke test">
+      <invoke url="/parameters.html" description="Get parameters page" />
+
+      <!-- Wait for AJAX stuff to load -->
+      <sleep seconds="2" />
+      <verifyListElementsLoaded listId='sources' />
+      <verifyListElementsLoaded listId='algorithms' />
+    </webtest>
+  </target>
+</project>

@@ -14,6 +14,13 @@
   <!-- DCS build dirs -->
   <property name="dcs.dir" location="tmp/dcs" />
 
+  <!-- DCS WAR -->
+  <property name="dcs.war.dir" location="${dcs.dir}/war" />
+  <property name="dcs.war.base.name" value="carrot2-dcs" />
+ 
+  <!-- Webtest results -->
+  <property name="dcs.webtest.report.dir" location="tmp/dcs-webtest-report" />
+  
   <!-- DCS dist file name base -->
   <property name="dcs.dist.base" value="${carrot2.dcs.base}" />
 
@@ -61,8 +68,8 @@
     <copy todir="${dcs.dir}">
       <fileset dir="${carrot2.dcs.basedir}">
         <include name="examples/**" />
-		<exclude name="**/tmp/**" />
-		<exclude name="**/obj/**" />
+		    <exclude name="**/tmp/**" />
+		    <exclude name="**/obj/**" />
       </fileset>
       <fileset dir="${carrot2.dcs.basedir}/etc">
         <include name="readme.txt" />
@@ -73,19 +80,48 @@
       </fileset>
     </copy>
   
+    <copy todir="${dcs.dir}/examples/java/lib" flatten="true">
+      <fileset dir="${carrot2.master.basedir}/lib">
+        <include name="**/commons-logging*.*" />
+        <include name="**/commons-codec*.*" />
+        <include name="**/commons-httpclient*.*" />
+      </fileset>
+    </copy>
+      
     <delete dir="${dcs.dir}/classes" />
   </target>
 
   <!--
        Builds the DCS ZIP archive.
     -->
-  <target name="carrot2.dcs.dist" depends="carrot2.dcs.build">
+  <target name="carrot2.dcs.dist" depends="carrot2.dcs.build, carrot2.dcs.webtest.war">
     <zip destfile="${dcs.dir}/../${dcs.dist.base}-${carrot2.version}.zip">
       <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}" />
     </zip>
     <delete dir="${dcs.dir}" failonerror="false" />
   </target>
 
+  <!-- 
+       Runs webtests against some deployed DCS.
+    -->
+  <target name="carrot2.dcs.webtest.localhost" depends="carrot2.common.webtest.deployed.check">
+    <webtest-deployed webtest.tests.dir="${carrot2.dcs.basedir}/webtest"
+                      webtest.report.dir="${dcs.webtest.report.dir}" 
+                      webtest.basepath="/" />
+  </target>
+  
+  <!-- 
+       Deploys DCS WAR file and runs webstest against it.
+    -->
+  <target name="carrot2.dcs.webtest.war" depends="carrot2.common.webtest.war.prepare"
+          if="webtest.war.resources.available">
+    <webtest-war cargo.tmp.dir="tmp/cargo"
+                 war.path="${dcs.war.dir}/${dcs.war.base.name}.war"
+                 war.base.name="${dcs.war.base.name}"
+                 webtest.tests.dir="${carrot2.dcs.basedir}/webtest"
+                 webtest.report.dir="${dcs.webtest.report.dir}" />
+  </target>
+    
   <!-- 
        Builds the DCS war file.
     -->
@@ -123,7 +159,7 @@
 
     <copy tofile="${dcs.dir}/classes/log4j.xml"
           file="core/carrot2-util-log4j/src/log4j-dcs.xml" />
-    <war destfile="${dcs.dir}/war/carrot2-dcs.war"
+    <war destfile="${dcs.war.dir}/${dcs.war.base.name}.war"
          webxml="${carrot2.dcs.basedir}/web/WEB-INF/web.xml"
          manifest="${dcs.dir}/manifest/MANIFEST.MF">
       <fileset dir="${carrot2.dcs.basedir}/web">

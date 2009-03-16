@@ -400,7 +400,7 @@ public final class RestProcessorServlet extends HttpServlet
         Throwable e) throws IOException
     {
         final String finalMessage = message + ": " + e.getMessage();
-        config.logger.warn(finalMessage);
+        config.logger.warn(finalMessage, e);
         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, finalMessage);
     }
 
@@ -408,7 +408,7 @@ public final class RestProcessorServlet extends HttpServlet
         throws IOException
     {
         final String finalMessage = message + ": " + e.getMessage();
-        config.logger.warn(finalMessage);
+        config.logger.error(finalMessage);
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, finalMessage);
     }
 

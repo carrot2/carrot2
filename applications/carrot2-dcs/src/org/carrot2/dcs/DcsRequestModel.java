@@ -35,7 +35,7 @@ public class DcsRequestModel
 
     @Input
     @Attribute(key = "dcs.output.format")
-    public OutputFormat outputFormat;
+    public OutputFormat outputFormat = OutputFormat.XML;
     
     @Input
     @Attribute(key = "dcs.json.callback")

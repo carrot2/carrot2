@@ -30,8 +30,8 @@ import com.google.common.collect.Maps;
 
 /**
  * A {@link IResource} implementation that allows URLs to be parameterized. The attribute
- * place holders are of format: <code>${attribute}</code> and will be replaced before
- * the contents is fetched from the URL when the {@link #open(Map)} method is used.
+ * place holders are of format: <code>${attribute}</code> and will be replaced before the
+ * contents is fetched from the URL when the {@link #open(Map)} method is used.
  */
 @Root(name = "parameterized-url-resource")
 public class URLResourceWithParams implements IResource
@@ -171,5 +171,19 @@ public class URLResourceWithParams implements IResource
     void afterDeserialization() throws MalformedURLException
     {
         url = new URL(info);
+    }
+
+    public static URLResourceWithParams valueOf(String string)
+    {
+        try
+        {
+            // We don't check if the URL indeed contains parameters. A parameterless
+            // URL will be handled correctly anyway.
+            return new URLResourceWithParams(new URL(string));
+        }
+        catch (MalformedURLException e)
+        {
+            return null;
+        }
     }
 }

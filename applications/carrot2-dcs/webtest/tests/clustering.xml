@@ -1,0 +1,16 @@
+<!DOCTYPE project SYSTEM "../dtd/Project.dtd">
+
+<project name="Clustering smoke test" default="webtest">
+  <target name="webtest">
+    <webtest name="Clustering from file">
+      <invoke url="/" description="Get quick start page" />
+      <setRadioButton htmlId="source-from-file" />
+      <setFileField name="dcs.c2stream" fileName="../src-test/xml/carrot2-kaczynski.xml" />
+      
+      <!-- Wait for AJAX stuff to load -->
+      <sleep seconds="2" />
+      <clickButton name="submit" />
+      <!-- As long as we get 200 code, it's fine. We have more coverage in unit tests. -->
+    </webtest>
+  </target>
+</project>

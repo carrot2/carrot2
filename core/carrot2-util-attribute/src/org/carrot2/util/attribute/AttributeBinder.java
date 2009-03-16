@@ -358,11 +358,12 @@ public class AttributeBinder
      * Transforms {@link String} attribute values to the types required by the target
      * field by:
      * <ol>
-     * <li>Leaving non-{@link String} typed values unchanged.</li> <li>Looking for a
-     * static <code>valueOf(String)</code> in the target type and using it for conversion.
-     * </li> <li>If the method is not available, trying to load a class named as the value
-     * of the attribute, so that this class can be further coerced to the class instance.
-     * </li> <li>If the class cannot be loaded, leaving the the value unchanged.</li>
+     * <li>Leaving non-{@link String} typed values unchanged.</li>
+     * <li>Looking for a static <code>valueOf(String)</code> in the target type and using
+     * it for conversion.</li>
+     * <li>If the method is not available, trying to load a class named as the value of
+     * the attribute, so that this class can be further coerced to the class instance.</li>
+     * <li>If the class cannot be loaded, leaving the the value unchanged.</li>
      * </ol>
      */
     public static class AttributeTransformerFromString implements IAttributeTransformer
@@ -394,29 +395,33 @@ public class AttributeBinder
             }
             else
             {
-                // Try valueOf(String)
-                try
+
+                // Try valueOf(String) on the declared type
+                Object convertedValue = null;
+                convertedValue = callValueOf(stringValue, fieldType);
+                if (convertedValue != null)
                 {
-                    final Method valueOfMethod = fieldType.getMethod("valueOf",
-                        String.class);
-                    return valueOfMethod.invoke(null, stringValue);
+                    return convertedValue;
                 }
-                catch (RuntimeException e)
+
+                // Try valueOf(String) of the declared implementing classes, useful
+                // when field type is an interface, which is probably a common case.
+                // We process implementing classes in the order they appear in the
+                // annotation, which means we'll transform to an instance of the first
+                // class that returns a non-null valueOf(String).
+                final ImplementingClasses implementingClasses = field
+                    .getAnnotation(ImplementingClasses.class);
+                if (implementingClasses != null)
                 {
-                    throw e;
-                }
-                catch (NoSuchMethodException e)
-                {
-                    // Just skip this possibility.
-                }
-                catch (IllegalAccessException e)
-                {
-                    throw new RuntimeException("No access to valueOf() method in: "
-                        + fieldType.getName());
-                }
-                catch (InvocationTargetException e)
-                {
-                    throw ExceptionUtils.wrapAsRuntimeException(e.getCause());
+                    final Class<?> [] classes = implementingClasses.classes();
+                    for (Class<?> toClass : classes)
+                    {
+                        convertedValue = callValueOf(stringValue, toClass);
+                        if (convertedValue != null)
+                        {
+                            return convertedValue;
+                        }
+                    }
                 }
 
                 /*
@@ -425,8 +430,6 @@ public class AttributeBinder
                  * ConsistencyCheckImplementingClasses. If the value meets the constraint,
                  * we'll return the original value.
                  */
-                final ImplementingClasses implementingClasses = field
-                    .getAnnotation(ImplementingClasses.class);
                 if (implementingClasses != null
                     && field.getType().isAssignableFrom(String.class)
                     && ConstraintValidator.isMet(stringValue, implementingClasses).length == 0)
@@ -445,6 +448,39 @@ public class AttributeBinder
                 }
 
                 return stringValue;
+            }
+        }
+
+        private Object callValueOf(final String stringValue, final Class<?> fieldType)
+        {
+            try
+            {
+                final Method valueOfMethod = fieldType.getMethod("valueOf", String.class);
+                return valueOfMethod.invoke(null, stringValue);
+            }
+            catch (RuntimeException e)
+            {
+                throw e;
+            }
+            catch (NoSuchMethodException e)
+            {
+                return null;
+            }
+            catch (IllegalAccessException e)
+            {
+                throw new RuntimeException("No access to valueOf() method in: "
+                    + fieldType.getName());
+            }
+            catch (InvocationTargetException e)
+            {
+                final Throwable target = e.getTargetException();
+                if (target instanceof NumberFormatException)
+                {
+                    return null;
+                }
+                else {
+                    throw ExceptionUtils.wrapAsRuntimeException(target);
+                }
             }
         }
     }

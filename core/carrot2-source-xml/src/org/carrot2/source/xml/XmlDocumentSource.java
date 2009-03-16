@@ -67,6 +67,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     @Processing
     @Attribute
     @Required
+    @Internal(configuration = true)
     @ImplementingClasses(classes =
     {
         FileResource.class, URLResourceWithParams.class, URLResource.class
@@ -97,6 +98,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     @Init
     @Processing
     @Attribute
+    @Internal(configuration = true)
     @ImplementingClasses(classes =
     {
         FileResource.class, URLResourceWithParams.class, URLResource.class
