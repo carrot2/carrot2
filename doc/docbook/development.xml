@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<chapter xml:id="chapter.development" xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <title>&C2; Development</title>
+  <subtitle>Contributing to &C2;</subtitle>
+
+  <para>
+    This chapter contains information for &C2; developers.
+  </para>
+
+  <section xml:id="section.release">
+    <title>Stable release procedure</title>
+    
+    <para>
+      Each &C2; release should be performed according to the following procedure:
+    </para>
+    
+    <orderedlist>
+      <listitem>
+        <formalpara>
+          <title>Review of static code analysis reports</title>
+          <para>
+            Review and fix reasonably-looking flaws from the following reports:
+            
+            <orderedlist>
+              <listitem><para><link xlink:href="http://builds.carrot2.org/download/C2HEAD-SOURCES/artifacts/latest/FindBugs-Report/index.html">FindBugs</link></para></listitem>
+              <listitem><para><link xlink:href="http://builds.carrot2.org/download/C2HEAD-SOURCES/artifacts/latest/Duplication-Report/index.html">Code Duplication</link></para></listitem>
+            </orderedlist>
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Precondition: successful trunk builds</title>
+          <para>
+            The status of the <link xlink:href="http://builds.carrot2.org/browse/C2HEAD-CORE">C2HEAD-CORE</link>
+            and <link xlink:href="http://builds.carrot2.org/browse/C2HEAD-SOURCES">C2HEAD-SOURCES</link>
+            builds must be successful.
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Precondition: resolved issues</title>
+          <para>
+            All issues related to the software to be released scheduled (fix for) for
+            the release must be resolved.
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Replace the stable branch in SVN</title>
+          <para>
+            <programlisting><![CDATA[svn remove https://carrot2.svn.sourceforge.net/svnroot/carrot2/branches/stable
+svn copy https://carrot2.svn.sourceforge.net/svnroot/carrot2/trunk 
+         https://carrot2.svn.sourceforge.net/svnroot/carrot2/branches/stable]]></programlisting>
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Update version files in the stable branch</title>
+          <para>
+            Update <filename>etc/version/carrot2.version</filename> in the stable branch 
+            to contain the desired stable version number. That number will be embedded in 
+            distribution file names, JavaDoc page title and other version-sensitive places. 
+            Note the property name should be <filename>carrot2.version.stable</filename>, e.g.:
+            
+            <programlisting><![CDATA[carrot2.version.stable=3.0.1
+carrot2.version=${carrot2.version.stable}]]></programlisting>
+
+            Commit the change to the stable branch.
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Trigger stable branch build</title>
+          <para>
+            Go to the <link xlink:href="http://builds.carrot2.org/browse/C2STABLE-ALL">C2STABLE-ALL build page</link> 
+            and trigger a build. If the build is successful, all distribution files should 
+            be  available in the download directory.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Verify the distribution files</title>
+          <para>
+            Download, unpack and run each distribution file to make sure there are no obvious
+            release blockers.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Create release tag</title>
+          <para>
+            <programlisting><![CDATA[svn copy https://carrot2.svn.sourceforge.net/svnroot/carrot2/branches/stable
+         https://carrot2.svn.sourceforge.net/svnroot/carrot2/tags/VERSION_3_0_1]]></programlisting>
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Update version files in trunk</title>
+          <para>
+            In case of major releases, update <filename>etc/version/carrot2.version</filename> 
+            in trunk to contain a new development version number, e.g.:
+            
+            <programlisting><![CDATA[carrot2.version.head=3.2-dev
+carrot2.version=${carrot2.version.head}]]></programlisting>
+
+            Commit the change to trunk.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Update project website</title>
+          
+          <para>
+            <orderedlist>
+              <listitem>
+                <formalpara>
+                  <title>Release notes</title>
+                  <para>
+                    Add a page named <filename>release-[version]-notes</filename> that
+                    lists new features, major bug fixes and improvements introduced in the
+                    new release. The page will automatically become linked from all 
+                    relevant sections of the website (done by an SVN external to
+                    <filename>etc/version/carrot2.version</filename>).
+                  </para>
+                </formalpara>
+              </listitem>
+                
+              <listitem>
+                <formalpara>
+                  <title>Release note history</title>
+                  <para>
+                    Add release date and link to the release's JIRA issues on the
+                    <filename>release-notes</filename> page. 
+                  </para>
+                </formalpara>
+              </listitem>
+            </orderedlist>
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Upload distribution files to SourceForge</title>
+          <para>
+            Go to <link xlink:href="https://sourceforge.net/project/admin/editpackages.php?group_id=85379">SourceForge release manager</link>,
+            create a new release and upload distribution files.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Circulate release news</title>
+          <para>
+            If appropriate, circulate release news to:
+            
+            <orderedlist>
+              <listitem><para>&C2; mailing lists</para></listitem>
+              <listitem>
+                <para><link xlink:href="https://sourceforge.net/news/submit.php?group_id=85379">SourceForge</link></para>
+              </listitem>
+            </orderedlist>
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Consider upgrading &C2; dependent projects</title>
+          <para>
+            If reasonable, upgrade &C2; dependency in other known projects, such as
+            Apache Solr and Nutch.
+          </para>
+        </formalpara>
+      </listitem>
+    </orderedlist>
+  </section>
+</chapter>
