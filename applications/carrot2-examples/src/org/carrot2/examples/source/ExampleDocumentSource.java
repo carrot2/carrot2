@@ -18,7 +18,7 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
 {
     @Processing
     @Input
-    @Attribute(key = AttributeNames.RESULTS)
+    @Attribute(key = AttributeNames.QUERY)
     public String query;
 
     @Processing
