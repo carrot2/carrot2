@@ -115,46 +115,12 @@ public class PhraseExtractorTest extends PreprocessingComponentTestBase
     {
         createDocuments("a b . a b", "a b c d . a b c d");
 
-        int [][] expectedPhraseWordIndexes = new int [] []
-        {
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c")
-            },
-
-            new int []
-            {
-                wordIndices.get("c"), wordIndices.get("d")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c"), wordIndices.get("d")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c"),
-                wordIndices.get("d")
-            },
-        };
-
         int [] expectedPhraseTf = new int []
         {
             4, 2, 2, 2, 2, 2
         };
 
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
+        check(get4TokenSubphrases(), expectedPhraseTf,
             createTrivialTfByDocument(expectedPhraseTf));
     }
 
@@ -163,7 +129,20 @@ public class PhraseExtractorTest extends PreprocessingComponentTestBase
     {
         createDocuments(null, "a b c d . a b c d");
 
-        int [][] expectedPhraseWordIndexes = new int [] []
+        int [][] expectedPhraseWordIndexes = get4TokenSubphrases();
+
+        int [] expectedPhraseTf = new int []
+        {
+            2, 2, 2, 2, 2, 2
+        };
+
+        check(expectedPhraseWordIndexes, expectedPhraseTf,
+            createTrivialTfByDocument(expectedPhraseTf));
+    }
+
+    private int [][] get4TokenSubphrases()
+    {
+        return new int [] []
         {
             new int []
             {
@@ -195,16 +174,7 @@ public class PhraseExtractorTest extends PreprocessingComponentTestBase
                 wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c"),
                 wordIndices.get("d")
             },
-
         };
-
-        int [] expectedPhraseTf = new int []
-        {
-            2, 2, 2, 2, 2, 2
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
     }
 
     @Test

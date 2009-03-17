@@ -459,7 +459,14 @@
           Add an additional option to your JVM command line invocation providing the 
           path to the <emphasis role="bold">directory</emphasis> to which you extracted the native library:
         </para>
-        <programlisting><![CDATA[java -Djava.library.path=[native-lib-dir-path] ...]]></programlisting>
+        <programlisting><![CDATA[java -Djava.library.path=[native-lib-dir] ...]]></programlisting>
+        
+        <para>
+          To enable native computations in web applications deployed to Apache Tomcat,
+          pass the above directive in the <varname>JAVA_OPTS</varname> environment 
+          variable, e.g.:
+        </para>
+        <programlisting><![CDATA[export JAVA_OPTS="-Djava.library.path=[native-lib-dir]"]]></programlisting>
       </listitem>
 
       <listitem>

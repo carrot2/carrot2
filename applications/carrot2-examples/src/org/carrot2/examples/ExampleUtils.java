@@ -13,8 +13,7 @@
 
 package org.carrot2.examples;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
@@ -117,7 +116,7 @@ public class ExampleUtils
     /**
      * Some example documents to cluster.
      */
-    public static final String [][] documentContent = new String [] []
+    private static final String [][] documentContent = new String [] []
     {
         {
             "Data Mining - Wikipedia", "http://en.wikipedia.org/wiki/Data_mining"
@@ -256,4 +255,17 @@ public class ExampleUtils
             "http://www.ncdm.uic.edu/"
         },
     };
+    
+    /**
+     * Some example documents to use for clustering.
+     */
+    public final static List<Document> exampleDocuments;
+    static {
+        List<Document> documents = new ArrayList<Document>();
+        for (final String [] element : ExampleUtils.documentContent)
+        {
+            documents.add(new Document(element[0], "", element[1]));
+        }
+        exampleDocuments = Collections.unmodifiableList(documents);
+    }
 }

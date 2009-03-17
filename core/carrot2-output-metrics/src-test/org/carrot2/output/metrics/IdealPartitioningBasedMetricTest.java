@@ -70,4 +70,34 @@ public class IdealPartitioningBasedMetricTest
             assertThat(c1.getAttribute(metricKey)).isNull();
         }
     }
+
+    protected Cluster pureCluster()
+    {
+        final Document d1 = documentWithTopic("test");
+        final Document d2 = documentWithTopic("test");
+        final Document d3 = documentWithTopic("test");
+        final Document d4 = documentWithTopic("test");
+        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
+        return cluster;
+    }
+
+    protected Cluster partiallyContaminatedCluster()
+    {
+        final Document d1 = documentWithTopic("test1");
+        final Document d2 = documentWithTopic("test1");
+        final Document d3 = documentWithTopic("test1");
+        final Document d4 = documentWithTopic("test2");
+        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
+        return cluster;
+    }
+
+    protected Cluster fullyContaminatedCluster()
+    {
+        final Document d1 = documentWithTopic("test1");
+        final Document d2 = documentWithTopic("test2");
+        final Document d3 = documentWithTopic("test3");
+        final Document d4 = documentWithTopic("test4");
+        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
+        return cluster;
+    }
 }

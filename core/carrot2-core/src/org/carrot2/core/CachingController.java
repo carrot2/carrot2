@@ -520,7 +520,7 @@ public final class CachingController implements IController
      * Resets {@link Processing} attribute values before the component is returned to the
      * pool.
      */
-    private final class ComponentResetListener implements
+    private static final class ComponentResetListener implements
         IPassivationListener<IProcessingComponent, String>,
         IActivationListener<IProcessingComponent, String>
     {
@@ -699,7 +699,7 @@ public final class CachingController implements IController
      * modifications to the attributes map or its values do not change the hashCode and
      * equality behavior of the key.
      */
-    private final class AttributeMapCacheKey
+    private static final class AttributeMapCacheKey
     {
         private Map<String, Object> attributes;
         private int hashCode;
@@ -718,7 +718,7 @@ public final class CachingController implements IController
              * contained in the map. To be completely safe, we'd have to make a deep copy.
              */
             this.attributes = attributes;
-            this.hashCode = attributes != null ? attributes.hashCode() : 0;
+            this.hashCode = attributes.hashCode();
         }
 
         /*
@@ -733,6 +733,11 @@ public final class CachingController implements IController
         @Override
         public boolean equals(Object obj)
         {
+            if (!(obj instanceof AttributeMapCacheKey))
+            {
+                return false;
+            }
+            
             final boolean result = (obj.hashCode() == this.hashCode);
             if (result)
             {

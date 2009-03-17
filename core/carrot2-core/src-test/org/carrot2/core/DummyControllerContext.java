@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,80 +12,40 @@
 
 package org.carrot2.core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 /**
  * {@link IControllerContext} implementation for tests only.
  */
 public final class DummyControllerContext implements IControllerContext
 {
-    /**
-     * Listeners on this context.
-     */
-    private final ArrayList<IControllerContextListener> listeners = Lists.newArrayList();
+    private ControllerContextImpl delegate;
 
-    /**
-     * Attributes of this context.
-     */
-    private final HashMap<String, Object> attributes = Maps.newHashMap();
-
-    /**
-     * {@inheritDoc}
-     */
-    public synchronized Object getAttribute(String key)
+    public DummyControllerContext()
     {
-        return attributes.get(key);
+        delegate = new ControllerContextImpl();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public synchronized void setAttribute(String key, Object value)
-    {
-        attributes.put(key, value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public synchronized void removeListener(IControllerContextListener listener)
-    {
-        listeners.remove(listener);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public synchronized void addListener(IControllerContextListener listener)
     {
-        listeners.add(listener);
+        delegate.addListener(listener);
     }
 
-    /**
-     * Destroy this context.
-     */
     public synchronized void dispose()
     {
-        for (IControllerContextListener listener : listeners)
-        {
-            try
-            {
-                listener.beforeDisposal(this);
-            }
-            catch (Throwable t)
-            {
-                Logger.getLogger(ControllerContextImpl.class).warn(
-                    "Unhandled exception in context listener.", t);
-            }
-        }
+        delegate.dispose();
+    }
 
-        this.listeners.clear();
-        this.attributes.clear();
+    public synchronized Object getAttribute(String key)
+    {
+        return delegate.getAttribute(key);
+    }
+
+    public synchronized void removeListener(IControllerContextListener listener)
+    {
+        delegate.removeListener(listener);
+    }
+
+    public synchronized void setAttribute(String key, Object value)
+    {
+        delegate.setAttribute(key, value);
     }
 }

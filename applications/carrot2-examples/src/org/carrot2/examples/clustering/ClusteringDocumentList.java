@@ -43,11 +43,7 @@ public class ClusteringDocumentList
          * a unique URL (identifier), a title and a snippet (document content), but none
          * of these are obligatory.
          */
-        final List<Document> documents = new ArrayList<Document>();
-        for (final String [] element : ExampleUtils.documentContent)
-        {
-            documents.add(new Document(element[0], "", element[1]));
-        }
+        final List<Document> documents = ExampleUtils.exampleDocuments;
 
         /*
          * We are clustering using a simple controller (no caching, one-time shot).
@@ -68,7 +64,6 @@ public class ClusteringDocumentList
          * We will cluster by URL components first. The algorithm that does this is called
          * ByUrlClusteringAlgorithm. It has no parameters.
          */
-        Class<?> algorithm = LingoClusteringAlgorithm.class;
         ProcessingResult result = controller.process(attributes,
             ByUrlClusteringAlgorithm.class);
         ExampleUtils.displayResults(result);
@@ -79,7 +74,7 @@ public class ClusteringDocumentList
          * set an algorithm parameter for term weighting to a non-default value to show
          * how it is done.
          */
-        algorithm = LingoClusteringAlgorithm.class;
+        Class<?> algorithm = LingoClusteringAlgorithm.class;
         attributes.clear();
         attributes.put(AttributeNames.DOCUMENTS, documents);
         attributes.put(AttributeUtils.getKey(TermDocumentMatrixBuilder.class,

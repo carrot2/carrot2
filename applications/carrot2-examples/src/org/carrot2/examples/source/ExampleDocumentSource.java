@@ -51,16 +51,20 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
         this.documents = new ArrayList<Document>();
 
         // Fetch results
-        int resultsToPush = Math.min(ExampleUtils.documentContent.length, this.results);
+        int resultsToPush = Math.min(ExampleUtils.exampleDocuments.size(), this.results);
         for (int i = 0; i < resultsToPush; i++)
         {
             if (i % this.modulo == 0)
             {
-                Document document = new Document();
-                document.addField(Document.TITLE, ExampleUtils.documentContent[i][0]);
+                final Document originalDocument = ExampleUtils.exampleDocuments.get(i);
+
+                // For the sake of example we just copy the original document fields
+                final Document document = new Document();
+                document.addField(Document.TITLE, originalDocument
+                    .getField(Document.TITLE));
                 document.addField(Document.SUMMARY, "");
-                document.addField(Document.CONTENT_URL,
-                    ExampleUtils.documentContent[i][1]);
+                document.addField(Document.CONTENT_URL, originalDocument
+                    .getField(Document.CONTENT_URL));
                 documents.add(document);
             }
         }

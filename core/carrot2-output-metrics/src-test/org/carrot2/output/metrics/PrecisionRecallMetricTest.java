@@ -15,7 +15,6 @@ package org.carrot2.output.metrics;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.core.Cluster;
-import org.carrot2.core.Document;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -68,36 +67,6 @@ public class PrecisionRecallMetricTest extends IdealPartitioningBasedMetricTest
             "recall").isEqualTo(expectedRecall);
         assertThat(cluster.<Double> getAttribute(PrecisionRecallMetric.F_MEASURE)).as(
             "f-measure").isEqualTo(expectedFMeasure);
-    }
-
-    private Cluster pureCluster()
-    {
-        final Document d1 = documentWithTopic("test");
-        final Document d2 = documentWithTopic("test");
-        final Document d3 = documentWithTopic("test");
-        final Document d4 = documentWithTopic("test");
-        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
-        return cluster;
-    }
-
-    private Cluster partiallyContaminatedCluster()
-    {
-        final Document d1 = documentWithTopic("test1");
-        final Document d2 = documentWithTopic("test1");
-        final Document d3 = documentWithTopic("test1");
-        final Document d4 = documentWithTopic("test2");
-        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
-        return cluster;
-    }
-
-    private Cluster fullyContaminatedCluster()
-    {
-        final Document d1 = documentWithTopic("test1");
-        final Document d2 = documentWithTopic("test2");
-        final Document d3 = documentWithTopic("test3");
-        final Document d4 = documentWithTopic("test4");
-        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
-        return cluster;
     }
 
     @Override

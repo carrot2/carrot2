@@ -152,45 +152,39 @@ public class ClusterTest
     @Test
     public void testByReversedWeightedScoreAndSizeComparatorOnlySize()
     {
-        final Cluster clusterA = new Cluster();
-        clusterA.addPhrases("A");
-        clusterA.setAttribute(Cluster.SCORE, 1.0);
-        clusterA.addDocuments(new Document(), new Document());
-
-        final Cluster clusterB = new Cluster();
-        clusterB.addPhrases("B");
-        clusterB.setAttribute(Cluster.SCORE, 2.0);
-        clusterB.addDocuments(new Document(), new Document());
-
-        final Cluster clusterC = new Cluster();
-        clusterC.addPhrases("C");
-        clusterC.setAttribute(Cluster.SCORE, 0.1);
-        clusterC.addDocuments(new Document(), new Document(), new Document());
-
-        checkOrder(Lists.newArrayList(clusterC, clusterA, clusterB), Cluster
+        checkOrder(createSizeAndScoreClusters(1, 2, 0), Cluster
             .byReversedWeightedScoreAndSizeComparator(0));
     }
-    
+
     @Test
     public void testByReversedWeightedScoreAndSizeComparatorOnlyScore()
     {
+        checkOrder(createSizeAndScoreClusters(1, 0, 2), Cluster
+            .byReversedWeightedScoreAndSizeComparator(1));
+    }
+
+    private List<Cluster> createSizeAndScoreClusters(int a, int b, int c)
+    {
+        Cluster [] clusters = new Cluster [3];
         final Cluster clusterA = new Cluster();
         clusterA.addPhrases("A");
         clusterA.setAttribute(Cluster.SCORE, 1.0);
         clusterA.addDocuments(new Document(), new Document());
-        
+        clusters[a] = clusterA;
+
         final Cluster clusterB = new Cluster();
         clusterB.addPhrases("B");
         clusterB.setAttribute(Cluster.SCORE, 2.0);
         clusterB.addDocuments(new Document(), new Document());
-        
+        clusters[b] = clusterB;
+
         final Cluster clusterC = new Cluster();
         clusterC.addPhrases("C");
         clusterC.setAttribute(Cluster.SCORE, 0.1);
         clusterC.addDocuments(new Document(), new Document(), new Document());
-        
-        checkOrder(Lists.newArrayList(clusterB, clusterA, clusterC), Cluster
-            .byReversedWeightedScoreAndSizeComparator(1));
+        clusters[c] = clusterC;
+
+        return Arrays.asList(clusters);
     }
 
     private void checkOrder(List<Cluster> expected, Comparator<Cluster> comparator)
