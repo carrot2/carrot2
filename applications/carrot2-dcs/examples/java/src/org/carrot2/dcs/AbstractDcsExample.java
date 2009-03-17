@@ -3,24 +3,23 @@ package org.carrot2.dcs;
 import java.io.*;
 import java.util.*;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.multipart.*;
-import org.dom4j.*;
+import org.dom4j.Document;
+import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 /**
- * An example of calling Document Clustering Server service in Java. Please see
- * http://localhost:8080 for a list of all available parameters.
+ * Runs several example clusterings using the Document Clustering Server. Concrete
+ * subclasses implement sending DCS request using specific Java REST frameworks.
  */
-public class DcsRestExample
+abstract class AbstractDcsExample
 {
-    /**
-     * The URL at which the DCS is available.
-     */
-    private static final String DCS_URL = "http://localhost:8080/dcs/rest";
+    /** URL at which the DCS rest service is available */
+    protected static final String DCS_URL = "http://localhost:8080/dcs/rest";
 
-    public static void main(String [] args) throws Exception
+    /**
+     * Sends several clustering requests to the DCS.
+     */
+    protected void runExamples() throws Exception
     {
         final Map<String, String> attributes = new LinkedHashMap<String, String>();
 
@@ -28,11 +27,10 @@ public class DcsRestExample
         System.out.println("## Clustering documents from a local file");
         // Optionally, we can pass the query that generated the documents
         // to avoid creation of trivial clusters.
-        attributes.put("query", "data mining");
-        // Note that the dcs.c2stream parameter must come last
         attributes.put("dcs.c2stream", new String(
             readFullyAndClose(new InputStreamReader(new FileInputStream(
-                "input/data-mining.xml"), "UTF-8"))));
+                "examples/java/input/data-mining.xml"), "UTF-8"))));
+        attributes.put("query", "data mining");
         displayResults(sendDcsPostRequest(attributes));
 
         // Clustering input from a remote XML stream,
@@ -69,38 +67,35 @@ public class DcsRestExample
      * @param attributes parameters to send to the DCS
      * @return raw response.
      */
-    private static InputStream sendDcsPostRequest(Map<String, String> attributes)
-        throws Exception
-    {
-        final HttpClient client = new HttpClient();
-        final PostMethod post = new PostMethod(DCS_URL);
-        final List<Part> parts = new ArrayList<Part>();
-        for (Map.Entry<String, String> entry : attributes.entrySet())
-        {
-            parts.add(new StringPart(entry.getKey(), entry.getValue()));
-        }
-        post.setRequestEntity(new MultipartRequestEntity(parts.toArray(new Part [parts
-            .size()]), post.getParams()));
-        client.executeMethod(post);
-        return post.getResponseBodyAsStream();
-    }
+    protected abstract InputStream sendDcsPostRequest(Map<String, String> attributes)
+        throws Exception;
 
     /**
      * Simple parsing and display of the response. This method uses dom4j for parsing XML,
      * feel free to use anything that comes handy.
      */
     @SuppressWarnings("unchecked")
-    private static void displayResults(InputStream results) throws DocumentException
+    private static void displayResults(InputStream results) throws Exception
     {
-        SAXReader reader = new SAXReader();
-        Document document = reader.read(results);
-        System.out.println("Cluster labels:");
-        for (Iterator<Element> it = document.getRootElement().elementIterator("group"); it
-            .hasNext();)
+        try
         {
-            System.out.println(it.next().element("title").elementText("phrase"));
+            SAXReader reader = new SAXReader();
+            Document document = reader.read(results);
+            System.out.println("Cluster labels:");
+            for (Iterator<Element> it = document.getRootElement()
+                .elementIterator("group"); it.hasNext();)
+            {
+                System.out.println(it.next().element("title").elementText("phrase"));
+            }
+            System.out.println();
         }
-        System.out.println();
+        finally
+        {
+            if (results != null)
+            {
+                results.close();
+            }
+        }
     }
 
     /**
