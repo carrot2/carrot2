@@ -48,7 +48,7 @@ public final class BossNewsSearchService extends BossSearchService
     public String serviceURI = "http://boss.yahooapis.com/ysearch/news/v1/${query}";
 
     /**
-     * Retrieve documents by age. The index stories for 30 days.
+     * Maximum age of returned news in days. The index stories for 30 days.
      * 
      * @group Results filtering
      * @label Age

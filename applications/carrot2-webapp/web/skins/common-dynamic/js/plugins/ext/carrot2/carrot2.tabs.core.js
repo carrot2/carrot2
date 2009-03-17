@@ -1,10 +1,6 @@
 (function($) {
   $(document).ready(function() {
     sourceTabs();
-    
-    $("body").bind("carrot2-loaded", function() {
-      $("#source-tabs").trigger("tabActivated", [ $("#source-tabs li.active").eq(0).attr("id") ]);
-    });
   });
 
   /**
@@ -22,6 +18,19 @@
       }
     }));
 
+    // Add autosubmit on tab activation
+    $tabContainer.bind("tabActivated", function() {
+      if ($("#results-area").size() > 0) {
+        // A little-hack, dependency-wise: we remove attribute names from advanced options
+        // so that when we submit the form after tab change, common attribute values
+        // are not passed between sources (e.g. site between boss-wiki and boss-images).
+        if ($tabContainer.data("previous-source") != $("#source").val()) {
+          $("#advanced-options :input").removeAttr("name");
+        }
+        $("#search-form")[0].submit();
+      }
+    });
+    
     // Initialize active tab
     updateTabs();
   
@@ -38,23 +47,21 @@
     var $target = $(e.target);
     var $tabLi;
     if ($target.is("li.tab")) {
-    	$tabLi = $target;
+      $tabLi = $target;
     } else {
-    	$tabLi = $target.parents("li.tab").eq(0);
+      $tabLi = $target.parents("li.tab").eq(0);
     }
     
     $tabLi.addClass("active").removeClass("passive");
     $tabContainer.trigger("tabStructureChanged");
     
     var tabId = $tabLi.attr("id");
+    var $sourceHidden = $("#source");
+    $tabContainer.data("previous-source", $sourceHidden.val());
+    $sourceHidden.val(tabId);
     $tabContainer.trigger("tabActivated", [ tabId ]);
     
-    $("#source").val(tabId);
-    if ($("#results-area").size() > 0) {
-      $("#source").parents("form")[0].submit();
-    } else {
-      $("#query").focus();
-    }
+    $("#query").focus();
   };
 
   /**
@@ -103,9 +110,18 @@
   };
 
   /**
+   * Returns the id of the initially selected tab.
+   */
+  getInitialActiveTab = function() {
+    return $("#source-tabs li.active").eq(0).attr("id");
+  }
+  
+  /**
    * Core functions for handling tabs exported to the outside.
    */
   jQuery.tabs = {
-    updateTabs: updateTabs
+    updateTabs: updateTabs,
+    getInitialActiveTab: getInitialActiveTab
   };
+
 })(jQuery);

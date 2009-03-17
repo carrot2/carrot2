@@ -22,8 +22,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.highlight.*;
-import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
@@ -54,6 +53,7 @@ public class SimpleFieldMapper implements IFieldMapper
     @Attribute
     @Init
     @Processing
+    @Internal(configuration = true)
     public String titleField;
 
     /**
@@ -67,6 +67,7 @@ public class SimpleFieldMapper implements IFieldMapper
     @Attribute
     @Init
     @Processing
+    @Internal(configuration = true)
     public String contentField;
 
     /**
@@ -80,6 +81,7 @@ public class SimpleFieldMapper implements IFieldMapper
     @Attribute
     @Init
     @Processing
+    @Internal(configuration = true)
     public String urlField;
 
     /**
@@ -93,6 +95,7 @@ public class SimpleFieldMapper implements IFieldMapper
     @Attribute
     @Init
     @Processing
+    @Internal(configuration = true)
     public List<String> searchFields;
 
     /**

@@ -19,10 +19,8 @@ import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.*;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
@@ -38,7 +36,7 @@ import com.google.common.collect.Sets;
  * </p>
  */
 @Bindable
-public class CoverageMetric implements ClusteringMetric
+public class CoverageMetric extends IdealPartitioningBasedClusteringMetric
 {
     /**
      * Absolute topic coverage. Absolute topic coverage will be equal to 1.0 for a set of
@@ -70,6 +68,9 @@ public class CoverageMetric implements ClusteringMetric
     @Attribute(key = "document-coverage")
     public double documentCoverage;
 
+    /**
+     * Calculate coverage metrics.
+     */
     @Processing
     @Input
     @Attribute
@@ -87,7 +88,7 @@ public class CoverageMetric implements ClusteringMetric
 
     public void calculate()
     {
-        final int topicCount = ClusteringMetricUtils.countTopics(documents);
+        final int topicCount = getTopicCount(documents);
         if (topicCount == 0)
         {
             return;
@@ -109,7 +110,7 @@ public class CoverageMetric implements ClusteringMetric
             }
 
             coveredDocuments.addAll(cluster.getAllDocuments());
-            coveredTopics.add(calculateMajorityTopic(cluster));
+            coveredTopics.add(getMajorTopic(cluster.getAllDocuments()));
             p++;
             if (coveredTopics.size() == topicCount)
             {
@@ -120,26 +121,6 @@ public class CoverageMetric implements ClusteringMetric
         absoluteTopicCoverage = coveredTopics.size() / Math.sqrt(Math.max(topicCount, p) * topicCount);
         topicCoverage = coveredTopics.size() / (double) topicCount;
         documentCoverage = coveredDocuments.size() / (double) documents.size();
-    }
-
-    private String calculateMajorityTopic(Cluster cluster)
-    {
-        final List<Document> allDocuments = cluster.getAllDocuments();
-        final Map<String, Integer> counts = Maps.newHashMap();
-        Integer max = 0;
-        String majorityTopic = null;
-        for (Document document : allDocuments)
-        {
-            final String topic = document.getField(Document.TOPIC);
-            final Integer newValue = MapUtils.increment(counts, topic);
-            if (newValue > max)
-            {
-                max = newValue;
-                majorityTopic = topic;
-            }
-        }
-
-        return majorityTopic;
     }
 
     public boolean isEnabled()

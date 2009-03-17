@@ -13,10 +13,8 @@
 package org.carrot2.source.boss;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
@@ -28,8 +26,8 @@ import org.carrot2.util.attribute.*;
  * Attributes of this class correspond to Yahoo's documentation (see links below).
  * 
  * @label Yahoo Boss Web Search Service
- * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/Web_Search.html">API
- *      description</a>
+ * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/Web_Search.html">API *
+ *      description< /a>
  * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/">Yahoo Boss
  *      Documentation< /a>
  */
@@ -56,10 +54,10 @@ public final class BossWebSearchService extends BossSearchService
      * <p>
      * The following content types are supported:
      * </p>
-     * <table> <thead>
+     * <table>
+     * <thead>
      * <tr>
-     * <th align="left">Value</th>
-     * <th align="left">Content</th>
+     * <th align="left">Value</th> <th align="left">Content</th>
      * </tr>
      * </thead> <tbody>
      * <tr>
@@ -70,7 +68,8 @@ public final class BossWebSearchService extends BossSearchService
      * <td><code>-hate</code></td>
      * <td>Filters out hate content</td>
      * </tr>
-     * </tbody> </table>
+     * </tbody>
+     * </table>
      * <p>
      * Adult content filtering is supported for all languages, hate content filtering is
      * supported for English only.
@@ -83,7 +82,7 @@ public final class BossWebSearchService extends BossSearchService
     @Processing
     @Input
     @Attribute
-    public List<FilterConst> filter;
+    public OffensiveContentFilter filter;
 
     /**
      * Restricts search to documents of the specified types. Must be a comma-separated
@@ -91,10 +90,10 @@ public final class BossWebSearchService extends BossSearchService
      * <p>
      * The following document types are supported:
      * </p>
-     * <table> <thead>
+     * <table>
+     * <thead>
      * <tr>
-     * <th align="left">Value</th>
-     * <th align="left">Document type</th>
+     * <th align="left">Value</th> <th align="left">Document type</th>
      * </tr>
      * </thead> <tbody>
      * <tr>
@@ -121,14 +120,15 @@ public final class BossWebSearchService extends BossSearchService
      * <td><code>ppt</code></td>
      * <td>Microsoft Power Point documents</td>
      * </tr>
-     * </tbody> </table>
+     * </tbody>
+     * </table>
      * <p>
      * The following document type groups are supported:
      * </p>
-     * <table> <thead>
+     * <table>
+     * <thead>
      * <tr>
-     * <th align="left">Value</th>
-     * <th align="left">Document type groups</th>
+     * <th align="left">Value</th> <th align="left">Document type groups</th>
      * </tr>
      * </thead> <tbody>
      * <tr>
@@ -141,7 +141,8 @@ public final class BossWebSearchService extends BossSearchService
      * <td>Anything else than HTML documents (<code>text</code>, <code>pdf</code>,
      * <code>xl</code>, <code>msword</code>, <code>ppt</code>)</td>
      * </tr>
-     * </tbody> </table>
+     * </tbody>
+     * </table>
      * <p>
      * You can also specify a format group and then exclude an item:
      * <code>type=msoffice,-ppt</code>.
@@ -149,7 +150,7 @@ public final class BossWebSearchService extends BossSearchService
      * 
      * @group Results filtering
      * @label Type filter
-     * @level Medium
+     * @level Advanced
      */
     @Processing
     @Input
@@ -165,9 +166,9 @@ public final class BossWebSearchService extends BossSearchService
     {
         final ArrayList<NameValuePair> params = new ArrayList<NameValuePair>(10);
 
-        if (filter != null && filter.size() > 0)
+        if (filter != null)
         {
-            params.add(new NameValuePair("filter", StringUtils.join(filter, ',')));
+            params.add(new NameValuePair("filter", filter.getApiOption()));
         }
 
         if (type != null)
@@ -182,5 +183,36 @@ public final class BossWebSearchService extends BossSearchService
     protected String getServiceURI()
     {
         return serviceURI;
+    }
+
+    /**
+     * Constants for offensive content filtering.
+     */
+    public static enum OffensiveContentFilter
+    {
+        PORN("-porn"),
+
+        HATE("-hate"),
+
+        PORN_AND_HATE("-porn,-hate");
+        
+        /** Option to pass to the API */
+        private String apiOption;
+
+        private OffensiveContentFilter(String apiOption)
+        {
+            this.apiOption = apiOption;
+        }
+
+        @Override
+        public String toString()
+        {
+            return "remove " + name().replace('_', ' ').toLowerCase();
+        }
+
+        public String getApiOption()
+        {
+            return apiOption;
+        }
     }
 }

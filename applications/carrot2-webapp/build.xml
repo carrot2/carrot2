@@ -34,7 +34,7 @@
 
   <!-- Webtest parameters -->
   <property name="cargo.dir" location="${carrot2.webapp.basedir}/tmp/cargo" />
-  <property name="webtest.report.dir" location="tmp/webtest-report" />
+  <property name="webtest.report.dir" location="tmp/webapp-webtest-report" />
 
   <!-- Webapp-specific dependencies -->
   <patternset id="lib.webapp">
@@ -78,7 +78,7 @@
        Builds the webapp distribution. Currently, it just moves the WAR file
        to the output directory, not sure it if makes sense to wrap it with an extra ZIP file.
     -->
-  <target name="carrot2.webapp.dist" depends="carrot2.webapp.build, carrot2.webapp.webtest">
+  <target name="carrot2.webapp.dist" depends="carrot2.webapp.webtest.war">
     <move file="${webapp.dir}/${war.name.base}.war" tofile="${webapp.dir}/../${war.name.base}-${carrot2.version}.war" />
     <delete dir="${webapp.dir}" failonerror="false" />
   </target>
@@ -86,85 +86,28 @@
   <!--
        Performs a quick smoketest of the webapp WAR.
     -->
-  <target name="carrot2.webapp.webtest" depends="carrot2.webapp.webtest.prepare, carrot2.webapp.build" 
-          if="webtest.resources.available">
-    
-    <!-- Deploy the WAR file -->
-    <taskdef resource="cargo.tasks">
-      <classpath>
-        <fileset dir="${cargo.home}" />
-      </classpath>
-    </taskdef>
-
-    <property name="tomcat.config.dir" location="${cargo.dir}/config" />
-    <property name="tomcat.log.dir" location="${cargo.dir}/log" />
-      
-    <delete dir="${cargo.dir}" />
-    <mkdir dir="${tomcat.log.dir}"/>
-    <mkdir dir="${tomcat.config.dir}"/>
-    
-    <property name="wt.config.port" value="8181" />
-    <cargo containerId="tomcat5x" home="${tomcat.home}" output="${tomcat.log.dir}/output.log" 
-        log="${tomcat.log.dir}/cargo.log" action="start" wait="100">
-      <configuration home="${tomcat.config.dir}">
-        <property name="cargo.servlet.port" value="${wt.config.port}"/>
-        <property name="cargo.logging" value="high"/>
-        <deployable type="war" file="${webapp.dir}/${war.name.base}.war"/>
-      </configuration>
-    </cargo>
-    <echo>Started: http://localhost:${wt.config.port}/${war.name.base}/</echo>
-
-    <!-- Run webtests -->
-    <property name="wt.config.basepath" value="/${war.name.base}" />
-    <antcall target="carrot2.webapp.webtest.internal" />
-    
-    <cargo containerId="tomcat5x" home="${tomcat.home}" output="${tomcat.log.dir}/output.log" 
-        log="${tomcat.log.dir}/cargo.log" action="stop" wait="100">
-      <configuration home="${tomcat.config.dir}" />
-    </cargo>
-    <echo>Stopped: http://localhost:${wt.config.port}/${war.name.base}/</echo>
-    
-    <!-- 
-         In theory we should be able to delete ${cargo.dir} here, but for some
-         reason it's still locked at this point.
-      -->
-    <delete dir="${cargo.dir}" failonerror="false" />
+  <target name="carrot2.webapp.webtest.war" depends="carrot2.webapp.build, carrot2.common.webtest.war.prepare"
+          if="webtest.war.resources.available">
+    <webtest-war cargo.tmp.dir="tmp/cargo"
+                 war.path="${webapp.dir}/${war.name.base}.war"
+                 war.base.name="${war.name.base}"
+                 webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
+                 webtest.report.dir="${webtest.report.dir}" />
   </target>
 
-  <target name="carrot2.webapp.webtest.internal" depends="carrot2.webapp.webtest.prepare"> 
-    <property name="wt.config.resultfile" value="${webtest.report.dir}/webtest-results.xml" />  
-    <property name="wt.config.resultpath" location="${webtest.report.dir}" />
-
-    <property name="wt.config.host" value="localhost" />
-    <property name="wt.config.protocol" value="http" />
-
-    <echo>${wt.config.headless}</echo>
-    <ant antfile="${carrot2.webapp.basedir}/webtest/webtest.xml" inheritall="true" dir="${carrot2.webapp.basedir}/webtest" />
+  <target name="carrot2.webapp.webtest.localhost" depends="carrot2.common.webtest.deployed.check"> 
+    <webtest-deployed webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
+                      webtest.report.dir="${webtest.report.dir}" 
+                      webtest.basepath="/" />
   </target>
     
-  <target name="carrot2.webapp.webtest.localhost" depends="carrot2.webapp.webtest.prepare"> 
-    <property name="wt.config.basepath" value="/" />
-      <property name="wt.config.port" value="8080" />
-    <antcall target="carrot2.webapp.webtest.internal" />
-  </target>
-    
-  <target name="carrot2.webapp.webtest.prepare">
-    <condition property="webtest.resources.available">
-      <and>
-        <isset property="cargo.home" />
-        <isset property="webtest.home" />
-        <isset property="tomcat.home" />
-      </and>
-    </condition>
-  </target>
-      
   <!--
        Prepares resources the web applications WAR file. "Build scripts "extending" this
        script may want to add their own preparation steps (e.g. copy extra skins)
        before they let this script assemble the complete WAR file.
     -->
   <target name="carrot2.webapp.prepare"
-          depends="carrot2.webapp.templates.war, carrot2.webapp.classes, carrot2.webapp.suites, carrot2.webapp.skins, carrot2.webapp.sprites.war" />
+          depends="carrot2.webapp.templates.war, carrot2.webapp.classes, carrot2.webapp.attributes.war, carrot2.webapp.suites, carrot2.webapp.skins, carrot2.webapp.sprites.war" />
 
   <!--
        Compiles the main web application classes and copies log4j configuration.
@@ -272,7 +215,8 @@
   <!--
        Processes all the files required to run the web application from Eclipse.
     -->
-  <target name="carrot2.webapp.eclipse.setup" depends="carrot2.webapp.templates.eclipse, carrot2.webapp.sprites.eclipse" />
+  <target name="carrot2.webapp.eclipse.setup" 
+          depends="carrot2.webapp.templates.eclipse, carrot2.webapp.sprites.eclipse, carrot2.webapp.attributes.eclipse" />
 
   <!--
        Substitutes variables in config.xml, jawr.properties and web.xml files.
@@ -345,6 +289,24 @@
   </target>
 
   <!--
+       Generates metadata files for webapp-specific document sources.
+    -->
+  <target name="carrot2.webapp.attributes.war">
+    <antcall target="compile" />
+    <attributes-xml java.source="${carrot2.webapp.basedir}/src/org/carrot2/webapp/source" 
+                    output.dir="${webapp.classes.dir}" />
+  </target>
+
+  <!--
+       Generates metadata files for webapp-specific document sources.
+    -->
+  <target name="carrot2.webapp.attributes.eclipse">
+    <antcall target="compile" />
+    <attributes-xml java.source="${carrot2.webapp.basedir}/src/org/carrot2/webapp/source" 
+                    output.dir="${carrot2.webapp.basedir}/tmp/eclipse" />
+  </target>
+
+  <!--
        Removes temporary files left after building the web application.
     -->
   <target name="carrot2.webapp.cleanup">
@@ -357,5 +319,17 @@
     -->
   <target name="carrot2.webapp.clean">
     <delete dir="${webapp.dir}" />
+  </target>
+
+  
+  <!--
+       Helps to debug XSLT compilation problems. For some reason, the embedded Xalan
+       does not output any information about the reason why the stylesheet doesn't compile.
+    -->
+  <target name="carrot2.webapp.xslt.debug">
+    <delete file="tmp/startup.html" />
+    <xslt style="${carrot2.webapp.basedir}/web/skins/fancy-compact/page.xsl"
+          in="etc/xslt-debug/startup.xml" 
+          out="tmp/startup.html" />
   </target>
 </project>

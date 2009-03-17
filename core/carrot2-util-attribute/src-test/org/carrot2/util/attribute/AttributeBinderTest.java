@@ -165,7 +165,7 @@ public class AttributeBinderTest
         @ImplementingClasses(classes =
         {
             CoercedInterfaceImpl.class
-        })
+        }, strict = false)
         private ICoercedInterface coerced = null;
     }
 
@@ -235,13 +235,6 @@ public class AttributeBinderTest
     public static class OnlyBindingDirectionAnnotationProvided
     {
         @Input
-        private int initInput;
-    }
-
-    @Bindable
-    public static class OnlyBindingTimeAnnotationProvided
-    {
-        @TestInit
         private int initInput;
     }
 
@@ -542,9 +535,9 @@ public class AttributeBinderTest
             AttributeBinder.bind(instance, attributes, Input.class, TestProcessing.class);
             fail();
         }
-        catch (final ConstraintViolationException e)
+        catch (final AttributeBindingException e)
         {
-            assertEquals(12, e.offendingValue);
+            assertEquals(12, ((ConstraintViolationException) e.getCause()).offendingValue);
         }
         checkFieldValues(instance, new Object []
         {
@@ -570,9 +563,9 @@ public class AttributeBinderTest
             AttributeBinder.bind(instance, attributes, Input.class, TestProcessing.class);
             fail();
         }
-        catch (final ConstraintViolationException e)
+        catch (final AttributeBindingException e)
         {
-            assertEquals(8, e.offendingValue);
+            assertEquals(8, ((ConstraintViolationException) e.getCause()).offendingValue);
         }
         checkFieldValues(instance, new Object []
         {
@@ -585,9 +578,9 @@ public class AttributeBinderTest
             AttributeBinder.bind(instance, attributes, Input.class, TestProcessing.class);
             fail();
         }
-        catch (final ConstraintViolationException e)
+        catch (final AttributeBindingException e)
         {
-            assertEquals(12, e.offendingValue);
+            assertEquals(12, ((ConstraintViolationException) e.getCause()).offendingValue);
         }
         checkFieldValues(instance, new Object []
         {
@@ -602,6 +595,24 @@ public class AttributeBinderTest
 
         addAttribute(CoercedReferenceContainer.class, "coerced",
             CoercedInterfaceImpl.class);
+        addAttribute(CoercedInterfaceImpl.class, "initInput", 7);
+
+        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
+        assertNotNull(instance.coerced);
+        assertEquals(instance.coerced.getClass(), CoercedInterfaceImpl.class);
+        checkFieldValues(instance.coerced, new Object []
+        {
+            "initInput", 7
+        });
+    }
+
+    @Test
+    public void testClassCoercionFromString() throws InstantiationException
+    {
+        final CoercedReferenceContainer instance = new CoercedReferenceContainer();
+
+        addAttribute(CoercedReferenceContainer.class, "coerced",
+            CoercedInterfaceImpl.class.getName());
         addAttribute(CoercedInterfaceImpl.class, "initInput", 7);
 
         AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
@@ -667,14 +678,7 @@ public class AttributeBinderTest
         throws InstantiationException
     {
         final OnlyBindingDirectionAnnotationProvided instance = new OnlyBindingDirectionAnnotationProvided();
-        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testOnlyBindingTimeAnnotationProvided() throws InstantiationException
-    {
-        final OnlyBindingTimeAnnotationProvided instance = new OnlyBindingTimeAnnotationProvided();
-        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
+        AttributeBinder.bind(instance, attributes, Input.class);
     }
 
     @Test(expected = IllegalArgumentException.class)

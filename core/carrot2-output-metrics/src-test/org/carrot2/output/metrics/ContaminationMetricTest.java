@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,18 +14,15 @@ package org.carrot2.output.metrics;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.util.List;
-
 import org.carrot2.core.Cluster;
-import org.carrot2.core.Document;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
 /**
- * Test cases for {@link ClusteringMetric}.
+ * Test cases for {@link IClusteringMetric}.
  */
-public class ContaminationMetricTest
+public class ContaminationMetricTest extends IdealPartitioningBasedMetricTest
 {
     @Test
     public void testCalculateWorstCaseH()
@@ -69,29 +65,6 @@ public class ContaminationMetricTest
         check(fullyContaminatedCluster(), 1.0);
     }
 
-    @Test
-    public void testNoTopicInformation()
-    {
-        final List<Document> documents = Lists.newArrayList();
-        final List<Cluster> clusters = Lists.newArrayList();
-
-        final ContaminationMetric metric = new ContaminationMetric();
-        metric.documents = documents;
-
-        final Document d1 = new Document();
-        final Document d2 = documentWithTopic("test");
-        documents.add(d1);
-
-        final Cluster c1 = new Cluster("test", d1);
-        clusters.add(c1);
-
-        metric.calculate();
-        assertThat(c1.getAttribute(ContaminationMetric.CONTAMINATION)).isNull();
-
-        documents.add(d2);
-        assertThat(c1.getAttribute(ContaminationMetric.CONTAMINATION)).isNull();
-    }
-
     private void check(Cluster cluster, Double expectedContamination)
     {
         final ContaminationMetric metric = new ContaminationMetric();
@@ -102,40 +75,12 @@ public class ContaminationMetricTest
             .isEqualTo(expectedContamination);
     }
 
-    private Cluster pureCluster()
+    @Override
+    protected String [] getClusterMetricKeys()
     {
-        final Document d1 = documentWithTopic("test");
-        final Document d2 = documentWithTopic("test");
-        final Document d3 = documentWithTopic("test");
-        final Document d4 = documentWithTopic("test");
-        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
-        return cluster;
-    }
-
-    private Cluster partiallyContaminatedCluster()
-    {
-        final Document d1 = documentWithTopic("test1");
-        final Document d2 = documentWithTopic("test1");
-        final Document d3 = documentWithTopic("test1");
-        final Document d4 = documentWithTopic("test2");
-        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
-        return cluster;
-    }
-
-    private Cluster fullyContaminatedCluster()
-    {
-        final Document d1 = documentWithTopic("test1");
-        final Document d2 = documentWithTopic("test2");
-        final Document d3 = documentWithTopic("test3");
-        final Document d4 = documentWithTopic("test4");
-        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
-        return cluster;
-    }
-
-    private Document documentWithTopic(final String topic)
-    {
-        final Document document = new Document();
-        document.addField(Document.TOPIC, topic);
-        return document;
+        return new String []
+        {
+            ContaminationMetric.CONTAMINATION
+        };
     }
 }

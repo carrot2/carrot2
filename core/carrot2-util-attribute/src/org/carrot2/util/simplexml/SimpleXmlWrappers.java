@@ -189,6 +189,22 @@ public class SimpleXmlWrappers
 
     static synchronized <T> Class<? extends ISimpleXmlWrapper<?>> getWrapper(T value)
     {
-        return wrappers.get(value.getClass());
+        final Class<? extends ISimpleXmlWrapper<?>> clazz = wrappers.get(value.getClass());
+        
+        // Check for some common fallback cases
+        if (clazz == null)
+        {
+            if (value instanceof List)
+            {
+                return ListSimpleXmlWrapper.class;
+            }
+            
+            if (value instanceof Map)
+            {
+                return MapSimpleXmlWrapper.class;
+            }
+        }
+        
+        return clazz;
     }
 }

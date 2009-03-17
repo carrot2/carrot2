@@ -48,7 +48,7 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase
             5
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 0);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase
             5
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 0);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase
             9, 11
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 0);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase
 
         double previousThreshold = labelFilterProcessor.completeLabelFilter.labelOverrideThreshold;
         labelFilterProcessor.completeLabelFilter.labelOverrideThreshold = 0.3;
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 0);
         labelFilterProcessor.completeLabelFilter.labelOverrideThreshold = previousThreshold;
     }
 
@@ -103,7 +103,7 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase
             7, 9
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 0);
     }
 
     @Test
@@ -116,6 +116,6 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase
             3
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 0);
     }
 }

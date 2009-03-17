@@ -330,6 +330,8 @@ public class ProcessingResultTest
         document.addField("testInteger", 10);
         document.addField("testDouble", 10.3);
         document.addField("testBoolean", true);
+        document.id = 3; // assign an id so that the max id is larger than the list size
+        Document.assignDocumentIds(documents);
 
         final Cluster clusterA = new Cluster();
         clusterA.addPhrases("Label 1", "Label 2");

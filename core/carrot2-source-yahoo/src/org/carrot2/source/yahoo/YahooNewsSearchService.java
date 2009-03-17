@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -26,8 +25,8 @@ import org.carrot2.util.attribute.*;
  * Attributes of this class correspond to Yahoo's documentation (see links below).
  * 
  * @label Yahoo News Search Service
- * @see <a href="http://com3.devnet.re3.yahoo.com/search/news/V1/newsSearch.html">Yahoo
- *      News Search Documentation</a>
+ * @see <a href="http://com3.devnet.re3.yahoo.com/search/news/V1/newsSearch.html">Yahoo *
+ *      News Search Documentation< /a>
  */
 @Bindable(prefix = "YahooNewsSearchService")
 public final class YahooNewsSearchService extends YahooSearchService
@@ -38,24 +37,32 @@ public final class YahooNewsSearchService extends YahooSearchService
     public enum SortType
     {
         /**
-         * Sort results by relevance 
+         * Sort results by relevance
          */
-        RANK, 
-        
+        RANK,
+
         /**
-         * Put most recent results first. 
+         * Put most recent results first.
          */
         DATE;
-        
-        @Override
-        public String toString()
+
+        public String getApiOption()
         {
             switch (this)
             {
-                case RANK: return "rank";
-                case DATE: return "date";
-                default: throw new RuntimeException("Unknown constant: " + this.name());
+                case RANK:
+                    return "rank";
+                case DATE:
+                    return "date";
+                default:
+                    throw new RuntimeException("Unknown constant: " + this.name());
             }
+        }
+
+        @Override
+        public String toString()
+        {
+            return "by " + name().toLowerCase();
         }
     }
 
@@ -69,8 +76,7 @@ public final class YahooNewsSearchService extends YahooSearchService
     @Init
     @Input
     @Attribute
-    public String serviceURI =
-        "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
+    public String serviceURI = "http://search.yahooapis.com/NewsSearchService/V1/newsSearch";
 
     /**
      * A domain to restrict your searches to (e.g., www.yahoo.com).
@@ -86,7 +92,14 @@ public final class YahooNewsSearchService extends YahooSearchService
 
     /**
      * Results sort order.
+     * 
+     * @group Results sorting
+     * @label Sorting order
+     * @level Medium
      */
+    @Processing
+    @Input
+    @Attribute
     public SortType sort = SortType.RANK;
 
     /**
@@ -114,11 +127,11 @@ public final class YahooNewsSearchService extends YahooSearchService
         }
         if (sort != null)
         {
-            params.add(new NameValuePair("sort", sort.toString()));
+            params.add(new NameValuePair("sort", sort.getApiOption()));
         }
         if (type != null)
         {
-            params.add(new NameValuePair("type", type.toString()));
+            params.add(new NameValuePair("type", type.getApiOption()));
         }
 
         return params;

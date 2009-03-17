@@ -70,6 +70,8 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
             xml);
         processingAttributes.put(AttributeNames.RESULTS, 50);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "readAll"), 
+            false);
         final int documentCount = runQuery();
         assertEquals(50, documentCount);
         assertEquals("apple computer", processingAttributes.get(AttributeNames.QUERY));

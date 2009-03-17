@@ -48,22 +48,34 @@ public abstract class YahooSearchService
         /**
          * Returns results with all query terms.
          */
-        ALL,
+        ALL("search for all words"),
 
         /**
          * Returns results with one or more of the query terms.
          */
-        ANY,
+        ANY("search for any word"),
 
         /**
          * Returns results containing the query terms as a phrase.
          */
-        PHRASE;
+        PHRASE("search for phrase");
+
+        private String label;
+
+        private QueryType(String label)
+        {
+            this.label = label;
+        }
 
         @Override
         public String toString()
         {
-            return this.name().toLowerCase();
+            return label;
+        }
+
+        public String getApiOption()
+        {
+            return name().toLowerCase();
         }
     }
 
@@ -98,6 +110,7 @@ public abstract class YahooSearchService
      * Query words interpretation.
      * 
      * @group Search query
+     * @label Query interpretation
      * @level Medium
      */
     @Processing
@@ -183,8 +196,8 @@ public abstract class YahooSearchService
 
             if (logger.isDebugEnabled())
             {
-                logger.debug("Received, results: " + ser.results.size()
-                    + ", total: " + ser.getResultsTotal() + ", first: "
+                logger.debug("Received, results: " + ser.results.size() + ", total: "
+                    + ser.getResultsTotal() + ", first: "
                     + ser.metadata.get(FIRST_INDEX_KEY));
             }
 

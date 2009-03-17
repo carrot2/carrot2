@@ -8,7 +8,7 @@ Require-Bundle: org.eclipse.ui,
  org.carrot2.core,
  org.carrot2.util.common,
  org.carrot2.workbench.core
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  META-INF/,
  icons/,

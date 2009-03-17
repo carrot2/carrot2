@@ -21,6 +21,7 @@ import bak.pcj.DoubleComparator;
 import cern.colt.function.DoubleFunction;
 import cern.colt.list.DoubleArrayList;
 import cern.colt.list.IntArrayList;
+import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.jet.math.Functions;
 
@@ -370,5 +371,10 @@ public class MatrixUtils
         }
 
         return sums;
+    }
+    
+    public static double l1Norm(DoubleMatrix1D vector)
+    {
+        return vector.aggregate(Functions.plus, Functions.identity);
     }
 }

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -31,10 +30,11 @@ import org.codehaus.jackson.map.JsonNode;
 import org.codehaus.jackson.map.JsonTypeMapper;
 
 /**
- * A {@link IDocumentSource} fetching search results from Google JSON API. Please note that
- * this document source cannot deliver more than 32 search results.
+ * A {@link IDocumentSource} fetching search results from Google JSON API. Please note
+ * that this document source cannot deliver more than 32 search results.
  * 
- * @see <a href="http://code.google.com/apis/ajaxsearch/documentation/#fonje">Google AJAX API</a>
+ * @see <a href="http://code.google.com/apis/ajaxsearch/documentation/#fonje">Google AJAX
+ *      API< /a>
  */
 @Bindable(prefix = "GoogleDocumentSource")
 public class GoogleDocumentSource extends MultipageSearchEngine
@@ -53,7 +53,9 @@ public class GoogleDocumentSource extends MultipageSearchEngine
      * component in production environments. Instead, put the URL to your application
      * here.
      * 
+     * @group Postprocessing
      * @level Advanced
+     * @label Keep highlights
      */
     @Input
     @Processing
@@ -62,9 +64,11 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     public String referer = "http://www.carrot2.org";
 
     /**
-     * Keep query word highlighting. Google by default highlights query words in
-     * snippets using the bold HTML tag. Set this attribute to <code>true</code> to keep
-     * these highlights.
+     * Keep query word highlighting. Google by default highlights query words in snippets
+     * using the bold HTML tag. Set this attribute to <code>true</code> to keep these
+     * highlights.
+     * 
+     * @label Ke
      */
     @Input
     @Processing
@@ -75,7 +79,8 @@ public class GoogleDocumentSource extends MultipageSearchEngine
      * Google API Key. Please do not use the default key when deploying this component in
      * production environments. Instead, apply for your own key.
      * 
-     * @see <a href="http://code.google.com/apis/ajaxsearch/signup.html">Google AJAX signup</a>
+     * @see <a href="http://code.google.com/apis/ajaxsearch/signup.html">Google AJAX
+     *      signup< /a>
      */
     public String apiKey = "ABQIAAAA_XmITjrzoipJYoBApAgGJhS8yIvkL4-1sNwOJWkV7nbkjq_Z_BQW0-uzOh5lKXRtEXQDTGbzIEz06Q";
 
@@ -104,53 +109,71 @@ public class GoogleDocumentSource extends MultipageSearchEngine
             public SearchEngineResponse search() throws Exception
             {
                 final SearchEngineResponse response = new SearchEngineResponse();
-                final NameValuePair [] queryParams = new NameValuePair [] {
-                    new NameValuePair("v", "1.0"),
-                    new NameValuePair("rsz", "large"),
+                final NameValuePair [] queryParams = new NameValuePair []
+                {
+                    new NameValuePair("v", "1.0"), new NameValuePair("rsz", "large"),
                     new NameValuePair("start", Integer.toString(bucket.start)),
-                    new NameValuePair("key", apiKey),
-                    new NameValuePair("q", query),
+                    new NameValuePair("key", apiKey), new NameValuePair("q", query),
                 };
-                final Header [] headers = new Header [] {
+                final Header [] headers = new Header []
+                {
                     new Header("Referer", referer),
                 };
 
-                final HttpUtils.Response httpResp = HttpUtils.doGET(serviceUrl,
-                    Arrays.asList(queryParams), Arrays.asList(headers));
+                final HttpUtils.Response httpResp = HttpUtils.doGET(serviceUrl, Arrays
+                    .asList(queryParams), Arrays.asList(headers));
 
-                final JsonParser jsonParser = new JsonFactory().createJsonParser(httpResp.getPayloadAsStream());
+                final JsonParser jsonParser = new JsonFactory().createJsonParser(httpResp
+                    .getPayloadAsStream());
                 final JsonTypeMapper mapper = new JsonTypeMapper();
                 final JsonNode root = mapper.read(jsonParser);
-                final JsonNode responseData = root.getFieldValue("responseData");
-                final JsonNode resultsArray = responseData.getFieldValue("results");
-
-                if (resultsArray != null)
+                if (root == null)
                 {
-                    final Iterator<JsonNode> results = resultsArray.getElements();
-                    while (results.hasNext())
-                    {
-                        final JsonNode result = results.next();
-                        final Document document = new Document(result.getFieldValue(
-                            "titleNoFormatting").getTextValue(), result
-                            .getFieldValue("content").getTextValue(), result
-                            .getFieldValue("url").getTextValue());
-                        response.results.add(document);
-                    }
-
+                    return response;
                 }
-                final JsonNode cursor = responseData.getFieldValue("cursor")
-                    .getFieldValue("estimatedResultCount");
-                if (cursor != null)
+
+                final JsonNode responseData = root.getFieldValue("responseData");
+                if (responseData == null)
                 {
-                    response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY,
-                        Long.parseLong(cursor.getTextValue()));
+                    return response;
+                }
+
+                final JsonNode resultsArray = responseData.getFieldValue("results");
+                if (resultsArray == null)
+                {
+                    return response;
+                }
+
+                final Iterator<JsonNode> results = resultsArray.getElements();
+                while (results.hasNext())
+                {
+                    final JsonNode result = results.next();
+                    final Document document = new Document(result.getFieldValue(
+                        "titleNoFormatting").getTextValue(), result.getFieldValue(
+                        "content").getTextValue(), result.getFieldValue("url")
+                        .getTextValue());
+                    response.results.add(document);
+                }
+
+                final JsonNode cursor = responseData.getFieldValue("cursor");
+                if (cursor == null)
+                {
+                    return response;
+                }
+                
+                final JsonNode resultCount = cursor.getFieldValue("estimatedResultCount");
+                if (resultCount != null)
+                {
+                    response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, Long
+                        .parseLong(resultCount.getTextValue()));
                 }
                 else
                 {
                     response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, 0L);
                 }
 
-                response.metadata.put(SearchEngineResponse.COMPRESSION_KEY, httpResp.compression);
+                response.metadata.put(SearchEngineResponse.COMPRESSION_KEY,
+                    httpResp.compression);
 
                 return response;
             }

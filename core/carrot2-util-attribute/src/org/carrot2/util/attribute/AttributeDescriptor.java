@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -23,6 +22,7 @@ import org.carrot2.util.attribute.constraint.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Persist;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 /**
@@ -31,8 +31,8 @@ import com.google.common.collect.Lists;
  * human-readable {@link #metadata} about the attribute such as title, label or
  * description.
  * <p>
- * {@link AttributeDescriptor}s can be obtained from {@link BindableDescriptor}s, which
- * in turn are built by {@link BindableDescriptorBuilder#buildDescriptor(Object)};
+ * {@link AttributeDescriptor}s can be obtained from {@link BindableDescriptor}s, which in
+ * turn are built by {@link BindableDescriptorBuilder#buildDescriptor(Object)};
  */
 @Root(name = "attribute-descriptor")
 public class AttributeDescriptor
@@ -119,7 +119,7 @@ public class AttributeDescriptor
      * In case of Enum attributes, a list of allowed values, for serialization.
      */
     @ElementList(name = "allowed-values", entry = "value", required = false)
-    private ArrayList<String> allowedValues;
+    private ArrayList<AllowedValue> allowedValues;
 
     /**
      * 
@@ -147,7 +147,7 @@ public class AttributeDescriptor
      * @return annotation of the attribute or <code>null</code> is annotation of the
      *         provided type is not defined for the attribute
      */
-    public Annotation getAnnotation(Class<? extends Annotation> annotationClass)
+    public <T extends Annotation> T getAnnotation(Class<T> annotationClass)
     {
         return attributeField.getAnnotation(annotationClass);
     }
@@ -173,6 +173,24 @@ public class AttributeDescriptor
             .toArray(new Annotation [this.constraints.size()]);
 
         return ConstraintValidator.isMet(value, constraints).length == 0;
+    }
+
+    /**
+     * Transforms {@link AttributeDescriptor}s into their keys.
+     */
+    public static final class AttributeDescriptorToKey implements
+        Function<AttributeDescriptor, String>
+    {
+        public static final AttributeDescriptorToKey INSANCE = new AttributeDescriptorToKey();
+
+        private AttributeDescriptorToKey()
+        {
+        }
+
+        public String apply(AttributeDescriptor d)
+        {
+            return d.key;
+        }
     }
 
     @Override
@@ -207,7 +225,14 @@ public class AttributeDescriptor
             }
             else
             {
-                defaultValueString = defaultValue.toString();
+                if (defaultValue instanceof Enum)
+                {
+                    defaultValueString = ((Enum) defaultValue).name();
+                }
+                else
+                {
+                    defaultValueString = defaultValue.toString();
+                }
             }
         }
 
@@ -230,8 +255,23 @@ public class AttributeDescriptor
             final Enum<?> [] enumConstants = ((Class<Enum<?>>) type).getEnumConstants();
             for (Enum<?> object : enumConstants)
             {
-                allowedValues.add(object.name());
+                allowedValues.add(new AllowedValue(object.name(), object.toString()));
             }
+        }
+    }
+
+    private static class AllowedValue
+    {
+        @org.simpleframework.xml.Attribute
+        String label;
+
+        @Text
+        String value;
+
+        public AllowedValue(String value, String label)
+        {
+            this.value = value;
+            this.label = label;
         }
     }
 }

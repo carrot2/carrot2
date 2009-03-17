@@ -13,6 +13,8 @@
 
 package org.carrot2.source.boss;
 
+import org.carrot2.util.StringUtils;
+
 
 /**
  * Preferred image size for {@link BossImageSearchService#dimensions}.
@@ -31,5 +33,11 @@ public enum Dimensions
     Dimensions(String value)
     {
         this.parameterValue = value;
+    }
+
+    @Override
+    public String toString()
+    {
+        return StringUtils.identifierToHumanReadable(name());
     }
 }

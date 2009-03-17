@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -45,7 +44,7 @@ public class DocumentAssignerTest extends LabelFilterTestBase
     public void testEmpty()
     {
         final int [][] expectedDocumentIndices = new int [] [] {};
-        check(expectedDocumentIndices);
+        check(expectedDocumentIndices, -1);
     }
 
     @Test
@@ -66,7 +65,41 @@ public class DocumentAssignerTest extends LabelFilterTestBase
             }
         };
 
-        check(expectedDocumentIndices);
+        documentAssigner.minClusterSize = 1;
+        check(expectedDocumentIndices, -1);
+    }
+
+    @Test
+    public void testMinClusterSize()
+    {
+        createDocuments("test data", "test data", "data test . mining",
+            "data test . mining");
+
+        final int [][] expectedDocumentIndices = new int [] []
+        {
+            new int []
+            {
+                0, 1
+            },
+
+            new int []
+            {
+                0, 1
+            },
+
+            new int []
+            {
+                0, 1
+            },
+
+            new int []
+            {
+                0, 1
+            }
+        };
+
+        documentAssigner.minClusterSize = 2;
+        check(expectedDocumentIndices, 2);
     }
 
     @Test
@@ -88,7 +121,7 @@ public class DocumentAssignerTest extends LabelFilterTestBase
             }
         };
 
-        check(expectedDocumentIndices);
+        check(expectedDocumentIndices, 1);
     }
 
     @Test
@@ -115,7 +148,7 @@ public class DocumentAssignerTest extends LabelFilterTestBase
             }
         };
 
-        check(expectedDocumentIndices);
+        check(expectedDocumentIndices, 2);
     }
 
     @Test
@@ -152,16 +185,18 @@ public class DocumentAssignerTest extends LabelFilterTestBase
             }
         };
 
-        check(expectedDocumentIndices);
+        check(expectedDocumentIndices, 4);
     }
 
-    private void check(int [][] expectedDocumentIndices)
+    private void check(int [][] expectedDocumentIndices, int expectedFirstPhraseIndex)
     {
         runPreprocessing();
         documentAssigner.assign(context);
 
+        assertThat(context.allLabels.firstPhraseIndex).as("allLabels.firstPhraseIndex")
+            .isEqualTo(expectedFirstPhraseIndex);
         assertThat(context.allLabels.documentIndices).as("allLabels.documentIndices")
-            .hasSize(expectedDocumentIndices.length);
+        .hasSize(expectedDocumentIndices.length);
         for (int i = 0; i < expectedDocumentIndices.length; i++)
         {
             assertThat(context.allLabels.documentIndices[i].toArray()).as(

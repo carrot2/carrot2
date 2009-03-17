@@ -88,4 +88,16 @@ public final class FileResource implements IResource
     {
         return file;
     }
+    
+    public static FileResource valueOf(String path)
+    {
+        // Return non-null value only if the string is a path to some existing file.
+        final File file = new File(path);
+        if (!file.exists())
+        {
+            return null;
+        }
+        
+        return new FileResource(file);
+    }
 }

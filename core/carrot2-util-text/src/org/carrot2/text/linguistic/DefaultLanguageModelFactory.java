@@ -32,9 +32,6 @@ import com.google.common.collect.*;
 @Bindable(prefix = "DefaultLanguageModelFactory")
 public final class DefaultLanguageModelFactory implements ILanguageModelFactory
 {
-    /**
-     * The default language. This language is returned from {@link #getCurrentLanguage()}.
-     */
     @Required
     @Processing
     @Input

@@ -19,18 +19,11 @@
    </license>
 
    <requires>
-      <import feature="org.eclipse.rcp" version="3.3.1.R33x_r20070802-8y8eE8sEV3Fz0z0GlHJrXvTAUS" match="compatible"/>
+      <import feature="org.eclipse.rcp" version="3.4.1" match="compatible"/>
    </requires>
 
    <plugin
          id="org.carrot2.workbench.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.bea.xml"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -215,7 +208,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.resources.win32"
+         id="org.eclipse.core.resources"
          os="win32"
          download-size="0"
          install-size="0"
@@ -419,13 +412,6 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.tartarus.snowball"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="bak.pcj"
          download-size="0"
          install-size="0"
@@ -616,5 +602,13 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="org.codehaus.woodstox"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+	 unpack="false"
+	 />
 
 </feature>

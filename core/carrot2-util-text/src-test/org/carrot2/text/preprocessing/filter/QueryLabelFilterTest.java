@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -79,12 +78,18 @@ public class QueryLabelFilterTest extends LabelFilterTestBase
             0, 4, 5
         };
 
-        check("Query word", expectedLabelsFeatureIndex);
+        check("Query word", expectedLabelsFeatureIndex, 1);
     }
 
     private void check(String query, int [] expectedLabelsFeatureIndex)
     {
+        check(query, expectedLabelsFeatureIndex, -1);
+    }
+
+    private void check(String query, int [] expectedLabelsFeatureIndex,
+        int expectedFirstPhraseIndex)
+    {
         createPreprocessingContext(query);
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, expectedFirstPhraseIndex);
     }
 }

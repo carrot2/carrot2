@@ -1,9 +1,8 @@
-# Eclipse installation with PDE (propably this installation youre normally working on while developing the workbench/carrot2 3.0
-eclipse.home                        =   D:/eclipse-3.3-PDE
+# Note the usual layout of folders below -- they have the distribution version name
+# and an /eclipse *subfolder*.
 
-# Target platform, to build Workbench against, should be the same one as is set in your eclipse.home installation
-# This directory should have eclipse/ directory inside it! Not plugins/ and features/!
-target.platform                     =   D:/magisterka/target3.3.1-Platform/eclipse_no_source
+target.platform = /your-eclipse-bundles/3.4.1SR1
+eclipse.home = ${target.platform}/eclipse
 
 # Platform, windowing system and architecture on which Workbench JUnit tests are run.
 # Use the usual os, ws and arch strings Eclipse normally uses, see below for examples.

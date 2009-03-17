@@ -1,6 +1,10 @@
 <ehcache>
     <diskStore path="java.io.tmpdir" />
 
+	<!-- 
+	We are using in-memory caches only because we cannot guarantee that objects inside
+	attributes map are serializable.  
+	-->
     <defaultCache
             maxElementsInMemory="1000"
             eternal="false"

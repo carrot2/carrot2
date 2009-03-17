@@ -12,7 +12,10 @@
 
 package org.carrot2.text.linguistic;
 
-import org.tartarus.snowball.SnowballStemmer;
+import org.apache.log4j.Logger;
+import org.carrot2.util.ReflectionUtils;
+import org.tartarus.snowball.SnowballProgram;
+
 
 /**
  * Factory of {@link IStemmer} implementations from the <code>snowball</code> project.
@@ -24,9 +27,9 @@ final class SnowballStemmerFactory
      */
     private static class SnowballStemmerAdapter implements IStemmer
     {
-        private final SnowballStemmer snowballStemmer;
+        private final SnowballProgram snowballStemmer;
 
-        public SnowballStemmerAdapter(SnowballStemmer snowballStemmer)
+        public SnowballStemmerAdapter(SnowballProgram snowballStemmer)
         {
             this.snowballStemmer = snowballStemmer;
         }
@@ -51,20 +54,34 @@ final class SnowballStemmerFactory
      */
     public static IStemmer createStemmer(LanguageCode language)
     {
-        final String stemmerClazzName = "org.tartarus.snowball.ext."
-            + language.name().toLowerCase() + "Stemmer";
-
+        final String stemmerClazzName = getStemmerClassName(language);
+        
         try
         {
-            final Class<? extends SnowballStemmer> stemmerClazz = Thread.currentThread()
-            .getContextClassLoader().loadClass(stemmerClazzName).asSubclass(
-                SnowballStemmer.class);
-            
+            Class<? extends SnowballProgram> stemmerClazz = 
+                ReflectionUtils.classForName(stemmerClazzName)
+                .asSubclass(SnowballProgram.class);
+
             return new SnowballStemmerAdapter(stemmerClazz.newInstance());
         }
         catch (Throwable e)
         {
+            Logger.getLogger(SnowballStemmerFactory.class)
+                .warn("No Snowball stemmer class for: " + language.name());
+
             return new IdentityStemmer();
         }
+    }
+
+    /**
+     * Construct stemmer class name from a given language.
+     */
+    private static String getStemmerClassName(LanguageCode language)
+    {
+        final String name = language.name();
+        final String languageName = Character.toUpperCase(
+            name.charAt(0)) + name.substring(1).toLowerCase();
+        
+        return "org.tartarus.snowball.ext." + languageName + "Stemmer";
     }
 }

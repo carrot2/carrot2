@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,13 +15,14 @@ package org.carrot2.clustering.lingo;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
+import org.carrot2.text.vsm.TfTermWeighting;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test cases for cluster document assignment in {@link ClusterBuilder}.
  */
-public class ClusterDocumentAssignerTest extends TermDocumentMatrixBuilderTestBase
+public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBase
 {
     /** Matrix reducer needed for test */
     private TermDocumentMatrixReducer reducer;
@@ -34,6 +34,7 @@ public class ClusterDocumentAssignerTest extends TermDocumentMatrixBuilderTestBa
     public void setUpClusterLabelBuilder()
     {
         clusterBuilder = new ClusterBuilder();
+        clusterBuilder.labelAssigner = new SimpleLabelAssigner();
         reducer = new TermDocumentMatrixReducer();
         reducer.factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
         reducer.desiredClusterCountBase = 25;
@@ -49,23 +50,23 @@ public class ClusterDocumentAssignerTest extends TermDocumentMatrixBuilderTestBa
     public void testNoPhrases()
     {
         reducer.desiredClusterCountBase = 30;
-        createDocuments("", "aa . aa", "", "bb . bb", "", "cc . cc");
+        createDocuments("", "aa . bb", "", "cc . bb", "", "cc . aa");
 
         final int [][] expectedDocumentIndices = new int [] []
         {
             new int []
             {
-                0
+                0, 2
             },
 
             new int []
             {
-                2
+                0, 1
             },
 
             new int []
             {
-                1
+                1, 2
             }
         };
 
@@ -92,7 +93,7 @@ public class ClusterDocumentAssignerTest extends TermDocumentMatrixBuilderTestBa
     @Test
     public void testSinglePhraseSingleWords()
     {
-        createDocuments("aa bb", "aa bb", "cc", "cc", "aa bb", "aa bb");
+        createDocuments("aa bb", "aa bb", "cc", "cc", "aa bb", "aa bb . cc");
         reducer.desiredClusterCountBase = 15;
         clusterBuilder.phraseLabelBoost = 0.3;
 
@@ -105,7 +106,7 @@ public class ClusterDocumentAssignerTest extends TermDocumentMatrixBuilderTestBa
 
             new int []
             {
-                1
+                1, 2
             },
 
         };
@@ -116,9 +117,9 @@ public class ClusterDocumentAssignerTest extends TermDocumentMatrixBuilderTestBa
     private void check(int [][] expectedDocumentIndices)
     {
         buildTermDocumentMatrix();
-        
+
         reducer.reduce(lingoContext);
-        
+
         final TfTermWeighting termWeighting = new TfTermWeighting();
         clusterBuilder.buildLabels(lingoContext, termWeighting);
         clusterBuilder.assignDocuments(lingoContext);

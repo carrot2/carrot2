@@ -34,3 +34,11 @@
 #clusters li.branch-last > a > span.tree {
   background-image: url('../img/tree-branch-last.gif'); /** sprite-ref: vert; */
 }
+
+#clusters li.leaf-last > a > span.tree {
+  height: 22px;
+}
+
+#clusters li.branch-last > a > span.tree {
+  height: 22px;
+}

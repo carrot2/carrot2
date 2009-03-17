@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -29,6 +28,8 @@ public class CharArrayComparators
         {
             if (a1 == null)
             {
+                if (a2 == null) return 0;
+
                 return 1;
             }
 
@@ -41,10 +42,12 @@ public class CharArrayComparators
             final int l2 = a2.length;
             final int n = l1 < l2 ? l1 : l2;
 
+            // Quiet assumption that the numbers here won't cause an overflow.
             for (int i = 0; i < n; i++)
             {
-                char c = Character.toLowerCase(a1[i]);
-                char d = Character.toLowerCase(a2[i]);
+                // Use JDK 1.5+ full codepoint method.
+                final int c = Character.toLowerCase((int) a1[i]);
+                final int d = Character.toLowerCase((int) a2[i]);
                 if (c != d)
                 {
                     return c - d;
@@ -64,6 +67,8 @@ public class CharArrayComparators
         {
             if (a1 == null)
             {
+                if (a2 == null) return 0;
+                
                 return 1;
             }
 
@@ -76,10 +81,11 @@ public class CharArrayComparators
             final int l2 = a2.length;
             final int n = l1 < l2 ? l1 : l2;
 
+            // Quiet assumption that the numbers here won't cause an overflow.
             for (int i = 0; i < n; i++)
             {
-                char a1I = a1[i];
-                char a2I = a2[i];
+                final char a1I = a1[i];
+                final char a2I = a2[i];
 
                 if (a1I != a2I)
                 {
@@ -101,7 +107,8 @@ public class CharArrayComparators
      * <li>Strings are first compared in case-insensitive mode</li>
      * <li>Finally, strings are compared in case-sensitive mode</li>
      * </ol>
-     * This comparator does not provide a lexicographic order, which makes it much faster.
+     * This comparator does not provide a lexicographic order, which makes it much faster, but
+     * not suitable for general purpose sorting.
      */
     public static final Comparator<char []> NORMALIZING_CHAR_ARRAY_COMPARATOR = new Comparator<char []>()
     {
@@ -109,6 +116,8 @@ public class CharArrayComparators
         {
             if (a1 == null)
             {
+                if (a2 == null) return 0;
+
                 return 1;
             }
 
@@ -120,20 +129,22 @@ public class CharArrayComparators
             final int l1 = a1.length;
             final int l2 = a2.length;
 
-            // For those who might wonder: the condition below is perfectly ok here. It is
-            // used to calculate word occurrence statistics, which is essentially a "count
-            // unique strings by sorting" problem. Therefore, the semantic meaning of the
-            // order produced by this comparator doesn't matter at all as long as it: a)
-            // groups equal (case sensitive) strings together, b) groups equal (case
-            // insensitive) strings into one block, c) null string is always
-            // greater than a non-null string. See tests for this comparator
-            // for examples.
-            //
-            // In comparison-based sorting algorithms crucial is the speed of
-            // comparisons, so declaring that e.g. shorter strings are always
-            // smaller (regardless of contents) saves us calls to Character.toLowerCase(),
-            // which are very costly. For CaseNormalizer it doesn't matter at all,
-            // and makes sorting way faster.
+            /*
+             * For those who might wonder: the condition below is perfectly ok here. It is
+             * used to calculate word occurrence statistics, which is essentially a "count
+             * unique strings by sorting" problem. Therefore, the semantic meaning of the
+             * order produced by this comparator doesn't matter at all as long as it: a)
+             * groups equal (case sensitive) strings together, b) groups equal (case
+             * insensitive) strings into one block, c) null string is always greater than
+             * a non-null string. See tests for this comparator for examples.
+             *  
+             * In comparison-based sorting algorithms crucial is the speed of comparisons,
+             * so declaring that e.g. shorter strings are always smaller (regardless of
+             * contents) saves us calls to Character.toLowerCase(), which are very costly.
+             * For CaseNormalizer it doesn't matter at all, and makes sorting way faster.
+             */
+
+            // Quiet assumption that the numbers here won't cause an overflow.
 
             // Not crucial, but speeds things up
             if (l1 != l2)
@@ -144,8 +155,9 @@ public class CharArrayComparators
             // Compare whole strings in case insensitive mode first
             for (int i = 0; i < l1; i++)
             {
-                final char c = Character.toLowerCase(a1[i]);
-                final char d = Character.toLowerCase(a2[i]);
+                // Use JDK 1.5+ full codepoint method.
+                final int c = Character.toLowerCase((int) a1[i]);
+                final int d = Character.toLowerCase((int) a2[i]);
                 if (c != d)
                 {
                     return c - d;

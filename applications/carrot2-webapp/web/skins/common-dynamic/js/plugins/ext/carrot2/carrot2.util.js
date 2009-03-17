@@ -61,4 +61,19 @@
   jQuery.modern = function(string) {
     return !jQuery.browser.msie || parseInt(jQuery.browser.version) > 6; 
   }
+  
+  /**
+   * Converts all selected checkboxes into ones submitted as a hidden field.
+   */
+  jQuery.fn.submitCheckboxAsHidden = function() {
+    return this.filter(":checkbox").each(function() {
+      var name = this.name;
+      var $hidden = $("<input name='" + name + "' type='hidden' value='' />");
+      $(this).removeAttr("name").after($hidden).change(updateHidden).click(updateHidden).change();
+      
+      function updateHidden() {
+        $hidden.val(this.checked ? 'true' : 'false');
+      }
+    }).end();
+  }
 })(jQuery);

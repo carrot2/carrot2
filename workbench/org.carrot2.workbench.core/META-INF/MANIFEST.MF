@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.carrot2.util.attribute,
  org.carrot2.core,
  org.apache.velocity
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: org.carrot2.workbench.core,
  org.carrot2.workbench.core.helpers,

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,12 +14,14 @@ package org.carrot2.examples.clustering;
 
 import java.util.*;
 
-import org.carrot2.clustering.lingo.LinearTfIdfTermWeighting;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ExampleUtils;
+import org.carrot2.text.vsm.LinearTfIdfTermWeighting;
+import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.util.attribute.AttributeUtils;
 
 /**
@@ -42,11 +43,7 @@ public class ClusteringDocumentList
          * a unique URL (identifier), a title and a snippet (document content), but none
          * of these are obligatory.
          */
-        final List<Document> documents = new ArrayList<Document>();
-        for (final String [] element : documentContent)
-        {
-            documents.add(new Document(element[0], "", element[1]));
-        }
+        final List<Document> documents = ExampleUtils.exampleDocuments;
 
         /*
          * We are clustering using a simple controller (no caching, one-time shot).
@@ -69,7 +66,6 @@ public class ClusteringDocumentList
          */
         ProcessingResult result = controller.process(attributes,
             ByUrlClusteringAlgorithm.class);
-
         ExampleUtils.displayResults(result);
 
         /*
@@ -78,19 +74,18 @@ public class ClusteringDocumentList
          * set an algorithm parameter for term weighting to a non-default value to show
          * how it is done.
          */
-        final Class<?> algorithm = LingoClusteringAlgorithm.class;
-
-        attributes.put(AttributeUtils.getKey(algorithm, "termWeighting"),
-            LinearTfIdfTermWeighting.class);
+        Class<?> algorithm = LingoClusteringAlgorithm.class;
+        attributes.clear();
+        attributes.put(AttributeNames.DOCUMENTS, documents);
+        attributes.put(AttributeUtils.getKey(TermDocumentMatrixBuilder.class,
+            "termWeighting"), LinearTfIdfTermWeighting.class);
 
         /*
          * If you know what query generated the documents you're about to cluster, pass
          * the query to the algorithm, which will usually increase clustering quality.
          */
         attributes.put(AttributeNames.QUERY, "data mining");
-
         result = controller.process(attributes, algorithm);
-
         ExampleUtils.displayResults(result);
 
         /*
@@ -101,150 +96,17 @@ public class ClusteringDocumentList
          */
         Boolean nativeUsed = (Boolean) result.getAttributes().get(
             AttributeUtils.getKey(algorithm, "nativeMatrixUsed"));
-
         System.out.println("Native libraries used: " + nativeUsed);
+        
+        /*
+         * Finally, we'll cluster the same documents with another text clustering 
+         * algorithm: Suffix Tree Clustering (STC).
+         */
+        algorithm = STCClusteringAlgorithm.class;
+        attributes.clear();
+        attributes.put(AttributeNames.QUERY, "data mining");
+        attributes.put(AttributeNames.DOCUMENTS, documents);
+        result = controller.process(attributes, algorithm);
+        ExampleUtils.displayResults(result);
     }
-
-    /**
-     * Documents to cluster.
-     */
-    private static final String [][] documentContent = new String [] []
-    {
-        {
-            "Data Mining - Wikipedia", "http://en.wikipedia.org/wiki/Data_mining"
-        },
-        {
-            "KD Nuggets", "http://www.kdnuggets.com/"
-        },
-        {
-            "The Data Mine", "http://www.the-data-mine.com/"
-        },
-        {
-            "DMG", "http://www.dmg.org/"
-        },
-        {
-            "Two Crows: Data mining glossary", "http://www.twocrows.com/glossary.htm"
-        },
-        {
-            "Jeff Ullman's Data Mining Lecture Notes",
-            "http://www-db.stanford.edu/~ullman/mining/mining.html"
-        },
-        {
-            "Thearling.com", "http://www.thearling.com/"
-        },
-        {
-            "Data Mining", "http://www.eco.utexas.edu/~norman/BUS.FOR/course.mat/Alex"
-        },
-        {
-            "CCSU - Data Mining", "http://www.ccsu.edu/datamining/resources.html"
-        },
-        {
-            "Data Mining: Practical Machine Learning Tools and Techniques",
-            "http://www.cs.waikato.ac.nz/~ml/weka/book.html"
-        },
-        {
-            "Data Mining - Monografias.com",
-            "http://www.monografias.com/trabajos/datamining/datamining.shtml"
-        },
-        {
-            "Amazon.com: Data Mining: Books: Pieter Adriaans,Dolf Zantinge",
-            "http://www.amazon.com/exec/obidos/tg/detail/-/0201403803?v=glance"
-        },
-        {
-            "DMReview", "http://www.dmreview.com/"
-        },
-        {
-            "Data Mining @ CCSU", "http://www.ccsu.edu/datamining"
-        },
-        {
-            "What is Data Mining", "http://www.megaputer.com/dm/dm101.php3"
-        },
-        {
-            "Electronic Statistics Textbook: Data Mining Techniques",
-            "http://www.statsoft.com/textbook/stdatmin.html"
-        },
-        {
-            "data mining - a definition from Whatis.com - see also: data miner, data analysis",
-            "http://searchcrm.techtarget.com/sDefinition/0,,sid11_gci211901,00.html"
-        },
-        {
-            "St@tServ - About Data Mining", "http://www.statserv.com/datamining.html"
-        },
-        {
-            "DATA MINING 2005", "http://www.wessex.ac.uk/conferences/2005/data05"
-        },
-        {
-            "Investor Home - Data Mining", "http://www.investorhome.com/mining.htm"
-        },
-        {
-            "SAS | Data Mining and Text Mining",
-            "http://www.sas.com/technologies/data_mining"
-        },
-        {
-            "Data Mining Student Notes, QUB",
-            "http://www.pcc.qub.ac.uk/tec/courses/datamining/stu_notes/dm_book_1.html"
-        },
-        {
-            "Data Mining", "http://datamining.typepad.com/data_mining"
-        },
-        {
-            "Two Crows Corporation", "http://www.twocrows.com/"
-        },
-        {
-            "Statistical Data Mining Tutorials", "http://www.autonlab.org/tutorials"
-        },
-        {
-            "Data Mining: An Introduction",
-            "http://databases.about.com/library/weekly/aa100700a.htm"
-        },
-        {
-            "Data Mining Project", "http://research.microsoft.com/dmx/datamining"
-        },
-        {
-            "An Introduction to Data Mining",
-            "http://www.thearling.com/text/dmwhite/dmwhite.htm"
-        },
-        {
-            "Untangling Text Data Mining",
-            "http://www.sims.berkeley.edu/~hearst/papers/acl99/acl99-tdm.html"
-        },
-        {
-            "Data Mining Technologies", "http://www.data-mine.com/"
-        },
-        {
-            "SQL Server Data Mining", "http://www.sqlserverdatamining.com/"
-        },
-        {
-            "Data Warehousing Information Center", "http://www.dwinfocenter.org/"
-        },
-        {
-            "ITworld.com - Data mining",
-            "http://www.itworld.com/App/110/050805datamining"
-        },
-        {
-            "IBM Research | Almaden Research Center | Computer Science",
-            "http://www.almaden.ibm.com/cs/quest"
-        },
-        {
-            "Data Mining and Discovery", "http://www.aaai.org/AITopics/html/mining.html"
-        },
-        {
-            "Data Mining: An Overview", "http://www.fas.org/irp/crs/RL31798.pdf"
-        },
-        {
-            "Data Mining", "http://www.gr-fx.com/graf-fx.htm"
-        },
-        {
-            "Data Mining Benchmarking Association (DMBA)",
-            "http://www.dmbenchmarking.com/"
-        },
-        {
-            "Data Mining",
-            "http://www.computerworld.com/databasetopics/businessintelligence/datamining"
-        },
-        {
-            "National Center for Data Mining (NCDM) - University of Illinois at Chicago",
-            "http://www.ncdm.uic.edu/"
-        },
-    };
 }

@@ -17,6 +17,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.factorization.*;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
+import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -79,17 +80,18 @@ public class TermDocumentMatrixReducer
     @Processing
     @Attribute
     @IntRange(min = 2, max = 100)
-    public int desiredClusterCountBase = 40;
+    public int desiredClusterCountBase = 30;
 
     /**
      * Performs the reduction.
      */
     void reduce(LingoProcessingContext context)
     {
-        if (context.tdMatrix.columns() == 0 || context.tdMatrix.rows() == 0)
+        final VectorSpaceModelContext vsmContext = context.vsmContext;
+        if (vsmContext.termDocumentMatrix.columns() == 0 || vsmContext.termDocumentMatrix.rows() == 0)
         {
-            context.baseMatrix = DoubleFactory2D.dense.make(context.tdMatrix.rows(),
-                context.tdMatrix.columns());
+            context.baseMatrix = DoubleFactory2D.dense.make(vsmContext.termDocumentMatrix.rows(),
+                vsmContext.termDocumentMatrix.columns());
             return;
         }
 
@@ -99,11 +101,11 @@ public class TermDocumentMatrixReducer
                 .setK(getDesiredClusterCount(context));
             IterationNumberGuesser.setEstimatedIterationsNumber(
                 (IterativeMatrixFactorizationFactory) factorizationFactory,
-                context.tdMatrix, factorizationQuality);
+                vsmContext.termDocumentMatrix, factorizationQuality);
         }
 
-        MatrixUtils.normalizeColumnL2(context.tdMatrix, null);
-        context.baseMatrix = factorizationFactory.factorize(context.tdMatrix).getU();
+        MatrixUtils.normalizeColumnL2(vsmContext.termDocumentMatrix, null);
+        context.baseMatrix = factorizationFactory.factorize(vsmContext.termDocumentMatrix).getU();
 
         if (!(factorizationFactory instanceof IterativeMatrixFactorizationFactory)
             && context.baseMatrix.columns() > desiredClusterCountBase)

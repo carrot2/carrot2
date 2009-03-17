@@ -56,8 +56,7 @@ public final class BossImageSearchService extends BossSearchService
     public String serviceURI = "http://boss.yahooapis.com/ysearch/images/v1/${query}";
 
     /**
-     * Whether or not to activate the Offensive Content Reduction filter. If set to yes,
-     * content marked as offensive is omitted from results.
+     * If enabled, excludes offensive content from the results.
      * 
      * @see <a
      *      href="http://developer.yahoo.com/search/boss/boss_guide/Submit_Image_Queries.html">API

@@ -1,13 +1,32 @@
 	<div class="snippet">
 	    <span class="id"> [$document.Id]</span>
-	    <a href="$esc.html(${document.getField("url")})">
-	    	<b>$esc.html($document.getField("title"))</b></a>
-	    <br>
-	    #if ($document.getField("thumbnail-url") && $document.getField("thumbnail-url") != "")
-	        <img class="t" src="$esc.html($document.getField("thumbnail-url"))">
+	    
+	    #set ($title = ${document.getField("title")})
+	    #set ($hasTitle = ($title && $title != ""))
+
+		#set ($snippet = ${document.getField("snippet")})
+	    #set ($hasSnippet = ($snippet && $snippet != ""))
+
+		#set ($url = ${document.getField("url")})
+	    #set ($hasURL = ($url && $url != ""))
+
+		#set ($thumbnail = ${document.getField("thumbnail-url")})
+	    #set ($hasThumbnail = ($thumbnail && $thumbnail != ""))
+
+		#if ($hasURL)   <a href="$esc.html($url)"> #end
+	    	#if ($hasTitle) <b>$esc.html($title)</b> #end
+	    #if ($hasURL)   </a> #end
+
+	    #if ($hasThumbnail) <img class="t" src="$esc.html($thumbnail)"> #end
+	    #if ($hasSnippet)
+	        #if ($hasTitle) <br> #end	    
+	        $stringutils.abbreviate($esc.html($snippet), 280)
 	    #end
-	    #if ($document.getField("snippet") && $document.getField("snippet") != "")
-	        $stringutils.abbreviate($esc.html($document.getField("snippet")), 280)<br>
-	    #end
-	    <span class="du">$esc.html(${document.getField("url")})</span><br><br>
+
+		#if ($hasURL)
+			#if ($hasSnippet || $hasTitle) <br> #end 
+			<span class="du">$esc.html($url)</span>
+		#end
+
+		<br><br>
 	</div>

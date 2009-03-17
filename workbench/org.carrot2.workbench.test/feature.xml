@@ -25,7 +25,7 @@
          version="0.0.0"/>
 
    <requires>
-      <import feature="org.carrot2.workbench" version="1.0.0"/>
+      <import feature="org.carrot2.workbench" version="3.0.0" match="compatible" />
    </requires>
 
    <plugin

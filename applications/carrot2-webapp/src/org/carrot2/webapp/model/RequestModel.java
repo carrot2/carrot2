@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -108,7 +107,7 @@ public class RequestModel
 
         otherParameters = remainingHttpParameters;
         otherParametersToSerialize = MapUtils.asHashMap(SimpleXmlWrappers
-            .wrap(remainingHttpParameters));
+            .wrap(otherParameters));
 
         this.cookies = MapUtils.asHashMap(SimpleXmlWrappers.wrap(cookies));
 

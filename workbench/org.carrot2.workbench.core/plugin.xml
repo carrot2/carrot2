@@ -38,16 +38,16 @@
                value="Carrot2 Workbench">
          </property>
          <property
+               name="aboutText"
+               value="%productBlurb">
+         </property>
+         <property
                name="windowImages"
                value="icons/carrot2-16x16.gif,icons/carrot2-32x32.gif">
          </property>
          <property
-               name="aboutText"
-               value="Carrot2 Workbench">
-         </property>
-         <property
                name="aboutImage"
-               value="icons/product-logo.png">
+               value="icons/product_logo.png">
          </property>
          <property
                name="preferenceCustomization"

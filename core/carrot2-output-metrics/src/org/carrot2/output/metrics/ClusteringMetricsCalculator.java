@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -33,6 +32,11 @@ public class ClusteringMetricsCalculator extends ProcessingComponentBase
      */
     public CoverageMetric coverage = new CoverageMetric();
 
+    /**
+     * Precision and recall based metrics.
+     */
+    public PrecisionRecallMetric precisionRecall = new PrecisionRecallMetric();
+
     @Override
     public void process() throws ProcessingException
     {
@@ -44,6 +48,11 @@ public class ClusteringMetricsCalculator extends ProcessingComponentBase
         if (coverage.isEnabled())
         {
             coverage.calculate();
+        }
+
+        if (precisionRecall.isEnabled())
+        {
+            precisionRecall.calculate();
         }
     }
 }

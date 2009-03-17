@@ -68,4 +68,25 @@ public class UserAgentUtilsTest
         assertFalse(UserAgentUtils
             .isModernBrowser("Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)"));
     }
+    
+    @Test
+    public void testFirefly()
+    {
+        assertFalse(UserAgentUtils
+            .isModernBrowser("Firefly/1.0 (compatible; Mozilla 4.0; MSIE 5.5)"));
+    }
+    
+    @Test
+    public void testLetterInNumber()
+    {
+        assertFalse(UserAgentUtils
+            .isModernBrowser("Firefly/1.0 (compatible; Mozilla 4.0; MSIE 5.5d)"));
+    }
+    
+    @Test
+    public void testIENoNumber()
+    {
+        assertFalse(UserAgentUtils
+            .isModernBrowser("Firefly/1.0 (compatible; Mozilla 4.0; MSIE not at all)"));
+    }
 }

@@ -552,11 +552,81 @@
     </section>
     
     <section xml:id="section.integration.setting-up-carrot2-sources-in-eclipse">
-      <title>Setting up a &C2; source code in Eclipse</title>
+      <title>Setting up &C2; source code in Eclipse</title>
       
       <para>
-        &NA;
+        &C2; source code can be easily set up in Eclipse IDE. The description below assumes
+        you are using Eclipse IDE version 3.4 or newer.  
       </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Check out &C2; source code, e.g. from the following Subversion URL:
+          </para>
+          
+<programlisting><![CDATA[https://carrot2.svn.sourceforge.net/svnroot/carrot2/trunk]]></programlisting>          
+        </listitem>
+        
+        <listitem>
+          <para>
+            In the <guilabel>Package Explorer</guilabel> view in Eclipse, choose 
+            <guilabel>Import...</guilabel> (see <xref linkend="figure.eclipse-import" />),
+            select <guilabel>General > Existing Projects into Workspace</guilabel> and click
+            <guilabel>Next</guilabel>.
+          </para>
+          
+          <figure xml:id="figure.eclipse-import">
+            <title>Eclipse &C2; project import step 1</title>
+            <mediaobject>
+              <imageobject role="html">
+                <imagedata format="GIF" fileref="img/eclipse-import.gif" />
+              </imageobject>
+            </mediaobject>  
+          </figure>        
+        </listitem>        
+        
+        <listitem>
+          <para>
+            In the <guilabel>Import projects</guilabel> dialog provide your local
+            &C2; checkout directory in the <guilabel>Select root directory</guilabel>
+            field. Uncheck the <filename>org.carrot2.antlib</filename> project 
+            (see <xref linkend="figure.eclipse-import-projects" />) and click 
+            <guilabel>Finish</guilabel>.
+          </para>
+          
+          <figure xml:id="figure.eclipse-import-projects">
+            <title>Eclipse &C2; project import step 2</title>
+            <mediaobject>
+              <imageobject role="html">
+                <imagedata format="PNG" fileref="img/eclipse-import-projects.png" />
+              </imageobject>
+            </mediaobject>  
+          </figure>        
+        </listitem>        
+
+        <listitem>
+          <para>
+            All &C2; source code should compile without errors. If it does not:
+          </para>
+          
+          <itemizedlist>
+            <listitem>
+              <para>
+                Make sure your Eclipse's Java compiler compliance level is set to
+                1.5 or higher (<guilabel>Preferences > Java > Compiler</guilabel>). 
+              </para>
+            </listitem>
+            
+            <listitem>
+              <para>
+                Make sure your Eclipse's workspace encoding is set to UTF-8
+                (<guilabel>Preferences > General > Workspace > Text file encoding</guilabel>). 
+              </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </orderedlist>  
     </section>
     
     <section xml:id="section.integration.calling-carrot2-from-non-java-software">

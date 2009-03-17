@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.*;
 import java.util.List;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
@@ -172,8 +173,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private Image sourceImage;
 
     /**
-     * If <code>true</code>, then the editor's {@link #searchResult} contain a stale
-     * value with regard to its input.
+     * If <code>true</code>, then the editor's {@link #searchResult} contain a stale value
+     * with regard to its input.
      */
     private boolean dirty = true;
 
@@ -191,8 +192,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private IMemento state;
 
     /**
-     * {@link SearchEditor} forwards its selection provider methods to this component ({@link SearchEditorSections#CLUSTERS}
-     * panel).
+     * {@link SearchEditor} forwards its selection provider methods to this component (
+     * {@link SearchEditorSections#CLUSTERS} panel).
      */
     private IPostSelectionProvider selectionProvider;
 
@@ -350,8 +351,11 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private void updatePartHeaders()
     {
-        final String full = getFullInputTitle(getSearchResult().getInput());
-        final String abbreviated = getAbbreviatedInputTitle(getSearchResult().getInput());
+        final SearchResult searchResult = getSearchResult();
+        final SearchInput input = getSearchResult().getInput();
+
+        final String full = getFullInputTitle(searchResult);
+        final String abbreviated = getAbbreviatedInputTitle(searchResult);
 
         setPartName(abbreviated);
         setTitleToolTip(full);
@@ -359,16 +363,16 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         /*
          * Add the number of documents and clusters to the root form's title.
          */
-        final ProcessingResult result = getSearchResult().getProcessingResult();
+        final ProcessingResult result = searchResult.getProcessingResult();
         if (result != null)
         {
             final int documents = result.getDocuments().size();
             final int clusters = result.getClusters().size();
 
             rootForm.setText(abbreviated + " (" + pluralize(documents, "document")
-                + " from " + componentName(getSearchResult().getInput().getSourceId())
-                + ", " + pluralize(clusters, "cluster") + " from "
-                + componentName(getSearchResult().getInput().getAlgorithmId()) + ")");
+                + " from " + componentName(input.getSourceId()) + ", "
+                + pluralize(clusters, "cluster") + " from "
+                + componentName(input.getAlgorithmId()) + ")");
         }
         else
         {
@@ -403,40 +407,53 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /**
      * Abbreviates the input's title (and adds an ellipsis at end if needed).
      */
-    private String getAbbreviatedInputTitle(SearchInput input)
+    private String getAbbreviatedInputTitle(SearchResult searchResult)
     {
         final int MAX_WIDTH = 40;
-        return StringUtils.abbreviate(getFullInputTitle(input), MAX_WIDTH);
+        return StringUtils.abbreviate(getFullInputTitle(searchResult), MAX_WIDTH);
     }
 
     /**
      * Attempts to construct an input title from either query attribute or attributes
      * found in processing results.
      */
-    private String getFullInputTitle(SearchInput input)
+    private String getFullInputTitle(SearchResult searchResult)
     {
-        Object query = this.searchResult.getInput().getAttribute(AttributeNames.QUERY);
+        /*
+         * Initially, set to dummy name.
+         */
+        String title = ObjectUtils.toString(this.searchResult.getInput().getAttribute(
+            AttributeNames.QUERY), null);
 
-        if (query == null)
+        /*
+         * If we have a processing result...
+         */
+        if (searchResult.hasProcessingResult())
         {
-            final ProcessingResult result = this.searchResult.getProcessingResult();
-            if (result != null)
-            {
-                query = this.searchResult.getProcessingResult().getAttributes().get(
-                    AttributeNames.QUERY);
-            }
+            final ProcessingResult result = searchResult.getProcessingResult();
+
+            /*
+             * Check if there is a query in the output attributes (may be different from
+             * the one set on input).
+             */
+
+            title = ObjectUtils.toString(
+                result.getAttributes().get(AttributeNames.QUERY), null);
+
+            /*
+             * Override with custom title, if present.
+             */
+
+            title = ObjectUtils.toString(result.getAttributes().get(
+                AttributeNames.PROCESSING_RESULT_TITLE), title);
         }
 
-        if (query != null)
+        if (StringUtils.isEmpty(title))
         {
-            query = query.toString();
-        }
-        else
-        {
-            query = "(empty query)";
+            title = "(empty query)";
         }
 
-        return query.toString();
+        return title;
     }
 
     /*
@@ -639,7 +656,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         {
             newOptions = new SaveOptions();
             newOptions.fileName = SaveOptions
-                .sanitizeFileName(getFullInputTitle(getSearchResult().getInput()))
+                .sanitizeFileName(getFullInputTitle(getSearchResult()))
                 + ".xml";
         }
 
@@ -724,8 +741,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
-     * Returns a map of this editor's panels ({@link SectionReference}s). This map and
-     * its objects are considered <b>read-only</b>.
+     * Returns a map of this editor's panels ({@link SectionReference}s). This map and its
+     * objects are considered <b>read-only</b>.
      * 
      * @see #setSectionVisibility(SearchEditorSections, boolean)
      */
@@ -987,7 +1004,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /**
      * Create internal panel with the set of algorithm component's attributes.
      */
-    @SuppressWarnings("unchecked")
     private Section createAttributesPart(Composite parent, IWorkbenchSite site)
     {
         final SearchEditorSections section = SearchEditorSections.ATTRIBUTES;
@@ -1082,7 +1098,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          * Create search job.
          */
 
-        final String title = getAbbreviatedInputTitle(searchResult.getInput());
+        final String title = getAbbreviatedInputTitle(searchResult);
         this.searchJob = new SearchJob("Searching for '" + title + "'...", searchResult);
 
         // Try to push search jobs into the background, if possible.

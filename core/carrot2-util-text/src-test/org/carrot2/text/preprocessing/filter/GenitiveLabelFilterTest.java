@@ -68,7 +68,7 @@ public class GenitiveLabelFilterTest extends LabelFilterTestBase
             wordIndices.get("minister'll"), 2
         };
 
-        check(expectedLabelsFeatureIndex);
+        check(expectedLabelsFeatureIndex, 1);
     }
 
     @Test

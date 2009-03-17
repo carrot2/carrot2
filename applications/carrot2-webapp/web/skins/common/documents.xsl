@@ -7,6 +7,10 @@
               
   <xsl:strip-space elements="*" />
 
+  <xsl:key name="urls-by-root" match="document" use="substring-before(concat(url, '/'), '/')" />
+  <xsl:variable name="unique-urls" select="count(/page/searchresult/document[generate-id(.) = generate-id(key('urls-by-root', substring-before(concat(substring-after(url, 'http://'), '/'), '/'))[1])])" />
+  <xsl:variable name="document-count" select="count(/page/searchresult/document)" />
+
   <!-- Documents -->
   <xsl:template match="page[@type = 'DOCUMENTS']">
     <div id="documents">
@@ -35,6 +39,9 @@
           <span class="rank"><xsl:value-of select="number(@id) + 1" /></span>
           <span class="title-in-clusters">
             <a href="{url}" class="title">
+              <xsl:if test="$open-results-in-new-window = 'true'">
+                <xsl:attribute name="target">_blank</xsl:attribute>
+              </xsl:if>
               <xsl:choose>
                 <xsl:when test="field[@key = 'title-highlight']">
                   <xsl:value-of disable-output-escaping="yes" select="field[@key = 'title-highlight']/value/@value" />
@@ -50,8 +57,6 @@
           <a href="#" class="show-preview" title="Show preview">&#160;<small>Show preview</small></a>
         </h3>
       </div>
-      <xsl:variable name="unique-urls-for-thumbnails"><xsl:apply-templates select="/page" mode="unique-urls-for-thumbnails" /></xsl:variable>
-      <xsl:variable name="document-source-ids-for-thumbnails"><xsl:apply-templates select="/page" mode="document-source-ids-for-thumbnails" /></xsl:variable>
       <xsl:choose>
         <xsl:when test="field[@key = 'thumbnail-url']">
           <img class="thumbnail" src="{field[@key = 'thumbnail-url']/value/@value}" />
@@ -76,18 +81,18 @@
       <div class="url">
         <xsl:apply-templates select="url" />
         <xsl:if test="count(sources/source) > 0">
-          <span class="sources"> [<xsl:apply-templates select="sources/source" />]</span>
+          <span class="sources"> [<xsl:apply-templates select="sources/source" mode="document-source" />]</span>
         </xsl:if>
       </div>
       <div style="clear: both"><xsl:comment></xsl:comment></div>
     </div>
   </xsl:template>
   
-  <xsl:template match="document/sources/source[position() = last()]">
+  <xsl:template match="document/sources/source[position() = last()]" mode="document-source">
     <xsl:apply-templates />
   </xsl:template>
   
-  <xsl:template match="document/sources/source[position() != last()]">
+  <xsl:template match="document/sources/source[position() != last()]" mode="document-source">
     <xsl:apply-templates />,
   </xsl:template>
 </xsl:stylesheet>

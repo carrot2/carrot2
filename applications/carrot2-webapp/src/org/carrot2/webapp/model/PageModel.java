@@ -36,9 +36,12 @@ public class PageModel
     @Element(name = "asset-urls")
     public final AssetUrlsModel assetUrls;
 
+    @Element(name = "attribute-metadata")
+    public final AttributeMetadataModel attributesModel;
+
     @Element(name = "request")
     public final RequestModel requestModel;
-
+    
     @Element(name = "searchresult", required = false)
     public final ProcessingResult processingResult;
 
@@ -72,6 +75,7 @@ public class PageModel
     {
         this.processingResult = processingResult;
         this.requestModel = requestModel;
+        this.attributesModel = new AttributeMetadataModel();
         this.type = processingException == null ? requestModel.type : RequestType.ERROR;
         this.processingExceptionMessage = processingException == null ? null
             : processingException.getMessage();

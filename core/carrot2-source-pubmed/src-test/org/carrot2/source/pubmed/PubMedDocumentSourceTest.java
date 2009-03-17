@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -64,5 +63,11 @@ public class PubMedDocumentSourceTest extends
     protected String getNoResultsQueryText()
     {
         return "chrzęszczyrzeboszyce";
+    }
+
+    @Override
+    protected boolean mustReturnUniqueUrls()
+    {
+        return false;
     }
 }

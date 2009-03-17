@@ -13,6 +13,9 @@
 
 package org.carrot2.webapp.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -22,6 +25,8 @@ import org.apache.commons.lang.StringUtils;
  */
 public class UserAgentUtils
 {
+    private static final Pattern MSIE_PATTERN = Pattern.compile("MSIE\\s+([\\d\\.]+)");
+    
     private UserAgentUtils()
     {
     }
@@ -52,10 +57,23 @@ public class UserAgentUtils
             return true;
         }
 
-        final String msieVersion = userAgent.substring(msieIndex + 4,
-            userAgent.indexOf(";", msieIndex + 4)).trim();
-        double version = Double.parseDouble(msieVersion);
-
-        return version >= 7.0;
+        final Matcher matcher = MSIE_PATTERN.matcher(userAgent);
+        if (matcher.find())
+        {
+            final String msieVersion = matcher.group(1);
+            
+            if (msieVersion != null && msieVersion.length() > 0)
+            {
+                return Double.parseDouble(msieVersion) >= 7.0;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else {
+            // Some weird user agent, let's assume it's not modern
+            return false;
+        }
     }
 }

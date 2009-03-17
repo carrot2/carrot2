@@ -13,8 +13,6 @@
 
 package org.carrot2.core.attribute;
 
-import javax.security.auth.callback.LanguageCallback;
-
 import org.carrot2.core.*;
 
 /**
@@ -27,7 +25,7 @@ public final class AttributeNames
      * Index of the first document/ search result to fetch. The index starts at zero.
      * 
      * @label Start Index
-     * @level Medium
+     * @level Advanced
      * @group Search query
      */
     public static final String START = "start";
@@ -54,7 +52,7 @@ public final class AttributeNames
      * Estimated total number of matching documents.
      * 
      * @label Total Results
-     * @group Search request statistics
+     * @group Search request information
      */
     public static final String RESULTS_TOTAL = "results-total";
 
@@ -107,7 +105,7 @@ public final class AttributeNames
     public static final String PROCESSING_TIME_ALGORITHM = "processing-time-algorithm";
 
     /**
-     * Processing language hint. Suggestion for the clustering algorithm to perform
+     * Language in which to perform clustering. Suggestion for the clustering algorithm to perform
      * clustering in the specified language. Based on the suggestion, the algorithm can
      * determine e.g. the stemmer or list of stop words the algorithm uses. A mismatch
      * between the processing language hint and the actual language of processed documents
@@ -120,6 +118,19 @@ public final class AttributeNames
      */
     public static final String ACTIVE_LANGUAGE = "active-language";
 
+    /**
+     * Processing result title. A typical title for a processing result will be the
+     * query used to fetch documents from that source. For certain document sources
+     * the query may not be needed (on-disk XML, feed of syndicated news); in such cases,
+     * the input component should set its title properly for visual interfaces such
+     * as the workbench.
+     * 
+     * @label Title
+     * @level Advanced
+     * @group Search request information
+     */
+    public static final String PROCESSING_RESULT_TITLE = "processing-result.title";
+    
     /*
      *
      */

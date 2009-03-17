@@ -19,7 +19,7 @@ import org.carrot2.core.IProcessingComponent;
 
 /**
  * Marks attributes that will be bound upon initialization of a Carrot<sup>2</sup>
- * component. Please see
+ * component instance. Please see
  * {@link IProcessingComponent#init(IControllerContext)} for details.
  */
 @Retention(RetentionPolicy.RUNTIME)

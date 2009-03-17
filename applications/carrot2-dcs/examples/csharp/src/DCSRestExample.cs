@@ -59,8 +59,14 @@ namespace Org.Carrot2.Examples
             // Pass query hint.
             service.AddFormValue("query", queryHint);
 
-            // The algorithm to use for clustering. Omit to select the default.
-            // service.AddFormValue("dcs.algorithm", "");
+            // The algorithm to use for clustering. Omit to select the default. An example of
+            // using Lingo with custom parameters follows.
+
+            // service.AddFormValue("dcs.algorithm", "lingo");
+            // service.AddFormValue("LingoClusteringAlgorithm.desiredClusterCountBase", "10");
+            // service.AddFormValue("LingoClusteringAlgorithm.factorizationQuality", "LOW");
+            // service.AddFormValue("LingoClusteringAlgorithm.factorizationFactory",
+            //     "org.carrot2.matrix.factorization.PartialSingularValueDecompositionFactory");
 
             // Add the XML stream here.
             service.AttachFile("input.xml", "dcs.c2stream", new FileInfo(filePath));

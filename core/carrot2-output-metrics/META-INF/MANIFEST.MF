@@ -6,3 +6,5 @@ Bundle-Version: 3.0.0
 Export-Package: org.carrot2.output.metrics
 Require-Bundle: org.carrot2.core;bundle-version="3.0.0"
 Bundle-Vendor: Carrot2.org
+Bundle-ClassPath: META-INF/,
+ .

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -86,10 +85,12 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
     @SuppressWarnings("unchecked")
     public void testURLsUnique() throws Exception
     {
-        runQuery(getLargeQueryText(), getLargeQuerySize());
-
-        assertFieldUnique((Collection<Document>) processingAttributes
-            .get(AttributeNames.DOCUMENTS), Document.CONTENT_URL);
+        if (mustReturnUniqueUrls())
+        {
+            runQuery(getLargeQueryText(), getLargeQuerySize());
+            assertFieldUnique((Collection<Document>) processingAttributes
+                .get(AttributeNames.DOCUMENTS), Document.CONTENT_URL);
+        }
     }
 
     @Test
@@ -129,7 +130,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         attributes.put(AttributeNames.RESULTS, getSmallQuerySize());
 
         // Cache results from all DataSources
-        final CachingController cachingController = getCachingController(initAttributes, 
+        final CachingController cachingController = getCachingController(initAttributes,
             IDocumentSource.class);
 
         int count = 3;
@@ -148,7 +149,8 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
             });
         }
 
-        final List<Future<ProcessingResult>> results = executorService.invokeAll(callables);
+        final List<Future<ProcessingResult>> results = executorService
+            .invokeAll(callables);
 
         List<Document> documents = null;
         int index = 0;
@@ -234,13 +236,21 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
     }
 
     /**
+     * Override to switch checking of URL uniqueness.
+     */
+    protected boolean mustReturnUniqueUrls()
+    {
+        return true;
+    }
+
+    /**
      * Override to customize no results query.
      */
     protected String getNoResultsQueryText()
     {
         return getNoResultsQuery();
     }
-    
+
     /**
      * Override to customize no results query.
      */
@@ -249,20 +259,18 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         final int words = 5;
         final int chars = 8;
         final Random random = new Random();
-        
+
         final StringBuilder query = new StringBuilder();
         for (int i = 0; i < words; i++)
         {
             for (int j = 0; j < chars; j++)
             {
-                query.append((char)('a' + random.nextInt('z' - 'a')));
+                query.append((char) ('a' + random.nextInt('z' - 'a')));
             }
             query.append(random.nextInt(1000000));
             query.append(' ');
         }
-        
-        System.out.println(query);
-        
+
         return query.toString();
     }
 

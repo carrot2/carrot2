@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -60,10 +59,17 @@ public class LabelFilterTestBase extends PreprocessingComponentTestBase
 
     protected void check(int [] expectedLabelsFeatureIndex)
     {
+        check(expectedLabelsFeatureIndex, -1);
+    }
+
+    protected void check(int [] expectedLabelsFeatureIndex, int expectedFirstPhraseIndex)
+    {
         runPreprocessing();
 
         assertThat(context.allLabels.featureIndex).as("allLabels.featureIndex")
             .isEqualTo(expectedLabelsFeatureIndex);
+        assertThat(context.allLabels.firstPhraseIndex).as("allLabels.firstPhraseIndex")
+            .isEqualTo(expectedFirstPhraseIndex);
     }
 
     protected void runPreprocessing()

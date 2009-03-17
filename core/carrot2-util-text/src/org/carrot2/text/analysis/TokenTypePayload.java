@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,7 +15,7 @@ package org.carrot2.text.analysis;
 import org.apache.lucene.index.Payload;
 
 /**
- * Lucene's {@link Payload} implementing {@link TokenInfo}. 
+ * Lucene's {@link Payload} implementing {@link TokenInfo}.
  */
 final class TokenTypePayload extends Payload implements ITokenType
 {
@@ -34,12 +33,29 @@ final class TokenTypePayload extends Payload implements ITokenType
     {
         return flags;
     }
-    
+
     /**
      * Sets {@link #flags}.
      */
     void setRawFlags(int flags)
     {
         this.flags = flags;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof TokenTypePayload))
+        {
+            return false;
+        }
+
+        return super.equals(object) && ((TokenTypePayload) object).flags == this.flags;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode() % flags;
     }
 }

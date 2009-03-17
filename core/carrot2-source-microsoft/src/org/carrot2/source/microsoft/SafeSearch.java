@@ -13,6 +13,8 @@
 
 package org.carrot2.source.microsoft;
 
+import org.carrot2.util.StringUtils;
+
 import com.microsoft.msnsearch.SafeSearchOptions;
 
 /**
@@ -38,5 +40,11 @@ public enum SafeSearch
             default:
                 throw new RuntimeException("Unhandled constant: " + this);
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return StringUtils.identifierToHumanReadable(name());
     }
 }

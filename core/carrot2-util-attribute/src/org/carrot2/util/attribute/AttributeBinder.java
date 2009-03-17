@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,15 +14,16 @@ package org.carrot2.util.attribute;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.commons.lang.ClassUtils;
-import org.carrot2.util.Pair;
+import org.carrot2.util.*;
 import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.util.resource.IResource;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.*;
 
 /**
@@ -134,6 +134,20 @@ public class AttributeBinder
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
     {
+        return bind(object, values, checkRequired, bindingDirectionAnnotation,
+            filteringAnnotations.length > 0 ? new FilteringAnnotationsPredicate(
+                filteringAnnotations) : Predicates.<Field> alwaysTrue());
+    }
+
+    /**
+     * A version of {@link #bind(Object, Map, boolean, Class, Class...)} with a
+     * {@link Predicate} instead of filtering annotations. For experts only.
+     */
+    public static <T> Map<String, Object> bind(T object, Map<String, Object> values,
+        boolean checkRequired, Class<? extends Annotation> bindingDirectionAnnotation,
+        Predicate<Field> predicate) throws InstantiationException,
+        AttributeBindingException
+    {
         final AttributeBinderActionBind attributeBinderActionBind = new AttributeBinderActionBind(
             Input.class, values, checkRequired, AttributeTransformerFromString.INSTANCE);
         final IAttributeBinderAction [] actions = new IAttributeBinderAction []
@@ -142,7 +156,7 @@ public class AttributeBinder
             new AttributeBinderActionCollect(Output.class, values),
         };
 
-        bind(object, actions, bindingDirectionAnnotation, filteringAnnotations);
+        bind(object, actions, bindingDirectionAnnotation, predicate);
 
         return attributeBinderActionBind.remainingValues;
     }
@@ -183,8 +197,49 @@ public class AttributeBinder
         Class<? extends Annotation>... filteringAnnotations)
         throws InstantiationException, AttributeBindingException
     {
+        bind(object, attributeBinderActions, bindingDirectionAnnotation,
+            filteringAnnotations.length > 0 ? new FilteringAnnotationsPredicate(
+                filteringAnnotations) : Predicates.<Field> alwaysTrue());
+    }
+
+    /**
+     * A more flexible version of {@link #bind(Object, Map, Class, Class...)} that accepts
+     * custom {@link IAttributeBinderAction}s. For experts only.
+     */
+    public static <T> void bind(T object,
+        IAttributeBinderAction [] attributeBinderActions,
+        Class<? extends Annotation> bindingDirectionAnnotation, Predicate<Field> predicate)
+        throws InstantiationException, AttributeBindingException
+    {
         bind(new HashSet<Object>(), new BindingTracker(), 0, object,
-            attributeBinderActions, bindingDirectionAnnotation, filteringAnnotations);
+            attributeBinderActions, bindingDirectionAnnotation, predicate);
+    }
+
+    /**
+     * A predicate that evaluates to <code>true</code> if the attribute is annotated with
+     * at least one of the provided annotations.
+     */
+    public static class FilteringAnnotationsPredicate implements Predicate<Field>
+    {
+        private final Class<? extends Annotation> [] filteringAnnotations;
+
+        public FilteringAnnotationsPredicate(
+            Class<? extends Annotation> [] filteringAnnotations)
+        {
+            this.filteringAnnotations = filteringAnnotations;
+        }
+
+        public boolean apply(Field field)
+        {
+            for (Class<? extends Annotation> annotation : filteringAnnotations)
+            {
+                if (field.getAnnotation(annotation) != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /**
@@ -192,8 +247,7 @@ public class AttributeBinder
      */
     static <T> void bind(Set<Object> boundObjects, BindingTracker bindingTracker,
         int level, T object, IAttributeBinderAction [] attributeBinderActions,
-        Class<? extends Annotation> bindingDirectionAnnotation,
-        Class<? extends Annotation>... filteringAnnotations)
+        Class<? extends Annotation> bindingDirectionAnnotation, Predicate<Field> predicate)
         throws InstantiationException, AttributeBindingException
     {
         // Binding direction can be either @Input or @Output
@@ -241,18 +295,25 @@ public class AttributeBinder
             for (int i = 0; consistent && i < CONSISTENCY_CHECKS.length; i++)
             {
                 consistent &= CONSISTENCY_CHECKS[i].check(field,
-                    bindingDirectionAnnotation, filteringAnnotations);
+                    bindingDirectionAnnotation);
             }
 
             // We skip fields that do not have all the required annotations
-            if (consistent)
+            if (consistent && predicate.apply(field))
             {
-                // Apply binding actions provided
-                for (int i = 0; i < attributeBinderActions.length; i++)
+                try
                 {
-                    attributeBinderActions[i].performAction(bindingTracker, level,
-                        object, key, field, value, bindingDirectionAnnotation,
-                        filteringAnnotations);
+                    // Apply binding actions provided
+                    for (int i = 0; i < attributeBinderActions.length; i++)
+                    {
+                        attributeBinderActions[i].performAction(bindingTracker, level,
+                            object, key, field, value, bindingDirectionAnnotation,
+                            predicate);
+                    }
+                }
+                catch (ConstraintViolationException e)
+                {
+                    throw new AttributeBindingException(key, e.getMessage(), e);
                 }
             }
 
@@ -268,8 +329,7 @@ public class AttributeBinder
 
                 // Recursively descend into other types.
                 bind(boundObjects, bindingTracker, level + 1, value,
-                    attributeBinderActions, bindingDirectionAnnotation,
-                    filteringAnnotations);
+                    attributeBinderActions, bindingDirectionAnnotation, predicate);
             }
         }
     }
@@ -282,8 +342,7 @@ public class AttributeBinder
         public <T> void performAction(BindingTracker bindingTracker, int level, T object,
             String key, Field field, Object value,
             Class<? extends Annotation> bindingDirectionAnnotation,
-            Class<? extends Annotation>... filteringAnnotations)
-            throws InstantiationException;
+            Predicate<Field> predicate) throws InstantiationException;
     }
 
     /**
@@ -292,19 +351,19 @@ public class AttributeBinder
     public static interface IAttributeTransformer
     {
         public Object transform(Object value, String key, Field field,
-            Class<? extends Annotation> bindingDirectionAnnotation,
-            Class<? extends Annotation>... filteringAnnotations);
+            Class<? extends Annotation> bindingDirectionAnnotation);
     }
 
     /**
      * Transforms {@link String} attribute values to the types required by the target
      * field by:
      * <ol>
-     * <li>Leaving non-{@link String} typed values unchanged.</li> <li>Looking for a
-     * static <code>valueOf(String)</code> in the target type and using it for conversion.
-     * </li> <li>If the method is not available, trying to load a class named as the value
-     * of the attribute, so that this class can be further coerced to the class instance.
-     * </li> <li>If the class cannot be loaded, leaving the the value unchanged.</li>
+     * <li>Leaving non-{@link String} typed values unchanged.</li>
+     * <li>Looking for a static <code>valueOf(String)</code> in the target type and using
+     * it for conversion.</li>
+     * <li>If the method is not available, trying to load a class named as the value of
+     * the attribute, so that this class can be further coerced to the class instance.</li>
+     * <li>If the class cannot be loaded, leaving the the value unchanged.</li>
      * </ol>
      */
     public static class AttributeTransformerFromString implements IAttributeTransformer
@@ -320,8 +379,7 @@ public class AttributeBinder
         }
 
         public Object transform(Object value, String key, Field field,
-            Class<? extends Annotation> bindingDirectionAnnotation,
-            Class<? extends Annotation>... filteringAnnotations)
+            Class<? extends Annotation> bindingDirectionAnnotation)
         {
             if (!(value instanceof String))
             {
@@ -337,46 +395,92 @@ public class AttributeBinder
             }
             else
             {
-                // Try valueOf(String)
-                try
+
+                // Try valueOf(String) on the declared type
+                Object convertedValue = null;
+                convertedValue = callValueOf(stringValue, fieldType);
+                if (convertedValue != null)
                 {
-                    final Method valueOfMethod = fieldType.getMethod("valueOf",
-                        String.class);
-                    return valueOfMethod.invoke(null, stringValue);
-                }
-                catch (RuntimeException e)
-                {
-                    throw e;
-                }
-                catch (Exception e)
-                {
-                    // Just skip this possibility
+                    return convertedValue;
                 }
 
-                // Try if we can assign anyway. If the attribute is of a non-primitive
-                // type, it must have an ImplementingClasses annotation, see
-                // ConsistencyCheckImplementingClasses. If the value meets the constraint,
-                // we'll return the original value.
+                // Try valueOf(String) of the declared implementing classes, useful
+                // when field type is an interface, which is probably a common case.
+                // We process implementing classes in the order they appear in the
+                // annotation, which means we'll transform to an instance of the first
+                // class that returns a non-null valueOf(String).
                 final ImplementingClasses implementingClasses = field
                     .getAnnotation(ImplementingClasses.class);
+                if (implementingClasses != null)
+                {
+                    final Class<?> [] classes = implementingClasses.classes();
+                    for (Class<?> toClass : classes)
+                    {
+                        convertedValue = callValueOf(stringValue, toClass);
+                        if (convertedValue != null)
+                        {
+                            return convertedValue;
+                        }
+                    }
+                }
+
+                /*
+                 * Try if we can assign anyway. If the attribute is of a non-primitive
+                 * type, it must have an ImplementingClasses annotation, see
+                 * ConsistencyCheckImplementingClasses. If the value meets the constraint,
+                 * we'll return the original value.
+                 */
                 if (implementingClasses != null
+                    && field.getType().isAssignableFrom(String.class)
                     && ConstraintValidator.isMet(stringValue, implementingClasses).length == 0)
                 {
                     return stringValue;
                 }
 
-                // Try loading the class
+                // Try loading the class indicated by this string.
                 try
                 {
-                    return Thread.currentThread().getContextClassLoader().loadClass(
-                        stringValue);
+                    return ReflectionUtils.classForName(stringValue);
                 }
                 catch (ClassNotFoundException e)
                 {
-                    // Just skip this possibility
+                    // Just skip this possibility.
                 }
 
                 return stringValue;
+            }
+        }
+
+        private Object callValueOf(final String stringValue, final Class<?> fieldType)
+        {
+            try
+            {
+                final Method valueOfMethod = fieldType.getMethod("valueOf", String.class);
+                return valueOfMethod.invoke(null, stringValue);
+            }
+            catch (RuntimeException e)
+            {
+                throw e;
+            }
+            catch (NoSuchMethodException e)
+            {
+                return null;
+            }
+            catch (IllegalAccessException e)
+            {
+                throw new RuntimeException("No access to valueOf() method in: "
+                    + fieldType.getName());
+            }
+            catch (InvocationTargetException e)
+            {
+                final Throwable target = e.getTargetException();
+                if (target instanceof NumberFormatException)
+                {
+                    return null;
+                }
+                else {
+                    throw ExceptionUtils.wrapAsRuntimeException(target);
+                }
             }
         }
     }
@@ -406,8 +510,7 @@ public class AttributeBinder
         public <T> void performAction(BindingTracker bindingTracker, int level, T object,
             String key, Field field, Object value,
             Class<? extends Annotation> bindingDirectionAnnotation,
-            Class<? extends Annotation>... filteringAnnotations)
-            throws InstantiationException
+            Predicate<Field> predicate) throws InstantiationException
         {
             if (this.bindingDirectionAnnotation.equals(bindingDirectionAnnotation)
                 && field.getAnnotation(bindingDirectionAnnotation) != null)
@@ -447,7 +550,7 @@ public class AttributeBinder
                 for (IAttributeTransformer transformer : transformers)
                 {
                     value = transformer.transform(value, key, field,
-                        bindingDirectionAnnotation, filteringAnnotations);
+                        bindingDirectionAnnotation);
                 }
 
                 // Try to coerce from class to its instance first
@@ -462,7 +565,7 @@ public class AttributeBinder
                         value = clazz.newInstance();
                         if (clazz.isAnnotationPresent(Bindable.class))
                         {
-                            bind(value, values, Input.class, filteringAnnotations);
+                            bind(value, values, false, Input.class, predicate);
                         }
                     }
                     catch (final InstantiationException e)
@@ -529,8 +632,7 @@ public class AttributeBinder
         public <T> void performAction(BindingTracker bindingTracker, int level, T object,
             String key, Field field, Object value,
             Class<? extends Annotation> bindingDirectionAnnotation,
-            Class<? extends Annotation>... filteringAnnotations)
-            throws InstantiationException
+            Predicate<Field> predicate) throws InstantiationException
         {
             if (this.bindingDirectionAnnotation.equals(bindingDirectionAnnotation)
                 && field.getAnnotation(bindingDirectionAnnotation) != null)
@@ -543,7 +645,7 @@ public class AttributeBinder
                     for (IAttributeTransformer transformer : transformers)
                     {
                         value = transformer.transform(value, key, field,
-                            bindingDirectionAnnotation, filteringAnnotations);
+                            bindingDirectionAnnotation);
                     }
 
                     if (bindingTracker.canBind(object, key, level))
@@ -575,8 +677,7 @@ public class AttributeBinder
          *         be bound.
          * @throws IllegalArgumentException when attribute's annotations are inconsistent
          */
-        abstract boolean check(Field field, Class<? extends Annotation> bindingDirection,
-            Class<? extends Annotation>... filteringAnnotations);
+        abstract boolean check(Field field, Class<? extends Annotation> bindingDirection);
     }
 
     /**
@@ -585,18 +686,11 @@ public class AttributeBinder
     static class ConsistencyCheckRequiredAnnotations extends ConsistencyCheck
     {
         @Override
-        boolean check(Field field, Class<? extends Annotation> bindingDirection,
-            Class<? extends Annotation>... filteringAnnotations)
+        boolean check(Field field, Class<? extends Annotation> bindingDirection)
         {
             final boolean hasAttribute = field.getAnnotation(Attribute.class) != null;
             boolean hasBindingDirection = field.getAnnotation(Input.class) != null
                 || field.getAnnotation(Output.class) != null;
-
-            boolean hasRequiredExtraAnnotations = false;
-            for (Class<? extends Annotation> filteringAnnotation : filteringAnnotations)
-            {
-                hasRequiredExtraAnnotations |= field.getAnnotation(filteringAnnotation) != null;
-            }
 
             if (hasAttribute)
             {
@@ -611,18 +705,16 @@ public class AttributeBinder
             }
             else
             {
-                if (hasBindingDirection || hasRequiredExtraAnnotations)
+                if (hasBindingDirection)
                 {
                     throw new IllegalArgumentException(
-                        "Binding time or direction defined for a field ("
-                            + field.getClass() + "#" + field.getName()
-                            + ") that does not have an @"
+                        "Binding  direction defined for a field (" + field.getClass()
+                            + "#" + field.getName() + ") that does not have an @"
                             + Attribute.class.getSimpleName() + " annotation");
                 }
             }
 
-            return hasAttribute
-                && (filteringAnnotations.length == 0 || hasRequiredExtraAnnotations);
+            return hasAttribute;
         }
     }
 
@@ -641,8 +733,7 @@ public class AttributeBinder
             Enum.class, IResource.class, Collection.class, Map.class);
 
         @Override
-        boolean check(Field field, Class<? extends Annotation> bindingDirection,
-            Class<? extends Annotation>... filteringAnnotations)
+        boolean check(Field field, Class<? extends Annotation> bindingDirection)
         {
             if (field.getAnnotation(Input.class) == null)
             {

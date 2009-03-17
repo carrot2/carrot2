@@ -38,6 +38,8 @@
         cache: !$.browser.mozilla 
       });
   
+      $("#query").val($.documents.query);
+      
       // Quick preload of some results
       if (!jQuery.documents.loaded && $.documents.source == 'web') {
         $.getJSON(

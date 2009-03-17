@@ -6,7 +6,9 @@
   %local;
   %custom;
 ]>
-<chapter xml:id="chapter.advanced-topics" xmlns="http://docbook.org/ns/docbook" version="5.0">
+<chapter xml:id="chapter.advanced-topics" version="5.0"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:c2="http://www.carrot2.org">
   <title>Advanced topics</title>
   <subtitle>Customizing &C2; components and applications</subtitle>
 
@@ -256,12 +258,164 @@
   <section xml:id="section.advanced-topics.customizing-applications">
     <title>Customizing &C2; applications</title>
     
-    <para>
-      &NA;
-    </para>
+    <section xml:id="section.advanced-topics.customizing-applications.adding-source-to-webapp">
+      <title>Adding document source tabs to &WA;</title>
+      
+      <para>
+        Adding a document source tab to the &WA; requires a number of steps. The following
+        procedure demonstrates the process on an example of 
+        <link role="javadoc" linkend="org.carrot2.source.lucene.LuceneDocumentSource" />. 
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Download <c2:webapp-download-link>&WA; WAR file</c2:webapp-download-link>.
+          </para>
+        </listitem>
+      
+        <listitem>
+          <para>
+            Open for editing the <filename>suite-webapp.xml</filename> file, located in the 
+            <filename>WEB-INF/classes/carrot2-default</filename> directory of the 
+            WAR file. To the <tag>sources</tag> section add a fragment shown in
+            <xref linkend="figure.lucene-source-descriptor" />.
+          </para>
+
+          <figure xml:id="figure.lucene-source-descriptor">
+            <title>Lucene document source descriptor</title>
+            <programlisting><![CDATA[<source id="lucene" 
+    attribute-sets-resource="/carrot2-default/lucene.attributes.xml"
+    component-class="org.carrot2.source.lucene.LuceneDocumentSource">
+  <label>Lucene</label>
+  <title>Lucene</title>
+  <mnemonic>L</mnemonic>
+  <description>Lucene search</description>
+  <example-queries>
+    <example-query>query1</example-query>
+    <example-query>query2</example-query>
+  </example-queries>
+</source>]]></programlisting>      
+          </figure>
+        </listitem>
+        
+        <listitem>
+          <para>
+            In the <filename>WEB-INF/classes/carrot2-default</filename> directory of the 
+            WAR file create a file names <filename>lucene.attributes.xml</filename>, which 
+            will provide all the necessary configuration for the Lucene index
+            (see <xref linkend="figure.lucene-source-attributes" />).
+          </para>
+
+          <figure xml:id="figure.lucene-source-attributes">
+            <title>Lucene document source attributes</title>
+            <programlisting><![CDATA[<attribute-sets>
+  <attribute-set id="lucene">
+    <value-set>
+      <label>Lucene</label>
+      <attribute key="LuceneDocumentSource.directory">
+        <value>
+           <wrapper class="org.carrot2.source.lucene.FSDirectoryWrapper">
+              <indexPath>/path/to/lucene/index/directory</indexPath>
+           </wrapper>
+        </value>
+      </attribute>
+      <attribute key="org.carrot2.source.lucene.SimpleFieldMapper.contentField">
+        <value type="java.lang.String" value="summary" />
+      </attribute>
+      <attribute key="org.carrot2.source.lucene.SimpleFieldMapper.titleField">
+        <value type="java.lang.String" value="title" />
+      </attribute>
+      <attribute key="org.carrot2.source.lucene.SimpleFieldMapper.urlField">
+        <value type="java.lang.String" value="url" />
+      </attribute>
+    </value-set>
+  </attribute-set>
+</attribute-sets>]]></programlisting>      
+          </figure>
+        </listitem>
+
+        <listitem>
+          <para>
+            Deploy the WAR file with the above modifications to your container.
+            If the Lucene tab is not showing, clear cookies for the domain on which
+            the web application is deployed.
+          </para>
+        </listitem>        
+      </orderedlist>
+    </section>
+    
+    <section xml:id="section.advanced-topics.customizing-applications.customizing-lingo-for-webapp">
+      <title>Customizing Lingo for the &WA;</title>
+        
+      <para>
+        To run the &WA; with custom <link linkend="section.component.lingo">attributes of the Lingo clustering algorithm</link>,
+        you will need to pass them in a special XML file and reference the file in the
+        processing component suite XML the web application is using.
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Use <link linkend="section.workbench">&DCW;</link> to tune the attributes of Lingo
+            to produce the desired results.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Modify the <classname>SavingAttributeValuesToXml</classname> class from the
+            <classname>carrot2-examples</classname> package to correspond to the attribute values
+            you would like to set for Lingo. Run the class to print the XML encoding of the 
+            attribute values to the standard output. The label and identifier
+            of the attribute can be set to any value, if there is only one attribute
+            set in the file, it will be loaded as the default.
+          </para>
+          
+          <para>  
+            Save the result to a local file named
+            e.g. <filename>lingo.attributes.xml</filename> and copy the file to the
+            <filename>WEB-INF/classes/carrot2-default</filename> directory of the 
+            web application's WAR file. 
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Open for editing the <filename>suite-common.xml</filename> file, located in the 
+            <filename>WEB-INF/classes/carrot2-default</filename> directory of the 
+            web application's WAR file. Modify the Lingo entry
+            to point to the custom attributes file:
+          </para>
+          
+          <figure xml:id="figure.lingo-algorithm-descriptor">
+            <title>Lingo clustering algorithm descriptor</title>
+            <programlisting><![CDATA[<algorithm id="lingo" 
+    attribute-sets-resource="/carrot2-default/lingo.attributes.xml"
+    component-class="org.carrot2.clustering.lingo.LingoClusteringAlgorithm">
+  <label>Lingo</label>
+  <title>Lingo Clustering</title>
+</algorithm>]]></programlisting>      
+          </figure>
+        </listitem>
+
+        <listitem>
+          <para>
+            Deploy the WAR file with the above modifications to your container. Lingo
+            clustering should be performed with the modified settings for all document
+            sources.
+          </para>
+        </listitem>        
+      </orderedlist>
+      
+      <para>
+        You can use the same procedure to customize other algorithms, e.g. 
+        <link linkend="section.component.stc">STC</link>.
+      </para>
+    </section>
     
     <section>
-      <title>Removing or adding document source tabs to &WA;</title>
+      <title>Adding document sources to &DCW;</title>
       
       <para>
         &NA;
@@ -305,7 +459,14 @@
           Add an additional option to your JVM command line invocation providing the 
           path to the <emphasis role="bold">directory</emphasis> to which you extracted the native library:
         </para>
-        <programlisting><![CDATA[java -Djava.library.path=[native-lib-dir-path] ...]]></programlisting>
+        <programlisting><![CDATA[java -Djava.library.path=[native-lib-dir] ...]]></programlisting>
+        
+        <para>
+          To enable native computations in web applications deployed to Apache Tomcat,
+          pass the above directive in the <varname>JAVA_OPTS</varname> environment 
+          variable, e.g.:
+        </para>
+        <programlisting><![CDATA[export JAVA_OPTS="-Djava.library.path=[native-lib-dir]"]]></programlisting>
       </listitem>
 
       <listitem>

@@ -20,6 +20,7 @@
   <import file="${carrot2.master.basedir}/applications/carrot2-dcs/build.xml" />
   <import file="${carrot2.master.basedir}/doc/build.xml" />
   <import file="${carrot2.master.basedir}/etc/maven/build.xml" />
+  <import file="${carrot2.master.basedir}/etc/ant/common/webtest.xml" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />
@@ -75,18 +76,17 @@
     <exclude name="**/carrot2-examples/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-etools/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-google/**/*.java" if="external.api.tests.disabled" />
-    <exclude name="**/carrot2-source-yahoo/**/*.java" if="external.api.tests.disabled" />
+    <exclude name="**/carrot2-source-yahoo/**/*.java" unless="yahooapi.tests.enabled" />
     <exclude name="**/carrot2-source-boss/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-microsoft/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-opensearch/**/*.java" if="external.api.tests.disabled" />
-    <exclude name="**/carrot2-stemmer-snowball/src/**/*.java" />
     <exclude name="**/carrot2-source-microsoft/src/com/microsoft/msnsearch/**/*.java" />
   </fileset>
 
   <patternset id="lib.test">
     <include name="core/**/*.jar" />
     <include name="lib/**/*.jar" />
-    <include name="applications/carrot2-dcs/lib/*.jar" />
+    <include name="applications/carrot2-dcs/**/*.jar" />
     <include name="applications/carrot2-webapp/lib/*.jar" />
   </patternset>
 
@@ -111,6 +111,19 @@
     <include name="lib/**/*.jar" />
     <include name="core/carrot2-util-matrix/lib/*.jar" />
     <patternset refid="lib.core.excludes" />
+  </patternset>
+  
+  <patternset id="lib.core.mini">
+    <include name="lib/**/colt*.jar" />
+    <include name="lib/**/commons-lang*.jar" />
+    <include name="lib/**/ehcache*.jar" />
+    <include name="lib/**/google-collections*.jar" />
+    <include name="lib/**/jackson*.jar" />
+    <include name="lib/**/log4j*.jar" />
+    <include name="lib/**/lucene-core*.jar" />
+    <include name="lib/**/lucene-snowball*.jar" />
+    <include name="lib/**/nni*.jar" />
+    <include name="lib/**/pcj*.jar" />
   </patternset>
   
   <patternset id="licenses.core">
@@ -282,6 +295,7 @@
            errorproperty="junit.error"
            failureproperty="junit.failure">
       <jvmarg value="-Djava.library.path=${nni.native.library.path}" />
+      <jvmarg value="-ea" />
       <formatter type="xml" />
 
       <classpath refid="test.classpath" />
@@ -450,6 +464,10 @@
                            output.dir="${core.dir}/carrot2-util-text/tmp/eclipse"
                            copy.to="${core.dir}/carrot2-util-text/META-INF" />
 
+      <attributes-xml-copy java.source="${core.dir}/carrot2-output-metrics/src"
+                           output.dir="${core.dir}/carrot2-output-metrics/tmp/eclipse"
+                           copy.to="${core.dir}/carrot2-output-metrics/META-INF" />
+
       <attributes-xml java.source="${core.dir}/carrot2-util-attribute/src-test"
                       output.dir="${core.dir}/carrot2-util-attribute/tmp/eclipse" />
 
@@ -482,7 +500,6 @@
       <fileset dir="${core.dir}">
         <include name="**/*.java" />
         <exclude name="carrot2-source-microsoft/src/com/microsoft/msnsearch/**" />
-        <exclude name="carrot2-stemmer-snowball/src/**" />
       </fileset>
       <fileset dir="${applications.dir}">
         <include name="**/*.java" />
@@ -513,7 +530,6 @@
     <delete>
       <fileset dir="${build.dir}">
         <include name="com/microsoft/msnsearch/**/*.class" />
-        <include name="org/tartarus/snowball/**/*.class" />
         <include name="**/ExtendedWhitespaceTokenizerImpl.class" />
       </fileset>
     </delete>
@@ -610,8 +626,9 @@
              version="true"
              use="false"
              encoding="UTF-8"
-             doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; ${carrot2.version} API Specification"
-             header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; ${carrot2.version} &lt;br&gt;API Specification&lt;/div&gt;"
+             windowtitle="Carrot2 v${carrot2.version} API Documentation (JavaDoc)"
+             doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} API Documentation"
+             header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} &lt;br&gt;API Documentation&lt;/div&gt;"
              footer="&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
              bottom="&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;&lt;script type=&quot;text/javascript&quot;&gt; var gaJsHost = ((&quot;https:&quot; == document.location.protocol) ? &quot;https://ssl.&quot; : &quot;http://www.&quot;); document.write(unescape(&quot;%3Cscript src='&quot; + gaJsHost + &quot;google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E&quot;)); &lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; var pageTracker = _gat._getTracker(&quot;UA-317750-1&quot;); pageTracker._trackPageview(); &lt;/script&gt;"
              failonerror="true"
@@ -624,7 +641,6 @@
         <include name="**/*.java" />
         <exclude name="**/org/carrot2/core/test/**" />
         <exclude name="**/com/microsoft/msnsearch/**" />
-        <exclude name="**/org/tartarus/snowball/**" />
       </fileset>
 
       <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
@@ -658,12 +674,7 @@
        Build core JAR.
     -->
   <target name="jar" depends="jar.check, jar.build"
-    description="Builds Carrot2 core JAR" unless="jar.exists">
-    <mkdir dir="${jar.dir}" />
-    <jar destfile="${jar.dir}/carrot2-core.jar">
-      <fileset dir="${build.dir}" />
-    </jar>
-  </target>
+    description="Builds Carrot2 core JAR" unless="jar.exists" />
 
   <target name="jar.build" unless="jar.exists">
     <!-- Dependant tasks are always executed, so we need to have antcalls here -->
@@ -674,10 +685,91 @@
 
     <mkdir dir="${jar.dir}" />
     <jar destfile="${jar.dir}/carrot2-core.jar">
-      <fileset dir="${build.dir}" />
+      <fileset dir="${build.dir}">
+        <exclude name="org.carrot2.util.attribute*.xml" />
+        <exclude name="**/*.html" />
+      </fileset>
     </jar>
   </target>
 
+  <target name="jar.src">
+    <copy todir="${jar.dir}/sources" overwrite="true">
+        <fileset dir="${core.dir}" includes="**/src/**/*.java" />
+        <chainedmapper>
+            <filtermapper><replacestring from="\" to="/"/></filtermapper>
+            <mapper type="regexp" from="^(.+)/src/(.+)" to="\2"/>
+        </chainedmapper> 
+    </copy>
+    <jar destfile="${jar.dir}/carrot2-core-sources.jar">
+      <fileset dir="${jar.dir}/sources" />
+    </jar>
+    <delete dir="${jar.dir}/sources" />
+  </target>
+  
+  <!--
+        Carrot2 mini JAR, just core and algorithms.
+    -->
+  <target name="jar.mini" depends="jar.mini.test" />
+    
+  <target name="jar.mini.build" depends="jar">
+    <property name="jar.mini.dir" location="${carrot2.master.basedir}/tmp/jar-mini" />
+    <mkdir dir="${jar.mini.dir}" />
+    <unzip src="${jar.dir}/carrot2-core.jar" dest="${jar.mini.dir}" />
+
+    <delete includeEmptyDirs="true">
+      <fileset dir="${jar.mini.dir}">
+        <include name="ambient/**" />
+        <include name="org.carrot2.source*.xml" />
+        <include name="org.carrot2.output*.xml" />
+        <include name="org/carrot2/source/**" />
+        <include name="org/carrot2/output/**" />
+        <include name="com/**" />
+      </fileset>
+    </delete>
+
+    <jar destfile="${jar.dir}/carrot2-mini.jar">
+      <fileset dir="${jar.mini.dir}" />
+    </jar>
+    <delete dir="${jar.mini.dir}" />
+  </target>
+
+  <!-- Check if the basic clustering example runs with the mini distribution -->
+  <target name="jar.mini.test" depends="jar.mini.build">
+    <property name="jar.mini.test.classes.dir" location="${carrot2.master.basedir}/tmp/jar-mini-classes" />
+    <mkdir dir="${jar.mini.test.classes.dir}" />
+    <javac srcdir="${carrot2.master.basedir}/applications/carrot2-examples/src"
+           destdir="${jar.mini.test.classes.dir}"
+           compiler="modern"
+           source="1.5"
+           target="1.5"
+           encoding="UTF-8">
+      <include name="**/ClusteringDocumentList.java" />
+      <classpath>
+        <path location="${jar.dir}/carrot2-mini.jar" />
+        <fileset dir="${carrot2.master.basedir}">
+          <patternset refid="lib.core.mini" />
+          <!-- 
+               We add SimpleXML only to stop compiler from complainig about missing
+               annotation definitions. SimpleXML is not required to run basic clustering. 
+            -->
+          <include name="**/simple-xml*.jar" />
+        </fileset>
+      </classpath>
+    </javac>
+    
+    <java classname="org.carrot2.examples.clustering.ClusteringDocumentList"
+          outputproperty="dev.null" failonerror="true">
+      <classpath>
+        <pathelement path="${jar.mini.test.classes.dir}" />
+        <pathelement location="${jar.dir}/carrot2-mini.jar" />
+        <fileset dir="${carrot2.master.basedir}">
+          <patternset refid="lib.core.mini" />
+        </fileset>
+      </classpath>
+    </java>
+    <delete dir="${jar.mini.test.classes.dir}" />
+  </target>
+    
   <target name="jar.check">
     <available file="${jar.dir}/carrot2-core.jar" property="jar.exists" />
   </target>
@@ -689,7 +781,7 @@
   <!--
        Builds API distribution: core JAR, dependencies, example source code.
     -->
-  <target name="core" depends="jar, lib-no-jar.flattened" description="Builds Carrot2 Java API JAR with dependencies">
+  <target name="core" depends="jar, jar.src, lib-no-jar.flattened" description="Builds Carrot2 Java API JAR with dependencies">
     <delete dir="${api.dir}" failonerror="false" />
     <mkdir dir="${api.dir}" />
     <mkdir dir="${api.dir}/lib" />
@@ -751,27 +843,15 @@
 
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
-  
+
   <!--
       Maven artefacts.
     -->
-  <target name="maven" depends="antlib,jar,javadoc" description="Deploy Maven artifacts">
+  <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini" description="Deploy Maven artifacts">
     <jar destfile="${jar.dir}/carrot2-core-javadoc.jar">
       <fileset dir="${javadoc.dir}" />
     </jar>
 
-    <copy todir="${jar.dir}/sources" overwrite="true">
-        <fileset dir="${core.dir}" includes="**/src/**/*.java" />
-        <chainedmapper>
-            <filtermapper><replacestring from="\" to="/"/></filtermapper>
-            <mapper type="regexp" from="^(.+)/src/(.+)" to="\2"/>
-        </chainedmapper> 
-    </copy>
-    <jar destfile="${jar.dir}/carrot2-core-sources.jar">
-      <fileset dir="${jar.dir}/sources" />
-    </jar>
-    <delete dir="${jar.dir}/sources" />
-    
     <antcall target="carrot2.maven.deploy" />
     <delete>
         <fileset dir="${jar.dir}" includes="carrot2-core-*.jar" />
@@ -856,7 +936,6 @@
         <header contains="${carrot2.generated.code}"               replacement="${carrot2.generated.code}" />
     	<header contains="following code was generated by JFlex"   replacement="${carrot2.generated.code}" />
         <header contains="Generated By:JavaCC"                     replacement="${carrot2.generated.code}" />
-        <header contains="generated automatically by the Snowball" replacement="${carrot2.generated.code}" />
         <header contains="This file was auto-generated from WSDL"  replacement="${carrot2.generated.code}" />
 
         <!-- Replace empty headers with C2 license -->
@@ -901,5 +980,11 @@
       <include name="**/*.bat" />
     </fixcrlf>
   </target>
+  
+  <!--
+       Pre-commit check for developers
+  -->
+  <target name="precommit" depends="clean, test, jar.mini.test" />
+
 </project>
 

@@ -20,7 +20,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.*;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.MapUtils;
@@ -30,6 +31,8 @@ import org.carrot2.webapp.filter.QueryWordHighlighter;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.carrot2.webapp.model.*;
 import org.carrot2.webapp.util.UserAgentUtils;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Persister;
 import org.simpleframework.xml.stream.Format;
 
@@ -155,6 +158,7 @@ public class QueryProcessorServlet extends HttpServlet
             // Build model for this request
             final RequestModel requestModel = WebappConfig.INSTANCE
                 .setDefaults(new RequestModel());
+
             requestModel.modern = UserAgentUtils.isModernBrowser(request);
             final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = new AttributeBinder.AttributeBinderActionBind(
                 Input.class, requestParameters, true,
@@ -171,6 +175,11 @@ public class QueryProcessorServlet extends HttpServlet
             {
                 handleStatsRequest(request, response, requestParameters, requestModel);
             }
+            if (RequestType.ATTRIBUTES.equals(requestModel.type))
+            {
+                handleAttributesRequest(request, response, requestParameters,
+                    requestModel);
+            }
             else if (RequestType.SOURCES.equals(requestModel.type))
             {
                 handleSourcesRequest(request, response, requestParameters, requestModel);
@@ -186,6 +195,38 @@ public class QueryProcessorServlet extends HttpServlet
         }
     }
 
+    /**
+     * Handles requests for document source attributes.
+     * 
+     * @throws Exception
+     */
+    private void handleAttributesRequest(HttpServletRequest request,
+        HttpServletResponse response, Map<String, Object> requestParameters,
+        RequestModel requestModel) throws Exception
+    {
+        response.setContentType(MIME_XML_CHARSET_UTF);
+        final AjaxAttributesModel model = new AjaxAttributesModel(requestModel);
+
+        final Persister persister = new Persister(getPersisterFormat(requestModel));
+        persister.write(model, response.getWriter());
+        setExpires(response, 60 * 24 * 7); // 1 week
+    }
+
+    @Root(name = "ajax-attribute-metadata")
+    private static class AjaxAttributesModel
+    {
+        @Element(name = "request")
+        public final RequestModel requestModel;
+        
+        @Element(name = "attribute-metadata")
+        public final AttributeMetadataModel attributesModel = new AttributeMetadataModel();
+
+        private AjaxAttributesModel(RequestModel requestModel)
+        {
+            this.requestModel = requestModel;
+        }
+    }
+    
     /**
      * Handles list of sources requests.
      */
@@ -272,6 +313,10 @@ public class QueryProcessorServlet extends HttpServlet
         // web application defaults and not component defaults.
         requestParameters.put(AttributeNames.RESULTS, requestModel.results);
 
+        // Remove values corresponding to internal attributes
+        requestParameters.keySet().removeAll(
+            WebappConfig.INSTANCE.componentInternalAttributeKeys);
+
         // Perform processing
         ProcessingResult processingResult = null;
         ProcessingException processingException = null;
@@ -286,14 +331,14 @@ public class QueryProcessorServlet extends HttpServlet
                     logQuery(Level.DEBUG, requestModel, null);
                     processingResult = controller.process(requestParameters,
                         requestModel.source, requestModel.algorithm);
-                    logQuery(Level.INFO, requestModel, processingResult); 
+                    logQuery(Level.INFO, requestModel, processingResult);
                 }
                 else if (RequestType.DOCUMENTS.equals(requestModel.type))
                 {
                     processingResult = controller.process(requestParameters,
                         requestModel.source, QueryWordHighlighter.class.getName());
                 }
-                setExpires(response);
+                setExpires(response, 5);
             }
         }
         catch (ProcessingException e)
@@ -320,9 +365,6 @@ public class QueryProcessorServlet extends HttpServlet
         }
     }
 
-    /*
-     * 
-     */
     private void logQuery(Level p, RequestModel requestModel, ProcessingResult processingResult)
     {
         if (!queryLogger.isEnabledFor(p)) return;
@@ -337,21 +379,15 @@ public class QueryProcessorServlet extends HttpServlet
         this.queryLogger.log(p, message);
     }
 
-    /*
-     * 
-     */
-    private void setExpires(HttpServletResponse response)
+    private void setExpires(HttpServletResponse response, int minutes)
     {
         final HttpServletResponse httpResponse = response;
 
         final Calendar expiresCalendar = Calendar.getInstance();
-        expiresCalendar.add(Calendar.MINUTE, 5);
+        expiresCalendar.add(Calendar.MINUTE, minutes);
         httpResponse.addDateHeader("Expires", expiresCalendar.getTimeInMillis());
     }
 
-    /*
-     * 
-     */
     private Format getPersisterFormat(RequestModel requestModel)
     {
         return new Format(2, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -359,9 +395,6 @@ public class QueryProcessorServlet extends HttpServlet
             + WebappConfig.getContextRelativeSkinStylesheet(requestModel.skin) + "\" ?>");
     }
 
-    /*
-     * 
-     */
     private Map<String, String> extractCookies(HttpServletRequest request)
     {
         final Map<String, String> result = Maps.newHashMap();

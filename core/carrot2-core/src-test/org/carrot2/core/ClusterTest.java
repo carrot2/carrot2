@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,9 +15,8 @@ package org.carrot2.core;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.*;
 
 import org.fest.assertions.Assertions;
 import org.junit.Test;
@@ -117,9 +115,8 @@ public class ClusterTest
 
         final Cluster clusterNull = new Cluster();
 
-        assertEquals(0, Cluster.BY_LABEL_COMPARATOR.compare(clusterA, clusterA));
-        assertTrue(Cluster.BY_LABEL_COMPARATOR.compare(clusterA, clusterB) < 0);
-        assertTrue(Cluster.BY_LABEL_COMPARATOR.compare(clusterNull, clusterB) < 0);
+        checkOrder(Lists.newArrayList(clusterNull, clusterA, clusterB),
+            Cluster.BY_SIZE_COMPARATOR);
     }
 
     @Test
@@ -130,8 +127,7 @@ public class ClusterTest
 
         final Cluster clusterB = new Cluster();
 
-        assertEquals(0, Cluster.BY_SIZE_COMPARATOR.compare(clusterA, clusterA));
-        assertTrue(Cluster.BY_SIZE_COMPARATOR.compare(clusterA, clusterB) > 0);
+        checkOrder(Lists.newArrayList(clusterB, clusterA), Cluster.BY_SIZE_COMPARATOR);
     }
 
     @Test
@@ -149,12 +145,53 @@ public class ClusterTest
         clusterC.addPhrases("C");
         clusterC.addDocuments(new Document(), new Document(), new Document());
 
-        assertEquals(0, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR.compare(clusterA,
-            clusterA));
-        assertTrue(Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR.compare(clusterA,
-            clusterB) < 0);
-        assertTrue(Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR.compare(clusterA,
-            clusterC) > 0);
+        checkOrder(Lists.newArrayList(clusterC, clusterA, clusterB),
+            Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
+    }
+
+    @Test
+    public void testByReversedWeightedScoreAndSizeComparatorOnlySize()
+    {
+        checkOrder(createSizeAndScoreClusters(1, 2, 0), Cluster
+            .byReversedWeightedScoreAndSizeComparator(0));
+    }
+
+    @Test
+    public void testByReversedWeightedScoreAndSizeComparatorOnlyScore()
+    {
+        checkOrder(createSizeAndScoreClusters(1, 0, 2), Cluster
+            .byReversedWeightedScoreAndSizeComparator(1));
+    }
+
+    private List<Cluster> createSizeAndScoreClusters(int a, int b, int c)
+    {
+        Cluster [] clusters = new Cluster [3];
+        final Cluster clusterA = new Cluster();
+        clusterA.addPhrases("A");
+        clusterA.setAttribute(Cluster.SCORE, 1.0);
+        clusterA.addDocuments(new Document(), new Document());
+        clusters[a] = clusterA;
+
+        final Cluster clusterB = new Cluster();
+        clusterB.addPhrases("B");
+        clusterB.setAttribute(Cluster.SCORE, 2.0);
+        clusterB.addDocuments(new Document(), new Document());
+        clusters[b] = clusterB;
+
+        final Cluster clusterC = new Cluster();
+        clusterC.addPhrases("C");
+        clusterC.setAttribute(Cluster.SCORE, 0.1);
+        clusterC.addDocuments(new Document(), new Document(), new Document());
+        clusters[c] = clusterC;
+
+        return Arrays.asList(clusters);
+    }
+
+    private void checkOrder(List<Cluster> expected, Comparator<Cluster> comparator)
+    {
+        List<Cluster> toSort = Lists.newArrayList(expected);
+        Collections.sort(toSort, comparator);
+        Assertions.assertThat(toSort).isEqualTo(expected);
     }
 
     @Test()

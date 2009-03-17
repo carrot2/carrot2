@@ -11,6 +11,12 @@
     $("#util-links ul").clone().appendTo("#startup #search-area");
     
     $("#source-tabs").bind("tabActivated", copyTabInfo);
+    
+    $("body").bind("carrot2-loaded", function() {
+      if ($("#results-area").size() == 0) {
+        $("#source-tabs").trigger("tabActivated", [ $.tabs.getInitialActiveTab() ]);
+      }
+    });
   });
   
   /**

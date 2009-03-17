@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-  <xsl:include href="documents.xsl" />
-  <xsl:include href="clusters.xsl" />
+  <xsl:import href="documents.xsl" />
+  <xsl:import href="clusters.xsl" />
 
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
               doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -64,7 +64,7 @@
 
   <!-- Error message text -->
   <xsl:template match="page" mode="error-text">
-    Our apologies, a following processing error has occurred: 
+    Our apologies, the following processing error has occurred: 
     <span class="message"><xsl:value-of select="/page/@exception-message" /></span>
     If the error persists, <a href="http://project.carrot2.org/contact.html">contact us</a>.
   </xsl:template>
@@ -90,8 +90,32 @@
   </xsl:template>
   
   <!-- The percentage of unique urls required for thumbnails to show -->
-  <xsl:template match="page" mode="unique-urls-for-thumbnails">0.5</xsl:template>
+  <xsl:param name="unique-urls-for-thumbnails">0.5</xsl:param>
   
   <!-- Ids of document sources for which thumbnails should show -->
-  <xsl:template match="page" mode="document-source-ids-for-thumbnails"></xsl:template>
+  <xsl:param name="document-source-ids-for-thumbnails"></xsl:param>
+  
+  <!-- Whether to always open links in a new window -->
+  <xsl:param name="open-results-in-new-window">false</xsl:param>
+  
+  <!-- 
+       Determines how basic search options should be handled. Allowed values:
+       
+         * always - basic search options always shown
+         * hidden - basic search options shown after clicking "More options" link
+         * never - basic search options never
+    -->
+  <xsl:param name="show-basic-options">hidden</xsl:param>
+  
+  <!-- 
+       Determines how advanced search options should be handled. Allowed values:
+       
+         * always - advanced search options always shown
+         * hidden - advanced search options shown after clicking "More advanced options"
+         * never - advanced search options never shown
+       
+       NOTE: this setting takes effect only when 'show-basic-options' setting is
+       set to either 'always' or 'hidden'.
+    -->
+  <xsl:param name="show-advanced-options">hidden</xsl:param>
 </xsl:stylesheet>

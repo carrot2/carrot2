@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,6 +17,8 @@ import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang.WordUtils;
 
 /**
  * Provides a number of useful method operating on {@link String}s that are not available
@@ -62,7 +63,7 @@ public final class StringUtils
             {
                 final String group = matcher.group(i);
                 if (group.length() == 0) continue;
-                
+
                 parts.add(group);
             }
         }
@@ -84,5 +85,10 @@ public final class StringUtils
     public static String removeHtmlTags(String string)
     {
         return HTML_TAG_PATTERN.matcher(string).replaceAll("");
+    }
+
+    public static String identifierToHumanReadable(String string)
+    {
+        return WordUtils.capitalizeFully(string.replace('_', ' '));
     }
 }

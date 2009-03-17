@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,21 +14,23 @@ package org.carrot2.util.attribute;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import java.io.File;
 import java.lang.reflect.Field;
+import java.net.URL;
 
 import org.carrot2.util.attribute.AttributeBinder.AttributeTransformerFromString;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.resource.*;
 import org.junit.Test;
 
 /**
  * Test cases for {@link AttributeTransformerFromString}.
  */
+@SuppressWarnings("unused")
 public class AttributeTransformerFromStringTest
 {
-    @SuppressWarnings("unused")
     private Integer integerField;
 
-    @SuppressWarnings("unused")
     private String stringField;
 
     enum TestEnum
@@ -37,33 +38,34 @@ public class AttributeTransformerFromStringTest
         VALUE1, VALUE2;
     }
 
-    @SuppressWarnings("unused")
     private TestEnum enumField;
 
-    @SuppressWarnings("unused")
     private AttributeTransformerFromStringTest loadableClassField;
 
     @ImplementingClasses(classes =
     {
         String.class, Integer.class
     }, strict = true)
-    @SuppressWarnings("unused")
     private Object stringStrictlyAssignable;
 
     @ImplementingClasses(classes =
     {
         Integer.class, Double.class
     }, strict = false)
-    @SuppressWarnings("unused")
     private Object stringNonStrictlyAssignable;
 
     @ImplementingClasses(classes =
     {
         Integer.class, Double.class
     }, strict = true)
-    @SuppressWarnings("unused")
     private Object stringNotAssignable;
-    
+
+    @ImplementingClasses(classes =
+    {
+        FileResource.class, URLResourceWithParams.class, URLResource.class
+    })
+    private IResource resource;
+
     @Test
     public void testNonStringValue()
     {
@@ -122,12 +124,28 @@ public class AttributeTransformerFromStringTest
         final String string = "test";
         check("stringNonStrictlyAssignable", string, string);
     }
-    
+
     @Test
     public void testStringNotAssignable() throws Exception
     {
         final String string = Object.class.getName();
         check("stringNotAssignable", string, Object.class);
+    }
+
+    @Test
+    public void testFileResourceFile() throws Exception
+    {
+        final File file = File.createTempFile(AttributeTransformerFromStringTest.class
+            .getSimpleName(), "");
+        file.deleteOnExit();
+        check("resource", file.getAbsolutePath(), new FileResource(file));
+    }
+
+    @Test
+    public void testFileResourceUrlWithParameters() throws Exception
+    {
+        String url = "http://search.carrot2.org?q=test";
+        check("resource", url, new URLResourceWithParams(new URL(url)));
     }
 
     private void check(String fieldName, String stringValue,

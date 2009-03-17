@@ -1,0 +1,30 @@
+<!DOCTYPE project SYSTEM "../dtd/Project.dtd">
+
+<project name="Set and verify advanced options" default="webtest">
+  <target name="webtest">
+    <webtest name="Set and verify advanced options">
+      <config easyajax="true" easyajaxdelay="5000"/>
+      &getStartupPage;
+      <setInputField htmlId="query" value="test" />
+      <clickLink xpath="id('show-options')/a[1]" />
+      <clickLink xpath="id('show-advanced-options')" />
+      <verifyXPath xpath="count(id('advanced-options')/div) = 3" 
+                   description="3 advanced options expected for the default source" />
+      <setSelectField name="EToolsDocumentSource.country" value="ITALY" />
+      <setSelectField name="EToolsDocumentSource.language" value="ITALIAN" />
+      <setCheckbox htmlid="EToolsDocumentSource.safeSearch" checked="true" />
+      
+      <clickButton htmlId="search" />
+      
+      <verifySelectField name="EToolsDocumentSource.country" value="ITALY" />
+      <verifySelectField name="EToolsDocumentSource.language" value="ITALIAN" />
+      <verifyCheckbox htmlid="EToolsDocumentSource.safeSearch" checked="true" />
+      <verifyInputField name="EToolsDocumentSource.safeSearch" value="true" />
+      
+      <!-- Verify that safe search on images is turned on by default -->
+      <clickElement htmlid="boss-images" />
+      <verifyCheckbox htmlid="BossImageSearchService.filter" checked="true" />
+      <verifyInputField name="BossImageSearchService.filter" value="true" />
+    </webtest>
+  </target>
+</project>
