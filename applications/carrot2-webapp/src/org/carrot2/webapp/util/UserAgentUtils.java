@@ -25,7 +25,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class UserAgentUtils
 {
-    private static final Pattern MSIE_PATTERN = Pattern.compile("MSIE\\s+([\\d\\.]+)");
+    private static final Pattern MSIE_PATTERN = Pattern.compile("MSIE\\s+(\\d+)");
     
     private UserAgentUtils()
     {

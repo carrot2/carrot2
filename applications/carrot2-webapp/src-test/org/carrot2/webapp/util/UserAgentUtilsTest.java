@@ -56,6 +56,13 @@ public class UserAgentUtilsTest
     }
 
     @Test
+    public void testIE7MoreDigits()
+    {
+        assertTrue(UserAgentUtils
+            .isModernBrowser("Mozilla/4.0 (compatible; MSIE MSIE 7.0.5730.13; Windows NT 5.1; .NET CLR 2.0.50727; Zune 2.0)"));
+    }
+    
+    @Test
     public void testIE6()
     {
         assertFalse(UserAgentUtils

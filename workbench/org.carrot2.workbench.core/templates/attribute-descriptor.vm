@@ -16,9 +16,16 @@
 		<dt>Attribute:</dt>
 		<dd>$fields.metadata.LabelOrTitle</dd>
 		
-			#if ($fields.metadata.description)
+			#if ($fields.metadata.description || $fields.metadata.title)
 			<dt>Description:</dt>
-			<dd>$fields.metadata.description</dd>
+			<dd>
+			  #if ($fields.metadata.title)
+			    ${fields.metadata.title}.
+			  #end
+			  #if ($fields.metadata.description)
+			    ${fields.metadata.description}
+			  #end
+			</dd>
 			#end
 		#end
 

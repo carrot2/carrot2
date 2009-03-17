@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,9 +13,10 @@
 package org.carrot2.util.attribute.constraint;
 
 import java.lang.annotation.Annotation;
+import java.util.List;
 
+import org.carrot2.util.ListUtils;
 import org.carrot2.util.attribute.Attribute;
-
 
 /**
  * An exception thrown when an attempt is made to bind attribute values that do not meet
@@ -55,10 +55,14 @@ public class ConstraintViolationException extends RuntimeException
     public String getMessage()
     {
         final StringBuilder constraintsString = new StringBuilder();
-        for (int i = 0; i < annotations.length; i++)
+        final List<Constraint> constraints = ListUtils.asArrayList(ConstraintFactory
+            .createConstraints(annotations));
+        for (int i = 0; i < constraints.size(); i++)
         {
             constraintsString.append("@");
             constraintsString.append(annotations[i].annotationType().getSimpleName());
+            constraintsString.append(": ");
+            constraintsString.append(constraints.get(i).toString());
             if (i != annotations.length - 1)
             {
                 constraintsString.append(", ");

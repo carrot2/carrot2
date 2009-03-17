@@ -14,44 +14,53 @@
     <xsl:for-each select="attribute-descriptors/attribute-descriptor">
       <xsl:variable name="key" select="@key" />
       <div>
-        <label title="{metadata/title}">
-        <xsl:value-of select="metadata/label" />
-        
-        <xsl:variable name="current-value"><xsl:call-template name="attribute-value"><xsl:with-param name="key" select="$key" /><xsl:with-param name="source" select="../../@source" /></xsl:call-template></xsl:variable>
-        <xsl:choose>
-          <xsl:when test="allowed-values">
-            <select name="{@key}">
-              <xsl:if test="not(@default)">
-                <option value=""></option>
-              </xsl:if>
-              <xsl:for-each select="allowed-values/value">
-                <xsl:variable name="value" select="string(.)" />
-                <option value="{.}">
-                  <xsl:if test="$current-value = $value">
-                    <xsl:attribute name="selected">selected</xsl:attribute>
-                  </xsl:if>
-                  <xsl:value-of select="@label" />
-                </option>
-              </xsl:for-each>
-            </select>
-          </xsl:when>
-          <xsl:when test="@type = 'java.lang.Boolean'">
-            <input id="{@key}" name="{@key}" type="checkbox" value="true">
-              <xsl:if test="$current-value = 'true'">
-                <xsl:attribute name="checked">checked</xsl:attribute>
-              </xsl:if>
-            </input>
-          </xsl:when>
-          <xsl:otherwise>
-            <input name="{@key}" type="text" value="{$current-value}" />
-          </xsl:otherwise>
-        </xsl:choose>
+        <label>
+          <xsl:attribute name="title">
+            <xsl:apply-templates select="metadata/title" />
+            <xsl:apply-templates select="constraints" mode="title-extra" />
+          </xsl:attribute>
+          <xsl:apply-templates select="metadata/label" />
+          
+          <xsl:variable name="current-value"><xsl:call-template name="attribute-value"><xsl:with-param name="key" select="$key" /><xsl:with-param name="source" select="../../@source" /></xsl:call-template></xsl:variable>
+          <xsl:choose>
+            <xsl:when test="allowed-values">
+              <select name="{@key}">
+                <xsl:if test="not(@default)">
+                  <option value=""></option>
+                </xsl:if>
+                <xsl:for-each select="allowed-values/value">
+                  <xsl:variable name="value" select="string(.)" />
+                  <option value="{.}">
+                    <xsl:if test="$current-value = $value">
+                      <xsl:attribute name="selected">selected</xsl:attribute>
+                    </xsl:if>
+                    <xsl:value-of select="@label" />
+                  </option>
+                </xsl:for-each>
+              </select>
+            </xsl:when>
+            <xsl:when test="@type = 'java.lang.Boolean'">
+              <input id="{@key}" name="{@key}" type="checkbox" value="true">
+                <xsl:if test="$current-value = 'true'">
+                  <xsl:attribute name="checked">checked</xsl:attribute>
+                </xsl:if>
+              </input>
+            </xsl:when>
+            <xsl:otherwise>
+              <input name="{@key}" type="text" value="{$current-value}" />
+            </xsl:otherwise>
+          </xsl:choose>
         </label>
       </div>
     </xsl:for-each>
     <xsl:if test="count(attribute-descriptors/attribute-descriptor) = 0 and $show-advanced-options = 'hidden'">
       <div id="no-advanced-options">No advanced options</div>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.IntRangeConstraint']" mode="title-extra">
+    <xsl:if test="@min">, min: <xsl:value-of select="@min" /></xsl:if>
+    <xsl:if test="@max">, max: <xsl:value-of select="@max" /></xsl:if>
   </xsl:template>
 
   <!--
