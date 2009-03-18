@@ -986,5 +986,9 @@
   -->
   <target name="precommit" depends="clean, test, jar.mini.test" />
 
+  <!--
+       Pre-release source code updates.
+    -->
+  <target name="prerelease" depends="licenses.update, fix-line-endings" />
 </project>
 

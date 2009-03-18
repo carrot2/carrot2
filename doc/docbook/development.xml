@@ -38,6 +38,19 @@
       
       <listitem>
         <formalpara>
+          <title>Update source code headers and line endings</title>
+          <para>
+            In project root:
+          
+            <programlisting><![CDATA[ant prerelease]]></programlisting>
+            
+            Commit changes to trunk.
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
           <title>Precondition: successful trunk builds</title>
           <para>
             The status of the <link xlink:href="http://builds.carrot2.org/browse/C2HEAD-CORE">C2HEAD-CORE</link>
@@ -70,17 +83,37 @@ svn copy https://carrot2.svn.sourceforge.net/svnroot/carrot2/trunk
       
       <listitem>
         <formalpara>
-          <title>Update version files in the stable branch</title>
-          <para>
-            Update <filename>etc/version/carrot2.version</filename> in the stable branch 
-            to contain the desired stable version number. That number will be embedded in 
-            distribution file names, JavaDoc page title and other version-sensitive places. 
-            Note the property name should be <filename>carrot2.version.stable</filename>, e.g.:
-            
-            <programlisting><![CDATA[carrot2.version.stable=3.0.1
-carrot2.version=${carrot2.version.stable}]]></programlisting>
+          <title>Update version number strings in the stable branch</title>
 
-            Commit the change to the stable branch.
+          <para>
+            <orderedlist>
+              <listitem>
+                <formalpara>
+                  <title>Version files</title>
+                  <para>
+                    Update <filename>etc/version/carrot2.version</filename> 
+                    to contain the desired stable version number. That number will be embedded in 
+                    distribution file names, JavaDoc page title and other version-sensitive places. 
+                    Note the property name should be <filename>carrot2.version.stable</filename>, e.g.:
+                    
+                    <programlisting><![CDATA[carrot2.version.stable=3.0.1
+carrot2.version=${carrot2.version.stable}]]></programlisting>
+                  </para>
+                </formalpara>
+              </listitem>
+              
+              <listitem>
+                <formalpara>
+                  <title>&C2; plugin versions in &DCW;</title>
+                  
+                  <para>
+                    Update &C2; plugin version strings in the &DCW; to the version being released.
+                  </para>
+                </formalpara>
+              </listitem>
+            </orderedlist>
+            
+            Commit changes to the stable branch.
           </para>
         </formalpara>
       </listitem>
@@ -108,7 +141,7 @@ carrot2.version=${carrot2.version.stable}]]></programlisting>
 
       <listitem>
         <formalpara>
-          <title>Create release tag</title>
+          <title>Create the release tag</title>
           <para>
             <programlisting><![CDATA[svn copy https://carrot2.svn.sourceforge.net/svnroot/carrot2/branches/stable
          https://carrot2.svn.sourceforge.net/svnroot/carrot2/tags/VERSION_3_0_1]]></programlisting>
@@ -118,15 +151,50 @@ carrot2.version=${carrot2.version.stable}]]></programlisting>
 
       <listitem>
         <formalpara>
-          <title>Update version files in trunk</title>
+          <title>Update version number strings in trunk</title>
+          
           <para>
-            In case of major releases, update <filename>etc/version/carrot2.version</filename> 
-            in trunk to contain a new development version number, e.g.:
+            In case of major releases, update development version numbers.
             
-            <programlisting><![CDATA[carrot2.version.head=3.2-dev
+            <orderedlist>
+              <listitem>
+                <formalpara>
+                  <title>Version files</title>
+                  <para>
+                    Update <filename>etc/version/carrot2.version</filename> 
+                    to contain the desired development version number.  
+                    Note the property name should be <filename>carrot2.version.head</filename>, e.g.:
+                    
+                    <programlisting><![CDATA[carrot2.version.head=3.2-dev
 carrot2.version=${carrot2.version.head}]]></programlisting>
+                  </para>
+                </formalpara>
+              </listitem>
+              
+              <listitem>
+                <formalpara>
+                  <title>&C2; plugin versions in &DCW;</title>
+                  
+                  <para>
+                    Update &C2; plugin version strings in the &DCW; to the current development 
+                    version. 
+                  </para>
+                </formalpara>
+              </listitem>
+            </orderedlist>
+            
+            Commit changes to trunk.
+          </para>
+        </formalpara>
+      </listitem>
 
-            Commit the change to trunk.
+      <listitem>
+        <formalpara>
+          <title>Update JIRA</title>
+          
+          <para>
+            Close issues scheduled for the release being made, release the version in JIRA, 
+            create a next version in JIRA.
           </para>
         </formalpara>
       </listitem>
@@ -192,7 +260,7 @@ carrot2.version=${carrot2.version.head}]]></programlisting>
 
       <listitem>
         <formalpara>
-          <title>Consider upgrading &C2; dependent projects</title>
+          <title>Consider upgrading &C2; in dependent projects</title>
           <para>
             If reasonable, upgrade &C2; dependency in other known projects, such as
             Apache Solr and Nutch.
