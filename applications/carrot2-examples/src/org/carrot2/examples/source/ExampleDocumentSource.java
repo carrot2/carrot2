@@ -2,11 +2,15 @@ package org.carrot2.examples.source;
 
 import java.util.*;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.examples.ExampleUtils;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 /**
@@ -28,6 +32,16 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
     public int results = 20;
 
     /**
+     * Documents produced by this document source. The documents are returned in an output
+     * attribute with key equal to {@link AttributeNames#DOCUMENTS},
+     */
+    @Processing
+    @Output
+    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Internal
+    public List<Document> documents;
+
+    /**
      * Modulo to fetch the documents with. This dummy input attribute is just to show how
      * custom input attributes can be implemented.
      */
@@ -36,11 +50,19 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
     @Attribute
     public int modulo = 1;
 
+    /**
+     * Another dummy attribute. This one shows that if the attribute is not a primitive
+     * type (see {@link AttributeBinder.ConsistencyCheckImplementingClasses} for the
+     * implementation), {@link ImplementingClasses} constraint must be added to specify
+     * which assignable types are allowed as values for the attribute. To allow all
+     * assignable values, specify empty {@link ImplementingClasses#classes()} and
+     * {@link ImplementingClasses#strict()} equal to <code>false</code>.
+     */
     @Processing
-    @Output
-    @Attribute(key = AttributeNames.DOCUMENTS)
-    @Internal
-    public List<Document> documents;
+    @Input
+    @Attribute
+    @ImplementingClasses(classes = {}, strict = false)
+    public Analyzer analyzer = new StandardAnalyzer();
 
     @Override
     public void process() throws ProcessingException
@@ -78,6 +100,8 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
         final IController controller = new SimpleController();
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put(AttributeUtils.getKey(ExampleDocumentSource.class, "modulo"), 2);
+        params.put(AttributeUtils.getKey(ExampleDocumentSource.class, "analyzer"),
+            new WhitespaceAnalyzer());
 
         final ProcessingResult result = controller.process(params,
             ExampleDocumentSource.class, LingoClusteringAlgorithm.class);
