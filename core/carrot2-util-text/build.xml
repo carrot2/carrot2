@@ -8,12 +8,11 @@
 	</target>
 
 	<target name="jflex" description="Recompile JFlex parsers.">
-		<taskdef classname="JFlex.anttask.JFlexTask" name="jflex">
-			<classpath location="lib/JFlex.jar" />
-		</taskdef>
+        <java classname="JFlex.Main" fork="true">
+            <classpath location="lib/JFlex.jar" />
 
-		<jflex 
-			  file="src/org/carrot2/text/analysis/ExtendedWhitespaceTokenizerImpl.jflex" 
-			outdir="src/org/carrot2/text/analysis/" nobak="on" />
+            <arg value="-nobak" />
+            <arg file="src/org/carrot2/text/analysis/ExtendedWhitespaceTokenizerImpl.jflex" />
+        </java>
 	</target>
 </project>
