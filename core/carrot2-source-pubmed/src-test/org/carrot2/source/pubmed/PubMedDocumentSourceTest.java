@@ -70,4 +70,9 @@ public class PubMedDocumentSourceTest extends
     {
         return false;
     }
+    
+    protected int getLargeQuerySize()
+    {
+        return 200;
+    }
 }
