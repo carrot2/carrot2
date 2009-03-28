@@ -179,6 +179,12 @@
     <delete dir="${carrot2.master.basedir}/tmp/classes" failonerror="false" />
   </target>
 
+  <target name="clean.all" depends="coverage.clean">
+    <delete includeemptydirs="true">
+      <fileset dir="${carrot2.master.basedir}" includes="**/tmp/**" defaultexcludes="false" />
+    </delete>
+  </target>
+
   <!-- 
        Source compilation.
        Compiles production the code without clover instrumentation.

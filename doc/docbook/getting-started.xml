@@ -491,7 +491,7 @@
       
       <para>
         After the example project gets created, you can use standard Maven2 goals e.g. to
-        generate Eclipse project files:
+        generate Eclipse IDE project files:
       </para>
 <programlisting><![CDATA[mvn eclipse:eclipse]]></programlisting> 
     </section>
@@ -552,7 +552,7 @@
     </section>
     
     <section xml:id="section.integration.setting-up-carrot2-sources-in-eclipse">
-      <title>Setting up &C2; source code in Eclipse</title>
+      <title>Setting up &C2; source code in Eclipse IDE</title>
       
       <para>
         &C2; source code can be easily set up in Eclipse IDE. The description below assumes
@@ -570,14 +570,14 @@
         
         <listitem>
           <para>
-            In the <guilabel>Package Explorer</guilabel> view in Eclipse, choose 
+            In the <guilabel>Package Explorer</guilabel> view in Eclipse IDE, choose 
             <guilabel>Import...</guilabel> (see <xref linkend="figure.eclipse-import" />),
             select <guilabel>General > Existing Projects into Workspace</guilabel> and click
             <guilabel>Next</guilabel>.
           </para>
           
           <figure xml:id="figure.eclipse-import">
-            <title>Eclipse &C2; project import step 1</title>
+            <title>Eclipse IDE &C2; project import step 1</title>
             <mediaobject>
               <imageobject role="html">
                 <imagedata format="GIF" fileref="img/eclipse-import.gif" />
@@ -596,7 +596,7 @@
           </para>
           
           <figure xml:id="figure.eclipse-import-projects">
-            <title>Eclipse &C2; project import step 2</title>
+            <title>Eclipse IDE &C2; project import step 2</title>
             <mediaobject>
               <imageobject role="html">
                 <imagedata format="PNG" fileref="img/eclipse-import-projects.png" />
