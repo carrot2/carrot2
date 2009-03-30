@@ -164,7 +164,7 @@ public class WebappConfig
             }
         }
 
-        return null;
+        return ModelWithDefault.getDefault(skins);
     }
 
     public RequestModel setDefaults(RequestModel requestModel)
