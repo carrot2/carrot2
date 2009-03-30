@@ -71,7 +71,7 @@
       </orderedlist>
     </section>
     
-    <section>
+    <section xml:id="section.advanced-topics.running-in-eclipse.webapp">
       <title>Running &WA; in Eclipse IDE</title>
       
       <para>
