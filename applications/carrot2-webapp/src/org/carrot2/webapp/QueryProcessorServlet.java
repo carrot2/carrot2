@@ -175,7 +175,7 @@ public class QueryProcessorServlet extends HttpServlet
             {
                 handleStatsRequest(request, response, requestParameters, requestModel);
             }
-            if (RequestType.ATTRIBUTES.equals(requestModel.type))
+            else if (RequestType.ATTRIBUTES.equals(requestModel.type))
             {
                 handleAttributesRequest(request, response, requestParameters,
                     requestModel);
