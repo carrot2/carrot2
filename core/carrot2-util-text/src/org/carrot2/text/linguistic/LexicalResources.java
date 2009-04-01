@@ -71,7 +71,7 @@ final class LexicalResources
 
             for (String word : TextResourceUtils.load(resource))
             {
-                result.add(new MutableCharArray(word));
+                result.add(new MutableCharArray(word.toLowerCase()));
             }
 
             return result;
