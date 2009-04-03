@@ -231,17 +231,29 @@ public final class Document
     }
 
     /**
+     * Transforms a {@link Document} to its identifier returned by
+     * {@link Document#getId()}.
+     */
+    public static final class DocumentToId implements Function<Document, Integer>
+    {
+        public static final DocumentToId INSTANCE = new DocumentToId();
+        
+        private DocumentToId()
+        {
+        }
+        
+        public Integer apply(Document document)
+        {
+            return document.id;
+        }
+    }
+
+    /**
      * Compares {@link Document}s by their identifiers {@link #getId()}, which effectively
      * gives the original order in which they were returned by the document source.
      */
     public static final Comparator<Document> BY_ID_COMPARATOR = Comparators
-        .nullLeastOrder(Comparators.fromFunction(new Function<Document, Integer>()
-        {
-            public Integer apply(Document document)
-            {
-                return document.id;
-            }
-        }));
+        .nullLeastOrder(Comparators.fromFunction(DocumentToId.INSTANCE));
 
     /**
      * Transfers some fields from the map to individual class fields.
