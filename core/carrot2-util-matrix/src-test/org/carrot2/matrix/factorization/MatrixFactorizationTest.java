@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -183,31 +182,25 @@ public class MatrixFactorizationTest extends NNITestBase
         DoubleMatrix2D expectedU = NNIDoubleFactory2D.nni.make(new double [] []
         {
             {
-                0, 0.424
+                0.7380, 0
             },
             {
-                0.245, 0.284
+                0, 0.6832
             },
             {
-                0.245, 0.284
+                0, 0.6832
             },
             {
-                0.86, 0
+                0.3481, 0.2575
             },
             {
-                0, 0.332
+                0.5779, 0
             }
         });
 
         DoubleMatrix2D expectedV = NNIDoubleFactory2D.nni.make(new double [] []
         {
             {
-                1, 0
-            },
-            {
-                0, 1
-            },
-            {
                 0, 1
             },
             {
@@ -217,10 +210,16 @@ public class MatrixFactorizationTest extends NNITestBase
                 1, 0
             },
             {
-                0, 1
+                1, 0
+            },
+            {
+                1, 0
             },
             {
                 0, 1
+            },
+            {
+                1, 0
             }
         });
 
@@ -398,7 +397,8 @@ public class MatrixFactorizationTest extends NNITestBase
     private void check(DoubleMatrix2D expectedU, DoubleMatrix2D expectedV,
         IMatrixFactorization factorization)
     {
-        assertThat(factorization.getU()).as("U").isEquivalentTo(expectedU, DELTA);
+        final DoubleMatrix2D u = factorization.getU();
+        assertThat(u).as("U").isEquivalentTo(expectedU, DELTA);
         assertThat(factorization.getV()).as("V").isEquivalentTo(expectedV, DELTA);
     }
 

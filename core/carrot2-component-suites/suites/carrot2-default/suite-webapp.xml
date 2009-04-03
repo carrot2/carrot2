@@ -36,5 +36,17 @@
         <example-query>election</example-query>
       </example-queries>
     </source>
+    <source id="lucene" 
+        attribute-sets-resource="/carrot2-default/lucene.attributes.xml"
+        component-class="org.carrot2.source.lucene.LuceneDocumentSource">
+      <label>Lucene</label>
+      <title>Lucene</title>
+      <mnemonic>L</mnemonic>
+      <description>Lucene search</description>
+      <example-queries>
+        <example-query>query1</example-query>
+        <example-query>query2</example-query>
+      </example-queries>
+    </source>
   </sources>
 </component-suite>
