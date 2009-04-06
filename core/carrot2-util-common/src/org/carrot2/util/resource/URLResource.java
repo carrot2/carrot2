@@ -27,7 +27,7 @@ import org.simpleframework.xml.load.Commit;
  * resources <b>should not</b> be accessed this way because the default handler caches
  * {@link JarFile} instances and thus locks the file.
  * 
- * @see <a href="http://issues.carrot2.org/browse/CARROT-143">Issue CARROT-143< /a>
+ * @see <a href="http://issues.carrot2.org/browse/CARROT-143">Issue CARROT-143</a>
  */
 @Root(name = "url-resource")
 public class URLResource implements IResource
