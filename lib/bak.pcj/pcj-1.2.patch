@@ -311,7 +311,6 @@ Index: src/bak/pcj/set/IntBitSet.java
              int nextLongIndex = nextLongIndex(0);
              int nextBitIndex = nextLongIndex < data.length ? nextBitIndex(nextLongIndex, 0) : 0;
              int lastValue = -1;
-+            int returnedValues = 0;
  
              int nextLongIndex(int index) {
                  while (index < data.length && data[index] == 0)
@@ -319,14 +318,12 @@ Index: src/bak/pcj/set/IntBitSet.java
              }
  
              public boolean hasNext() {
--                return nextLongIndex < data.length;
-+                return returnedValues < size;
+                 return nextLongIndex < data.length;
              }
  
              public int next() {
                  if (!hasNext())
                      Exceptions.endOfIterator();
-+                returnedValues++;
                  lastValue = (int)(nextLongIndex*BITS_PER_LONG + nextBitIndex);
  
                  //  Advance pointers
