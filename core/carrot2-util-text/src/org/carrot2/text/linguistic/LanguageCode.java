@@ -83,6 +83,24 @@ public enum LanguageCode
         return locale;
     }
 
+    /**
+     * Return a {@link LanguageCode} constant for a given ISO code (or <code>null</code>)
+     * if not available. 
+     */
+    public static LanguageCode forISOCode(String language)
+    {
+        language = language.toLowerCase();
+
+        // Simple scan here, if the number of languages grows, switch to a hashmap.
+        for (LanguageCode code : values()) {
+            if (code.getIsoCode().equals(language)) {
+                return code;
+            }
+        }
+
+        return null;
+    }
+    
     @Override
     public String toString()
     {
