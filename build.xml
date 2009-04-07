@@ -29,7 +29,7 @@
   <property name="lib.dir" location="${carrot2.master.basedir}/lib" />
   <property name="etc.dir" location="${carrot2.master.basedir}/etc" />
   
-  <!-- Ouptut dirs -->
+  <!-- Output dirs -->
   <property name="build.dir" location="${carrot2.master.basedir}/tmp/classes" />
   <property name="jar.dir" location="${carrot2.master.basedir}/tmp/jar" />
   <property name="api.dir" location="${carrot2.master.basedir}/tmp/api" />
