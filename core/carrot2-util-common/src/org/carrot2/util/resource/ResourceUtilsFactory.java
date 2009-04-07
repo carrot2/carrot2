@@ -36,7 +36,7 @@ public final class ResourceUtilsFactory
     static
     {
         addLast(
-        // Absolute resource files
+            // Absolute resource files
             new AbsoluteFilePathLocator(),
             // Current working directory
             new DirLocator(new File(".").getAbsolutePath()),
