@@ -958,7 +958,7 @@
   </target>	
 
   <target name="fix-line-endings">
-    <patternset id="fix-line-endings-exludes">
+    <patternset id="fix-line-endings-excludes">
       <exclude name="**/*.jar" />
       <exclude name="**/*.png" />
       <exclude name="**/*.gif" />
@@ -975,13 +975,13 @@
     </patternset>
 
     <fixcrlf srcdir="." eol="unix" encoding="utf-8">
-      <patternset refid="fix-line-endings-exludes" />
+      <patternset refid="fix-line-endings-excludes" />
       <exclude name="**/*.cmd" />
       <exclude name="**/*.bat" />
       <exclude name="**/csharp/**" />
     </fixcrlf>
     <fixcrlf srcdir="." eol="dos" encoding="utf-8">
-      <patternset refid="fix-line-endings-exludes" />
+      <patternset refid="fix-line-endings-excludes" />
       <include name="**/*.cmd" />
       <include name="**/*.bat" />
     </fixcrlf>
