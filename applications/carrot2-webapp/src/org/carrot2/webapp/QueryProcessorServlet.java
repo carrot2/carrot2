@@ -71,10 +71,9 @@ public class QueryProcessorServlet extends HttpServlet
     public final static String STATS_KEY = "stats.key";
 
     /** Response constants */
-    private final static String MIME_XML = "text/xml";
-    private final static String ENCODING_UTF = "utf-8";
-    private final static String MIME_XML_CHARSET_UTF = MIME_XML + "; charset="
-        + ENCODING_UTF;
+    private final static String UTF8 = "UTF-8";
+    private final static String MIME_XML_UTF8 = "text/xml; charset=" + UTF8;
+    private final static String MIME_TEXT_PLAIN_UTF8 = "text/plain; charset=" + UTF8;
 
     /*
      * Servlet lifecycle.
@@ -203,7 +202,7 @@ public class QueryProcessorServlet extends HttpServlet
         HttpServletResponse response, Map<String, Object> requestParameters,
         RequestModel requestModel) throws Exception
     {
-        response.setContentType(MIME_XML_CHARSET_UTF);
+        response.setContentType(MIME_XML_UTF8);
         final AjaxAttributesModel model = new AjaxAttributesModel(requestModel);
 
         final Persister persister = new Persister(getPersisterFormat(requestModel));
@@ -211,6 +210,9 @@ public class QueryProcessorServlet extends HttpServlet
         setExpires(response, 60 * 24 * 7); // 1 week
     }
 
+    /*
+     * ?
+     */
     @Root(name = "ajax-attribute-metadata")
     private static class AjaxAttributesModel
     {
@@ -233,7 +235,7 @@ public class QueryProcessorServlet extends HttpServlet
         HttpServletResponse response, Map<String, Object> requestParameters,
         RequestModel requestModel) throws Exception
     {
-        response.setContentType(MIME_XML_CHARSET_UTF);
+        response.setContentType(MIME_XML_UTF8);
         final PageModel pageModel = new PageModel(request, requestModel,
             jawrUrlGenerator, null, null);
 
@@ -255,7 +257,7 @@ public class QueryProcessorServlet extends HttpServlet
             final CachingControllerStatistics statistics = controller.getStatistics();
 
             // Sets encoding for the response writer
-            response.setContentType("text/plain; charset=utf-8");
+            response.setContentType(MIME_TEXT_PLAIN_UTF8);
             final Writer output = response.getWriter();
 
             output.write("clustering-total-queries: " + statistics.totalQueries + "\n");
@@ -347,7 +349,7 @@ public class QueryProcessorServlet extends HttpServlet
         }
 
         // Send response, sets encoding of the response writer.
-        response.setContentType(MIME_XML_CHARSET_UTF);
+        response.setContentType(MIME_XML_UTF8);
         final PageModel pageModel = new PageModel(request, requestModel,
             jawrUrlGenerator, processingResult, processingException);
 

@@ -24,8 +24,6 @@ public class WebApp
      */
     private void startJetty(final int port) throws Exception
     {
-        System.setProperty("org.mortbay.util.URI.charset", "utf-8");
-        
         final Server server = new Server();
         SelectChannelConnector connector = new SelectChannelConnector();
         connector.setPort(port);
@@ -52,7 +50,13 @@ public class WebApp
          * This enables LOG4J logging in Jetty (specify on command-line, if possible).
          */
         System.setProperty("org.mortbay.log.LogFactory.noDiscovery", "false");
-        
-        new WebApp().startJetty(8080);
+
+        /*
+         * Specify URI decoding codepage.
+         */
+        System.setProperty("org.mortbay.util.URI.charset", "UTF-8");
+
+        final int port = 8080;
+        new WebApp().startJetty(port);
     }
 }
