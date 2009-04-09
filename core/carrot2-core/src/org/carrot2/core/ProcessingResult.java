@@ -318,7 +318,7 @@ public final class ProcessingResult
      * 
      * @param writer the writer to serialize this processing result to. The writer will
      *            <strong>not</strong> be closed.
-     * @throws Exception in case of any problems with serialization
+     * @throws IOException in case of any problems with serialization
      */
     public void serializeJson(Writer writer) throws IOException
     {
@@ -332,7 +332,7 @@ public final class ProcessingResult
      *            <strong>not</strong> be closed.
      * @param callback JavaScript function name in which to wrap the JSON response or
      *            <code>null</code>.
-     * @throws Exception in case of any problems with serialization
+     * @throws IOException in case of any problems with serialization
      */
     public void serializeJson(Writer writer, String callback) throws IOException
     {
@@ -348,7 +348,7 @@ public final class ProcessingResult
      *            <code>null</code>.
      * @param saveDocuments if <code>false</code>, documents will not be serialized.
      * @param saveClusters if <code>false</code>, clusters will not be serialized
-     * @throws Exception in case of any problems with serialization
+     * @throws IOException in case of any problems with serialization
      */
     public void serializeJson(Writer writer, String callback, boolean saveDocuments,
         boolean saveClusters) throws IOException
@@ -366,7 +366,7 @@ public final class ProcessingResult
      * @param indent if <code>true</code>, the output JSON will be pretty-printed
      * @param saveDocuments if <code>false</code>, documents will not be serialized.
      * @param saveClusters if <code>false</code>, clusters will not be serialized
-     * @throws Exception in case of any problems with serialization
+     * @throws IOException in case of any problems with serialization
      */
     public void serializeJson(Writer writer, String callback, boolean indent,
         boolean saveDocuments, boolean saveClusters) throws IOException

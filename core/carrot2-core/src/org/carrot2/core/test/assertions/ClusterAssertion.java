@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -32,13 +31,13 @@ public class ClusterAssertion implements AssertExtension
         this.actualCluster = actual;
     }
 
-/**
+    /**
      * Asserts that the cluster is equivalent to the provided cluster. Two clusters are
      * equivalent if their {@link Cluster#getPhrases()} and
      * {@link Cluster#getAttributes()} are equal, and their
      * {@link Cluster#getSubclusters()} and {@link Cluster#getDocuments()} are equivalent
-     * (see {@link DocumentAssertion#isEquivalentTo(org.carrot2.core.Document)).
      * 
+     * @see DocumentAssertion#isEquivalentTo(org.carrot2.core.Document)
      * @param expectedCluster the expected cluster
      * @return this assertion for convenience
      */
@@ -47,16 +46,16 @@ public class ClusterAssertion implements AssertExtension
         return isEquivalentTo(expectedCluster, true);
     }
 
-/**
+    /**
      * Asserts that the cluster is equivalent to the provided cluster. Two clusters are
      * equivalent if their {@link Cluster#getPhrases()} and
      * {@link Cluster#getAttributes()} are equal, and their
      * {@link Cluster#getSubclusters()} and {@link Cluster#getDocuments()} are equivalent
-     * (see {@link DocumentAssertion#isEquivalentTo(org.carrot2.core.Document)).
      * 
+     * @see DocumentAssertion#isEquivalentTo(org.carrot2.core.Document)
      * @param expectedCluster the expected cluster
-     * @param checkDocuments if <code>false</code>, cluster's document references will
-     *            not be checked
+     * @param checkDocuments if <code>false</code>, cluster's document references will not
+     *            be checked
      * @return this assertion for convenience
      */
     public ClusterAssertion isEquivalentTo(Cluster expectedCluster, boolean checkDocuments)

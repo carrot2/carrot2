@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
 import org.simpleframework.xml.Attribute;
@@ -114,7 +115,7 @@ public class ProcessingComponentDescriptor
 
     /**
      * @return Returns the {@link Class} object for this component.
-     * @throws {@link RuntimeException} if the class cannot be defined for some reason
+     * @throws RuntimeException if the class cannot be defined for some reason
      *         (class loader issues).
      */
     @SuppressWarnings("unchecked")
@@ -124,8 +125,8 @@ public class ProcessingComponentDescriptor
         {
             try
             {
-                this.componentClass = (Class) Class.forName(componentClassName, true,
-                    Thread.currentThread().getContextClassLoader());
+                this.componentClass = (Class<? extends IProcessingComponent>)
+                    ReflectionUtils.classForName(componentClassName);
             }
             catch (Exception e)
             {

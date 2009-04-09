@@ -48,7 +48,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     }
 
     /**
-     * @see http://issues.carrot2.org/browse/CARROT-400
+     * @see "http://issues.carrot2.org/browse/CARROT-400"
      */
     @Test
     public void testEmptyDocuments()
