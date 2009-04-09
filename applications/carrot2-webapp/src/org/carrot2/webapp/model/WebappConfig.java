@@ -104,9 +104,19 @@ public class WebappConfig
     @Attribute(name = "skin-param", required = false)
     public final static String SKIN_PARAM = "skin";
 
-    /** Application-wide instance of the configuration */
+    /** Application-wide instance of the configuration. */
     public final static WebappConfig INSTANCE;
 
+    /*
+     * TODO: Static initialization blocks suck because you can't really predict when they
+     * are called and thus which exception handlers may potentially consume their failure.
+     * Ideally, webapp-global resources should be stored in the servlet context (and
+     * initialized by one of the servlets in the init() method. I see the calls
+     * to INSTANCE are scattered all over the place, so it will be hard to achieve this,
+     * but even a lazy-init factory method seems better than a static block to me. This
+     * is a potential headache waiting to happen, especially if somebody wants to 
+     * modify component suites on their own.
+     */
     static
     {
         try
@@ -144,7 +154,7 @@ public class WebappConfig
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Could not load application config", e);
+            throw new RuntimeException("Could not load application config.", e);
         }
     }
 
