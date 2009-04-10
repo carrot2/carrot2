@@ -2,7 +2,7 @@
   Internal build script for Carrot2 web application. 
   Please use the 'webapp' target from the main build script to build the web application.
   -->
-<project name="carrot2.webapp" default="carrot2.webapp.eclipse.setup">
+<project name="carrot2.webapp" default="basedir.check">
   <!-- Base dir determined from the build file location -->
   <dirname property="carrot2.webapp.basedir"
            file="${ant.file.carrot2.webapp}" />
@@ -10,6 +10,10 @@
   <!-- Master build base dir -->
   <property name="carrot2.master.basedir"
             location="${carrot2.webapp.basedir}/../../" />
+
+  <!-- Import common macros -->
+  <import file="${carrot2.master.basedir}/etc/ant/common/basedir.xml" />
+  <import file="${carrot2.master.basedir}/etc/ant/common/webtest.xml" />
 
   <!-- Load properties from the master base dir, otherwise sprites generator will not work -->
   <property file="${carrot2.master.basedir}/local.properties" />
@@ -47,12 +51,12 @@
   <!-- 
        Build the web application WAR file.
     -->
-  <target name="carrot2.webapp.build" depends="carrot2.webapp.prepare, carrot2.webapp.war, carrot2.webapp.cleanup" />
+  <target name="carrot2.webapp.build" depends="basedir.check, carrot2.webapp.prepare, carrot2.webapp.war, carrot2.webapp.cleanup" />
 
   <!--
        Assembles the web applications WAR file.
     -->
-  <target name="carrot2.webapp.war">
+  <target name="carrot2.webapp.war" depends="basedir.check">
     <antcall target="lib.flattened" />
     <copy todir="${lib.flattened}">
       <fileset dir="${carrot2.master.basedir}">
@@ -78,7 +82,7 @@
        Builds the webapp distribution. Currently, it just moves the WAR file
        to the output directory, not sure it if makes sense to wrap it with an extra ZIP file.
     -->
-  <target name="carrot2.webapp.dist" depends="carrot2.webapp.webtest.war">
+  <target name="carrot2.webapp.dist" depends="basedir.check, carrot2.webapp.webtest.war">
     <move file="${webapp.dir}/${war.name.base}.war" tofile="${webapp.dir}/../${war.name.base}-${carrot2.version}.war" />
     <delete dir="${webapp.dir}" failonerror="false" />
   </target>
@@ -86,7 +90,7 @@
   <!--
        Performs a quick smoketest of the webapp WAR.
     -->
-  <target name="carrot2.webapp.webtest.war" depends="carrot2.webapp.build, carrot2.common.webtest.war.prepare"
+  <target name="carrot2.webapp.webtest.war" depends="basedir.check, carrot2.webapp.build, carrot2.common.webtest.war.prepare"
           if="webtest.war.resources.available">
     <webtest-war cargo.tmp.dir="tmp/cargo"
                  war.path="${webapp.dir}/${war.name.base}.war"
@@ -95,7 +99,7 @@
                  webtest.report.dir="${webtest.report.dir}" />
   </target>
 
-  <target name="carrot2.webapp.webtest.localhost" depends="carrot2.common.webtest.deployed.check"> 
+  <target name="carrot2.webapp.webtest.localhost" depends="basedir.check, carrot2.common.webtest.deployed.check"> 
     <webtest-deployed webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
                       webtest.report.dir="${webtest.report.dir}" 
                       webtest.basepath="/" />
@@ -107,12 +111,12 @@
        before they let this script assemble the complete WAR file.
     -->
   <target name="carrot2.webapp.prepare"
-          depends="carrot2.webapp.templates.war, carrot2.webapp.classes, carrot2.webapp.attributes.war, carrot2.webapp.suites, carrot2.webapp.skins, carrot2.webapp.sprites.war" />
+          depends="basedir.check, carrot2.webapp.templates.war, carrot2.webapp.classes, carrot2.webapp.attributes.war, carrot2.webapp.suites, carrot2.webapp.skins, carrot2.webapp.sprites.war" />
 
   <!--
        Compiles the main web application classes and copies log4j configuration.
     -->
-  <target name="carrot2.webapp.classes">
+  <target name="carrot2.webapp.classes" depends="basedir.check">
     <mkdir dir="${webapp.classes.dir}" />
     <antcall target="jar" />
 
@@ -142,7 +146,7 @@
   <!--
        Copies the default component suites. Can be disabled by "extending" build scripts.
     -->
-  <target name="carrot2.webapp.suites" unless="carrot2.webapp.no-default-suites">
+  <target name="carrot2.webapp.suites" unless="carrot2.webapp.no-default-suites" depends="basedir.check">
     <copy todir="${webapp.classes.dir}">
       <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
         <include name="carrot2-default/suite-local.xml" />
@@ -155,7 +159,7 @@
   <!--
        Copies "source" skin files to a work directory.
     -->
-  <target name="carrot2.webapp.skins">
+  <target name="carrot2.webapp.skins" depends="basedir.check">
     <mkdir dir="${webapp.skins.dir}" />
     <copy todir="${webapp.skins.dir}">
       <fileset dir="${carrot2.webapp.basedir}/web/skins" />
@@ -195,7 +199,7 @@
   <!--
        Builds sprite images in the skins work directory.
     -->
-  <target name="carrot2.webapp.sprites.war" if="smartsprites.home" depends="carrot2.webapp.skins">
+  <target name="carrot2.webapp.sprites.war" if="smartsprites.home" depends="basedir.check, carrot2.webapp.skins">
     <carrot2.webapp.sprites base.dir="${webapp.skins.dir}" root.dir="fancy-compact" />
     <carrot2.webapp.sprites base.dir="${webapp.skins.dir}" root.dir="fancy-large" />
     <carrot2.webapp.sprites base.dir="${webapp.skins.dir}" root.dir="simple" />
@@ -204,7 +208,7 @@
   <!--
        Builds sprite images in the skin source directory.
     -->
-  <target name="carrot2.webapp.sprites.eclipse" if="smartsprites.home">
+  <target name="carrot2.webapp.sprites.eclipse" if="smartsprites.home" depends="basedir.check">
     <carrot2.webapp.sprites base.dir="${carrot2.webapp.basedir}/web/skins"
              root.dir="fancy-compact" />
     <carrot2.webapp.sprites base.dir="${carrot2.webapp.basedir}/web/skins"
@@ -216,7 +220,7 @@
        Processes all the files required to run the web application from Eclipse.
     -->
   <target name="carrot2.webapp.eclipse.setup" 
-          depends="carrot2.webapp.templates.eclipse, carrot2.webapp.sprites.eclipse, carrot2.webapp.attributes.eclipse" />
+          depends="basedir.check, carrot2.webapp.templates.eclipse, carrot2.webapp.sprites.eclipse, carrot2.webapp.attributes.eclipse" />
 
   <!--
        Substitutes variables in config.xml, jawr.properties and web.xml files.
@@ -275,7 +279,7 @@
        Substitutes variables in config.xml, jawr.properties and web.xml files and saves
        the results to the classes working dir.
     -->
-  <target name="carrot2.webapp.templates.war">
+  <target name="carrot2.webapp.templates.war" depends="basedir.check">
     <carrot2.webapp.templates target.dir="${webapp.classes.dir}" />
   </target>
 
@@ -283,7 +287,7 @@
        Substitutes variables in config.xml, jawr.properties and web.xml files and saves
        the results to the source dirs.
     -->
-  <target name="carrot2.webapp.templates.eclipse">
+  <target name="carrot2.webapp.templates.eclipse" depends="basedir.check">
     <carrot2.webapp.templates target.dir="${carrot2.webapp.basedir}/src"
                template.caching="false" />
   </target>
@@ -291,7 +295,7 @@
   <!--
        Generates metadata files for webapp-specific document sources.
     -->
-  <target name="carrot2.webapp.attributes.war">
+  <target name="carrot2.webapp.attributes.war" depends="basedir.check">
     <antcall target="compile" />
     <attributes-xml java.source="${carrot2.webapp.basedir}/src/org/carrot2/webapp/source" 
                     output.dir="${webapp.classes.dir}" />
@@ -300,7 +304,7 @@
   <!--
        Generates metadata files for webapp-specific document sources.
     -->
-  <target name="carrot2.webapp.attributes.eclipse">
+  <target name="carrot2.webapp.attributes.eclipse" depends="basedir.check">
     <antcall target="compile" />
     <attributes-xml java.source="${carrot2.webapp.basedir}/src/org/carrot2/webapp/source" 
                     output.dir="${carrot2.webapp.basedir}/tmp/eclipse" />
@@ -309,7 +313,7 @@
   <!--
        Removes temporary files left after building the web application.
     -->
-  <target name="carrot2.webapp.cleanup">
+  <target name="carrot2.webapp.cleanup" depends="basedir.check">
     <delete dir="${webapp.classes.dir}" />
     <delete dir="${webapp.skins.dir}" />
   </target>
@@ -317,7 +321,7 @@
   <!--
        Removes the WAR file and all temporary files.
     -->
-  <target name="carrot2.webapp.clean">
+  <target name="carrot2.webapp.clean" depends="basedir.check">
     <delete dir="${webapp.dir}" />
   </target>
 
@@ -331,5 +335,9 @@
     <xslt style="${carrot2.webapp.basedir}/web/skins/fancy-compact/page.xsl"
           in="etc/xslt-debug/startup.xml" 
           out="tmp/startup.html" />
+  </target>
+
+  <target name="basedir.check">
+    <basedir-check main-basedir="${basedir}" internal-basedir="${carrot2.webapp.basedir}" />
   </target>
 </project>

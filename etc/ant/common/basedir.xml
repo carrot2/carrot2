@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="carrot2.common.basedir">
+  <!--
+        Causes the internal builds to fail if run. This can be easily cheated
+        by overriding the basedir from the command line, but it should be enough
+        to catch usual invocations.
+    -->
+  <macrodef name="basedir-check">
+    <attribute name="main-basedir"  />
+    <attribute name="internal-basedir"  />
+    
+    <sequential>
+      <condition property="basedir.fail">
+        <equals arg1="@{main-basedir}" arg2="@{internal-basedir}" />
+      </condition>
+      <ant target="carrot2.common.basedir.message" />
+    </sequential>
+  </macrodef>
+
+  <target name="carrot2.common.basedir.message" if="basedir.fail">
+    <echo>
+
+    
+This is an internal build script. Please invoke the same target 
+from the main build script located in the main checkout directory.
+
+      
+    </echo>
+    <fail message="Please invoke the same target from the main build script" />
+  </target>
+</project>

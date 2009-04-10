@@ -20,7 +20,6 @@
   <import file="${carrot2.master.basedir}/applications/carrot2-dcs/build.xml" />
   <import file="${carrot2.master.basedir}/doc/build.xml" />
   <import file="${carrot2.master.basedir}/etc/maven/build.xml" />
-  <import file="${carrot2.master.basedir}/etc/ant/common/webtest.xml" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />
