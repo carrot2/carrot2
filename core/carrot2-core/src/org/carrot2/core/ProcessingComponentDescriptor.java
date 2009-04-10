@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -28,6 +27,7 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.load.Commit;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 /**
@@ -115,8 +115,8 @@ public class ProcessingComponentDescriptor
 
     /**
      * @return Returns the {@link Class} object for this component.
-     * @throws RuntimeException if the class cannot be defined for some reason
-     *         (class loader issues).
+     * @throws RuntimeException if the class cannot be defined for some reason (class
+     *             loader issues).
      */
     @SuppressWarnings("unchecked")
     public synchronized Class<? extends IProcessingComponent> getComponentClass()
@@ -125,8 +125,8 @@ public class ProcessingComponentDescriptor
         {
             try
             {
-                this.componentClass = (Class<? extends IProcessingComponent>)
-                    ReflectionUtils.classForName(componentClassName);
+                this.componentClass = (Class<? extends IProcessingComponent>) ReflectionUtils
+                    .classForName(componentClassName);
             }
             catch (Exception e)
             {
@@ -311,6 +311,24 @@ public class ProcessingComponentDescriptor
             Logger.getLogger(this.getClass()).warn(
                 "Component availability failure: " + componentClassName, e);
             this.componentAvailable = false;
+        }
+    }
+
+    /**
+     * Transforms a {@link ProcessingComponentDescriptor} to its identifier.
+     */
+    public static final class ProcessingComponentDescriptorToId implements
+        Function<ProcessingComponentDescriptor, String>
+    {
+        public static final ProcessingComponentDescriptorToId INSTANCE = new ProcessingComponentDescriptorToId();
+
+        private ProcessingComponentDescriptorToId()
+        {
+        }
+
+        public String apply(ProcessingComponentDescriptor descriptor)
+        {
+            return descriptor.id;
         }
     }
 }
