@@ -987,6 +987,11 @@
   </target>
   
   <!--
+       Generate development files for Eclipse.
+   -->
+  <target name="eclipse" depends="attrs.eclipse, carrot2.webapp.eclipse.setup" description="Generate Eclipse files for development." />
+
+  <!--
        Pre-commit check for developers
   -->
   <target name="precommit" depends="clean, test, jar.mini.test" />
