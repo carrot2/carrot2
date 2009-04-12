@@ -458,10 +458,6 @@ public class AttributeBinder
                 final Method valueOfMethod = fieldType.getMethod("valueOf", String.class);
                 return valueOfMethod.invoke(null, stringValue);
             }
-            catch (RuntimeException e)
-            {
-                throw e;
-            }
             catch (NoSuchMethodException e)
             {
                 return null;
