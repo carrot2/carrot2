@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,12 +13,51 @@
 package org.carrot2.util.attribute;
 
 import java.io.*;
+import java.util.ArrayList;
+
+import com.google.common.collect.Lists;
 
 /**
- * Builds metadata XML files for the requested Java source directories.
+ * Builds metadata XML files for the requested Java source directories. This is a POJO ANT
+ * task as well as a command-line executable Java class.
  */
 public class BindableMetadataXmlSerializer
 {
+    private final ArrayList<File> sourceDirs = Lists.newArrayList();
+    private final ArrayList<File> commonNamesSource = Lists.newArrayList();
+    private File destinationDir;
+
+    public void setSrc(File sourceDir)
+    {
+        sourceDirs.add(sourceDir);
+    }
+
+    public void setToDir(File destinationDir)
+    {
+        this.destinationDir = destinationDir;
+    }
+
+    public void setCommonNames(File file)
+    {
+        commonNamesSource.add(file);
+    }
+
+    public void execute() throws IOException
+    {
+        if (destinationDir == null || !destinationDir.isDirectory())
+        {
+            throw new IllegalArgumentException("Missing destination directory.");
+        }
+
+        final BindableMetadataBuilder builder = new BindableMetadataBuilder();
+        for (File f : sourceDirs) builder.addSource(f);
+        for (File f : commonNamesSource) builder.addCommonMetadataSource(f);
+        
+        builder.addListener(
+            new BindableMetadataBuilderListener.XmlSerializerListener(destinationDir));
+        builder.buildAttributeMetadata();
+    }
+
     public static void main(String [] args) throws FileNotFoundException, IOException
     {
         if (args.length < 2)
@@ -28,20 +66,14 @@ public class BindableMetadataXmlSerializer
             return;
         }
 
-        final String javaSource = args[0];
-        final String outputDir = args[1];
+        BindableMetadataXmlSerializer serializer = new BindableMetadataXmlSerializer();
+        serializer.setSrc(new File(args[0]));
+        serializer.setToDir(new File(args[1]));
 
-        final BindableMetadataBuilder builder = new BindableMetadataBuilder();
-        builder.addSource(new File(javaSource));
-
-        for (int i = 2; i < args.length; i++)
+        if (args.length > 2)
         {
-            builder.addCommonMetadataSource(new File(args[i]));
+            for (int i = 2; i < args.length; i++) serializer.setCommonNames(new File(args[i]));
         }
-
-        builder.addListener(new BindableMetadataBuilderListener.XmlSerializerListener(
-            new File(outputDir)));
-        builder.buildAttributeMetadata();
     }
 
     private static void printUsage()

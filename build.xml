@@ -344,19 +344,15 @@
     -->
   <property name="common.attribute.names.source.path"
             location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
-  
+
   <macrodef name="attributes-xml">
     <attribute name="java.source" />
     <attribute name="output.dir" />
     <sequential>
       <mkdir dir="@{output.dir}" />
-      <java classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer"
-            classpathref="test.classpath"
-            outputproperty="dev.null">
-        <arg file="@{java.source}" />
-        <arg file="@{output.dir}" />
-        <arg value="${common.attribute.names.source.path}" />
-      </java>
+
+      <metadata-serializer
+        src="@{java.source}" todir="@{output.dir}" commonNames="${common.attribute.names.source.path}" />
     </sequential>
   </macrodef>
 
@@ -376,7 +372,7 @@
   </macrodef>
 
   <target name="attrs"
-          depends="compile">
+          depends="compile, attrs.tasks">
     <parallel threadsPerProcessor="1">
       <attributes-xml java.source="${core.dir}/carrot2-algorithm-lingo/src" output.dir="${build.dir}" />
       <attributes-xml java.source="${core.dir}/carrot2-algorithm-stc/src" output.dir="${build.dir}" />
@@ -399,7 +395,7 @@
     </parallel>
   </target>
 
-  <target name="attrs.eclipse" depends="compile" description="Compiles attribute descriptors for use with Eclipse.">
+  <target name="attrs.eclipse" depends="compile, attrs.tasks" description="Compiles attribute descriptors for use with Eclipse.">
     <parallel threadsPerProcessor="1">
       <attributes-xml-copy java.source="${core.dir}/carrot2-algorithm-lingo/src"
                            output.dir="${core.dir}/carrot2-algorithm-lingo/tmp/eclipse"
@@ -491,6 +487,10 @@
 
   <target name="pmd.tasks" if="pmd.home">
     <taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpathref="pmd.classpath" />
+  </target>
+
+  <target name="attrs.tasks" depends="compile">
+    <taskdef name="metadata-serializer" classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer" classpathref="test.classpath" />
   </target>
 
   <target name="duplication"
