@@ -345,32 +345,6 @@
   <property name="common.attribute.names.source.path"
             location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
 
-  <macrodef name="attributes-xml">
-    <attribute name="java.source" />
-    <attribute name="output.dir" />
-    <sequential>
-      <mkdir dir="@{output.dir}" />
-
-      <metadata-serializer
-        src="@{java.source}" todir="@{output.dir}" commonNames="${common.attribute.names.source.path}" />
-    </sequential>
-  </macrodef>
-
-  <macrodef name="attributes-xml-copy">
-    <attribute name="java.source" />
-    <attribute name="output.dir" />
-    <attribute name="copy.to" />
-    <sequential>
-      <mkdir dir="@{output.dir}" />
-      <attributes-xml java.source="@{java.source}" output.dir="@{output.dir}" />
-      <copy todir="@{copy.to}">
-        <fileset dir="@{output.dir}">
-          <include name="*.xml" />
-        </fileset>
-      </copy>
-    </sequential>
-  </macrodef>
-
   <target name="attrs"
           depends="compile, attrs.tasks">
     <parallel threadsPerProcessor="1">
@@ -491,6 +465,32 @@
 
   <target name="attrs.tasks" depends="compile">
     <taskdef name="metadata-serializer" classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer" classpathref="test.classpath" />
+    
+    <macrodef name="attributes-xml">
+      <attribute name="java.source" />
+      <attribute name="output.dir" />
+      <sequential>
+        <mkdir dir="@{output.dir}" />
+  
+        <metadata-serializer
+          src="@{java.source}" todir="@{output.dir}" commonNames="${common.attribute.names.source.path}" />
+      </sequential>
+    </macrodef>
+  
+    <macrodef name="attributes-xml-copy">
+      <attribute name="java.source" />
+      <attribute name="output.dir" />
+      <attribute name="copy.to" />
+      <sequential>
+        <mkdir dir="@{output.dir}" />
+        <attributes-xml java.source="@{java.source}" output.dir="@{output.dir}" />
+        <copy todir="@{copy.to}">
+          <fileset dir="@{output.dir}">
+            <include name="*.xml" />
+          </fileset>
+        </copy>
+      </sequential>
+    </macrodef>
   </target>
 
   <target name="duplication"
