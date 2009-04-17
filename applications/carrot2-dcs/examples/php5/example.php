@@ -30,7 +30,7 @@
   //
   //
   echo '<h1>Clustering documents from external source</h1>';
-  $source = "yahoo-news";
+  $source = "boss-news";
   $query = "world";
   $results = 20;
   $algorithm = "url"; // cluster by url to show how to handle subclusters
