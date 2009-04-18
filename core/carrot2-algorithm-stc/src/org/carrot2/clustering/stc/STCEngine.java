@@ -363,8 +363,7 @@ public class STCEngine
                     .getInternalDocumentsRepresentation().numberOfSetBitsAfterAnd(
                         b.getNode().getInternalDocumentsRepresentation());
 
-                // BUG: This check should be bidirectional (see Zamir's paper).
-                if (((a_and_b_docCount / b.getNode().getSuffixedDocumentsCount()) > MERGE_THRESHOLD)
+                if (((a_and_b_docCount / b.getNode().getSuffixedDocumentsCount()) > MERGE_THRESHOLD)    
                     && ((a_and_b_docCount / a_docCount) > MERGE_THRESHOLD))
                 {
                     // add links to base cluster graph. This is actually redundant as
