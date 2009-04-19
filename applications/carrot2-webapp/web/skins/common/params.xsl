@@ -10,6 +10,10 @@
               
   <xsl:strip-space elements="*" />
   
+  <!--
+       Templates and parameters to override when customizing the webapp. 
+    -->
+  
   <!-- Suffix appended to the head title after the current query -->
   <xsl:template match="page" mode="head-title-suffix">Carrot2 Clustering Engine</xsl:template>
   
@@ -118,4 +122,9 @@
        set to either 'always' or 'hidden'.
     -->
   <xsl:param name="show-advanced-options">hidden</xsl:param>
+  
+  <!--
+       Google Analytics web property id.  
+    -->
+  <xsl:param name="google-analytics-web-property-id">UA-317750-3</xsl:param>
 </xsl:stylesheet>
