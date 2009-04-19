@@ -94,7 +94,7 @@ body, input, select, label {
 
 /** Startup screen */
 #startup #logo {
-  background-image: url('../img/c2-logo-startup.png'); /** sprite-ref: vert; */
+  background-image: url('../img/c2-logo-startup.png'); /** sprite-ref: vert; sprite-margin-bottom: 16px; */
   top: 110px;
   left: 100px;
 }
