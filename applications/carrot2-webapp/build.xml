@@ -14,6 +14,7 @@
   <!-- Import common macros -->
   <import file="${carrot2.master.basedir}/etc/ant/common/basedir.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/webtest.xml" />
+  <import file="${carrot2.webapp.basedir}/etc/ant/webapp.xml" />
 
   <!-- Load properties from the master base dir, otherwise sprites generator will not work -->
   <property file="${carrot2.master.basedir}/local.properties" />
@@ -126,7 +127,7 @@
            compiler="modern"
            source="1.5"
            target="1.5"
-	   debug="true"
+	         debug="true"
            encoding="UTF-8">
       <classpath refid="lib.classpath" />
       <classpath path="${jar.dir}/carrot2-core.jar" />
@@ -166,54 +167,18 @@
     </copy>
   </target>
 
-  <!-- 
-       Builds sprite images for a single skin.
-    -->
-  <macrodef name="carrot2.webapp.sprites">
-    <attribute name="base.dir" />
-    <attribute name="root.dir" />
-
-    <sequential>
-      <taskdef name="smartsprites"
-               classname="org.carrot2.labs.smartsprites.ant.SmartSpritesTask">
-        <classpath>
-          <fileset dir="${smartsprites.home}/lib" />
-        </classpath>
-      </taskdef>
-
-      <delete dir="@{base.dir}/@{root.dir}/sprite" />
-      <mkdir dir="@{base.dir}/@{root.dir}/sprite" />
-      <smartsprites rootdir="@{base.dir}/@{root.dir}"
-                    outputdir="@{base.dir}/@{root.dir}/sprite"
-                    cssfilesuffix=""
-                    loglevel="WARN" />
-
-      <copy todir="@{base.dir}/@{root.dir}/sprite" overwrite="false">
-        <fileset dir="@{base.dir}/@{root.dir}">
-          <include name="css/**" />
-        </fileset>
-      </copy>
-    </sequential>
-  </macrodef>
-
   <!--
        Builds sprite images in the skins work directory.
     -->
   <target name="carrot2.webapp.sprites.war" if="smartsprites.home" depends="basedir.check, carrot2.webapp.skins">
-    <carrot2.webapp.sprites base.dir="${webapp.skins.dir}" root.dir="fancy-compact" />
-    <carrot2.webapp.sprites base.dir="${webapp.skins.dir}" root.dir="fancy-large" />
-    <carrot2.webapp.sprites base.dir="${webapp.skins.dir}" root.dir="simple" />
+    <carrot2.webapp.sprite-skins webapp.skins.dir="${webapp.skins.dir}" />
   </target>
 
   <!--
        Builds sprite images in the skin source directory.
     -->
   <target name="carrot2.webapp.sprites.eclipse" if="smartsprites.home" depends="basedir.check">
-    <carrot2.webapp.sprites base.dir="${carrot2.webapp.basedir}/web/skins"
-             root.dir="fancy-compact" />
-    <carrot2.webapp.sprites base.dir="${carrot2.webapp.basedir}/web/skins"
-             root.dir="fancy-large" />
-    <carrot2.webapp.sprites base.dir="${carrot2.webapp.basedir}/web/skins" root.dir="simple" />
+    <carrot2.webapp.sprite-skins webapp.skins.dir="${carrot2.webapp.basedir}/web/skins" />
   </target>
 
   <!--

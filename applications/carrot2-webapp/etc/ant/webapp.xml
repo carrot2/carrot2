@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="carrot2.webapp.common">
+  <!--
+       Builds sprites for all skins in the webapp.
+    -->
+  <macrodef name="carrot2.webapp.sprite-skins">
+    <attribute name="webapp.skins.dir" />
+
+    <sequential>
+      <carrot2.webapp.sprites base.dir="@{webapp.skins.dir}" root.dir="fancy-compact" />
+      <carrot2.webapp.sprites base.dir="@{webapp.skins.dir}" root.dir="fancy-large" />
+      <carrot2.webapp.sprites base.dir="@{webapp.skins.dir}" root.dir="simple" />
+    </sequential>
+  </macrodef>
+
+  <!-- 
+       Builds sprite images for a single skin.
+    -->
+  <macrodef name="carrot2.webapp.sprites">
+    <attribute name="base.dir" />
+    <attribute name="root.dir" />
+
+    <sequential>
+      <taskdef name="smartsprites"
+               classname="org.carrot2.labs.smartsprites.ant.SmartSpritesTask">
+        <classpath>
+          <fileset dir="${smartsprites.home}/lib" />
+        </classpath>
+      </taskdef>
+
+      <delete dir="@{base.dir}/@{root.dir}/sprite" />
+      <mkdir dir="@{base.dir}/@{root.dir}/sprite" />
+      <smartsprites rootdir="@{base.dir}/@{root.dir}"
+                    outputdir="@{base.dir}/@{root.dir}/sprite"
+                    cssfilesuffix=""
+                    loglevel="WARN" />
+
+      <copy todir="@{base.dir}/@{root.dir}/sprite" overwrite="false">
+        <fileset dir="@{base.dir}/@{root.dir}">
+          <include name="css/**" />
+        </fileset>
+      </copy>
+    </sequential>
+  </macrodef>
+</project>
