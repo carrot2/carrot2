@@ -76,15 +76,6 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
 
         return result;
     }
-    
-    /**
-     * Calls {@link #next()} with an empty token, effectively creating a new one.
-     */
-    @Override
-    public Token next() throws IOException
-    {
-        return next(null);
-    }
 
     /**
      * Not implemented in this tokenizer. Use {@link #reset()} or {@link #close()}.
