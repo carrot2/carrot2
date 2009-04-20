@@ -57,6 +57,8 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
      */
     public final Token next(Token result) throws IOException
     {
+        assert result != null : "Reusable token must not be null.";
+
         final int tokenType = parser.getNextToken();
 
         // EOF?
@@ -65,12 +67,8 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
             return null;
         }
 
+        result.setPayload(tokenPayload);
         tokenPayload.setRawFlags(tokenType);
-        if (result == null)
-        {
-            result = new Token();
-            result.setPayload(tokenPayload);
-        }
 
         result.setTermBuffer(parser.yybuffer(), parser.yystart(), parser.yylength());
 

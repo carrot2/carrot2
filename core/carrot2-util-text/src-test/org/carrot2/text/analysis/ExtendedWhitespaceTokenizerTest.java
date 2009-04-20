@@ -245,8 +245,8 @@ public class ExtendedWhitespaceTokenizerTest
                 testString));
 
             final ArrayList<TokenImage> tokens = new ArrayList<TokenImage>();
-            Token token;
-            while ((token = tokenizer.next()) != null)
+            Token token = new Token();
+            while ((token = tokenizer.next(token)) != null)
             {
                 final String image = new String(token.termBuffer(), 0, token.termLength());
                 final ITokenType payload = (ITokenType) token.getPayload();
