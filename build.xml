@@ -46,6 +46,7 @@
   <!-- Extra tools the build can use if available -->
   <property name="clover.jar" location="${clover.home}/lib/clover.jar" />
   <property name="pmd.jar" location="${pmd.home}/lib/" />
+  <property name="smartsprites.home" location="${carrot2.master.basedir}/etc/smartsprites" />
 
   <!-- Extra stuff for building the documentation. -->
   <property name="xalan.home" location="lib/org.apache.xml" />

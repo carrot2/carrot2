@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="smartsprites" default="process">
+  <target name="process"
+          description="Performs CSS sprite processing">
+    <available file="smartsprites.properties" property="smartsprites.properties.available" />
+    <fail unless="smartsprites.properties.available">
+
+Please provide SmartSprite parameters in a 'smartsprites.properties' file.
+
+    </fail>
+
+    <property file="smartsprites.properties" />
+    <taskdef name="smartsprites"
+             classname="org.carrot2.labs.smartsprites.ant.SmartSpritesTask">
+      <classpath>
+        <fileset dir="lib" />
+      </classpath>
+    </taskdef>
+
+    <smartsprites rootdir="${root.dir.path}"
+                  documentrootdir="${document.root.dir.path}"
+                  outputdir="${output.dir.path}"
+                  cssfilesuffix="${css.file.suffix}"
+                  csspropertyindent="${css.property.indent}"
+                  loglevel="${log.level}"
+                  spritepngdepth="${sprite.png.depth}"
+                  spritepngie6="${sprite.png.ie6}" />
+  </target>
+</project>
+
