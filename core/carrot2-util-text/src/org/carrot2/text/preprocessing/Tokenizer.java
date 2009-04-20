@@ -155,7 +155,7 @@ public final class Tokenizer
                 final String fieldName = fieldEntry.objectA;
                 final String fieldValue = fieldEntry.objectB;
 
-                Token t = null;
+                Token t = new Token();
                 if (!StringUtils.isEmpty(fieldValue))
                 {
                     try
