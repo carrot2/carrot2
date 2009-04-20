@@ -530,7 +530,7 @@
     </copy>
 
     <javadoc destdir="${javadoc.dir}"
-             access="public"
+             access="protected"
              version="true"
              use="false"
              encoding="UTF-8"
