@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -17,9 +16,12 @@ import java.io.*;
 import java.util.List;
 import java.util.Map;
 
+import org.carrot2.util.StreamUtils;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.directorywalker.*;
 import com.thoughtworks.qdox.model.*;
 
 /**
@@ -81,12 +83,43 @@ class BindableMetadataBuilder
     {
         if (file.isDirectory())
         {
-            javaDocBuilder.addSourceTree(file);
+            addSourceTree(file);
         }
         else
         {
             javaDocBuilder.addSource(file);
         }
+    }
+
+    /**
+     * A directory traversal optimized to look only for classes that have {@link Bindable}
+     * annotation (avoiding full source code parse).
+     */
+    public void addSourceTree(File file)
+    {
+        final DirectoryScanner scanner = new DirectoryScanner(file);
+        scanner.addFilter(new SuffixFilter(".java"));
+        scanner.scan(new FileVisitor()
+        {
+            public void visitFile(File currentFile)
+            {
+                try
+                {
+                    String encoding = "UTF-8";
+                    String sourceFile = new String(StreamUtils
+                        .readFullyAndClose(new FileInputStream(currentFile)), encoding);
+
+                    if (sourceFile.indexOf("@Bindable") >= 0)
+                    {
+                        javaDocBuilder.addSource(new StringReader(sourceFile));
+                    }
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     /**
