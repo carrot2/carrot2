@@ -581,16 +581,8 @@
   <!-- 
        Build core JAR.
     -->
-  <target name="jar" depends="jar.check, jar.build"
-    description="Builds Carrot2 core JAR" unless="jar.exists" />
-
-  <target name="jar.build" unless="jar.exists">
-    <!-- Dependant tasks are always executed, so we need to have antcalls here -->
-    <antcall target="clean.classes" />
-    <antcall target="compile" />
-    <antcall target="attrs" />
-    <antcall target="resources" />
-
+  <target name="jar" description="Builds Carrot2 core JAR"
+    depends="compile, attrs, resources">
     <mkdir dir="${jar.dir}" />
     <jar destfile="${jar.dir}/carrot2-core.jar">
       <fileset dir="${build.dir}">
@@ -676,10 +668,6 @@
       </classpath>
     </java>
     <delete dir="${jar.mini.test.classes.dir}" />
-  </target>
-    
-  <target name="jar.check">
-    <available file="${jar.dir}/carrot2-core.jar" property="jar.exists" />
   </target>
   
   <target name="clean.jar">
