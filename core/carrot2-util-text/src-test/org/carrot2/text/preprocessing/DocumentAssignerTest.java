@@ -70,6 +70,51 @@ public class DocumentAssignerTest extends LabelFilterTestBase
     }
 
     @Test
+    public void testStemmedSingleWordLabelConflation()
+    {
+        createDocuments("cat", "cat", "cat", "cat", "cats", "cats", "cats", "cats");
+
+        final int [][] expectedDocumentIndices = new int [] []
+        {
+            new int []
+            {
+                0, 1, 2, 3
+            }
+        };
+
+        documentAssigner.minClusterSize = 1;
+        check(expectedDocumentIndices, -1);
+    }
+
+    @Test
+    public void testStemmedPhraseLabelConflation()
+    {
+        createDocuments("cat horse", "cat horse", "cats horse", "cats horse",
+            "cat horses", "cat horses", "cats horses", "cats horses");
+
+        final int [][] expectedDocumentIndices = new int [] []
+        {
+            new int []
+            {
+                0, 1, 2, 3
+            },
+
+            new int []
+            {
+                0, 1, 2, 3
+            },
+
+            new int []
+            {
+                0, 1, 2, 3
+            }
+        };
+
+        documentAssigner.minClusterSize = 1;
+        check(expectedDocumentIndices, 2);
+    }
+
+    @Test
     public void testMinClusterSize()
     {
         createDocuments("test data", "test data", "data test . mining",
@@ -105,30 +150,27 @@ public class DocumentAssignerTest extends LabelFilterTestBase
     @Test
     public void testPhraseLabelsExactMatch()
     {
-        createDocuments("data is cool", "data is cool", "data is cool", "", "cool",
-            "cool");
+        createDocuments("data is cool", "data is cool", "data is cool", "data is cool",
+            "data cool", "data cool");
 
         final int [][] expectedDocumentIndices = new int [] []
         {
-            new int []
-            {
-                0, 1, 2
-            },
-
             new int []
             {
                 0, 1
             }
         };
 
-        check(expectedDocumentIndices, 1);
+        documentAssigner.exactPhraseAssignment = true;
+        documentAssigner.minClusterSize = 2;
+        check(expectedDocumentIndices, 0);
     }
 
     @Test
     public void testPhraseLabelsNonExactMatch()
     {
-        createDocuments("data is cool", "data is cool", "cool data", "", "cool", "data",
-            "data", "");
+        createDocuments("data is cool", "data is cool", "data is cool", "data is cool",
+            "data cool", "data cool");
 
         final int [][] expectedDocumentIndices = new int [] []
         {
@@ -139,16 +181,13 @@ public class DocumentAssignerTest extends LabelFilterTestBase
 
             new int []
             {
-                0, 1, 2, 3
-            },
-
-            new int []
-            {
                 0, 1, 2
             }
         };
 
-        check(expectedDocumentIndices, 2);
+        documentAssigner.exactPhraseAssignment = false;
+        documentAssigner.minClusterSize = 2;
+        check(expectedDocumentIndices, 0);
     }
 
     @Test
@@ -196,7 +235,7 @@ public class DocumentAssignerTest extends LabelFilterTestBase
         assertThat(context.allLabels.firstPhraseIndex).as("allLabels.firstPhraseIndex")
             .isEqualTo(expectedFirstPhraseIndex);
         assertThat(context.allLabels.documentIndices).as("allLabels.documentIndices")
-        .hasSize(expectedDocumentIndices.length);
+            .hasSize(expectedDocumentIndices.length);
         for (int i = 0; i < expectedDocumentIndices.length; i++)
         {
             assertThat(context.allLabels.documentIndices[i].toArray()).as(

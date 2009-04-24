@@ -80,11 +80,12 @@ public class DocumentAssigner
     public void assign(PreprocessingContext context)
     {
         final int [] labelsFeatureIndex = context.allLabels.featureIndex;
-        final int [][] wordsTfByDocument = context.allWords.tfByDocument;
+        final int [][] stemsTfByDocument = context.allStems.tfByDocument;
+        final int [] wordsStemIndex = context.allWords.stemIndex;
         final boolean [] wordsCommonTerm = context.allWords.commonTermFlag;
         final int [][] phrasesTfByDocument = context.allPhrases.tfByDocument;
         final int [][] phrasesWordIndices = context.allPhrases.wordIndices;
-        final int wordCount = wordsTfByDocument.length;
+        final int wordCount = wordsStemIndex.length;
         final int documentCount = context.documents.size();
 
         final IntSet [] labelsDocumentIndices = new IntSet [labelsFeatureIndex.length];
@@ -92,18 +93,22 @@ public class DocumentAssigner
         for (int i = 0; i < labelsFeatureIndex.length; i++)
         {
             final IntBitSet documentIndices = new IntBitSet(documentCount);
-            final int [] tfByDocument;
 
             final int featureIndex = labelsFeatureIndex[i];
             if (featureIndex < wordCount)
             {
-                tfByDocument = wordsTfByDocument[featureIndex];
+                addTfByDocumentToBitSet(documentIndices,
+                    stemsTfByDocument[wordsStemIndex[featureIndex]]);
             }
             else
             {
                 final int phraseIndex = featureIndex - wordCount;
-                tfByDocument = phrasesTfByDocument[phraseIndex];
-                if (!exactPhraseAssignment)
+                if (exactPhraseAssignment)
+                {
+                    addTfByDocumentToBitSet(documentIndices,
+                        phrasesTfByDocument[phraseIndex]);
+                }
+                else
                 {
                     final int [] wordIndices = phrasesWordIndices[phraseIndex];
                     boolean firstAdded = false;
@@ -116,22 +121,20 @@ public class DocumentAssigner
                             if (!firstAdded)
                             {
                                 addTfByDocumentToBitSet(documentIndices,
-                                    wordsTfByDocument[wordIndex]);
+                                    stemsTfByDocument[wordsStemIndex[wordIndex]]);
                                 firstAdded = true;
                             }
                             else
                             {
                                 final IntBitSet temp = new IntBitSet(documentCount);
                                 addTfByDocumentToBitSet(temp,
-                                    wordsTfByDocument[wordIndex]);
+                                    stemsTfByDocument[wordsStemIndex[wordIndex]]);
                                 documentIndices.retainAll(temp);
                             }
                         }
                     }
                 }
             }
-
-            addTfByDocumentToBitSet(documentIndices, tfByDocument);
 
             labelsDocumentIndices[i] = documentIndices;
         }
