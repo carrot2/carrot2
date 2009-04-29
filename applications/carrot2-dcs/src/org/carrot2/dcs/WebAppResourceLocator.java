@@ -14,6 +14,8 @@ import org.carrot2.util.resource.IResourceLocator;
  */
 final class WebAppResourceLocator implements IResourceLocator
 {
+    private static IResource [] EMPTY_RESULT = new IResource [0];
+
     /**
      * Servlet context.
      */
@@ -63,7 +65,7 @@ final class WebAppResourceLocator implements IResourceLocator
             return new IResource [] { new WebAppResource(resource) };
         }
 
-        return null;
+        return EMPTY_RESULT;
     }
 
     private boolean isPathRelative(String resource)
