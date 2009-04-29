@@ -1,0 +1,19 @@
+About SmartSprites
+------------------
+
+SmartSprites will let you easily introduce and maintain CSS sprites in your
+designs. SmartSprites parses special directives you can insert into your
+original CSS to mark individual images to be turned into sprites. It then
+builds sprite images from the collected images and automatically inserts the
+required CSS properties into your style sheet, so that the sprites are used
+instead of the individual images.
+
+In other words, no tedious copying & pasting to your CSS when adding, removing
+or changing sprited images. Just work with your CSS and original images as
+usual and have SmartSprites automatically transform them to the sprite-powered
+version when necessary. 
+
+
+For downloads and more information about SmartSprites, please see:
+
+http://stanislaw.osinski.name/smartsprites
