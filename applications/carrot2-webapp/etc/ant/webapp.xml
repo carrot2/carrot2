@@ -24,7 +24,9 @@
       <taskdef name="smartsprites"
                classname="org.carrot2.labs.smartsprites.ant.SmartSpritesTask">
         <classpath>
-          <fileset dir="${smartsprites.home}/lib" />
+          <fileset dir="${smartsprites.home}">
+            <include name="*.jar" />
+          </fileset>
         </classpath>
       </taskdef>
 
