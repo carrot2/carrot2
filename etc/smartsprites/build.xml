@@ -22,7 +22,7 @@ Please provide SmartSprite parameters in a 'smartsprites.properties' file.
                   outputdir="${output.dir.path}"
                   cssfilesuffix="${css.file.suffix}"
                   csspropertyindent="${css.property.indent}"
-                  loglevel="${log.level}"
+                  loglevel="INFO"
                   spritepngdepth="${sprite.png.depth}"
                   spritepngie6="${sprite.png.ie6}" />
   </target>
