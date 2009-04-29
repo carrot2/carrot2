@@ -115,7 +115,7 @@
   </target>
   
   <!-- 
-       Deploys DCS WAR file and runs webstest against it.
+       Deploys DCS WAR file and runs webtests against it.
     -->
   <target name="carrot2.dcs.webtest.war" depends="basedir.check, carrot2.common.webtest.war.prepare"
           if="webtest.war.resources.available">
@@ -129,10 +129,7 @@
   <!-- 
        Builds the DCS war file.
     -->
-  <target name="carrot2.dcs.war" depends="basedir.check">
-    <antcall target="jar" />
-    <antcall target="lib.flattened" />
-
+  <target name="carrot2.dcs.war" depends="basedir.check, jar, lib.flattened">
     <!-- Add DCS-specific JARs -->
     <copy todir="${lib.flattened}">
       <fileset dir="${carrot2.master.basedir}">
@@ -153,7 +150,6 @@
     <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
     <javac srcdir="${carrot2.dcs.basedir}/src"
            destdir="${dcs.dir}/classes"
-           compiler="modern"
            source="1.5"
            target="1.5"
            encoding="UTF-8">
@@ -163,6 +159,7 @@
 
     <copy tofile="${dcs.dir}/classes/log4j.xml"
           file="core/carrot2-util-log4j/src/log4j-dcs.xml" />
+
     <war destfile="${dcs.war.dir}/${dcs.war.base.name}.war"
          webxml="${carrot2.dcs.basedir}/web/WEB-INF/web.xml"
          manifest="${dcs.dir}/manifest/MANIFEST.MF">
