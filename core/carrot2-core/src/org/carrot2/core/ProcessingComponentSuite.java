@@ -13,8 +13,7 @@
 
 package org.carrot2.core;
 
-import java.io.InputStream;
-import java.io.Writer;
+import java.io.*;
 import java.util.*;
 
 import org.carrot2.core.ProcessingComponentDescriptor.Position;
@@ -198,6 +197,8 @@ public class ProcessingComponentSuite
     private static ProcessingComponentSuite deserialize(IResource resource,
         boolean clearInternals) throws Exception
     {
+        if (resource == null) throw new IOException("Resource not found.");
+        
         final InputStream inputStream = resource.open();
         try
         {
