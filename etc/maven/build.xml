@@ -68,11 +68,6 @@
 
         <!-- Deploy custom libraries or those that are not present in the official Maven repositories -->
 
-        <artifact:deploy file="${carrot2.master.basedir}/lib/org.codehaus.jackson/jackson-0.9.2-patched.jar">
-            <artifact:pom file="${poms.dir}/jackson.pom.xml" />
-            <artifact:remoteRepository url="${maven.repository.url}" />
-        </artifact:deploy>
-
         <artifact:deploy file="${carrot2.master.basedir}/lib/morfologik/morfologik-stemming-1.1.2.jar">
             <artifact:pom file="${poms.dir}/morfologik.pom.xml" />
             <artifact:remoteRepository url="${maven.repository.url}" />
