@@ -187,31 +187,6 @@ public class ProcessingResultTest
         checkJsonDocuments(result, root);
     }
 
-    /**
-     * Tests compliance with the assumed JSON format. Useful when updating the library to
-     * make sure the Carrot2 JSON format doesn't change unnoticed.
-     */
-    @Test
-    public void testJsonFormatStability() throws IOException
-    {
-        final String expectedJson = "callback({\"clusters\":[{\"phrases\":[\"Label 1\",\"Label 2\"]," +
-        		"\"clusters\":[{\"phrases\":[\"Label 3 zażółć gęślą jaźń\"],\"documents\":" +
-        		"[3,4],\"id\":1}],\"score\":1.0,\"documents\":[],\"attributes\":{\"testDouble\":" +
-        		"10.3,\"testString\":\"test\",\"testBoolean\":true,\"testInteger\":10},\"id\":0}," +
-        		"{\"phrases\":[\"Label 4\"],\"score\":0.55,\"documents\":[4,5],\"id\":2}]," +
-        		"\"documents\":[{\"snippet\":\"Test snippet 1\",\"url\":\"http://test1.com\"," +
-        		"\"fields\":{\"testDouble\":10.3,\"testString\":\"test\",\"testBoolean\":true," +
-        		"\"testInteger\":10},\"id\":3,\"title\":\"Test title 1\",\"sources\":[\"s1\",\"s2\"]}," +
-        		"{\"snippet\":\"Test snippet 2\",\"url\":\"http://test2.com/test\",\"id\":4," +
-        		"\"title\":\"Test title 2\"},{\"snippet\":\"Test snippet 3. Some more words and <b>html</b>\"," +
-        		"\"url\":\"http://test2.com\",\"id\":5,\"title\":\"Test title 3\"}],\"query\":\"query\"});";
-        final ProcessingResult result = prepareProcessingResult();
-        final String jsonString = getJsonString(result, "callback", true, true);
-        System.out.println(jsonString);
-        Assertions.assertThat(jsonString).isEqualTo(
-            expectedJson);
-    }
-
     @Test
     public void testJsonSerializationWithCallback() throws IOException
     {
@@ -311,7 +286,7 @@ public class ProcessingResultTest
         final ProcessingResult sourceProcessingResult = prepareProcessingResult();
 
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        final Writer writer = new OutputStreamWriter(outputStream);
+        final Writer writer = new OutputStreamWriter(outputStream, "UTF-8");
         sourceProcessingResult.serialize(new NullWriter());
         sourceProcessingResult.serialize(writer, documentsDeserialized,
             clustersDeserialized);
