@@ -89,30 +89,6 @@ public final class Document
     Integer id;
 
     /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     */
-    @Element(required = false)
-    private String title;
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     */
-    @Element(required = false)
-    private String url;
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     */
-    @Element(required = false)
-    private String snippet;
-
-    /**
-     * Field used during serialization/ deserialization.
-     */
-    @ElementList(entry = "source", required = false)
-    private List<String> sources;
-
-    /**
      * Field used during serialization/ deserialization.
      */
     @ElementMap(entry = "field", key = "key", attribute = true, inline = true, required = false)
@@ -153,33 +129,73 @@ public final class Document
      * Returns this document's {@link #TITLE} field.
      */
     @JsonGetter
+    @Element(required = false)
     public String getTitle()
     {
         return getField(TITLE);
     }
 
     /**
+     * Sets this document's {@link #TITLE} field.
+     * 
+     * @param title title to set
+     * @return this document for convenience
+     */
+    @Element(required = false)
+    public Document setTitle(String title)
+    {
+        return setField(TITLE, title);
+    }
+
+    /**
      * Returns this document's {@link #SUMMARY} field.
      */
     @JsonGetter("snippet")
+    @Element(name = "snippet", required = false)
     public String getSummary()
     {
         return getField(SUMMARY);
     }
 
     /**
+     * Sets this document's {@link #SUMMARY} field.
+     * 
+     * @param summary summary to set
+     * @return this document for convenience
+     */
+    @Element(name = "snippet", required = false)
+    public Document setSummary(String summary)
+    {
+        return setField(SUMMARY, summary);
+    }
+
+    /**
      * Returns this document's {@link #CONTENT_URL} field.
      */
     @JsonGetter("url")
+    @Element(name = "url", required = false)
     public String getContentUrl()
     {
         return getField(CONTENT_URL);
     }
 
     /**
+     * Sets this document's {@link #CONTENT_URL} field.
+     * 
+     * @param contentUrl content URL to set
+     * @return this document for convenience
+     */
+    @Element(name = "url", required = false)
+    public Document setContentUrl(String contentUrl)
+    {
+        return setField(CONTENT_URL, contentUrl);
+    }
+
+    /**
      * Returns this document's {@link #SOURCES} field.
      */
     @JsonGetter
+    @ElementList(entry = "source", required = false)
     public List<String> getSources()
     {
         return getField(SOURCES);
@@ -191,6 +207,7 @@ public final class Document
      * @param sources the sources list to set
      * @return this document for convenience
      */
+    @ElementList(entry = "source", required = false)
     public Document setSources(List<String> sources)
     {
         return setField(SOURCES, sources);
@@ -341,17 +358,12 @@ public final class Document
     @Persist
     @SuppressWarnings(
     {
-        "unused", "unchecked"
+        "unused"
     })
     private void beforeSerialization()
     {
         synchronized (fields)
         {
-            title = (String) fields.get(TITLE);
-            snippet = (String) fields.get(SUMMARY);
-            url = (String) fields.get(CONTENT_URL);
-            sources = (List<String>) fields.get(SOURCES);
-
             // Wrapper iterates over the whole map, so we need to synchronize
             // to avoid concurrent modification exceptions in setters
             otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
@@ -374,19 +386,8 @@ public final class Document
         {
             if (otherFieldsForSerialization != null)
             {
-                fields = SimpleXmlWrappers.unwrap(otherFieldsForSerialization);
+                fields.putAll(SimpleXmlWrappers.unwrap(otherFieldsForSerialization));
             }
-            fields.put(TITLE, title);
-            fields.put(SUMMARY, snippet);
-            fields.put(CONTENT_URL, url);
-            if (sources != null)
-            {
-                fields.put(SOURCES, sources);
-            }
-
-            fieldsView = Collections.unmodifiableMap(fields);
         }
-
-        sources = null;
     }
 }

@@ -99,18 +99,9 @@ public final class Cluster
     /** Cached list of documents from this cluster and subclusters */
     private List<Document> allDocuments;
 
-    /** Score of this cluster for serialization/ deserialization purposes. */
-    @Attribute(required = false)
-    private Double score;
-
     /** Attributes of this cluster for serialization/ deserialization purposes. */
     @ElementMap(entry = "attribute", key = "key", attribute = true, inline = true, required = false)
     private HashMap<String, SimpleXmlWrapperValue> otherAttributesForSerialization;
-
-    /** The actual size of this cluster, for serialization purposes only */
-    @SuppressWarnings("unused")
-    @Attribute(required = false)
-    private int size;
 
     /**
      * List of document ids used for serialization/ deserialization purposes.
@@ -372,10 +363,26 @@ public final class Cluster
         return this;
     }
 
+    /**
+     * Returns this cluster's {@value #SCORE} field.
+     */
     @JsonGetter
+    @Attribute(required = false)
     public Double getScore()
     {
         return getAttribute(SCORE);
+    }
+
+    /**
+     * Sets this cluster's {@link #SCORE} field.
+     * 
+     * @param score score to set
+     * @return this cluster for convenience
+     */
+    @Attribute(required = false)
+    public Cluster setScore(Double score)
+    {
+        return setAttribute(SCORE, score);
     }
 
     /**
@@ -427,6 +434,27 @@ public final class Cluster
     public int size()
     {
         return getAllDocuments().size();
+    }
+
+    /**
+     * For serialization only.
+     */
+    @JsonGetter
+    @Attribute(required = false)
+    @SuppressWarnings("unused")
+    private int getSize()
+    {
+        return size();
+    }
+
+    /**
+     * Empty implementation, SimpleXML requires both a getter and a setter.
+     */
+    @Attribute(required = false)
+    @SuppressWarnings("unused")
+    private void setSize(int size)
+    {
+        // We only serialize the size, hence empty implementation
     }
 
     /**
@@ -723,9 +751,6 @@ public final class Cluster
             }
         });
 
-        score = getAttribute(SCORE);
-        size = size();
-
         // Remove score from attributes for serialization
         otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
             .wrap(attributes));
@@ -742,17 +767,9 @@ public final class Cluster
     {
         if (otherAttributesForSerialization != null)
         {
-            attributes = SimpleXmlWrappers.unwrap(otherAttributesForSerialization);
+            attributes.putAll(SimpleXmlWrappers.unwrap(otherAttributesForSerialization));
         }
 
-        if (score != null)
-        {
-            // We're creating a new object reference to which should not
-            // yet escape, so no need to synchronize here
-            attributes.put(SCORE, score);
-        }
-
-        attributesView = Collections.unmodifiableMap(attributes);
         phrasesView = Collections.unmodifiableList(phrases);
         subclustersView = Collections.unmodifiableList(subclusters);
         // Documents will be restored on the ProcessingResult level
@@ -767,7 +784,7 @@ public final class Cluster
     {
         return Lists.transform(documents, Document.DocumentToId.INSTANCE);
     }
-    
+
     /**
      * For JSON and XML serialization only.
      */
@@ -776,7 +793,6 @@ public final class Cluster
     private Map<String, Object> getOtherAttributes()
     {
         final Map<String, Object> otherAttributes = Maps.newHashMap(attributesView);
-        otherAttributes.remove(SCORE);
         return otherAttributes.isEmpty() ? null : otherAttributes;
     }
 }
