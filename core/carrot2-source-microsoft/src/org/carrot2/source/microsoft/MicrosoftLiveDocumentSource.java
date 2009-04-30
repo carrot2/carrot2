@@ -209,18 +209,18 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
             }
 
             final Document document = new Document();
-            document.addField(Document.CONTENT_URL, tmp);
+            document.setField(Document.CONTENT_URL, tmp);
 
             tmp = StringEscapeUtils.unescapeHtml(searchResults[j].getTitle());
             if (!StringUtils.isEmpty(tmp))
             {
-                document.addField(Document.TITLE, tmp);
+                document.setField(Document.TITLE, tmp);
             }
 
             tmp = StringEscapeUtils.unescapeHtml(searchResults[j].getDescription());
             if (!StringUtils.isEmpty(tmp))
             {
-                document.addField(Document.SUMMARY, tmp);
+                document.setField(Document.SUMMARY, tmp);
             }
 
             docs.add(document);

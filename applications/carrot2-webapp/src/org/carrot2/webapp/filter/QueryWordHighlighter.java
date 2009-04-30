@@ -112,7 +112,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
             field = matcher.replaceAll("<b>$1</b>");
         }
 
-        document.addField(fieldName + HIGHLIGHTED_FIELD_NAME_SUFFIX, field);
+        document.setField(fieldName + HIGHLIGHTED_FIELD_NAME_SUFFIX, field);
     }
 
     private static final Pattern LT_PATTERN = Pattern.compile("<");

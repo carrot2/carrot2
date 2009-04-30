@@ -86,7 +86,7 @@ public class ByFieldClusteringAlgorithmTest extends
     private Document documentWithField(Object fieldValue)
     {
         final Document document = new Document();
-        document.addField(FIELD, fieldValue);
+        document.setField(FIELD, fieldValue);
         return document;
     }
 }

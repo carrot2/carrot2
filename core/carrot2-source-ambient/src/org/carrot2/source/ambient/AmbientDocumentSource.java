@@ -124,6 +124,16 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
     @Internal
     public List<Document> documents;
 
+    /**
+     * Ambient topics and subtopics covered in the output documents. The set is computed
+     * for the output {@link #documents} and it may vary for the same main topic based
+     * e.g. on the requested number of {@link #results} or {@link #minTopicSize}.
+     */
+    @Processing
+    @Output
+    @Attribute
+    public Set<Object> topicIds;
+
     @Processing
     @Output
     @Attribute(key = AttributeNames.QUERY)
@@ -192,6 +202,7 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process() throws ProcessingException
     {
         query = topic.query;
@@ -212,6 +223,20 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
         {
             documents = documents.subList(0, results);
         }
+
+        topicIds = Sets.newHashSet();
+        for (Document document : documents)
+        {
+            final Object topics = document.getField(Document.TOPIC);
+            if (topics instanceof Collection)
+            {
+                topicIds.addAll((Collection<? extends Object>) topics);
+            }
+            else
+            {
+                topicIds.add(topics);
+            }
+        }
     }
 
     /**
@@ -221,7 +246,7 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
     {
         return subtopicLabels.get(topicId);
     }
-    
+
     /**
      * Loads human-readable labels for subtopics.
      */
@@ -304,13 +329,13 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
 
                 // Build document
                 final Document document = new Document();
-                document.addField(Document.CONTENT_URL, split[1]);
-                document.addField(Document.TITLE, split[2]);
+                document.setField(Document.CONTENT_URL, split[1]);
+                document.setField(Document.TITLE, split[2]);
                 if (split.length > 3)
                 {
-                    document.addField(Document.SUMMARY, split[3]);
+                    document.setField(Document.SUMMARY, split[3]);
                 }
-                document.addField(Document.TOPIC, buildTopicId(topicId,
+                document.setField(Document.TOPIC, buildTopicId(topicId,
                     resultSubtopicIds[topicId][resultIndex]));
 
                 // Add to list

@@ -158,24 +158,24 @@ final class XMLResponseParser implements ContentHandler
             // Recognize special fields and translate them.
             if ("Title".equals(localName))
             {
-                document.addField(Document.TITLE, text);
+                document.setField(Document.TITLE, text);
             }
             else if ("Summary".equals(localName))
             {
-                document.addField(Document.SUMMARY, text);
+                document.setField(Document.SUMMARY, text);
             }
             else if ("Url".equals(localName))
             {
-                document.addField(Document.CONTENT_URL, text);
+                document.setField(Document.CONTENT_URL, text);
             }
             else if ("NewsSource".equals(localName))
             {
-                document.addField(Document.SOURCES, Lists.newArrayList(text));
+                document.setField(Document.SOURCES, Lists.newArrayList(text));
             }
             else if (!"Thumbnail".equals(localName))
             {
                 // All other fields go directly in the document.
-                document.addField(localName, text);
+                document.setField(localName, text);
             }
         }
         else if (stack.size() == 4 && "Thumbnail".equals(stack.get(2)))
@@ -185,7 +185,7 @@ final class XMLResponseParser implements ContentHandler
 
             if ("Url".equals(localName)) 
             {
-                document.addField(Document.THUMBNAIL_URL, text);
+                document.setField(Document.THUMBNAIL_URL, text);
             }
         }
 

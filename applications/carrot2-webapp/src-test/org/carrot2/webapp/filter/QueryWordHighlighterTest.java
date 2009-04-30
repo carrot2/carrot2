@@ -84,7 +84,7 @@ public class QueryWordHighlighterTest
     private void check(String query, String snippetToHighlight, String expectedSnippet)
     {
         final Document document = new Document();
-        document.addField(Document.SUMMARY, snippetToHighlight);
+        document.setField(Document.SUMMARY, snippetToHighlight);
 
         final QueryWordHighlighter highlighter = new QueryWordHighlighter();
         highlighter.documents = Lists.newArrayList(document);

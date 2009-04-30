@@ -73,7 +73,7 @@ public class TestDocumentFactory
             for (final String field : fieldsToGenerate)
             {
                 final IDataGenerator<?> generator = resolveGenerator(customGenerators, field);
-                document.addField(field, generator.generate(i));
+                document.setField(field, generator.generate(i));
             }
 
             result.add(document);

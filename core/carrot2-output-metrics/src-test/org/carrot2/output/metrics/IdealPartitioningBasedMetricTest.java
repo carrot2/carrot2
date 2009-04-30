@@ -58,7 +58,7 @@ public class IdealPartitioningBasedMetricTest
     protected Document documentWithTopic(final String topic)
     {
         final Document document = new Document();
-        document.addField(Document.TOPIC, topic);
+        document.setField(Document.TOPIC, topic);
         return document;
     }
 

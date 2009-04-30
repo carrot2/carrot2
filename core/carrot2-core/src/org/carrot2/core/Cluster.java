@@ -18,6 +18,7 @@ import org.carrot2.util.MapUtils;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
+import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -32,6 +33,8 @@ import com.google.common.collect.*;
  * {@link #OTHER_TOPICS}. This class is <strong>not</strong> thread-safe.
  */
 @Root(name = "group", strict = false)
+@JsonAutoDetect(JsonMethod.NONE)
+@JsonWriteNullProperties(false)
 public final class Cluster
 {
     /**
@@ -176,6 +179,7 @@ public final class Cluster
      * 
      * @return phrases describing this cluster
      */
+    @JsonGetter
     public List<String> getPhrases()
     {
         return phrasesView;
@@ -189,6 +193,16 @@ public final class Cluster
     public List<Cluster> getSubclusters()
     {
         return subclustersView;
+    }
+
+    /**
+     * For JSON serialization only.
+     */
+    @JsonGetter("clusters")
+    @SuppressWarnings("unused")
+    private List<Cluster> getSubclustersForSerialization()
+    {
+        return subclustersView.isEmpty() ? null : subclustersView;
     }
 
     /**
@@ -358,6 +372,12 @@ public final class Cluster
         return this;
     }
 
+    @JsonGetter
+    public Double getScore()
+    {
+        return getAttribute(SCORE);
+    }
+
     /**
      * Returns the attribute associated with this cluster under the provided
      * <code>key</code>. If there is no attribute under the provided <code>key</code>,
@@ -416,6 +436,7 @@ public final class Cluster
      * 
      * @see ProcessingResult
      */
+    @JsonGetter
     public Integer getId()
     {
         return id;
@@ -735,5 +756,27 @@ public final class Cluster
         phrasesView = Collections.unmodifiableList(phrases);
         subclustersView = Collections.unmodifiableList(subclusters);
         // Documents will be restored on the ProcessingResult level
+    }
+
+    /**
+     * For JSON serialization only.
+     */
+    @JsonGetter("documents")
+    @SuppressWarnings("unused")
+    private List<Integer> getDocumentIds()
+    {
+        return Lists.transform(documents, Document.DocumentToId.INSTANCE);
+    }
+    
+    /**
+     * For JSON and XML serialization only.
+     */
+    @JsonGetter("attributes")
+    @SuppressWarnings("unused")
+    private Map<String, Object> getOtherAttributes()
+    {
+        final Map<String, Object> otherAttributes = Maps.newHashMap(attributesView);
+        otherAttributes.remove(SCORE);
+        return otherAttributes.isEmpty() ? null : otherAttributes;
     }
 }

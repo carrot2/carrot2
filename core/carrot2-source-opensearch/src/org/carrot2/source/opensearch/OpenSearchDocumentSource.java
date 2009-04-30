@@ -241,10 +241,10 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
                         final SyndEntry entry = (SyndEntry) it.next();
                         final Document document = new Document();
 
-                        document.addField(Document.TITLE, clean(entry.getTitle()));
-                        document.addField(Document.SUMMARY, clean(entry.getDescription()
+                        document.setField(Document.TITLE, clean(entry.getTitle()));
+                        document.setField(Document.SUMMARY, clean(entry.getDescription()
                             .getValue()));
-                        document.addField(Document.CONTENT_URL, entry.getLink());
+                        document.setField(Document.CONTENT_URL, entry.getLink());
 
                         response.results.add(document);
                     }

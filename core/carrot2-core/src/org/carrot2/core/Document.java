@@ -16,6 +16,7 @@ import java.util.*;
 
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.simplexml.*;
+import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -29,6 +30,8 @@ import com.google.common.collect.*;
  * {@link #CONTENT_URL}.
  */
 @Root(name = "document")
+@JsonAutoDetect(JsonMethod.NONE)
+@JsonWriteNullProperties(false)
 public final class Document
 {
     /** Field name for the title of the document. */
@@ -128,9 +131,9 @@ public final class Document
      */
     public Document(String title, String summary, String contentUrl)
     {
-        addField(TITLE, title);
-        addField(SUMMARY, summary);
-        addField(CONTENT_URL, contentUrl);
+        setField(TITLE, title);
+        setField(SUMMARY, summary);
+        setField(CONTENT_URL, contentUrl);
     }
 
     /**
@@ -140,9 +143,72 @@ public final class Document
      * 
      * @return unique identifier of this document
      */
+    @JsonGetter
     public Integer getId()
     {
         return id;
+    }
+
+    /**
+     * Returns this document's {@link #TITLE} field.
+     */
+    @JsonGetter
+    public String getTitle()
+    {
+        return getField(TITLE);
+    }
+
+    /**
+     * Returns this document's {@link #SUMMARY} field.
+     */
+    @JsonGetter("snippet")
+    public String getSummary()
+    {
+        return getField(SUMMARY);
+    }
+
+    /**
+     * Returns this document's {@link #CONTENT_URL} field.
+     */
+    @JsonGetter("url")
+    public String getContentUrl()
+    {
+        return getField(CONTENT_URL);
+    }
+
+    /**
+     * Returns this document's {@link #SOURCES} field.
+     */
+    @JsonGetter
+    public List<String> getSources()
+    {
+        return getField(SOURCES);
+    }
+
+    /**
+     * Sets this document's {@link #SOURCES} field.
+     * 
+     * @param sources the sources list to set
+     * @return this document for convenience
+     */
+    public Document setSources(List<String> sources)
+    {
+        return setField(SOURCES, sources);
+    }
+
+    /**
+     * For JSON and XML serialization only.
+     */
+    @JsonGetter("fields")
+    @SuppressWarnings("unused")
+    private Map<String, Object> getOtherFields()
+    {
+        final Map<String, Object> otherFields = Maps.newHashMap(fieldsView);
+        otherFields.remove(TITLE);
+        otherFields.remove(SUMMARY);
+        otherFields.remove(CONTENT_URL);
+        otherFields.remove(SOURCES);
+        return otherFields.isEmpty() ? null : otherFields;
     }
 
     /**
@@ -174,8 +240,22 @@ public final class Document
      * @param name of the field to be added
      * @param value value of the field
      * @return this document for convenience
+     * @deprecated Please use {@link #setField(String, Object)} instead. This method will
+     *             be removed in version 3.2.
      */
     public Document addField(String name, Object value)
+    {
+        return setField(name, value);
+    }
+
+    /**
+     * Sets a field in this document.
+     * 
+     * @param name of the field to set
+     * @param value value of the field
+     * @return this document for convenience
+     */
+    public Document setField(String name, Object value)
     {
         synchronized (fields)
         {
@@ -237,11 +317,11 @@ public final class Document
     public static final class DocumentToId implements Function<Document, Integer>
     {
         public static final DocumentToId INSTANCE = new DocumentToId();
-        
+
         private DocumentToId()
         {
         }
-        
+
         public Integer apply(Document document)
         {
             return document.id;

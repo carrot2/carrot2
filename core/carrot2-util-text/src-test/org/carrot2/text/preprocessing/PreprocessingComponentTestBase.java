@@ -92,7 +92,7 @@ public class PreprocessingComponentTestBase
             Document document = new Document();
             for (String fieldName : fields)
             {
-                document.addField(fieldName, fieldValues[fieldValuesIndex++]);
+                document.setField(fieldName, fieldValues[fieldValuesIndex++]);
 
                 if (fieldValuesIndex >= fieldValues.length)
                 {

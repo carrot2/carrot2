@@ -82,10 +82,10 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
 
                 // For the sake of example we just copy the original document fields
                 final Document document = new Document();
-                document.addField(Document.TITLE, originalDocument
+                document.setField(Document.TITLE, originalDocument
                     .getField(Document.TITLE));
-                document.addField(Document.SUMMARY, "");
-                document.addField(Document.CONTENT_URL, originalDocument
+                document.setField(Document.SUMMARY, "");
+                document.setField(Document.CONTENT_URL, originalDocument
                     .getField(Document.CONTENT_URL));
                 documents.add(document);
             }

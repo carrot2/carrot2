@@ -24,10 +24,8 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpUtils;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.JsonNode;
-import org.codehaus.jackson.map.JsonTypeMapper;
+import org.codehaus.jackson.*;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * A {@link IDocumentSource} fetching search results from Google JSON API. Please note
@@ -125,20 +123,20 @@ public class GoogleDocumentSource extends MultipageSearchEngine
 
                 final JsonParser jsonParser = new JsonFactory().createJsonParser(httpResp
                     .getPayloadAsStream());
-                final JsonTypeMapper mapper = new JsonTypeMapper();
-                final JsonNode root = mapper.read(jsonParser);
+                final ObjectMapper mapper = new ObjectMapper();
+                final JsonNode root = mapper.readTree(jsonParser);
                 if (root == null)
                 {
                     return response;
                 }
 
-                final JsonNode responseData = root.getFieldValue("responseData");
+                final JsonNode responseData = root.get("responseData");
                 if (responseData == null)
                 {
                     return response;
                 }
 
-                final JsonNode resultsArray = responseData.getFieldValue("results");
+                final JsonNode resultsArray = responseData.get("results");
                 if (resultsArray == null)
                 {
                     return response;
@@ -148,20 +146,19 @@ public class GoogleDocumentSource extends MultipageSearchEngine
                 while (results.hasNext())
                 {
                     final JsonNode result = results.next();
-                    final Document document = new Document(result.getFieldValue(
-                        "titleNoFormatting").getTextValue(), result.getFieldValue(
-                        "content").getTextValue(), result.getFieldValue("url")
-                        .getTextValue());
+                    final Document document = new Document(result
+                        .get("titleNoFormatting").getTextValue(), result.get("content")
+                        .getTextValue(), result.get("url").getTextValue());
                     response.results.add(document);
                 }
 
-                final JsonNode cursor = responseData.getFieldValue("cursor");
+                final JsonNode cursor = responseData.get("cursor");
                 if (cursor == null)
                 {
                     return response;
                 }
-                
-                final JsonNode resultCount = cursor.getFieldValue("estimatedResultCount");
+
+                final JsonNode resultCount = cursor.get("estimatedResultCount");
                 if (resultCount != null)
                 {
                     response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, Long

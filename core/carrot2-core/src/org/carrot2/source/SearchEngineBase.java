@@ -115,7 +115,7 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
 
                     cleanedField = StringEscapeUtils.unescapeHtml(cleanedField);
 
-                    document.addField(field, cleanedField);
+                    document.setField(field, cleanedField);
                 }
             }
         }

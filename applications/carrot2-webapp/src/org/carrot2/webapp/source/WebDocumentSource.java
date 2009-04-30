@@ -99,7 +99,7 @@ public class WebDocumentSource extends SimpleSearchEngine
                 {
                     googleDocumentsByUrl.put((String) googleDocument
                         .getField(Document.CONTENT_URL), googleDocument);
-                    googleDocument.addField(Document.SOURCES, Lists
+                    googleDocument.setField(Document.SOURCES, Lists
                         .newArrayList("Google"));
                 }
                 response.results.addAll(google.documents);
@@ -119,7 +119,7 @@ public class WebDocumentSource extends SimpleSearchEngine
                         {
                             sources.add("Google");
                         }
-                        matchingGoogleDocument.addField(Document.SOURCES, sources);
+                        matchingGoogleDocument.setField(Document.SOURCES, sources);
                     }
                     else
                     {

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -22,16 +21,15 @@ import java.util.*;
 
 import org.apache.commons.io.output.NullWriter;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.test.TestDocumentFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.CollectionUtils;
 import org.codehaus.jackson.*;
-import org.codehaus.jackson.map.JsonNode;
-import org.codehaus.jackson.map.JsonTypeMapper;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
-import com.google.common.collect.*;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * Test cases for {@link ProcessingResult}.
@@ -189,6 +187,31 @@ public class ProcessingResultTest
         checkJsonDocuments(result, root);
     }
 
+    /**
+     * Tests compliance with the assumed JSON format. Useful when updating the library to
+     * make sure the Carrot2 JSON format doesn't change unnoticed.
+     */
+    @Test
+    public void testJsonFormatStability() throws IOException
+    {
+        final String expectedJson = "callback({\"clusters\":[{\"phrases\":[\"Label 1\",\"Label 2\"]," +
+        		"\"clusters\":[{\"phrases\":[\"Label 3 zażółć gęślą jaźń\"],\"documents\":" +
+        		"[3,4],\"id\":1}],\"score\":1.0,\"documents\":[],\"attributes\":{\"testDouble\":" +
+        		"10.3,\"testString\":\"test\",\"testBoolean\":true,\"testInteger\":10},\"id\":0}," +
+        		"{\"phrases\":[\"Label 4\"],\"score\":0.55,\"documents\":[4,5],\"id\":2}]," +
+        		"\"documents\":[{\"snippet\":\"Test snippet 1\",\"url\":\"http://test1.com\"," +
+        		"\"fields\":{\"testDouble\":10.3,\"testString\":\"test\",\"testBoolean\":true," +
+        		"\"testInteger\":10},\"id\":3,\"title\":\"Test title 1\",\"sources\":[\"s1\",\"s2\"]}," +
+        		"{\"snippet\":\"Test snippet 2\",\"url\":\"http://test2.com/test\",\"id\":4," +
+        		"\"title\":\"Test title 2\"},{\"snippet\":\"Test snippet 3. Some more words and <b>html</b>\"," +
+        		"\"url\":\"http://test2.com\",\"id\":5,\"title\":\"Test title 3\"}],\"query\":\"query\"});";
+        final ProcessingResult result = prepareProcessingResult();
+        final String jsonString = getJsonString(result, "callback", true, true);
+        System.out.println(jsonString);
+        Assertions.assertThat(jsonString).isEqualTo(
+            expectedJson);
+    }
+
     @Test
     public void testJsonSerializationWithCallback() throws IOException
     {
@@ -218,7 +241,7 @@ public class ProcessingResultTest
 
         checkJsonQuery(root);
         checkJsonDocuments(result, root);
-        Assertions.assertThat(root.getFieldValue("clusters")).isNull();
+        Assertions.assertThat(root.get("clusters")).isNull();
     }
 
     @Test
@@ -229,18 +252,18 @@ public class ProcessingResultTest
 
         checkJsonQuery(root);
         checkJsonClusters(result, root);
-        Assertions.assertThat(root.getFieldValue("documents")).isNull();
+        Assertions.assertThat(root.get("documents")).isNull();
     }
 
     private void checkJsonQuery(final JsonNode root)
     {
-        Assertions.assertThat(root.getFieldValue("query").getTextValue()).isEqualTo(
+        Assertions.assertThat(root.get("query").getTextValue()).isEqualTo(
             "query");
     }
 
     private void checkJsonClusters(final ProcessingResult result, final JsonNode root)
     {
-        final JsonNode clusters = root.getFieldValue("clusters");
+        final JsonNode clusters = root.get("clusters");
         Assertions.assertThat(clusters).isNotNull();
         final ArrayList<JsonNode> clusterNodes = Lists.newArrayList(clusters
             .getElements());
@@ -249,7 +272,7 @@ public class ProcessingResultTest
 
     private void checkJsonDocuments(final ProcessingResult result, final JsonNode root)
     {
-        final JsonNode documents = root.getFieldValue("documents");
+        final JsonNode documents = root.get("documents");
         Assertions.assertThat(documents).isNotNull();
         final ArrayList<JsonNode> documentNodes = Lists.newArrayList(documents
             .getElements());
@@ -260,9 +283,16 @@ public class ProcessingResultTest
         boolean saveDocuments, boolean saveClusters) throws IOException,
         JsonParseException
     {
+        return getJsonRootNode(getJsonString(result, callback, saveDocuments,
+            saveClusters));
+    }
+
+    private String getJsonString(final ProcessingResult result, String callback,
+        boolean saveDocuments, boolean saveClusters) throws IOException
+    {
         final StringWriter json = new StringWriter();
-        result.serializeJson(json, callback, saveDocuments, saveClusters);
-        return getJsonRootNode(json.toString());
+        result.serializeJson(json, callback, false, saveDocuments, saveClusters);
+        return json.toString();
     }
 
     private JsonNode getJsonRootNode(final String jsonString) throws IOException,
@@ -270,8 +300,8 @@ public class ProcessingResultTest
     {
         final JsonParser jsonParser = new JsonFactory()
             .createJsonParser(new StringReader(jsonString));
-        final JsonTypeMapper mapper = new JsonTypeMapper();
-        final JsonNode root = mapper.read(jsonParser);
+        final ObjectMapper mapper = new ObjectMapper();
+        final JsonNode root = mapper.readTree(jsonParser);
         return root;
     }
 
@@ -321,15 +351,19 @@ public class ProcessingResultTest
 
     private ProcessingResult prepareProcessingResult()
     {
-        final List<Document> documents = TestDocumentFactory.DEFAULT.generate(5);
+        final List<Document> documents = Lists.newArrayList(new Document("Test title 1",
+            "Test snippet 1", "http://test1.com"), new Document("Test title 2",
+            "Test snippet 2", "http://test2.com/test"), new Document("Test title 3",
+            "Test snippet 3. Some more words and <b>html</b>", "http://test2.com"));
         final Map<String, Object> attributes = Maps.newHashMap();
         attributes.put(AttributeNames.DOCUMENTS, documents);
 
         final Document document = documents.get(0);
-        document.addField("testString", "test");
-        document.addField("testInteger", 10);
-        document.addField("testDouble", 10.3);
-        document.addField("testBoolean", true);
+        document.setSources(Lists.newArrayList("s1", "s2"));
+        document.setField("testString", "test");
+        document.setField("testInteger", 10);
+        document.setField("testDouble", 10.3);
+        document.setField("testBoolean", true);
         document.id = 3; // assign an id so that the max id is larger than the list size
         Document.assignDocumentIds(documents);
 
@@ -342,7 +376,7 @@ public class ProcessingResultTest
         clusterA.setAttribute("testBoolean", true);
 
         final Cluster clusterAA = new Cluster();
-        clusterAA.addPhrases("Label 3");
+        clusterAA.addPhrases("Label 3 zażółć gęślą jaźń");
         clusterAA.addDocuments(documents.get(0), documents.get(1));
         clusterA.addSubclusters(clusterAA);
 

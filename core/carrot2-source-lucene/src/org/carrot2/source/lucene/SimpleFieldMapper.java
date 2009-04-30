@@ -194,13 +194,13 @@ public class SimpleFieldMapper implements IFieldMapper
         String value = fieldValue(titleField, luceneDoc);
         if (value != null)
         {
-            doc.addField(org.carrot2.core.Document.TITLE, value);
+            doc.setField(org.carrot2.core.Document.TITLE, value);
         }
 
         value = fieldValue(urlField, luceneDoc);
         if (value != null)
         {
-            doc.addField(org.carrot2.core.Document.CONTENT_URL, value);
+            doc.setField(org.carrot2.core.Document.CONTENT_URL, value);
         }
 
         /*
@@ -223,7 +223,7 @@ public class SimpleFieldMapper implements IFieldMapper
                 {
                     summary = value;
                 }
-                doc.addField(org.carrot2.core.Document.SUMMARY, summary);
+                doc.setField(org.carrot2.core.Document.SUMMARY, summary);
             }
             catch (IOException e)
             {
@@ -234,7 +234,7 @@ public class SimpleFieldMapper implements IFieldMapper
         /*
          * Add a reference to Lucene document.
          */
-        doc.addField(LUCENE_DOCUMENT, luceneDoc);
+        doc.setField(LUCENE_DOCUMENT, luceneDoc);
     }
 
     /*
