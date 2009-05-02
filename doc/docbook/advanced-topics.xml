@@ -419,7 +419,9 @@
       <para>
         Adding a document source tab to the &WA; requires a number of steps. The following
         procedure demonstrates the process on an example of 
-        <link role="javadoc" linkend="org.carrot2.source.lucene.LuceneDocumentSource" />. 
+        <link role="javadoc" linkend="org.carrot2.source.lucene.LuceneDocumentSource" />.
+        For descriptors for other components, please see 
+        <xref linkend="chapter.descriptors" />. 
       </para>
       
       <orderedlist>
