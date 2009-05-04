@@ -9,47 +9,32 @@ using System.Collections;
 
 /// 
 /// <summary>
-/// Clustering examples. Read and cluster XML data from disk, get
-/// XML data from an external source, print the results to console.
+/// Contains several examples of clustering using the Document Clustering Server.
 /// </summary>
-/// 
-/// See http://localhost:8080 for documentation concerning service parameters.
 ///
 namespace Org.Carrot2.Examples
 {
-    public sealed class DCSRestExample
+    public sealed class Examples
     {
         public static void Main()
         {
             MultipartFileUpload service = new MultipartFileUpload();
             service.Uri = new Uri("http://localhost:8080/dcs/rest");
 
-            XmlDocument result;
-
-            /*
-             * An example of clustering data stored in a local file and passed
-             * as part of the HTTP request. A query hint is provided for the
-             * clustering algorithm (to avoid trivial clusters).
-             */
-            Console.WriteLine("## Clustering data from file...");
-            result = clusterFromFile(service, "input\\data-mining.xml", "data mining");
-            printResults(result);
-
-            /*
-             * An example of clustering data fetched from an external document source.
-             */
-            Console.WriteLine("## Clustering data from external source...");
-            result = clusterFromSource(service, "boss-web", "data mining");
-            printResults(result);
-
-            Console.ReadLine();
+            // The path here is relative from binary output to shared resources folder.
+            ClusterFromFile(service, "..\\..\\..\\shared\\data-mining.xml", "data mining");
+            ClusterFromSearchEngine(service, "etools", "data mining");
         }
 
-        /*
-         * 
-         */
-        private static XmlDocument clusterFromFile(MultipartFileUpload service, string filePath, string queryHint)
+        /// <summary>
+        /// An example of clustering data stored in a local file and passed
+        /// as part of the HTTP request. A query hint is provided for the
+        /// clustering algorithm (to avoid trivial clusters).
+        /// </summary>
+        private static void ClusterFromFile(MultipartFileUpload service, string filePath, string queryHint)
         {
+            Console.WriteLine("## Clustering data from file...");
+
             // The output format is XML.
             service.AddFormValue("dcs.output.format", "XML");
 
@@ -62,11 +47,11 @@ namespace Org.Carrot2.Examples
             // The algorithm to use for clustering. Omit to select the default. An example of
             // using Lingo with custom parameters follows.
 
-            // service.AddFormValue("dcs.algorithm", "lingo");
-            // service.AddFormValue("LingoClusteringAlgorithm.desiredClusterCountBase", "10");
-            // service.AddFormValue("LingoClusteringAlgorithm.factorizationQuality", "LOW");
-            // service.AddFormValue("LingoClusteringAlgorithm.factorizationFactory",
-            //     "org.carrot2.matrix.factorization.PartialSingularValueDecompositionFactory");
+            service.AddFormValue("dcs.algorithm", "lingo");
+            service.AddFormValue("LingoClusteringAlgorithm.desiredClusterCountBase", "10");
+            service.AddFormValue("LingoClusteringAlgorithm.factorizationQuality", "LOW");
+            service.AddFormValue("LingoClusteringAlgorithm.factorizationFactory",
+                "org.carrot2.matrix.factorization.PartialSingularValueDecompositionFactory");
 
             // Add the XML stream here.
             service.AttachFile("input.xml", "dcs.c2stream", new FileInfo(filePath));
@@ -81,14 +66,17 @@ namespace Org.Carrot2.Examples
             document.PreserveWhitespace = true;
             document.Load(input);
 
-            return document;
+            printResults(document);
         }
 
-        /*
-         * 
-         */
-        private static XmlDocument clusterFromSource(MultipartFileUpload service, string sourceId, string query)
+        /// <summary>
+        /// Cluster data retrieved from a search engine or some other source registered in the
+        /// DCS as a document source.
+        /// </summary>
+        private static void ClusterFromSearchEngine(MultipartFileUpload service, string sourceId, string query)
         {
+            Console.WriteLine("## Clustering data from external source...");
+
             // The output format is XML.
             service.AddFormValue("dcs.output.format", "XML");
 
@@ -111,21 +99,22 @@ namespace Org.Carrot2.Examples
             document.PreserveWhitespace = true;
             document.Load(input);
 
-            return document;
+            printResults(document);
         }
 
-        /*
-         * 
-         */
+        /// <summary>
+        /// Dump the result (group labels).
+        /// </summary>
         private static void printResults(XmlDocument document)
         {
+            Console.WriteLine("[Cluster labels]");
             foreach (XmlNode group in
                 document.SelectNodes("/searchresult/group"))
             {
-                Console.WriteLine(group.SelectSingleNode("title/phrase").InnerText);
-                Console.WriteLine("Documents: " + group.SelectNodes("document").Count);
-                Console.WriteLine();
+                Console.Write("  " + group.SelectSingleNode("title/phrase").InnerText);
+                Console.WriteLine(" (" + group.SelectNodes("document").Count + " documents)");
             }
+            Console.WriteLine();
         }
     }
 }

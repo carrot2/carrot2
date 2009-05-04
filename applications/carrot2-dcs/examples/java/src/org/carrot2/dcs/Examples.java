@@ -104,6 +104,7 @@ final class Examples
         attributes.put("query", "test");
         attributes.put("results", "20");
         attributes.put("dcs.algorithm", "lingo");
+        attributes.put("dcs.clusters.only", "true");
 
         // Some customized algorithm parameters.
         attributes.put("LingoClusteringAlgorithm.desiredClusterCountBase", "10");

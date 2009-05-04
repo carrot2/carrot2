@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCSRestExample", "DCSRestExample.csproj", "{1BC54A07-EFEC-4C68-A050-5DDE2A818482}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCS-CSharp-Example", "DCS-CSharp-Example.csproj", "{1BC54A07-EFEC-4C68-A050-5DDE2A818482}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Org.Carrot2</RootNamespace>
     <AssemblyName>DCSRestExample</AssemblyName>
-    <StartupObject>Org.Carrot2.Examples.DCSRestExample</StartupObject>
+    <StartupObject>Org.Carrot2.Examples.Examples</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,13 +33,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\DCSRestExample.cs" />
+    <Compile Include="src\Examples.cs" />
     <Compile Include="src\MultipartFileUpload.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="input\data-mining.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
