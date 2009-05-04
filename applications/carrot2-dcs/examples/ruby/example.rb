@@ -14,7 +14,7 @@ def dump(jsonResponse)
 	response = JSON.parse(jsonResponse)
 
 	descriptions = response['clusters'].map do
-        |cluster| "%s [%i document(s)]" % [cluster['phrases'].join(", "), cluster['documents'].length]
+        |cluster| "  %s [%i document(s)]" % [cluster['phrases'].join(", "), cluster['documents'].length]
     end
 	puts descriptions.join("\n")
 end
@@ -35,9 +35,9 @@ end
 
 uri = "http://localhost:8080/dcs/rest"
 
-puts "\n## Clustering data from external source...\n"
+puts "\n## Clustering data from a search engine...\n"
 dump(dcs_request(uri, {
-     "dcs.source" => "boss-web",
+     "dcs.source" => "etools",
 	 "query" => "data mining",
 	 "dcs.output.format" => "JSON",
 	 "dcs.clusters.only" => "false"
@@ -49,7 +49,7 @@ dump(dcs_request(uri, {
 
 puts "\n## Clustering data from a file...\n"
 dump(dcs_request(uri, {
-     "dcs.c2stream"   => open("data-mining.xml"),        
+     "dcs.c2stream"   => open("../shared/data-mining.xml"),
 	 "query" => "data mining",
 	 "dcs.output.format" => "JSON",
 	 "dcs.clusters.only" => "true"
