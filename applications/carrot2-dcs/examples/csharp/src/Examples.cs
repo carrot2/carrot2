@@ -33,7 +33,7 @@ namespace Org.Carrot2.Examples
         /// </summary>
         private static void ClusterFromFile(MultipartFileUpload service, string filePath, string queryHint)
         {
-            Console.WriteLine("## Clustering data from file...");
+            Console.WriteLine("## Clustering documents from a local file...");
 
             // The output format is XML.
             service.AddFormValue("dcs.output.format", "XML");
@@ -66,7 +66,7 @@ namespace Org.Carrot2.Examples
             document.PreserveWhitespace = true;
             document.Load(input);
 
-            printResults(document);
+            PrintResults(document);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Org.Carrot2.Examples
         /// </summary>
         private static void ClusterFromSearchEngine(MultipartFileUpload service, string sourceId, string query)
         {
-            Console.WriteLine("## Clustering data from external source...");
+            Console.WriteLine("## Clustering search results from a search engine...");
 
             // The output format is XML.
             service.AddFormValue("dcs.output.format", "XML");
@@ -85,6 +85,9 @@ namespace Org.Carrot2.Examples
 
             // Add query.
             service.AddFormValue("query", query);
+
+            // Add the number of results.
+            service.AddFormValue("results", "20");
 
             // Specify the source.
             service.AddFormValue("dcs.source", sourceId);
@@ -99,13 +102,13 @@ namespace Org.Carrot2.Examples
             document.PreserveWhitespace = true;
             document.Load(input);
 
-            printResults(document);
+            PrintResults(document);
         }
 
         /// <summary>
         /// Dump the result (group labels).
         /// </summary>
-        private static void printResults(XmlDocument document)
+        private static void PrintResults(XmlDocument document)
         {
             Console.WriteLine("[Cluster labels]");
             foreach (XmlNode group in
