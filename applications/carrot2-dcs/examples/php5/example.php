@@ -30,8 +30,8 @@
   //
   //
   echo '<h1>Clustering documents from external source</h1>';
-  $source = "boss-news";
-  $query = "world";
+  $source = "etools";
+  $query = "data mining";
   $results = 20;
   $algorithm = "url"; // cluster by url to show how to handle subclusters
   echo "<strong>Source:</strong> " . $source . '<br />';
@@ -96,7 +96,10 @@
   echo '<h1>Clustering directly provided documents</h1>';
 
   $job = new Carrot2Job();
+  $algorithm = "lingo";
+
   addExampleDocuments($job);
+  $job->setAlgorithm($algorithm);
   $job->setQuery("data mining"); // set the query as a hint for the clustering algorithm (optional)
   $job->setAttributes(array (
         'TermDocumentMatrixBuilder.termWeighting' => 'org.carrot2.text.vsm.LinearTfIdfTermWeighting'
