@@ -74,6 +74,7 @@
         <include name="examples/**" />
 		    <exclude name="**/tmp/**" />
 		    <exclude name="**/obj/**" />
+		    <exclude name="**/*.suo" />
       </fileset>
       <fileset dir="${carrot2.dcs.basedir}/etc">
         <include name="readme.txt" />
