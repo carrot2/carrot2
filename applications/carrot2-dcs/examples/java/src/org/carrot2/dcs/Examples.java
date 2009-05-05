@@ -152,11 +152,11 @@ final class Examples
         {
             final SAXReader reader = new SAXReader();
             final Document document = reader.read(results);
-            System.out.println("[Cluster labels]");
-            for (Iterator<Element> it = document.getRootElement()
-                .elementIterator("group"); it.hasNext();)
+            final Iterator<Element> i = document.getRootElement().elementIterator("group");
+            while (i.hasNext())
             {
-                System.out.println("  " + it.next().element("title").elementText("phrase"));
+                final Element group = i.next();
+                display(group, 1);
             }
             System.out.println();
         }
@@ -170,6 +170,25 @@ final class Examples
             {
                 results.close();
             }
+        }
+    }
+
+    /**
+     * Display a single cluster and its sub-clusters.
+     */
+    @SuppressWarnings({"unused", "unchecked"})
+    private static void display(Element group, int level)
+    {
+        final int documentCount = group.elements("document").size();
+        final int recursiveDocumentCount = Integer.parseInt(group.attribute("size").getValue());
+        final String label = group.element("title").elementText("phrase");
+
+        for (int i = 0; i < level; i++) System.out.print("  ");
+        System.out.println(label + " [" + recursiveDocumentCount + " document(s)]");
+        final Iterator<Element> i = group.elementIterator("group");
+        while (i.hasNext())
+        {
+            display(i.next(), level + 1);
         }
     }
 }

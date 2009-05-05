@@ -110,14 +110,28 @@ namespace Org.Carrot2.Examples
         /// </summary>
         private static void PrintResults(XmlDocument document)
         {
-            Console.WriteLine("[Cluster labels]");
             foreach (XmlNode group in
                 document.SelectNodes("/searchresult/group"))
             {
-                Console.Write("  " + group.SelectSingleNode("title/phrase").InnerText);
-                Console.WriteLine(" (" + group.SelectNodes("document").Count + " documents)");
+                PrintGroup(group, 1);
             }
             Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Dump a single cluster and its subclusters.
+        /// </summary>
+        private static void PrintGroup(XmlNode group, int level)
+        {
+            for (int i = 0; i < level; i++) Console.Write("  ");
+            Console.Write(group.SelectSingleNode("title/phrase").InnerText);
+
+            Console.WriteLine(" [" + group.Attributes["size"].Value + " document(s)]");
+
+            foreach (XmlNode subgroup in group.SelectNodes("group"))
+            {
+                PrintGroup(subgroup, level + 1);
+            }
         }
     }
 }
