@@ -260,19 +260,13 @@
   <!--
        Generates metadata files for webapp-specific document sources.
     -->
-  <target name="carrot2.webapp.attributes.war" depends="basedir.check, attrs.tasks">
-    <antcall target="compile" />
-    <attributes-xml java.source="${carrot2.webapp.basedir}/src/org/carrot2/webapp/source" 
-                    output.dir="${webapp.classes.dir}" />
+  <target name="carrot2.webapp.attributes.war" depends="basedir.check, attrs.tasks, attrs, compile">
   </target>
 
   <!--
        Generates metadata files for webapp-specific document sources.
     -->
-  <target name="carrot2.webapp.attributes.eclipse" depends="basedir.check, attrs.tasks">
-    <antcall target="compile" />
-    <attributes-xml java.source="${carrot2.webapp.basedir}/src/org/carrot2/webapp/source" 
-                    output.dir="${carrot2.webapp.basedir}/tmp/eclipse" />
+  <target name="carrot2.webapp.attributes.eclipse" depends="basedir.check, attrs.tasks, attrs, compile">
   </target>
 
   <!--
