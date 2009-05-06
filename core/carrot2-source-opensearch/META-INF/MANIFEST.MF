@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OpenSearch API Document Source
-Bundle-SymbolicName: org.carrot2.opensearch;singleton:=true
+Bundle-SymbolicName: org.carrot2.source.opensearch;singleton:=true
 Bundle-Version: 3.0.0
 Export-Package: org.carrot2.source.opensearch
 Require-Bundle: org.carrot2.core,

@@ -126,12 +126,15 @@
 			<fileset dir="${carrot2.dir}/workbench">
 				<patternset refid="to.exclude" />
 				<include name="org.carrot2?*/**" />
-				<exclude name="org.carrot2.workbench.test/**" />
 				<exclude name="org.carrot2.workbench/**" />
+				<exclude name="org.carrot2.workbench.test/**" />
+				<exclude name="org.carrot2.workbench.core.feature/**" />
 			</fileset>
 		</copy>
-		<copy todir="${buildDirectory}/features/org.carrot2.workbench">
-			<fileset dir="${carrot2.dir}/workbench/org.carrot2.workbench">
+		<copy todir="${buildDirectory}/features">
+			<fileset dir="${carrot2.dir}/workbench/">
+				<include name="org.carrot2.workbench/**" />
+				<include name="org.carrot2.workbench.core.feature/**" />
 				<patternset refid="to.exclude" />
 			</fileset>
 		</copy>
