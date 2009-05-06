@@ -68,7 +68,7 @@ Apache Software Foundation http://www.apache.org/.
       <plugin id="org.eclipse.core.expressions"/>
       <plugin id="org.eclipse.core.jobs"/>
       <plugin id="org.eclipse.core.runtime"/>
-      <plugin id="org.eclipse.core.runtime.compatibility.registry" fragment="true"/>
+      <plugin id="org.eclipse.core.runtime.compatibility.registry"/>
       <plugin id="org.eclipse.equinox.app"/>
       <plugin id="org.eclipse.equinox.common"/>
       <plugin id="org.eclipse.equinox.preferences"/>
@@ -91,6 +91,7 @@ Apache Software Foundation http://www.apache.org/.
 
    <features>
       <feature id="org.carrot2.workbench" version="1.0.0"/>
+      <feature id="org.eclipse.rcp" version="3.3.1.R33x_r20070802-8y8eE8sEV3Fz0z0GlHJrXvTAUS"/>
    </features>
 
 </product>
