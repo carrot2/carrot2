@@ -111,7 +111,8 @@ class BindableMetadataBuilder
 
                     if (sourceFile.indexOf("@Bindable") >= 0)
                     {
-                        javaDocBuilder.addSource(new StringReader(sourceFile));
+                        javaDocBuilder.addSource(new StringReader(sourceFile),
+                            currentFile.getAbsolutePath());
                     }
                 }
                 catch (IOException e)
