@@ -1,51 +1,47 @@
-<project name="proto-3.0" default="build">
-  <property file="workbench.properties" />
-  <property file="${basedir}/workbench/build-conf/build.properties" />
+<project name="carrot2.workbench" default="build">
+  <!-- Basedir relative to this build file -->
+  <dirname property="carrot2.master.basedir" file="${ant.file.carrot2.workbench}"/>
 
-  <property name="custom.tasks.dir"
-            location="${basedir}/lib/org.carrot2.antlib" />
+  <!-- Import local properties and version -->
+  <property file="${carrot2.master.basedir}/local.properties" />
 
-  <property name="workbench.build.dir" value="tmp/workbench" />
+  <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
+  <property file="${carrot2.master.basedir}/etc/version/carrot2.basenames" /> 
 
-  <property name="workbench.tests.html.report.dir"
-            value="tmp/workbench/test-report" />
+  <property file="${carrot2.master.basedir}/workbench.properties" />
+  <property file="${carrot2.master.basedir}/workbench/build-conf/build.properties" />
 
-  <property name="workbench.tests.txt.report.dir"
-            value="tmp/workbench/test-report-txt" />
+  <property name="workbench.build.dir" location="tmp/workbench" />
+  <property name="workbench.tests.html.report.dir" location="${workbench.build.dir}/test-report" />
+  <property name="workbench.tests.txt.report.dir"  location="${workbench.build.dir}/test-report-txt" />
 
-  <!-- = = = = = = = = = = = = = = = = =
-          macrodef: launchAntRunner          
-         = = = = = = = = = = = = = = = = = -->
+  <property name="custom.tasks.dir" location="${carrot2.master.basedir}/lib/org.carrot2.antlib" />
+
+  <!-- Macros -->
   <macrodef name="launchAntRunner">
     <attribute name="buildfile" />
     <attribute name="build.dir" />
-    <attribute name="build.type" />
-    <attribute name="props.file" default="workbench.properties" />
+    <attribute name="props.file" default="${carrot2.master.basedir}/workbench.properties" />
     <attribute name="extra.args" default="" />
     <sequential>
       <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
-            fork="true"
-            failonerror="true">
+            fork="true" failonerror="true">
         <arg line="-application org.eclipse.ant.core.antRunner" />
         <arg line="-buildfile @{buildfile}" />
-        <arg line="-Dbuilder=${basedir}/workbench/build-conf/" />
+        <arg line="-Dbuilder=${carrot2.master.basedir}/workbench/build-conf/" />
         <arg line="-DbuildDirectory=@{build.dir}" />
-        <arg line="-Dcarrot2.dir=${basedir}" />
+        <arg line="-Dcarrot2.dir=${carrot2.master.basedir}" />
         <arg line="-Dtarget.platform=${target.platform}" />
-        <arg line="-Dbuild.type=@{build.type}" />
         <arg line="@{extra.args}" />
-        <arg line="-propertyfile ${basedir}/@{props.file}" />
+        <arg line="-propertyfile @{props.file}" />
       </java>
     </sequential>
   </macrodef>
 
-  <!-- = = = = = = = = = = = = = = = = =
-          macrodef: checkAccessRestriction          
-         = = = = = = = = = = = = = = = = = -->
   <macrodef name="checkAccessRestriction">
     <attribute name="logsBasedir" />
     <sequential>
-      <fail message="Access Restriction errors during build! Are you sure all packages from carrot2 are made visible at runtime?">
+      <fail message="Access Restriction errors during build! Are you sure all packages are visible at runtime?">
         <condition>
           <resourcecount when="greater" count="0">
             <fileset dir="@{logsBasedir}">
@@ -58,9 +54,7 @@
     </sequential>
   </macrodef>
 
-  <!-- - - - - - - - - - - - - - - - - - 
-          target: init                      
-         - - - - - - - - - - - - - - - - - -->
+  <!-- Initialize the build. -->
   <target name="init">
     <ant dir="${custom.tasks.dir}" antfile="build.xml" target="jar" />
 
@@ -74,36 +68,38 @@
                  eclipsehome="${eclipse.home}"
                  pluginid="org.eclipse.equinox.launcher"
                  pluginform="jar" />
+
     <findVersion property="pde.build.plugin"
                  eclipsehome="${eclipse.home}"
                  pluginid="org.eclipse.pde.build"
                  pluginform="dir" />
 
     <echo>Equinox version: ${equinox.launcher.plugin.jar}, PDE build plugin: ${pde.build.plugin}</echo>
+    
+    <!-- Compute attribute metadata. -->
+    <ant antfile="${carrot2.master.basedir}/build.xml" target="attrs" />    
   </target>
 
-  <target name="build"
-          description="Builds workbench without test plugins"
-          depends="init">
+  <!-- Build the workbench. -->
+  <target name="build" description="Build the workbench" depends="init">
+    <!-- Compile and assemble the workbench. -->
+    <launchAntRunner buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
+                     build.dir="${workbench.build.dir}/build-dir"
+                     props.file="${carrot2.master.basedir}/workbench.properties"
+                     extra.args="-Dproduct=/org.carrot2.workbench/Workbench.product" />
+
+    <checkAccessRestriction logsbasedir="${workbench.build.dir}/build-dir" />
+
+    <!-- Add Carrot2 license file to the distribution ZIP files -->    
     <taskdef resource="net/sf/antcontrib/antlib.xml">
       <classpath>
-        <pathelement location="${basedir}/etc/ant/ant-contrib-1.0b3.jar" />
+        <pathelement location="${carrot2.master.basedir}/etc/ant/ant-contrib-1.0b3.jar" />
       </classpath>
     </taskdef>
-
-    <property name="build.props" value="workbench.properties" />
-    <property name="build.dir" value="build-dir" />
-    <launchAntRunner buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
-                     build.dir="${basedir}/${workbench.build.dir}/${build.dir}"
-                     build.type="build"
-                     props.file="${build.props}"
-                     extra.args="-Dproduct=/org.carrot2.workbench/Workbench.product" />
-    <checkAccessRestriction logsbasedir="${basedir}/${workbench.build.dir}/${build.dir}" />
     
-    <!-- Add Carrot2 license file to the distribution ZIP files -->    
     <for param="zip">
       <path>
-        <fileset dir="${basedir}/${workbench.build.dir}/${build.dir}/${buildLabel}">
+        <fileset dir="${workbench.build.dir}/build-dir/${buildLabel}">
           <include name="**/${archivePrefix}*.zip" />
         </fileset>
       </path>
@@ -122,41 +118,24 @@
     </for>
   </target>
 
-  <target name="test"
-          description="Builds workbench with test plugins and runs tests"
-          depends="init">
-    <condition property="test.props"
-               value="workbench.test.properties"
-               else="workbench.properties">
-      <available file="${basedir}/workbench.test.properties" />
-    </condition>
-    <antcall target="build">
-      <param name="build.props" value="${test.props}" />
-      <param name="build.dir" value="test-dir" />
-    </antcall>
+  <!-- Build the test distribution and run the tests. -->
+  <target name="test" description="Builds workbench and run the tests" depends="init">
+    <!-- Build the test distribution. -->
     <launchAntRunner buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
-                     build.dir="${basedir}/${workbench.build.dir}/test-dir"
-                     build.type="test"
-                     props.file="${test.props}" />
-    <checkAccessRestriction logsbasedir="${basedir}/${workbench.build.dir}/test-dir" />
+                     build.dir="${workbench.build.dir}/test-dir"
+                     props.file="${carrot2.master.basedir}/workbench.test.properties"
+                     extra.args="-Dproduct=/org.carrot2.workbench/Workbench.product -DfeatureList=org.carrot2.workbench.test" />
 
-    <property name="test.eclipse.home"
-              location="${basedir}/${workbench.build.dir}/test-dir/tmp/${archivePrefix}" />
+    <checkAccessRestriction logsbasedir="${workbench.build.dir}/test-dir" />
+
+    <property name="test.eclipse.home" 
+        location="${workbench.build.dir}/test-dir/tmp/${archivePrefix}" />
+
     <findVersion property="workbench.core.test.dir"
                  pluginid="org.carrot2.workbench.core.test"
                  pluginform="dir"
                  eclipsehome="${test.eclipse.home}" />
 
-<!--
-  Workaround: testing framework expects that executable will be called eclipse :/
-
-     <move todir="${test.eclipse.home}">
-       <fileset dir="${test.eclipse.home}">
-         <include name="carrot2-workbench*"/>
-       </fileset>
-       <mapper type="glob" from="carrot2-workbench*" to="eclipse*"></mapper>
-      </move>
--->    
     <property name="org.carrot2.antlib" location="lib/org.carrot2.antlib" />
     <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
           fork="true"
@@ -167,29 +146,33 @@
       <arg line="-Dorg.carrot2.antlib=${org.carrot2.antlib}" />
       <arg line="-Dos=${test.os} -Dws=${test.ws} -Darch=${test.arch}" />
     </java>
+
     <!-- JUnit report -->
     <mkdir dir="${workbench.tests.html.report.dir}" />
     <junitreport todir="${workbench.tests.html.report.dir}">
-      <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/${archivePrefix}">
+      <fileset dir="${workbench.build.dir}/test-dir/tmp/${archivePrefix}">
         <include name="*.xml" />
       </fileset>
       <report format="frames"
               todir="${workbench.tests.html.report.dir}" />
     </junitreport>
+
     <!-- Copy XML reports -->
     <copy todir="${workbench.tests.html.report.dir}">
-      <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/${archivePrefix}">
+      <fileset dir="${workbench.build.dir}/test-dir/tmp/${archivePrefix}">
         <include name="*.xml" />
       </fileset>
       <mapper type="glob" from="*.xml" to="TEST-*.xml" />
     </copy>
+
     <!-- Copy text reports -->
     <mkdir dir="${workbench.tests.txt.report.dir}" />
     <copy todir="${workbench.tests.txt.report.dir}">
-      <fileset dir="${basedir}/${workbench.build.dir}/test-dir/tmp/${archivePrefix}/raw-output">
+      <fileset dir="${workbench.build.dir}/test-dir/tmp/${archivePrefix}/raw-output">
         <include name="*.txt" />
       </fileset>
     </copy>
+
     <!-- 
              A hacky way of finding out whether tests passed. The Eclipse runner doesn't
              seem to expose this information directly.
@@ -217,10 +200,9 @@
         </or>
       </condition>
     </fail>
-
   </target>
 
   <target name="clean">
-    <delete dir="tmp/workbench" />
+    <delete dir="${workbench.build.dir}" />
   </target>
 </project>

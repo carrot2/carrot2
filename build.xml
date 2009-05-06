@@ -386,12 +386,9 @@
 
     <macrodef name="attributes-xml">
       <attribute name="java.source" />
-      <attribute name="output.dir" default="@{java.source}" />
       <sequential>
-        <mkdir dir="@{output.dir}" />
-
         <metadata-serializer
-          src="@{java.source}" todir="@{output.dir}" commonNames="${common.attribute.names.source.path}" />
+          src="@{java.source}" todir="@{java.source}" commonNames="${common.attribute.names.source.path}" />
       </sequential>
     </macrodef>
   </target>
