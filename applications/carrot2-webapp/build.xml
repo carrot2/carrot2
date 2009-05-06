@@ -57,8 +57,7 @@
   <!--
        Assembles the web applications WAR file.
     -->
-  <target name="carrot2.webapp.war" depends="basedir.check">
-    <antcall target="lib.flattened" />
+  <target name="carrot2.webapp.war" depends="basedir.check, lib.flattened">
     <copy todir="${lib.flattened}">
       <fileset dir="${carrot2.master.basedir}">
         <patternset refid="lib.webapp" />
@@ -117,9 +116,8 @@
   <!--
        Compiles the main web application classes and copies log4j configuration.
     -->
-  <target name="carrot2.webapp.classes" depends="basedir.check">
+  <target name="carrot2.webapp.classes" depends="basedir.check, jar">
     <mkdir dir="${webapp.classes.dir}" />
-    <antcall target="jar" />
 
     <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
     <javac srcdir="${carrot2.webapp.basedir}/src"
@@ -132,6 +130,14 @@
       <classpath refid="lib.classpath" />
       <classpath path="${jar.dir}/carrot2-core.jar" />
     </javac>
+
+    <copy todir="${webapp.classes.dir}">
+        <fileset dir="${carrot2.webapp.basedir}/src">
+            <exclude name="**/*.java" />
+            <exclude name="*.properties" />
+            <exclude name="config.*" />
+        </fileset>
+    </copy>
 
     <!-- Log4j specific config -->
     <copy tofile="${webapp.dir}/classes/log4j.xml"
