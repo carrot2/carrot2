@@ -32,6 +32,7 @@
         <arg line="-DbuildDirectory=@{build.dir}" />
         <arg line="-Dcarrot2.dir=${carrot2.master.basedir}" />
         <arg line="-Dtarget.platform=${target.platform}" />
+        <arg line="-Dcarrot2.master.basedir=${carrot2.master.basedir}" />
         <arg line="@{extra.args}" />
         <arg line="-propertyfile @{props.file}" />
       </java>
@@ -80,43 +81,19 @@
     <ant antfile="${carrot2.master.basedir}/build.xml" target="attrs" />    
   </target>
 
+
   <!-- Build the workbench. -->
   <target name="build" description="Build the workbench" depends="init">
     <!-- Compile and assemble the workbench. -->
     <launchAntRunner buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
                      build.dir="${workbench.build.dir}/build-dir"
                      props.file="${carrot2.master.basedir}/workbench.properties"
-                     extra.args="-Dproduct=/org.carrot2.workbench/Workbench.product" />
+                     extra.args="
+                        -Dproduct=/org.carrot2.workbench/Workbench.product" />
 
     <checkAccessRestriction logsbasedir="${workbench.build.dir}/build-dir" />
-
-    <!-- Add Carrot2 license file to the distribution ZIP files -->    
-    <taskdef resource="net/sf/antcontrib/antlib.xml">
-      <classpath>
-        <pathelement location="${carrot2.master.basedir}/etc/ant/ant-contrib-1.0b3.jar" />
-      </classpath>
-    </taskdef>
-    
-    <for param="zip">
-      <path>
-        <fileset dir="${workbench.build.dir}/build-dir/${buildLabel}">
-          <include name="**/${archivePrefix}*.zip" />
-        </fileset>
-      </path>
-    
-      <sequential>
-        <zip destfile="@{zip}" update="true">
-          <zipfileset dir="${basedir}" prefix="${archivePrefix}">
-            <include name="carrot2.LICENSE" />
-            <include name="carrot2.CONTRIBUTORS" />
-          </zipfileset>
-          <zipfileset dir="${basedir}/workbench" prefix="${archivePrefix}">
-            <include name="readme.txt" />
-          </zipfileset>
-        </zip>
-      </sequential>
-    </for>
   </target>
+
 
   <!-- Build the test distribution and run the tests. -->
   <target name="test" description="Builds workbench and run the tests" depends="init">
@@ -124,7 +101,9 @@
     <launchAntRunner buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
                      build.dir="${workbench.build.dir}/test-dir"
                      props.file="${carrot2.master.basedir}/workbench.test.properties"
-                     extra.args="-Dproduct=/org.carrot2.workbench/Workbench.product -DfeatureList=org.carrot2.workbench.test" />
+                     extra.args="
+                        -Dproduct=/org.carrot2.workbench/Workbench.product 
+                        -DfeatureList=org.carrot2.workbench.test" />
 
     <checkAccessRestriction logsbasedir="${workbench.build.dir}/test-dir" />
 
@@ -174,30 +153,19 @@
     </copy>
 
     <!-- 
-             A hacky way of finding out whether tests passed. The Eclipse runner doesn't
-             seem to expose this information directly.
-        -->
+        A hacky way of finding out whether tests passed. The Eclipse runner doesn't
+        seem to expose this information directly.
+      -->
     <loadfile property="testxml"
               srcFile="${workbench.tests.html.report.dir}/TESTS-TestSuites.xml" />
     <fail message="Tests failed, see ${workbench.tests.html.report.dir} for report.">
       <condition>
-        <or>
-          <matches string="${testxml}"
-                   pattern='errors="[1-9][0-9]*"' />
-          <matches string="${testxml}"
-                   pattern='failures="[1-9][0-9]*"' />
-          <matches string="${testxml}"
-                   pattern="errors='[1-9][0-9]*'" />
-          <matches string="${testxml}"
-                   pattern="failures='[1-9][0-9]*'" />
-        </or>
+          <matches string="${testxml}" pattern="(failures|errors)=.[1-9][0-9]*" />
       </condition>
     </fail>
     <fail message="Tests did not run, see ${workbench.tests.txt.report.dir} for logs.">
       <condition>
-        <or>
           <matches string="${testxml}" pattern="testsuites />" />
-        </or>
       </condition>
     </fail>
   </target>
