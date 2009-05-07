@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.carrot2.workbench"
+      id="org.carrot2.workbench.feature"
       label="Carrot2 Workbench Feature"
       version="3.0.0"
       provider-name="Carrot2.org"

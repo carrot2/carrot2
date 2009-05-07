@@ -74,34 +74,32 @@
           target: fetchBuildFiles              
          ================================= -->
 	<target name="fetchBuildFiles">
+		<patternset id="temporary.files">
+			<exclude name="**/.svn/**" />
+			<exclude name="**/tmp/**" />
+			<exclude name="**/.clover/**" />
+		</patternset>
+
 		<copy todir="${buildDirectory}/plugins">
 			<fileset dir="${carrot2.dir}/core">
-				<patternset id="to.exclude">
-					<exclude name="**/.svn/**" />
-					<exclude name="**/tmp/**" />
-					<exclude name="**/.clover/**" />
-				</patternset>
+				<patternset refid="temporary.files" />
 			</fileset>
 
 			<fileset dir="${carrot2.dir}/lib">
-				<patternset refid="to.exclude" />
+				<patternset refid="temporary.files" />
 			</fileset>
 
 			<fileset dir="${carrot2.dir}/workbench">
-				<patternset refid="to.exclude" />
-				<include name="org.carrot2*/**" />
+				<patternset refid="temporary.files" />
+				<exclude name="build-conf/**" />
 				<exclude name="org.carrot2*.feature/**" />
-				<exclude name="org.carrot2.workbench/**" />
-				<exclude name="org.carrot2.workbench.test/**" />
 			</fileset>
 		</copy>
 
 		<copy todir="${buildDirectory}/features">
 			<fileset dir="${carrot2.dir}/workbench/">
+				<patternset refid="temporary.files" />
 				<include name="org.carrot2*.feature/**" />
-				<include name="org.carrot2.workbench/**" />
-				<include name="org.carrot2.workbench.test/**" />
-				<patternset refid="to.exclude" />
 			</fileset>
 		</copy>
 	</target>

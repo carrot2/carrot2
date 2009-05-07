@@ -89,7 +89,7 @@
                      build.dir="${workbench.build.dir}/build-dir"
                      props.file="${carrot2.master.basedir}/workbench.properties"
                      extra.args="
-                        -Dproduct=/org.carrot2.workbench/Workbench.product" />
+                        -Dproduct=/org.carrot2.workbench.feature/Workbench.product" />
 
     <checkAccessRestriction logsbasedir="${workbench.build.dir}/build-dir" />
   </target>
@@ -102,8 +102,8 @@
                      build.dir="${workbench.build.dir}/test-dir"
                      props.file="${carrot2.master.basedir}/workbench.test.properties"
                      extra.args="
-                        -Dproduct=/org.carrot2.workbench/Workbench.product 
-                        -DfeatureList=org.carrot2.workbench.test" />
+                        -Dproduct=/org.carrot2.workbench.feature/Workbench.product 
+                        -DfeatureList=org.carrot2.workbench.core.test.feature" />
 
     <checkAccessRestriction logsbasedir="${workbench.build.dir}/test-dir" />
 
