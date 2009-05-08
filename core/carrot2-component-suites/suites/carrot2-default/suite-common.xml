@@ -13,6 +13,7 @@
         <example-query>clustering</example-query>
       </example-queries>
     </source>
+    
     <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-images">
       <label>Images</label>
       <title>Yahoo Image Search</title>
@@ -25,6 +26,7 @@
         <example-query>president</example-query>
       </example-queries>
     </source>
+    
     <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-news">
       <label>News</label>
       <title>Yahoo Boss News Search</title>
@@ -39,6 +41,7 @@
         <example-query>election</example-query>
       </example-queries>
     </source>
+    
     <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
       <label>Yahoo</label>
       <title>Yahoo Web Search</title>
@@ -51,6 +54,7 @@
         <example-query>London</example-query>
       </example-queries>
     </source>
+    
     <source component-class="org.carrot2.source.microsoft.MicrosoftLiveDocumentSource" id="msn-web">
       <label>MSN</label>
       <title>MSN Live Search</title>
@@ -89,19 +93,23 @@
       </example-queries>
     </source>
   </sources>
+  
   <algorithms>
     <algorithm component-class="org.carrot2.clustering.lingo.LingoClusteringAlgorithm" id="lingo">
       <label>Lingo</label>
       <title>Lingo Clustering</title>
     </algorithm>
+    
     <algorithm component-class="org.carrot2.clustering.stc.STCClusteringAlgorithm" id="stc">
       <label>STC</label>
       <title>Suffix Tree Clustering</title>
     </algorithm>
+    
     <algorithm component-class="org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm" id="url">
       <label>By URL</label>
       <title>By URL Clustering</title>
     </algorithm>
+    
     <algorithm component-class="org.carrot2.clustering.synthetic.ByFieldClusteringAlgorithm" id="source">
       <label>By Source</label>
       <title>By Source Clustering</title>

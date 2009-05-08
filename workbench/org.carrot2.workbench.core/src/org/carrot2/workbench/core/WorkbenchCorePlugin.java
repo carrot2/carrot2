@@ -204,7 +204,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             .getExtensionPoint(COMPONENT_SUITE_EXTENSION_ID).getExtensions();
 
         // Load suites from extension points.
-        extLoop: for (IExtension extension : extensions)
+        for (IExtension extension : extensions)
         {
             final IConfigurationElement [] configElements = extension
                 .getConfigurationElements();
@@ -212,15 +212,26 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             {
                 String suiteRoot = configElements[0].getAttribute("resourceRoot");
                 if (StringUtils.isEmpty(suiteRoot)) suiteRoot = "";
-                final String suiteResource = configElements[0].getAttribute("resource");
 
+                final String suiteResource = configElements[0].getAttribute("resource");
                 if (StringUtils.isEmpty(suiteResource))
                 {
                     continue;
                 }
 
-                final IContributor c = extension.getContributor();
-                final Bundle b = Platform.getBundle(c.getName());
+                String bundleId = configElements[0].getAttribute("bundleId");
+                if (StringUtils.isEmpty(bundleId))
+                {
+                    final IContributor c = extension.getContributor();
+                    bundleId = c.getName();
+                }
+
+                final Bundle b = Platform.getBundle(bundleId);
+                if (b == null)
+                {
+                    Utils.logError("Suite's bundle not found: " + bundleId, false);
+                    continue;
+                }
 
                 if (b.getState() != Bundle.ACTIVE)
                 {
@@ -230,16 +241,16 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                     }
                     catch (BundleException e)
                     {
-                        continue extLoop;
+                        Utils.logError("Bundle inactive: " + bundleId, false);                        
+                        continue;
                     }
                 }
 
-                final URL bundleURL = b.getEntry(suiteRoot + suiteResource);
-                
+                final String suitePath = suiteRoot + suiteResource;
+                final URL bundleURL = b.getEntry(suitePath);
                 if (bundleURL == null)
                 {
-                    String message = "Suite extension resource not found: "
-                        + suiteRoot + suiteResource;
+                    String message = "Suite extension resource not found: " + suitePath;
                     Logger.getRootLogger().error(message);
                     Utils.logError(message, false);
                     continue;
@@ -283,9 +294,9 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                             {
                                 continue;
                             }
-    
-                            componentImages.put(d.getId(), imageDescriptorFromPlugin(c
-                                .getName(), iconPath));
+
+                            componentImages.put(d.getId(), 
+                                imageDescriptorFromPlugin(bundleId, iconPath));
                         }
     
                         suites.add(suite);

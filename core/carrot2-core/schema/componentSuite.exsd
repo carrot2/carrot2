@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.carrot2.workbench.core">
+<schema targetNamespace="org.carrot2.workbench.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
-      <appInfo>
+      <appinfo>
          <meta.schema plugin="org.carrot2.workbench.core" id="componentSuite" name="Carrot2 Component Suite"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          A component suite contains Carrot2 framework&apos;s document sources and/or algorithms along with their default initialization and runtime parameters, typical query examples and some documentation.
       </documentation>
@@ -34,9 +34,9 @@
                <documentation>
                   
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute translatable="true"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
@@ -44,9 +44,9 @@
 
    <element name="suite">
       <annotation>
-         <appInfo>
+         <appinfo>
             <meta.element labelAttribute="name"/>
-         </appInfo>
+         </appinfo>
       </annotation>
       <complexType>
          <attribute name="resource" type="string" use="required">
@@ -54,9 +54,9 @@
                <documentation>
                   Suite path inside the bundle.
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute translatable="true"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="name" type="string" use="default" value="Component Suite">
@@ -69,56 +69,23 @@
          <attribute name="resourceRoot" type="string" use="default" value="">
             <annotation>
                <documentation>
-                  Bundle resource prefix for include directives inside suites. 
+                  Bundle resource prefix for include directives inside suites. The prefix is not normalized in any way, so it should include trailing slashes, should they be needed. Example: suites/
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="bundleId" type="string">
+            <annotation>
+               <documentation>
+                  OSGI bundle identifier from which the suite should be loaded. If empty, the extension&apos;s containing bundle is used.
                </documentation>
             </annotation>
          </attribute>
       </complexType>
    </element>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="since"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="examples"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="apiInfo"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="implementation"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="copyright"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
 </schema>
