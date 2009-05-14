@@ -16,8 +16,6 @@ package org.carrot2.text.suffixtrees;
  * The interface providing access to collection elements for use by SuffixTree. In order
  * to be used by SuffixTree class (and subclasses), the object must implement this
  * interface.
- * 
- * @author Dawid Weiss
  */
 public interface ISuffixableElement
 {

@@ -20,8 +20,6 @@ import org.carrot2.util.attribute.constraint.IntRange;
 /**
  * STC algorithm parameters. These should be eventually moved into
  * {@link STCClusteringAlgorithm}.
- * 
- * @author Dawid Weiss
  */
 @Bindable(prefix = "STCClusteringAlgorithm")
 public final class STCClusteringParameters

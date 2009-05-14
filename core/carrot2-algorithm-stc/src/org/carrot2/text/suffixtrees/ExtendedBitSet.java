@@ -40,7 +40,6 @@ import java.util.Iterator;
  * may change with implementation. The length of a bit set relates to logical length of a
  * bit set and is defined independently of implementation.
  * 
- * @author Dawid Weiss
  * @author Arthur van Hoff
  * @author Michael McCloskey
  */

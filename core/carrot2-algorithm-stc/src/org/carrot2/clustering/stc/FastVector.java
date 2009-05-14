@@ -50,9 +50,8 @@ import java.util.NoSuchElementException;
  * BE LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR
  * DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
  * </p>
- * 
- * @author Dawid Weiss, (c) 1999 Poznan University of Technology, Institute of Computing
- *         Science.<BR>
+ *
+ * @author
  *         Jonathan Payne (original Vector class) (c) Sun Microsystems, Inc.<BR>
  *         Lee Boynton (original Vector class) (c) Sun Microsystems, Inc.
  * @version 0.9, 13 Apr 1999,<BR>
