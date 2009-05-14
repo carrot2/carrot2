@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" title="style" media="all" href="css/style.css" />
-    <title>Request parameters - Document Clustering Server - Carrot2</title>
+    <title>Request parameters - Document Clustering Server</title>
   </head>
 
   <body>
@@ -40,7 +40,7 @@
         the <b><tt>/dcs/rest</tt></b> URL and supports the following HTTP POST
         parameters:
       </p>
-      
+
       <dl>
         <dt>dcs.source</dt>
         <dd>
@@ -59,8 +59,7 @@
         
         <dt>dcs.c2stream</dt>
         <dd>
-          Documents to be clustered in <a href="input.html">XML format</a>. This field can be
-          provided either as a file upload or as a plain POST parameter. This parameter
+          Documents to be clustered in the following <a href="input.html">XML format</a>. This parameter
           is ignored if <tt>dcs.source</tt> is provided.
         </dd>
 
@@ -98,7 +97,7 @@
         <dd>
           Any other parameter names will be treated as attribute keys and will be passed, along with the value,
           to the respective component. A complete reference of each component's attributes
-          is available in the <a href="http://demo.carrot2.org/head-3.0/manual/html/carrot2-manual.html#chapter.components" target="_blank">Carrot2 Manual</a>.  
+          is available in the documentation and in the source code of each algorithm.  
         </dd>
       </dl>
 
