@@ -60,7 +60,7 @@ public class DcsAppTest extends ExternalApiTestBase
     {
         final HtmlPage page = getStartPage();
         assertThat(page.getTitleText()).isEqualTo(
-            "Quick start - Document Clustering Server - Carrot2");
+            "Quick start - Document Clustering Server");
     }
 
     @Test
@@ -148,7 +148,7 @@ public class DcsAppTest extends ExternalApiTestBase
     {
         final HtmlPage page = getPage("parameters.html");
         assertThat(page.getTitleText()).isEqualTo(
-            "Request parameters - Document Clustering Server - Carrot2");
+            "Request parameters - Document Clustering Server");
         assertThat(page.getBody().getTextContent()).contains("dcs.source").doesNotMatch(
             "Loading\\.\\.\\.");
     }
@@ -158,7 +158,7 @@ public class DcsAppTest extends ExternalApiTestBase
     {
         final HtmlPage page = getPage("input.html");
         assertThat(page.getTitleText()).isEqualTo(
-            "Input format - Document Clustering Server - Carrot2");
+            "Input format - Document Clustering Server");
         assertThat(page.getBody().getTextContent()).contains("(optional)").doesNotMatch(
             "Loading\\.\\.\\.");
     }
@@ -168,7 +168,7 @@ public class DcsAppTest extends ExternalApiTestBase
     {
         final HtmlPage page = getPage("output.html");
         assertThat(page.getTitleText()).isEqualTo(
-            "Output format - Document Clustering Server - Carrot2");
+            "Output format - Document Clustering Server");
         assertThat(page.getBody().getTextContent()).contains("(optional)").doesNotMatch(
             "Loading\\.\\.\\.");
     }
