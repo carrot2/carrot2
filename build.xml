@@ -20,6 +20,7 @@
   <import file="${carrot2.master.basedir}/applications/carrot2-dcs/build.xml" />
   <import file="${carrot2.master.basedir}/doc/build.xml" />
   <import file="${carrot2.master.basedir}/etc/maven/build.xml" />
+  <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />
@@ -48,10 +49,6 @@
   <property name="pmd.jar" location="${pmd.home}/lib/" />
   <property name="smartsprites.home" location="${carrot2.master.basedir}/etc/smartsprites" />
 
-  <!-- Extra stuff for building the documentation. -->
-  <property name="xalan.home" location="lib/org.apache.xml" />
-
-  
   <!-- Source files to compile for tests -->
   <path id="src.test.folders">
     <dirset dir="${core.dir}" includes="**/src" />
@@ -752,12 +749,10 @@
     </delete>
   </target>
 
-  <!-- We need the newest Xalan to build the docs -->
-  <property name="xalan.home" location="lib/org.apache.xml" />
-    <target name="enable.xincludes" depends="antlib">
-      <setProperty sysproperty="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
-    </target>
-  <target name="doc" depends="enable.xincludes,carrot2.doc.build" description="Builds Carrot2 documentation" />
+  <!-- 
+      Builds the manual.
+    -->
+  <target name="doc" depends="carrot2.doc.build" description="Builds Carrot2 Manual" />
 
   <!-- 
        Flattened lib directory.
@@ -789,17 +784,7 @@
   <!--
       Compile and define custom ANT tasks.
    -->
-  <target name="antlib">
-    <property name="org.carrot2.antlib" location="lib/org.carrot2.antlib" />
-
-    <ant dir="${org.carrot2.antlib}" antfile="build.xml" target="jar" />
-  
-    <taskdef resource="org.carrot2.antlib.xml">
-      <classpath>
-        <pathelement location="${org.carrot2.antlib}/org.carrot2.antlib.jar" />
-      </classpath>
-    </taskdef>    
-  </target>
+  <target name="antlib" depends="carrot2.common.antlib.tasks" />
   
   <!--
       Source code management: license headers list and replace.

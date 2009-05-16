@@ -15,7 +15,7 @@
   <property name="workbench.tests.html.report.dir" location="${workbench.build.dir}/test-report" />
   <property name="workbench.tests.txt.report.dir"  location="${workbench.build.dir}/test-report-txt" />
 
-  <property name="custom.tasks.dir" location="${carrot2.master.basedir}/lib/org.carrot2.antlib" />
+  <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
 
   <patternset id="temporary.files">
     <exclude name="**/.svn/**" />
@@ -86,15 +86,7 @@
   </macrodef>
 
   <!-- Initialize the build. -->
-  <target name="init">
-    <ant dir="${custom.tasks.dir}" antfile="build.xml" target="jar" />
-
-    <taskdef resource="org.carrot2.antlib.xml">
-      <classpath>
-        <pathelement location="${custom.tasks.dir}/org.carrot2.antlib.jar" />
-      </classpath>
-    </taskdef>
-
+  <target name="init" depends="carrot2.common.antlib.tasks">
     <findVersion property="equinox.launcher.plugin.jar"
                  eclipsehome="${eclipse.home}"
                  pluginid="org.eclipse.equinox.launcher"
