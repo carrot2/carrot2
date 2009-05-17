@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,6 +14,7 @@ package org.carrot2.output.metrics;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.core.Cluster;
+import org.fest.assertions.Delta;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -61,12 +61,24 @@ public class PrecisionRecallMetricTest extends IdealPartitioningBasedMetricTest
         metric.documents = cluster.getAllDocuments();
         metric.clusters = Lists.newArrayList(cluster);
         metric.calculate();
-        assertThat(cluster.<Double> getAttribute(PrecisionRecallMetric.PRECISION)).as(
-            "precision").isEqualTo(expectedPrecision);
-        assertThat(cluster.<Double> getAttribute(PrecisionRecallMetric.RECALL)).as(
-            "recall").isEqualTo(expectedRecall);
-        assertThat(cluster.<Double> getAttribute(PrecisionRecallMetric.F_MEASURE)).as(
-            "f-measure").isEqualTo(expectedFMeasure);
+        assertEquals(expectedPrecision, cluster
+            .<Double> getAttribute(PrecisionRecallMetric.PRECISION), 0.001, "precision");
+        assertEquals(expectedRecall, cluster
+            .<Double> getAttribute(PrecisionRecallMetric.RECALL), 0.001, "recall");
+        assertEquals(expectedFMeasure, cluster
+            .<Double> getAttribute(PrecisionRecallMetric.F_MEASURE), 0.001, "f-measure");
+    }
+
+    private void assertEquals(Double expected, Double actual, double delta, String as)
+    {
+        if (expected == null)
+        {
+            assertThat((Object) actual).as(as).isEqualTo(expected);
+        }
+        else
+        {
+            assertThat(actual).as(as).isEqualTo(expected, Delta.delta(delta));
+        }
     }
 
     @Override

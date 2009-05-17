@@ -57,7 +57,7 @@ public class DcsAppTest
     {
         final HtmlPage page = getStartPage();
         assertThat(page.getTitleText()).isEqualTo(
-            "Quick start - Document Clustering Server -");
+            "Quick start - Document Clustering Server");
     }
 
     @Test

@@ -71,7 +71,7 @@ public class ContaminationMetricTest extends IdealPartitioningBasedMetricTest
         metric.documents = cluster.getAllDocuments();
         metric.clusters = Lists.newArrayList(cluster);
         metric.calculate();
-        assertThat(cluster.<Double> getAttribute(ContaminationMetric.CONTAMINATION))
+        assertThat(cluster.<Object> getAttribute(ContaminationMetric.CONTAMINATION))
             .isEqualTo(expectedContamination);
     }
 
