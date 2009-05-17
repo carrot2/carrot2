@@ -49,6 +49,14 @@
   <property name="pmd.jar" location="${pmd.home}/lib/" />
   <property name="smartsprites.home" location="${carrot2.master.basedir}/etc/smartsprites" />
 
+  <!-- Compilation presets. -->
+  <presetdef name="javac">
+      <javac deprecation="true" debug="true"
+          compiler="modern"
+          target="1.5" source="1.5"
+          encoding="UTF-8" includeantruntime="true" optimize="true" />
+  </presetdef>
+
   <!-- Source files to compile for tests -->
   <path id="src.test.folders">
     <dirset dir="${core.dir}" includes="**/src" />
@@ -190,15 +198,8 @@
     <mkdir dir="${build.dir}" />
 
     <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac destdir="${build.dir}"
-           compiler="modern"
-           source="1.5"
-           target="1.5"
-           encoding="UTF-8"
-           debug="true"
-           debuglevel="lines,source">
+    <javac destdir="${build.dir}">
       <src refid="src.core.folders" />
-
       <classpath refid="lib.classpath" />
     </javac>
   </target>
@@ -208,15 +209,8 @@
     <mkdir dir="${build.dir}" />
 
     <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac destdir="${build.dir}"
-           compiler="modern"
-           source="1.5"
-           target="1.5"
-           encoding="UTF-8"
-           debug="true"
-           debuglevel="lines,source">
+    <javac destdir="${build.dir}">
       <src refid="src.test.folders" />
-
       <classpath refid="lib.classpath" />
     </javac>
   </target>
@@ -226,7 +220,7 @@
           depends="with.clover">
     <mkdir dir="${build.dir}" />
 
-    <javac destdir="${build.dir}" source="1.5" target="1.5" encoding="UTF-8" debug="true" debuglevel="lines,source">
+    <javac destdir="${build.dir}">
       <src refid="src.test.folders" />
 
       <classpath refid="lib.classpath" />
@@ -647,11 +641,7 @@
     <property name="jar.mini.test.classes.dir" location="${carrot2.master.basedir}/tmp/jar-mini-classes" />
     <mkdir dir="${jar.mini.test.classes.dir}" />
     <javac srcdir="${carrot2.master.basedir}/applications/carrot2-examples/src"
-           destdir="${jar.mini.test.classes.dir}"
-           compiler="modern"
-           source="1.5"
-           target="1.5"
-           encoding="UTF-8">
+           destdir="${jar.mini.test.classes.dir}">
       <include name="**/ClusteringDocumentList.java" />
       <classpath>
         <path location="${jar.dir}/carrot2-mini.jar" />
