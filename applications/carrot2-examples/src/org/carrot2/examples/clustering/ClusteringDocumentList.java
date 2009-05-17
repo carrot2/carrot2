@@ -27,8 +27,8 @@ import org.carrot2.util.attribute.AttributeUtils;
 /**
  * This example shows how to cluster a set of documents available as an {@link ArrayList}.
  * This setting is particularly useful for quick experiments with custom data for which
- * there is no corresponding {@link DocumentSource} implementation. For production use,
- * it's better to implement a {@link DocumentSource} for the custom document source, so
+ * there is no corresponding {@link IDocumentSource} implementation. For production use,
+ * it's better to implement a {@link IDocumentSource} for the custom document source, so
  * that e.g the {@link CachingController} can cache it, if needed.
  * 
  * @see ClusteringDataFromDocumentSources

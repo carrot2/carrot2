@@ -25,7 +25,7 @@ import org.carrot2.util.attribute.AttributeUtils;
 
 /**
  * This example shows how to cluster {@link Document}s retrieved from
- * {@link DocumentSource}s. There are a number of implementations of this interface in the
+ * {@link IDocumentSource}s. There are a number of implementations of this interface in the
  * Carrot2 project, in this example we will cluster results from Microsoft Live (Web
  * search) and Yahoo Boss (news search).
  * <p>
