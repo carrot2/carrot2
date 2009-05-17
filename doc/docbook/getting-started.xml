@@ -8,35 +8,34 @@
 ]>
 <chapter xml:id="chapter.getting-started" 
          xmlns="http://docbook.org/ns/docbook" version="5.0"
-         xmlns:c2="http://www.carrot2.org">
+         xmlns:product="http://www.carrot2.org">
   <title>Getting started</title>
-  <subtitle>Trying &C2; clustering with your own data</subtitle>
+  <subtitle>Trying &PROD; clustering with your own data</subtitle>
 
   <para>
-    This chapter will show you how to use &C2; in a number of typical scenarios such as
-    trying clustering on your own documents, integrating &C2; with your software or customizing
-    &C2; applications.
+    This chapter will show you how to use &PROD; in a number of typical scenarios such as
+    trying clustering on your own documents or integrating &PROD; with your software.
   </para>
   
   <section xml:id="section.getting-started">
-    <title>Trying &C2; clustering</title>
+    <title>Trying &PROD; clustering</title>
     
     <para>
-      This section shows how to apply &C2; clustering on documents from various sources.
+      This section shows how to apply &PROD; clustering on documents from various sources.
     </para>
 
     <section xml:id="section.getting-started.common-search-engines">
       <title>Clustering results from common search engines</title>
       
       <para>
-        To try &C2; clustering on results from common search engines, such as Google, 
+        To try &PROD; clustering on results from common search engines, such as Google, 
         Yahoo or MSN, you can either:
       </para>
 
       <itemizedlist>
         <listitem>
           <para>
-            Use the <link xlink:href="http://demo.carrot2.org">on-line version of &WA;</link>
+            Use the <product:online-demo-link>on-line version of &WA;</product:online-demo-link>
           </para>
         </listitem>
       </itemizedlist>
@@ -56,7 +55,7 @@
       <title>Clustering plain text, HTML and MS Word documents</title>
       
       <para>
-        To try &C2; clustering on a collection of plain text, HTML or MS Word documents, you will
+        To try &PROD; clustering on a collection of plain text, HTML or MS Word documents, you will
         need to install Google Desktop:
       </para>
       
@@ -105,7 +104,7 @@
       <title>Clustering documents from XML files</title>
       
       <para>
-        To try &C2; clustering on documents or search results stored in a single XML file
+        To try &PROD; clustering on documents or search results stored in a single XML file
         you can use the &DCW;.
       </para>
       
@@ -128,7 +127,7 @@
             create an XSLT style sheet that transforms your data into &C2; format,
             see <xref linkend="section.getting-started.xml-feed" /> for an example.
             Provide a path to your style sheet in the <guilabel>XSLT Stylesheet</guilabel>
-            field, which is an optional field &ndash; you can show optional fields by 
+            field, which is an optional field. You can show optional fields by 
             clicking the arrow button of the <guilabel>Search</guilabel> view toolbar
             (<xref linkend="figure.search-view-xml" />).
           </para>
@@ -158,7 +157,7 @@
       <title>Clustering documents from XML feeds</title>
       
       <para>
-        To try &C2; clustering on documents or search results fetched from a remote
+        To try &PROD; clustering on documents or search results fetched from a remote
         XML feed, you can use the &DCW;. As an example, we will cluster a news feed from
         BBC:
       </para>
@@ -190,7 +189,7 @@
             <link linkend="figure.input-xml-format">&C2; format</link>. For the news feed
             we can use the stylesheet shown in <xref linkend="figure.bbc-to-c2" />. To
             add more colour to our results, the XSLT transform extracts thumbnail URLs
-            from the feed and passes them to &C2; in a special attribute.
+            from the feed and passes them to &PROD; in a special attribute.
           </para>
         </listitem>
         
@@ -211,7 +210,7 @@
       </orderedlist>
       
       <figure xml:id="figure.bbc-to-c2">
-        <title>News feed XML to &C2; format transformation</title>
+        <title>News feed XML to &PROD; format transformation</title>
         <programlisting><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
@@ -249,7 +248,7 @@
       <title>Clustering documents from a Lucene index</title>
       
       <para>
-        To try &C2; clustering on documents from a local Lucene index, you can use &DCW;:
+        To try &PROD; clustering on documents from a local Lucene index, you can use &DCW;:
       </para>
       
       <orderedlist>
@@ -296,7 +295,7 @@
       <title>Clustering documents from a Solr index</title>
       
       <para>
-        To try &C2; clustering on documents from an instance of Apache Solr, you can use &DCW;:
+        To try &PROD; clustering on documents from an instance of Apache Solr, you can use &DCW;:
       </para>
       
       <orderedlist>
@@ -344,7 +343,7 @@
       <title>Saving clusters for further processing</title>
       
       <para>
-        To save clusters produced by &C2; for further processing:
+        To save clusters produced by &PROD; for further processing:
       </para>
       
       <orderedlist>
@@ -357,7 +356,7 @@
         <listitem>
           <para>
             Use the <guilabel>File &gt; Save as...</guilabel> dialog to save the 
-            documents and clusters into a file in <link linkend="figure.output-xml-format">&C2; XML format</link>.
+            documents and clusters into a file in <link linkend="figure.output-xml-format">&PROD; XML format</link>.
           </para>
         </listitem>
       </orderedlist>
@@ -365,29 +364,29 @@
   </section>
   
   <section xml:id="section.integration">
-    <title>Integrating &C2; with your software</title>
+    <title>Integrating &PROD; with your software</title>
     
     <para>
     </para>
     
     <section xml:id="section.integration.compiling-java-program-with-carrot2">
-      <title>Compiling a Java program using &C2; API</title>
+      <title>Compiling a Java program using &PROD; API</title>
       
       <para>
-        The easiest way to integrate &C2; with your Java programs is to use the &JA; package:
+        The easiest way to integrate &PROD; with your Java programs is to use the &JA; package:
       </para>
       
       <orderedlist>
         <listitem>
           <para>
-            <c2:java-api-download-link>Download &JA;</c2:java-api-download-link>
+            <product:java-api-download-link>Download &JA;</product:java-api-download-link>
             and unpack it to some local directory.
           </para>
         </listitem>
         
         <listitem>
           <para>
-            Make sure that <filename>carrot2-core.jar</filename> and all JARs from the
+            Make sure that <filename>&PRODID;.jar</filename> and all JARs from the
             <filename>lib/</filename> directory are available in the classpath of
             your program.
           </para>
@@ -411,18 +410,18 @@
           <tip>
             <para>
               For easier experimenting with &JA;, you may want to 
-              <link linkend="section.integration.seting-up-c2-project-in-eclipse">set up a &C2; project in Eclipse IDE</link>.
+              <link linkend="section.integration.seting-up-c2-project-in-eclipse">set up a &PROD; project in Eclipse IDE</link>.
             </para> 
           </tip>
         </listitem>
       </orderedlist>
     </section>
     
-    <section xml:id="section.integration.adding-to-maven-project">
-      <title>Adding &C2; dependency to a Maven2 project</title>
+    <section xml:id="section.integration.adding-to-maven-project" role="maven">
+      <title>Adding &PROD; dependency to a Maven2 project</title>
       
       <para>
-        To add &C2; as a dependency to an existing Maven2 project:
+        To add &PROD; as a dependency to an existing Maven2 project:
       </para>
       
       <orderedlist>
@@ -467,24 +466,24 @@
     </section>
     
     <section xml:id="section.integration.setting-up-maven-project">
-      <title>Setting up a Maven2 project with &C2; dependency</title>
+      <title>Setting up a Maven2 project with &PROD; dependency</title>
       
       <para>
-        &C2; provides Maven2 artifacts and an archetype project with examples of use.
-        To create a template &C2; project, use the following command (line breaks for clarity): 
+        &PROD; provides Maven2 artifacts and an archetype project with examples of use.
+        To create a template &PROD; project, use the following command (line breaks for clarity): 
       </para>
       
 <programlisting><![CDATA[mvn archetype:generate 
  -DarchetypeRepository=http://download.carrot2.org/maven2/ 
  -DarchetypeGroupId=org.carrot2 
  -DarchetypeArtifactId=carrot2-example-archetype 
- -DarchetypeVersion=]]><emphasis role="bold"><c2:carrot2-version /></emphasis><![CDATA[ 
+ -DarchetypeVersion=]]><emphasis role="bold"><product:version /></emphasis><![CDATA[ 
  -DgroupId=com.mycompany 
  -DartifactId=myproject 
  -DinteractiveMode=false]]></programlisting>
   
       <para>
-        Marked in bold is the &C2; release that will be used, please see 
+        Marked in bold is the &PROD; release that will be used, please see 
         <link xlink:href="http://download.carrot2.org/maven2/org/carrot2/carrot2-example-archetype/">our Maven2 repository</link> 
         for available version numbers.
       </para>
@@ -497,7 +496,7 @@
     </section>
     
     <section xml:id="section.integration.seting-up-c2-project-in-eclipse">
-      <title>Setting up a &C2; project in Eclipse IDE</title>
+      <title>Setting up a &PROD; project in Eclipse IDE</title>
       
       <para>
         &JA; examples can be easily set up in Eclipse IDE. The description below assumes
@@ -507,7 +506,7 @@
       <orderedlist>
         <listitem>
           <para>
-            <c2:java-api-download-link>Download &JA;</c2:java-api-download-link>
+            <product:java-api-download-link>Download &JA;</product:java-api-download-link>
             and unpack it to some local directory.
           </para>
         </listitem>
@@ -551,18 +550,18 @@
       </figure>
     </section>
     
-    <section xml:id="section.integration.setting-up-carrot2-sources-in-eclipse">
-      <title>Setting up &C2; source code in Eclipse IDE</title>
+    <section xml:id="section.integration.setting-up-carrot2-sources-in-eclipse" role="sources">
+      <title>Setting up &PROD; source code in Eclipse IDE</title>
       
       <para>
-        &C2; source code can be easily set up in Eclipse IDE. The description below assumes
+        &PROD; source code can be easily set up in Eclipse IDE. The description below assumes
         you are using Eclipse IDE version 3.4 or newer.  
       </para>
       
       <orderedlist>
         <listitem>
           <para>
-            Check out &C2; source code, e.g. from the following Subversion URL:
+            Check out &PROD; source code, e.g. from the following Subversion URL:
           </para>
           
 <programlisting><![CDATA[https://carrot2.svn.sourceforge.net/svnroot/carrot2/trunk]]></programlisting>          
@@ -577,7 +576,7 @@
           </para>
           
           <figure xml:id="figure.eclipse-import">
-            <title>Eclipse IDE &C2; project import step 1</title>
+            <title>Eclipse IDE &PROD; project import step 1</title>
             <mediaobject>
               <imageobject role="html">
                 <imagedata format="GIF" fileref="img/eclipse-import.gif" />
@@ -589,14 +588,14 @@
         <listitem>
           <para>
             In the <guilabel>Import projects</guilabel> dialog provide your local
-            &C2; checkout directory in the <guilabel>Select root directory</guilabel>
+            &PROD; checkout directory in the <guilabel>Select root directory</guilabel>
             field. Uncheck the <filename>org.carrot2.antlib</filename> project 
             (see <xref linkend="figure.eclipse-import-projects" />) and click 
             <guilabel>Finish</guilabel>.
           </para>
           
           <figure xml:id="figure.eclipse-import-projects">
-            <title>Eclipse IDE &C2; project import step 2</title>
+            <title>Eclipse IDE &PROD; project import step 2</title>
             <mediaobject>
               <imageobject role="html">
                 <imagedata format="PNG" fileref="img/eclipse-import-projects.png" />
@@ -607,7 +606,7 @@
 
         <listitem>
           <para>
-            All &C2; source code should compile without errors. If it does not:
+            All &PROD; source code should compile without errors. If it does not:
           </para>
           
           <itemizedlist>
@@ -630,11 +629,11 @@
     </section>
     
     <section xml:id="section.integration.calling-carrot2-from-non-java-software">
-      <title>Calling &C2; clustering from non-Java software</title>
+      <title>Calling &PROD; clustering from non-Java software</title>
       
       <para>
-        To integrate &C2; with your non-Java system,
-        you can use the &DCS;, which exposes &C2; clustering as a REST/XML service. Please
+        To integrate &PROD; with your non-Java system,
+        you can use the &DCS;, which exposes &PROD; clustering as a REST/XML service. Please
         see <xref linkend="section.dcs.installation" /> for installation instructions and
         the <filename>examples/</filename> directory in the distribution archive for
         example code in PHP, C# and Ruby.

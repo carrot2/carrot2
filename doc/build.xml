@@ -35,13 +35,14 @@
       <xslt.param.entries>
         <param name="dist.url" expression="${dist.url}" />
         <param name="carrot2.javadoc.url" expression="${dist.url}/javadoc" />
-        <param name="carrot2.java-api.base" expression="${carrot2.java-api.base}" />
-        <param name="carrot2.dcs.base" expression="${carrot2.dcs.base}" />
-        <param name="carrot2.webapp.base" expression="${carrot2.webapp.base}" />
-        <param name="carrot2.manual.base" expression="${carrot2.manual.base}" />
-        <param name="carrot2.workbench.base" expression="${carrot2.workbench.base}" />
+        <param name="product.java-api.base" expression="${carrot2.java-api.base}" />
+        <param name="product.dcs.base" expression="${carrot2.dcs.base}" />
+        <param name="product.webapp.base" expression="${carrot2.webapp.base}" />
+        <param name="product.manual.base" expression="${carrot2.manual.base}" />
+        <param name="product.workbench.base" expression="${carrot2.workbench.base}" />
         
-        <param name="carrot2.version" expression="${carrot2.version}" />
+        <param name="product.demo.url" expression="http://search.carrot2.org" />
+        <param name="product.version" expression="${carrot2.version}" />
       </xslt.param.entries>
     </carrot2.doc.build>
   </target>

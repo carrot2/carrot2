@@ -1,36 +1,50 @@
 <?xml version='1.0'?> 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-                xmlns:c2="http://www.carrot2.org"
+                xmlns:product="http://www.carrot2.org"
                 xmlns:d="http://docbook.org/ns/docbook"
-                version="1.0" exclude-result-prefixes="c2">
+                version="1.0" exclude-result-prefixes="product">
                 
   <xsl:param name="dist.url" />
-  <xsl:param name="carrot2.version" />
+  <xsl:param name="product.version" />
+  <xsl:param name="product.demo.url" />
   
-  <xsl:param name="carrot2.java-api.base" />
-  <xsl:param name="carrot2.dcs.base" />
-  <xsl:param name="carrot2.webapp.base" />
-  <xsl:param name="carrot2.workbench.base" />
-  <xsl:param name="carrot2.manual.base" />
+  <xsl:param name="product.java-api.base" />
+  <xsl:param name="product.dcs.base" />
+  <xsl:param name="product.webapp.base" />
+  <xsl:param name="product.workbench.base" />
+  <xsl:param name="product.manual.base" />
   <xsl:param name="carrot2.javadoc.url" />
   
-  <xsl:template match="c2:java-api-download-link">
-    <a href="{$dist.url}/{$carrot2.java-api.base}-{$carrot2.version}.zip"><xsl:apply-templates /></a>
+  <xsl:template match="product:java-api-download-link">
+    <a href="{$dist.url}/{$product.java-api.base}-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>
     
-  <xsl:template match="c2:dcs-download-link">
-    <a href="{$dist.url}/{$carrot2.dcs.base}-{$carrot2.version}.zip"><xsl:apply-templates /></a>
+  <xsl:template match="product:dcs-download-link">
+    <a href="{$dist.url}/{$product.dcs.base}-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>  
 
-  <xsl:template match="c2:webapp-download-link">
-    <a href="{$dist.url}/{$carrot2.webapp.base}-{$carrot2.version}.war"><xsl:apply-templates /></a>
+  <xsl:template match="product:webapp-download-link">
+    <a href="{$dist.url}/{$product.webapp.base}-{$product.version}.war"><xsl:apply-templates /></a>
   </xsl:template>  
 
-  <xsl:template match="c2:workbench-download-link">
-    <a href="{$dist.url}/{$carrot2.workbench.base}-{@os}.{@wm}.x86.zip"><xsl:apply-templates /></a>
+  <xsl:template match="product:workbench-download-link">
+    <a href="{$dist.url}/{$product.workbench.base}-{@os}.{@wm}.x86-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>
   
-  <xsl:template match="c2:carrot2-version"><xsl:value-of select="$carrot2.version" /></xsl:template>
+  <xsl:template match="product:online-demo-link">
+    <xsl:variable name="content">
+      <xsl:choose>
+        <xsl:when test="string-length(.) > 0">
+          <xsl:apply-templates />
+        </xsl:when>
+        
+        <xsl:otherwise><xsl:value-of select="$product.demo.url" /></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <a href="{$product.demo.url}"><xsl:value-of select="$content" /></a>
+  </xsl:template>
+  
+  <xsl:template match="product:version"><xsl:value-of select="$product.version" /></xsl:template>
   
   <xsl:template match="d:link[@role = 'javadoc']">
     <xsl:variable name="class-name">

@@ -6,7 +6,8 @@
   %local;
   %custom;
 ]>
-<book>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0"
+      xmlns:product="http://www.carrot2.org">
   <info>
     <title>&C2;</title>
     <subtitle>User and Developer Manual</subtitle>
@@ -19,7 +20,7 @@
       </para>
       
       <para>
-        &C2; Online Demo: <link xlink:href="http://search.carrot2.org" /><?linebreak?>
+        &C2; Online Demo: <product:online-demo-link /><?linebreak?>
         &C2; website: <link xlink:href="http://project.carrot2.org" />
       </para>
     </abstract>

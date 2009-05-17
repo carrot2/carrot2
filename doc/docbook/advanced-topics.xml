@@ -8,7 +8,7 @@
 ]>
 <chapter xml:id="chapter.advanced-topics" version="5.0"
          xmlns="http://docbook.org/ns/docbook"
-         xmlns:c2="http://www.carrot2.org">
+         xmlns:product="http://www.carrot2.org">
   <title>Advanced topics</title>
   <subtitle>Customizing &C2; components and applications</subtitle>
 
@@ -427,7 +427,7 @@
       <orderedlist>
         <listitem>
           <para>
-            Download <c2:webapp-download-link>&WA; WAR file</c2:webapp-download-link>.
+            Download <product:webapp-download-link>&WA; WAR file</product:webapp-download-link>.
           </para>
         </listitem>
       

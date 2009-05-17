@@ -4,6 +4,7 @@
 
   <xsl:import href="../html/docbook.xsl"/>
   <xsl:import href="distribution-links.xsl"/>
+  <xsl:import href="customization.xsl"/>
   <xsl:import href="attributes.xsl"/>
   <xsl:import href="i10n.xsl"/>
 
@@ -27,6 +28,7 @@
 
   <xsl:template name="user.head.content">
     <link rel="stylesheet" type="text/css" href="css/elegant-common.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="css/elegant-common-custom.css" media="all" />
     <link rel="stylesheet" type="text/css" href="css/elegant-screen.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="css/elegant-print.css" media="print" />
     <xsl:text disable-output-escaping="yes">&lt;!--[if IE]&gt;<![CDATA[<link rel="stylesheet" type="text/css" href="css/elegant-common-ie.css" />]]>&lt;![endif]--&gt;</xsl:text>
