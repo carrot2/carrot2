@@ -5,23 +5,24 @@ Bundle-SymbolicName: org.junit4.ext
 Bundle-Version: 4.3.1
 Bundle-Vendor: JUnit
 Require-Bundle: org.eclipse.core.runtime
-Bundle-ClassPath: junit-4.3.1.jar,
- junitext-0.2.4.jar
+Bundle-ClassPath: junit-4.6.jar
 Export-Package: junit.extensions,
  junit.framework,
  junit.runner,
- junit.textui,
+ org.hamcrest,
+ org.hamcrest.core,
+ org.hamcrest.internal,
  org.junit,
- org.junit.internal,
- org.junit.internal.requests,
- org.junit.internal.runners,
+ org.junit.experimental,
+ org.junit.experimental.max,
+ org.junit.experimental.results,
+ org.junit.experimental.runners,
+ org.junit.experimental.theories,
+ org.junit.experimental.theories.internal,
+ org.junit.experimental.theories.suppliers,
+ org.junit.matchers,
  org.junit.runner,
  org.junit.runner.manipulation,
  org.junit.runner.notification,
  org.junit.runners,
- org.junitext,
- org.junitext.internal.runners,
- org.junitext.manipulation,
- org.junitext.runner,
- org.junitext.runners,
- org.junitext.runners.parameters.factory
+ org.junit.runners.model

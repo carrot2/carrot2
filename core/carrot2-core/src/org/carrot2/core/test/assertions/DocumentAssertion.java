@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -43,7 +42,7 @@ public class DocumentAssertion implements AssertExtension
      */
     public DocumentAssertion isEquivalentTo(Document expectedDocument)
     {
-        assertThat(actualDocument.getId()).as(description + ", id").isEqualTo(
+        assertThat((Object) actualDocument.getId()).as(description + ", id").isEqualTo(
             expectedDocument.getId());
         assertThat(actualDocument.getFields()).as(description).isEqualTo(
             expectedDocument.getFields());

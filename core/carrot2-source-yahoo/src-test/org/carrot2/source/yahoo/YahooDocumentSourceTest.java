@@ -14,6 +14,8 @@ package org.carrot2.source.yahoo;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
+import static org.carrot2.core.test.ExternalApiTestAssumptions.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,21 +28,17 @@ import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junitext.Prerequisite;
-import org.junitext.runners.AnnotationRunner;
 
 /**
  * Tests Yahoo! input component.
  */
-@RunWith(AnnotationRunner.class)
 public class YahooDocumentSourceTest extends
     MultipageDocumentSourceTestBase<YahooDocumentSource>
 {
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNewsServiceSearch() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
         initAttributes.put(AttributeUtils.getKey(YahooDocumentSource.class, "service"),
             YahooNewsSearchService.class);
 
@@ -48,10 +46,11 @@ public class YahooDocumentSourceTest extends
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     @SuppressWarnings("unchecked")
     public void testNewsThumbnails() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
+
         initAttributes.put(AttributeUtils.getKey(YahooDocumentSource.class, "service"),
             YahooNewsSearchService.class);
 
@@ -74,10 +73,11 @@ public class YahooDocumentSourceTest extends
 
     @Ignore
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     @SuppressWarnings("unchecked")
     public void dumpResultAsJavaSource() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
+
         runQuery("data mining", 100);
 
         Collection<Document> docs = (Collection<Document>) processingAttributes

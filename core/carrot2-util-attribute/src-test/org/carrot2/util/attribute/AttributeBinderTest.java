@@ -879,7 +879,7 @@ public class AttributeBinderTest
             10
         });
 
-        assertThat(remaining).hasSize(2).contains(MapAssert.entry("remaining", 20),
+        assertThat(remaining).hasSize(2).includes(MapAssert.entry("remaining", 20),
             MapAssert.entry(getKey(SingleClass.class, "processingInput"), 6));
     }
 
@@ -929,7 +929,7 @@ public class AttributeBinderTest
         instance.int1 = 19;
         instance.child.int1 = 8;
         AttributeBinder.bind(instance, attributes, Output.class);
-        assertThat(attributes).hasSize(1).contains(MapAssert.entry("int", 19));
+        assertThat(attributes).hasSize(1).includes(MapAssert.entry("int", 19));
     }
 
     @Test

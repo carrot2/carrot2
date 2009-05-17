@@ -617,10 +617,10 @@ public class CachingControllerTest extends ControllerTestBase
                 "conf2", conf2Attributes));
 
         ProcessingResult result1 = controller.process(attributes, "conf1");
-        assertThat(result1.getAttributes()).contains(entry("result", "v1v1"));
+        assertThat(result1.getAttributes()).includes(entry("result", "v1v1"));
 
         ProcessingResult result2 = controller.process(attributes, "conf2");
-        assertThat(result2.getAttributes()).contains(entry("result", "v2v2"));
+        assertThat(result2.getAttributes()).includes(entry("result", "v2v2"));
 
     }
 
@@ -643,10 +643,10 @@ public class CachingControllerTest extends ControllerTestBase
                 "conf2", conf2Attributes));
 
         ProcessingResult result1 = controller.process(attributes, "conf1");
-        assertThat(result1.getAttributes()).contains(entry("result", "v1v1"));
+        assertThat(result1.getAttributes()).includes(entry("result", "v1v1"));
 
         ProcessingResult result2 = controller.process(attributes, "conf2");
-        assertThat(result2.getAttributes()).contains(entry("result", "v2v2"));
+        assertThat(result2.getAttributes()).includes(entry("result", "v2v2"));
     }
 
     @Test(expected = ComponentInitializationException.class)

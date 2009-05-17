@@ -124,6 +124,20 @@ public final class ProcessingResult
     }
 
     /**
+     * Returns a specific attribute of this result set. This method is equivalent to
+     * calling {@link #getAttributes()} and then getting the required attribute from
+     * the map.
+     * 
+     * @param key key of the attribute to return
+     * @return value of the attribute
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getAttribute(String key)
+    {
+        return (T) attributesView.get(key);
+    }
+    
+    /**
      * Returns the documents that have been processed. The returned collection is
      * unmodifiable.
      * 

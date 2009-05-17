@@ -32,14 +32,12 @@ import org.carrot2.core.Document;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
-import org.junit.*;
-import org.junit.runner.RunWith;
-import org.junitext.runners.AnnotationRunner;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Tests Lucene document source.
  */
-@RunWith(AnnotationRunner.class)
 public class LuceneDocumentSourceTest extends
     QueryableDocumentSourceTestBase<LuceneDocumentSource>
 {

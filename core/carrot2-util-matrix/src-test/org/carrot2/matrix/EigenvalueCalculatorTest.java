@@ -12,14 +12,13 @@
 
 package org.carrot2.matrix;
 
+import static org.carrot2.matrix.NNITestAssumptions.nativeLapackAvailable;
 import static org.carrot2.util.test.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junitext.Prerequisite;
-import org.junitext.runners.AnnotationRunner;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
@@ -27,8 +26,7 @@ import cern.colt.matrix.linalg.EigenvalueDecomposition;
 /**
  * Test cases for {@link EigenvalueCalculator}.
  */
-@RunWith(AnnotationRunner.class)
-public class EigenvalueCalculatorTest extends NNITestBase
+public class EigenvalueCalculatorTest
 {
     /** Default delta for comparisons */
     private static final double DELTA = 1e-6;
@@ -69,9 +67,10 @@ public class EigenvalueCalculatorTest extends NNITestBase
     }
 
     @Test
-    @Prerequisite(requires = "nativeLapackAvailable")
     public void testAsymmetrical()
     {
+        assumeTrue(nativeLapackAvailable());
+
         double [] eigenvalues = EigenvalueCalculator.computeEigenvaluesNNI(A);
         Arrays.sort(eigenvalues);
 

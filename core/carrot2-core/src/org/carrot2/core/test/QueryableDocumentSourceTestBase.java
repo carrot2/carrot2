@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,8 +11,10 @@
 
 package org.carrot2.core.test;
 
+import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -22,7 +23,6 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.StringUtils;
 import org.junit.Test;
-import org.junitext.Prerequisite;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -35,96 +35,89 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
     DocumentSourceTestBase<T>
 {
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNoResultsQuery() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
         runAndCheckNoResultsQuery();
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testSmallQuery() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
         checkMinimumResults(getSmallQueryText(), getSmallQuerySize(),
             getSmallQuerySize() / 2);
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testUtfCharacters() throws Exception
     {
-        if (hasUtfResults())
-        {
-            checkMinimumResults("kaczyński", getSmallQuerySize(), getSmallQuerySize() / 2);
-        }
+        assumeTrue(externalApiTestsEnabled());
+        assumeTrue(hasUtfResults());
+        checkMinimumResults("kaczyński", getSmallQuerySize(), getSmallQuerySize() / 2);
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testLargeQuery() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
         checkMinimumResults(getLargeQueryText(), getLargeQuerySize(),
             getLargeQuerySize() / 2);
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testResultsTotal() throws Exception
     {
-        if (hasTotalResultsEstimate())
-        {
-            runQuery(getSmallQueryText(), getSmallQuerySize());
+        assumeTrue(externalApiTestsEnabled());
+        assumeTrue(hasTotalResultsEstimate());
+        runQuery(getSmallQueryText(), getSmallQuerySize());
 
-            assertNotNull(processingAttributes.get(AttributeNames.RESULTS_TOTAL));
-            assertTrue((Long) processingAttributes.get(AttributeNames.RESULTS_TOTAL) > 0);
-        }
+        assertNotNull(processingAttributes.get(AttributeNames.RESULTS_TOTAL));
+        assertTrue((Long) processingAttributes.get(AttributeNames.RESULTS_TOTAL) > 0);
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     @SuppressWarnings("unchecked")
     public void testURLsUnique() throws Exception
     {
-        if (mustReturnUniqueUrls())
-        {
-            runQuery(getLargeQueryText(), getLargeQuerySize());
-            assertFieldUnique((Collection<Document>) processingAttributes
-                .get(AttributeNames.DOCUMENTS), Document.CONTENT_URL);
-        }
+        assumeTrue(externalApiTestsEnabled());
+        assumeTrue(mustReturnUniqueUrls());
+        runQuery(getLargeQueryText(), getLargeQuerySize());
+        assertFieldUnique((Collection<Document>) processingAttributes
+            .get(AttributeNames.DOCUMENTS), Document.CONTENT_URL);
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testHtmlUnescaping()
     {
-        if (canReturnEscapedHtml())
+        assumeTrue(externalApiTestsEnabled());
+        assumeTrue(canReturnEscapedHtml());
+        runQuery("test", getSmallQuerySize());
+        final List<Document> documents = getDocuments();
+        int i = 0;
+        for (Document document : documents)
         {
-            runQuery("test", getSmallQuerySize());
-            final List<Document> documents = getDocuments();
-            int i = 0;
-            for (Document document : documents)
+            final String snippet = (String) document.getField(Document.SUMMARY);
+            if (snippet != null)
             {
-                final String snippet = (String) document.getField(Document.SUMMARY);
-                if (snippet != null)
-                {
-                    assertThat(snippet).as("snippet[" + i + "]").doesNotMatch(".*&lt;.*");
-                }
-                final Object title = document.getField(Document.TITLE);
-                if (title != null)
-                {
-                    assertThat((String) title).as("title[" + i + "]").doesNotMatch(
-                        ".*&lt;.*");
-                }
-                i++;
+                assertThat(snippet).as("snippet[" + i + "]").doesNotMatch(".*&lt;.*");
             }
+            final Object title = document.getField(Document.TITLE);
+            if (title != null)
+            {
+                assertThat((String) title).as("title[" + i + "]")
+                    .doesNotMatch(".*&lt;.*");
+            }
+            i++;
         }
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     @SuppressWarnings("unchecked")
     public void testInCachingController() throws InterruptedException, ExecutionException
     {
+        assumeTrue(externalApiTestsEnabled());
+        
         final Map<String, Object> attributes = Maps.newHashMap();
         attributes.put(AttributeNames.QUERY, getSmallQueryText());
         attributes.put(AttributeNames.RESULTS, getSmallQuerySize());

@@ -12,21 +12,19 @@
 
 package org.carrot2.dcs;
 
+import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
 
 import java.io.*;
 import java.net.MalformedURLException;
 
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.test.ExternalApiTestBase;
 import org.carrot2.util.StreamUtils;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.junit.*;
-import org.junit.runner.RunWith;
-import org.junitext.Prerequisite;
-import org.junitext.runners.AnnotationRunner;
 
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -36,8 +34,7 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage;
 /**
  * Test cases for the {@link DcsApp}.
  */
-@RunWith(AnnotationRunner.class)
-public class DcsAppTest extends ExternalApiTestBase
+public class DcsAppTest
 {
     private static DcsApp dcs;
 
@@ -60,13 +57,14 @@ public class DcsAppTest extends ExternalApiTestBase
     {
         final HtmlPage page = getStartPage();
         assertThat(page.getTitleText()).isEqualTo(
-            "Quick start - Document Clustering Server");
+            "Quick start - Document Clustering Server -");
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testExternalSource() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
+
         final String query = "kaczyński";
         final HtmlForm form = getSearchForm();
         form.getInputByName("query").setValueAttribute(query);

@@ -13,13 +13,10 @@
 package org.carrot2.source.pubmed;
 
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
-import org.junit.runner.RunWith;
-import org.junitext.runners.AnnotationRunner;
 
 /**
  * Test cases for {@link PubMedDocumentSource}.
  */
-@RunWith(AnnotationRunner.class)
 public class PubMedDocumentSourceTest extends
     QueryableDocumentSourceTestBase<PubMedDocumentSource>
 {

@@ -15,15 +15,13 @@ package org.carrot2.source.google;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
-import org.junit.*;
-import org.junit.runner.RunWith;
-import org.junitext.runners.AnnotationRunner;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * Test cases for {@link GoogleDesktopDocumentSource}. The test cases are ignored by
  * default.
  */
-@RunWith(AnnotationRunner.class)
 @Ignore
 public class GoogleDesktopDocumentSourceTest extends
     QueryableDocumentSourceTestBase<GoogleDesktopDocumentSource>

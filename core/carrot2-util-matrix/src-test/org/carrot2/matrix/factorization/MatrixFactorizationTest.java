@@ -13,23 +13,21 @@
 package org.carrot2.matrix.factorization;
 
 import static org.carrot2.matrix.MatrixAssertions.assertThat;
+import static org.junit.Assume.assumeTrue;
+import static org.carrot2.matrix.NNITestAssumptions.nativeLapackAvailable;
 
 import org.carrot2.matrix.*;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
 import org.carrot2.util.test.Assertions;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junitext.Prerequisite;
-import org.junitext.runners.AnnotationRunner;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * Test cases for matrix factorizations.
  */
-@RunWith(AnnotationRunner.class)
-public class MatrixFactorizationTest extends NNITestBase
+public class MatrixFactorizationTest
 {
     /** Factorization parameters */
     private static final int K = 2;
@@ -60,9 +58,10 @@ public class MatrixFactorizationTest extends NNITestBase
     });
 
     @Test
-    @Prerequisite(requires = "nativeLapackAvailable")
     public void testNativeSVD()
     {
+        assumeTrue(nativeLapackAvailable());
+
         NNIInterface.suppressNNI(false);
         PartialSingularValueDecompositionFactory factory = new PartialSingularValueDecompositionFactory();
         factory.setK(2);
