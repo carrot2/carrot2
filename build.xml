@@ -380,13 +380,27 @@
   </target>
 
   <target name="attrs.tasks" depends="compile">
-    <taskdef name="metadata-serializer" classname="org.carrot2.util.attribute.BindableMetadataXmlSerializer" classpathref="test.classpath" />
+    <taskdef name="metadata-serializer" 
+        classname="org.carrot2.util.attribute.BindableMetadataSerializerTask" classpathref="test.classpath" />
 
     <macrodef name="attributes-xml">
       <attribute name="java.source" />
       <sequential>
-        <metadata-serializer
-          src="@{java.source}" todir="@{java.source}" commonNames="${common.attribute.names.source.path}" />
+        <metadata-serializer destdir="@{java.source}">
+            <commonMetadata>
+                <path location="${common.attribute.names.source.path}" />
+            </commonMetadata>
+
+            <fileset dir="@{java.source}">
+                <include name="**/*.java" />
+
+                <modified update="true" cache="propertyfile" algorithm="digest" comparator="equal">
+                    <param name="cache.cachefile"
+                        value="${carrot2.master.basedir}/tmp/attrs-cache.properties"/>
+                    <param name="algorithm.algorithm" value="MD5" />
+                </modified>
+            </fileset>
+        </metadata-serializer>
       </sequential>
     </macrodef>
   </target>

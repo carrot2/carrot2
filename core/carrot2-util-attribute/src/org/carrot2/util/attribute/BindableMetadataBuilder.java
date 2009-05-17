@@ -109,11 +109,8 @@ class BindableMetadataBuilder
                     String sourceFile = new String(StreamUtils
                         .readFullyAndClose(new FileInputStream(currentFile)), encoding);
 
-                    if (sourceFile.indexOf("@Bindable") >= 0)
-                    {
-                        javaDocBuilder.addSource(new StringReader(sourceFile),
-                            currentFile.getAbsolutePath());
-                    }
+                    javaDocBuilder.addSource(new StringReader(sourceFile),
+                        currentFile.getAbsolutePath());
                 }
                 catch (IOException e)
                 {
