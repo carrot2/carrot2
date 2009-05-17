@@ -29,7 +29,7 @@ import org.carrot2.util.attribute.AttributeUtils;
  * This setting is particularly useful for quick experiments with custom data for which
  * there is no corresponding {@link IDocumentSource} implementation. For production use,
  * it's better to implement a {@link IDocumentSource} for the custom document source, so
- * that e.g the {@link CachingController} can cache it, if needed.
+ * that e.g., the {@link CachingController} can cache it, if needed.
  * 
  * @see ClusteringDataFromDocumentSources
  * @see UsingCachingController
