@@ -30,31 +30,6 @@
     <attribute name="props.file" default="${carrot2.master.basedir}/workbench.properties" />
     <attribute name="extra.args" default="" />
     <sequential>
-      <!-- Copy source plugins and features to the build folder. -->
-      <copy todir="@{build.dir}/plugins">
-        <fileset dir="${carrot2.master.basedir}/core">
-          <patternset refid="temporary.files" />
-        </fileset>
-      
-        <fileset dir="${carrot2.master.basedir}//lib">
-          <patternset refid="temporary.files" />
-        </fileset>
-      
-        <fileset dir="${carrot2.master.basedir}/workbench">
-          <patternset refid="temporary.files" />
-          <exclude name="build-conf/**" />
-          <exclude name="org.carrot2*.feature/**" />
-        </fileset>
-      </copy>
-      
-      <copy todir="@{build.dir}/features">
-        <fileset dir="${carrot2.master.basedir}/workbench">
-          <patternset refid="temporary.files" />
-          <include name="org.carrot2*.feature/**" />
-        </fileset>
-      </copy>
-
-      <!-- Launch the builder. -->
       <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}"
             fork="true" failonerror="true">
         <arg line="-application org.eclipse.ant.core.antRunner" />
@@ -100,7 +75,31 @@
     <echo>Equinox version: ${equinox.launcher.plugin.jar}, PDE build plugin: ${pde.build.plugin}</echo>
     
     <!-- Compute attribute metadata. -->
-    <ant antfile="${carrot2.master.basedir}/build.xml" target="attrs" />    
+    <ant antfile="${carrot2.master.basedir}/build.xml" target="attrs" />
+    
+    <!-- Copy source plugins and features to the build folder. -->
+    <copy todir="${workbench.build.dir}/plugins">
+      <fileset dir="${carrot2.master.basedir}/core">
+        <patternset refid="temporary.files" />
+      </fileset>
+      
+      <fileset dir="${carrot2.master.basedir}/lib">
+        <patternset refid="temporary.files" />
+      </fileset>
+      
+      <fileset dir="${carrot2.master.basedir}/workbench">
+        <patternset refid="temporary.files" />
+        <exclude name="build-conf/**" />
+        <exclude name="org.carrot2*.feature/**" />
+      </fileset>
+    </copy>
+    
+    <copy todir="${workbench.build.dir}/features">
+      <fileset dir="${carrot2.master.basedir}/workbench">
+        <patternset refid="temporary.files" />
+        <include name="org.carrot2*.feature/**" />
+      </fileset>
+    </copy>
   </target>
 
 
