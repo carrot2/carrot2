@@ -20,7 +20,8 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
-import org.carrot2.examples.ExampleUtils;
+import org.carrot2.examples.ConsoleFormatter;
+import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -84,13 +85,15 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
         // Create a place holder for the results
         this.documents = new ArrayList<Document>();
 
-        // Fetch results
-        int resultsToPush = Math.min(ExampleUtils.exampleDocuments.size(), this.results);
+        // Fetch results.
+        final List<Document> inputDocuments = 
+            new ArrayList<Document>(SampleDocumentData.DOCUMENTS_DATA_MINING);
+        int resultsToPush = Math.min(inputDocuments.size(), this.results);
         for (int i = 0; i < resultsToPush; i++)
         {
             if (i % this.modulo == 0)
             {
-                final Document originalDocument = ExampleUtils.exampleDocuments.get(i);
+                final Document originalDocument = inputDocuments.get(i);
 
                 // For the sake of example we just copy the original document fields
                 final Document document = new Document();
@@ -118,6 +121,6 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
         final ProcessingResult result = controller.process(params,
             ExampleDocumentSource.class, LingoClusteringAlgorithm.class);
 
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
     }
 }

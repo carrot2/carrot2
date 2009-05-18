@@ -18,7 +18,7 @@ import java.util.Map;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.examples.ExampleUtils;
+import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.source.boss.*;
 import org.carrot2.source.microsoft.MicrosoftLiveDocumentSource;
 import org.carrot2.util.attribute.AttributeUtils;
@@ -62,7 +62,7 @@ public class ClusteringDataFromDocumentSources
         ProcessingResult result = controller.process(attributes,
             MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
 
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
 
         /*
          * EXAMPLE 2: fetching from Yahoo BOSS (news search), clustering with Lingo.
@@ -89,6 +89,6 @@ public class ClusteringDataFromDocumentSources
         result = controller.process(attributes, BossDocumentSource.class,
             LingoClusteringAlgorithm.class);
 
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
     }
 }

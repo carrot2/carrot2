@@ -19,7 +19,8 @@ import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.examples.ExampleUtils;
+import org.carrot2.examples.ConsoleFormatter;
+import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.text.vsm.LinearTfIdfTermWeighting;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.util.attribute.AttributeUtils;
@@ -43,7 +44,7 @@ public class ClusteringDocumentList
          * a unique URL (identifier), a title and a snippet (document content), but none
          * of these are obligatory.
          */
-        final List<Document> documents = ExampleUtils.exampleDocuments;
+        final Collection<Document> documents = SampleDocumentData.DOCUMENTS_DATA_MINING;
 
         /*
          * We are clustering using a simple controller (no caching, one-time shot).
@@ -66,7 +67,7 @@ public class ClusteringDocumentList
          */
         ProcessingResult result = controller.process(attributes,
             ByUrlClusteringAlgorithm.class);
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
 
         /*
          * Now we will cluster the same documents using a more complex text clustering
@@ -86,7 +87,7 @@ public class ClusteringDocumentList
          */
         attributes.put(AttributeNames.QUERY, "data mining");
         result = controller.process(attributes, algorithm);
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
 
         /*
          * The ProcessingResult object contains everything that has been contributed to
@@ -107,6 +108,6 @@ public class ClusteringDocumentList
         attributes.put(AttributeNames.QUERY, "data mining");
         attributes.put(AttributeNames.DOCUMENTS, documents);
         result = controller.process(attributes, algorithm);
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
     }
 }
