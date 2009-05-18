@@ -85,7 +85,7 @@ public class ConsoleFormatter
         {
             System.out.print("  ");
         }
-        System.out.println(label + " (" + cluster.getDocuments().size() + " documents)");
+        System.out.println(label + " (" + cluster.getAllDocuments().size() + " documents)");
 
         // if this cluster has documents, display three topmost documents.
         for (final Document document : cluster.getDocuments())
