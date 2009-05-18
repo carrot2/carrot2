@@ -172,7 +172,7 @@
         
         <listitem>
           <para>
-            Go to the <filename>tmp/ workbench/ build-dir/ tmp/ carrot2-workbench</filename>
+            Go to the <filename>tmp/ workbench/ tmp/ carrot2-workbench</filename>
             folder in the &C2; checkout dir and run &DCW;.
           </para>
         </listitem>

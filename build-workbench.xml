@@ -108,29 +108,30 @@
   <target name="build" description="Build the workbench" depends="init">
     <!-- Compile and assemble the workbench. -->
     <launchAntRunner buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
-                     build.dir="${workbench.build.dir}/build-dir"
+                     build.dir="${workbench.build.dir}"
                      props.file="${carrot2.master.basedir}/workbench.properties"
                      extra.args="
                         -Dproduct=/org.carrot2.workbench.feature/Workbench.product" />
 
-    <checkAccessRestriction logsbasedir="${workbench.build.dir}/build-dir" />
+    <checkAccessRestriction logsbasedir="${workbench.build.dir}" />
   </target>
 
 
   <!-- Build the test distribution and run the tests. -->
   <target name="test" description="Builds workbench and run the tests" depends="init">
-    <!-- Build the test distribution. -->
+    <!-- Compile and assemble the test distribution. -->
     <launchAntRunner buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
-                     build.dir="${workbench.build.dir}/test-dir"
+                     build.dir="${workbench.build.dir}"
                      props.file="${carrot2.master.basedir}/workbench.test.properties"
                      extra.args="
+                        -DbuildType=T
                         -Dproduct=/org.carrot2.workbench.feature/Workbench.product 
                         -DfeatureList=org.carrot2.workbench.core.test.feature" />
 
-    <checkAccessRestriction logsbasedir="${workbench.build.dir}/test-dir" />
+    <checkAccessRestriction logsbasedir="${workbench.build.dir}" />
 
     <property name="test.eclipse.home" 
-        location="${workbench.build.dir}/test-dir/tmp/${archivePrefix}" />
+        location="${workbench.build.dir}/tmp/${archivePrefix}" />
 
     <findVersion property="workbench.core.test.dir"
                  pluginid="org.carrot2.workbench.core.test"
@@ -149,7 +150,7 @@
     <!-- JUnit report -->
     <mkdir dir="${workbench.tests.html.report.dir}" />
     <junitreport todir="${workbench.tests.html.report.dir}">
-      <fileset dir="${workbench.build.dir}/test-dir/tmp/${archivePrefix}">
+      <fileset dir="${workbench.build.dir}/tmp/${archivePrefix}">
         <include name="*.xml" />
       </fileset>
       <report format="frames"
@@ -158,7 +159,7 @@
 
     <!-- Copy XML reports -->
     <copy todir="${workbench.tests.html.report.dir}">
-      <fileset dir="${workbench.build.dir}/test-dir/tmp/${archivePrefix}">
+      <fileset dir="${workbench.build.dir}/tmp/${archivePrefix}">
         <include name="*.xml" />
       </fileset>
       <mapper type="glob" from="*.xml" to="TEST-*.xml" />
@@ -167,7 +168,7 @@
     <!-- Copy text reports -->
     <mkdir dir="${workbench.tests.txt.report.dir}" />
     <copy todir="${workbench.tests.txt.report.dir}">
-      <fileset dir="${workbench.build.dir}/test-dir/tmp/${archivePrefix}/raw-output">
+      <fileset dir="${workbench.build.dir}/tmp/${archivePrefix}/raw-output">
         <include name="*.txt" />
       </fileset>
     </copy>

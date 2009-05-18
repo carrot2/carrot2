@@ -71,8 +71,9 @@
         <!-- copy to the distribution dir -->
         <mkdir dir="${dist.dir}" />
         <copy todir="${dist.dir}" overwrite="true">
-            <fileset dir="${carrot2.code.dir}/tmp/workbench/build-dir">
-                <include name="*carrot2-workbench/*.zip" />
+            <fileset dir="${carrot2.code.dir}/tmp/workbench">
+                <!-- Files from the interim build. -->
+                <include name="I.carrot2-workbench/*.zip" />
             </fileset>
 
             <chainedmapper>
