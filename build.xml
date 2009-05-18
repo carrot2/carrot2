@@ -338,7 +338,7 @@
 
   <target name="attrs"
           depends="compile, attrs.tasks">
-    <parallel threadsPerProcessor="1">
+    <sequential>
       <attributes-xml java.source="${core.dir}/carrot2-algorithm-lingo/src"        />
       <attributes-xml java.source="${core.dir}/carrot2-algorithm-stc/src"          />
       <attributes-xml java.source="${core.dir}/carrot2-algorithm-synthetic/src"    />
@@ -358,7 +358,7 @@
       <attributes-xml java.source="${core.dir}/carrot2-util-text/src"              />
       <attributes-xml java.source="${core.dir}/carrot2-util-attribute/src-test"    />
       <attributes-xml java.source="${applications.dir}/carrot2-webapp/src" />
-    </parallel>
+    </sequential>
   </target>
 
   <!-- 
