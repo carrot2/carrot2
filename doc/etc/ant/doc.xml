@@ -69,9 +69,19 @@
     
     <sequential>
       <mkdir dir="@{doc.output.dir}" />
+      
+      <xslt in="@{doc.build.dir}/docbook/@{doc.main.docbook.filename}"
+            style="@{doc.build.dir}/xsl/filtering.xsl"
+            out="@{doc.output.dir}/filtered.xml"
+            force="yes">
+        <xmlcatalog>
+          <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
+               location="${docbook.dtd.dir}/docbook.dtd" />
+        </xmlcatalog>
+      </xslt>
 
       <!-- Build the actual manual -->
-      <xslt in="@{doc.build.dir}/docbook/@{doc.main.docbook.filename}"
+      <xslt in="@{doc.output.dir}/filtered.xml"
             style="${docbook.xsl.dir}/html-custom/docbook.xsl"
             out="@{doc.output.dir}/index.html"
             force="yes">
@@ -206,7 +216,7 @@
 
       <copy todir="@{doc.build.dir}/xsl">
         <fileset dir="@{doc.base.dir}/xsl">
-          <include name="*.xsl" />
+          <include name="**/*.xsl" />
         </fileset>
       </copy>
 
@@ -225,7 +235,9 @@
     
     <sequential>
       <delete dir="${docbook.xsl.dir}/html-custom" />
+      <!-- 
       <delete dir="@{doc.build.dir}" />
+      -->
     </sequential>
   </macrodef>
 

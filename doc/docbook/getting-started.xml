@@ -465,7 +465,7 @@
       </orderedlist>
     </section>
     
-    <section xml:id="section.integration.setting-up-maven-project">
+    <section xml:id="section.integration.setting-up-maven-project" role="maven">
       <title>Setting up a Maven2 project with &PROD; dependency</title>
       
       <para>
