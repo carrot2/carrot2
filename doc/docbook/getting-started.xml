@@ -521,7 +521,7 @@
         <listitem>
           <para>
             In the <guilabel>New Java Project</guilabel> dialog (<xref linkend="figure.eclipse-new-java-project" />),
-            type name for the new project, e.g. <filename>carrot2-examples</filename>.
+            type name for the new project, e.g. <filename>&PRODID;-examples</filename>.
             Then choose the <guilabel>Create project from existing source</guilabel> option,
             provide the directory to which you unpacked the &JA; archive and click 
             <guilabel>Finish</guilabel>.
