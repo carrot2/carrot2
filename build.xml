@@ -52,7 +52,6 @@
   <!-- Compilation presets. -->
   <presetdef name="javac">
       <javac deprecation="true" debug="true"
-          compiler="modern"
           target="1.5" source="1.5"
           encoding="UTF-8" includeantruntime="true" optimize="true" />
   </presetdef>
@@ -198,7 +197,7 @@
     <mkdir dir="${build.dir}" />
 
     <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac destdir="${build.dir}">
+    <javac destdir="${build.dir}" compiler="modern">
       <src refid="src.core.folders" />
       <classpath refid="lib.classpath" />
     </javac>
@@ -209,7 +208,7 @@
     <mkdir dir="${build.dir}" />
 
     <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac destdir="${build.dir}">
+    <javac destdir="${build.dir}" compiler="modern">
       <src refid="src.test.folders" />
       <classpath refid="lib.classpath" />
     </javac>
@@ -641,7 +640,8 @@
     <property name="jar.mini.test.classes.dir" location="${carrot2.master.basedir}/tmp/jar-mini-classes" />
     <mkdir dir="${jar.mini.test.classes.dir}" />
     <javac srcdir="${carrot2.master.basedir}/applications/carrot2-examples/src"
-           destdir="${jar.mini.test.classes.dir}">
+           destdir="${jar.mini.test.classes.dir}"
+           compiler="modern">
       <include name="**/ClusteringDocumentList.java" />
       <classpath>
         <path location="${jar.dir}/carrot2-mini.jar" />
