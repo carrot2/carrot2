@@ -5,41 +5,34 @@ target.platform = /your-eclipse-bundles/3.4.1SR1
 eclipse.home = ${target.platform}/eclipse
 
 # Platform, windowing system and architecture on which Workbench JUnit tests are run.
-# Use the usual os, ws and arch strings Eclipse normally uses, see below for examples.
+# Use the usual os, ws and arch strings Eclipse normally uses, examples:
+#
+# win32, win32, x86
+# linux, gtk, ppc
+# linux, gtk, x86
+# linux, gtk, x86_64
+# linux, motif, x86
+# solaris, motif, sparc
+# solaris, gtk, sparc
+# aix, motif, ppc
+# hpux, motif, PA_RISC
+# macosx, carbon, ppc
+
 test.os=win32
 test.ws=win32
 test.arch=x86
 
 # The list of {os, ws, arch} configurations to build.  This
-# value is a '&' separated list of ',' separate triples.  For example,
-#     configs=win32,win32,x86 & linux,motif,x86
-# By default the value is *,*,*
+# value is a '&' separated list of ',' separate triples. Example:
+#
 #configs = *, *, *
 #configs=win32, win32, x86
-#configs=win32, win32, x86 & \
-#	linux, gtk, ppc &\
-# linux, gtk, x86 & \
-#	linux, gtk, x86_64 & \
-#	linux, motif, x86 & \
-#	solaris, motif, sparc & \
-#	solaris, gtk, sparc & \
-#	aix, motif, ppc & \
-#	hpux, motif, PA_RISC & \
-#	macosx, carbon, ppc
-configs                             =   win32, win32, x86
+#configs= win32, win32, x86 & \
+#	linux, gtk, x86_64
 
-#The format of the archive. By default a zip is created using antZip.
-#The list can only contain the configuration for which the desired format is different than zip.
-#Possible formats are: zip (requires zip executable in path), antZip, rar, folder
-#archivesFormat=win32, win32, x86 - folder
-# win32, win32, x86 - antZip& \
-#	linux, gtk, ppc - antZip &\
-#    linux, gtk, x86 - antZip& \
-#	linux, gtk, x86_64 - antZip& \
-# linux, motif, x86 - antZip& \
-#	solaris, motif, sparc - antZip& \
-#	solaris, gtk, sparc - antZip& \
-#	aix, motif, ppc - antZip& \
-#	hpux, motif, PA_RISC - antZip& \
-#	macosx, carbon, ppc - antZip
-archivesFormat                      =   win32, win32, x86 - folder
+configs = win32, win32, x86
+
+# The format of the archive. By default a zip is created using antZip.
+# Possible formats are: zip (requires zip executable in path), antZip, rar, folder
+
+archivesFormat = win32, win32, x86 - folder

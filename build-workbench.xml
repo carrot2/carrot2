@@ -121,11 +121,13 @@
     <!-- Compile and assemble the test distribution. -->
     <launchAntRunner buildfile="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml"
                      build.dir="${workbench.build.dir}"
-                     props.file="${carrot2.master.basedir}/workbench.test.properties"
+                     props.file="${carrot2.master.basedir}/workbench.properties"
                      extra.args="
                         -DbuildType=T
                         -Dproduct=/org.carrot2.workbench.feature/Workbench.product 
-                        -DfeatureList=org.carrot2.workbench.core.test.feature" />
+                        -DfeatureList=org.carrot2.workbench.core.test.feature
+                        -Dconfigs=${test.os},${test.ws},${test.arch}
+                        -DarchivesFormat=${test.os},${test.ws},${test.arch}-folder" />
 
     <checkAccessRestriction logsbasedir="${workbench.build.dir}" />
 
