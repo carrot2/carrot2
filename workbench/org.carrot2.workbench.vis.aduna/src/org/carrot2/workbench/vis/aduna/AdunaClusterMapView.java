@@ -21,7 +21,7 @@ import org.eclipse.ui.*;
 /**
  * {@link AdunaClusterMapView} displays clusters using Aduna's Cluster View component.
  * 
- * @see http://www.aduna-software.com/technologies/clustermap/overview.view
+ * @see "http://www.aduna-software.com/technologies/clustermap/overview.view"
  */
 public final class AdunaClusterMapView extends PageBookViewBase
 {
