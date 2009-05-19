@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,8 +14,8 @@ package org.carrot2.workbench.core.ui;
 import org.eclipse.ui.IWorkbenchPart;
 
 /**
- * A cluster tree view displays a {@link ClusterTree} control attached
- * to the currently visible editor.
+ * A cluster tree view displays a {@link ClusterTree} control attached to the currently
+ * visible editor.
  */
 public final class ClusterTreeView extends PageBookViewBase
 {

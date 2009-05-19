@@ -152,7 +152,7 @@ public final class ClusterTree extends Composite implements IPostSelectionProvid
         treeViewer.setLabelProvider(new ClusterLabelProvider());
         treeViewer.setContentProvider(contentProvider);
         treeViewer.setInput(new ArrayList<ClusterWithParent>());
-        treeViewer.setAutoExpandLevel(2);
+        treeViewer.setAutoExpandLevel(1);
     }
 
     public void addSelectionChangedListener(ISelectionChangedListener listener)
@@ -188,5 +188,15 @@ public final class ClusterTree extends Composite implements IPostSelectionProvid
     public void selectionChanged(IWorkbenchPart part, ISelection selection)
     {
         this.treeViewer.setSelection(selection);
+    }
+
+    public void expandAll()
+    {
+        this.treeViewer.expandAll();
+    }
+
+    public void collapseAll()
+    {
+        this.treeViewer.collapseAll();
     }
 }

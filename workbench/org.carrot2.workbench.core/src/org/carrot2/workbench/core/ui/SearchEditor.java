@@ -971,6 +971,18 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         });
 
         sec.setClient(clustersTree);
+        
+        // Add expand/collapse action to the toolbar.
+        final ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
+        final ToolBar toolbar = toolBarManager.createControl(sec);
+
+        final IAction expanderAction = new ActionDelegateProxy(
+            new ClusterTreeExpanderAction(clustersTree), IAction.AS_PUSH_BUTTON);
+
+        toolBarManager.add(expanderAction);
+        toolBarManager.update(true);
+        sec.setTextClient(toolbar);
+
         return sec;
     }
 
