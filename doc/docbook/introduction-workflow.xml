@@ -7,7 +7,7 @@
   %custom;
 ]>
 <para>
-  In most cases your workflow with &PROD; would be the following:
+  In most cases your workflow with &PROD; applications would be the following:
 
   <orderedlist>
     <listitem>
@@ -20,8 +20,9 @@
     </listitem>
     <listitem>
       <para>
-        If developing Java software, use &PROD; API and JAR to integrate
-        clustering into your code.  For non-Java environments, set-up the <link linkend="section.dcs">&DCS;</link>
+        If you are developing Java software, use &PROD; API and JAR to 
+        <link linkend="section.integration.compiling-java-program-with-carrot2">integrate
+        clustering into your code</link>.  For non-Java environments, set-up the <link linkend="section.dcs">&DCS;</link>
         and call &C2; clustering using the REST protocol.
       </para>
     </listitem>

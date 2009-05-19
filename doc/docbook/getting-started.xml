@@ -196,7 +196,7 @@
         <listitem>
           <para>
             Provide a path to the transformation style sheet in the <guilabel>XSLT Stylesheet</guilabel>
-            field, which is an optional field &ndash; you can show optional fields by 
+            field, which is an optional field. You can show optional fields by 
             clicking the arrow button of the <guilabel>Search</guilabel> view toolbar
             (<xref linkend="figure.search-view-xml" />).
           </para>
@@ -356,7 +356,7 @@
         <listitem>
           <para>
             Use the <guilabel>File &gt; Save as...</guilabel> dialog to save the 
-            documents and clusters into a file in <link linkend="figure.output-xml-format">&PROD; XML format</link>.
+            documents and clusters into a file in <link linkend="figure.output-xml-format">&C2; XML format</link>.
           </para>
         </listitem>
       </orderedlist>
@@ -386,8 +386,8 @@
         
         <listitem>
           <para>
-            Make sure that <filename>&PRODID;.jar</filename> and all JARs from the
-            <filename>lib/</filename> directory are available in the classpath of
+            Make sure that <phrase role="carrot2"><filename>carrot2-core.jar</filename> and</phrase> 
+            all JARs from the <filename>lib/</filename> directory are available in the classpath of
             your program.
           </para>
         </listitem>
