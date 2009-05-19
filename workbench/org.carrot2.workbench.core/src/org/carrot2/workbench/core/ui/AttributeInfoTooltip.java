@@ -183,7 +183,7 @@ public class AttributeInfoTooltip extends ToolTip
     }
 
     /**
-     * @return Build text content to be displayed in the tooltip.
+     * Build text content to be displayed in the tooltip.
      */
     protected void buildContent(StyledTextContentBuilder builder)
     {

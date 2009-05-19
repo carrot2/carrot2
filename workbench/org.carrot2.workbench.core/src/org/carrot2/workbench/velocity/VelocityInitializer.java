@@ -21,7 +21,7 @@ import org.apache.velocity.runtime.log.NullLogChute;
 import org.apache.velocity.tools.generic.EscapeTool;
 
 /**
- * See {@link #createInstance()}.
+ * See {@link #createInstance(String, String)}.
  */
 public final class VelocityInitializer
 {

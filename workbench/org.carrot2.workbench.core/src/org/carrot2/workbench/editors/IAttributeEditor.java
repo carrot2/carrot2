@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Composite;
  * <ul>
  * <li>call
  * {@link #init(BindableDescriptor, AttributeDescriptor, IAttributeEventProvider, Map)}.
- * <li>call {@link #createEditor(Composite, Object)}
+ * <li>call {@link #createEditor(Composite, int)}
  * </ul>
  * Then, repeatedly:
  * <ul>

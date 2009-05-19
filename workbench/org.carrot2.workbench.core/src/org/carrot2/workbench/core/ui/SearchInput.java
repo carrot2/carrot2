@@ -132,7 +132,7 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
     }
 
     /**
-     * @see WorkbenchCorePlugin#getComponentImageDescriptor(String);
+     * @see WorkbenchCorePlugin#getComponentImageDescriptor(String)
      */
     public ImageDescriptor getImageDescriptor()
     {
