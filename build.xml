@@ -170,6 +170,9 @@
     <!-- Include our own compiled sources so that we can exclude some classes from javadoc
          and still compile without warnings. -->
     <path refid="core.jar.classpath" />
+    
+    <!-- Include ANT's JAR for ANT tasks. -->
+    <path location="${ant.home}/lib/ant.jar" />
   </path>
 
   <!-- 
