@@ -2,7 +2,7 @@
 <feature
       id="org.carrot2.workbench.core.feature"
       label="Workbench Core Feature"
-      version="3.0.0"
+      version="0.0.0.QUALIFIER"
       provider-name="Carrot2.org">
 
    <description url="http://www.carrot2.org">

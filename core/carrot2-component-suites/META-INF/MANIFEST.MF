@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Open Source Components
 Bundle-SymbolicName: org.carrot2.suites.default;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 0.0.0.QUALIFIER
 Export-Package: org.carrot2.core
 Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.core,

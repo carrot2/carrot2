@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Workbench Core
 Bundle-SymbolicName: org.carrot2.workbench.core; singleton:=true
 Bundle-Localization: plugin
-Bundle-Version: 3.0.0
+Bundle-Version: 0.0.0.QUALIFIER
 Bundle-Activator: org.carrot2.workbench.core.WorkbenchCorePlugin
 Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.eclipse.core.runtime;visibility:=reexport,

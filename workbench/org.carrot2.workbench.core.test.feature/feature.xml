@@ -2,7 +2,7 @@
 <feature
       id="org.carrot2.workbench.core.test.feature"
       label="Workbench Test Feature"
-      version="3.0.0">
+      version="0.0.0.QUALIFIER">
 
    <description url="http://www.example.com/description">
     [EMPTY]

@@ -38,6 +38,7 @@
         <arg line="-DbuildDirectory=@{build.dir}" />
         <arg line="-Dtarget.platform=${target.platform}" />
         <arg line="-Dcarrot2.master.basedir=${carrot2.master.basedir}" />
+        <arg line="-Dcarrot2.workbench.base=${carrot2.workbench.base}" />
         <arg line="@{extra.args}" />
         <arg line="-propertyfile @{props.file}" />
       </java>
@@ -76,29 +77,51 @@
     
     <!-- Compute attribute metadata. -->
     <ant antfile="${carrot2.master.basedir}/build.xml" target="attrs" />
-    
+
     <!-- Copy source plugins and features to the build folder. -->
     <copy todir="${workbench.build.dir}/plugins">
-      <fileset dir="${carrot2.master.basedir}/core">
+      <fileset dir="${carrot2.master.basedir}">
+        <include name="core/**" />
+        <include name="lib/**" />
+        <include name="workbench/**" />
+        <exclude name="**/*.feature/**" />
         <patternset refid="temporary.files" />
       </fileset>
-      
-      <fileset dir="${carrot2.master.basedir}/lib">
-        <patternset refid="temporary.files" />
-      </fileset>
-      
-      <fileset dir="${carrot2.master.basedir}/workbench">
-        <patternset refid="temporary.files" />
-        <exclude name="build-conf/**" />
-        <exclude name="org.carrot2*.feature/**" />
-      </fileset>
+
+      <regexpmapper from="[^/]+/(.*)" to="\1" handledirsep="yes" />
     </copy>
-    
+
+    <copy todir="${workbench.build.dir}/plugins" overwrite="true" filtering="true">
+      <fileset dir="${carrot2.master.basedir}">
+        <include name="core/**/MANIFEST.MF" />
+        <include name="lib/**/MANIFEST.MF" />
+        <include name="workbench/**/MANIFEST.MF" />
+        <exclude name="**/*.feature/**" />
+        <patternset refid="temporary.files" />
+      </fileset>
+
+      <regexpmapper from="[^/]+/(.*)" to="\1" handledirsep="yes" />
+
+      <filterchain id="workbench.version.filterchain">
+        <replacestring from="0.0.0.QUALIFIER" to="${carrot2.version.workbench}"/>
+      </filterchain>
+    </copy>
+
     <copy todir="${workbench.build.dir}/features">
       <fileset dir="${carrot2.master.basedir}/workbench">
         <patternset refid="temporary.files" />
-        <include name="org.carrot2*.feature/**" />
+        <include name="**/*.feature/**" />
       </fileset>
+    </copy>
+
+    <copy todir="${workbench.build.dir}/features" overwrite="true" filtering="true">
+      <fileset dir="${carrot2.master.basedir}/workbench">
+        <include name="**/*.feature/**/feature.xml" />
+        <include name="**/*.feature/**/MANIFEST.MF" />
+        <patternset refid="temporary.files" />
+      </fileset>
+      
+      <filterchain refid="workbench.version.filterchain" />
     </copy>
   </target>
 

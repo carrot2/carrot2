@@ -2,7 +2,7 @@
 <feature
       id="org.carrot2.workbench.feature"
       label="Carrot2 Workbench Feature"
-      version="3.0.0"
+      version="0.0.0.QUALIFIER"
       provider-name="Carrot2.org"
       plugin="org.carrot2.workbench.core">
 

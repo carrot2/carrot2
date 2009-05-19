@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Matrix Utilities
 Bundle-SymbolicName: org.carrot2.util.matrix
-Bundle-Version: 3.0.0
+Bundle-Version: 0.0.0.QUALIFIER
 Bundle-ClassPath: .,
  lib/nni.jar
 Export-Package: 
@@ -12,4 +12,4 @@ Export-Package:
  org.carrot2.matrix.factorization.seeding
 Bundle-Vendor: Carrot2.org
 Require-Bundle: cern.colt;bundle-version="1.2.0";visibility:=reexport,
- org.carrot2.util.common;bundle-version="3.0.0";visibility:=reexport
+ org.carrot2.util.common;bundle-version="0.0.0";visibility:=reexport

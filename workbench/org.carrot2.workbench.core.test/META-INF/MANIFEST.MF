@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Workbench Core Test Plug-in
 Bundle-SymbolicName: org.carrot2.workbench.core.test;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 0.0.0.QUALIFIER
 Export-Package: org.carrot2.workbench.core,
  org.carrot2.workbench.editors,
  org.carrot2.workbench.editors.factory
