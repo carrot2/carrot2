@@ -12,16 +12,13 @@
 
 package org.carrot2.workbench.core;
 
-import java.io.*;
+import java.io.File;
 import java.net.URL;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
-import org.carrot2.text.linguistic.LanguageCode;
-import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.StreamUtils;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.resource.*;
 import org.carrot2.workbench.core.helpers.Utils;
@@ -93,8 +90,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         plugin = this;
 
         /*
-         * Copy linguistic resources at first launch (or if deleted from workspace). Add
-         * workspace to the list of resource locations.
+         * Add workspace to the list of resource locations.
          */
         installWorkbenchResourceLocator();
 
@@ -375,63 +371,9 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         }
 
         /*
-         * Copy linguistic resources to the given location on first launch (or if
-         * missing). Make sure this is done <b>before</b> installing the new resource
-         * locator because we'd be chasing our tail here.
-         */
-        final Map<String, IResource> resources = Maps.newLinkedHashMap();
-        final ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
-
-        for (LanguageCode language : LanguageCode.values())
-        {
-            addResourceToCopy(resources, resUtils, language, "stopwords");
-            addResourceToCopy(resources, resUtils, language, "stoplabels");
-        }
-
-        for (Map.Entry<String, IResource> e : resources.entrySet())
-        {
-            final String fileName = e.getKey();
-            final File targetFile = new File(workspacePath, fileName);
-
-            if (targetFile.exists())
-            {
-                // Skip if exists.
-                continue;
-            }
-
-            InputStream in = null;
-            OutputStream out = null;
-            try
-            {
-                in = e.getValue().open();
-                out = new FileOutputStream(targetFile);
-                StreamUtils.copy(in, out, 8 * 1024);
-            }
-            catch (IOException x)
-            {
-                Utils.logError("Could not copy resource: " + fileName, x, false);
-            }
-            finally
-            {
-                CloseableUtils.close(in, out);
-            }
-        }
-
-        /*
          * Install a resource locator pointing to the workspace.
          */
         ResourceUtilsFactory.addFirst(new DirLocator(workspacePath.getAbsolutePath()));
-    }
-
-    private void addResourceToCopy(final Map<String, IResource> resources,
-        final ResourceUtils resUtils, LanguageCode language, final String prefix)
-    {
-        final String stopwords = prefix + "." + language.getIsoCode();
-        final IResource resource = resUtils.getFirst(stopwords);
-        if (resource != null)
-        {
-            resources.put(stopwords, resource);
-        }
     }
 
     /**

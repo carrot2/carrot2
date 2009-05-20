@@ -216,6 +216,6 @@
   </target>
 
   <target name="clean">
-    <delete dir="${workbench.build.dir}" />
+    <delete dir="${workbench.build.dir}" failonerror="false" />
   </target>
 </project>
