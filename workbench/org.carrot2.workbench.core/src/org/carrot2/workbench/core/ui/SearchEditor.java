@@ -305,11 +305,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         rootForm.getBody().setLayout(layout);
 
         createControls(sashForm);
-        updatePartHeaders();
-
-        sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
         createActions();
+        
+        updatePartHeaders();
+        sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
         /*
          * Hook to post-update events.
@@ -793,10 +792,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         final IToolBarManager toolbar = rootForm.getToolBarManager();
 
-        // Auto update action.
-        final IWorkbenchWindow window = getSite().getWorkbenchWindow();
-        toolbar.add(WorkbenchActionFactory.AUTO_UPDATE_ACTION.create(window));
-
         // Choose visible panels.
         final IAction selectSectionsAction = new SearchEditorPanelsAction(
             "Choose visible panels", this);
@@ -1057,12 +1052,21 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          */
         final ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
         final ToolBar toolbar = toolBarManager.createControl(sec);
+
+        // Auto update.
+        final IWorkbenchWindow window = getSite().getWorkbenchWindow();
+        toolBarManager.add(WorkbenchActionFactory.AUTO_UPDATE_ACTION.create(window));
+
+        // Attribute grouping.
         final IAction attributesAction = new GroupingMethodAction(GROUPING_LOCAL, this);
         toolBarManager.add(attributesAction);
+
         toolBarManager.update(true);
         sec.setTextClient(toolbar);
-        
-        // Update global preferences when local change.
+
+        /*
+         * Update global preferences when local change.
+         */
         final String globalPreferenceKey = PreferenceConstants.GROUPING_EDITOR_PANEL;
         addPartPropertyListener(new PropertyChangeListenerAdapter(GROUPING_LOCAL)
         {
