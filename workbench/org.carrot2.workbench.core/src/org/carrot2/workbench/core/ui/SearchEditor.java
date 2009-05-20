@@ -797,32 +797,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final IWorkbenchWindow window = getSite().getWorkbenchWindow();
         toolbar.add(WorkbenchActionFactory.AUTO_UPDATE_ACTION.create(window));
 
-        // Attribute grouping.
-        final String globalPreferenceKey = PreferenceConstants.GROUPING_EDITOR_PANEL;
-
-        toolbar.add(new GroupingMethodAction(GROUPING_LOCAL, this));
-
-        // Update global preferences when local change.
-        addPartPropertyListener(new PropertyChangeListenerAdapter(GROUPING_LOCAL)
-        {
-            protected void propertyChangeFiltered(PropertyChangeEvent event)
-            {
-                final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault()
-                    .getPreferenceStore();
-
-                final String currentValue = getPartProperty(GROUPING_LOCAL);
-                prefStore.setValue(globalPreferenceKey, currentValue);
-
-                updateGroupingState(GroupingMethod.valueOf(currentValue));
-                Utils.adaptToFormUI(toolkit, attributesPanel);
-
-                if (!sections.get(SearchEditorSections.ATTRIBUTES).visibility)
-                {
-                    setSectionVisibility(SearchEditorSections.ATTRIBUTES, true);
-                }
-            }
-        });
-
         // Choose visible panels.
         final IAction selectSectionsAction = new SearchEditorPanelsAction(
             "Choose visible panels", this);
@@ -971,7 +945,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         });
 
         sec.setClient(clustersTree);
-        
+
         // Add expand/collapse action to the toolbar.
         final ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
         final ToolBar toolbar = toolBarManager.createControl(sec);
@@ -1078,6 +1052,38 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         };
         getSearchResult().getInput().addAttributeListener(editorToPanelSync);
 
+        /*
+         * Add toolbar actions.
+         */
+        final ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
+        final ToolBar toolbar = toolBarManager.createControl(sec);
+        final IAction attributesAction = new GroupingMethodAction(GROUPING_LOCAL, this);
+        toolBarManager.add(attributesAction);
+        toolBarManager.update(true);
+        sec.setTextClient(toolbar);
+        
+        // Update global preferences when local change.
+        final String globalPreferenceKey = PreferenceConstants.GROUPING_EDITOR_PANEL;
+        addPartPropertyListener(new PropertyChangeListenerAdapter(GROUPING_LOCAL)
+        {
+            protected void propertyChangeFiltered(PropertyChangeEvent event)
+            {
+                final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault()
+                    .getPreferenceStore();
+
+                final String currentValue = getPartProperty(GROUPING_LOCAL);
+                prefStore.setValue(globalPreferenceKey, currentValue);
+
+                updateGroupingState(GroupingMethod.valueOf(currentValue));
+                Utils.adaptToFormUI(toolkit, attributesPanel);
+
+                if (!sections.get(SearchEditorSections.ATTRIBUTES).visibility)
+                {
+                    setSectionVisibility(SearchEditorSections.ATTRIBUTES, true);
+                }
+            }
+        });
+        
         /*
          * Perform GUI adaptations.
          */
