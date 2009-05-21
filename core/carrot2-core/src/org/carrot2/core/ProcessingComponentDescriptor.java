@@ -172,6 +172,15 @@ public class ProcessingComponentDescriptor
         return description;
     }
 
+    /**
+     * @return Return the name of a resource from which {@link #getAttributeSets()}
+     * were read or <code>null</code> if there was no such resource.
+     */
+    public String getAttributeSetsResource()
+    {
+        return attributeSetsResource;
+    }
+
     public AttributeValueSets getAttributeSets()
     {
         return attributeSets;
