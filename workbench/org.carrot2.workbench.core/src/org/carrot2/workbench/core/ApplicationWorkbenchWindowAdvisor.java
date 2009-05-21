@@ -62,7 +62,6 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
         configurer.setInitialSize(new Point(width, height));
 
         configurer.setShowStatusLine(true);
-        configurer.setTitle("Carrot2 Workbench");
         configurer.setShowMenuBar(true);
         configurer.setShowPerspectiveBar(true);
         configurer.setShowProgressIndicator(true);
