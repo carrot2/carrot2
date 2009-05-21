@@ -1,6 +1,6 @@
 <component-suite>
-  <include suite="carrot2-default/suite-common.xml" />
-  <include suite="carrot2-default/suite-local.xml" />
+  <!-- Includes DCS sources and algorithms. -->
+  <include suite="carrot2-default/suite-dcs.xml" />
 
   <!-- Generic (uninitialized) instance of OpenSearchDocumentSource -->
   <!-- 

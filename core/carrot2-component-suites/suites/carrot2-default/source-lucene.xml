@@ -1,0 +1,14 @@
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.lucene.LuceneDocumentSource" id="lucene">
+      <label>Lucene</label>
+      <title>Apache Lucene</title>
+      <mnemonic>L</mnemonic>
+      <description>
+        Apache Lucene index (local index access).
+      </description>
+      <icon-path>icons/lucene.png</icon-path>
+      <example-queries></example-queries>
+    </source>
+  </sources>
+</component-suite>
