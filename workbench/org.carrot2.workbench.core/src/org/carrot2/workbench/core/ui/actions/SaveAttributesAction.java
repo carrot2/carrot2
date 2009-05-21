@@ -14,6 +14,9 @@ package org.carrot2.workbench.core.ui.actions;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.carrot2.core.ProcessingComponentDescriptor;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.*;
@@ -109,8 +112,7 @@ public final class SaveAttributesAction extends Action
     public void saveAttributes()
     {
         final IPath pathHint = FileDialogs.recallPath(REMEMBER_DIRECTORY).append(
-            FileDialogs.sanitizeFileName(searchInput.getAlgorithmId())
-                + "-attributes.xml");
+            getFilenameHint());
 
         final Path saveLocation = FileDialogs.openSaveXML(pathHint);
         if (saveLocation != null)
@@ -120,21 +122,30 @@ public final class SaveAttributesAction extends Action
                 /*
                  * Extract all @Input defaults for a given algorithm.
                  */
-                Map<String, Object> defaults = getDefaultAttributeValues(searchInput
-                    .getAlgorithmId());
+                final AttributeValueSet defaults 
+                    = getDefaultAttributeValueSet(searchInput.getAlgorithmId());
 
-                // Override customized @Input properties
-                AttributeValueSet avs = searchInput.getAttributeValueSet();
-                Map<String, Object> current = avs.getAttributeValues();
-                current.keySet().retainAll(defaults.keySet());
-                defaults.putAll(current);
+                /*
+                 * Create an AVS for the default values and a based-on AVS with
+                 * overriden values.
+                 */
+                final AttributeValueSet avs = searchInput.getAttributeValueSet();
+                final Map<String, Object> overrides = avs.getAttributeValues();
+                removeSpecialKeys(overrides);
+                overrides.keySet().retainAll(defaults.getAttributeValues().keySet());
+                
+                final AttributeValueSet overridenAvs = new AttributeValueSet(
+                    "overriden-attributes", defaults);
+                overridenAvs.setAttributeValues(overrides);
 
                 // Flatten and save.
-                AttributeValueSet flattened = new AttributeValueSet("saved-attribute-set");
-                flattened.setAttributeValues(defaults);
+                final AttributeValueSets merged = new AttributeValueSets();
+                merged.addAttributeValueSet(overridenAvs.label, overridenAvs);
+                merged.addAttributeValueSet(defaults.label, defaults);
+                merged.setDefaultAttributeValueSetId(overridenAvs.label);
 
                 final Persister persister = new Persister();
-                persister.write(flattened, saveLocation.toFile());
+                persister.write(merged, saveLocation.toFile());
             }
             catch (Exception e)
             {
@@ -145,7 +156,38 @@ public final class SaveAttributesAction extends Action
             FileDialogs.rememberDirectory(REMEMBER_DIRECTORY, saveLocation);
         }
     }
-    
+
+    /**
+     * Handle the "special" {@link Input} keys that shouldn't be serialized. 
+     */
+    private void removeSpecialKeys(Map<String, Object> keyMap)
+    {
+        keyMap.remove(AttributeNames.DOCUMENTS);
+        keyMap.remove(AttributeNames.QUERY);
+        keyMap.remove(AttributeNames.START);
+    }
+
+    /**
+     * @return Returns the filename hint for an attribute set. The first take
+     * is the attribute sets resource associated with the algorithm. If this fails,
+     * we try to name the file after the algorithm itself.
+     */
+    private IPath getFilenameHint()
+    {        
+        final String algorithmId = this.searchInput.getAlgorithmId();
+        final ProcessingComponentDescriptor component = 
+            WorkbenchCorePlugin.getDefault().getComponent(algorithmId);
+
+        String nameHint = component.getAttributeSetsResource();
+        if (StringUtils.isBlank(nameHint))
+        {
+            // Try a fallback.
+            nameHint = FileDialogs.sanitizeFileName(algorithmId + ".attributes.xml");
+        }
+
+        return new Path(nameHint);
+    }
+
     /**
      * Open attributes from an XML file.
      */
@@ -159,10 +201,11 @@ public final class SaveAttributesAction extends Action
             try
             {
                 final Persister persister = new Persister();
-                final AttributeValueSet avs = 
-                    persister.read(AttributeValueSet.class, readLocation.toFile());
+                final AttributeValueSets avs =
+                    persister.read(AttributeValueSets.class, readLocation.toFile());
 
-                for (Map.Entry<String, Object> e : avs.getAttributeValues().entrySet())
+                for (Map.Entry<String, Object> e : 
+                    avs.getDefaultAttributeValueSet().getAttributeValues().entrySet())
                 {
                     searchInput.setAttribute(e.getKey(), e.getValue());
                 }
@@ -176,10 +219,10 @@ public final class SaveAttributesAction extends Action
     }
 
     /**
-     * Default attribute values for a given component.
+     * Default attribute value set for a given component.
      */
     @SuppressWarnings("unchecked")
-    private Map<String, Object> getDefaultAttributeValues(String componentId)
+    private AttributeValueSet getDefaultAttributeValueSet(String componentId)
     {
         BindableDescriptor desc = WorkbenchCorePlugin.getDefault()
             .getComponentDescriptor(componentId);
@@ -190,7 +233,10 @@ public final class SaveAttributesAction extends Action
         {
             defaults.put(e.getKey(), e.getValue().defaultValue);
         }
-
-        return defaults;
+        removeSpecialKeys(defaults);
+        
+        AttributeValueSet result = new AttributeValueSet("defaults");
+        result.setAttributeValues(defaults);
+        return result;
     }
 }
