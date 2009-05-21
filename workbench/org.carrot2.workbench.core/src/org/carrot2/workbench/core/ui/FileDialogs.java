@@ -42,6 +42,8 @@ public final class FileDialogs
             "XML Files", "All Files"
         });
 
+        dialog.setOverwrite(true);
+
         String result = dialog.open();
         if (result == null) return null;
         return new Path(result);
