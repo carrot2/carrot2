@@ -1,5 +1,7 @@
 package org.carrot2.workbench.core.ui;
 
+import org.carrot2.core.Cluster;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.actions.ActionDelegate;
@@ -7,18 +9,40 @@ import org.eclipse.ui.actions.ActionDelegate;
 /**
  * Expand or collapses nodes of a {@link ClusterTree}.
  */
-public final class ClusterTreeExpanderAction extends ActionDelegate
+final class ClusterTreeExpanderAction extends ActionDelegate
 {
     private ClusterTree tree;
     private boolean expand = true;
+    private volatile IAction action;
 
-    public ClusterTreeExpanderAction(ClusterTree tree)
+    public ClusterTreeExpanderAction(ClusterTree tree, SearchResult searchResult)
     {
         this.tree = tree;
+
+        searchResult.addListener(new ISearchResultListener() {
+            public void processingResultUpdated(ProcessingResult result)
+            {
+                boolean hasStructure = false;
+                for (Cluster c : result.getClusters())
+                {
+                    if (!c.getSubclusters().isEmpty())
+                    {
+                        hasStructure = true;
+                        break;
+                    }
+                }
+
+                if (action != null)
+                {
+                    action.setEnabled(hasStructure);
+                }
+            }
+        });
     }
 
     public void init(IAction action)
     {
+        this.action = action;
         update(action);
     }
 

@@ -932,7 +932,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final ToolBar toolbar = toolBarManager.createControl(sec);
 
         final IAction expanderAction = new ActionDelegateProxy(
-            new ClusterTreeExpanderAction(clustersTree), IAction.AS_PUSH_BUTTON);
+            new ClusterTreeExpanderAction(clustersTree, this.getSearchResult()), 
+            IAction.AS_PUSH_BUTTON);
 
         toolBarManager.add(expanderAction);
         toolBarManager.update(true);

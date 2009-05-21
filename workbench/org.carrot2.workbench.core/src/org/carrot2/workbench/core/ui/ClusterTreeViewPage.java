@@ -69,7 +69,9 @@ final class ClusterTreeViewPage extends Page
         // Create toolbar.
         final IActionBars bars = getSite().getActionBars();
         final IAction expanderAction = new ActionDelegateProxy(
-            new ClusterTreeExpanderAction(clusterTree), IAction.AS_PUSH_BUTTON);
+            new ClusterTreeExpanderAction(clusterTree, editor.getSearchResult()),
+            IAction.AS_PUSH_BUTTON);
+
         bars.getToolBarManager().add(expanderAction);        
         bars.updateActionBars();
         
