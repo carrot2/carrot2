@@ -27,8 +27,7 @@ import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
-import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
-import org.carrot2.workbench.core.ui.actions.SaveAsXMLActionDelegate;
+import org.carrot2.workbench.core.ui.actions.*;
 import org.carrot2.workbench.core.ui.sash.SashForm;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.*;
@@ -83,18 +82,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         public String getFullPath()
         {
             return new File(new File(directory), fileName).getAbsolutePath();
-        }
-
-        public static String sanitizeFileName(String anything)
-        {
-            String result = anything.replaceAll("[^a-zA-Z0-9_\\-.\\s]", "");
-            result = result.trim().replaceAll("[\\s]+", "-");
-            result = result.toLowerCase();
-            if (StringUtils.isEmpty(result))
-            {
-                result = "unnamed";
-            }
-            return result;
         }
     }
 
@@ -654,9 +641,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         if (newOptions == null)
         {
             newOptions = new SaveOptions();
-            newOptions.fileName = SaveOptions
-                .sanitizeFileName(getFullInputTitle(getSearchResult()))
-                + ".xml";
+            newOptions.fileName = 
+                FileDialogs.sanitizeFileName(getFullInputTitle(getSearchResult())) + ".xml";
         }
 
         final Shell shell = this.getEditorSite().getShell();
@@ -1060,6 +1046,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         // Attribute grouping.
         final IAction attributesAction = new GroupingMethodAction(GROUPING_LOCAL, this);
         toolBarManager.add(attributesAction);
+        
+        // Save/ load attributes.
+        final IAction saveLoadAction = new SaveAttributesAction(getSearchResult().getInput());
+        toolBarManager.add(saveLoadAction);
 
         toolBarManager.update(true);
         sec.setTextClient(toolbar);

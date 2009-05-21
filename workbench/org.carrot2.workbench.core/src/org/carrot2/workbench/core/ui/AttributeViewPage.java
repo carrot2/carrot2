@@ -20,8 +20,10 @@ import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
+import org.carrot2.workbench.core.ui.actions.SaveAttributesAction;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.*;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -104,6 +106,11 @@ final class AttributeViewPage extends Page
          */
         toolBarManager.add(new GroupingMethodAction(
             PreferenceConstants.GROUPING_ATTRIBUTE_VIEW));
+        
+        // Save/ load attributes.
+        final IAction saveLoadAction = new SaveAttributesAction(
+            editor.getSearchResult().getInput());
+        toolBarManager.add(saveLoadAction);
     }
 
     /**

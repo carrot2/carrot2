@@ -23,7 +23,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.*;
 
 /**
- * <p>
  * Instances of this class constitute the input to a search/clustering process (required
  * when opening a new editor).
  */
