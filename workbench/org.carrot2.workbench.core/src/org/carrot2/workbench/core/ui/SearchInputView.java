@@ -25,8 +25,7 @@ import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
-import org.carrot2.workbench.core.ui.actions.ActiveSearchEditorActionDelegate;
-import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
+import org.carrot2.workbench.core.ui.actions.*;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.AttributeEvent;
 import org.carrot2.workbench.editors.AttributeListenerAdapter;
@@ -333,6 +332,7 @@ public class SearchInputView extends ViewPart
      */
     private void createToolbar(IToolBarManager toolBarManager)
     {
+        // Link with editor action.
         final IAction linkWithEditor = new ActionDelegateProxy(
             new LinkWithEditorActionDelegate(), IAction.AS_CHECK_BOX);
         linkWithEditor.setImageDescriptor(WorkbenchCorePlugin
@@ -341,8 +341,12 @@ public class SearchInputView extends ViewPart
         toolBarManager.add(linkWithEditor);
         this.linkWithEditorAction = linkWithEditor;
 
+        // Grouping method action.
         toolBarManager.add(new GroupingMethodAction(
             PreferenceConstants.GROUPING_INPUT_VIEW));
+
+        // Add save attributes action.
+        toolBarManager.add(new SaveDocumentSourceAttributesAction(this));
     }
 
     /*
@@ -544,21 +548,6 @@ public class SearchInputView extends ViewPart
 
         checkAllRequiredAttributes();
         scroller.reflow(true);
-    }
-
-    /**
-     * Filter only those keys from {@link #attributes} that belong to source
-     * <code>sourceID</code>.
-     */
-    private Map<String, Object> filterAttributesOf(String sourceID)
-    {
-        final Map<String, Object> filtered = Maps.newLinkedHashMap(attributes
-            .getAttributeValues());
-
-        filtered.keySet().retainAll(
-            descriptors.get(sourceID).attributeDescriptors.keySet());
-
-        return filtered;
     }
 
     /**
@@ -930,7 +919,7 @@ public class SearchInputView extends ViewPart
     /**
      * Return the current source component identifier.
      */
-    private String getSourceId()
+    String getSourceId()
     {
         return getSelectedId(sourceViewer);
     }
@@ -978,6 +967,29 @@ public class SearchInputView extends ViewPart
         final IStructuredSelection selection = ((IStructuredSelection) combo
             .getSelection());
         return ((ProcessingComponentDescriptor) selection.getFirstElement()).getId();
+    }
+
+    /**
+     * Filter only those keys from {@link #attributes} that belong to source
+     * <code>sourceID</code>.
+     */
+    Map<String, Object> filterAttributesOf(String sourceID)
+    {
+        final Map<String, Object> filtered = Maps.newLinkedHashMap(attributes
+            .getAttributeValues());
+    
+        filtered.keySet().retainAll(
+            descriptors.get(sourceID).attributeDescriptors.keySet());
+    
+        return filtered;
+    }
+
+    /**
+     * Update an attribute stored in the input view. 
+     */
+    void setAttribute(String key, Object value)
+    {
+        this.editorComposite.setAttribute(key, value);
     }
 
     /*

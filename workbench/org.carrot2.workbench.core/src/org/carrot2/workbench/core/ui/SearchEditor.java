@@ -1049,7 +1049,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         toolBarManager.add(attributesAction);
         
         // Save/ load attributes.
-        final IAction saveLoadAction = new SaveAttributesAction(getSearchResult().getInput());
+        final IAction saveLoadAction = new SaveAlgorithmAttributesAction(getSearchResult().getInput());
         toolBarManager.add(saveLoadAction);
 
         toolBarManager.update(true);
