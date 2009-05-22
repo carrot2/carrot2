@@ -71,9 +71,17 @@ public class DcsAppTest
         final HtmlSelect source = form.getSelectByName("dcs.source");
 
         assertThat(source.getOptions().size()).isGreaterThan(0);
-        source.setSelectedAttribute(source.getOptions().get(0), true);
-
-        checkXmlOutput(query, form);
+        final String sourceID = "boss-web";
+        for (HtmlOption option : source.getOptions())
+        {
+            if (sourceID.equals(option.getAttributeValue("value")))
+            {
+                source.setSelectedAttribute(option, true);
+                checkXmlOutput(query, form);
+                return;
+            }
+        }
+        Assert.fail("No required external source: " + sourceID);
     }
 
     @Test
