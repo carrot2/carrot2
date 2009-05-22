@@ -9,7 +9,17 @@
     <xsl:call-template name="simple.xlink">
       <xsl:with-param name="node" select="."/>
       <xsl:with-param name="linkend" select="$section-id" />
-      <xsl:with-param name="content" select="string(//d:section[@xml:id = $section-id]/d:title)" />
+      <xsl:with-param name="content">
+        <xsl:choose>
+          <xsl:when test="string-length(.) > 0">
+            <xsl:value-of select="string(.)" />
+          </xsl:when>
+          
+          <xsl:otherwise>
+            <xsl:value-of select="string(//d:section[@xml:id = $section-id]/d:title)" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 </xsl:stylesheet>
