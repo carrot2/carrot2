@@ -26,6 +26,15 @@ a:hover {
   text-decoration: underline;
 }
 
+.chapter .titlepage .title a[name] {
+  position: relative;
+  top: -30mm;
+}
+
+.chapter .section .titlepage .title a[name] {
+  top: -10mm;
+}
+
 p {
   text-align: justify;
   margin-top: 3mm;
