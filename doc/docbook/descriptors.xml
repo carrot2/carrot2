@@ -15,7 +15,7 @@
     This chapter includes descriptors and attribute set XMLs for components that are
     not included in Carrot2 application distributions. For instructions on how to
     insert them into specific applications, please see 
-    <xref linkend="section.advanced-topics.customizing-applications" />.
+    <xref linkend="chapter.customizing" />.
   </para>
   
   <section xml:id="section.descriptors.solr">

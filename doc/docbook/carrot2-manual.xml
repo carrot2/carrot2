@@ -31,9 +31,10 @@
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="introduction.xml" /> 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="application-suite.xml" /> 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="getting-started.xml" /> 
-  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="architecture.xml" /> 
-  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="advanced-topics.xml" /> 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="customizing.xml" /> 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="advanced-topics.xml" />
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="troubleshooting.xml" /> 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="architecture.xml" /> 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="development.xml" /> 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="components.xml" /> 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="descriptors.xml" /> 
