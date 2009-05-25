@@ -135,14 +135,13 @@ div.chapter {
 }
 
 .chapter .titlepage  {
-  margin-bottom: 15mm;
 }
 
 .chapter .titlepage h3.subtitle {
   margin: 0;
   font-weight: normal;
-  position: absolute;
-  margin-top: -9mm;
+  position: relative;
+  top: -9mm;
 }
 
 .chapter .titlepage .title .n {
@@ -257,12 +256,13 @@ div.chapter {
 }
 
 .programlisting {
-  border: 1px dotted #404040;
+  border: 1px solid #b0b0b0;
   background-color: #f0f0f0;
   padding: 2mm;
   margin: 0;
   margin-top: 3mm;
   margin-bottom: 3mm;
+  font-size: 8pt;
 }
 
 /** Admonitions */

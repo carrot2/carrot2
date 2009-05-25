@@ -2,5 +2,5 @@
 <config 
 	cache-documents="true" 
 	cache-clusters="true" 
-	component-suite-resource="carrot2-default/suite-dcs.xml"
+	component-suite-resource="suites/suite-dcs.xml"
 />

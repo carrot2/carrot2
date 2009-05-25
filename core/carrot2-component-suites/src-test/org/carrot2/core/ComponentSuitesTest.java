@@ -31,7 +31,7 @@ public class ComponentSuitesTest
     @Test
     public void testCarrot2DefaultComponentSuite() throws Exception
     {
-        IResource resource = resourceUtils.getFirst("/carrot2-default/suite-dcs.xml",
+        IResource resource = resourceUtils.getFirst("/suites/suite-dcs.xml",
             ComponentSuitesTest.class);
         assertThat(resource).isNotNull();
         ProcessingComponentSuite suite = ProcessingComponentSuite.deserialize(resource);

@@ -4,7 +4,7 @@
     <algorithm
         id="lingo" 
         component-class="org.carrot2.clustering.lingo.LingoClusteringAlgorithm" 
-        attribute-sets-resource="/carrot2-default/lingo.attributes.xml">
+        attribute-sets-resource="/suites/lingo.attributes.xml">
       <label>Lingo</label>
       <title>Lingo Clustering</title>
     </algorithm>

@@ -22,7 +22,7 @@
   <target name="carrot2.doc.build" depends="jar, carrot2.doc.common.docbook.check">
     <carrot2.doc.build doc.base.dir="${carrot2.doc.basedir}"
                        doc.main.docbook.filename="carrot2-manual.xml" 
-                       doc.suite.path="carrot2-default/suite-doc.xml"
+                       doc.suite.path="suites/suite-doc.xml"
                        doc.output.dir="${doc.output.dir}"
                        doc.build.dir="${doc.output.dir}/build">
 

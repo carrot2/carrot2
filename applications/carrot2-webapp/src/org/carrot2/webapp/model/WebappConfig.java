@@ -74,7 +74,7 @@ public class WebappConfig
     public String skinsFolder;
 
     @Attribute(name = "component-suite")
-    public String componentSuite = "carrot2-default/suite-webapp.xml";
+    public String componentSuite = "suites/suite-webapp.xml";
 
     @Attribute(name = "search-url", required = false)
     public final String searchUrl = "search";

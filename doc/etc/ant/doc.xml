@@ -105,6 +105,8 @@
         <html.xslt.param.entries />
       </xslt>
 
+      <delete file="@{doc.output.dir}/filtered.xml" />
+      
       <copy todir="@{doc.output.dir}">
         <fileset dir="@{doc.base.dir}/assets">
           <include name="css/**" />
@@ -235,9 +237,7 @@
     
     <sequential>
       <delete dir="${docbook.xsl.dir}/html-custom" />
-      <!-- 
       <delete dir="@{doc.build.dir}" />
-      -->
     </sequential>
   </macrodef>
 

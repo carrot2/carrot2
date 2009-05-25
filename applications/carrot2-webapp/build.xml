@@ -156,9 +156,10 @@
   <target name="carrot2.webapp.suites" unless="carrot2.webapp.no-default-suites" depends="basedir.check">
     <copy todir="${webapp.classes.dir}">
       <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
-        <include name="carrot2-default/suite-local.xml" />
-        <include name="carrot2-default/suite-common.xml" />
-        <include name="carrot2-default/suite-webapp.xml" />
+        <include name="suites/algorithm-*.xml" />
+        <include name="suites/source-*.xml" />
+        <include name="suites/*.attributes.xml" />
+        <include name="suites/suite-webapp.xml" />
       </fileset>
     </copy>
   </target>

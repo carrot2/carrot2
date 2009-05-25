@@ -7,7 +7,7 @@
       <suite
             name="Carrot2 Component Suite"
             resourceRoot="suites/"
-            resource="carrot2-default/suite-workbench.xml">
+            resource="suites/suite-workbench.xml">
       </suite>
    </extension>
 </plugin>

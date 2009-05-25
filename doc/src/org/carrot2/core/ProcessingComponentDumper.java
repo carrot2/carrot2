@@ -93,7 +93,7 @@ public class ProcessingComponentDumper
 
     public static void main(String [] args) throws Exception
     {
-        String suite = "carrot2-default/suite-doc.xml";
+        String suite = "suites/suite-doc.xml";
         String output = null;
 
         if (args.length == 2)
