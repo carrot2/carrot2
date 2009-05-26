@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -50,16 +49,17 @@ public class LuceneDocumentSourceTest extends
         analyzer = new SimpleAnalyzer();
         directory = new RAMDirectory();
 
-        final IndexWriter w = new IndexWriter(directory, analyzer, true);
+        final IndexWriter w = new IndexWriter(directory, analyzer, true,
+            IndexWriter.MaxFieldLength.UNLIMITED);
         for (Document d : DOCUMENTS_DATA_MINING)
         {
             org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document();
 
             doc.add(new Field("title", (String) d.getField(Document.TITLE), Store.YES,
-                Field.Index.TOKENIZED, TermVector.WITH_POSITIONS_OFFSETS));
+                Field.Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS));
 
             doc.add(new Field("snippet", (String) d.getField(Document.SUMMARY),
-                Store.YES, Field.Index.TOKENIZED, TermVector.WITH_POSITIONS_OFFSETS));
+                Store.YES, Field.Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS));
 
             doc.add(new Field("url", (String) d.getField(Document.CONTENT_URL),
                 Store.YES, Field.Index.NO));

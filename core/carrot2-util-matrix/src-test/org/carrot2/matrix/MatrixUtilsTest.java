@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,11 +12,11 @@
 package org.carrot2.matrix;
 
 import static org.fest.assertions.Assertions.assertThat;
+import junit.framework.TestCase;
 
-import org.fest.assertions.DoubleAssert;
+import org.fest.assertions.Delta;
 import org.junit.Test;
 
-import junit.framework.TestCase;
 import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix2D;
 
@@ -50,7 +49,7 @@ public class MatrixUtilsTest extends TestCase
         });
 
         assertThat(MatrixUtils.computeOrthogonality(orthogonal)).isEqualTo(0.0,
-            DoubleAssert.delta(0.00));
+            Delta.delta(0.00));
     }
 
     @Test
@@ -77,7 +76,7 @@ public class MatrixUtilsTest extends TestCase
         });
 
         assertThat(MatrixUtils.computeOrthogonality(identical)).isEqualTo(1.0,
-            DoubleAssert.delta(0.02));
+            Delta.delta(0.02));
     }
 
     @Test
@@ -264,7 +263,7 @@ public class MatrixUtilsTest extends TestCase
             if (length != 0)
             {
                 assertThat(length).as("Column " + c + "length").isEqualTo(1.0,
-                    DoubleAssert.delta(0.02));
+                    Delta.delta(0.02));
             }
         }
     }
@@ -285,7 +284,7 @@ public class MatrixUtilsTest extends TestCase
             if (length != 0)
             {
                 assertThat(length).as("Column " + c + "length").isEqualTo(1.0,
-                    DoubleAssert.delta(0.02));
+                    Delta.delta(0.02));
             }
         }
     }

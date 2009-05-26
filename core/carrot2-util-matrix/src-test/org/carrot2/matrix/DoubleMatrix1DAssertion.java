@@ -14,8 +14,7 @@ package org.carrot2.matrix;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.fest.assertions.DoubleAssert;
-import org.fest.assertions.DoubleAssert.Delta;
+import org.fest.assertions.Delta;
 
 import cern.colt.matrix.DoubleMatrix1D;
 
@@ -69,7 +68,7 @@ public class DoubleMatrix1DAssertion
         assertThat(actualMatrix).isNotNull();
         assertThat(actualMatrix.size()).as("size").isEqualTo(values.length);
 
-        final Delta deltaObject = DoubleAssert.delta(delta);
+        final Delta deltaObject = Delta.delta(delta);
         for (int column = 0; column < values.length; column++)
         {
             assertThat(actualMatrix.get(column)).as(description + "[" + column + "]")

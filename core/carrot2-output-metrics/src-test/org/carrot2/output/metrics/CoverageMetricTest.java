@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,7 +17,7 @@ import java.util.List;
 
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
-import org.fest.assertions.DoubleAssert;
+import org.fest.assertions.Delta;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -96,7 +95,7 @@ public class CoverageMetricTest extends IdealPartitioningBasedMetricTest
         metric.clusters = clusters;
         metric.calculate();
         assertThat(metric.absoluteTopicCoverage).isEqualTo(expectedAbsoluteTopicCoverage,
-            DoubleAssert.delta(0.001));
+            Delta.delta(0.001));
         assertThat(metric.topicCoverage).isEqualTo(expectedTopicCoverage);
         assertThat(metric.documentCoverage).isEqualTo(expectedDocumentCoverage);
     }
