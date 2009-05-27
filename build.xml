@@ -385,11 +385,6 @@
       <attribute name="java.source" />
       <sequential>
         <switchClassLoader loaderRef="attrs.classloader">
-          <!-- Define stax processor inside the current JVM (JDK 1.5 does not handle META-INF/services). -->
-          <setProperty sysproperty="javax.xml.stream.XMLEventFactory" value="com.ctc.wstx.stax.WstxEventFactory" />
-          <setProperty sysproperty="javax.xml.stream.XMLInputFactory" value="com.ctc.wstx.stax.WstxInputFactory" />
-          <setProperty sysproperty="javax.xml.stream.XMLOutputFactory" value="com.ctc.wstx.stax.WstxOutputFactory" />
-          
           <metadata-serializer destdir="@{java.source}">
               <commonMetadata>
                   <path location="${common.attribute.names.source.path}" />
