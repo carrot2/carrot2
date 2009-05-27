@@ -530,5 +530,4 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
         detectErrorResponse(statusCode);
         super.setStatus(statusCode, message);
     }
-
 }

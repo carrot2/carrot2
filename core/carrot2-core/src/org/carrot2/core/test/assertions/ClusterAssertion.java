@@ -12,7 +12,7 @@
 
 package org.carrot2.core.test.assertions;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.core.Cluster;
@@ -63,13 +63,13 @@ public class ClusterAssertion implements AssertExtension
         assertThat(actualCluster.getPhrases()).isEqualTo(expectedCluster.getPhrases());
         if (checkDocuments)
         {
-            assertThat(actualCluster.getDocuments()).as(
+            assertThatDocuments(actualCluster.getDocuments()).as(
                 "cluster: " + actualCluster.getLabel()).isEquivalentTo(
                 expectedCluster.getDocuments());
         }
         assertThat(actualCluster.getAttributes()).isEqualTo(
             expectedCluster.getAttributes());
-        assertThat(actualCluster.getSubclusters()).isEquivalentTo(
+        assertThatClusters(actualCluster.getSubclusters()).isEquivalentTo(
             expectedCluster.getSubclusters(), checkDocuments);
 
         return this;

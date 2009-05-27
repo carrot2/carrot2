@@ -48,7 +48,7 @@ public class Carrot2CoreAssertions
      * @param actual the actual cluster list to make assertions on
      * @return the assertion object
      */
-    public static ClusterListAssertion assertThat(List<Cluster> actual)
+    public static ClusterListAssertion assertThatClusters(List<Cluster> actual)
     {
         return new ClusterListAssertion(actual);
     }
@@ -70,7 +70,7 @@ public class Carrot2CoreAssertions
      * @param actual the actual document list to make assertions on
      * @return the assertion object
      */
-    public static DocumentListAssertion assertThat(List<Document> actual)
+    public static DocumentListAssertion assertThatDocuments(List<Document> actual)
     {
         return new DocumentListAssertion(actual);
     }

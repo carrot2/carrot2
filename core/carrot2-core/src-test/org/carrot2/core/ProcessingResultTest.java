@@ -14,7 +14,7 @@ package org.carrot2.core;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
 
 import java.io.*;
 import java.util.*;
@@ -143,7 +143,7 @@ public class ProcessingResultTest
         assertNotNull(deserialized.getAttributes());
 
         // Check documents
-        assertThat(deserialized.getDocuments()).hasSize(documentCount);
+        assertThatDocuments(deserialized.getDocuments()).hasSize(documentCount);
         int index = 0;
         final List<Document> documents = deserialized.getDocuments();
         for (Document document : documents)
@@ -171,7 +171,7 @@ public class ProcessingResultTest
         clusterB.setAttribute(Cluster.SCORE, 0.55);
         clusterB.addDocuments(documents.get(1), documents.get(2));
 
-        assertThat(clusters).isEquivalentTo(Lists.newArrayList(clusterA, clusterB));
+        assertThatClusters(clusters).isEquivalentTo(Lists.newArrayList(clusterA, clusterB));
         Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
             .isEqualTo(query);
     }
@@ -302,7 +302,7 @@ public class ProcessingResultTest
 
         if (documentsDeserialized)
         {
-            assertThat(deserialized.getDocuments()).isEquivalentTo(
+            assertThatDocuments(deserialized.getDocuments()).isEquivalentTo(
                 sourceProcessingResult.getDocuments());
         }
         else
@@ -312,7 +312,7 @@ public class ProcessingResultTest
 
         if (clustersDeserialized)
         {
-            assertThat(deserialized.getClusters()).isEquivalentTo(
+            assertThatClusters(deserialized.getClusters()).isEquivalentTo(
                 sourceProcessingResult.getClusters(), documentsDeserialized);
         }
         else

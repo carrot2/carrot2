@@ -12,7 +12,7 @@
 
 package org.carrot2.clustering.synthetic;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
 
 import java.util.List;
 
@@ -79,7 +79,7 @@ public class ByFieldClusteringAlgorithmTest extends
             otherTopics.setAttribute(Cluster.OTHER_TOPICS, true);
             expectedClusters.add(otherTopics);
         }
-        assertThat(clusters).isEquivalentTo(expectedClusters);
+        assertThatClusters(clusters).isEquivalentTo(expectedClusters);
     }
 
     private Document documentWithField(Object fieldValue)

@@ -12,7 +12,7 @@
 
 package org.carrot2.core.test;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static org.carrot2.core.test.SampleDocumentData.*;
@@ -149,7 +149,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
                 Assertions.assertThat(firstClusterList).isNotEmpty();
                 while (iterator.hasNext())
                 {
-                    assertThat(firstClusterList).isEquivalentTo(iterator.next());
+                    assertThatClusters(firstClusterList).isEquivalentTo(iterator.next());
                 }
             }
         }
