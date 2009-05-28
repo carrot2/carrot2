@@ -8,7 +8,8 @@
   <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
   <property file="${carrot2.master.basedir}/etc/version/carrot2.basenames" /> 
 
-  <property file="${carrot2.master.basedir}/workbench.properties" />
+  <property name="workbench.properties" location="${carrot2.master.basedir}/workbench.properties" />
+  <property file="${workbench.properties}" />
   <property file="${carrot2.master.basedir}/workbench/build-conf/build.properties" />
 
   <property name="workbench.build.dir" location="tmp/workbench" />
