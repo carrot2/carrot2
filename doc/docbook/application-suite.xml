@@ -280,7 +280,9 @@
         <listitem>
           <para>
             See the <filename>examples/</filename> directory in the distribution archive
-            for PHP, C#, Ruby and Java code examples.
+            for PHP, C#, Ruby and Java code examples. You can also 
+            <link linkend="section.advanced-topics.using-dcs-with-curl">invoke DCS clustering
+            using the <command>curl</command> command</link>.
           </para>
         </listitem>
       </orderedlist>

@@ -187,6 +187,42 @@
       </para>
     </section>
   </section>
+
+  <section xml:id="section.advanced-topics.using-dcs-with-curl">
+    <title>Using &DCS; with <command>curl</command></title>
+    
+    <para>
+      You can use <command>curl</command> to post requests to the &DCS; 
+      <xref linkend="figure.dcs-curl-from-document-source" /> shows how to use <command>curl</command>
+      to query an external document source and cluster the results using the DCS.
+      <xref linkend="figure.dcs-curl-from-local-file" /> shows how to cluster documents
+      from an XML file in <link linkend="section.architecture.input-xml">&C2; format</link> using the DCS.
+      Please see the <filename>examples/curl</filename> directory of the &DCS; distribution
+      archive for more <command>curl</command> DCS invocation examples.
+    </para>
+      
+    <figure xml:id="figure.dcs-curl-from-document-source">
+      <title>Using DCS and curl to cluster data from document source</title>
+      <programlisting><![CDATA[curl http://localhost/dcs/rest \
+     -F "dcs.source=etools" \
+     -F "query=test" \
+     -o result.xml]]></programlisting>      
+    </figure>
+      
+    <figure xml:id="figure.dcs-curl-from-local-file">
+      <title>Using DCS and curl to cluster data from document source</title>
+      <programlisting><![CDATA[curl http://localhost/dcs/rest \
+     -F "dcs.c2stream=@documents-in-carrot2-format.xml" \
+     -o result.xml]]></programlisting>      
+    </figure>
+    
+    <tip>
+      <para>
+        You can download <command>curl</command> for Windows from 
+        <link xlink:href="http://curl.haxx.se/latest.cgi?curl=win32-nossl" />.
+      </para>
+    </tip>
+  </section>
   
   <section xml:id="section.advanced-topics.http-proxies">
     <title>Working with HTTP proxies</title>
