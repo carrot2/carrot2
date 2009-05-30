@@ -20,7 +20,7 @@
 
   <!-- DCS WAR -->
   <property name="dcs.war.dir" location="${dcs.dir}/war" />
-  <property name="dcs.war.base.name" value="carrot2-dcs" />
+  <property name="dcs.war.base.name" value="${carrot2.dcs.base}" />
  
   <!-- Webtest results -->
   <property name="dcs.webtest.report.dir" location="tmp/dcs-webtest-report" />

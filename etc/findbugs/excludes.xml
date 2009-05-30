@@ -8,4 +8,7 @@
    <Match>
       <Bug code="SS" />
    </Match>
+   <Match>
+      <Bug code="BC" />
+   </Match>
 </FindBugsFilter>

@@ -521,22 +521,7 @@
     <delete dir="${javadoc.dir}" failonerror="false" />
     <property name="tmp.src" location="${carrot2.master.basedir}/tmp/src" />
 
-    <mkdir dir="${tmp.src}" />
     <mkdir dir="${javadoc.dir}" />
-
-    <copy failonerror="true" filtering="false" overwrite="true" todir="${tmp.src}">
-      <fileset dir="core">
-        <include name="**/src/**/*.java" />
-        <include name="**/src/**/*.html" />
-        <exclude name="**/tmp/**/*" />
-      </fileset>
-      <chainedmapper>
-        <filtermapper>
-          <replacestring from="\" to="/" />
-        </filtermapper>
-        <mapper type="regexp" from="^(.+)/src/(.+)" to="\2" />
-      </chainedmapper>
-    </copy>
 
     <javadoc destdir="${javadoc.dir}"
              access="protected"
@@ -554,11 +539,13 @@
 
       <classpath refid="javadoc.classpath" />
 
-      <fileset dir="${tmp.src}">
-        <include name="**/*.java" />
-        <exclude name="**/org/carrot2/core/test/**" />
-        <exclude name="**/com/microsoft/msnsearch/**" />
-      </fileset>
+      <sourcefiles>
+        <fileset dir="core">
+          <include name="**/src/**/*.java" />
+          <exclude name="**/org/carrot2/core/test/**" />
+          <exclude name="**/com/microsoft/msnsearch/**" />
+        </fileset>
+      </sourcefiles>
 
       <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
 
@@ -579,7 +566,6 @@
       <arg value="-quiet" />
     </javadoc>
 
-    <delete dir="${tmp.src}" />
     <copy todir="${javadoc.dir}">
       <fileset dir="${etc.dir}/javadoc/">
         <include name="*.gif" />

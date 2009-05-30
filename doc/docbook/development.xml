@@ -24,6 +24,16 @@
     <orderedlist>
       <listitem>
         <formalpara>
+          <title>Update JavaDoc documentation</title>
+          <para>
+            Review JavaDoc documentation, provide missing public and protected
+            members description, provide missing package descriptions.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
           <title>Review of static code analysis reports</title>
           <para>
             Review and fix reasonably-looking flaws from the following reports:
