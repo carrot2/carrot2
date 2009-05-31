@@ -1,0 +1,32 @@
+<component-suite>
+  <sources>
+    <source id="lucene"
+        component-class="org.carrot2.source.lucene.LuceneDocumentSource"
+        attribute-sets-resource="lucene.attributes.xml">
+      <label>Lucene</label>
+      <title>Apache Lucene</title>
+      <mnemonic>L</mnemonic>
+      <description>
+        Apache Lucene index (local index access).
+      </description>
+      <icon-path>icons/lucene.png</icon-path>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>london</example-query>
+        <example-query>clustering</example-query>
+      </example-queries>
+    </source>
+  </sources>
+  
+  <algorithms>
+    <algorithm id="lingo" 
+        component-class="org.carrot2.clustering.lingo.LingoClusteringAlgorithm" 
+        attribute-sets-resource="lingo.attributes.xml">
+      <label>Lingo</label>
+      <title>Lingo Clustering</title>
+    </algorithm>
+  </algorithms>
+  
+  <include suite="source-yahoo-boss.xml" />
+  <include suite="algorithm-stc.xml" />
+</component-suite>

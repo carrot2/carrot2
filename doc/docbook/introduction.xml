@@ -41,8 +41,12 @@
     <xref linkend="chapter.application-suite" /> of this manual introduces
     applications available in &PROD; distribution. <xref
     linkend="chapter.getting-started" /> shows how to quickly set up &PROD; to
-    cluster your own data. <xref linkend="chapter.architecture" /> discusses
-    &PROD; architecture and internals, while <xref linkend="chapter.components"
-    /> is an in-depth reference of &PROD; components.
+    cluster your own data. <xref linkend="chapter.tuning" /> discusses topics related
+    to tuning &PROD; clustering, while <xref linkend="chapter.customizing" /> shows 
+    how to customize &PROD; applications. <xref linkend="chapter.advanced-topics" /> covers
+    some more advanced use cases of &PROD; and <xref linkend="chapter.troubleshooting" />
+    provides solutions to common problems. Finally, <xref linkend="chapter.architecture" /> discusses
+    &PROD; architecture and internals, while <xref linkend="chapter.components"/> 
+    is an in-depth reference of &PROD; components.
   </para>
 </chapter>

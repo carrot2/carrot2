@@ -9,7 +9,7 @@
 <chapter xml:id="chapter.application-suite" 
          xmlns="http://docbook.org/ns/docbook" version="5.0"
          xmlns:product="http://www.carrot2.org">
-  <title>&PROD; application suite</title>
+  <title>Application suite</title>
   <subtitle>Applications shipped with &PROD;</subtitle>
 
   <para>
@@ -280,9 +280,9 @@
         <listitem>
           <para>
             See the <filename>examples/</filename> directory in the distribution archive
-            for PHP, C#, Ruby and Java code examples. You can also 
+            for PHP, C#, Ruby and Java code examples. <phrase role="carrot2">You can also 
             <link linkend="section.advanced-topics.using-dcs-with-curl">invoke DCS clustering
-            using the <command>curl</command> command</link>.
+            using the <command>curl</command> command</link>.</phrase>
           </para>
         </listitem>
       </orderedlist>

@@ -10,7 +10,7 @@
          xmlns="http://docbook.org/ns/docbook"
          xmlns:product="http://www.carrot2.org">
   <title>Advanced topics</title>
-  <subtitle>Customizing &C2; components and applications</subtitle>
+  <subtitle>Building and running &C2; from source code</subtitle>
 
   <para>
     This chapter discusses more advanced usage scenarios of &C2; such as running &C2; applications
