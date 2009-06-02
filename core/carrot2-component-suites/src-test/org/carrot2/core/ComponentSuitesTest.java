@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -31,8 +30,14 @@ public class ComponentSuitesTest
     @Test
     public void testCarrot2DefaultComponentSuite() throws Exception
     {
-        IResource resource = resourceUtils.getFirst("/suites/suite-dcs.xml",
-            ComponentSuitesTest.class);
+        checkSuite("/suites/suite-dcs.xml");
+        checkSuite("/suites/suite-doc.xml");
+        checkSuite("/suites/suite-workbench.xml");
+    }
+
+    private void checkSuite(final String suitePath) throws Exception
+    {
+        IResource resource = resourceUtils.getFirst(suitePath, ComponentSuitesTest.class);
         assertThat(resource).isNotNull();
         ProcessingComponentSuite suite = ProcessingComponentSuite.deserialize(resource);
 
@@ -46,12 +51,6 @@ public class ComponentSuitesTest
             assertThat(source.getAttributeSets()).isNotNull();
             assertThat(source.getLabel()).isNotEmpty();
             assertThat(source.getTitle()).isNotEmpty();
-
-            if ("yahoo-news".equals(source.getId()))
-            {
-                assertThat(source.getAttributeSets().getAttributeValueSetIds())
-                    .isNotEmpty();
-            }
         }
 
         for (ProcessingComponentDescriptor algorithm : suite.getAlgorithms())

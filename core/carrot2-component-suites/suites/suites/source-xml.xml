@@ -1,6 +1,7 @@
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.xml.XmlDocumentSource" id="xml">
+    <source component-class="org.carrot2.source.xml.XmlDocumentSource" id="xml"
+            attribute-sets-resource="/suites/source-xml-attributes.xml">
       <label>XML</label>
       <title>XML</title>
       <icon-path>icons/xml.gif</icon-path>

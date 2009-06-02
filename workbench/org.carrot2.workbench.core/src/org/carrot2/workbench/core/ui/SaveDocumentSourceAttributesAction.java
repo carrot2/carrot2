@@ -53,10 +53,10 @@ final class SaveDocumentSourceAttributesAction extends SaveAttributesAction
         final AttributeValueSet defaults = getDefaultAttributeValueSet(sourceId);
 
         /*
-         * Create an AVS for the default values and a based-on AVS with overriden values.
+         * Create an AVS for the default values and a based-on AVS with overridden values.
          */
         final AttributeValueSet overridenAvs = new AttributeValueSet(
-            "overriden-attributes", defaults);
+            "overridden-attributes", defaults);
         final Map<String, Object> overrides = searchInputView
             .filterAttributesOf(sourceId);
         removeSpecialKeys(overrides);
@@ -90,6 +90,6 @@ final class SaveDocumentSourceAttributesAction extends SaveAttributesAction
     @Override
     protected IPath getFileNameHint()
     {
-        return getDefaultHint(this.searchInputView.getSourceId());
+        return getDefaultHint(this.searchInputView.getSourceId(), "source-");
     }
 }

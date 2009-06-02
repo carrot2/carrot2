@@ -1,6 +1,7 @@
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.solr.SolrDocumentSource" id="solr">
+    <source component-class="org.carrot2.source.solr.SolrDocumentSource" id="solr"
+            attribute-sets-resource="/suites/source-solr-attributes.xml">
       <label>Solr</label>
       <title>Solr Search Engine</title>
       <icon-path>icons/solr.png</icon-path>

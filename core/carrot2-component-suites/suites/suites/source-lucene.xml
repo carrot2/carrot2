@@ -1,6 +1,7 @@
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.lucene.LuceneDocumentSource" id="lucene">
+    <source component-class="org.carrot2.source.lucene.LuceneDocumentSource" id="lucene"
+            attribute-sets-resource="/suites/source-lucene-attributes.xml">
       <label>Lucene</label>
       <title>Apache Lucene</title>
       <mnemonic>L</mnemonic>

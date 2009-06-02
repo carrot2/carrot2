@@ -7,7 +7,7 @@
       &getStartupPage;
       <setInputField htmlId="query" value="test" />
       <forceHiddenInputField name="source" value="unknown" />
-      <setSelectField name="algorithm" value="lingo" />
+      <setSelectField name="algorithm" value="url" />
       <setSelectField name="results" value="100" />
       <forceHiddenInputField name="view" value="unknown" />
       <forceHiddenInputField name="skin" value="unknown" />

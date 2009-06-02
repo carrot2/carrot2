@@ -354,11 +354,11 @@ public class CachingControllerTest extends ControllerTestBase
         processingComponent1Mock.init(isA(IControllerContext.class));
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
-        mocksControl.andAnswer(new DelayedAnswer<Object>(500));
+        mocksControl.andAnswer(new DelayedAnswer<Object>(1500));
         processingComponent1Mock.afterProcessing();
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
-        mocksControl.andAnswer(new DelayedAnswer<Object>(500));
+        mocksControl.andAnswer(new DelayedAnswer<Object>(1500));
         processingComponent1Mock.afterProcessing();
         processingComponent1Mock.dispose();
         processingComponent1Mock.dispose();

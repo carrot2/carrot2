@@ -1,7 +1,8 @@
 <!-- Components included in all applications -->
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.microsoft.MicrosoftLiveDocumentSource" id="msn-web">
+    <source component-class="org.carrot2.source.microsoft.MicrosoftLiveDocumentSource" id="msn-web"
+            attribute-sets-resource="/suites/source-microsoft-live-attributes.xml">
       <label>MSN</label>
       <title>MSN Live Search</title>
       <mnemonic>M</mnemonic>

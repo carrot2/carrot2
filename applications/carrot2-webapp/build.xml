@@ -158,7 +158,6 @@
       <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
         <include name="suites/algorithm-*.xml" />
         <include name="suites/source-*.xml" />
-        <include name="suites/*.attributes.xml" />
         <include name="suites/suite-webapp.xml" />
       </fileset>
     </copy>

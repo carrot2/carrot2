@@ -11,10 +11,10 @@ import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.DropDownMenuAction;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.eclipse.core.runtime.*;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.*;
 import org.eclipse.swt.widgets.Event;
 import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.stream.Format;
 
 import com.google.common.collect.Maps;
 
@@ -44,7 +44,7 @@ abstract class SaveAttributesAction extends Action
 
     public SaveAttributesAction(String text)
     {
-        super(text, Action.AS_DROP_DOWN_MENU);
+        super(text, IAction.AS_DROP_DOWN_MENU);
 
         setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/save_e.gif"));
         setMenuCreator(new MenuManagerCreator()
@@ -76,7 +76,7 @@ abstract class SaveAttributesAction extends Action
             }
             catch (Exception e)
             {
-                Utils.showError(new Status(Status.ERROR, WorkbenchCorePlugin.PLUGIN_ID,
+                Utils.showError(new Status(IStatus.ERROR, WorkbenchCorePlugin.PLUGIN_ID,
                     "Failed to read attributes from: " + readLocation.toOSString(), e));
             }
         }
@@ -113,12 +113,12 @@ abstract class SaveAttributesAction extends Action
         {
             try
             {
-                final Persister persister = new Persister();
+                final Persister persister = new Persister(new Format(2));
                 persister.write(attributes, saveLocation.toFile());
             }
             catch (Exception e)
             {
-                Utils.showError(new Status(Status.ERROR, WorkbenchCorePlugin.PLUGIN_ID,
+                Utils.showError(new Status(IStatus.ERROR, WorkbenchCorePlugin.PLUGIN_ID,
                     "An error occurred while saving attributes.", e));
             }
 
@@ -131,7 +131,7 @@ abstract class SaveAttributesAction extends Action
      *         attribute sets resource associated with the algorithm. If this fails, we
      *         try to name the file after the algorithm itself.
      */
-    static IPath getDefaultHint(String componentId)
+    static IPath getDefaultHint(String componentId, String prefix)
     {
         final ProcessingComponentDescriptor component = WorkbenchCorePlugin.getDefault()
             .getComponent(componentId);
@@ -140,7 +140,7 @@ abstract class SaveAttributesAction extends Action
         if (StringUtils.isBlank(nameHint))
         {
             // Try a fallback.
-            nameHint = FileDialogs.sanitizeFileName(componentId + ".attributes.xml");
+            nameHint = FileDialogs.sanitizeFileName(prefix + componentId + "-attributes.xml");
         }
 
         return new Path(nameHint);

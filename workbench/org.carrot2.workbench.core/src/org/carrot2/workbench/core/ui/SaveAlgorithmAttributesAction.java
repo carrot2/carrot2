@@ -62,7 +62,7 @@ final class SaveAlgorithmAttributesAction extends SaveAttributesAction
             .getAlgorithmId());
 
         /*
-         * Create an AVS for the default values and a based-on AVS with overriden
+         * Create an AVS for the default values and a based-on AVS with overridden
          * values.
          */
         final AttributeValueSet avs = searchInput.getAttributeValueSet();
@@ -72,7 +72,7 @@ final class SaveAlgorithmAttributesAction extends SaveAttributesAction
         overrides.keySet().retainAll(defaults.getAttributeValues().keySet());
 
         final AttributeValueSet overridenAvs = new AttributeValueSet(
-            "overriden-attributes", defaults);
+            "overridden-attributes", defaults);
         overridenAvs.setAttributeValues(overrides);
 
         // Flatten and save.
@@ -87,6 +87,6 @@ final class SaveAlgorithmAttributesAction extends SaveAttributesAction
     @Override
     protected IPath getFileNameHint()
     {
-        return getDefaultHint(searchInput.getAlgorithmId());
+        return getDefaultHint(searchInput.getAlgorithmId(), "algorithm-");
     }
 }

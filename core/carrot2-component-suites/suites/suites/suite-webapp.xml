@@ -15,7 +15,7 @@
         </source>
 
         <source component-class="org.carrot2.source.boss.BossDocumentSource"
-            id="put" attribute-sets-resource="/suites/put.attributes.xml"
+            id="put" attribute-sets-resource="/suites/source-put-attributes.xml"
             position="END">
             <label>PUT</label>
             <title>*.put.poznan.pl search (with Yahoo Boss)</title>
