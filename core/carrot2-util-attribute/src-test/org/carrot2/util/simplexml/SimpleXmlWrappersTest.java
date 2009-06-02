@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -114,6 +113,12 @@ public class SimpleXmlWrappersTest
         check(new FileResource(new File(".").getAbsoluteFile()));
     }
 
+    @Test
+    public void testNonprimitiveClassWithDefaultConstructor() throws Exception
+    {
+        check(new Nonprimitive());
+    }
+
     enum TestEnum
     {
         TEST1, TEST2;
@@ -122,6 +127,25 @@ public class SimpleXmlWrappersTest
         public String toString()
         {
             return name().toLowerCase();
+        }
+    }
+
+    public static class Nonprimitive
+    {
+        @Override
+        public boolean equals(Object obj)
+        {
+            // We're using the default constructor to deserialize instance of this
+            // class, so it doesn't make sense to try to tell the difference between
+            // different instances.
+            return ObjectUtils.equals(this.getClass(), obj != null ? obj.getClass()
+                : null);
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return getClass().hashCode();
         }
     }
 
@@ -177,7 +201,7 @@ public class SimpleXmlWrappersTest
         final Map<String, Object> map = Maps.newHashMap();
         check(populateTestMap(map));
     }
-    
+
     @Test
     public void testHashMapWithList() throws Exception
     {
@@ -185,14 +209,14 @@ public class SimpleXmlWrappersTest
         map.put("list", Lists.newArrayList("test1", "test2", "test3"));
         check(map);
     }
-    
+
     @Test
     public void testTreeMap() throws Exception
     {
         final Map<String, Object> map = Maps.newTreeMap();
         check(populateTestMap(map));
     }
-    
+
     @Test
     public void testNestedMaps() throws Exception
     {

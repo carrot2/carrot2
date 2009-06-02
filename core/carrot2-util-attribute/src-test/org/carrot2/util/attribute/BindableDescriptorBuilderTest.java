@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -54,6 +53,24 @@ public class BindableDescriptorBuilderTest
 
         assertThat(bindableDescriptor.attributeDescriptors.keySet()).excludes(
             clazz.getName() + ".notAnAttribute");
+    }
+
+    @Test
+    public void testNonprimitiveAttribute() throws Exception
+    {
+        final NonprimitiveAttribute instance = new NonprimitiveAttribute();
+        final Class<?> clazz = NonprimitiveAttribute.class;
+
+        final BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
+            .buildDescriptor(instance);
+
+        assertThat(bindableDescriptor).contains(
+            AttributeUtils.getKey(clazz, "resource"),
+            new AttributeDescriptor(clazz.getDeclaredField("resource"),
+                instance.resource, Lists
+                    .<Annotation> newArrayList(NonprimitiveAttribute.class.getField(
+                        "resource").getAnnotation(ImplementingClasses.class)),
+                new AttributeMetadata("Nonprimitive", null, null, null, null)));
     }
 
     @Test

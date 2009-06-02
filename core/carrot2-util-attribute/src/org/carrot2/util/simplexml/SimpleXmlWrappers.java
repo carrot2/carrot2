@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,6 +11,7 @@
 
 package org.carrot2.util.simplexml;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 import org.simpleframework.xml.Root;
@@ -168,7 +168,7 @@ public class SimpleXmlWrappers
     {
         return SimpleXmlWrapperValue.wrap(value);
     }
-    
+
     /**
      * Unwraps an object after deserialization.
      * 
@@ -188,8 +188,9 @@ public class SimpleXmlWrappers
 
     static synchronized <T> Class<? extends ISimpleXmlWrapper<?>> getWrapper(T value)
     {
-        final Class<? extends ISimpleXmlWrapper<?>> clazz = wrappers.get(value.getClass());
-        
+        final Class<? extends ISimpleXmlWrapper<?>> clazz = wrappers
+            .get(value.getClass());
+
         // Check for some common fallback cases
         if (clazz == null)
         {
@@ -197,13 +198,30 @@ public class SimpleXmlWrappers
             {
                 return ListSimpleXmlWrapper.class;
             }
-            
+
             if (value instanceof Map)
             {
                 return MapSimpleXmlWrapper.class;
             }
+
+            // Check if the value's class has a default constructor. If so, return
+            // a generic wrapper that will serialize the class name and deserialize
+            // a new instance by calling the default constructor.
+            try
+            {
+                value.getClass().getConstructor();
+                return DefaultConstructorSimpleXmlWrapper.class;
+            }
+            catch (SecurityException e)
+            {
+                // ignored
+            }
+            catch (NoSuchMethodException e)
+            {
+                // ignored
+            }
         }
-        
+
         return clazz;
     }
 }
