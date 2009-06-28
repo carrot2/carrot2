@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public enum LanguageCode
 {
+    CHINESE ("zh"),
     DANISH ("da"),
     DUTCH ("nl"),
     ENGLISH ("en"),

@@ -21,8 +21,8 @@ import org.apache.lucene.analysis.*;
 import org.apache.lucene.index.Payload;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Init;
-import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
-import org.carrot2.text.analysis.ITokenType;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.analysis.*;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.util.ExceptionUtils;
@@ -59,11 +59,12 @@ public final class Tokenizer
      * @label Analyzer
      */
     @Init
+    @Processing
     @Input
     @Attribute
     @ImplementingClasses(classes =
     {
-        ExtendedWhitespaceAnalyzer.class
+        ChineseAnalyzer.class, ExtendedWhitespaceAnalyzer.class
     }, strict = false)
     public Analyzer analyzer = new ExtendedWhitespaceAnalyzer();
 
