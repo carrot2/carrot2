@@ -201,11 +201,9 @@ public class SearchInputView extends ViewPart
      */
     private class LinkWithEditorActionDelegate extends ActiveSearchEditorActionDelegate
     {
-        /*
-         * 
-         */
+        /* */
         @Override
-        public void run(SearchEditor editor)
+        protected void run(SearchEditor editor)
         {
             linkWithEditor = !linkWithEditor;
 
