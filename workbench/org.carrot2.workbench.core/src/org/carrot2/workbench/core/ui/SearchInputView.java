@@ -266,6 +266,8 @@ public class SearchInputView extends ViewPart
         {
             super("Show optional attributes", SWT.TOGGLE);
 
+            setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/optional.gif"));
+
             /*
              * Subscribe to change events on the global preference property and update
              * initial state.
@@ -322,7 +324,6 @@ public class SearchInputView extends ViewPart
          * Create toolbar and menu contributions.
          */
         final IActionBars bars = getViewSite().getActionBars();
-        createMenu(bars.getMenuManager());
         createToolbar(bars.getToolBarManager());
         bars.updateActionBars();
     }
@@ -341,6 +342,10 @@ public class SearchInputView extends ViewPart
         toolBarManager.add(linkWithEditor);
         this.linkWithEditorAction = linkWithEditor;
 
+        // Optional attributes action toggle.
+        final IAction showRequiredOnly = new ShowOptionalAction();
+        toolBarManager.add(showRequiredOnly);
+
         // Grouping method action.
         toolBarManager.add(new GroupingMethodAction(
             PreferenceConstants.GROUPING_INPUT_VIEW));
@@ -349,16 +354,6 @@ public class SearchInputView extends ViewPart
         toolBarManager.add(new SaveDocumentSourceAttributesAction(this));
     }
 
-    /*
-     * 
-     */
-    private void createMenu(IMenuManager menuManager)
-    {
-        final IAction showRequiredOnly = new ShowOptionalAction();
-
-        menuManager.add(showRequiredOnly);
-        menuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-    }
 
     /**
      * Create user interface for the view.
