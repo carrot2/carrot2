@@ -22,7 +22,8 @@ Apache Software Foundation http://www.apache.org/.
    <launcherArgs>
       <programArgs>-data workspace</programArgs>
       <vmArgs>-Xms256m
--Xmx512m</vmArgs>
+-Xmx512m
+-Dorg.eclipse.update.reconcile=false</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
