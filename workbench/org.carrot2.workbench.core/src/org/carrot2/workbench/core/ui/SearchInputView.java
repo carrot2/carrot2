@@ -133,13 +133,14 @@ public class SearchInputView extends ViewPart
 
     /**
      * A joint set of attributes for all sources from
-     * {@link WorkbenchCorePlugin#getSources()}.
+     * {@link WorkbenchCorePlugin#getSources()} and default attribute values for
+     * algorithms.
      */
     private AttributeValueSet attributes = new AttributeValueSet("all-inputs");
 
     /**
-     * A map of {@link BindableDescriptor} for each document source ID from {@link
-     * WorkbenchCorePlugin#getSources()}.
+     * A map of {@link BindableDescriptor} for each document source ID and
+     * algorithm ID from {@link WorkbenchCorePlugin#getComponentSuite()}.
      */
     private Map<String, BindableDescriptor> descriptors = Maps.newHashMap();
 
@@ -547,7 +548,6 @@ public class SearchInputView extends ViewPart
      * Creates permanent GUI elements (source, algorithm combos, placeholder for the
      * editors).
      */
-    @SuppressWarnings("unchecked")
     private void createComponents(Composite parent)
     {
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
@@ -565,7 +565,7 @@ public class SearchInputView extends ViewPart
         scroller.setContent(innerComposite);
 
         // Initialize sources, descriptors and source combo.
-        ProcessingComponentSuite suite = core.getComponentSuite();
+        final ProcessingComponentSuite suite = core.getComponentSuite();
 
         sourceViewer = createComboViewer(innerComposite, "Source", suite.getSources());
         sourceViewer.addSelectionChangedListener(sourceSelectionListener);
@@ -576,8 +576,7 @@ public class SearchInputView extends ViewPart
             try
             {
                 sources.put(e.getId(), e);
-                descriptors.put(e.getId(), core.getComponentDescriptor(e.getId()).only(
-                    Input.class, Processing.class));
+                addFilteredDescriptor(e);
             }
             catch (Exception x)
             {
@@ -593,6 +592,7 @@ public class SearchInputView extends ViewPart
         for (ProcessingComponentDescriptor e : suite.getAlgorithms())
         {
             algorithms.put(e.getId(), e);
+            addFilteredDescriptor(e);
         }
 
         final Label l = new Label(innerComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
@@ -631,6 +631,20 @@ public class SearchInputView extends ViewPart
          */
         restoreState();
         displayEditorSet();
+    }
+
+    /**
+     * Adds a {@link BindableDescriptor} to {@link #descriptors}, filtering
+     * to only {@link Input} and {@link Processing} attributes.
+     */
+    @SuppressWarnings("unchecked")
+    private void addFilteredDescriptor(ProcessingComponentDescriptor e)
+    {
+        final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
+
+        descriptors.put(e.getId(),
+            core.getComponentDescriptor(e.getId()).only(
+                Input.class, Processing.class));        
     }
 
     /**
@@ -692,9 +706,10 @@ public class SearchInputView extends ViewPart
          */
         final AttributeValueSet requestAttrs = new AttributeValueSet("request");
         requestAttrs.setAttributeValues(filterAttributesOf(getSourceId()));
+        requestAttrs.setAttributeValues(filterAttributesOf(getAlgorithmId()));
 
-        final SearchInput input = new SearchInput(getSourceId(), getAlgorithmId(),
-            requestAttrs);
+        final SearchInput input = new SearchInput(
+            getSourceId(), getAlgorithmId(), requestAttrs);
         try
         {
             page.openEditor(input, SearchEditor.ID);
@@ -966,14 +981,14 @@ public class SearchInputView extends ViewPart
      * Filter only those keys from {@link #attributes} that belong to source
      * <code>sourceID</code>.
      */
-    Map<String, Object> filterAttributesOf(String sourceID)
+    Map<String, Object> filterAttributesOf(String componentId)
     {
-        final Map<String, Object> filtered = Maps.newLinkedHashMap(attributes
-            .getAttributeValues());
-    
+        final Map<String, Object> filtered = Maps.newLinkedHashMap(
+            attributes.getAttributeValues());
+
         filtered.keySet().retainAll(
-            descriptors.get(sourceID).attributeDescriptors.keySet());
-    
+            descriptors.get(componentId).attributeDescriptors.keySet());
+
         return filtered;
     }
 
@@ -982,6 +997,11 @@ public class SearchInputView extends ViewPart
      */
     void setAttribute(String key, Object value)
     {
+        /*
+         * Force update of attributes map directly because this method
+         * updates algorithm attributes that are not covered by editorComposite.
+         */
+        this.attributes.setAttributeValue(key, value);
         this.editorComposite.setAttribute(key, value);
     }
 
@@ -1061,5 +1081,16 @@ public class SearchInputView extends ViewPart
         if (this.errorStatusImage != null) this.errorStatusImage.dispose();
         
         super.dispose();
+    }
+
+    /**
+     * Returns the active page's view instance.
+     */
+    public static SearchInputView getView()
+    {
+        final IWorkbenchPage page = PlatformUI.getWorkbench()
+            .getActiveWorkbenchWindow().getActivePage();
+
+        return (SearchInputView) page.findView(SearchInputView.ID);
     }
 }

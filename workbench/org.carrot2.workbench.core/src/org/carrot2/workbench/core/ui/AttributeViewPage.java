@@ -22,8 +22,7 @@ import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.*;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.*;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -85,8 +84,24 @@ final class AttributeViewPage extends Page
 
         final IActionBars bars = pageSite.getActionBars();
         createToolbarActions(bars.getToolBarManager());
-
+        createMenuActions(bars.getMenuManager());
+        
         bars.updateActionBars();
+    }
+
+    /*
+     * 
+     */
+    private void createMenuActions(IMenuManager menuManager)
+    {
+        final SearchInput input = editor.getSearchResult().getInput();
+
+        /*
+         * Add defaults management.
+         */
+        menuManager.add(new SetNewDefaultsAction(input));
+        menuManager.add(new ResetToDefaultsAction(input));
+        menuManager.add(new ResetToFactoryDefaultsAction(input));
     }
 
     /*
@@ -105,8 +120,10 @@ final class AttributeViewPage extends Page
          */
         toolBarManager.add(new GroupingMethodAction(
             PreferenceConstants.GROUPING_ATTRIBUTE_VIEW));
-        
-        // Save/ load attributes.
+
+        /*
+         * Save/ load attributes.
+         */
         final IAction saveLoadAction = new SaveAlgorithmAttributesAction(
             editor.getSearchResult().getInput());
         toolBarManager.add(saveLoadAction);
