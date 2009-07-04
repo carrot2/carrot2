@@ -121,7 +121,7 @@
     <include name="lib/**/colt*.jar" />
     <include name="lib/**/commons-lang*.jar" />
     <include name="lib/**/ehcache*.jar" />
-    <include name="lib/**/google-collections*.jar" />
+    <include name="lib/**/google-collect*.jar" />
     <include name="lib/**/jackson*.jar" />
     <include name="lib/**/log4j*.jar" />
     <include name="lib/**/lucene-core*.jar" />
