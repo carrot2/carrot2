@@ -32,11 +32,11 @@ public final class PreprocessingContext
 {
     /** Predicate for splitting on document separator. */
     public static final Predicate<Integer> ON_DOCUMENT_SEPARATOR = Predicates
-        .isEqualTo(ITokenType.TF_SEPARATOR_DOCUMENT);
+        .equalTo(ITokenType.TF_SEPARATOR_DOCUMENT);
 
     /** Predicate for splitting on field separator. */
     public static final Predicate<Integer> ON_FIELD_SEPARATOR = Predicates
-        .isEqualTo(ITokenType.TF_SEPARATOR_FIELD);
+        .equalTo(ITokenType.TF_SEPARATOR_FIELD);
 
     /** Predicate for splitting on sentence separator. */
     public static final Predicate<Integer> ON_SENTENCE_SEPARATOR = new Predicate<Integer>()

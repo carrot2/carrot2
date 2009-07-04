@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,7 +14,8 @@ package org.carrot2.core;
 import java.util.*;
 
 import org.carrot2.util.MapUtils;
-import org.carrot2.util.simplexml.*;
+import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
+import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
@@ -67,11 +67,22 @@ public final class Document
     public static final String SOURCES = "sources";
 
     /**
-     * Field name for an optional indicator of the document's topic. Value type:
-     * <code>String</code> or <code>Collection&lt;String&gt;</code> if a document belongs
-     * to multiple topics.
+     * @deprecated please use {@link #PARTITIONS}. This field will be removed in version 3.2.
      */
     public static final String TOPIC = "topic";
+
+    /**
+     * Identifiers of reference clustering partitions this document belongs to. Currently,
+     * this field is used only to calculate various clustering quality metrics. In the
+     * future, clustering algorithms may be able to use values of this field to increase
+     * the quality of clustering.
+     * <p>
+     * Value type: <code>Collection&lt;Object&gt;</code>. There is no constraint on the
+     * actual type of the partition identifier in the collection. Identifiers are assumed
+     * to correctly implement the {@link #equals(Object)} and {@link #hashCode()} methods.
+     * </p>
+     */
+    public static final String PARTITIONS = "partitions";
 
     /** Fields of this document */
     private Map<String, Object> fields = Maps.newHashMap();
@@ -349,8 +360,8 @@ public final class Document
      * Compares {@link Document}s by their identifiers {@link #getId()}, which effectively
      * gives the original order in which they were returned by the document source.
      */
-    public static final Comparator<Document> BY_ID_COMPARATOR = Comparators
-        .nullLeastOrder(Comparators.fromFunction(DocumentToId.INSTANCE));
+    public static final Comparator<Document> BY_ID_COMPARATOR = Ordering.natural()
+        .nullsFirst().onResultOf(DocumentToId.INSTANCE);
 
     /**
      * Transfers some fields from the map to individual class fields.

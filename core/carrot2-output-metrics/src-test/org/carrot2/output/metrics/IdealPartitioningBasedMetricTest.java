@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,54 +13,43 @@ package org.carrot2.output.metrics;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.util.List;
+import java.util.*;
 
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Test cases for {@link IClusteringMetric}.
  */
 public class IdealPartitioningBasedMetricTest
 {
-    protected String [] getClusterMetricKeys()
-    {
-        return new String [0];
-    }
-
     @Test
-    public void testNoTopicInformation()
+    public void testNoPartitionInformation()
     {
         final List<Document> documents = Lists.newArrayList();
         final List<Cluster> clusters = Lists.newArrayList();
-
+        
         final ContaminationMetric metric = new ContaminationMetric();
         metric.documents = documents;
-
+        
         final Document d1 = new Document();
-        final Document d2 = documentWithTopic("test");
+        final Document d2 = documentWithPartitions("test");
         documents.add(d1);
-
+        
         final Cluster c1 = new Cluster("test", d1);
         clusters.add(c1);
-
+        
         metric.calculate();
         checkAllMetricsNull(c1);
-
+        
         documents.add(d2);
         checkAllMetricsNull(c1);
     }
-
-    protected Document documentWithTopic(final String topic)
-    {
-        final Document document = new Document();
-        document.setField(Document.TOPIC, topic);
-        return document;
-    }
-
+    
     private void checkAllMetricsNull(final Cluster c1)
     {
         final String [] clusterMetricKeys = getClusterMetricKeys();
@@ -70,34 +58,90 @@ public class IdealPartitioningBasedMetricTest
             assertThat(c1.getAttribute(metricKey)).isNull();
         }
     }
+    
+    protected String [] getClusterMetricKeys()
+    {
+        return new String [0];
+    }
+    
+    protected static List<Document> getAllDocuments(Cluster... clusters)
+    {
+        final Set<Document> set = Sets.newHashSet();
+        for (Cluster cluster : clusters)
+        {
+            set.addAll(cluster.getAllDocuments());
+        }
+        return Lists.newArrayList(set);
+    }
+
+    protected Document documentWithPartitions(final String... partitions)
+    {
+        final Document document = new Document();
+        document.setField(Document.PARTITIONS, Arrays.asList(partitions));
+        return document;
+    }
+
+    protected Cluster clusterWithPartitions(final String... partitions)
+    {
+        final Cluster cluster = new Cluster();
+
+        for (String partition : partitions)
+        {
+            cluster.addDocuments(documentWithPartitions(partition));
+        }
+
+        return cluster;
+    }
 
     protected Cluster pureCluster()
     {
-        final Document d1 = documentWithTopic("test");
-        final Document d2 = documentWithTopic("test");
-        final Document d3 = documentWithTopic("test");
-        final Document d4 = documentWithTopic("test");
-        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
-        return cluster;
+        return clusterWithPartitions("test", "test", "test", "test");
     }
 
     protected Cluster partiallyContaminatedCluster()
     {
-        final Document d1 = documentWithTopic("test1");
-        final Document d2 = documentWithTopic("test1");
-        final Document d3 = documentWithTopic("test1");
-        final Document d4 = documentWithTopic("test2");
-        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
-        return cluster;
+        return clusterWithPartitions("test1", "test1", "test1", "test2");
     }
 
     protected Cluster fullyContaminatedCluster()
     {
-        final Document d1 = documentWithTopic("test1");
-        final Document d2 = documentWithTopic("test2");
-        final Document d3 = documentWithTopic("test3");
-        final Document d4 = documentWithTopic("test4");
-        final Cluster cluster = new Cluster("test", d1, d2, d3, d4);
-        return cluster;
+        return clusterWithPartitions("test1", "test2", "test3", "test4");
+    }
+
+    protected Cluster [] hardClustersWithOverlappingPartitions()
+    {
+        final Cluster c1 = new Cluster("c1", documentWithPartitions("t1"),
+            documentWithPartitions("t1"));
+        final Cluster c2 = new Cluster("c2", documentWithPartitions("t1", "t2"),
+            documentWithPartitions("t2"));
+        return new Cluster []
+        {
+            c1, c2
+        };
+    }
+
+    protected Cluster [] overlappingClustersWithHardPartitions()
+    {
+        final Document document = documentWithPartitions("t2");
+        final Cluster c1 = new Cluster("c1", documentWithPartitions("t1"),
+            documentWithPartitions("t1"), document);
+        final Cluster c2 = new Cluster("c2", document, documentWithPartitions("t2"));
+        return new Cluster []
+        {
+            c1, c2
+        };
+    }
+
+    protected Cluster [] overlappingClustersWithOverlappingPartitions()
+    {
+        final Document documentWithTwoPartitions = documentWithPartitions("t1", "t2");
+        final Cluster c1 = new Cluster("c1", documentWithPartitions("t1"),
+            documentWithPartitions("t1"), documentWithTwoPartitions);
+        final Cluster c2 = new Cluster("c2", documentWithTwoPartitions,
+            documentWithPartitions("t2"));
+        return new Cluster []
+        {
+            c1, c2
+        };
     }
 }

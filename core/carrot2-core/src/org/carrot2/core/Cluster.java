@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -474,40 +473,40 @@ public final class Cluster
      * Compares clusters by size as returned by {@link #size()}. Clusters with more
      * documents are larger.
      */
-    public static final Comparator<Cluster> BY_SIZE_COMPARATOR = Comparators
-        .nullLeastOrder(Comparators.fromFunction(new Function<Cluster, Integer>()
+    public static final Comparator<Cluster> BY_SIZE_COMPARATOR = Ordering.natural()
+        .nullsFirst().onResultOf(new Function<Cluster, Integer>()
         {
             public Integer apply(Cluster cluster)
             {
                 return cluster.size();
             }
-        }));
+        });
 
     /**
      * Compares clusters by score as returned by {@link #SCORE}. Clusters with larger
      * score are larger.
      */
-    public static final Comparator<Cluster> BY_SCORE_COMPARATOR = Comparators
-        .nullLeastOrder(Comparators.fromFunction(new Function<Cluster, Double>()
+    public static final Comparator<Cluster> BY_SCORE_COMPARATOR = Ordering.natural()
+        .nullsFirst().onResultOf(new Function<Cluster, Double>()
         {
             public Double apply(Cluster cluster)
             {
                 return cluster.getAttribute(SCORE);
             }
-        }));
+        });
 
     /**
      * Compares clusters by the natural order of their labels as returned by
      * {@link #getLabel()}.
      */
-    public static final Comparator<Cluster> BY_LABEL_COMPARATOR = Comparators
-        .nullLeastOrder(Comparators.fromFunction(new Function<Cluster, String>()
+    public static final Comparator<Cluster> BY_LABEL_COMPARATOR = Ordering.natural()
+        .nullsFirst().onResultOf(new Function<Cluster, String>()
         {
             public String apply(Cluster cluster)
             {
                 return cluster.getLabel();
             }
-        }));
+        });
 
     /**
      * Compares clusters first by their size as returned by {@link #size()} and labels as
@@ -519,8 +518,8 @@ public final class Cluster
      * the applications want to display clusters).
      * </p>
      */
-    public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = Comparators
-        .compound(Collections.reverseOrder(BY_SIZE_COMPARATOR), BY_LABEL_COMPARATOR);
+    public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = Ordering
+        .from(Collections.reverseOrder(BY_SIZE_COMPARATOR)).compound(BY_LABEL_COMPARATOR);
 
     /**
      * Compares clusters first by their size as returned by {@link #SCORE} and labels as
@@ -532,8 +531,9 @@ public final class Cluster
      * the applications want to display clusters).
      * </p>
      */
-    public static final Comparator<Cluster> BY_REVERSED_SCORE_AND_LABEL_COMPARATOR = Comparators
-        .compound(Collections.reverseOrder(BY_SCORE_COMPARATOR), BY_LABEL_COMPARATOR);
+    public static final Comparator<Cluster> BY_REVERSED_SCORE_AND_LABEL_COMPARATOR = Ordering
+        .from(Collections.reverseOrder(BY_SCORE_COMPARATOR))
+        .compound(BY_LABEL_COMPARATOR);
 
     /**
      * Returns a comparator that compares clusters based on the aggregation of their size
@@ -558,15 +558,14 @@ public final class Cluster
                 "Score weight must be between 0.0 (inclusive) and 1.0 (inclusive) ");
         }
 
-        return Comparators.compound(Comparators
-            .fromFunction(new Function<Cluster, Double>()
+        return Ordering.natural().onResultOf(new Function<Cluster, Double>()
+        {
+            public Double apply(Cluster cluster)
             {
-                public Double apply(Cluster cluster)
-                {
-                    return -Math.pow(cluster.size(), (1 - scoreWeight))
-                        * Math.pow((Double) cluster.getAttribute(SCORE), scoreWeight);
-                }
-            }), BY_LABEL_COMPARATOR);
+                return -Math.pow(cluster.size(), (1 - scoreWeight))
+                    * Math.pow((Double) cluster.getAttribute(SCORE), scoreWeight);
+            }
+        }).compound(BY_LABEL_COMPARATOR);
     }
 
     /**

@@ -70,7 +70,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
     @SuppressWarnings("unchecked")
     private void refreshFields(Object directory)
     {
-        BiMap<Object, String> valueToName = Maps.newHashBiMap();
+        BiMap<Object, String> valueToName = HashBiMap.create();
         ArrayList<Object> valueOrder = Lists.newArrayList();
 
         if (directory != null && directory instanceof Directory)

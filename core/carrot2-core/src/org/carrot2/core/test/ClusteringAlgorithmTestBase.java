@@ -122,8 +122,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
         try
         {
             List<Future<ProcessingResult>> results = executorService.invokeAll(callables);
-            Multimap<Integer, List<Cluster>> clusterings = Multimaps
-                .newArrayListMultimap();
+            Multimap<Integer, List<Cluster>> clusterings = ArrayListMultimap.create();
 
             // Group results by query
             for (Future<ProcessingResult> future : results)

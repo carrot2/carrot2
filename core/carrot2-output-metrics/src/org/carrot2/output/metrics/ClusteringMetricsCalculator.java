@@ -28,11 +28,6 @@ public class ClusteringMetricsCalculator extends ProcessingComponentBase
     public ContaminationMetric contamination = new ContaminationMetric();
 
     /**
-     * Coverage metrics.
-     */
-    public CoverageMetric coverage = new CoverageMetric();
-
-    /**
      * Precision and recall based metrics.
      */
     public PrecisionRecallMetric precisionRecall = new PrecisionRecallMetric();
@@ -43,11 +38,6 @@ public class ClusteringMetricsCalculator extends ProcessingComponentBase
         if (contamination.isEnabled())
         {
             contamination.calculate();
-        }
-
-        if (coverage.isEnabled())
-        {
-            coverage.calculate();
         }
 
         if (precisionRecall.isEnabled())

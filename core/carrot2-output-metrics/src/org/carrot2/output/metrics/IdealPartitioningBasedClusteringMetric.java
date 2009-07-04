@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,20 +13,18 @@ package org.carrot2.output.metrics;
 
 import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.*;
 
+import com.google.common.base.Function;
 import com.google.common.collect.*;
 
 /**
  *
  */
 @Bindable
-public abstract class IdealPartitioningBasedClusteringMetric implements
-    IClusteringMetric
+public abstract class IdealPartitioningBasedClusteringMetric implements IClusteringMetric
 {
     /**
      * Partition id field name.
@@ -35,92 +32,64 @@ public abstract class IdealPartitioningBasedClusteringMetric implements
     @Input
     @Processing
     @Attribute
-    public String partitionIdFieldName = Document.TOPIC;
+    public String partitionIdFieldName = Document.PARTITIONS;
 
-    /**
-     * Key for the major {@link Document#TOPIC} of a cluster.
-     */
-    public static final String MAJOR_TOPIC = "major-topic";
-
-    /**
-     * Returns the number of distinct {@link Document#TOPIC}s in a collection of
-     * documents. Note if that at least one of the document has a <code>null</code> topic,
-     * 0 will be returned.
-     */
-    int getTopicCount(List<Document> documents)
+    Set<Object> getPartitions(List<Document> documents)
     {
-        final HashSet<String> topics = Sets.newHashSet();
+        final HashSet<Object> partitions = Sets.newHashSet();
         for (Document document : documents)
         {
-            final String topic = document.getField(partitionIdFieldName);
-            if (StringUtils.isBlank(topic))
+            final Collection<Object> documentPartitions = document
+                .<Collection<Object>> getField(partitionIdFieldName);
+            if (documentPartitions != null)
             {
-                return 0;
+                partitions.addAll(documentPartitions);
             }
-            topics.add(topic);
         }
-        return topics.size();
+        return partitions;
     }
 
     /**
-     * Returns the the topic represented by the majority of the provided documents.
+     * Returns the number of distinct {@link Document#PARTITIONS}s in a collection of
+     * documents. Note if that at least one of the document has a <code>null</code>
+     * partition, 0 will be returned.
      */
-    String getMajorTopic(List<Document> documents)
+    int getPartitionsCount(List<Document> documents)
     {
-        final Map<String, Integer> counts = Maps.newHashMap();
-        Integer max = 0;
-        String majorityTopic = null;
-        for (Document document : documents)
-        {
-            final String topic = document.getField(partitionIdFieldName);
-            final Integer newValue = MapUtils.increment(counts, topic);
-            if (newValue > max)
-            {
-                max = newValue;
-                majorityTopic = topic;
-            }
-        }
-
-        return majorityTopic;
+        return getPartitions(documents).size();
     }
 
     /**
-     * Returns documents grouped by topics.
+     * Returns documents grouped by partitions.
      */
-    Map<String, Set<Document>> getDocumentsByTopic(List<Document> documents)
+    SetMultimap<Object, Document> getDocumentsByPartition(List<Document> documents)
     {
-        final Multimap<String, Document> result = Multimaps.newHashMultimap();
+        final SetMultimap<Object, Document> index = HashMultimap.create();
         for (Document document : documents)
         {
-            final String topic = document.getField(partitionIdFieldName);
-            if (topic != null)
+            final Collection<Object> partitions = document.getField(partitionIdFieldName);
+            for (Object partition : partitions)
             {
-                result.put(topic, document);
+                index.put(partition, document);
             }
         }
 
-        final Map<String, Set<Document>> map = Maps.newHashMap();
-        for (String key : result.keySet())
-        {
-            map.put(key, Sets.newHashSet(result.get(key)));
-        }
-
-        return map;
+        return ImmutableSetMultimap.copyOf(index);
     }
 
     /**
-     * Returns document counts for each topic.
+     * Returns document counts for each partition.
      */
-    Map<String, Integer> getDocumentCountByTopic(List<Document> documents)
+    Map<Object, Integer> getDocumentCountByPartition(List<Document> documents)
     {
-        final Map<String, Integer> result = Maps.newHashMap();
-        final Map<String, Set<Document>> documentsByTopic = getDocumentsByTopic(documents);
-
-        for (Map.Entry<String, Set<Document>> set : documentsByTopic.entrySet())
-        {
-            result.put(set.getKey(), set.getValue().size());
-        }
-
-        return result;
+        return ImmutableMap.copyOf(Maps.transformValues(
+            getDocumentsByPartition(documents).asMap(),
+            new Function<Collection<Document>, Integer>()
+            {
+                public Integer apply(Collection<Document> documents)
+                {
+                    return documents.size();
+                }
+            }));
     }
 }

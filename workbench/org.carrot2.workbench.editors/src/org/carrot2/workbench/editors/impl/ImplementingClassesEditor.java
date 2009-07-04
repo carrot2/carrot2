@@ -57,7 +57,7 @@ public final class ImplementingClassesEditor extends MappedValueComboEditor
 
         valueRequired = (descriptor.getAnnotation(Required.class) != null);
 
-        final BiMap<Object, String> valueToName = Maps.newHashBiMap();
+        final BiMap<Object, String> valueToName = HashBiMap.create();
         final List<Object> valueOrder = Lists.newArrayList();
         for (Class<?> clazz : constraint.classes())
         {

@@ -13,7 +13,9 @@ package org.carrot2.output.metrics;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+
 import org.carrot2.core.Cluster;
+import org.carrot2.util.MathUtils;
 import org.fest.assertions.Delta;
 import org.junit.Test;
 
@@ -25,51 +27,82 @@ import com.google.common.collect.Lists;
 public class PrecisionRecallMetricTest extends IdealPartitioningBasedMetricTest
 {
     @Test
-    public void testCalculatePrecisionRecallEmptyCluster()
+    public void testEmptyCluster()
     {
-        check(new Cluster(), null, null, null);
+        check(null, null, null, new Cluster());
     }
 
     @Test
-    public void testCalculatePrecisionRecallTrivialCluster()
+    public void testTrivialCluster()
     {
-        check(new Cluster("test", documentWithTopic("test")), 1.0, 1.0, 1.0);
+        check(1.0, 1.0, 1.0, new Cluster("test", documentWithPartitions("test")));
     }
 
     @Test
-    public void testCalculatePrecisionRecallPartiallyContaminatedCluster()
+    public void testPartiallyContaminatedCluster()
     {
-        check(partiallyContaminatedCluster(), 0.75, 1.0, 2 * 0.75 / (1 + 0.75));
+        check((3 * 0.75 + 1 * 0.25) / 4, 1.0,
+            (3 * MathUtils.harmonicMean(0.75, 1.0) + 1 * MathUtils
+                .harmonicMean(0.25, 1.0)) / 4, partiallyContaminatedCluster());
     }
 
     @Test
-    public void testCalculatePrecisionRecallFullyContaminatedCluster()
+    public void testFullyContaminatedCluster()
     {
-        check(fullyContaminatedCluster(), 0.25, 1.0, 2 * 0.25 / (1 + 0.25));
+        check(0.25, 1.0, 2 * 0.25 / (1 + 0.25), fullyContaminatedCluster());
     }
 
     @Test
-    public void testCalculateContaminationPureCluster()
+    public void testPureCluster()
     {
-        check(pureCluster(), 1.0, 1.0, 1.0);
+        check(1.0, 1.0, 1.0, pureCluster());
     }
 
-    private void check(Cluster cluster, Double expectedPrecision, Double expectedRecall,
-        Double expectedFMeasure)
+    @Test
+    public void testHardClustersWithOverlappingPartitions()
+    {
+        check(1.0, MathUtils.arithmeticMean(2.0 / 3.0, 1, 3, 2), MathUtils
+            .arithmeticMean(MathUtils.harmonicMean(2.0 / 3.0, 1), 1, 3, 2),
+            hardClustersWithOverlappingPartitions());
+    }
+
+    @Test
+    public void testHardPartitionsOverlappingClusters()
+    {
+        check(MathUtils.arithmeticMean(2.0 / 3.0, 1, 2, 2), 1.0, MathUtils
+            .arithmeticMean(MathUtils.harmonicMean(2.0 / 3.0, 1), 1, 2, 2),
+            overlappingClustersWithHardPartitions());
+    }
+
+    @Test
+    public void testOverlappingPartitionsOverlappingClusters()
+    {
+        check(1.0, 1.0, 1.0, overlappingClustersWithOverlappingPartitions());
+    }
+
+    @Test
+    public void testAllDocumentsInOtherTopics()
+    {
+        final Cluster otherTopics = clusterWithPartitions("t1", "t2", "t3");
+        otherTopics.setAttribute(Cluster.OTHER_TOPICS, true);
+        check(0.0, 0.0, 0.0, otherTopics);
+    }
+
+    private void check(Double expectedAveragePrecision, Double expectedAverageRecall,
+        Double expectedAverageFMeasure, Cluster... clusters)
     {
         final PrecisionRecallMetric metric = new PrecisionRecallMetric();
-        metric.documents = cluster.getAllDocuments();
-        metric.clusters = Lists.newArrayList(cluster);
+        metric.documents = getAllDocuments(clusters);
+        metric.clusters = Lists.newArrayList(clusters);
         metric.calculate();
-        assertEquals(expectedPrecision, cluster
-            .<Double> getAttribute(PrecisionRecallMetric.PRECISION), 0.001, "precision");
-        assertEquals(expectedRecall, cluster
-            .<Double> getAttribute(PrecisionRecallMetric.RECALL), 0.001, "recall");
-        assertEquals(expectedFMeasure, cluster
-            .<Double> getAttribute(PrecisionRecallMetric.F_MEASURE), 0.001, "f-measure");
+        assertEquals(expectedAveragePrecision, metric.weightedAveragePrecision, 0.001,
+            "precision");
+        assertEquals(expectedAverageRecall, metric.weightedAverageRecall, 0.001, "recall");
+        assertEquals(expectedAverageFMeasure, metric.weightedAverageFMeasure, 0.001,
+            "f-measure");
     }
 
-    private void assertEquals(Double expected, Double actual, double delta, String as)
+    private static void assertEquals(Double expected, Double actual, double delta, String as)
     {
         if (expected == null)
         {
@@ -86,8 +119,7 @@ public class PrecisionRecallMetricTest extends IdealPartitioningBasedMetricTest
     {
         return new String []
         {
-            PrecisionRecallMetric.PRECISION, PrecisionRecallMetric.RECALL,
-            PrecisionRecallMetric.F_MEASURE
+            PrecisionRecallMetric.BEST_F_MEASURE_PARTITION
         };
     }
 }

@@ -99,7 +99,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         Collection<Integer> documentIndexes, String [][] urlParts, int level,
         String labelSuffix)
     {
-        final Multimap<String, Integer> urlPartToDocumentIndex = new LinkedHashMultimap<String, Integer>();
+        final Multimap<String, Integer> urlPartToDocumentIndex = LinkedHashMultimap.create();
         for (final Integer documentIndex : documentIndexes)
         {
             final String [] urlPartsForDocument = urlParts[documentIndex.intValue()];

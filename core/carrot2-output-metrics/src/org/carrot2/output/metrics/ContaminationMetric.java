@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -23,16 +22,16 @@ import org.carrot2.util.attribute.*;
 import com.google.common.collect.Lists;
 
 /**
- * Computes cluster contamination. If a cluster groups documents with the same
- * {@link Document#TOPIC}, its contamination is 0. If a cluster groups an equally
- * distributed mix of all topics, its contamination is 1.0. For a full definition, please
- * see section 4.4.1 of <a
+ * Computes cluster contamination. If a cluster groups documents found in the same
+ * {@link Document#PARTITIONS}, its contamination is 0. If a cluster groups an equally
+ * distributed mix of all partitions, its contamination is 1.0. For a full definition,
+ * please see section 4.4.1 of <a
  * href="http://project.carrot2.org/publications/osinski04-dimensionality.pdf">this
  * work</a>.
  * <p>
  * Contamination is calculated for top-level clusters only, taking into account documents
  * from the cluster and all subclusters. Finally, contamination will be calculated only if
- * all input documents have non-blank {@link Document#TOPIC}s.
+ * all input documents have non-blank {@link Document#PARTITIONS}s.
  * </p>
  */
 @Bindable
@@ -71,8 +70,8 @@ public class ContaminationMetric extends IdealPartitioningBasedClusteringMetric
 
     public void calculate()
     {
-        final int topicCount = getTopicCount(documents);
-        if (topicCount == 0)
+        final int partitionCount = getPartitionsCount(documents);
+        if (partitionCount == 0)
         {
             return;
         }
@@ -86,7 +85,7 @@ public class ContaminationMetric extends IdealPartitioningBasedClusteringMetric
             {
                 continue;
             }
-            final double contamination = calculate(cluster, topicCount);
+            final double contamination = calculate(cluster, partitionCount);
             cluster.setAttribute(CONTAMINATION, contamination);
 
             contaminationSum += contamination * cluster.size();
@@ -96,9 +95,17 @@ public class ContaminationMetric extends IdealPartitioningBasedClusteringMetric
         weightedAverageContamination = contaminationSum / weightSum;
     }
 
-    double calculate(Cluster cluster, int topicCount)
+    @SuppressWarnings("unchecked")
+    double calculate(Cluster cluster, int partitionCount)
     {
-        final double worstCaseH = calculateWorstCaseH(cluster.size(), topicCount);
+        int clusterPartitionAssignments = 0;
+        for (Document document : cluster.getAllDocuments())
+        {
+            clusterPartitionAssignments += ((Collection<Object>) document
+                .getField(Document.PARTITIONS)).size();
+        }
+
+        final double worstCaseH = calculateWorstCaseH(clusterPartitionAssignments, partitionCount);
         if (worstCaseH == 0)
         {
             return 0;
@@ -111,23 +118,23 @@ public class ContaminationMetric extends IdealPartitioningBasedClusteringMetric
 
     int calculateH(Cluster cluster)
     {
-        final Map<String, Integer> documentCountByTopic = getDocumentCountByTopic(cluster
+        final Map<Object, Integer> documentCountByPartition = getDocumentCountByPartition(cluster
             .getAllDocuments());
 
         final ArrayList<Integer> counts = Lists.newArrayList();
-        counts.addAll(documentCountByTopic.values());
+        counts.addAll(documentCountByPartition.values());
 
         return calculateH(counts);
     }
 
-    static int calculateWorstCaseH(int clusterSize, int topicCount)
+    static int calculateWorstCaseH(int clusterSize, int partitionCount)
     {
         final ArrayList<Integer> counts = Lists.newArrayList();
 
-        for (int topic = 0; topic < topicCount; topic++)
+        for (int partition = 0; partition < partitionCount; partition++)
         {
-            counts.add(clusterSize / topicCount
-                + (topic < (clusterSize % topicCount) ? 1 : 0));
+            counts.add(clusterSize / partitionCount
+                + (partition < (clusterSize % partitionCount) ? 1 : 0));
         }
 
         return calculateH(counts);

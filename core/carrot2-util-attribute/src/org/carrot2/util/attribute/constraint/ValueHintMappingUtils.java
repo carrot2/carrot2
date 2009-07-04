@@ -12,10 +12,10 @@
 
 package org.carrot2.util.attribute.constraint;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 
 /**
  * Utilities for dealing with {@link IValueHintMapping} and {@link Enum} classes.
@@ -32,7 +32,6 @@ public final class ValueHintMappingUtils
      * enum constants (values). Keys in the returned map are ordered according to enum's
      * declaration.
      */
-    @SuppressWarnings("unchecked")
     public static Map<String, Enum<?>> getValidValuesMap(Class<? extends Enum<?>> clazz)
     {
         final LinkedHashMap<String, Enum<?>> valueSet = Maps.newLinkedHashMap();
@@ -54,10 +53,9 @@ public final class ValueHintMappingUtils
      * Returns a bidirectional mapping between valid attribute values (keys) and
      * user-friendly names (values).
      */
-    @SuppressWarnings("unchecked")
     public static BiMap<String, String> getValueToFriendlyName(Class<? extends Enum<?>> clazz)
     {
-        final BiMap<String, String> valueToName = Maps.newHashBiMap();
+        final BiMap<String, String> valueToName = HashBiMap.create();
 
         for (Enum<?> e : clazz.getEnumConstants())
         {

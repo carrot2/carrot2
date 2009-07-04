@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -213,7 +212,8 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
         {
             public boolean apply(Document document)
             {
-                final String documentTopic = document.getField(Document.TOPIC);
+                // For now there is only one topic per document in Ambient
+                final String documentTopic = getAmbientTopic(document);
                 return subtopicSizes.get(documentTopic) >= minTopicSize
                     && (includeDocumentsWithoutTopic || !documentTopic.endsWith(".0"));
             }
@@ -227,16 +227,15 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
         topicIds = Sets.newHashSet();
         for (Document document : documents)
         {
-            final Object topics = document.getField(Document.TOPIC);
-            if (topics instanceof Collection)
-            {
-                topicIds.addAll((Collection<? extends Object>) topics);
-            }
-            else
-            {
-                topicIds.add(topics);
-            }
+            topicIds.addAll((Collection<? extends Object>) document
+                .<Object> getField(Document.PARTITIONS));
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    static String getAmbientTopic(Document document)
+    {
+        return ((List<String>) document.getField(Document.PARTITIONS)).get(0);
     }
 
     /**
@@ -335,8 +334,8 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
                 {
                     document.setField(Document.SUMMARY, split[3]);
                 }
-                document.setField(Document.TOPIC, buildTopicId(topicId,
-                    resultSubtopicIds[topicId][resultIndex]));
+                document.setField(Document.PARTITIONS, ImmutableList.of(buildTopicId(
+                    topicId, resultSubtopicIds[topicId][resultIndex])));
 
                 // Add to list
                 List<Document> topicList = documents.get(topicId);

@@ -26,7 +26,6 @@ public class SuffixTreeTest
     /**
      * Test if all the leaf nodes are in place.
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testLeafNodes()
     {
@@ -41,7 +40,7 @@ public class SuffixTreeTest
         {
             final Node n = nodes.pop();
 
-            for (Edge e : Iterators.newArray(n.getEdgesIterator(), Edge.class))
+            for (Edge e : Iterators.toArray(n.getEdgesIterator(), Edge.class))
             {
                 if (e.endNode.isLeaf())
                 {

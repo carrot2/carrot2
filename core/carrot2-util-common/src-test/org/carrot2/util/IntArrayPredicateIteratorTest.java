@@ -24,7 +24,7 @@ import com.google.common.base.*;
 public class IntArrayPredicateIteratorTest
 {
     private final int SEP = -1;
-    private Predicate<Integer> equalsSep = Predicates.isEqualTo(SEP);
+    private Predicate<Integer> equalsSep = Predicates.equalTo(SEP);
 
     @Test
     public void testSimpleCase() {

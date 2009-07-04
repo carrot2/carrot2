@@ -119,7 +119,7 @@ public class AmbientDocumentSourceTest extends
         {
             assertThat((String) document.getField(Document.TITLE)).isNotEmpty();
             assertThat((String) document.getField(Document.CONTENT_URL)).isNotEmpty();
-            final String topicId = document.getField(Document.TOPIC);
+            final String topicId = AmbientDocumentSource.getAmbientTopic(document);
             assertThat(topicId.startsWith(Integer.toString(topicIndex))).isTrue();
 
             if (!includeDocumentsWithoutTopic)
@@ -135,7 +135,7 @@ public class AmbientDocumentSourceTest extends
             {
                 public String apply(Document document)
                 {
-                    return document.getField(Document.TOPIC);
+                    return AmbientDocumentSource.getAmbientTopic(document);
                 }
             });
         for (String topic : documentsByTopic.keySet())

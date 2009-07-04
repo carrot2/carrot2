@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -51,14 +50,15 @@ public class ClusteringQualityBenchmark
         // List of metrics to output
         final ArrayList<String> metrics = Lists.newArrayList(AttributeUtils.getKey(
             ContaminationMetric.class, "weightedAverageContamination"), AttributeUtils
-            .getKey(CoverageMetric.class, "absoluteTopicCoverage"), AttributeUtils
-            .getKey(CoverageMetric.class, "topicCoverage"), AttributeUtils.getKey(
-            CoverageMetric.class, "documentCoverage"));
+            .getKey(PrecisionRecallMetric.class, "weightedAverageFMeasure"),
+            AttributeUtils
+                .getKey(PrecisionRecallMetric.class, "weightedAveragePrecision"),
+            AttributeUtils.getKey(PrecisionRecallMetric.class, "weightedAverageRecall"));
 
         final Map<String, Object> attributes = Maps.newHashMap();
 
         System.out
-            .println("Topic\tAlgorithm\tOrder\tContamination\tATCoverage\tTCoverage\tDCoverage");
+            .println("Topic\tAlgorithm\tContamination\tF-Score\tPrecision\tRecall");
         for (AmbientTopic topic : topics)
         {
             for (Class<? extends IProcessingComponent> algorithm : algorithms)

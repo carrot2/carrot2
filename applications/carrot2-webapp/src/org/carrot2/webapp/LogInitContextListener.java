@@ -23,8 +23,7 @@ import javax.servlet.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.*;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
+import com.google.common.collect.*;
 
 /**
  * Initializes file appenders to save logs to files named after the context path. Works
@@ -41,7 +40,7 @@ public class LogInitContextListener implements ServletContextListener
     /**
      * Any created {@link FileAppenders}.
      */
-    private Multimap<Logger, Appender> appenders = Multimaps.newArrayListMultimap();
+    private Multimap<Logger, Appender> appenders = ArrayListMultimap.create();
 
     /**
      * Callback hook from the application container. Initialize logging appenders

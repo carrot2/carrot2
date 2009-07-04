@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,22 +13,21 @@ package org.carrot2.util;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.util.Collections;
 import java.util.Comparator;
 
 import org.junit.Test;
 
-import com.google.common.collect.Comparators;
+import com.google.common.collect.Ordering;
 
 /**
- * Test cases for the deprecated and removed {@link IndirectSorter}. The replacement
- * class {@link IndirectSort} should provide the same functionality.
+ * Test cases for the deprecated and removed {@link IndirectSorter}. The replacement class
+ * {@link IndirectSort} should provide the same functionality.
  */
 public class IndirectSorterTest
 {
     /** Test comparator */
-    private static final Comparator<String> REVERSED_STRING_COMPARATOR = Collections
-        .<String> reverseOrder(Comparators.<String> naturalOrder());
+    private static final Comparator<String> REVERSED_STRING_COMPARATOR = Ordering
+        .natural().reverse();
 
     @Test
     public void testObjectEmpty()
@@ -313,7 +311,7 @@ public class IndirectSorterTest
 
         check(new IndirectComparator.DescendingShortComparator(array), expectedOrder);
     }
-    
+
     @Test
     public void testDoubleUnsorted()
     {
@@ -359,7 +357,8 @@ public class IndirectSorterTest
         check(new IndirectComparator.DescendingDoubleComparator(array), expectedOrder);
     }
 
-    private void check(int start, int length, IndirectComparator comparator, int [] expectedOrder)
+    private void check(int start, int length, IndirectComparator comparator,
+        int [] expectedOrder)
     {
         int [] order = IndirectSort.sort(start, length, comparator);
         assertThat(order).isEqualTo(expectedOrder);
@@ -369,15 +368,16 @@ public class IndirectSorterTest
     {
         check(0, expectedOrder.length, comparator, expectedOrder);
     }
-    
-    private <T> void check(T [] input, int start, int length, Comparator<T> comparator, int [] expectedOrder)
+
+    private <T> void check(T [] input, int start, int length, Comparator<T> comparator,
+        int [] expectedOrder)
     {
         int [] order = IndirectSort.sort(input, start, length, comparator);
         assertThat(order).isEqualTo(expectedOrder);
     }
-    
+
     private <T> void check(T [] input, int [] expectedOrder, Comparator<T> comparator)
     {
         check(input, 0, input.length, comparator, expectedOrder);
-    }    
+    }
 }

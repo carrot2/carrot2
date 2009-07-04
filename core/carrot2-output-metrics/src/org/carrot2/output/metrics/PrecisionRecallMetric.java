@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,35 +17,23 @@ import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.MathUtils;
 import org.carrot2.util.attribute.*;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 
 /**
- * Computes precision, recall and F-metric for individual clusters and an average of these
- * across top-level clusters.
+ * Computes precision, recall and F-metric for all partitions against the provided
+ * clusters.
  * <p>
  * Metrics will be calculated only if all input documents have non-blank
- * {@link Document#TOPIC}s.
+ * {@link Document#PARTITIONS}s.
  * </p>
  */
 @Bindable
 public class PrecisionRecallMetric extends IdealPartitioningBasedClusteringMetric
 {
-    /**
-     * Key for the precision value for a cluster.
-     */
-    public static final String PRECISION = "precision";
-
-    /**
-     * Key for the recall value for a cluster.
-     */
-    public static final String RECALL = "recall";
-
-    /**
-     * Key for the F-measure value for a cluster.
-     */
-    public static final String F_MEASURE = "f-measure";
+    public final static String BEST_F_MEASURE_PARTITION = "best-f-measure-partition";
 
     /**
      * Average precision of the whole cluster set.
@@ -54,7 +41,7 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedClusteringMetri
     @Processing
     @Output
     @Attribute(key = "average-precision")
-    public double averagePrecision;
+    public Double weightedAveragePrecision;
 
     /**
      * Average recall of the whole cluster set.
@@ -62,7 +49,7 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedClusteringMetri
     @Processing
     @Output
     @Attribute(key = "average-recall")
-    public double averageRecall;
+    public Double weightedAverageRecall;
 
     /**
      * Average F-measure of the whole cluster set.
@@ -70,7 +57,31 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedClusteringMetri
     @Processing
     @Output
     @Attribute(key = "average-f-measure")
-    public double averageFMeasure;
+    public Double weightedAverageFMeasure;
+
+    /**
+     * Precision by partition.
+     */
+    @Processing
+    @Output
+    @Attribute(key = "precision-by-partition")
+    public Map<Object, Double> precisionByPartition;
+
+    /**
+     * Recall by partition.
+     */
+    @Processing
+    @Output
+    @Attribute(key = "recall-by-partition")
+    public Map<Object, Double> recallByPartition;
+
+    /**
+     * F-measure by partition.
+     */
+    @Processing
+    @Output
+    @Attribute(key = "f-measure-by-partition")
+    public Map<Object, Double> fMeasureByPartition;
 
     /**
      * Calculate F-measure.
@@ -92,8 +103,8 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedClusteringMetri
 
     public void calculate()
     {
-        final int topicCount = getTopicCount(documents);
-        if (topicCount == 0)
+        final int partitionCount = getPartitionsCount(documents);
+        if (partitionCount == 0)
         {
             return;
         }
@@ -103,48 +114,74 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedClusteringMetri
             return;
         }
 
-        final Map<String, Set<Document>> documentsByTopic = getDocumentsByTopic(documents);
+        final SetMultimap<Object, Document> documentsByPartition = getDocumentsByPartition(documents);
+        final Set<Object> partitions = getPartitions(documents);
+
+        precisionByPartition = Maps.newHashMap();
+        recallByPartition = Maps.newHashMap();
+        fMeasureByPartition = Maps.newHashMap();
 
         double recallSum = 0;
         double precisionSum = 0;
         double fMeasureSum = 0;
-        int clusterCount = 0;
+        int partitionDocumentsCountSum = 0;
 
-        for (Cluster cluster : clusters)
+        for (Object partition : partitions)
         {
-            final List<Document> clusterDocuments = cluster.getAllDocuments();
-            if (cluster.getAttribute(Cluster.OTHER_TOPICS) != null
-                || clusterDocuments.size() == 0)
+            final Set<Document> partitionDocuments = documentsByPartition.get(partition);
+            final int partitionDocumentsCount = partitionDocuments.size();
+            double partitionFMeasure = 0;
+            double partitionPrecision = 0;
+            double partitionRecall = 0;
+            Cluster bestFMeasureCluster = null;
+
+            for (Cluster cluster : clusters)
             {
-                continue;
+                final List<Document> clusterDocuments = cluster.getAllDocuments();
+                if (cluster.getAttribute(Cluster.OTHER_TOPICS) != null
+                    || clusterDocuments.size() == 0)
+                {
+                    continue;
+                }
+
+                final Set<Document> commonDocuments = Sets.newHashSet(partitionDocuments);
+                commonDocuments.retainAll(clusterDocuments);
+
+                final double precision = commonDocuments.size()
+                    / (double) clusterDocuments.size();
+                final double recall = commonDocuments.size()
+                    / (double) partitionDocumentsCount;
+                final double fMeasure = MathUtils.harmonicMean(precision, recall);
+
+                if (fMeasure > partitionFMeasure)
+                {
+                    partitionFMeasure = fMeasure;
+                    partitionPrecision = precision;
+                    partitionRecall = recall;
+                    bestFMeasureCluster = cluster;
+                }
             }
 
-            final String majorTopic = getMajorTopic(cluster.getAllDocuments());
-            final Set<Document> commonDocuments = Sets.newHashSet(documentsByTopic
-                .get(majorTopic));
-            final int topicDocumentsCount = commonDocuments.size();
-            commonDocuments.retainAll(clusterDocuments);
+            recallSum += partitionRecall * partitionDocumentsCount;
+            precisionSum += partitionPrecision * partitionDocumentsCount;
+            fMeasureSum += partitionFMeasure * partitionDocumentsCount;
+            partitionDocumentsCountSum += partitionDocumentsCount;
 
-            final double precision = commonDocuments.size()
-                / (double) clusterDocuments.size();
-            final double recall = commonDocuments.size() / (double) topicDocumentsCount;
-            final double fMeasure = 2 * precision * recall / (precision + recall);
-
-            cluster.setAttribute(IdealPartitioningBasedClusteringMetric.MAJOR_TOPIC,
-                majorTopic);
-            cluster.setAttribute(PRECISION, precision);
-            cluster.setAttribute(RECALL, recall);
-            cluster.setAttribute(F_MEASURE, fMeasure);
-
-            recallSum += recall;
-            precisionSum += precision;
-            fMeasureSum += fMeasure;
-            clusterCount++;
+            recallByPartition.put(partition, partitionRecall);
+            precisionByPartition.put(partition, partitionPrecision);
+            fMeasureByPartition.put(partition, partitionFMeasure);
+            if (bestFMeasureCluster != null)
+            {
+                bestFMeasureCluster.setAttribute(BEST_F_MEASURE_PARTITION, partition);
+            }
         }
 
-        averageFMeasure = fMeasureSum / clusterCount;
-        averagePrecision = precisionSum / clusterCount;
-        averageRecall = recallSum / clusterCount;
+        // Dividing by partitionDocumentsCountSum rather than by the number of documents
+        // because partitionDocumentsCountSum can be larger than the number of documents
+        // if the partitions have overlapping documents.
+        weightedAveragePrecision = precisionSum / partitionDocumentsCountSum;
+        weightedAverageRecall = recallSum / partitionDocumentsCountSum;
+        weightedAverageFMeasure = fMeasureSum / partitionDocumentsCountSum;
     }
 
     public boolean isEnabled()
