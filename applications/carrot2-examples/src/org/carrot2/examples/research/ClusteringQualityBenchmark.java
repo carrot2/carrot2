@@ -53,12 +53,13 @@ public class ClusteringQualityBenchmark
             .getKey(PrecisionRecallMetric.class, "weightedAverageFMeasure"),
             AttributeUtils
                 .getKey(PrecisionRecallMetric.class, "weightedAveragePrecision"),
-            AttributeUtils.getKey(PrecisionRecallMetric.class, "weightedAverageRecall"));
+            AttributeUtils.getKey(PrecisionRecallMetric.class, "weightedAverageRecall"),
+            AttributeUtils.getKey(NormalizedMutualInformationMetric.class, "normalizedMutualInformation"));
 
         final Map<String, Object> attributes = Maps.newHashMap();
 
         System.out
-            .println("Topic\tAlgorithm\tContamination\tF-Score\tPrecision\tRecall");
+            .println("Topic\tAlgorithm\tContamination\tF-Score\tPrecision\tRecall\tNMI");
         for (AmbientTopic topic : topics)
         {
             for (Class<? extends IProcessingComponent> algorithm : algorithms)

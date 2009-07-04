@@ -94,6 +94,12 @@ public class ContaminationMetricTest extends IdealPartitioningBasedMetricTest
         check(otherTopics, null);
     }
 
+    @Test
+    public void testIdealClustering()
+    {
+        check(idealClusters(), 0.0, 0.0);
+    }
+
     private void check(Cluster cluster, Double expectedContamination)
     {
         check(new Cluster []

@@ -35,7 +35,7 @@ import com.google.common.collect.Lists;
  * </p>
  */
 @Bindable
-public class ContaminationMetric extends IdealPartitioningBasedClusteringMetric
+public class ContaminationMetric extends IdealPartitioningBasedMetric
 {
     /**
      * Key for the contamination value of a cluster.
@@ -47,7 +47,7 @@ public class ContaminationMetric extends IdealPartitioningBasedClusteringMetric
      */
     @Processing
     @Output
-    @Attribute(key = "average-contamination")
+    @Attribute
     public double weightedAverageContamination;
 
     /**

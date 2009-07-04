@@ -88,6 +88,12 @@ public class PrecisionRecallMetricTest extends IdealPartitioningBasedMetricTest
         check(0.0, 0.0, 0.0, otherTopics);
     }
 
+    @Test
+    public void testIdealClustering()
+    {
+        check(1.0, 1.0, 1.0, idealClusters());
+    }
+
     private void check(Double expectedAveragePrecision, Double expectedAverageRecall,
         Double expectedAverageFMeasure, Cluster... clusters)
     {

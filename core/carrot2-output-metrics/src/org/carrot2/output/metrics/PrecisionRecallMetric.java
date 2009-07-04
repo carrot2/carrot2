@@ -31,32 +31,36 @@ import com.google.common.collect.*;
  * </p>
  */
 @Bindable
-public class PrecisionRecallMetric extends IdealPartitioningBasedClusteringMetric
+public class PrecisionRecallMetric extends IdealPartitioningBasedMetric
 {
+    /**
+     * Partition on which the cluster achieved best F-Score value. Value type:
+     * <code>Object</code>. See {@value Document#PARTITIONS} for more information.
+     */
     public final static String BEST_F_MEASURE_PARTITION = "best-f-measure-partition";
 
     /**
-     * Average precision of the whole cluster set.
+     * Average precision of the whole cluster set, weighted by cluster size.
      */
     @Processing
     @Output
-    @Attribute(key = "average-precision")
+    @Attribute
     public Double weightedAveragePrecision;
 
     /**
-     * Average recall of the whole cluster set.
+     * Average recall of the whole cluster set, weighted by cluster size.
      */
     @Processing
     @Output
-    @Attribute(key = "average-recall")
+    @Attribute
     public Double weightedAverageRecall;
 
     /**
-     * Average F-measure of the whole cluster set.
+     * Average F-measure of the whole cluster set, weighted by cluster size.
      */
     @Processing
     @Output
-    @Attribute(key = "average-f-measure")
+    @Attribute
     public Double weightedAverageFMeasure;
 
     /**
@@ -64,7 +68,7 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedClusteringMetri
      */
     @Processing
     @Output
-    @Attribute(key = "precision-by-partition")
+    @Attribute
     public Map<Object, Double> precisionByPartition;
 
     /**
@@ -72,7 +76,7 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedClusteringMetri
      */
     @Processing
     @Output
-    @Attribute(key = "recall-by-partition")
+    @Attribute
     public Map<Object, Double> recallByPartition;
 
     /**
@@ -80,7 +84,7 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedClusteringMetri
      */
     @Processing
     @Output
-    @Attribute(key = "f-measure-by-partition")
+    @Attribute
     public Map<Object, Double> fMeasureByPartition;
 
     /**

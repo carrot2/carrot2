@@ -32,24 +32,24 @@ public class IdealPartitioningBasedMetricTest
     {
         final List<Document> documents = Lists.newArrayList();
         final List<Cluster> clusters = Lists.newArrayList();
-        
+
         final ContaminationMetric metric = new ContaminationMetric();
         metric.documents = documents;
-        
+
         final Document d1 = new Document();
         final Document d2 = documentWithPartitions("test");
         documents.add(d1);
-        
+
         final Cluster c1 = new Cluster("test", d1);
         clusters.add(c1);
-        
+
         metric.calculate();
         checkAllMetricsNull(c1);
-        
+
         documents.add(d2);
         checkAllMetricsNull(c1);
     }
-    
+
     private void checkAllMetricsNull(final Cluster c1)
     {
         final String [] clusterMetricKeys = getClusterMetricKeys();
@@ -58,12 +58,12 @@ public class IdealPartitioningBasedMetricTest
             assertThat(c1.getAttribute(metricKey)).isNull();
         }
     }
-    
+
     protected String [] getClusterMetricKeys()
     {
         return new String [0];
     }
-    
+
     protected static List<Document> getAllDocuments(Cluster... clusters)
     {
         final Set<Document> set = Sets.newHashSet();
@@ -106,6 +106,14 @@ public class IdealPartitioningBasedMetricTest
     protected Cluster fullyContaminatedCluster()
     {
         return clusterWithPartitions("test1", "test2", "test3", "test4");
+    }
+
+    protected Cluster [] idealClusters()
+    {
+        return new Cluster []
+        {
+            clusterWithPartitions("t1", "t1", "t1"), clusterWithPartitions("t2", "t2")
+        };
     }
 
     protected Cluster [] hardClustersWithOverlappingPartitions()

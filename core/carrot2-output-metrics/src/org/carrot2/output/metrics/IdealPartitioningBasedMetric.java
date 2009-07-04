@@ -24,7 +24,7 @@ import com.google.common.collect.*;
  *
  */
 @Bindable
-public abstract class IdealPartitioningBasedClusteringMetric implements IClusteringMetric
+public abstract class IdealPartitioningBasedMetric implements IClusteringMetric
 {
     /**
      * Partition id field name.

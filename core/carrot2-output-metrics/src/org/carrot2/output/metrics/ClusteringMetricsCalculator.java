@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -32,6 +31,11 @@ public class ClusteringMetricsCalculator extends ProcessingComponentBase
      */
     public PrecisionRecallMetric precisionRecall = new PrecisionRecallMetric();
 
+    /**
+     * Normalized Mutual Information metric.
+     */
+    public NormalizedMutualInformationMetric normalizedMutualInformation = new NormalizedMutualInformationMetric();
+
     @Override
     public void process() throws ProcessingException
     {
@@ -43,6 +47,11 @@ public class ClusteringMetricsCalculator extends ProcessingComponentBase
         if (precisionRecall.isEnabled())
         {
             precisionRecall.calculate();
+        }
+        
+        if (normalizedMutualInformation.isEnabled())
+        {
+            normalizedMutualInformation.calculate();
         }
     }
 }
