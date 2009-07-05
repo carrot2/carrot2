@@ -26,10 +26,10 @@ import org.eclipse.swt.widgets.Text;
 
 /**
  * Editor for textual content. Sends
- * {@link IAttributeListener#attributeChange(AttributeChangedEvent)} events only on actual
+ * {@link IAttributeListener#valueChanged(AttributeEvent)} events only on actual
  * content change, committed by return key traversal or focus lost event. On-keystroke
  * content change is propagated via
- * {@link IAttributeListener#contentChanging(IAttributeEditor, Object value)}.
+ * {@link IAttributeListener#valueChanging(AttributeEvent)}.
  */
 public class StringEditor extends AttributeEditorAdapter
 {
