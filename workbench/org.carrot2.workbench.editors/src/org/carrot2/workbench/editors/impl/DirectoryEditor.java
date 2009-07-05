@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -10,16 +9,15 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.workbench.editors.lucene;
+package org.carrot2.workbench.editors.impl;
 
 import java.io.File;
 import java.util.Map;
 
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.carrot2.workbench.core.helpers.*;
+import org.carrot2.util.attribute.constraint.IsDirectory;
+import org.carrot2.workbench.core.helpers.DisposeBin;
+import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
-import org.carrot2.workbench.editors.impl.EditorsPlugin;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -30,33 +28,32 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 
 /**
- * An {@link IAttributeEditor} for editing Apache Lucene's {@link Directory} attributes.
- * The only currently valid selection is to point to a local Lucene index ({@link FSDirectory}
- * is created).
+ * Editor for attributes that are of {@link File} type, with {@link IsDirectory}
+ * constraint (directory selection).
  */
-public class IndexDirectoryEditor extends AttributeEditorAdapter
+public class DirectoryEditor extends AttributeEditorAdapter
 {
     /** Preference store key for keeping last selected path. */
-    public static final String PREF_LAST_SELECTED_LUCENE_DIR = "resource-editor.last-selected-lucene-dir";
+    public static final String PREF_LAST_SELECTED_DIR = "directory-editor.last-selected-dir";
 
     /** Disposal of resources. */
     private DisposeBin disposeBin = new DisposeBin();
 
     /**
-     * Directory location info string.
+     * Directory location.
      */
-    private Text resourceInfo;
+    private Text dirLocation;
 
     /**
-     * The current value.
+     * The last valid selected value.
      */
-    private Directory current = null;
+    private File current = null;
 
     /*
      * 
      */
     @Override
-    protected AttributeEditorInfo init(Map<String,Object> defaultValues)
+    protected AttributeEditorInfo init(Map<String, Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
     }
@@ -71,13 +68,14 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
         holder.setLayoutData(GUIFactory.editorGridData().grab(true, false).span(
             gridColumns, 1).create());
 
-        GridLayout gl = GUIFactory.zeroMarginGridLayout();
-        gl.numColumns = 2;
+        final GridLayout gl = GUIFactory.zeroMarginGridLayout();
+        gl.numColumns = 3;
         gl.horizontalSpacing = 3;
         holder.setLayout(gl);
 
         createTextBox(holder);
         createFileButton(holder);
+        createClearButton(holder);
     }
 
     /*
@@ -85,12 +83,12 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
      */
     private void createTextBox(Composite holder)
     {
-        this.resourceInfo = new Text(holder, SWT.READ_ONLY | SWT.NO_FOCUS | SWT.BORDER
+        this.dirLocation = new Text(holder, SWT.READ_ONLY | SWT.NO_FOCUS | SWT.BORDER
             | SWT.SINGLE);
 
         final GridData gd = GridDataFactory.fillDefaults().grab(true, false).hint(100,
             SWT.DEFAULT).align(SWT.FILL, SWT.CENTER).create();
-        resourceInfo.setLayoutData(gd);
+        dirLocation.setLayoutData(gd);
     }
 
     /*
@@ -119,37 +117,51 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
     /*
      * 
      */
+    private void createClearButton(Composite holder)
+    {
+        final Image image = EditorsPlugin.getImageDescriptor("icons/clear.gif")
+            .createImage();
+        disposeBin.add(image);
+
+        final Button button = new Button(holder, SWT.PUSH | SWT.CENTER);
+        button.setImage(image);
+        button.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER)
+            .create());
+
+        button.addSelectionListener(new SelectionAdapter()
+        {
+            public void widgetSelected(SelectionEvent e)
+            {
+                setValue(null);
+            }
+        });
+    }
+
+    /*
+     * 
+     */
     private void openIndexDialog()
     {
-        final DirectoryDialog dialog = new DirectoryDialog(this.resourceInfo.getShell());
+        final DirectoryDialog dialog = new DirectoryDialog(this.dirLocation.getShell());
 
-        if (this.current != null && current instanceof FSDirectory)
+        if (this.current != null)
         {
-            dialog.setFilterPath(((FSDirectory) current).getFile().getAbsolutePath());
+            dialog.setFilterPath(current.getAbsolutePath());
         }
         else
         {
             // In case we can't restore last file, refer to global last key.
             dialog.setFilterPath(EditorsPlugin.getDefault().getPreferenceStore()
-                .getString(PREF_LAST_SELECTED_LUCENE_DIR));
+                .getString(PREF_LAST_SELECTED_DIR));
         }
 
         final String path = dialog.open();
         if (path != null)
         {
-            try
-            {
-                final File file = new File(path);
-
-                EditorsPlugin.getDefault().getPreferenceStore().setValue(
-                    PREF_LAST_SELECTED_LUCENE_DIR, file.getAbsolutePath());
-
-                setValue(FSDirectory.getDirectory(file));
-            }
-            catch (Exception e)
-            {
-                Utils.logError("Could not open index in directory: " + path, e, true);
-            }
+            final File file = new File(path);
+            EditorsPlugin.getDefault().getPreferenceStore().setValue(
+                PREF_LAST_SELECTED_DIR, file.getAbsolutePath());
+            setValue(file);
         }
     }
 
@@ -164,25 +176,21 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
             return;
         }
 
-        if (!(newValue instanceof Directory))
+        if (newValue != null && !(newValue instanceof File))
         {
             return;
         }
 
-        this.current = (Directory) newValue;
-
-        final String representation;
-        if (current == null)
+        if (newValue == null)
         {
-            representation = "";
+            this.current = null;
+            this.dirLocation.setText("");
         }
-        else if (current instanceof FSDirectory)
+        else
         {
-            representation = ((FSDirectory) current).getFile().getAbsolutePath();
+            this.current = (File) newValue;
+            this.dirLocation.setText(current.getAbsolutePath());
         }
-        else representation = current.getClass().getSimpleName();
-
-        this.resourceInfo.setText(representation);
 
         fireAttributeChanged(new AttributeEvent(this));
     }
