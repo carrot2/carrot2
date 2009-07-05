@@ -1,5 +1,7 @@
 package org.carrot2.workbench.core.ui;
 
+import java.util.Locale;
+
 /**
  * Benchmark statistics (immutable).
  */
@@ -72,5 +74,14 @@ public final class BenchmarkStatistics
             warmupRounds, benchmarkRounds, round + 1,
             avg, stdev,
             min, max, sum, sumSquares);
+    }
+    
+    @Override
+    public String toString()
+    {
+        return String.format(
+            Locale.ENGLISH,
+            "avg: %.3f sec., stddev: %.3f sec., min: %.3f sec., max: %.3f sec.\n", 
+            avg, stdDev, min / 1000d, max / 1000d);
     }
 }

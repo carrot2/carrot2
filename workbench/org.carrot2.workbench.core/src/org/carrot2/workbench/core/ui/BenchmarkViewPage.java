@@ -11,27 +11,34 @@
 
 package org.carrot2.workbench.core.ui;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
-import org.carrot2.core.CachingController;
-import org.carrot2.core.ProcessingComponentDescriptor;
-import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.helpers.GUIFactory;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
+import org.carrot2.workbench.editors.AttributeEvent;
+import org.carrot2.workbench.editors.AttributeListenerAdapter;
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.*;
-import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.layout.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.editors.text.EditorsUI;
+import org.eclipse.ui.editors.text.IEncodingSupport;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
 
-import com.google.common.collect.Maps;
 
 /**
  * A single benchmark view page is associated with a given editor (and hence with the
@@ -59,64 +66,6 @@ final class BenchmarkViewPage extends Page
     private Button startButton;
     private ProgressBar progressBar;
 
-    /**
-     * Actual background benchmarking job.
-     */
-    private final static class BenchmarkJob extends Job
-    {
-        private final SearchInput input;
-        private final BenchmarkSettings settings;
-
-        /**
-         * Public volatile statistics when the job is in progress.
-         */
-        public volatile BenchmarkStatistics statistics;
-
-        public BenchmarkJob(SearchInput input, BenchmarkSettings settings)
-        {
-            super("Benchmarking...");
-
-            this.settings = settings;
-            this.input = input;
-            this.statistics = new BenchmarkStatistics(settings.warmupRounds, settings.benchmarksRounds);
-        }
-
-        /* */
-        @Override
-        protected IStatus run(IProgressMonitor monitor)
-        {
-            final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
-
-            CachingController controller = core.getController();
-
-            final ProcessingComponentDescriptor source = core.getComponent(input.getSourceId());
-            final ProcessingComponentDescriptor algorithm = core.getComponent(input.getAlgorithmId());
-            
-            final Map<String, Object> attributes = 
-                Maps.newHashMap(input.getAttributeValueSet().getAttributeValues());
-
-            final int totalRounds = settings.warmupRounds + settings.benchmarksRounds;
-
-            monitor.beginTask("Running...", totalRounds);
-            for (int rounds = totalRounds; rounds > 0; rounds--)
-            {
-                if (monitor.isCanceled()) break;
-
-                monitor.setTaskName("Rounds left: " + rounds);
-
-                final long start = System.currentTimeMillis();
-                controller.process(attributes, source.getId(), algorithm.getId());
-                final long time = System.currentTimeMillis() - start;
-
-                statistics = statistics.update((int) time);
-                monitor.worked(1);
-            }
-            monitor.done();
-
-            return Status.OK_STATUS;
-        }
-    };
-    
     /**
      * Benchmarking job is part of Eclipse's infrastructure.
      */
@@ -148,7 +97,6 @@ final class BenchmarkViewPage extends Page
      */
     private IJobChangeListener jobListener = new JobChangeAdapter()
     {
-        
         @Override
         public void done(IJobChangeEvent ijobchangeevent)
         {
@@ -196,7 +144,7 @@ final class BenchmarkViewPage extends Page
             stddevLabel.setText("");
             minTimeLabel.setText("");
             maxTimeLabel.setText("");
-            statusLabel.setText("no data");
+            statusLabel.setText("waiting for data");
         }
         else
         {
@@ -239,8 +187,25 @@ final class BenchmarkViewPage extends Page
     {
         assert Display.getCurrent() != null;
         
+        try
+        {
+            if (benchmarkSettings.openLogsInEditor)
+            {
+                final File file = benchmarkJob.logFile;
+                final IFileStore fileStore = EFS.getLocalFileSystem().fromLocalFile(file);
+                final IEditorPart part = getSite().getWorkbenchWindow().getActivePage().openEditor(
+                    new FileStoreEditorInput(fileStore), EditorsUI.DEFAULT_TEXT_EDITOR_ID);
+
+                ((IEncodingSupport) part.getAdapter(IEncodingSupport.class)).setEncoding("UTF-8");                
+            }
+        }
+        catch (Exception e)
+        {
+            Utils.logError(e, true);
+        }
+
         benchmarkJob = null;
-        startButton.setText(START_TEXT);        
+        startButton.setText(START_TEXT);
     }
 
     /*
@@ -264,15 +229,62 @@ final class BenchmarkViewPage extends Page
         final Composite innerComposite = GUIFactory.createSpacer(scroller);
         final GridLayout gridLayout = (GridLayout) innerComposite.getLayout();
         gridLayout.numColumns = 1;
+        gridLayout.verticalSpacing = LayoutConstants.getSpacing().y;
         scroller.setContent(innerComposite);
 
         createBenchmarkPanel(innerComposite);
+        createSeparator(innerComposite);
+        createSettingsPanel(innerComposite);
     }
 
     /**
+     * Create separator between settings and the benchmark panel.
+     */
+    private void createSeparator(Composite parent)
+    {
+        final Label label = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
+        label.setLayoutData(
+            GridDataFactory.fillDefaults().grab(true, false).create());
+    }
+
+    /**
+     * Create settings panel.
+     */
+    private Control createSettingsPanel(Composite parent)
+    {
+        final BindableDescriptor descriptor = 
+            BindableDescriptorBuilder.buildDescriptor(benchmarkSettings, true);
+
+        final HashMap<String, Object> attrs = descriptor.getDefaultValues();
+        final AttributeGroups panel = new AttributeGroups(
+            parent, descriptor, GroupingMethod.GROUP, null, attrs);
+        panel.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+
+        // Link changes in the editor to settings object.
+        panel.addAttributeListener(new AttributeListenerAdapter()
+        {
+            public void valueChanged(AttributeEvent event)
+            {
+                attrs.put(event.key, event.value);
+                try
+                {
+                    AttributeBinder.bind(benchmarkSettings, attrs, Input.class);
+                }
+                catch (InstantiationException e)
+                {
+                    Utils.logError(e, true);
+                }
+            }
+        });
+        panel.collapseAll();
+
+        return panel;
+    }
+    
+    /**
      * Create benchmark panel component.
      */
-    private Widget createBenchmarkPanel(Composite parent)
+    private Control createBenchmarkPanel(Composite parent)
     {
         final Composite panel = new Composite(parent, SWT.NONE);
         panel.setLayout(
@@ -370,18 +382,8 @@ final class BenchmarkViewPage extends Page
      * 
      */
     @Override
-    public void dispose()
-    {
-        scroller.dispose();
-        super.dispose();
-    }
-
-    /*
-     * 
-     */
-    @Override
     public void setFocus()
     {
-        // Do nothing.
+        this.startButton.setFocus();
     }
 }

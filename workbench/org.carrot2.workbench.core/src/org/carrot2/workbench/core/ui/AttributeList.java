@@ -21,6 +21,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.workbench.core.helpers.GUIFactory;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.carrot2.workbench.editors.factory.EditorNotFoundException;
@@ -213,6 +214,9 @@ public final class AttributeList extends Composite implements IAttributeEventPro
             }
             catch (EditorNotFoundException ex)
             {
+                Utils.logError("No editor for attribute: "
+                    + descriptor.key + " (class: " + descriptor.type + ")", false);
+
                 /*
                  * Skip editor.
                  */

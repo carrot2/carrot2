@@ -360,6 +360,7 @@
       <attributes-xml java.source="${core.dir}/carrot2-source-ambient/src"         />
       <attributes-xml java.source="${core.dir}/carrot2-util-text/src"              />
       <attributes-xml java.source="${core.dir}/carrot2-util-attribute/src-test"    />
+      <attributes-xml java.source="${workbench.dir}/org.carrot2.workbench.core/src" />
       <attributes-xml java.source="${applications.dir}/carrot2-webapp/src" />
     </sequential>
   </target>

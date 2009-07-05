@@ -14,7 +14,11 @@ Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.carrot2.text,
  org.carrot2.util.attribute,
  org.carrot2.core,
- org.apache.velocity
+ org.apache.velocity,
+ org.eclipse.ui.workbench.texteditor;bundle-version="3.4.1",
+ org.eclipse.ui.editors;bundle-version="3.4.0",
+ org.eclipse.core.resources;bundle-version="3.4.1",
+ org.eclipse.core.filesystem;bundle-version="1.2.0"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: org.carrot2.workbench.core,

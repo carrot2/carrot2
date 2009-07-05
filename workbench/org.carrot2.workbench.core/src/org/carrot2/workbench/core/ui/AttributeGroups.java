@@ -116,6 +116,11 @@ public final class AttributeGroups extends Composite implements
     private HashMap<String, Object> currentValues;
 
     /**
+     * {@link Section} objects for attribute groups, if any.
+     */
+    private Map<String, Section> attributeGroupSections = Maps.newLinkedHashMap();
+
+    /**
      * A predicate that filters out all descriptors without an editor.
      */
     private class HasEditorPredicate implements Predicate<AttributeDescriptor>
@@ -366,6 +371,7 @@ public final class AttributeGroups extends Composite implements
         final int style = ExpandableComposite.TWISTIE | ExpandableComposite.CLIENT_INDENT;
         final Section group = new Section(parent, style);
         group.setText(groupName);
+        // TODO: Fix for http://issues.carrot2.org/browse/CARROT-491 should be around here?
         group.setExpanded(true);
         group.setSeparatorControl(new Label(group, SWT.SEPARATOR | SWT.HORIZONTAL));
 
@@ -430,6 +436,9 @@ public final class AttributeGroups extends Composite implements
                 forceReflow();
             }
         });
+
+        // Store the history of sections to remember folding state.
+        attributeGroupSections.put(groupName, group);
     }
 
     /**
@@ -504,6 +513,7 @@ public final class AttributeGroups extends Composite implements
         }
 
         this.attributeEditors.clear();
+        this.attributeGroupSections.clear();
     }
 
     /**
@@ -531,5 +541,17 @@ public final class AttributeGroups extends Composite implements
         this.listeners.clear();
 
         super.dispose();
+    }
+
+    /**
+     * Collapse all attribute group sections, if present.
+     */
+    public void collapseAll()
+    {
+        assert Display.getCurrent() != null;
+        for (Section section : attributeGroupSections.values())
+        {
+            section.setExpanded(false);
+        }
     }
 }
