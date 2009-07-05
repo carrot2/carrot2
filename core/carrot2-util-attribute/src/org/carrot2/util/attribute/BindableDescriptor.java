@@ -294,6 +294,26 @@ public class BindableDescriptor
     }
 
     /**
+     * Returns a map of default values of attributes associated with this bindable. A
+     * shortcut for:
+     * <pre>
+     * for (AttributeDescriptor d : flatten().attributeDescriptors.values())
+     * {
+     *     values.put(d.key, d.defaultValue);
+     * }
+     * </pre>
+     */
+    public HashMap<String, Object> getDefaultValues()
+    {
+        final HashMap<String, Object> values = Maps.newHashMap();
+        for (AttributeDescriptor d : flatten().attributeDescriptors.values())
+        {
+            values.put(d.key, d.defaultValue);
+        }
+        return values;
+    }
+
+    /**
      * Internal interface for extracting grouping key values.
      */
     static interface IGrouper<T>
