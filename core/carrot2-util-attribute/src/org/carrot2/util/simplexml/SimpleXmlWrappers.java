@@ -11,7 +11,6 @@
 
 package org.carrot2.util.simplexml;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
 
 import org.simpleframework.xml.Root;
