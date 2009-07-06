@@ -12,25 +12,18 @@
 package org.carrot2.workbench.core.ui;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Locale;
 
-import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
-import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
-import org.carrot2.workbench.editors.AttributeEvent;
-import org.carrot2.workbench.editors.AttributeListenerAdapter;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.*;
-import org.eclipse.jface.layout.*;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.editors.text.EditorsUI;
@@ -52,11 +45,8 @@ final class BenchmarkViewPage extends Page
     /** The configuration we are benchmarking. */
     private final SearchEditor editor;
 
-    /** Current benchmark settings. */
-    private BenchmarkSettings benchmarkSettings = new BenchmarkSettings();
-
-    /** Scroller container for all components. */
-    private CScrolledComposite scroller;
+    /** Main page control. */
+    private Control mainControl;
 
     private Label avgTimeLabel;
     private Label minTimeLabel;
@@ -70,6 +60,9 @@ final class BenchmarkViewPage extends Page
      * Benchmarking job is part of Eclipse's infrastructure.
      */
     private BenchmarkJob benchmarkJob;
+    
+    /** Parent benchmark view. */
+    private final BenchmarkView benchmarkView;
 
     /**
      * Update benchmarking job results.
@@ -119,7 +112,8 @@ final class BenchmarkViewPage extends Page
 
         startButton.setText(STOP_TEXT);
 
-        benchmarkJob = new BenchmarkJob(editor.getSearchResult().getInput(), benchmarkSettings);
+        benchmarkJob = new BenchmarkJob(
+            editor.getSearchResult().getInput(), benchmarkView.getCurrentSettings());
         updateBenchmark(benchmarkJob.statistics);
         benchmarkJob.addJobChangeListener(jobListener);
         benchmarkJob.schedule();
@@ -189,7 +183,7 @@ final class BenchmarkViewPage extends Page
         
         try
         {
-            if (benchmarkSettings.openLogsInEditor)
+            if (benchmarkJob.settings.openLogsInEditor)
             {
                 final File file = benchmarkJob.logFile;
                 final IFileStore fileStore = EFS.getLocalFileSystem().fromLocalFile(file);
@@ -211,9 +205,10 @@ final class BenchmarkViewPage extends Page
     /*
      * 
      */
-    public BenchmarkViewPage(SearchEditor editor)
+    public BenchmarkViewPage(SearchEditor editor, BenchmarkView benchmarkView)
     {
         this.editor = editor;
+        this.benchmarkView = benchmarkView;
     }
 
     /*
@@ -222,63 +217,7 @@ final class BenchmarkViewPage extends Page
     @Override
     public void createControl(Composite parent)
     {
-        this.scroller = new CScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
-        scroller.setExpandHorizontal(true);
-        scroller.setExpandVertical(true);
-
-        final Composite innerComposite = GUIFactory.createSpacer(scroller);
-        final GridLayout gridLayout = (GridLayout) innerComposite.getLayout();
-        gridLayout.numColumns = 1;
-        gridLayout.verticalSpacing = LayoutConstants.getSpacing().y;
-        scroller.setContent(innerComposite);
-
-        createBenchmarkPanel(innerComposite);
-        createSeparator(innerComposite);
-        createSettingsPanel(innerComposite);
-    }
-
-    /**
-     * Create separator between settings and the benchmark panel.
-     */
-    private void createSeparator(Composite parent)
-    {
-        final Label label = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
-        label.setLayoutData(
-            GridDataFactory.fillDefaults().grab(true, false).create());
-    }
-
-    /**
-     * Create settings panel.
-     */
-    private Control createSettingsPanel(Composite parent)
-    {
-        final BindableDescriptor descriptor = 
-            BindableDescriptorBuilder.buildDescriptor(benchmarkSettings, true);
-
-        final HashMap<String, Object> attrs = descriptor.getDefaultValues();
-        final AttributeGroups panel = new AttributeGroups(
-            parent, descriptor, GroupingMethod.GROUP, null, attrs);
-        panel.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-
-        // Link changes in the editor to settings object.
-        panel.addAttributeListener(new AttributeListenerAdapter()
-        {
-            public void valueChanged(AttributeEvent event)
-            {
-                attrs.put(event.key, event.value);
-                try
-                {
-                    AttributeBinder.bind(benchmarkSettings, attrs, Input.class);
-                }
-                catch (InstantiationException e)
-                {
-                    Utils.logError(e, true);
-                }
-            }
-        });
-        panel.collapseAll();
-
-        return panel;
+        this.mainControl = createBenchmarkPanel(parent);
     }
     
     /**
@@ -375,7 +314,7 @@ final class BenchmarkViewPage extends Page
     @Override
     public Control getControl()
     {
-        return scroller;
+        return mainControl;
     }
 
     /*

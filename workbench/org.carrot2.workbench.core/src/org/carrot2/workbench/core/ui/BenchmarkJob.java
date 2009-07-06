@@ -24,8 +24,15 @@ import com.google.common.collect.Maps;
  */
 final class BenchmarkJob extends Job
 {
+    /**
+     * Search input for this job.
+     */
     private final SearchInput input;
-    private final BenchmarkSettings settings;
+
+    /**
+     * A clone of benchmark settings for this job.
+     */
+    final BenchmarkSettings settings;
 
     /**
      * Public volatile statistics when the job is in progress.
