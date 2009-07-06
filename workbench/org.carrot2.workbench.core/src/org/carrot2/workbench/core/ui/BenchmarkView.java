@@ -11,12 +11,12 @@
 
 package org.carrot2.workbench.core.ui;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
-import org.carrot2.workbench.core.helpers.GUIFactory;
-import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.AttributeEvent;
 import org.carrot2.workbench.editors.AttributeListenerAdapter;
@@ -25,7 +25,10 @@ import org.eclipse.jface.layout.LayoutConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.*;
+import org.eclipse.ui.part.*;
+
+import com.google.common.collect.Maps;
 
 /**
  * {@link SearchEditor}-tied view for running benchmarks.
@@ -40,8 +43,10 @@ public final class BenchmarkView extends PageBookViewBase
     /** Current global benchmark settings. */
     private final BenchmarkSettings benchmarkSettings = new BenchmarkSettings();
 
-    /** Current global benchmark settings (attribute values). */
-    private HashMap<String, Object> attrs;
+    /**
+     * Main GUI control of this view.
+     */
+    private CScrolledComposite mainControl;
 
     /**
      * Benchmark view is a composite of global attribute editors and editor-specific
@@ -54,6 +59,7 @@ public final class BenchmarkView extends PageBookViewBase
             new CScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
         scroller.setExpandHorizontal(true);
         scroller.setExpandVertical(true);
+        this.mainControl = scroller;
 
         final Composite innerComposite = GUIFactory.createSpacer(scroller);
         final GridLayout gridLayout = (GridLayout) innerComposite.getLayout();
@@ -70,6 +76,29 @@ public final class BenchmarkView extends PageBookViewBase
         createSettingsPanel(innerComposite);
     }
 
+    /*
+     * 
+     */
+    @Override
+    protected void showPageRec(PageRec pageRec)
+    {
+        super.showPageRec(pageRec);
+        mainControl.reflow(true);
+    }
+
+    /*
+     * 
+     */
+    @Override
+    protected IPage createDefaultPage(PageBook book)
+    {
+        MessagePage defaultPage = new MessagePage();
+        defaultPage.setMessage("No active search result.");
+        initPage(defaultPage);
+        defaultPage.createControl(book);
+        return defaultPage;
+    }
+    
     /**
      * Create the benchmarking view for a given part.
      */
@@ -95,6 +124,48 @@ public final class BenchmarkView extends PageBookViewBase
     }
 
     /**
+     * Restore state between runs.
+     */
+    @Override
+    public void init(IViewSite site, IMemento memento) throws PartInitException
+    {
+        super.init(site, memento);
+
+        try
+        {
+            final BenchmarkSettings settings = SimpleXmlMemento.fromMemento(
+                BenchmarkSettings.class, memento.getChild("benchmark-settings"));
+
+            final HashMap<String, Object> attrs = Maps.newHashMap(); 
+            AttributeBinder.unbind(settings, attrs, Input.class);
+            AttributeBinder.bind(benchmarkSettings, attrs, Input.class);
+        }
+        catch (Exception e)
+        {
+            Utils.logError(e, false);
+        }
+    }
+
+    /**
+     * Persist state between runs.
+     */
+    @Override
+    public void saveState(IMemento memento)
+    {
+        super.saveState(memento);
+
+        try
+        {
+            final IMemento m = SimpleXmlMemento.toMemento(benchmarkSettings);
+            memento.createChild(m.getType()).putMemento(m);
+        }
+        catch (IOException e)
+        {
+            Utils.logError(e, false);
+        }
+    }
+    
+    /**
      * Create settings panel.
      */
     private Control createSettingsPanel(Composite parent)
@@ -102,7 +173,17 @@ public final class BenchmarkView extends PageBookViewBase
         final BindableDescriptor descriptor = 
             BindableDescriptorBuilder.buildDescriptor(benchmarkSettings, true);
 
-        attrs = descriptor.getDefaultValues();
+        HashMap<String, Object> attrs = Maps.newHashMap();
+        try
+        {
+            AttributeBinder.unbind(benchmarkSettings, attrs, Input.class);
+        }
+        catch (Exception e)
+        {
+            Utils.logError(e, false);
+            attrs = descriptor.getDefaultValues();
+        }
+
         final AttributeGroups panel = new AttributeGroups(
             parent, descriptor, GroupingMethod.GROUP, null, attrs);
         panel.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
@@ -112,9 +193,10 @@ public final class BenchmarkView extends PageBookViewBase
         {
             public void valueChanged(AttributeEvent event)
             {
-                attrs.put(event.key, event.value);
                 try
                 {
+                    final HashMap<String, Object> attrs = Maps.newHashMap();
+                    attrs.put(event.key, event.value);
                     AttributeBinder.bind(benchmarkSettings, attrs, Input.class);
                 }
                 catch (InstantiationException e)
@@ -141,11 +223,13 @@ public final class BenchmarkView extends PageBookViewBase
     /**
      * @return Return a clone of the current settings.
      */
-    public BenchmarkSettings getCurrentSettings()
+    BenchmarkSettings getCurrentSettings()
     {
         final BenchmarkSettings cloned = new BenchmarkSettings();
         try
         {
+            HashMap<String, Object> attrs = Maps.newHashMap();
+            AttributeBinder.unbind(benchmarkSettings, attrs, Input.class);
             AttributeBinder.bind(cloned, attrs, Input.class);
         }
         catch (Exception e)

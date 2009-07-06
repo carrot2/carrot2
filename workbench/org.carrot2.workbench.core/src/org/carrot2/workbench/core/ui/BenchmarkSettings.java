@@ -5,11 +5,14 @@ import java.io.File;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.attribute.constraint.IsDirectory;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 /**
  * Settings for {@link BenchmarkViewPage}.
  */
 @Bindable
+@Root(name = "benchmark-settings")
 public class BenchmarkSettings
 {
     /**
@@ -42,6 +45,7 @@ public class BenchmarkSettings
     @Input
     @Attribute
     @IntRange(min = 1, max = 100)
+    @Element
     public int benchmarksRounds = 20;
 
     /**
@@ -56,6 +60,7 @@ public class BenchmarkSettings
     @Input
     @IntRange(min = 0, max = 20)
     @Attribute
+    @Element
     public int warmupRounds = 5;
 
     /**
@@ -71,6 +76,7 @@ public class BenchmarkSettings
     @Required
     @Input
     @Attribute
+    @Element
     public ThreadPriority priority = ThreadPriority.NORMAL;
 
     /**
@@ -85,6 +91,7 @@ public class BenchmarkSettings
     @Input
     @Attribute
     @IntRange(min = 1, max = 8)
+    @Element
     public int threads = 1;
 
     // TODO: Add execution controller type (Cached, Simple)
@@ -100,6 +107,7 @@ public class BenchmarkSettings
     @Input
     @Attribute
     @IsDirectory(mustExist = true)
+    @Element(required = false)
     public File logDirectory;
     
     /**
@@ -112,8 +120,9 @@ public class BenchmarkSettings
      */
     @Input
     @Attribute
+    @Element
     public boolean openLogsInEditor;
-    
+
     /**
      * A shortcut for:
      * <pre>
