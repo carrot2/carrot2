@@ -82,6 +82,6 @@ public final class BenchmarkStatistics
         return String.format(
             Locale.ENGLISH,
             "avg: %.3f sec., stddev: %.3f sec., min: %.3f sec., max: %.3f sec.\n", 
-            avg, stdDev, min / 1000d, max / 1000d);
+            avg / 1000d, stdDev / 1000d, min / 1000d, max / 1000d);
     }
 }

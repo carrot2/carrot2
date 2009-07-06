@@ -13,6 +13,23 @@ import org.carrot2.util.attribute.constraint.IsDirectory;
 public class BenchmarkSettings
 {
     /**
+     * @see BenchmarkSettings#priority
+     */
+    public enum ThreadPriority 
+    {
+        HIGH(Thread.MAX_PRIORITY), 
+        NORMAL(Thread.NORM_PRIORITY), 
+        LOW(Thread.NORM_PRIORITY - 1), 
+        IDLE(Thread.MIN_PRIORITY);
+
+        public final int threadPriority;
+        private ThreadPriority(int threadPriority)
+        {
+            this.threadPriority = threadPriority;
+        }
+    }
+
+    /**
      * Number of benchmark rounds. Typically, around 20-30 rounds is enough to
      * get a good estimate of the average clustering time. Benchmarking
      * is performed at regular priority and any processes running in the background may
@@ -40,7 +57,38 @@ public class BenchmarkSettings
     @IntRange(min = 0, max = 20)
     @Attribute
     public int warmupRounds = 5;
-    
+
+    /**
+     * Execution priority for benchmark threads. Setting high thread priority may
+     * block the user interface, but will give more accurate result.
+     * Low thread priority may cause distortions due to other system processes
+     * running in the background.  
+     * 
+     * @group Threads
+     * @level Medium
+     * @label Thread priority 
+     */
+    @Required
+    @Input
+    @Attribute
+    public ThreadPriority priority = ThreadPriority.NORMAL;
+
+    /**
+     * The number of concurrently executing benchmark threads. For multi-core
+     * processor, this setting can be used to saturate the CPU. 
+     * 
+     * @group Threads
+     * @level Medium
+     * @label Number of concurrent threads 
+     */
+    @Required
+    @Input
+    @Attribute
+    @IntRange(min = 1, max = 8)
+    public int threads = 1;
+
+    // TODO: Add execution controller type (Cached, Simple)
+
     /**
      * Directory where benchmark logs should be saved. Plain-text benchmark logs are saved
      * in the provided directory.
@@ -65,4 +113,15 @@ public class BenchmarkSettings
     @Input
     @Attribute
     public boolean openLogsInEditor;
+    
+    /**
+     * A shortcut for:
+     * <pre>
+     * benchmarksRounds + warmupRounds
+     * </pre>
+     */
+    public int getTotalRounds() 
+    {
+        return this.benchmarksRounds + this.warmupRounds;
+    }
 }

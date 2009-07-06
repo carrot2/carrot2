@@ -20,6 +20,24 @@
         <level>BASIC</level>
       </attribute-metadata>
     </attribute>
+    <attribute field-name="priority">
+      <attribute-metadata>
+        <title><![CDATA[Execution priority for benchmark threads]]></title>
+        <label>Thread priority</label>
+        <description><![CDATA[Setting high thread priority may block the user interface, but will give more accurate result. Low thread priority may cause distortions due to other system processes running in the background.]]></description>
+        <group>Threads</group>
+        <level>MEDIUM</level>
+      </attribute-metadata>
+    </attribute>
+    <attribute field-name="threads">
+      <attribute-metadata>
+        <title><![CDATA[The number of concurrently executing benchmark threads]]></title>
+        <label>Number of concurrent threads</label>
+        <description><![CDATA[For multi-core processor, this setting can be used to saturate the CPU.]]></description>
+        <group>Threads</group>
+        <level>MEDIUM</level>
+      </attribute-metadata>
+    </attribute>
     <attribute field-name="logDirectory">
       <attribute-metadata>
         <title><![CDATA[Directory where benchmark logs should be saved]]></title>
