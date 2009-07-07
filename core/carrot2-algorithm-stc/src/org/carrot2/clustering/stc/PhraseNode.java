@@ -54,7 +54,6 @@ public class PhraseNode extends GSTNode
         super(t);
 
         docs = new ExtendedBitSet(t.getCurrentDocumentIndex());
-
         docs.set(t.getCurrentDocumentIndex());
     }
 

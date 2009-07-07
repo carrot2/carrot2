@@ -67,14 +67,16 @@ public class SuffixTree
 
         // create root node and active point.
         rootNode = this.createNode();
-
         rootNode.setEdgeToParent(null);
 
         Suffix activePoint = new Suffix(this, rootNode, 0, -1);
+        activePoint.canonize();
 
         // Loop through all prefixes.
         for (int i = 0; i < currentSuffixableElement.size(); i++)
+        {
             insertPrefix(activePoint, i);
+        }
 
         return rootNode;
     }
@@ -115,7 +117,10 @@ public class SuffixTree
                  * If it does, do nothing (path compression - an implicit node is
                  * created).
                  */
-                if (edge != null) break;
+                if (edge != null)
+                {
+                    break;
+                }
             }
             else
             {
@@ -183,7 +188,6 @@ public class SuffixTree
 
         /* Now the endpoint is the next active point */
         active.lastElementIndex++;
-
         active.canonize();
 
         return active;

@@ -62,7 +62,7 @@ public class GeneralizedSuffixTree extends SuffixTree
             /*
              * Find out at which node the longest matching prefix of current
              * SuffixableElement ends - this will be the active node we'll resume
-             * inserting.
+             * inserting from.
              */
             Node lastPrefixNode = rootNode;
             Edge follow = null;
@@ -110,31 +110,32 @@ public class GeneralizedSuffixTree extends SuffixTree
                 }
             }
 
-            if (startIndex == getCurrentElement().size())
-            {
-                // POSSIBILITY OF PERFORMANCE TUNING:
-                // iterate through elements of the boundary path only.
-                for (int i = 0; i < getCurrentElement().size(); i++)
-                {
-                    activePoint = new Suffix(this, rootNode, i, getCurrentElement()
-                        .size() - 1);
-
-                    activePoint.canonize();
-                    ((GSTNode) activePoint.originNode)
-                        .addIndexedElement(getCurrentElementNumber());
-                }
-
-                return rootNode;
-            }
-            else
+            if (startIndex != getCurrentElement().size())
             {
                 // insert remaining suffixes.
                 activePoint = new Suffix(this, lastPrefixNode, startIndex, endIndex);
+                activePoint.canonize();
 
                 // loop through all prefixes.
                 for (int i = endIndex + 1; i < getCurrentElement().size(); i++)
                     insertPrefix(activePoint, i);
             }
+
+            /*
+             * Update document counts of all suffixes of the current element. This is 
+             * a brute-force method that canonizes all suffixes to reach proper tree
+             * nodes. We can't use the active path (suffix links) because some of the
+             * nodes are leaves and these don't have suffix links.
+             */
+            for (int i = 0; i < getCurrentElement().size(); i++)
+            {
+                activePoint = new Suffix(this, rootNode, i, getCurrentElement().size() - 1);
+                activePoint.canonize();
+                ((GSTNode) activePoint.originNode)
+                    .addIndexedElement(getCurrentElementNumber());
+            }
+
+            return rootNode;
         }
 
         return rootNode;
