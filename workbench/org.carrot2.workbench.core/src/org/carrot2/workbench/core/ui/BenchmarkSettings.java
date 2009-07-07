@@ -44,7 +44,7 @@ public class BenchmarkSettings
      */
     @Input
     @Attribute
-    @IntRange(min = 1, max = 100)
+    @IntRange(min = 1, max = 1000)
     @Element
     public int benchmarksRounds = 20;
 
@@ -58,7 +58,7 @@ public class BenchmarkSettings
      * @label Warmup rounds 
      */
     @Input
-    @IntRange(min = 0, max = 20)
+    @IntRange(min = 0, max = 200)
     @Attribute
     @Element
     public int warmupRounds = 5;
