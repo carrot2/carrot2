@@ -200,6 +200,7 @@ final class BenchmarkViewPage extends Page
 
         benchmarkJob = null;
         startButton.setText(START_TEXT);
+        startButton.setEnabled(true);
     }
 
     /*
@@ -254,6 +255,11 @@ final class BenchmarkViewPage extends Page
                 if (benchmarkJob == null)
                 {
                     startBenchmark();
+                }
+                else
+                {
+                    benchmarkJob.cancel();
+                    startButton.setEnabled(false);
                 }
             }
         });
