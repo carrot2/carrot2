@@ -44,10 +44,6 @@ final class InvalidStateDecorationListener implements IAttributeListener
         else if (event.key.equals(descriptor.key))
         {
             valid = descriptor.isValid(event.value);
-            if (!valid)
-            {
-                descriptor.isValid(event.value);
-            }
             updateOverlay();
         }
     }

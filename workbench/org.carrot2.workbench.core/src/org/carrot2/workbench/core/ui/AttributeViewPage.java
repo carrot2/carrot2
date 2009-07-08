@@ -170,6 +170,7 @@ final class AttributeViewPage extends Page
             defaultGrouping, null, Collections.<String, Object> emptyMap());
         attributeEditors.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
             .create());
+        attributeEditors.setAttribute(AttributeList.ENABLE_VALIDATION_OVERLAYS, true);
 
         this.mainControl = scroller;
         scroller.reflow(true);
