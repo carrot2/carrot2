@@ -103,7 +103,7 @@ public class SearchInputView extends ViewPart
     /**
      * The current editor composite.
      */
-    private AttributeGroups editorComposite;
+    private AttributeGroups attributeGroups;
 
     /**
      * A joint set of attributes for all sources from
@@ -449,10 +449,12 @@ public class SearchInputView extends ViewPart
         /*
          * Dispose of last editor.
          */
-        if (this.editorComposite != null)
+        Map<String, Boolean> expansionState = Collections.emptyMap();
+        if (this.attributeGroups != null)
         {
-            this.editorComposite.dispose();
-            this.editorComposite = null;
+            expansionState = this.attributeGroups.getExpansionStates();
+            this.attributeGroups.dispose();
+            this.attributeGroups = null;
         }
 
         /*
@@ -477,13 +479,14 @@ public class SearchInputView extends ViewPart
         }
         else
         {
-            this.editorComposite = new AttributeGroups(editorCompositeContainer,
+            this.attributeGroups = new AttributeGroups(editorCompositeContainer,
                 sourceDescriptor, groupingMethod, filter, attributes.getAttributeValues());
 
             final GridData gd = new GridData();
             gd.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
             gd.grabExcessHorizontalSpace = true;
-            editorComposite.setLayoutData(gd);
+            attributeGroups.setLayoutData(gd);
+            attributeGroups.setExpanded(expansionState);
 
             /*
              * Set default values for those attributes that have null values.
@@ -500,12 +503,12 @@ public class SearchInputView extends ViewPart
             /*
              * Set initial values of editors.
              */
-            editorComposite.setAttributes(filterAttributesOf(sourceID));
+            attributeGroups.setAttributes(filterAttributesOf(sourceID));
 
             /*
              * Hook up listeners updating attributes on changes in editors.
              */
-            editorComposite.addAttributeListener(new AttributeListenerAdapter()
+            attributeGroups.addAttributeListener(new AttributeListenerAdapter()
             {
                 public void valueChanged(AttributeEvent event)
                 {
@@ -623,11 +626,17 @@ public class SearchInputView extends ViewPart
         processButtonGridData.horizontalSpan = 1;
         processButton.setLayoutData(processButtonGridData);
 
-        /*
-         * Restore state and push initial values to editors.
-         */
+        // Restore view state.
         restoreState();
+
+        // Initial editor display for the current input.
         displayEditorSet();
+
+        // Restore initial expansion state for groups.
+        if (state != null)
+        {
+            this.attributeGroups.setExpanded(state.sectionsExpansionState);            
+        }
     }
 
     /**
@@ -769,7 +778,7 @@ public class SearchInputView extends ViewPart
         }
         else
         {
-            editorComposite.setAttribute(ENABLE_VALIDATION_OVERLAYS, true);
+            attributeGroups.setAttribute(ENABLE_VALIDATION_OVERLAYS, true);
 
             final String source = getSourceId();
             if (!StringUtils.isEmpty(source))
@@ -933,7 +942,7 @@ public class SearchInputView extends ViewPart
          * updates algorithm attributes that are not covered by editorComposite.
          */
         this.attributes.setAttributeValue(key, value);
-        this.editorComposite.setAttribute(key, value);
+        this.attributeGroups.setAttribute(key, value);
     }
 
     /*
@@ -947,7 +956,8 @@ public class SearchInputView extends ViewPart
         state.sourceId = getSourceId();
         state.algorithmId = getAlgorithmId();
         state.linkWithEditor = linkWithEditor;
-        state.attributes = this.attributes;
+        state.attributes = attributes;
+        state.sectionsExpansionState = attributeGroups.getExpansionStates();
 
         try
         {
@@ -960,15 +970,15 @@ public class SearchInputView extends ViewPart
     }
 
     /**
-     * We set the focus to the current {@link #editorComposite}'s default element if
+     * We set the focus to the current {@link #attributeGroups}'s default element if
      * possible. Otherwise, set the focus to the input source combo.
      */
     @Override
     public void setFocus()
     {
-        if (editorComposite != null)
+        if (attributeGroups != null)
         {
-            editorComposite.setFocus();
+            attributeGroups.setFocus();
         }
         else
         {
@@ -982,7 +992,7 @@ public class SearchInputView extends ViewPart
     @Override
     public void dispose()
     {
-        if (this.editorComposite != null) editorComposite.dispose();
+        if (this.attributeGroups != null) attributeGroups.dispose();
         if (this.errorStatusImage != null) this.errorStatusImage.dispose();
         
         super.dispose();

@@ -1,8 +1,9 @@
 package org.carrot2.workbench.core.ui;
 
+import java.util.Map;
+
 import org.carrot2.util.attribute.AttributeValueSet;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import org.simpleframework.xml.*;
 
 /**
  * Persistent state for {@link SearchInputView}.
@@ -21,4 +22,7 @@ public final class SearchInputViewMemento
 
     @Element
     public boolean linkWithEditor;
+
+    @ElementMap
+    public Map<String, Boolean> sectionsExpansionState;
 }
