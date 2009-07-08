@@ -49,6 +49,13 @@ public final class AttributeList extends Composite implements IAttributeEventPro
     public final static int SPACE_BEFORE_LABEL = 5;
 
     /**
+     * Key for enabling validation overlays (artificial attribute key for editor listeners).
+     * 
+     * @see #setAttribute(String, Object)
+     */
+    public static final String ENABLE_VALIDATION_OVERLAYS = "enable.validation.overlays";
+    
+    /**
      * A list of {@link AttributeDescriptor}s, indexed by their keys.
      */
     private final Map<String, AttributeDescriptor> attributeDescriptors;

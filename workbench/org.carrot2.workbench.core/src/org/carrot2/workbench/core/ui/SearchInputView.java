@@ -12,7 +12,7 @@
 
 package org.carrot2.workbench.core.ui;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -24,7 +24,8 @@ import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.*;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
-import org.carrot2.workbench.core.ui.actions.*;
+import org.carrot2.workbench.core.ui.actions.ActiveSearchEditorActionDelegate;
+import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.AttributeEvent;
 import org.carrot2.workbench.editors.AttributeListenerAdapter;
@@ -74,11 +75,6 @@ public class SearchInputView extends ViewPart
      */
     private final static Predicate<AttributeDescriptor> SHOW_ALL = Predicates
         .alwaysTrue();
-
-    /**
-     * Enable validation overlays (artificial attribute key for editor listeners).
-     */
-    public static final String ENABLE_VALIDATION_OVERLAYS = "enable.validation.overlays";
 
     /**
      * State persistence.
@@ -512,7 +508,7 @@ public class SearchInputView extends ViewPart
             {
                 public void valueChanged(AttributeEvent event)
                 {
-                    if (event.key.equals(ENABLE_VALIDATION_OVERLAYS))
+                    if (event.key.equals(AttributeList.ENABLE_VALIDATION_OVERLAYS))
                     {
                         return;
                     }
@@ -778,7 +774,8 @@ public class SearchInputView extends ViewPart
         }
         else
         {
-            attributeGroups.setAttribute(ENABLE_VALIDATION_OVERLAYS, true);
+            attributeGroups.setAttribute(
+                AttributeList.ENABLE_VALIDATION_OVERLAYS, true);
 
             final String source = getSourceId();
             if (!StringUtils.isEmpty(source))

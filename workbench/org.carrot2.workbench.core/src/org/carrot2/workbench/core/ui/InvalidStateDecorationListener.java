@@ -36,7 +36,7 @@ final class InvalidStateDecorationListener implements IAttributeListener
 
     public void valueChanged(AttributeEvent event)
     {
-        if (event.key.equals(SearchInputView.ENABLE_VALIDATION_OVERLAYS))
+        if (event.key.equals(AttributeList.ENABLE_VALIDATION_OVERLAYS))
         {
             this.showOverlay = true;
             updateOverlay();
