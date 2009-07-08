@@ -12,8 +12,7 @@
 
 package org.carrot2.workbench.core.ui;
 
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 
@@ -64,31 +63,6 @@ public class SearchInputView extends ViewPart
     public static final String ID = "org.carrot2.workbench.core.views.search";
 
     /**
-     * Memento attribute for persisting {@link #linkWithEditor}.
-     */
-    private static final String MEMENTO_EDITOR_LINK = "link-with-editor";
-
-    /**
-     * Memento branch for persisting algorithm component ID;
-     */
-    private static final String MEMENTO_ALGORITHM_ID = "algorithmId";
-
-    /**
-     * Memento branch for persisting source component ID;
-     */
-    private static final String MEMENTO_SOURCE_ID = "sourceId";
-
-    /**
-     * Memento branch for persisting {@link #attributes}.
-     */
-    private static final String MEMENTO_ATTRIBUTES = "attribute-set";
-
-    /**
-     * A serialized {@link AttributeValueSet} attribute inside memento.
-     */
-    private static final String MEMENTO_ATTRIBUTE_SET_SERIALIZED = "serialized";
-
-    /**
      * Filter showing only required attributes.
      */
     @SuppressWarnings("unchecked")
@@ -109,7 +83,7 @@ public class SearchInputView extends ViewPart
     /**
      * State persistence.
      */
-    private IMemento state;
+    private SearchInputViewMemento state;
 
     private ComboViewer sourceViewer;
     private ComboViewer algorithmViewer;
@@ -136,7 +110,7 @@ public class SearchInputView extends ViewPart
      * {@link WorkbenchCorePlugin#getSources()} and default attribute values for
      * algorithms.
      */
-    private AttributeValueSet attributes = new AttributeValueSet("all-inputs");
+    private final AttributeValueSet attributes = new AttributeValueSet("global");
 
     /**
      * A map of {@link BindableDescriptor} for each document source ID and
@@ -325,6 +299,29 @@ public class SearchInputView extends ViewPart
         final IActionBars bars = getViewSite().getActionBars();
         createToolbar(bars.getToolBarManager());
         bars.updateActionBars();
+    }
+    
+    /*
+     * 
+     */
+    @Override
+    public void init(IViewSite site, IMemento memento) throws PartInitException
+    {
+        super.init(site, memento);
+
+        this.state = null;
+        try
+        {
+            if (memento != null)
+            {
+                this.state = SimpleXmlMemento.getChild(SearchInputViewMemento.class, memento);
+            }
+        }
+        catch (IOException e)
+        {
+            Utils.logError(e, false);
+            this.state = null;
+        }
     }
 
     /*
@@ -794,108 +791,19 @@ public class SearchInputView extends ViewPart
     }
 
     /**
-     * Restore state of UI components from memento.
+     * Restore state of UI components from saved state.
      */
-    @SuppressWarnings("unchecked")
     private void restoreState()
     {
-        /*
-         * Restore attribute sets for inputs.
-         */
         if (state != null)
         {
-            final IMemento [] mementos = state.getChildren(MEMENTO_ATTRIBUTES);
-            if (mementos != null)
-            {
-                for (int i = 0; i < mementos.length; i++)
-                {
-                    final IMemento single = mementos[i];
-
-                    final String id = single.getID();
-                    final String serialized = single
-                        .getString(MEMENTO_ATTRIBUTE_SET_SERIALIZED);
-
-                    if (id == null || serialized == null)
-                    {
-                        continue;
-                    }
-
-                    try
-                    {
-                        final AttributeValueSets sets = AttributeValueSets
-                            .deserialize(new StringReader(serialized));
-                        final AttributeValueSet set = sets.getDefaultAttributeValueSet();
-                        if (set != null)
-                        {
-                            this.attributes.setAttributeValues(set.getAttributeValues());
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Utils.logError("Could not restore view state.", e, false);
-                    }
-                }
-            }
-
-            this.linkWithEditor = Boolean.valueOf(state.getString(MEMENTO_EDITOR_LINK));
-            this.linkWithEditorAction.setChecked(linkWithEditor);
+            this.attributes.setAttributeValues(state.attributes.getAttributeValues());
+            this.linkWithEditor = state.linkWithEditor;
         }
+        this.linkWithEditorAction.setChecked(linkWithEditor);
 
-        /*
-         * Combo boxes state.
-         */
-        try
-        {
-            final Object [][] combos = new Object [] []
-            {
-                {
-                    sourceViewer, MEMENTO_SOURCE_ID
-                },
-                {
-                    algorithmViewer, MEMENTO_ALGORITHM_ID
-                }
-            };
-
-            for (Object [] comboPair : combos)
-            {
-                ComboViewer combo = (ComboViewer) comboPair[0];
-                String mementoAttr = (String) comboPair[1];
-
-                Collection<ProcessingComponentDescriptor> options = (Collection<ProcessingComponentDescriptor>) combo
-                    .getInput();
-
-                /*
-                 * Attempt to restore selection from memento, if not available, set the
-                 * default option.
-                 */
-                boolean restored = false;
-                if (state != null)
-                {
-                    String id = state.getString(mementoAttr);
-                    if (id != null)
-                    {
-                        for (ProcessingComponentDescriptor i : options)
-                        {
-                            if (i.getId().equals(id))
-                            {
-                                combo.setSelection(new StructuredSelection(i), true);
-                                restored = true;
-                            }
-                        }
-                    }
-                }
-
-                if (!restored && combo.getCombo().getItemCount() > 0)
-                {
-                    final Object element = options.iterator().next();
-                    combo.setSelection(new StructuredSelection(element));
-                }
-            }
-        }
-        catch (RuntimeException re)
-        {
-            Utils.logError("Could not restore search view state", re, false);
-        }
+        restoreState(sourceViewer, state == null ? null : sources.get(state.sourceId));
+        restoreState(algorithmViewer, state == null ? null : algorithms.get(state.algorithmId));
 
         /*
          * Disable GUI if no inputs or algorithms.
@@ -908,9 +816,32 @@ public class SearchInputView extends ViewPart
 
         if (algorithms.isEmpty())
         {
-            disableComboWithMessage(algorithmViewer.getCombo(),
-                "No clustering algorithms.");
+            disableComboWithMessage(algorithmViewer.getCombo(), "No clustering algorithms.");
             processButton.setEnabled(false);
+        }
+    }
+
+    /**
+     * Attempt to set selection to the given descriptor, if failed, select the first
+     * available element. 
+     */
+    @SuppressWarnings("unchecked")
+    private void restoreState(ComboViewer combo, ProcessingComponentDescriptor descriptor)
+    {
+        if (descriptor == null)
+        {
+            Collection<ProcessingComponentDescriptor> options = 
+                (Collection<ProcessingComponentDescriptor>) combo.getInput();
+
+            if (options.size() > 0)
+            {
+                descriptor = options.iterator().next();
+            }
+        }
+
+        if (descriptor != null)
+        {
+            combo.setSelection(new StructuredSelection(descriptor), true);
         }
     }
 
@@ -1009,48 +940,22 @@ public class SearchInputView extends ViewPart
      * 
      */
     @Override
-    public void init(IViewSite site, IMemento memento) throws PartInitException
-    {
-        state = memento;
-        super.init(site, memento);
-    }
-
-    /*
-     * 
-     */
-    @Override
     public void saveState(IMemento memento)
     {
-        memento.putString(MEMENTO_SOURCE_ID, getSourceId());
-        memento.putString(MEMENTO_ALGORITHM_ID, getAlgorithmId());
-        memento.putString(MEMENTO_EDITOR_LINK, Boolean.toString(linkWithEditor));
+        final SearchInputViewMemento state = new SearchInputViewMemento();
 
-        /*
-         * Save attributes for each input separately.
-         */
+        state.sourceId = getSourceId();
+        state.algorithmId = getAlgorithmId();
+        state.linkWithEditor = linkWithEditor;
+        state.attributes = this.attributes;
 
-        for (String sourceID : this.descriptors.keySet())
+        try
         {
-            final AttributeValueSet set = new AttributeValueSet(sourceID);
-            set.setAttributeValues(filterAttributesOf(sourceID));
-
-            try
-            {
-                final StringWriter w = new StringWriter();
-                final AttributeValueSets sets = new AttributeValueSets();
-                sets.addAttributeValueSet(sourceID, set);
-                sets.serialize(w);
-                w.close();
-
-                final String serialized = w.toString();
-
-                final IMemento single = memento.createChild(MEMENTO_ATTRIBUTES, sourceID);
-                single.putString(MEMENTO_ATTRIBUTE_SET_SERIALIZED, serialized);
-            }
-            catch (Exception e)
-            {
-                Utils.logError(e, false);
-            }
+            SimpleXmlMemento.addChild(memento, state);
+        }
+        catch (IOException e)
+        {
+            Utils.logError(e, false);
         }
     }
 

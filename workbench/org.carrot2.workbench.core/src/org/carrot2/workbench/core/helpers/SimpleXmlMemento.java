@@ -143,6 +143,11 @@ public final class SimpleXmlMemento
         }
 
         IMemento [] children = memento.getChildren(childName);
+        if (children.length == 0)
+        {
+            return null;
+        }
+
         if (children.length != 1)
         {
             throw new IOException("More than one child named '" + childName + "':"
