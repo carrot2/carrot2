@@ -12,13 +12,18 @@
 
 package org.carrot2.workbench.core.preferences;
 
-import java.util.EnumSet;
+import org.carrot2.workbench.core.ui.SearchEditor.PanelName;
+
+import java.util.EnumMap;
 
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.carrot2.workbench.core.ui.SearchEditorSections;
+import org.carrot2.workbench.core.ui.SearchEditor;
+import org.carrot2.workbench.core.ui.SearchEditor.PanelState;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
+
+import com.google.common.collect.Maps;
 
 /**
  * Class used to initialize default preference values.
@@ -33,16 +38,12 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         /*
          * Default editor panels.
          */
-        final EnumSet<SearchEditorSections> enabled = EnumSet.of(
-            SearchEditorSections.DOCUMENTS, SearchEditorSections.CLUSTERS);
-
-        for (SearchEditorSections s : EnumSet.allOf(SearchEditorSections.class))
-        {
-            store.setDefault(
-                PreferenceConstants.getSectionVisibilityKey(s), 
-                enabled.contains(s));
-            store.setDefault(PreferenceConstants.getSectionWeightKey(s), s.weight);
-        }
+        final EnumMap<SearchEditor.PanelName, SearchEditor.PanelState> globals = 
+            Maps.newEnumMap(SearchEditor.PanelName.class);
+        globals.put(PanelName.CLUSTERS, createPanelState(1, true));
+        globals.put(PanelName.DOCUMENTS, createPanelState(2, true));
+        globals.put(PanelName.ATTRIBUTES, createPanelState(1, false));
+        SearchEditor.saveGlobalState(globals);
 
         /*
          * Auto-update.
@@ -70,5 +71,16 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
          * Automatically show attribute info in the view.
          */
         store.setDefault(PreferenceConstants.ATTRIBUTE_INFO_SYNC, true);
+    }
+
+    /*
+     * 
+     */
+    private static PanelState createPanelState(int weight, boolean visibility)
+    {
+        final PanelState ps = new PanelState();
+        ps.visibility = visibility;
+        ps.weight = weight;
+        return ps;
     }
 }

@@ -22,14 +22,9 @@ import org.carrot2.core.*;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.resource.*;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.core.preferences.PreferenceConstants;
-import org.carrot2.workbench.core.ui.SearchEditor;
-import org.carrot2.workbench.core.ui.SearchEditorSections;
-import org.carrot2.workbench.core.ui.SearchEditor.SectionReference;
 import org.carrot2.workbench.core.ui.adapters.ClusterAdapterFactory;
 import org.carrot2.workbench.core.ui.adapters.PropertySourceAdapterFactory;
 import org.eclipse.core.runtime.*;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.*;
@@ -374,45 +369,5 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
          * Install a resource locator pointing to the workspace.
          */
         ResourceUtilsFactory.addFirst(new DirLocator(workspacePath.getAbsolutePath()));
-    }
-
-    /**
-     * Restore the state of {@link SearchEditor}'s sections from the most recent global
-     * state.
-     */
-    public void restoreSectionsState(
-        EnumMap<SearchEditorSections, SearchEditor.SectionReference> sections)
-    {
-        final IPreferenceStore store = getPreferenceStore();
-        for (Map.Entry<SearchEditorSections, SearchEditor.SectionReference> s : sections
-            .entrySet())
-        {
-            final SearchEditorSections section = s.getKey();
-            final SectionReference ref = s.getValue();
-
-            ref.weight = store.getInt(PreferenceConstants.getSectionWeightKey(section));
-            ref.visibility = store.getBoolean(PreferenceConstants
-                .getSectionVisibilityKey(section));
-        }
-    }
-
-    /**
-     * Keep a reference to the most recently updated {@link SearchEditor}'s sections.
-     */
-    public void storeSectionsState(
-        EnumMap<SearchEditorSections, SectionReference> sections)
-    {
-        final IPreferenceStore store = getPreferenceStore();
-        for (Map.Entry<SearchEditorSections, SearchEditor.SectionReference> s : sections
-            .entrySet())
-        {
-            final SearchEditorSections section = s.getKey();
-            final SectionReference ref = s.getValue();
-
-            final String key = PreferenceConstants.getSectionWeightKey(section);
-            final String key2 = PreferenceConstants.getSectionVisibilityKey(section);
-            store.setValue(key, ref.weight);
-            store.setValue(key2, ref.visibility);
-        }
     }
 }
