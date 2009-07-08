@@ -186,6 +186,11 @@
                visible="false"
                relative="org.carrot2.workbench.core.views.clusters"/>
 
+         <view
+               id="org.carrot2.workbench.core.views.benchmark"
+               relationship="stack"
+               visible="false"
+               relative="org.carrot2.workbench.core.views.clusters" />
       </perspectiveExtension>
 
       <perspectiveExtension
