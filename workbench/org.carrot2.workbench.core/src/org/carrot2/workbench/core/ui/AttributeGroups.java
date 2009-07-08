@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -46,15 +45,22 @@ import com.google.common.collect.Sets;
 /**
  * An SWT composite capable of displaying groups of {@link IAttributeEditor}s, sorted by
  * {@link GroupingMethod} and filtered using {@link #setFilter(Predicate)}.
+ * <p>
+ * This component does not store its own state, you should save and restore the state from
+ * within parent components.
  */
-public final class AttributeGroups extends Composite implements
-    IAttributeEventProvider
+public final class AttributeGroups extends Composite implements IAttributeEventProvider
 {
     /**
      * Padding between a given group (when it is expanded) and the following group.
      */
     public static final int SPACE_TO_NEXT_GROUP = 10;
-    
+
+    /**
+     * Section name for ungrouped attributes.
+     */
+    private static final String UNGROUPED_ATTRIBUTES_GROUP = "Ungrouped";
+
     /**
      * Method of grouping attribute editors.
      */
@@ -73,12 +79,14 @@ public final class AttributeGroups extends Composite implements
     /**
      * Forward events from editors to external listeners.
      */
-    private final IAttributeListener forwardListener = new ForwardingAttributeListener(listeners);
+    private final IAttributeListener forwardListener = new ForwardingAttributeListener(
+        listeners);
 
     /**
      * Update {@link #currentValues}.
      */
-    private final IAttributeListener updateListener = new AttributeListenerAdapter() {
+    private final IAttributeListener updateListener = new AttributeListenerAdapter()
+    {
         public void valueChanged(AttributeEvent event)
         {
             currentValues.put(event.key, event.value);
@@ -110,15 +118,20 @@ public final class AttributeGroups extends Composite implements
     private Predicate<AttributeDescriptor> filterPredicate;
 
     /**
-     * A copy of the initial default values, kept in sync with changes reported by
-     * the editors.
+     * A copy of the initial default values, kept in sync with changes reported by the
+     * editors.
      */
     private HashMap<String, Object> currentValues;
 
     /**
      * {@link Section} objects for attribute groups, if any.
      */
-    private Map<String, Section> attributeGroupSections = Maps.newLinkedHashMap();
+    private Map<String, Section> attributeGroupSections = Maps.newHashMap();
+
+    /**
+     * Expansion state for sections (regardless if they are shown or not).
+     */
+    private Map<String, Boolean> attributeGroupExpansionState = Maps.newHashMap();
 
     /**
      * A predicate that filters out all descriptors without an editor.
@@ -132,7 +145,8 @@ public final class AttributeGroups extends Composite implements
                 Class<?> clazz = descriptor.type;
                 if (clazz != null && IProcessingComponent.class.isAssignableFrom(clazz))
                 {
-                    EditorFactory.getEditorFor(clazz.asSubclass(IProcessingComponent.class), descriptor);
+                    EditorFactory.getEditorFor(clazz
+                        .asSubclass(IProcessingComponent.class), descriptor);
                 }
                 else
                 {
@@ -152,7 +166,8 @@ public final class AttributeGroups extends Composite implements
      * Builds the component for a given {@link BindableDescriptor}.
      */
     public AttributeGroups(Composite parent, BindableDescriptor descriptor,
-        GroupingMethod grouping, Predicate<AttributeDescriptor> filter, Map<String, Object> defaultValues)
+        GroupingMethod grouping, Predicate<AttributeDescriptor> filter,
+        Map<String, Object> defaultValues)
     {
         super(parent, SWT.NONE);
 
@@ -281,7 +296,7 @@ public final class AttributeGroups extends Composite implements
                 groupLabel = StringUtils.abbreviate(groupKey.toString(), 160);
             }
 
-            createEditorGroup(mainControl, groupLabel, descriptor,
+            createEditorGroup(mainControl, groupKey.toString(), groupLabel, descriptor,
                 descriptor.attributeGroups.get(groupKey), this);
         }
 
@@ -308,8 +323,9 @@ public final class AttributeGroups extends Composite implements
              */
             if (!descriptor.attributeDescriptors.isEmpty())
             {
-                createEditorGroup(mainControl, "Ungrouped", 
-                    descriptor, descriptor.attributeDescriptors, this);
+                createEditorGroup(mainControl, UNGROUPED_ATTRIBUTES_GROUP,
+                    UNGROUPED_ATTRIBUTES_GROUP, descriptor,
+                    descriptor.attributeDescriptors, this);
             }
         }
     }
@@ -335,7 +351,7 @@ public final class AttributeGroups extends Composite implements
         gd.grabExcessVerticalSpace = false;
         inner.setLayoutData(gd);
 
-        final AttributeList editorList = new AttributeList(inner, descriptor, attributes, 
+        final AttributeList editorList = new AttributeList(inner, descriptor, attributes,
             globalEventsProvider, currentValues);
 
         final GridData data = new GridData();
@@ -364,15 +380,15 @@ public final class AttributeGroups extends Composite implements
     /**
      * Create an editor group associated with a group of attributes.
      */
-    private void createEditorGroup(final Composite parent, String groupName,
-        BindableDescriptor descriptor, Map<String, AttributeDescriptor> attributes,
+    private void createEditorGroup(final Composite parent, final String groupKey,
+        String groupName, BindableDescriptor descriptor,
+        Map<String, AttributeDescriptor> attributes,
         IAttributeEventProvider globalEventsProvider)
     {
         final int style = ExpandableComposite.TWISTIE | ExpandableComposite.CLIENT_INDENT;
         final Section group = new Section(parent, style);
         group.setText(groupName);
-        // TODO: Fix for http://issues.carrot2.org/browse/CARROT-491 should be around here?
-        group.setExpanded(true);
+        group.setExpanded(getExpansionState(groupKey));
         group.setSeparatorControl(new Label(group, SWT.SEPARATOR | SWT.HORIZONTAL));
 
         final GridLayout layout = GUIFactory.zeroMarginGridLayout();
@@ -434,11 +450,24 @@ public final class AttributeGroups extends Composite implements
             public void expansionStateChanged(ExpansionEvent e)
             {
                 forceReflow();
+                attributeGroupExpansionState.put(groupKey, group.isExpanded());
             }
         });
 
         // Store the history of sections to remember folding state.
-        attributeGroupSections.put(groupName, group);
+        attributeGroupSections.put(groupKey, group);
+    }
+
+    /**
+     * Returns expansion state for a given group.
+     */
+    private boolean getExpansionState(String groupKey)
+    {
+        if (!attributeGroupExpansionState.containsKey(groupKey))
+        {
+            attributeGroupExpansionState.put(groupKey, true);
+        }
+        return attributeGroupExpansionState.containsKey(groupKey);
     }
 
     /**
@@ -482,7 +511,7 @@ public final class AttributeGroups extends Composite implements
         {
             setAttribute(e.getKey(), e.getValue());
         }
-    }    
+    }
 
     /**
      * Dispose and unregister any editors currently held.
@@ -494,8 +523,7 @@ public final class AttributeGroups extends Composite implements
         /*
          * Unsubscribe from attribute editors (unique).
          */
-        final HashSet<AttributeList> values = Sets.newHashSet(this.attributeEditors
-            .values());
+        final HashSet<AttributeList> values = Sets.newHashSet(attributeEditors.values());
         for (AttributeList attEditor : values)
         {
             attEditor.removeAttributeListener(forwardListener);
@@ -517,8 +545,8 @@ public final class AttributeGroups extends Composite implements
     }
 
     /**
-     * Set the focus to the {@link AttributeList} containing 
-     * {@link AttributeNames#QUERY}, if possible. 
+     * Set the focus to the {@link AttributeList} containing {@link AttributeNames#QUERY},
+     * if possible.
      */
     @Override
     public boolean setFocus()
@@ -544,14 +572,51 @@ public final class AttributeGroups extends Composite implements
     }
 
     /**
-     * Collapse all attribute group sections, if present.
+     * Expand or collapse all currently shown attribute groups.
+     * 
+     * @see Section#setExpanded(boolean)
      */
-    public void collapseAll()
+    public void setExpanded(boolean expanded)
     {
         assert Display.getCurrent() != null;
-        for (Section section : attributeGroupSections.values())
+        for (String key : attributeGroupSections.keySet())
         {
-            section.setExpanded(false);
+            setExpanded(key, expanded);
+        }
+    }
+
+    /**
+     * Expand or collapse a given attribute group section.
+     */
+    public void setExpanded(String groupKey, boolean expanded)
+    {
+        assert Display.getCurrent() != null;
+        this.attributeGroupExpansionState.put(groupKey, expanded);
+        final Section section = this.attributeGroupSections.get(groupKey);
+        if (section != null)
+        {
+            section.setExpanded(expanded);
+        }
+    }
+
+    /**
+     * Returns a snapshot of expansion states of this component's sections.
+     */
+    public Map<String, Boolean> getExpansionStates()
+    {
+        assert Display.getCurrent() != null;
+        return Maps.newHashMap(this.attributeGroupExpansionState);
+    }
+
+    /**
+     * Calls {@link #setExpanded(String, boolean)} for all entries.
+     */
+    public void setExpanded(Map<String, Boolean> map)
+    {
+        assert Display.getCurrent() != null;
+        for (Map.Entry<String, Boolean> e : map.entrySet())
+        {
+            setExpanded(e.getKey(), e.getValue());
         }
     }
 }

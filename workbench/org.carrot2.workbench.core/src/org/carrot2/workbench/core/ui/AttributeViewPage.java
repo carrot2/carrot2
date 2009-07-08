@@ -29,10 +29,8 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
-import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 
 /**
@@ -74,19 +72,17 @@ final class AttributeViewPage extends Page
         this.editor = editor;
     }
 
-    /*
-     * 
+    /**
+     * Make contributions to menus, toolbars and status line.
      */
     @Override
-    public void init(IPageSite pageSite)
+    public void makeContributions(IMenuManager menu,
+        IToolBarManager toolBar, IStatusLineManager statusManager)
     {
-        super.init(pageSite);
+        super.makeContributions(menu, toolBar, statusManager);
 
-        final IActionBars bars = pageSite.getActionBars();
-        createToolbarActions(bars.getToolBarManager());
-        createMenuActions(bars.getMenuManager());
-        
-        bars.updateActionBars();
+        createToolbarActions(toolBar);
+        createMenuActions(menu);
     }
 
     /*
@@ -146,8 +142,8 @@ final class AttributeViewPage extends Page
     @Override
     public void createControl(Composite parent)
     {
-        final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault()
-            .getPreferenceStore();
+        final IPreferenceStore prefStore = 
+            WorkbenchCorePlugin.getDefault().getPreferenceStore();
 
         final String key = PreferenceConstants.GROUPING_ATTRIBUTE_VIEW;
         prefStore.addPropertyChangeListener(new PropertyChangeListenerAdapter(key)

@@ -11,11 +11,14 @@
 
 package org.carrot2.workbench.core.helpers;
 
+import java.beans.Introspector;
 import java.io.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.ExceptionUtils;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
+import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Persister;
 
 /**
@@ -25,15 +28,16 @@ import org.simpleframework.xml.load.Persister;
 public final class SimpleXmlMemento
 {
     /**
-     * Creates an {@link XMLMemento} from a serializable object.
+     * Creates an {@link XMLMemento} from Simple XML-annotated bean.
      */
-    public static IMemento toMemento(Object benchmarkSettings) throws IOException
+    static IMemento toMemento(Object benchmarkSettings) throws IOException
     {
         try
         {
             final StringWriter w = new StringWriter();
             new Persister().write(benchmarkSettings, w);
-            XMLMemento memento = XMLMemento.createReadRoot(new StringReader(w.toString()));
+            XMLMemento memento = XMLMemento
+                .createReadRoot(new StringReader(w.toString()));
             return memento;
         }
         catch (Exception e)
@@ -43,10 +47,10 @@ public final class SimpleXmlMemento
     }
 
     /**
-     * Reads an object from a memento. The memento's type (root) must be aligned with
-     * the XML root for simple XML. 
+     * Reads an object from a {@link IMemento}. The memento's type (root) must equal the
+     * bean's {@link Root} annotation name attribute.
      */
-    public static <T> T fromMemento(Class<T> clazz, IMemento memento) throws IOException
+    static <T> T fromMemento(Class<T> clazz, IMemento memento) throws IOException
     {
         try
         {
@@ -60,5 +64,115 @@ public final class SimpleXmlMemento
         {
             throw ExceptionUtils.wrapAs(IOException.class, e);
         }
+    }
+
+    /**
+     * A shortcut for:
+     * 
+     * <pre>
+     * fromMemento(clazz, memento.getChild(childName))
+     * </pre>
+     * 
+     * verifying precondition that only one child of a given name exists.
+     */
+    static <T> T fromMemento(Class<T> clazz, IMemento memento, String childName)
+        throws IOException
+    {
+        final IMemento [] children = memento.getChildren(childName);
+        if (children.length != 1)
+        {
+            throw new IOException("Expected a single node named '" + childName
+                + "' under memento '" + memento.getType() + "'.");
+        }
+        return fromMemento(clazz, children[0]);
+    }
+
+    /**
+     * Convert a memento to a string.
+     */
+    public static String toString(IMemento memento)
+    {
+        if (!(memento instanceof XMLMemento))
+        {
+            XMLMemento m = XMLMemento.createWriteRoot(memento.getType());
+            m.putMemento(memento);
+            memento = m;
+        }
+
+        try
+        {
+            final StringWriter w = new StringWriter();
+            ((XMLMemento) memento).save(w);
+            return w.toString();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Add a child node to a given memento, named after the object's {@link Root}
+     * annotation.
+     */
+    public static void addChild(IMemento memento, Object object) throws IOException
+    {
+        checkObject(object);
+
+        final IMemento child = toMemento(object);
+        memento.createChild(child.getType()).putMemento(child);
+    }
+
+    /**
+     * Returns an object deserialized from a child node of a given memento.
+     */
+    public static <T> T getChild(Class<T> clazz, IMemento memento) throws IOException
+    {
+        Root root = clazz.getAnnotation(Root.class);
+
+        if (root == null)
+        {
+            throw new IllegalArgumentException("Missing @Root annotation on: "
+                + clazz.getName());
+        }
+
+        String childName = root.name();
+        if (StringUtils.isEmpty(childName))
+        {
+            childName = getClassName(clazz);
+        }
+
+        IMemento [] children = memento.getChildren(childName);
+        if (children.length != 1)
+        {
+            throw new IOException("More than one child named '" + childName + "':"
+                + children.length);
+        }
+
+        return fromMemento(clazz, children[0]);
+    }
+
+    /**
+     * Check if the target contains simple XML's annotation.
+     */
+    private static void checkObject(Object object)
+    {
+        Root root = object.getClass().getAnnotation(Root.class);
+        if (root == null)
+        {
+            throw new IllegalArgumentException("Missing @Root annotation on: "
+                + object.getClass());
+        }
+    }
+
+    /**
+     * Mimics SimpleXML's naming for classes without {@link Root#name()}.
+     */
+    private static String getClassName(Class<?> type)
+    {
+        if (type.isArray()) type = type.getComponentType();
+        final String name = type.getSimpleName();
+        if (type.isPrimitive()) return name;
+        else return Introspector.decapitalize(name);
     }
 }

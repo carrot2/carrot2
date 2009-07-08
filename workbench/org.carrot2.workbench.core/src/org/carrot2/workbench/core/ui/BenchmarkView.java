@@ -49,6 +49,16 @@ public final class BenchmarkView extends PageBookViewBase
     private CScrolledComposite mainControl;
 
     /**
+     * Attribute groups panel.
+     */
+    private AttributeGroups attributeGroups;
+
+    /**
+     * State restoration.
+     */
+    private BenchmarkViewMemento restoreState;
+
+    /**
      * Benchmark view is a composite of global attribute editors and editor-specific
      * part that shows the most recent benchmarking result.
      */
@@ -74,6 +84,9 @@ public final class BenchmarkView extends PageBookViewBase
         // Create global editors.
         createSeparator(innerComposite);
         createSettingsPanel(innerComposite);
+        
+        // Restore GUI state.
+        restoreState();
     }
 
     /*
@@ -133,14 +146,9 @@ public final class BenchmarkView extends PageBookViewBase
 
         try
         {
-            final BenchmarkSettings settings = SimpleXmlMemento.fromMemento(
-                BenchmarkSettings.class, memento.getChild("benchmark-settings"));
-
-            final HashMap<String, Object> attrs = Maps.newHashMap(); 
-            AttributeBinder.unbind(settings, attrs, Input.class);
-            AttributeBinder.bind(benchmarkSettings, attrs, Input.class);
+            restoreState = SimpleXmlMemento.getChild(BenchmarkViewMemento.class, memento);
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             Utils.logError(e, false);
         }
@@ -156,10 +164,34 @@ public final class BenchmarkView extends PageBookViewBase
 
         try
         {
-            final IMemento m = SimpleXmlMemento.toMemento(benchmarkSettings);
-            memento.createChild(m.getType()).putMemento(m);
+            final BenchmarkViewMemento state = new BenchmarkViewMemento();
+            state.settings = this.benchmarkSettings;
+            state.sectionsExpansionState = this.attributeGroups.getExpansionStates();
+
+            SimpleXmlMemento.addChild(memento, state);
         }
         catch (IOException e)
+        {
+            Utils.logError(e, false);
+        }
+    }
+    
+    /**
+     * Restore GUI state. We can't do it in {@link #init(IViewSite, IMemento)}
+     * because GUI elements are not available then.
+     */
+    private void restoreState()
+    {
+        if (this.restoreState == null) return;
+
+        try
+        {
+            final HashMap<String, Object> attrs = Maps.newHashMap(); 
+            AttributeBinder.unbind(restoreState.settings, attrs, Input.class);
+            this.attributeGroups.setAttributes(attrs);
+            this.attributeGroups.setExpanded(restoreState.sectionsExpansionState);
+        }
+        catch (Exception e)
         {
             Utils.logError(e, false);
         }
@@ -173,23 +205,12 @@ public final class BenchmarkView extends PageBookViewBase
         final BindableDescriptor descriptor = 
             BindableDescriptorBuilder.buildDescriptor(benchmarkSettings, true);
 
-        HashMap<String, Object> attrs = Maps.newHashMap();
-        try
-        {
-            AttributeBinder.unbind(benchmarkSettings, attrs, Input.class);
-        }
-        catch (Exception e)
-        {
-            Utils.logError(e, false);
-            attrs = descriptor.getDefaultValues();
-        }
-
-        final AttributeGroups panel = new AttributeGroups(
-            parent, descriptor, GroupingMethod.GROUP, null, attrs);
-        panel.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+        attributeGroups = new AttributeGroups(
+            parent, descriptor, GroupingMethod.GROUP, null, descriptor.getDefaultValues());
+        attributeGroups.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
         // Link changes in the editor to settings object.
-        panel.addAttributeListener(new AttributeListenerAdapter()
+        attributeGroups.addAttributeListener(new AttributeListenerAdapter()
         {
             public void valueChanged(AttributeEvent event)
             {
@@ -205,9 +226,9 @@ public final class BenchmarkView extends PageBookViewBase
                 }
             }
         });
-        panel.collapseAll();
+        attributeGroups.setExpanded(false);
 
-        return panel;
+        return attributeGroups;
     }
 
     /**
