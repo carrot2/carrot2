@@ -118,6 +118,7 @@ public class ClusterBuilder
     @Input
     @Processing
     @Attribute
+    @Required
     @ImplementingClasses(classes =
     {
         UniqueLabelAssigner.class, SimpleLabelAssigner.class

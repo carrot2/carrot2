@@ -62,6 +62,7 @@ public class TermDocumentMatrixReducer
      */
     @Input
     @Processing
+    @Required
     @Attribute
     public FactorizationQuality factorizationQuality = FactorizationQuality.HIGH;
 

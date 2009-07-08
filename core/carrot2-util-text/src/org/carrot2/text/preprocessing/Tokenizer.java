@@ -62,6 +62,7 @@ public final class Tokenizer
     @Processing
     @Input
     @Attribute
+    @Required
     @ImplementingClasses(classes =
     {
         ChineseAnalyzer.class, ExtendedWhitespaceAnalyzer.class
