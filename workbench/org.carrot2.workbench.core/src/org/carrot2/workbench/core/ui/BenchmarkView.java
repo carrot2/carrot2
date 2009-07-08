@@ -146,7 +146,10 @@ public final class BenchmarkView extends PageBookViewBase
 
         try
         {
-            restoreState = SimpleXmlMemento.getChild(BenchmarkViewMemento.class, memento);
+            if (memento != null)
+            {
+                restoreState = SimpleXmlMemento.getChild(BenchmarkViewMemento.class, memento);
+            }
         }
         catch (IOException e)
         {
