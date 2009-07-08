@@ -16,14 +16,15 @@ import java.io.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.ExceptionUtils;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Persister;
 
 /**
- * Utilities for creating {@link IMemento}s using <code>org.simpleframework.xml</code>
- * library.
+ * Utilities for storing and reading preferences ({@link IMemento},
+ * {@link IPreferenceStore}) using <code>org.simpleframework.xml</code> library.
  */
 public final class SimpleXmlMemento
 {
@@ -88,7 +89,7 @@ public final class SimpleXmlMemento
     }
 
     /**
-     * Convert a memento to a string.
+     * Convert any {@link IMemento} to a string.
      */
     public static String toString(IMemento memento)
     {
@@ -108,6 +109,41 @@ public final class SimpleXmlMemento
         catch (Exception e)
         {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Convert any <code>org.simpleframework.xml</code>-enabled object to an XML string.
+     */
+    public static String toString(Object object) throws IOException
+    {
+        checkObject(object);
+        
+        try
+        {
+            final StringWriter w = new StringWriter();
+            new Persister().write(object, w);
+            return w.toString();
+        }
+        catch (Exception e)
+        {
+            throw ExceptionUtils.wrapAs(IOException.class, e);
+        }
+    }
+
+    /**
+     * Convert an XML string to <code>org.simpleframework.xml</code>-enabled object.
+     */
+    public static <T> T fromString(Class<T> clazz, String xml) throws IOException
+    {
+        try
+        {
+            final StringReader r = new StringReader(xml);
+            return new Persister().read(clazz, r);
+        }
+        catch (Exception e)
+        {
+            throw ExceptionUtils.wrapAs(IOException.class, e);
         }
     }
 

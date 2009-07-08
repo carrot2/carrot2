@@ -13,6 +13,12 @@ import org.simpleframework.xml.Root;
 @Root
 public final class SearchEditorMemento
 {
-    @ElementMap
+    @ElementMap(required = false)
     public Map<PanelName, PanelState> panels;
+
+    /**
+     * Expansion state for sections inside {@link PanelName#ATTRIBUTES} panel.
+     */
+    @ElementMap
+    public Map<String, Boolean> sectionsExpansionState;
 }

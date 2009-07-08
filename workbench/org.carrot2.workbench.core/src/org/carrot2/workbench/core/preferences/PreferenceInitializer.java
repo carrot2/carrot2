@@ -43,7 +43,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         globals.put(PanelName.CLUSTERS, createPanelState(1, true));
         globals.put(PanelName.DOCUMENTS, createPanelState(2, true));
         globals.put(PanelName.ATTRIBUTES, createPanelState(1, false));
-        SearchEditor.saveGlobalState(globals);
+        SearchEditor.saveGlobalPanelsState(globals);
 
         /*
          * Auto-update.

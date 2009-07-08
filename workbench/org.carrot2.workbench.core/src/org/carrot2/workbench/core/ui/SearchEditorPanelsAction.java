@@ -90,7 +90,7 @@ final class SearchEditorPanelsAction extends Action
             mi.addSelectionListener(new SelectionAdapter() {
                 public void widgetSelected(SelectionEvent e)
                 {
-                    SearchEditor.saveGlobalState(editor.getPanelState());
+                    editor.saveAsGlobalState();
                 }
             });
 

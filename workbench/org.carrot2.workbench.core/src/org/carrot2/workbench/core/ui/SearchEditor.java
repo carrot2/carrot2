@@ -104,6 +104,11 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         PreferenceConstants.GROUPING_EDITOR_PANEL + ".local";
 
     /**
+     * Global memento key.
+     */
+    private static final String GLOBAL_MEMENTO_KEY = SearchEditor.class + ".memento";
+
+    /**
      * {@link SearchEditor} has several panels. These panels are identifier with constants
      * in this enum. Their visual attributes and preference keys are also configured here.
      * <p>
@@ -316,7 +321,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                         sr.state.weight = weights[sr.sashIndex];
                     }
 
-                    saveGlobalState(getPanelState());
+                    saveGlobalPanelsState(getPanelState());
                 }
                 return modified;
             }
@@ -545,6 +550,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         {
             final SearchEditorMemento state = new SearchEditorMemento();
             state.panels = getPanelState(); 
+            state.sectionsExpansionState = this.attributesPanel.getExpansionStates();
             SimpleXmlMemento.addChild(memento, state);
         }
         catch (IOException e)
@@ -571,9 +577,33 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
-     * Save the given state as global state. 
+     * Save this editor's state as global.
      */
-    public static void saveGlobalState(Map<PanelName, PanelState> globalState)
+    void saveAsGlobalState()
+    {
+        saveGlobalPanelsState(getPanelState());
+
+        // Save global sections expansion state (serialized).
+        final IPreferenceStore prefStore = 
+            WorkbenchCorePlugin.getDefault().getPreferenceStore();
+
+        try
+        {
+            this.state = new SearchEditorMemento();
+            this.state.panels = getPanelState();
+            this.state.sectionsExpansionState = this.attributesPanel.getExpansionStates();
+            prefStore.setValue(GLOBAL_MEMENTO_KEY, SimpleXmlMemento.toString(state));
+        }
+        catch (IOException e)
+        {
+            Utils.logError(e, false);
+        }
+    }
+
+    /**
+     * Save the given panels state as global state. 
+     */
+    public static void saveGlobalPanelsState(Map<PanelName, PanelState> globalState)
     {
         final IPreferenceStore prefStore = 
             WorkbenchCorePlugin.getDefault().getPreferenceStore();
@@ -588,20 +618,37 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /**
      * Restore global state shared among editors. 
      */
-    public static Map<PanelName, PanelState> restoreGlobalState()
+    private static SearchEditorMemento restoreGlobalState()
     {
         final IPreferenceStore prefStore = 
             WorkbenchCorePlugin.getDefault().getPreferenceStore();
 
-        final Map<PanelName, PanelState> state = Maps.newEnumMap(PanelName.class);
+        SearchEditorMemento memento = new SearchEditorMemento();
+        memento.sectionsExpansionState = Maps.newHashMap();
+        try
+        {
+            String xml = prefStore.getString(GLOBAL_MEMENTO_KEY);
+            if (!StringUtils.isEmpty(xml))
+            {
+                memento = SimpleXmlMemento.fromString(SearchEditorMemento.class, xml);
+            }
+        }
+        catch (IOException e)
+        {
+            Utils.logError(e, false);
+        }
+
+        final Map<PanelName, PanelState> panels = Maps.newEnumMap(PanelName.class);
         for (PanelName n : EnumSet.allOf(PanelName.class))
         {
             final PanelState s = new PanelState();
             s.visibility = prefStore.getBoolean(n.prefKeyVisibility);
             s.weight = prefStore.getInt(n.prefKeyWeight);
-            state.put(n, s);
+            panels.put(n, s);
         }
-        return state;
+        memento.panels = panels;
+
+        return memento;
     }
 
     /*
@@ -610,12 +657,14 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private void restoreState()
     {
         /*
-         * Restore global panels, if possible.
+         * Restore from global state, if possible.
          */
-        for (Map.Entry<PanelName, PanelState> e : restoreGlobalState().entrySet())
+        final SearchEditorMemento globalState = restoreGlobalState();
+        for (Map.Entry<PanelName, PanelState> e : globalState.panels.entrySet())
         {
             panels.get(e.getKey()).state = e.getValue();
         }
+        this.attributesPanel.setExpanded(globalState.sectionsExpansionState);
 
         /*
          * Restore state from this editor's memento, if possible.
@@ -626,6 +675,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             {
                 panels.get(e.getKey()).state = e.getValue();
             }
+            this.attributesPanel.setExpanded(state.sectionsExpansionState);
         }
 
         /*
