@@ -25,11 +25,13 @@ final class InvalidStateDecorationListener implements IAttributeListener
     private boolean showOverlay;
     private boolean valid;
 
-    public InvalidStateDecorationListener(ControlDecoration d,
-        AttributeDescriptor descriptor)
+    public InvalidStateDecorationListener(
+        ControlDecoration d, AttributeDescriptor descriptor, Object defaultValue)
     {
         this.decoration = d;
         this.descriptor = descriptor;
+
+        valueChanged(new AttributeEvent(this, descriptor.key, defaultValue));
     }
 
     public void valueChanged(AttributeEvent event)
@@ -39,18 +41,13 @@ final class InvalidStateDecorationListener implements IAttributeListener
             this.showOverlay = true;
             updateOverlay();
         }
-
-        if (event.key.equals(descriptor.key))
+        else if (event.key.equals(descriptor.key))
         {
-            if (descriptor.isValid(event.value))
+            valid = descriptor.isValid(event.value);
+            if (!valid)
             {
-                valid = true;
+                descriptor.isValid(event.value);
             }
-            else
-            {
-                valid = false;
-            }
-
             updateOverlay();
         }
     }

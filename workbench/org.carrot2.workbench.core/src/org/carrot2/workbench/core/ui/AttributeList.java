@@ -254,6 +254,16 @@ public final class AttributeList extends Composite implements IAttributeEventPro
                 continue;
             }
 
+            final Object defaultValue;
+            if (currentValues != null && currentValues.get(key) != null)
+            {
+                defaultValue = currentValues.get(key);
+            }
+            else
+            {
+                defaultValue = attributeDescriptors.get(key).defaultValue;
+            }
+
             // Add label to editors that do not have it.
             if (!editorInfo.displaysOwnLabel)
             {
@@ -284,7 +294,8 @@ public final class AttributeList extends Composite implements IAttributeEventPro
                     decoration.hide();
 
                     final IAttributeListener validationListener = 
-                        new InvalidStateDecorationListener(decoration, descriptor);
+                        new InvalidStateDecorationListener(
+                            decoration, descriptor, defaultValue);
 
                     globalEventsProvider.addAttributeListener(validationListener);
                     editor.addAttributeListener(validationListener);
@@ -307,15 +318,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
             editor.createEditor(this, maxColumns);
 
             // Set the default value for the editor.
-            if (currentValues != null && currentValues.get(key) != null)
-            {
-                editor.setValue(currentValues.get(key));
-            }
-            else
-            {
-                editor.setValue(attributeDescriptors.get(key).defaultValue);
-            }
-
+            editor.setValue(defaultValue);
             editors.put(editor.getAttributeKey(), editor);
 
             /*
