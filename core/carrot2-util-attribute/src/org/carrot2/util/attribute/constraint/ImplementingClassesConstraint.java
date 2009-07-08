@@ -14,7 +14,6 @@ package org.carrot2.util.attribute.constraint;
 
 import java.lang.annotation.Annotation;
 
-import org.apache.commons.lang.ClassUtils;
 import org.simpleframework.xml.*;
 
 /**
