@@ -49,6 +49,8 @@ public final class RestProcessorServlet extends HttpServlet
 
     private transient boolean loggerInitialized;
 
+    private String defaultAlgorithmId;
+
     @Override
     @SuppressWarnings("unchecked")
     public void init() throws ServletException
@@ -80,8 +82,15 @@ public final class RestProcessorServlet extends HttpServlet
         }
         catch (Exception e)
         {
-            throw new ServletException("Could intialize component suite", e);
+            throw new ServletException("Could initialize component suite.", e);
         }
+
+        // Initialize defaults.
+        if (componentSuite.getAlgorithms().size() == 0)
+        {
+            throw new ServletException("Component suite has no algorithms.");
+        }
+        defaultAlgorithmId = componentSuite.getAlgorithms().get(0).getId();
 
         // Initialize controller
         final List<Class<? extends IProcessingComponent>> cachedComponentClasses = Lists
@@ -319,7 +328,7 @@ public final class RestProcessorServlet extends HttpServlet
         
         if (StringUtils.isEmpty(requestModel.algorithm))
         {
-            requestModel.algorithm = componentSuite.getAlgorithms().get(0).getId();            
+            requestModel.algorithm = defaultAlgorithmId;            
         }
 
         // We need either sourceId or direct document feed
