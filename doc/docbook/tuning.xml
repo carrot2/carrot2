@@ -17,6 +17,83 @@
     algorithms. Some of the scenarios are relevant to all &PROD; algorithms, while others
     are specific to individual algorithms.
   </para>
+
+  <section xml:id="section.advanced-topics.fine-tuning.input-documents-characteristics">
+    <title>Desirable characteristics of documents for clustering</title>
+    
+    <para>
+      The quality of clusters and their labels largely depends on the 
+      characteristics of documents provided on the input. Although there is no general
+      rule for optimum document content, below are some tips worth considering.
+    </para>
+    
+    <itemizedlist>
+      <listitem>
+        <formalpara>
+          <title>&PROD; is designed for small to medium collections of documents.</title>
+          
+          <para>
+            The most important characteristic of &PROD; algorithms to keep in mind is
+            that they perform in-memory clustering. For this reason, as a rule of
+            thumb, &PROD; should successfully deal with up to a thousand of
+            documents, a few paragraphs each. For algorithms designed to process
+            millions of documents, you may want to check out the 
+            <link xlink:href="http://lucene.apache.org/mahout/">Mahout</link> project.
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Provide a minimum of 20 documents.</title>
+          
+          <para>
+            &PROD; clustering algorithms will work best with a set of documents similar
+            to what is normally returned by a typical search engine. While about 20 is the
+            minimum number of documents you can reasonably cluster, the optimum would fall
+            in the 100 &ndash; 500 range. 
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Provide contextual snippets if possible.</title>
+          
+          <para>
+            If the input documents are a result of some search query, provide
+            contextual snippets related to that query, similar
+            to what web search engines return, instead of full document content. Not only
+            will this speed up processing, but also should help the clustering
+            algorithm to cover the full spectrum of topics dealt with in the search results. 
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Minimize "noise" in the input documents.</title>
+          
+          <para>
+            All kinds of "noise" in the documents, such as truncated sentences (sometimes resulting from 
+            contextual snippet extraction suggested above) or random alphanumerical strings
+            may decrease the quality of cluster labels. If you have access to e.g. a few
+            sentences' abstract of each document, it is worth checking the quality of 
+            clustering based on those abstracts. If you can combine this with the
+            previous tip, i.e. extract complete sentences matching user's query, this
+            should improve the clusters even further.  
+          </para>
+        </formalpara>
+      </listitem>
+    </itemizedlist>
+      
+      <para>
+        Let us once again stress that there are no definite generic guidelines for
+        the best content for clustering, <emphasis role="bold">it is always worth 
+        experimenting with different combinations.</emphasis> You can also describe 
+        your specific application on &PROD; mailing list and ask for advice.
+      </para>
+  </section>
    
   <section xml:id="section.advanced-topics.fine-tuning.stop-words">
     <title>Modifying the list of stop words</title>

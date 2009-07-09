@@ -29,6 +29,7 @@
   </info>
 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="introduction.xml" /> 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="faq.xml" /> 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="application-suite.xml" /> 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="getting-started.xml" /> 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="tuning.xml" /> 

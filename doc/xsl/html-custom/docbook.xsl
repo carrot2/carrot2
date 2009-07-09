@@ -25,6 +25,7 @@
   <xsl:param name="admon.style"></xsl:param>
   <xsl:param name="formal.object.break.after">0</xsl:param>
   <xsl:param name="runinhead.default.title.end.punct"></xsl:param>
+  <xsl:param name="qanda.defaultlabel">none</xsl:param>
 
   <xsl:template name="user.head.content">
     <link rel="stylesheet" type="text/css" href="css/elegant-common.css" media="all" />
@@ -53,7 +54,7 @@ chapter   title
 part      toc,title
 preface   toc,title
 qandadiv  toc
-qandaset  toc
+qandaset  nop
 reference toc,title
 sect1     nop
 sect2     nop

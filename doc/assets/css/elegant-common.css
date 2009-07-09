@@ -148,6 +148,12 @@ div.chapter {
   top: -9mm;
 }
 
+.chapter .section .titlepage h3.subtitle {
+  font-size: 13pt;
+  font-style: italic;
+  top: -4mm;
+}
+
 .chapter .titlepage .title .n {
   font-size: 64pt;
   font-family: Arial Black, sans-serif;
@@ -329,4 +335,22 @@ span.guilabel {
 .constant {
   font-size: 90%;
   line-height: 150%;
+}
+
+/** Q & A */
+.qandaset table {
+  position: relative;
+  left: -2mm;
+}
+
+.qandaset table tr.toc td {
+  padding-left: 2mm;
+}
+
+.qandaset table tr.question p {
+  margin-bottom: 0;
+}
+
+.qandaset table tr.answer p {
+  margin-top: 0;
 }
