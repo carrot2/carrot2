@@ -52,11 +52,19 @@ public class ProcessingComponentSuite
         this.sources = sources;
     }
 
+    /**
+     * Returns the internal list of document sources. Changes to this list will
+     * affect the suite.
+     */
     public List<DocumentSourceDescriptor> getSources()
     {
         return sources;
     }
 
+    /**
+     * Returns the internal list of algorithms. Changes to this list will
+     * affect the suite.
+     */
     public List<ProcessingComponentDescriptor> getAlgorithms()
     {
         return algorithms;
