@@ -16,6 +16,7 @@ import java.io.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.ExceptionUtils;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
@@ -118,7 +119,7 @@ public final class SimpleXmlMemento
     public static String toString(Object object) throws IOException
     {
         checkObject(object);
-        
+
         try
         {
             final StringWriter w = new StringWriter();
@@ -191,6 +192,46 @@ public final class SimpleXmlMemento
         }
 
         return fromMemento(clazz, children[0]);
+    }
+
+    /**
+     * Save an object to global plugin's preference store.
+     */
+    public static void toPreferenceStore(String globalPreferenceKey, Object object)
+    {
+        final IPreferenceStore prefStore = 
+            WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        try
+        {
+            prefStore.setValue(globalPreferenceKey, toString(object));
+        }
+        catch (IOException e)
+        {
+            Utils.logError(e, false);
+        }
+    }
+
+    /**
+     * Read an object from the global plugin's preference store. May return
+     * <code>null</code> if an error occurred. 
+     */
+    public static <T> T fromPreferenceStore(Class<T> clazz, String globalPreferenceKey)
+    {
+        final IPreferenceStore prefStore = 
+            WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        final String xml = prefStore.getString(globalPreferenceKey);
+        if (!StringUtils.isEmpty(xml))
+        {
+            try
+            {
+                return fromString(clazz, xml);
+            }
+            catch (IOException e)
+            {
+                Utils.logError(e, false);
+            }
+        }
+        return null;
     }
 
     /**

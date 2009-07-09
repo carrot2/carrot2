@@ -584,20 +584,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         saveGlobalPanelsState(getPanelState());
 
         // Save global sections expansion state (serialized).
-        final IPreferenceStore prefStore = 
-            WorkbenchCorePlugin.getDefault().getPreferenceStore();
-
-        try
-        {
-            this.state = new SearchEditorMemento();
-            this.state.panels = getPanelState();
-            this.state.sectionsExpansionState = this.attributesPanel.getExpansionStates();
-            prefStore.setValue(GLOBAL_MEMENTO_KEY, SimpleXmlMemento.toString(state));
-        }
-        catch (IOException e)
-        {
-            Utils.logError(e, false);
-        }
+        this.state = new SearchEditorMemento();
+        this.state.panels = getPanelState();
+        this.state.sectionsExpansionState = this.attributesPanel.getExpansionStates();
+        SimpleXmlMemento.toPreferenceStore(GLOBAL_MEMENTO_KEY, state);
     }
 
     /**
@@ -620,24 +610,17 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private static SearchEditorMemento restoreGlobalState()
     {
+        SearchEditorMemento memento = SimpleXmlMemento.fromPreferenceStore(
+            SearchEditorMemento.class, GLOBAL_MEMENTO_KEY);
+
+        if (memento == null)
+        {
+            memento = new SearchEditorMemento();
+            memento.sectionsExpansionState = Maps.newHashMap();            
+        }
+
         final IPreferenceStore prefStore = 
             WorkbenchCorePlugin.getDefault().getPreferenceStore();
-
-        SearchEditorMemento memento = new SearchEditorMemento();
-        memento.sectionsExpansionState = Maps.newHashMap();
-        try
-        {
-            String xml = prefStore.getString(GLOBAL_MEMENTO_KEY);
-            if (!StringUtils.isEmpty(xml))
-            {
-                memento = SimpleXmlMemento.fromString(SearchEditorMemento.class, xml);
-            }
-        }
-        catch (IOException e)
-        {
-            Utils.logError(e, false);
-        }
-
         final Map<PanelName, PanelState> panels = Maps.newEnumMap(PanelName.class);
         for (PanelName n : EnumSet.allOf(PanelName.class))
         {

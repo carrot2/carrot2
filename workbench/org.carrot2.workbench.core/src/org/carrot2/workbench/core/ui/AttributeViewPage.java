@@ -18,6 +18,7 @@ import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.GUIFactory;
+import org.carrot2.workbench.core.helpers.SimpleXmlMemento;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
@@ -27,8 +28,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 import org.eclipse.ui.part.Page;
@@ -38,6 +38,12 @@ import org.eclipse.ui.part.Page;
  */
 final class AttributeViewPage extends Page
 {
+    /**
+     * Global preference key for expansion state.
+     */
+    private static final String PREFERENCE_KEY_EXPANSION_STATE = 
+        AttributeViewPage.class.getName() + ".expansionState";
+
     /**
      * The search editor this page is attached to.
      */
@@ -172,11 +178,42 @@ final class AttributeViewPage extends Page
             .create());
         attributeEditors.setAttribute(AttributeList.ENABLE_VALIDATION_OVERLAYS, true);
 
+        restoreGlobalState();
+
         this.mainControl = scroller;
         scroller.reflow(true);
 
         updateGroupingState(defaultGrouping);
         registerListeners();
+    }
+
+    /**
+     * Save to global state.
+     */
+    void saveGlobalState()
+    {
+        assert Display.getCurrent() != null;
+        
+        final AttributeViewMemento memento = new AttributeViewMemento(); 
+        memento.sectionsExpansionState = attributeEditors.getExpansionStates();
+
+        SimpleXmlMemento.toPreferenceStore(PREFERENCE_KEY_EXPANSION_STATE, memento);
+    }
+
+    /**
+     * Restore from global state.
+     */
+    void restoreGlobalState()
+    {
+        assert Display.getCurrent() != null;
+
+        final AttributeViewMemento memento = SimpleXmlMemento.fromPreferenceStore(
+            AttributeViewMemento.class, PREFERENCE_KEY_EXPANSION_STATE);
+
+        if (memento != null)
+        {
+            attributeEditors.setExpanded(memento.sectionsExpansionState);
+        }
     }
 
     /*

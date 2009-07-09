@@ -21,6 +21,11 @@ import org.eclipse.ui.IWorkbenchPart;
 public final class AttributeView extends PageBookViewBase
 {
     public static final String ID = "org.carrot2.workbench.core.views.attributes";
+    
+    /**
+     * Currently shown page.
+     */
+    private AttributeViewPage current;
 
     /**
      * Create a tree view for the given part.
@@ -35,6 +40,19 @@ public final class AttributeView extends PageBookViewBase
         page.createControl(getPageBook());
 
         return new PageRec(part, page);
+    }
+    
+    @Override
+    protected void showPageRec(PageRec pageRec)
+    {
+        if (current != pageRec.page && (pageRec.page instanceof AttributeViewPage))
+        {
+            final AttributeViewPage next = (AttributeViewPage) pageRec.page;
+            if (current != null) current.saveGlobalState();
+            next.restoreGlobalState();
+            current = next;
+        }
+        super.showPageRec(pageRec);
     }
 
     /**
