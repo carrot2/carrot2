@@ -56,6 +56,16 @@ public final class PreferenceConstants
      */
     public static final String ATTRIBUTE_INFO_SYNC = "attribute-info-view.sync";
 
+    /**
+     * Default source component (if no previous memento is available).
+     */
+    public static final String DEFAULT_SOURCE_ID = "DEFAULT_SOURCE_ID";
+
+    /**
+     * Default algorithm component (if no previous memento is available).
+     */
+    public static final String DEFAULT_ALGORITHM_ID = "DEFAULT_ALGORITHM_ID";
+
     /*
      * 
      */

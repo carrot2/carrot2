@@ -808,8 +808,33 @@ public class SearchInputView extends ViewPart
         }
         this.linkWithEditorAction.setChecked(linkWithEditor);
 
-        restoreState(sourceViewer, state == null ? null : sources.get(state.sourceId));
-        restoreState(algorithmViewer, state == null ? null : algorithms.get(state.algorithmId));
+        ProcessingComponentDescriptor source = null;
+        ProcessingComponentDescriptor algorithm = null;
+
+        if (state != null)
+        {
+            source = sources.get(state.sourceId);
+            algorithm = algorithms.get(state.algorithmId);
+        }
+        
+        if (source == null)
+        {
+            // Try to select the default set in preferences.
+            String id = WorkbenchCorePlugin.getDefault().getPreferenceStore().getString(
+                PreferenceConstants.DEFAULT_SOURCE_ID);
+            source = sources.get(id);
+        }
+
+        if (algorithm == null)
+        {
+            // Try to select the default set in preferences.
+            String id = WorkbenchCorePlugin.getDefault().getPreferenceStore().getString(
+                PreferenceConstants.DEFAULT_ALGORITHM_ID);
+            algorithm = algorithms.get(id);
+        }
+
+        restoreState(sourceViewer, source);
+        restoreState(algorithmViewer, algorithm);
 
         /*
          * Disable GUI if no inputs or algorithms.
