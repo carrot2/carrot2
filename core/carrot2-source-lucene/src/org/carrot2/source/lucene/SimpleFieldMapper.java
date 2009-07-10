@@ -228,10 +228,6 @@ public class SimpleFieldMapper implements IFieldMapper
             {
                 throw ExceptionUtils.wrapAsRuntimeException(e);
             }
-            catch (InvalidTokenOffsetsException e)
-            {
-                throw ExceptionUtils.wrapAsRuntimeException(e);
-            }
         }
         
         /*
