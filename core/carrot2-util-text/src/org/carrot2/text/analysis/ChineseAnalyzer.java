@@ -13,12 +13,16 @@ package org.carrot2.text.analysis;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.cn.smart.*;
+import org.carrot2.text.util.MutableCharArray;
 
 /**
- * An {@link Analyzer} instance tokenizing using {@link ExtendedWhitespaceTokenizer}.
+ * An analyzer for the Chinese language, based on Lucene's
+ * {@link org.apache.lucene.analysis.cn.ChineseAnalyzer}. A simple heuristic is employed
+ * to detect punctuation and simple numeric tokens.
  */
 public final class ChineseAnalyzer extends Analyzer
 {
@@ -47,24 +51,45 @@ public final class ChineseAnalyzer extends Analyzer
             new SentenceTokenizer(reader), wordSegmenter));
     }
 
+    /**
+     * Sets the token types required by Carrot2 based on the output from ChineseAnalyzer.
+     */
     private static class TokenTypePayloadSetter extends TokenStream
     {
         private final TokenTypePayload tokenPayload = new TokenTypePayload();
-
+        private final Pattern numeric = Pattern
+            .compile("[\\-+'$]?\\d+([:\\-/,.]?\\d+)*[%$]?");
         private TokenStream wrapped;
+        private MutableCharArray tempCharSequence;
 
         TokenTypePayloadSetter(TokenStream wrapped)
         {
             this.wrapped = wrapped;
+            this.tempCharSequence = new MutableCharArray(new char [0]);
         }
 
         @Override
+        @SuppressWarnings("deprecation")
         public Token next(Token reusableToken) throws IOException
         {
             final Token token = wrapped.next(reusableToken);
             if (token != null)
             {
-                tokenPayload.setRawFlags(ITokenType.TT_TERM);
+                final char [] image = token.termBuffer();
+                tempCharSequence.reset(image, 0, token.termLength());
+                if (tempCharSequence.length() == 1 && tempCharSequence.charAt(0) == ',')
+                {
+                    // ChineseAnalyzer seems to convert all punctuation to ',' characters
+                    tokenPayload.setRawFlags(ITokenType.TT_PUNCTUATION);
+                }
+                else if (numeric.matcher(tempCharSequence).matches())
+                {
+                    tokenPayload.setRawFlags(ITokenType.TT_NUMERIC);
+                }
+                else
+                {
+                    tokenPayload.setRawFlags(ITokenType.TT_TERM);
+                }
                 token.setPayload(tokenPayload);
             }
             return token;

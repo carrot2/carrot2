@@ -51,6 +51,7 @@ public final class FSDirectoryWrapper implements ISimpleXmlWrapper<FSDirectory>
     }
 
     @Commit
+    @SuppressWarnings("deprecation")
     void afterDeserialization()
     {
         try

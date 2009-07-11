@@ -12,57 +12,20 @@
 
 package org.carrot2.text.analysis;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
+import java.io.Reader;
 
-import org.apache.lucene.analysis.Token;
-import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.TokenStream;
 import org.junit.Test;
 
 /**
  * Test {@link ExtendedWhitespaceTokenizer}.
  */
-public class ExtendedWhitespaceTokenizerTest
+public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
 {
-    /**
-     * Internal class for comparing sequences of tokens.
-     */
-    private static class TokenImage
+    @Override
+    protected TokenStream createTokenStream(Reader reader)
     {
-        final int type;
-        final String image;
-
-        public TokenImage(String image, int type)
-        {
-            this.type = type;
-            this.image = image;
-        }
-
-        @Override
-        public boolean equals(Object o)
-        {
-            if (o instanceof TokenImage)
-            {
-                return (((TokenImage) o).image.equals(this.image) && (((TokenImage) o).type == this.type));
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        @Override
-        public int hashCode()
-        {
-            return image != null ? image.hashCode() ^ type : type;
-        }
-
-        public String toString()
-        {
-            final String rawType = "0x" + Integer.toHexString(type);
-            return "[" + rawType + "] " + this.image;
-        }
+        return new ExtendedWhitespaceTokenizer(reader);
     }
 
     @Test
@@ -231,33 +194,5 @@ public class ExtendedWhitespaceTokenizerTest
         };
 
         assertEqualTokens(test, tokens);
-    }
-
-    /**
-     * Compare expected and produced token sequences.
-     */
-    private static void assertEqualTokens(String testString, TokenImage [] expectedTokens)
-    {
-        try
-        {
-            final Tokenizer tokenizer = new ExtendedWhitespaceTokenizer(new StringReader(
-                testString));
-
-            final ArrayList<TokenImage> tokens = new ArrayList<TokenImage>();
-            Token token = new Token();
-            while ((token = tokenizer.next(token)) != null)
-            {
-                final String image = new String(token.termBuffer(), 0, token.termLength());
-                final ITokenType payload = (ITokenType) token.getPayload();
-
-                tokens.add(new TokenImage(image, payload.getRawFlags()));
-            }
-
-            org.junit.Assert.assertArrayEquals(expectedTokens, tokens.toArray());
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
     }
 }

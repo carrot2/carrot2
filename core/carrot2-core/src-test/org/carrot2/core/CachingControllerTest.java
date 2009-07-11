@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -159,7 +158,7 @@ public class CachingControllerTest extends ControllerTestBase
         @Init
         @Processing
         @Attribute(key = "initProcessing")
-        private String initProcessingRequired = DEFAULT;
+        private String initProcessing = DEFAULT;
 
         @Output
         @Processing
@@ -170,8 +169,24 @@ public class CachingControllerTest extends ControllerTestBase
         @Override
         public void process() throws ProcessingException
         {
-            result = initProcessingRequired;
+            result = initProcessing;
         }
+    }
+
+    @Bindable
+    public static class ComponentWithInitProcessingInputReferenceAttribute extends
+        ProcessingComponentBase
+    {
+        @Input
+        @Init
+        @Processing
+        @Attribute(key = "initProcessing")
+        @ImplementingClasses(classes =
+        {
+            BindableClass.class
+        })
+        @SuppressWarnings("unused")
+        private BindableClass initProcessing;
     }
 
     @Override
@@ -647,6 +662,30 @@ public class CachingControllerTest extends ControllerTestBase
 
         ProcessingResult result2 = controller.process(attributes, "conf2");
         assertThat(result2.getAttributes()).includes(entry("result", "v2v2"));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testComponentConfigurationInitProcessingAttributeCreation()
+    {
+        final CachingController controller = new CachingController();
+        final Map<String, Object> attributes = Maps.newHashMap();
+
+        final Map<String, Object> globalInitAttributes = Maps.newHashMap();
+        BindableClass.createdInstances = 0;
+        globalInitAttributes.put("initProcessing", BindableClass.class);
+
+        controller.init(globalInitAttributes);
+
+        controller.process(attributes,
+            ComponentWithInitProcessingInputReferenceAttribute.class);
+        controller.process(attributes,
+            ComponentWithInitProcessingInputReferenceAttribute.class);
+        assertThat(BindableClass.createdInstances).isEqualTo(1);
+        attributes.put("initProcessing", BindableClass.class);
+        controller.process(attributes,
+            ComponentWithInitProcessingInputReferenceAttribute.class);
+        assertThat(BindableClass.createdInstances).isEqualTo(2);
     }
 
     @Test(expected = ComponentInitializationException.class)

@@ -48,6 +48,7 @@ import com.google.common.collect.Maps;
  * </ul>
  */
 @Bindable(prefix = "Tokenizer")
+@SuppressWarnings("deprecation")
 public final class Tokenizer
 {
     /**

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -53,9 +52,9 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
 
     /**
      * Merges stop words and stop labels from all known languages. If set to
-     * <code>false</code>, only stop words and stop labels of the active language will
-     * be used. If set to <code>true</code>, stop words from all {@link LanguageCode}s
-     * will be used together and stop labels from all languages will be used together, no
+     * <code>false</code>, only stop words and stop labels of the active language will be
+     * used. If set to <code>true</code>, stop words from all {@link LanguageCode}s will
+     * be used together and stop labels from all languages will be used together, no
      * matter the active language. Lexical resource merging is useful when clustering data
      * in a mix of different languages and should increase clustering quality in such
      * settings.
@@ -82,6 +81,14 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
      * Preloaded and cached merged lexical resources.
      */
     private static LexicalResources LEXICAL_RESOURCES_MERGED;
+
+    /**
+     * A stemmer cache for this particular factory. As opposed to lexical resources, which
+     * are cached globally, stemmer are cached on a per-factory basis to make sure
+     * stemmers are not shared between processing threads (each processing component
+     * instance has its own instance of {@link DefaultLanguageModelFactory}).
+     */
+    private final HashMap<LanguageCode, IStemmer> stemmerCache = Maps.newHashMap();
 
     /**
      * @see #current
@@ -132,25 +139,34 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
                         resourceLoaders, language));
                 }
             }
-
-            final LexicalResources lexicalResources;
-            if (mergeResources)
-            {
-                lexicalResources = LEXICAL_RESOURCES_MERGED;
-            }
-            else
-            {
-                lexicalResources = LEXICAL_RESOURCES_CACHE.get(language);
-            }
-
-            final IStemmer stemmer = createStemmer(language);
-
-            return new DefaultLanguageModel(language, lexicalResources, stemmer);
         }
+
+        final LexicalResources lexicalResources;
+        if (mergeResources)
+        {
+            lexicalResources = LEXICAL_RESOURCES_MERGED;
+        }
+        else
+        {
+            lexicalResources = LEXICAL_RESOURCES_CACHE.get(language);
+        }
+
+        IStemmer stemmer;
+        synchronized (stemmerCache)
+        {
+            stemmer = stemmerCache.get(language);
+            if (!stemmerCache.containsKey(language))
+            {
+                stemmer = createStemmer(language);
+                stemmerCache.put(language, stemmer);
+            }
+        }
+
+        return new DefaultLanguageModel(language, lexicalResources, stemmer);
     }
 
     /**
-     * Provide an {@link IStemmer} implementation for a given language. 
+     * Provide an {@link IStemmer} implementation for a given language.
      */
     private IStemmer createStemmer(LanguageCode language)
     {

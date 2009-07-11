@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,6 +12,7 @@
 package org.carrot2.core;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,14 +21,14 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.pool.*;
 import org.carrot2.util.resource.ClassResource;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.*;
 
 /**
@@ -425,8 +425,8 @@ public final class CachingController implements IController
             {
                 try
                 {
-                    resultClass = ReflectionUtils.classForName(componentId)
-                        .asSubclass(IProcessingComponent.class);
+                    resultClass = ReflectionUtils.classForName(componentId).asSubclass(
+                        IProcessingComponent.class);
 
                     // The component id was coerced to a generic class,
                     // so we're not using a specific version of a component.
@@ -461,7 +461,6 @@ public final class CachingController implements IController
             this.componentSpecificInitAttributes = componentSpecificInitAttributes;
         }
 
-        @SuppressWarnings("unchecked")
         public void objectInstantiated(IProcessingComponent component, String parameter)
         {
             try
@@ -489,7 +488,19 @@ public final class CachingController implements IController
                 // attributes as the required processing attributes will be most likely
                 // provided at request time.
                 AttributeBinder.bind(component, actualInitAttributes, false, Input.class,
-                    Processing.class);
+                    new Predicate<Field>()
+                    {
+                        /**
+                         * Returns <code>true</code> only of the field has is a
+                         * {@link Processing} attribute, but not an {@link Init} attribute
+                         * at the same time.
+                         */
+                        public boolean apply(Field field)
+                        {
+                            return field.getAnnotation(Processing.class) != null
+                                && field.getAnnotation(Init.class) == null;
+                        }
+                    });
             }
             catch (Exception e)
             {
@@ -737,7 +748,7 @@ public final class CachingController implements IController
             {
                 return false;
             }
-            
+
             final boolean result = (obj.hashCode() == this.hashCode);
             if (result)
             {
@@ -764,8 +775,8 @@ public final class CachingController implements IController
         {
             final Map<String, Object> inputAttributes = ((AttributeMapCacheKey) key).attributes;
 
-            final Class<? extends IProcessingComponent> componentClass = 
-                (Class<? extends IProcessingComponent>) inputAttributes.get(COMPONENT_CLASS_KEY);
+            final Class<? extends IProcessingComponent> componentClass = (Class<? extends IProcessingComponent>) inputAttributes
+                .get(COMPONENT_CLASS_KEY);
             final String componentId = (String) inputAttributes.get(COMPONENT_ID_KEY);
 
             IProcessingComponent component = null;

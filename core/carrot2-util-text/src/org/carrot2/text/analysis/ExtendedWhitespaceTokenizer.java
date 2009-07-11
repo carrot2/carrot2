@@ -24,6 +24,7 @@ import org.carrot2.util.CloseableUtils;
  * complex tokens, such as URLs, e-mail addresses and sentence delimiters. For each
  * returned {@link Token}, a payload implementing {@link ITokenType} is returned.
  */
+@SuppressWarnings("deprecation")
 public final class ExtendedWhitespaceTokenizer extends Tokenizer
 {
     /**

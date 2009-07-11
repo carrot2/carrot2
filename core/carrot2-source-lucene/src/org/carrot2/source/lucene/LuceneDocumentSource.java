@@ -39,6 +39,7 @@ import com.google.common.collect.Maps;
  * The index should be binary-compatible with the Lucene version actually imported by this
  * plugin.
  */
+@SuppressWarnings("deprecation")
 @Bindable(prefix = "LuceneDocumentSource")
 public final class LuceneDocumentSource extends ProcessingComponentBase implements
     IDocumentSource

@@ -36,7 +36,7 @@ public class ClusteringChineseContent
          * components. This is especially important when the components are expensive
          * to create, which is the case with ChineseAnalyzer.
          */
-        final CachingController controller = new CachingController();
+        final CachingController controller = new CachingController(IDocumentSource.class);
 
         /*
          * Initialize the controller setting the clustering language and analyzer
