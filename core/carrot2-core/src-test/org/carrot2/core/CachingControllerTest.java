@@ -229,7 +229,8 @@ public class CachingControllerTest extends ControllerTestBase
     {
         return new CachingController(
             CachedProcessingComponent1.class,
-            CachedProcessingComponent2.class);
+            CachedProcessingComponent2.class,
+            ProcessingComponentWithKey2Defaults.class);
     }
 
     @Override
