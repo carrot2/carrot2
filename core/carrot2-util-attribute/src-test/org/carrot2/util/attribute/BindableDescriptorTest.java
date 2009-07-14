@@ -12,11 +12,11 @@
 
 package org.carrot2.util.attribute;
 
-import static junit.framework.Assert.assertNotSame;
-import static junit.framework.Assert.assertSame;
+import static junit.framework.Assert.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.util.attribute.test.filtering.*;
@@ -28,6 +28,41 @@ public class BindableDescriptorTest
     private final BindableDescriptor descriptor = BindableDescriptorBuilder
         .buildDescriptor(new FilteringSubClass());
 
+    @Bindable
+    public static class DefaultValuesTestClass
+    {
+        @Input
+        @Attribute(key = "optionalNullValue")
+        public String optional;
+
+        @Input
+        @Attribute(key = "requiredNullValue")
+        @Required
+        public String required;
+
+        @Input
+        @Attribute(key = "nonNull")
+        public String nonNull = "nonNull";
+
+        @Output
+        @Attribute(key = "output")
+        public String output = "value";
+    }
+
+    @Test
+    public void testDefaultValues()
+    {
+        HashMap<String, Object> values = 
+            BindableDescriptorBuilder
+                .buildDescriptor(new DefaultValuesTestClass(), false)
+                .getDefaultValues();
+        assertFalse(values.containsKey("optionalNullValue"));
+        assertFalse(values.containsKey("output"));
+        assertTrue(values.containsKey("requiredNullValue"));
+        assertEquals(null, values.get("requiredNullValue"));
+        assertEquals("nonNull", values.get("nonNull"));
+    }
+    
     @Test
     public void testOnlyWithNoCriteria()
     {

@@ -303,12 +303,16 @@ public class BindableDescriptor
      * }
      * </pre>
      */
+    @SuppressWarnings("unchecked")
     public HashMap<String, Object> getDefaultValues()
     {
         final HashMap<String, Object> values = Maps.newHashMap();
-        for (AttributeDescriptor d : flatten().attributeDescriptors.values())
+        for (AttributeDescriptor d : only(Input.class).flatten().attributeDescriptors.values())
         {
-            values.put(d.key, d.defaultValue);
+            if (d.defaultValue != null || d.requiredAttribute)
+            {
+                values.put(d.key, d.defaultValue);
+            }
         }
         return values;
     }
