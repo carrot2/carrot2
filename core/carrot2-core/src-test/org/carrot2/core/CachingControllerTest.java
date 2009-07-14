@@ -23,6 +23,7 @@ import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.*;
@@ -54,6 +55,39 @@ public class CachingControllerTest extends ControllerTestBase
         }
     }
 
+    @Bindable
+    public static class CachedProcessingComponent2 extends ProcessingComponentBase
+        implements IDocumentSource
+    {
+        @Init @Processing @Input @Output
+        @Attribute(key = "key1")
+        protected String key1;
+        
+        @Init @Processing @Input @Output
+        @Attribute(key = "key2")
+        protected String key2;
+        
+        @Override
+        public void process() throws ProcessingException
+        {
+            super.process();
+            key2 = "value";
+        }
+    }
+
+    @Bindable
+    public static class ProcessingComponentWithKey2Defaults extends ProcessingComponentBase
+        implements IClusteringAlgorithm
+    {
+        @Init @Processing @Input @Output
+        @Attribute(key = "key1")
+        protected String key1 = "default";
+
+        @Required @Init @Processing @Input @Output
+        @Attribute(key = "key2")
+        protected String key2 = "default";
+    }
+    
     @Bindable
     @SuppressWarnings("unused")
     public static class ComponentWithBindableReference extends ProcessingComponentBase
@@ -193,7 +227,9 @@ public class CachingControllerTest extends ControllerTestBase
     @SuppressWarnings("unchecked")
     protected IController createController()
     {
-        return new CachingController(CachedProcessingComponent1.class);
+        return new CachingController(
+            CachedProcessingComponent1.class,
+            CachedProcessingComponent2.class);
     }
 
     @Override
@@ -925,6 +961,28 @@ public class CachingControllerTest extends ControllerTestBase
         assertThat((String) processingAttributes.get("result")).isEqualTo(
             overriddenInitValue);
 
+    }
+
+    @Test
+    public void testOutputAttributesWithNullValues()
+    {
+        performProcessing(
+            CachedProcessingComponent2.class,
+            ProcessingComponentWithKey2Defaults.class);
+        
+        Assert.assertEquals("default", processingAttributes.get("key1"));
+        Assert.assertEquals("value", processingAttributes.get("key2"));
+
+        processingAttributes.clear();
+        processingAttributes.put("key1", null);
+        processingAttributes.put("key2", null);
+
+        performProcessing(
+            CachedProcessingComponent2.class,
+            ProcessingComponentWithKey2Defaults.class);
+        
+        Assert.assertEquals(null, processingAttributes.get("key1"));
+        Assert.assertEquals("value", processingAttributes.get("key2"));
     }
 
     private CachingController getCachingController()
