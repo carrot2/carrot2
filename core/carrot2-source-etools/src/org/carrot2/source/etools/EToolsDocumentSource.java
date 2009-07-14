@@ -12,14 +12,20 @@
 
 package org.carrot2.source.etools;
 
-import org.carrot2.core.attribute.Internal;
-import org.carrot2.core.attribute.Processing;
+import java.util.Collections;
+import java.util.Map;
+
+import org.carrot2.core.attribute.*;
 import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
+import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.ClassResource;
 import org.carrot2.util.resource.IResource;
+
+import com.google.common.collect.Maps;
 
 /**
  * A Carrot2 input component for the eTools service (http://www.etools.ch). For commercial
@@ -101,6 +107,22 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
         ITALIAN("it"), 
         SPANISH("es");
 
+        /**
+         * Maps <b>some</b> of the values of this enum to {@link LanguageCode}s.
+         */
+        private final static Map<Language, LanguageCode> TO_LANGUAGE_CODE;
+        static
+        {
+            final Map<Language, LanguageCode> map = Maps.newEnumMap(Language.class);
+            map.put(ENGLISH, LanguageCode.ENGLISH);
+            map.put(FRENCH, LanguageCode.FRENCH);
+            map.put(GERMAN, LanguageCode.GERMAN);
+            map.put(ITALIAN, LanguageCode.ITALIAN);
+            map.put(SPANISH, LanguageCode.SPANISH);
+            
+            TO_LANGUAGE_CODE = Collections.unmodifiableMap(map);
+        }
+        
         private String code;
 
         private Language(String code)
@@ -118,6 +140,15 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
         {
             return code;
         }
+        
+        /**
+         * Returns a corresponding {@link LanguageCode} or <code>null</code> if no
+         * {@link LanguageCode} corresponds to this {@link Language} constant.
+         */
+        public LanguageCode toLanguageCode()
+        {
+            return TO_LANGUAGE_CODE.get(this);
+        }
     }
 
     /**
@@ -131,6 +162,18 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Processing
     @Attribute
     public Language language = Language.ENGLISH;
+
+    /**
+     * An internal attribute to capture the previously set active language and possibly
+     * set a new better matching value based on the supplied {@link #languageAndRegion} value.
+     */
+    @Processing
+    @Input
+    @Output
+    @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
+    @Internal
+    @SuppressWarnings("unused")
+    private LanguageCode activeLanguage;
 
     /**
      * Maximum time in milliseconds to wait for all data sources to return results.
@@ -266,5 +309,16 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
         int rawDataSourceResults = results / sources;
         return Math.min(((rawDataSourceResults + 9) / 10 + 1) * 10,
             MAX_DATA_SOURCE_RESULTS);
+    }
+
+    @Override
+    public void process()
+    {
+        super.process();
+        LanguageCode bestMatchingLanguageCode = language.toLanguageCode();
+        if (bestMatchingLanguageCode != null)
+        {
+            activeLanguage = bestMatchingLanguageCode;
+        }
     }
 }

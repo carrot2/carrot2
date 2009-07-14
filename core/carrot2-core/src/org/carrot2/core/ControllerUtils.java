@@ -17,6 +17,9 @@ import java.util.Map;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.Maps;
+
 /**
  * Static life cycle and controller utilities (for use within the core package).
  * <p>
@@ -188,8 +191,10 @@ public final class ControllerUtils
         {
             processingComponent.afterProcessing();
 
-            AttributeBinder.bind(processingComponent, attributes, Output.class,
-                Processing.class);
+          final Map<String, Object> outputAttributesWithNulls = Maps.newHashMap();
+          AttributeBinder.bind(processingComponent, outputAttributesWithNulls, Output.class,
+              Processing.class);
+          attributes.putAll(Maps.filterValues(outputAttributesWithNulls, Predicates.notNull()));
         }
         catch (final InstantiationException e)
         {

@@ -47,6 +47,7 @@
             <!-- Exclude reports, we'll link these directly to the build server -->
             <exclude name="*-report/**" />
             <exclude name="workbench/**" />
+            <exclude name="attrs-cache.properties" />
           </fileset>
         </copy>
     </target>

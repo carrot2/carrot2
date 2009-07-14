@@ -233,6 +233,17 @@ public abstract class ControllerTestBase
             ProcessingComponent5_1.class,
             ProcessingComponent5_2.class);
         
+        Assert.assertEquals("default", processingAttributes.get("key1"));
+        Assert.assertEquals("value", processingAttributes.get("key2"));
+        
+        processingAttributes.clear();
+        processingAttributes.put("key1", null);
+        processingAttributes.put("key2", null);
+        
+        performProcessing(
+            ProcessingComponent5_1.class,
+            ProcessingComponent5_2.class);
+        
         Assert.assertEquals(null, processingAttributes.get("key1"));
         Assert.assertEquals("value", processingAttributes.get("key2"));
     }

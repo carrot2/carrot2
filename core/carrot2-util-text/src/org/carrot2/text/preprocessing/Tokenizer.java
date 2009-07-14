@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -52,8 +51,8 @@ import com.google.common.collect.Maps;
 public final class Tokenizer
 {
     /**
-     * Analyzer used to split documents into individual tokens (terms). This
-     * analyzer must provide token {@link Payload} implementing {@link ITokenType}.
+     * Analyzer used to split documents into individual tokens (terms). This analyzer must
+     * provide token {@link Payload} implementing {@link ITokenType}.
      * 
      * @level Medium
      * @group Preprocessing
@@ -66,13 +65,13 @@ public final class Tokenizer
     @Required
     @ImplementingClasses(classes =
     {
-        ChineseAnalyzer.class, ExtendedWhitespaceAnalyzer.class
+        ActiveLanguageAnalyzer.class, ChineseAnalyzer.class,
+        ExtendedWhitespaceAnalyzer.class
     }, strict = false)
-    public Analyzer analyzer = new ExtendedWhitespaceAnalyzer();
+    public Analyzer analyzer = new ActiveLanguageAnalyzer();
 
     /**
-     * Textual fields of documents that should be tokenized and parsed for
-     * clustering.
+     * Textual fields of documents that should be tokenized and parsed for clustering.
      * 
      * @level Advanced
      * @group Preprocessing
@@ -115,6 +114,12 @@ public final class Tokenizer
      */
     public void tokenize(PreprocessingContext context)
     {
+        if (analyzer instanceof ActiveLanguageAnalyzer)
+        {
+            ((ActiveLanguageAnalyzer) analyzer).setActiveLanguage(context.language
+                .getLanguageCode());
+        }
+
         // Documents to tokenize
         final List<Document> documents = context.documents;
 

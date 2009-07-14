@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -23,7 +22,7 @@ import org.junit.Test;
 public class ChineseTokenizerTest extends TokenizerTestBase
 {
     private ChineseAnalyzer chineseAnalyzer = new ChineseAnalyzer();
-    
+
     @Override
     protected TokenStream createTokenStream(Reader reader)
     {
@@ -31,55 +30,72 @@ public class ChineseTokenizerTest extends TokenizerTestBase
     }
 
     @Test
-    public void TERM()
+    public void testTermTokens()
     {
         String test = "东亚货币贬值";
         TokenImage [] tokens =
         {
-            term("东亚"),
-            term("货币"),
-            term("贬值"),
+            term("东亚"), term("货币"), term("贬值"),
         };
 
         assertEqualTokens(test, tokens);
     }
-    
+
     @Test
-    public void PUNCTUATION()
+    public void testChineseEnglishTermTokens()
+    {
+        String test = "test 东亚货币贬值 English";
+        TokenImage [] tokens =
+        {
+            term("test"), term("东亚"), term("货币"), term("贬值"), term("english")
+        };
+
+        assertEqualTokens(test, tokens);
+    }
+
+    @Test
+    public void testJunkTokens()
+    {
+        final String [] junkTokens = new String []
+        {
+            ",", ".", "<", ">", "?", "/", "\\", "|", "-", "_", "+", "=", "*", "&", "^",
+            "%", "#", "@", "!", "~", "`", ";", ":", "'", "\"", "(", ")", "$", "·", "‘",
+            "’", "…", "`", "’", "“", "”", "‘", "—"
+        };
+
+        TokenImage [] tokens =
+        {
+            punctuation(","),
+        };
+        for (String junkToken : junkTokens)
+        {
+            assertEqualTokens(junkToken, tokens);
+        }
+    }
+
+    @Test
+    public void testPunctuationTokens()
     {
         String test = "东亚货币贬值。周小燕老师，您辛苦了！";
         TokenImage [] tokens =
         {
-            term("东亚"),
-            term("货币"),
-            term("贬值"),
-            punctuation(","),
-            term("周"),
-            term("小"),
-            term("燕"),
-            term("老师"),
-            punctuation(","),
-            term("您"),
-            term("辛苦"),
-            term("了"),
+            term("东亚"), term("货币"), term("贬值"), punctuation(","), term("周"), term("小"),
+            term("燕"), term("老师"), punctuation(","), term("您"), term("辛苦"), term("了"),
             punctuation(","),
         };
-        
+
         assertEqualTokens(test, tokens);
     }
-    
+
     @Test
-    public void NUMERIC()
+    public void testNumericTokens()
     {
         String test = "湖南１１个部门";
         TokenImage [] tokens =
         {
-            term("湖南"),
-            numeric("11"),
-            term("个"),
-            term("部门"),
+            term("湖南"), numeric("11"), term("个"), term("部门"),
         };
-        
+
         assertEqualTokens(test, tokens);
     }
 }

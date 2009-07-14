@@ -29,7 +29,7 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
     }
 
     @Test
-    public void TERM()
+    public void testTermTokens()
     {
         String test = " simple simple's simples` terms simpleterm 9numterm numerm99x \"quoted string\"";
         TokenImage [] tokens =
@@ -49,7 +49,7 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
     }
 
     @Test
-    public void SYMBOL()
+    public void testSymbolTokens()
     {
         String test = " ...  S_NI_P token";
         TokenImage [] tokens =
@@ -64,7 +64,7 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
     }
 
     @Test
-    public void EMAIL()
+    public void testEmailTokens()
     {
         String test = "e-mails dweiss@go2.pl dawid.weiss@go2.com.pl bubu@some-host.com me@me.org bubu99@yahoo.com";
         TokenImage [] tokens =
@@ -81,7 +81,7 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
     }
 
     @Test
-    public void URL()
+    public void testUrlTokens()
     {
         String test = " urls http://www.google.com http://www.cs.put.poznan.pl/index.jsp?query=term&query2=term "
             + " ftp://ftp.server.pl www.google.com   not.an.url   go2.pl/mail http://www.digimine.com/usama/datamine/.";
@@ -107,7 +107,7 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
     }
 
     @Test
-    public void ACRONYM()
+    public void testAcronymTokens()
     {
         String test = " acronyms I.B.M. S.C. z o.o. AT&T garey&johnson&willet";
         TokenImage [] tokens =
@@ -127,7 +127,7 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
     }
 
     @Test
-    public void NUMERIC()
+    public void testNumericTokens()
     {
         String test = " numeric 127 0 12.87 12,12 12-2003/23 term2003 2003term ";
         TokenImage [] tokens =
@@ -148,7 +148,7 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
     }
 
     @Test
-    public void NASTY_URL_1()
+    public void testNastyUrlTokens()
     {
         String test = "http://r.office.microsoft.com/r/rlidLiveMeeting?p1=7&amp;p2=en_US&amp;p3=LMInfo&amp;p4=DownloadWindowsConsole "
             + "https://www.livemeeting.com/cc/askme/join?id=58937J&amp;role=present&amp;pw=mNjC%27%25%3D%218";

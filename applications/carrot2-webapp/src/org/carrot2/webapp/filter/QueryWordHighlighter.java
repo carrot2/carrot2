@@ -45,7 +45,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     public String query = null;
 
     /**
-     * {@link Document}s to highlights query words in.
+     * {@link Document}s to highlight query words in.
      */
     @Processing
     @Input

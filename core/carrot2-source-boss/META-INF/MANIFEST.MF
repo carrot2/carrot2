@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.carrot2.source.boss;singleton:=true
 Bundle-Version: 0.0.0.QUALIFIER
 Export-Package: org.carrot2.source.boss
 Require-Bundle: org.carrot2.core,
- org.carrot2.util.common
+ org.carrot2.util.common,
+ org.carrot2.text
 Bundle-ClassPath: META-INF/,
  .
 Bundle-Vendor: Carrot2.org

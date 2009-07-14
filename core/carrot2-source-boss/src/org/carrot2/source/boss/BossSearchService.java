@@ -19,10 +19,11 @@ import java.util.Arrays;
 
 import org.apache.commons.httpclient.*;
 import org.apache.log4j.Logger;
-import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
+import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpHeaders;
@@ -83,7 +84,7 @@ public abstract class BossSearchService
      * href="http://developer.yahoo.com/search/boss/boss_guide/supp_regions_lang.html">
      * language codes supported by the Yahoo Boss API</a>.
      * <p>
-     * The following languages and regions are currently (September 2008) supported:
+     * The following languages and regions are currently (July 2009) supported:
      * </p>
      * <table> <thead>
      * <tr>
@@ -138,6 +139,11 @@ public abstract class BossSearchService
      * <td>es</td>
      * </tr>
      * <tr>
+     * <td>Czech Republic</td>
+     * <td>cz</td>
+     * <td>cs</td>
+     * </tr>
+     * <tr>
      * <td>Denmark</td>
      * <td>dk</td>
      * <td>da</td>
@@ -148,6 +154,16 @@ public abstract class BossSearchService
      * <td>fi</td>
      * </tr>
      * <tr>
+     * <td>Hong Kong</td>
+     * <td>hk</td>
+     * <td>tzh</td>
+     * </tr>
+     * <tr>
+     * <td>Hungary Hungary</td>
+     * <td>hu</td>
+     * <td>hu</td>
+     * </tr>
+     * <tr>
      * <td>Indonesia - English</td>
      * <td>id</td>
      * <td>en</td>
@@ -156,6 +172,11 @@ public abstract class BossSearchService
      * <td>Indonesia - Indonesian</td>
      * <td>id</td>
      * <td>id</td>
+     * </tr>
+     * <tr>
+     * <td>Israel</td>
+     * <td>il</td>
+     * <td>he</td>
      * </tr>
      * <tr>
      * <td>India</td>
@@ -223,6 +244,11 @@ public abstract class BossSearchService
      * <td>ru</td>
      * </tr>
      * <tr>
+     * <td>Romania</td>
+     * <td>ro</td>
+     * <td>ro</td>
+     * </tr>
+     * <tr>
      * <td>Sweden</td>
      * <td>se</td>
      * <td>sv</td>
@@ -233,9 +259,19 @@ public abstract class BossSearchService
      * <td>en</td>
      * </tr>
      * <tr>
+     * <td>Taiwan</td>
+     * <td>tw</td>
+     * <td>tzh</td>
+     * </tr>
+     * <tr>
      * <td>Thailand</td>
      * <td>th</td>
      * <td>th</td>
+     * </tr>
+     * <tr>
+     * <td>Turkey</td>
+     * <td>tr</td>
+     * <td>tr</td>
      * </tr>
      * <tr>
      * <td>Switzerland - German</td>
@@ -315,6 +351,18 @@ public abstract class BossSearchService
     public BossLanguageCodes languageAndRegion;
 
     /**
+     * An internal attribute to capture the previously set active language and possibly
+     * set a new better matching value based on the supplied {@link #languageAndRegion} value.
+     */
+    @Processing
+    @Input
+    @Output
+    @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
+    @Internal
+    @SuppressWarnings("unused")
+    private LanguageCode language;
+
+    /**
      * BOSS engine current metadata.
      */
     protected MultipageSearchEngineMetadata metadata = DEFAULT_METADATA;
@@ -368,6 +416,12 @@ public abstract class BossSearchService
             catch (IllegalArgumentException e)
             {
                 throw new IOException("Language value: " + languageAndRegion);
+            }
+            
+            final LanguageCode bestMatchingLanguageCode = languageAndRegion.toLanguageCode();
+            if (bestMatchingLanguageCode != null)
+            {
+                language = bestMatchingLanguageCode;
             }
         }
 
