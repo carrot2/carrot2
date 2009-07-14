@@ -154,11 +154,11 @@ public abstract class ControllerTestBase
     public static class ProcessingComponent5_1 extends ProcessingComponentBase
         implements IDocumentSource
     {
-        @Init @Processing @Input @Output
+        @Processing @Input @Output
         @Attribute(key = "key1")
         protected String key1;
         
-        @Init @Processing @Input @Output
+        @Processing @Input @Output
         @Attribute(key = "key2")
         protected String key2;
         
@@ -174,11 +174,11 @@ public abstract class ControllerTestBase
     public static class ProcessingComponent5_2 extends ProcessingComponentBase
         implements IClusteringAlgorithm
     {
-        @Init @Processing @Input @Output
+        @Processing @Input @Output
         @Attribute(key = "key1")
         protected String key1 = "default";
 
-        @Init @Processing @Input @Output
+        @Processing @Input @Output
         @Attribute(key = "key2")
         protected String key2 = "default";
     }
@@ -229,17 +229,6 @@ public abstract class ControllerTestBase
     @Test
     public void testOutputAttributesWithNullValues()
     {
-        performProcessing(
-            ProcessingComponent5_1.class,
-            ProcessingComponent5_2.class);
-        
-        Assert.assertEquals("default", processingAttributes.get("key1"));
-        Assert.assertEquals("value", processingAttributes.get("key2"));
-
-        processingAttributes.clear();
-        processingAttributes.put("key1", null);
-        processingAttributes.put("key2", null);
-
         performProcessing(
             ProcessingComponent5_1.class,
             ProcessingComponent5_2.class);
