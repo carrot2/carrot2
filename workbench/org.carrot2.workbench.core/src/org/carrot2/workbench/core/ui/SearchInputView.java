@@ -485,14 +485,14 @@ public class SearchInputView extends ViewPart
             attributeGroups.setExpanded(expansionState);
 
             /*
-             * Set default values for those attributes that have null values.
+             * Set default values for those attributes that do not have any assigned.
              */
-            for (AttributeDescriptor attr : sourceDescriptor.flatten().attributeDescriptors
-                .values())
+            Map<String,Object> defaultValues = sourceDescriptor.getDefaultValues();
+            for (Map.Entry<String, Object> e : defaultValues.entrySet())
             {
-                if (attributes.getAttributeValue(attr.key) == null)
+                if (attributes.getAttributeValue(e.getKey()) == null)
                 {
-                    attributes.setAttributeValue(attr.key, attr.defaultValue);
+                    attributes.setAttributeValue(e.getKey(), e.getValue());
                 }
             }
 
