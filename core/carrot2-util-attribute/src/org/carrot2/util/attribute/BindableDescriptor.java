@@ -297,9 +297,10 @@ public class BindableDescriptor
      * Returns a map of default values of attributes associated with this bindable. A
      * shortcut for:
      * <pre>
-     * for (AttributeDescriptor d : flatten().attributeDescriptors.values())
+     * for (AttributeDescriptor d : only(Input.class).flatten().attributeDescriptors.values())
      * {
-     *     values.put(d.key, d.defaultValue);
+     *     if (d.defaultValue != null || d.requiredAttribute)
+     *        values.put(d.key, d.defaultValue);
      * }
      * </pre>
      */
