@@ -23,7 +23,6 @@ import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.*;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.attribute.*;
 
@@ -106,7 +105,6 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
     @Output
     @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
     @Internal
-    @SuppressWarnings("unused")
     private LanguageCode language;
     
     /**
@@ -125,10 +123,13 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
         
         // Set best matching language code based on the culture info. The value will
         // be collected and propagated for components down the chain.
-        LanguageCode bestMatchingLanguageCode = culture.toLanguageCode();
-        if (bestMatchingLanguageCode != null) 
+        if (language == null) 
         {
-            language = bestMatchingLanguageCode;
+            LanguageCode bestMatchingLanguageCode = culture.toLanguageCode();
+            if (bestMatchingLanguageCode != null) 
+            {
+                language = bestMatchingLanguageCode;
+            }
         }
     }
     

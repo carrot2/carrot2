@@ -376,4 +376,10 @@ public class MatrixUtils
     {
         return vector.aggregate(Functions.plus, Functions.identity);
     }
+    
+    
+    public static DoubleMatrix1D columnCentroid(DoubleMatrix2D matrix)
+    {
+        return null;
+    }
 }

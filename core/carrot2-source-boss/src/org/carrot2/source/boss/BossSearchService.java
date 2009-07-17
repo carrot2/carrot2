@@ -22,7 +22,6 @@ import org.apache.log4j.Logger;
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
@@ -359,7 +358,6 @@ public abstract class BossSearchService
     @Output
     @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
     @Internal
-    @SuppressWarnings("unused")
     private LanguageCode language;
 
     /**
@@ -418,10 +416,13 @@ public abstract class BossSearchService
                 throw new IOException("Language value: " + languageAndRegion);
             }
             
-            final LanguageCode bestMatchingLanguageCode = languageAndRegion.toLanguageCode();
-            if (bestMatchingLanguageCode != null)
+            if (language == null)
             {
-                language = bestMatchingLanguageCode;
+                final LanguageCode bestMatchingLanguageCode = languageAndRegion.toLanguageCode();
+                if (bestMatchingLanguageCode != null)
+                {
+                    language = bestMatchingLanguageCode;
+                }
             }
         }
 

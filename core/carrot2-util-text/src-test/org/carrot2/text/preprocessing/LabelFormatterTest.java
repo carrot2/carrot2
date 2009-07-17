@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,8 +13,7 @@ package org.carrot2.text.preprocessing;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
+import org.carrot2.text.linguistic.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -53,14 +51,14 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         createDocuments("test", "test");
         final String expectedLabel = "Test";
 
-        checkFullPreprocessing(expectedLabel);
+        checkFullPreprocessing(LanguageCode.ENGLISH, expectedLabel);
         checkWithoutPreprocessing(new char [] []
         {
             "test".toCharArray()
         }, new boolean []
         {
             false
-        }, expectedLabel);
+        }, expectedLabel, true);
     }
 
     @Test
@@ -69,14 +67,14 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         createDocuments("kMN", "kMN");
         final String expectedLabel = "kMN";
 
-        checkFullPreprocessing(expectedLabel);
+        checkFullPreprocessing(LanguageCode.ENGLISH, expectedLabel);
         checkWithoutPreprocessing(new char [] []
         {
             "kMN".toCharArray()
         }, new boolean []
         {
             false
-        }, expectedLabel);
+        }, expectedLabel, true);
     }
 
     @Test
@@ -86,14 +84,14 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         labelFilterProcessor.stopWordLabelFilter.enabled = false;
         final String expectedLabel = "For";
 
-        checkFullPreprocessing(expectedLabel);
+        checkFullPreprocessing(LanguageCode.ENGLISH, expectedLabel);
         checkWithoutPreprocessing(new char [] []
         {
             "for".toCharArray()
         }, new boolean []
         {
             true
-        }, expectedLabel);
+        }, expectedLabel, true);
     }
 
     @Test
@@ -102,14 +100,14 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         createDocuments("test phrase", "test phrase");
         final String expectedLabel = "Test Phrase";
 
-        checkFullPreprocessing(expectedLabel);
+        checkFullPreprocessing(LanguageCode.ENGLISH, expectedLabel);
         checkWithoutPreprocessing(new char [] []
         {
             "test".toCharArray(), "phrase".toCharArray()
         }, new boolean []
         {
             false, false
-        }, expectedLabel);
+        }, expectedLabel, true);
     }
 
     @Test
@@ -118,14 +116,14 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         createDocuments("food for fish", "food for fish");
         final String expectedLabel = "Food for Fish";
 
-        checkFullPreprocessing(expectedLabel);
+        checkFullPreprocessing(LanguageCode.ENGLISH, expectedLabel);
         checkWithoutPreprocessing(new char [] []
         {
             "food".toCharArray(), "for".toCharArray(), "fish".toCharArray()
         }, new boolean []
         {
             false, true, false
-        }, expectedLabel);
+        }, expectedLabel, true);
     }
 
     @Test
@@ -134,14 +132,14 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         createDocuments("Jaguar car", "Jaguar car");
         final String expectedLabel = "Jaguar Car";
 
-        checkFullPreprocessing(expectedLabel);
+        checkFullPreprocessing(LanguageCode.ENGLISH, expectedLabel);
         checkWithoutPreprocessing(new char [] []
         {
             "Jaguar".toCharArray(), "Car".toCharArray()
         }, new boolean []
         {
             false, true, false
-        }, expectedLabel);
+        }, expectedLabel, true);
     }
 
     @Test
@@ -150,24 +148,41 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         createDocuments("iMac stuff", "iMac stuff");
         final String expectedLabel = "iMac Stuff";
 
-        checkFullPreprocessing(expectedLabel);
+        checkFullPreprocessing(LanguageCode.ENGLISH, expectedLabel);
         checkWithoutPreprocessing(new char [] []
         {
             "iMac".toCharArray(), "stuff".toCharArray()
         }, new boolean []
         {
             false, false
-        }, expectedLabel);
+        }, expectedLabel, true);
+    }
+
+    @Test
+    public void testChinesePhrases()
+    {
+        createDocuments("东亚货币贬值", "东亚货币贬值");
+        final String expectedLabel = "东亚货币贬值";
+
+        checkFullPreprocessing(LanguageCode.ENGLISH, expectedLabel);
+        checkWithoutPreprocessing(new char [] []
+        {
+            "东亚货币贬值".toCharArray()
+        }, new boolean []
+        {
+            false, false
+        }, expectedLabel, false);
     }
 
     private void checkWithoutPreprocessing(char [][] words, boolean [] stopWords,
-        String expectedFormattedLabel)
+        String expectedFormattedLabel, boolean joinWithSpace)
     {
-        assertThat(LabelFormatter.format(words, stopWords)).isEqualTo(
+        assertThat(LabelFormatter.format(words, stopWords, joinWithSpace)).isEqualTo(
             expectedFormattedLabel);
     }
 
-    private void checkFullPreprocessing(String... expectedFormattedLabels)
+    private void checkFullPreprocessing(LanguageCode language,
+        String... expectedFormattedLabels)
     {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);

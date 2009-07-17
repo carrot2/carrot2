@@ -17,7 +17,6 @@ import java.util.Map;
 
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
@@ -172,7 +171,6 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Output
     @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
     @Internal
-    @SuppressWarnings("unused")
     private LanguageCode activeLanguage;
 
     /**
@@ -315,10 +313,14 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     public void process()
     {
         super.process();
-        LanguageCode bestMatchingLanguageCode = language.toLanguageCode();
-        if (bestMatchingLanguageCode != null)
+        
+        if (activeLanguage == null)
         {
-            activeLanguage = bestMatchingLanguageCode;
+            LanguageCode bestMatchingLanguageCode = language.toLanguageCode();
+            if (bestMatchingLanguageCode != null)
+            {
+                activeLanguage = bestMatchingLanguageCode;
+            }
         }
     }
 }

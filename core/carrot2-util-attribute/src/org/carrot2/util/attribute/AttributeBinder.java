@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -474,7 +473,8 @@ public class AttributeBinder
                 {
                     return null;
                 }
-                else {
+                else
+                {
                     throw ExceptionUtils.wrapAsRuntimeException(target);
                 }
             }
@@ -524,7 +524,9 @@ public class AttributeBinder
                     {
                         // Throw exception only if the current value is null
                         throw new AttributeBindingException(key,
-                            "No value for required attribute: " + key);
+                            "No value for required attribute: " + key + " ("
+                                + field.getDeclaringClass().getName() + "#"
+                                + field.getName() + ")");
                     }
                     return;
                 }

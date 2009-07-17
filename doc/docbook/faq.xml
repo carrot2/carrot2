@@ -108,6 +108,43 @@
             </para> 
           </answer>
         </qandaentry>
+        
+        <qandaentry xml:id="section.faq.preliminaries.supported-languages">
+          <question>
+            <para>Can &C2; cluster content in other languages than English?</para>
+          </question>
+          <answer>
+            <para>
+              Yes. Currently, Carrot2 can cluster content in 17 languages:
+              
+              <itemizedlist>
+                <listitem><simpara>Chinese Simplified (experimental)</simpara></listitem>
+                <listitem><simpara>Danish</simpara></listitem>
+                <listitem><simpara>Dutch</simpara></listitem>
+                <listitem><simpara>English</simpara></listitem>
+                <listitem><simpara>Finnish</simpara></listitem>
+                <listitem><simpara>French</simpara></listitem>
+                <listitem><simpara>German</simpara></listitem>
+                <listitem><simpara>Hungarian</simpara></listitem>
+                <listitem><simpara>Italian</simpara></listitem>
+                <listitem><simpara>Norwegian</simpara></listitem>
+                <listitem><simpara>Polish</simpara></listitem>
+                <listitem><simpara>Portuguese</simpara></listitem>
+                <listitem><simpara>Romanian</simpara></listitem>
+                <listitem><simpara>Russian</simpara></listitem>
+                <listitem><simpara>Spanish</simpara></listitem>
+                <listitem><simpara>Swedish</simpara></listitem>
+                <listitem><simpara>Turkish</simpara></listitem>
+              </itemizedlist>
+              
+              <para>
+                Please note, however, that for some of the languages you may need to 
+                <link linkend="section.advanced-topics.fine-tuning.stop-words">tune
+                the stop words</link> to achieve best results.
+              </para>
+            </para> 
+          </answer>
+        </qandaentry>
       </qandadiv>
     </qandaset>
   </section>

@@ -18,27 +18,41 @@ import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
-import org.carrot2.source.boss.BossSearchService;
-import org.carrot2.source.microsoft.CultureInfo;
+import org.carrot2.source.boss.*;
+import org.carrot2.source.etools.EToolsDocumentSource;
 import org.carrot2.source.microsoft.MicrosoftLiveDocumentSource;
 import org.carrot2.text.linguistic.LanguageCode;
 
 /**
- * This example shows how to cluster content in non-English languages, e.g. Chinese. The
- * key to clustering content in other languages is to set the
- * {@link AttributeNames#ACTIVE_LANGUAGE} to the appropriate value from
- * {@link LanguageCode}, which will make the clustering algorithm use the tokenizer,
- * stemmer and lexical resources dedicated to that language.
- * <p>
- * When using a document source that can return content in different languages, such as
- * {@link MicrosoftLiveDocumentSource} or BossDocumentSource, the appropriate
+ * This example shows how to cluster content in non-English languages. By default Carrot2
+ * algorithms assume the content is in English and use the tokenizer, stemmer and stop
+ * words appropriate for that language. There are two ways of performing non-English
+ * clustering in Carrot2:
+ * <ol>
+ * <li>Set the {@link AttributeNames#ACTIVE_LANGUAGE} attribute to the appropriate value
+ * from {@link LanguageCode}, which will make the clustering algorithm use the tokenizer,
+ * stemmer and lexical resources dedicated to that language</li>
+ * <li>When using a document source that can return content in different languages,
  * {@link AttributeNames#ACTIVE_LANGUAGE} will be determined based on the source-specific
- * language attribute, e.g. {@link MicrosoftLiveDocumentSource#culture} or
- * {@link BossSearchService#languageAndRegion}.
+ * language attribute. Currently, three document sources support language choice:
+ * <ol>
+ * <li>{@link MicrosoftLiveDocumentSource} through the
+ * {@link MicrosoftLiveDocumentSource#culture} attribute</li>
+ * <li>{@link BossDocumentSource} through the {@link BossSearchService#languageAndRegion}
+ * attribute</li>
+ * <li>{@link EToolsDocumentSource} through the {@link EToolsDocumentSource#language}
+ * attribute</li>
+ * </ol>
+ * </ol>
+ * <p>
+ * <strong>Note:</strong> As the tokenizer for Chinese is fairly expensive to create, for
+ * best performance when clustering Chinese content, use {@link CachingController} that
+ * can cache processing component instances.
  * </p>
  */
 public class ClusteringNonEnglishContent
 {
+    @SuppressWarnings("unchecked")
     public static void main(String [] args)
     {
         /*
@@ -49,29 +63,41 @@ public class ClusteringNonEnglishContent
         final CachingController controller = new CachingController(IDocumentSource.class);
 
         /*
-         * No special initialization-time attributes in this example. 
+         * No special initialization-time attributes in this example.
          */
         final Map<String, Object> initAttributes = new HashMap<String, Object>();
         controller.init(initAttributes);
 
         /*
-         * In the first call, we will fetch Chinese search results from a search engine,
-         * and the engine will set the active language to Chinese automatically.
+         * In the first call, we will fetch Chinese search results from MSN Live, but as
+         * we don't explicitly set the document source's language to Chinese, we'll need
+         * to provide the active language attribute.
          */
         final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
         attributes.put(AttributeNames.RESULTS, 100);
-
-        // MicrosoftLiveDocumentSource-specific attribute for setting the language
-        attributes.put("MicrosoftLiveDocumentSource.culture", CultureInfo.CHINESE_CHINA);
+        attributes.put(AttributeNames.ACTIVE_LANGUAGE, LanguageCode.CHINESE);
 
         /*
          * Perform clustering and display results.
          */
         final ProcessingResult chineseResult = controller.process(attributes,
             MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
-        controller.process(attributes, MicrosoftLiveDocumentSource.class,
-            LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(chineseResult);
+
+        /*
+         * In the second call, we will fetch German search results from eTools, and
+         * explicitly instruct the document source to return results in German. In this
+         * case, we don't need to set the active language attribute because the document
+         * source will set it for us accordingly.
+         */
+        attributes.clear();
+        attributes.put(AttributeNames.QUERY, "bundestag");
+        attributes.put(AttributeNames.RESULTS, 100);
+        attributes.put("EToolsDocumentSource.language", EToolsDocumentSource.Language.GERMAN);
+        final ProcessingResult germanResult = controller.process(attributes,
+            EToolsDocumentSource.class, LingoClusteringAlgorithm.class);
+        ConsoleFormatter.displayResults(germanResult);
+
     }
 }

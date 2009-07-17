@@ -17,8 +17,7 @@ import java.util.*;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.text.analysis.*;
-import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
+import org.carrot2.text.linguistic.*;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.text.suffixtrees.Node;
 import org.carrot2.util.attribute.*;
@@ -147,6 +146,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             .size());
         junkDocuments.addAll(documents);
 
+        final boolean joinLabelTokensWithSpace = context.language.getLanguageCode() != LanguageCode.CHINESE;
         for (Iterator i = mergedClusters.iterator(); i.hasNext() && (max > 0); max--)
         {
             final MergedCluster b = (MergedCluster) i.next();
@@ -170,7 +170,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                     images[oindex] = t.getTerm().toCharArray();
                 }
 
-                newCluster.addPhrases(LabelFormatter.format(images, stopwords));
+                newCluster.addPhrases(LabelFormatter.format(images, stopwords, 
+                    joinLabelTokensWithSpace));
             }
 
             for (Iterator j = b.getDocuments().iterator(); j.hasNext();)
