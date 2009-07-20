@@ -13,6 +13,7 @@
 package org.carrot2.workbench.core.ui;
 
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.part.*;
 
 /**
  * A view showing attribute values associated with the active editor's
@@ -53,6 +54,16 @@ public final class AttributeView extends PageBookViewBase
             current = next;
         }
         super.showPageRec(pageRec);
+    }
+    
+    @Override
+    protected IPage createDefaultPage(PageBook book)
+    {
+        MessagePage defaultPage = new MessagePage();
+        defaultPage.setMessage("No active search result.");
+        initPage(defaultPage);
+        defaultPage.createControl(book);
+        return defaultPage;
     }
     
     @Override
