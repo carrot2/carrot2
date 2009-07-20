@@ -54,6 +54,13 @@ public final class AttributeView extends PageBookViewBase
         }
         super.showPageRec(pageRec);
     }
+    
+    @Override
+    public void partClosed(IWorkbenchPart part)
+    {
+        if (current != null) current.saveGlobalState();
+        super.partClosed(part);
+    }
 
     /**
      * Only react to {@link SearchEditor} instances.
