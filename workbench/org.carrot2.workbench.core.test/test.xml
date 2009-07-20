@@ -45,6 +45,17 @@
 			<property name="data-dir" value="${eclipse-home}/data" />
 			<property name="junit-report-output" value="${raw-output-dir}" />
 		</ant>
+
+                <!-- Tests that require the GUI should be here (although they won't run in headless mode).
+
+                <ant target="ui-test" antfile="${library-file}" dir="${eclipse-home}">
+                  <property name="plugin-name" value="${plugin-name}" />
+                  <property name="classname"
+                            value="org.carrot2.workbench.core.AllTests" />
+                  <property name="data-dir" value="${eclipse-home}/data" />
+                  <property name="junit-report-output" value="${raw-output-dir}" />
+                </ant>
+                -->
 	</target>
 
 	<!-- This target holds code to cleanup the testing environment after -->
