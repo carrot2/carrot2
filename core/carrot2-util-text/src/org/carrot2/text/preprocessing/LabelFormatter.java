@@ -38,7 +38,7 @@ public class LabelFormatter
         }
         else
         {
-            final boolean insertSpace = context.language.getLanguageCode() != LanguageCode.CHINESE;
+            final boolean insertSpace = context.language.getLanguageCode() != LanguageCode.CHINESE_SIMPLIFIED;
             final int [] wordIndices = phrasesWordIndices[featureIndex - wordCount];
             final boolean [] commonTermFlag = context.allWords.commonTermFlag;
             for (int i = 0; i < wordIndices.length; i++)

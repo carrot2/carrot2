@@ -84,8 +84,9 @@ public enum BossLanguageCodes implements IValueHintMapping
     {
         final Map<BossLanguageCodes, LanguageCode> map = Maps.newEnumMap(BossLanguageCodes.class);
         
-        map.put(HONG_KONG, LanguageCode.CHINESE);
-        map.put(TAIWAN, LanguageCode.CHINESE);
+        // TODO: Hong Kong uses traditional Chinese, I believe.
+        map.put(HONG_KONG, LanguageCode.CHINESE_SIMPLIFIED);
+        map.put(TAIWAN, LanguageCode.CHINESE_SIMPLIFIED);
         map.put(DENMARK, LanguageCode.DANISH);
         map.put(NETHERLANDS, LanguageCode.DUTCH);
         map.put(AUSTRALIA, LanguageCode.ENGLISH);

@@ -28,7 +28,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public enum LanguageCode
 {
-    CHINESE ("zh"),
+    CHINESE_SIMPLIFIED ("zh_cn"),
     DANISH ("da"),
     DUTCH ("nl"),
     ENGLISH ("en"),
@@ -47,7 +47,10 @@ public enum LanguageCode
     TURKISH ("tr");
 
     /**
-     * ISO code for this language.
+     * ISO 639-1 code for this language. An underscore may separate additional country/region
+     * variant, should it be relevant (as in Simplified and Traditional Chinese).
+     * 
+     * @see "http://www.loc.gov/standards/iso639-2/php/code_list.php"
      */
     private final String isoCode;
 

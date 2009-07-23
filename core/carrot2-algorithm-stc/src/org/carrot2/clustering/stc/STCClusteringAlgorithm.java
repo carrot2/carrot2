@@ -146,7 +146,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             .size());
         junkDocuments.addAll(documents);
 
-        final boolean joinLabelTokensWithSpace = context.language.getLanguageCode() != LanguageCode.CHINESE;
+        final boolean joinLabelTokensWithSpace = context.language.getLanguageCode() != LanguageCode.CHINESE_SIMPLIFIED;
         for (Iterator i = mergedClusters.iterator(); i.hasNext() && (max > 0); max--)
         {
             final MergedCluster b = (MergedCluster) i.next();

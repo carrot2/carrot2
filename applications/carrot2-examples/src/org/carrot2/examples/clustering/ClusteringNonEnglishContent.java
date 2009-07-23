@@ -76,7 +76,7 @@ public class ClusteringNonEnglishContent
         final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
         attributes.put(AttributeNames.RESULTS, 100);
-        attributes.put(AttributeNames.ACTIVE_LANGUAGE, LanguageCode.CHINESE);
+        attributes.put(AttributeNames.ACTIVE_LANGUAGE, LanguageCode.CHINESE_SIMPLIFIED);
 
         /*
          * Perform clustering and display results.
