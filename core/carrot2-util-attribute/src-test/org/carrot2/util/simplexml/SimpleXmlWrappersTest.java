@@ -355,6 +355,20 @@ public class SimpleXmlWrappersTest
         check(new ClassWithWrapper(null, null));
     }
 
+    @Test
+    public void testValueWithDefaultStringType() throws Exception
+    {
+        final String input = "<map><attribute key='key'><value value='value'/></attribute></map>";
+        final MapContainer deserialized = new Persister().read(MapContainer.class, input);
+        assertThat(deserialized.map.get("key")).isEqualTo("value");
+        
+        final Map<String, Object> original = Maps.newHashMap();
+        original.put("key", Arrays.asList(new String [] {"buhu", "v"}));
+        final StringWriter writer = new StringWriter();
+        new Persister().write(new MapContainer(original), writer);
+        System.out.println(writer.toString());
+    }
+
     public void check(Object value) throws Exception
     {
         checkMap(Long.toString(value != null ? value.hashCode() : 0), value);
