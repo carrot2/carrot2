@@ -132,6 +132,11 @@
       <listitem>
         <para>Fine tune &PROD; clustering algorithms' settings to work best with your specific data.</para>
       </listitem>
+      
+      <listitem>
+        <para>Run simple performance benchmarks using different settings to predict maximum clustering throughput
+        on a single machine (see <xref linkend="section.workbench.benchmarking" /> for details).</para>
+      </listitem>      
     </itemizedlist>
     
     <section xml:id="section.workbench.installation" role="notoc">

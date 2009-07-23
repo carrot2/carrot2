@@ -238,7 +238,8 @@
       </para>
     </tip>
     
-    <section>
+    <!-- Single-level subsections are discouraged. Do we need to have this one? -->
+    <simplesect>
       <title>Tuning Lingo algorithm for smallest <emphasis>Other Topics</emphasis> cluster</title>
 
       <para>
@@ -276,6 +277,45 @@
           <xref linkend="chapter.customizing" />.
         </para>
       </tip>
-    </section>
+    </simplesect>
+  </section>
+
+  <section xml:id="section.workbench.benchmarking">
+    <title>Benchmarking algorithms' performance in the &DCW;</title>
+
+    <para>
+      The &DCW; has a dedicated view for running simple performance benchmarks on the currently opened
+      search result (<xref linkend="figure.benchmark-view" />). The way this works, is by repeatedly clustering 
+      the currently opened editor's input and reporting the average time it takes to complete 
+      the clustering. Such benchmarks can be used to estimate
+      a given algorithm's performance and its maximum throughput (the maximum number of requests that 
+      can be processed per second). 
+    </para>
+
+    <figure xml:id="figure.benchmark-view">
+      <title>Benchmark View in the &DCW;</title>
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata format="PNG" fileref="img/workbench-benchmark-view.png" />
+        </imageobject>
+      </mediaobject>  
+    </figure>
+
+    <tip>
+      <para>
+        Note that by default, the benchmarking view uses only a single processing unit on multi-processor or
+        multi-core machines. This can be adjusted in the settings. 
+      </para>
+    </tip>
+
+    <caution>
+      <para>
+        Benchmark results may vary and be different from the results acquired on production machines
+        due to other programs running in the background, operating system and 
+        hardware-specific considerations and even different Java Virtual Machine settings. Always fine-tune your
+        clustering setup in the target deployment environment. 
+      </para>
+    </caution>    
   </section>
 </chapter>
+
