@@ -1,0 +1,76 @@
+<!--
+  An example of adding custom fields (attributes) to a document. Author field is a primitive type (single-value). For lists of tokens,
+  use the following:
+
+  <field key="key">
+    <value><wrapper class="org.carrot2.util.simplexml.ListSimpleXmlWrapper">
+        <list>
+          <value value="value1"/>
+          <value value="value2"/>
+        </list>
+    </wrapper></value>
+  </field>
+
+  -->
+
+<searchresult>
+   <query>sicilia e bella</query>
+   
+   <document id="0">
+      <field key="author">
+        <value value="John Doe" />
+      </field>
+      
+      <title>VACANZE IN SICILIA-TAORMINA-ETNA - BELLA SICILIA - ARTE E LUOGHI</title>
+      <snippet>vacanze in Sicilia-Taormina-arte-cultura-mare-Letoianni-Giardini Naxos ... Sicilia e Polonia unite nei versi. CURIOSITA&apos; Schumacher compra una tonnara e un ...</snippet>
+      <url>http://www.bellasicilia.org/</url>
+   </document>
+   
+   <document id="1">
+      <field key="author">
+        <value value="John Doe" />
+      </field>
+
+      <title>Sicilia Hip Hotel - Alberghi di charme e itinerari</title>
+      <snippet>La Sicilia è l&apos;isola più grande del Mediterraneo, dalle coste magnifiche. ... Vento e fuoco: ecco le Isole Eolie Natura incontaminata, arte, buona tavola e bella gente</snippet>
+      <url>http://www.sicily-traveller.com/</url>
+   </document>
+   
+   <document id="2">
+      <field key="author">
+        <value value="Bill Poe" />
+      </field>
+
+      <title>Quale e&apos; la più bella? La Sicilia o la Sardegna? - Yahoo! Answers</title>
+      <snippet>Lo so che tutte e due sono bellissime, ma cerco di scegliere per ... La Sicilia! In Sicilia c&apos;è metà del patrimonio storico-artistico italiano ...</snippet>
+      <url>http://it.answers.yahoo.com/question/index?qid=20070623001948AAOVmz9</url>
+   </document>
+   
+   <document id="3">
+      <field key="author">
+        <value value="Bill Poe" />
+      </field>
+      
+      <title>Hai visto com&apos;è bella la mia sicilia ..? - [Agorà Magazine]</title>
+      <snippet>Parto venerdi&apos; 19 dicembre 2008. Sono le 6 del mattino e il mio adorato fratello Giampiero mi accompagna in aeroporto a bergamo : destinazione Palermo ...</snippet>
+      <url>http://www.agoramagazine.it/agora/spip.php?article5433</url>
+   </document>
+   
+   <document id="4">
+     <field key="author">
+       <value value="Foo Lee" />
+     </field>
+
+     <title>Le più belle spiagge di Sicilia: San Lorenzo a Marzamemi ...</title>
+      <snippet>La segnalazione di Superbike87, relativamente alle spiagge più belle del Mediterraneo, ci permette di colmare una grave lacuna e di occuparci un po&apos; degli…</snippet>
+      <url>http://www.travelblog.it/post/8332/le-piu-belle-spiagge-di-sicilia-san-lorenzo-a-marzamemi-vendicari-e-lido-di-noto</url>
+   </document>
+
+   <document id="5">
+      <!-- No author at all. -->
+     
+      <title>La Repubblica/spettacoli_e_cultura: La Sandrelli, giovane e bella ...</title>
+      <snippet>La Sandrelli, giovane e bella nella Sicilia di Pietro Germi. A lungo attesa dagli appassionati di cinema italiano, ecco in dvd la collezione dei film di uno ...</snippet>
+      <url>http://www.repubblica.it/online/spettacoli_e_cultura/dvddue/scheda/scheda.html</url>
+   </document>
+</searchresult>
