@@ -12,21 +12,31 @@
 
 package org.carrot2.workbench.vis.circles;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.carrot2.core.Cluster;
-import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.*;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.SearchResultListenerAdapter;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
+
+import com.google.common.collect.Lists;
 
 /**
  * A single {@link CirclesView} page embedding a Web browser and redirecting to an
@@ -103,9 +113,9 @@ final class CirclesViewPage extends Page
     };
 
     /**
-     * Unique ID associated with this page (and this the editor).
+     * Unique ID associated with this page (and this editor).
      */
-    private int id;
+    private final int id;
 
     /** 
      * Last selected cluster ID (to avoid repetitions).
@@ -171,6 +181,44 @@ final class CirclesViewPage extends Page
         browser = new Browser(parent, SWT.NONE);
 
         /*
+         * Register custom callback functions.
+         */
+
+        new BrowserFunction(browser, "swt_selectionCleared") {
+            public Object function(Object [] arguments)
+            {
+                editor.setSelection(StructuredSelection.EMPTY);
+                return null;
+            }
+        };
+
+        new BrowserFunction(browser, "swt_groupClicked") {
+            public Object function(Object [] arguments)
+            {
+                if (arguments.length == 2)
+                {
+                    final int groupId = (int) Double.parseDouble(arguments[0].toString());
+                    doGroupSelection(groupId);
+                }
+
+                return null;
+            }
+        };
+
+        new BrowserFunction(browser, "swt_documentClicked") {
+            public Object function(Object [] arguments)
+            {
+                if (arguments.length == 1)
+                {
+                    final int documentId = (int) Double.parseDouble(arguments[0].toString());
+                    doDocumentSelection(documentId);
+                }
+
+                return null;
+            }
+        };
+        
+        /*
          * Add a listener to the editor to update the view
          * after new clusters are available.
          */
@@ -219,5 +267,72 @@ final class CirclesViewPage extends Page
     public int getId()
     {
         return id;
+    }
+    
+    private void doGroupSelection(int groupId)
+    {
+        final ProcessingResult pr = editor.getSearchResult().getProcessingResult();
+        if (pr == null) return;
+
+        final List<Cluster> clusters = pr.getClusters();
+
+        if (clusters != null && !clusters.isEmpty())
+        {
+            ClusterWithParent c = 
+                ClusterWithParent.find(groupId, ClusterWithParent.wrap(clusters));
+
+            if (c != null)
+            {
+                /*
+                 * Construct full tree path to allow automatic expansion of 
+                 * tree selection observers.
+                 */
+                final ArrayList<ClusterWithParent> path = Lists.newArrayList();
+                while (c != null)
+                {
+                    path.add(0, c);
+                    c = c.parent;
+                }
+
+                editor.setSelection(
+                    new StructuredSelection(new TreePath(path.toArray())));
+            }
+        }
+    }
+    
+    private void doDocumentSelection(int documentId)
+    {
+        final ProcessingResult pr = editor.getSearchResult().getProcessingResult();
+        if (pr == null) return;
+
+        for (Document d : pr.getDocuments())
+        {
+            if (documentId == d.getId())
+            {
+                final String url = d.getField(Document.CONTENT_URL);
+                if (!StringUtils.isEmpty(url))
+                {
+                    openURL(url);
+                }
+            }
+        }
+    }
+    
+    private static void openURL(String location)
+    {
+        try
+        {
+            WorkbenchCorePlugin.getDefault().getWorkbench().getBrowserSupport()
+                .createBrowser(
+                    IWorkbenchBrowserSupport.AS_EDITOR
+                        | IWorkbenchBrowserSupport.LOCATION_BAR
+                        | IWorkbenchBrowserSupport.NAVIGATION_BAR
+                        | IWorkbenchBrowserSupport.STATUS, null, null, null)
+                .openURL(new URL(location));
+        }
+        catch (Exception e)
+        {
+            Utils.logError("Couldn't open internal browser", e, false);
+        }
     }
 }

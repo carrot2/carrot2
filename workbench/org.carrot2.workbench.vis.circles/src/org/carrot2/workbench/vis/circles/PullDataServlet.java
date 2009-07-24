@@ -50,7 +50,6 @@ public class PullDataServlet extends HttpServlet
         }
         
         final ProcessingResult pr = getProcessingResult(page); 
-
         if (pr == null)
         {
             // No processing result anymore.
