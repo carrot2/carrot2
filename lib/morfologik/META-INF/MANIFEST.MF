@@ -10,3 +10,4 @@ Export-Package: morfologik,
  morfologik.fsa.dictionary,
  morfologik.stemmers,
  morfologik.tools
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

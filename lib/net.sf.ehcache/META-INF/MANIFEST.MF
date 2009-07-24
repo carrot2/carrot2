@@ -23,3 +23,4 @@ Export-Package: net.sf.ehcache,
  net.sf.ehcache.store,
  net.sf.ehcache.util
 Require-Bundle: org.apache.commons
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

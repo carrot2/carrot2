@@ -3,7 +3,7 @@
 
 package com.microsoft.msnsearch;
 
-@SuppressWarnings({ "unchecked", "unused", "serial" })
+@SuppressWarnings({ "unchecked", "serial" })
 public class SearchResponse  implements java.io.Serializable {
     private com.microsoft.msnsearch.SourceResponse[] responses;
 

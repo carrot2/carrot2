@@ -7,3 +7,4 @@ Bundle-ClassPath: google-collect-1.0-rc2.jar
 Bundle-Vendor: Google Inc.
 Export-Package: com.google.common.base,
  com.google.common.collect
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

@@ -12,4 +12,5 @@ Export-Package: org.jdom,
  org.jdom.output,
  org.jdom.transform,
  org.jdom.xpath
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 

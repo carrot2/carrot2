@@ -78,3 +78,4 @@ Export-Package: org.apache.commons.codec,
    org.apache.avalon.framework.logger,
    javax.servlet,
    org.apache.log"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

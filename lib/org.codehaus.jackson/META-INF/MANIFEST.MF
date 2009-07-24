@@ -20,3 +20,4 @@ Export-Package: org.codehaus.jackson,
  org.codehaus.jackson.type,
  org.codehaus.jackson.util
 Bundle-Vendor: jackson.codehaus.org
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

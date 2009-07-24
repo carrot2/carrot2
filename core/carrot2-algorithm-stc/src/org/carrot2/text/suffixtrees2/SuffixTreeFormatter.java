@@ -22,7 +22,6 @@ public class SuffixTreeFormatter
     /**
      * Convert to GraphViz's DOT language.
      */
-    @SuppressWarnings("unchecked")
     public String toDot(SuffixTree<Node> tree)
     {
         StringBuilder gv = new StringBuilder();
