@@ -49,7 +49,7 @@ public class URLResourceWithParams implements IResource
 
     /**
      * For XML serialization/deserialization only, use
-     * {@link #ParameterizedUrlResource(URL)}
+     * {@link #URLResourceWithParams(URL)}
      */
     URLResourceWithParams()
     {

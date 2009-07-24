@@ -26,7 +26,6 @@ public class AdunaActivator extends AbstractUIPlugin
     /*
      * 
      */
-    @SuppressWarnings("unchecked")
     public void start(BundleContext context) throws Exception
     {
         super.start(context);

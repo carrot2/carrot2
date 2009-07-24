@@ -32,7 +32,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  * that this document source cannot deliver more than 32 search results.
  * 
  * @see <a href="http://code.google.com/apis/ajaxsearch/documentation/#fonje">Google AJAX
- *      API< /a>
+ *      API</a>
  */
 @Bindable(prefix = "GoogleDocumentSource")
 public class GoogleDocumentSource extends MultipageSearchEngine
@@ -78,7 +78,7 @@ public class GoogleDocumentSource extends MultipageSearchEngine
      * production environments. Instead, apply for your own key.
      * 
      * @see <a href="http://code.google.com/apis/ajaxsearch/signup.html">Google AJAX
-     *      signup< /a>
+     *      signup</a>
      */
     public String apiKey = "ABQIAAAA_XmITjrzoipJYoBApAgGJhS8yIvkL4-1sNwOJWkV7nbkjq_Z_BQW0-uzOh5lKXRtEXQDTGbzIEz06Q";
 

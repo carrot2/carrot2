@@ -65,8 +65,7 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
 
     /**
      * Another dummy attribute. This one shows that if the attribute is not a primitive
-     * type (see {@link AttributeBinder.ConsistencyCheckImplementingClasses} for the
-     * implementation), {@link ImplementingClasses} constraint must be added to specify
+     * type for the implementation), {@link ImplementingClasses} constraint must be added to specify
      * which assignable types are allowed as values for the attribute. To allow all
      * assignable values, specify empty {@link ImplementingClasses#classes()} and
      * {@link ImplementingClasses#strict()} equal to <code>false</code>.

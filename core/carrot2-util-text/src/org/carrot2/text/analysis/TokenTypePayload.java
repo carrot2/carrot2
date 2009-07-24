@@ -15,7 +15,7 @@ package org.carrot2.text.analysis;
 import org.apache.lucene.index.Payload;
 
 /**
- * Lucene's {@link Payload} implementing {@link TokenInfo}.
+ * Lucene's {@link Payload} implementing {@link ITokenType}.
  */
 final class TokenTypePayload extends Payload implements ITokenType
 {

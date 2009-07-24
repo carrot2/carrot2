@@ -25,6 +25,8 @@ import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.adapters.ClusterAdapterFactory;
 import org.carrot2.workbench.core.ui.adapters.PropertySourceAdapterFactory;
 import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.*;
@@ -369,5 +371,13 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
          * Install a resource locator pointing to the workspace.
          */
         ResourceUtilsFactory.addFirst(new DirLocator(workspacePath.getAbsolutePath()));
+    }
+
+    /**
+     * @return Returns the plugin's instance preferences.
+     */
+    public static IEclipsePreferences getPreferences()
+    {
+        return new InstanceScope().getNode(WorkbenchCorePlugin.PLUGIN_ID);
     }
 }

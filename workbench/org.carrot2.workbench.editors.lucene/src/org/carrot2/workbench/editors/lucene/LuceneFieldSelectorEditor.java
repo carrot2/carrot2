@@ -37,7 +37,6 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
     /*
      * 
      */
-    @SuppressWarnings("unchecked")
     @Override
     public AttributeEditorInfo init(Map<String, Object> defaultValues)
     {
@@ -67,7 +66,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
     /*
      * 
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"deprecation", "unchecked"})
     private void refreshFields(Object directory)
     {
         BiMap<Object, String> valueToName = HashBiMap.create();

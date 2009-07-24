@@ -102,8 +102,7 @@ public class SearchInputView extends ViewPart
     private AttributeGroups attributeGroups;
 
     /**
-     * A joint set of attributes for all sources from
-     * {@link WorkbenchCorePlugin#getSources()} and default attribute values for
+     * A joint set of attributes for all sources from and default attribute values for
      * algorithms.
      */
     private final AttributeValueSet attributes = new AttributeValueSet("global");

@@ -164,7 +164,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
 
     /**
      * An internal attribute to capture the previously set active language and possibly
-     * set a new better matching value based on the supplied {@link #languageAndRegion} value.
+     * set a new better matching value based on the supplied {@link #language} value.
      */
     @Processing
     @Input
@@ -291,8 +291,6 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     /**
      * Returns the number of results per data source, estimated based on the total
      * requested results.
-     * 
-     * @param params
      */
     int getDataSourceResultsCount()
     {

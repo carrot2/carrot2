@@ -16,8 +16,7 @@ import org.carrot2.util.IndirectComparator;
 import org.carrot2.util.IndirectSort;
 
 /**
- * A simple suffix sorting utility based on the generic sorting routines from
- * {@link IndirectSorter}.
+ * A simple suffix sorting utility based on the generic sorting routines from {@link IndirectSort}.
  */
 final class SuffixSorter
 {

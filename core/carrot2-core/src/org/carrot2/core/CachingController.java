@@ -62,8 +62,8 @@ public final class CachingController implements IController
         .newHashMap();
 
     /**
-     * Maintains a mapping between component ids and their classes. Initialized in
-     * {@link #init(Map, ComponentConfiguration...)}, used in
+     * Maintains a mapping between component IDs and their classes. Initialized in
+     * {@link #init(Map, ProcessingComponentConfiguration...)}, used in
      * {@link #process(Map, String...)}.
      */
     private FromIdProcessingComponentClassResolver processingComponentClassResolver;

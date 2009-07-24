@@ -148,7 +148,7 @@ public class SimpleFieldMapper implements IFieldMapper
 
     /**
      * Last received {@link Query} object in
-     * {@link #map(Query, Document, org.carrot2.core.Document)}.
+     * {@link #map(Query, Analyzer, Document, org.carrot2.core.Document)}.
      */
     private Query query;
 

@@ -85,8 +85,7 @@ public final class FileDialogs
      */
     public static void rememberPath(String preferencesKey, IPath path)
     {
-        WorkbenchCorePlugin.getDefault().getPluginPreferences().setValue(preferencesKey,
-            path.toOSString());
+        WorkbenchCorePlugin.getPreferences().put(preferencesKey, path.toOSString());
     }
 
     /**
@@ -112,13 +111,8 @@ public final class FileDialogs
      */
     public static Path recallPath(String preferencesKey)
     {
-        String pathAsString = WorkbenchCorePlugin.getDefault().getPluginPreferences()
-            .getString(preferencesKey);
-
-        if (StringUtils.isEmpty(pathAsString))
-        {
-            pathAsString = getDefaultPath().toOSString();
-        }
+        String pathAsString = 
+            WorkbenchCorePlugin.getPreferences().get(preferencesKey, getDefaultPath().toOSString());
 
         final File file = new File(pathAsString);
         if (file.getParentFile() == null || file.getParentFile().exists())

@@ -273,7 +273,7 @@ public class STCEngine
      * expected phrase length (average) and "tolerance" towards shorter and longer phrases
      * (standard deviation). You can draw this score multiplier's characteristic with
      * gnuplot. One word-phrases can be given a fixed boost, if
-     * {@link STCConstants#SINGLE_TERM_BOOST} is greater than zero.
+     * {@link STCClusteringParameters#singleTermBoost} is greater than zero.
      * 
      * <pre>
      * reset

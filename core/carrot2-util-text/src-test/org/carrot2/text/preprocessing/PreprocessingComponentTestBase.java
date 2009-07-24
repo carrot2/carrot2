@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * Base class for {@link Preprocessor} tasks tests.
+ * Base class for {@link PreprocessingContext} tasks tests.
  */
 public class PreprocessingComponentTestBase
 {

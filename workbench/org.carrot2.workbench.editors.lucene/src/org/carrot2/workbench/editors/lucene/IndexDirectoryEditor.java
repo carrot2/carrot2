@@ -119,6 +119,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
     /*
      * 
      */
+    @SuppressWarnings("deprecation")
     private void openIndexDialog()
     {
         final DirectoryDialog dialog = new DirectoryDialog(this.resourceInfo.getShell());

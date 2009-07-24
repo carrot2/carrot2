@@ -26,10 +26,8 @@ import org.carrot2.util.attribute.*;
  * Attributes of this class correspond to Yahoo's documentation (see links below).
  * 
  * @label Yahoo Boss Web Search Service
- * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/Web_Search.html">API *
- *      description< /a>
- * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/">Yahoo Boss
- *      Documentation< /a>
+ * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/Web_Search.html">API description</a>
+ * @see <a href="http://developer.yahoo.com/search/boss/boss_guide/">Yahoo Boss Documentation</a>
  */
 @Bindable(prefix = "BossWebSearchService")
 public final class BossWebSearchService extends BossSearchService

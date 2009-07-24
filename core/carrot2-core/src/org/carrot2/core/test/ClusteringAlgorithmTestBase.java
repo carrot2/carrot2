@@ -159,7 +159,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     }
 
     /**
-     * Performs clustering using {@link #simpleController}.
+     * Performs clustering using {@link SimpleController}.
      * 
      * @param documents Documents to be clustered.
      * @return {@link ProcessingResult} returned from the controller.

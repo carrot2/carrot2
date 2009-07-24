@@ -38,7 +38,7 @@ public class LogInitContextListener implements ServletContextListener
     public static final String CONTEXT_ID = LogInitContextListener.class.getName();
 
     /**
-     * Any created {@link FileAppenders}.
+     * Any created {@link Appender}s.
      */
     private Multimap<Logger, Appender> appenders = ArrayListMultimap.create();
 

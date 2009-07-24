@@ -20,7 +20,7 @@ import org.junit.Test;
 import cern.colt.matrix.DoubleMatrix2D;
 
 /**
- * Test cases for phrase matrix building in {@link ClusterBuilder}.
+ * Test cases for phrase matrix building.
  */
 public class PhraseMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase
 {

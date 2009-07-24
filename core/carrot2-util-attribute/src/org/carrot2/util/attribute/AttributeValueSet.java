@@ -14,8 +14,7 @@ package org.carrot2.util.attribute;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
-import org.carrot2.util.simplexml.SimpleXmlWrappers;
+import org.carrot2.util.simplexml.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -204,7 +203,7 @@ public class AttributeValueSet
     }
 
     /**
-     * Converts attribute values to {@link TypeStringValuePair}s for serialization.
+     * Converts attribute values to {@link ISimpleXmlWrapper}s for serialization.
      */
     @Persist
     @SuppressWarnings("unused")
@@ -217,7 +216,7 @@ public class AttributeValueSet
     }
 
     /**
-     * Converts attribute values to {@link TypeStringValuePair}s after deserialization.
+     * Converts attribute values to {@link ISimpleXmlWrapper}s after deserialization.
      */
     @Commit
     @SuppressWarnings("unused")

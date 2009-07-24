@@ -55,9 +55,8 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     }
 
     /**
-     * @return Overriden
-     *         {@link #init(BindableDescriptor, AttributeDescriptor, IAttributeEventProvider)}
-     *         with original parameters saved to protected fields.
+     * @return This method is invoked to initialize the subclasses. Some values have been assigned
+     * to protected fields already.
      */
     protected abstract AttributeEditorInfo init(Map<String,Object> defaultValues);
 

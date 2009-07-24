@@ -83,7 +83,7 @@ public class AttributeTitles
     private int titleWithExtraPeriods;
 
     /**
-     * Title with link to {@link ProcessingComponent#init()}. Description.
+     * Title with link to {@link AttributeTitles#titleWithLink}. Description.
      */
     @TestInit
     @Input

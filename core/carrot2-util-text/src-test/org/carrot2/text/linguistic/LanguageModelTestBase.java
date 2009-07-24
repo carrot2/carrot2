@@ -14,7 +14,6 @@ package org.carrot2.text.linguistic;
 
 import static org.junit.Assert.*;
 
-import org.carrot2.text.util.MutableCharArray;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -115,7 +114,7 @@ public abstract class LanguageModelTestBase
 
     /**
      * Override and provide words for testing against
-     * {@link ILanguageModel#isCommonWord(MutableCharArray)}).
+     * {@link ILanguageModel#isCommonWord(CharSequence)}).
      */
     protected String [] getCommonWordsTestData()
     {

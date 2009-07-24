@@ -98,7 +98,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
     /**
      * Part property indicating current grouping of attributes on the
-     * {@link SearchEditorPanelName#ATTRIBUTES}.
+     * {@link PanelName#ATTRIBUTES}.
      */
     private static final String GROUPING_LOCAL = 
         PreferenceConstants.GROUPING_EDITOR_PANEL + ".local";
@@ -222,7 +222,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
     /**
      * {@link SearchEditor} forwards its selection provider methods to this component (
-     * {@link SearchEditorPanelName#CLUSTERS} panel).
+     * {@link PanelName#CLUSTERS} panel).
      */
     private IPostSelectionProvider selectionProvider;
 

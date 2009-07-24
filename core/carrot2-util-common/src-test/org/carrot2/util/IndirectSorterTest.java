@@ -20,7 +20,7 @@ import org.junit.Test;
 import com.google.common.collect.Ordering;
 
 /**
- * Test cases for the deprecated and removed {@link IndirectSorter}. The replacement class
+ * Test cases for the deprecated and removed <code>IndirectSorter<code>. The replacement class
  * {@link IndirectSort} should provide the same functionality.
  */
 public class IndirectSorterTest

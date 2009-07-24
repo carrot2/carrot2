@@ -239,7 +239,6 @@ final class AdunaClusterMapViewPage extends Page
     private PostponableJob refreshJob = new PostponableJob(new UIJob(
         "Aduna ClusterMap (full refresh)...")
     {
-        @SuppressWarnings("unchecked")
         public IStatus runInUIThread(IProgressMonitor monitor)
         {
             final ProcessingResult result = editor.getSearchResult()

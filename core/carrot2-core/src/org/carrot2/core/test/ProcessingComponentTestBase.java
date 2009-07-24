@@ -88,7 +88,7 @@ public abstract class ProcessingComponentTestBase<T extends IProcessingComponent
     }
 
     /**
-     * Return an instance of a {@link CachedController}, initializing it on the way.
+     * Return an instance of a {@link CachingController}, initializing it on the way.
      */
     protected final CachingController getCachingController(
         Map<String, Object> initAttributes,
