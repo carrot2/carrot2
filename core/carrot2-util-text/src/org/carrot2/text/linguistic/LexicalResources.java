@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -22,14 +21,20 @@ import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtils;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 
 /**
  * Holds lexical resources for one language.
  */
 final class LexicalResources
 {
+    private final static Logger logger = Logger.getLogger(LexicalResources.class);
+
+    /**
+     * If we cannot find resources for some languages, emit warning once only.
+     */
+    final static EnumSet<LanguageCode> problemCache = EnumSet.noneOf(LanguageCode.class);
+
     final Set<MutableCharArray> stopwords;
     final List<Pattern> stoplabels;
 
@@ -53,16 +58,15 @@ final class LexicalResources
         return new LexicalResources(mergedStoplabels, mergedStopwords);
     }
 
-    static LexicalResources load(ResourceUtils resourceLoaders,
-        LanguageCode lang)
+    static LexicalResources load(ResourceUtils resourceLoaders, LanguageCode lang)
     {
-        return new LexicalResources(loadStopLabels(resourceLoaders, lang),
-            loadStopWords(resourceLoaders, lang));
+        return new LexicalResources(loadStopLabels(resourceLoaders, lang), loadStopWords(
+            resourceLoaders, lang));
     }
 
     /**
-     * Loads common words associated with the given language. Logs an error and
-     * recovers silently if the given resource cannot be found.
+     * Loads common words associated with the given language. Logs an error and recovers
+     * silently if the given resource cannot be found.
      */
     private static Set<MutableCharArray> loadStopWords(ResourceUtils resourceLoaders,
         LanguageCode lang)
@@ -77,8 +81,7 @@ final class LexicalResources
 
             if (resource == null)
             {
-                throw new IOException("Common words resource not found: "
-                    + resourceName);
+                throw new IOException("Resource not found: " + resourceName);
             }
 
             for (String word : TextResourceUtils.load(resource))
@@ -90,16 +93,16 @@ final class LexicalResources
         }
         catch (IOException e)
         {
-            Logger.getLogger(DefaultLanguageModelFactory.class).warn(
-                "Common words for language: " + lang.toString() + " not found");
-
+            problemCache.add(lang);
+            logger.warn("Common words could not be loaded for language "
+                + lang.toString() + ": " + e.getMessage());
             return Collections.emptySet();
         }
     }
 
     /**
-     * Loads stop labels associated with the given language. Logs an error and
-     * recovers silently if the given resource cannot be found.
+     * Loads stop labels associated with the given language. Logs an error and recovers
+     * silently if the given resource cannot be found.
      */
     private static List<Pattern> loadStopLabels(ResourceUtils resourceLoaders,
         LanguageCode lang)
@@ -114,8 +117,7 @@ final class LexicalResources
 
             if (resource == null)
             {
-                throw new IOException("Stop labels resource not found: "
-                    + resourceName);
+                throw new IOException("Resource not found: " + resourceName);
             }
 
             for (String word : TextResourceUtils.load(resource))
@@ -126,9 +128,9 @@ final class LexicalResources
                 }
                 catch (PatternSyntaxException e)
                 {
-                    Logger.getLogger(DefaultLanguageModelFactory.class).warn(
-                        "Ignoring regular expression with syntax error: " + word
-                            + " in " + resourceName);
+                    problemCache.add(lang);
+                    logger.warn("Ignoring regular expression with syntax error: " + word
+                        + " in " + resourceName);
                 }
             }
 
@@ -136,9 +138,8 @@ final class LexicalResources
         }
         catch (IOException e)
         {
-            Logger.getLogger(DefaultLanguageModelFactory.class).warn(
-                "Stop labels for language: " + lang.toString() + " not found");
-
+            problemCache.add(lang);
+            logger.warn("Stop labels for language " + lang.toString() + " not found.");
             return Collections.emptyList();
         }
     }
