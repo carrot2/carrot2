@@ -221,7 +221,7 @@ public class BindableMetadataBuilderTest
 
         // Note that this scenario is not supported
         checkTitle(AttributeTitles.class, "titleWithLink",
-            "Title with link to <code>ProcessingComponent.init()</code>");
+            "Title with link to <code>AttributeTitles.titleWithLink</code>");
         checkDescription(AttributeTitles.class, "titleWithLink", "Description.");
     }
 
