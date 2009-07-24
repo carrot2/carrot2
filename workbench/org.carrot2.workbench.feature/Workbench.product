@@ -94,7 +94,7 @@ Apache Software Foundation http://www.apache.org/.
 
    <features>
       <feature id="org.carrot2.workbench.feature" version="0.0.0"/>
-      <feature id="org.eclipse.rcp" version="3.3.1.R33x_r20070802-8y8eE8sEV3Fz0z0GlHJrXvTAUS"/>
+      <feature id="org.eclipse.rcp" version="0.0.0"/>
    </features>
 
 </product>
