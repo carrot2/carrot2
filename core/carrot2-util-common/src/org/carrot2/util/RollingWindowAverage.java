@@ -20,7 +20,7 @@ import java.util.LinkedList;
  * <p>
  * This class is not thread-safe.
  */
-public final class RollingWindowAverage
+public class RollingWindowAverage
 {
     /** Helpful constant for one millisecond. */
     public static final int MILLIS = 1;
@@ -74,7 +74,7 @@ public final class RollingWindowAverage
         if (bucketSizeMillis <= 0 || windowSizeMillis <= 0
             || windowSizeMillis <= bucketSizeMillis)
         {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bucket size must be smaller than window size.");
         }
 
         this.bucketSizeMillis = bucketSizeMillis;
@@ -84,9 +84,9 @@ public final class RollingWindowAverage
     /**
      * Adds a new entry.
      */
-    public void add(long timestamp, long value)
+    public final void add(long timestamp, long value)
     {
-        final long now = System.currentTimeMillis();
+        final long now = getNow();
         removeOldBuckets(now);
 
         Bucket bucket;
@@ -106,9 +106,9 @@ public final class RollingWindowAverage
     /**
      *
      */
-    public double getCurrentAverage()
+    public final double getCurrentAverage()
     {
-        removeOldBuckets(System.currentTimeMillis());
+        removeOldBuckets(getNow());
 
         if (this.currentCount == 0)
         {
@@ -121,24 +121,33 @@ public final class RollingWindowAverage
     }
 
     /**
-     * 
+     * Returns the number of updates kept in the rolling window's scope.
      */
-    public long getUpdatesInWindow()
+    public final long getUpdatesInWindow()
     {
-        removeOldBuckets(System.currentTimeMillis());
+        removeOldBuckets(getNow());
         return this.currentCount;
     }
 
     /**
-     * 
+     * Returns the size of the rolling window. 
      */
-    public long getWindowSizeMillis()
+    public final long getWindowSizeMillis()
     {
         return windowSizeMillis;
     }
-    
+
     /**
-     *
+     * Returns <code>System.currentTimeMillise()</code>, but moved to a separate method to speed
+     * up JUnit tests and make them independent of actual wall time.
+     */
+    long getNow()
+    {
+        return System.currentTimeMillis();
+    }
+
+    /**
+     * Remove buckets that fall outside the rolling window's scope.
      */
     private void removeOldBuckets(long now)
     {
