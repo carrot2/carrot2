@@ -12,7 +12,7 @@ function selectGroupById(id) {
  */
 function loadDataFromURL(url) {
 	var circles = getSWF();
-	circles.loadDataFromURL(url);
+    circles.loadDataFromURL(url);
 }
 
 /**

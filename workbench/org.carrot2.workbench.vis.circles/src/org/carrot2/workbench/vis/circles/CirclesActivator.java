@@ -93,7 +93,7 @@ public final class CirclesActivator extends AbstractUIPlugin
      * Returns a full URL to the internal built-in HTTP server, based on the
      * relative URI to a resource.
      */
-    private String getFullURL(String relativeURL)
+    String getFullURL(String relativeURL)
     {
         final String base = "http://" + webService.getHost() + ":" + webService.getPort();
         

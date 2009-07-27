@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
@@ -28,10 +27,8 @@ import org.carrot2.workbench.core.ui.SearchResultListenerAdapter;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.browser.BrowserFunction;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.browser.*;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
@@ -65,43 +62,80 @@ final class CirclesViewPage extends Page
     private Browser browser;
 
     /**
+     * A flag indicating the browser's applet has finished loading.
+     */
+    private volatile boolean browserInitialized;
+
+    /**
      * Browser refresh job. Postponed a bit to make the user interface
      * more responsive.
      */
     private PostponableJob refreshJob = new PostponableJob(new UIJob("Browser (refresh)...") {
         public IStatus runInUIThread(IProgressMonitor monitor)
         {
-            if (!browser.isDisposed())
+            // If there is no search result, quit. Search result listener will reschedule.
+            if (getProcessingResult() == null)
             {
-                final CirclesActivator plugin = CirclesActivator.getInstance();
-    
-                final String refreshURL = plugin.getStartupURL() + "?page=" + getId(); 
-                browser.setUrl(refreshURL);
-                
-                Logger.getLogger("browser").info(refreshURL);
+                // No search result yet.
+                return Status.OK_STATUS;
             }
+            
+            // If browser disposed, quit.
+            if (browser.isDisposed())
+            {
+                return Status.OK_STATUS;
+            }
+
+			// TODO: Workaround for http://issues.carrot2.org/browse/CARROT-546
+            // Instead of calling external interface's reload function, reload the entire URL.
+
+            final CirclesActivator plugin = CirclesActivator.getInstance();
+            final String refreshURL = plugin.getStartupURL() + "?page=" + getId();
+            browserInitialized = false;
+            browser.setUrl(refreshURL);
+
+            /*
+            // If the page has not finished loading, reschedule.
+            if (!browserInitialized)
+            {
+                this.schedule(BROWSER_REFRESH_DELAY);
+                return Status.OK_STATUS;
+            }
+
+            final String refreshURL = plugin.getFullURL("servlets/pull?page=" + getId()); 
+            Logger.getLogger("browser").info("Refreshing: " + refreshURL);
+            try
+            {
+                Object out = browser.evaluate("javascript:loadDataFromURL('" + refreshURL + "')");
+                Logger.getLogger("browser").info("Out: " + out);
+            }
+            catch (SWTException e)
+            {
+                Logger.getLogger("browser").info("Err: ", e);
+            }
+            */
+
             return Status.OK_STATUS;
         }
     });
-    
+
     /**
      * Selection refresh job.
      */
-    private PostponableJob selectionJob = new PostponableJob(new UIJob("Browser (selecting)...") {
+    private PostponableJob selectionJob = new PostponableJob(new UIJob("Browser (selection)...") {
         public IStatus runInUIThread(IProgressMonitor monitor)
         {
-            if (!browser.isDisposed())
+            if (browser.isDisposed() || last == null)
             {
-                if (last != null)
-                {
-                    browser.execute("javascript:selectGroupById(" + last + ");");
-                }
+                return Status.OK_STATUS;
             }
+
+            browser.execute("javascript:selectGroupById(" + last + ");");
             return Status.OK_STATUS;
         }
     });
-    
-    /*
+
+    /**
      * Sync with search result updated event.
      */
     private final SearchResultListenerAdapter editorSyncListener = new SearchResultListenerAdapter()
@@ -149,8 +183,8 @@ final class CirclesViewPage extends Page
     
                         if (!ObjectUtils.equals(id, last))
                         {
-                            selectionJob.reschedule(BROWSER_SELECTION_DELAY);
                             last = id;
+                            selectionJob.reschedule(BROWSER_SELECTION_DELAY);
                         }
                     }
 
@@ -179,14 +213,32 @@ final class CirclesViewPage extends Page
          * Open the browser and redirect it to the internal HTTP server.
          */
         browser = new Browser(parent, SWT.NONE);
+        browser.addProgressListener(new ProgressAdapter() {            
+            public void completed(ProgressEvent event)
+            {                             
+                // When the page loads, try to refresh clusters immediately.
+                browserInitialized = true;
+
+                // TODO: Uncomment when fixed: http://issues.carrot2.org/browse/CARROT-546
+                // refreshJob.reschedule(0);
+            }
+        });
+
+        // TODO: Workaround for: http://issues.carrot2.org/browse/CARROT-546
+        // browser.setUrl(refreshURL);
+        if (getProcessingResult() != null)
+        {
+            refreshJob.reschedule(BROWSER_REFRESH_DELAY);
+        }
 
         /*
          * Register custom callback functions.
          */
-
         new BrowserFunction(browser, "swt_selectionCleared") {
             public Object function(Object [] arguments)
             {
+                if (!browserInitialized) return null;
+
                 editor.setSelection(StructuredSelection.EMPTY);
                 return null;
             }
@@ -195,6 +247,8 @@ final class CirclesViewPage extends Page
         new BrowserFunction(browser, "swt_groupClicked") {
             public Object function(Object [] arguments)
             {
+                if (!browserInitialized) return null;
+
                 if (arguments.length == 2)
                 {
                     final int groupId = (int) Double.parseDouble(arguments[0].toString());
@@ -208,6 +262,8 @@ final class CirclesViewPage extends Page
         new BrowserFunction(browser, "swt_documentClicked") {
             public Object function(Object [] arguments)
             {
+                if (!browserInitialized) return null;
+
                 if (arguments.length == 1)
                 {
                     final int documentId = (int) Double.parseDouble(arguments[0].toString());
@@ -217,15 +273,6 @@ final class CirclesViewPage extends Page
                 return null;
             }
         };
-        
-        /*
-         * Add a listener to the editor to update the view
-         * after new clusters are available.
-         */
-        if (editor.getSearchResult().getProcessingResult() != null)
-        {
-            refreshJob.reschedule(BROWSER_REFRESH_DELAY);
-        }
 
         editor.getSearchResult().addListener(editorSyncListener);
         editor.addPostSelectionChangedListener(selectionListener);
@@ -258,6 +305,7 @@ final class CirclesViewPage extends Page
         editor.getSearchResult().removeListener(editorSyncListener);
         editor.removePostSelectionChangedListener(selectionListener);
         browser.dispose();
+
         super.dispose();
     }
     
@@ -269,9 +317,12 @@ final class CirclesViewPage extends Page
         return id;
     }
     
+    /*
+     * 
+     */
     private void doGroupSelection(int groupId)
     {
-        final ProcessingResult pr = editor.getSearchResult().getProcessingResult();
+        final ProcessingResult pr = getProcessingResult();
         if (pr == null) return;
 
         final List<Cluster> clusters = pr.getClusters();
@@ -302,7 +353,7 @@ final class CirclesViewPage extends Page
     
     private void doDocumentSelection(int documentId)
     {
-        final ProcessingResult pr = editor.getSearchResult().getProcessingResult();
+        final ProcessingResult pr = getProcessingResult();
         if (pr == null) return;
 
         for (Document d : pr.getDocuments())
@@ -334,5 +385,18 @@ final class CirclesViewPage extends Page
         {
             Utils.logError("Couldn't open internal browser", e, false);
         }
+    }
+
+    /**
+     * Returns the current processing result (must be called from the GUI thread).
+     */
+    private ProcessingResult getProcessingResult()
+    {
+        assert Display.getCurrent() != null;
+
+        final ProcessingResult pr = editor.getSearchResult().getProcessingResult();
+        if (pr == null || pr.getClusters() == null) return null;
+
+        return pr;
     }
 }
