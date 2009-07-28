@@ -33,7 +33,7 @@ public class BenchmarkSettings
     }
 
     /**
-     * Number of benchmark rounds. Typically, around 20-30 rounds is enough to
+     * Number of benchmark rounds. Typically, around 50 rounds is enough to
      * get a good estimate of the average clustering time. Benchmarking
      * is performed at regular priority and any processes running in the background may
      * distort the result.
@@ -46,7 +46,7 @@ public class BenchmarkSettings
     @Attribute
     @IntRange(min = 1, max = 1000)
     @Element
-    public int benchmarksRounds = 20;
+    public int benchmarksRounds = 75;
 
     /**
      * Number of warm-up rounds. Java virtual machine's JIT (just in time) compilation
@@ -61,7 +61,7 @@ public class BenchmarkSettings
     @IntRange(min = 0, max = 200)
     @Attribute
     @Element
-    public int warmupRounds = 5;
+    public int warmupRounds = 25;
 
     /**
      * Execution priority for benchmark threads. Setting high thread priority may

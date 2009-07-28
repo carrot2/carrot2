@@ -127,9 +127,9 @@
             create an XSLT style sheet that transforms your data into &C2; format,
             see <xref linkend="section.getting-started.xml-feed" /> for an example.
             Provide a path to your style sheet in the <guilabel>XSLT Stylesheet</guilabel>
-            field, which is an optional field. You can show optional fields by 
-            clicking the arrow button of the <guilabel>Search</guilabel> view toolbar
-            (<xref linkend="figure.search-view-xml" />).
+            field, which is an optional field. 
+            You can show optional fields by clicking the <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-optional-attributes.png" /></imageobject></inlinemediaobject></guiicon>            
+            button on the <guilabel>Search</guilabel> view toolbar (<xref linkend="figure.search-view-xml" />).
           </para>
         </listitem>
         
@@ -196,9 +196,9 @@
         <listitem>
           <para>
             Provide a path to the transformation style sheet in the <guilabel>XSLT Stylesheet</guilabel>
-            field, which is an optional field. You can show optional fields by 
-            clicking the arrow button of the <guilabel>Search</guilabel> view toolbar
-            (<xref linkend="figure.search-view-xml" />).
+            field, which is an optional field. 
+            You can show optional fields by clicking the <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-optional-attributes.png" /></imageobject></inlinemediaobject></guiicon>            
+            button on the <guilabel>Search</guilabel> view toolbar (<xref linkend="figure.search-view-xml" />).
           </para>
         </listitem>
         
@@ -254,9 +254,10 @@
       <orderedlist>
         <listitem>
           <para>
-            In the <guilabel>Search</guilabel> view of &DCW;, choose Lucene source. Using
-            the arrow button of the <guilabel>Search</guilabel> view toolbar
-            (<xref linkend="figure.search-view-lucene" />), show optional attributes.
+            In the <guilabel>Search</guilabel> view of &DCW;, choose Lucene source. 
+            Click the <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-optional-attributes.png" /></imageobject></inlinemediaobject></guiicon>            
+            button on the view's toolbar (<xref linkend="figure.search-view-lucene" />) 
+            to show optional attributes.
           </para>
         </listitem>
         
@@ -301,9 +302,10 @@
       <orderedlist>
         <listitem>
           <para>
-            In the <guilabel>Search</guilabel> view of &DCW;, choose Solr source. Using
-            the arrow button of the <guilabel>Search</guilabel> view toolbar
-            (<xref linkend="figure.search-view-solr" />), show optional attributes.
+            In the <guilabel>Search</guilabel> view of &DCW;, choose Solr source. 
+            Click the <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-optional-attributes.png" /></imageobject></inlinemediaobject></guiicon>            
+            button on the view's toolbar (<xref linkend="figure.search-view-solr" />) 
+            to show optional attributes.
           </para>
         </listitem>
         
