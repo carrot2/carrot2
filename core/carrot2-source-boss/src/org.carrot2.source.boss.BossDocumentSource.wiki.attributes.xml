@@ -1,0 +1,11 @@
+
+<attribute-sets>
+  <attribute-set id="wiki">
+    <value-set>
+      <label>Wikipedia search</label>
+      <attribute key="BossSearchService.sites">
+        <value type="java.lang.String" value="en.wikipedia.org" />
+      </attribute>
+    </value-set>
+  </attribute-set>
+</attribute-sets>
