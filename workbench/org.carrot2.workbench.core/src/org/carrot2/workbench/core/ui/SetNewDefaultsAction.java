@@ -23,19 +23,18 @@ final class SetNewDefaultsAction extends Action
     @Override
     public void runWithEvent(Event event)
     {
-        // Collect @Input attributes.
-        final AttributeValueSet defaults = SaveAttributesAction
-            .getDefaultAttributeValueSet(searchInput.getAlgorithmId());
+        // Collect all default @Input attributes.
+        final AttributeValueSet defaults = 
+            SaveAttributesAction.getDefaultAttributeValueSet(searchInput.getAlgorithmId());
 
-        final Map<String, Object> overrides = searchInput.getAttributeValueSet()
-            .getAttributeValues();
+        final Map<String, Object> overrides = 
+            searchInput.getAttributeValueSet().getAttributeValues();
+
         SaveAttributesAction.removeSpecialKeys(overrides);
-        SaveAttributesAction.removeKeysWithDefaultValues(overrides, defaults);
         overrides.keySet().retainAll(defaults.getAttributeValues().keySet());
 
-        // Find the SearchInputView and set the values as defaults.
+        // Find the SearchInputView and set the editor's attribute values as defaults.
         final SearchInputView searchView = SearchInputView.getView();
-        
         for (Map.Entry<String, Object> e : overrides.entrySet())
         {
             searchView.setAttribute(e.getKey(), e.getValue());
