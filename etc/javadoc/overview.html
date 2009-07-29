@@ -1,0 +1,127 @@
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /></head>
+<body>
+<p>
+Carrot<sup>2</sup> is an Open Source Search Results Clustering Engine, which can
+automatically organize small collections of documents, e.g. search results,
+into thematic categories, <a href="#overview_description">see below for more</a>.
+</p>
+
+<h1>Downloads &amp; more information</h1>
+<p>
+<a href="http://project.carrot2.org/download-java-api.html" class="download-small">Java API JAR, JavaDocs and example code</a><br />
+<a href="http://project.carrot2.org/download.html" class="download-small">Other Carrot2 applications</a><br />
+<a href="http://download.carrot2.org/head/manual/index.html" class="view-small">User and Developer Manual</a><br />
+<a href="http://download.carrot2.org/head/manual/index.html#section.integration.adding-to-maven-project" class="view-small">Instructions for Maven2 users</a><br />
+<a href="http://project.carrot2.org" class="view-small">Carrot2 project website</a><br />
+<a href="http://search.carrot2.org" class="view-small">Carrot2 on-line demo</a>
+</p>
+
+<h1>Java API usage examples</h1>
+<p>
+  You can use Carrot<sup>2</sup> Java API to fetch documents from various sources (public search engines, Lucene, Solr), perform clustering, serialize the results to JSON or XML and many more.
+</p>
+
+<h2>Clustering documents from document sources</h2>
+<p>
+The most common way to use Carrot<sup>2</sup> Java API is to fetch a number of
+documents from some {@link org.carrot2.core.IDocumentSource} and cluster them
+using some {@link org.carrot2.core.IClusteringAlgorithm}. The general pattern
+for this kind of invocation is to put all input data required for processing
+(query and required number of results in this case) into a map and pass that
+map to an {@link org.carrot2.core.IController} that will perform all the procesing.
+The code shown below retrieves 100 search results from {@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource}
+and clusters them using the {@link org.carrot2.clustering.lingo.LingoClusteringAlgorithm}.
+</p>
+
+<pre class="brush: java">
+        /* A controller to manage the processing pipeline. */
+        IController controller = new SimpleController();
+
+        /* Input data for clustering, the query and number of results in this case. */
+        Map&lt;String, Object> attributes = new HashMap&lt;String, Object>();
+        attributes.put(AttributeNames.QUERY, "data mining");
+        attributes.put(AttributeNames.RESULTS, 100);
+
+        /* Perform processing */
+        ProcessingResult result = controller.process(attributes,
+            MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+        
+        /* Documents fetched from the document source, clusters created by Carrot2. */
+        List&lt;Document> documents = result.getDocuments();
+        List&lt;Cluster> clusters = result.getClusters();
+</pre>
+
+<h2>Clustering arbitrary documents</h2>
+
+<p>
+You can also directly pass a list of {@link org.carrot2.core.Document} instnaces for clustering:
+</p>
+
+<pre class="brush: java">
+        /* A few example documents, normally you would need at least 20 for reasonable clusters. */
+        final String [][] data = new String [] []
+        {
+            {
+                "http://en.wikipedia.org/wiki/Data_mining",
+                "Data mining - Wikipedia, the free encyclopedia",
+                "Article about knowledge-discovery in databases (KDD), the practice of automatically searching large stores of data for patterns."
+            },
+
+            {
+                "http://www.ccsu.edu/datamining/resources.html",
+                "CCSU - Data Mining",
+                "A collection of Data Mining links edited by the Central Connecticut State University ... Graduate Certificate Program. Data Mining Resources. Resources. Groups ..."
+            },
+
+            {
+                "http://www.kdnuggets.com/",
+                "KDnuggets: Data Mining, Web Mining, and Knowledge Discovery",
+                "Newsletter on the data mining and knowledge industries, offering information on data mining, knowledge discovery, text mining, and web mining software, courses, jobs, publications, and meetings."
+            },
+
+            {
+                "http://en.wikipedia.org/wiki/Data-mining",
+                "Data mining - Wikipedia, the free encyclopedia",
+                "Data mining is considered a subfield within the Computer Science field of knowledge discovery. ... claim to perform \"data mining\" by automating the creation ..."
+            },
+
+            {
+                "http://www.anderson.ucla.edu/faculty/jason.frand/teacher/technologies/palace/datamining.htm",
+                "Data Mining: What is Data Mining?",
+                "Outlines what knowledge discovery, the process of analyzing data from different perspectives and summarizing it into useful information, can do and how it works."
+            },
+        };
+        final ArrayList&lt;Document> documents = new ArrayList&lt;Document>();
+        for (String [] row : data)
+        {
+            documents.add(new Document(row[1], row[2], row[0]));
+        }
+
+        /* A controller to manage the processing pipeline. */
+        final SimpleController controller = new SimpleController();
+
+        /* Input data for clustering, list of Documents in this case. */
+        final Map&lt;String, Object> attributes = new HashMap&lt;String, Object>();
+        attributes.put(AttributeNames.DOCUMENTS, documents);
+
+        /* Perform clustering */
+        ProcessingResult result = controller.process(attributes,
+            LingoClusteringAlgorithm.class);
+  
+        /* Clusters created by Carrot2. */
+        List&lt;Cluster> clusters = result.getClusters();
+</pre>
+
+<link type="text/css" rel="stylesheet" href="{@docRoot}/sh/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="{@docRoot}/sh/shThemeDefault.css"/>
+<script type="text/javascript" src="{@docRoot}/sh/shCore.js"></script>
+<script type="text/javascript" src="{@docRoot}/sh/shBrushJava.js"></script>
+<script type="text/javascript">
+  SyntaxHighlighter.defaults.light = false;
+  SyntaxHighlighter.defaults.gutter = false;
+  SyntaxHighlighter.all();
+</script>
+
+</body>
+</html>

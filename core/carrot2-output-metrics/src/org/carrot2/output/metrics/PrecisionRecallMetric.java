@@ -27,7 +27,7 @@ import com.google.common.collect.*;
  * clusters.
  * <p>
  * Metrics will be calculated only if all input documents have non-blank
- * {@link Document#PARTITIONS}s.
+ * {@link Document#PARTITIONS}.
  * </p>
  */
 @Bindable
@@ -35,7 +35,7 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedMetric
 {
     /**
      * Partition on which the cluster achieved best F-Score value. Value type:
-     * <code>Object</code>. See {@value Document#PARTITIONS} for more information.
+     * <code>Object</code>. See {@link Document#PARTITIONS} for more information.
      */
     public final static String BEST_F_MEASURE_PARTITION = "best-f-measure-partition";
 

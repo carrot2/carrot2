@@ -127,3 +127,17 @@ HR  {
     font-weight:bold;
 }
 
+a.download-small, a.view-small {
+  background-position: 0 4px;
+  background-repeat: no-repeat;
+  padding-bottom: 2px;
+  padding-left: 72px;
+}
+
+a.download-small {
+  background-image: url(button-download-small.png);
+}
+
+a.view-small {
+  background-image: url(button-view-small.png);
+}
