@@ -153,6 +153,17 @@ public class QueryProcessorServlet extends HttpServlet
         {
             requestParameters.put(WebappConfig.QUERY_PARAM, queryFromAlias);
         }
+        
+        // Remove query if blank. This will get the user back to the startup screen.
+       final String query = (String)requestParameters.get(WebappConfig.QUERY_PARAM);
+       if (StringUtils.isBlank(query))
+       {
+           requestParameters.remove(WebappConfig.QUERY_PARAM);
+       }
+       else
+       {
+           requestParameters.put(WebappConfig.QUERY_PARAM, query.trim());
+       }
 
         try
         {
@@ -221,9 +232,11 @@ public class QueryProcessorServlet extends HttpServlet
     private static class AjaxAttributesModel
     {
         @Element(name = "request")
+        @SuppressWarnings("unused")
         public final RequestModel requestModel;
 
         @Element(name = "attribute-metadata")
+        @SuppressWarnings("unused")
         public final AttributeMetadataModel attributesModel = new AttributeMetadataModel();
 
         private AjaxAttributesModel(RequestModel requestModel)
