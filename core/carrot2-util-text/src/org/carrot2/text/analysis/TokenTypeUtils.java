@@ -30,4 +30,12 @@ public final class TokenTypeUtils
     {
         return rawType & ITokenType.TYPE_MASK;
     }
+
+    /**
+     * Returns <code>true</code> if the given type has {@link ITokenType#TF_SEPARATOR_DOCUMENT} set.
+     */
+    public static boolean isDocumentSeparator(int type)
+    {
+        return (type & ITokenType.TF_SEPARATOR_DOCUMENT) != 0;
+    }
 }
