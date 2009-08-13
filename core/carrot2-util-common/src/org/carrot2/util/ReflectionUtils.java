@@ -12,6 +12,8 @@
 
 package org.carrot2.util;
 
+import org.apache.log4j.Logger;
+
 /**
  * Utilities related to Java reflection.
  */
@@ -28,7 +30,16 @@ public final class ReflectionUtils
      */
     public static Class<?> classForName(String clazzName) throws ClassNotFoundException
     {
-        return Class.forName(clazzName, true, Thread.currentThread()
-            .getContextClassLoader());
+        try
+        {
+            return Class.forName(clazzName, true, Thread.currentThread()
+                .getContextClassLoader());
+        }
+        catch (ClassNotFoundException e)
+        {
+            Logger.getLogger(ReflectionUtils.class).warn("Could not load class: "
+                + clazzName + " (" + e.getMessage() + ").");
+            throw e;
+        }
     }
 }
