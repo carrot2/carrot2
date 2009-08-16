@@ -22,6 +22,7 @@ into thematic categories, <a href="#overview_description">see below for more</a>
   You can use Carrot<sup>2</sup> Java API to fetch documents from various sources (public search engines, Lucene, Solr), perform clustering, serialize the results to JSON or XML and many more. Below is some example code for the most common use cases. Please see the <tt>examples/</tt> directory in the <a href="http://project.carrot2.org/download-java-api.html">Java API distribution archive</a> for more examples.
 </p>
 
+<a name="clustering-from-document-sources"></a>
 <h2>Clustering documents from document sources</h2>
 <p>
 The most common way to use Carrot<sup>2</sup> Java API is to fetch a number of
@@ -51,7 +52,9 @@ and clusters them using the {@link org.carrot2.clustering.lingo.LingoClusteringA
         List&lt;Document> documents = result.getDocuments();
         List&lt;Cluster> clusters = result.getClusters();
 </pre>
+<a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/ClusteringDataFromDocumentSources.java?r=trunk">View full source code</a>
 
+<a name="clustering-documents"></a>
 <h2>Clustering arbitrary documents</h2>
 
 <p>
@@ -92,17 +95,17 @@ You can also directly pass a list of {@link org.carrot2.core.Document} instnaces
                 "Outlines what knowledge discovery, the process of analyzing data from different perspectives and summarizing it into useful information, can do and how it works."
             },
         };
-        final ArrayList&lt;Document> documents = new ArrayList&lt;Document>();
+        ArrayList&lt;Document> documents = new ArrayList&lt;Document>();
         for (String [] row : data)
         {
             documents.add(new Document(row[1], row[2], row[0]));
         }
 
         /* A controller to manage the processing pipeline. */
-        final SimpleController controller = new SimpleController();
+        SimpleController controller = new SimpleController();
 
         /* Input data for clustering, list of Documents in this case. */
-        final Map&lt;String, Object> attributes = new HashMap&lt;String, Object>();
+        Map&lt;String, Object> attributes = new HashMap&lt;String, Object>();
         attributes.put(AttributeNames.DOCUMENTS, documents);
 
         /* Perform clustering */
@@ -112,7 +115,9 @@ You can also directly pass a list of {@link org.carrot2.core.Document} instnaces
         /* Clusters created by Carrot2. */
         List&lt;Cluster> clusters = result.getClusters();
 </pre>
+<a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/ClusteringDocumentList.java?r=trunk">View full source code</a>
 
+<a name="caching-controller"></a>
 <h2>Using {@link org.carrot2.core.CachingController}</h2>
 
 <p>
@@ -167,6 +172,83 @@ You can also directly pass a list of {@link org.carrot2.core.Document} instnaces
         duration = System.currentTimeMillis() - start;
         System.out.println(duration + " ms (documents and clusters from cache)");
 </pre>
+<a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/UsingCachingController.java?r=trunk">View full source code</a>
+
+<a name="non-english"></a>
+<h2>Clustering non-English content</h2>
+
+<p>
+  By default Carrot2 algorithms assume the content is in English and use the
+  tokenizer, stemmer and stop words appropriate for that language. There are
+  two ways of performing non-English clustering in Carrot2:
+  <ol>
+    <li>Set the {@link org.carrot2.core.attribute.AttributeNames#ACTIVE_LANGUAGE} attribute to the appropriate value
+    from {@link org.carrot2.text.linguistic.LanguageCode}, which will make the clustering algorithm use the tokenizer,
+    stemmer and lexical resources dedicated to that language</li>
+    <li>When using a document source that can return content in different languages,
+    {@link org.carrot2.core.attribute.AttributeNames#ACTIVE_LANGUAGE} will be determined based on the source-specific
+    language attribute. Currently, three document sources support language choice:
+    <ol>
+      <li>{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource} through the
+      {@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource#culture} attribute</li>
+      <li>{@link org.carrot2.source.boss.BossDocumentSource} through the {@link org.carrot2.source.boss.BossSearchService#languageAndRegion}
+      attribute</li>
+      <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the {@link org.carrot2.source.etools.EToolsDocumentSource#language}
+      attribute</li>
+    </ol></li>
+  </ol>
+  The following example demonstrates both approaches:
+</p>
+
+<pre class="brush: java">
+        /*
+         * We use a CachingController here to reuse instances of Carrot2 processing
+         * components. This is especially important when the components are expensive to
+         * create, which is the case with ChineseAnalyzer.
+         */
+        CachingController controller = new CachingController(IDocumentSource.class);
+
+        /*
+         * No special initialization-time attributes in this example.
+         */
+        Map&lt;String, Object> initAttributes = new HashMap&lt;String, Object>();
+        controller.init(initAttributes);
+
+        /*
+         * In the first call, we will fetch Chinese search results from MSN Live, but as
+         * we don't explicitly set the document source's language to Chinese, we'll need
+         * to provide the active language attribute.
+         */
+        Map&lt;String, Object> attributes = new HashMap&lt;String, Object>();
+        attributes.put(AttributeNames.QUERY, "??"); // clustering?
+        attributes.put(AttributeNames.RESULTS, 100);
+        attributes.put(AttributeNames.ACTIVE_LANGUAGE, LanguageCode.CHINESE_SIMPLIFIED);
+
+        /*
+         * Perform clustering and display results.
+         */
+        ProcessingResult chineseResult = controller.process(attributes,
+            MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+        List&lt;Cluster> chineseClusters = chineseResult.getClusters();
+
+        /*
+         * In the second call, we will fetch German search results from eTools, and
+         * explicitly instruct the document source to return results in German. In this
+         * case, we don't need to set the active language attribute because the document
+         * source will set it for us accordingly.
+         */
+        attributes.clear();
+        attributes.put(AttributeNames.QUERY, "bundestag");
+        attributes.put(AttributeNames.RESULTS, 100);
+        attributes.put("EToolsDocumentSource.language", EToolsDocumentSource.Language.GERMAN);
+        ProcessingResult germanResult = controller.process(attributes,
+            EToolsDocumentSource.class, LingoClusteringAlgorithm.class);
+        List&lt;Cluster> germanClusters = germanResult.getClusters();
+</pre>
+<a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/ClusteringNonEnglishContent.java?r=trunk">View full source code</a>
+<p>
+&nbsp;
+</p>
 
 <link type="text/css" rel="stylesheet" href="{@docRoot}/sh/shCore.css"/>
 <link type="text/css" rel="stylesheet" href="{@docRoot}/sh/shThemeDefault.css"/>
