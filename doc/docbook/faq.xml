@@ -149,6 +149,42 @@
     </qandaset>
   </section>
   
+  <section xml:id="section.faq.using">
+    <title>How do I use &C2;?</title>
+      
+    <qandaset>
+      <qandadiv>
+        <qandaentry xml:id="section.faq.using.query-syntax">
+          <question>
+            <para>What is the query syntax in &C2;?</para>
+          </question>
+          <answer>
+            <para>
+              As &C2; is not a search engine on its own, there is no common
+              query syntax in &C2; The syntax depends on the underlying search
+              engine you set &C2; to use, e.g. Yahoo!, Solr, Lucene or any other. 
+              &C2; passes your query without any modifications to the search engine
+              and clusters the results it returns. For this reason, any syntax
+              supported by the search engine is automatically supported in &C2;.
+            </para>
+          </answer>
+        </qandaentry>
+
+        <qandaentry xml:id="section.faq.using.boolean-queries">
+          <question>
+            <para>Does &C2; support boolean querying?</para>
+          </question>
+          <answer>
+            <para>
+              If the underlying search engine support boolean queries, so will &C2;.
+              Please see <link linkend="section.faq.using.query-syntax">this question</link> for more details.
+            </para>
+          </answer>
+        </qandaentry>
+      </qandadiv>
+    </qandaset>
+  </section>
+
   <section xml:id="section.faq.tuning">
     <title>How can I improve clustering?</title>
       
