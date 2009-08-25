@@ -26,7 +26,7 @@ public final class ListUtils
 
     public static <E> ArrayList<E> asArrayList(List<E> list)
     {
-        if (list instanceof ArrayList)
+        if (ArrayList.class.isInstance(list))
         {
             return (ArrayList<E>) list;
         }

@@ -29,7 +29,7 @@ public class MapUtils
 
     public static <K, V> HashMap<K, V> asHashMap(Map<K, V> map)
     {
-        if (map instanceof HashMap)
+        if (HashMap.class.isInstance(map))
         {
             return (HashMap<K, V>) map;
         }

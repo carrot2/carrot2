@@ -25,7 +25,7 @@ public final class SetUtils
 
     public static <E> HashSet<E> asHashSet(Set<E> set)
     {
-        if (set instanceof HashSet)
+        if (HashSet.class.isInstance(set))
         {
             return (HashSet<E>) set;
         }
