@@ -45,6 +45,15 @@ public final class IntQueue
     }
 
     /**
+     * Create with the desired initial capacity.
+     */
+    public IntQueue(int initialCapacity)
+    {
+        this();
+        ensureSize(initialCapacity);
+    }
+
+    /**
      * Create with minimum and maximum grow counts. The internal array will double its
      * size when reallocating, but only within the provided limits.
      * 
@@ -165,7 +174,9 @@ public final class IntQueue
      */
     public final int get(int index)
     {
-        assert index >= 0 && index < elementsCount;
+        assert index >= 0 && index < elementsCount 
+            : "index oob: " + index + " (" + elementsCount + ")";
+
         return buffer[index];
     }
 
