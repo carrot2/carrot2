@@ -365,6 +365,12 @@
     </sequential>
   </target>
 
+  <target name="attrs.compile" depends="compile, attrs.tasks" 
+  	description="Generate custom attribute descriptors.">
+  	<fail unless="src.dir">Provide source folder to parse: -Dsrc.dir=&lt;location&gt;</fail>
+  	<attributes-xml java.source="${src.dir}" />
+  </target>
+
   <!-- 
        Code duplication detection.
     -->
