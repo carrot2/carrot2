@@ -109,6 +109,7 @@
     <exclude name="lib/org.mortbay.jetty/**" />
     <exclude name="lib/org.kohsuke.args4j/**" />
     <exclude name="lib/org.apache.xml/**" />
+    <exclude name="lib/com.google.collections/ri*" />
   </patternset>
 
   <patternset id="lib.core">
@@ -591,6 +592,7 @@
     <mkdir dir="${jar.dir}" />
     <jar destfile="${jar.dir}/carrot2-core.jar">
       <fileset dir="${build.dir}">
+        <exclude name="ambient/**" />
         <exclude name="org.carrot2.util.attribute*.xml" />
         <exclude name="**/*.html" />
       </fileset>
