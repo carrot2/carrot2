@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.cn.smart.*;
+import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.carrot2.text.util.MutableCharArray;
 
 /**
@@ -26,29 +28,13 @@ import org.carrot2.text.util.MutableCharArray;
  */
 public final class ChineseAnalyzer extends Analyzer
 {
-    private WordSegmenter wordSegmenter = new WordSegmenter();
-
-    /*
-     * 
-     */
-    public TokenStream reusableTokenStream(String field, final Reader reader)
-    {
-        /*
-         * Avoid using ThreadLocal in Analyzer so that the context class loader's
-         * reference is not stored in the thread.
-         * http://issues.carrot2.org/browse/CARROT-414
-         */
-        return tokenStream(field, reader);
-    }
-
-    /*
-     * 
-     */
     @Override
     public TokenStream tokenStream(String field, Reader reader)
     {
-        return new TokenTypePayloadSetter(new WordTokenizer(
-            new SentenceTokenizer(reader), wordSegmenter));
+        // WordTokenFilter uses a shared dictionary, so creating multiple
+        // instances of it should not be problem here.
+        return new TokenTypePayloadSetter(new WordTokenFilter(new SentenceTokenizer(
+            reader)));
     }
 
     /**
@@ -56,43 +42,56 @@ public final class ChineseAnalyzer extends Analyzer
      */
     private static class TokenTypePayloadSetter extends TokenStream
     {
-        private final TokenTypePayload tokenPayload = new TokenTypePayload();
+        private final TokenTypePayload payload = new TokenTypePayload();
+        private final PayloadAttribute payloadAttribute;
+        private final TermAttribute termAttribute;
         private final Pattern numeric = Pattern
             .compile("[\\-+'$]?\\d+([:\\-/,.]?\\d+)*[%$]?");
-        private TokenStream wrapped;
-        private MutableCharArray tempCharSequence;
+        private final TokenStream wrapped;
+        private final MutableCharArray tempCharSequence;
 
         TokenTypePayloadSetter(TokenStream wrapped)
         {
             this.wrapped = wrapped;
             this.tempCharSequence = new MutableCharArray(new char [0]);
+            this.payloadAttribute = (PayloadAttribute) addAttribute(PayloadAttribute.class);
+            this.termAttribute = (TermAttribute) addAttribute(TermAttribute.class);
         }
 
         @Override
-        @SuppressWarnings("deprecation")
-        public Token next(Token reusableToken) throws IOException
+        public boolean incrementToken() throws IOException
         {
-            final Token token = wrapped.next(reusableToken);
-            if (token != null)
+            final boolean hasNextToken = wrapped.incrementToken();
+            if (hasNextToken)
             {
-                final char [] image = token.termBuffer();
-                tempCharSequence.reset(image, 0, token.termLength());
+                final TermAttribute term = (TermAttribute) wrapped
+                    .getAttribute(TermAttribute.class);
+
+                // Looking at AttributeSource implementation, it's safer to
+                // create a copy of the term attribute rather than override
+                // getAttribute() and delegate to the wrapper there.
+                termAttribute.setTermBuffer(term.termBuffer(), 0, term.termLength());
+                termAttribute.setTermLength(term.termLength());
+
+                final char [] image = term.termBuffer();
+                tempCharSequence.reset(image, 0, term.termLength());
                 if (tempCharSequence.length() == 1 && tempCharSequence.charAt(0) == ',')
                 {
                     // ChineseAnalyzer seems to convert all punctuation to ',' characters
-                    tokenPayload.setRawFlags(ITokenType.TT_PUNCTUATION);
+                    payload.setRawFlags(ITokenType.TT_PUNCTUATION);
                 }
                 else if (numeric.matcher(tempCharSequence).matches())
                 {
-                    tokenPayload.setRawFlags(ITokenType.TT_NUMERIC);
+                    payload.setRawFlags(ITokenType.TT_NUMERIC);
                 }
                 else
                 {
-                    tokenPayload.setRawFlags(ITokenType.TT_TERM);
+                    payload.setRawFlags(ITokenType.TT_TERM);
                 }
-                token.setPayload(tokenPayload);
+                payloadAttribute.setPayload(payload);
             }
-            return token;
+            return hasNextToken;
         }
+
     }
 }

@@ -14,7 +14,9 @@ package org.carrot2.text.analysis;
 import java.io.*;
 import java.util.ArrayList;
 
-import org.apache.lucene.analysis.*;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 
 /**
  * A base class for testing Carrot2 tokenizers.
@@ -69,7 +71,6 @@ abstract class TokenizerTestBase
     /**
      * Compare expected and produced token sequences.
      */
-    @SuppressWarnings("deprecation")
     protected void assertEqualTokens(String testString, TokenImage [] expectedTokens)
     {
         try
@@ -77,13 +78,14 @@ abstract class TokenizerTestBase
             final TokenStream tokenStream = createTokenStream(new StringReader(testString));
 
             final ArrayList<TokenImage> tokens = new ArrayList<TokenImage>();
-            Token token = new Token();
-            while ((token = tokenStream.next(token)) != null)
+            while (tokenStream.incrementToken())
             {
-                final String image = new String(token.termBuffer(), 0, token.termLength());
-                final ITokenType payload = (ITokenType) token.getPayload();
-
-                tokens.add(new TokenImage(image, payload.getRawFlags()));
+                final TermAttribute term = (TermAttribute) tokenStream
+                    .getAttribute(TermAttribute.class);
+                final PayloadAttribute payloadAttribute = (PayloadAttribute) tokenStream
+                    .getAttribute(PayloadAttribute.class);
+                tokens.add(new TokenImage(term.term(), ((ITokenType) payloadAttribute
+                    .getPayload()).getRawFlags()));
             }
 
             org.junit.Assert.assertArrayEquals(expectedTokens, tokens.toArray());
@@ -93,17 +95,17 @@ abstract class TokenizerTestBase
             throw new RuntimeException(e);
         }
     }
-    
+
     protected TokenImage term(String image)
     {
         return new TokenImage(image, ITokenType.TT_TERM);
     }
-    
+
     protected TokenImage punctuation(String image)
     {
         return new TokenImage(image, ITokenType.TT_PUNCTUATION);
     }
-    
+
     protected TokenImage numeric(String image)
     {
         return new TokenImage(image, ITokenType.TT_NUMERIC);

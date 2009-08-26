@@ -12,6 +12,7 @@
 
 package org.carrot2.examples.clustering;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class ClusteringDataFromLucene
         final String contentFieldName = "summary";
 
         luceneGlobalAttributes.put(AttributeUtils.getKey(LuceneDocumentSource.class,
-            "directory"), FSDirectory.getDirectory(indexPath));
+            "directory"), FSDirectory.open(new File(indexPath)));
         luceneGlobalAttributes.put(AttributeUtils.getKey(SimpleFieldMapper.class,
             "titleField"), titleFieldName);
         luceneGlobalAttributes.put(AttributeUtils.getKey(SimpleFieldMapper.class,

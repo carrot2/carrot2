@@ -16,7 +16,10 @@ import java.io.StringReader;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.*;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.index.Payload;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Init;
@@ -47,7 +50,6 @@ import com.google.common.collect.Maps;
  * </ul>
  */
 @Bindable(prefix = "Tokenizer")
-@SuppressWarnings("deprecation")
 public final class Tokenizer
 {
     /**
@@ -162,7 +164,6 @@ public final class Tokenizer
                 final String fieldName = fieldEntry.objectA;
                 final String fieldValue = fieldEntry.objectB;
 
-                Token t = new Token();
                 if (!StringUtils.isEmpty(fieldValue))
                 {
                     try
@@ -170,9 +171,12 @@ public final class Tokenizer
                         final TokenStream ts = analyzer.reusableTokenStream(null,
                             new StringReader(fieldValue));
 
-                        while ((t = ts.next(t)) != null)
+                        while (ts.incrementToken())
                         {
-                            add(documentIndex, fieldNameToIndex.get(fieldName), t);
+                            add(documentIndex, fieldNameToIndex.get(fieldName),
+                                (TermAttribute) ts.getAttribute(TermAttribute.class),
+                                (PayloadAttribute) ts
+                                    .getAttribute(PayloadAttribute.class));
                         }
                     }
                     catch (IOException e)
@@ -235,11 +239,13 @@ public final class Tokenizer
      * Add the token's code to the list. The <code>token</code> must carry
      * {@link ITokenType} payload.
      */
-    void add(int documentIndex, byte fieldIndex, Token token)
+    void add(int documentIndex, byte fieldIndex, TermAttribute term,
+        PayloadAttribute payload)
     {
-        final ITokenType type = (ITokenType) token.getPayload();
-        final char [] buffer = new char [token.termLength()];
-        System.arraycopy(token.termBuffer(), 0, buffer, 0, token.termLength());
+        final ITokenType type = (ITokenType) payload.getPayload();
+        final int termLength = term.termLength();
+        final char [] buffer = new char [termLength];
+        System.arraycopy(term.termBuffer(), 0, buffer, 0, termLength);
         add(documentIndex, fieldIndex, buffer, type.getRawFlags());
     }
 

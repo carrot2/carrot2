@@ -17,6 +17,7 @@ import java.util.*;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.util.Version;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
@@ -74,7 +75,7 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
     @Input
     @Attribute
     @ImplementingClasses(classes = {}, strict = false)
-    public Analyzer analyzer = new StandardAnalyzer();
+    public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
 
     @Override
     public void process() throws ProcessingException

@@ -15,8 +15,9 @@ package org.carrot2.text.analysis;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.carrot2.util.CloseableUtils;
 
 /**
@@ -24,7 +25,6 @@ import org.carrot2.util.CloseableUtils;
  * complex tokens, such as URLs, e-mail addresses and sentence delimiters. For each
  * returned {@link Token}, a payload implementing {@link ITokenType} is returned.
  */
-@SuppressWarnings("deprecation")
 public final class ExtendedWhitespaceTokenizer extends Tokenizer
 {
     /**
@@ -42,37 +42,38 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
      */
     private final TokenTypePayload tokenPayload = new TokenTypePayload();
 
+    private TermAttribute term;
+    private PayloadAttribute payload;
+    
     /**
      * 
      */
     public ExtendedWhitespaceTokenizer(Reader input)
     {
         this.parser = new ExtendedWhitespaceTokenizerImpl(input);
+        term = (TermAttribute) addAttribute(TermAttribute.class);
+        payload = (PayloadAttribute) addAttribute(PayloadAttribute.class);
         reset(input);
     }
+    
+    
 
-    /**
-     * Return the next token or <code>null</code> in case the token was not found.
-     * {@link Token} instances will be reused in subsequent requests.
-     */
-    public final Token next(Token result) throws IOException
+    @Override
+    public boolean incrementToken() throws IOException
     {
-        assert result != null : "Reusable token must not be null.";
-
         final int tokenType = parser.getNextToken();
 
         // EOF?
         if (tokenType == ExtendedWhitespaceTokenizerImpl.YYEOF)
         {
-            return null;
+            return false;
         }
 
-        result.setPayload(tokenPayload);
         tokenPayload.setRawFlags(tokenType);
-
-        result.setTermBuffer(parser.yybuffer(), parser.yystart(), parser.yylength());
-
-        return result;
+        payload.setPayload(tokenPayload);
+        term.setTermBuffer(parser.yybuffer(), parser.yystart(), parser.yylength());
+        term.setTermLength(parser.yylength());
+        return true;
     }
 
     /**

@@ -3,10 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Apache Lucene
 Bundle-SymbolicName: org.apache.lucene.v2
 Bundle-Version: 2.4.0
-Bundle-ClassPath: lucene-analyzers-2.9-20090628.021428-1.jar,
- lucene-core-2.9-20090628.021423-1.jar,
- lucene-highlighter-2.9-20090628.021442-1.jar,
- lucene-snowball-2.9-20090628.021455-1.jar
+Bundle-ClassPath: lucene-analyzers-2.9-20090826.022311-1.jar,
+ lucene-core-2.9-20090826.022252-1.jar,
+ lucene-highlighter-2.9-20090826.022440-1.jar,
+ lucene-smartcn-2.9-20090826.022314-1.jar,
+ lucene-snowball-2.9-20090826.022521-1.jar
 Bundle-Vendor: Apache Foundation
 Export-Package: org.apache.lucene,
  org.apache.lucene.analysis,
@@ -21,6 +22,7 @@ Export-Package: org.apache.lucene,
  org.apache.lucene.analysis.cz,
  org.apache.lucene.analysis.de,
  org.apache.lucene.analysis.el,
+ org.apache.lucene.analysis.fa,
  org.apache.lucene.analysis.fr,
  org.apache.lucene.analysis.miscellaneous,
  org.apache.lucene.analysis.ngram,
@@ -35,6 +37,7 @@ Export-Package: org.apache.lucene,
  org.apache.lucene.analysis.snowball,
  org.apache.lucene.analysis.standard,
  org.apache.lucene.analysis.th,
+ org.apache.lucene.analysis.tokenattributes,
  org.apache.lucene.document,
  org.apache.lucene.index,
  org.apache.lucene.queryParser,
