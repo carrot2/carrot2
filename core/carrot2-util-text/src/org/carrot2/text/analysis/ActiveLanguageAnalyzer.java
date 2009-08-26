@@ -55,8 +55,7 @@ public final class ActiveLanguageAnalyzer extends Analyzer
 
     /**
      * Sets the language to be used by this analyzer. This method must be called before
-     * calls to {@link #tokenStream(String, Reader)} or
-     * {@link #reusableTokenStream(String, Reader)} are made.
+     * calls to {@link #tokenStream(String, Reader)} are made.
      */
     public void setActiveLanguage(LanguageCode activeLanguage)
     {

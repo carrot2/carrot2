@@ -168,7 +168,7 @@ public final class Tokenizer
                 {
                     try
                     {
-                        final TokenStream ts = analyzer.reusableTokenStream(null,
+                        final TokenStream ts = analyzer.tokenStream(null,
                             new StringReader(fieldValue));
 
                         while (ts.incrementToken())
