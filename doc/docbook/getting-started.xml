@@ -331,6 +331,15 @@
         </listitem>
       </orderedlist>
       
+      <tip>
+        <para>
+          &PROD; clustering can also be performed directly within Solr by means of
+          Solr's <link xlink:href="http://wiki.apache.org/solr/ClusteringComponent">&PROD; Clustering Component</link>. Please see
+          <xref linkend="section.advanced-topics.integration-with-solr" />
+          for more details.
+        </para>
+      </tip>
+
       <figure xml:id="figure.search-view-solr">
         <title>&DCW; Solr search view</title>
         <mediaobject>

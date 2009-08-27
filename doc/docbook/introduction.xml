@@ -19,11 +19,11 @@
   </para>
 
   <para>
-    &PROD; contains components for fetching search results from several search
-    engines, such as Yahoo!, MSN Live, Google, but it also supports other
-    sources of documents like Lucene, Solr or Google Desktop index. &PROD;
-    contains also two document clustering algorighms designed specifically for
+    &PROD; contains two document clustering algorighms designed specifically for
     search results clustering: Suffix Tree Clustering and Lingo.
+    &PROD; also contains components for fetching search results from several search
+    engines, such as Yahoo!, MSN Live, Google, but it also supports other
+    sources of documents like Lucene, Solr or Google Desktop index. 
   </para>
 
   <para>
@@ -38,8 +38,10 @@
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="introduction-workflow.xml" /> 
 
   <para>
-    <xref linkend="chapter.application-suite" /> of this manual introduces
-    applications available in &PROD; distribution. <xref
+    <xref linkend="chapter.faq" /> answers the questions most frequently asked
+    on &PROD; mailing lists, it can also serve as a question-based index to the
+    rest of this manual. <xref linkend="chapter.application-suite" />
+    introduces applications available in &PROD; distribution and <xref
     linkend="chapter.getting-started" /> shows how to quickly set up &PROD; to
     cluster your own data. <xref linkend="chapter.tuning" /> discusses topics related
     to tuning &PROD; clustering, while <xref linkend="chapter.customizing" /> shows 

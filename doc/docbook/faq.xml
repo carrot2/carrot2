@@ -30,7 +30,7 @@
           <answer>
             <para>
               Yes. The only requirement is that you <link linkend="section.faq.preliminaries.acknowledging">properly acknowledge the use of
-              &C2;</link> (on your project's website and documentation) and let us know
+              &C2;</link> (on your project's website and documentation) and <link xlink:href="http://project.carrot2.org/contact.html">let us know</link>
               about your project. Please also remember to read 
               <link xlink:href="http://project.carrot2.org/license.html">the license</link>.
             </para>
@@ -161,7 +161,7 @@
           <answer>
             <para>
               As &C2; is not a search engine on its own, there is no common
-              query syntax in &C2; The syntax depends on the underlying search
+              query syntax in &C2;. The syntax depends on the underlying search
               engine you set &C2; to use, e.g. Yahoo!, Solr, Lucene or any other. 
               &C2; passes your query without any modifications to the search engine
               and clusters the results it returns. For this reason, any syntax

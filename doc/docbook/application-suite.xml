@@ -88,11 +88,19 @@
 
       <listitem>
         <formalpara>
+          <title>Performance benchmarking.</title>
+          <para>
+            &DCW; can run simple performance benchmarks of &PROD; clustering algorithms.
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
           <title>Attractive visualizations.</title>
           <para>
             &DCW; comes with two visualizations of the cluster structure, one developed
-            within the &PROD; project and another one from 
-            <link xlink:href="http://www.aduna-software.com/technologies/clustermap/overview.view">Aduna Software</link>.
+            within the &PROD; project and another one from Aduna Software.
           </para>
         </formalpara>
       </listitem>
@@ -130,12 +138,15 @@
       </listitem>
       
       <listitem>
-        <para>Fine tune &PROD; clustering algorithms' settings to work best with your specific data.</para>
+        <para>
+          Fine tune &PROD; clustering algorithms' settings to work best with your specific data.
+          Please see <xref linkend="chapter.tuning" /> for more details.
+        </para>
       </listitem>
       
       <listitem>
         <para>Run simple performance benchmarks using different settings to predict maximum clustering throughput
-        on a single machine (see <xref linkend="section.workbench.benchmarking" /> for details).</para>
+        on a single machine. Please see <xref linkend="section.workbench.benchmarking" /> for details.</para>
       </listitem>      
     </itemizedlist>
     
@@ -215,7 +226,7 @@
           <title>PHP and C# examples included.</title>
           <para>
             &DCS; ships with ready-to-use examples of calling &PROD; DCS services from PHP 
-            (version 5), C#, Ruby and Java.
+            (version 5), C#, Ruby, Java and <command>curl</command>.
           </para>
         </formalpara>
       </listitem>

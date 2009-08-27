@@ -141,8 +141,7 @@
       
       <listitem>
         <para>
-          Uncheck the <guilabel>Restart Processing Automatically</guilabel>
-          option in the <guilabel>Search</guilabel> menu. To rerun clustering after
+          To re-run clustering after
           you've saved changes to the <filename>stopwords.*</filename>, choose the
           <guilabel>Restart Clustering</guilabel> option from the <guilabel>Search</guilabel>
           menu, or press <guilabel>Ctrl+F11</guilabel>.
@@ -185,7 +184,7 @@
       <link linkend="section.advanced-topics.fine-tuning.stop-words">stop word tuning</link>.
       The difference is that this time you need to edit the <filename>stoplabels.*</filename> files.
       Each line of a stop labels file corresponds to one stop label and is a <link xlink:href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html">Java regular
-      expression</link>. Please note that in order to be removed a label <emphasis>as a whole</emphasis> must match 
+      expression</link>. Please note that in order to be removed, a label <emphasis>as a whole</emphasis> must match 
       at least one of the stop label expressions. A number of example
       stop label expressions are shown below.
     </para>

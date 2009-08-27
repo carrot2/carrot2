@@ -13,10 +13,20 @@
   <subtitle>Building and running &C2; from source code</subtitle>
 
   <para>
-    This chapter discusses more advanced usage scenarios of &C2; such as running &C2; applications
-    in Eclipse and building &C2; from source code.
+    This chapter discusses more advanced usage scenarios of &C2; such as integration 
+    with Apache Solr, running &C2; applications in Eclipse and building &C2; from source code.
   </para>
 
+  <section xml:id="section.advanced-topics.integration-with-solr">
+    <title>Integration with Apache Solr</title>
+    
+    <para>
+      As of version 1.4 of Apache Solr, &C2; clustering can be performed directly
+      within Solr by means of the
+      <link xlink:href="http://wiki.apache.org/solr/ClusteringComponent">&PROD; Clustering Component</link>
+    </para>
+  </section>
+  
   <section xml:id="section.advanced-topics.running-in-eclipse">
     <title>Running &C2; in Eclipse IDE</title>
     
