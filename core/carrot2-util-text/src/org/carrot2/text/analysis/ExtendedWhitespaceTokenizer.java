@@ -22,8 +22,8 @@ import org.carrot2.util.CloseableUtils;
 
 /**
  * A tokenizer separating input characters on whitespace, but capable of extracting more
- * complex tokens, such as URLs, e-mail addresses and sentence delimiters. For each
- * returned {@link Token}, a payload implementing {@link ITokenType} is returned.
+ * complex tokens, such as URLs, e-mail addresses and sentence delimiters. Provides
+ * {@link TermAttribute}s and {@link PayloadAttribute}s implementing {@link ITokenType}.
  */
 public final class ExtendedWhitespaceTokenizer extends Tokenizer
 {
