@@ -30,7 +30,7 @@ documents from some {@link org.carrot2.core.IDocumentSource} and cluster them
 using some {@link org.carrot2.core.IClusteringAlgorithm}. The general pattern
 for this kind of invocation is to put all input data required for processing
 (query and required number of results in this case) into a map and pass that
-map to an {@link org.carrot2.core.IController} that will perform all the procesing.
+map to an {@link org.carrot2.core.IController} that will perform all the processing.
 The code shown below retrieves 100 search results from {@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource}
 and clusters them using the {@link org.carrot2.clustering.lingo.LingoClusteringAlgorithm}.
 </p>
@@ -58,7 +58,7 @@ and clusters them using the {@link org.carrot2.clustering.lingo.LingoClusteringA
 <h2>Clustering arbitrary documents</h2>
 
 <p>
-You can also directly pass a list of {@link org.carrot2.core.Document} instnaces for clustering:
+You can also directly pass a list of {@link org.carrot2.core.Document} instances for clustering:
 </p>
 
 <pre class="brush: java">
@@ -123,7 +123,7 @@ You can also directly pass a list of {@link org.carrot2.core.Document} instnaces
 <p>
   The examples above used an instance of {@link org.carrot2.core.SimpleController} 
   to manage the clustering process. While {@link org.carrot2.core.SimpleController}
-  is enough for one-shot requests, for long-runnig applications, such as web 
+  is enough for one-shot requests, for long-running applications, such as web 
   applications, it's better to use the {@link org.carrot2.core.CachingController}, 
   which supports processing component pooling and results caching:
 </p>

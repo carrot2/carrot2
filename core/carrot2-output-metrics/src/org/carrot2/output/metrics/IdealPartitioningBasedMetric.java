@@ -21,10 +21,10 @@ import com.google.common.base.Function;
 import com.google.common.collect.*;
 
 /**
- *
+ * A base class for metrics based on some reference partitioning.
  */
 @Bindable
-public abstract class IdealPartitioningBasedMetric implements IClusteringMetric
+abstract class IdealPartitioningBasedMetric implements IClusteringMetric
 {
     /**
      * Partition id field name.

@@ -20,7 +20,7 @@ import org.carrot2.text.linguistic.LanguageCode;
 
 /**
  * An analyzer that delegates processing to an appropriate analyzer based on the value of
- * the {@link AttributeNames#ACTIVE_LANGUAGE} attributes. If
+ * the {@link AttributeNames#ACTIVE_LANGUAGE} attribute. If
  * {@link AttributeNames#ACTIVE_LANGUAGE} is {@link LanguageCode#CHINESE_SIMPLIFIED},
  * {@link ChineseAnalyzer} is used. Otherwise, {@link ExtendedWhitespaceAnalyzer} is used.
  */

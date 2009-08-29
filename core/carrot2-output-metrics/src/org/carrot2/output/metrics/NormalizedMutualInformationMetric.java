@@ -26,7 +26,7 @@ import com.google.common.collect.*;
  * Computes Normalized Mutual Information (NMI) metric for the cluster set.
  * <p>
  * Metrics will be calculated only if all input documents have non-blank
- * {@link Document#PARTITIONS}s.
+ * {@link Document#PARTITIONS}.
  * </p>
  */
 @Bindable
