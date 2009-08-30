@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,6 +17,7 @@ import java.util.Map;
 import javax.xml.transform.Templates;
 
 import org.carrot2.core.*;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
 import org.carrot2.util.resource.IResource;
@@ -59,15 +59,18 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
         final SearchEngineResponse response = new SearchEngineResponse();
 
         final ProcessingResult processingResult = xmlDocumentSourceHelper
-            .loadProcessingResult(serviceURL, toCarrot2Xslt, getXsltParameters(), response.metadata);
+            .loadProcessingResult(serviceURL, toCarrot2Xslt, getXsltParameters(),
+                response.metadata);
 
         final List<Document> documents = processingResult.getDocuments();
         if (documents != null)
         {
             response.results.addAll(documents);
-            response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, response
-                .getResultsTotal() > 0 ? response.getResultsTotal() : (long) documents
-                .size());
+            final Map<String, Object> resultAttributes = processingResult.getAttributes();
+            response.metadata
+                .put(SearchEngineResponse.RESULTS_TOTAL_KEY, resultAttributes
+                    .containsKey(AttributeNames.RESULTS_TOTAL) ? resultAttributes
+                    .get(AttributeNames.RESULTS_TOTAL) : (long) documents.size());
         }
         else
         {
