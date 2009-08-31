@@ -85,6 +85,7 @@
     <exclude name="**/carrot2-source-microsoft/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-opensearch/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-microsoft/src/com/microsoft/msnsearch/**/*.java" />
+    <exclude name="**/carrot2-util-matrix/src/nni/**/*.java" />
   </fileset>
 
   <patternset id="lib.test">

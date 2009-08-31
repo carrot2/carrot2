@@ -24,7 +24,7 @@ import cern.colt.matrix.DoubleMatrix2D;
  * Quickly checks if the native BLAS libraries can be loaded and what the performance gain
  * is.
  */
-public class BLASQuickCheck
+class BLASQuickCheck
 {
     /** Used to calculate the number of rows of the test matrix */
     private static final double ROWS_COLUMNS_RATIO = 2.8;

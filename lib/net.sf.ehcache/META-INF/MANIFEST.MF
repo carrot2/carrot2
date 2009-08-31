@@ -3,16 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EhCache
 Bundle-SymbolicName: net.sf.ehcache
 Bundle-Version: 1.4.1
-Bundle-ClassPath: ehcache-1.6.0-beta3.jar
+Bundle-ClassPath: ehcache-1.6.2.jar
 Bundle-Vendor: ehcache.sourceforge.net
 Export-Package: net.sf.ehcache,
  net.sf.ehcache.bootstrap,
  net.sf.ehcache.config,
- net.sf.ehcache.constructs.asynchronous,
  net.sf.ehcache.constructs.blocking,
- net.sf.ehcache.constructs.concurrent,
- net.sf.ehcache.constructs.web,
- net.sf.ehcache.constructs.web.filter,
  net.sf.ehcache.distribution,
  net.sf.ehcache.event,
  net.sf.ehcache.exceptionhandler,

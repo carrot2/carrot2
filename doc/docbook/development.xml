@@ -44,6 +44,16 @@
 
       <listitem>
         <formalpara>
+          <title>Update Maven dependencies</title>
+          <para>
+            Update Maven POMs so that dependencies are in sync with the JAR versions
+            in the repository. 
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
           <title>Review of static code analysis reports</title>
           <para>
             Review and fix reasonably-looking flaws from the following reports:
@@ -286,6 +296,76 @@ carrot2.version=${carrot2.version.head}]]></programlisting>
             Apache Solr and Nutch.
           </para>
         </formalpara>
+      </listitem>
+    </orderedlist>
+  </section>
+  
+  <section xml:id="section.qa">
+    <title>QA check list</title>
+    
+    <para>
+      This a very quick quality assurance check list to run through before stable 
+      releases. This list also serves as some guide line for further automation
+      of acceptance tests.
+    </para>
+    
+    <note>
+      <para>
+        Note that this list does not contain many checks for the &WA;, &DCS; and &JA;
+        as these are fairly well tested during builds (webtests, smoke-tests).
+      </para>
+    </note>
+    
+    <orderedlist>
+      <listitem>
+        <para>
+          For each supported platform you can test, check that &DCW;:
+          
+          <orderedlist spacing="compact">
+            <listitem>
+              <para>launches without errors in the error log</para>
+            </listitem>
+            
+            <listitem>
+              <para>executes and cluters a remote search query without errors</para>
+            </listitem>
+            
+            <listitem>
+              <para>
+                executes and clusters a Lucene query without errors (we've had a bug
+                that caused the Lucene directory attribute editor to disappear, 
+                hence this step).
+              </para>
+            </listitem>
+            
+            <listitem>
+              <para>can edit a clustering algorithm's attribute</para>
+            </listitem>
+            
+            <listitem>
+              <para>shows both cluster visualizations</para>
+            </listitem>
+            
+            <listitem>
+              <para>executes clustering algorithm benchmarks</para>
+            </listitem>
+          </orderedlist>
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Check that a the &DCS; starts up correctly using command line on Windows and 
+          Linux. More acceptance tests are performed during builds (but starting &DCS; 
+          using the WAR file instead of command line).
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Check that a &C2; project <link linkend="section.integration.setting-up-maven-project">set up using Maven archetype</link>
+          builds correctly.
+        </para>
       </listitem>
     </orderedlist>
   </section>

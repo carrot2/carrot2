@@ -24,6 +24,7 @@ import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.*;
+import org.apache.lucene.util.Version;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.SearchEngineResponse;
@@ -108,7 +109,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     {
         SimpleAnalyzer.class, StandardAnalyzer.class, WhitespaceAnalyzer.class
     }, strict = false)
-    public Analyzer analyzer = new StandardAnalyzer();
+    public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
 
     /**
      * {@link IFieldMapper} provides the link between Carrot2 {@link Document} fields and
