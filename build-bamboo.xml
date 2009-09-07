@@ -18,9 +18,14 @@
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="test" inheritall="true" />
     </target>
 
-    <target name="dist" description="Build Carrot2 distribution">
+    <target name="dist" description="Build Carrot2 distribution without documentation">
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist" inheritall="true" />
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist.doc.without" inheritall="true" />
+    </target>
+
+    <target name="doc" description="Build Carrot2 documentation">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist.doc.only" inheritall="true" />
     </target>
 
     <target name="publish" depends="publish.artifacts, publish.demo" />

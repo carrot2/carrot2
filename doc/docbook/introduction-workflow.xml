@@ -23,7 +23,7 @@
         If you are developing Java software, use &PROD; API and JAR to 
         <link linkend="section.integration.compiling-java-program-with-carrot2">integrate
         clustering into your code</link>.  For non-Java environments, set-up the <link linkend="section.dcs">&DCS;</link>
-        and call &C2; clustering using the REST protocol.
+        and call &PROD; clustering using the REST protocol.
       </para>
     </listitem>
   </orderedlist>
