@@ -52,6 +52,8 @@
     </listitem>
   </itemizedlist>
 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="application-suite-intro-suffix.xml" /> 
+
   <section xml:id="section.workbench">
     <title>&DCW;</title>
 
@@ -406,5 +408,8 @@
         </listitem>
       </orderedlist>
     </section>      
-  </section>    
+  </section>
+      
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="application-suite-sections-suffix.xml" /> 
+
 </chapter>
