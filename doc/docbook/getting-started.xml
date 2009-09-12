@@ -17,6 +17,17 @@
     trying clustering on your own documents or integrating &PROD; with your software.
   </para>
   
+  <section xml:id="section.requirements">
+    <title>Requirements</title>
+    
+    <para>
+      All &PROD; applications require <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link>
+      version 1.5.0 or higher (1.6.0 recommended). The &DCW; is distributed for Windows,
+      Linux 32-bit and 64-bit versions and Mac OS x86. All other &PROD; applications
+      will run on any platform supporting Java Runtime Environment version 1.5.0 or higher.
+    </para>
+  </section>
+  
   <section xml:id="section.getting-started">
     <title>Trying &PROD; clustering</title>
     

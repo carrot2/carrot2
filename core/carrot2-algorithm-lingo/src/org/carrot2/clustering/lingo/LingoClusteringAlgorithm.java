@@ -138,10 +138,6 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                 {
                     log.info("Native BLAS routines available");
                 }
-                else
-                {
-                    log.info("Native BLAS routines not available");
-                }
                 nativeLibrariesReported = true;
             }
         }
