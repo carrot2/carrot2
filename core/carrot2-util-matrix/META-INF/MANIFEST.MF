@@ -6,6 +6,7 @@ Bundle-Version: 0.0.0.QUALIFIER
 Bundle-ClassPath: .,
  lib/nni.jar
 Export-Package: 
+ nni,
  org.carrot2.matrix,
  org.carrot2.matrix.factorization,
  org.carrot2.matrix.factorization.seeding

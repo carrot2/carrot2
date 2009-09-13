@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-test"/>
+	<classpathentry exported="true" kind="lib" path="lib/nni.jar" sourcepath="carrot2-util-matrixsrc.zip"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

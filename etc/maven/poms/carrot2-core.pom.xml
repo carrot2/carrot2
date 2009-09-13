@@ -195,6 +195,12 @@
       <artifactId>colt</artifactId>
       <version>1.2.0</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.carrot2</groupId>
+      <artifactId>nni</artifactId>
+      <version>1.0.0</version>
+    </dependency>
   </dependencies>
 </project>
 
