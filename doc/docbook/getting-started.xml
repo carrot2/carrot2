@@ -98,17 +98,34 @@
             source in the search view (<xref linkend="figure.search-view-google-desktop" />), type your query
             and press the <guilabel>Process</guilabel> button to see the results.
           </para>
+          
+          <figure xml:id="figure.search-view-google-desktop">
+            <title>&DCW; Google Desktop search view</title>
+            <mediaobject>
+              <imageobject role="html">
+                <imagedata format="PNG" fileref="img/workbench-google-destkop-search-view.png" />
+              </imageobject>
+            </mediaobject>  
+          </figure>
         </listitem>
       </orderedlist>
       
-      <figure xml:id="figure.search-view-google-desktop">
-        <title>&DCW; Google Desktop search view</title>
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata format="PNG" fileref="img/workbench-google-destkop-search-view.png" />
-          </imageobject>
-        </mediaobject>  
-      </figure>
+      <note>
+        <para>
+          &DCW; can automatically determine the Google Desktop Query URL only when it 
+          is run on Windows with Administrator's privileges. For other setups, please
+          refer to <link xlink:href="http://code.google.com/apis/desktop/docs/queryapi.html#httpxml">Google Desktop API Documentation</link>
+          for instructions about obtaining the Query URL. You can set the Query URL
+          attribute in the optional attributes section, shown after clicking the
+          <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-optional-attributes.png" /></imageobject></inlinemediaobject></guiicon>            
+          button on the <guilabel>Search</guilabel> view toolbar. 
+        </para>
+        
+        <para>
+          Please also note that Query URLs are different for different users, using a 
+          Query URL not belonging to the currently logged in-user will result in errors.
+        </para>
+      </note>
     </section>
     
     <section xml:id="section.getting-started.xml-files">
