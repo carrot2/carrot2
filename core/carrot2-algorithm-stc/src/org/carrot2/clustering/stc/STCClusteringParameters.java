@@ -120,7 +120,7 @@ public final class STCClusteringParameters
     @Input
     @Attribute
     @DoubleRange(min = 0, max = 1)
-    public double maxPhraseOverlap = 0.3d;
+    public double maxPhraseOverlap = 0.6d;
 
     /**
      * Minimum general phrase coverage. Minimum phrase coverage to appear in cluster
