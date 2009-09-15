@@ -8,7 +8,7 @@
       <invoke url="/parameters.html" description="Get parameters page" />
 
       <!-- Wait for AJAX stuff to load -->
-      <sleep seconds="4" />
+      <sleep seconds="8" />
       <verifyListElementsLoaded listId='sources' />
       <verifyListElementsLoaded listId='algorithms' />
     </webtest>

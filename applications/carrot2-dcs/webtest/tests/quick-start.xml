@@ -8,7 +8,7 @@
       <invoke url="/" description="Get quick start page" />
 
       <!-- Wait for AJAX stuff to load -->
-      <sleep seconds="2" />
+      <sleep seconds="5" />
       <verifySelectOptionsLoaded selectId='sources' />
       <verifySelectOptionsLoaded selectId='algorithms' />
     </webtest>
