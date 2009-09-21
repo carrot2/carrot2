@@ -48,6 +48,7 @@ public abstract class LanguageModelTestBase
     public void testStemmerAvailable()
     {
         assertNotNull(languageModel.getStemmer());
+        assertFalse(languageModel.getStemmer() instanceof IdentityStemmer);
     }
 
     /**
