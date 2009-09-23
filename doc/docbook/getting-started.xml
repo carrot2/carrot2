@@ -85,7 +85,7 @@
           
           <tip>
             <para>
-              You can use <link xlink:href="http://desktop.google.com/plugins/i/tweakgds.html">TweakGDS</link>
+              You can use <link xlink:href="http://podsync.com/tweakgds.htm">TweakGDS</link>
               to make Google Desktop index only the folder with your documents.
             </para>
           </tip>
@@ -109,6 +109,18 @@
           </figure>
         </listitem>
       </orderedlist>
+          
+      <tip>
+        <para>
+          You can use the <filename>filetype:</filename> operator to restrict
+          searching to specific file types only, e.g. <filename>filetype:doc</filename>
+          for MS Word documents. You can also use the <filename>under:</filename>
+          operator to restrict searches to a specific folder and its subfolders, e.g.
+          <filename>under:"c:\test-documents"</filename>. Please see 
+          <link xlink:href="http://desktop.google.com/support/bin/answer.py?hl=en&amp;answer=10111">Google Desktop search operators reference</link>
+          for other useful query modifiers. 
+        </para>
+      </tip>
       
       <note>
         <para>

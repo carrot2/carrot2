@@ -15,11 +15,13 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.regex.Pattern;
 
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.analysis.cn.smart.*;
+import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.util.ReflectionUtils;
 
 /**
  * An analyzer for the Chinese language, based on Lucene's
@@ -31,10 +33,36 @@ public final class ChineseAnalyzer extends Analyzer
     @Override
     public TokenStream tokenStream(String field, Reader reader)
     {
-        // WordTokenFilter uses a shared dictionary, so creating multiple
-        // instances of it should not be problem here.
-        return new TokenTypePayloadSetter(new WordTokenFilter(new SentenceTokenizer(
-            reader)));
+        try
+        {
+            // As other frameworks embedding Carrot2 (Solr, Nutch) may not distribute the
+            // Smart Chinese Analyzer JAR by default due to its size, we need to make 
+            // this dependency optional too.
+            final Class<?> tokenFilterClass = ReflectionUtils
+                .classForName("org.apache.lucene.analysis.cn.smart.WordTokenFilter");
+            final Class<?> sentenceTokenizerClass = ReflectionUtils
+                .classForName("org.apache.lucene.analysis.cn.smart.SentenceTokenizer");
+
+            // WordTokenFilter uses a shared dictionary, so creating multiple
+            // instances of it should not be problem here.
+            final Object sentenceTokenizer = sentenceTokenizerClass.getConstructor(
+                Reader.class).newInstance(reader);
+            final Object tokenFilter = tokenFilterClass.getConstructor(TokenStream.class)
+                .newInstance(sentenceTokenizer);
+            return new TokenTypePayloadSetter((TokenStream) tokenFilter);
+        }
+        catch (Exception e)
+        {
+            Logger
+                .getLogger(ChineseAnalyzer.class)
+                .warn(
+                    "Could not instantiate Smart Chinese Analyzer, clustering quality "
+                        + "of Chinese content may be degraded. For best quality clusters, "
+                        + "make sure Lucene's Smart Chinese Analyzer JAR is in the classpath",
+                    e);
+            return new ExtendedWhitespaceTokenizer(reader);
+        }
+
     }
 
     /**
