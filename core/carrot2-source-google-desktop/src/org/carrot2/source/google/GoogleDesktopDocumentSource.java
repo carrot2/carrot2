@@ -119,7 +119,7 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
     {
         /*
          * Should we exclude Vista here (because it will tend to show this blocking
-         * hack-prevention screen.. forgot what the heck the name was.
+         * hack-prevention screen (User Account Control; UAC).
          */
         if (!org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS)
         {
