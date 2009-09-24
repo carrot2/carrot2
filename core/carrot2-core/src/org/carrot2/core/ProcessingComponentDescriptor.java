@@ -12,8 +12,7 @@
 
 package org.carrot2.core;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -266,6 +265,11 @@ public class ProcessingComponentDescriptor
         {
             // Try to load from the directly provided location
             resource = resourceUtils.getFirst(attributeSetsResource, clazz);
+            
+            if (resource == null)
+            {
+                throw new IOException("Attribute set resource not found: " + attributeSetsResource);
+            }
         }
 
         if (resource == null)
