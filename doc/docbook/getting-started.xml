@@ -229,7 +229,8 @@
             <link linkend="figure.input-xml-format">&C2; format</link>. For the news feed
             we can use the stylesheet shown in <xref linkend="figure.bbc-to-c2" />. To
             add more colour to our results, the XSLT transform extracts thumbnail URLs
-            from the feed and passes them to &PROD; in a special attribute.
+            from the feed and passes them to &PROD; in a special attribute. Attributes that are a sequence
+            of values can be embedded as shown in <xref linkend="figure.list-attributes" />.
           </para>
         </listitem>
         
@@ -281,7 +282,19 @@
     </document>
   </xsl:template>
 </xsl:stylesheet>]]></programlisting>      
-      </figure>      
+      </figure>
+      
+      <figure xml:id="figure.list-attributes">
+        <title>Document attribute that contains a list of values.</title>
+        <programlisting><![CDATA[<field key="key">
+  <value><wrapper class="org.carrot2.util.simplexml.ListSimpleXmlWrapper">
+    <list>
+      <value value="value1"/>
+      <value value="value2"/>
+    </list>
+  </wrapper></value>
+</field>]]></programlisting>
+      </figure>
     </section>
     
     <section xml:id="section.getting-started.lucene">
