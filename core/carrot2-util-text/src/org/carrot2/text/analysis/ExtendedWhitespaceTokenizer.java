@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -44,7 +43,7 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
 
     private TermAttribute term;
     private PayloadAttribute payload;
-    
+
     /**
      * 
      */
@@ -55,8 +54,6 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
         payload = (PayloadAttribute) addAttribute(PayloadAttribute.class);
         reset(input);
     }
-    
-    
 
     @Override
     public boolean incrementToken() throws IOException
@@ -115,5 +112,25 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
             CloseableUtils.close(reader);
             this.reader = null;
         }
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (other instanceof ExtendedWhitespaceTokenizer)
+        {
+            return super.equals(other);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode()
+    {
+        // Just to document we're fine with using AttributeSource.hashCode()
+        return super.hashCode();
     }
 }

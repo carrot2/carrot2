@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -36,7 +37,7 @@ public final class ChineseAnalyzer extends Analyzer
         try
         {
             // As other frameworks embedding Carrot2 (Solr, Nutch) may not distribute the
-            // Smart Chinese Analyzer JAR by default due to its size, we need to make 
+            // Smart Chinese Analyzer JAR by default due to its size, we need to make
             // this dependency optional too.
             final Class<?> tokenFilterClass = ReflectionUtils
                 .classForName("org.apache.lucene.analysis.cn.smart.WordTokenFilter");
@@ -121,5 +122,25 @@ public final class ChineseAnalyzer extends Analyzer
             return hasNextToken;
         }
 
+        @Override
+        public boolean equals(Object other)
+        {
+            if (other instanceof TokenTypePayloadSetter)
+            {
+                return super.equals(other)
+                    && ObjectUtils.equals(this.wrapped,
+                        ((TokenTypePayloadSetter) other).wrapped);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return super.hashCode() ^ ObjectUtils.hashCode(this.wrapped);
+        }
     }
 }

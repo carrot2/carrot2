@@ -110,13 +110,13 @@ public class PrecisionRecallMetricTest extends IdealPartitioningBasedMetricTest
 
     private static void assertEquals(Double expected, Double actual, double delta, String as)
     {
-        if (expected == null)
+        if (expected != null)
         {
-            assertThat((Object) actual).as(as).isEqualTo(expected);
+            assertThat(actual).as(as).isEqualTo(expected, Delta.delta(delta));
         }
         else
         {
-            assertThat(actual).as(as).isEqualTo(expected, Delta.delta(delta));
+            assertThat((Object) actual).as(as).isEqualTo(expected);
         }
     }
 

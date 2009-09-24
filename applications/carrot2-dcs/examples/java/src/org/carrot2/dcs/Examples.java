@@ -191,7 +191,6 @@ final class Examples
     @SuppressWarnings({"unused", "unchecked"})
     private static void display(Element group, int level)
     {
-        final int documentCount = group.elements("document").size();
         final int recursiveDocumentCount = Integer.parseInt(group.attribute("size").getValue());
         final String label = group.element("title").elementText("phrase");
 
