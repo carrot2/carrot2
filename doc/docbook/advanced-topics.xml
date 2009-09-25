@@ -189,12 +189,31 @@
       </orderedlist>
     </section>
     
-    <section>
+    <section xml:id="section.advanced-topics.building-from-source-code.webapp">
       <title>Building &WA;</title>
       
       <para>
-        &NA;
+        To build &WA; from source code:
       </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Run:
+            
+            <programlisting><![CDATA[ant webapp]]></programlisting>
+            
+            in the main &PROD; checkout directory.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Go to the <filename>tmp/webapp/</filename>
+            folder in the &C2; checkout dir where you will find the web application WAR file.
+          </para>
+        </listitem>
+      </orderedlist>
     </section>
   </section>
 
