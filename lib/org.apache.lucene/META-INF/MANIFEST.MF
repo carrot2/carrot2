@@ -3,11 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Apache Lucene
 Bundle-SymbolicName: org.apache.lucene.v2
 Bundle-Version: 2.9.0
-Bundle-ClassPath: lucene-analyzers-2.9.0-rc5.jar,
- lucene-core-2.9.0-rc5.jar,
- lucene-highlighter-2.9.0-rc5.jar,
- lucene-smartcn-2.9.0-rc5.jar,
- lucene-snowball-2.9.0-rc5.jar
+Bundle-ClassPath: lucene-analyzers-2.9.0.jar,
+ lucene-core-2.9.0.jar,
+ lucene-highlighter-2.9.0.jar,
+ lucene-smartcn-2.9.0.jar,
+ lucene-snowball-2.9.0.jar
 Bundle-Vendor: Apache Foundation
 Export-Package: org.apache.lucene,
  org.apache.lucene.analysis,

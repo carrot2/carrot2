@@ -154,6 +154,7 @@ public class WebappConfig
         }
         catch (Exception e)
         {
+            log.error("Could not load application config.", e);
             throw new RuntimeException("Could not load application config.", e);
         }
     }
