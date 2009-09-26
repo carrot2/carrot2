@@ -50,7 +50,7 @@ public class DocumentAssignerTest extends LabelFilterTestBase
     @Test
     public void testSingleWordLabels()
     {
-        createDocuments("data is", "data is", "mining", "mining");
+        createDocuments("coal is", "coal is", "mining", "mining");
 
         final int [][] expectedDocumentIndices = new int [] []
         {
@@ -117,8 +117,8 @@ public class DocumentAssignerTest extends LabelFilterTestBase
     @Test
     public void testMinClusterSize()
     {
-        createDocuments("test data", "test data", "data test . mining",
-            "data test . mining");
+        createDocuments("test coal", "test coal", "coal test . mining",
+            "coal test . mining");
 
         final int [][] expectedDocumentIndices = new int [] []
         {

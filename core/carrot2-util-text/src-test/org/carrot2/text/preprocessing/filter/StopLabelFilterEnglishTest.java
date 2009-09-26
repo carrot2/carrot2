@@ -41,7 +41,7 @@ public class StopLabelFilterEnglishTest extends LabelFilterTestBase
     @Test
     public void testNonStopLabels()
     {
-        createDocuments("data . mining", "data . mining");
+        createDocuments("coal . mining", "coal . mining");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
@@ -54,11 +54,11 @@ public class StopLabelFilterEnglishTest extends LabelFilterTestBase
     @Test
     public void testSingleWordStopLabels()
     {
-        createDocuments("new . new . new", "data news . data news");
+        createDocuments("new . new . new", "coal news . coal news");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
-            wordIndices.get("data"), wordIndices.get("news"), 3
+            wordIndices.get("coal"), wordIndices.get("news"), 3
         };
 
         check(expectedLabelsFeatureIndex, 2);
@@ -67,11 +67,11 @@ public class StopLabelFilterEnglishTest extends LabelFilterTestBase
     @Test
     public void testPhraseStopLabels()
     {
-        createDocuments("information on data", "information on data");
+        createDocuments("information on coal", "information on coal");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
-            wordIndices.get("data")
+            wordIndices.get("coal")
         };
 
         check(expectedLabelsFeatureIndex);
