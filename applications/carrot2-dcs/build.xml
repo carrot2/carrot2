@@ -101,10 +101,10 @@
     -->
   <target name="carrot2.dcs.dist" depends="basedir.check, carrot2.dcs.build, carrot2.dcs.webtest.war">
     <zip destfile="${dcs.dir}/../${dcs.dist.base}-${carrot2.version}.zip">
-      <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}">
+      <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}-${carrot2.version}">
         <exclude name="**/*.sh" />
       </zipfileset>
-      <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}" filemode="755">
+      <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}-${carrot2.version}" filemode="755">
         <include name="**/*.sh" />
       </zipfileset>
     </zip>

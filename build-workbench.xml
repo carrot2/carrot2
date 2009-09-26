@@ -39,6 +39,7 @@
         <arg line="-DbuildDirectory=@{build.dir}" />
         <arg line="-Dtarget.platform=${target.platform}" />
         <arg line="-Dcarrot2.master.basedir=${carrot2.master.basedir}" />
+        <arg line="-Dcarrot2.version=${carrot2.version}" />
         <arg line="-Dcarrot2.workbench.base=${carrot2.workbench.base}" />
         <arg line="@{extra.args}" />
         <arg line="-propertyfile @{props.file}" />

@@ -711,8 +711,8 @@
 
   <target name="carrot2.core.dist" depends="core.test, javadoc">
     <zip destfile="${api.dir}/../${api.dist.base}-${carrot2.version}.zip">
-      <zipfileset dir="${api.dir}" prefix="${api.dist.base}" />
-      <zipfileset dir="${javadoc.dir}" prefix="${api.dist.base}/javadoc" />
+      <zipfileset dir="${api.dir}" prefix="${api.dist.base}-${carrot2.version}" />
+      <zipfileset dir="${javadoc.dir}" prefix="${api.dist.base}-${carrot2.version}/javadoc" />
     </zip>
     <delete dir="${api.dir}" />
   </target>
