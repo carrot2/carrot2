@@ -1,5 +1,5 @@
 <!--
-  Builds main components and applications of Carrot2 3.0.
+  Builds main components and applications of Carrot2 3.x.
   Carrot2 Workbench is built using a dedicated script.
   -->
 <project name="carrot2.master" default="test">
@@ -500,7 +500,7 @@
           depends="clover.tasks"
           if="clover.home">
     <clover-report>
-      <current outfile="${coverage.report.dir}" title="Carrot2 3.0">
+      <current outfile="${coverage.report.dir}" title="Carrot2 ${carrot2.version}">
         <format type="html" />
       </current>
     </clover-report>
