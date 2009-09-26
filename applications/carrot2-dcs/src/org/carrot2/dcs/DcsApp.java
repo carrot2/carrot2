@@ -78,7 +78,7 @@ public class DcsApp
         final String dcsWar = System.getProperty("dcs.war");
         if (dcsWar != null)
         {
-            // WAR distribution provide, use it
+            // WAR distribution provides, use it
             wac.setWar(dcsWar);
         }
         else
@@ -100,6 +100,7 @@ public class DcsApp
         try
         {
             server.start();
+            log.info("DCS started, point your browser to: http://localhost:" + port + "/");
         }
         catch (Exception e)
         {
