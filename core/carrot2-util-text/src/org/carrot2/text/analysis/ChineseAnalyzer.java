@@ -25,9 +25,8 @@ import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.ReflectionUtils;
 
 /**
- * An analyzer for the Chinese language, based on Lucene's
- * {@link org.apache.lucene.analysis.cn.ChineseAnalyzer}. A simple heuristic is employed
- * to detect punctuation and simple numeric tokens.
+ * An analyzer for the Chinese language, based on Lucene's Chinese analyzer.
+ * A simple heuristic is employed to detect punctuation and simple numeric tokens.
  */
 public final class ChineseAnalyzer extends Analyzer
 {

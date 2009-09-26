@@ -19,7 +19,7 @@
   <!--
        Builds Carrot2 Manual
     -->
-  <target name="carrot2.doc.build" depends="jar, carrot2.doc.common.docbook.check">
+  <target name="carrot2.doc.build" depends="carrot2.doc.common.docbook.check">
     <carrot2.doc.build doc.base.dir="${carrot2.doc.basedir}"
                        doc.main.docbook.filename="carrot2-manual.xml" 
                        doc.suite.path="suites/suite-doc.xml"

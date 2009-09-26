@@ -25,7 +25,7 @@ Index: src/bak/pcj/map/IntKeyIntOpenHashMap.java
 @@ -1,6 +1,6 @@
  /*
   *  Primitive Collections for Java.
-- *  Copyright (C) 2002, 2003  Søren Bak
+- *  Copyright (C) 2002, 2003  Sï¿½ren Bak
 + *  Copyright (C) 2002, 2003  S?ren Bak
   *
   *  This library is free software; you can redistribute it and/or
@@ -114,7 +114,7 @@ Index: src/bak/pcj/map/LongKeyIntOpenHashMap.java
 @@ -1,6 +1,6 @@
  /*
   *  Primitive Collections for Java.
-- *  Copyright (C) 2002, 2003  Søren Bak
+- *  Copyright (C) 2002, 2003  Sï¿½ren Bak
 + *  Copyright (C) 2002, 2003  Sï¿½ren Bak
   *
   *  This library is free software; you can redistribute it and/or
@@ -203,7 +203,7 @@ Index: src/bak/pcj/set/IntBitSet.java
 @@ -1,6 +1,6 @@
  /*
   *  Primitive Collections for Java.
-- *  Copyright (C) 2002, 2003  Søren Bak
+- *  Copyright (C) 2002, 2003  Sï¿½ren Bak
 + *  Copyright (C) 2002, 2003  S?ren Bak
   *
   *  This library is free software; you can redistribute it and/or
