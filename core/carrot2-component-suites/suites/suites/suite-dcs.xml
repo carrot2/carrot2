@@ -1,9 +1,4 @@
 <component-suite>
-    <!-- Local sources. -->
-    <include suite="suites/source-xml.xml" />
-    <include suite="suites/source-google-desktop.xml" />
-    <include suite="suites/source-solr.xml" />
-
     <!-- Search engines. -->
     <include suite="suites/source-etools.xml" />
     <include suite="suites/source-microsoft-live.xml" />
@@ -12,6 +7,11 @@
     <!-- PubMed, Indeed job search. -->
     <include suite="suites/source-pubmed.xml" />
     <include suite="suites/source-indeed.xml" />
+
+    <!-- Local sources. -->
+    <include suite="suites/source-xml.xml" />
+    <include suite="suites/source-google-desktop.xml" />
+    <include suite="suites/source-solr.xml" />
 
     <!-- Algorithms. -->
     <include suite="suites/algorithm-lingo.xml" />
