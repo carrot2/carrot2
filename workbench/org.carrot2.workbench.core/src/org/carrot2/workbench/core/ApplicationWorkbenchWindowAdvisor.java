@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -63,7 +62,6 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
         configurer.setInitialSize(new Point(width, height));
 
         configurer.setShowStatusLine(true);
-        configurer.setTitle("Carrot2 Workbench");
         configurer.setShowMenuBar(true);
         configurer.setShowPerspectiveBar(true);
         configurer.setShowProgressIndicator(true);

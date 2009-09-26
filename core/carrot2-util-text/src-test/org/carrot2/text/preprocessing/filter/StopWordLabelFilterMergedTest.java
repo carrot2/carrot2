@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -42,7 +41,7 @@ public class StopWordLabelFilterMergedTest extends LabelFilterTestBase
     @Test
     public void testNonStopWords()
     {
-        createDocuments("data . mining", "data . mining");
+        createDocuments("coal . mining", "coal . mining");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
@@ -55,11 +54,11 @@ public class StopWordLabelFilterMergedTest extends LabelFilterTestBase
     @Test
     public void testStopWords()
     {
-        createDocuments("I . dog . data", "I . dog . data . y . y . el . el . der . der");
+        createDocuments("I . dog . zoo", "I . dog . zoo . y . y . el . el . der . der");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
-            wordIndices.get("data")
+            wordIndices.get("zoo")
         };
 
         check(expectedLabelsFeatureIndex);
@@ -68,7 +67,7 @@ public class StopWordLabelFilterMergedTest extends LabelFilterTestBase
     @Test
     public void testStopWordsInPhrases()
     {
-        createDocuments("y data mining der", "y data mining der");
+        createDocuments("y coal mining der", "y coal mining der");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {

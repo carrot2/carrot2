@@ -17,8 +17,8 @@
   </xsl:template>
 
   <xsl:template match="db:attribute-reference">
-    <xsl:apply-templates select="$metadata/processing-component-docs/sources/processing-component-doc" />
     <xsl:apply-templates select="$metadata/processing-component-docs/algorithms/processing-component-doc" />
+    <xsl:apply-templates select="$metadata/processing-component-docs/sources/processing-component-doc" />
   </xsl:template>
 
   <xsl:template match="processing-component-doc">

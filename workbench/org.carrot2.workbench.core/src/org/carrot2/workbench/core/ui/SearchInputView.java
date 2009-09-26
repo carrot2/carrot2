@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,8 +12,7 @@
 
 package org.carrot2.workbench.core.ui;
 
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -66,31 +64,6 @@ public class SearchInputView extends ViewPart
     public static final String ID = "org.carrot2.workbench.core.views.search";
 
     /**
-     * Memento attribute for persisting {@link #linkWithEditor}.
-     */
-    private static final String MEMENTO_EDITOR_LINK = "link-with-editor";
-
-    /**
-     * Memento branch for persisting algorithm component ID;
-     */
-    private static final String MEMENTO_ALGORITHM_ID = "algorithmId";
-
-    /**
-     * Memento branch for persisting source component ID;
-     */
-    private static final String MEMENTO_SOURCE_ID = "sourceId";
-
-    /**
-     * Memento branch for persisting {@link #attributes}.
-     */
-    private static final String MEMENTO_ATTRIBUTES = "attribute-set";
-
-    /**
-     * A serialized {@link AttributeValueSet} attribute inside memento.
-     */
-    private static final String MEMENTO_ATTRIBUTE_SET_SERIALIZED = "serialized";
-
-    /**
      * Filter showing only required attributes.
      */
     @SuppressWarnings("unchecked")
@@ -104,14 +77,9 @@ public class SearchInputView extends ViewPart
         .alwaysTrue();
 
     /**
-     * Enable validation overlays (artificial attribute key for editor listeners).
-     */
-    public static final String ENABLE_VALIDATION_OVERLAYS = "enable.validation.overlays";
-
-    /**
      * State persistence.
      */
-    private IMemento state;
+    private SearchInputViewMemento state;
 
     private ComboViewer sourceViewer;
     private ComboViewer algorithmViewer;
@@ -131,17 +99,17 @@ public class SearchInputView extends ViewPart
     /**
      * The current editor composite.
      */
-    private AttributeGroups editorComposite;
+    private AttributeGroups attributeGroups;
 
     /**
-     * A joint set of attributes for all sources from
-     * {@link WorkbenchCorePlugin#getSources()}.
+     * A joint set of attributes for all sources from and default attribute values for
+     * algorithms.
      */
-    private AttributeValueSet attributes = new AttributeValueSet("all-inputs");
+    private final AttributeValueSet attributes = new AttributeValueSet("global");
 
     /**
-     * A map of {@link BindableDescriptor} for each document source ID from {@link
-     * WorkbenchCorePlugin#getSources()}.
+     * A map of {@link BindableDescriptor} for each document source ID and
+     * algorithm ID from {@link WorkbenchCorePlugin#getComponentSuite()}.
      */
     private Map<String, BindableDescriptor> descriptors = Maps.newHashMap();
 
@@ -203,11 +171,9 @@ public class SearchInputView extends ViewPart
      */
     private class LinkWithEditorActionDelegate extends ActiveSearchEditorActionDelegate
     {
-        /*
-         * 
-         */
+        /* */
         @Override
-        public void run(SearchEditor editor)
+        protected void run(SearchEditor editor)
         {
             linkWithEditor = !linkWithEditor;
 
@@ -268,6 +234,8 @@ public class SearchInputView extends ViewPart
         {
             super("Show optional attributes", SWT.TOGGLE);
 
+            setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/optional.gif"));
+
             /*
              * Subscribe to change events on the global preference property and update
              * initial state.
@@ -324,9 +292,31 @@ public class SearchInputView extends ViewPart
          * Create toolbar and menu contributions.
          */
         final IActionBars bars = getViewSite().getActionBars();
-        createMenu(bars.getMenuManager());
         createToolbar(bars.getToolBarManager());
         bars.updateActionBars();
+    }
+    
+    /*
+     * 
+     */
+    @Override
+    public void init(IViewSite site, IMemento memento) throws PartInitException
+    {
+        super.init(site, memento);
+
+        this.state = null;
+        try
+        {
+            if (memento != null)
+            {
+                this.state = SimpleXmlMemento.getChild(SearchInputViewMemento.class, memento);
+            }
+        }
+        catch (IOException e)
+        {
+            Utils.logError(e, false);
+            this.state = null;
+        }
     }
 
     /*
@@ -334,6 +324,7 @@ public class SearchInputView extends ViewPart
      */
     private void createToolbar(IToolBarManager toolBarManager)
     {
+        // Link with editor action.
         final IAction linkWithEditor = new ActionDelegateProxy(
             new LinkWithEditorActionDelegate(), IAction.AS_CHECK_BOX);
         linkWithEditor.setImageDescriptor(WorkbenchCorePlugin
@@ -342,20 +333,18 @@ public class SearchInputView extends ViewPart
         toolBarManager.add(linkWithEditor);
         this.linkWithEditorAction = linkWithEditor;
 
+        // Optional attributes action toggle.
+        final IAction showRequiredOnly = new ShowOptionalAction();
+        toolBarManager.add(showRequiredOnly);
+
+        // Grouping method action.
         toolBarManager.add(new GroupingMethodAction(
             PreferenceConstants.GROUPING_INPUT_VIEW));
+
+        // Add save attributes action.
+        toolBarManager.add(new SaveDocumentSourceAttributesAction(this));
     }
 
-    /*
-     * 
-     */
-    private void createMenu(IMenuManager menuManager)
-    {
-        final IAction showRequiredOnly = new ShowOptionalAction();
-
-        menuManager.add(showRequiredOnly);
-        menuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-    }
 
     /**
      * Create user interface for the view.
@@ -455,10 +444,12 @@ public class SearchInputView extends ViewPart
         /*
          * Dispose of last editor.
          */
-        if (this.editorComposite != null)
+        Map<String, Boolean> expansionState = Collections.emptyMap();
+        if (this.attributeGroups != null)
         {
-            this.editorComposite.dispose();
-            this.editorComposite = null;
+            expansionState = this.attributeGroups.getExpansionStates();
+            this.attributeGroups.dispose();
+            this.attributeGroups = null;
         }
 
         /*
@@ -483,39 +474,40 @@ public class SearchInputView extends ViewPart
         }
         else
         {
-            this.editorComposite = new AttributeGroups(editorCompositeContainer,
+            this.attributeGroups = new AttributeGroups(editorCompositeContainer,
                 sourceDescriptor, groupingMethod, filter, attributes.getAttributeValues());
 
             final GridData gd = new GridData();
             gd.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
             gd.grabExcessHorizontalSpace = true;
-            editorComposite.setLayoutData(gd);
+            attributeGroups.setLayoutData(gd);
+            attributeGroups.setExpanded(expansionState);
 
             /*
-             * Set default values for those attributes that have null values.
+             * Set default values for those attributes that do not have any assigned.
              */
-            for (AttributeDescriptor attr : sourceDescriptor.flatten().attributeDescriptors
-                .values())
+            Map<String,Object> defaultValues = sourceDescriptor.getDefaultValues();
+            for (Map.Entry<String, Object> e : defaultValues.entrySet())
             {
-                if (attributes.getAttributeValue(attr.key) == null)
+                if (attributes.getAttributeValue(e.getKey()) == null)
                 {
-                    attributes.setAttributeValue(attr.key, attr.defaultValue);
+                    attributes.setAttributeValue(e.getKey(), e.getValue());
                 }
             }
 
             /*
              * Set initial values of editors.
              */
-            editorComposite.setAttributes(filterAttributesOf(sourceID));
+            attributeGroups.setAttributes(filterAttributesOf(sourceID));
 
             /*
              * Hook up listeners updating attributes on changes in editors.
              */
-            editorComposite.addAttributeListener(new AttributeListenerAdapter()
+            attributeGroups.addAttributeListener(new AttributeListenerAdapter()
             {
                 public void valueChanged(AttributeEvent event)
                 {
-                    if (event.key.equals(ENABLE_VALIDATION_OVERLAYS))
+                    if (event.key.equals(AttributeList.ENABLE_VALIDATION_OVERLAYS))
                     {
                         return;
                     }
@@ -548,25 +540,9 @@ public class SearchInputView extends ViewPart
     }
 
     /**
-     * Filter only those keys from {@link #attributes} that belong to source
-     * <code>sourceID</code>.
-     */
-    private Map<String, Object> filterAttributesOf(String sourceID)
-    {
-        final Map<String, Object> filtered = Maps.newLinkedHashMap(attributes
-            .getAttributeValues());
-
-        filtered.keySet().retainAll(
-            descriptors.get(sourceID).attributeDescriptors.keySet());
-
-        return filtered;
-    }
-
-    /**
      * Creates permanent GUI elements (source, algorithm combos, placeholder for the
      * editors).
      */
-    @SuppressWarnings("unchecked")
     private void createComponents(Composite parent)
     {
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
@@ -584,7 +560,7 @@ public class SearchInputView extends ViewPart
         scroller.setContent(innerComposite);
 
         // Initialize sources, descriptors and source combo.
-        ProcessingComponentSuite suite = core.getComponentSuite();
+        final ProcessingComponentSuite suite = core.getComponentSuite();
 
         sourceViewer = createComboViewer(innerComposite, "Source", suite.getSources());
         sourceViewer.addSelectionChangedListener(sourceSelectionListener);
@@ -595,8 +571,7 @@ public class SearchInputView extends ViewPart
             try
             {
                 sources.put(e.getId(), e);
-                descriptors.put(e.getId(), core.getComponentDescriptor(e.getId()).only(
-                    Input.class, Processing.class));
+                addFilteredDescriptor(e);
             }
             catch (Exception x)
             {
@@ -612,6 +587,7 @@ public class SearchInputView extends ViewPart
         for (ProcessingComponentDescriptor e : suite.getAlgorithms())
         {
             algorithms.put(e.getId(), e);
+            addFilteredDescriptor(e);
         }
 
         final Label l = new Label(innerComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
@@ -645,11 +621,31 @@ public class SearchInputView extends ViewPart
         processButtonGridData.horizontalSpan = 1;
         processButton.setLayoutData(processButtonGridData);
 
-        /*
-         * Restore state and push initial values to editors.
-         */
+        // Restore view state.
         restoreState();
+
+        // Initial editor display for the current input.
         displayEditorSet();
+
+        // Restore initial expansion state for groups.
+        if (state != null)
+        {
+            this.attributeGroups.setExpanded(state.sectionsExpansionState);            
+        }
+    }
+
+    /**
+     * Adds a {@link BindableDescriptor} to {@link #descriptors}, filtering
+     * to only {@link Input} and {@link Processing} attributes.
+     */
+    @SuppressWarnings("unchecked")
+    private void addFilteredDescriptor(ProcessingComponentDescriptor e)
+    {
+        final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
+
+        descriptors.put(e.getId(),
+            core.getComponentDescriptor(e.getId()).only(
+                Input.class, Processing.class));        
     }
 
     /**
@@ -711,9 +707,10 @@ public class SearchInputView extends ViewPart
          */
         final AttributeValueSet requestAttrs = new AttributeValueSet("request");
         requestAttrs.setAttributeValues(filterAttributesOf(getSourceId()));
+        requestAttrs.setAttributeValues(filterAttributesOf(getAlgorithmId()));
 
-        final SearchInput input = new SearchInput(getSourceId(), getAlgorithmId(),
-            requestAttrs);
+        final SearchInput input = new SearchInput(
+            getSourceId(), getAlgorithmId(), requestAttrs);
         try
         {
             page.openEditor(input, SearchEditor.ID);
@@ -776,7 +773,8 @@ public class SearchInputView extends ViewPart
         }
         else
         {
-            editorComposite.setAttribute(ENABLE_VALIDATION_OVERLAYS, true);
+            attributeGroups.setAttribute(
+                AttributeList.ENABLE_VALIDATION_OVERLAYS, true);
 
             final String source = getSourceId();
             if (!StringUtils.isEmpty(source))
@@ -798,108 +796,44 @@ public class SearchInputView extends ViewPart
     }
 
     /**
-     * Restore state of UI components from memento.
+     * Restore state of UI components from saved state.
      */
-    @SuppressWarnings("unchecked")
     private void restoreState()
     {
-        /*
-         * Restore attribute sets for inputs.
-         */
         if (state != null)
         {
-            final IMemento [] mementos = state.getChildren(MEMENTO_ATTRIBUTES);
-            if (mementos != null)
-            {
-                for (int i = 0; i < mementos.length; i++)
-                {
-                    final IMemento single = mementos[i];
-
-                    final String id = single.getID();
-                    final String serialized = single
-                        .getString(MEMENTO_ATTRIBUTE_SET_SERIALIZED);
-
-                    if (id == null || serialized == null)
-                    {
-                        continue;
-                    }
-
-                    try
-                    {
-                        final AttributeValueSets sets = AttributeValueSets
-                            .deserialize(new StringReader(serialized));
-                        final AttributeValueSet set = sets.getDefaultAttributeValueSet();
-                        if (set != null)
-                        {
-                            this.attributes.setAttributeValues(set.getAttributeValues());
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Utils.logError("Could not restore view state.", e, false);
-                    }
-                }
-            }
-
-            this.linkWithEditor = Boolean.valueOf(state.getString(MEMENTO_EDITOR_LINK));
-            this.linkWithEditorAction.setChecked(linkWithEditor);
+            this.attributes.setAttributeValues(state.attributes.getAttributeValues());
+            this.linkWithEditor = state.linkWithEditor;
         }
+        this.linkWithEditorAction.setChecked(linkWithEditor);
 
-        /*
-         * Combo boxes state.
-         */
-        try
+        ProcessingComponentDescriptor source = null;
+        ProcessingComponentDescriptor algorithm = null;
+
+        if (state != null)
         {
-            final Object [][] combos = new Object [] []
-            {
-                {
-                    sourceViewer, MEMENTO_SOURCE_ID
-                },
-                {
-                    algorithmViewer, MEMENTO_ALGORITHM_ID
-                }
-            };
-
-            for (Object [] comboPair : combos)
-            {
-                ComboViewer combo = (ComboViewer) comboPair[0];
-                String mementoAttr = (String) comboPair[1];
-
-                Collection<ProcessingComponentDescriptor> options = (Collection<ProcessingComponentDescriptor>) combo
-                    .getInput();
-
-                /*
-                 * Attempt to restore selection from memento, if not available, set the
-                 * default option.
-                 */
-                boolean restored = false;
-                if (state != null)
-                {
-                    String id = state.getString(mementoAttr);
-                    if (id != null)
-                    {
-                        for (ProcessingComponentDescriptor i : options)
-                        {
-                            if (i.getId().equals(id))
-                            {
-                                combo.setSelection(new StructuredSelection(i), true);
-                                restored = true;
-                            }
-                        }
-                    }
-                }
-
-                if (!restored && combo.getCombo().getItemCount() > 0)
-                {
-                    final Object element = options.iterator().next();
-                    combo.setSelection(new StructuredSelection(element));
-                }
-            }
+            source = sources.get(state.sourceId);
+            algorithm = algorithms.get(state.algorithmId);
         }
-        catch (RuntimeException re)
+        
+        if (source == null)
         {
-            Utils.logError("Could not restore search view state", re, false);
+            // Try to select the default set in preferences.
+            String id = WorkbenchCorePlugin.getDefault().getPreferenceStore().getString(
+                PreferenceConstants.DEFAULT_SOURCE_ID);
+            source = sources.get(id);
         }
+
+        if (algorithm == null)
+        {
+            // Try to select the default set in preferences.
+            String id = WorkbenchCorePlugin.getDefault().getPreferenceStore().getString(
+                PreferenceConstants.DEFAULT_ALGORITHM_ID);
+            algorithm = algorithms.get(id);
+        }
+
+        restoreState(sourceViewer, source);
+        restoreState(algorithmViewer, algorithm);
 
         /*
          * Disable GUI if no inputs or algorithms.
@@ -912,9 +846,32 @@ public class SearchInputView extends ViewPart
 
         if (algorithms.isEmpty())
         {
-            disableComboWithMessage(algorithmViewer.getCombo(),
-                "No clustering algorithms.");
+            disableComboWithMessage(algorithmViewer.getCombo(), "No clustering algorithms.");
             processButton.setEnabled(false);
+        }
+    }
+
+    /**
+     * Attempt to set selection to the given descriptor, if failed, select the first
+     * available element. 
+     */
+    @SuppressWarnings("unchecked")
+    private void restoreState(ComboViewer combo, ProcessingComponentDescriptor descriptor)
+    {
+        if (descriptor == null)
+        {
+            Collection<ProcessingComponentDescriptor> options = 
+                (Collection<ProcessingComponentDescriptor>) combo.getInput();
+
+            if (options.size() > 0)
+            {
+                descriptor = options.iterator().next();
+            }
+        }
+
+        if (descriptor != null)
+        {
+            combo.setSelection(new StructuredSelection(descriptor), true);
         }
     }
 
@@ -931,7 +888,7 @@ public class SearchInputView extends ViewPart
     /**
      * Return the current source component identifier.
      */
-    private String getSourceId()
+    String getSourceId()
     {
         return getSelectedId(sourceViewer);
     }
@@ -981,14 +938,32 @@ public class SearchInputView extends ViewPart
         return ((ProcessingComponentDescriptor) selection.getFirstElement()).getId();
     }
 
-    /*
-     * 
+    /**
+     * Filter only those keys from {@link #attributes} that belong to source
+     * <code>sourceID</code>.
      */
-    @Override
-    public void init(IViewSite site, IMemento memento) throws PartInitException
+    Map<String, Object> filterAttributesOf(String componentId)
     {
-        state = memento;
-        super.init(site, memento);
+        final Map<String, Object> filtered = Maps.newLinkedHashMap(
+            attributes.getAttributeValues());
+
+        filtered.keySet().retainAll(
+            descriptors.get(componentId).attributeDescriptors.keySet());
+
+        return filtered;
+    }
+
+    /**
+     * Update an attribute stored in the input view. 
+     */
+    void setAttribute(String key, Object value)
+    {
+        /*
+         * Force update of attributes map directly because this method
+         * updates algorithm attributes that are not covered by editorComposite.
+         */
+        this.attributes.setAttributeValue(key, value);
+        this.attributeGroups.setAttribute(key, value);
     }
 
     /*
@@ -997,49 +972,34 @@ public class SearchInputView extends ViewPart
     @Override
     public void saveState(IMemento memento)
     {
-        memento.putString(MEMENTO_SOURCE_ID, getSourceId());
-        memento.putString(MEMENTO_ALGORITHM_ID, getAlgorithmId());
-        memento.putString(MEMENTO_EDITOR_LINK, Boolean.toString(linkWithEditor));
+        final SearchInputViewMemento state = new SearchInputViewMemento();
 
-        /*
-         * Save attributes for each input separately.
-         */
+        state.sourceId = getSourceId();
+        state.algorithmId = getAlgorithmId();
+        state.linkWithEditor = linkWithEditor;
+        state.attributes = attributes;
+        state.sectionsExpansionState = attributeGroups.getExpansionStates();
 
-        for (String sourceID : this.descriptors.keySet())
+        try
         {
-            final AttributeValueSet set = new AttributeValueSet(sourceID);
-            set.setAttributeValues(filterAttributesOf(sourceID));
-
-            try
-            {
-                final StringWriter w = new StringWriter();
-                final AttributeValueSets sets = new AttributeValueSets();
-                sets.addAttributeValueSet(sourceID, set);
-                sets.serialize(w);
-                w.close();
-
-                final String serialized = w.toString();
-
-                final IMemento single = memento.createChild(MEMENTO_ATTRIBUTES, sourceID);
-                single.putString(MEMENTO_ATTRIBUTE_SET_SERIALIZED, serialized);
-            }
-            catch (Exception e)
-            {
-                Utils.logError(e, false);
-            }
+            SimpleXmlMemento.addChild(memento, state);
+        }
+        catch (IOException e)
+        {
+            Utils.logError(e, false);
         }
     }
 
     /**
-     * We set the focus to the current {@link #editorComposite}'s default element if
+     * We set the focus to the current {@link #attributeGroups}'s default element if
      * possible. Otherwise, set the focus to the input source combo.
      */
     @Override
     public void setFocus()
     {
-        if (editorComposite != null)
+        if (attributeGroups != null)
         {
-            editorComposite.setFocus();
+            attributeGroups.setFocus();
         }
         else
         {
@@ -1053,9 +1013,20 @@ public class SearchInputView extends ViewPart
     @Override
     public void dispose()
     {
-        if (this.editorComposite != null) editorComposite.dispose();
+        if (this.attributeGroups != null) attributeGroups.dispose();
         if (this.errorStatusImage != null) this.errorStatusImage.dispose();
         
         super.dispose();
+    }
+
+    /**
+     * Returns the active page's view instance.
+     */
+    public static SearchInputView getView()
+    {
+        final IWorkbenchPage page = PlatformUI.getWorkbench()
+            .getActiveWorkbenchWindow().getActivePage();
+
+        return (SearchInputView) page.findView(SearchInputView.ID);
     }
 }

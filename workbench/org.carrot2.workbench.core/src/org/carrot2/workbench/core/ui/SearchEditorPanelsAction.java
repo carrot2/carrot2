@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,9 +12,13 @@
 
 package org.carrot2.workbench.core.ui;
 
+import java.util.Map;
+
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.DropDownMenuAction;
+import org.carrot2.workbench.core.ui.SearchEditor.PanelName;
+import org.carrot2.workbench.core.ui.SearchEditor.PanelState;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.SWT;
@@ -65,16 +68,17 @@ final class SearchEditorPanelsAction extends Action
          */
         private Menu createItems(Menu menu)
         {
-            for (final SearchEditorSections section : editor.getSections().keySet())
+            for (Map.Entry<PanelName, PanelState> e : editor.getPanelState().entrySet())
             {
+                final PanelName p = e.getKey();
                 final MenuItem mi = new MenuItem(menu, SWT.CHECK);
-                mi.setText(section.name);
+                mi.setText(p.name);
 
-                mi.setSelection(editor.getSections().get(section).visibility);
+                mi.setSelection(e.getValue().visibility);
                 mi.addSelectionListener(new SelectionAdapter() {
                     public void widgetSelected(SelectionEvent e)
                     {
-                        editor.setSectionVisibility(section, mi.getSelection());
+                        editor.setPanelVisibility(p, mi.getSelection());
                         e.doit = true;
                     }
                 });
@@ -86,8 +90,7 @@ final class SearchEditorPanelsAction extends Action
             mi.addSelectionListener(new SelectionAdapter() {
                 public void widgetSelected(SelectionEvent e)
                 {
-                    WorkbenchCorePlugin.getDefault().storeSectionsState(
-                        editor.getSections());
+                    editor.saveAsGlobalState();
                 }
             });
 

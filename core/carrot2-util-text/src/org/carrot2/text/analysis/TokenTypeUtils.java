@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -30,5 +29,13 @@ public final class TokenTypeUtils
     public static int maskType(int rawType) 
     {
         return rawType & ITokenType.TYPE_MASK;
+    }
+
+    /**
+     * Returns <code>true</code> if the given type has {@link ITokenType#TF_SEPARATOR_DOCUMENT} set.
+     */
+    public static boolean isDocumentSeparator(int type)
+    {
+        return (type & ITokenType.TF_SEPARATOR_DOCUMENT) != 0;
     }
 }

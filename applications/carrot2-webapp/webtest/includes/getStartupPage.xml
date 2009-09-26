@@ -1,3 +1,2 @@
 <invoke url="/" description="Get startup page" />
-<verifyTitle text="Carrot2 Clustering Engine" />
 &commonChecks;

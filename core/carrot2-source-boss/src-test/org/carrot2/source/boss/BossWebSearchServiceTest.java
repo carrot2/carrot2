@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,36 +12,33 @@
 
 package org.carrot2.source.boss;
 
+import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
 import java.io.IOException;
 
-import org.carrot2.core.test.ExternalApiTestBase;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junitext.Prerequisite;
-import org.junitext.runners.AnnotationRunner;
 
 /**
  * Tests Web service accessor.
  */
-@RunWith(AnnotationRunner.class)
-public class BossWebSearchServiceTest extends ExternalApiTestBase
+public class BossWebSearchServiceTest
 {
     private BossSearchService service;
 
     @Before
     public void init()
     {
+        assumeTrue(externalApiTestsEnabled());
         service = new BossWebSearchService();
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNoResultsQuery() throws Exception
     {
         final SearchEngineResponse response = service.query(
@@ -50,7 +47,6 @@ public class BossWebSearchServiceTest extends ExternalApiTestBase
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testPolishDiacritics() throws Exception
     {
         final SearchEngineResponse response = service.query("Łódź", 0, 100);
@@ -58,7 +54,6 @@ public class BossWebSearchServiceTest extends ExternalApiTestBase
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testLargerQuery() throws Exception
     {
         final int needed = service.metadata.resultsPerPage / 2;
@@ -67,7 +62,6 @@ public class BossWebSearchServiceTest extends ExternalApiTestBase
     }
 
     @Test(expected = IOException.class)
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testErrorResult() throws Exception
     {
         service.metadata = new MultipageSearchEngineMetadata(400, 1000);
@@ -76,7 +70,6 @@ public class BossWebSearchServiceTest extends ExternalApiTestBase
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testCompressedStreamsUsed() throws Exception
     {
         final SearchEngineResponse response = service.query("apache", 0, 50);

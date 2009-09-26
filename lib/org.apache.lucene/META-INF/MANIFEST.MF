@@ -2,37 +2,44 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Lucene
 Bundle-SymbolicName: org.apache.lucene.v2
-Bundle-Version: 2.4.0
-Bundle-ClassPath: lucene-analyzers-2.4.0.jar,
- lucene-core-2.4.0.jar,
- lucene-highlighter-2.4.0.jar,
- lucene-snowball-2.4.0.jar
+Bundle-Version: 2.9.0
+Bundle-ClassPath: lucene-analyzers-2.9.0.jar,
+ lucene-core-2.9.0.jar,
+ lucene-highlighter-2.9.0.jar,
+ lucene-smartcn-2.9.0.jar,
+ lucene-snowball-2.9.0.jar
 Bundle-Vendor: Apache Foundation
 Export-Package: org.apache.lucene,
  org.apache.lucene.analysis,
+ org.apache.lucene.analysis.ar,
  org.apache.lucene.analysis.br,
  org.apache.lucene.analysis.cjk,
  org.apache.lucene.analysis.cn,
+ org.apache.lucene.analysis.cn.smart,
+ org.apache.lucene.analysis.cn.smart.hhmm,
  org.apache.lucene.analysis.compound,
  org.apache.lucene.analysis.compound.hyphenation,
  org.apache.lucene.analysis.cz,
  org.apache.lucene.analysis.de,
  org.apache.lucene.analysis.el,
+ org.apache.lucene.analysis.fa,
  org.apache.lucene.analysis.fr,
  org.apache.lucene.analysis.miscellaneous,
  org.apache.lucene.analysis.ngram,
  org.apache.lucene.analysis.nl,
  org.apache.lucene.analysis.payloads,
+ org.apache.lucene.analysis.position,
  org.apache.lucene.analysis.query,
+ org.apache.lucene.analysis.reverse,
  org.apache.lucene.analysis.ru,
  org.apache.lucene.analysis.shingle,
  org.apache.lucene.analysis.sinks,
  org.apache.lucene.analysis.snowball,
  org.apache.lucene.analysis.standard,
  org.apache.lucene.analysis.th,
+ org.apache.lucene.analysis.tokenattributes,
  org.apache.lucene.document,
  org.apache.lucene.index,
- org.apache.lucene.index.memory,
  org.apache.lucene.queryParser,
  org.apache.lucene.search,
  org.apache.lucene.search.function,
@@ -44,3 +51,4 @@ Export-Package: org.apache.lucene,
  org.apache.lucene.util.cache,
  org.tartarus.snowball,
  org.tartarus.snowball.ext
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

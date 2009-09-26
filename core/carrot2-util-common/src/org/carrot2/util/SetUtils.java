@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -26,7 +25,7 @@ public final class SetUtils
 
     public static <E> HashSet<E> asHashSet(Set<E> set)
     {
-        if (set instanceof HashSet)
+        if (HashSet.class.isInstance(set))
         {
             return (HashSet<E>) set;
         }

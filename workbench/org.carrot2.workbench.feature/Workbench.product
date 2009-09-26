@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.4"?>
+
+<product name="Carrot2 Workbench" id="org.carrot2.workbench.core.product" application="org.carrot2.workbench.core.application" useFeatures="true">
+
+   <aboutInfo>
+      <image path="/org.carrot2.workbench.core/icons/product_logo.png"/>
+      <text>
+         Carrot2 Workbench
+
+(c) Carrot2 developers.  All rights reserved.
+Visit http://carrot2.org for more information.
+
+This product includes software developed by the
+Apache Software Foundation http://www.apache.org/.
+      </text>
+   </aboutInfo>
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+      <programArgs>-data workspace</programArgs>
+      <vmArgs>-Xms256m
+-Xmx512m
+-Dorg.eclipse.update.reconcile=false</vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+   </launcherArgs>
+
+   <windowImages i16="/org.carrot2.workbench.core/icons/carrot2-16x16.gif" i32="/org.carrot2.workbench.core/icons/carrot2-32x32.gif"/>
+
+   <splash
+      location="org.carrot2.workbench.core" />
+   <launcher name="carrot2-workbench">
+      <linux icon="/org.carrot2.workbench.core/icons/carrot2-32x32.xpm"/>
+      <solaris/>
+      <win useIco="false">
+         <bmp
+            winSmallHigh="/org.carrot2.workbench.core/icons/ico/carrot2-16x16x32.bmp"
+            winSmallLow="/org.carrot2.workbench.core/icons/ico/carrot2-16x16x8.bmp"
+            winMediumHigh="/org.carrot2.workbench.core/icons/ico/carrot2-32x32x32.bmp"
+            winMediumLow="/org.carrot2.workbench.core/icons/ico/carrot2-32x32x8.bmp"
+            winLargeHigh="/org.carrot2.workbench.core/icons/ico/carrot2-48x48x32.bmp"
+            winLargeLow="/org.carrot2.workbench.core/icons/ico/carrot2-48x48x8.bmp"/>
+      </win>
+   </launcher>
+
+
+   <vm>
+   </vm>
+
+   <plugins>
+      <plugin id="com.google.collections"/>
+      <plugin id="com.ibm.icu"/>
+      <plugin id="com.ibm.icu36.data.update"/>
+      <plugin id="com.thoughtworks.qdox"/>
+      <plugin id="javax.servlet"/>
+      <plugin id="net.sf.ehcache"/>
+      <plugin id="org.apache.ant"/>
+      <plugin id="org.apache.commons"/>
+      <plugin id="org.apache.log4j"/>
+      <plugin id="org.carrot2.core"/>
+      <plugin id="org.carrot2.util.attribute"/>
+      <plugin id="org.carrot2.util.common"/>
+      <plugin id="org.carrot2.util.log4j" fragment="true"/>
+      <plugin id="org.carrot2.workbench.core"/>
+      <plugin id="org.codehaus.woodstox"/>
+      <plugin id="org.eclipse.core.commands"/>
+      <plugin id="org.eclipse.core.contenttype"/>
+      <plugin id="org.eclipse.core.databinding"/>
+      <plugin id="org.eclipse.core.expressions"/>
+      <plugin id="org.eclipse.core.jobs"/>
+      <plugin id="org.eclipse.core.runtime"/>
+      <plugin id="org.eclipse.core.runtime.compatibility.registry" fragment="true"/>
+      <plugin id="org.eclipse.equinox.app"/>
+      <plugin id="org.eclipse.equinox.common"/>
+      <plugin id="org.eclipse.equinox.preferences"/>
+      <plugin id="org.eclipse.equinox.registry"/>
+      <plugin id="org.eclipse.help"/>
+      <plugin id="org.eclipse.jdt.junit.runtime"/>
+      <plugin id="org.eclipse.jdt.junit4.runtime"/>
+      <plugin id="org.eclipse.jface"/>
+      <plugin id="org.eclipse.jface.databinding"/>
+      <plugin id="org.eclipse.osgi"/>
+      <plugin id="org.eclipse.pde.runtime"/>
+      <plugin id="org.eclipse.swt"/>
+      <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.ui"/>
+      <plugin id="org.eclipse.ui.workbench"/>
+      <plugin id="org.junit"/>
+      <plugin id="org.junit4"/>
+      <plugin id="org.simpleframework.xml"/>
+   </plugins>
+
+   <features>
+      <feature id="org.carrot2.workbench.feature" version="0.0.0"/>
+      <feature id="org.eclipse.rcp" version="0.0.0"/>
+   </features>
+
+</product>

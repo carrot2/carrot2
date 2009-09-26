@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -23,8 +22,7 @@ import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.workbench.editors.IAttributeEditor;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 
 /**
  * See {@link #getEditorFor(Class, AttributeDescriptor)}.
@@ -156,7 +154,7 @@ public final class EditorFactory
             }
         };
         
-        return Lists.sortedCopy(editors, comparator);
+        return Ordering.from(comparator).sortedCopy(editors);
     }
 
     /**

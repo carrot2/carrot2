@@ -96,6 +96,14 @@
             id="org.carrot2.workbench.core.views.attributeInfo"
             name="Attribute Info">
       </view>
+      <view
+            allowMultiple="false"
+            category="org.carrot2.workbench.core.workbench.category"
+            class="org.carrot2.workbench.core.ui.BenchmarkView"
+            icon="icons/view_benchmark.gif"
+            id="org.carrot2.workbench.core.views.benchmark"
+            name="Benchmark">
+      </view>
       <category
             id="org.carrot2.workbench.core.workbench.category"
             name="Carrot2">
@@ -178,6 +186,11 @@
                visible="false"
                relative="org.carrot2.workbench.core.views.clusters"/>
 
+         <view
+               id="org.carrot2.workbench.core.views.benchmark"
+               relationship="stack"
+               visible="false"
+               relative="org.carrot2.workbench.core.views.clusters" />
       </perspectiveExtension>
 
       <perspectiveExtension
@@ -197,7 +210,10 @@
          <viewShortcut
                id="org.carrot2.workbench.core.views.attributeInfo">
          </viewShortcut>
-         
+         <viewShortcut
+               id="org.carrot2.workbench.core.views.benchmark">
+         </viewShortcut>
+
          <view
                id="org.carrot2.workbench.core.views.attributeInfo"
                ratio="0.70"
@@ -246,7 +262,12 @@
                relationship="stack"
                visible="true"
                relative="org.eclipse.ui.views.ProgressView" />
-         
+
+         <view
+               id="org.carrot2.workbench.core.views.benchmark"
+               relationship="stack"
+               visible="true"
+               relative="org.eclipse.ui.views.ProgressView" />               
       </perspectiveExtension>
    </extension>
    <extension

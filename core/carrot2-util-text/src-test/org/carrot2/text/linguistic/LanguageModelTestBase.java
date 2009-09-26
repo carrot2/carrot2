@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,7 +14,6 @@ package org.carrot2.text.linguistic;
 
 import static org.junit.Assert.*;
 
-import org.carrot2.text.util.MutableCharArray;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,6 +48,7 @@ public abstract class LanguageModelTestBase
     public void testStemmerAvailable()
     {
         assertNotNull(languageModel.getStemmer());
+        assertFalse(languageModel.getStemmer() instanceof IdentityStemmer);
     }
 
     /**
@@ -116,7 +115,7 @@ public abstract class LanguageModelTestBase
 
     /**
      * Override and provide words for testing against
-     * {@link ILanguageModel#isCommonWord(MutableCharArray)}).
+     * {@link ILanguageModel#isCommonWord(CharSequence)}).
      */
     protected String [] getCommonWordsTestData()
     {

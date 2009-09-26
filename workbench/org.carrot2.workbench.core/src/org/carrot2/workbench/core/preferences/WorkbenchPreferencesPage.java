@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,7 +15,7 @@ package org.carrot2.workbench.core.preferences;
 import java.util.*;
 
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.carrot2.workbench.core.ui.SearchEditorSections;
+import org.carrot2.workbench.core.ui.SearchEditor;
 import org.eclipse.jface.preference.*;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
@@ -27,7 +26,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 /**
- * 
+ * Global preferences for the workbench.
  */
 public class WorkbenchPreferencesPage extends FieldEditorPreferencePage implements
     IWorkbenchPreferencePage
@@ -65,10 +64,10 @@ public class WorkbenchPreferencesPage extends FieldEditorPreferencePage implemen
          */
         Group g = createOptionGroup(parent, "Visible editor panels");
         Composite spacer = createSpacerComposite(g);
-        for (SearchEditorSections s : EnumSet.allOf(SearchEditorSections.class))
+        for (SearchEditor.PanelName s : EnumSet.allOf(SearchEditor.PanelName.class))
         {
-            final String key = PreferenceConstants.getSectionVisibilityKey(s);
-            final BooleanFieldEditor editor = new BooleanFieldEditor(key, s.name, spacer);
+            final BooleanFieldEditor editor = 
+                new BooleanFieldEditor(s.prefKeyVisibility, s.name, spacer);
 
             editors.add(editor);
             addField(editor);

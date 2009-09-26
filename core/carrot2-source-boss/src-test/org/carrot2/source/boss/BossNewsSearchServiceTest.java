@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,33 +12,30 @@
 
 package org.carrot2.source.boss;
 
+import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
-import org.carrot2.core.test.ExternalApiTestBase;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.source.SearchEngineResponse;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junitext.Prerequisite;
-import org.junitext.runners.AnnotationRunner;
 
 /**
  * Tests News service accessor.
  */
-@RunWith(AnnotationRunner.class)
-public class BossNewsSearchServiceTest extends ExternalApiTestBase
+public class BossNewsSearchServiceTest
 {
     private BossSearchService service;
 
     @Before
     public void init()
     {
+        assumeTrue(externalApiTestsEnabled());
         service = new BossNewsSearchService();
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testNoResultsQuery() throws Exception
     {
         final SearchEngineResponse response = service.query(
@@ -47,7 +44,6 @@ public class BossNewsSearchServiceTest extends ExternalApiTestBase
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testPresidentQuery() throws Exception
     {
         final int needed = service.metadata.resultsPerPage / 2;

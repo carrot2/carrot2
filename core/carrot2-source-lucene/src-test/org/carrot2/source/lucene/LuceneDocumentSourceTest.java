@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -33,14 +31,12 @@ import org.carrot2.core.Document;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
-import org.junit.*;
-import org.junit.runner.RunWith;
-import org.junitext.runners.AnnotationRunner;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Tests Lucene document source.
  */
-@RunWith(AnnotationRunner.class)
 public class LuceneDocumentSourceTest extends
     QueryableDocumentSourceTestBase<LuceneDocumentSource>
 {
@@ -53,16 +49,17 @@ public class LuceneDocumentSourceTest extends
         analyzer = new SimpleAnalyzer();
         directory = new RAMDirectory();
 
-        final IndexWriter w = new IndexWriter(directory, analyzer, true);
+        final IndexWriter w = new IndexWriter(directory, analyzer, true,
+            IndexWriter.MaxFieldLength.UNLIMITED);
         for (Document d : DOCUMENTS_DATA_MINING)
         {
             org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document();
 
             doc.add(new Field("title", (String) d.getField(Document.TITLE), Store.YES,
-                Field.Index.TOKENIZED, TermVector.WITH_POSITIONS_OFFSETS));
+                Field.Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS));
 
             doc.add(new Field("snippet", (String) d.getField(Document.SUMMARY),
-                Store.YES, Field.Index.TOKENIZED, TermVector.WITH_POSITIONS_OFFSETS));
+                Store.YES, Field.Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS));
 
             doc.add(new Field("url", (String) d.getField(Document.CONTENT_URL),
                 Store.YES, Field.Index.NO));

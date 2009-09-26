@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -21,8 +20,6 @@ import org.carrot2.util.attribute.constraint.IntRange;
 /**
  * STC algorithm parameters. These should be eventually moved into
  * {@link STCClusteringAlgorithm}.
- * 
- * @author Dawid Weiss
  */
 @Bindable(prefix = "STCClusteringAlgorithm")
 public final class STCClusteringParameters
@@ -123,7 +120,7 @@ public final class STCClusteringParameters
     @Input
     @Attribute
     @DoubleRange(min = 0, max = 1)
-    public double maxPhraseOverlap = 0.3d;
+    public double maxPhraseOverlap = 0.6d;
 
     /**
      * Minimum general phrase coverage. Minimum phrase coverage to appear in cluster

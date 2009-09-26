@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -18,21 +18,19 @@ import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.GUIFactory;
+import org.carrot2.workbench.core.helpers.SimpleXmlMemento;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
 import org.carrot2.workbench.editors.*;
-import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.*;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IActionBars;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
-import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 
 /**
@@ -40,6 +38,12 @@ import org.eclipse.ui.part.Page;
  */
 final class AttributeViewPage extends Page
 {
+    /**
+     * Global preference key for expansion state.
+     */
+    private static final String PREFERENCE_KEY_EXPANSION_STATE = 
+        AttributeViewPage.class.getName() + ".expansionState";
+
     /**
      * The search editor this page is attached to.
      */
@@ -74,18 +78,32 @@ final class AttributeViewPage extends Page
         this.editor = editor;
     }
 
+    /**
+     * Make contributions to menus, toolbars and status line.
+     */
+    @Override
+    public void makeContributions(IMenuManager menu,
+        IToolBarManager toolBar, IStatusLineManager statusManager)
+    {
+        super.makeContributions(menu, toolBar, statusManager);
+
+        createToolbarActions(toolBar);
+        createMenuActions(menu);
+    }
+
     /*
      * 
      */
-    @Override
-    public void init(IPageSite pageSite)
+    private void createMenuActions(IMenuManager menuManager)
     {
-        super.init(pageSite);
+        final SearchInput input = editor.getSearchResult().getInput();
 
-        final IActionBars bars = pageSite.getActionBars();
-        createToolbarActions(bars.getToolBarManager());
-
-        bars.updateActionBars();
+        /*
+         * Add defaults management.
+         */
+        menuManager.add(new SetNewDefaultsAction(input));
+        menuManager.add(new ResetToDefaultsAction(input));
+        menuManager.add(new ResetToFactoryDefaultsAction(input));
     }
 
     /*
@@ -104,6 +122,13 @@ final class AttributeViewPage extends Page
          */
         toolBarManager.add(new GroupingMethodAction(
             PreferenceConstants.GROUPING_ATTRIBUTE_VIEW));
+
+        /*
+         * Save/ load attributes.
+         */
+        final IAction saveLoadAction = new SaveAlgorithmAttributesAction(
+            editor.getSearchResult().getInput());
+        toolBarManager.add(saveLoadAction);
     }
 
     /**
@@ -123,8 +148,8 @@ final class AttributeViewPage extends Page
     @Override
     public void createControl(Composite parent)
     {
-        final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault()
-            .getPreferenceStore();
+        final IPreferenceStore prefStore = 
+            WorkbenchCorePlugin.getDefault().getPreferenceStore();
 
         final String key = PreferenceConstants.GROUPING_ATTRIBUTE_VIEW;
         prefStore.addPropertyChangeListener(new PropertyChangeListenerAdapter(key)
@@ -151,12 +176,44 @@ final class AttributeViewPage extends Page
             defaultGrouping, null, Collections.<String, Object> emptyMap());
         attributeEditors.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
             .create());
+        attributeEditors.setAttribute(AttributeList.ENABLE_VALIDATION_OVERLAYS, true);
+
+        restoreGlobalState();
 
         this.mainControl = scroller;
         scroller.reflow(true);
 
         updateGroupingState(defaultGrouping);
         registerListeners();
+    }
+
+    /**
+     * Save to global state.
+     */
+    void saveGlobalState()
+    {
+        assert Display.getCurrent() != null;
+        
+        final AttributeViewMemento memento = new AttributeViewMemento(); 
+        memento.sectionsExpansionState = attributeEditors.getExpansionStates();
+
+        SimpleXmlMemento.toPreferenceStore(PREFERENCE_KEY_EXPANSION_STATE, memento);
+    }
+
+    /**
+     * Restore from global state.
+     */
+    void restoreGlobalState()
+    {
+        assert Display.getCurrent() != null;
+
+        final AttributeViewMemento memento = SimpleXmlMemento.fromPreferenceStore(
+            AttributeViewMemento.class, PREFERENCE_KEY_EXPANSION_STATE);
+
+        if (memento != null)
+        {
+            attributeEditors.setExpanded(memento.sectionsExpansionState);
+        }
     }
 
     /*

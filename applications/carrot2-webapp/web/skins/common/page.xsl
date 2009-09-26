@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:import href="params.xsl" />
   <xsl:import href="customization.xsl" />
   <xsl:import href="documents.xsl" />
   <xsl:import href="clusters.xsl" />
@@ -63,13 +64,15 @@
     
             <!-- Custom in-line javascript -->
             <xsl:apply-templates select="/page" mode="js" />
-            <script type="text/javascript"> var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www."); 
-              document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-            </script>
-            <script type="text/javascript">
-              var pageTracker = _gat._getTracker("UA-317750-3");
-              pageTracker._trackPageview();
-            </script>
+            <xsl:if test="$google-analytics-web-property-id">
+              <script type="text/javascript"> var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www."); 
+                document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+              </script>
+              <script type="text/javascript">
+                var pageTracker = _gat._getTracker("<xsl:value-of select="$google-analytics-web-property-id" />");
+                pageTracker._trackPageview();
+              </script>
+            </xsl:if>
           </body>
         </html>
       </xsl:when>
@@ -123,7 +126,7 @@
         </div>
       </xsl:if>
     </div>
-    
+
     <hr class="hide" />
 
     <div id="main-area">

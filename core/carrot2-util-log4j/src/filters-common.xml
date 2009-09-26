@@ -33,4 +33,4 @@
 <logger name="org.apache.velocity"><level value="info" /></logger>
 
 <!-- JAWR -->
-<logger name="net.jawr"><level value="info" /></logger>
+<logger name="net.jawr"><level value="warn" /></logger>

@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -19,10 +18,7 @@ import static org.eclipse.swt.SWT.Selection;
 
 import java.io.File;
 
-import org.apache.commons.lang.StringUtils;
-import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.ui.SearchEditor.SaveOptions;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
@@ -32,7 +28,6 @@ import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * Displays a dialog prompting for the location of the output XML file and options
@@ -43,9 +38,8 @@ final class SearchEditorSaveAsDialog extends TrayDialog
     /**
      * Global most recent path in case the editor did not have a previous one.
      */
-    private static final String GLOBAL_PATH_PREF = SearchEditorSaveAsDialog.class
-        .getName()
-        + ".savePath";
+    private static final String GLOBAL_PATH_PREF = 
+        SearchEditorSaveAsDialog.class.getName() + ".savePath";
 
     private Text fileNameText;
     private Button browseButton;
@@ -91,9 +85,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
         options.includeClusters = clusterOption.getSelection();
         options.includeDocuments = docOption.getSelection();
 
-        WorkbenchCorePlugin.getDefault().getPluginPreferences().setValue(
-            GLOBAL_PATH_PREF, options.directory);
-
+        FileDialogs.rememberPath(GLOBAL_PATH_PREF, new Path(options.directory));
         super.okPressed();
     }
 
@@ -108,45 +100,20 @@ final class SearchEditorSaveAsDialog extends TrayDialog
 
         if (options.directory == null)
         {
-            options.directory = WorkbenchCorePlugin.getDefault().getPluginPreferences()
-                .getString(GLOBAL_PATH_PREF);
-
-            if (StringUtils.isEmpty(options.directory))
-            {
-                final File home = new File(System.getProperty("user.home", "."));
-                options.directory = home.getAbsolutePath();
-            }
+            options.directory = 
+                FileDialogs.recallPath(GLOBAL_PATH_PREF).toOSString();
         }
 
-        fileNameText.setText(options.getFullPath());
-
+        final Path fullPath = new Path(options.getFullPath());
+        fileNameText.setText(fullPath.toOSString());
         browseButton.addListener(Selection, new Listener()
         {
             public void handleEvent(Event event)
             {
-                final Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
-                final FileDialog dialog = new FileDialog(shell, SWT.SAVE);
-
-                final IPath file = new Path(fileNameText.getText());
-                if (file.isValidPath(fileNameText.getText()))
-                {
-                    dialog.setFileName(file.lastSegment());
-                    dialog.setFilterPath(file.removeLastSegments(1).toOSString());
-                }
-
-                dialog.setFilterExtensions(new String []
-                {
-                    "*.xml", "*.*"
-                });
-                dialog.setFilterNames(new String []
-                {
-                    "XML Files", "All Files"
-                });
-
-                String newPath = dialog.open();
+                Path newPath = FileDialogs.openSaveXML(fullPath);
                 if (newPath != null)
                 {
-                    fileNameText.setText(newPath);
+                    fileNameText.setText(newPath.toOSString());
                 }
             }
         });
@@ -239,5 +206,4 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             clusterOption.setSelection(true);
         }
     }
-
 }

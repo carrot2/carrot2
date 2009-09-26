@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -29,8 +28,7 @@ import org.carrot2.dcs.DcsRequestModel.OutputFormat;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
-import org.carrot2.util.resource.ClassResource;
-import org.carrot2.util.resource.ResourceUtilsFactory;
+import org.carrot2.util.resource.*;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -51,31 +49,48 @@ public final class RestProcessorServlet extends HttpServlet
 
     private transient boolean loggerInitialized;
 
+    private String defaultAlgorithmId;
+
     @Override
     @SuppressWarnings("unchecked")
     public void init() throws ServletException
     {
+        /*
+         * Prepend webapp-specific resource locator reading from the web
+         * application context's WEB-INF folder.
+         */
+        ResourceUtilsFactory.addFirst(
+            new PrefixDecoratorLocator(
+                new WebAppResourceLocator(getServletContext()), "/WEB-INF/"));
+        ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
+
         // Run in servlet container, load config from config.xml
         try
         {
-            config = DcsConfig.deserialize(ResourceUtilsFactory.getDefaultResourceUtils()
-                .getFirst("config.xml"));
+            config = DcsConfig.deserialize(resUtils.getFirst("config.xml"));
         }
         catch (Exception e)
         {
-            throw new ServletException("Could not read config.xml", e);
+            throw new ServletException("Could not read 'config.xml' resource.", e);
         }
 
         // Load component suite
         try
         {
-            componentSuite = ProcessingComponentSuite.deserialize(ResourceUtilsFactory
-                .getDefaultResourceUtils().getFirst("carrot2-default/suite-dcs.xml"));
+            componentSuite = ProcessingComponentSuite.deserialize(
+                resUtils.getFirst(config.componentSuiteResource));
         }
         catch (Exception e)
         {
-            throw new ServletException("Could intialize component suite", e);
+            throw new ServletException("Could initialize component suite.", e);
         }
+
+        // Initialize defaults.
+        if (componentSuite.getAlgorithms().size() == 0)
+        {
+            throw new ServletException("Component suite has no algorithms.");
+        }
+        defaultAlgorithmId = componentSuite.getAlgorithms().get(0).getId();
 
         // Initialize controller
         final List<Class<? extends IProcessingComponent>> cachedComponentClasses = Lists
@@ -313,7 +328,7 @@ public final class RestProcessorServlet extends HttpServlet
         
         if (StringUtils.isEmpty(requestModel.algorithm))
         {
-            requestModel.algorithm = componentSuite.getAlgorithms().get(0).getId();            
+            requestModel.algorithm = defaultAlgorithmId;            
         }
 
         // We need either sourceId or direct document feed

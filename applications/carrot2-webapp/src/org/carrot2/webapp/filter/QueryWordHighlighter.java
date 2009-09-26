@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -46,7 +45,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     public String query = null;
 
     /**
-     * {@link Document}s to highlights query words in.
+     * {@link Document}s to highlight query words in.
      */
     @Processing
     @Input
@@ -112,7 +111,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
             field = matcher.replaceAll("<b>$1</b>");
         }
 
-        document.addField(fieldName + HIGHLIGHTED_FIELD_NAME_SUFFIX, field);
+        document.setField(fieldName + HIGHLIGHTED_FIELD_NAME_SUFFIX, field);
     }
 
     private static final Pattern LT_PATTERN = Pattern.compile("<");

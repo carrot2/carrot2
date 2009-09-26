@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -53,7 +52,7 @@ public class WebDocumentSource extends SimpleSearchEngine
     public void init(IControllerContext context)
     {
         super.init(context);
-        
+
         google.init(context);
         etools.init(context);
     }
@@ -94,31 +93,38 @@ public class WebDocumentSource extends SimpleSearchEngine
             getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()).invokeAll(tasks);
 
             final Map<String, Document> googleDocumentsByUrl = Maps.newHashMap();
-            for (Document googleDocument : google.documents)
+            if (google.documents != null)
             {
-                googleDocumentsByUrl.put((String) googleDocument
-                    .getField(Document.CONTENT_URL), googleDocument);
-                googleDocument.addField(Document.SOURCES, Lists.newArrayList("Google"));
-            }
-            response.results.addAll(google.documents);
-
-            for (Document etoolsDocument : etools.documents)
-            {
-                final Document matchingGoogleDocument = googleDocumentsByUrl
-                    .get(etoolsDocument.getField(Document.CONTENT_URL));
-                if (matchingGoogleDocument != null)
+                for (Document googleDocument : google.documents)
                 {
-                    final List<String> sources = etoolsDocument
-                        .getField(Document.SOURCES);
-                    if (!sources.contains("Google"))
-                    {
-                        sources.add("Google");
-                    }
-                    matchingGoogleDocument.addField(Document.SOURCES, sources);
+                    googleDocumentsByUrl.put((String) googleDocument
+                        .getField(Document.CONTENT_URL), googleDocument);
+                    googleDocument.setField(Document.SOURCES, Lists
+                        .newArrayList("Google"));
                 }
-                else
+                response.results.addAll(google.documents);
+            }
+
+            if (etools.documents != null)
+            {
+                for (Document etoolsDocument : etools.documents)
                 {
-                    response.results.add(etoolsDocument);
+                    final Document matchingGoogleDocument = googleDocumentsByUrl
+                        .get(etoolsDocument.getField(Document.CONTENT_URL));
+                    if (matchingGoogleDocument != null)
+                    {
+                        final List<String> sources = etoolsDocument
+                            .getField(Document.SOURCES);
+                        if (!sources.contains("Google"))
+                        {
+                            sources.add("Google");
+                        }
+                        matchingGoogleDocument.setField(Document.SOURCES, sources);
+                    }
+                    else
+                    {
+                        response.results.add(etoolsDocument);
+                    }
                 }
             }
 

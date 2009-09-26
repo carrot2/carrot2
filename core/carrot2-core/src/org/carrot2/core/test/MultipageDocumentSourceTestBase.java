@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,15 +12,16 @@
 
 package org.carrot2.core.test;
 
+import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.source.*;
 import org.carrot2.source.MultipageSearchEngine.SearchMode;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Test;
-import org.junitext.Prerequisite;
 
 /**
  * Common tests for {@link IDocumentSource}s that can make more than one search requests to
@@ -36,9 +36,10 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
     protected abstract MultipageSearchEngineMetadata getSearchEngineMetadata();
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testQueryLargerThanPage() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
+
         final int needed = getSearchEngineMetadata().resultsPerPage * 2
             + getSearchEngineMetadata().resultsPerPage / 2;
 
@@ -55,9 +56,9 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
     
     
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testConservativeMode() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
         processingAttributes.put("search-mode", SearchMode.CONSERVATIVE);
 
         runAndCheckNoResultsQuery();
@@ -66,9 +67,9 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testSpeculativeMode() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
         processingAttributes.put("search-mode", SearchMode.SPECULATIVE);
 
         runAndCheckNoResultsQuery(getSearchEngineMetadata().resultsPerPage + 1);

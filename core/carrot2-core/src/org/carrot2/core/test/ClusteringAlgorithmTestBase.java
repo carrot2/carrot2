@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,7 +12,7 @@
 
 package org.carrot2.core.test;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static org.carrot2.core.test.SampleDocumentData.*;
@@ -48,7 +47,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     }
 
     /**
-     * @see http://issues.carrot2.org/browse/CARROT-400
+     * @see "http://issues.carrot2.org/browse/CARROT-400"
      */
     @Test
     public void testEmptyDocuments()
@@ -123,8 +122,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
         try
         {
             List<Future<ProcessingResult>> results = executorService.invokeAll(callables);
-            Multimap<Integer, List<Cluster>> clusterings = Multimaps
-                .newArrayListMultimap();
+            Multimap<Integer, List<Cluster>> clusterings = ArrayListMultimap.create();
 
             // Group results by query
             for (Future<ProcessingResult> future : results)
@@ -150,7 +148,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
                 Assertions.assertThat(firstClusterList).isNotEmpty();
                 while (iterator.hasNext())
                 {
-                    assertThat(firstClusterList).isEquivalentTo(iterator.next());
+                    assertThatClusters(firstClusterList).isEquivalentTo(iterator.next());
                 }
             }
         }
@@ -161,7 +159,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     }
 
     /**
-     * Performs clustering using {@link #simpleController}.
+     * Performs clustering using {@link SimpleController}.
      * 
      * @param documents Documents to be clustered.
      * @return {@link ProcessingResult} returned from the controller.

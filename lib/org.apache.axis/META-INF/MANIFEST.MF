@@ -107,3 +107,4 @@ Bundle-ClassPath: axis.jar,
  jaxrpc.jar,
  saaj.jar,
  wsdl4j-1.5.1.jar
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

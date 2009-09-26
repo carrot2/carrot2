@@ -1,8 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -114,6 +113,12 @@ public class SimpleXmlWrappersTest
         check(new FileResource(new File(".").getAbsoluteFile()));
     }
 
+    @Test
+    public void testNonprimitiveClassWithDefaultConstructor() throws Exception
+    {
+        check(new Nonprimitive());
+    }
+
     enum TestEnum
     {
         TEST1, TEST2;
@@ -122,6 +127,25 @@ public class SimpleXmlWrappersTest
         public String toString()
         {
             return name().toLowerCase();
+        }
+    }
+
+    public static class Nonprimitive
+    {
+        @Override
+        public boolean equals(Object obj)
+        {
+            // We're using the default constructor to deserialize instance of this
+            // class, so it doesn't make sense to try to tell the difference between
+            // different instances.
+            return ObjectUtils.equals(this.getClass(), obj != null ? obj.getClass()
+                : null);
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return getClass().hashCode();
         }
     }
 
@@ -177,7 +201,7 @@ public class SimpleXmlWrappersTest
         final Map<String, Object> map = Maps.newHashMap();
         check(populateTestMap(map));
     }
-    
+
     @Test
     public void testHashMapWithList() throws Exception
     {
@@ -185,14 +209,14 @@ public class SimpleXmlWrappersTest
         map.put("list", Lists.newArrayList("test1", "test2", "test3"));
         check(map);
     }
-    
+
     @Test
     public void testTreeMap() throws Exception
     {
         final Map<String, Object> map = Maps.newTreeMap();
         check(populateTestMap(map));
     }
-    
+
     @Test
     public void testNestedMaps() throws Exception
     {
@@ -329,6 +353,14 @@ public class SimpleXmlWrappersTest
         check(new ClassWithWrapper(-5, null));
         check(new ClassWithWrapper(null, "test"));
         check(new ClassWithWrapper(null, null));
+    }
+
+    @Test
+    public void testValueWithDefaultStringType() throws Exception
+    {
+        final String input = "<map><attribute key='key'><value value='value'/></attribute></map>";
+        final MapContainer deserialized = new Persister().read(MapContainer.class, input);
+        assertThat(deserialized.map.get("key")).isEqualTo("value");
     }
 
     public void check(Object value) throws Exception

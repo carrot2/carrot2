@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -52,14 +50,16 @@ public class ClusteringQualityBenchmark
         // List of metrics to output
         final ArrayList<String> metrics = Lists.newArrayList(AttributeUtils.getKey(
             ContaminationMetric.class, "weightedAverageContamination"), AttributeUtils
-            .getKey(CoverageMetric.class, "absoluteTopicCoverage"), AttributeUtils
-            .getKey(CoverageMetric.class, "topicCoverage"), AttributeUtils.getKey(
-            CoverageMetric.class, "documentCoverage"));
+            .getKey(PrecisionRecallMetric.class, "weightedAverageFMeasure"),
+            AttributeUtils
+                .getKey(PrecisionRecallMetric.class, "weightedAveragePrecision"),
+            AttributeUtils.getKey(PrecisionRecallMetric.class, "weightedAverageRecall"),
+            AttributeUtils.getKey(NormalizedMutualInformationMetric.class, "normalizedMutualInformation"));
 
         final Map<String, Object> attributes = Maps.newHashMap();
 
         System.out
-            .println("Topic\tAlgorithm\tOrder\tContamination\tATCoverage\tTCoverage\tDCoverage");
+            .println("Topic\tAlgorithm\tContamination\tF-Score\tPrecision\tRecall\tNMI");
         for (AmbientTopic topic : topics)
         {
             for (Class<? extends IProcessingComponent> algorithm : algorithms)

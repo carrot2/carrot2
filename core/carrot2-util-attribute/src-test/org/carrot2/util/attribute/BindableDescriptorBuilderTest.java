@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -55,6 +53,24 @@ public class BindableDescriptorBuilderTest
 
         assertThat(bindableDescriptor.attributeDescriptors.keySet()).excludes(
             clazz.getName() + ".notAnAttribute");
+    }
+
+    @Test
+    public void testNonprimitiveAttribute() throws Exception
+    {
+        final NonprimitiveAttribute instance = new NonprimitiveAttribute();
+        final Class<?> clazz = NonprimitiveAttribute.class;
+
+        final BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
+            .buildDescriptor(instance);
+
+        assertThat(bindableDescriptor).contains(
+            AttributeUtils.getKey(clazz, "resource"),
+            new AttributeDescriptor(clazz.getDeclaredField("resource"),
+                instance.resource, Lists
+                    .<Annotation> newArrayList(NonprimitiveAttribute.class.getField(
+                        "resource").getAnnotation(ImplementingClasses.class)),
+                new AttributeMetadata("Nonprimitive", null, null, null, null)));
     }
 
     @Test

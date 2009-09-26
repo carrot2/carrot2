@@ -6,5 +6,6 @@ carrot2.manual.base=carrot2-manual
 carrot2.java-api.base=carrot2-java-api
 carrot2.dcs.base=carrot2-dcs
 carrot2.webapp.base=carrot2-webapp
-# need to synchronise this one manually
+
+# This is heavily referenced in the documentation, do not change without a good reason.
 carrot2.workbench.base=carrot2-workbench

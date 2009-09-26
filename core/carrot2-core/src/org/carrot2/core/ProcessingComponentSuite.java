@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,8 +12,7 @@
 
 package org.carrot2.core;
 
-import java.io.InputStream;
-import java.io.Writer;
+import java.io.*;
 import java.util.*;
 
 import org.carrot2.core.ProcessingComponentDescriptor.Position;
@@ -54,11 +52,19 @@ public class ProcessingComponentSuite
         this.sources = sources;
     }
 
+    /**
+     * Returns the internal list of document sources. Changes to this list will
+     * affect the suite.
+     */
     public List<DocumentSourceDescriptor> getSources()
     {
         return sources;
     }
 
+    /**
+     * Returns the internal list of algorithms. Changes to this list will
+     * affect the suite.
+     */
     public List<ProcessingComponentDescriptor> getAlgorithms()
     {
         return algorithms;
@@ -198,6 +204,8 @@ public class ProcessingComponentSuite
     private static ProcessingComponentSuite deserialize(IResource resource,
         boolean clearInternals) throws Exception
     {
+        if (resource == null) throw new IOException("Resource not found.");
+        
         final InputStream inputStream = resource.open();
         try
         {

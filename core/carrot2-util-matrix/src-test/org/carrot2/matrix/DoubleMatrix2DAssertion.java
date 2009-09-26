@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,8 +15,7 @@ package org.carrot2.matrix;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.assertions.AssertExtension;
-import org.fest.assertions.DoubleAssert;
-import org.fest.assertions.DoubleAssert.Delta;
+import org.fest.assertions.Delta;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
@@ -71,7 +69,7 @@ public class DoubleMatrix2DAssertion implements AssertExtension
         assertThat(actualMatrix).isNotNull();
         assertThat(actualMatrix.rows()).as("rows").isEqualTo(values.length);
 
-        final Delta deltaObject = DoubleAssert.delta(delta);
+        final Delta deltaObject = Delta.delta(delta);
         for (int row = 0; row < values.length; row++)
         {
             assertThat(actualMatrix.columns()).as("columns")

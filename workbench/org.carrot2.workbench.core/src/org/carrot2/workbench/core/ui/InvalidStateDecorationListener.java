@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -26,32 +25,25 @@ final class InvalidStateDecorationListener implements IAttributeListener
     private boolean showOverlay;
     private boolean valid;
 
-    public InvalidStateDecorationListener(ControlDecoration d,
-        AttributeDescriptor descriptor)
+    public InvalidStateDecorationListener(
+        ControlDecoration d, AttributeDescriptor descriptor, Object defaultValue)
     {
         this.decoration = d;
         this.descriptor = descriptor;
+
+        valueChanged(new AttributeEvent(this, descriptor.key, defaultValue));
     }
 
     public void valueChanged(AttributeEvent event)
     {
-        if (event.key.equals(SearchInputView.ENABLE_VALIDATION_OVERLAYS))
+        if (event.key.equals(AttributeList.ENABLE_VALIDATION_OVERLAYS))
         {
             this.showOverlay = true;
             updateOverlay();
         }
-
-        if (event.key.equals(descriptor.key))
+        else if (event.key.equals(descriptor.key))
         {
-            if (descriptor.isValid(event.value))
-            {
-                valid = true;
-            }
-            else
-            {
-                valid = false;
-            }
-
+            valid = descriptor.isValid(event.value);
             updateOverlay();
         }
     }

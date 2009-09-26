@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Open Source Components
 Bundle-SymbolicName: org.carrot2.suites.default;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 0.0.0.QUALIFIER
 Export-Package: org.carrot2.core
 Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.core,
@@ -16,9 +16,10 @@ Require-Bundle: org.carrot2.core,
  org.carrot2.source.boss;visibility:=reexport,
  org.carrot2.source.google.desktop;visibility:=reexport,
  org.carrot2.source.google.api;resolution:=optional;visibility:=reexport,
- org.carrot2.opensearch;resolution:=optional;visibility:=reexport,
+ org.carrot2.source.opensearch;resolution:=optional;visibility:=reexport,
  org.carrot2.source.pubmed;resolution:=optional;visibility:=reexport,
  org.carrot2.source.solr;visibility:=reexport,
  org.carrot2.source.lucene;resolution:=optional;visibility:=reexport,
  org.carrot2.source.ambient;resolution:=optional;visibility:=reexport,
  org.carrot2.output.metrics;resolution:=optional
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,6 +13,7 @@
 package org.carrot2.workbench.core.ui;
 
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.part.*;
 
 /**
  * A view showing attribute values associated with the active editor's
@@ -22,6 +22,11 @@ import org.eclipse.ui.IWorkbenchPart;
 public final class AttributeView extends PageBookViewBase
 {
     public static final String ID = "org.carrot2.workbench.core.views.attributes";
+    
+    /**
+     * Currently shown page.
+     */
+    private AttributeViewPage current;
 
     /**
      * Create a tree view for the given part.
@@ -36,6 +41,36 @@ public final class AttributeView extends PageBookViewBase
         page.createControl(getPageBook());
 
         return new PageRec(part, page);
+    }
+    
+    @Override
+    protected void showPageRec(PageRec pageRec)
+    {
+        if (current != pageRec.page && (pageRec.page instanceof AttributeViewPage))
+        {
+            final AttributeViewPage next = (AttributeViewPage) pageRec.page;
+            if (current != null) current.saveGlobalState();
+            next.restoreGlobalState();
+            current = next;
+        }
+        super.showPageRec(pageRec);
+    }
+    
+    @Override
+    protected IPage createDefaultPage(PageBook book)
+    {
+        MessagePage defaultPage = new MessagePage();
+        defaultPage.setMessage("No active search result.");
+        initPage(defaultPage);
+        defaultPage.createControl(book);
+        return defaultPage;
+    }
+    
+    @Override
+    public void partClosed(IWorkbenchPart part)
+    {
+        if (current != null) current.saveGlobalState();
+        super.partClosed(part);
     }
 
     /**

@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,10 +13,13 @@
 package org.carrot2.workbench.core.ui;
 
 import org.carrot2.core.ProcessingResult;
+import org.carrot2.workbench.core.helpers.ActionDelegateProxy;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.Page;
 
 /**
@@ -41,7 +43,7 @@ final class ClusterTreeViewPage extends Page
     /*
      * 
      */
-    ClusterTree clusterTree;
+    private ClusterTree clusterTree;
 
     /*
      * editor->view selection propagation.
@@ -64,6 +66,15 @@ final class ClusterTreeViewPage extends Page
     {
         clusterTree = new ClusterTree(parent, SWT.NONE);
 
+        // Create toolbar.
+        final IActionBars bars = getSite().getActionBars();
+        final IAction expanderAction = new ActionDelegateProxy(
+            new ClusterTreeExpanderAction(clusterTree, editor.getSearchResult()),
+            IAction.AS_PUSH_BUTTON);
+
+        bars.getToolBarManager().add(expanderAction);        
+        bars.updateActionBars();
+        
         // Register listeners
         registerListeners();
         

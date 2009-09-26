@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -48,7 +48,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      * One special {@link IResource} implementation you can use is
      * {@link URLResourceWithParams}. It allows you to specify attribute placeholders in
      * the URL that will be replaced with actual values at runtime. The placeholder format
-     * is <code>${attribute}</code>. The following attributes will be substituted:
+     * is <code>${attribute}</code>. The following common attributes will be substituted:
      * </p>
      * <ul>
      * <li><code>query</code> will be replaced with the current query being processed. If
@@ -57,6 +57,10 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      * the number of results has not been provided, this attribute will be substituted
      * with an empty string.</li>
      * </ul>
+     * <p>
+     * Additionally, custom placeholders can be used. Values for the custom placeholders
+     * should be provided in the {@link #xmlParameters} attribute.
+     * </p>
      * 
      * @label XML Resource
      * @level Basic
@@ -106,6 +110,24 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     public IResource xslt;
 
     /**
+     * Values for custom placeholders in the XML URL. If the type of resource provided in
+     * the {@link #xml} attribute is {@link URLResourceWithParams}, this map provides
+     * values for custom placeholders found in the XML URL. Keys of the map correspond to
+     * placeholder names, values of the map will be used to replace the placeholders.
+     * Please see {@link #xml} for the placeholder syntax.
+     * 
+     * @label XML Parameters
+     * @level Advanced
+     * @group XML data
+     */
+    @Input
+    @Init
+    @Processing
+    @Attribute
+    @Internal(configuration = true)
+    public Map<String, String> xmlParameters = ImmutableMap.of();
+
+    /**
      * Parameters to be passed to the XSLT transformer. Keys of the map will be used as
      * parameter names, values of the map as parameter values.
      * 
@@ -117,6 +139,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     @Init
     @Processing
     @Attribute
+    @Internal(configuration = true)
     public Map<String, String> xsltParameters = ImmutableMap.of();
 
     /**
@@ -208,12 +231,12 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
 
             query = (String) processingResult.getAttributes().get(AttributeNames.QUERY);
             documents = processingResult.getDocuments();
-            
+
             /*
              * Override the result title if query is present.
              */
             if (!StringUtils.isEmpty(query)) title = null;
-            
+
             if (documents == null)
             {
                 documents = Lists.newArrayList();
@@ -261,16 +284,22 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
 
         if (resource instanceof URLResourceWithParams)
         {
+            if (StringUtils.isNotBlank(query))
+            {
+                title = query;
+            }
+
             // If we got a specialized implementation of the Resource interface,
             // perform substitution of known attributes
             final Map<String, Object> attributes = Maps.newHashMap();
 
             attributes.put("query", (query != null ? query : ""));
             attributes.put("results", (results != -1 ? results : ""));
+            attributes.putAll(xmlParameters);
 
             return ((URLResourceWithParams) resource).open(attributes);
         }
-        
+
         if (resource instanceof FileResource)
         {
             title = ((FileResource) resource).getFile().getName();

@@ -8,18 +8,18 @@
 ]>
 <chapter xml:id="chapter.application-suite" 
          xmlns="http://docbook.org/ns/docbook" version="5.0"
-         xmlns:c2="http://www.carrot2.org">
-  <title>&C2; application suite</title>
-  <subtitle>Applications shipped with &C2;</subtitle>
+         xmlns:product="http://www.carrot2.org">
+  <title>Application suite</title>
+  <subtitle>Applications shipped with &PROD;</subtitle>
 
   <para>
-    &C2; comes with a number of supporting applications that you can use to
+    &PROD; comes with a number of supporting applications that you can use to
     quickly set up clustering on your own data, further tune clustering results
-    and expose &C2; clustering as a remote service. 
+    and expose &PROD; clustering as a remote service. 
   </para>
   
   <para>
-    &C2; application suite contains:
+    &PROD; application suite contains:
   </para>
   
   <itemizedlist>
@@ -27,7 +27,7 @@
       <formalpara>
         <title>&DCW;</title>
         <para>
-          which is a standalone GUI application you can use to experiment with &C2;
+          which is a standalone GUI application you can use to experiment with &PROD;
           clustering on data from common search engines or your own data.
         </para>
       </formalpara>
@@ -37,26 +37,28 @@
       <formalpara>
         <title>&DCS;</title>
         <para>
-          which exposes &C2; clustering as a REST service.
+          which exposes &PROD; clustering as a REST service.
         </para>
       </formalpara>
     </listitem>
 
-    <listitem>
+    <listitem role="webapp">
       <formalpara>
         <title>&WA;</title>
         <para>
-          which exposes &C2; clustering as a web application for end users.
+          which exposes &PROD; clustering as a web application for end users.
         </para>
       </formalpara>
     </listitem>
   </itemizedlist>
 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="application-suite-intro-suffix.xml" /> 
+
   <section xml:id="section.workbench">
     <title>&DCW;</title>
 
     <para>
-      &DCW; is a standalone GUI application you can use to experiment with &C2;
+      &DCW; is a standalone GUI application you can use to experiment with &PROD;
       clustering on data from common search engines or your own data. 
     </para>
 
@@ -67,11 +69,11 @@
     <itemizedlist>
       <listitem>
         <formalpara>
-          <title>All &C2; document sources and algorithms included.</title>
+          <title>Various document sources included.</title>
           <para>
-            &DCW; contains a large number of document sources, including major search
+            &DCW; can fetch and cluster documents from a number of sources, including major search
             engines, indexing engines (Lucene, Solr, Google Desktop) as well as generic
-            XML feeds and files. It also contains all &C2;'s clustering algorithms.
+            XML feeds and files.
           </para>
         </formalpara>
       </listitem>
@@ -88,11 +90,19 @@
 
       <listitem>
         <formalpara>
+          <title>Performance benchmarking.</title>
+          <para>
+            &DCW; can run simple performance benchmarks of &PROD; clustering algorithms.
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
           <title>Attractive visualizations.</title>
           <para>
             &DCW; comes with two visualizations of the cluster structure, one developed
-            within the &C2; project and another one from 
-            <link xlink:href="http://www.aduna-software.com/technologies/clustermap/overview.view">Aduna Software</link>.
+            within the &PROD; project and another one from Aduna Software.
           </para>
         </formalpara>
       </listitem>
@@ -124,14 +134,22 @@
     <itemizedlist>
       <listitem>
         <para>
-          Quickly test &C2; clustering with your own data. Please see <xref linkend="chapter.getting-started" />
+          Quickly test &PROD; clustering with your own data. Please see <xref linkend="chapter.getting-started" />
           for instructions for the most common scenarios.
         </para>
       </listitem>
       
       <listitem>
-        <para>Fine tune &C2; clustering algorithms' settings to work best with your specific data.</para>
+        <para>
+          Fine tune &PROD; clustering algorithms' settings to work best with your specific data.
+          Please see <xref linkend="chapter.tuning" /> for more details.
+        </para>
       </listitem>
+      
+      <listitem>
+        <para>Run simple performance benchmarks using different settings to predict maximum clustering throughput
+        on a single machine. Please see <xref linkend="section.workbench.benchmarking" /> for details.</para>
+      </listitem>      
     </itemizedlist>
     
     <section xml:id="section.workbench.installation" role="notoc">
@@ -148,14 +166,14 @@
       
         <listitem>
           <para>
-            Download &DCW; <c2:workbench-download-link os="win32" wm="win32">Windows binaries</c2:workbench-download-link>
-            or <c2:workbench-download-link os="linux" wm="gtk">Linux binaries</c2:workbench-download-link>
+            Download &DCW; <product:workbench-download-link os="win32" wm="win32">Windows binaries</product:workbench-download-link>
+            or <product:workbench-download-link os="linux" wm="gtk">Linux binaries</product:workbench-download-link>
             and extract the archive to some local disk location.
           </para>
         </listitem>
         
         <listitem>
-          <para>Run <command>carrot2-workbench.exe</command> (Windows) or <command>carrot2-workbench</command> (Linux)</para>
+          <para>Run <command>&PRODID;-workbench.exe</command> (Windows) or <command>&PRODID;-workbench</command> (Linux)</para>
         </listitem>
       </orderedlist>
     </section>
@@ -165,7 +183,7 @@
     <title>&DCS;</title>
     
     <para>
-      Document Clustering Server (DCS) exposes Carrot2 clustering as a REST service. 
+      &DCS; (DCS) exposes &PROD; clustering as a REST service. 
       It can cluster documents from an external source (e.g. a search engine) or 
       documents provided directly as an XML stream and returns results in XML or 
       JSON formats. 
@@ -188,11 +206,19 @@
         
       <listitem>
         <formalpara>
-          <title>All &C2; document sources and algorithms included.</title>
+          <title>Various document sources included.</title>
           <para>
-            &DCS; contains a large number of document sources, including major search
-            engines and indexing engines (Lucene, Solr). It also contains all &C2;'s 
-            clustering algorithms.
+            &DCS; can fetch and cluster documents from a large number of sources, 
+            including major search engines and indexing engines (Lucene, Solr).
+          </para>
+        </formalpara>
+      </listitem>
+        
+      <listitem>
+        <formalpara>
+          <title>Direct XML feed.</title>
+          <para>
+            &DCS; can cluster documents fed directly in a simple XML format.
           </para>
         </formalpara>
       </listitem>
@@ -201,8 +227,8 @@
         <formalpara>
           <title>PHP and C# examples included.</title>
           <para>
-            &DCS; ships with ready-to-use examples of calling &C2; DCS services from PHP 
-            (version 5) and C#.
+            &DCS; ships with ready-to-use examples of calling &PROD; DCS services from PHP 
+            (version 5), C#, Ruby, Java and <command>curl</command>.
           </para>
         </formalpara>
       </listitem>
@@ -233,7 +259,7 @@
     
     <itemizedlist>
       <listitem>
-        <para>Integrate &C2; with your non-Java software.</para>
+        <para>Integrate &PROD; with your non-Java software.</para>
       </listitem>
       
       <listitem>
@@ -256,7 +282,7 @@
       
         <listitem>
           <para>
-            Download <c2:dcs-download-link>&DCS; binaries</c2:dcs-download-link> and
+            Download <product:dcs-download-link>&DCS; binaries</product:dcs-download-link> and
             extract the archive to some local disk location.
           </para>
         </listitem>
@@ -272,7 +298,9 @@
         <listitem>
           <para>
             See the <filename>examples/</filename> directory in the distribution archive
-            for PHP, C# and Ruby code examples.
+            for PHP, C#, Ruby and Java code examples. <phrase role="carrot2">You can also 
+            <link linkend="section.advanced-topics.using-dcs-with-curl">invoke DCS clustering
+            using the <command>curl</command> command</link>.</phrase>
           </para>
         </listitem>
       </orderedlist>
@@ -288,18 +316,18 @@
       <tip>
         <para>
           To deploy the DCS in an external servlet container, such as Apache Tomcat, use
-          the <filename>carrot2-dcs.war</filename> file from the <filename>war/</filename>
+          the <filename>&PRODID;-dcs.war</filename> file from the <filename>war/</filename>
           folder of the DCS distribution.
         </para>
       </tip>
     </section>
   </section>
 
-  <section xml:id="section.webapp">
+  <section xml:id="section.webapp" role="webapp">
     <title>&WA;</title>
     
     <para>
-      &WA; exposes &C2; clustering as a web application for end users. It allows users
+      &WA; exposes &PROD; clustering as a web application for end users. It allows users
       to browse clusters using a conventional tree view, but also in an attractive visualization.
     </para>
     
@@ -312,7 +340,7 @@
         <formalpara>
           <title>Two cluster views.</title>
           <para>
-            &WA; offers two views of the clusters generated by &C2;: conventional tree
+            &WA; offers two views of the clusters generated by &PROD;: conventional tree
             view and a Flash-based visualization.
           </para>
         </formalpara>
@@ -320,11 +348,11 @@
 
       <listitem>
         <formalpara>
-          <title>All &C2; document sources and algorithms included.</title>
+          <title>All &PROD; document sources and algorithms included.</title>
           <para>
             &WA; contains a large number of document sources, including major search
             engines. Optionally, further document sources can be added, such as
-            Lucene or Solr ones. It also contains all &C2;'s clustering algorithms.
+            Lucene or Solr ones. It also contains all &PROD;'s clustering algorithms.
           </para>
         </formalpara>
       </listitem>
@@ -372,7 +400,7 @@
         </listitem>
       
         <listitem>
-          <para>Download <c2:webapp-download-link>&WA; WAR file</c2:webapp-download-link>.</para>
+          <para>Download <product:webapp-download-link>&WA; WAR file</product:webapp-download-link>.</para>
         </listitem>
         
         <listitem>
@@ -380,5 +408,8 @@
         </listitem>
       </orderedlist>
     </section>      
-  </section>    
+  </section>
+      
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="application-suite-sections-suffix.xml" /> 
+
 </chapter>

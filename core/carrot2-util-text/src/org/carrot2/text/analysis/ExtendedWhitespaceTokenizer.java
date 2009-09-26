@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,14 +14,15 @@ package org.carrot2.text.analysis;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.carrot2.util.CloseableUtils;
 
 /**
  * A tokenizer separating input characters on whitespace, but capable of extracting more
- * complex tokens, such as URLs, e-mail addresses and sentence delimiters. For each
- * returned {@link Token}, a payload implementing {@link ITokenType} is returned.
+ * complex tokens, such as URLs, e-mail addresses and sentence delimiters. Provides
+ * {@link TermAttribute}s and {@link PayloadAttribute}s implementing {@link ITokenType}.
  */
 public final class ExtendedWhitespaceTokenizer extends Tokenizer
 {
@@ -42,48 +41,36 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
      */
     private final TokenTypePayload tokenPayload = new TokenTypePayload();
 
+    private TermAttribute term;
+    private PayloadAttribute payload;
+
     /**
      * 
      */
     public ExtendedWhitespaceTokenizer(Reader input)
     {
         this.parser = new ExtendedWhitespaceTokenizerImpl(input);
+        term = (TermAttribute) addAttribute(TermAttribute.class);
+        payload = (PayloadAttribute) addAttribute(PayloadAttribute.class);
         reset(input);
     }
 
-    /**
-     * Return the next token or <code>null</code> in case the token was not found.
-     * {@link Token} instances will be reused in subsequent requests.
-     */
-    public final Token next(Token result) throws IOException
+    @Override
+    public boolean incrementToken() throws IOException
     {
         final int tokenType = parser.getNextToken();
 
         // EOF?
         if (tokenType == ExtendedWhitespaceTokenizerImpl.YYEOF)
         {
-            return null;
+            return false;
         }
 
         tokenPayload.setRawFlags(tokenType);
-        if (result == null)
-        {
-            result = new Token();
-            result.setPayload(tokenPayload);
-        }
-
-        result.setTermBuffer(parser.yybuffer(), parser.yystart(), parser.yylength());
-
-        return result;
-    }
-    
-    /**
-     * Calls {@link #next()} with an empty token, effectively creating a new one.
-     */
-    @Override
-    public Token next() throws IOException
-    {
-        return next(null);
+        payload.setPayload(tokenPayload);
+        term.setTermBuffer(parser.yybuffer(), parser.yystart(), parser.yylength());
+        term.setTermLength(parser.yylength());
+        return true;
     }
 
     /**
@@ -125,5 +112,25 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
             CloseableUtils.close(reader);
             this.reader = null;
         }
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (other instanceof ExtendedWhitespaceTokenizer)
+        {
+            return super.equals(other);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode()
+    {
+        // Just to document we're fine with using AttributeSource.hashCode()
+        return super.hashCode();
     }
 }

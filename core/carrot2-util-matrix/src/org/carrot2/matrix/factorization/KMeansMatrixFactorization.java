@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -63,7 +62,7 @@ public class KMeansMatrixFactorization extends IterativeMatrixFactorizationBase
             U.assign(0);
 
             // For each object
-            MatrixUtils.minInColumns(D, minIndices, minValues);
+            MatrixUtils.maxInColumns(D, minIndices, minValues);
             for (int i = 0; i < minIndices.length; i++)
             {
                 V.setQuick(i, minIndices[i], 1);
@@ -84,16 +83,8 @@ public class KMeansMatrixFactorization extends IterativeMatrixFactorizationBase
                 }
 
                 // Divide
-                if (count > 0)
-                {
-                    U.viewColumn(c).assign(Mult.div(count));
-                }
-                else
-                {
-                    // Assign a pseudo-random column
-                    U.viewColumn(c).assign(
-                        A.viewColumn(iterationsCompleted % A.columns()));
-                }
+                U.viewColumn(c).assign(Mult.div(count));
+                MatrixUtils.normalizeColumnL2(U, null);
             }
 
         }

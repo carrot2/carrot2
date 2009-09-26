@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -119,7 +119,7 @@ public class AmbientDocumentSourceTest extends
         {
             assertThat((String) document.getField(Document.TITLE)).isNotEmpty();
             assertThat((String) document.getField(Document.CONTENT_URL)).isNotEmpty();
-            final String topicId = document.getField(Document.TOPIC);
+            final String topicId = AmbientDocumentSource.getAmbientTopic(document);
             assertThat(topicId.startsWith(Integer.toString(topicIndex))).isTrue();
 
             if (!includeDocumentsWithoutTopic)
@@ -135,7 +135,7 @@ public class AmbientDocumentSourceTest extends
             {
                 public String apply(Document document)
                 {
-                    return document.getField(Document.TOPIC);
+                    return AmbientDocumentSource.getAmbientTopic(document);
                 }
             });
         for (String topic : documentsByTopic.keySet())

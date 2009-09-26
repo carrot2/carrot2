@@ -1,8 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -28,14 +27,14 @@ public class ClusteringMetricsCalculator extends ProcessingComponentBase
     public ContaminationMetric contamination = new ContaminationMetric();
 
     /**
-     * Coverage metrics.
-     */
-    public CoverageMetric coverage = new CoverageMetric();
-
-    /**
      * Precision and recall based metrics.
      */
     public PrecisionRecallMetric precisionRecall = new PrecisionRecallMetric();
+
+    /**
+     * Normalized Mutual Information metric.
+     */
+    public NormalizedMutualInformationMetric normalizedMutualInformation = new NormalizedMutualInformationMetric();
 
     @Override
     public void process() throws ProcessingException
@@ -45,14 +44,14 @@ public class ClusteringMetricsCalculator extends ProcessingComponentBase
             contamination.calculate();
         }
 
-        if (coverage.isEnabled())
-        {
-            coverage.calculate();
-        }
-
         if (precisionRecall.isEnabled())
         {
             precisionRecall.calculate();
+        }
+        
+        if (normalizedMutualInformation.isEnabled())
+        {
+            normalizedMutualInformation.calculate();
         }
     }
 }

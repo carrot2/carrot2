@@ -26,6 +26,19 @@ a:hover {
   text-decoration: underline;
 }
 
+.chapter .titlepage .title a[name] {
+  position: relative;
+  top: -30mm;
+}
+
+.chapter .section .titlepage .title a[name] {
+  top: -10mm;
+}
+
+.figure > a[name] {
+  top: -5mm;
+}
+
 p {
   text-align: justify;
   margin-top: 3mm;
@@ -121,29 +134,35 @@ div.chapter {
   margin-top: 30mm;
   border-bottom: 0.3pt solid black;
   font-weight: normal;
-  font-size: 36pt;
+  font-size: 34pt;
+  position: relative;
 }
 
 .chapter .titlepage  {
-  margin-bottom: 15mm;
 }
 
 .chapter .titlepage h3.subtitle {
   margin: 0;
   font-weight: normal;
-  position: absolute;
-  margin-top: -9mm;
+  position: relative;
+  top: -9mm;
 }
 
-.chapter .titlepage .title .n {
+.chapter .section .titlepage h3.subtitle {
+  font-size: 13pt;
+  font-style: italic;
+  top: -4mm;
+}
+
+.chapter .titlepage h2.title .n {
   font-size: 64pt;
   font-family: Arial Black, sans-serif;
   display: block;
   position: absolute;
+  left: -28mm;
+  top: -9.5mm;
   width: 23mm;
   text-align: right;
-  margin-left: -28mm;
-  margin-top: -9mm;
   background-color: black;
   color: white;
   padding-right: 2mm;
@@ -153,16 +172,17 @@ div.chapter {
   margin: 0;
 }
 
-.section .titlepage .title {
+.section .titlepage h2.title {
   font-size: 20pt;
   margin: 0;
   margin-top: 7mm;
   margin-bottom: 5mm;
   border-bottom: 0.3pt black solid;
   page-break-after: avoid;
+  position: relative;
 }
 
-.section .titlepage .title .n {
+.section .titlepage h2.title .n {
   background-color: white;
   color: black;
   display: inline;
@@ -171,14 +191,16 @@ div.chapter {
   margin: 0;
   width: 25mm;
   position: absolute;
-  margin-left: -28mm;
-  margin-top: -0.5mm;
+  bottom: -2mm;
+  top: auto;
+  left: -28mm;
   line-height: 120%;
   border-bottom: 6pt black solid;
   padding-right: 0;
 }
 
-.section .section .titlepage .title {
+.section .simplesect .titlepage h3.title,
+.section .section .titlepage h3.title {
   font-size: 16pt;
   margin: 0;
   margin-top: 7.3mm;
@@ -186,7 +208,7 @@ div.chapter {
   page-break-after: avoid;
 }
 
-.section .section .titlepage .title .n {
+.section .section .titlepage h3.title .n {
   background-color: white;
   color: black;
   display: inline;
@@ -195,20 +217,23 @@ div.chapter {
   margin: 0;
   width: 25mm;
   position: absolute;
-  margin-left: -28mm;
+  bottom: 0;
+  left: -28mm;
+  text-align: right;
   border: 0;
 }
 
-.section .section .section .titlepage .title {
+.section .section .section .titlepage h4.title {
   font-size: 12pt;
   font-weight: bold;
   clear: both;
   margin: 0;
   margin-top: 6mm;
   page-break-after: avoid;
+  border: none;
 }
 
-.section .section .section .titlepage .title .n {
+.section .section .section .titlepage h4.title .n {
   display: none;
 }
 
@@ -216,6 +241,7 @@ div.chapter {
 
 .example, .figure {
   margin-bottom: 6mm;
+  position: relative;
 }
 
 .example .title .n,
@@ -239,17 +265,18 @@ div.chapter {
   width: 35mm;
   text-align: right;
   margin: 0;
-  margin-left: -38mm;
-  margin-top: -1mm;
+  left: -38mm;
+  top: 0;
 }
 
 .programlisting {
-  border: 1px dotted #404040;
+  border: 1px solid #b0b0b0;
   background-color: #f0f0f0;
   padding: 2mm;
   margin: 0;
   margin-top: 3mm;
   margin-bottom: 3mm;
+  font-size: 8pt;
 }
 
 /** Admonitions */
@@ -303,6 +330,7 @@ div.informaltable table td.rowhead {
 }
 
 /** Inline elements */
+span.guibutton,
 span.guilabel {
   font-family: sans-serif;
   font-weight: bold;
@@ -312,4 +340,29 @@ span.guilabel {
 .constant {
   font-size: 90%;
   line-height: 150%;
+}
+
+span.guiicon span.inlinemediaobject img {
+  padding: 2px;
+  border: 1px solid #aaa;
+  vertical-align: text-bottom;
+  -moz-border-radius: 2px;
+}
+
+/** Q & A */
+.qandaset table {
+  position: relative;
+  left: -2mm;
+}
+
+.qandaset table tr.toc td {
+  padding-left: 2mm;
+}
+
+.qandaset table tr.question p {
+  margin-bottom: 0;
+}
+
+.qandaset table tr.answer p {
+  margin-top: 0;
 }

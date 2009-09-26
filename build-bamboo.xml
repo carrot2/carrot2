@@ -18,9 +18,14 @@
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="test" inheritall="true" />
     </target>
 
-    <target name="dist" description="Build Carrot2 distribution">
+    <target name="dist" description="Build Carrot2 distribution without documentation">
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist" inheritall="true" />
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist.doc.without" inheritall="true" />
+    </target>
+
+    <target name="doc" description="Build Carrot2 documentation">
+        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist.doc.only" inheritall="true" />
     </target>
 
     <target name="publish" depends="publish.artifacts, publish.demo" />
@@ -47,6 +52,9 @@
             <!-- Exclude reports, we'll link these directly to the build server -->
             <exclude name="*-report/**" />
             <exclude name="workbench/**" />
+            <exclude name="jar/**" />
+            <exclude name="classes/**" />
+            <exclude name="attrs-cache.properties" />
           </fileset>
         </copy>
     </target>
@@ -71,8 +79,9 @@
         <!-- copy to the distribution dir -->
         <mkdir dir="${dist.dir}" />
         <copy todir="${dist.dir}" overwrite="true">
-            <fileset dir="${carrot2.code.dir}/tmp/workbench/build-dir">
-                <include name="*carrot2-workbench/*.zip" />
+            <fileset dir="${carrot2.code.dir}/tmp/workbench">
+                <!-- Files from the interim build. -->
+                <include name="I.carrot2-workbench/*.zip" />
             </fileset>
 
             <chainedmapper>

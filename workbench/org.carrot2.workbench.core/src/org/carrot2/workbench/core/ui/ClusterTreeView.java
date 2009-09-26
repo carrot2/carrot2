@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,8 +14,8 @@ package org.carrot2.workbench.core.ui;
 import org.eclipse.ui.IWorkbenchPart;
 
 /**
- * A cluster tree view displays a {@link ClusterTree} control attached
- * to the currently visible editor.
+ * A cluster tree view displays a {@link ClusterTree} control attached to the currently
+ * visible editor.
  */
 public final class ClusterTreeView extends PageBookViewBase
 {

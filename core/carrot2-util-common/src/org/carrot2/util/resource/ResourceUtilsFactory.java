@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -36,7 +36,7 @@ public final class ResourceUtilsFactory
     static
     {
         addLast(
-        // Absolute resource files
+            // Absolute resource files
             new AbsoluteFilePathLocator(),
             // Current working directory
             new DirLocator(new File(".").getAbsolutePath()),

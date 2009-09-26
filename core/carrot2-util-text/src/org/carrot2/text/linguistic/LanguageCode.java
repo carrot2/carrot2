@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,7 +14,7 @@ package org.carrot2.text.linguistic;
 
 import java.util.Locale;
 
-import org.apache.commons.lang.StringUtils;
+import org.carrot2.util.StringUtils;
 
 /**
  * Codes for languages for which linguistic resources are available 
@@ -29,6 +28,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public enum LanguageCode
 {
+    CHINESE_SIMPLIFIED ("zh_cn"),
     DANISH ("da"),
     DUTCH ("nl"),
     ENGLISH ("en"),
@@ -47,7 +47,10 @@ public enum LanguageCode
     TURKISH ("tr");
 
     /**
-     * ISO code for this language.
+     * ISO 639-1 code for this language. An underscore may separate additional country/region
+     * variant, should it be relevant (as in Simplified and Traditional Chinese).
+     * 
+     * @see "http://www.loc.gov/standards/iso639-2/php/code_list.php"
      */
     private final String isoCode;
 
@@ -83,9 +86,27 @@ public enum LanguageCode
         return locale;
     }
 
+    /**
+     * Return a {@link LanguageCode} constant for a given ISO code (or <code>null</code>)
+     * if not available. 
+     */
+    public static LanguageCode forISOCode(String language)
+    {
+        language = language.toLowerCase();
+
+        // Simple scan here, if the number of languages grows, switch to a hashmap.
+        for (LanguageCode code : values()) {
+            if (code.getIsoCode().equals(language)) {
+                return code;
+            }
+        }
+
+        return null;
+    }
+    
     @Override
     public String toString()
     {
-        return StringUtils.capitalize(name().toLowerCase());
+        return StringUtils.identifierToHumanReadable(name());
     }
 }

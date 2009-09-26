@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,7 +13,9 @@
 package org.carrot2.source.etools;
 
 import static junit.framework.Assert.assertEquals;
+import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.List;
 import java.util.Set;
@@ -25,16 +26,12 @@ import org.carrot2.source.SearchEngineBase;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.fest.assertions.MapAssert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junitext.Prerequisite;
-import org.junitext.runners.AnnotationRunner;
 
 import com.google.common.collect.Sets;
 
 /**
  * Test cases for {@link EToolsDocumentSource}.
  */
-@RunWith(AnnotationRunner.class)
 public class EToolsDocumentSourceTest extends
     QueryableDocumentSourceTestBase<EToolsDocumentSource>
 {
@@ -51,9 +48,10 @@ public class EToolsDocumentSourceTest extends
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testDataSources() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
+
         runQuery("apache", 50);
 
         final Set<String> sources = Sets.newHashSet();
@@ -68,11 +66,12 @@ public class EToolsDocumentSourceTest extends
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testGzipCompression() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
+
         runQuery("apache", 50);
-        assertThat(processingAttributes).contains(
+        assertThat(processingAttributes).includes(
             MapAssert.entry(AttributeUtils.getKey(SearchEngineBase.class, "compressed"),
                 true));
     }

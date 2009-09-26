@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -29,7 +29,7 @@ public class MapUtils
 
     public static <K, V> HashMap<K, V> asHashMap(Map<K, V> map)
     {
-        if (map instanceof HashMap)
+        if (HashMap.class.isInstance(map))
         {
             return (HashMap<K, V>) map;
         }

@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -50,7 +49,7 @@ public class AttributeValueSetTest
         assertEquals("overridenValue", set.getAttributeValue("overridenKey"));
         assertEquals(null, set.getAttributeValue("nonexistingKey"));
 
-        assertThat(set.getAttributeValues()).contains(entry("testKey", "testValue"),
+        assertThat(set.getAttributeValues()).includes(entry("testKey", "testValue"),
             entry("baseKey", "baseValue"), entry("overridenKey", "overridenValue"))
             .hasSize(3);
     }
@@ -77,7 +76,7 @@ public class AttributeValueSetTest
         assertEquals("overriden1Value", set.getAttributeValue("overriden1Key"));
         assertEquals("overrideMe", set.getAttributeValue("overriden2Key"));
 
-        assertThat(set.getAttributeValues()).contains(entry("testKey", "testValue"),
+        assertThat(set.getAttributeValues()).includes(entry("testKey", "testValue"),
             entry("base1Key", "base1Value"), entry("base2Key", "base2Value"),
             entry("overriden1Key", "overriden1Value"),
             entry("overriden2Key", "overrideMe")).hasSize(5);

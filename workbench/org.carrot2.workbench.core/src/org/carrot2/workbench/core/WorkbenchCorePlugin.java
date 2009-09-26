@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,27 +12,21 @@
 
 package org.carrot2.workbench.core;
 
-import java.io.*;
+import java.io.File;
 import java.net.URL;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
-import org.carrot2.text.linguistic.LanguageCode;
-import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.StreamUtils;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.resource.*;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.core.preferences.PreferenceConstants;
-import org.carrot2.workbench.core.ui.SearchEditor;
-import org.carrot2.workbench.core.ui.SearchEditorSections;
-import org.carrot2.workbench.core.ui.SearchEditor.SectionReference;
 import org.carrot2.workbench.core.ui.adapters.ClusterAdapterFactory;
 import org.carrot2.workbench.core.ui.adapters.PropertySourceAdapterFactory;
 import org.eclipse.core.runtime.*;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.*;
@@ -94,8 +87,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         plugin = this;
 
         /*
-         * Copy linguistic resources at first launch (or if deleted from workspace). Add
-         * workspace to the list of resource locations.
+         * Add workspace to the list of resource locations.
          */
         installWorkbenchResourceLocator();
 
@@ -205,7 +197,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             .getExtensionPoint(COMPONENT_SUITE_EXTENSION_ID).getExtensions();
 
         // Load suites from extension points.
-        extLoop: for (IExtension extension : extensions)
+        for (IExtension extension : extensions)
         {
             final IConfigurationElement [] configElements = extension
                 .getConfigurationElements();
@@ -213,15 +205,26 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             {
                 String suiteRoot = configElements[0].getAttribute("resourceRoot");
                 if (StringUtils.isEmpty(suiteRoot)) suiteRoot = "";
-                final String suiteResource = configElements[0].getAttribute("resource");
 
+                final String suiteResource = configElements[0].getAttribute("resource");
                 if (StringUtils.isEmpty(suiteResource))
                 {
                     continue;
                 }
 
-                final IContributor c = extension.getContributor();
-                final Bundle b = Platform.getBundle(c.getName());
+                String bundleId = configElements[0].getAttribute("bundleId");
+                if (StringUtils.isEmpty(bundleId))
+                {
+                    final IContributor c = extension.getContributor();
+                    bundleId = c.getName();
+                }
+
+                final Bundle b = Platform.getBundle(bundleId);
+                if (b == null)
+                {
+                    Utils.logError("Suite's bundle not found: " + bundleId, false);
+                    continue;
+                }
 
                 if (b.getState() != Bundle.ACTIVE)
                 {
@@ -231,16 +234,16 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                     }
                     catch (BundleException e)
                     {
-                        continue extLoop;
+                        Utils.logError("Bundle inactive: " + bundleId, false);                        
+                        continue;
                     }
                 }
 
-                final URL bundleURL = b.getEntry(suiteRoot + suiteResource);
-                
+                final String suitePath = suiteRoot + suiteResource;
+                final URL bundleURL = b.getEntry(suitePath);
                 if (bundleURL == null)
                 {
-                    String message = "Suite extension resource not found: "
-                        + suiteRoot + suiteResource;
+                    String message = "Suite extension resource not found: " + suitePath;
                     Logger.getRootLogger().error(message);
                     Utils.logError(message, false);
                     continue;
@@ -284,9 +287,9 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                             {
                                 continue;
                             }
-    
-                            componentImages.put(d.getId(), imageDescriptorFromPlugin(c
-                                .getName(), iconPath));
+
+                            componentImages.put(d.getId(), 
+                                imageDescriptorFromPlugin(bundleId, iconPath));
                         }
     
                         suites.add(suite);
@@ -365,102 +368,16 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         }
 
         /*
-         * Copy linguistic resources to the given location on first launch (or if
-         * missing). Make sure this is done <b>before</b> installing the new resource
-         * locator because we'd be chasing our tail here.
-         */
-        final Map<String, IResource> resources = Maps.newLinkedHashMap();
-        final ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
-
-        for (LanguageCode language : LanguageCode.values())
-        {
-            addResourceToCopy(resources, resUtils, language, "stopwords");
-            addResourceToCopy(resources, resUtils, language, "stoplabels");
-        }
-
-        for (Map.Entry<String, IResource> e : resources.entrySet())
-        {
-            final String fileName = e.getKey();
-            final File targetFile = new File(workspacePath, fileName);
-
-            if (targetFile.exists())
-            {
-                // Skip if exists.
-                continue;
-            }
-
-            InputStream in = null;
-            OutputStream out = null;
-            try
-            {
-                in = e.getValue().open();
-                out = new FileOutputStream(targetFile);
-                StreamUtils.copy(in, out, 8 * 1024);
-            }
-            catch (IOException x)
-            {
-                Utils.logError("Could not copy resource: " + fileName, x, false);
-            }
-            finally
-            {
-                CloseableUtils.close(in, out);
-            }
-        }
-
-        /*
          * Install a resource locator pointing to the workspace.
          */
         ResourceUtilsFactory.addFirst(new DirLocator(workspacePath.getAbsolutePath()));
     }
 
-    private void addResourceToCopy(final Map<String, IResource> resources,
-        final ResourceUtils resUtils, LanguageCode language, final String prefix)
-    {
-        final String stopwords = prefix + "." + language.getIsoCode();
-        final IResource resource = resUtils.getFirst(stopwords);
-        if (resource != null)
-        {
-            resources.put(stopwords, resource);
-        }
-    }
-
     /**
-     * Restore the state of {@link SearchEditor}'s sections from the most recent global
-     * state.
+     * @return Returns the plugin's instance preferences.
      */
-    public void restoreSectionsState(
-        EnumMap<SearchEditorSections, SearchEditor.SectionReference> sections)
+    public static IEclipsePreferences getPreferences()
     {
-        final IPreferenceStore store = getPreferenceStore();
-        for (Map.Entry<SearchEditorSections, SearchEditor.SectionReference> s : sections
-            .entrySet())
-        {
-            final SearchEditorSections section = s.getKey();
-            final SectionReference ref = s.getValue();
-
-            ref.weight = store.getInt(PreferenceConstants.getSectionWeightKey(section));
-            ref.visibility = store.getBoolean(PreferenceConstants
-                .getSectionVisibilityKey(section));
-        }
-    }
-
-    /**
-     * Keep a reference to the most recently updated {@link SearchEditor}'s sections.
-     */
-    public void storeSectionsState(
-        EnumMap<SearchEditorSections, SectionReference> sections)
-    {
-        final IPreferenceStore store = getPreferenceStore();
-        for (Map.Entry<SearchEditorSections, SearchEditor.SectionReference> s : sections
-            .entrySet())
-        {
-            final SearchEditorSections section = s.getKey();
-            final SectionReference ref = s.getValue();
-
-            final String key = PreferenceConstants.getSectionWeightKey(section);
-            final String key2 = PreferenceConstants.getSectionVisibilityKey(section);
-            store.setValue(key, ref.weight);
-            store.setValue(key2, ref.visibility);
-        }
+        return new InstanceScope().getNode(WorkbenchCorePlugin.PLUGIN_ID);
     }
 }

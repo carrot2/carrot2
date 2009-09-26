@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -22,9 +21,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.source.*;
+import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.attribute.*;
 
 import com.microsoft.msnsearch.*;
@@ -98,6 +97,17 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
     public SafeSearch safeSearch = SafeSearch.MODERATE;
 
     /**
+     * An internal attribute to capture the previously set active language and possibly
+     * set a new better matching value based on the supplied {@link #culture} value.
+     */
+    @Processing
+    @Input
+    @Output
+    @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
+    @Internal
+    private LanguageCode language;
+    
+    /**
      * Microsoft Live! metadata.
      */
     static final MultipageSearchEngineMetadata metadata = new MultipageSearchEngineMetadata(
@@ -110,8 +120,19 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
     public void process() throws ProcessingException
     {
         super.process(metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()));
+        
+        // Set best matching language code based on the culture info. The value will
+        // be collected and propagated for components down the chain.
+        if (language == null) 
+        {
+            LanguageCode bestMatchingLanguageCode = culture.toLanguageCode();
+            if (bestMatchingLanguageCode != null) 
+            {
+                language = bestMatchingLanguageCode;
+            }
+        }
     }
-
+    
     /**
      * Create a single page fetcher for the search range.
      */
@@ -209,18 +230,18 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
             }
 
             final Document document = new Document();
-            document.addField(Document.CONTENT_URL, tmp);
+            document.setField(Document.CONTENT_URL, tmp);
 
             tmp = StringEscapeUtils.unescapeHtml(searchResults[j].getTitle());
             if (!StringUtils.isEmpty(tmp))
             {
-                document.addField(Document.TITLE, tmp);
+                document.setField(Document.TITLE, tmp);
             }
 
             tmp = StringEscapeUtils.unescapeHtml(searchResults[j].getDescription());
             if (!StringUtils.isEmpty(tmp))
             {
-                document.addField(Document.SUMMARY, tmp);
+                document.setField(Document.SUMMARY, tmp);
             }
 
             docs.add(document);

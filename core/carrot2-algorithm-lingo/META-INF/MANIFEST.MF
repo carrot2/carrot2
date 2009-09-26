@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Lingo Clustering Algorithm
 Bundle-SymbolicName: org.carrot2.algorithm.lingo;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 0.0.0.QUALIFIER
 Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.core,
  org.carrot2.util.common,
@@ -13,3 +13,4 @@ Require-Bundle: org.carrot2.core,
 Bundle-ClassPath: META-INF/,
  .
 Export-Package: org.carrot2.clustering.lingo
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

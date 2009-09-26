@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -44,7 +42,7 @@ public class DocumentAssertion implements AssertExtension
      */
     public DocumentAssertion isEquivalentTo(Document expectedDocument)
     {
-        assertThat(actualDocument.getId()).as(description + ", id").isEqualTo(
+        assertThat((Object) actualDocument.getId()).as(description + ", id").isEqualTo(
             expectedDocument.getId());
         assertThat(actualDocument.getFields()).as(description).isEqualTo(
             expectedDocument.getFields());

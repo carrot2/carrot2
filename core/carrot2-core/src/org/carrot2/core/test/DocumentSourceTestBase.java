@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -33,7 +32,7 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
 {
     /**
      * Runs a query without specifying any additional attributes. The query is run using
-     * the {@link #simpleController}.
+     * the {@link SimpleController}.
      * 
      * @return Returns the number of fetched documents. Access
      *         {@link #processingAttributes} map to get hold of the actual documents.
@@ -45,7 +44,7 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
 
     /**
      * Runs a query without specifying any additional attributes. The query is run using
-     * the {@link #cachingController}.
+     * the {@link CachingController}.
      * 
      * @return Returns the number of fetched documents. Access
      *         {@link #processingAttributes} map to get hold of the actual documents.
@@ -77,7 +76,7 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
 
     /**
      * Runs a <code>query</code> and asks for <code>results</code> results. The query
-     * is run using the {@link #simpleController}.
+     * is run using the {@link SimpleController}.
      * 
      * @return Returns the number of fetched documents. Access
      *         {@link #processingAttributes} map to get hold of the actual documents.

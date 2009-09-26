@@ -24,6 +24,36 @@
     <orderedlist>
       <listitem>
         <formalpara>
+          <title>Update JavaDoc documentation</title>
+          <para>
+            Review JavaDoc documentation, provide missing public and protected
+            members description, provide missing package descriptions.
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Update &C2; Manual</title>
+          <para>
+            Review &C2; Manual, modify or add content related to the features implemented
+            in the new release.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Update Maven dependencies</title>
+          <para>
+            Update Maven POMs so that dependencies are in sync with the JAR versions
+            in the repository. 
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
           <title>Review of static code analysis reports</title>
           <para>
             Review and fix reasonably-looking flaws from the following reports:
@@ -32,6 +62,19 @@
               <listitem><para><link xlink:href="http://builds.carrot2.org/download/C2HEAD-SOURCES/artifacts/latest/FindBugs-Report/index.html">FindBugs</link></para></listitem>
               <listitem><para><link xlink:href="http://builds.carrot2.org/download/C2HEAD-SOURCES/artifacts/latest/Duplication-Report/index.html">Code Duplication</link></para></listitem>
             </orderedlist>
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Update source code headers and line endings</title>
+          <para>
+            In project root:
+          
+            <programlisting><![CDATA[ant prerelease]]></programlisting>
+            
+            Commit changes to trunk.
           </para>
         </formalpara>
       </listitem>
@@ -70,17 +113,37 @@ svn copy https://carrot2.svn.sourceforge.net/svnroot/carrot2/trunk
       
       <listitem>
         <formalpara>
-          <title>Update version files in the stable branch</title>
-          <para>
-            Update <filename>etc/version/carrot2.version</filename> in the stable branch 
-            to contain the desired stable version number. That number will be embedded in 
-            distribution file names, JavaDoc page title and other version-sensitive places. 
-            Note the property name should be <filename>carrot2.version.stable</filename>, e.g.:
-            
-            <programlisting><![CDATA[carrot2.version.stable=3.0.1
-carrot2.version=${carrot2.version.stable}]]></programlisting>
+          <title>Update version number strings in the stable branch</title>
 
-            Commit the change to the stable branch.
+          <para>
+            <orderedlist>
+              <listitem>
+                <formalpara>
+                  <title>Version files</title>
+                  <para>
+                    Update <filename>etc/version/carrot2.version</filename> 
+                    to contain the desired stable version number. That number will be embedded in 
+                    distribution file names, JavaDoc page title and other version-sensitive places. 
+                    Note the property name should be <filename>carrot2.version.stable</filename>, e.g.:
+                    
+                    <programlisting><![CDATA[carrot2.version.stable=3.0.1
+carrot2.version=${carrot2.version.stable}]]></programlisting>
+                  </para>
+                </formalpara>
+              </listitem>
+              
+              <listitem>
+                <formalpara>
+                  <title>&C2; plugin versions in &DCW;</title>
+                  
+                  <para>
+                    Update &C2; plugin version strings in the &DCW; to the version being released.
+                  </para>
+                </formalpara>
+              </listitem>
+            </orderedlist>
+            
+            Commit changes to the stable branch.
           </para>
         </formalpara>
       </listitem>
@@ -108,7 +171,7 @@ carrot2.version=${carrot2.version.stable}]]></programlisting>
 
       <listitem>
         <formalpara>
-          <title>Create release tag</title>
+          <title>Create the release tag</title>
           <para>
             <programlisting><![CDATA[svn copy https://carrot2.svn.sourceforge.net/svnroot/carrot2/branches/stable
          https://carrot2.svn.sourceforge.net/svnroot/carrot2/tags/VERSION_3_0_1]]></programlisting>
@@ -118,15 +181,50 @@ carrot2.version=${carrot2.version.stable}]]></programlisting>
 
       <listitem>
         <formalpara>
-          <title>Update version files in trunk</title>
+          <title>Update version number strings in trunk</title>
+          
           <para>
-            In case of major releases, update <filename>etc/version/carrot2.version</filename> 
-            in trunk to contain a new development version number, e.g.:
+            In case of major releases, update development version numbers.
             
-            <programlisting><![CDATA[carrot2.version.head=3.2-dev
+            <orderedlist>
+              <listitem>
+                <formalpara>
+                  <title>Version files</title>
+                  <para>
+                    Update <filename>etc/version/carrot2.version</filename> 
+                    to contain the desired development version number.  
+                    Note the property name should be <filename>carrot2.version.head</filename>, e.g.:
+                    
+                    <programlisting><![CDATA[carrot2.version.head=3.2-dev
 carrot2.version=${carrot2.version.head}]]></programlisting>
+                  </para>
+                </formalpara>
+              </listitem>
+              
+              <listitem>
+                <formalpara>
+                  <title>&C2; plugin versions in &DCW;</title>
+                  
+                  <para>
+                    Update &C2; plugin version strings in the &DCW; to the current development 
+                    version. 
+                  </para>
+                </formalpara>
+              </listitem>
+            </orderedlist>
+            
+            Commit changes to trunk.
+          </para>
+        </formalpara>
+      </listitem>
 
-            Commit the change to trunk.
+      <listitem>
+        <formalpara>
+          <title>Update JIRA</title>
+          
+          <para>
+            Close issues scheduled for the release being made, release the version in JIRA, 
+            create a next version in JIRA.
           </para>
         </formalpara>
       </listitem>
@@ -192,12 +290,82 @@ carrot2.version=${carrot2.version.head}]]></programlisting>
 
       <listitem>
         <formalpara>
-          <title>Consider upgrading &C2; dependent projects</title>
+          <title>Consider upgrading &C2; in dependent projects</title>
           <para>
             If reasonable, upgrade &C2; dependency in other known projects, such as
             Apache Solr and Nutch.
           </para>
         </formalpara>
+      </listitem>
+    </orderedlist>
+  </section>
+  
+  <section xml:id="section.qa">
+    <title>QA check list</title>
+    
+    <para>
+      This a very quick quality assurance check list to run through before stable 
+      releases. This list also serves as some guide line for further automation
+      of acceptance tests.
+    </para>
+    
+    <note>
+      <para>
+        Note that this list does not contain many checks for the &WA;, &DCS; and &JA;
+        as these are fairly well tested during builds (webtests, smoke-tests).
+      </para>
+    </note>
+    
+    <orderedlist>
+      <listitem>
+        <para>
+          For each supported platform you can test, check that &DCW;:
+          
+          <orderedlist spacing="compact">
+            <listitem>
+              <para>launches without errors in the error log</para>
+            </listitem>
+            
+            <listitem>
+              <para>executes and cluters a remote search query without errors</para>
+            </listitem>
+            
+            <listitem>
+              <para>
+                executes and clusters a Lucene query without errors (we've had a bug
+                that caused the Lucene directory attribute editor to disappear, 
+                hence this step).
+              </para>
+            </listitem>
+            
+            <listitem>
+              <para>can edit a clustering algorithm's attribute</para>
+            </listitem>
+            
+            <listitem>
+              <para>shows both cluster visualizations</para>
+            </listitem>
+            
+            <listitem>
+              <para>executes clustering algorithm benchmarks</para>
+            </listitem>
+          </orderedlist>
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Check that a the &DCS; starts up correctly using command line on Windows and 
+          Linux. More acceptance tests are performed during builds (but starting &DCS; 
+          using the WAR file instead of command line).
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Check that a &C2; project <link linkend="section.integration.setting-up-maven-project">set up using Maven archetype</link>
+          builds correctly.
+        </para>
       </listitem>
     </orderedlist>
   </section>

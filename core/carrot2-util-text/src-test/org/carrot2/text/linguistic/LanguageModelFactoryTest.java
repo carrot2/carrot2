@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,8 +12,7 @@
 
 package org.carrot2.text.linguistic;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -37,6 +35,18 @@ public class LanguageModelFactoryTest
         final ILanguageModel model = new DefaultLanguageModelFactory().getLanguage(LanguageCode.DUTCH);
         assertNotNull(model);
         assertEquals(LanguageCode.DUTCH, model.getLanguageCode());
-    }    
+    }
+    
+    @Test
+    public void testLinguisticResourcesAvailable()
+    {
+        for (LanguageCode l : LanguageCode.values())
+        {
+            new DefaultLanguageModelFactory().getLanguage(l);
+        }
+        
+        assertTrue("There were problems with loading certain lexical resources. Check log4j logs.", 
+            LexicalResources.problemCache.isEmpty());
+    }
 }
 

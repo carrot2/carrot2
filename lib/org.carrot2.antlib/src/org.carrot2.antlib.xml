@@ -14,4 +14,7 @@
 		
 	<taskdef name="setProperty"
 		classname="org.carrot2.antlib.tasks.SetPropertyTask" />
+		
+    <taskdef name="switchClassLoader"
+        classname="org.carrot2.antlib.tasks.SwitchClassLoader" />
 </antlib>

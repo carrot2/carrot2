@@ -1,0 +1,16 @@
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.solr.SolrDocumentSource" id="solr"
+            attribute-sets-resource="/suites/source-solr-attributes.xml">
+      <label>Solr</label>
+      <title>Solr Search Engine</title>
+      <icon-path>icons/solr.png</icon-path>
+      <mnemonic>s</mnemonic>
+      <description>Solr document source queries an instance of Apache Solr search engine.</description>
+      <example-queries>
+        <example-query>test</example-query>
+        <example-query>solr</example-query>
+      </example-queries>
+    </source>
+  </sources>
+</component-suite>

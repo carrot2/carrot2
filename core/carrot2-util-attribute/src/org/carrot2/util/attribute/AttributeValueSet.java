@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,12 +11,10 @@
 
 package org.carrot2.util.attribute;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
-import org.carrot2.util.MapUtils;
-import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
-import org.carrot2.util.simplexml.SimpleXmlWrappers;
+import org.carrot2.util.simplexml.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -70,7 +66,7 @@ public class AttributeValueSet
      * {@link #convertAttributeValuesFromStrings()}.
      */
     @ElementMap(entry = "attribute", key = "key", attribute = true, inline = true, required = false)
-    private HashMap<String, SimpleXmlWrapperValue> overridenAttributeValuesForSerialization;
+    private TreeMap<String, SimpleXmlWrapperValue> overridenAttributeValuesForSerialization;
 
     AttributeValueSet()
     {
@@ -207,18 +203,20 @@ public class AttributeValueSet
     }
 
     /**
-     * Converts attribute values to {@link TypeStringValuePair}s for serialization.
+     * Converts attribute values to {@link ISimpleXmlWrapper}s for serialization.
      */
     @Persist
     @SuppressWarnings("unused")
     private void convertAttributeValuesToStrings()
     {
-        overridenAttributeValuesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
+        overridenAttributeValuesForSerialization = new TreeMap<String, SimpleXmlWrapperValue>(
+            String.CASE_INSENSITIVE_ORDER);
+        overridenAttributeValuesForSerialization.putAll(SimpleXmlWrappers
             .wrap(overridenAttributeValues));
     }
 
     /**
-     * Converts attribute values to {@link TypeStringValuePair}s after deserialization.
+     * Converts attribute values to {@link ISimpleXmlWrapper}s after deserialization.
      */
     @Commit
     @SuppressWarnings("unused")

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Workbench Circles Visualization
 Bundle-SymbolicName: org.carrot2.workbench.vis.circles;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 0.0.0.QUALIFIER
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.apache.commons,
@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.equinox.http.registry,
  org.eclipse.equinox.http.servlet,
  javax.servlet,
- org.apache.velocity
+ org.apache.velocity,
+ org.eclipse.ui.browser;bundle-version="3.2.300"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  META-INF/,

@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -18,12 +16,15 @@ import java.io.StringReader;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.*;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.index.Payload;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Init;
-import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
-import org.carrot2.text.analysis.ITokenType;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.analysis.*;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.util.ExceptionUtils;
@@ -52,25 +53,27 @@ import com.google.common.collect.Maps;
 public final class Tokenizer
 {
     /**
-     * Analyzer used to split documents into individual tokens (terms). This
-     * analyzer must provide token {@link Payload} implementing {@link ITokenType}.
+     * Analyzer used to split documents into individual tokens (terms). This analyzer must
+     * provide token {@link Payload} implementing {@link ITokenType}.
      * 
      * @level Medium
      * @group Preprocessing
      * @label Analyzer
      */
     @Init
+    @Processing
     @Input
     @Attribute
+    @Required
     @ImplementingClasses(classes =
     {
+        ActiveLanguageAnalyzer.class, ChineseAnalyzer.class,
         ExtendedWhitespaceAnalyzer.class
     }, strict = false)
-    public Analyzer analyzer = new ExtendedWhitespaceAnalyzer();
+    public Analyzer analyzer = new ActiveLanguageAnalyzer();
 
     /**
-     * Textual fields of documents that should be tokenized and parsed for
-     * clustering.
+     * Textual fields of documents that should be tokenized and parsed for clustering.
      * 
      * @level Advanced
      * @group Preprocessing
@@ -113,6 +116,12 @@ public final class Tokenizer
      */
     public void tokenize(PreprocessingContext context)
     {
+        if (analyzer instanceof ActiveLanguageAnalyzer)
+        {
+            ((ActiveLanguageAnalyzer) analyzer).setActiveLanguage(context.language
+                .getLanguageCode());
+        }
+
         // Documents to tokenize
         final List<Document> documents = context.documents;
 
@@ -155,17 +164,19 @@ public final class Tokenizer
                 final String fieldName = fieldEntry.objectA;
                 final String fieldValue = fieldEntry.objectB;
 
-                Token t = null;
                 if (!StringUtils.isEmpty(fieldValue))
                 {
                     try
                     {
-                        final TokenStream ts = analyzer.reusableTokenStream(null,
+                        final TokenStream ts = analyzer.tokenStream(null,
                             new StringReader(fieldValue));
 
-                        while ((t = ts.next(t)) != null)
+                        while (ts.incrementToken())
                         {
-                            add(documentIndex, fieldNameToIndex.get(fieldName), t);
+                            add(documentIndex, fieldNameToIndex.get(fieldName),
+                                (TermAttribute) ts.getAttribute(TermAttribute.class),
+                                (PayloadAttribute) ts
+                                    .getAttribute(PayloadAttribute.class));
                         }
                     }
                     catch (IOException e)
@@ -228,11 +239,13 @@ public final class Tokenizer
      * Add the token's code to the list. The <code>token</code> must carry
      * {@link ITokenType} payload.
      */
-    void add(int documentIndex, byte fieldIndex, Token token)
+    void add(int documentIndex, byte fieldIndex, TermAttribute term,
+        PayloadAttribute payload)
     {
-        final ITokenType type = (ITokenType) token.getPayload();
-        final char [] buffer = new char [token.termLength()];
-        System.arraycopy(token.termBuffer(), 0, buffer, 0, token.termLength());
+        final ITokenType type = (ITokenType) payload.getPayload();
+        final int termLength = term.termLength();
+        final char [] buffer = new char [termLength];
+        System.arraycopy(term.termBuffer(), 0, buffer, 0, termLength);
         add(documentIndex, fieldIndex, buffer, type.getRawFlags());
     }
 

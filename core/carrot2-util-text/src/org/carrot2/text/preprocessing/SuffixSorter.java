@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,8 +16,7 @@ import org.carrot2.util.IndirectComparator;
 import org.carrot2.util.IndirectSort;
 
 /**
- * A simple suffix sorting utility based on the generic sorting routines from
- * {@link IndirectSorter}.
+ * A simple suffix sorting utility based on the generic sorting routines from {@link IndirectSort}.
  */
 final class SuffixSorter
 {

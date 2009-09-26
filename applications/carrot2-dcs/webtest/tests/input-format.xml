@@ -8,7 +8,7 @@
       <invoke url="/input.html" description="Get input format page" />
 
       <!-- Wait for AJAX stuff to load -->
-      <sleep seconds="2" />
+      <sleep seconds="5" />
       <verifyElementContentLoaded elementId="input-example" />
     </webtest>
   </target>

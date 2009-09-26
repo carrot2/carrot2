@@ -1,8 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -159,7 +158,7 @@ public class CachingControllerTest extends ControllerTestBase
         @Init
         @Processing
         @Attribute(key = "initProcessing")
-        private String initProcessingRequired = DEFAULT;
+        private String initProcessing = DEFAULT;
 
         @Output
         @Processing
@@ -170,8 +169,24 @@ public class CachingControllerTest extends ControllerTestBase
         @Override
         public void process() throws ProcessingException
         {
-            result = initProcessingRequired;
+            result = initProcessing;
         }
+    }
+
+    @Bindable
+    public static class ComponentWithInitProcessingInputReferenceAttribute extends
+        ProcessingComponentBase
+    {
+        @Input
+        @Init
+        @Processing
+        @Attribute(key = "initProcessing")
+        @ImplementingClasses(classes =
+        {
+            BindableClass.class
+        })
+        @SuppressWarnings("unused")
+        private BindableClass initProcessing;
     }
 
     @Override
@@ -354,11 +369,11 @@ public class CachingControllerTest extends ControllerTestBase
         processingComponent1Mock.init(isA(IControllerContext.class));
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
-        mocksControl.andAnswer(new DelayedAnswer<Object>(500));
+        mocksControl.andAnswer(new DelayedAnswer<Object>(1500));
         processingComponent1Mock.afterProcessing();
         processingComponent1Mock.beforeProcessing();
         processingComponent1Mock.process();
-        mocksControl.andAnswer(new DelayedAnswer<Object>(500));
+        mocksControl.andAnswer(new DelayedAnswer<Object>(1500));
         processingComponent1Mock.afterProcessing();
         processingComponent1Mock.dispose();
         processingComponent1Mock.dispose();
@@ -617,10 +632,10 @@ public class CachingControllerTest extends ControllerTestBase
                 "conf2", conf2Attributes));
 
         ProcessingResult result1 = controller.process(attributes, "conf1");
-        assertThat(result1.getAttributes()).contains(entry("result", "v1v1"));
+        assertThat(result1.getAttributes()).includes(entry("result", "v1v1"));
 
         ProcessingResult result2 = controller.process(attributes, "conf2");
-        assertThat(result2.getAttributes()).contains(entry("result", "v2v2"));
+        assertThat(result2.getAttributes()).includes(entry("result", "v2v2"));
 
     }
 
@@ -643,10 +658,34 @@ public class CachingControllerTest extends ControllerTestBase
                 "conf2", conf2Attributes));
 
         ProcessingResult result1 = controller.process(attributes, "conf1");
-        assertThat(result1.getAttributes()).contains(entry("result", "v1v1"));
+        assertThat(result1.getAttributes()).includes(entry("result", "v1v1"));
 
         ProcessingResult result2 = controller.process(attributes, "conf2");
-        assertThat(result2.getAttributes()).contains(entry("result", "v2v2"));
+        assertThat(result2.getAttributes()).includes(entry("result", "v2v2"));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testComponentConfigurationInitProcessingAttributeCreation()
+    {
+        final CachingController controller = new CachingController();
+        final Map<String, Object> attributes = Maps.newHashMap();
+
+        final Map<String, Object> globalInitAttributes = Maps.newHashMap();
+        BindableClass.createdInstances = 0;
+        globalInitAttributes.put("initProcessing", BindableClass.class);
+
+        controller.init(globalInitAttributes);
+
+        controller.process(attributes,
+            ComponentWithInitProcessingInputReferenceAttribute.class);
+        controller.process(attributes,
+            ComponentWithInitProcessingInputReferenceAttribute.class);
+        assertThat(BindableClass.createdInstances).isEqualTo(1);
+        attributes.put("initProcessing", BindableClass.class);
+        controller.process(attributes,
+            ComponentWithInitProcessingInputReferenceAttribute.class);
+        assertThat(BindableClass.createdInstances).isEqualTo(2);
     }
 
     @Test(expected = ComponentInitializationException.class)
@@ -886,6 +925,29 @@ public class CachingControllerTest extends ControllerTestBase
         assertThat((String) processingAttributes.get("result")).isEqualTo(
             overriddenInitValue);
 
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testOutputAttributesWithNullValues_CachedSourceAndAlgorithm()
+    {
+        CachingController c = new CachingController(
+            ProcessingComponent5_1.class, ProcessingComponent5_2.class);
+        c.init(Maps.<String, Object>newHashMap());
+        this.controller = c;
+
+        super.testOutputAttributesWithNullValues();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testOutputAttributesWithNullValues_CachedSource()
+    {
+        CachingController c = new CachingController(ProcessingComponent5_1.class);
+        c.init(Maps.<String, Object>newHashMap());
+        this.controller = c;
+        
+        super.testOutputAttributesWithNullValues();
     }
 
     private CachingController getCachingController()

@@ -7,189 +7,55 @@
   <dirname property="carrot2.doc.basedir"
            file="${ant.file.carrot2.doc}" />
 
-  <!-- Documentation source dir -->
-  <property name="doc.docbook.dir" location="${carrot2.doc.basedir}/docbook" />
-  <property name="doc.xsl.dir" location="${carrot2.doc.basedir}/xsl" />
-  <property name="doc.src.dir" location="${carrot2.doc.basedir}/src" />
-  <property name="doc.assets.dir" location="${carrot2.doc.basedir}/assets" />
+  <!-- Import common macros -->
+  <import file="${carrot2.doc.basedir}/etc/ant/doc.xml" />
 
   <!-- Output directory for the documentation -->
-  <property name="doc.build.dir" location="${carrot2.master.basedir}/tmp/manual/build" />
   <property name="doc.output.dir" location="${carrot2.master.basedir}/tmp/manual" />
 
   <!-- Manual dist file name base -->
   <property name="doc.dist.base" value="${carrot2.manual.base}" />
 
-  <property name="doc.classes.dir" location="${doc.build.dir}/classes" />
-
   <!--
        Builds Carrot2 Manual
     -->
-  <target name="carrot2.doc.build"
-          depends="carrot2.doc.docbook.check, carrot2.doc.prepare, carrot2.doc.components">
-    <mkdir dir="${doc.output.dir}" />
+  <target name="carrot2.doc.build" depends="jar, carrot2.doc.common.docbook.check">
+    <carrot2.doc.build doc.base.dir="${carrot2.doc.basedir}"
+                       doc.main.docbook.filename="carrot2-manual.xml" 
+                       doc.suite.path="suites/suite-doc.xml"
+                       doc.output.dir="${doc.output.dir}"
+                       doc.build.dir="${doc.output.dir}/build">
 
-    <!-- Build the actual manual -->
-    <xslt in="${doc.build.dir}/docbook/carrot2-manual.xml"
-          style="${docbook.xsl.dir}/html-custom/docbook.xsl"
-          out="${doc.output.dir}/index.html"
-          force="yes">
-      <xmlcatalog>
-        <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
-             location="${docbook.dtd.dir}/docbook.dtd" />
-      </xmlcatalog>
-
-      <classpath>
-        <fileset dir="${xalan.home}">
-          <include name="*.jar" />
-        </fileset>
-      </classpath>
-	  
-	  <!-- 
-	    <factory> enforcement will not work due to this
-		bug in ANT: https://issues.apache.org/bugzilla/show_bug.cgi?id=46172 
-	  -->
-	  <!-- <factory name="org.apache.xalan.processor.TransformerFactoryImpl" /> -->
-      
-      <param name="dist.url" expression="${dist.url}" />
-      <param name="carrot2.javadoc.url" expression="${dist.url}/javadoc" />
-      <param name="carrot2.java-api.base" expression="${carrot2.java-api.base}" />
-      <param name="carrot2.dcs.base" expression="${carrot2.dcs.base}" />
-      <param name="carrot2.webapp.base" expression="${carrot2.webapp.base}" />
-      <param name="carrot2.manual.base" expression="${carrot2.manual.base}" />
-      <param name="carrot2.workbench.base" expression="${carrot2.workbench.base}" />
-      
-      <param name="carrot2.version" expression="${carrot2.version}" />
-    </xslt>
-
-    <copy todir="${doc.output.dir}">
-      <fileset dir="${doc.assets.dir}">
-        <include name="css/**" />
-        <include name="img/**" />
-      </fileset>
-    </copy>
-
-    <antcall target="carrot2.doc.cleanup" />
-  </target>
-
-  <!--
-       Builds the DCS ZIP archive.
-    -->
-  <target name="carrot2.doc.dist" depends="carrot2.doc.build">
-    <zip destfile="${doc.output.dir}/../${doc.dist.base}-${carrot2.version}.zip">
-      <zipfileset dir="${doc.output.dir}" prefix="${doc.dist.base}" />
-    </zip>
-  </target>
-  
-  <!--
-       Copies all files necessary to produce the DocBook documentation.
-    -->
-  <target name="carrot2.doc.prepare">
-    <mkdir dir="${doc.build.dir}" />
-
-    <copy todir="${doc.build.dir}/docbook">
-      <fileset dir="${doc.docbook.dir}" />
-    </copy>
-
-    <copy todir="${doc.build.dir}/xsl">
-      <fileset dir="${doc.xsl.dir}">
-        <include name="*.xsl" />
-      </fileset>
-    </copy>
-
-    <copy todir="${docbook.xsl.dir}/html-custom">
-      <fileset dir="${doc.xsl.dir}/html-custom" />
-    </copy>
-  </target>
-
-  <!--
-       Builds the XML with component descriptions.
-    -->
-  <target name="carrot2.doc.components">
-    <antcall target="jar" />
-    <mkdir dir="${doc.classes.dir}" />
-
-    <javac destdir="${doc.classes.dir}"
-           compiler="modern"
-           source="1.5"
-           target="1.5"
-           encoding="UTF-8"
-           debug="true"
-           debuglevel="lines">
-      <src path="doc/src" />
-      <classpath>
-        <path refid="core.jar.classpath" />
-        <path refid="lib.classpath" />
-      </classpath>
-    </javac>
-
-    <mkdir dir="${doc.build.dir}/xsl" />
-    <java classname="org.carrot2.core.ProcessingComponentDumper"
-          outputproperty="dev.null">
-      <classpath>
+      <attribute.dumper.classpath.entries>
         <path refid="core.jar.classpath" />
         <path refid="lib.classpath" />
         <path path="${carrot2.master.basedir}/core/carrot2-component-suites/suites" />
-        <path path="${doc.classes.dir}" />
-      </classpath>
-      <arg value="carrot2-default/suite-doc.xml" />
-      <arg value="${doc.build.dir}/xsl/components-metadata.xml" />
-    </java>
+      </attribute.dumper.classpath.entries>
 
-    <!-- 
-         HACK: remove CDATA sections from the description tags. This is the only
-         reasonably easy way of transforming HTML from JavaDocs into DocBook counterparts.
-         The downside is obviously that if the HTML in JavaDoc is not valid XML,
-         the documentation generation will fail.
-      -->
-    <copy file="${doc.build.dir}/xsl/components-metadata.xml"
-          tofile="${doc.build.dir}/xsl/components-metadata-nocdata.xml"
-          filtering="yes">
-      <filterset begintoken="&lt;description&gt;" endtoken="CDATA[">
-        <filter token="&lt;![" value="&lt;description&gt;" />
-      </filterset>
-      <filterset begintoken="]]&gt;" endtoken="&gt;">
-        <filter token="&lt;/description" value="&lt;/description&gt;" />
-      </filterset>
-      <filterset begintoken="&lt;title&gt;" endtoken="CDATA[">
-        <filter token="&lt;![" value="&lt;title&gt;" />
-      </filterset>
-      <filterset begintoken="]]&gt;" endtoken="&gt;">
-        <filter token="&lt;/title" value="&lt;/title&gt;" />
-      </filterset>
-    </copy>
-    <copy file="${doc.build.dir}/xsl/components-metadata.xml"
-          tofile="${doc.build.dir}/xsl/components-metadata-orig.xml" 
-          overwrite="true" />
-    <copy file="${doc.build.dir}/xsl/components-metadata-nocdata.xml"
-          tofile="${doc.build.dir}/xsl/components-metadata.xml" 
-          overwrite="true" />
-
-    <xslt in="${doc.build.dir}/docbook/components.template.xml"
-          style="${doc.build.dir}/xsl/attributes-to-docbook.xsl"
-          out="${doc.build.dir}/docbook/components.xml">
-      <xmlcatalog>     
-        <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
-             location="${docbook.dtd.dir}/docbook.dtd" />
-      </xmlcatalog>
-      <param name="carrot2.javadoc.url" expression="${dist.url}/javadoc" />
-    </xslt>
-  </target>
-
-  <target name="carrot2.doc.cleanup">
-    <delete dir="${docbook.xsl.dir}/html-custom" />
-    <delete dir="${doc.build.dir}" failonerror="false" />
+      <xslt.param.entries>
+        <param name="dist.url" expression="${dist.url}" />
+        <param name="carrot2.javadoc.url" expression="${dist.url}/javadoc" />
+        <param name="product.java-api.base" expression="${carrot2.java-api.base}" />
+        <param name="product.dcs.base" expression="${carrot2.dcs.base}" />
+        <param name="product.webapp.base" expression="${carrot2.webapp.base}" />
+        <param name="product.manual.base" expression="${carrot2.manual.base}" />
+        <param name="product.workbench.base" expression="${carrot2.workbench.base}" />
+        
+        <param name="product.demo.url" expression="http://search.carrot2.org" />
+        <param name="product.version" expression="${carrot2.version}" />
+      </xslt.param.entries>
+    </carrot2.doc.build>
   </target>
 
   <!--
-       Checks for required DocBook resources.
+       Builds the manual ZIP archive.
     -->
-  <target name="carrot2.doc.docbook.check">
-    <fail unless="docbook.xsl.dir" message="Please specify docbook.xsl.dir" />
-    <fail unless="docbook.dtd.dir" message="Please specify docbook.dtd.dir" />
-    <fail unless="xalan.home" message="Please specify xalan.home" />
+  <target name="carrot2.doc.dist" depends="carrot2.doc.build">
+    <zip destfile="${doc.output.dir}/../${doc.dist.base}-${carrot2.version}.zip">
+      <zipfileset dir="${doc.output.dir}" prefix="${doc.dist.base}-${carrot2.version}" />
+    </zip>
   </target>
-
+  
   <target name="fail">
     <fail>Please use the 'doc' target from the main build script to build the documentation.</fail>
   </target>

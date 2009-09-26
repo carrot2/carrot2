@@ -16,8 +16,8 @@ Consolidated plugin/ project classpaths. Notes:
 	  These plugins re-export many standard libraries and there
 	  is usually no need to bother with importing anything else.
 	  
-	- SHOULD declare plugin version number consistent with the
-	  Carrot2 release (3.0.0, for example).
+	- SHOULD declare plugin version number as:
+	  0.0.0.qualifier
 
 2) All the projects that are regular Java projects (Webapp, DCS, examples):
 

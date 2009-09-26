@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -26,7 +26,7 @@ import org.carrot2.util.attribute.*;
  * 
  * @label Yahoo News Search Service
  * @see <a href="http://com3.devnet.re3.yahoo.com/search/news/V1/newsSearch.html">Yahoo *
- *      News Search Documentation< /a>
+ *      News Search Documentation</a>
  */
 @Bindable(prefix = "YahooNewsSearchService")
 public final class YahooNewsSearchService extends YahooSearchService

@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -27,7 +26,7 @@ import org.eclipse.swt.widgets.Composite;
  * <ul>
  * <li>call
  * {@link #init(BindableDescriptor, AttributeDescriptor, IAttributeEventProvider, Map)}.
- * <li>call {@link #createEditor(Composite, Object)}
+ * <li>call {@link #createEditor(Composite, int)}
  * </ul>
  * Then, repeatedly:
  * <ul>

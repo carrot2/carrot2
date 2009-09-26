@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<para>
+  In most cases your workflow with &PROD; applications would be the following:
+
+  <orderedlist>
+    <listitem>
+      <para>
+        Use <link linkend="section.workbench">&DCW;</link> and possibly other applications from &PROD; application suite
+        to see what the clustering results are like for your content.  If the
+        results are promising, you can use the &DCW; to further tune the
+        clustering algorithm's settings.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        If you are developing Java software, use &PROD; API and JAR to 
+        <link linkend="section.integration.compiling-java-program-with-carrot2">integrate
+        clustering into your code</link>.  For non-Java environments, set-up the <link linkend="section.dcs">&DCS;</link>
+        and call &PROD; clustering using the REST protocol.
+      </para>
+    </listitem>
+  </orderedlist>
+</para>

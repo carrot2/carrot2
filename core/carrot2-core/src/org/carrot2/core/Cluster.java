@@ -1,8 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -18,6 +17,7 @@ import org.carrot2.util.MapUtils;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
+import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -32,6 +32,8 @@ import com.google.common.collect.*;
  * {@link #OTHER_TOPICS}. This class is <strong>not</strong> thread-safe.
  */
 @Root(name = "group", strict = false)
+@JsonAutoDetect(JsonMethod.NONE)
+@JsonWriteNullProperties(false)
 public final class Cluster
 {
     /**
@@ -96,18 +98,9 @@ public final class Cluster
     /** Cached list of documents from this cluster and subclusters */
     private List<Document> allDocuments;
 
-    /** Score of this cluster for serialization/ deserialization purposes. */
-    @Attribute(required = false)
-    private Double score;
-
     /** Attributes of this cluster for serialization/ deserialization purposes. */
     @ElementMap(entry = "attribute", key = "key", attribute = true, inline = true, required = false)
     private HashMap<String, SimpleXmlWrapperValue> otherAttributesForSerialization;
-
-    /** The actual size of this cluster, for serialization purposes only */
-    @SuppressWarnings("unused")
-    @Attribute(required = false)
-    private int size;
 
     /**
      * List of document ids used for serialization/ deserialization purposes.
@@ -176,6 +169,7 @@ public final class Cluster
      * 
      * @return phrases describing this cluster
      */
+    @JsonGetter
     public List<String> getPhrases()
     {
         return phrasesView;
@@ -189,6 +183,16 @@ public final class Cluster
     public List<Cluster> getSubclusters()
     {
         return subclustersView;
+    }
+
+    /**
+     * For JSON serialization only.
+     */
+    @JsonGetter("clusters")
+    @SuppressWarnings("unused")
+    private List<Cluster> getSubclustersForSerialization()
+    {
+        return subclustersView.isEmpty() ? null : subclustersView;
     }
 
     /**
@@ -359,6 +363,28 @@ public final class Cluster
     }
 
     /**
+     * Returns this cluster's {@value #SCORE} field.
+     */
+    @JsonGetter
+    @Attribute(required = false)
+    public Double getScore()
+    {
+        return getAttribute(SCORE);
+    }
+
+    /**
+     * Sets this cluster's {@link #SCORE} field.
+     * 
+     * @param score score to set
+     * @return this cluster for convenience
+     */
+    @Attribute(required = false)
+    public Cluster setScore(Double score)
+    {
+        return setAttribute(SCORE, score);
+    }
+
+    /**
      * Returns the attribute associated with this cluster under the provided
      * <code>key</code>. If there is no attribute under the provided <code>key</code>,
      * <code>null</code> will be returned.
@@ -410,12 +436,34 @@ public final class Cluster
     }
 
     /**
+     * For serialization only.
+     */
+    @JsonGetter
+    @Attribute(required = false)
+    @SuppressWarnings("unused")
+    private int getSize()
+    {
+        return size();
+    }
+
+    /**
+     * Empty implementation, SimpleXML requires both a getter and a setter.
+     */
+    @Attribute(required = false)
+    @SuppressWarnings("unused")
+    private void setSize(int size)
+    {
+        // We only serialize the size, hence empty implementation
+    }
+
+    /**
      * Internal identifier of this cluster within the {@link ProcessingResult}. This
      * identifier is assigned dynamically after clusters are passed to
      * {@link ProcessingResult}.
      * 
      * @see ProcessingResult
      */
+    @JsonGetter
     public Integer getId()
     {
         return id;
@@ -425,40 +473,40 @@ public final class Cluster
      * Compares clusters by size as returned by {@link #size()}. Clusters with more
      * documents are larger.
      */
-    public static final Comparator<Cluster> BY_SIZE_COMPARATOR = Comparators
-        .nullLeastOrder(Comparators.fromFunction(new Function<Cluster, Integer>()
+    public static final Comparator<Cluster> BY_SIZE_COMPARATOR = Ordering.natural()
+        .nullsFirst().onResultOf(new Function<Cluster, Integer>()
         {
             public Integer apply(Cluster cluster)
             {
                 return cluster.size();
             }
-        }));
+        });
 
     /**
      * Compares clusters by score as returned by {@link #SCORE}. Clusters with larger
      * score are larger.
      */
-    public static final Comparator<Cluster> BY_SCORE_COMPARATOR = Comparators
-        .nullLeastOrder(Comparators.fromFunction(new Function<Cluster, Double>()
+    public static final Comparator<Cluster> BY_SCORE_COMPARATOR = Ordering.natural()
+        .nullsFirst().onResultOf(new Function<Cluster, Double>()
         {
             public Double apply(Cluster cluster)
             {
                 return cluster.getAttribute(SCORE);
             }
-        }));
+        });
 
     /**
      * Compares clusters by the natural order of their labels as returned by
      * {@link #getLabel()}.
      */
-    public static final Comparator<Cluster> BY_LABEL_COMPARATOR = Comparators
-        .nullLeastOrder(Comparators.fromFunction(new Function<Cluster, String>()
+    public static final Comparator<Cluster> BY_LABEL_COMPARATOR = Ordering.natural()
+        .nullsFirst().onResultOf(new Function<Cluster, String>()
         {
             public String apply(Cluster cluster)
             {
                 return cluster.getLabel();
             }
-        }));
+        });
 
     /**
      * Compares clusters first by their size as returned by {@link #size()} and labels as
@@ -470,8 +518,8 @@ public final class Cluster
      * the applications want to display clusters).
      * </p>
      */
-    public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = Comparators
-        .compound(Collections.reverseOrder(BY_SIZE_COMPARATOR), BY_LABEL_COMPARATOR);
+    public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = Ordering
+        .from(Collections.reverseOrder(BY_SIZE_COMPARATOR)).compound(BY_LABEL_COMPARATOR);
 
     /**
      * Compares clusters first by their size as returned by {@link #SCORE} and labels as
@@ -483,8 +531,9 @@ public final class Cluster
      * the applications want to display clusters).
      * </p>
      */
-    public static final Comparator<Cluster> BY_REVERSED_SCORE_AND_LABEL_COMPARATOR = Comparators
-        .compound(Collections.reverseOrder(BY_SCORE_COMPARATOR), BY_LABEL_COMPARATOR);
+    public static final Comparator<Cluster> BY_REVERSED_SCORE_AND_LABEL_COMPARATOR = Ordering
+        .from(Collections.reverseOrder(BY_SCORE_COMPARATOR))
+        .compound(BY_LABEL_COMPARATOR);
 
     /**
      * Returns a comparator that compares clusters based on the aggregation of their size
@@ -509,15 +558,14 @@ public final class Cluster
                 "Score weight must be between 0.0 (inclusive) and 1.0 (inclusive) ");
         }
 
-        return Comparators.compound(Comparators
-            .fromFunction(new Function<Cluster, Double>()
+        return Ordering.natural().onResultOf(new Function<Cluster, Double>()
+        {
+            public Double apply(Cluster cluster)
             {
-                public Double apply(Cluster cluster)
-                {
-                    return -Math.pow(cluster.size(), (1 - scoreWeight))
-                        * Math.pow((Double) cluster.getAttribute(SCORE), scoreWeight);
-                }
-            }), BY_LABEL_COMPARATOR);
+                return -Math.pow(cluster.size(), (1 - scoreWeight))
+                    * Math.pow((Double) cluster.getAttribute(SCORE), scoreWeight);
+            }
+        }).compound(BY_LABEL_COMPARATOR);
     }
 
     /**
@@ -702,9 +750,6 @@ public final class Cluster
             }
         });
 
-        score = getAttribute(SCORE);
-        size = size();
-
         // Remove score from attributes for serialization
         otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
             .wrap(attributes));
@@ -721,19 +766,32 @@ public final class Cluster
     {
         if (otherAttributesForSerialization != null)
         {
-            attributes = SimpleXmlWrappers.unwrap(otherAttributesForSerialization);
+            attributes.putAll(SimpleXmlWrappers.unwrap(otherAttributesForSerialization));
         }
 
-        if (score != null)
-        {
-            // We're creating a new object reference to which should not
-            // yet escape, so no need to synchronize here
-            attributes.put(SCORE, score);
-        }
-
-        attributesView = Collections.unmodifiableMap(attributes);
         phrasesView = Collections.unmodifiableList(phrases);
         subclustersView = Collections.unmodifiableList(subclusters);
         // Documents will be restored on the ProcessingResult level
+    }
+
+    /**
+     * For JSON serialization only.
+     */
+    @JsonGetter("documents")
+    @SuppressWarnings("unused")
+    private List<Integer> getDocumentIds()
+    {
+        return Lists.transform(documents, Document.DocumentToId.INSTANCE);
+    }
+
+    /**
+     * For JSON and XML serialization only.
+     */
+    @JsonGetter("attributes")
+    @SuppressWarnings("unused")
+    private Map<String, Object> getOtherAttributes()
+    {
+        final Map<String, Object> otherAttributes = Maps.newHashMap(attributesView);
+        return otherAttributes.isEmpty() ? null : otherAttributes;
     }
 }

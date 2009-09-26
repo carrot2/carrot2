@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -25,7 +24,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * Base class for {@link Preprocessor} tasks tests.
+ * Base class for {@link PreprocessingContext} tasks tests.
  */
 public class PreprocessingComponentTestBase
 {
@@ -92,7 +91,7 @@ public class PreprocessingComponentTestBase
             Document document = new Document();
             for (String fieldName : fields)
             {
-                document.addField(fieldName, fieldValues[fieldValuesIndex++]);
+                document.setField(fieldName, fieldValues[fieldValuesIndex++]);
 
                 if (fieldValuesIndex >= fieldValues.length)
                 {

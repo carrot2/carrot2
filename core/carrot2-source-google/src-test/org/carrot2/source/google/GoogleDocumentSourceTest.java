@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,7 +12,9 @@
 
 package org.carrot2.source.google;
 
+import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.List;
 
@@ -21,14 +22,10 @@ import org.carrot2.core.Document;
 import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junitext.Prerequisite;
-import org.junitext.runners.AnnotationRunner;
 
 /**
  * Test cases for {@link GoogleDocumentSource}.
  */
-@RunWith(AnnotationRunner.class)
 public class GoogleDocumentSourceTest extends
     MultipageDocumentSourceTestBase<GoogleDocumentSource>
 {
@@ -63,9 +60,10 @@ public class GoogleDocumentSourceTest extends
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testHighlightsRemoved()
     {
+        assumeTrue(externalApiTestsEnabled());
+
         runQuery("test", getSmallQuerySize());
         final List<Document> documents = getDocuments();
         for (Document document : documents)

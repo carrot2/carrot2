@@ -1,0 +1,19 @@
+<component-suite>
+  <!-- Includes DCS sources and algorithms. -->
+  <include suite="suites/suite-dcs.xml" />
+
+  <!-- Generic (uninitialized) instance of OpenSearchDocumentSource -->
+  <!-- 
+  <sources>
+    <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="opensearch">
+      <label>OpenSearch</label>
+      <title>OpenSearch</title>
+      <mnemonic>J</mnemonic>
+      <description>
+        OpenSearch document source retrieves search results from search engines supporting
+        the OpenSearch standard.
+      </description>
+    </source>
+  </sources>
+   -->
+</component-suite>

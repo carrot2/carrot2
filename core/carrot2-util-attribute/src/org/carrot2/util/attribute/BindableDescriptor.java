@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -292,6 +291,31 @@ public class BindableDescriptor
                 this.bindableDescriptorsInternal, this.attributeDescriptorsInternal,
                 groupingMethod);
         }
+    }
+
+    /**
+     * Returns a map of default values of attributes associated with this bindable. A
+     * shortcut for:
+     * <pre>
+     * for (AttributeDescriptor d : only(Input.class).flatten().attributeDescriptors.values())
+     * {
+     *     if (d.defaultValue != null || d.requiredAttribute)
+     *        values.put(d.key, d.defaultValue);
+     * }
+     * </pre>
+     */
+    @SuppressWarnings("unchecked")
+    public HashMap<String, Object> getDefaultValues()
+    {
+        final HashMap<String, Object> values = Maps.newHashMap();
+        for (AttributeDescriptor d : only(Input.class).flatten().attributeDescriptors.values())
+        {
+            if (d.defaultValue != null || d.requiredAttribute)
+            {
+                values.put(d.key, d.defaultValue);
+            }
+        }
+        return values;
     }
 
     /**

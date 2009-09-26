@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,7 +12,7 @@
 
 package org.carrot2.core;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
@@ -311,7 +311,7 @@ public class ClusterTest
 
         final Cluster otherTopics = Cluster.buildOtherTopics(allDocuments, clusters);
 
-        assertThat(otherTopics.getDocuments()).isEquivalentTo(allDocuments);
+        assertThatDocuments(otherTopics.getDocuments()).isEquivalentTo(allDocuments);
     }
 
     @Test
@@ -331,7 +331,7 @@ public class ClusterTest
 
         final Cluster otherTopics = Cluster.buildOtherTopics(allDocuments, clusters);
 
-        assertThat(otherTopics.getDocuments()).isEquivalentTo(Lists.newArrayList(d1, d3));
+        assertThatDocuments(otherTopics.getDocuments()).isEquivalentTo(Lists.newArrayList(d1, d3));
     }
 
     @Test
@@ -353,7 +353,7 @@ public class ClusterTest
 
         final Cluster otherTopics = Cluster.buildOtherTopics(allDocuments, clusters);
 
-        assertThat(otherTopics.getDocuments()).isEquivalentTo(
+        assertThatDocuments(otherTopics.getDocuments()).isEquivalentTo(
             Lists.<Document> newArrayList());
     }
 }

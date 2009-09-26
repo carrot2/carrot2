@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -94,7 +93,7 @@ public final class CirclesActivator extends AbstractUIPlugin
      * Returns a full URL to the internal built-in HTTP server, based on the
      * relative URI to a resource.
      */
-    private String getFullURL(String relativeURL)
+    String getFullURL(String relativeURL)
     {
         final String base = "http://" + webService.getHost() + ":" + webService.getPort();
         

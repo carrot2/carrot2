@@ -16,7 +16,7 @@ table {
 }
 
 div.logo {
-  background-image: url('carrot2-logo.gif');
+  background-image: url('logo.gif');
   background-position: top right;
   background-repeat: no-repeat;
   padding-right: 55px;
@@ -127,3 +127,32 @@ HR  {
     font-weight:bold;
 }
 
+a.download-small, a.view-small {
+  background-position: 0 4px;
+  background-repeat: no-repeat;
+  padding-bottom: 2px;
+  padding-left: 72px;
+}
+
+a.download-small {
+  background-image: url(button-download-small.png);
+}
+
+a.view-small {
+  background-image: url(button-view-small.png);
+}
+
+h1, h2 {
+  margin-bottom: 0.2em;
+  margin-top: 1em;
+}
+
+p {
+  margin-top: 0;
+}
+
+a.source-link {
+  float:right;
+  position:relative;
+  top:-1em;
+}

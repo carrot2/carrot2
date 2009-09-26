@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,61 +12,24 @@
 
 package org.carrot2.text.analysis;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
+import java.io.Reader;
 
-import org.apache.lucene.analysis.Token;
-import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.TokenStream;
 import org.junit.Test;
 
 /**
  * Test {@link ExtendedWhitespaceTokenizer}.
  */
-public class ExtendedWhitespaceTokenizerTest
+public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
 {
-    /**
-     * Internal class for comparing sequences of tokens.
-     */
-    private static class TokenImage
+    @Override
+    protected TokenStream createTokenStream(Reader reader)
     {
-        final int type;
-        final String image;
-
-        public TokenImage(String image, int type)
-        {
-            this.type = type;
-            this.image = image;
-        }
-
-        @Override
-        public boolean equals(Object o)
-        {
-            if (o instanceof TokenImage)
-            {
-                return (((TokenImage) o).image.equals(this.image) && (((TokenImage) o).type == this.type));
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        @Override
-        public int hashCode()
-        {
-            return image != null ? image.hashCode() ^ type : type;
-        }
-
-        public String toString()
-        {
-            final String rawType = "0x" + Integer.toHexString(type);
-            return "[" + rawType + "] " + this.image;
-        }
+        return new ExtendedWhitespaceTokenizer(reader);
     }
 
     @Test
-    public void TERM()
+    public void testTermTokens()
     {
         String test = " simple simple's simples` terms simpleterm 9numterm numerm99x \"quoted string\"";
         TokenImage [] tokens =
@@ -87,7 +49,7 @@ public class ExtendedWhitespaceTokenizerTest
     }
 
     @Test
-    public void SYMBOL()
+    public void testSymbolTokens()
     {
         String test = " ...  S_NI_P token";
         TokenImage [] tokens =
@@ -102,7 +64,7 @@ public class ExtendedWhitespaceTokenizerTest
     }
 
     @Test
-    public void EMAIL()
+    public void testEmailTokens()
     {
         String test = "e-mails dweiss@go2.pl dawid.weiss@go2.com.pl bubu@some-host.com me@me.org bubu99@yahoo.com";
         TokenImage [] tokens =
@@ -119,7 +81,7 @@ public class ExtendedWhitespaceTokenizerTest
     }
 
     @Test
-    public void URL()
+    public void testUrlTokens()
     {
         String test = " urls http://www.google.com http://www.cs.put.poznan.pl/index.jsp?query=term&query2=term "
             + " ftp://ftp.server.pl www.google.com   not.an.url   go2.pl/mail http://www.digimine.com/usama/datamine/.";
@@ -145,7 +107,7 @@ public class ExtendedWhitespaceTokenizerTest
     }
 
     @Test
-    public void ACRONYM()
+    public void testAcronymTokens()
     {
         String test = " acronyms I.B.M. S.C. z o.o. AT&T garey&johnson&willet";
         TokenImage [] tokens =
@@ -165,7 +127,7 @@ public class ExtendedWhitespaceTokenizerTest
     }
 
     @Test
-    public void NUMERIC()
+    public void testNumericTokens()
     {
         String test = " numeric 127 0 12.87 12,12 12-2003/23 term2003 2003term ";
         TokenImage [] tokens =
@@ -186,7 +148,7 @@ public class ExtendedWhitespaceTokenizerTest
     }
 
     @Test
-    public void NASTY_URL_1()
+    public void testNastyUrlTokens()
     {
         String test = "http://r.office.microsoft.com/r/rlidLiveMeeting?p1=7&amp;p2=en_US&amp;p3=LMInfo&amp;p4=DownloadWindowsConsole "
             + "https://www.livemeeting.com/cc/askme/join?id=58937J&amp;role=present&amp;pw=mNjC%27%25%3D%218";
@@ -232,33 +194,5 @@ public class ExtendedWhitespaceTokenizerTest
         };
 
         assertEqualTokens(test, tokens);
-    }
-
-    /**
-     * Compare expected and produced token sequences.
-     */
-    private static void assertEqualTokens(String testString, TokenImage [] expectedTokens)
-    {
-        try
-        {
-            final Tokenizer tokenizer = new ExtendedWhitespaceTokenizer(new StringReader(
-                testString));
-
-            final ArrayList<TokenImage> tokens = new ArrayList<TokenImage>();
-            Token token;
-            while ((token = tokenizer.next()) != null)
-            {
-                final String image = new String(token.termBuffer(), 0, token.termLength());
-                final ITokenType payload = (ITokenType) token.getPayload();
-
-                tokens.add(new TokenImage(image, payload.getRawFlags()));
-            }
-
-            org.junit.Assert.assertArrayEquals(expectedTokens, tokens.toArray());
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
     }
 }

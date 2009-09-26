@@ -15,6 +15,11 @@
     <searchresult>
       <query><xsl:value-of select="/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='q']" /></query>
       <xsl:apply-templates select="/response/result/doc" />
+      <xsl:if test="/response/result/@numFound">
+        <attribute key="results-total">
+          <value type="java.lang.Long" value="{/response/result/@numFound}" />
+        </attribute>
+      </xsl:if>
     </searchresult>
   </xsl:template>
 
@@ -25,5 +30,4 @@
       <url><xsl:value-of select="*[@name=$solr.url-field]" /></url>
     </document>
   </xsl:template>
-
 </xsl:stylesheet>

@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -25,7 +24,7 @@ import com.google.common.base.*;
 public class IntArrayPredicateIteratorTest
 {
     private final int SEP = -1;
-    private Predicate<Integer> equalsSep = Predicates.isEqualTo(SEP);
+    private Predicate<Integer> equalsSep = Predicates.equalTo(SEP);
 
     @Test
     public void testSimpleCase() {

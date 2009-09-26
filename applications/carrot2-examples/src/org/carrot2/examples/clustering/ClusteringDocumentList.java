@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -19,7 +19,8 @@ import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.examples.ExampleUtils;
+import org.carrot2.examples.ConsoleFormatter;
+import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.text.vsm.LinearTfIdfTermWeighting;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.util.attribute.AttributeUtils;
@@ -27,9 +28,9 @@ import org.carrot2.util.attribute.AttributeUtils;
 /**
  * This example shows how to cluster a set of documents available as an {@link ArrayList}.
  * This setting is particularly useful for quick experiments with custom data for which
- * there is no corresponding {@link DocumentSource} implementation. For production use,
- * it's better to implement a {@link DocumentSource} for the custom document source, so
- * that e.g the {@link CachingController} can cache it, if needed.
+ * there is no corresponding {@link IDocumentSource} implementation. For production use,
+ * it's better to implement a {@link IDocumentSource} for the custom document source, so
+ * that e.g., the {@link CachingController} can cache it, if needed.
  * 
  * @see ClusteringDataFromDocumentSources
  * @see UsingCachingController
@@ -43,7 +44,7 @@ public class ClusteringDocumentList
          * a unique URL (identifier), a title and a snippet (document content), but none
          * of these are obligatory.
          */
-        final List<Document> documents = ExampleUtils.exampleDocuments;
+        final Collection<Document> documents = SampleDocumentData.DOCUMENTS_DATA_MINING;
 
         /*
          * We are clustering using a simple controller (no caching, one-time shot).
@@ -66,7 +67,7 @@ public class ClusteringDocumentList
          */
         ProcessingResult result = controller.process(attributes,
             ByUrlClusteringAlgorithm.class);
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
 
         /*
          * Now we will cluster the same documents using a more complex text clustering
@@ -86,7 +87,7 @@ public class ClusteringDocumentList
          */
         attributes.put(AttributeNames.QUERY, "data mining");
         result = controller.process(attributes, algorithm);
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
 
         /*
          * The ProcessingResult object contains everything that has been contributed to
@@ -107,6 +108,6 @@ public class ClusteringDocumentList
         attributes.put(AttributeNames.QUERY, "data mining");
         attributes.put(AttributeNames.DOCUMENTS, documents);
         result = controller.process(attributes, algorithm);
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
     }
 }

@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,6 +12,7 @@
 
 package org.carrot2.examples.clustering;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.examples.ExampleUtils;
+import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.source.lucene.LuceneDocumentSource;
 import org.carrot2.source.lucene.SimpleFieldMapper;
 import org.carrot2.util.attribute.AttributeUtils;
@@ -74,7 +74,7 @@ public class ClusteringDataFromLucene
         final String contentFieldName = "summary";
 
         luceneGlobalAttributes.put(AttributeUtils.getKey(LuceneDocumentSource.class,
-            "directory"), FSDirectory.getDirectory(indexPath));
+            "directory"), FSDirectory.open(new File(indexPath)));
         luceneGlobalAttributes.put(AttributeUtils.getKey(SimpleFieldMapper.class,
             "titleField"), titleFieldName);
         luceneGlobalAttributes.put(AttributeUtils.getKey(SimpleFieldMapper.class,
@@ -104,6 +104,6 @@ public class ClusteringDataFromLucene
         ProcessingResult process = controller.process(processingAttributes, "lucene",
             LingoClusteringAlgorithm.class.getName());
         
-        ExampleUtils.displayResults(process);
+        ConsoleFormatter.displayResults(process);
     }
 }

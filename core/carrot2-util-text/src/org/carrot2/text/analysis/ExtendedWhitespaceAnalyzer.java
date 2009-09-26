@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -23,23 +22,6 @@ import org.apache.lucene.analysis.TokenStream;
  */
 public final class ExtendedWhitespaceAnalyzer extends Analyzer
 {
-    /*
-     * 
-     */
-    public TokenStream reusableTokenStream(String field, final Reader reader)
-    {
-        /*
-         * Avoid using ThreadLocal in Analyzer so that the context class loader's
-         * reference is not stored in the thread.
-         * 
-         * http://issues.carrot2.org/browse/CARROT-414
-         */
-        return tokenStream(field, reader);
-    }
-
-    /*
-     * 
-     */
     @Override
     public TokenStream tokenStream(String field, Reader reader)
     {

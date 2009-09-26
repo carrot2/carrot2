@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,8 +15,7 @@ package org.carrot2.util.test;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.assertions.AssertExtension;
-import org.fest.assertions.DoubleAssert;
-import org.fest.assertions.DoubleAssert.Delta;
+import org.fest.assertions.Delta;
 
 /**
  * Additional assertions on <code>double []</code> arrays.
@@ -44,7 +42,7 @@ public class DoubleArrayAssert implements AssertExtension
         assertThat(expected).as(description).isNotNull();
         assertThat(actualArray.length).as(description).isEqualTo(expected.length);
 
-        final Delta deltaObject = DoubleAssert.delta(delta);
+        final Delta deltaObject = Delta.delta(delta);
         for (int i = 0; i < expected.length; i++)
         {
             assertThat(actualArray[i]).as(description + "[" + i + "]").isEqualTo(

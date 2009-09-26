@@ -1,0 +1,57 @@
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
+      <label>Yahoo</label>
+      <title>Yahoo Web Search</title>
+      <mnemonic>Y</mnemonic>
+      <description>Searches the web using Yahoo Boss Web Search API</description>
+      <icon-path>icons/yahoo.png</icon-path>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>olympics</example-query>
+        <example-query>London</example-query>
+      </example-queries>
+    </source>
+
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="wiki">
+      <label>Wiki</label>
+      <title>Wikipedia Search (with Yahoo Boss)</title>
+      <mnemonic>k</mnemonic>
+      <description>Searches the Wikipedia web using Yahoo Boss Web Search API</description>
+      <icon-path>icons/wiki.png</icon-path>
+      <example-queries>
+        <example-query>poland</example-query>
+        <example-query>olympics</example-query>
+        <example-query>clustering</example-query>
+      </example-queries>
+    </source>
+    
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-images">
+      <label>Images</label>
+      <title>Yahoo Image Search</title>
+      <mnemonic>I</mnemonic>
+      <description>Searches web images using Yahoo Boss Image Search API</description>
+      <icon-path>icons/yahoo.png</icon-path>
+      <example-queries>
+        <example-query>apple</example-query>
+        <example-query>amiga</example-query>
+        <example-query>president</example-query>
+      </example-queries>
+    </source>
+    
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-news">
+      <label>News</label>
+      <title>Yahoo Boss News Search</title>
+      <description>
+        Yahoo Boss News Search searches news using Yahoo Boss
+        API.
+      </description>
+      <icon-path>icons/yahoo.png</icon-path>
+      <example-queries>
+        <example-query>iphone</example-query>
+        <example-query>iraq</example-query>
+        <example-query>election</example-query>
+      </example-queries>
+    </source>
+  </sources>
+</component-suite>

@@ -103,21 +103,21 @@
     <repository>
       <id>maven2</id>
       <name>maven2</name>
-      <url>http://repo1.maven.org/maven2/</url>
+      <url>http://repo1.maven.org/maven2</url>
     </repository>
 
-    <!-- Dotsrc -->
+    <!-- Codehaus repo -->
     <repository>
-      <id>dotsrc.org</id>
-      <name>dotsrc.org</name>
-      <url>http://mirrors.dotsrc.org/maven2</url>
+      <id>org.codehaus</id>
+      <name>Codehaus repository</name>
+      <url>http://repository.codehaus.org</url>
     </repository>
 
     <!-- Carrot2 Maven2 repo -->
     <repository>
       <id>carrot2.org</id>
       <name>Carrot2 Maven2 repository</name>
-      <url>http://download.carrot2.org/maven2/</url>
+      <url>http://download.carrot2.org/maven2</url>
     </repository>
   </repositories>
 </project>

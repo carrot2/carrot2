@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,23 +13,21 @@
 package org.carrot2.matrix.factorization;
 
 import static org.carrot2.matrix.MatrixAssertions.assertThat;
+import static org.junit.Assume.assumeTrue;
+import static org.carrot2.matrix.NNITestAssumptions.nativeLapackAvailable;
 
 import org.carrot2.matrix.*;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
 import org.carrot2.util.test.Assertions;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junitext.Prerequisite;
-import org.junitext.runners.AnnotationRunner;
 
 import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * Test cases for matrix factorizations.
  */
-@RunWith(AnnotationRunner.class)
-public class MatrixFactorizationTest extends NNITestBase
+public class MatrixFactorizationTest
 {
     /** Factorization parameters */
     private static final int K = 2;
@@ -61,9 +58,10 @@ public class MatrixFactorizationTest extends NNITestBase
     });
 
     @Test
-    @Prerequisite(requires = "nativeLapackAvailable")
     public void testNativeSVD()
     {
+        assumeTrue(nativeLapackAvailable());
+
         NNIInterface.suppressNNI(false);
         PartialSingularValueDecompositionFactory factory = new PartialSingularValueDecompositionFactory();
         factory.setK(2);
@@ -183,31 +181,25 @@ public class MatrixFactorizationTest extends NNITestBase
         DoubleMatrix2D expectedU = NNIDoubleFactory2D.nni.make(new double [] []
         {
             {
-                0, 0.424
+                0.7380, 0
             },
             {
-                0.245, 0.284
+                0, 0.6832
             },
             {
-                0.245, 0.284
+                0, 0.6832
             },
             {
-                0.86, 0
+                0.3481, 0.2575
             },
             {
-                0, 0.332
+                0.5779, 0
             }
         });
 
         DoubleMatrix2D expectedV = NNIDoubleFactory2D.nni.make(new double [] []
         {
             {
-                1, 0
-            },
-            {
-                0, 1
-            },
-            {
                 0, 1
             },
             {
@@ -217,10 +209,16 @@ public class MatrixFactorizationTest extends NNITestBase
                 1, 0
             },
             {
-                0, 1
+                1, 0
+            },
+            {
+                1, 0
             },
             {
                 0, 1
+            },
+            {
+                1, 0
             }
         });
 
@@ -398,7 +396,8 @@ public class MatrixFactorizationTest extends NNITestBase
     private void check(DoubleMatrix2D expectedU, DoubleMatrix2D expectedV,
         IMatrixFactorization factorization)
     {
-        assertThat(factorization.getU()).as("U").isEquivalentTo(expectedU, DELTA);
+        final DoubleMatrix2D u = factorization.getU();
+        assertThat(u).as("U").isEquivalentTo(expectedU, DELTA);
         assertThat(factorization.getV()).as("V").isEquivalentTo(expectedV, DELTA);
     }
 

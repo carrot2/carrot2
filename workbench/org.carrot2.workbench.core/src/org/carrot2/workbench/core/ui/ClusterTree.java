@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -153,7 +152,7 @@ public final class ClusterTree extends Composite implements IPostSelectionProvid
         treeViewer.setLabelProvider(new ClusterLabelProvider());
         treeViewer.setContentProvider(contentProvider);
         treeViewer.setInput(new ArrayList<ClusterWithParent>());
-        treeViewer.setAutoExpandLevel(2);
+        treeViewer.setAutoExpandLevel(1);
     }
 
     public void addSelectionChangedListener(ISelectionChangedListener listener)
@@ -189,5 +188,15 @@ public final class ClusterTree extends Composite implements IPostSelectionProvid
     public void selectionChanged(IWorkbenchPart part, ISelection selection)
     {
         this.treeViewer.setSelection(selection);
+    }
+
+    public void expandAll()
+    {
+        this.treeViewer.expandAll();
+    }
+
+    public void collapseAll()
+    {
+        this.treeViewer.collapseAll();
     }
 }

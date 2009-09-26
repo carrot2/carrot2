@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -32,8 +30,14 @@ public class ComponentSuitesTest
     @Test
     public void testCarrot2DefaultComponentSuite() throws Exception
     {
-        IResource resource = resourceUtils.getFirst("/carrot2-default/suite-dcs.xml",
-            ComponentSuitesTest.class);
+        checkSuite("/suites/suite-dcs.xml");
+        checkSuite("/suites/suite-doc.xml");
+        checkSuite("/suites/suite-workbench.xml");
+    }
+
+    private void checkSuite(final String suitePath) throws Exception
+    {
+        IResource resource = resourceUtils.getFirst(suitePath, ComponentSuitesTest.class);
         assertThat(resource).isNotNull();
         ProcessingComponentSuite suite = ProcessingComponentSuite.deserialize(resource);
 
@@ -47,12 +51,6 @@ public class ComponentSuitesTest
             assertThat(source.getAttributeSets()).isNotNull();
             assertThat(source.getLabel()).isNotEmpty();
             assertThat(source.getTitle()).isNotEmpty();
-
-            if ("yahoo-news".equals(source.getId()))
-            {
-                assertThat(source.getAttributeSets().getAttributeValueSetIds())
-                    .isNotEmpty();
-            }
         }
 
         for (ProcessingComponentDescriptor algorithm : suite.getAlgorithms())

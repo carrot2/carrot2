@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -19,14 +18,14 @@ import java.util.Map;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.examples.ExampleUtils;
+import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.source.boss.*;
 import org.carrot2.source.microsoft.MicrosoftLiveDocumentSource;
 import org.carrot2.util.attribute.AttributeUtils;
 
 /**
  * This example shows how to cluster {@link Document}s retrieved from
- * {@link DocumentSource}s. There are a number of implementations of this interface in the
+ * {@link IDocumentSource}s. There are a number of implementations of this interface in the
  * Carrot2 project, in this example we will cluster results from Microsoft Live (Web
  * search) and Yahoo Boss (news search).
  * <p>
@@ -63,7 +62,7 @@ public class ClusteringDataFromDocumentSources
         ProcessingResult result = controller.process(attributes,
             MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
 
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
 
         /*
          * EXAMPLE 2: fetching from Yahoo BOSS (news search), clustering with Lingo.
@@ -90,6 +89,6 @@ public class ClusteringDataFromDocumentSources
         result = controller.process(attributes, BossDocumentSource.class,
             LingoClusteringAlgorithm.class);
 
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
     }
 }

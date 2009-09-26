@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -50,7 +49,29 @@ class ImplementingClassesConstraint extends Constraint
             return true;
         }
 
-        final Class<?> target = value.getClass();
+        /*
+         * http://issues.carrot2.org/browse/CARROT-536
+         * 
+         * The value of an attribute annotated with @ImplementingClasses
+         * may be a class instance (in which case the binder will create an instance when
+         * initializing the bindable).
+         */
+        final Class<?> target;
+        if (value instanceof Class<?>)
+        {
+            target = (Class<?>) value;
+
+            // TODO: Check for other special cases by simply trying to instantiate target? 
+            if (target.isInterface())
+            {
+                return false;
+            }
+        }
+        else
+        {
+            target = value.getClass();            
+        }
+
         for (final Class<?> clazz : classes)
         {
             if (clazz.isAssignableFrom(target))

@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -18,7 +18,7 @@ import java.util.Map;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.examples.ExampleUtils;
+import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.source.pubmed.PubMedDocumentSource;
 
@@ -59,6 +59,6 @@ public class ClusteringDataFromPubMed
         ProcessingResult result = controller.process(attributes,
             PubMedDocumentSource.class, LingoClusteringAlgorithm.class);
 
-        ExampleUtils.displayResults(result);
+        ConsoleFormatter.displayResults(result);
     }
 }

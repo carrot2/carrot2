@@ -8,7 +8,7 @@
       <setFileField name="dcs.c2stream" fileName="../src-test/xml/carrot2-kaczynski.xml" />
       
       <!-- Wait for AJAX stuff to load -->
-      <sleep seconds="2" />
+      <sleep seconds="5" />
       <clickButton name="submit" />
       <!-- As long as we get 200 code, it's fine. We have more coverage in unit tests. -->
     </webtest>

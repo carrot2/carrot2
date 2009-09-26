@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,6 +13,7 @@
 package org.carrot2.workbench.core.ui;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -56,6 +57,10 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.forms.widgets.*;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.progress.UIJob;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
+import com.google.common.collect.Maps;
 
 /**
  * Editor accepting {@link SearchInput} and performing operations on it. The editor also
@@ -84,18 +89,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         {
             return new File(new File(directory), fileName).getAbsolutePath();
         }
-
-        public static String sanitizeFileName(String anything)
-        {
-            String result = anything.replaceAll("[^a-zA-Z0-9_\\-.\\s]", "");
-            result = result.trim().replaceAll("[\\s]+", "-");
-            result = result.toLowerCase();
-            if (StringUtils.isEmpty(result))
-            {
-                result = "unnamed";
-            }
-            return result;
-        }
     }
 
     /**
@@ -103,51 +96,87 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private SaveOptions saveOptions;
 
-    /*
-     * Memento attributes and sections.
-     */
-
-    private static final String MEMENTO_SECTIONS = "sections";
-    private static final String MEMENTO_SECTION = "section";
-    private static final String SECTION_NAME = "name";
-    private static final String SECTION_WEIGHT = "weight";
-    private static final String SECTION_VISIBLE = "visible";
-
     /**
      * Part property indicating current grouping of attributes on the
-     * {@link SearchEditorSections#ATTRIBUTES}.
+     * {@link PanelName#ATTRIBUTES}.
      */
-    private static final String GROUPING_LOCAL = PreferenceConstants.GROUPING_EDITOR_PANEL
-        + ".local";
+    private static final String GROUPING_LOCAL = 
+        PreferenceConstants.GROUPING_EDITOR_PANEL + ".local";
+
+    /**
+     * Global memento key.
+     */
+    private static final String GLOBAL_MEMENTO_KEY = SearchEditor.class + ".memento";
+
+    /**
+     * {@link SearchEditor} has several panels. These panels are identifier with constants
+     * in this enum. Their visual attributes and preference keys are also configured here.
+     * <p>
+     * These panels are <b>required</b> by {@link SearchEditor} and you should not remove
+     * any of these constants.
+     */
+    public static enum PanelName
+    {
+        CLUSTERS("Clusters", ClusterTreeView.ID), 
+        DOCUMENTS("Documents", DocumentListView.ID), 
+        ATTRIBUTES("Attributes", AttributeView.ID);
+
+        /** Default name. */
+        public final String name;
+
+        /** Icon identifier. */
+        public final String iconID;
+        
+        /** Visibility preference key. */
+        public final String prefKeyVisibility;
+
+        /** Width preference key. */
+        public final String prefKeyWeight;
+
+        private PanelName(String name, String iconID)
+        {
+            this.name = name;
+            this.iconID = iconID;
+
+            final String prefKey = PanelName.class.getName() + "." + name;
+            this.prefKeyVisibility = prefKey + ".visibility";
+            this.prefKeyWeight = prefKey + ".weight";
+        }
+    }    
 
     /**
      * All attributes of a single panel.
      */
-    public final static class SectionReference
+    final static class PanelReference
     {
-        public final Section section;
-        public final int sashIndex;
-        public boolean visibility;
-        public int weight;
+        private final Section section;
+        private final int sashIndex;
+        PanelState state;
 
-        SectionReference(Section self, int sashIndex, boolean v, int w)
+        PanelReference(Section self, int sashIndex)
         {
             this.section = self;
             this.sashIndex = sashIndex;
-            this.visibility = v;
-            this.weight = w;
         }
-
-        public SectionReference(SectionReference other)
-        {
-            this(null, -1, other.visibility, other.weight);
-        }
+    }
+    
+    /**
+     * Panel state.
+     */
+    @Root
+    public final static class PanelState
+    {
+        @Element
+        public int weight;
+        
+        @Element
+        public boolean visibility;
     }
 
     /**
-     * Sections (panels) present inside the editor.
+     * Panels inside the editor.
      */
-    private EnumMap<SearchEditorSections, SectionReference> sections;
+    private EnumMap<PanelName, PanelReference> panels;
 
     /**
      * Search result model is the core model around which all other views revolve
@@ -187,13 +216,13 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private SashForm sashForm;
 
     /**
-     * This editor's restore state information.
+     * This editor's restore state.
      */
-    private IMemento state;
+    private SearchEditorMemento state;
 
     /**
      * {@link SearchEditor} forwards its selection provider methods to this component (
-     * {@link SearchEditorSections#CLUSTERS} panel).
+     * {@link PanelName#CLUSTERS} panel).
      */
     private IPostSelectionProvider selectionProvider;
 
@@ -287,13 +316,12 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                      * Update globally remembered weights.
                      */
                     final int [] weights = sashForm.getWeights();
-                    for (SearchEditorSections s : sections.keySet())
+                    for (PanelReference sr : panels.values())
                     {
-                        SectionReference sr = sections.get(s);
-                        sr.weight = weights[sr.sashIndex];
+                        sr.state.weight = weights[sr.sashIndex];
                     }
 
-                    WorkbenchCorePlugin.getDefault().storeSectionsState(getSections());
+                    saveGlobalPanelsState(getPanelState());
                 }
                 return modified;
             }
@@ -305,11 +333,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         rootForm.getBody().setLayout(layout);
 
         createControls(sashForm);
-        updatePartHeaders();
-
-        sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
         createActions();
+        
+        updatePartHeaders();
+        sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
         /*
          * Hook to post-update events.
@@ -517,54 +544,94 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     public void saveState(IMemento memento)
     {
-        if (memento != null)
+        if (memento == null) return;
+
+        try
         {
-            saveSectionsState(memento, sections);
+            final SearchEditorMemento state = new SearchEditorMemento();
+            state.panels = getPanelState(); 
+            state.sectionsExpansionState = this.attributesPanel.getExpansionStates();
+            SimpleXmlMemento.addChild(memento, state);
+        }
+        catch (IOException e)
+        {
+            Utils.logError(e, false);
+        }
+    }
+
+    /*
+     * 
+     */
+    public void restoreState(IMemento memento)
+    {
+        if (memento == null) return;
+
+        try
+        {
+            this.state = SimpleXmlMemento.getChild(SearchEditorMemento.class, memento);
+        }
+        catch (IOException e)
+        {
+            Utils.logError(e, false);
         }
     }
 
     /**
-     * Creates a custom child in a given memento and persists information from a set of
-     * {@link SectionReference}s.
+     * Save this editor's state as global.
      */
-    final static void saveSectionsState(IMemento memento,
-        EnumMap<SearchEditorSections, SectionReference> sections)
+    void saveAsGlobalState()
     {
-        final IMemento sectionsMemento = memento.createChild(MEMENTO_SECTIONS);
-        for (SearchEditorSections section : sections.keySet())
-        {
-            final SectionReference sr = sections.get(section);
+        saveGlobalPanelsState(getPanelState());
 
-            final IMemento sectionMemento = sectionsMemento.createChild(MEMENTO_SECTION);
-            sectionMemento.putString(SECTION_NAME, section.name());
-            sectionMemento.putInteger(SECTION_WEIGHT, sr.weight);
-            sectionMemento.putString(SECTION_VISIBLE, Boolean.toString(sr.visibility));
+        // Save global sections expansion state (serialized).
+        this.state = new SearchEditorMemento();
+        this.state.panels = getPanelState();
+        this.state.sectionsExpansionState = this.attributesPanel.getExpansionStates();
+        SimpleXmlMemento.toPreferenceStore(GLOBAL_MEMENTO_KEY, state);
+    }
+
+    /**
+     * Save the given panels state as global state. 
+     */
+    public static void saveGlobalPanelsState(Map<PanelName, PanelState> globalState)
+    {
+        final IPreferenceStore prefStore = 
+            WorkbenchCorePlugin.getDefault().getPreferenceStore();
+
+        for (Map.Entry<PanelName, PanelState> e : globalState.entrySet())
+        {
+            prefStore.setValue(e.getKey().prefKeyVisibility, e.getValue().visibility);
+            prefStore.setValue(e.getKey().prefKeyWeight, e.getValue().weight);
         }
     }
 
     /**
-     * Restores partial attributes saved by {@link #saveSectionsState()}
+     * Restore global state shared among editors. 
      */
-    final static void restoreSectionsState(IMemento memento,
-        EnumMap<SearchEditorSections, SectionReference> sections)
+    private static SearchEditorMemento restoreGlobalState()
     {
-        final IMemento sectionsMemento = memento.getChild(MEMENTO_SECTIONS);
-        if (sectionsMemento != null)
-        {
-            for (IMemento sectionMemento : sectionsMemento.getChildren(MEMENTO_SECTION))
-            {
-                final SearchEditorSections section = SearchEditorSections
-                    .valueOf(sectionMemento.getString(SECTION_NAME));
+        SearchEditorMemento memento = SimpleXmlMemento.fromPreferenceStore(
+            SearchEditorMemento.class, GLOBAL_MEMENTO_KEY);
 
-                if (sections.containsKey(section))
-                {
-                    final SectionReference r = sections.get(section);
-                    r.weight = sectionMemento.getInteger(SECTION_WEIGHT);
-                    r.visibility = Boolean.valueOf(sectionMemento
-                        .getString(SECTION_VISIBLE));
-                }
-            }
+        if (memento == null)
+        {
+            memento = new SearchEditorMemento();
+            memento.sectionsExpansionState = Maps.newHashMap();            
         }
+
+        final IPreferenceStore prefStore = 
+            WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        final Map<PanelName, PanelState> panels = Maps.newEnumMap(PanelName.class);
+        for (PanelName n : EnumSet.allOf(PanelName.class))
+        {
+            final PanelState s = new PanelState();
+            s.visibility = prefStore.getBoolean(n.prefKeyVisibility);
+            s.weight = prefStore.getInt(n.prefKeyWeight);
+            panels.put(n, s);
+        }
+        memento.panels = panels;
+
+        return memento;
     }
 
     /*
@@ -573,46 +640,51 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private void restoreState()
     {
         /*
-         * Assign default section weights.
+         * Restore from global state, if possible.
          */
-        for (SearchEditorSections s : sections.keySet())
+        final SearchEditorMemento globalState = restoreGlobalState();
+        for (Map.Entry<PanelName, PanelState> e : globalState.panels.entrySet())
         {
-            sections.get(s).weight = s.weight;
+            panels.get(e.getKey()).state = e.getValue();
         }
+        this.attributesPanel.setExpanded(globalState.sectionsExpansionState);
 
         /*
-         * Restore global sections attributes, if possible.
-         */
-        final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
-        core.restoreSectionsState(sections);
-
-        /*
-         * Restore weights from editor's memento, if possible.
+         * Restore state from this editor's memento, if possible.
          */
         if (state != null)
         {
-            restoreSectionsState(state, sections);
+            for (Map.Entry<PanelName, PanelState> e : state.panels.entrySet())
+            {
+                panels.get(e.getKey()).state = e.getValue();
+            }
+            this.attributesPanel.setExpanded(state.sectionsExpansionState);
         }
 
         /*
          * Update weights and visibility.
          */
         final int [] weights = sashForm.getWeights();
-        for (SearchEditorSections s : sections.keySet())
+        for (Map.Entry<PanelName, PanelReference> e : panels.entrySet())
         {
-            final SectionReference sr = sections.get(s);
-            weights[sr.sashIndex] = sr.weight;
-            setSectionVisibility(s, sr.visibility);
+            final PanelReference p = e.getValue();
+            weights[p.sashIndex] = p.state.weight;
+            setPanelVisibility(e.getKey(), p.state.visibility);
         }
         sashForm.setWeights(weights);
     }
-
-    /*
-     * 
+    
+    /**
+     * Returns the current state of all editor panels.
      */
-    public void restoreState(IMemento memento)
+    Map<PanelName, PanelState> getPanelState()
     {
-        state = memento;
+        final HashMap<PanelName, PanelState> m = Maps.newHashMap();
+        for (Map.Entry<PanelName, PanelReference> e : panels.entrySet())
+        {
+            m.put(e.getKey(), e.getValue().state);
+        }
+        return m;
     }
 
     /*
@@ -655,9 +727,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         if (newOptions == null)
         {
             newOptions = new SaveOptions();
-            newOptions.fileName = SaveOptions
-                .sanitizeFileName(getFullInputTitle(getSearchResult()))
-                + ".xml";
+            newOptions.fileName = 
+                FileDialogs.sanitizeFileName(getFullInputTitle(getSearchResult())) + ".xml";
         }
 
         final Shell shell = this.getEditorSite().getShell();
@@ -741,23 +812,12 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     }
 
     /**
-     * Returns a map of this editor's panels ({@link SectionReference}s). This map and its
-     * objects are considered <b>read-only</b>.
-     * 
-     * @see #setSectionVisibility(SearchEditorSections, boolean)
-     */
-    EnumMap<SearchEditorSections, SectionReference> getSections()
-    {
-        return sections;
-    }
-
-    /**
      * Shows or hides a given panel.
      */
-    public void setSectionVisibility(SearchEditorSections section, boolean visible)
+    public void setPanelVisibility(PanelName panel, boolean visible)
     {
-        sections.get(section).visibility = visible;
-        sections.get(section).section.setVisible(visible);
+        panels.get(panel).state.visibility = visible;
+        panels.get(panel).section.setVisible(visible);
         sashForm.layout();
     }
 
@@ -793,40 +853,10 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     {
         final IToolBarManager toolbar = rootForm.getToolBarManager();
 
-        // Auto update action.
-        final IWorkbenchWindow window = getSite().getWorkbenchWindow();
-        toolbar.add(WorkbenchActionFactory.AUTO_UPDATE_ACTION.create(window));
-
-        // Attribute grouping.
-        final String globalPreferenceKey = PreferenceConstants.GROUPING_EDITOR_PANEL;
-
-        toolbar.add(new GroupingMethodAction(GROUPING_LOCAL, this));
-
-        // Update global preferences when local change.
-        addPartPropertyListener(new PropertyChangeListenerAdapter(GROUPING_LOCAL)
-        {
-            protected void propertyChangeFiltered(PropertyChangeEvent event)
-            {
-                final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault()
-                    .getPreferenceStore();
-
-                final String currentValue = getPartProperty(GROUPING_LOCAL);
-                prefStore.setValue(globalPreferenceKey, currentValue);
-
-                updateGroupingState(GroupingMethod.valueOf(currentValue));
-                Utils.adaptToFormUI(toolkit, attributesPanel);
-
-                if (!sections.get(SearchEditorSections.ATTRIBUTES).visibility)
-                {
-                    setSectionVisibility(SearchEditorSections.ATTRIBUTES, true);
-                }
-            }
-        });
-
         // Choose visible panels.
-        final IAction selectSectionsAction = new SearchEditorPanelsAction(
+        final IAction selectPanelsAction = new SearchEditorPanelsAction(
             "Choose visible panels", this);
-        toolbar.add(selectSectionsAction);
+        toolbar.add(selectPanelsAction);
 
         toolbar.update(true);
     }
@@ -847,13 +877,12 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private void createControls(SashForm parent)
     {
         /*
-         * Create and add sections in order of their declaration in the enum type.
+         * Create and add panels in order of their declaration in the enum type.
          */
-        this.sections = new EnumMap<SearchEditorSections, SectionReference>(
-            SearchEditorSections.class);
+        this.panels = Maps.newEnumMap(PanelName.class);
 
         int index = 0;
-        for (final SearchEditorSections s : EnumSet.allOf(SearchEditorSections.class))
+        for (final PanelName s : EnumSet.allOf(PanelName.class))
         {
             final Section section;
             switch (s)
@@ -871,21 +900,19 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                     break;
 
                 default:
-                    throw new RuntimeException("Unhandled section: " + s);
+                    throw new RuntimeException("Unknown section: " + s);
             }
 
-            final SectionReference sr = new SectionReference(section, index, true, 0);
-            sections.put(s, sr);
-
-            index++;
+            final PanelReference sr = new PanelReference(section, index++);
+            panels.put(s, sr);
         }
 
         /*
          * Set up selection event forwarding. Install the editor as selection provider for
          * the part.
          */
-        final ClusterTree tree = (ClusterTree) getSections().get(
-            SearchEditorSections.CLUSTERS).section.getClient();
+        final ClusterTree tree = 
+            (ClusterTree) panels.get(PanelName.CLUSTERS).section.getClient();
 
         this.selectionProvider = new SearchEditorSelectionProxy(this, tree);
         this.getSite().setSelectionProvider(this);
@@ -919,8 +946,8 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          * Install a synchronization agent between the current selection in the editor and
          * the document list panel.
          */
-        final DocumentList documentList = (DocumentList) getSections().get(
-            SearchEditorSections.DOCUMENTS).section.getClient();
+        final DocumentList documentList =
+            (DocumentList) panels.get(PanelName.DOCUMENTS).section.getClient();
         documentListSelectionSync = new DocumentListSelectionSync(documentList, this);
         resources.registerPostSelectionChangedListener(this, documentListSelectionSync);
 
@@ -944,7 +971,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private Section createClustersPart(Composite parent, IWorkbenchSite site)
     {
-        final SearchEditorSections section = SearchEditorSections.CLUSTERS;
+        final PanelName section = PanelName.CLUSTERS;
         final Section sec = createSection(parent);
         sec.setText(section.name);
 
@@ -971,6 +998,19 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         });
 
         sec.setClient(clustersTree);
+
+        // Add expand/collapse action to the toolbar.
+        final ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
+        final ToolBar toolbar = toolBarManager.createControl(sec);
+
+        final IAction expanderAction = new ActionDelegateProxy(
+            new ClusterTreeExpanderAction(clustersTree, this.getSearchResult()), 
+            IAction.AS_PUSH_BUTTON);
+
+        toolBarManager.add(expanderAction);
+        toolBarManager.update(true);
+        sec.setTextClient(toolbar);
+
         return sec;
     }
 
@@ -979,7 +1019,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private Section createDocumentsPart(Composite parent, IWorkbenchSite site)
     {
-        final SearchEditorSections section = SearchEditorSections.DOCUMENTS;
+        final PanelName section = PanelName.DOCUMENTS;
         final Section sec = createSection(parent);
         sec.setText(section.name);
 
@@ -1006,7 +1046,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     private Section createAttributesPart(Composite parent, IWorkbenchSite site)
     {
-        final SearchEditorSections section = SearchEditorSections.ATTRIBUTES;
+        final PanelName section = PanelName.ATTRIBUTES;
         final Section sec = createSection(parent);
         sec.setText(section.name);
 
@@ -1066,6 +1106,51 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         };
         getSearchResult().getInput().addAttributeListener(editorToPanelSync);
 
+        /*
+         * Add toolbar actions.
+         */
+        final ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
+        final ToolBar toolbar = toolBarManager.createControl(sec);
+
+        // Auto update.
+        final IWorkbenchWindow window = getSite().getWorkbenchWindow();
+        toolBarManager.add(WorkbenchActionFactory.AUTO_UPDATE_ACTION.create(window));
+
+        // Attribute grouping.
+        final IAction attributesAction = new GroupingMethodAction(GROUPING_LOCAL, this);
+        toolBarManager.add(attributesAction);
+        
+        // Save/ load attributes.
+        final IAction saveLoadAction = new SaveAlgorithmAttributesAction(getSearchResult().getInput());
+        toolBarManager.add(saveLoadAction);
+
+        toolBarManager.update(true);
+        sec.setTextClient(toolbar);
+
+        /*
+         * Update global preferences when local change.
+         */
+        final String globalPreferenceKey = PreferenceConstants.GROUPING_EDITOR_PANEL;
+        addPartPropertyListener(new PropertyChangeListenerAdapter(GROUPING_LOCAL)
+        {
+            protected void propertyChangeFiltered(PropertyChangeEvent event)
+            {
+                final IPreferenceStore prefStore = WorkbenchCorePlugin.getDefault()
+                    .getPreferenceStore();
+
+                final String currentValue = getPartProperty(GROUPING_LOCAL);
+                prefStore.setValue(globalPreferenceKey, currentValue);
+
+                updateGroupingState(GroupingMethod.valueOf(currentValue));
+                Utils.adaptToFormUI(toolkit, attributesPanel);
+
+                if (!panels.get(PanelName.ATTRIBUTES).state.visibility)
+                {
+                    setPanelVisibility(PanelName.ATTRIBUTES, true);
+                }
+            }
+        });
+        
         /*
          * Perform GUI adaptations.
          */

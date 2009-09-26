@@ -33,7 +33,7 @@ body, input, select, label, button {
 
 /** Startup screen */
 #startup #logo {
-  background-image: url('../img/c2-logo-startup.png'); /** sprite-ref: vert; */
+  background-image: url('../img/c2-logo-startup.png'); /** sprite-ref: vert; sprite-margin-bottom: 16px; */
   top: 107px;
   left: 100px;
 }
@@ -41,7 +41,7 @@ body, input, select, label, button {
 #startup #logo,
 #startup #logo a {
   width: 124px;
-  height: 113px;
+  height: 129px;
 }
 
 #startup #main-area-inside {

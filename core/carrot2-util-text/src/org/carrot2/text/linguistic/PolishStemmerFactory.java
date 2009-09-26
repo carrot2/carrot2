@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,6 +13,10 @@
 package org.carrot2.text.linguistic;
 
 import org.apache.log4j.Logger;
+import java.util.List;
+
+import morfologik.stemming.WordData;
+
 import org.carrot2.util.ReflectionUtils;
 
 
@@ -41,30 +45,30 @@ final class PolishStemmerFactory
      */
     private static class MorfologikStemmerAdapter implements IStemmer
     {
-        private final morfologik.stemmers.IStemmer stemmer;
+        private final morfologik.stemming.IStemmer stemmer;
 
         public MorfologikStemmerAdapter()
             throws Exception
         {
-            final String stemmerClazzName = "morfologik.stemmers.Lametyzator";
+            final String stemmerClazzName = "morfologik.stemming.PolishStemmer";
 
-            final Class<? extends morfologik.stemmers.IStemmer> stemmerClazz = 
+            final Class<? extends morfologik.stemming.IStemmer> stemmerClazz = 
                 ReflectionUtils.classForName(stemmerClazzName)
-                .asSubclass(morfologik.stemmers.IStemmer.class);
+                .asSubclass(morfologik.stemming.IStemmer.class);
 
             this.stemmer = stemmerClazz.newInstance();
         }
 
         public CharSequence stem(CharSequence word)
         {
-            final String [] stems = stemmer.stem(word.toString());
-            if (stems == null || stems.length == 0)
+            final List<WordData> stems = stemmer.lookup(word);
+            if (stems == null || stems.size() == 0)
             {
                 return null;
             }
             else
             {
-                return stems[0];
+                return stems.get(0).getStem().toString();
             }
         }
     }

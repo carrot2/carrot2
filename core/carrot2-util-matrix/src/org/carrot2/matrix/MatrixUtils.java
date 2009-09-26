@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -376,5 +375,11 @@ public class MatrixUtils
     public static double l1Norm(DoubleMatrix1D vector)
     {
         return vector.aggregate(Functions.plus, Functions.identity);
+    }
+    
+    
+    public static DoubleMatrix1D columnCentroid(DoubleMatrix2D matrix)
+    {
+        return null;
     }
 }

@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -59,11 +58,11 @@ final class YSearchResponse
                     final Document document = new Document(result.title, result.summary,
                         result.url);
 
-                    document.addField(Document.CLICK_URL, result.clickURL);
+                    document.setField(Document.CLICK_URL, result.clickURL);
 
                     try
                     {
-                        document.addField(Document.SIZE, Long.parseLong(result.size));
+                        document.setField(Document.SIZE, Long.parseLong(result.size));
                     }
                     catch (NumberFormatException e)
                     {
@@ -86,10 +85,10 @@ final class YSearchResponse
                     final Document document = new Document(result.title, result.summary,
                         result.url);
 
-                    document.addField(Document.CLICK_URL, result.clickURL);
+                    document.setField(Document.CLICK_URL, result.clickURL);
                     if (StringUtils.isNotBlank(result.source))
                     {
-                        document.addField(Document.SOURCES, Lists.newArrayList(result.source));
+                        document.setField(Document.SOURCES, Lists.newArrayList(result.source));
                     }
                     response.results.add(document);
                 }
@@ -107,10 +106,10 @@ final class YSearchResponse
                     final Document document = new Document(result.title, result.summary, result.refererURL);
 
                     // We use the image's referer page as the target click for the title.
-                    document.addField(Document.CLICK_URL, result.refererClickURL);
+                    document.setField(Document.CLICK_URL, result.refererClickURL);
 
                     // Attach thumbnail URL.
-                    document.addField(Document.THUMBNAIL_URL, result.thumbnailURL);
+                    document.setField(Document.THUMBNAIL_URL, result.thumbnailURL);
                     response.results.add(document);
                 }
             }

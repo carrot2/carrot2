@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -29,12 +27,16 @@ import com.google.common.collect.Sets;
  * This controller is useful for one-time processing either with existing component
  * instances or classes of components to be created for processing. In case component
  * classes are used, for <b>each query</b> the controller creates, initializes and
- * destroys instances of all components involved in the processing.
+ * destroys instances of all components involved in the processing. For long-running
+ * applications (e.g. web applications) please consider the {@link CachingController},
+ * which offers processing component pooling and result caching.
  * <p>
- * Thread-safety of processing on instantiated component instances is not enforced in any
- * way and must be assured externally. Processing on component classes is thread safe, but
- * there is an additional overhead of creating new component instances for each query
- * (which may or may not be a performance issue, this depends on a given component).
+ * Thread-safety of processing on instantiated component (
+ * {@link #process(Map, IProcessingComponent...)}) instances is not enforced in any way
+ * and must be assured externally. Processing on component classes (
+ * {@link #process(Map, Class...)}) is thread safe, but there is an additional overhead of
+ * creating new component instances for each query (which may or may not be a performance
+ * issue, this depends on a given component).
  */
 public final class SimpleController implements IController
 {

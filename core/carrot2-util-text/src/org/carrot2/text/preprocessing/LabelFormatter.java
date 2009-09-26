@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,6 +11,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.attribute.Bindable;
 
@@ -39,6 +38,7 @@ public class LabelFormatter
         }
         else
         {
+            final boolean insertSpace = context.language.getLanguageCode() != LanguageCode.CHINESE_SIMPLIFIED;
             final int [] wordIndices = phrasesWordIndices[featureIndex - wordCount];
             final boolean [] commonTermFlag = context.allWords.commonTermFlag;
             for (int i = 0; i < wordIndices.length; i++)
@@ -46,7 +46,7 @@ public class LabelFormatter
                 final int wordIndex = wordIndices[i];
                 appendFormatted(label, wordsImage[wordIndex], i == 0,
                     commonTermFlag[wordIndex]);
-                if (i < wordIndices.length - 1)
+                if (insertSpace && i < wordIndices.length - 1)
                 {
                     label.append(' ');
                 }
@@ -64,8 +64,12 @@ public class LabelFormatter
      * @param image images of the words making the label.
      * @param stopWord determines whether the corresponding word of the label is a stop
      *            word
+     * @param joinWithSpace if <code>true</code>, label tokens will be joined with a space
+     *            character, if <code>false</code>, no extra characters will be inserted
+     *            between label tokens.
      */
-    public static String format(char [][] image, boolean [] stopWord)
+    public static String format(char [][] image, boolean [] stopWord,
+        boolean joinWithSpace)
     {
         final StringBuilder label = new StringBuilder();
         if (image.length == 1)
@@ -77,7 +81,7 @@ public class LabelFormatter
             for (int i = 0; i < image.length; i++)
             {
                 appendFormatted(label, image[i], i == 0, stopWord[i]);
-                if (i < image.length - 1)
+                if (joinWithSpace && i < image.length - 1)
                 {
                     label.append(' ');
                 }

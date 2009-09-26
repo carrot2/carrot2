@@ -1,12 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 #set ( $page = ${request.getParameter("page")} )
-#set ( $swf = "org.carrotsearch.vis.circles.swf" )
-
 #set ( $source = "servlets/pull?page=" + $page )
-#set ( $selectionCallback = "servlets/select?action=group&page=" + $page )
-#set ( $selectionClearedCallback = "servlets/select?action=clear&page=" + $page )
-#set ( $documentClickedCallback = "servlets/select?action=document&page=" + $page )
+#set ( $swf = "org.carrotsearch.vis.circles.swf" )
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
@@ -24,16 +20,12 @@
 		<script type="text/javascript" src="js/hooks.js"></script>
 
 		<script type="text/javascript">
-			var selectionCallback = "$selectionCallback";
-			var selectionClearedCallback = "$selectionClearedCallback";
-			var documentClickedCallback = "$documentClickedCallback";
-
 			/* Publish SWF using the dynamic embedding method. */
 			var flashvars = {
 				data_sourceURL: "$source",
-				callback_onGroupClick: "groupClicked",
-		        callback_onDocumentClick: "documentClicked",
-		        callback_onSelectionClear: "selectionCleared"
+				callback_onGroupClick: "swt_groupClicked",
+		        callback_onDocumentClick: "swt_documentClicked",
+		        callback_onSelectionClear: "swt_selectionCleared"
 			};
 			var params = {};
 			var attributes = {};

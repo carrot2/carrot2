@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -84,7 +83,7 @@ public class QueryWordHighlighterTest
     private void check(String query, String snippetToHighlight, String expectedSnippet)
     {
         final Document document = new Document();
-        document.addField(Document.SUMMARY, snippetToHighlight);
+        document.setField(Document.SUMMARY, snippetToHighlight);
 
         final QueryWordHighlighter highlighter = new QueryWordHighlighter();
         highlighter.documents = Lists.newArrayList(document);

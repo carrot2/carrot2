@@ -15,12 +15,13 @@
 	<!-- sets the properties eclipse-home, and library-file -->
 	<property name="plugin-name" value="org.carrot2.workbench.core.test" />
 
+  <import file="${org.carrot2.antlib}/build.xml" />
+
 	<!-- This target holds all initialization code that needs to be done for -->
 	<!-- all tests that are to be run. Initialization for individual tests -->
 	<!-- should be done within the body of the suite target. -->
-	<target name="init">
+	<target name="init" depends="carrot2.common.antlib.tasks">
 		<fail unless="eclipse-home">'eclipse-home' property must be privided.</fail>
-		<fail unless="org.carrot2.antlib">'org.carrot2.antlib' property must be privided.</fail>
 		<tstamp />
 		<delete>
 			<fileset dir="${eclipse-home}" includes="org*.xml" />
@@ -29,14 +30,6 @@
 
 	<!-- This target defines the tests that need to be run. -->
 	<target name="suite" depends="init">
-		<ant dir="${org.carrot2.antlib}" antfile="build.xml" target="jar" />
-
-		<taskdef resource="org.carrot2.antlib.xml">
-			<classpath>
-				<pathelement location="${org.carrot2.antlib}/org.carrot2.antlib.jar" />
-			</classpath>
-		</taskdef>
-
 		<findVersion property="eclipse.test.plugin"
 		             eclipsehome="${eclipse-home}"
 		             pluginid="org.eclipse.test"
@@ -52,6 +45,17 @@
 			<property name="data-dir" value="${eclipse-home}/data" />
 			<property name="junit-report-output" value="${raw-output-dir}" />
 		</ant>
+
+                <!-- Tests that require the GUI should be here (although they won't run in headless mode).
+
+                <ant target="ui-test" antfile="${library-file}" dir="${eclipse-home}">
+                  <property name="plugin-name" value="${plugin-name}" />
+                  <property name="classname"
+                            value="org.carrot2.workbench.core.AllTests" />
+                  <property name="data-dir" value="${eclipse-home}/data" />
+                  <property name="junit-report-output" value="${raw-output-dir}" />
+                </ant>
+                -->
 	</target>
 
 	<!-- This target holds code to cleanup the testing environment after -->

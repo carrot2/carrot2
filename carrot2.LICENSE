@@ -1,8 +1,7 @@
 
 Carrot2 Project
 
-Copyright (C) 2002-2008, Dawid Weiss, Stanis�aw Osi�ski.
-Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -15,17 +14,14 @@ are permitted provided that the following conditions are met:
   list of conditions and the following  disclaimer in  the documentation  and/or
   other materials provided with the distribution. 
 
-- Neither the name  of the Poznan University  of Technology, Poznan, Poland  nor
-  the names  of  its contributors may  be used  to endorse  or promote  products 
-  derived from this software without specific prior written permission.
+- Neither the name  of the Carrot2 Project  nor  the names  of  its contributors 
+  may  be used  to endorse  or  promote  products derived   from  this  software 
+  without specific prior written permission.
 
-- We request that  you include in the  end-user documentation provided with  the
-  redistribution and/or in the software itself  an acknowledgement equivalent to
-  the following: "This  product  includes  software  developed  by  the  Carrot2
+- We kindly request that you include in the end-user documentation provided with
+  the redistribution and/or in the software itself an acknowledgement equivalent 
+  to  the  following:  "This product includes  software developed by the Carrot2 
   Project."
-  
-- No algorithms or technical solutions in the project may be patented or claimed
-  proprietary.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  AND
 ANY EXPRESS OR  IMPLIED WARRANTIES, INCLUDING,  BUT NOT LIMITED  TO, THE IMPLIED

@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<chapter xml:id="chapter.tuning" version="5.0"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:product="http://www.carrot2.org">
+  <title>Tuning clustering</title>
+  <subtitle>Fine-tuning &PROD; clustering</subtitle>
+
+  <para>
+    This chapter discusses a number of typical fine-tuning scenarios for &PROD; clustering
+    algorithms. Some of the scenarios are relevant to all &PROD; algorithms, while others
+    are specific to individual algorithms.
+  </para>
+
+  <section xml:id="section.advanced-topics.fine-tuning.input-documents-characteristics">
+    <title>Desirable characteristics of documents for clustering</title>
+    
+    <para>
+      The quality of clusters and their labels largely depends on the 
+      characteristics of documents provided on the input. Although there is no general
+      rule for optimum document content, below are some tips worth considering.
+    </para>
+    
+    <itemizedlist>
+      <listitem>
+        <formalpara>
+          <title>&PROD; is designed for small to medium collections of documents.</title>
+          
+          <para>
+            The most important characteristic of &PROD; algorithms to keep in mind is
+            that they perform in-memory clustering. For this reason, as a rule of
+            thumb, &PROD; should successfully deal with up to a thousand of
+            documents, a few paragraphs each. For algorithms designed to process
+            millions of documents, you may want to check out the 
+            <link xlink:href="http://lucene.apache.org/mahout/">Mahout</link> project.
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Provide a minimum of 20 documents.</title>
+          
+          <para>
+            &PROD; clustering algorithms will work best with a set of documents similar
+            to what is normally returned by a typical search engine. While about 20 is the
+            minimum number of documents you can reasonably cluster, the optimum would fall
+            in the 100 &ndash; 500 range. 
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Provide contextual snippets if possible.</title>
+          
+          <para>
+            If the input documents are a result of some search query, provide
+            contextual snippets related to that query, similar
+            to what web search engines return, instead of full document content. Not only
+            will this speed up processing, but also should help the clustering
+            algorithm to cover the full spectrum of topics dealt with in the search results. 
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Minimize "noise" in the input documents.</title>
+          
+          <para>
+            All kinds of "noise" in the documents, such as truncated sentences (sometimes resulting from 
+            contextual snippet extraction suggested above) or random alphanumerical strings
+            may decrease the quality of cluster labels. If you have access to e.g. a few
+            sentences' abstract of each document, it is worth checking the quality of 
+            clustering based on those abstracts. If you can combine this with the
+            previous tip, i.e. extract complete sentences matching user's query, this
+            should improve the clusters even further.  
+          </para>
+        </formalpara>
+      </listitem>
+    </itemizedlist>
+      
+      <para>
+        Let us once again stress that there are no definite generic guidelines for
+        the best content for clustering, <emphasis role="bold">it is always worth 
+        experimenting with different combinations.</emphasis> You can also describe 
+        your specific application on &PROD; mailing list and ask for advice.
+      </para>
+  </section>
+   
+  <section xml:id="section.advanced-topics.fine-tuning.stop-words">
+    <title>Modifying the list of stop words</title>
+    
+    <para>
+      Stop words are the common meaningless words, such as <emphasis>the</emphasis>, 
+      <emphasis>to</emphasis>, <emphasis>for</emphasis> in English, that should be 
+      ignored while clustering. The Lingo algorithm, for example, will not create
+      clusters whose labels start or end in a stop word.
+    </para>
+    
+    <para>
+      To fine-tune the stop words list you can use the 
+      <link linkend="section.workbench">&DCW;</link> in the following way:
+    </para>
+    
+    <orderedlist>
+      <listitem>
+        <para>
+          Start &DCW; and run some query on which you'll be observing the results
+          of your changes.
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Go to the <filename>workspace/</filename> directory which is located in
+          the directory to which you extracted &DCW;. Modify the <filename>stopwords.*</filename>
+          file for the language you are working on (e.g. <filename>stopwords.en</filename>
+          for English). Add or remove stop words as required and save changes.
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Open the <guilabel>Attributes</guilabel> view in &DCW; and use the view's toolbar
+          button shown in <xref linkend="figure.preprocessing-attributes" /> 
+          to group the attributes by semantics. In the <guilabel>Preprocessing</guilabel>
+          make sure the <guilabel>Processing language</guilabel> is correctly set and
+          check the <guilabel>Reload stopwords</guilabel> checkbox. Doing the latter
+          will let you to see the updated clustering results without restarting &DCW;
+          every time you save the changed stop word list.
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          To re-run clustering after
+          you've saved changes to the <filename>stopwords.*</filename>, choose the
+          <guilabel>Restart Clustering</guilabel> option from the <guilabel>Search</guilabel>
+          menu, or press <guilabel>Ctrl+F11</guilabel>.
+        </para>
+      </listitem>
+    </orderedlist>
+    
+    <figure xml:id="figure.preprocessing-attributes">
+      <title>&DCW; Preprocessing Attributes</title>
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata format="PNG" fileref="img/workbench-preprocessing-attributes.png" />
+        </imageobject>
+      </mediaobject>  
+    </figure>
+    
+    <tip>
+      <para>
+        To transfer the changed stop words file to other &C2; applications, update
+        the existing stop words file in the <filename>carrot2-core.jar</filename> the application
+        is using. In case of the &DCS; and &WA;, the <filename>carrot2-core.jar</filename> is located
+        in the <filename>WEB-INF/lib</filename> directory.
+      </para>
+    </tip>
+  </section>
+    
+  <section xml:id="section.advanced-topics.fine-tuning.stop-regexps">
+    <title>Excluding specific clusters from results</title>
+    
+    <para>
+      The Lingo clustering algorithm, in addition to 
+      <link linkend="section.advanced-topics.fine-tuning.stop-words">stop words editing</link>,
+      offers more precise control over cluster labels by means of "stop label" regular expressions. 
+      If a cluster's label matches one of the stop labels, the label will not appear 
+      on the list of clusters produced by Lingo.
+    </para>
+    
+    <para>
+      The procedure for tuning stop labels and transferring them to other &C2; applications is similar to 
+      <link linkend="section.advanced-topics.fine-tuning.stop-words">stop word tuning</link>.
+      The difference is that this time you need to edit the <filename>stoplabels.*</filename> files.
+      Each line of a stop labels file corresponds to one stop label and is a <link xlink:href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html">Java regular
+      expression</link>. Please note that in order to be removed, a label <emphasis>as a whole</emphasis> must match 
+      at least one of the stop label expressions. A number of example
+      stop label expressions are shown below.
+    </para>
+    
+    <programlisting>(?i)new
+(?i)information
+(?i)information (about|on).*
+(?i)(index|list) of.*</programlisting>
+
+    <para>
+      All stop labels shown above start with the <tag>(?i)</tag> prefix, which enables 
+      case-insensitive matching for them. The stop label in the first line suppresses 
+      labels consisting solely of the word <emphasis>new</emphasis>. Similarly, the stop label
+      in the second line removes labels consisting of the word <emphasis>information</emphasis>.
+      The stop label in the third line removes labels that start in <emphasis>information about</emphasis>
+      or <emphasis>information on</emphasis>, and the stop label in the fourth line removes
+      labels that start with <emphasis>index of</emphasis> or <emphasis>list of</emphasis>. 
+    </para>
+    
+    <note>
+      <para>
+        Please note that defining a very large number of stop labels (100+) may 
+        significantly slow down clustering. In such cases you may want to combine
+        separate stop label expressions into one larger regular expression.
+      </para>
+    </note>
+  </section>
+    
+  <section xml:id="section.advanced-topics.fine-tuning.reducing-other-topics">
+    <title>Reducing the size of the <emphasis>Other Topics</emphasis> cluster</title>
+    
+    <para>
+      The <emphasis>Other Topics</emphasis> cluster contains documents that do not belong
+      to any other cluster generated by the algorithm. Depending on the input documents, the size of
+      this cluster may vary from a few to tens of documents.
+    </para>
+    
+    <para>
+      By tuning parameters of the clustering algorithm, you can reduce the number of
+      unclustered documents, however bringing the number down to 0 is unachievable in most cases.
+      Please note that minimizing the <emphasis>Other Topics</emphasis> cluster size is usually achieved
+      by forcing the algorithm to create more clusters, which may degrade the perceived
+      clustering quality.
+    </para>
+    
+    <tip>
+      <para>
+        The easiest way to try different clustering algorithm settings is to use
+        the <link linkend="section.workbench">&DCW;</link>.
+      </para>
+    </tip>
+    
+    <!-- Single-level subsections are discouraged. Do we need to have this one? -->
+    <simplesect>
+      <title>Tuning Lingo algorithm for smallest <emphasis>Other Topics</emphasis> cluster</title>
+
+      <para>
+        To reduce the size of the <emphasis>Other Topics</emphasis> cluster generated
+        by Lingo, you can try applying the following settings:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Change the <link linkend="LingoClusteringAlgorithm.factorizationFactory" role="attribute" /> attribute
+            to <classname>LocalNonnegativeMatrixFactorizationFactory</classname>.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Increase the <link linkend="LingoClusteringAlgorithm.desiredClusterCountBase" role="attribute" />
+            above the default value.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Decrease the <link linkend="LingoClusteringAlgorithm.phraseLabelBoost" role="attribute" />.
+            Note that this will increase the number of one-word labels, which may not always
+            be desirable.
+          </para>
+        </listitem>
+      </orderedlist>
+    
+      <tip>
+        <para>
+          To apply the changes &C2; applications, please follow instructions from
+          <xref linkend="chapter.customizing" />.
+        </para>
+      </tip>
+    </simplesect>
+  </section>
+
+  <section xml:id="section.workbench.benchmarking">
+    <title>Benchmarking clustering performance</title>
+
+    <para>
+      You can use the &DCW; to run simple performance benchmarks of &PROD;. The benchmarks
+      repeatedly cluster the content of the currently opened editor and report the average 
+      clustering time. You can use the benchmarking results to measure the impact of different
+      algorithm's attribute settings on its performance and estimate the 
+      the maximum number of clustering requests that the algorithm can process per second. 
+    </para>
+
+    <para>
+      To perform a performance benchmark:
+    </para>
+    
+    <orderedlist>
+      <listitem>
+        <simpara>
+          In the <guilabel>Search</guilabel> view, choose the algorithm to benchmark and 
+          perform the query to be used for benchmarking. 
+        </simpara>
+      </listitem>
+      
+      <listitem>
+        <simpara>
+          Open the <guilabel>Benchmark</guilabel> view. 
+        </simpara>
+        
+        <figure xml:id="figure.benchmark-view">
+          <title>&DCW; Benchmark view</title>
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata format="PNG" fileref="img/workbench-benchmark-view.png" />
+            </imageobject>
+          </mediaobject>  
+        </figure>
+      </listitem>
+      
+      <listitem>
+        <simpara>
+          Press <guibutton>Start</guibutton> to start the benchmark. After the benchmark
+          completes, you should see the measured clustering time average, standard deviation,
+          minimum and maximum.
+        </simpara>
+      </listitem>
+    </orderedlist>
+
+    <tip>
+      <para>
+        To asses the performance impact of different attribute settings on one algorithm, you can
+        open two or more editors with the same results clustered by the algorithm, set
+        different attribute values in each editor and run benchmarking for each editor
+        separately. The benchmark view remembers the last result for each editor, so you 
+        can compare the performance figures by simply switching between the editors.
+      </para>
+    </tip>
+
+    <tip>
+      <para>
+        By default, the benchmarking view uses only a single processing unit on multi-processor or
+        multi-core machines. You can increase the number of benchmark threads in the
+        <guilabel>Threads</guilabel> section. 
+      </para>
+    </tip>
+
+    <caution>
+      <para>
+        Benchmark results may vary and be different from the results acquired on production machines
+        due to other programs running in the background, operating system, 
+        hardware-specific considerations and even different Java Virtual Machine settings. Always fine-tune your
+        clustering setup in the target deployment environment. 
+      </para>
+    </caution>    
+  </section>
+</chapter>
+

@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -24,7 +23,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.*;
 
 /**
- * <p>
  * Instances of this class constitute the input to a search/clustering process (required
  * when opening a new editor).
  */
@@ -133,7 +131,7 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
     }
 
     /**
-     * @see WorkbenchCorePlugin#getComponentImageDescriptor(String);
+     * @see WorkbenchCorePlugin#getComponentImageDescriptor(String)
      */
     public ImageDescriptor getImageDescriptor()
     {

@@ -1,0 +1,13 @@
+<!-- Components included in all applications -->
+<component-suite>
+  <algorithms>
+    <algorithm component-class="org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm" id="url">
+      <label>By URL</label>
+      <title>By URL Clustering</title>
+    </algorithm>
+    <algorithm component-class="org.carrot2.clustering.synthetic.ByFieldClusteringAlgorithm" id="source">
+      <label>By Source</label>
+      <title>By Source Clustering</title>
+    </algorithm>
+  </algorithms>
+</component-suite>

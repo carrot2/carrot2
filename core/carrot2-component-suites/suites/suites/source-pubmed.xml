@@ -1,0 +1,17 @@
+<!-- Components included in all applications -->
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.pubmed.PubMedDocumentSource" id="pubmed" position="END">
+      <label>PubMed</label>
+      <title>PubMed medical database</title>
+      <mnemonic>P</mnemonic>
+      <description>Searches the PubMed medical abstracts database</description>
+      <icon-path>icons/pubmed.png</icon-path>
+      <example-queries>
+        <example-query>cancer</example-query>
+        <example-query>heart</example-query>
+        <example-query>lung</example-query>
+      </example-queries>
+    </source>
+  </sources>
+</component-suite>

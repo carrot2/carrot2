@@ -8,12 +8,12 @@
 ]>
 <chapter xml:id="chapter.components" xmlns="http://docbook.org/ns/docbook" version="5.0">
   <title>Component reference</title>
-  <subtitle>Detailed description of all &C2; components</subtitle>
+  <subtitle>Detailed description of all &PROD; components</subtitle>
 
   <para>
-    This section lists and describes attributes of all &C2; components. Please see
-    <xref linkend="section.architecture.overview.component-attributes" /> for information
-    on you can set component attributes in different &C2; applications.
+    This section lists and describes attributes of all &PROD; components. Please see
+    <xref linkend="chapter.customizing" /> for information
+    on you can set component attributes in different &PROD; applications.
   </para>
 
   <attribute-reference />

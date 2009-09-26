@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,7 +12,7 @@
 
 package org.carrot2.clustering.synthetic;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
 import static org.junit.Assert.assertArrayEquals;
 
 import java.util.*;
@@ -79,7 +78,7 @@ public class ByUrlClusteringAlgorithmTest extends
             docs.get(0), docs.get(1), docs.get(2)));
 
         final ArrayList<Cluster> actual = Lists.newArrayList(cluster(docs).getClusters());
-        assertThat(actual).isEquivalentTo(expectedFacets);
+        assertThatClusters(actual).isEquivalentTo(expectedFacets);
     }
 
     @Test
@@ -94,7 +93,7 @@ public class ByUrlClusteringAlgorithmTest extends
         final List<Cluster> expectedFacets = Lists.newArrayList(new Cluster("cos.pl",
             docs.get(0), docs.get(1), docs.get(2)));
 
-        assertThat(cluster(docs).getClusters()).isEquivalentTo(expectedFacets);
+        assertThatClusters(cluster(docs).getClusters()).isEquivalentTo(expectedFacets);
     }
 
     @Test
@@ -113,7 +112,7 @@ public class ByUrlClusteringAlgorithmTest extends
         final Cluster facet1 = new Cluster("cos.pl").addSubclusters(facet11, facet12);
         expectedFacets.add(facet1);
 
-        assertThat(cluster(docs).getClusters()).isEquivalentTo(expectedFacets);
+        assertThatClusters(cluster(docs).getClusters()).isEquivalentTo(expectedFacets);
     }
 
     @Test
@@ -129,6 +128,6 @@ public class ByUrlClusteringAlgorithmTest extends
             docs.get(0), docs.get(1), docs.get(4)), new Cluster("cos.com", docs.get(2),
             docs.get(3)));
 
-        assertThat(cluster(docs).getClusters()).isEquivalentTo(expectedFacets);
+        assertThatClusters(cluster(docs).getClusters()).isEquivalentTo(expectedFacets);
     }
 }

@@ -1,9 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -36,10 +34,14 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * available. On Windows machines, the URL is available at the
      * <code>HKEY_CURRENT_USER\Software\Google\Google Desktop\API\search_url</code> system
      * registry key and Carrot2 will attempt to automatically read the value from the
-     * registry. Please consult Google Desktop API documents for further instructions if
-     * needed.
+     * registry when run with Administrator provileges. Please consult <a
+     * href="http://code.google.com/apis/desktop/docs/queryapi.html#httpxml">Google
+     * Desktop API documentation</a> for further instructions on how to determine the
+     * query URL on other systems.
      * 
-     * @see <a href="http://code.google.com/apis/desktop/docs/queryapi.html#httpxml">Google API</a>
+     * @see <a
+     *      href="http://code.google.com/apis/desktop/docs/queryapi.html#httpxml">Google
+     *      API</a>
      * @label Query URL
      * @level Advanced
      * @group Service
@@ -71,8 +73,16 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
             // Return the error in a more gentle way
             final SearchEngineResponse response = new SearchEngineResponse();
 
+            final String windowsHint = "2) Try running the application as an Administrator, "
+                + "3) If you can't run the application as an Administrator, "
+                + "set the Query URL attribute manually.";
+            final String otherHint = "2) In the Search view, set the Query URL (optional) attribute "
+                + "to point to the Query URL of your Google Desktop installation. See the attribute's "
+                + "inline help for more information.";
             response.results.add(new Document("Could not connect to Google Desktop",
-                "Is Google Desktop installed on your machine?", ""));
+                "To fix the problem: 1) Make sure Google Desktop is installed on your machine, "
+                    + (org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS ? windowsHint
+                        : otherHint), ""));
             return response;
         }
         else
@@ -109,7 +119,7 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
     {
         /*
          * Should we exclude Vista here (because it will tend to show this blocking
-         * hack-prevention screen.. forgot what the heck the name was.
+         * hack-prevention screen (User Account Control; UAC).
          */
         if (!org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS)
         {

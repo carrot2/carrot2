@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -23,8 +23,7 @@ import javax.servlet.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.*;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
+import com.google.common.collect.*;
 
 /**
  * Initializes file appenders to save logs to files named after the context path. Works
@@ -39,9 +38,9 @@ public class LogInitContextListener implements ServletContextListener
     public static final String CONTEXT_ID = LogInitContextListener.class.getName();
 
     /**
-     * Any created {@link FileAppenders}.
+     * Any created {@link Appender}s.
      */
-    private Multimap<Logger, Appender> appenders = Multimaps.newArrayListMultimap();
+    private Multimap<Logger, Appender> appenders = ArrayListMultimap.create();
 
     /**
      * Callback hook from the application container. Initialize logging appenders

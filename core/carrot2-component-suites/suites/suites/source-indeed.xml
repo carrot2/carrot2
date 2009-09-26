@@ -1,0 +1,15 @@
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="indeed">
+      <label>Jobs</label>
+      <title>Jobs from indeed.com</title>
+      <mnemonic>J</mnemonic>
+      <description>Searches jobs from indeed.com</description>
+      <example-queries>
+        <example-query>java</example-query>
+        <example-query>manager</example-query>
+        <example-query>ruby</example-query>
+      </example-queries>
+    </source>
+  </sources>
+</component-suite>

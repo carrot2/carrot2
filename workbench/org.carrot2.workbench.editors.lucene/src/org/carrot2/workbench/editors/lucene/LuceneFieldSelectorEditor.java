@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -38,7 +37,6 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
     /*
      * 
      */
-    @SuppressWarnings("unchecked")
     @Override
     public AttributeEditorInfo init(Map<String, Object> defaultValues)
     {
@@ -68,10 +66,10 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
     /*
      * 
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"deprecation", "unchecked"})
     private void refreshFields(Object directory)
     {
-        BiMap<Object, String> valueToName = Maps.newHashBiMap();
+        BiMap<Object, String> valueToName = HashBiMap.create();
         ArrayList<Object> valueOrder = Lists.newArrayList();
 
         if (directory != null && directory instanceof Directory)

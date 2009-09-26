@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Workbench Aduna Cluster Map Visualization
 Bundle-SymbolicName: org.carrot2.workbench.vis.aduna;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 0.0.0.QUALIFIER
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.carrot2.core,

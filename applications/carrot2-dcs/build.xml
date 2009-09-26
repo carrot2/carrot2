@@ -2,7 +2,7 @@
   Internal build script for Carrot2 Document Clustering Server. 
   Please use the 'dcs' target from the main build script to build the DCS.
   -->
-<project name="carrot2.dcs" default="carrot2.dcs.fail">
+<project name="carrot2.dcs" default="basedir.check">
   <!-- Base dir determined from the build file location -->
   <dirname property="carrot2.dcs.basedir"
            file="${ant.file.carrot2.dcs}" />
@@ -11,12 +11,16 @@
   <property name="carrot2.master.basedir"
             location="${carrot2.dcs.basedir}/../../" />
 
+  <!-- Import common macros -->
+  <import file="${carrot2.master.basedir}/etc/ant/common/basedir.xml" />
+  <import file="${carrot2.master.basedir}/etc/ant/common/webtest.xml" />
+
   <!-- DCS build dirs -->
   <property name="dcs.dir" location="tmp/dcs" />
 
   <!-- DCS WAR -->
   <property name="dcs.war.dir" location="${dcs.dir}/war" />
-  <property name="dcs.war.base.name" value="carrot2-dcs" />
+  <property name="dcs.war.base.name" value="${carrot2.dcs.base}" />
  
   <!-- Webtest results -->
   <property name="dcs.webtest.report.dir" location="tmp/dcs-webtest-report" />
@@ -33,7 +37,7 @@
   <!--
        Builds the DCS.
     -->
-  <target name="carrot2.dcs.build" depends="carrot2.dcs.war">
+  <target name="carrot2.dcs.build" depends="basedir.check, carrot2.dcs.war">
     <mkdir dir="${dcs.dir}/lib" />
     <copy todir="${dcs.dir}/lib">
       <fileset dir="lib">
@@ -70,6 +74,7 @@
         <include name="examples/**" />
 		    <exclude name="**/tmp/**" />
 		    <exclude name="**/obj/**" />
+		    <exclude name="**/*.suo" />
       </fileset>
       <fileset dir="${carrot2.dcs.basedir}/etc">
         <include name="readme.txt" />
@@ -94,9 +99,14 @@
   <!--
        Builds the DCS ZIP archive.
     -->
-  <target name="carrot2.dcs.dist" depends="carrot2.dcs.build, carrot2.dcs.webtest.war">
+  <target name="carrot2.dcs.dist" depends="basedir.check, carrot2.dcs.build, carrot2.dcs.webtest.war">
     <zip destfile="${dcs.dir}/../${dcs.dist.base}-${carrot2.version}.zip">
-      <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}" />
+      <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}-${carrot2.version}">
+        <exclude name="**/*.sh" />
+      </zipfileset>
+      <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}-${carrot2.version}" filemode="755">
+        <include name="**/*.sh" />
+      </zipfileset>
     </zip>
     <delete dir="${dcs.dir}" failonerror="false" />
   </target>
@@ -104,16 +114,16 @@
   <!-- 
        Runs webtests against some deployed DCS.
     -->
-  <target name="carrot2.dcs.webtest.localhost" depends="carrot2.common.webtest.deployed.check">
+  <target name="carrot2.dcs.webtest.localhost" depends="basedir.check, carrot2.common.webtest.deployed.check">
     <webtest-deployed webtest.tests.dir="${carrot2.dcs.basedir}/webtest"
                       webtest.report.dir="${dcs.webtest.report.dir}" 
                       webtest.basepath="/" />
   </target>
   
   <!-- 
-       Deploys DCS WAR file and runs webstest against it.
+       Deploys DCS WAR file and runs webtests against it.
     -->
-  <target name="carrot2.dcs.webtest.war" depends="carrot2.common.webtest.war.prepare"
+  <target name="carrot2.dcs.webtest.war" depends="basedir.check, carrot2.common.webtest.war.prepare"
           if="webtest.war.resources.available">
     <webtest-war cargo.tmp.dir="tmp/cargo"
                  war.path="${dcs.war.dir}/${dcs.war.base.name}.war"
@@ -125,10 +135,7 @@
   <!-- 
        Builds the DCS war file.
     -->
-  <target name="carrot2.dcs.war">
-    <antcall target="jar" />
-    <antcall target="lib.flattened" />
-
+  <target name="carrot2.dcs.war" depends="basedir.check, jar, lib.flattened">
     <!-- Add DCS-specific JARs -->
     <copy todir="${lib.flattened}">
       <fileset dir="${carrot2.master.basedir}">
@@ -149,7 +156,6 @@
     <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
     <javac srcdir="${carrot2.dcs.basedir}/src"
            destdir="${dcs.dir}/classes"
-           compiler="modern"
            source="1.5"
            target="1.5"
            encoding="UTF-8">
@@ -159,6 +165,7 @@
 
     <copy tofile="${dcs.dir}/classes/log4j.xml"
           file="core/carrot2-util-log4j/src/log4j-dcs.xml" />
+
     <war destfile="${dcs.war.dir}/${dcs.war.base.name}.war"
          webxml="${carrot2.dcs.basedir}/web/WEB-INF/web.xml"
          manifest="${dcs.dir}/manifest/MANIFEST.MF">
@@ -178,13 +185,18 @@
         <include name="appender-*" />
         <include name="filters-*" />
       </classes>
+      <classes dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
+        <include name="suites/algorithm-*.xml" />
+        <include name="suites/source-*.xml" />
+        <include name="suites/suite-dcs.xml" />
+      </classes>
     </war>
 
     <delete dir="${dcs.dir}/manifest" />
   </target>
 
   <!-- Copies the runtime resources to the compiled classes directory. -->
-  <target name="carrot2.dcs.resources">
+  <target name="carrot2.dcs.resources" depends="basedir.check">
     <mkdir dir="${build.dir}" />
 
     <copy todir="${build.dir}" includeemptydirs="false">
@@ -195,11 +207,11 @@
     </copy>
   </target>
 
-  <target name="carrot2.dcs.clean">
+  <target name="carrot2.dcs.clean" depends="basedir.check">
     <delete dir="${dcs.dir}" />
   </target>
 
-  <target name="carrot2.dcs.fail">
-    <fail>Please use the 'dcs' target from the main build script to build the DCS.</fail>
+  <target name="basedir.check">
+    <basedir-check main-basedir="${basedir}" internal-basedir="${carrot2.dcs.basedir}" />
   </target>
 </project>

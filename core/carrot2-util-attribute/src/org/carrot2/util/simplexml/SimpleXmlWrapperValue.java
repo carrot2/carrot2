@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,6 +15,7 @@ package org.carrot2.util.simplexml;
 import java.lang.reflect.Method;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.ReflectionUtils;
 import org.simpleframework.xml.*;
@@ -84,7 +84,7 @@ public class SimpleXmlWrapperValue
         else if (value instanceof String)
         {
             wrapper.value = (String) value;
-            wrapper.type = String.class.getName();
+            wrapper.type = null;
         }
         else if (value instanceof Class)
         {
@@ -118,9 +118,14 @@ public class SimpleXmlWrapperValue
     @SuppressWarnings("unchecked")
     Object unwrap()
     {
-        if (value != null && type != null)
+        if (value != null)
         {
-            final Class<?> valueType = loadClassWrapAsRuntime(type);
+            if (StringUtils.isEmpty(type))
+            {
+                type = String.class.getName();
+            }
+
+            final Class<?> valueType = loadClassWrapAsRuntime(type); 
 
             if (TO_STRING_VALUE_OF_TYPES.contains(valueType))
             {

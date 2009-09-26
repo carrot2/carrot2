@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -149,7 +148,7 @@ public class SimpleFieldMapper implements IFieldMapper
 
     /**
      * Last received {@link Query} object in
-     * {@link #map(Query, Document, org.carrot2.core.Document)}.
+     * {@link #map(Query, Analyzer, Document, org.carrot2.core.Document)}.
      */
     private Query query;
 
@@ -194,13 +193,13 @@ public class SimpleFieldMapper implements IFieldMapper
         String value = fieldValue(titleField, luceneDoc);
         if (value != null)
         {
-            doc.addField(org.carrot2.core.Document.TITLE, value);
+            doc.setField(org.carrot2.core.Document.TITLE, value);
         }
 
         value = fieldValue(urlField, luceneDoc);
         if (value != null)
         {
-            doc.addField(org.carrot2.core.Document.CONTENT_URL, value);
+            doc.setField(org.carrot2.core.Document.CONTENT_URL, value);
         }
 
         /*
@@ -223,9 +222,13 @@ public class SimpleFieldMapper implements IFieldMapper
                 {
                     summary = value;
                 }
-                doc.addField(org.carrot2.core.Document.SUMMARY, summary);
+                doc.setField(org.carrot2.core.Document.SUMMARY, summary);
             }
             catch (IOException e)
+            {
+                throw ExceptionUtils.wrapAsRuntimeException(e);
+            }
+            catch (InvalidTokenOffsetsException e)
             {
                 throw ExceptionUtils.wrapAsRuntimeException(e);
             }
@@ -234,7 +237,7 @@ public class SimpleFieldMapper implements IFieldMapper
         /*
          * Add a reference to Lucene document.
          */
-        doc.addField(LUCENE_DOCUMENT, luceneDoc);
+        doc.setField(LUCENE_DOCUMENT, luceneDoc);
     }
 
     /*

@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,7 +12,7 @@
 
 package org.carrot2.clustering.synthetic;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
 
 import java.util.List;
 
@@ -80,13 +79,13 @@ public class ByFieldClusteringAlgorithmTest extends
             otherTopics.setAttribute(Cluster.OTHER_TOPICS, true);
             expectedClusters.add(otherTopics);
         }
-        assertThat(clusters).isEquivalentTo(expectedClusters);
+        assertThatClusters(clusters).isEquivalentTo(expectedClusters);
     }
 
     private Document documentWithField(Object fieldValue)
     {
         final Document document = new Document();
-        document.addField(FIELD, fieldValue);
+        document.setField(FIELD, fieldValue);
         return document;
     }
 }

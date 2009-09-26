@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,6 +12,7 @@
 
 package org.carrot2.dcs;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.kohsuke.args4j.*;
@@ -35,18 +36,16 @@ public class DcsApp
     }, required = false, usage = "Print detailed messages")
     boolean verbose;
 
-    String appName;
+    @Option(name = "--accept-queue", required = false, 
+        usage = "Socket accept queue length (default 20).")
+    int acceptQueue = 20;
 
+    String appName;
     Server server;
 
     DcsApp(String appName)
     {
         this.appName = appName;
-    }
-
-    void go() throws Exception
-    {
-        start();
     }
 
     void start() throws Exception
@@ -69,7 +68,8 @@ public class DcsApp
         server = new Server();
         SelectChannelConnector connector = new SelectChannelConnector();
         connector.setPort(port);
-        connector.setAcceptQueueSize(20);
+        connector.setReuseAddress(false);
+        connector.setAcceptQueueSize(acceptQueue);
         server.addConnector(connector);
 
         WebAppContext wac = new WebAppContext();
@@ -78,7 +78,7 @@ public class DcsApp
         final String dcsWar = System.getProperty("dcs.war");
         if (dcsWar != null)
         {
-            // WAR distribution provide, use it
+            // WAR distribution provides, use it
             wac.setWar(dcsWar);
         }
         else
@@ -96,14 +96,32 @@ public class DcsApp
         server.setHandler(wac);
         server.setStopAtShutdown(true);
 
-        // Start the http server
-        server.start();
-        log.info("DCS started, point browser to: http://localhost:" + port + "/");
+        // Start the http server.
+        try
+        {
+            server.start();
+            log.info("DCS started, point your browser to: http://localhost:" + port + "/");
+        }
+        catch (Exception e)
+        {
+            stop();
+            throw e;
+        }
     }
 
-    void stop() throws Exception
+    void stop()
     {
-        server.stop();
+        if (server != null)
+        {
+            try
+            {
+                server.stop();
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public static void main(String [] args) throws Exception
@@ -128,6 +146,14 @@ public class DcsApp
             return;
         }
 
-        dcs.go();
+        try
+        {
+            dcs.start();
+        }
+        catch (Exception e)
+        {
+            dcs.log.fatal("Startup failure: "
+                + ExceptionUtils.getMessage(e));
+        }
     }
 }

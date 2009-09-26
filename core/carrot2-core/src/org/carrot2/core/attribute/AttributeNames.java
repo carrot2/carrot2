@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -114,7 +113,7 @@ public final class AttributeNames
      * @label Processing Language
      * @level Basic
      * @group Preprocessing
-     * @see org.carrot2.text.linguistic.LanguageCode
+     * @see "org.carrot2.text.linguistic.LanguageCode"
      */
     public static final String ACTIVE_LANGUAGE = "active-language";
 

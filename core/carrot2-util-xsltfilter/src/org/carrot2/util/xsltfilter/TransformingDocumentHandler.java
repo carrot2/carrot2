@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -401,12 +401,17 @@ final class TransformingDocumentHandler implements ContentHandler
                 final Properties outputProps = template.getOutputProperties();
                 final String encoding;
 
+                /*
+                 * If you're tempted to use Properties@containsKey, see
+                 * http://issues.carrot2.org/browse/CARROT-507
+                 */
+
                 String contentType = null;
-                if (outputProps.containsKey(OutputKeys.MEDIA_TYPE))
+                if (hasKey(outputProps, OutputKeys.MEDIA_TYPE))
                 {
                     contentType = outputProps.getProperty(OutputKeys.MEDIA_TYPE);
                 }
-                else if (outputProps.containsKey(OutputKeys.METHOD))
+                else if (hasKey(outputProps, OutputKeys.METHOD))
                 {
                     final String method = outputProps.getProperty(OutputKeys.METHOD);
                     contentType = (String) methodMapping.get(method);
@@ -418,7 +423,7 @@ final class TransformingDocumentHandler implements ContentHandler
                     contentType = (String) methodMapping.get("xml");
                 }
 
-                if (outputProps.containsKey(OutputKeys.ENCODING))
+                if (hasKey(outputProps, OutputKeys.ENCODING))
                 {
                     encoding = outputProps.getProperty(OutputKeys.ENCODING);
                 }
@@ -437,6 +442,18 @@ final class TransformingDocumentHandler implements ContentHandler
         {
             log.error("Transformer configuration exception.", e);
         }
+    }
+
+    /**
+     * Properties by default extend from HashMap, but can contain a backup set
+     * of keys as set in {@link Properties#Properties(Properties)}. Unfortunately,
+     * while {@link Properties#getProperty(String)} works with these default
+     * values, {@link Properties#containsKey(Object)} does not. In this method
+     * we check for the existence of a key by trying to load it.
+     */
+    private static boolean hasKey(Properties props, String key)
+    {
+        return props.getProperty(key) != null;
     }
 
     /**

@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -25,8 +24,7 @@ import org.junit.Before;
  * an instance of a {@link IController}, a map for attributes and a method that initializes
  * them.
  */
-public abstract class ProcessingComponentTestBase<T extends IProcessingComponent> extends
-    ExternalApiTestBase
+public abstract class ProcessingComponentTestBase<T extends IProcessingComponent>
 {
     /** Simple controller used for tests. */
     private SimpleController simpleController;
@@ -90,7 +88,7 @@ public abstract class ProcessingComponentTestBase<T extends IProcessingComponent
     }
 
     /**
-     * Return an instance of a {@link CachedController}, initializing it on the way.
+     * Return an instance of a {@link CachingController}, initializing it on the way.
      */
     protected final CachingController getCachingController(
         Map<String, Object> initAttributes,

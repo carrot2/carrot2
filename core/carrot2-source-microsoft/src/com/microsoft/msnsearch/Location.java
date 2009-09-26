@@ -3,7 +3,7 @@
 
 package com.microsoft.msnsearch;
 
-@SuppressWarnings({ "unchecked", "unused", "serial" })
+@SuppressWarnings({ "unchecked", "serial" })
 public class Location  implements java.io.Serializable {
     private double latitude;
 

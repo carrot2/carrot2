@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,7 +12,12 @@
 
 package org.carrot2.source.microsoft;
 
-import org.carrot2.core.attribute.AttributeNames;
+import java.util.Collections;
+import java.util.Map;
+
+import org.carrot2.text.linguistic.LanguageCode;
+
+import com.google.common.collect.Maps;
 
 
 /**
@@ -21,14 +25,6 @@ import org.carrot2.core.attribute.AttributeNames;
  */
 public enum CultureInfo
 {
-    /** 
-     * Special constant indicating culture consistent with the
-     * currently selected Carrot2 language. 
-     * 
-     * @see AttributeNames#ACTIVE_LANGUAGE
-     */
-    // CARROT2_CURRENT_LANGUAGE ("carrot2", "Carrot2 - current language"),
-
     ARABIC_ARABIA            ("ar-XA", "Arabic – Arabia"),
     BULGARIAN_BULGARIA       ("bg-BG", "Bulgarian – Bulgaria"),
     CHINESE_CHINA            ("zh-CN", "Chinese – China"),
@@ -39,10 +35,6 @@ public enum CultureInfo
     DANISH_DENMARK           ("da-DK", "Danish – Denmark"),
     DUTCH_BELGIUM            ("nl-BE", "Dutch – Belgium"),
     DUTCH_NETHERLANDS        ("nl-NL", "Dutch – Netherlands"),
-    GERMAN_AUSTRIA           ("de-AT", "German – Austria"),
-    GERMAN_GERMANY           ("de-DE", "German – Germany"),
-    GERMAN_SWITZERLAND       ("de-CH", "German – Switzerland"),
-    GREEK_GREECE             ("el-GR", "Greek – Greece"),
     ENGLISH_AUSTRALIA        ("en-AU", "English – Australia"),
     ENGLISH_ARABIA           ("en-XA", "English – Arabia"),
     ENGLISH_CANADA           ("en-CA", "English – Canada"),
@@ -62,6 +54,10 @@ public enum CultureInfo
     FRENCH_FRANCE            ("fr-FR", "French – France"),
     FRENCH_CANADA            ("fr-CA", "French – Canada"),
     FRENCH_SWITZERLAND       ("fr-CH", "French – Switzerland"),
+    GERMAN_AUSTRIA           ("de-AT", "German – Austria"),
+    GERMAN_GERMANY           ("de-DE", "German – Germany"),
+    GERMAN_SWITZERLAND       ("de-CH", "German – Switzerland"),
+    GREEK_GREECE             ("el-GR", "Greek – Greece"),
     HEBREW_ISRAEL            ("he-IL", "Hebrew – Israel"),
     HUNGARIAN_HUNGARY        ("hu-HU", "Hungarian – Hungary"),
     ITALIAN_ITALY            ("it-IT", "Italian – Italy"),
@@ -82,12 +78,68 @@ public enum CultureInfo
     SPANISH_LATIN_AMERICA    ("es-XL", "Spanish – Latin America"),
     SPANISH_MEXICO           ("es-MX", "Spanish – Mexico"),
     SPANISH_SPAIN            ("es-ES", "Spanish – Spain"),
-    SWEDISH_SWEDEN           ("sv-SE", "Swedish – Sweden"),
     SPANISH_UNITED_STATES    ("es-US", "Spanish – United States"),
+    SWEDISH_SWEDEN           ("sv-SE", "Swedish – Sweden"),
     THAI_THAILAND            ("th-TH", "Thai – Thailand"),
     TURKISH_TURKEY           ("tr-TR", "Turkish – Turkey"),
     UKRAINIAN_UKRAINE        ("uk-UA", "Ukrainian – Ukraine");
 
+    /**
+     * Maps <b>some</b> of the values of this enum to {@link LanguageCode}s.
+     */
+    public static final Map<CultureInfo, LanguageCode> TO_LANGUAGE_CODE;
+    
+    static 
+    {
+        final Map<CultureInfo, LanguageCode> map = Maps.newEnumMap(CultureInfo.class);
+        
+        map.put(CHINESE_CHINA, LanguageCode.CHINESE_SIMPLIFIED);
+        // TODO: Hong kong uses traditional Chinese I believe.
+        map.put(CHINESE_HONG_KONG_SAR, LanguageCode.CHINESE_SIMPLIFIED);
+        map.put(CHINESE_TAIWAN, LanguageCode.CHINESE_SIMPLIFIED);
+        map.put(DANISH_DENMARK, LanguageCode.DANISH);
+        map.put(DUTCH_BELGIUM, LanguageCode.DUTCH);
+        map.put(DUTCH_NETHERLANDS, LanguageCode.DUTCH);
+        map.put(ENGLISH_AUSTRALIA, LanguageCode.ENGLISH);
+        map.put(ENGLISH_ARABIA, LanguageCode.ENGLISH);
+        map.put(ENGLISH_CANADA, LanguageCode.ENGLISH);
+        map.put(ENGLISH_INDIA, LanguageCode.ENGLISH);
+        map.put(ENGLISH_INDONESIA, LanguageCode.ENGLISH);
+        map.put(ENGLISH_IRELAND, LanguageCode.ENGLISH);
+        map.put(ENGLISH_MALAYSIA, LanguageCode.ENGLISH);
+        map.put(ENGLISH_NEW_ZEALAND, LanguageCode.ENGLISH);
+        map.put(ENGLISH_PHILIPPINES, LanguageCode.ENGLISH);
+        map.put(ENGLISH_SOUTH_AFRICA, LanguageCode.ENGLISH);
+        map.put(ENGLISH_UNITED_KINGDOM, LanguageCode.ENGLISH);
+        map.put(ENGLISH_UNITED_STATES, LanguageCode.ENGLISH);
+        map.put(FINNISH_FINLAND, LanguageCode.FINNISH);
+        map.put(FRENCH_BELGIUM, LanguageCode.FRENCH);
+        map.put(FRENCH_FRANCE, LanguageCode.FRENCH);
+        map.put(FRENCH_CANADA, LanguageCode.FRENCH);
+        map.put(FRENCH_SWITZERLAND, LanguageCode.FRENCH);
+        map.put(GERMAN_AUSTRIA, LanguageCode.GERMAN);
+        map.put(GERMAN_GERMANY, LanguageCode.GERMAN);
+        map.put(GERMAN_SWITZERLAND, LanguageCode.GERMAN);
+        map.put(HUNGARIAN_HUNGARY, LanguageCode.HUNGARIAN);
+        map.put(ITALIAN_ITALY, LanguageCode.ITALIAN);
+        map.put(NORWEGIAN_NORWAY, LanguageCode.NORWEGIAN);
+        map.put(POLISH_POLAND, LanguageCode.POLISH);
+        map.put(PORTUGUESE_BRAZIL, LanguageCode.PORTUGUESE);
+        map.put(PORTUGUESE_PORTUGAL, LanguageCode.PORTUGUESE);
+        map.put(ROMANIAN_ROMANIA, LanguageCode.ROMANIAN);
+        map.put(RUSSIAN_RUSSIA, LanguageCode.RUSSIAN);
+        map.put(SPANISH_ARGENTINA, LanguageCode.SPANISH);
+        map.put(SPANISH_CHILE, LanguageCode.SPANISH);
+        map.put(SPANISH_LATIN_AMERICA, LanguageCode.SPANISH);
+        map.put(SPANISH_MEXICO, LanguageCode.SPANISH);
+        map.put(SPANISH_SPAIN, LanguageCode.SPANISH);
+        map.put(SPANISH_UNITED_STATES, LanguageCode.SPANISH);
+        map.put(SWEDISH_SWEDEN, LanguageCode.SWEDISH);
+        map.put(TURKISH_TURKEY, LanguageCode.TURKISH);
+        
+        TO_LANGUAGE_CODE = Collections.unmodifiableMap(map);
+    }
+    
     /**
      * Culture info code for Live API.
      */
@@ -111,5 +163,14 @@ public enum CultureInfo
     public String toString()
     {
         return description;
+    }
+    
+    /**
+     * Returns a corresponding {@link LanguageCode} or <code>null</code> if no
+     * {@link LanguageCode} corresponds to this {@link CultureInfo} constant.
+     */
+    public LanguageCode toLanguageCode()
+    {
+        return TO_LANGUAGE_CODE.get(this);
     }
 }

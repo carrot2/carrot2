@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -23,8 +22,7 @@ import org.eclipse.core.runtime.jobs.Job;
  * can be dynamically changed).
  * <p>
  * This class is not a subclass of {@link Job} because scheduling methods in {@link Job}
- * are final and this could be confusing. Instead, either override the
- * {@link #run(IProgressMonitor)} method of this class, or pass the job to be executed
+ * are final and this could be confusing. Instead, pass the job to be executed
  * after a certain delay.
  */
 public class PostponableJob

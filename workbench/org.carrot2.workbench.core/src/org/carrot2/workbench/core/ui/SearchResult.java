@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -18,6 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.core.IController;
 import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.AttributeNames;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -46,10 +46,20 @@ public final class SearchResult
      * Dispatch {@link ISearchResultListener#processingResultUpdated(ProcessingResult)}
      * to listeners.
      */
-    final Runnable dispatchResultUpdated = new Runnable()
+    private final Runnable dispatchResultUpdated = new Runnable()
     {
         public void run()
         {
+            /*
+             * QUICK FIX for issue: http://issues.carrot2.org/browse/CARROT-542
+             * Propagate active-language back to input attributes, if it has been set.
+             */
+            if (input.getAttribute(AttributeNames.ACTIVE_LANGUAGE) == null)
+            {
+                input.setAttribute(AttributeNames.ACTIVE_LANGUAGE, 
+                    result.getAttribute(AttributeNames.ACTIVE_LANGUAGE));
+            }
+
             for (ISearchResultListener listener : listeners)
             {
                 listener.processingResultUpdated(result);
@@ -77,7 +87,7 @@ public final class SearchResult
      * Update {@link ProcessingResult} associated with this object, notifying all
      * interested listeners.
      */
-    public void setProcessingResult(ProcessingResult result)
+    void setProcessingResult(ProcessingResult result)
     {
         this.result = result;
         fireProcessingResultUpdated();
@@ -112,10 +122,6 @@ public final class SearchResult
      */
     private void fireProcessingResultUpdated()
     {
-        /*
-         * If we have a running Workbench (which should always be the case), run the dispatch
-         * asynchronously. For headless tests, dispatch it immediately.
-         */
         if (PlatformUI.isWorkbenchRunning())
         {
             PlatformUI.getWorkbench().getDisplay().asyncExec(dispatchResultUpdated);

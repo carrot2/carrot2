@@ -14,7 +14,6 @@
 
     <!-- Add appenders here. -->
     &appender-console;
-    &appender-file-html;
 
     <!-- Add logger filters here. -->
     &filters-common;
@@ -24,6 +23,5 @@
         <priority value="debug" />
 
         <appender-ref ref="appender-console" />
-        <appender-ref ref="appender-file-html" />
     </root>
 </log4j:configuration>

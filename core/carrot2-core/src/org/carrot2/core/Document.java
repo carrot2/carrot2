@@ -1,8 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,7 +14,9 @@ package org.carrot2.core;
 import java.util.*;
 
 import org.carrot2.util.MapUtils;
-import org.carrot2.util.simplexml.*;
+import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
+import org.carrot2.util.simplexml.SimpleXmlWrappers;
+import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Commit;
 import org.simpleframework.xml.load.Persist;
@@ -29,6 +30,8 @@ import com.google.common.collect.*;
  * {@link #CONTENT_URL}.
  */
 @Root(name = "document")
+@JsonAutoDetect(JsonMethod.NONE)
+@JsonWriteNullProperties(false)
 public final class Document
 {
     /** Field name for the title of the document. */
@@ -64,11 +67,22 @@ public final class Document
     public static final String SOURCES = "sources";
 
     /**
-     * Field name for an optional indicator of the document's topic. Value type:
-     * <code>String</code> or <code>Collection&lt;String&gt;</code> if a document belongs
-     * to multiple topics.
+     * @deprecated please use {@link #PARTITIONS}. This field will be removed in version 3.2.
      */
     public static final String TOPIC = "topic";
+
+    /**
+     * Identifiers of reference clustering partitions this document belongs to. Currently,
+     * this field is used only to calculate various clustering quality metrics. In the
+     * future, clustering algorithms may be able to use values of this field to increase
+     * the quality of clustering.
+     * <p>
+     * Value type: <code>Collection&lt;Object&gt;</code>. There is no constraint on the
+     * actual type of the partition identifier in the collection. Identifiers are assumed
+     * to correctly implement the {@link #equals(Object)} and {@link #hashCode()} methods.
+     * </p>
+     */
+    public static final String PARTITIONS = "partitions";
 
     /** Fields of this document */
     private Map<String, Object> fields = Maps.newHashMap();
@@ -84,30 +98,6 @@ public final class Document
      */
     @Attribute(required = false)
     Integer id;
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     */
-    @Element(required = false)
-    private String title;
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     */
-    @Element(required = false)
-    private String url;
-
-    /**
-     * Field used during serialization/ deserialization to preserve Carrot2 2.x format.
-     */
-    @Element(required = false)
-    private String snippet;
-
-    /**
-     * Field used during serialization/ deserialization.
-     */
-    @ElementList(entry = "source", required = false)
-    private List<String> sources;
 
     /**
      * Field used during serialization/ deserialization.
@@ -128,9 +118,9 @@ public final class Document
      */
     public Document(String title, String summary, String contentUrl)
     {
-        addField(TITLE, title);
-        addField(SUMMARY, summary);
-        addField(CONTENT_URL, contentUrl);
+        setField(TITLE, title);
+        setField(SUMMARY, summary);
+        setField(CONTENT_URL, contentUrl);
     }
 
     /**
@@ -140,9 +130,113 @@ public final class Document
      * 
      * @return unique identifier of this document
      */
+    @JsonGetter
     public Integer getId()
     {
         return id;
+    }
+
+    /**
+     * Returns this document's {@link #TITLE} field.
+     */
+    @JsonGetter
+    @Element(required = false)
+    public String getTitle()
+    {
+        return getField(TITLE);
+    }
+
+    /**
+     * Sets this document's {@link #TITLE} field.
+     * 
+     * @param title title to set
+     * @return this document for convenience
+     */
+    @Element(required = false)
+    public Document setTitle(String title)
+    {
+        return setField(TITLE, title);
+    }
+
+    /**
+     * Returns this document's {@link #SUMMARY} field.
+     */
+    @JsonGetter("snippet")
+    @Element(name = "snippet", required = false)
+    public String getSummary()
+    {
+        return getField(SUMMARY);
+    }
+
+    /**
+     * Sets this document's {@link #SUMMARY} field.
+     * 
+     * @param summary summary to set
+     * @return this document for convenience
+     */
+    @Element(name = "snippet", required = false)
+    public Document setSummary(String summary)
+    {
+        return setField(SUMMARY, summary);
+    }
+
+    /**
+     * Returns this document's {@link #CONTENT_URL} field.
+     */
+    @JsonGetter("url")
+    @Element(name = "url", required = false)
+    public String getContentUrl()
+    {
+        return getField(CONTENT_URL);
+    }
+
+    /**
+     * Sets this document's {@link #CONTENT_URL} field.
+     * 
+     * @param contentUrl content URL to set
+     * @return this document for convenience
+     */
+    @Element(name = "url", required = false)
+    public Document setContentUrl(String contentUrl)
+    {
+        return setField(CONTENT_URL, contentUrl);
+    }
+
+    /**
+     * Returns this document's {@link #SOURCES} field.
+     */
+    @JsonGetter
+    @ElementList(entry = "source", required = false)
+    public List<String> getSources()
+    {
+        return getField(SOURCES);
+    }
+
+    /**
+     * Sets this document's {@link #SOURCES} field.
+     * 
+     * @param sources the sources list to set
+     * @return this document for convenience
+     */
+    @ElementList(entry = "source", required = false)
+    public Document setSources(List<String> sources)
+    {
+        return setField(SOURCES, sources);
+    }
+
+    /**
+     * For JSON and XML serialization only.
+     */
+    @JsonGetter("fields")
+    @SuppressWarnings("unused")
+    private Map<String, Object> getOtherFields()
+    {
+        final Map<String, Object> otherFields = Maps.newHashMap(fieldsView);
+        otherFields.remove(TITLE);
+        otherFields.remove(SUMMARY);
+        otherFields.remove(CONTENT_URL);
+        otherFields.remove(SOURCES);
+        return otherFields.isEmpty() ? null : otherFields;
     }
 
     /**
@@ -174,8 +268,22 @@ public final class Document
      * @param name of the field to be added
      * @param value value of the field
      * @return this document for convenience
+     * @deprecated Please use {@link #setField(String, Object)} instead. This method will
+     *             be removed in version 3.2.
      */
     public Document addField(String name, Object value)
+    {
+        return setField(name, value);
+    }
+
+    /**
+     * Sets a field in this document.
+     * 
+     * @param name of the field to set
+     * @param value value of the field
+     * @return this document for convenience
+     */
+    public Document setField(String name, Object value)
     {
         synchronized (fields)
         {
@@ -231,17 +339,29 @@ public final class Document
     }
 
     /**
+     * Transforms a {@link Document} to its identifier returned by
+     * {@link Document#getId()}.
+     */
+    public static final class DocumentToId implements Function<Document, Integer>
+    {
+        public static final DocumentToId INSTANCE = new DocumentToId();
+
+        private DocumentToId()
+        {
+        }
+
+        public Integer apply(Document document)
+        {
+            return document.id;
+        }
+    }
+
+    /**
      * Compares {@link Document}s by their identifiers {@link #getId()}, which effectively
      * gives the original order in which they were returned by the document source.
      */
-    public static final Comparator<Document> BY_ID_COMPARATOR = Comparators
-        .nullLeastOrder(Comparators.fromFunction(new Function<Document, Integer>()
-        {
-            public Integer apply(Document document)
-            {
-                return document.id;
-            }
-        }));
+    public static final Comparator<Document> BY_ID_COMPARATOR = Ordering.natural()
+        .nullsFirst().onResultOf(DocumentToId.INSTANCE);
 
     /**
      * Transfers some fields from the map to individual class fields.
@@ -249,17 +369,12 @@ public final class Document
     @Persist
     @SuppressWarnings(
     {
-        "unused", "unchecked"
+        "unused"
     })
     private void beforeSerialization()
     {
         synchronized (fields)
         {
-            title = (String) fields.get(TITLE);
-            snippet = (String) fields.get(SUMMARY);
-            url = (String) fields.get(CONTENT_URL);
-            sources = (List<String>) fields.get(SOURCES);
-
             // Wrapper iterates over the whole map, so we need to synchronize
             // to avoid concurrent modification exceptions in setters
             otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
@@ -282,19 +397,8 @@ public final class Document
         {
             if (otherFieldsForSerialization != null)
             {
-                fields = SimpleXmlWrappers.unwrap(otherFieldsForSerialization);
+                fields.putAll(SimpleXmlWrappers.unwrap(otherFieldsForSerialization));
             }
-            fields.put(TITLE, title);
-            fields.put(SUMMARY, snippet);
-            fields.put(CONTENT_URL, url);
-            if (sources != null)
-            {
-                fields.put(SOURCES, sources);
-            }
-
-            fieldsView = Collections.unmodifiableMap(fields);
         }
-
-        sources = null;
     }
 }

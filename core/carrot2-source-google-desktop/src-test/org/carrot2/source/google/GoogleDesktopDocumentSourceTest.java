@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,15 +15,13 @@ package org.carrot2.source.google;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
-import org.junit.*;
-import org.junit.runner.RunWith;
-import org.junitext.runners.AnnotationRunner;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * Test cases for {@link GoogleDesktopDocumentSource}. The test cases are ignored by
  * default.
  */
-@RunWith(AnnotationRunner.class)
 @Ignore
 public class GoogleDesktopDocumentSourceTest extends
     QueryableDocumentSourceTestBase<GoogleDesktopDocumentSource>

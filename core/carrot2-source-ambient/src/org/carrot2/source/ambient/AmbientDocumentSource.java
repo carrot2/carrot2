@@ -1,8 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -124,6 +123,16 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
     @Internal
     public List<Document> documents;
 
+    /**
+     * Ambient topics and subtopics covered in the output documents. The set is computed
+     * for the output {@link #documents} and it may vary for the same main topic based
+     * e.g. on the requested number of {@link #results} or {@link #minTopicSize}.
+     */
+    @Processing
+    @Output
+    @Attribute
+    public Set<Object> topicIds;
+
     @Processing
     @Output
     @Attribute(key = AttributeNames.QUERY)
@@ -192,6 +201,7 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process() throws ProcessingException
     {
         query = topic.query;
@@ -202,7 +212,8 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
         {
             public boolean apply(Document document)
             {
-                final String documentTopic = document.getField(Document.TOPIC);
+                // For now there is only one topic per document in Ambient
+                final String documentTopic = getAmbientTopic(document);
                 return subtopicSizes.get(documentTopic) >= minTopicSize
                     && (includeDocumentsWithoutTopic || !documentTopic.endsWith(".0"));
             }
@@ -212,6 +223,19 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
         {
             documents = documents.subList(0, results);
         }
+
+        topicIds = Sets.newHashSet();
+        for (Document document : documents)
+        {
+            topicIds.addAll((Collection<? extends Object>) document
+                .<Object> getField(Document.PARTITIONS));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    static String getAmbientTopic(Document document)
+    {
+        return ((List<String>) document.getField(Document.PARTITIONS)).get(0);
     }
 
     /**
@@ -221,7 +245,7 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
     {
         return subtopicLabels.get(topicId);
     }
-    
+
     /**
      * Loads human-readable labels for subtopics.
      */
@@ -304,14 +328,14 @@ public class AmbientDocumentSource extends ProcessingComponentBase implements
 
                 // Build document
                 final Document document = new Document();
-                document.addField(Document.CONTENT_URL, split[1]);
-                document.addField(Document.TITLE, split[2]);
+                document.setField(Document.CONTENT_URL, split[1]);
+                document.setField(Document.TITLE, split[2]);
                 if (split.length > 3)
                 {
-                    document.addField(Document.SUMMARY, split[3]);
+                    document.setField(Document.SUMMARY, split[3]);
                 }
-                document.addField(Document.TOPIC, buildTopicId(topicId,
-                    resultSubtopicIds[topicId][resultIndex]));
+                document.setField(Document.PARTITIONS, ImmutableList.of(buildTopicId(
+                    topicId, resultSubtopicIds[topicId][resultIndex])));
 
                 // Add to list
                 List<Document> topicList = documents.get(topicId);

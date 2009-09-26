@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,21 +12,21 @@
 
 package org.carrot2.source.xml;
 
+import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.IController;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.resource.*;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junitext.Prerequisite;
-import org.junitext.runners.AnnotationRunner;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -35,7 +34,6 @@ import com.google.common.collect.Maps;
 /**
  * Test cases for {@link XmlDocumentSource}.
  */
-@RunWith(AnnotationRunner.class)
 public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSource>
 {
     private ResourceUtils resourceUtils = ResourceUtilsFactory.getDefaultResourceUtils();
@@ -261,9 +259,10 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     }
 
     @Test
-    @Prerequisite(requires = "carrot2XmlFeedTestsEnabled")
     public void testRemoteUrl() throws MalformedURLException
     {
+        assumeTrue(carrot2XmlFeedTestsEnabled());
+
         IResource xml = new URLResourceWithParams(new URL(getCarrot2XmlFeedUrlBase()
             + "&q=${query}&results=${results}"));
         final String query = "apple computer";
@@ -293,5 +292,22 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         assertEquals(Lists.newArrayList("http://www.research.ibm.com/security/mars.html",
             "http://www-3.ibm.com/software/wireless/wsdd/"), Lists.transform(
             getDocuments(), DOCUMENT_TO_CONTENT_URL));
+    }
+
+    /**
+     * Allows to skip running tests when details of the Carrot2 search feed are not
+     * provided.
+     */
+    private static boolean carrot2XmlFeedTestsEnabled()
+    {
+        return externalApiTestsEnabled() && StringUtils.isNotBlank(getCarrot2XmlFeedUrlBase());
+    }
+
+    /**
+     * Returns the Carrot2 XML feed URL base or <code>null</code> if not provided.
+     */
+    private static String getCarrot2XmlFeedUrlBase()
+    {
+        return System.getProperty("carrot2.xml.feed.url.base");
     }
 }

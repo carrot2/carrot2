@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -22,7 +21,7 @@ import org.eclipse.ui.*;
 /**
  * {@link AdunaClusterMapView} displays clusters using Aduna's Cluster View component.
  * 
- * @see http://www.aduna-software.com/technologies/clustermap/overview.view
+ * @see "http://www.aduna-software.com/technologies/clustermap/overview.view"
  */
 public final class AdunaClusterMapView extends PageBookViewBase
 {

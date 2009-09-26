@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -37,14 +36,10 @@ import org.eclipse.swt.widgets.*;
  */
 public class IndexDirectoryEditor extends AttributeEditorAdapter
 {
-    /*
-     * 
-     */
+    /** Preference store key for keeping last selected path. */
     public static final String PREF_LAST_SELECTED_LUCENE_DIR = "resource-editor.last-selected-lucene-dir";
 
-    /*
-     * Disposal of resources.
-     */
+    /** Disposal of resources. */
     private DisposeBin disposeBin = new DisposeBin();
 
     /**
@@ -124,6 +119,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
     /*
      * 
      */
+    @SuppressWarnings("deprecation")
     private void openIndexDialog()
     {
         final DirectoryDialog dialog = new DirectoryDialog(this.resourceInfo.getShell());

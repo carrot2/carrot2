@@ -1,8 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,6 +16,9 @@ import java.util.Map;
 
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
+
+import com.google.common.base.Predicates;
+import com.google.common.collect.Maps;
 
 /**
  * Static life cycle and controller utilities (for use within the core package).
@@ -188,8 +191,10 @@ public final class ControllerUtils
         {
             processingComponent.afterProcessing();
 
-            AttributeBinder.bind(processingComponent, attributes, Output.class,
-                Processing.class);
+          final Map<String, Object> outputAttributesWithNulls = Maps.newHashMap();
+          AttributeBinder.bind(processingComponent, outputAttributesWithNulls, Output.class,
+              Processing.class);
+          attributes.putAll(Maps.filterValues(outputAttributesWithNulls, Predicates.notNull()));
         }
         catch (final InstantiationException e)
         {

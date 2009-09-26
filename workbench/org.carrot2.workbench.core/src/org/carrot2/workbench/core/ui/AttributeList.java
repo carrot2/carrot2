@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,6 +14,7 @@ package org.carrot2.workbench.core.ui;
 
 import java.text.Collator;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.core.IProcessingComponent;
@@ -22,6 +22,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.workbench.core.helpers.GUIFactory;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.carrot2.workbench.editors.factory.EditorNotFoundException;
@@ -32,8 +33,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.*;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -48,6 +48,13 @@ public final class AttributeList extends Composite implements IAttributeEventPro
      */
     public final static int SPACE_BEFORE_LABEL = 5;
 
+    /**
+     * Key for enabling validation overlays (artificial attribute key for editor listeners).
+     * 
+     * @see #setAttribute(String, Object)
+     */
+    public static final String ENABLE_VALIDATION_OVERLAYS = "enable.validation.overlays";
+    
     /**
      * A list of {@link AttributeDescriptor}s, indexed by their keys.
      */
@@ -214,6 +221,9 @@ public final class AttributeList extends Composite implements IAttributeEventPro
             }
             catch (EditorNotFoundException ex)
             {
+                Utils.logError("No editor for attribute: "
+                    + descriptor.key + " (class: " + descriptor.type + ")", false);
+
                 /*
                  * Skip editor.
                  */
@@ -251,6 +261,16 @@ public final class AttributeList extends Composite implements IAttributeEventPro
                 continue;
             }
 
+            final Object defaultValue;
+            if (currentValues != null && currentValues.get(key) != null)
+            {
+                defaultValue = currentValues.get(key);
+            }
+            else
+            {
+                defaultValue = attributeDescriptors.get(key).defaultValue;
+            }
+
             // Add label to editors that do not have it.
             if (!editorInfo.displaysOwnLabel)
             {
@@ -268,34 +288,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
                 /*
                  * Add validation overlay.
                  */
-                {
-                    final ControlDecoration decoration = new ControlDecoration(label,
-                        SWT.LEFT | SWT.BOTTOM);
-
-                    FieldDecoration requiredDecoration = FieldDecorationRegistry
-                        .getDefault().getFieldDecoration(
-                            FieldDecorationRegistry.DEC_ERROR);
-
-                    decoration.setImage(requiredDecoration.getImage());
-                    decoration.setDescriptionText("Invalid value");
-                    decoration.hide();
-
-                    final IAttributeListener validationListener = 
-                        new InvalidStateDecorationListener(decoration, descriptor);
-
-                    globalEventsProvider.addAttributeListener(validationListener);
-                    editor.addAttributeListener(validationListener);
-
-                    label.addDisposeListener(new DisposeListener()
-                    {
-                        public void widgetDisposed(DisposeEvent e)
-                        {
-                            globalEventsProvider.removeAttributeListener(validationListener);
-                            editor.removeAttributeListener(validationListener);
-                            decoration.dispose();
-                        }
-                    });                    
-                }
+                addValidationOverlay(descriptor, editor, defaultValue, label);                    
 
                 AttributeInfoTooltip.attach(label, descriptor);
             }
@@ -304,15 +297,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
             editor.createEditor(this, maxColumns);
 
             // Set the default value for the editor.
-            if (currentValues != null && currentValues.get(key) != null)
-            {
-                editor.setValue(currentValues.get(key));
-            }
-            else
-            {
-                editor.setValue(attributeDescriptors.get(key).defaultValue);
-            }
-
+            editor.setValue(defaultValue);
             editors.put(editor.getAttributeKey(), editor);
 
             /*
@@ -322,6 +307,41 @@ public final class AttributeList extends Composite implements IAttributeEventPro
 
             firstEditor = false;
         }
+    }
+
+    /**
+     * Adds validation overlay component to the control.
+     */
+    private void addValidationOverlay(final AttributeDescriptor descriptor,
+        final IAttributeEditor editor, final Object defaultValue, final Control label)
+    {
+        final ControlDecoration decoration = new ControlDecoration(label,
+            SWT.LEFT | SWT.BOTTOM);
+        decoration.hide();
+
+        final FieldDecoration requiredDecoration = FieldDecorationRegistry
+            .getDefault().getFieldDecoration(
+                FieldDecorationRegistry.DEC_ERROR);
+
+        decoration.setImage(requiredDecoration.getImage());
+        decoration.setDescriptionText("Invalid value");
+
+        final IAttributeListener validationListener = 
+            new InvalidStateDecorationListener(
+                decoration, descriptor, defaultValue);
+
+        globalEventsProvider.addAttributeListener(validationListener);
+        editor.addAttributeListener(validationListener);
+
+        label.addDisposeListener(new DisposeListener()
+        {
+            public void widgetDisposed(DisposeEvent e)
+            {
+                globalEventsProvider.removeAttributeListener(validationListener);
+                editor.removeAttributeListener(validationListener);
+                decoration.dispose();
+            }
+        });
     }
 
     /*

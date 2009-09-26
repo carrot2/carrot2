@@ -1,0 +1,22 @@
+<!DOCTYPE project SYSTEM "../dtd/Project.dtd">
+
+<project name="Search with unknown parameters" default="webtest">
+  <target name="webtest">
+    <webtest name="Search with unknown parameters">
+      <config easyajax="true" easyajaxdelay="5000"/>
+      &getStartupPage;
+      <setInputField htmlId="query" value="test" />
+      <forceHiddenInputField name="source" value="unknown" />
+      <setSelectField name="algorithm" value="url" />
+      <setSelectField name="results" value="100" />
+      <forceHiddenInputField name="view" value="unknown" />
+      <forceHiddenInputField name="skin" value="unknown" />
+        
+      <clickButton htmlId="search" />
+      <verifyXPath xpath="count(id('documents')/div) &gt; 50" 
+                   description="More than 50 documents expected" />
+      <verifyXPath xpath="count(id('clusters')//li) &gt; 5"
+                   description="More than 5 clusters expected" />
+    </webtest>
+  </target>
+</project>

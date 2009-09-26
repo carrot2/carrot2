@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,21 +12,19 @@
 
 package org.carrot2.dcs;
 
+import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
 
 import java.io.*;
 import java.net.MalformedURLException;
 
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.test.ExternalApiTestBase;
 import org.carrot2.util.StreamUtils;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.junit.*;
-import org.junit.runner.RunWith;
-import org.junitext.Prerequisite;
-import org.junitext.runners.AnnotationRunner;
 
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -37,8 +34,7 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage;
 /**
  * Test cases for the {@link DcsApp}.
  */
-@RunWith(AnnotationRunner.class)
-public class DcsAppTest extends ExternalApiTestBase
+public class DcsAppTest
 {
     private static DcsApp dcs;
 
@@ -61,22 +57,31 @@ public class DcsAppTest extends ExternalApiTestBase
     {
         final HtmlPage page = getStartPage();
         assertThat(page.getTitleText()).isEqualTo(
-            "Quick start - Document Clustering Server - Carrot2");
+            "Quick start - Document Clustering Server");
     }
 
     @Test
-    @Prerequisite(requires = "externalApiTestsEnabled")
     public void testExternalSource() throws Exception
     {
+        assumeTrue(externalApiTestsEnabled());
+
         final String query = "kaczyński";
         final HtmlForm form = getSearchForm();
         form.getInputByName("query").setValueAttribute(query);
         final HtmlSelect source = form.getSelectByName("dcs.source");
 
         assertThat(source.getOptions().size()).isGreaterThan(0);
-        source.setSelectedAttribute(source.getOptions().get(0), true);
-
-        checkXmlOutput(query, form);
+        final String sourceID = "boss-web";
+        for (HtmlOption option : source.getOptions())
+        {
+            if (sourceID.equals(option.getAttributeValue("value")))
+            {
+                source.setSelectedAttribute(option, true);
+                checkXmlOutput(query, form);
+                return;
+            }
+        }
+        Assert.fail("No required external source: " + sourceID);
     }
 
     @Test
@@ -149,7 +154,7 @@ public class DcsAppTest extends ExternalApiTestBase
     {
         final HtmlPage page = getPage("parameters.html");
         assertThat(page.getTitleText()).isEqualTo(
-            "Request parameters - Document Clustering Server - Carrot2");
+            "Request parameters - Document Clustering Server");
         assertThat(page.getBody().getTextContent()).contains("dcs.source").doesNotMatch(
             "Loading\\.\\.\\.");
     }
@@ -159,7 +164,7 @@ public class DcsAppTest extends ExternalApiTestBase
     {
         final HtmlPage page = getPage("input.html");
         assertThat(page.getTitleText()).isEqualTo(
-            "Input format - Document Clustering Server - Carrot2");
+            "Input format - Document Clustering Server");
         assertThat(page.getBody().getTextContent()).contains("(optional)").doesNotMatch(
             "Loading\\.\\.\\.");
     }
@@ -169,7 +174,7 @@ public class DcsAppTest extends ExternalApiTestBase
     {
         final HtmlPage page = getPage("output.html");
         assertThat(page.getTitleText()).isEqualTo(
-            "Output format - Document Clustering Server - Carrot2");
+            "Output format - Document Clustering Server");
         assertThat(page.getBody().getTextContent()).contains("(optional)").doesNotMatch(
             "Loading\\.\\.\\.");
     }

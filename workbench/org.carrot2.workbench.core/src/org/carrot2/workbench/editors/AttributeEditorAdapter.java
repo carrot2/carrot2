@@ -2,8 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2008, Dawid Weiss, Stanisław Osiński.
- * Portions (C) Contributors listed in "carrot2.CONTRIBUTORS" file.
+ * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -56,9 +55,8 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     }
 
     /**
-     * @return Overriden
-     *         {@link #init(BindableDescriptor, AttributeDescriptor, IAttributeEventProvider)}
-     *         with original parameters saved to protected fields.
+     * @return This method is invoked to initialize the subclasses. Some values have been assigned
+     * to protected fields already.
      */
     protected abstract AttributeEditorInfo init(Map<String,Object> defaultValues);
 

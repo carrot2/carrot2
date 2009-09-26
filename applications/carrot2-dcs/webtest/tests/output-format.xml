@@ -8,7 +8,7 @@
       <invoke url="/output.html" description="Get output format page" />
 
       <!-- Wait for AJAX stuff to load -->
-      <sleep seconds="2" />
+      <sleep seconds="5" />
       <verifyElementContentLoaded elementId="output-example-xml" />
       <verifyElementContentLoaded elementId="output-example-json" />
     </webtest>
