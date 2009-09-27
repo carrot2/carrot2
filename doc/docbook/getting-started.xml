@@ -384,7 +384,7 @@
         </listitem>
       </orderedlist>
       
-      <tip>
+      <tip role="carrot2">
         <para>
           &PROD; clustering can also be performed directly within Solr by means of
           Solr's <link xlink:href="http://wiki.apache.org/solr/ClusteringComponent">&PROD; Clustering Component</link>. Please see
