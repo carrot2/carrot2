@@ -126,18 +126,11 @@ svn copy https://carrot2.svn.sourceforge.net/svnroot/carrot2/trunk
                     distribution file names, JavaDoc page title and other version-sensitive places. 
                     Note the property name should be <filename>carrot2.version.stable</filename>, e.g.:
                     
-                    <programlisting><![CDATA[carrot2.version.stable=3.0.1
-carrot2.version=${carrot2.version.stable}]]></programlisting>
-                  </para>
-                </formalpara>
-              </listitem>
-              
-              <listitem>
-                <formalpara>
-                  <title>&C2; plugin versions in &DCW;</title>
-                  
-                  <para>
-                    Update &C2; plugin version strings in the &DCW; to the version being released.
+                    <programlisting><![CDATA[carrot2.version.stable=3.3.0
+carrot2.version=${carrot2.version.stable}
+
+# workbench plugin/ feature versions.
+carrot2.version.workbench=3.3.0.dev-snapshot]]></programlisting>
                   </para>
                 </formalpara>
               </listitem>
