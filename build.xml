@@ -593,6 +593,7 @@
     <jar destfile="${jar.dir}/carrot2-core.jar">
       <fileset dir="${build.dir}">
         <exclude name="ambient/**" />
+        <exclude name="odp239/**" />
         <exclude name="org.carrot2.util.attribute*.xml" />
         <exclude name="**/*.html" />
       </fileset>
@@ -625,7 +626,6 @@
 
     <delete includeEmptyDirs="true">
       <fileset dir="${jar.mini.dir}">
-        <include name="ambient/**" />
         <include name="org.carrot2.source*.xml" />
         <include name="org.carrot2.output*.xml" />
         <include name="org/carrot2/source/**" />

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -19,7 +18,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 
 /**
- * Simple console formatter for dumping {@link ProcessingResult}. 
+ * Simple console formatter for dumping {@link ProcessingResult}.
  */
 public class ConsoleFormatter
 {
@@ -32,25 +31,30 @@ public class ConsoleFormatter
         // Show documents
         if (documents != null)
         {
-            System.out.println("Collected " + documents.size() + " documents\n");
-            for (final Document document : documents)
-            {
-                displayDocument(0, document);
-            }
+            displayDocuments(documents);
         }
 
         // Show clusters
         if (clusters != null)
         {
-            System.out.println("\n\nCreated " + clusters.size() + " clusters\n");
-            int clusterNumber = 1;
-            for (final Cluster cluster : clusters)
-            {
-                displayCluster(0, "" + clusterNumber++, cluster);
-            }
+            displayClusters(clusters);
         }
 
         // Show attributes other attributes
+        displayAttributes(attributes);
+    }
+
+    public static void displayDocuments(final Collection<Document> documents)
+    {
+        System.out.println("Collected " + documents.size() + " documents\n");
+        for (final Document document : documents)
+        {
+            displayDocument(0, document);
+        }
+    }
+
+    public static void displayAttributes(final Map<String, Object> attributes)
+    {
         System.out.println("Attributes:");
         for (final Map.Entry<String, Object> attribute : attributes.entrySet())
         {
@@ -59,6 +63,16 @@ public class ConsoleFormatter
             {
                 System.out.println(attribute.getKey() + ":   " + attribute.getValue());
             }
+        }
+    }
+
+    public static void displayClusters(final Collection<Cluster> clusters)
+    {
+        System.out.println("\n\nCreated " + clusters.size() + " clusters\n");
+        int clusterNumber = 1;
+        for (final Cluster cluster : clusters)
+        {
+            displayCluster(0, "" + clusterNumber++, cluster);
         }
     }
 
@@ -85,7 +99,8 @@ public class ConsoleFormatter
         {
             System.out.print("  ");
         }
-        System.out.println(label + " (" + cluster.getAllDocuments().size() + " documents)");
+        System.out.println(label + " (" + cluster.getAllDocuments().size()
+            + " documents, score: " + cluster.getScore() + ")");
 
         // if this cluster has documents, display three topmost documents.
         for (final Document document : cluster.getDocuments())

@@ -76,6 +76,11 @@ public class NormalizedMutualInformationMetric extends IdealPartitioningBasedMet
         final Map<Object, Integer> documentCountByPartition = getDocumentCountByPartition(documents);
         final int documentCount = documents.size();
 
+        if (partitions.size() <= 1) {
+            normalizedMutualInformation = 0.0;
+            return;
+        }
+        
         final Collection<Integer> partitionSizes = Maps.transformValues(
             documentsByPartition.asMap(), new Function<Collection<Document>, Integer>()
             {
@@ -86,11 +91,6 @@ public class NormalizedMutualInformationMetric extends IdealPartitioningBasedMet
             }).values();
         double partitionEntropy = entropy(documentCount, partitionSizes
             .toArray(new Integer [partitionSizes.size()]));
-        if (partitionEntropy == 0)
-        {
-            normalizedMutualInformation = 0.0;
-            return;
-        }
 
         final List<Integer> clusterSizes = Lists.transform(clusters,
             new Function<Cluster, Integer>()
