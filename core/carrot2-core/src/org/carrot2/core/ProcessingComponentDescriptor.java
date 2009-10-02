@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -172,8 +171,8 @@ public class ProcessingComponentDescriptor
     }
 
     /**
-     * @return Return the name of a resource from which {@link #getAttributeSets()}
-     * were read or <code>null</code> if there was no such resource.
+     * @return Return the name of a resource from which {@link #getAttributeSets()} were
+     *         read or <code>null</code> if there was no such resource.
      */
     public String getAttributeSetsResource()
     {
@@ -203,8 +202,9 @@ public class ProcessingComponentDescriptor
      * is returned.
      * </p>
      */
-    private IProcessingComponent newInitializedInstance() throws InstantiationException,
-        IllegalAccessException
+    @SuppressWarnings("unchecked")
+    private IProcessingComponent newInitializedInstance(boolean init)
+        throws InstantiationException, IllegalAccessException
     {
         final IProcessingComponent instance = getComponentClass().newInstance();
         final Map<String, Object> initAttributes = Maps.newHashMap();
@@ -218,7 +218,16 @@ public class ProcessingComponentDescriptor
         final ControllerContextImpl context = new ControllerContextImpl();
         try
         {
-            ControllerUtils.init(instance, initAttributes, false, context);
+            AttributeBinder
+                .bind(instance, initAttributes, false, Input.class, Init.class);
+
+            if (init)
+            {
+                instance.init(context);
+            }
+
+            AttributeBinder.bind(instance, initAttributes, false, Output.class,
+                Init.class);
         }
         finally
         {
@@ -238,7 +247,26 @@ public class ProcessingComponentDescriptor
     public BindableDescriptor getBindableDescriptor() throws InstantiationException,
         IllegalAccessException
     {
-        return BindableDescriptorBuilder.buildDescriptor(newInitializedInstance());
+        return getBindableDescriptor(true);
+    }
+
+    /**
+     * Builds and returns a {@link BindableDescriptor} for an instance of this
+     * descriptor's {@link IProcessingComponent}, with default {@link Init} attributes
+     * initialized with the default attribute set. If the default attribute set does not
+     * provide values for some required {@link Bindable} {@link Init} attributes, the
+     * returned descriptor may be incomplete.
+     * 
+     * @param init if <code>true</code>, the component will be initialized by calling
+     *            {@link IProcessingComponent#init(IControllerContext)}. Otherwise, the
+     *            {@link Init} attributes will be bound but
+     *            {@link IProcessingComponent#init(IControllerContext)} will not be
+     *            called.
+     */
+    public BindableDescriptor getBindableDescriptor(boolean init)
+        throws InstantiationException, IllegalAccessException
+    {
+        return BindableDescriptorBuilder.buildDescriptor(newInitializedInstance(init));
     }
 
     /**
@@ -265,10 +293,11 @@ public class ProcessingComponentDescriptor
         {
             // Try to load from the directly provided location
             resource = resourceUtils.getFirst(attributeSetsResource, clazz);
-            
+
             if (resource == null)
             {
-                throw new IOException("Attribute set resource not found: " + attributeSetsResource);
+                throw new IOException("Attribute set resource not found: "
+                    + attributeSetsResource);
             }
         }
 
@@ -317,7 +346,7 @@ public class ProcessingComponentDescriptor
         try
         {
             loadAttributeSets();
-            newInitializedInstance();
+            newInitializedInstance(true);
         }
         catch (Throwable e)
         {

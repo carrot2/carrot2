@@ -35,6 +35,9 @@ public class FubDocumentSource extends ProcessingComponentBase implements IDocum
      * Topics and subtopics covered in the output documents. The set is computed for the
      * output {@link #documents} and it may vary for the same main topic based e.g. on the
      * requested number of {@link #results} or {@link #minTopicSize}.
+     * 
+     * @level Advanced
+     * @group Topic ID
      */
     @Processing
     @Output
