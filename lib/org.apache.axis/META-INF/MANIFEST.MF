@@ -108,3 +108,4 @@ Bundle-ClassPath: axis.jar,
  saaj.jar,
  wsdl4j-1.5.1.jar
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: org.apache.commons.logging
