@@ -172,7 +172,7 @@
         <exclude name="WEB-INF" />
       </fileset>
       <lib dir="${lib.flattened}">
-      	<exclude name="**/slf4j-nop-*.jar" />
+      	<exclude name="**/slf4j-*" />
       </lib>
       <lib dir="${dcs.lib.dir}" />
       <classes dir="${dcs.dir}/classes">
