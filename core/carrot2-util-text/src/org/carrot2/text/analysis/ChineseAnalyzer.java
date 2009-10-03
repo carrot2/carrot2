@@ -16,13 +16,13 @@ import java.io.Reader;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.ReflectionUtils;
+import org.slf4j.LoggerFactory;
 
 /**
  * An analyzer for the Chinese language, based on Lucene's Chinese analyzer.
@@ -53,8 +53,7 @@ public final class ChineseAnalyzer extends Analyzer
         }
         catch (Exception e)
         {
-            Logger
-                .getLogger(ChineseAnalyzer.class)
+            LoggerFactory.getLogger(ChineseAnalyzer.class)
                 .warn(
                     "Could not instantiate Smart Chinese Analyzer, clustering quality "
                         + "of Chinese content may be degraded. For best quality clusters, "

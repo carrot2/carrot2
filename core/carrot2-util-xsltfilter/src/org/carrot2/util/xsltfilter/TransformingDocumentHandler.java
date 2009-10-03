@@ -22,7 +22,7 @@ import javax.servlet.ServletContext;
 import javax.xml.transform.*;
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.util.xml.TemplatesPool;
 import org.carrot2.util.xml.TransformerErrorListener;
 import org.xml.sax.*;
@@ -33,7 +33,7 @@ import org.xml.sax.*;
  */
 final class TransformingDocumentHandler implements ContentHandler
 {
-    private static final Logger log = Logger.getLogger(TransformingDocumentHandler.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(TransformingDocumentHandler.class);
 
     /**
      * A map of XSLT output methods and their corresponding MIME content types.

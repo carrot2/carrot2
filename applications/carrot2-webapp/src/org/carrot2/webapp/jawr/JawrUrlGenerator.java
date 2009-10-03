@@ -19,7 +19,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.util.StreamUtils;
 
 import net.jawr.web.resource.bundle.handler.ResourceBundlesHandler;
@@ -31,7 +31,7 @@ import net.jawr.web.servlet.RendererRequestUtils;
  */
 public class JawrUrlGenerator
 {
-    private static final Logger logger = Logger.getLogger(JawrUrlGenerator.class);
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(JawrUrlGenerator.class);
 
     private final ResourceBundlesHandler cssJawrHandler;
     private final ResourceBundlesHandler jsJawrHandler;
@@ -83,7 +83,7 @@ public class JawrUrlGenerator
         catch (IOException e)
         {
             // Cannot happen really
-            logger.error(e);
+            logger.error(e.getMessage());
         }
 
         return links;

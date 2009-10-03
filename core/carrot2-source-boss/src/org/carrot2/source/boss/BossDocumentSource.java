@@ -14,7 +14,7 @@ package org.carrot2.source.boss;
 
 import java.util.concurrent.Callable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
@@ -31,7 +31,7 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
 public final class BossDocumentSource extends MultipageSearchEngine
 {
     /** Logger for this class. */
-    final static Logger logger = Logger.getLogger(BossDocumentSource.class);
+    final static Logger logger = org.slf4j.LoggerFactory.getLogger(BossDocumentSource.class);
 
     /**
      * Maximum concurrent threads from all instances of this component.

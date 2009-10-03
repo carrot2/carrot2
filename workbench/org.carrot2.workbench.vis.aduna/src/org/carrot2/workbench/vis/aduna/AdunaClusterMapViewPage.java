@@ -25,7 +25,7 @@ import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
@@ -79,7 +79,7 @@ final class AdunaClusterMapViewPage extends Page
      */
     private final int REFRESH_DELAY = 500;
 
-    private final static Logger logger = Logger.getLogger(AdunaClusterMapViewPage.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(AdunaClusterMapViewPage.class);
 
     /**
      * Classification root.

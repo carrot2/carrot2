@@ -92,6 +92,7 @@
     <include name="lib/**/*.jar" />
     <include name="applications/carrot2-dcs/**/*.jar" />
     <include name="applications/carrot2-webapp/lib/*.jar" />
+    <exclude name="lib/org.slf4j/slf4j-log4j12*" />
   </patternset>
 
   <!-- Excludes both JAR and LICENSE files -->
@@ -110,6 +111,8 @@
     <exclude name="lib/org.kohsuke.args4j/**" />
     <exclude name="lib/org.apache.xml/**" />
     <exclude name="lib/com.google.collections/ri*" />
+    <exclude name="lib/org.slf4j/slf4j-log4j12*" />
+    <exclude name="lib/org.apache.log4j/*" />
   </patternset>
 
   <patternset id="lib.core">
@@ -117,20 +120,22 @@
     <include name="core/carrot2-util-matrix/lib/*.jar" />
     <patternset refid="lib.core.excludes" />
   </patternset>
-  
+
   <patternset id="lib.core.mini">
     <include name="lib/**/colt*.jar" />
     <include name="lib/**/commons-lang*.jar" />
     <include name="lib/**/ehcache*.jar" />
     <include name="lib/**/google-collect*.jar" />
     <include name="lib/**/jackson*.jar" />
-    <include name="lib/**/log4j*.jar" />
     <include name="lib/**/lucene-core*.jar" />
     <include name="lib/**/lucene-snowball*.jar" />
     <include name="lib/**/nni*.jar" />
     <include name="lib/**/pcj*.jar" />
+
+    <include name="lib/**/slf4j-api*.jar" />
+    <include name="lib/**/slf4j-nop*.jar" />
   </patternset>
-  
+
   <patternset id="licenses.core">
     <include name="lib/**/*.LICENSE" />
     <patternset refid="lib.core.excludes" />

@@ -116,8 +116,7 @@ public class LogInitContextListener implements ServletContextListener
             final String contextPathName = getContextPathSegment(contextPath);
 
             addAppender(new File(logDir, "c2-" + contextPathName + "-queries.log"),
-                Logger.getLogger(QueryProcessorServlet.QUERY_LOG_NAME),
-                "%d{ISO8601},%m%n");
+                Logger.getLogger(QueryProcessorServlet.QUERY_LOG_NAME), "%d{ISO8601},%m%n");
 
             addAppender(new File(logDir, "c2-" + contextPathName + "-full.log"), Logger
                 .getRootLogger(), "%d{ISO8601},[%p],[%t],%c,%m%n");

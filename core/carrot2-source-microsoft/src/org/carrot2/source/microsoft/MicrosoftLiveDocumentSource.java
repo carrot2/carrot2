@@ -18,13 +18,13 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.*;
 import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.attribute.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.microsoft.msnsearch.*;
 
@@ -39,16 +39,7 @@ public final class MicrosoftLiveDocumentSource extends MultipageSearchEngine
     public final static String CARROTSEARCH_APPID = "DE531D8A42139F590B253CADFAD7A86172F93B96";
 
     /** Logger for this class. */
-    private final static Logger logger = Logger
-        .getLogger(MicrosoftLiveDocumentSource.class);
-
-    /*
-     * Disable annoying "missing activation.jar" message from Axis.
-     */
-    static
-    {
-        Logger.getLogger("org.apache.axis.utils.JavaUtils").setLevel(Level.ERROR);
-    }
+    private final static Logger logger = LoggerFactory.getLogger(MicrosoftLiveDocumentSource.class);
 
     /**
      * Maximum concurrent threads from all instances of this component.

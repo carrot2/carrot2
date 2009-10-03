@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtils;
@@ -28,7 +28,7 @@ import com.google.common.collect.*;
  */
 final class LexicalResources
 {
-    private final static Logger logger = Logger.getLogger(LexicalResources.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(LexicalResources.class);
 
     /**
      * If we cannot find resources for some languages, emit warning once only.

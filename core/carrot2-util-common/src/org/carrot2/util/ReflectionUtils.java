@@ -12,7 +12,7 @@
 
 package org.carrot2.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 /**
  * Utilities related to Java reflection.
@@ -37,7 +37,7 @@ public final class ReflectionUtils
         }
         catch (ClassNotFoundException e)
         {
-            Logger.getLogger(ReflectionUtils.class).warn("Could not load class: "
+            org.slf4j.LoggerFactory.getLogger(ReflectionUtils.class).warn("Could not load class: "
                 + clazzName + " (" + e.getMessage() + ").");
             throw e;
         }

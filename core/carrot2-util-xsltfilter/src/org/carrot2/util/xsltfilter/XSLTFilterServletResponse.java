@@ -21,7 +21,7 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.util.xml.TemplatesPool;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -33,7 +33,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 final class XSLTFilterServletResponse extends HttpServletResponseWrapper
 {
-    private static final Logger log = Logger.getLogger(XSLTFilterServletResponse.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(XSLTFilterServletResponse.class);
 
     /**
      * If true, the stream will be passed verbatim to the next filter. This usually

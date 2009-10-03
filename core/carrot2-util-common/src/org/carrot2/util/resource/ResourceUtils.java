@@ -15,7 +15,7 @@ package org.carrot2.util.resource;
 import java.io.*;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.util.StreamUtils;
 
 import com.google.common.collect.Lists;
@@ -29,7 +29,7 @@ public final class ResourceUtils
     /**
      * Logger instance.
      */
-    private final static Logger logger = Logger.getLogger(ResourceUtils.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(ResourceUtils.class);
 
     /**
      * An array of resource locators (used first to last).

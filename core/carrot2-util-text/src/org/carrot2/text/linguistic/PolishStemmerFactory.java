@@ -12,7 +12,7 @@
 
 package org.carrot2.text.linguistic;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import java.util.List;
 
 import morfologik.stemming.WordData;
@@ -28,7 +28,7 @@ import org.carrot2.util.ReflectionUtils;
  */
 final class PolishStemmerFactory
 {
-    private final static Logger logger = Logger.getLogger(PolishStemmerFactory.class); 
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(PolishStemmerFactory.class); 
 
     private final static IStemmer stemmer;
     static

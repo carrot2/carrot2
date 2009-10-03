@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.httpclient.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
@@ -37,7 +37,7 @@ import org.simpleframework.xml.load.Persister;
 public abstract class BossSearchService
 {
     /** Logger for this object. */
-    protected final Logger logger = Logger.getLogger(this.getClass().getName());
+    protected final Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
 
     /**
      * Yahoo BOSS application ID assigned to Carrot2/ Carrot Search. Use your own, please.

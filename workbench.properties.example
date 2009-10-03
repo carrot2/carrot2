@@ -1,7 +1,7 @@
 # Note the usual layout of folders below -- they have the distribution version name
 # and an /eclipse *subfolder*.
 
-target.platform = /your-eclipse-bundles/3.4.1SR1
+target.platform = /your-eclipse-bundles/3.5
 eclipse.home = ${target.platform}/eclipse
 
 # Platform, windowing system and architecture on which Workbench JUnit tests are run.
@@ -17,6 +17,7 @@ eclipse.home = ${target.platform}/eclipse
 # aix, motif, ppc
 # hpux, motif, PA_RISC
 # macosx, carbon, ppc
+# macosx, cocoa, x86
 
 test.os=win32
 test.ws=win32

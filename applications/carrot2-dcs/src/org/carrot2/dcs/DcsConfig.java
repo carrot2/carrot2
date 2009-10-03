@@ -15,7 +15,7 @@ package org.carrot2.dcs;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.resource.IResource;
 import org.simpleframework.xml.Attribute;
@@ -49,7 +49,7 @@ class DcsConfig
 
     DcsConfig()
     {
-        logger = Logger.getLogger(DCS_APP_NAME);
+        logger = org.slf4j.LoggerFactory.getLogger(DCS_APP_NAME);
     }
 
     static DcsConfig deserialize(IResource configResource) throws Exception

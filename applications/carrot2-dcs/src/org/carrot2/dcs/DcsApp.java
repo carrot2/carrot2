@@ -13,9 +13,9 @@
 package org.carrot2.dcs;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.kohsuke.args4j.*;
+import org.mortbay.component.LifeCycle;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
@@ -25,7 +25,7 @@ import org.mortbay.jetty.webapp.WebAppContext;
  */
 public class DcsApp
 {
-    private final Logger log = Logger.getLogger("dcs");
+    private final Logger log = org.slf4j.LoggerFactory.getLogger("dcs");
 
     @Option(name = "-port", usage = "Port number to bind to")
     int port = 8080;
@@ -43,6 +43,18 @@ public class DcsApp
     String appName;
     Server server;
 
+    /** 
+     * Empty implementation of {@link LifeCycle.Listener}.
+     */
+    private static class ListenerAdapter implements LifeCycle.Listener
+    {
+        public void lifeCycleFailure(LifeCycle lc, Throwable t) { }
+        public void lifeCycleStarted(LifeCycle lc) { }
+        public void lifeCycleStarting(LifeCycle lc) { }
+        public void lifeCycleStopped(LifeCycle lc) { }
+        public void lifeCycleStopping(LifeCycle lc) { }
+    }    
+    
     DcsApp(String appName)
     {
         this.appName = appName;
@@ -57,12 +69,6 @@ public class DcsApp
     {
         System.setProperty("org.mortbay.log.class", Log4jJettyLog.class.getName());
 
-        /*
-         * Silence memory leak messages from TemplatesPool in command line mode. We use a
-         * hardcoded class name to avoid a dependency on Carrot2 core in DCS starter.
-         */
-        Logger.getLogger("org.carrot2.util.xml.TemplatesPool").setLevel(Level.ERROR);
-
         log.info("Starting DCS...");
 
         server = new Server();
@@ -74,6 +80,26 @@ public class DcsApp
 
         WebAppContext wac = new WebAppContext();
         wac.setContextPath("/");
+        wac.addLifeCycleListener(new ListenerAdapter()
+        {
+            public void lifeCycleStarted(LifeCycle lc)
+            {
+                log.info("DCS started on port: " + port);
+            }
+            
+            
+            public void lifeCycleFailure(LifeCycle lc, Throwable t)
+            {
+                log.error("DCS startup failure.");
+                stop();
+            }
+
+            public void lifeCycleStopped(LifeCycle lc)
+            {
+                log.info("DCS stopped.");
+            }
+        });
+        wac.setParentLoaderPriority(true);
 
         final String dcsWar = System.getProperty("dcs.war");
         if (dcsWar != null)
@@ -100,7 +126,6 @@ public class DcsApp
         try
         {
             server.start();
-            log.info("DCS started, point your browser to: http://localhost:" + port + "/");
         }
         catch (Exception e)
         {
@@ -152,8 +177,7 @@ public class DcsApp
         }
         catch (Exception e)
         {
-            dcs.log.fatal("Startup failure: "
-                + ExceptionUtils.getMessage(e));
+            dcs.log.error("Startup failure: " + ExceptionUtils.getMessage(e));
         }
     }
 }

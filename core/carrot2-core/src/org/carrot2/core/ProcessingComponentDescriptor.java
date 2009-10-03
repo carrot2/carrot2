@@ -15,7 +15,7 @@ import java.io.*;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.ReflectionUtils;
@@ -350,7 +350,7 @@ public class ProcessingComponentDescriptor
         }
         catch (Throwable e)
         {
-            Logger.getLogger(this.getClass()).warn(
+            org.slf4j.LoggerFactory.getLogger(this.getClass()).warn(
                 "Component availability failure: " + componentClassName, e);
             this.componentAvailable = false;
         }

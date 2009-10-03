@@ -13,7 +13,7 @@
 package org.carrot2.util.attribute;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
@@ -199,7 +199,7 @@ abstract class MetadataExtractor
             catch (Throwable e)
             {
                 // Thrown if unknown enum
-                Logger.getLogger(MetadataExtractor.class).warn(
+                org.slf4j.LoggerFactory.getLogger(MetadataExtractor.class).warn(
                     "Ignoring unknown attribute level: " + value);
             }
         }

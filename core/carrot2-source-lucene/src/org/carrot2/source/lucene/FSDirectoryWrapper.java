@@ -15,7 +15,7 @@ package org.carrot2.source.lucene;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.apache.lucene.store.FSDirectory;
 import org.carrot2.util.simplexml.ISimpleXmlWrapper;
 import org.simpleframework.xml.Element;
@@ -60,7 +60,7 @@ public final class FSDirectoryWrapper implements ISimpleXmlWrapper<FSDirectory>
         }
         catch (IOException e)
         {
-            Logger.getLogger(FSDirectoryWrapper.class).warn(
+            org.slf4j.LoggerFactory.getLogger(FSDirectoryWrapper.class).warn(
                 "Could not deserialize index location.", e);
         }
     }    

@@ -14,7 +14,7 @@ package org.carrot2.workbench.core.ui;
 
 import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.core.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
@@ -125,7 +125,7 @@ public final class ClusterTree extends Composite implements IPostSelectionProvid
      */
     public void show(final ProcessingResult result)
     {
-        Logger.getLogger("SEL: ").debug("Selection changed: " + result);
+        org.slf4j.LoggerFactory.getLogger("SEL: ").debug("Selection changed: " + result);
         final List<Cluster> clusters = result.getClusters();
         show(clusters);
     }
@@ -135,7 +135,7 @@ public final class ClusterTree extends Composite implements IPostSelectionProvid
      */
     public void clear()
     {
-        Logger.getLogger("SEL: ").debug("Selection changed: CLEAR");
+        org.slf4j.LoggerFactory.getLogger("SEL: ").debug("Selection changed: CLEAR");
         
         treeViewer.setInput(Collections.EMPTY_LIST);
     }

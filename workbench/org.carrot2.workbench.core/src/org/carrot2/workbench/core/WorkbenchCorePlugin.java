@@ -17,7 +17,6 @@ import java.net.URL;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.resource.*;
@@ -244,7 +243,6 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                 if (bundleURL == null)
                 {
                     String message = "Suite extension resource not found: " + suitePath;
-                    Logger.getRootLogger().error(message);
                     Utils.logError(message, false);
                     continue;
                 }
@@ -301,7 +299,6 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                 }
                 catch (Exception e)
                 {
-                    Logger.getRootLogger().error("Failed to load extension.", e);
                     // Skip errors, logging them.
                     Utils.logError("Failed to load suite extension.", e, false);
                 }

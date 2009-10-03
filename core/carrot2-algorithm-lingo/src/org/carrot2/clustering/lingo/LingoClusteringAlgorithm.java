@@ -15,7 +15,7 @@ package org.carrot2.clustering.lingo;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.matrix.NNIInterface;
@@ -37,7 +37,7 @@ import com.google.common.collect.Lists;
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
-    private static final Logger log = Logger.getLogger(LingoClusteringAlgorithm.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(LingoClusteringAlgorithm.class);
 
     /**
      * Report the warning about native libraries only once.

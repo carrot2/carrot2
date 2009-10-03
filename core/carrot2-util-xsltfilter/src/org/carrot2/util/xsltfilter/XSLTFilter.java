@@ -18,7 +18,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.util.xml.TemplatesPool;
 
 /**
@@ -34,7 +34,7 @@ import org.carrot2.util.xml.TemplatesPool;
  */
 public final class XSLTFilter implements Filter
 {
-    private final static Logger logger = Logger.getLogger(XSLTFilter.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(XSLTFilter.class);
 
     /**
      * Init parameter for the filter: if <code>true</code>, the parsed XSLT stylesheets

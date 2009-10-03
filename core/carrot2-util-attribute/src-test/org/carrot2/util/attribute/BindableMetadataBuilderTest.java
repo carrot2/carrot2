@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.attribute.test.metadata.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 public class BindableMetadataBuilderTest
 {
@@ -49,8 +50,7 @@ public class BindableMetadataBuilderTest
     {
         if (!sourcePathAvailable())
         {
-            org.apache.log4j.Logger
-                .getLogger(BindableMetadataBuilderTest.class)
+            LoggerFactory.getLogger(BindableMetadataBuilderTest.class)
                 .warn(
                     "Some tests skipped: provide path to sources of test classes in the '"
                         + SOURCE_PATH_PROPERTY

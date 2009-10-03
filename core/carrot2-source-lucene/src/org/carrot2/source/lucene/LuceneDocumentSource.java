@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.IdentityHashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -46,7 +46,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     IDocumentSource
 {
     /** Logger for this class. */
-    private final static Logger logger = Logger.getLogger(LuceneDocumentSource.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(LuceneDocumentSource.class);
 
     /*
      * Register selected SimpleXML wrappers for Lucene data types.

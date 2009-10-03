@@ -14,7 +14,6 @@ package org.carrot2.workbench.core;
 
 import java.util.*;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -24,14 +23,15 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
 import org.eclipse.ui.application.*;
 import org.eclipse.ui.views.IViewDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Configures various aspects of the main application's window.
  */
 final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
 {
-    private final static Logger logger = Logger
-        .getLogger(ApplicationWorkbenchWindowAdvisor.class);
+    private final static Logger logger = LoggerFactory.getLogger(ApplicationWorkbenchWindowAdvisor.class);
 
     /*
      * 
