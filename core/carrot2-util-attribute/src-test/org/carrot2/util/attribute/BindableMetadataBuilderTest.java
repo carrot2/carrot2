@@ -19,6 +19,7 @@ import java.io.*;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.tools.ant.Project;
 import org.carrot2.util.attribute.test.metadata.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -61,10 +62,13 @@ public class BindableMetadataBuilderTest
             return;
         }
 
+        final Project project = new Project();
+        project.setName("Test");
+
         final BindableMetadataBuilder builder;
         final String sourcePaths = System.getProperty(SOURCE_PATH_PROPERTY);
 
-        builder = new BindableMetadataBuilder();
+        builder = new BindableMetadataBuilder(project);
         builder.addCommonMetadataSource(new File(System
             .getProperty(COMMON_ATTRIBUTE_NAMES_SOURCE_PATH_PROPERTY)));
 

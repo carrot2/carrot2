@@ -28,7 +28,7 @@ public final class BindableMetadataSerializerTask extends Task
     /**
      * Metadata builder.
      */
-    private final BindableMetadataBuilder builder = new BindableMetadataBuilder();
+    private BindableMetadataBuilder builder;
 
     /**
      * Destination directory.
@@ -40,6 +40,13 @@ public final class BindableMetadataSerializerTask extends Task
 
     /** A list of metadata files. */
     private ArrayList<Path> metadataFiles = new ArrayList<Path>();
+
+    @Override
+    public void setProject(Project project)
+    {
+        super.setProject(project);
+        builder = new BindableMetadataBuilder(project);        
+    }
 
     /**
      * Set destination directory.
@@ -105,12 +112,13 @@ public final class BindableMetadataSerializerTask extends Task
         if (inputFiles.size() == 0)
         {
             // No input files to process, exit immediately to avoid parsing metadata files.
+            log("No input files, exiting.", Project.MSG_WARN);
             return;
         }
 
         for (File f : inputFiles)
         {
-            log("Adding for processing: " + f, Project.MSG_VERBOSE);
+            log("Adding file for processing: " + f, Project.MSG_VERBOSE);
             try
             {
                 builder.addSource(f);
