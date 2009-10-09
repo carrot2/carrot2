@@ -12,8 +12,7 @@
 
 package org.carrot2.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Utility methods for working with {@link List}s.
@@ -24,7 +23,7 @@ public final class ListUtils
     {
     }
 
-    public static <E> ArrayList<E> asArrayList(List<E> list)
+    public static <E> ArrayList<E> asArrayList(Collection<E> list)
     {
         if (ArrayList.class.isInstance(list))
         {
@@ -36,7 +35,7 @@ public final class ListUtils
         }
     }
 
-    public static int [] asArray(List<Integer> list)
+    public static int [] asArray(Collection<Integer> list)
     {
         final int [] result = new int [list.size()];
         int index = 0;

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -23,7 +22,8 @@ import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.Persist;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import com.google.common.base.Predicate;
+import com.google.common.collect.*;
 
 /**
  * Provides a full description of an individual attribute, including its {@link #key},
@@ -112,14 +112,13 @@ public class AttributeDescriptor
      * Instances of this attribute's constraints, for serialization.
      */
     @ElementList(name = "constraints", required = false)
-    @SuppressWarnings("unused")
     private ArrayList<Constraint> constraintInstances;
 
     /**
      * In case of Enum attributes, a list of allowed values, for serialization.
      */
-    @ElementList(name = "allowed-values", entry = "value", required = false)
-    private ArrayList<AllowedValue> allowedValues;
+    @Element(name = "allowed-values", required = false)
+    private AllowedValues allowedValues;
 
     /**
      * 
@@ -244,22 +243,80 @@ public class AttributeDescriptor
             annotations.add(annotation.annotationType().getSimpleName());
         }
 
-        // Constraints
-        constraintInstances = ListUtils.asArrayList(ConstraintFactory
-            .createConstraints(attributeField.getAnnotations()));
+        // Constraints. As ValueHintEnumConstraint is a dummy constraint whose main
+        // purpose is to expose the ValueHintEnum annotation in the API, we filter it out
+        // here and put the values provided by ValueHintEnum in the allowed values list in
+        // the same way as for proper enums.
+        constraintInstances = ListUtils.asArrayList(Collections2.filter(ConstraintFactory
+            .createConstraints(attributeField.getAnnotations()),
+            new Predicate<Constraint>()
+            {
+                public boolean apply(Constraint constraint)
+                {
+                    return !(constraint instanceof ValueHintEnumConstraint);
+                }
+            }));
+        // Remove empty element from serialized output
+        if (constraintInstances.isEmpty())
+        {
+            constraintInstances = null;
+        }
 
-        // Allowed values of enum types
+        // Allowed values of enum types and strings with ValueHintEnum annotations
+        Class<? extends Enum<?>> enumType = null;
+        boolean otherValuesAllowed = false;
         if (type.isEnum())
         {
-            allowedValues = Lists.newArrayList();
-            final Enum<?> [] enumConstants = ((Class<Enum<?>>) type).getEnumConstants();
-            for (Enum<?> object : enumConstants)
+            enumType = (Class<? extends Enum<?>>) type;
+            otherValuesAllowed = false;
+        }
+        else if (CharSequence.class.isAssignableFrom(type))
+        {
+            final ValueHintEnum hint = getAnnotation(ValueHintEnum.class);
+            if (hint != null)
             {
-                allowedValues.add(new AllowedValue(object.name(), object.toString()));
+                enumType = hint.values();
+                otherValuesAllowed = true;
+            }
+        }
+
+        if (enumType != null)
+        {
+            allowedValues = new AllowedValues(otherValuesAllowed);
+            final BiMap<String, String> valueToLabel = ValueHintMappingUtils
+                .getValueToFriendlyName(enumType);
+
+            for (String value : ValueHintMappingUtils.getValidValuesMap(enumType)
+                .keySet())
+            {
+                allowedValues.add(value, valueToLabel.get(value));
             }
         }
     }
 
+    @Root(name = "allowed-values")
+    @SuppressWarnings("unused")
+    private static class AllowedValues
+    {
+        @ElementList(name = "allowed-values", entry = "value", required = false, inline = true)
+        private ArrayList<AllowedValue> allowedValues;
+
+        @org.simpleframework.xml.Attribute(name = "other-values-allowed")
+        private boolean otherValuesAllowed;
+
+        private AllowedValues(boolean otherValuesAllowed)
+        {
+            this.allowedValues = Lists.newArrayList();
+            this.otherValuesAllowed = otherValuesAllowed;
+        }
+
+        void add(String value, String label)
+        {
+            allowedValues.add(new AllowedValue(value, label));
+        }
+    }
+
+    @SuppressWarnings("unused")
     private static class AllowedValue
     {
         @org.simpleframework.xml.Attribute
