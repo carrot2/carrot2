@@ -20,6 +20,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.resource.FileResource;
+import org.junit.Before;
 import org.junit.Test;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.load.*;
@@ -31,6 +32,12 @@ import com.google.common.collect.*;
  */
 public class SimpleXmlWrappersTest
 {
+    @Before
+    public void clearWrappers()
+    {
+        SimpleXmlWrappers.clearWrappers();
+    }
+
     @Test
     public void testByte() throws Exception
     {
@@ -344,8 +351,16 @@ public class SimpleXmlWrappersTest
         }
     }
 
+    static class SubclassWithWrapper extends ClassWithWrapper
+    {
+        public SubclassWithWrapper(Integer integer, String string)
+        {
+            super(integer, string);
+        }
+    }
+
     @Test
-    public void testClassWithWrapper() throws Exception
+    public void testClassWithWrapperStrictMatched() throws Exception
     {
         SimpleXmlWrappers.addWrapper(ClassWithWrapper.class,
             ClassWithWrapperWrapper.class);
@@ -353,6 +368,25 @@ public class SimpleXmlWrappersTest
         check(new ClassWithWrapper(-5, null));
         check(new ClassWithWrapper(null, "test"));
         check(new ClassWithWrapper(null, null));
+    }
+
+    @Test
+    public void testClassWithWrapperStrictNotMatched() throws Exception
+    {
+        SimpleXmlWrappers.addWrapper(ClassWithWrapper.class,
+            ClassWithWrapperWrapper.class);
+        checkNotSerialized(new SubclassWithWrapper(10, "test"));
+    }
+    
+    @Test
+    public void testClassWithWrapperNotStrictMatched() throws Exception
+    {
+        SimpleXmlWrappers.addWrapper(ClassWithWrapper.class,
+            ClassWithWrapperWrapper.class, false);
+        check(new SubclassWithWrapper(10, "test"));
+        check(new SubclassWithWrapper(-5, null));
+        check(new SubclassWithWrapper(null, "test"));
+        check(new SubclassWithWrapper(null, null));
     }
 
     @Test
@@ -368,6 +402,16 @@ public class SimpleXmlWrappersTest
         checkMap(Long.toString(value != null ? value.hashCode() : 0), value);
         checkList(value);
         checkSet(value);
+    }
+
+    public void checkNotSerialized(Object value) throws Exception
+    {
+        final StringWriter writer = new StringWriter();
+        final Persister persister = new Persister();
+        persister.write(SimpleXmlWrappers.wrap(value), writer);
+        final SimpleXmlWrapperValue deserialized = persister.read(
+            SimpleXmlWrapperValue.class, writer.toString());
+        assertThat(SimpleXmlWrappers.unwrap(deserialized)).isNull();
     }
 
     public void checkMap(String key, Object value) throws Exception
@@ -404,6 +448,7 @@ public class SimpleXmlWrappersTest
     }
 
     @Root(name = "map")
+    @SuppressWarnings("unused")
     private static class MapContainer
     {
         private Map<String, Object> map;
@@ -434,6 +479,7 @@ public class SimpleXmlWrappersTest
     }
 
     @Root(name = "list")
+    @SuppressWarnings("unused")
     private static class ListContainer
     {
         private List<Object> list;
@@ -464,6 +510,7 @@ public class SimpleXmlWrappersTest
     }
 
     @Root(name = "set")
+    @SuppressWarnings("unused")
     private static class SetContainer
     {
         private Set<Object> set;

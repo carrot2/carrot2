@@ -80,7 +80,7 @@ public final class BindableMetadataSerializerTask extends Task
     @SuppressWarnings("unchecked")
     public void add(ResourceCollection res)
     {
-        final Iterator<Resource> i = (Iterator<Resource>) res.iterator();
+        final Iterator<Resource> i = res.iterator();
         while (i.hasNext())
         {
             final Resource r = i.next();
@@ -131,7 +131,7 @@ public final class BindableMetadataSerializerTask extends Task
 
         for (Path p : metadataFiles)
         {
-            Iterator<Resource> i = (Iterator<Resource>) p.iterator();
+            Iterator<Resource> i = p.iterator();
             while (i.hasNext())
             {
                 final Resource r = i.next();

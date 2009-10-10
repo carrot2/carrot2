@@ -555,7 +555,7 @@ public class AttributeBinder
                 // Notice that if some extra annotations are provided, the newly
                 // created instance will get only those attributes bound that
                 // match any of the extra annotations.
-                if (value instanceof Class && !field.getType().equals(Class.class))
+                if (Class.class.isInstance(value) && !field.getType().equals(Class.class))
                 {
                     final Class<?> clazz = ((Class<?>) value);
                     try

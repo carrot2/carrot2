@@ -40,7 +40,6 @@ import com.google.common.collect.Maps;
  * The index should be binary-compatible with the Lucene version actually imported by this
  * plugin.
  */
-@SuppressWarnings("deprecation")
 @Bindable(prefix = "LuceneDocumentSource")
 public final class LuceneDocumentSource extends ProcessingComponentBase implements
     IDocumentSource
@@ -53,7 +52,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
      */
     static
     {
-        SimpleXmlWrappers.addWrapper(FSDirectory.class, FSDirectoryWrapper.class);
+        SimpleXmlWrappers.addWrapper(FSDirectory.class, FSDirectoryWrapper.class, false);
     }
     
     @Processing
@@ -298,7 +297,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             {
                 try
                 {
-                    searcher = new IndexSearcher(directory);
+                    searcher = new IndexSearcher(directory, true);
                     openIndexes.put(directory, searcher);
                 }
                 catch (IOException e)

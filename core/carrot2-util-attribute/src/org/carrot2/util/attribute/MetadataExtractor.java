@@ -13,7 +13,6 @@
 package org.carrot2.util.attribute;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
 
 import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
