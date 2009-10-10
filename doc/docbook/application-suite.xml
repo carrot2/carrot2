@@ -61,6 +61,31 @@
       &DCW; is a standalone GUI application you can use to experiment with &PROD;
       clustering on data from common search engines or your own data. 
     </para>
+    
+    <para>
+      You can use &DCW; to:
+    </para>
+    
+    <itemizedlist>
+      <listitem>
+        <para>
+          Quickly test &PROD; clustering with your own data. Please see <xref linkend="chapter.getting-started" />
+          for instructions for the most common scenarios.
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Fine tune &PROD; clustering algorithms' settings to work best with your specific data.
+          Please see <xref linkend="chapter.tuning" /> for more details.
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>Run simple performance benchmarks using different settings to predict maximum clustering throughput
+        on a single machine. Please see <xref linkend="section.workbench.benchmarking" /> for details.</para>
+      </listitem>      
+    </itemizedlist>
 
     <para>
       &DCW; features include:
@@ -127,31 +152,6 @@
       </mediaobject>  
     </figure>
     
-    <para>
-      You can use &DCW; to:
-    </para>
-    
-    <itemizedlist>
-      <listitem>
-        <para>
-          Quickly test &PROD; clustering with your own data. Please see <xref linkend="chapter.getting-started" />
-          for instructions for the most common scenarios.
-        </para>
-      </listitem>
-      
-      <listitem>
-        <para>
-          Fine tune &PROD; clustering algorithms' settings to work best with your specific data.
-          Please see <xref linkend="chapter.tuning" /> for more details.
-        </para>
-      </listitem>
-      
-      <listitem>
-        <para>Run simple performance benchmarks using different settings to predict maximum clustering throughput
-        on a single machine. Please see <xref linkend="section.workbench.benchmarking" /> for details.</para>
-      </listitem>      
-    </itemizedlist>
-    
     <section xml:id="section.workbench.installation" role="notoc">
       <title>Installation and running</title>
     
@@ -188,6 +188,23 @@
       documents provided directly as an XML stream and returns results in XML or 
       JSON formats. 
     </para>
+    
+    <para>
+      You can use &DCS; to:
+    </para>
+    
+    <itemizedlist>
+      <listitem>
+        <para>Integrate &PROD; with your non-Java software.</para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Build a high-throughput document clustering system by setting up a number of
+          load-balanced instances of the DCS.
+        </para> 
+      </listitem>
+    </itemizedlist>
     
     <para>
       &DCS; features include:
@@ -252,23 +269,6 @@
         </imageobject>
       </mediaobject>  
     </figure>
-    
-    <para>
-      You can use &DCS; to:
-    </para>
-    
-    <itemizedlist>
-      <listitem>
-        <para>Integrate &PROD; with your non-Java software.</para>
-      </listitem>
-      
-      <listitem>
-        <para>
-          Build a high-throughput document clustering system by setting up a number of
-          load-balanced instances of the DCS.
-        </para> 
-      </listitem>
-    </itemizedlist>
     
     <section xml:id="section.dcs.installation" role="notoc">
       <title>Installation and running</title>

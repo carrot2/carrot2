@@ -95,6 +95,8 @@
       </para>
   </section>
    
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="tuning-in-workbench.xml" /> 
+   
   <section xml:id="section.advanced-topics.fine-tuning.stop-words">
     <title>Modifying the list of stop words</title>
     
@@ -129,34 +131,34 @@
       
       <listitem>
         <para>
-          Open the <guilabel>Attributes</guilabel> view in &DCW; and use the view's toolbar
-          button shown in <xref linkend="figure.preprocessing-attributes" /> 
-          to group the attributes by semantics. In the <guilabel>Preprocessing</guilabel>
-          make sure the <guilabel>Processing language</guilabel> is correctly set and
+          Open the <guilabel>Attributes</guilabel> view and use the view toolbar's
+          <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-attribute-grouping.png" /></imageobject></inlinemediaobject></guiicon>
+          button to group the attributes by semantics. In the <guilabel>Preprocessing</guilabel>
+          section, make sure the <guilabel>Processing language</guilabel> is correctly set and
           check the <guilabel>Reload stopwords</guilabel> checkbox. Doing the latter
           will let you to see the updated clustering results without restarting &DCW;
           every time you save the changed stop word list.
         </para>
+    
+        <figure xml:id="figure.preprocessing-attributes">
+          <title>Preprocessing attributes section</title>
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata format="PNG" fileref="img/workbench-preprocessing-attributes.png" />
+            </imageobject>
+          </mediaobject>  
+        </figure>
       </listitem>
       
       <listitem>
         <para>
           To re-run clustering after
           you've saved changes to the <filename>stopwords.*</filename>, choose the
-          <guilabel>Restart Clustering</guilabel> option from the <guilabel>Search</guilabel>
+          <guilabel>Restart Processing</guilabel> option from the <guilabel>Search</guilabel>
           menu, or press <guilabel>Ctrl+F11</guilabel>.
         </para>
       </listitem>
     </orderedlist>
-    
-    <figure xml:id="figure.preprocessing-attributes">
-      <title>&DCW; Preprocessing Attributes</title>
-      <mediaobject>
-        <imageobject role="html">
-          <imagedata format="PNG" fileref="img/workbench-preprocessing-attributes.png" />
-        </imageobject>
-      </mediaobject>  
-    </figure>
     
     <tip>
       <para>
@@ -272,7 +274,7 @@
     
       <tip>
         <para>
-          To apply the changes to the &C2; applications, please follow instructions from
+          To apply the changes to the &PROD; applications, please follow instructions from
           <xref linkend="chapter.customizing" />.
         </para>
       </tip>
