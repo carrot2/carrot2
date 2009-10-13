@@ -92,7 +92,7 @@ final class PolishStemmerFactory
         }
         catch (Throwable e)
         {
-            return new IdentityStemmer();
+            return IdentityStemmer.INSTANCE;
         }
     }
 }

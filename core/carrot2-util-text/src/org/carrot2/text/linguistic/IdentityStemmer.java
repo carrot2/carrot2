@@ -18,6 +18,13 @@ package org.carrot2.text.linguistic;
  */
 final class IdentityStemmer implements IStemmer
 {
+    public final static IdentityStemmer INSTANCE = new IdentityStemmer(); 
+
+    private IdentityStemmer()
+    {
+        // Hide from the public.
+    }
+
     public CharSequence stem(CharSequence word)
     {
         return null;

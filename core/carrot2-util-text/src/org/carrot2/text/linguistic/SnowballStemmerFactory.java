@@ -14,7 +14,6 @@ package org.carrot2.text.linguistic;
 
 import java.util.HashMap;
 
-import org.slf4j.Logger;
 import org.tartarus.snowball.SnowballProgram;
 import org.tartarus.snowball.ext.*;
 
@@ -89,7 +88,7 @@ final class SnowballStemmerFactory
             org.slf4j.LoggerFactory.getLogger(SnowballStemmerFactory.class).warn(
                 "No Snowball stemmer class for: " + language.name());
 
-            return new IdentityStemmer();
+            throw new RuntimeException("Missing snowball stemmer for: " + language.name());
         }
 
         try

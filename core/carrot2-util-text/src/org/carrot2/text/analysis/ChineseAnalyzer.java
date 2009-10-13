@@ -35,9 +35,11 @@ public final class ChineseAnalyzer extends Analyzer
     {
         try
         {
-            // As other frameworks embedding Carrot2 (Solr, Nutch) may not distribute the
-            // Smart Chinese Analyzer JAR by default due to its size, we need to make
-            // this dependency optional too.
+            /*
+             * As other frameworks embedding Carrot2 (Solr, Nutch) may not distribute the
+             * Smart Chinese Analyzer JAR by default due to its size, we need to make
+             * this dependency optional too.
+             */
             final Class<?> tokenFilterClass = ReflectionUtils
                 .classForName("org.apache.lucene.analysis.cn.smart.WordTokenFilter");
             final Class<?> sentenceTokenizerClass = ReflectionUtils
@@ -61,7 +63,6 @@ public final class ChineseAnalyzer extends Analyzer
                     e);
             return new ExtendedWhitespaceTokenizer(reader);
         }
-
     }
 
     /**
