@@ -21,7 +21,7 @@ import org.carrot2.util.ReflectionUtils;
 
 
 /**
- * Factory of {@link IStemmer} implementations from the {@link LanguageCode#POLISH}
+ * Factory of {@link IStemmer} implementations for the {@link LanguageCode#POLISH}
  * language. If <a href="http://morfologik.blogspot.com/">Morfologik-stemming</a> library
  * is available in classpath, a wrapper around this library is returned. Otherwise an
  * empty identity stemmer is returned.
@@ -41,7 +41,7 @@ final class PolishStemmerFactory
     }
 
     /**
-     * An adapter converting Snowball programs into {@link IStemmer} interface.
+     * Adapter to Morfologik stemmer.
      */
     private static class MorfologikStemmerAdapter implements IStemmer
     {
