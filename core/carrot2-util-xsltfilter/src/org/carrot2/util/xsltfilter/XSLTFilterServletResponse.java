@@ -366,10 +366,8 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
         try
         {
             final XMLReader reader = XMLReaderFactory.createXMLReader();
-            final String baseApplicationURL = origRequest.getScheme() + "://"
-                + origRequest.getServerName() + ":" + origRequest.getServerPort();
 
-            docHandler = new TransformingDocumentHandler(baseApplicationURL, context,
+            docHandler = new TransformingDocumentHandler(origRequest, context,
                 stylesheetParams, transformers);
 
             docHandler.setContentTypeListener(new IContentTypeListener()

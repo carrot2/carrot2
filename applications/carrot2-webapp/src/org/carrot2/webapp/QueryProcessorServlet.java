@@ -412,7 +412,7 @@ public class QueryProcessorServlet extends HttpServlet
     private Format getPersisterFormat(RequestModel requestModel)
     {
         return new Format(2, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            + "<?xml-stylesheet type=\"text/xsl\" href=\"@"
+            + "<?ext-stylesheet resource=\""
             + WebappConfig.getContextRelativeSkinStylesheet(requestModel.skin) + "\" ?>");
     }
 

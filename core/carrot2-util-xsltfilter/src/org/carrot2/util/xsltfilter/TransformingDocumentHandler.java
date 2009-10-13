@@ -12,20 +12,21 @@
 
 package org.carrot2.util.xsltfilter;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.*;
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.slf4j.Logger;
 import org.carrot2.util.xml.TemplatesPool;
 import org.carrot2.util.xml.TransformerErrorListener;
+import org.slf4j.Logger;
 import org.xml.sax.*;
+import org.xml.sax.ContentHandler;
 
 /**
  * A SAX handler that detects <code>xml-stylesheet</code> directive and delegates SAX
@@ -62,14 +63,17 @@ final class TransformingDocumentHandler implements ContentHandler
         "(href[ \\t]*=[ \\t]*\")([^\"]*)(\")", Pattern.CASE_INSENSITIVE);
 
     /**
-     * Base application URL for resolving stylesheet URIs (scheme, host and port). For
-     * example:
-     * 
-     * <pre>
-     * http://localhost:8080
-     * </pre>
+     * A regular expression for extracting <code>ext-stylesheet</code>'s
+     * <code>resource</code> pseudo-attribute.
      */
-    private String baseApplicationURL;
+    private final Pattern resourcePattern = Pattern.compile(
+        "(resource[ \\t]*=[ \\t]*\")([^\"]*)(\")", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * Current request for which this handler works. Used for resolving relative
+     * URIs.
+     */
+    private HttpServletRequest request;
 
     /**
      * The default handler used when no <code>xml-stylesheet</code> directive is
@@ -125,10 +129,10 @@ final class TransformingDocumentHandler implements ContentHandler
      * path is used to initialize local streams instead of requesting the stylesheet via
      * HTTP.
      */
-    public TransformingDocumentHandler(String baseApplicationURL, ServletContext context,
+    public TransformingDocumentHandler(HttpServletRequest request, ServletContext context,
         Map<String, Object> stylesheetParams, TemplatesPool pool)
     {
-        this.baseApplicationURL = baseApplicationURL;
+        this.request = request;
         this.context = context;
         this.pool = pool;
         this.stylesheetParams = stylesheetParams;
@@ -331,68 +335,117 @@ final class TransformingDocumentHandler implements ContentHandler
     }
 
     /**
-     * Inspect a processing instruction looking for <code>xml-stylesheet</code>
-     * directives. If found, update the
-     * {@link TransformingDocumentHandler#setTransformerHandler(TransformerHandler)}
-     * appropriately.
+     * Process <code>xml-stylesheet</code>.
      */
-    public void inspectProcessingInstruction(TransformingDocumentHandler handler,
-        String target, String data) throws SAXException
+    private URI processXmlStylesheet(String target, String data)
     {
         if (!target.equals("xml-stylesheet"))
-        {
-            return;
-        }
-
+            return null;
+        
         /*
          * Break up pseudo-attributes and look for content-type
          */
         final Matcher typeMatcher = typePattern.matcher(data);
         if (!typeMatcher.find())
         {
-            log
-                .warn("xml-stylesheet directive with no type attribute (should be text/xsl).");
-            return;
+            log.warn("xml-stylesheet directive with no type attribute (should be text/xsl).");
+            return null;
         }
+
         final String type = typeMatcher.group(2);
         if (!"text/xsl".equals(type))
         {
-            log
-                .warn("xml-stylesheet directive with incorrect type (should be text/xsl): "
+            log.warn("xml-stylesheet directive with incorrect type (should be text/xsl): "
                     + type);
-            return;
+            return null;
         }
 
         final Matcher hrefMatcher = hrefPattern.matcher(data);
         if (!hrefMatcher.find())
         {
             log.warn("xml-stylesheet directive with no 'href' pseudo-attribute.");
-            return;
+            return null;
         }
 
-        /*
-         * Resolve the stylesheet URI.
-         */
-        final String unresolvedURI = hrefMatcher.group(2);
-        final String resolvedURI = resolveTemplateURL(unresolvedURI);
-        if (resolvedURI == null)
+        URI base = URI.create(request.getRequestURI()); 
+        String stylesheetURI = hrefMatcher.group(2); 
+
+        return base.resolve(stylesheetURI);
+    }
+
+    /**
+     * Process <code>ext-stylesheet</code> of the following form:
+     * <pre>
+     * &lt;?ext-stylesheet resource="webapp-resource" ?&gt; 
+     * </pre>
+     * where <code>webapp-resource</code> is an application-context relative resource.
+     */
+    private URI processExtStylesheet(String target, String data)
+    {
+        if (!target.equals("ext-stylesheet"))
+            return null;
+
+        final Matcher resourceMatcher = resourcePattern.matcher(data);
+        if (!resourceMatcher.find())
         {
-            throw new SAXException(
-                "Stylesheet not recognized (try webapp-relative path starting with '@/'): "
-                    + unresolvedURI);
+            log.warn("ext-stylesheet directive with no 'resource' attribute.");
+            return null;
+        }
+
+        final String stylesheetURI = resourceMatcher.group(2); 
+        try
+        {
+            final URL stylesheetURL = context.getResource(stylesheetURI);
+            return stylesheetURL == null ? null : stylesheetURL.toURI();
+        }
+        catch (MalformedURLException e)
+        {
+            log.error("Malformed stylesheet URL: " + stylesheetURI, e);
+        }
+        catch (URISyntaxException e)
+        {
+            log.error("Stylesheet URI conversion error: " + stylesheetURI, e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Inspect a processing instruction looking for <code>xml-stylesheet</code>
+     * or <code>ext-stylesheet</code> directives. If found, update the
+     * {@link TransformingDocumentHandler#setTransformerHandler(TransformerHandler)}
+     * appropriately.
+     */
+    public void inspectProcessingInstruction(TransformingDocumentHandler handler,
+        String target, String data) throws SAXException
+    {
+        URI uri;
+        if ((uri = processExtStylesheet(target, data)) != null)
+        {
+            log.debug("Resolved ext-stylesheet URI: " + uri.toString());
+        }
+        else if ((uri = processXmlStylesheet(target, data)) != null)
+        {
+            log.debug("Resolved xml-stylesheet URI: " + uri.toString());
+        }
+        else
+        {
+            // Skip unknown processing instructions.
+            return;
         }
 
         /*
          * Check the pool for precompiled cached Templates
          */
+        final String uriString = uri.toString();
         Templates template;
         try
         {
-            template = pool.getTemplate(resolvedURI);
+            template = pool.getTemplate(uriString);
             if (template == null)
             {
-                template = pool.compileTemplate(resolvedURI);
-                pool.addTemplate(resolvedURI, template);
+                template = pool.compileTemplate(uriString);
+                pool.addTemplate(uriString, template);
             }
 
             // Find out about the content type and encoding.
@@ -454,68 +507,6 @@ final class TransformingDocumentHandler implements ContentHandler
     private static boolean hasKey(Properties props, String key)
     {
         return props.getProperty(key) != null;
-    }
-
-    /**
-     * Attempt to resolve the template URI. <code>null</code> is returned if this method
-     * fails to find a resource matching the given path.
-     */
-    private String resolveTemplateURL(String path) throws SAXException
-    {
-        String templatesURL = null;
-
-        if (path.startsWith("@/"))
-        {
-            /*
-             * The stylesheet is in the application context which is unknown to the XML
-             * source. Expand to the current application context and replace with a local
-             * resource URL (should be safe; I assume XMLs come from the same source as
-             * the application).
-             */
-            try
-            {
-                final String resourcePath = path.substring(1);
-                final URL resource = context.getResource(resourcePath);
-                if (resource == null)
-                {
-                    throw new SAXException("Context-relative stylesheet does not exist: "
-                        + resourcePath);
-                }
-
-                templatesURL = resource.toExternalForm();
-                log.debug("Context-path relative (expanded) xml-stylesheet URL: " + path
-                    + " resolved as: " + templatesURL);
-            }
-            catch (MalformedURLException e)
-            {
-                // Will never happen, but just in case.
-                throw new RuntimeException();
-            }
-        }
-        else if (path.startsWith("/"))
-        {
-            /*
-             * Try host-relative URL. Simply concatenate with the context URI.
-             */
-            templatesURL = this.baseApplicationURL + path;
-            log.debug("Context-relative xml-stylesheet URL: " + path + " resolved as: "
-                + templatesURL);
-        }
-        else
-        {
-            // Try absolute URL.
-            try
-            {
-                templatesURL = new URL(path).toExternalForm();
-                log.debug("Absolute xml-stylesheet URL: " + templatesURL);
-            }
-            catch (MalformedURLException e)
-            {
-                // Ignore, malformed URL.
-            }
-        }
-
-        return templatesURL;
     }
 
     /**

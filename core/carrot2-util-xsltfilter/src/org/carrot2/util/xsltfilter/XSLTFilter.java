@@ -22,15 +22,26 @@ import org.slf4j.Logger;
 import org.carrot2.util.xml.TemplatesPool;
 
 /**
- * A filter which applies XSLT stylesheets to the result of a request. The filter is
- * activated when:
+ * A servlet filter applying XSLT stylesheets to the result of a request. The filter is
+ * activated when the content has a MIME type equal to <code>text/xml</code> AND:
  * <ol>
- * <li>the content has a mime type equal to <code>text/xml</code>,</li>
+ * <li>the content has a correct <code>ext-stylesheet</code> directive (custom extension) OR,</li>
  * <li>the content has a correct <code>xml-stylesheet</code> directive,</li>
- * <li>processing has not been suppressed by setting
+ * <li>processing has not been suppressed by setting 
  * {@link XSLTFilterConstants#NO_XSLT_PROCESSING} in the request context.</li>
  * </ol>
  * Filter configuration is given through the web application descriptor file (<code>web.xml</code>).
+ * 
+ * <p>Example configuration using <code>ext-stylesheet</code>:
+ * <pre>
+ * &lt;?ext-stylesheet resource="WEB-INF/stylesheets/stylesheet.xsl" ?&gt; 
+ * </pre>
+ * 
+ * <p>Example configuration using <code>xml-stylesheet</code> (note the URL here is servlet-container
+ * relative, not application-context relative):
+ * <pre>
+ * &lt;?xml-stylesheet type="text/xsl" href="/stylesheets/stylesheet.xsl" ?&gt; 
+ * </pre>
  */
 public final class XSLTFilter implements Filter
 {
