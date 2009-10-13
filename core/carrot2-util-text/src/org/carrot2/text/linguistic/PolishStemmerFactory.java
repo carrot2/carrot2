@@ -15,9 +15,8 @@ package org.carrot2.text.linguistic;
 import org.slf4j.Logger;
 import java.util.List;
 
+import morfologik.stemming.PolishStemmer;
 import morfologik.stemming.WordData;
-
-import org.carrot2.util.ReflectionUtils;
 
 
 /**
@@ -50,13 +49,7 @@ final class PolishStemmerFactory
         public MorfologikStemmerAdapter()
             throws Exception
         {
-            final String stemmerClazzName = "morfologik.stemming.PolishStemmer";
-
-            final Class<? extends morfologik.stemming.IStemmer> stemmerClazz = 
-                ReflectionUtils.classForName(stemmerClazzName)
-                .asSubclass(morfologik.stemming.IStemmer.class);
-
-            this.stemmer = stemmerClazz.newInstance();
+            this.stemmer = new PolishStemmer();
         }
 
         public CharSequence stem(CharSequence word)

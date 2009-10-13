@@ -67,6 +67,9 @@ final class LexicalResources
         return new LexicalResources(mergedStoplabels, mergedStopwords);
     }
 
+    /**
+     * Loads lexical resources (stop words, stop labels) for a given {@link LanguageCode}.
+     */
     static LexicalResources load(ResourceUtils resourceLoaders, LanguageCode lang)
     {
         return new LexicalResources(loadStopLabels(resourceLoaders, lang), loadStopWords(

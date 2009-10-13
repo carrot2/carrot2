@@ -93,6 +93,7 @@ public enum CultureInfo
     {
         final Map<CultureInfo, LanguageCode> map = Maps.newEnumMap(CultureInfo.class);
         
+        map.put(ARABIC_ARABIA, LanguageCode.ARABIC);
         map.put(CHINESE_CHINA, LanguageCode.CHINESE_SIMPLIFIED);
         // TODO: Hong kong uses traditional Chinese I believe.
         map.put(CHINESE_HONG_KONG_SAR, LanguageCode.CHINESE_SIMPLIFIED);

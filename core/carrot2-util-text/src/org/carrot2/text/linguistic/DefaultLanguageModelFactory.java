@@ -179,7 +179,12 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
                  * Return identity stemmer for Chinese. Chinese requires proper word
                  * segmentation, however (input text analyzer).
                  */
-                return IdentityStemmer.INSTANCE; 
+                return IdentityStemmer.INSTANCE;
+            case ARABIC:
+                /*
+                 * We return specialized stemmer for Arabic (Lucene-based).
+                 */
+                return ArabicStemmerFactory.createStemmer();
             default:
                 return SnowballStemmerFactory.createStemmer(language);
         }
