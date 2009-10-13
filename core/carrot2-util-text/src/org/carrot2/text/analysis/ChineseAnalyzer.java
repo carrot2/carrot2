@@ -25,7 +25,7 @@ import org.carrot2.util.ReflectionUtils;
 import org.slf4j.LoggerFactory;
 
 /**
- * An analyzer for the Chinese language, based on Lucene's Chinese analyzer.
+ * An analyzer for the Chinese language, based on Lucene's Smart Chinese analyzer.
  * A simple heuristic is employed to detect punctuation and simple numeric tokens.
  */
 public final class ChineseAnalyzer extends Analyzer
