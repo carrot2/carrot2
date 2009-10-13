@@ -59,6 +59,12 @@ public final class ActiveLanguageAnalyzer extends Analyzer
      */
     public void setActiveLanguage(LanguageCode activeLanguage)
     {
+        // Backward compatible behavior: if null is passed, use ExtendedWhitespaceAnalyzer.
+        if (activeLanguage == null)
+        {
+            activeLanguage = LanguageCode.ENGLISH;
+        }
+
         switch (activeLanguage)
         {
             case CHINESE_SIMPLIFIED:
