@@ -12,7 +12,6 @@
 
 package org.carrot2.util;
 
-import org.slf4j.Logger;
 
 /**
  * Utilities related to Java reflection.
