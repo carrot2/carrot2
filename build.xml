@@ -541,6 +541,7 @@
              version="true"
              use="false"
              encoding="UTF-8"
+             docencoding="UTF-8"
              windowtitle="Carrot2 v${carrot2.version} API Documentation (JavaDoc)"
              doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} API Documentation"
              header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} &lt;br&gt;API Documentation&lt;/div&gt;"
