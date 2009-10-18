@@ -1,0 +1,11 @@
+
+
+
+Build information
+-----------------
+
+Build version : @carrot2.version@
+Build number  : @build.key@-@build.number@
+Build time    : @build.date@
+Built by      : @user.name@
+Build revision: @carrot2.rev@

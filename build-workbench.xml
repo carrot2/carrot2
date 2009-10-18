@@ -8,6 +8,8 @@
   <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
   <property file="${carrot2.master.basedir}/etc/version/carrot2.basenames" /> 
 
+  <property name="dist.dir" location="${carrot2.master.basedir}/tmp/dist" />
+
   <property name="workbench.properties" location="${carrot2.master.basedir}/workbench.properties" />
   <property file="${workbench.properties}" />
   <property file="${carrot2.master.basedir}/workbench/build-conf/build.properties" />
@@ -17,6 +19,7 @@
   <property name="workbench.tests.txt.report.dir"  location="${workbench.build.dir}/test-report-txt" />
 
   <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
+  <import file="${carrot2.master.basedir}/etc/ant/common/readme.xml" />
 
   <patternset id="temporary.files">
     <exclude name="**/.svn/**" />
@@ -219,5 +222,47 @@
 
   <target name="clean">
     <delete dir="${workbench.build.dir}" failonerror="false" />
+  </target>
+
+  <!--
+       Prepares Workbench archives for distribution.
+    -->
+  <target name="dist" depends="build">
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+      <classpath>
+        <pathelement location="${carrot2.master.basedir}/etc/ant/ant-contrib-1.0b3.jar" />
+      </classpath>
+    </taskdef>
+
+    <mkdir dir="${dist.dir}" />
+    <copy todir="${dist.dir}" overwrite="true">
+      <fileset dir="${workbench.build.dir}">
+        <include name="**/${carrot2.workbench.base}*.zip" />
+      </fileset>
+
+      <chainedmapper>
+        <mapper type="flatten" />
+        <mapper type="glob" from="*.zip" to="*-${carrot2.version}.zip"/>
+      </chainedmapper>
+    </copy>
+
+    <!-- Add readme.txt files -->
+    <mkdir dir="${carrot2.master.basedir}/tmp/workbench/readme" />
+    <carrot2.readme readme.src="${carrot2.master.basedir}/workbench/org.carrot2.workbench.feature/readme.txt"
+                    readme.dest="${carrot2.master.basedir}/tmp/workbench/readme/readme.txt" />
+    <for param="zip">
+      <fileset dir="${dist.dir}">
+        <include name="${carrot2.workbench.base}*.zip" />
+      </fileset>
+
+      <sequential>
+        <zip destfile="@{zip}" update="true">
+          <zipfileset dir="${carrot2.master.basedir}/tmp/workbench/readme" prefix="${carrot2.workbench.base}-${carrot2.version}">
+            <include name="readme.txt" />
+          </zipfileset>
+        </zip>  
+      </sequential>
+    </for>
+    <delete dir="${carrot2.master.basedir}/tmp/workbench/readme" />
   </target>
 </project>

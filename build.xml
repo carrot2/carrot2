@@ -21,6 +21,7 @@
   <import file="${carrot2.master.basedir}/doc/build.xml" />
   <import file="${carrot2.master.basedir}/etc/maven/build.xml" />
   <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
+  <import file="${carrot2.master.basedir}/etc/ant/common/readme.xml" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />
@@ -712,7 +713,8 @@
       <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/src" />
     </copy>
     <copy todir="${api.dir}" file="${carrot2.master.basedir}/applications/carrot2-examples/build.xml" />
-    <copy todir="${api.dir}" file="${carrot2.master.basedir}/applications/carrot2-examples/etc/readme.txt" />
+    <carrot2.readme readme.src="${carrot2.master.basedir}/applications/carrot2-examples/etc/readme.txt"
+                    readme.dest="${api.dir}/readme.txt" />
   </target>
 
   <target name="carrot2.core.dist" depends="core.test, javadoc">
@@ -720,7 +722,7 @@
       <zipfileset dir="${api.dir}" prefix="${api.dist.base}-${carrot2.version}" />
       <zipfileset dir="${javadoc.dir}" prefix="${api.dist.base}-${carrot2.version}/javadoc" />
     </zip>
-    <delete dir="${api.dir}" />
+    <delete dir="${api.dir}" failonerror="false" />
   </target>
 
   <target name="core.test" depends="core">

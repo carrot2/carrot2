@@ -14,6 +14,7 @@
   <!-- Import common macros -->
   <import file="${carrot2.master.basedir}/etc/ant/common/basedir.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/webtest.xml" />
+  <import file="${carrot2.master.basedir}/etc/ant/common/readme.xml" />
 
   <!-- DCS build dirs -->
   <property name="dcs.dir" location="tmp/dcs" />
@@ -105,6 +106,8 @@
        Builds the DCS ZIP archive.
     -->
   <target name="carrot2.dcs.dist" depends="basedir.check, carrot2.dcs.build, carrot2.dcs.webtest.war">
+    <carrot2.readme readme.src="${carrot2.dcs.basedir}/etc/readme.txt"
+                    readme.dest="${dcs.dir}/readme.txt" />
     <zip destfile="${dcs.dir}/../${dcs.dist.base}-${carrot2.version}.zip">
       <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}-${carrot2.version}">
         <exclude name="**/*.sh" />
