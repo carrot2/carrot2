@@ -53,8 +53,8 @@ public class ArabicTest extends LanguageModelTestBase
     {
         return new String []
         {
-            "عبد",
-            "واضافت",
+            "باستثناء",
+            "اكثر",
         };
     }
 }
