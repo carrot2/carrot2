@@ -13,6 +13,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  META-INF/
-Export-Package: org.carrot2.workbench.editors.impl
+Export-Package: org.carrot2.workbench.editors.impl,
+ org.carrot2.workbench.editors.impl.numeric
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Carrot2.org

@@ -75,7 +75,5 @@
             attribute-class="java.lang.String"
             class="org.carrot2.workbench.editors.impl.StringEditor">
       </type-editor>
-      
    </extension>
-
 </plugin>
