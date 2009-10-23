@@ -13,6 +13,7 @@
 package org.carrot2.workbench.core;
 
 import java.util.*;
+import java.util.List;
 
 import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.workbench.core.helpers.Utils;
@@ -23,7 +24,7 @@ import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.application.*;
 import org.eclipse.ui.views.IViewDescriptor;
@@ -59,8 +60,20 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
     public void preWindowOpen()
     {
         final IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-        final Rectangle fullScreenSize = Display.getDefault().getPrimaryMonitor()
-            .getClientArea();
+        final Monitor primary = Display.getDefault().getPrimaryMonitor();
+
+        /*
+         * Get the bounds of the primary monitor, not its client area.
+         * 
+         * Client area on multi-monitor desktops in Linux (Xinerama) spans across all monitors,
+         * but the window manager won't allow the window to take all that space immediately
+         * (at least that's the effect I'm observing on my desktop).
+         * 
+         * What's funny is that the window still opens on monitor[0], but is shifted
+         * outside of its bounds (and thus spills to monitor[1]). Seems like getPrimaryMonitor()
+         * is not used when creating the Workbench shell.
+         */
+        final Rectangle fullScreenSize = primary.getBounds();
         int width = calculateInitialSize(fullScreenSize.width, 800);
         int height = calculateInitialSize(fullScreenSize.height, 600);
         configurer.setInitialSize(new Point(width, height));
