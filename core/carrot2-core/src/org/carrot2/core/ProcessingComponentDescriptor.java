@@ -15,7 +15,6 @@ import java.io.*;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.ReflectionUtils;
@@ -40,8 +39,8 @@ public class ProcessingComponentDescriptor
     /** Cached component class instantiated from {@link #componentClassName}. */
     private Class<? extends IProcessingComponent> componentClass;
 
-    /** If <code>true</code> component class and its instances are available. */
-    private boolean componentAvailable;
+    /** If not <code>null</code>, component initialization ended with an exception. */
+    private Throwable initializationException;
 
     @Attribute
     private String id;
@@ -275,7 +274,7 @@ public class ProcessingComponentDescriptor
      */
     public boolean isComponentAvailable()
     {
-        return componentAvailable;
+        return this.initializationException == null;
     }
 
     /**
@@ -283,6 +282,8 @@ public class ProcessingComponentDescriptor
      */
     private void loadAttributeSets() throws Exception
     {
+        attributeSets = new AttributeValueSets();
+
         final ResourceUtils resourceUtils = ResourceUtilsFactory
             .getDefaultResourceUtils();
 
@@ -342,7 +343,7 @@ public class ProcessingComponentDescriptor
     @SuppressWarnings("unused")
     private void onCommit()
     {
-        this.componentAvailable = true;
+        this.initializationException = null;
         try
         {
             loadAttributeSets();
@@ -352,7 +353,7 @@ public class ProcessingComponentDescriptor
         {
             org.slf4j.LoggerFactory.getLogger(this.getClass()).warn(
                 "Component availability failure: " + componentClassName, e);
-            this.componentAvailable = false;
+            this.initializationException = e;
         }
     }
 
@@ -372,5 +373,13 @@ public class ProcessingComponentDescriptor
         {
             return descriptor.id;
         }
+    }
+
+    /**
+     * Returns initialization failure ({@link Throwable}) or <code>null</code>.
+     */
+    public Throwable getInitializationFailure()
+    {
+        return this.initializationException;
     }
 }

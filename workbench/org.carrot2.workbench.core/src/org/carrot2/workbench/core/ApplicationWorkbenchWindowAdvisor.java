@@ -14,7 +14,11 @@ package org.carrot2.workbench.core;
 
 import java.util.*;
 
+import org.carrot2.core.ProcessingComponentDescriptor;
+import org.carrot2.workbench.core.helpers.Utils;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.*;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.swt.graphics.Point;
@@ -178,6 +182,32 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
             {
                 editor.getEditor(true);
             }
+        }
+        
+        /*
+         * In case of component loading errors, display an error message and open the error log. 
+         */
+        final List<ProcessingComponentDescriptor> failed 
+            = WorkbenchCorePlugin.getDefault().getFailed();
+        if (!failed.isEmpty())
+        {
+            final StringBuilder errorMessages = new StringBuilder();
+            for (ProcessingComponentDescriptor p : failed)
+            {
+                Throwable t = p.getInitializationFailure();
+
+                errorMessages.append(p.getTitle() + ": " + t.getClass().getName());
+                if (t.getMessage() != null && t.getMessage().length() > 0)
+                    errorMessages.append("\n   " + t.getMessage());
+                errorMessages.append("\n\n");
+            }
+
+            Utils.showView("org.eclipse.pde.runtime.LogView");
+            ErrorDialog.openError(
+                PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+                "Fatal errors", 
+                "Plugin loading errors. See the error log for details.", 
+                new Status(Status.ERROR, WorkbenchCorePlugin.PLUGIN_ID, errorMessages.toString()));
         }
     }
 

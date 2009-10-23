@@ -16,13 +16,8 @@ import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.*;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /*
@@ -165,5 +160,32 @@ public final class Utils
     {
         c.setBackground(
             PlatformUI.getWorkbench().getDisplay().getSystemColor(systemColor));
+    }
+
+    /**
+     * Show a given view in the workbench if it exists.
+     */
+    public static IViewPart showView(String viewID)
+    {
+        final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+            .getActivePage();
+
+        if (page != null)
+        {
+            try
+            {
+                IViewPart view2 = page.findView(viewID);
+                if (!page.isPartVisible(view2))
+                {
+                    return page.showView(viewID);
+                }
+            }
+            catch (PartInitException e)
+            {
+                // Ignore part init exceptions.
+            }
+        }
+        
+        return null;
     }
 }

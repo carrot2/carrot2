@@ -244,18 +244,20 @@ public class ProcessingComponentSuite
      * 
      * @see ProcessingComponentDescriptor#isComponentAvailable()
      */
-    public void removeUnavailableComponents()
+    public List<ProcessingComponentDescriptor> removeUnavailableComponents()
     {
-        for (Iterator<? extends ProcessingComponentDescriptor> i = sources.iterator(); i
-            .hasNext();)
+        ArrayList<ProcessingComponentDescriptor> failed = Lists.newArrayList();  
+        ProcessingComponentDescriptor p;
+        for (Iterator<? extends ProcessingComponentDescriptor> 
+            i = Iterators.concat(sources.iterator(), algorithms.iterator()); i.hasNext();)
         {
-            if (!i.next().isComponentAvailable()) i.remove();
+            if (!(p = i.next()).isComponentAvailable())
+            {
+                failed.add(p);
+                i.remove();
+            }
         }
-
-        for (Iterator<? extends ProcessingComponentDescriptor> i = algorithms.iterator(); i
-            .hasNext();)
-        {
-            if (!i.next().isComponentAvailable()) i.remove();
-        }
+        
+        return failed;
     }
 }

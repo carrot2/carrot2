@@ -76,6 +76,11 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
      */
     private HashMap<String, ImageDescriptor> componentImages = Maps.newHashMap();
 
+    /**
+     * List of failed components.
+     */
+    private List<ProcessingComponentDescriptor> failed = Lists.newArrayList();
+    
     /*
      * 
      */
@@ -277,7 +282,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                         /*
                          * Remove invalid descriptors, cache icons.
                          */
-                        suite.removeUnavailableComponents();
+                        failed.addAll(suite.removeUnavailableComponents());
                         for (ProcessingComponentDescriptor d : suite.getComponents())
                         {
                             final String iconPath = d.getIconPath();
@@ -328,10 +333,33 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             }
             catch (Exception e)
             {
-                Utils.logError("Could not extract descriptor from: " + pcd.getId(), e,
-                    false);
+                Utils.logError("Could not extract descriptor from: " + pcd.getId(), e, false);
             }
         }
+        
+        /*
+         * Log errors.
+         */
+        if (!failed.isEmpty())
+        {
+            for (ProcessingComponentDescriptor d : failed)
+            {
+                getLog().log(
+                    new Status(Status.ERROR, PLUGIN_ID, 
+                        "Plugin loading failure: " + d.getId()
+                        + " (" + d.getTitle() + ")"
+                        + "\n" + StringUtils.defaultIfEmpty(d.getInitializationFailure().getMessage(), 
+                            "(no message)"), d.getInitializationFailure()));
+            }
+        }
+    }
+
+    /**
+     * @return Return failed component descriptors, if any.
+     */
+    List<ProcessingComponentDescriptor> getFailed()
+    {
+        return failed;
     }
 
     /**

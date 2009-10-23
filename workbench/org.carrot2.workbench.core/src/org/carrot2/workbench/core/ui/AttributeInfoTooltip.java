@@ -73,8 +73,8 @@ public class AttributeInfoTooltip extends ToolTip
      */
     private void showInView()
     {
-        final IWorkbenchPage page = PlatformUI.getWorkbench()
-        .getActiveWorkbenchWindow().getActivePage();
+        final IWorkbenchPage page = 
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
         if (page != null)
         {
