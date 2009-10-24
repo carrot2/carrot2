@@ -59,36 +59,21 @@ public final class ActiveLanguageAnalyzer extends Analyzer
      */
     public void setActiveLanguage(LanguageCode activeLanguage)
     {
-        // Backward compatible behavior: if null is passed, use ExtendedWhitespaceAnalyzer.
-        if (activeLanguage == null)
+        if (activeLanguage == LanguageCode.CHINESE_SIMPLIFIED)
         {
-            activeLanguage = LanguageCode.ENGLISH;
+            if (chineseAnalyzer == null)
+            {
+                chineseAnalyzer = new ChineseAnalyzer();
+            }
+            activeAnalyzer = chineseAnalyzer;
         }
-
-        switch (activeLanguage)
+        else
         {
-            case CHINESE_SIMPLIFIED:
-                if (chineseAnalyzer == null)
-                {
-                    chineseAnalyzer = new ChineseAnalyzer();
-                }
-                activeAnalyzer = chineseAnalyzer;
-                break;
-
-            /*
-             * We use our own analyzer for Arabic. Lucene's version has special support
-             * for Nonspacing-Mark characters (see http://www.fileformat.info/info/unicode/category/Mn/index.htm),
-             * but we have them included as letters in the parser.
-             */
-            case ARABIC:
-                // Intentional fall-through.
-
-            default:
-                if (extendedWhitespaceAnalyzer == null)
-                {
-                    extendedWhitespaceAnalyzer = new ExtendedWhitespaceAnalyzer();
-                }
-                activeAnalyzer = extendedWhitespaceAnalyzer;
+            if (extendedWhitespaceAnalyzer == null)
+            {
+                extendedWhitespaceAnalyzer = new ExtendedWhitespaceAnalyzer();
+            }
+            activeAnalyzer = extendedWhitespaceAnalyzer;
         }
     }
 }

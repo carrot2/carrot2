@@ -71,10 +71,9 @@ public abstract class LanguageModelTestBase
 
         for (String [] pair : testData)
         {
-            CharSequence stemmed = stemmer.stem(pair[0]);
             assertEquals("Stemming difference: " + pair[0] + " should become " + pair[1]
-                + " but was transformed into " 
-                + stemmed, pair[1], stemmed == null ? null : stemmed.toString());
+                + " but was transformed into " + stemmer.stem(pair[0]), pair[1], stemmer
+                .stem(pair[0]));
         }
     }
 
