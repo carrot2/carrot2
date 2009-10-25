@@ -33,6 +33,11 @@
   <patternset id="lib.dcs">
     <include name="applications/carrot2-dcs/lib/*.jar" />
     <include name="applications/carrot2-dcs/lib/*.LICENSE" />
+    <include name="lib/org.apache.log4j/*.LICENSE" />
+    <include name="lib/org.apache.log4j/*.jar" />
+    <include name="lib/org.slf4j/slf4j.LICENSE" />
+    <include name="lib/org.slf4j/slf4j-log4j12-*.jar" />
+    <include name="lib/org.slf4j/slf4j-api-*.jar" />
   </patternset>
 
   <!--
