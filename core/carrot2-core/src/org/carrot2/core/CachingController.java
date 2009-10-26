@@ -52,7 +52,7 @@ public final class CachingController implements IController
     final Object reentrantLock = new Object();
 
     /** Pool for component instances. */
-    private volatile SoftUnboundedPool<IProcessingComponent, String> componentPool;
+    private volatile IParameterizedPool<IProcessingComponent, String> componentPool;
 
     /**
      * Descriptors of {@link Input} and {@link Output} {@link Processing} attributes of
@@ -103,7 +103,27 @@ public final class CachingController implements IController
     public CachingController(
         Class<? extends IProcessingComponent>... cachedComponentClasses)
     {
+        this(new SoftUnboundedPool<IProcessingComponent, String>(),
+            cachedComponentClasses);
+    }
+
+    /**
+     * Creates a new caching controller with a custom implementation of the component
+     * pool.
+     * 
+     * @param componentPool the component pool to be used by the controller
+     * @param cachedComponentClasses classes of components whose output should be cached
+     *            by the controller. If a superclass is provided here, e.g.
+     *            {@link IDocumentSource}, all its subclasses will be subject to caching.
+     *            If {@link IProcessingComponent} is provided here, output of all
+     *            components will be cached.
+     */
+    public CachingController(
+        IParameterizedPool<IProcessingComponent, String> componentPool,
+        Class<? extends IProcessingComponent>... cachedComponentClasses)
+    {
         this.cachedComponentClasses = Sets.newHashSet(cachedComponentClasses);
+        this.componentPool = componentPool;
     }
 
     /*
@@ -186,10 +206,11 @@ public final class CachingController implements IController
 
         // Create the pool
         final ComponentResetListener componentResetListener = new ComponentResetListener();
-        componentPool = new SoftUnboundedPool<IProcessingComponent, String>(
-            new ComponentInstantiationListener(Maps.newHashMap(globalInitAttributes),
-                componentSpecificInitAttributes), componentResetListener,
-            componentResetListener, ComponentDisposalListener.INSTANCE);
+        componentPool = new SoftUnboundedPool<IProcessingComponent, String>();
+        componentPool.init(new ComponentInstantiationListener(Maps
+            .newHashMap(globalInitAttributes), componentSpecificInitAttributes),
+            componentResetListener, componentResetListener,
+            ComponentDisposalListener.INSTANCE);
 
         // Initialize cache if needed
         if (!cachedComponentClasses.isEmpty())
@@ -252,7 +273,7 @@ public final class CachingController implements IController
             throw new IllegalStateException("Controller not initialized.");
         }
 
-        final SoftUnboundedPool<IProcessingComponent, String> componentPool = this.componentPool;
+        final IParameterizedPool<IProcessingComponent, String> componentPool = this.componentPool;
         if (componentPool == null)
         {
             throw new IllegalStateException("Initialize the controller first.");
