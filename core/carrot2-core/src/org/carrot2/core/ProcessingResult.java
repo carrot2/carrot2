@@ -317,6 +317,9 @@ public final class ProcessingResult
     /**
      * Deserializes a {@link ProcessingResult} from an XML character stream.
      * 
+     * <p>NOTE: This method is overused in the code, we should remove it to avoid bugs as in
+     * <a href="http://issues.carrot2.org/browse/CARROT-582">CARROT-582</a>.</p>
+     * 
      * @param reader the reader to deserialize a {@link ProcessingResult} from. The reader
      *            will <strong>not</strong> be closed.
      * @return deserialized {@link ProcessingResult}
