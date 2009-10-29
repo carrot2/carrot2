@@ -13,12 +13,13 @@
 package org.carrot2.dcs;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.slf4j.Logger;
 import org.kohsuke.args4j.*;
 import org.mortbay.component.LifeCycle;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
+import org.mortbay.thread.QueuedThreadPool;
+import org.slf4j.Logger;
 
 /**
  * Bootstraps the Document Clustering Server.
@@ -39,6 +40,10 @@ public class DcsApp
     @Option(name = "--accept-queue", required = false, 
         usage = "Socket accept queue length (default 20).")
     int acceptQueue = 20;
+
+    @Option(name = "--threads", required = false, 
+        usage = "Maximum number of processing threads (default 4).")
+    int maxThreads = 4;
 
     String appName;
     Server server;
@@ -77,6 +82,15 @@ public class DcsApp
         connector.setReuseAddress(false);
         connector.setAcceptQueueSize(acceptQueue);
         server.addConnector(connector);
+
+        // http://issues.carrot2.org/browse/CARROT-581
+        if (maxThreads < 2)
+        {
+            throw new IllegalArgumentException("Max number of threads must be greater than 1.");
+        }
+            
+        final QueuedThreadPool tp = new QueuedThreadPool(maxThreads);
+        server.setThreadPool(tp);
 
         WebAppContext wac = new WebAppContext();
         wac.setContextPath("/");
