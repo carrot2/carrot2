@@ -236,11 +236,13 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
 
             if (searchFields.length == 1)
             {
-                query = new QueryParser(searchFields[0], analyzer).parse(textQuery);
+                query = new QueryParser(
+                    Version.LUCENE_CURRENT, searchFields[0], analyzer).parse(textQuery);
             }
             else
             {
-                query = new MultiFieldQueryParser(searchFields, analyzer)
+                query = new MultiFieldQueryParser(
+                    Version.LUCENE_CURRENT, searchFields, analyzer)
                     .parse(textQuery);
             }
         }
