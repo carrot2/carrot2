@@ -312,29 +312,4 @@ class FubTestCollection
         }
         return resultSubtopicIds;
     }
-
-    public static void main(String [] args) throws IOException
-    {
-        FileInputStream in = null;
-        try
-        {
-            in = new FileInputStream(
-                new File(
-                    "e:/repositories/sourceforge.net/carrot2-3.2.0/core/carrot2-source-ambient/src/odp239/topics.txt"));
-
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(in,
-                "UTF-8"));
-            String line;
-            while ((line = reader.readLine()) != null)
-            {
-                String [] split = line.split("\t");
-                System.out.println(split[1].replaceAll(" > ", "_").toUpperCase() + "("
-                    + split[0] + ", \"" + split[1].replaceAll("_", " ") + "\"),");
-            }
-        }
-        finally
-        {
-            in.close();
-        }
-    }
 }
