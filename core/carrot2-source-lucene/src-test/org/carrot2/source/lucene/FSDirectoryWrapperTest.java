@@ -8,6 +8,7 @@ import java.util.Random;
 import org.apache.commons.io.FileUtils;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.store.FSDirectory;
+import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.junit.*;
@@ -25,15 +26,14 @@ public class FSDirectoryWrapperTest
     public static void installFSDirectoryWrapper() throws ClassNotFoundException
     {
         // Just load LuceneDocumentSource to install the wrapper
-        @SuppressWarnings("unused")
-        final LuceneDocumentSource unused = new LuceneDocumentSource();
+        ReflectionUtils.classForName(LuceneDocumentSource.class.getName());
     }
 
     @BeforeClass
     public static void prepareIndex() throws Exception
     {
         indexDir = new File(new File(System.getProperty("java.io.tmpdir"))
-            .getCanonicalPath(), "index" + Math.abs(new Random().nextInt()));
+            .getCanonicalPath(), "index" + Math.abs(new Random().nextInt(Integer.MAX_VALUE)));
         directory = FSDirectory.open(indexDir);
         LuceneIndexUtils.createAndPopulateIndex(directory, new SimpleAnalyzer());
     }
