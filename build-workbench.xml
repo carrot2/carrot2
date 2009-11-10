@@ -252,7 +252,7 @@
                     readme.dest="${carrot2.master.basedir}/tmp/workbench/readme/readme.txt" />
     <for param="zip">
       <fileset dir="${dist.dir}">
-        <include name="${carrot2.workbench.base}*.zip" />
+        <include name="${carrot2.workbench.base}*${carrot2.version}.zip" />
       </fileset>
 
       <sequential>
