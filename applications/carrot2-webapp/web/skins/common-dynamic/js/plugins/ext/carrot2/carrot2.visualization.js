@@ -41,6 +41,13 @@
  */
 var selectedClusters = [];
 
+/**
+ * A cache of document identifiers for each cluster ID, as given by
+ * the visualization. The same data is created in <code>carrot2.clusters.core.js</code>,
+ * so perhaps we could reuse it?
+ */
+var flattenedDocuments0 = {};
+
 // Callback function invoked by the visualization:
 // a group has been selected or deselected.
 function onGroupSelection(clusterId, isSelected, docList) {
@@ -57,18 +64,12 @@ function onGroupSelection(clusterId, isSelected, docList) {
      * TODO: selectedClusters contains identifiers of clusters to be shown.
      * one could either merge their documents, or display one cluster after
      * another in the documents panel (my pick).
-     *
-     * Documents from each cluster could be stored in a hash locally here,
-     * but it probably makes more sense to reuse the flattenedDocuments array
-     * (or jQuery.clusters.documents) function), which contains document lists 
-     * for each cluster ID anyway.
-     *
-     * For now, that function is not properly initialized when visualization
-     * panel is shown, so I comment out the code below, but you get the point.
      */
-    // var clusterId = selectedClusters[0];
-    // var documentIndexes = jQuery.clusters.documents(clusterId);
-    // $("#clusters-panel").trigger("carrot2-clusters-selected", [ clusterId, documentIndexes ]);
+    flattenedDocuments0[clusterId] = docList.split(",");
+
+    var cluster = selectedClusters[0];
+    var documentIndexes = flattenedDocuments0[cluster];
+    $("#clusters-panel").trigger("carrot2-clusters-selected", [ cluster, documentIndexes ]);
   }
 }
 
