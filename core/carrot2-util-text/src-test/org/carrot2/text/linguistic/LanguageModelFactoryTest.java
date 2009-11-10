@@ -45,8 +45,8 @@ public class LanguageModelFactoryTest
             new DefaultLanguageModelFactory().getLanguage(l);
         }
         
-        assertTrue("There were problems with loading certain lexical resources. Check log4j logs.", 
-            LexicalResources.problemCache.isEmpty());
+        assertFalse("There were problems with loading certain lexical resources. Check the logs.", 
+            LexicalResources.hasIssues());
     }
 }
 

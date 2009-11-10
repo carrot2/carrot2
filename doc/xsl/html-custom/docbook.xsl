@@ -26,6 +26,7 @@
   <xsl:param name="formal.object.break.after">0</xsl:param>
   <xsl:param name="runinhead.default.title.end.punct"></xsl:param>
   <xsl:param name="qanda.defaultlabel">none</xsl:param>
+  <xsl:param name="callout.graphics.path">img/callouts/</xsl:param>
 
   <xsl:template name="user.head.content">
     <link rel="stylesheet" type="text/css" href="css/elegant-common.css" media="all" />

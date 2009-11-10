@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 import com.google.common.collect.Lists;
 
@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
  */
 public class ClassRelativeLocator implements IResourceLocator
 {
-    private final static Logger logger = Logger.getLogger(ClassRelativeLocator.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(ClassRelativeLocator.class);
 
     /**
      *

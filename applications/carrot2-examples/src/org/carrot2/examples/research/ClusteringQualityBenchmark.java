@@ -14,8 +14,6 @@ package org.carrot2.examples.research;
 import java.text.MessageFormat;
 import java.util.*;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.core.*;
@@ -36,8 +34,6 @@ public class ClusteringQualityBenchmark
     public static void main(String [] args)
     {
         // Disable excessive logging
-        LogManager.getRootLogger().setLevel(Level.WARN);
-
         final AmbientTopic [] topics = AmbientDocumentSource.AmbientTopic.values();
         SimpleController controller = new SimpleController();
 

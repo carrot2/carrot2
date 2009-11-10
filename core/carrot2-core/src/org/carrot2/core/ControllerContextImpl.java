@@ -15,7 +15,7 @@ package org.carrot2.core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -80,7 +80,7 @@ final class ControllerContextImpl implements IControllerContext
             }
             catch (Throwable t)
             {
-                Logger.getLogger(ControllerContextImpl.class).warn(
+                org.slf4j.LoggerFactory.getLogger(ControllerContextImpl.class).warn(
                     "Unhandled exception in context listener.", t);
             }
         }

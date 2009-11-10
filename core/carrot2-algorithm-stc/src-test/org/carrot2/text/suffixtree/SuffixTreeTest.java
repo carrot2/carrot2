@@ -60,7 +60,7 @@ public class SuffixTreeTest
     @Test
     public void checkRandomSymbols()
     {
-        final int [] input = new int [100000];
+        final int [] input = new int [10000];
         final Random rnd = new Random(0x11223344);
         for (int i = 0; i < input.length; i++)
         {

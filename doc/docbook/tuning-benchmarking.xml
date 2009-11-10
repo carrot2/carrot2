@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<section xml:id="section.workbench.benchmarking">
+  <title>Benchmarking clustering performance</title>
+
+  <para>
+    You can use the &DCW; to run simple performance benchmarks of &PROD;. The benchmarks
+    repeatedly cluster the content of the currently opened editor and report the average 
+    clustering time. You can use the benchmarking results to measure the impact of different
+    algorithm's attribute settings on its performance and estimate the 
+    the maximum number of clustering requests that the algorithm can process per second. 
+  </para>
+
+  <para>
+    To perform a performance benchmark:
+  </para>
+  
+  <orderedlist>
+    <listitem>
+      <simpara>
+        In the <guilabel>Search</guilabel> view, choose the algorithm to benchmark and 
+        perform the query to be used for benchmarking. 
+      </simpara>
+    </listitem>
+    
+    <listitem>
+      <simpara>
+        Open the <guilabel>Benchmark</guilabel> view. 
+      </simpara>
+      
+      <figure xml:id="figure.benchmark-view">
+        <title>&DCW; Benchmark view</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-benchmark-view.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </listitem>
+    
+    <listitem>
+      <simpara>
+        Press <guibutton>Start</guibutton> to start the benchmark. After the benchmark
+        completes, you should see the measured clustering time average, standard deviation,
+        minimum and maximum.
+      </simpara>
+    </listitem>
+  </orderedlist>
+
+  <tip>
+    <para>
+      To asses the performance impact of different attribute settings on one algorithm, you can
+      open two or more editors with the same results clustered by the algorithm, set
+      different attribute values in each editor and run benchmarking for each editor
+      separately. The benchmark view remembers the last result for each editor, so you 
+      can compare the performance figures by simply switching between the editors.
+    </para>
+  </tip>
+
+  <tip>
+    <para>
+      By default, the benchmarking view uses only a single processing unit on multi-processor or
+      multi-core machines. You can increase the number of benchmark threads in the
+      <guilabel>Threads</guilabel> section. 
+    </para>
+  </tip>
+
+  <caution>
+    <para>
+      Benchmark results may vary and be different from the results acquired on production machines
+      due to other programs running in the background, operating system, 
+      hardware-specific considerations and even different Java Virtual Machine settings. Always fine-tune your
+      clustering setup in the target deployment environment. 
+    </para>
+  </caution>    
+</section>
+

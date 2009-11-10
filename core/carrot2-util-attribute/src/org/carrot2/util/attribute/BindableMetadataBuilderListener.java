@@ -77,6 +77,8 @@ abstract class BindableMetadataBuilderListener
                 final File xmlFile = new File(outputDir, bindable.getFullyQualifiedName()
                     + ".xml");
 
+                System.out.println("Writing: " + xmlFile);
+
                 final Persister persister = new Persister(new Format(2,
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
                 persister.write(bindableMetadata, xmlFile);

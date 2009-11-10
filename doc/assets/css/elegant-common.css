@@ -366,3 +366,7 @@ span.guiicon span.inlinemediaobject img {
 .qandaset table tr.answer p {
   margin-top: 0;
 }
+
+span.human-readable-label {
+  color: #aaa;
+}

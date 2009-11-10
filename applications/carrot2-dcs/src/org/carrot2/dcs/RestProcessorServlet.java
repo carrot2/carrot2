@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -56,12 +55,11 @@ public final class RestProcessorServlet extends HttpServlet
     public void init() throws ServletException
     {
         /*
-         * Prepend webapp-specific resource locator reading from the web
-         * application context's WEB-INF folder.
+         * Prepend webapp-specific resource locator reading from the web application
+         * context's WEB-INF folder.
          */
-        ResourceUtilsFactory.addFirst(
-            new PrefixDecoratorLocator(
-                new WebAppResourceLocator(getServletContext()), "/WEB-INF/"));
+        ResourceUtilsFactory.addFirst(new PrefixDecoratorLocator(
+            new WebAppResourceLocator(getServletContext()), "/WEB-INF/"));
         ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
 
         // Run in servlet container, load config from config.xml
@@ -77,8 +75,8 @@ public final class RestProcessorServlet extends HttpServlet
         // Load component suite
         try
         {
-            componentSuite = ProcessingComponentSuite.deserialize(
-                resUtils.getFirst(config.componentSuiteResource));
+            componentSuite = ProcessingComponentSuite.deserialize(resUtils
+                .getFirst(config.componentSuiteResource));
         }
         catch (Exception e)
         {
@@ -104,7 +102,8 @@ public final class RestProcessorServlet extends HttpServlet
             cachedComponentClasses.add(IClusteringAlgorithm.class);
         }
 
-        controller = new CachingController(cachedComponentClasses.toArray(new Class [2]));
+        controller = new CachingController(cachedComponentClasses
+            .toArray(new Class [cachedComponentClasses.size()]));
         controller.init(Collections.<String, Object> emptyMap(), componentSuite);
     }
 
@@ -325,10 +324,10 @@ public final class RestProcessorServlet extends HttpServlet
         {
             processingAttributes.putAll(input.getAttributes());
         }
-        
+
         if (StringUtils.isEmpty(requestModel.algorithm))
         {
-            requestModel.algorithm = defaultAlgorithmId;            
+            requestModel.algorithm = defaultAlgorithmId;
         }
 
         // We need either sourceId or direct document feed

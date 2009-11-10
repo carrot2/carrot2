@@ -1,16 +1,12 @@
-<!DOCTYPE project SYSTEM "../dtd/Project.dtd">
-
 <project name="Search the default source" default="webtest">
+  <import file="../includes/webapp.xml" />
+
   <target name="webtest">
     <webtest name="Search the default source">
       <config easyajax="true" easyajaxdelay="5000"/>
-      &getStartupPage;
-      <setInputField htmlId="query" value="test" />
-      <clickButton htmlId="search" />
-      <verifyXPath xpath="count(id('documents')/div) &gt; 50" 
-                   description="More than 50 documents expected" />
-      <verifyXPath xpath="count(id('clusters')//li) &gt; 5"
-                   description="More than 5 clusters expected" />
+      <performQuery query="test" />
+      <verifyDocumentCount moreThan="50" />
+      <verifyClusterCount moreThan="5" />
     </webtest>
   </target>
 </project>

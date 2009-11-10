@@ -13,25 +13,30 @@
 package org.carrot2.workbench.core;
 
 import java.util.*;
+import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.carrot2.core.ProcessingComponentDescriptor;
+import org.carrot2.workbench.core.helpers.Utils;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.*;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.application.*;
 import org.eclipse.ui.views.IViewDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Configures various aspects of the main application's window.
  */
 final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
 {
-    private final static Logger logger = Logger
-        .getLogger(ApplicationWorkbenchWindowAdvisor.class);
+    private final static Logger logger = LoggerFactory.getLogger(ApplicationWorkbenchWindowAdvisor.class);
 
     /*
      * 
@@ -55,8 +60,20 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
     public void preWindowOpen()
     {
         final IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-        final Rectangle fullScreenSize = Display.getDefault().getPrimaryMonitor()
-            .getClientArea();
+        final Monitor primary = Display.getDefault().getPrimaryMonitor();
+
+        /*
+         * Get the bounds of the primary monitor, not its client area.
+         * 
+         * Client area on multi-monitor desktops in Linux (Xinerama) spans across all monitors,
+         * but the window manager won't allow the window to take all that space immediately
+         * (at least that's the effect I'm observing on my desktop).
+         * 
+         * What's funny is that the window still opens on monitor[0], but is shifted
+         * outside of its bounds (and thus spills to monitor[1]). Seems like getPrimaryMonitor()
+         * is not used when creating the Workbench shell.
+         */
+        final Rectangle fullScreenSize = primary.getBounds();
         int width = calculateInitialSize(fullScreenSize.width, 800);
         int height = calculateInitialSize(fullScreenSize.height, 600);
         configurer.setInitialSize(new Point(width, height));
@@ -178,6 +195,32 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
             {
                 editor.getEditor(true);
             }
+        }
+        
+        /*
+         * In case of component loading errors, display an error message and open the error log. 
+         */
+        final List<ProcessingComponentDescriptor> failed 
+            = WorkbenchCorePlugin.getDefault().getFailed();
+        if (!failed.isEmpty())
+        {
+            final StringBuilder errorMessages = new StringBuilder();
+            for (ProcessingComponentDescriptor p : failed)
+            {
+                Throwable t = p.getInitializationFailure();
+
+                errorMessages.append(p.getTitle() + ": " + t.getClass().getName());
+                if (t.getMessage() != null && t.getMessage().length() > 0)
+                    errorMessages.append("\n   " + t.getMessage());
+                errorMessages.append("\n\n");
+            }
+
+            Utils.showView("org.eclipse.pde.runtime.LogView");
+            ErrorDialog.openError(
+                PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+                "Fatal errors", 
+                "Plugin loading errors. See the error log for details.", 
+                new Status(Status.ERROR, WorkbenchCorePlugin.PLUGIN_ID, errorMessages.toString()));
         }
     }
 

@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
@@ -45,7 +45,7 @@ import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
 public class OpenSearchDocumentSource extends MultipageSearchEngine
 {
     /** Logger for this class. */
-    final static Logger logger = Logger.getLogger(OpenSearchDocumentSource.class);
+    final static Logger logger = org.slf4j.LoggerFactory.getLogger(OpenSearchDocumentSource.class);
 
     /**
      * Maximum concurrent threads from all instances of this component.

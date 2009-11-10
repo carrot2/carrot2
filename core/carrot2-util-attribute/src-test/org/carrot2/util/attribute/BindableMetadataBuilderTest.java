@@ -19,9 +19,11 @@ import java.io.*;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.tools.ant.Project;
 import org.carrot2.util.attribute.test.metadata.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 public class BindableMetadataBuilderTest
 {
@@ -49,8 +51,7 @@ public class BindableMetadataBuilderTest
     {
         if (!sourcePathAvailable())
         {
-            org.apache.log4j.Logger
-                .getLogger(BindableMetadataBuilderTest.class)
+            LoggerFactory.getLogger(BindableMetadataBuilderTest.class)
                 .warn(
                     "Some tests skipped: provide path to sources of test classes in the '"
                         + SOURCE_PATH_PROPERTY
@@ -61,10 +62,13 @@ public class BindableMetadataBuilderTest
             return;
         }
 
+        final Project project = new Project();
+        project.setName("Test");
+
         final BindableMetadataBuilder builder;
         final String sourcePaths = System.getProperty(SOURCE_PATH_PROPERTY);
 
-        builder = new BindableMetadataBuilder();
+        builder = new BindableMetadataBuilder(project);
         builder.addCommonMetadataSource(new File(System
             .getProperty(COMMON_ATTRIBUTE_NAMES_SOURCE_PATH_PROPERTY)));
 

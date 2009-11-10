@@ -44,8 +44,7 @@ public final class EnumEditor extends MappedValueComboEditor
         }
         else if (String.class.equals(clazz))
         {
-            final ValueHintEnum hint = (ValueHintEnum) descriptor
-                .getAnnotation(ValueHintEnum.class);
+            final ValueHintEnum hint = descriptor.getAnnotation(ValueHintEnum.class);
 
             if (hint == null)
             {
@@ -92,7 +91,7 @@ public final class EnumEditor extends MappedValueComboEditor
         {
             asString = ((IValueHintMapping) newValue).getAttributeValue();
         }
-        else if (newValue instanceof Enum)
+        else if (Enum.class.isInstance(newValue))
         {
             asString = ((Enum<?>) newValue).name();
         }

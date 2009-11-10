@@ -384,7 +384,7 @@
         </listitem>
       </orderedlist>
       
-      <tip>
+      <tip role="carrot2">
         <para>
           &PROD; clustering can also be performed directly within Solr by means of
           Solr's <link xlink:href="http://wiki.apache.org/solr/ClusteringComponent">&PROD; Clustering Component</link>. Please see
@@ -617,10 +617,14 @@
     <section xml:id="section.integration.setting-up-carrot2-sources-in-eclipse" role="sources">
       <title>Setting up &PROD; source code in Eclipse IDE</title>
       
-      <para>
-        &PROD; source code can be easily set up in Eclipse IDE. The description below assumes
-        you are using Eclipse IDE version 3.4 or newer.  
-      </para>
+      <important>
+        <para>
+          To set up &PROD; source code, you will need Eclipse IDE version 3.5 or higher
+          with the <emphasis role="bold">Plug-in Development Environment (PDE)</emphasis>.
+          The required plugins are avaiilable e.g. in Eclipse for Plug-in Developers and
+          Eclipse Classic distributions available at <link xlink:href="http://www.eclipse.org/downloads" />.
+        </para>
+      </important>
       
       <orderedlist>
         <listitem>

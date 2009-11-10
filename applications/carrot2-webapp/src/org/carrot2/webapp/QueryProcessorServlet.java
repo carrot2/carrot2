@@ -22,8 +22,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.MapUtils;
@@ -38,6 +36,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.load.Persister;
 import org.simpleframework.xml.stream.Format;
+import org.slf4j.Logger;
 
 import com.google.common.collect.*;
 
@@ -57,10 +56,10 @@ public class QueryProcessorServlet extends HttpServlet
     static final String QUERY_LOG_NAME = "queryLog";
 
     /** Query logger. */
-    private transient volatile Logger queryLogger = Logger.getLogger(QUERY_LOG_NAME);
+    private transient volatile Logger queryLogger = org.slf4j.LoggerFactory.getLogger(QUERY_LOG_NAME);
 
     /** Error log */
-    private transient volatile Logger logger = Logger.getLogger(getClass());
+    private transient volatile Logger logger = org.slf4j.LoggerFactory.getLogger(getClass());
 
     /** A reference to custom log appenders. */
     private transient volatile LogInitContextListener logInitializer;
@@ -346,10 +345,10 @@ public class QueryProcessorServlet extends HttpServlet
                     || RequestType.FULL.equals(requestModel.type)
                     || RequestType.CARROT2.equals(requestModel.type))
                 {
-                    logQuery(Level.DEBUG, requestModel, null);
+                    logQuery(true, requestModel, null);
                     processingResult = controller.process(requestParameters,
                         requestModel.source, requestModel.algorithm);
-                    logQuery(Level.INFO, requestModel, processingResult);
+                    logQuery(false, requestModel, processingResult);
                 }
                 else if (RequestType.DOCUMENTS.equals(requestModel.type))
                 {
@@ -383,10 +382,11 @@ public class QueryProcessorServlet extends HttpServlet
         }
     }
 
-    private void logQuery(Level p, RequestModel requestModel,
+    private void logQuery(boolean debug, RequestModel requestModel,
         ProcessingResult processingResult)
     {
-        if (!queryLogger.isEnabledFor(p)) return;
+        if (debug && !queryLogger.isDebugEnabled()) return;
+        if (!queryLogger.isInfoEnabled()) return;
 
         final String message = requestModel.algorithm
             + ","
@@ -397,7 +397,7 @@ public class QueryProcessorServlet extends HttpServlet
             + (processingResult == null ? "-" : processingResult.getAttributes().get(
                 AttributeNames.PROCESSING_TIME_TOTAL)) + "," + requestModel.query;
 
-        this.queryLogger.log(p, message);
+        if (debug) queryLogger.debug(message); else queryLogger.info(message);
     }
 
     private void setExpires(HttpServletResponse response, int minutes)
@@ -412,7 +412,7 @@ public class QueryProcessorServlet extends HttpServlet
     private Format getPersisterFormat(RequestModel requestModel)
     {
         return new Format(2, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            + "<?xml-stylesheet type=\"text/xsl\" href=\"@"
+            + "<?ext-stylesheet resource=\""
             + WebappConfig.getContextRelativeSkinStylesheet(requestModel.skin) + "\" ?>");
     }
 

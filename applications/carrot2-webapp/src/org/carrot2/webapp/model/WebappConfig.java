@@ -15,7 +15,7 @@ package org.carrot2.webapp.model;
 import java.io.InputStream;
 import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.InternalAttributePredicate;
@@ -36,7 +36,7 @@ import com.google.common.collect.*;
  */
 public class WebappConfig
 {
-    private final static Logger log = Logger.getLogger(WebappConfig.class);
+    private final static Logger log = org.slf4j.LoggerFactory.getLogger(WebappConfig.class);
 
     @Element(required = false)
     public ProcessingComponentSuite components;

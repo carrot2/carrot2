@@ -357,8 +357,8 @@
          id="org.carrot2.text"
          download-size="0"
          install-size="0"
-         unpack="false"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="bak.pcj"
@@ -613,5 +613,12 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="org.slf4j"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false" />
 
 </feature>

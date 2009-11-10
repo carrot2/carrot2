@@ -126,18 +126,11 @@ svn copy https://carrot2.svn.sourceforge.net/svnroot/carrot2/trunk
                     distribution file names, JavaDoc page title and other version-sensitive places. 
                     Note the property name should be <filename>carrot2.version.stable</filename>, e.g.:
                     
-                    <programlisting><![CDATA[carrot2.version.stable=3.0.1
-carrot2.version=${carrot2.version.stable}]]></programlisting>
-                  </para>
-                </formalpara>
-              </listitem>
-              
-              <listitem>
-                <formalpara>
-                  <title>&C2; plugin versions in &DCW;</title>
-                  
-                  <para>
-                    Update &C2; plugin version strings in the &DCW; to the version being released.
+                    <programlisting><![CDATA[carrot2.version.stable=3.2.0
+carrot2.version=${carrot2.version.stable}
+
+# workbench plugin/ feature versions.
+carrot2.version.workbench=${carrot2.version.stable}]]></programlisting>
                   </para>
                 </formalpara>
               </listitem>
@@ -174,7 +167,7 @@ carrot2.version=${carrot2.version.stable}]]></programlisting>
           <title>Create the release tag</title>
           <para>
             <programlisting><![CDATA[svn copy https://carrot2.svn.sourceforge.net/svnroot/carrot2/branches/stable
-         https://carrot2.svn.sourceforge.net/svnroot/carrot2/tags/VERSION_3_0_1]]></programlisting>
+         https://carrot2.svn.sourceforge.net/svnroot/carrot2/tags/VERSION_3_2_0]]></programlisting>
           </para>
         </formalpara>
       </listitem>
@@ -195,8 +188,10 @@ carrot2.version=${carrot2.version.stable}]]></programlisting>
                     to contain the desired development version number.  
                     Note the property name should be <filename>carrot2.version.head</filename>, e.g.:
                     
-                    <programlisting><![CDATA[carrot2.version.head=3.2-dev
-carrot2.version=${carrot2.version.head}]]></programlisting>
+                    <programlisting><![CDATA[carrot2.version.head=3.3.0-dev
+
+# workbench plugin/ feature versions.
+carrot2.version.workbench=3.3.0.dev-snapshot]]></programlisting>
                   </para>
                 </formalpara>
               </listitem>
@@ -266,8 +261,10 @@ carrot2.version=${carrot2.version.head}]]></programlisting>
         <formalpara>
           <title>Upload distribution files to SourceForge</title>
           <para>
-            Go to <link xlink:href="https://sourceforge.net/project/admin/editpackages.php?group_id=85379">SourceForge release manager</link>,
-            create a new release and upload distribution files.
+            Perform (e.g. on the build server):
+
+            <programlisting><![CDATA[rsync -e ssh *-3.2.0.zip \
+<sf.user>,carrot2@frs.sourceforge.net:/home/frs/project/c/ca/carrot2/carrot2/3.2.0]]></programlisting>
           </para>
         </formalpara>
       </listitem>

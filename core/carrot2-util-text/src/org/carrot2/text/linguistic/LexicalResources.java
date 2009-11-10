@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtils;
@@ -28,12 +28,21 @@ import com.google.common.collect.*;
  */
 final class LexicalResources
 {
-    private final static Logger logger = Logger.getLogger(LexicalResources.class);
+    private final static Logger logger = org.slf4j.LoggerFactory
+        .getLogger(LexicalResources.class);
 
-    /**
+    /*
      * If we cannot find resources for some languages, emit warning once only.
      */
-    final static EnumSet<LanguageCode> problemCache = EnumSet.noneOf(LanguageCode.class);
+
+    final static EnumSet<LanguageCode> missingStopwordsCache = EnumSet
+        .noneOf(LanguageCode.class);
+
+    final static EnumSet<LanguageCode> missingStoplabelsCache = EnumSet
+        .noneOf(LanguageCode.class);
+
+    final static EnumSet<LanguageCode> regexpProblemsCache = EnumSet
+        .noneOf(LanguageCode.class);
 
     final Set<MutableCharArray> stopwords;
     final List<Pattern> stoplabels;
@@ -58,6 +67,9 @@ final class LexicalResources
         return new LexicalResources(mergedStoplabels, mergedStopwords);
     }
 
+    /**
+     * Loads lexical resources (stop words, stop labels) for a given {@link LanguageCode}.
+     */
     static LexicalResources load(ResourceUtils resourceLoaders, LanguageCode lang)
     {
         return new LexicalResources(loadStopLabels(resourceLoaders, lang), loadStopWords(
@@ -93,11 +105,23 @@ final class LexicalResources
         }
         catch (IOException e)
         {
-            problemCache.add(lang);
-            logger.warn("Common words could not be loaded for language "
-                + lang.toString() + ": " + e.getMessage());
+            problemWarn(missingStopwordsCache, lang,
+                "Common words could not be loaded for language " + lang.toString() + ": "
+                    + e.getMessage());
             return Collections.emptySet();
         }
+    }
+
+    /**
+     * Warn about a problem with resources (once).
+     */
+    private static void problemWarn(EnumSet<LanguageCode> issueCache, LanguageCode lang,
+        String message)
+    {
+        if (issueCache.contains(lang)) return;
+        issueCache.add(lang);
+
+        logger.warn(message);
     }
 
     /**
@@ -128,9 +152,9 @@ final class LexicalResources
                 }
                 catch (PatternSyntaxException e)
                 {
-                    problemCache.add(lang);
-                    logger.warn("Ignoring regular expression with syntax error: " + word
-                        + " in " + resourceName);
+                    problemWarn(regexpProblemsCache, lang,
+                        "Ignoring regular expression with syntax error: " + word + " in "
+                            + resourceName + ".");
                 }
             }
 
@@ -138,9 +162,18 @@ final class LexicalResources
         }
         catch (IOException e)
         {
-            problemCache.add(lang);
-            logger.warn("Stop labels for language " + lang.toString() + " not found.");
+            problemWarn(missingStoplabelsCache, lang, "Stop labels for language "
+                + lang.toString() + " not found: " + e.getMessage());
             return Collections.emptyList();
         }
+    }
+
+    /**
+     * @return <code>true</code> if there have been issues loading resources.
+     */
+    static boolean hasIssues()
+    {
+        return !missingStoplabelsCache.isEmpty() || !missingStoplabelsCache.isEmpty()
+            || !regexpProblemsCache.isEmpty();
     }
 }

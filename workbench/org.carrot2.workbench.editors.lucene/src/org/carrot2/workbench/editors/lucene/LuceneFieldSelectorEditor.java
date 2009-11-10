@@ -15,7 +15,7 @@ package org.carrot2.workbench.editors.lucene;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexReader.FieldOption;
 import org.apache.lucene.store.Directory;
@@ -97,7 +97,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
             }
             catch (Exception e)
             {
-                Logger.getLogger(LuceneFieldSelectorEditor.class).warn(
+                org.slf4j.LoggerFactory.getLogger(LuceneFieldSelectorEditor.class).warn(
                     "Index access error.", e);
             }
         }

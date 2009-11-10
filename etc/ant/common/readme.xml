@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="carrot2.common.readme">
+  <!--
+      Appends build information at the end of a readme.txt file.
+    -->
+  <macrodef name="carrot2.common.readme.process">
+    <attribute name="readme.dest" />
+    <attribute name="readme.src" />
+    <attribute name="buildinfo.src" />
+    <element name="svninfos" />
+    <element name="filters" />
+
+    <sequential>
+      <typedef resource="org/tigris/subversion/svnant/svnantlib.xml">
+        <classpath>
+          <fileset dir="${carrot2.master.basedir}/etc/svnant" includes="*.jar" />
+        </classpath>
+      </typedef> 
+     
+      <svn javahl="false">
+        <svninfos />
+      </svn>
+
+      <mkdir dir="${carrot2.master.basedir}/tmp/readme" />
+      <concat destfile="${carrot2.master.basedir}/tmp/readme/readme.txt">
+        <fileset file="@{readme.src}" />
+        <fileset file="@{buildinfo.src}" />
+      </concat>
+
+      <tstamp>
+        <format property="build.date" pattern="yyyy-MM-dd HH:mm:ss" />
+      </tstamp>
+
+      <copy file="${carrot2.master.basedir}/tmp/readme/readme.txt" tofile="@{readme.dest}" filtering="yes">
+        <filterset>
+          <filter token="build.key" value="${build.key}" />
+          <filter token="build.number" value="${build.number}" />
+          <filter token="build.date" value="${build.date}" />
+          <filter token="user.name" value="${user.name}" />
+          <filters />
+        </filterset>
+      </copy>
+
+      <delete dir="${carrot2.master.basedir}/tmp/readme" />
+    </sequential>
+  </macrodef>
+
+  <!--
+       Custom invocation of carrot2.common.readme.process 
+       with Carrot2-specific SVN paths.
+    -->
+  <macrodef name="carrot2.readme">
+    <attribute name="readme.dest" />
+    <attribute name="readme.src" />
+
+    <sequential>
+      <carrot2.common.readme.process readme.dest="@{readme.dest}" readme.src="@{readme.src}" 
+                                     buildinfo.src="${carrot2.master.basedir}/etc/buildinfo/build.info">
+        <svninfos>
+          <info propPrefix="carrot2.svn.info" target="${carrot2.master.basedir}" />
+        </svninfos>
+
+        <filters>
+          <filter token="carrot2.version" value="${carrot2.version}" />
+          <filter token="carrot2.rev" value="${carrot2.svn.info.rev}" />
+        </filters>
+      </carrot2.common.readme.process>
+    </sequential>
+  </macrodef>
+</project>

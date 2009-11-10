@@ -138,19 +138,19 @@ public final class AttributeGroups extends Composite implements IAttributeEventP
      */
     private class HasEditorPredicate implements Predicate<AttributeDescriptor>
     {
-        public boolean apply(AttributeDescriptor descriptor)
+        public boolean apply(AttributeDescriptor ad)
         {
             try
             {
-                Class<?> clazz = descriptor.type;
+                Class<?> clazz = AttributeGroups.this.descriptor.type;
                 if (clazz != null && IProcessingComponent.class.isAssignableFrom(clazz))
                 {
                     EditorFactory.getEditorFor(clazz
-                        .asSubclass(IProcessingComponent.class), descriptor);
+                        .asSubclass(IProcessingComponent.class), ad);
                 }
                 else
                 {
-                    EditorFactory.getEditorFor(null, descriptor);
+                    EditorFactory.getEditorFor(null, ad);
                 }
 
                 return true;

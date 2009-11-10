@@ -41,17 +41,45 @@ public class SimpleXmlWrappers
         .newHashMap();
 
     /**
+     * Indicates whether the wrapper mapping is strict.
+     */
+    private static final Map<Class<?>, Boolean> strict = Maps.newHashMap();
+
+    /**
+     * Registers a new {@link ISimpleXmlWrapper}. If a wrapper for the provide
+     * <code>wrappedClass</code> already exists, it will be replaced with the new value.
+     * The wrapper mapping added using this method will be strict, it will apply only to
+     * objects of <code>wrappedClass</code>, but not its subclasses.
+     * 
+     * @param wrappedClass type to be wrapped
+     * @param wrapperClass class name of the {@link ISimpleXmlWrapper} implementation to
+     *            wrap <code>wrappedClass</code>
+     * @see SimpleXmlWrappers#addWrapper(Class, Class, boolean)
+     */
+    public static synchronized <T> void addWrapper(Class<T> wrappedClass,
+        Class<? extends ISimpleXmlWrapper<? super T>> wrapperClass)
+    {
+        addWrapper(wrappedClass, wrapperClass, true);
+    }
+
+    /**
      * Registers a new {@link ISimpleXmlWrapper}. If a wrapper for the provide
      * <code>wrappedClass</code> already exists, it will be replaced with the new value.
      * 
      * @param wrappedClass type to be wrapped
      * @param wrapperClass class name of the {@link ISimpleXmlWrapper} implementation to
      *            wrap <code>wrappedClass</code>
+     * @param strict if <code>true</code>, the mapping will apply only to objects of
+     *            <code>wrappedClass</code>, but not to its subclasses. If
+     *            <code>false</code>, if no exact mapping is found for
+     *            <code>wrappedClass</code>, the first available superclass mapping will
+     *            be sought.
      */
     public static synchronized <T> void addWrapper(Class<T> wrappedClass,
-        Class<? extends ISimpleXmlWrapper<? super T>> wrapperClass)
+        Class<? extends ISimpleXmlWrapper<? super T>> wrapperClass, boolean strict)
     {
         wrappers.put(wrappedClass, wrapperClass);
+        SimpleXmlWrappers.strict.put(wrappedClass, strict);
     }
 
     /**
@@ -173,11 +201,12 @@ public class SimpleXmlWrappers
      * 
      * @return original value
      */
-    public static Object unwrap(final SimpleXmlWrapperValue value)
+    @SuppressWarnings("unchecked")
+    public static <T> T unwrap(final SimpleXmlWrapperValue value)
     {
         if (value != null)
         {
-            return value.unwrap();
+            return (T) value.unwrap();
         }
         else
         {
@@ -187,18 +216,31 @@ public class SimpleXmlWrappers
 
     static synchronized <T> Class<? extends ISimpleXmlWrapper<?>> getWrapper(T value)
     {
-        final Class<? extends ISimpleXmlWrapper<?>> clazz = wrappers
-            .get(value.getClass());
+        final Class<? extends Object> valueClass = value.getClass();
+
+        // First try to find exact mapping
+        final Class<? extends ISimpleXmlWrapper<?>> clazz = wrappers.get(valueClass);
 
         // Check for some common fallback cases
         if (clazz == null)
         {
-            if (value instanceof List)
+            // Try to find a non-strict (subclass) mapping
+            for (Map.Entry<Class<?>, Class<? extends ISimpleXmlWrapper<?>>> entry : wrappers
+                .entrySet())
+            {
+                if (!strict.get(entry.getKey())
+                    && entry.getKey().isAssignableFrom(valueClass))
+                {
+                    return entry.getValue();
+                }
+            }
+
+            if (List.class.isInstance(value))
             {
                 return ListSimpleXmlWrapper.class;
             }
 
-            if (value instanceof Map)
+            if (Map.class.isInstance(value))
             {
                 return MapSimpleXmlWrapper.class;
             }
@@ -222,5 +264,14 @@ public class SimpleXmlWrappers
         }
 
         return clazz;
+    }
+
+    /**
+     * For unit tests.
+     */
+    static void clearWrappers()
+    {
+        wrappers.clear();
+        strict.clear();
     }
 }

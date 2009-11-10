@@ -20,15 +20,22 @@ be processed. Something like this should do:
 		<url-pattern>*.xml</url-pattern>
 	</filter-mapping>
 
-The filter processes only streams which send a proper MIME type (text/xml or application/xml) 
-and define an xml-stylesheet header:
+The filter applies only to streams that send XML MIME type (text/xml or application/xml) AND:
+   
+  - define an extended stylesheet header with application context-relative
+    resource (ignored by browsers):
 
-<?xml-stylesheet type="text/xsl" href="..." ?>
+    <?ext-stylesheet resource="" ?> 
 
-The 'href' attribute can be any of the following:
+  OR
 
-    a) a full external URL
-    b) a server-relative URL (starting with a '/' character)
-    c) an application-context-relative URL (starting with a "@/" sequence)
+  - define an xml-stylesheet header:
+
+    <?xml-stylesheet type="text/xsl" href="..." ?>
+
+    Where 'href' attribute can be any of the following (in the recommended order):
+
+    - current URI-relative path,
+    - full external URL.
 
 The stylesheet is cached in memory for subsequent use.

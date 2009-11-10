@@ -17,7 +17,6 @@ import java.net.URL;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.resource.*;
@@ -77,6 +76,11 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
      */
     private HashMap<String, ImageDescriptor> componentImages = Maps.newHashMap();
 
+    /**
+     * List of failed components.
+     */
+    private List<ProcessingComponentDescriptor> failed = Lists.newArrayList();
+    
     /*
      * 
      */
@@ -244,7 +248,6 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                 if (bundleURL == null)
                 {
                     String message = "Suite extension resource not found: " + suitePath;
-                    Logger.getRootLogger().error(message);
                     Utils.logError(message, false);
                     continue;
                 }
@@ -279,7 +282,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                         /*
                          * Remove invalid descriptors, cache icons.
                          */
-                        suite.removeUnavailableComponents();
+                        failed.addAll(suite.removeUnavailableComponents());
                         for (ProcessingComponentDescriptor d : suite.getComponents())
                         {
                             final String iconPath = d.getIconPath();
@@ -301,7 +304,6 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                 }
                 catch (Exception e)
                 {
-                    Logger.getRootLogger().error("Failed to load extension.", e);
                     // Skip errors, logging them.
                     Utils.logError("Failed to load suite extension.", e, false);
                 }
@@ -331,10 +333,33 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             }
             catch (Exception e)
             {
-                Utils.logError("Could not extract descriptor from: " + pcd.getId(), e,
-                    false);
+                Utils.logError("Could not extract descriptor from: " + pcd.getId(), e, false);
             }
         }
+        
+        /*
+         * Log errors.
+         */
+        if (!failed.isEmpty())
+        {
+            for (ProcessingComponentDescriptor d : failed)
+            {
+                getLog().log(
+                    new Status(Status.ERROR, PLUGIN_ID, 
+                        "Plugin loading failure: " + d.getId()
+                        + " (" + d.getTitle() + ")"
+                        + "\n" + StringUtils.defaultIfEmpty(d.getInitializationFailure().getMessage(), 
+                            "(no message)"), d.getInitializationFailure()));
+            }
+        }
+    }
+
+    /**
+     * @return Return failed component descriptors, if any.
+     */
+    List<ProcessingComponentDescriptor> getFailed()
+    {
+        return failed;
     }
 
     /**

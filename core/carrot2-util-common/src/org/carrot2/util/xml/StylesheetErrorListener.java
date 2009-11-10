@@ -15,14 +15,14 @@ package org.carrot2.util.xml;
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.TransformerException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 /**
  * An {@link ErrorListener} that reacts to errors when parsing (compiling) the stylesheet.
  */
 public final class StylesheetErrorListener implements ErrorListener
 {
-    private final static Logger logger = Logger.getLogger(StylesheetErrorListener.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(StylesheetErrorListener.class);
     
     /*
      * 

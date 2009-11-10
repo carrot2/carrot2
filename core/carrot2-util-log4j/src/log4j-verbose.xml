@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" [
+  <!ENTITY appender-console SYSTEM "appender-console.xml">
+  <!ENTITY filters-common SYSTEM "filters-common.xml">
+  <!ENTITY filters-framework SYSTEM "filters-framework.xml">
+]>
+
+<!-- 
+    Default log4j configuration used in Eclipse projects (debugging):
+    	console appender and standard set of library filters,
+    	the rest set to DEBUG level.
+-->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- Add appenders here. -->
+    &appender-console;
+
+    <!-- Add logger filters here. -->
+    &filters-common;
+
+    <!-- Root logger config. -->
+    <root>
+        <priority value="debug" />
+
+        <appender-ref ref="appender-console" />
+    </root>
+</log4j:configuration>

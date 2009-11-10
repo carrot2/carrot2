@@ -74,21 +74,7 @@
         <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="test" inheritall="true" />
 
         <!-- build the workbench -->
-        <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="build" inheritall="true" />
-
-        <!-- copy to the distribution dir -->
-        <mkdir dir="${dist.dir}" />
-        <copy todir="${dist.dir}" overwrite="true">
-            <fileset dir="${carrot2.code.dir}/tmp/workbench">
-                <!-- Files from the interim build. -->
-                <include name="I.carrot2-workbench/*.zip" />
-            </fileset>
-
-            <chainedmapper>
-              <mapper type="flatten" />
-              <mapper type="glob" from="*.zip" to="*-${carrot2.version}.zip"/>
-            </chainedmapper>
-        </copy>
+        <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="dist" inheritall="true" />
     </target>
 
     <target name="help">

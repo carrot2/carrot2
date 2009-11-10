@@ -1,11 +1,11 @@
-<!DOCTYPE project SYSTEM "../dtd/Project.dtd">
-
 <project name="Set and verify advanced options" default="webtest">
+  <import file="../includes/webapp.xml" />
+
   <target name="webtest">
     <webtest name="Set and verify advanced options">
       <config easyajax="true" easyajaxdelay="5000"/>
-      &getStartupPage;
-      <setInputField htmlId="query" value="test" />
+      <performQuery query="test" />
+
       <clickLink xpath="id('show-options')/a[1]" />
       <clickLink xpath="id('show-advanced-options')" />
       <verifyXPath xpath="count(id('advanced-options')/div) = 3" 

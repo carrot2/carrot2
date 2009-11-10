@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,6 +15,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.tools.ant.Project;
 import org.carrot2.util.StreamUtils;
 
 import com.google.common.collect.Lists;
@@ -31,6 +31,11 @@ class BindableMetadataBuilder
 {
     /** A field used in tests */
     static final String ATTRIBUTE_KEY_PARAMETER = "key";
+
+    /**
+     * ANT project this builder belongs to.
+     */
+    private final Project project;
 
     /**
      * Metadata extractors for attributes.
@@ -71,8 +76,9 @@ class BindableMetadataBuilder
     /**
      * Creates a {@link BindableMetadataBuilder} with empty commonMetadataSources.
      */
-    BindableMetadataBuilder()
+    BindableMetadataBuilder(Project project)
     {
+        this.project = project;
         commonMetadataSources = Lists.newArrayList();
     }
 
@@ -87,7 +93,7 @@ class BindableMetadataBuilder
         }
         else
         {
-            javaDocBuilder.addSource(file);
+            addJavaSourceFile(file);
         }
     }
 
@@ -105,12 +111,7 @@ class BindableMetadataBuilder
             {
                 try
                 {
-                    String encoding = "UTF-8";
-                    String sourceFile = new String(StreamUtils
-                        .readFullyAndClose(new FileInputStream(currentFile)), encoding);
-
-                    javaDocBuilder.addSource(new StringReader(sourceFile),
-                        currentFile.getAbsolutePath());
+                    addJavaSourceFile(currentFile);
                 }
                 catch (IOException e)
                 {
@@ -125,8 +126,8 @@ class BindableMetadataBuilder
      */
     void addCommonMetadataSource(File file) throws FileNotFoundException, IOException
     {
-        JavaSource addSource = javaDocBuilder.addSource(file);
-        commonMetadataSources.add(addSource.getClasses()[0].getFullyQualifiedName());
+        commonMetadataSources.add(addJavaSourceFile(file).getClasses()[0]
+            .getFullyQualifiedName());
     }
 
     /**
@@ -143,20 +144,28 @@ class BindableMetadataBuilder
      */
     void buildAttributeMetadata()
     {
+
         final JavaSource [] javaSources = javaDocBuilder.getSources();
         for (final JavaSource javaSource : javaSources)
         {
-            // Take first class in a file
-            final JavaClass javaClass = javaSource.getClasses()[0];
-            if (MetadataExtractorUtils.hasAnnotation(javaClass, Bindable.class))
+            for (JavaClass javaClass : javaSource.getClasses())
             {
-                final BindableMetadata bindableMetadata = new BindableMetadata();
-                buildBindableMetadata(javaClass, bindableMetadata);
-                buildAttributeMetadata(javaClass, bindableMetadata);
-
-                for (final BindableMetadataBuilderListener listener : listeners)
+                if (MetadataExtractorUtils.hasAnnotation(javaClass, Bindable.class))
                 {
-                    listener.bindableMetadataBuilt(javaClass, bindableMetadata);
+                    final BindableMetadata bindableMetadata = new BindableMetadata();
+                    buildBindableMetadata(javaClass, bindableMetadata);
+                    buildAttributeMetadata(javaClass, bindableMetadata);
+
+                    for (final BindableMetadataBuilderListener listener : listeners)
+                    {
+                        listener.bindableMetadataBuilt(javaClass, bindableMetadata);
+                    }
+                }
+                else
+                {
+                    project.log("Skipping non-@Bindable class: "
+                        + javaClass.getFullyQualifiedName() + " from "
+                        + javaSource.getURL(), Project.MSG_DEBUG);
                 }
             }
         }
@@ -256,5 +265,18 @@ class BindableMetadataBuilder
         }
 
         return null;
+    }
+
+    /**
+     * Adds a Java source from a {@link File} read assuming UTF-8 encoding.
+     */
+    private JavaSource addJavaSourceFile(File currentFile)
+        throws UnsupportedEncodingException, IOException, FileNotFoundException
+    {
+        String source = new String(StreamUtils.readFullyAndClose(new FileInputStream(
+            currentFile)), "UTF-8");
+
+        return javaDocBuilder.addSource(new StringReader(source), currentFile
+            .getAbsolutePath());
     }
 }

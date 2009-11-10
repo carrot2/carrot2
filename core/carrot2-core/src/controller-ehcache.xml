@@ -6,7 +6,7 @@
 	attributes map are serializable.  
 	-->
     <defaultCache
-            maxElementsInMemory="1000"
+            maxElementsInMemory="100"
             eternal="false"
             timeToIdleSeconds="1800"
             timeToLiveSeconds="1800"

@@ -1,16 +1,12 @@
-<!DOCTYPE project SYSTEM "../dtd/Project.dtd">
-
 <project name="Check all available document sources" default="webtest">
+  <import file="../includes/webapp.xml" />
+
   <target name="webtest">
     <property name="webtest.skip.source.icerocket" value="true" />
     <property name="webtest.skip.source.pubmed" value="true" />
 
     <webtest name="Check all available document sources">
-      &getStartupPage;
-      <setInputField htmlId="query" value="test" />
-      <setSelectField name="results" value="50" />
-      <clickButton htmlId="search" />
-      <sleep seconds="5" />
+      <performQuery query="test" results="50" />
 
       <!-- Default search already tested elsewhere -->
       <repeat xpath="id('source-tabs')//li[contains(@class,'tab') and not(contains(@class,'active'))]" counterName="tab" 
@@ -21,10 +17,8 @@
           <sleep seconds="10" />
           
           <verifyXPath xpath="contains(id('#{tabId}')/@class, 'active')" />
-          <verifyXPath xpath="count(id('documents')/div) &gt; 24" 
-                       description="More than 24 documents expected" />
-          <verifyXPath xpath="count(id('clusters')//li) &gt; 3"
-                       description="More than 3 clusters expected" />
+          <verifyDocumentCount moreThan="24" />
+          <verifyClusterCount moreThan="3" />
         </ifStep>
       </repeat>
     </webtest>

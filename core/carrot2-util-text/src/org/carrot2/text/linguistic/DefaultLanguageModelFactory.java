@@ -170,13 +170,18 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
      */
     private IStemmer createStemmer(LanguageCode language)
     {
-        if (language == LanguageCode.POLISH)
+        switch (language)
         {
-            return PolishStemmerFactory.createStemmer();
-        }
-        else
-        {
-            return SnowballStemmerFactory.createStemmer(language);
+            case POLISH:
+                return PolishStemmerFactory.createStemmer();
+            case CHINESE_SIMPLIFIED:
+                /*
+                 * Return identity stemmer for Chinese. Chinese requires proper word
+                 * segmentation, however (input text analyzer).
+                 */
+                return IdentityStemmer.INSTANCE; 
+            default:
+                return SnowballStemmerFactory.createStemmer(language);
         }
     }
 }

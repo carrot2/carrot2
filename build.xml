@@ -21,6 +21,7 @@
   <import file="${carrot2.master.basedir}/doc/build.xml" />
   <import file="${carrot2.master.basedir}/etc/maven/build.xml" />
   <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
+  <import file="${carrot2.master.basedir}/etc/ant/common/readme.xml" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />
@@ -92,6 +93,7 @@
     <include name="lib/**/*.jar" />
     <include name="applications/carrot2-dcs/**/*.jar" />
     <include name="applications/carrot2-webapp/lib/*.jar" />
+    <exclude name="lib/org.slf4j/slf4j-log4j12*" />
   </patternset>
 
   <!-- Excludes both JAR and LICENSE files -->
@@ -110,6 +112,8 @@
     <exclude name="lib/org.kohsuke.args4j/**" />
     <exclude name="lib/org.apache.xml/**" />
     <exclude name="lib/com.google.collections/ri*" />
+    <exclude name="lib/org.slf4j/slf4j-log4j12*" />
+    <exclude name="lib/org.apache.log4j/*" />
   </patternset>
 
   <patternset id="lib.core">
@@ -117,20 +121,22 @@
     <include name="core/carrot2-util-matrix/lib/*.jar" />
     <patternset refid="lib.core.excludes" />
   </patternset>
-  
+
   <patternset id="lib.core.mini">
     <include name="lib/**/colt*.jar" />
     <include name="lib/**/commons-lang*.jar" />
     <include name="lib/**/ehcache*.jar" />
     <include name="lib/**/google-collect*.jar" />
     <include name="lib/**/jackson*.jar" />
-    <include name="lib/**/log4j*.jar" />
     <include name="lib/**/lucene-core*.jar" />
     <include name="lib/**/lucene-snowball*.jar" />
     <include name="lib/**/nni*.jar" />
     <include name="lib/**/pcj*.jar" />
+
+    <include name="lib/**/slf4j-api*.jar" />
+    <include name="lib/**/slf4j-nop*.jar" />
   </patternset>
-  
+
   <patternset id="licenses.core">
     <include name="lib/**/*.LICENSE" />
     <patternset refid="lib.core.excludes" />
@@ -536,6 +542,7 @@
              version="true"
              use="false"
              encoding="UTF-8"
+             docencoding="UTF-8"
              windowtitle="Carrot2 v${carrot2.version} API Documentation (JavaDoc)"
              doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} API Documentation"
              header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} &lt;br&gt;API Documentation&lt;/div&gt;"
@@ -593,6 +600,7 @@
     <jar destfile="${jar.dir}/carrot2-core.jar">
       <fileset dir="${build.dir}">
         <exclude name="ambient/**" />
+        <exclude name="odp239/**" />
         <exclude name="org.carrot2.util.attribute*.xml" />
         <exclude name="**/*.html" />
       </fileset>
@@ -625,7 +633,6 @@
 
     <delete includeEmptyDirs="true">
       <fileset dir="${jar.mini.dir}">
-        <include name="ambient/**" />
         <include name="org.carrot2.source*.xml" />
         <include name="org.carrot2.output*.xml" />
         <include name="org/carrot2/source/**" />
@@ -706,7 +713,8 @@
       <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/src" />
     </copy>
     <copy todir="${api.dir}" file="${carrot2.master.basedir}/applications/carrot2-examples/build.xml" />
-    <copy todir="${api.dir}" file="${carrot2.master.basedir}/applications/carrot2-examples/etc/readme.txt" />
+    <carrot2.readme readme.src="${carrot2.master.basedir}/applications/carrot2-examples/etc/readme.txt"
+                    readme.dest="${api.dir}/readme.txt" />
   </target>
 
   <target name="carrot2.core.dist" depends="core.test, javadoc">
@@ -714,7 +722,7 @@
       <zipfileset dir="${api.dir}" prefix="${api.dist.base}-${carrot2.version}" />
       <zipfileset dir="${javadoc.dir}" prefix="${api.dist.base}-${carrot2.version}/javadoc" />
     </zip>
-    <delete dir="${api.dir}" />
+    <delete dir="${api.dir}" failonerror="false" />
   </target>
 
   <target name="core.test" depends="core">

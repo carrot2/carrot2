@@ -14,6 +14,7 @@
   <!-- Import common macros -->
   <import file="${carrot2.master.basedir}/etc/ant/common/basedir.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/webtest.xml" />
+  <import file="${carrot2.master.basedir}/etc/ant/common/readme.xml" />
 
   <!-- DCS build dirs -->
   <property name="dcs.dir" location="tmp/dcs" />
@@ -32,15 +33,20 @@
   <patternset id="lib.dcs">
     <include name="applications/carrot2-dcs/lib/*.jar" />
     <include name="applications/carrot2-dcs/lib/*.LICENSE" />
+    <include name="lib/org.apache.log4j/*.LICENSE" />
+    <include name="lib/org.apache.log4j/*.jar" />
+    <include name="lib/org.slf4j/slf4j.LICENSE" />
+    <include name="lib/org.slf4j/slf4j-log4j12-*.jar" />
+    <include name="lib/org.slf4j/slf4j-api-*.jar" />
   </patternset>
-      
+
   <!--
-       Builds the DCS.
+       Builds the DCS (includes bootstrap class and embedded jetty).
     -->
   <target name="carrot2.dcs.build" depends="basedir.check, carrot2.dcs.war">
     <mkdir dir="${dcs.dir}/lib" />
     <copy todir="${dcs.dir}/lib">
-      <fileset dir="lib">
+      <fileset dir="${carrot2.master.basedir}/lib">
         <include name="**/jetty*.jar" />
         <include name="**/jetty*.LICENSE" />
         <include name="**/args4j*.jar" />
@@ -48,6 +54,9 @@
         <include name="**/servlet-api*.jar" />
         <include name="**/log4j-*.jar" />
         <include name="**/log4j-*.LICENSE" />
+      	<include name="org.slf4j/slf4j-log4j12-*.jar" />
+      	<include name="org.slf4j/slf4j-api-*.jar" />
+      	<include name="org.slf4j/*.LICENSE" />
       </fileset>
       <mapper type="flatten" />
     </copy>
@@ -56,7 +65,7 @@
           file="core/carrot2-util-log4j/src/log4j-dcs.xml" />
     <jar jarfile="${dcs.dir}/lib/carrot2-dcs-bootstrap.jar">
       <fileset dir="${dcs.dir}/classes">
-        <include name="**/DcsApp.class" />
+        <include name="**/DcsApp*.class" />
         <include name="**/Log4jJettyLog.class" />
         <include name="**/*.xml" />
       </fileset>
@@ -84,10 +93,12 @@
         <include name="carrot2.CONTRIBUTORS" />
       </fileset>
     </copy>
-  
+
     <copy todir="${dcs.dir}/examples/java/lib" flatten="true">
       <fileset dir="${carrot2.master.basedir}/lib">
-        <include name="**/commons-logging*.*" />
+        <include name="**/jcl-over-slf4j-*.jar" />
+      	<include name="**/slf4j-api-*.jar" />
+      	<include name="**/slf4j-nop-*.jar" />
         <include name="**/commons-codec*.*" />
         <include name="**/commons-httpclient*.*" />
       </fileset>
@@ -100,6 +111,8 @@
        Builds the DCS ZIP archive.
     -->
   <target name="carrot2.dcs.dist" depends="basedir.check, carrot2.dcs.build, carrot2.dcs.webtest.war">
+    <carrot2.readme readme.src="${carrot2.dcs.basedir}/etc/readme.txt"
+                    readme.dest="${dcs.dir}/readme.txt" />
     <zip destfile="${dcs.dir}/../${dcs.dist.base}-${carrot2.version}.zip">
       <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}-${carrot2.version}">
         <exclude name="**/*.sh" />
@@ -137,21 +150,16 @@
     -->
   <target name="carrot2.dcs.war" depends="basedir.check, jar, lib.flattened">
     <!-- Add DCS-specific JARs -->
-    <copy todir="${lib.flattened}">
+  	<property name="dcs.lib.dir" location="${dcs.dir}/lib-tmp" />
+    <copy todir="${dcs.lib.dir}">
       <fileset dir="${carrot2.master.basedir}">
         <patternset refid="lib.dcs" />
       </fileset>
       <mapper type="flatten"/>
     </copy>
-    
-    <mkdir dir="${dcs.dir}" />
-    <mkdir dir="${dcs.dir}/war" />
 
-    <mkdir dir="${dcs.dir}/manifest" />
+    <mkdir dir="${dcs.dir}/war" />
     <mkdir dir="${dcs.dir}/classes" />
-    <manifest file="${dcs.dir}/manifest/MANIFEST.MF">
-      <attribute name="Main-Class" value="org.carrot2.dcs.DcsApp" />
-    </manifest>
 
     <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
     <javac srcdir="${carrot2.dcs.basedir}/src"
@@ -167,13 +175,14 @@
           file="core/carrot2-util-log4j/src/log4j-dcs.xml" />
 
     <war destfile="${dcs.war.dir}/${dcs.war.base.name}.war"
-         webxml="${carrot2.dcs.basedir}/web/WEB-INF/web.xml"
-         manifest="${dcs.dir}/manifest/MANIFEST.MF">
+         webxml="${carrot2.dcs.basedir}/web/WEB-INF/web.xml">
       <fileset dir="${carrot2.dcs.basedir}/web">
         <exclude name="WEB-INF" />
       </fileset>
-      <lib dir="${lib.flattened}" />
-      <lib dir="${carrot2.dcs.basedir}/lib" />
+      <lib dir="${lib.flattened}">
+      	<exclude name="**/slf4j-*" />
+      </lib>
+      <lib dir="${dcs.lib.dir}" />
       <classes dir="${dcs.dir}/classes">
         <exclude name="*.java" />
       </classes>
@@ -190,9 +199,12 @@
         <include name="suites/source-*.xml" />
         <include name="suites/suite-dcs.xml" />
       </classes>
+      <manifest>
+        <attribute name="Main-Class" value="org.carrot2.dcs.DcsApp" />
+      </manifest>
     </war>
-
-    <delete dir="${dcs.dir}/manifest" />
+  	
+  	<delete dir="${dcs.lib.dir}" />
   </target>
 
   <!-- Copies the runtime resources to the compiled classes directory. -->

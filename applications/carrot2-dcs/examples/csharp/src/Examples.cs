@@ -18,23 +18,36 @@ namespace Org.Carrot2.Examples
     {
         public static void Main()
         {
-            MultipartFileUpload service = new MultipartFileUpload();
-            service.Uri = new Uri("http://localhost:8080/dcs/rest");
+            MultipartFileUpload service = new MultipartFileUpload(new Uri("http://localhost:8080/dcs/rest"));
 
-            // The path here is relative from binary output to shared resources folder.
+            string examplePath = "..\\..\\..\\shared\\data-mining.xml";
+            if (!File.Exists(examplePath))
+            {
+                Console.WriteLine("Input path does not exist: " + examplePath);
+                return;
+            }
+
+            // Cluster directly from file (no buffering).
+            Console.WriteLine("## Clustering documents from a file...");
             ClusterFromFile(service, "..\\..\\..\\shared\\data-mining.xml", "data mining");
+
+            // Cluster from an XML in memory.
+            string xml = File.ReadAllText(examplePath, System.Text.Encoding.UTF8);
+            Console.WriteLine("## Clustering documents from an XML string...");
+            ClusterFromStream(service, 
+                new MemoryStream(System.Text.Encoding.UTF8.GetBytes(xml)), "data mining");
+
+            // Cluster form an external document source (on the DCS).
+            Console.WriteLine("## Clustering search results from a search engine...");
             ClusterFromSearchEngine(service, "etools", "data mining");
         }
 
         /// <summary>
-        /// An example of clustering data stored in a local file and passed
-        /// as part of the HTTP request. A query hint is provided for the
-        /// clustering algorithm (to avoid trivial clusters).
+        /// An example of clustering data from an arbitrary byte stream holding input XML for
+        /// the DCS (can be an in-memory stream if clustering from a string).
         /// </summary>
-        private static void ClusterFromFile(MultipartFileUpload service, string filePath, string queryHint)
+        private static void ClusterFromStream(MultipartFileUpload service, Stream xmlStream, string queryHint)
         {
-            Console.WriteLine("## Clustering documents from a local file...");
-
             // The output format is XML.
             service.AddFormValue("dcs.output.format", "XML");
 
@@ -54,10 +67,10 @@ namespace Org.Carrot2.Examples
                 "org.carrot2.matrix.factorization.PartialSingularValueDecompositionFactory");
 
             // Add the XML stream here.
-            service.AttachFile("input.xml", "dcs.c2stream", new FileInfo(filePath));
+            service.AddFormStream("dcs.c2stream", "anything.xml", xmlStream);
 
             // Perform the actual query.
-            byte[] response = service.UploadFileEx();
+            byte[] response = service.Post();
 
             // Parse the output and dump group headers.
             MemoryStream input = new MemoryStream(response);
@@ -70,13 +83,24 @@ namespace Org.Carrot2.Examples
         }
 
         /// <summary>
+        /// An example of clustering data stored in a local file and passed
+        /// as part of the HTTP request. A query hint is provided for the
+        /// clustering algorithm (to avoid trivial clusters).
+        /// </summary>
+        private static void ClusterFromFile(MultipartFileUpload service, string filePath, string queryHint)
+        {
+            using (FileStream fs = File.Open(filePath, FileMode.Open))
+            {
+                ClusterFromStream(service, fs, queryHint);
+            }
+        }
+
+        /// <summary>
         /// Cluster data retrieved from a search engine or some other source registered in the
         /// DCS as a document source.
         /// </summary>
         private static void ClusterFromSearchEngine(MultipartFileUpload service, string sourceId, string query)
         {
-            Console.WriteLine("## Clustering search results from a search engine...");
-
             // The output format is XML.
             service.AddFormValue("dcs.output.format", "XML");
 
@@ -93,7 +117,7 @@ namespace Org.Carrot2.Examples
             service.AddFormValue("dcs.source", sourceId);
 
             // Perform the actual query.
-            byte[] response = service.UploadFileEx();
+            byte[] response = service.Post();
 
             // Parse the output and dump group headers.
             MemoryStream input = new MemoryStream(response);

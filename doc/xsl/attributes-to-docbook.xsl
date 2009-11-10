@@ -160,6 +160,9 @@
                   <db:itemizedlist>
                     <xsl:apply-templates select="allowed-values/value" />
                   </db:itemizedlist>
+                  <xsl:if test="allowed-values/@other-values-allowed = 'true'">
+                    Other values are allowed.
+                  </xsl:if>
                 </db:entry>
               </db:row>
             </xsl:if>
@@ -184,7 +187,12 @@
   </xsl:template>  
   
   <xsl:template match="allowed-values/value">
-    <db:listitem><db:code><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="string(.)" /></xsl:call-template></db:code></db:listitem>
+    <db:listitem>
+      <db:code><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="string(.)" /></xsl:call-template></db:code>
+      <xsl:if test="@label">
+        &#160;<phrase role="human-readable-label">(<xsl:value-of select="@label" />)</phrase>
+      </xsl:if>
+    </db:listitem>
   </xsl:template>
   
   <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.ImplementingClassesConstraint']">

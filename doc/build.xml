@@ -30,6 +30,7 @@
         <path refid="core.jar.classpath" />
         <path refid="lib.classpath" />
         <path path="${carrot2.master.basedir}/core/carrot2-component-suites/suites" />
+        <path path="${carrot2.master.basedir}/core/carrot2-source-ambient/src" />
       </attribute.dumper.classpath.entries>
 
       <xslt.param.entries>

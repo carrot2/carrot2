@@ -20,7 +20,7 @@ import javax.xml.transform.sax.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
 /**
@@ -35,7 +35,7 @@ import org.xml.sax.SAXException;
  */
 public final class TemplatesPool
 {
-    private final static Logger logger = Logger.getLogger(TemplatesPool.class); 
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(TemplatesPool.class); 
 
     /**
      * Global system property disabling template caching. This property can also be set at

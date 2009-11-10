@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<section xml:id="section.tuning.in-workbench">
+  <title>Tuning clustering in &DCW;</title>
+
+  <para>
+    The best tool for experimenting and tuning &PROD; clustering is the &DCW;. 
+    <xref linkend="figure.workbench-tuning" /> shows the main components involved
+    in the tuning process. 
+  </para>
+
+  <figure xml:id="figure.workbench-tuning">
+    <title>Tuning clustering in &DCW;</title>
+    <mediaobject>
+      <imageobjectco>
+        <areaspec units="calspair">
+          <area xml:id="co.results-editor" coords="3000,5000 7000,9000" />
+          <area xml:id="co.attributes-view" coords="7000,5000 10000,9000" />
+          <area xml:id="co.attribute-info-view" coords="7000,500 10000,5000" />
+        </areaspec>
+        <imageobject>
+          <imagedata format="PNG" fileref="img/workbench-tuning.png" />
+        </imageobject>
+        
+        <calloutlist>
+          <callout arearefs="co.results-editor">
+            <para>
+              The results editor presents documents and clusters. Changes made in the
+              <guilabel>Attributes</guilabel> view will affect the currently active
+              results editor.
+            </para>
+          </callout>
+
+          <callout arearefs="co.attributes-view">
+            <para>
+              The <guilabel>Attributes</guilabel> view, where you can see and change
+              values of clustering algorithm's attributes.
+            </para>
+          </callout>
+        
+          <callout arearefs="co.attribute-info-view">
+            <para>
+              The <guilabel>Attribute Info</guilabel> view, which shows documentation
+              for specific attributes. Hold the mouse pointer over an attribute's label 
+              to see its documentation.
+            </para>
+          </callout>
+        </calloutlist>
+      </imageobjectco>
+    </mediaobject>
+  </figure>
+
+  <formalpara>
+    <title>Opening the <guilabel>Attributes</guilabel> view.</title>
+    
+    <para>
+      By default, the <guilabel>Attributes</guilabel> view shows on the right hand 
+      side of the &DCW;. You can open the view at any time by choosing
+      <guilabel>Window &gt; Show view &gt; Attributes</guilabel>.    
+    </para>
+  </formalpara>
+
+  <formalpara>
+    <title>Setting modified attributes as default for new queries.</title>
+    
+    <para>
+      If you modified a number of attributes for an algorithm and would like to use
+      the modified values for new queries, choose the <guilabel>Set as defaults for new 
+      queries</guilabel> from the <guilabel>Attributes</guilabel> view's context menu
+      (<xref linkend="figure.workbench-attributes-context-menu" />).
+
+      <figure xml:id="figure.workbench-attributes-context-menu">
+        <title>Attributes view's context menu</title>
+        <mediaobject>
+          <imageobject role="html">
+            <imagedata format="PNG" fileref="img/workbench-attributes-context-menu.png" />
+          </imageobject>
+        </mediaobject>  
+      </figure>
+    </para>
+  </formalpara>
+
+  <formalpara>
+    <title>Restoring default attribute values.</title>
+    
+    <para>
+      To reset the attributes to their default values, choose the <guilabel>Reset to defaults</guilabel>
+      option from the <guilabel>Attributes</guilabel> view's context menu
+      (<xref linkend="figure.workbench-attributes-context-menu" />). To bring the attributes
+      back to their factory defaults, choose the <guilabel>Reset to factory defaults</guilabel>
+      option.
+    </para>
+  </formalpara>
+
+  <formalpara>
+    <title>Loading and saving attribute values to XML.</title>
+    
+    <para>
+      To load or save attribute values to an XML file, use the <guilabel>Open</guilabel>
+      and <guilabel>Save as...</guilabel> options available under the 
+      <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-save.png" /></imageobject></inlinemediaobject></guiicon>
+      icon on the <guilabel>Attributes</guilabel> view's menu bar.
+    </para>
+  </formalpara>
+
+  <formalpara>
+    <title>Accessing attribute documentation.</title>
+    
+    <para>
+      To see the documentation for a specific attribute, hold the mouse pointer over
+      the attribute's label and its documentation will show in the 
+      <guilabel>Attribute Info</guilabel>
+      view.
+    </para>
+  </formalpara>
+</section>
+

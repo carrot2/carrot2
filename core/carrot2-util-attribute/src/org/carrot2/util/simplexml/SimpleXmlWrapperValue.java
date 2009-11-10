@@ -86,7 +86,7 @@ public class SimpleXmlWrapperValue
             wrapper.value = (String) value;
             wrapper.type = null;
         }
-        else if (value instanceof Class)
+        else if (Class.class.isInstance(value))
         {
             wrapper.value = ((Class<?>) value).getName();
             wrapper.type = Class.class.getName();

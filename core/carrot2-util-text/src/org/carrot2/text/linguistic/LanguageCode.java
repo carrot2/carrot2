@@ -28,11 +28,13 @@ import org.carrot2.util.StringUtils;
  */
 public enum LanguageCode
 {
+    // ARABIC ("ar"),
     CHINESE_SIMPLIFIED ("zh_cn"),
     DANISH ("da"),
     DUTCH ("nl"),
     ENGLISH ("en"),
     FINNISH ("fi"),
+    // PERSIAN ("fa"),
     FRENCH ("fr"),
     GERMAN ("de"),
     HUNGARIAN ("hu"),

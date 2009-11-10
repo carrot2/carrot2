@@ -12,23 +12,22 @@
 
 package org.carrot2.text.linguistic;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import java.util.List;
 
+import morfologik.stemming.PolishStemmer;
 import morfologik.stemming.WordData;
-
-import org.carrot2.util.ReflectionUtils;
 
 
 /**
- * Factory of {@link IStemmer} implementations from the {@link LanguageCode#POLISH}
+ * Factory of {@link IStemmer} implementations for the {@link LanguageCode#POLISH}
  * language. If <a href="http://morfologik.blogspot.com/">Morfologik-stemming</a> library
  * is available in classpath, a wrapper around this library is returned. Otherwise an
  * empty identity stemmer is returned.
  */
 final class PolishStemmerFactory
 {
-    private final static Logger logger = Logger.getLogger(PolishStemmerFactory.class); 
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(PolishStemmerFactory.class); 
 
     private final static IStemmer stemmer;
     static
@@ -41,7 +40,7 @@ final class PolishStemmerFactory
     }
 
     /**
-     * An adapter converting Snowball programs into {@link IStemmer} interface.
+     * Adapter to Morfologik stemmer.
      */
     private static class MorfologikStemmerAdapter implements IStemmer
     {
@@ -50,13 +49,7 @@ final class PolishStemmerFactory
         public MorfologikStemmerAdapter()
             throws Exception
         {
-            final String stemmerClazzName = "morfologik.stemming.PolishStemmer";
-
-            final Class<? extends morfologik.stemming.IStemmer> stemmerClazz = 
-                ReflectionUtils.classForName(stemmerClazzName)
-                .asSubclass(morfologik.stemming.IStemmer.class);
-
-            this.stemmer = stemmerClazz.newInstance();
+            this.stemmer = new PolishStemmer();
         }
 
         public CharSequence stem(CharSequence word)
@@ -92,7 +85,7 @@ final class PolishStemmerFactory
         }
         catch (Throwable e)
         {
-            return new IdentityStemmer();
+            return IdentityStemmer.INSTANCE;
         }
     }
 }

@@ -33,7 +33,7 @@
   <!-- Webapp build dirs -->
   <property name="webapp.dir" location="tmp/webapp" />
   <property name="webapp.classes.dir" location="${webapp.dir}/classes" />
-  <property name="webapp.lib.dir" location="${lib.flattened}" />
+  <property name="webapp.lib.dir" location="${webapp.dir}/lib" />
   <property name="webapp.skins.dir"
             location="${webapp.dir}/skins${build.number}" />
 
@@ -47,8 +47,11 @@
     <include name="applications/carrot2-webapp/lib/*.LICENSE" />
     <include name="lib/com.planetj.compression/*.jar" />
     <include name="lib/com.planetj.compression/*.LICENSE" />
+  	<include name="lib/org.apache.log4j/*.LICENSE" />
+    <include name="lib/org.apache.log4j/*.jar" />
+    <include name="lib/org.slf4j/slf4j-log4j12-*.jar" />
   </patternset>
-      
+
   <!-- 
        Build the web application WAR file.
     -->
@@ -58,7 +61,7 @@
        Assembles the web applications WAR file.
     -->
   <target name="carrot2.webapp.war" depends="basedir.check, lib.flattened">
-    <copy todir="${lib.flattened}">
+    <copy todir="${webapp.lib.dir}">
       <fileset dir="${carrot2.master.basedir}">
         <patternset refid="lib.webapp" />
       </fileset>
@@ -73,7 +76,12 @@
       <fileset dir="${webapp.skins.dir}/..">
         <include name="skins${build.number}/**" />
       </fileset>
+
+      <lib dir="${lib.flattened}">
+      	<exclude name="**/slf4j-nop-*.jar" />
+      </lib>
       <lib dir="${webapp.lib.dir}" />
+
       <classes dir="${webapp.classes.dir}" />
     </war>
   </target>
@@ -279,6 +287,7 @@
        Removes temporary files left after building the web application.
     -->
   <target name="carrot2.webapp.cleanup" depends="basedir.check">
+  	<delete dir="${webapp.lib.dir}" />
     <delete dir="${webapp.classes.dir}" />
     <delete dir="${webapp.skins.dir}" />
   </target>

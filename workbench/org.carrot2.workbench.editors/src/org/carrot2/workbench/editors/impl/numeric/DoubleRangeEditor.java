@@ -21,7 +21,7 @@ import org.carrot2.workbench.editors.AttributeEditorInfo;
 /**
  * Attribute editor for non-negative, limited-range double values.
  */
-final class DoubleRangeEditor extends NumericRangeEditorBase
+class DoubleRangeEditor extends NumericRangeEditorBase
 {
     /**
      * Number of digits of precision.
@@ -38,7 +38,15 @@ final class DoubleRangeEditor extends NumericRangeEditorBase
      */
     public DoubleRangeEditor()
     {
-        super(EDITOR_PRECISION_DIGITS);
+        this(EDITOR_PRECISION_DIGITS);
+    }
+
+    /*
+     * 
+     */
+    public DoubleRangeEditor(int precisionDigits)
+    {
+        super(precisionDigits);
     }
 
     /*

@@ -103,15 +103,15 @@ final class CirclesViewPage extends Page
             }
 
             final String refreshURL = plugin.getFullURL("servlets/pull?page=" + getId()); 
-            Logger.getLogger("browser").info("Refreshing: " + refreshURL);
+            org.slf4j.LoggerFactory.getLogger("browser").info("Refreshing: " + refreshURL);
             try
             {
                 Object out = browser.evaluate("javascript:loadDataFromURL('" + refreshURL + "')");
-                Logger.getLogger("browser").info("Out: " + out);
+                org.slf4j.LoggerFactory.getLogger("browser").info("Out: " + out);
             }
             catch (SWTException e)
             {
-                Logger.getLogger("browser").info("Err: ", e);
+                org.slf4j.LoggerFactory.getLogger("browser").info("Err: ", e);
             }
             */
 
