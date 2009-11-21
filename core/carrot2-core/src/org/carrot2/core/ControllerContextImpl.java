@@ -15,8 +15,6 @@ package org.carrot2.core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
