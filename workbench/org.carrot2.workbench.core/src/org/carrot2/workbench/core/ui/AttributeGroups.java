@@ -286,7 +286,7 @@ public final class AttributeGroups extends Composite implements IAttributeEventP
         for (Object groupKey : descriptor.attributeGroups.keySet())
         {
             final String groupLabel;
-            if (groupKey instanceof Class)
+            if (groupKey instanceof Class<?>)
             {
                 groupLabel = ((Class<?>) groupKey).getSimpleName();
             }

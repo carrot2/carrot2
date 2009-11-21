@@ -18,6 +18,7 @@ import org.carrot2.core.*;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * A processing job runs a query specified by the {@link SearchInput} on an instance of
@@ -74,7 +75,15 @@ public final class SearchJob extends Job
             final ProcessingResult result = controller.process(
                 attributes, source.getId(), algorithm.getId());
 
-            searchResult.setProcessingResult(result);
+            PlatformUI.getWorkbench().getDisplay().syncExec(
+                new Runnable()
+                {
+                    public void run()
+                    {
+                        searchResult.setProcessingResult(result);
+                    }
+                }
+            );
             status = Status.OK_STATUS;
         }
         catch (ProcessingException ex)

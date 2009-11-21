@@ -14,23 +14,15 @@ package org.carrot2.workbench.core;
 
 import junit.framework.TestSuite;
 
-import org.carrot2.workbench.core.helpers.SimpleXmlMementoTest;
-import org.carrot2.workbench.editors.factory.*;
-
-public class AllTests extends TestSuite
+public class GuiTests extends TestSuite
 {
     public static TestSuite suite()
     {
-        return new AllTests();
+        return new GuiTests();
     }
 
-    public AllTests()
+    public GuiTests()
     {
         this.addTestSuite(ProcessingJobTest.class);
-        this.addTestSuite(TypeEditorWrapperTest.class);
-        this.addTestSuite(DedicatedEditorWrapperTest.class);
-        this.addTestSuite(FactoryTest.class);
-        this.addTestSuite(SimpleXmlMementoTest.class);
     }
-
 }

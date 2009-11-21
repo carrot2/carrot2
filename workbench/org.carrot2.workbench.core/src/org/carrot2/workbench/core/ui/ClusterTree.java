@@ -14,7 +14,6 @@ package org.carrot2.workbench.core.ui;
 
 import java.util.*;
 
-import org.slf4j.Logger;
 import org.carrot2.core.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
