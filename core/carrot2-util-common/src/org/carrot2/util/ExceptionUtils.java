@@ -12,6 +12,8 @@
 
 package org.carrot2.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 
 /**
@@ -112,5 +114,21 @@ public final class ExceptionUtils
     public static RuntimeException wrapAsRuntimeException(Throwable t)
     {
         return wrapAs(RuntimeException.class, t);
+    }
+
+    /**
+     * Returns the current stack trace of the calling thread.
+     */
+    public static String currentStackTrace()
+    {
+        final Exception e = new Exception();
+        e.fillInStackTrace();
+        
+        final StringWriter w = new StringWriter();
+        final PrintWriter pw = new PrintWriter(w);
+        e.printStackTrace(pw);
+        pw.flush();
+
+        return w.toString();
     }
 }
