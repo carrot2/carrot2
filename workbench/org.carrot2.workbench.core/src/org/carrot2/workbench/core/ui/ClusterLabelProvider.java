@@ -41,12 +41,6 @@ public final class ClusterLabelProvider extends LabelProvider
             label = cluster.getLabel();
             documentCount = cluster.size();
         }
-        else if (element instanceof ClusterWithParent)
-        {
-            final Cluster cluster = ((ClusterWithParent) element).cluster;
-            label = cluster.getLabel();
-            documentCount = cluster.size();
-        }
         else
         {
             return "<unknown node: " + element + ">";

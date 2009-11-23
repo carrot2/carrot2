@@ -1,31 +1,30 @@
 
-/**
- * Externally 'select' a given group (id-based) in the visualisation circle.
- */
-function selectGroupById(id) {
-	var circles = getSWF();
-	circles.selectGroupById(id);
+/** SWT-JS-SWF link (clear selection). */
+function clearSelection(notifyListeners)
+{
+    getSWF().clearSelection(notifyListeners);
 }
 
-/**
- * Reload data from an external URL.
- */
-function loadDataFromURL(url) {
-	var circles = getSWF();
-    circles.loadDataFromURL(url);
+/** SWT-JS-SWF link (select group by ID). */ 
+function selectGroupById(id, selected, fireEvent)
+{
+    getSWF().selectGroupById(id, selected, fireEvent);
 }
 
-/**
- * Reload data from XML string.
- */
-function loadDataFromXML(data) {
-	var circles = getSWF();
-	var xml = circles.loadDataFromXML(data);
+/** SWT-JS-SWF link (reload data from an URL). */
+function loadDataFromURL(url)
+{
+    getSWF().loadDataFromURL(url);
 }
 
-/**
- * Returns the embedded SWF object.
- */
-function getSWF() {
+/** SWT-JS-SWF link (reload data from an string). */
+function loadDataFromXML(data)
+{
+	getSWF().loadDataFromXML(data);
+}
+
+/** Returns the embedded SWF object. */
+function getSWF()
+{
 	return $("#content")[0];
 }

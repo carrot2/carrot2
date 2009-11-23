@@ -16,6 +16,7 @@ package org.carrot2.workbench.core.ui.adapters;
 import java.util.Arrays;
 
 import org.carrot2.core.*;
+import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.SearchResult;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.IAdapterManager;
@@ -44,16 +45,17 @@ public final class PropertySourceAdapterFactory implements IAdapterFactory
 
         if (Arrays.asList(adapted).contains(adapterType))
         {
+            if (adaptableObject instanceof SearchEditor)
+            {
+                adaptableObject = ((SearchEditor) adaptableObject).getSearchResult();
+                if (adaptableObject == null) return null;
+            }
+
             if (adaptableObject instanceof SearchResult)
             {
                 return new SearchResultPropertySource((SearchResult) adaptableObject);
             }
             
-            if (adaptableObject instanceof ClusterWithParent)
-            {
-                adaptableObject = ((ClusterWithParent) adaptableObject).cluster;
-            }
-
             if (adaptableObject instanceof Cluster)
             {
                 return new ClusterPropertySource((Cluster) adaptableObject);
@@ -82,8 +84,8 @@ public final class PropertySourceAdapterFactory implements IAdapterFactory
     public static void register(IAdapterManager adapterManager)
     {
         final PropertySourceAdapterFactory factory = new PropertySourceAdapterFactory();
+        adapterManager.registerAdapters(factory, SearchEditor.class);
         adapterManager.registerAdapters(factory, SearchResult.class);
-        adapterManager.registerAdapters(factory, ClusterWithParent.class);
         adapterManager.registerAdapters(factory, Cluster.class);
         adapterManager.registerAdapters(factory, Document.class);
     }

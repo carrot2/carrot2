@@ -66,8 +66,7 @@ import com.google.common.collect.Maps;
  * Editor accepting {@link SearchInput} and performing operations on it. The editor also
  * exposes the model of processing results.
  */
-public final class SearchEditor extends EditorPart implements IPersistableEditor,
-    IPostSelectionProvider
+public final class SearchEditor extends EditorPart implements IPersistableEditor
 {
     /**
      * Public identifier of this editor.
@@ -192,11 +191,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private DisposeBin resources;
 
     /**
-     * Synchronization between {@link DocumentList} and the current workbench's selection.
-     */
-    private DocumentListSelectionSync documentListSelectionSync;
-
-    /**
      * Image from the {@link SearchInput} used to run the query.
      */
     private Image sourceImage;
@@ -221,10 +215,9 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     private SearchEditorMemento state;
 
     /**
-     * {@link SearchEditor} forwards its selection provider methods to this component (
-     * {@link PanelName#CLUSTERS} panel).
+     * Selection handling.
      */
-    private IPostSelectionProvider selectionProvider;
+    private SearchEditorSelectionProvider selectionProvider;
 
     /**
      * There is only one {@link SearchJob} assigned to each editor. The job is
@@ -346,7 +339,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             public void processingResultUpdated(ProcessingResult result)
             {
                 updatePartHeaders();
-                setSelection(StructuredSelection.EMPTY);
+                selectionProvider.setSelection(StructuredSelection.EMPTY);
             }
         };
         this.searchResult.addListener(rootFormTitleUpdater);
@@ -908,14 +901,16 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         }
 
         /*
-         * Set up selection event forwarding. Install the editor as selection provider for
-         * the part.
+         * Set up selection event forwarding.
          */
+        this.selectionProvider = new SearchEditorSelectionProvider(this);
+        this.getSite().setSelectionProvider(selectionProvider);
+
         final ClusterTree tree = 
             (ClusterTree) panels.get(PanelName.CLUSTERS).section.getClient();
 
-        this.selectionProvider = new SearchEditorSelectionProxy(this, tree);
-        this.getSite().setSelectionProvider(this);
+        /* Link bidirectional selection synchronization. */
+        new ClusterTreeSelectionAdapter(selectionProvider, tree);
 
         /*
          * Set up an event callback making editor dirty when attributes change.
@@ -946,10 +941,9 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          * Install a synchronization agent between the current selection in the editor and
          * the document list panel.
          */
-        final DocumentList documentList =
+        final DocumentList documentList = 
             (DocumentList) panels.get(PanelName.DOCUMENTS).section.getClient();
-        documentListSelectionSync = new DocumentListSelectionSync(documentList, this);
-        resources.registerPostSelectionChangedListener(this, documentListSelectionSync);
+        new DocumentListSelectionAdapter(selectionProvider, documentList, this);
 
         /*
          * Restore state information.
@@ -1248,39 +1242,5 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         section.setTextClient(toolbar);
         return toolBarManager;
-    }
-
-    /*
-     * Selection provider implementation forwards to the internal tree panel.
-     */
-
-    public void addPostSelectionChangedListener(ISelectionChangedListener listener)
-    {
-        this.selectionProvider.addPostSelectionChangedListener(listener);
-    }
-
-    public void removePostSelectionChangedListener(ISelectionChangedListener listener)
-    {
-        this.selectionProvider.removePostSelectionChangedListener(listener);
-    }
-
-    public void addSelectionChangedListener(ISelectionChangedListener listener)
-    {
-        this.selectionProvider.addSelectionChangedListener(listener);
-    }
-
-    public void removeSelectionChangedListener(ISelectionChangedListener listener)
-    {
-        this.selectionProvider.removeSelectionChangedListener(listener);
-    }
-
-    public ISelection getSelection()
-    {
-        return this.selectionProvider.getSelection();
-    }
-
-    public void setSelection(ISelection selection)
-    {
-        this.selectionProvider.setSelection(selection);
     }
 }
