@@ -172,15 +172,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.resources"
-         os="win32"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.ui.views"
          download-size="0"
          install-size="0"
@@ -401,13 +392,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.pde.runtime"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.sun.syndication"
          download-size="0"
          install-size="0"
@@ -582,6 +566,6 @@
          download-size="0"
          install-size="0"
          version="0.0.0"
-         unpack="false" />
+         unpack="false"/>
 
 </feature>
