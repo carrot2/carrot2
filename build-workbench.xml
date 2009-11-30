@@ -138,9 +138,7 @@
                      build.dir="${workbench.build.dir}"
                      props.file="${carrot2.master.basedir}/workbench.properties"
                      extra.args="
-                        -Dproduct=/org.carrot2.workbench.feature/Workbench.product
-                        -Dp2.gathering=true
-                     " />
+                        -Dproduct=/org.carrot2.workbench.feature/Workbench.product" />
 
     <checkAccessRestriction logsbasedir="${workbench.build.dir}" />
   </target>
