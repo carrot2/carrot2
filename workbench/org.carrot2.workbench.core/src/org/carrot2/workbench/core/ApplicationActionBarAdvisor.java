@@ -27,7 +27,6 @@ import org.eclipse.ui.actions.ContributionItemFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
-import org.eclipse.ui.ide.IIDEActionConstants;
 
 /**
  * 
@@ -106,7 +105,6 @@ final class ApplicationActionBarAdvisor extends ActionBarAdvisor
         fileToolBar.add(saveAsAction);
         fileToolBar.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 
-        coolBar.add(new GroupMarker(IIDEActionConstants.GROUP_FILE));
         coolBar.add(fileToolBar);
     }
 

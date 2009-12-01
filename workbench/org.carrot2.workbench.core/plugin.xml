@@ -39,7 +39,7 @@
          </property>
          <property
                name="aboutText"
-               value="%productBlurb">
+               value="Carrot2 Workbench&#x0A;&#x0A;(c) Carrot2 developers.  All rights reserved.&#x0A;Visit http://carrot2.org for more information.&#x0A;&#x0A;This product includes software developed by the&#x0A;Apache Software Foundation http://www.apache.org/.">
          </property>
          <property
                name="windowImages"
@@ -104,10 +104,20 @@
             id="org.carrot2.workbench.core.views.benchmark"
             name="Benchmark">
       </view>
+
       <category
             id="org.carrot2.workbench.core.workbench.category"
             name="Carrot2">
       </category>
+
+      <!-- Simulated categories and views from org.eclipse.ui.ide -->
+      <view
+            name="Progress"
+            icon="icons/pview.gif"
+            category="org.eclipse.ui"
+            class="org.eclipse.ui.internal.progress.ProgressView"
+            id="org.eclipse.ui.views.ProgressView">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
@@ -131,6 +141,11 @@
             class="org.carrot2.workbench.core.preferences.WorkbenchPreferencesPage"
             id="org.carrot2.workbench.core.preferences.WorkbenchPreferencePage"
             name="Carrot2">
+      </page>
+      <page
+            class="org.carrot2.workbench.core.preferences.GeneralPreferencesPage"
+            id="org.eclipse.ui.preferencePages.Workbench"
+            name="General">
       </page>
    </extension>
    <extension
@@ -389,7 +404,7 @@
 		<!-- cluttering view contributions -->
 		<activityPatternBinding
 			activityId="org.carrot2.activities.eclipse"
-			pattern=".+/org\.eclipse\.ui\.views\.(ContentOutline|ProblemView|ResourceNavigator|TaskList|BookmarkView)">
+			pattern=".+/org\.eclipse\.ui\.views\.(ContentOutline|ProblemView|ResourceNavigator|TaskList|BookmarkView|PropertySheet)">
 		</activityPatternBinding>
 		
 		<activityPatternBinding

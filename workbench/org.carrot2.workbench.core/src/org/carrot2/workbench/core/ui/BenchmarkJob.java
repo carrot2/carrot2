@@ -244,7 +244,7 @@ final class BenchmarkJob extends Job
     {
         final String logName = 
             String.format(Locale.ENGLISH, 
-                "benchmark_%1$tF_%1$tH-%1$tM-%1$tS.log", new Date());
+                "benchmark_%1$tF_%1$tH-%1$tM-%1$tS.txt", new Date());
 
         try
         {
