@@ -99,6 +99,16 @@ public final class Utils
     /*
      * 
      */
+    public static void logInfo(String message)
+    {
+        IStatus status = new Status(IStatus.INFO,
+            WorkbenchCorePlugin.PLUGIN_ID, message);
+        WorkbenchCorePlugin.getDefault().getLog().log(status);        
+    }
+    
+    /*
+     * 
+     */
     public static void logError(Throwable exception, boolean showError)
     {
         logError(exception.getMessage(), exception, showError);

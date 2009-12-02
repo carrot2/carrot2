@@ -8,6 +8,7 @@
 
 	  clusters
 	  comparator
+	  maxDisplay
 *#
 
 #foreach ($cluster in $clusters)
@@ -17,10 +18,20 @@
 		</div>
 	#end
 
+    #set ( $documents = $cluster.getAllDocuments($comparator) )
+    #set ( $remaining = $documents.size() - $maxDisplay )
+    
+    #if ( $remaining > 0 )
+        #set ( $documents = $documents.subList(0, $maxDisplay) )
+    #end
 
-	#foreach ($document in $cluster.getAllDocuments($comparator))
+	#foreach ($document in $documents)
 		#parse("_document.vm")
 	#end
+
+    #if( $remaining > 0 )
+        <p class="more">...and $remaining more.</p>
+    #end
 #end
 
 #parse("_footer.vm")
