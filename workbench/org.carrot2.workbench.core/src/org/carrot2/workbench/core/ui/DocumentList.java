@@ -71,12 +71,12 @@ public final class DocumentList extends Composite
     /**
      * Maximum number of documents to display for a search result.
      */
-    private int maxDisplayPerResult = 1000;
+    private int maxDisplayPerResult = 300;
     
     /**
      * Maximum number of documents to display per cluster.
      */
-    private int maxDisplayPerCluster = 1000;
+    private int maxDisplayPerCluster = 100;
 
     /**
      * Velocity instance for processing templates.
