@@ -1,5 +1,6 @@
 
 #parse("_header.vm")
+#parse("_document.vm")
 
 #*
 	Template displayed on show(Cluster...). 
@@ -26,7 +27,7 @@
     #end
 
 	#foreach ($document in $documents)
-		#parse("_document.vm")
+		#document( $document )
 	#end
 
     #if( $remaining > 0 )

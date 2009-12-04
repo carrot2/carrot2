@@ -1,32 +1,34 @@
-	<div class="snippet">
-	    <span class="id"> [$document.Id]</span>
-	    
-	    #set ($title = ${document.getField("title")})
-	    #set ($hasTitle = ($title && $title != ""))
+#macro( document $document )
+    <div class="snippet">
+        <span class="id"> [$document.Id]</span>
+        
+        #set ($title = ${document.getField("title")})
+        #set ($hasTitle = ($title && $title != ""))
 
-		#set ($snippet = ${document.getField("snippet")})
-	    #set ($hasSnippet = ($snippet && $snippet != ""))
+        #set ($snippet = ${document.getField("snippet")})
+        #set ($hasSnippet = ($snippet && $snippet != ""))
 
-		#set ($url = ${document.getField("url")})
-	    #set ($hasURL = ($url && $url != ""))
+        #set ($url = ${document.getField("url")})
+        #set ($hasURL = ($url && $url != ""))
 
-		#set ($thumbnail = ${document.getField("thumbnail-url")})
-	    #set ($hasThumbnail = ($thumbnail && $thumbnail != ""))
+        #set ($thumbnail = ${document.getField("thumbnail-url")})
+        #set ($hasThumbnail = ($thumbnail && $thumbnail != ""))
 
-		#if ($hasURL)   <a href="$esc.html($url)"> #end
-	    	#if ($hasTitle) <b>$esc.html($title)</b> #end
-	    #if ($hasURL)   </a> #end
+        #if ($hasURL)   <a href="$esc.html($url)"> #end
+            #if ($hasTitle) <b>$esc.html($title)</b> #end
+        #if ($hasURL)   </a> #end
 
-	    #if ($hasThumbnail) <img class="t" src="$esc.html($thumbnail)"> #end
-	    #if ($hasSnippet)
-	        #if ($hasTitle) <br> #end	    
-	        $stringutils.abbreviate($esc.html($snippet), 280)
-	    #end
+        #if ($hasThumbnail) <img class="t" src="$esc.html($thumbnail)"> #end
+        #if ($hasSnippet)
+            #if ($hasTitle) <br> #end       
+            $stringutils.abbreviate($esc.html($snippet), 280)
+        #end
 
-		#if ($hasURL)
-			#if ($hasSnippet || $hasTitle) <br> #end 
-			<span class="du">$esc.html($url)</span>
-		#end
+        #if ($hasURL)
+            #if ($hasSnippet || $hasTitle) <br> #end 
+            <span class="du">$esc.html($url)</span>
+        #end
 
-		<br><br>
-	</div>
+        <br><br>
+    </div>
+#end

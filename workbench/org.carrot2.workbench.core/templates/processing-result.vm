@@ -1,5 +1,6 @@
 
 #parse("_header.vm")
+#parse("_document.vm")
 
 #*
 	Template displayed on show(ProcessingResult). 
@@ -32,9 +33,9 @@
     </ul>
 #else
 	#foreach ($document in $documents)
-		#parse("_document.vm")
+		#document( $document )
 	#end
-	
+
     #if( $remaining > 0 )
         <p class="more">...and $remaining more.</p>
     #end
