@@ -18,6 +18,7 @@
   <!-- Import other build scripts. -->
   <import file="${carrot2.master.basedir}/applications/carrot2-webapp/build.xml" />
   <import file="${carrot2.master.basedir}/applications/carrot2-dcs/build.xml" />
+  <import file="${carrot2.master.basedir}/applications/carrot2-cli/build.xml" />
   <import file="${carrot2.master.basedir}/doc/build.xml" />
   <import file="${carrot2.master.basedir}/etc/maven/build.xml" />
   <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
@@ -634,8 +635,10 @@
     <delete includeEmptyDirs="true">
       <fileset dir="${jar.mini.dir}">
         <include name="org.carrot2.source*.xml" />
+        <include name="org.carrot2.source.xml*.xml" />
         <include name="org.carrot2.output*.xml" />
         <include name="org/carrot2/source/**" />
+        <exclude name="org/carrot2/source/xml/**" />
         <include name="org/carrot2/output/**" />
         <include name="com/**" />
       </fileset>

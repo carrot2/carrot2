@@ -1,0 +1,6 @@
+<component-suite>
+    <!-- Algorithms. -->
+    <include suite="suites/algorithm-lingo.xml" />
+    <include suite="suites/algorithm-stc.xml" />
+    <include suite="suites/algorithm-synthetic.xml" />
+</component-suite>

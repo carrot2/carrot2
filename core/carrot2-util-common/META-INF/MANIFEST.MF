@@ -17,7 +17,8 @@ Require-Bundle: org.apache.commons;visibility:=reexport,
  org.fest;resolution:=optional;visibility:=reexport,
  org.junit4.ext;resolution:=optional;visibility:=reexport,
  org.easymock;resolution:=optional;visibility:=reexport,
- org.slf4j;bundle-version="1.5.8";visibility:=reexport
+ org.slf4j;bundle-version="1.5.8";visibility:=reexport,
+ org.codehaus.jackson;bundle-version="0.9.2";visibility:=reexport
 Bundle-ClassPath: .
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: dependent,registered
