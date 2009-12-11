@@ -74,6 +74,9 @@
     <mkdir dir="${cli.dir}" />
     <unzip src="${cli.dist.zip}" dest="${cli.dir}" />
     <property name="unpacked" location="${cli.dir}/${cli.dist.base}-${carrot2.version}" />
+
+    <!-- Ant's unzip task does not preserve permissions, so we need to set them here once again. -->
+    <chmod dir="${unpacked}" includes="**/*.sh" perm="755" />
     
     <exec executable="cmd" dir="${unpacked}" failonerror="true" os="Windows XP">
       <arg value="/c"/>
@@ -92,12 +95,12 @@
       <arg value="JSON" />
     </exec>
     
-    <exec executable="batch.sh" dir="${unpacked}" failonerror="true" os="Linux">
+    <exec executable="${unpacked}/batch.sh" dir="${unpacked}" failonerror="true" os="Linux">
       <arg value="input" />
       <arg value="-o" />
       <arg value="output" />
     </exec>
-    <exec executable="batch.sh" dir="${unpacked}" failonerror="true" os="Linux">
+    <exec executable="${unpacked}/batch.sh" dir="${unpacked}" failonerror="true" os="Linux">
       <arg value="input" />
       <arg value="-o" />
       <arg value="output" />
