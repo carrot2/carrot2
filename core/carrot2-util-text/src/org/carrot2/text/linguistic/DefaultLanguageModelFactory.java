@@ -173,19 +173,37 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
         switch (language)
         {
             case POLISH:
+                /*
+                 * For Polish, we use a dictionary-backed stemmer
+                 * from the Morfologik project.
+                 */
                 return PolishStemmerFactory.createStemmer();
+
             case CHINESE_SIMPLIFIED:
                 /*
-                 * Return identity stemmer for Chinese. Chinese requires proper word
-                 * segmentation, however (input text analyzer).
+                 * Return identity stemmer for Chinese. Chinese requires proper 
+                 * prior word segmentation (from Lucene).
                  */
                 return IdentityStemmer.INSTANCE;
+
+            case KOREAN:
+                /*
+                 * Korean is agglutinative, but the extent of affixes is unknown to
+                 * me [DW] and I don't know whether a stemming engine for Korean 
+                 * exists. We fall back to identity. 
+                 */
+                return IdentityStemmer.INSTANCE; 
+
             case ARABIC:
                 /*
-                 * We return specialized stemmer for Arabic (Lucene-based).
+                 * We return specialized stemmer for Arabic (from Lucene).
                  */
                 return ArabicStemmerFactory.createStemmer();
+
             default:
+                /*
+                 * For other languages, try to use snowball's stemming. 
+                 */
                 return SnowballStemmerFactory.createStemmer(language);
         }
     }

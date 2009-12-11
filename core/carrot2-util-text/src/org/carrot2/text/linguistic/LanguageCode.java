@@ -31,6 +31,11 @@ import com.google.common.collect.Maps;
  */
 public enum LanguageCode
 {
+    /*
+     * When adding a language, check:
+     * - language mappings in carrot2-source-(boss|microsoft).
+     */
+
     ARABIC ("ar"),
     CHINESE_SIMPLIFIED ("zh_cn"),
     DANISH ("da"),
@@ -42,6 +47,7 @@ public enum LanguageCode
     GERMAN ("de"),
     HUNGARIAN ("hu"),
     ITALIAN ("it"),
+    KOREAN ("ko"),
     NORWEGIAN ("no"),
     POLISH ("pl"),
     PORTUGUESE ("pt"),

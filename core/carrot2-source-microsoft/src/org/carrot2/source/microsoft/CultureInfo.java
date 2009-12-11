@@ -123,6 +123,7 @@ public enum CultureInfo
         map.put(GERMAN_SWITZERLAND, LanguageCode.GERMAN);
         map.put(HUNGARIAN_HUNGARY, LanguageCode.HUNGARIAN);
         map.put(ITALIAN_ITALY, LanguageCode.ITALIAN);
+        map.put(KOREAN_KOREA, LanguageCode.KOREAN);
         map.put(NORWEGIAN_NORWAY, LanguageCode.NORWEGIAN);
         map.put(POLISH_POLAND, LanguageCode.POLISH);
         map.put(PORTUGUESE_BRAZIL, LanguageCode.PORTUGUESE);

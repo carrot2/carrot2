@@ -75,7 +75,7 @@ final class PolishStemmerFactory
     }
     
     /**
-     * Attempts to instantiate <code>morfologik-stemming</code> (Lametyzator) stemmer.
+     * Attempts to instantiate <code>morfologik-stemming</code>.
      */
     private static IStemmer createStemmerInternal()
     {

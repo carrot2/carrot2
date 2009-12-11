@@ -106,6 +106,7 @@ public enum BossLanguageCodes implements IValueHintMapping
         map.put(SWITZERLAND_GERMAN, LanguageCode.GERMAN);
         map.put(HUNGARY, LanguageCode.HUNGARIAN);
         map.put(ITALIAN, LanguageCode.ITALIAN);
+        map.put(KOREA, LanguageCode.KOREAN);
         map.put(NORWAY, LanguageCode.NORWEGIAN);
         map.put(BRAZIL, LanguageCode.PORTUGUESE);
         map.put(ROMANIA, LanguageCode.ROMANIAN);
