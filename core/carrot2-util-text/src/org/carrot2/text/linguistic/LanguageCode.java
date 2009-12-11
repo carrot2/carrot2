@@ -13,8 +13,11 @@
 package org.carrot2.text.linguistic;
 
 import java.util.Locale;
+import java.util.Map;
 
 import org.carrot2.util.StringUtils;
+
+import com.google.common.collect.Maps;
 
 /**
  * Codes for languages for which linguistic resources are available 
@@ -63,6 +66,19 @@ public enum LanguageCode
     private final Locale locale;
 
     /**
+     * A hash map of all ISO language codes.
+     */
+    private final static Map<String, LanguageCode> isoToLangCode;
+    static
+    {
+        isoToLangCode = Maps.newHashMap();
+        for (LanguageCode langCode : values())
+        {
+            isoToLangCode.put(langCode.getIsoCode(), langCode);
+        }
+    }
+    
+    /**
      * 
      */
     private LanguageCode(String isoCode)
@@ -90,20 +106,12 @@ public enum LanguageCode
 
     /**
      * Return a {@link LanguageCode} constant for a given ISO code (or <code>null</code>)
-     * if not available. 
+     * if not available.
      */
     public static LanguageCode forISOCode(String language)
     {
         language = language.toLowerCase();
-
-        // Simple scan here, if the number of languages grows, switch to a hashmap.
-        for (LanguageCode code : values()) {
-            if (code.getIsoCode().equals(language)) {
-                return code;
-            }
-        }
-
-        return null;
+        return isoToLangCode.get(language);
     }
     
     @Override
