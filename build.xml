@@ -124,18 +124,21 @@
   </patternset>
 
   <patternset id="lib.core.mini">
-    <include name="lib/**/colt*.jar" />
-    <include name="lib/**/commons-lang*.jar" />
-    <include name="lib/**/ehcache*.jar" />
-    <include name="lib/**/google-collect*.jar" />
-    <include name="lib/**/jackson*.jar" />
-    <include name="lib/**/lucene-core*.jar" />
-    <include name="lib/**/lucene-snowball*.jar" />
-    <include name="lib/**/nni*.jar" />
-    <include name="lib/**/pcj*.jar" />
+    <include name="lib/**/colt*" />
+    <include name="lib/**/commons-lang*" />
+    <include name="lib/**/ehcache*" />
+    <include name="lib/**/google-collect*" />
+    <include name="lib/**/jackson*" />
+    <include name="lib/**/lucene-core*" />
+    <include name="lib/**/lucene-snowball*" />
+    <include name="lib/**/lucene.LICENSE" />
+    <include name="lib/**/pcj.jar" />
+    <include name="lib/**/pcj.LICENSE" />
+    <include name="core/*carrot2-util-matrix/lib/nni*" />
 
     <include name="lib/**/slf4j-api*.jar" />
     <include name="lib/**/slf4j-nop*.jar" />
+    <include name="lib/**/slf4j.LICENSE" />
   </patternset>
 
   <patternset id="licenses.core">

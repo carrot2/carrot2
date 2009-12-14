@@ -14,6 +14,7 @@
   <!-- Import common macros -->
   <import file="${carrot2.master.basedir}/etc/ant/common/basedir.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/readme.xml" />
+  <import file="${carrot2.cli.basedir}/etc/ant/cli.xml" />
 
   <!-- CLI build dirs -->
   <property name="cli.dir" location="tmp/cli" />
@@ -21,7 +22,8 @@
 
   <!-- CLI dist file name base -->
   <property name="cli.dist.base" value="${carrot2.cli.base}" />
-  <property name="cli.dist.zip" location="${cli.dir}/../${cli.dist.base}-${carrot2.version}.zip" />
+  <property name="cli.dist.folder" value="${cli.dist.base}-${carrot2.version}" />
+  <property name="cli.dist.zip" location="${cli.dir}/../${cli.dist.folder}.zip" />
 
   <!--
        Builds the CLI applications
@@ -31,13 +33,6 @@
       <fileset dir="${carrot2.cli.basedir}/etc">
         <include name="*.cmd" />
         <include name="*.sh" />
-      </fileset>
-    </copy>
-
-    <copy todir="${cli.dir}">
-      <fileset dir="${carrot2.master.basedir}">
-        <include name="carrot2.LICENSE" />
-        <include name="carrot2.CONTRIBUTORS" />
       </fileset>
     </copy>
 
@@ -54,16 +49,24 @@
   <!--
        Builds the cli ZIP archive.
     -->
-  <target name="carrot2.cli.dist" depends="carrot2.cli.dist.verify" />
+  <target name="carrot2.cli.dist" depends="carrot2.cli.dist.verify">
+    <zip destfile="${cli.dist.zip}" update="true">
+      <zipfileset dir="${carrot2.master.basedir}" prefix="${cli.dist.folder}">
+        <include name="carrot2.LICENSE" />
+        <include name="carrot2.CONTRIBUTORS" />
+      </zipfileset>
+    </zip>
+  </target>
   
   <target name="carrot2.cli.dist.prepare" depends="basedir.check, carrot2.cli.build">
     <carrot2.readme readme.src="${carrot2.cli.basedir}/etc/readme.txt"
                     readme.dest="${cli.dir}/readme.txt" />
+                      
     <zip destfile="${cli.dist.zip}">
-      <zipfileset dir="${cli.dir}" prefix="${cli.dist.base}-${carrot2.version}">
+      <zipfileset dir="${cli.dir}" prefix="${cli.dist.folder}">
         <exclude name="**/*.sh" />
       </zipfileset>
-      <zipfileset dir="${cli.dir}" prefix="${cli.dist.base}-${carrot2.version}" filemode="755">
+      <zipfileset dir="${cli.dir}" prefix="${cli.dist.folder}" filemode="755">
         <include name="**/*.sh" />
       </zipfileset>
     </zip>
@@ -71,52 +74,9 @@
   </target>
 
   <target name="carrot2.cli.dist.verify" depends="carrot2.cli.dist.prepare">
-    <mkdir dir="${cli.dir}" />
-    <unzip src="${cli.dist.zip}" dest="${cli.dir}" />
-    <property name="unpacked" location="${cli.dir}/${cli.dist.base}-${carrot2.version}" />
-
-    <!-- Ant's unzip task does not preserve permissions, so we need to set them here once again. -->
-    <chmod dir="${unpacked}" includes="**/*.sh" perm="755" />
-    
-    <exec executable="cmd" dir="${unpacked}" failonerror="true" os="Windows XP">
-      <arg value="/c"/>
-      <arg value="batch.cmd"/>
-      <arg value="input" />
-      <arg value="-o" />
-      <arg value="output" />
-    </exec>
-    <exec executable="cmd" dir="${unpacked}" failonerror="true" os="Windows XP">
-      <arg value="/c"/>
-      <arg value="batch.cmd"/>
-      <arg value="input" />
-      <arg value="-o" />
-      <arg value="output" />
-      <arg value="-f" />
-      <arg value="JSON" />
-    </exec>
-    
-    <exec executable="${unpacked}/batch.sh" dir="${unpacked}" failonerror="true" os="Linux">
-      <arg value="input" />
-      <arg value="-o" />
-      <arg value="output" />
-    </exec>
-    <exec executable="${unpacked}/batch.sh" dir="${unpacked}" failonerror="true" os="Linux">
-      <arg value="input" />
-      <arg value="-o" />
-      <arg value="output" />
-      <arg value="-f" />
-      <arg value="JSON" />
-    </exec>
-
-    <available file="${unpacked}/output" property="dir.created" />
-    <available file="${unpacked}/output/input/data-mining.xml" property="xml.created" />
-    <available file="${unpacked}/output/input/data-mining.json" property="json.created" />
-    
-    <fail unless="dir.created">Output directory not created</fail>
-    <fail unless="xml.created">Output XML not created</fail>
-    <fail unless="json.created">Output JSON not created</fail>
-    
-    <delete dir="${cli.dir}" failonerror="false" />
+    <carrot2.cli.validate cli.dist.zip="${cli.dist.zip}"
+                          cli.dist.folder="${cli.dist.folder}"
+                          work.dir="${cli.dir}" />
   </target>
 
   
@@ -170,10 +130,6 @@
       <fileset dir="${carrot2.master.basedir}/core/carrot2-util-log4j/src">
         <include name="appender-*" />
         <include name="filters-*" />
-      </fileset>
-      <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
-        <include name="suites/algorithm-*.xml" />
-        <include name="suites/suite-cli.xml" />
       </fileset>
       <manifest>
         <attribute name="Main-Class" value="org.carrot2.cli.batch.BatchApp" />
