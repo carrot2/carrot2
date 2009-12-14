@@ -22,6 +22,7 @@ import org.carrot2.core.ProcessingComponentDescriptor.ProcessingComponentDescrip
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.source.xml.XmlDocumentSource;
 import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.resource.FileResource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.kohsuke.args4j.*;
@@ -109,7 +110,7 @@ public class BatchApp
             // Check if the provided algorithm is valid
             try
             {
-                Thread.currentThread().getContextClassLoader().loadClass(algorithm);
+                ReflectionUtils.classForName(algorithm);
             }
             catch (ClassNotFoundException ignored)
             {
@@ -248,8 +249,7 @@ public class BatchApp
             final ProcessingResult result = controller.process(attributes,
                 XmlDocumentSource.class.getName(), algorithm);
 
-            // Until http://issues.carrot2.org/browse/CARROT-582 is resolved, we'll
-            // stick with UTF-8 encoding on the output.
+            // Stick to UTF-8 encoding on the output.
             Writer writer = null;
             try
             {

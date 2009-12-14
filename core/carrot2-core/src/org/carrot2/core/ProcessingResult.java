@@ -273,7 +273,7 @@ public final class ProcessingResult
     }
 
     /**
-     * Serializes this {@link ProcessingResult} to an XML writer. This method is not
+     * Serializes this {@link ProcessingResult} to a character stream. This method is not
      * thread-safe, external synchronization must be applied if needed.
      * 
      * @param writer the writer to serialize this {@link ProcessingResult} to. The writer
