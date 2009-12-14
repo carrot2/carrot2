@@ -12,12 +12,13 @@
 
 package org.carrot2.util.attribute;
 
-import java.io.*;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.*;
 
 import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.*;
+import org.simpleframework.xml.core.*;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;

@@ -15,7 +15,6 @@ package org.carrot2.webapp.model;
 import java.io.InputStream;
 import java.util.*;
 
-import org.slf4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.InternalAttributePredicate;
@@ -25,7 +24,8 @@ import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
+import org.slf4j.Logger;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;

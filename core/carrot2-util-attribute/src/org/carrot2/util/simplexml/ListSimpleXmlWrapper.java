@@ -18,8 +18,8 @@ import java.util.List;
 import org.carrot2.util.ListUtils;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Commit;
-import org.simpleframework.xml.load.Persist;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persist;
 
 @Root(name = "list")
 @SuppressWarnings(

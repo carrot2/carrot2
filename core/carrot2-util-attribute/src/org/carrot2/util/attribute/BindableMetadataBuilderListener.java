@@ -15,7 +15,7 @@ package org.carrot2.util.attribute;
 import java.io.File;
 import java.util.Map;
 
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 
 import com.google.common.collect.Maps;

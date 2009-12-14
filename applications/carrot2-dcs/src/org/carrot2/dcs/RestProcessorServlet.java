@@ -38,6 +38,8 @@ import com.google.common.collect.Maps;
  */
 public final class RestProcessorServlet extends HttpServlet
 {
+    private final static String UTF8 = "UTF-8";
+
     private static final long serialVersionUID = 1L;
 
     private transient DcsConfig config;
@@ -139,7 +141,7 @@ public final class RestProcessorServlet extends HttpServlet
         throws ServletException, IOException
     {
         final String command = getCommandName(request);
-        response.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding(UTF8);
         if ("components".equals(command))
         {
             try
@@ -271,8 +273,7 @@ public final class RestProcessorServlet extends HttpServlet
                 // Deserialize documents from the stream
                 try
                 {
-                    input = ProcessingResult.deserialize(new InputStreamReader(
-                        uploadInputStream, "utf-8"));
+                    input = ProcessingResult.deserialize(uploadInputStream);
                 }
                 catch (Exception e)
                 {
@@ -365,7 +366,7 @@ public final class RestProcessorServlet extends HttpServlet
         // Serialize the result
         try
         {
-            response.setCharacterEncoding("utf-8");
+            response.setCharacterEncoding(UTF8);
             if (OutputFormat.XML.equals(requestModel.outputFormat))
             {
                 response.setContentType(OutputFormat.XML.contentType);
@@ -440,7 +441,7 @@ public final class RestProcessorServlet extends HttpServlet
         final FileAppender appender = new FileAppender(new PatternLayout(
             "%d{ISO8601} [%-5p] [%c] %m%n"), logPrefix + "/c2-dcs-" + contextPath
             + "-full.log", true);
-        appender.setEncoding("UTF-8");
+        appender.setEncoding(UTF8);
         return appender;
     }
 
@@ -457,12 +458,10 @@ public final class RestProcessorServlet extends HttpServlet
         {
             streamInput = new ClassResource(RestProcessorServlet.class,
                 "example-input.xml").open();
-            EXAMPLE_INPUT = ProcessingResult.deserialize(new InputStreamReader(
-                streamInput, "utf-8"));
+            EXAMPLE_INPUT = ProcessingResult.deserialize(streamInput);
             streamOutput = new ClassResource(RestProcessorServlet.class,
                 "example-output.xml").open();
-            EXAMPLE_OUTPUT = ProcessingResult.deserialize(new InputStreamReader(
-                streamOutput, "utf-8"));
+            EXAMPLE_OUTPUT = ProcessingResult.deserialize(streamOutput);
         }
         catch (Exception e)
         {

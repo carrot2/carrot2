@@ -19,8 +19,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.carrot2.util.simplexml.ISimpleXmlWrapper;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Commit;
-import org.simpleframework.xml.load.Persist;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persist;
 
 /**
  * Wraps {@link FSDirectory} for serialization with SimpleXML.

@@ -16,7 +16,7 @@ import java.lang.annotation.Annotation;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Persist;
+import org.simpleframework.xml.core.Persist;
 
 /**
  * Implementation of the {@link DoubleRangeConstraint}.

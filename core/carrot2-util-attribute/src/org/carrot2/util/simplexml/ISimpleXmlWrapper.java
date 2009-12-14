@@ -12,8 +12,8 @@
 
 package org.carrot2.util.simplexml;
 
-import org.simpleframework.xml.load.Commit;
-import org.simpleframework.xml.load.Persist;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persist;
 
 /**
  * A wrapper around a type to be serialized by Simple XML. The actual implementation

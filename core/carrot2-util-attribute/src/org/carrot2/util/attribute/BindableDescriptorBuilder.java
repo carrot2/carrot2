@@ -21,7 +21,7 @@ import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.constraint.IsConstraint;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.httpclient.*;
-import org.slf4j.Logger;
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
@@ -28,7 +27,8 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpHeaders;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.URLResourceWithParams;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
+import org.slf4j.Logger;
 
 /**
  * A superclass shared between various Boss verticals.

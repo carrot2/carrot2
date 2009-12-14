@@ -22,7 +22,7 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.load.Commit;
+import org.simpleframework.xml.core.Commit;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;

@@ -108,8 +108,7 @@ public class XmlDocumentSourceHelper
         try
         {
             carrot2XmlStream = getCarrot2XmlStream(xml, stylesheet, xsltParameters);
-            return ProcessingResult.deserialize(new InputStreamReader(carrot2XmlStream,
-                "utf-8"));
+            return ProcessingResult.deserialize(carrot2XmlStream);
         }
         finally
         {

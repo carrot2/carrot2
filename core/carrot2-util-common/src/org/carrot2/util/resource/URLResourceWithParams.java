@@ -24,7 +24,7 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.carrot2.util.StringUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Commit;
+import org.simpleframework.xml.core.Commit;
 
 import com.google.common.collect.Maps;
 

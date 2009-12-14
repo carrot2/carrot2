@@ -17,7 +17,7 @@ import java.io.*;
 import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Commit;
+import org.simpleframework.xml.core.Commit;
 
 /**
  * A local filesystem resource.

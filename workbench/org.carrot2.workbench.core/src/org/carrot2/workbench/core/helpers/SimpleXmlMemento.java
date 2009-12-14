@@ -21,7 +21,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
 
 /**
  * Utilities for storing and reading preferences ({@link IMemento},

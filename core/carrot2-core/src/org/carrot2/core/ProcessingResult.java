@@ -25,7 +25,7 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.impl.DefaultPrettyPrinter;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.load.*;
+import org.simpleframework.xml.core.*;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -325,9 +325,23 @@ public final class ProcessingResult
      * @return deserialized {@link ProcessingResult}
      * @throws Exception is case of any problems with deserialization
      */
+    @Deprecated
     public static ProcessingResult deserialize(Reader reader) throws Exception
     {
         return new Persister().read(ProcessingResult.class, reader);
+    }
+
+    /**
+     * Deserializes a {@link ProcessingResult} from an XML stream.
+     *
+     * @param input the input XML stream to deserialize a {@link ProcessingResult} from. The stream
+     *            will <strong>not</strong> be closed.
+     * @return deserialized {@link ProcessingResult}
+     * @throws Exception is case of any problems with deserialization
+     */
+    public static ProcessingResult deserialize(InputStream input) throws Exception
+    {
+        return new Persister().read(ProcessingResult.class, input);
     }
 
     /**

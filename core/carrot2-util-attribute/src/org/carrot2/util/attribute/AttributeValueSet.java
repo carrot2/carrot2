@@ -16,8 +16,8 @@ import java.util.TreeMap;
 
 import org.carrot2.util.simplexml.*;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.load.Commit;
-import org.simpleframework.xml.load.Persist;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persist;
 
 import com.google.common.collect.Maps;
 
@@ -32,16 +32,16 @@ import com.google.common.collect.Maps;
 public class AttributeValueSet
 {
     /**
-     * Human-readable value of this attribute value set.
+     * Human-readable value of this attribute value set. <b>Only for read-only use.</b>
      */
     @Element
-    public final String label;
+    public String label;
 
     /**
-     * Human-readable description of this attribute value set.
+     * Human-readable description of this attribute value set. <b>Only for read-only use.</b>
      */
     @Element(required = false)
-    public final String description;
+    public String description;
 
     /**
      * Holds values of attributes overridden by this attribute set.
@@ -70,8 +70,6 @@ public class AttributeValueSet
 
     AttributeValueSet()
     {
-        label = null;
-        description = null;
     }
 
     /**

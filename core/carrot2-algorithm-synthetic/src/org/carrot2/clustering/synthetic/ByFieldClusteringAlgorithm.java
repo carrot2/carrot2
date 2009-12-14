@@ -78,7 +78,7 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
         for (Document document : documents)
         {
             final Object field = document.getField(fieldName);
-            if (field instanceof Collection)
+            if (field instanceof Collection<?>)
             {
                 for (Object value : (Collection<?>) field)
                 {

@@ -19,7 +19,7 @@ import net.sf.ehcache.Statistics;
 import org.carrot2.util.RollingWindowAverage;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
 
 /**
  * Provides some statistics about processing performed in a {@link CachingController}.

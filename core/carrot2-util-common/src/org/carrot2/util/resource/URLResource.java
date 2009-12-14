@@ -20,7 +20,7 @@ import java.util.jar.JarFile;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Commit;
+import org.simpleframework.xml.core.Commit;
 
 /**
  * This class opens a connection to a resource pointed to by an URI. Note that JAR

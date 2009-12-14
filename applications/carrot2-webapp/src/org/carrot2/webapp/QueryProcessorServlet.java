@@ -34,7 +34,7 @@ import org.carrot2.webapp.model.*;
 import org.carrot2.webapp.util.UserAgentUtils;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 import org.slf4j.Logger;
 

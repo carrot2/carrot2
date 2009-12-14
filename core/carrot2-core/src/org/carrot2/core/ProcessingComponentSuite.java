@@ -20,8 +20,8 @@ import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.resource.*;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Commit;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persister;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.*;

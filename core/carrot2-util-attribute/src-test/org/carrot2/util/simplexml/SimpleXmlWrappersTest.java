@@ -23,7 +23,7 @@ import org.carrot2.util.resource.FileResource;
 import org.junit.Before;
 import org.junit.Test;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.load.*;
+import org.simpleframework.xml.core.*;
 
 import com.google.common.collect.*;
 

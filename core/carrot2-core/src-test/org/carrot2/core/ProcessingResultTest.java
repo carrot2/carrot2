@@ -73,9 +73,8 @@ public class ProcessingResultTest
         xml.append("</document>\n");
         xml.append("</searchresult>\n");
 
-        final StringReader reader = new StringReader(xml.toString());
-
-        final ProcessingResult deserialized = ProcessingResult.deserialize(reader);
+        final ProcessingResult deserialized = ProcessingResult.deserialize(
+            new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
@@ -135,9 +134,8 @@ public class ProcessingResultTest
         xml.append("</group>");
         xml.append("</searchresult>\n");
 
-        final StringReader reader = new StringReader(xml.toString());
-
-        final ProcessingResult deserialized = ProcessingResult.deserialize(reader);
+        final ProcessingResult deserialized = ProcessingResult.deserialize(
+            new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
@@ -292,10 +290,8 @@ public class ProcessingResultTest
             clustersDeserialized);
         CloseableUtils.close(writer);
 
-        final Reader reader = new InputStreamReader(new ByteArrayInputStream(outputStream
-            .toByteArray()), "utf-8");
-
-        final ProcessingResult deserialized = ProcessingResult.deserialize(reader);
+        final ProcessingResult deserialized = ProcessingResult.deserialize(
+            new ByteArrayInputStream(outputStream.toByteArray()));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());

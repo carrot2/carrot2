@@ -19,7 +19,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.carrot2.util.ListUtils;
 import org.carrot2.util.attribute.constraint.*;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.load.Persist;
+import org.simpleframework.xml.core.Persist;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;

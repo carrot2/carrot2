@@ -18,8 +18,8 @@ import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.load.Commit;
-import org.simpleframework.xml.load.Persist;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persist;
 
 import com.google.common.base.Function;
 import com.google.common.collect.*;

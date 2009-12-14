@@ -25,7 +25,7 @@ import org.carrot2.workbench.core.helpers.Utils;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.action.*;
 import org.eclipse.swt.widgets.Event;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 
 import com.google.common.collect.Maps;
