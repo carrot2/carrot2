@@ -29,10 +29,10 @@ import com.google.common.collect.Maps;
 public class AttributeMetadataModel
 {
     @ElementMap(entry = "attribute-descriptors", key = "source", value = "attribute-descriptors", attribute = true, inline = true)
-    public final HashMap<String, AttributeDescriptors> descriptors;
+    public HashMap<String, AttributeDescriptors> descriptors;
 
     @ElementMap(entry = "init-values", key = "source", value = "init-values", attribute = true, inline = true)
-    public final HashMap<String, AttributeInitValues> attributes;
+    public HashMap<String, AttributeInitValues> attributes;
 
     public AttributeMetadataModel()
     {
