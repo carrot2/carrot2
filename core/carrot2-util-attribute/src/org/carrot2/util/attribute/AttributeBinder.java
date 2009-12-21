@@ -309,10 +309,21 @@ public class AttributeBinder
                             object, key, field, value, bindingDirectionAnnotation,
                             predicate);
                     }
+                    
+                    // The value may have changed as a result of binding, so we need
+                    // to re-read it here. Otherwise, the recursive descent below
+                    // would bind values to an abandoned reference obtained at the
+                    // top of this method.
+                    value = field.get(object);
                 }
                 catch (ConstraintViolationException e)
                 {
                     throw new AttributeBindingException(key, e.getMessage(), e);
+                }
+                catch (final Exception e)
+                {
+                    throw new AttributeBindingException(key, "Could not get field value "
+                        + object.getClass().getName() + "#" + field.getName());
                 }
             }
 

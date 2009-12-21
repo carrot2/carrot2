@@ -489,6 +489,24 @@ public class AttributeBinderTest
             "processingInput", 5
         });
     }
+    
+    @Test
+    public void testReferenceWithReferenceInstanceInAttributes() throws InstantiationException
+    {
+        final CoercedReferenceContainer instance = new CoercedReferenceContainer();
+        instance.coerced = new CoercedInterfaceImpl();
+        
+        final CoercedInterfaceImpl reference = new CoercedInterfaceImpl();
+        addAttribute(CoercedReferenceContainer.class, "coerced", reference);
+        addAttribute(CoercedInterfaceImpl.class, "initInput", 7);
+
+        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
+
+        checkFieldValues(instance.coerced, new Object []
+        {
+            "initInput", 7
+        });
+    }
 
     @Test
     public void testReferenceOutput() throws InstantiationException
