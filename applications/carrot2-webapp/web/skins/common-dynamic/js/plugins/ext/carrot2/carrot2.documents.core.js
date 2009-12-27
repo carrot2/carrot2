@@ -183,14 +183,15 @@
     for (var i = 0; i < results.length; i++)
     {
       var result = results[i];
+      var url = unescape(result.url);
       
       $document = $templateDocument.clone();
       $document.attr("id", "d" + i);
       $document.find(".rank").html(i + 1);
-      $document.find("a.title, a.in-new-window").attr("href", result.url);
+      $document.find("a.title, a.in-new-window").attr("href", url);
       $document.find("a.title").html(result.title);
       $document.find(".snippet").html(result.content);
-      $document.find(".url").html(result.url + "<span class='sources'>[Google]</span>");
+      $document.find(".url").html(url + "<span class='sources'>[Google]</span>");
       
       $documents.append($document);
     }

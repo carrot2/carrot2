@@ -12,6 +12,8 @@
 
 package org.carrot2.source.google;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
@@ -22,6 +24,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
+import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.codehaus.jackson.*;
@@ -181,5 +184,23 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     protected void afterFetch(SearchEngineResponse response)
     {
         clean(response, keepHighlights, Document.TITLE, Document.SUMMARY);
+        
+        // Decode URLs
+        for (Document document : response.results)
+        {
+            final String url = document.getField(Document.CONTENT_URL);
+            if (url != null)
+            {
+                try
+                {
+                    document.setField(Document.CONTENT_URL, URLDecoder.decode(url, "UTF-8"));
+                }
+                catch (UnsupportedEncodingException e)
+                {
+                    // Should not happen
+                    throw ExceptionUtils.wrapAsRuntimeException(e);
+                }
+            }
+        }
     }
 }
