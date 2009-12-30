@@ -153,8 +153,8 @@
         <tbody>
           <row>
             <entry>Cluster diversity</entry>
-            <entry>High, many outlier (small) clusters highlighted</entry>
-            <entry>Low, outliers rarely highlighted</entry>
+            <entry>High, many small (outlier) clusters highlighted</entry>
+            <entry>Low, small (outlier) clusters rarely highlighted</entry>
           </row>
           <row>
             <entry>Cluster labels</entry>
@@ -164,8 +164,8 @@
           <row>
             <entry>Scalability</entry>
             <entry>
-              Low. For more than about 1000 documents, Lingo clustering will take long time and large memory<footnote><para>Pure 
-              Java version of Lingo can be improved by <link xref="section.advanced-topics.native-matrix-computations">installing 
+              Low. For more than about 1000 documents, Lingo clustering will take a long time and large memory<footnote><para>Performance of the  
+              pure Java version of Lingo can be improved by <link linkend="section.advanced-topics.native-matrix-computations">installing 
               native matrix computation libraries</link>.</para></footnote>. 
              </entry>
             <entry>High</entry>
@@ -185,10 +185,10 @@
 
     <para>
       It is difficult to give one clear recommendation as to which algorithm is "better".
-      Many people feel Lingo delivers better-formed and more diverse clusters, but
-      the ultimate judgment should based on the evaluation with the specific document 
-      collection. <xref linkend="table.lingo-stc-recommendations" /> highlights the 
-      scenarios for which the algorithms are best suited.
+      Many people feel Lingo delivers better-formed and more diverse clusters at the cost of
+      lower performance and scalability. The ultimate judgment, however, should based on 
+      the evaluation with the specific document collection. <xref linkend="table.lingo-stc-recommendations" /> 
+      highlights the scenarios for which the algorithms are best suited.
     </para>
     
     <table xml:id="table.lingo-stc-recommendations" frame="none">
@@ -209,7 +209,7 @@
             <entry></entry>
           </row>
           <row>
-            <entry>Highlighting of small clusters required</entry>
+            <entry>Highlighting of small (outlier) clusters required</entry>
             <entry role="center">&TICK;</entry>
             <entry></entry>
           </row>
@@ -434,8 +434,52 @@
   <section xml:id="section.advanced-topics.fine-tuning.performance">
     <title>Improving clustering performance</title>
     
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="tuning-general-performance-notes.xml" /> 
+    
     <para>
+      Further performance tuning tips are specific for each clustering algorithm.
     </para>
+
+    <section>
+      <title>Improving performance of Lingo</title>
+      
+      <para>
+        You change a number of attributes to increase the performance of Lingo. Most often,
+        performance gain will be achieved at the cost of lowered clustering quality or
+        significant change in the structure of clusters.
+      </para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>
+            Lower <link role="attribute" linkend="LingoClusteringAlgorithm.factorizationQuality" />,
+            which will cause the matrix factorization algorithm to perform fewer iterations
+            and hence complete quicker. Alternatively, you can set <link role="attribute" linkend="LingoClusteringAlgorithm.factorizationFactory" />
+            to <code>org.carrot2.matrix.factorization.PartialSingularValueDecompositionFactory</code>, 
+            which is slightly faster than the other factorizations. In the latter case
+            <link role="attribute" linkend="LingoClusteringAlgorithm.factorizationQuality" /> 
+            becomes irrelevant. 
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Lower <link role="attribute" linkend="TermDocumentMatrixBuilder.maximumMatrixSize" />,
+            which would cause the matrix factorization algorithm to complete quicker and
+            use less memory. With small matrix sizes, Lingo may not be able to discover
+            smaller clusters.
+          </para>
+        </listitem>
+      </itemizedlist>      
+    </section>
+    
+    <section>
+      <title>Improving performance of STC</title>
+      
+      <para>
+        &NA;
+      </para>
+    </section>
   </section>
   
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="tuning-benchmarking.xml" /> 

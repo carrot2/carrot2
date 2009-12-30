@@ -60,6 +60,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.Maps;
 
 /**
@@ -1165,7 +1166,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final String algorithmID = getSearchResult().getInput().getAlgorithmId();
 
         return core.getComponentDescriptor(algorithmID).only(Input.class,
-            Processing.class).not(Internal.class);
+            Processing.class).only(Predicates.not(new InternalAttributePredicate(false)));
     }
 
     /**

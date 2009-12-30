@@ -54,7 +54,7 @@ public class TermDocumentMatrixBuilder
      * Maximum matrix size. The maximum number of the term-document matrix elements. The
      * larger the size, the more accurate, time- and memory-consuming clustering.
      * 
-     * @level Advanced
+     * @level Medium
      * @group Matrix model
      * @label Maximum matrix size
      */
