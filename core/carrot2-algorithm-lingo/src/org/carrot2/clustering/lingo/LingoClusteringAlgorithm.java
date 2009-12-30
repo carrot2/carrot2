@@ -47,10 +47,6 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * Query that produced the documents. The query will help the algorithm to create
      * better clusters. Therefore, providing the query is optional but desirable.
-     * 
-     * @group Search query
-     * @level Medium
-     * @label Search query
      */
     @Processing
     @Input

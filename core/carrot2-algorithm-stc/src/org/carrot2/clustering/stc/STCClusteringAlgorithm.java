@@ -46,7 +46,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     IClusteringAlgorithm
 {
     /**
-     * Query that produced the documents, optional.
+     * Query that produced the documents. The query will help the algorithm to create
+     * better clusters. Therefore, providing the query is optional but desirable.
      */
     @Processing
     @Input

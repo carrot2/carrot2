@@ -59,6 +59,7 @@ public final class AttributeNames
      * Documents returned by the search engine/ document retrieval system.
      * 
      * @label Documents
+     * @level Basic
      * @group Documents
      */
     public static final String DOCUMENTS = "documents";
