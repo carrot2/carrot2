@@ -440,7 +440,7 @@
       Further performance tuning tips are specific for each clustering algorithm.
     </para>
 
-    <section>
+    <section xml:id="ection.advanced-topics.fine-tuning.performance.lingo">
       <title>Improving performance of Lingo</title>
       
       <para>
@@ -473,7 +473,7 @@
       </itemizedlist>      
     </section>
     
-    <section>
+    <section xml:id="ection.advanced-topics.fine-tuning.performance.stc">
       <title>Improving performance of STC</title>
       
       <para>
