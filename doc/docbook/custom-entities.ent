@@ -20,3 +20,6 @@
 <!ENTITY  WA                  "&PROD; Web Application">
 <!ENTITY  JA                  "&PROD; Java API">
 <!ENTITY  NA                  "Not yet covered, please <link xlink:href='http://project.carrot2.org/contact.html'>contact us</link> if you need this section.">
+
+<!-- Useful elements -->
+<!ENTITY  TICK                "<inlinemediaobject><imageobject role='html'><imagedata format='PNG' fileref='img/tick.gif' /></imageobject></inlinemediaobject>">

@@ -6,6 +6,7 @@
       <l:context name="title">
         <l:template name="example" text="Example&#160;%n %t"/> 
         <l:template name="figure" text="Figure&#160;%n %t"/> 
+        <l:template name="table" text="Table&#160;%n %t"/> 
       </l:context>    
       <l:context name="title-numbered">
         <l:template name="chapter" text="%n %t"/> 
