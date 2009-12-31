@@ -444,7 +444,7 @@
       <title>Improving performance of Lingo</title>
       
       <para>
-        You change a number of attributes to increase the performance of Lingo. Most often,
+        You can change a number of attributes to increase the performance of Lingo. Most often,
         performance gain will be achieved at the cost of lowered clustering quality or
         significant change in the structure of clusters.
       </para>

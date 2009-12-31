@@ -49,7 +49,7 @@
       </xsl:if>
       
       <db:section role="notoc" xml:id="section.component.{component-descriptor/@id}.by-level">
-        <db:title>Input attributes by level</db:title>
+        <db:title><xsl:apply-templates select="component-descriptor/title" /> input attributes by level</db:title>
         
         <xsl:call-template name="processing-component-doc-by-level">
           <xsl:with-param name="doc" select="$doc" />
