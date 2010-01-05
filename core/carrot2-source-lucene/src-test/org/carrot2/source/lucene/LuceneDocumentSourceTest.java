@@ -137,4 +137,11 @@ public class LuceneDocumentSourceTest extends
         assertThat(runQuery(null, getLargeQuerySize())).as("Number of results")
             .isGreaterThan(10);
     }
+
+    @Test
+    public void testAdvancedQueries() throws Exception
+    {
+        assertThat(runQuery("\"data mining\"", getLargeQuerySize())).as(
+            "Number of results").isEqualTo(99);
+    }
 }

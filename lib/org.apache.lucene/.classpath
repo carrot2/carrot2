@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lucene-analyzers-2.9.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-core-2.9.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-highlighter-2.9.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-smartcn-2.9.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-snowball-2.9.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-analyzers-3.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-core-3.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-highlighter-3.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-memory-3.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-smartcn-3.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-snowball-3.0.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
