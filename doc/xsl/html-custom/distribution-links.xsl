@@ -11,6 +11,7 @@
   <xsl:param name="product.java-api.base" />
   <xsl:param name="product.dcs.base" />
   <xsl:param name="product.webapp.base" />
+  <xsl:param name="product.cli.base" />
   <xsl:param name="product.workbench.base" />
   <xsl:param name="product.manual.base" />
   <xsl:param name="carrot2.javadoc.url" />
@@ -21,6 +22,10 @@
     
   <xsl:template match="product:dcs-download-link">
     <a href="{$dist.url}/{$product.dcs.base}-{$product.version}.zip"><xsl:apply-templates /></a>
+  </xsl:template>  
+
+  <xsl:template match="product:cli-download-link">
+    <a href="{$dist.url}/{$product.cli.base}-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>  
 
   <xsl:template match="product:webapp-download-link">

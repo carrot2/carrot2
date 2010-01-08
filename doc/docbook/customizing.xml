@@ -444,6 +444,9 @@
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" 
               href="customizing-algorithm-for-dcs.xml" />
   
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" 
+              href="customizing-algorithm-for-cli.xml" />
+  
   <section role="carrot2">
     <title>Adding document sources to &DCW;</title>
     

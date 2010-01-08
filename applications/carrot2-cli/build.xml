@@ -40,6 +40,7 @@
     <copy todir="${cli.dir}/input">
       <fileset dir="${carrot2.master.basedir}/applications/carrot2-dcs/examples/shared">
         <include name="data-mining.xml" />
+        <include name="seattle.xml" />
       </fileset>
     </copy>
   

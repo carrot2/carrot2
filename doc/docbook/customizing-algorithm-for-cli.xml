@@ -6,11 +6,11 @@
   %local;
   %custom;
 ]>
-<section xml:id="section.customizing.customizing-lingo-for-dcs">
-  <title>Customizing Lingo for &DCS;</title>
+<section xml:id="section.customizing.customizing-lingo-for-cli">
+  <title>Customizing Lingo for &CLI;</title>
     
   <para>
-    To run the &DCS; with custom <link linkend="section.component.lingo">attributes of the Lingo clustering algorithm</link>:
+    To run the &CLI; with custom <link linkend="section.component.lingo">attributes of the Lingo clustering algorithm</link>:
   </para>
   
   <orderedlist>
@@ -24,15 +24,15 @@
     <listitem>
       <para>
         Replace the contents of <filename>algorithm-lingo-attributes.xml</filename>, located in
-        the <filename>WEB-INF/classes/suites</filename> directory of the DCS
-        WAR file, located in the <filename>war/</filename> directory of the DCS distribution, 
+        the <filename>/suites</filename> directory of the <filename>carrot2-mini.jar</filename>
+        file, located in the <filename>lib/</filename> directory of the CLI distribution, 
         with the XML file saved in the previous step.
       </para>
     </listitem>
     
     <listitem>
       <para>
-        Restart the DCS.
+        Run the CLI application.
       </para>
     </listitem>        
   </orderedlist>

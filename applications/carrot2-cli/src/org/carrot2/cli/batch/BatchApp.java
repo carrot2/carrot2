@@ -70,7 +70,7 @@ public class BatchApp
     @Option(name = "-a", aliases =
     {
         "--algorithm"
-    }, required = false, metaVar = "ALGORITHM", usage = "Identifier or class name of the clustering algorithm to use")
+    }, required = false, metaVar = "ALGORITHM", usage = "Identifier or class name of the clustering algorithm to use, see below for the list")
     String algorithm;
 
     @Argument(metaVar = "INPUT", required = true, usage = "File in Carrot2 XML format or directory of files to cluster")
@@ -79,23 +79,30 @@ public class BatchApp
     int filesClusteredTotal = 0;
     int filesClusteredWithWarnings = 0;
 
+    private ProcessingComponentSuite componentSuite;
+    private List<ProcessingComponentDescriptor> algorithms;
+
+    /**
+     * Private constructor. Reads the available algorithms from the component suite.
+     */
+    private BatchApp() throws Exception
+    {
+        componentSuite = ProcessingComponentSuite.deserialize(ResourceUtilsFactory
+            .getDefaultResourceUtils().getFirst("suites/suite-batch.xml"));
+        algorithms = componentSuite.getAlgorithms();
+        if (algorithms.isEmpty())
+        {
+            throw new RuntimeException(
+                "Component suite does not contain any clustering algorithms.");
+        }
+    }
+
     /**
      * Processes all input.
      */
     @SuppressWarnings("unchecked")
     private int process() throws Exception
     {
-        // Initialize the controller
-        final ProcessingComponentSuite componentSuite;
-        componentSuite = ProcessingComponentSuite.deserialize(ResourceUtilsFactory
-            .getDefaultResourceUtils().getFirst("suites/suite-batch.xml"));
-        final List<ProcessingComponentDescriptor> algorithms = componentSuite
-            .getAlgorithms();
-        if (algorithms.isEmpty())
-        {
-            throw new RuntimeException(
-                "Component suite does not contain any clustering algorithms.");
-        }
         final CachingController controller = new CachingController();
         controller.init(Collections.<String, Object> emptyMap(), componentSuite);
 
@@ -158,7 +165,7 @@ public class BatchApp
             + (filesClusteredWithWarnings > 0 ? " with " + filesClusteredWithWarnings
                 + " warnings" : "") + " [" + (System.currentTimeMillis() - start)
             + " ms]");
-        
+
         return filesClusteredWithWarnings == 0 ? 0 : 10;
     }
 
@@ -299,6 +306,10 @@ public class BatchApp
             parser.printUsage(System.out);
 
             System.out.println("\n" + e.getMessage());
+
+            final List<String> algorithmIds = Lists.transform(batch.algorithms,
+                ProcessingComponentDescriptorToId.INSTANCE);
+            System.out.println("\nAvailable algorithms: " + algorithmIds.toString());
         }
     }
 }

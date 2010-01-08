@@ -759,6 +759,7 @@
 
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
+  <target name="cli" depends="carrot2.cli.build" description="Builds Carrot2 Command Line Interface" />
 
   <!--
       Maven artefacts.

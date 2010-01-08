@@ -204,7 +204,7 @@
           </para>
         </listitem>
       </orderedlist>
-    </section>
+      </section>
     
     <section xml:id="section.advanced-topics.building-from-source-code.webapp">
       <title>Building &WA;</title>
