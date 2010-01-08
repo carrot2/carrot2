@@ -47,12 +47,16 @@
       </exec>
 
       <available file="${unpacked}/output" property="dir.created" />
-      <available file="${unpacked}/output/input/data-mining.xml" property="xml.created" />
-      <available file="${unpacked}/output/input/data-mining.json" property="json.created" />
+      <available file="${unpacked}/output/input/data-mining.xml" property="data-mining.xml.created" />
+      <available file="${unpacked}/output/input/data-mining.json" property="data-mining.json.created" />
+      <available file="${unpacked}/output/input/seattle.xml" property="seattle.xml.created" />
+      <available file="${unpacked}/output/input/seattle.json" property="seattle.json.created" />
       
       <fail unless="dir.created">Output directory not created</fail>
-      <fail unless="xml.created">Output XML not created</fail>
-      <fail unless="json.created">Output JSON not created</fail>
+      <fail unless="data-mining.xml.created">Output XML not created</fail>
+      <fail unless="data-mining.json.created">Output JSON not created</fail>
+      <fail unless="seattle.xml.created">Output XML not created</fail>
+      <fail unless="seattle.json.created">Output JSON not created</fail>
       
       <delete dir="@{work.dir}" failonerror="false" />
     </sequential>
