@@ -78,6 +78,8 @@
           <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
                location="${docbook.dtd.dir}/docbook.dtd" />
         </xmlcatalog>
+        
+        <html.xslt.param.entries />
       </xslt>
 
       <!-- Build the actual manual -->
@@ -127,14 +129,11 @@
 
     <sequential>
       <property name="doc.src.dir" location="${carrot2.doc.basedir.internal}/src" />
-      <property name="doc.build.classes.dir" location="@{doc.build.dir}/classes" />
-      <property name="doc.build.docbook.dir" location="@{doc.build.dir}/docbook" />
-      <property name="doc.build.xsl.dir" location="@{doc.build.dir}/xsl" />
 
-      <mkdir dir="${doc.build.classes.dir}" />
+      <mkdir dir="@{doc.build.dir}/classes" />
 
       <!-- Build attribute dumper first -->
-      <javac destdir="${doc.build.classes.dir}"
+      <javac destdir="@{doc.build.dir}/classes"
              compiler="modern"
              source="1.5"
              target="1.5"
@@ -147,15 +146,15 @@
         </classpath>
       </javac>
 
-      <mkdir dir="${doc.build.xsl.dir}" />
+      <mkdir dir="@{doc.build.dir}/xsl" />
       <java classname="org.carrot2.core.ProcessingComponentDumper"
             outputproperty="dev.null">
         <classpath>
           <attributes.classpath.entries />
-          <path path="${doc.build.classes.dir}" />
+          <path path="@{doc.build.dir}/classes" />
         </classpath>
         <arg value="@{suite.path}" />
-        <arg value="${doc.build.xsl.dir}/components-metadata.xml" />
+        <arg value="@{doc.build.dir}/xsl/components-metadata.xml" />
       </java>
 
       <!-- 
@@ -164,8 +163,8 @@
            The downside is obviously that if the HTML in JavaDoc is not valid XML,
            the documentation generation will fail.
         -->
-      <copy file="${doc.build.xsl.dir}/components-metadata.xml"
-            tofile="${doc.build.xsl.dir}/components-metadata-nocdata.xml"
+      <copy file="@{doc.build.dir}/xsl/components-metadata.xml"
+            tofile="@{doc.build.dir}/xsl/components-metadata-nocdata.xml"
             filtering="yes">
         <filterset begintoken="&lt;description&gt;" endtoken="CDATA[">
           <filter token="&lt;![" value="&lt;description&gt;" />
@@ -180,16 +179,16 @@
           <filter token="&lt;/title" value="&lt;/title&gt;" />
         </filterset>
       </copy>
-      <copy file="${doc.build.xsl.dir}/components-metadata.xml"
-            tofile="${doc.build.xsl.dir}/components-metadata-orig.xml" 
+      <copy file="@{doc.build.dir}/xsl/components-metadata.xml"
+            tofile="@{doc.build.dir}/xsl/components-metadata-orig.xml" 
             overwrite="true" />
-      <copy file="${doc.build.xsl.dir}/components-metadata-nocdata.xml"
-            tofile="${doc.build.xsl.dir}/components-metadata.xml" 
+      <copy file="@{doc.build.dir}/xsl/components-metadata-nocdata.xml"
+            tofile="@{doc.build.dir}/xsl/components-metadata.xml" 
             overwrite="true" />
 
-      <xslt in="${doc.build.docbook.dir}/components.template.xml"
-            style="${doc.build.xsl.dir}/attributes-to-docbook.xsl"
-            out="${doc.build.docbook.dir}/components.xml">
+      <xslt in="@{doc.build.dir}/docbook/components.template.xml"
+            style="@{doc.build.dir}/xsl/attributes-to-docbook.xsl"
+            out="@{doc.build.dir}/docbook/components.xml">
         <xmlcatalog>     
           <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
                location="${docbook.dtd.dir}/docbook.dtd" />
@@ -197,7 +196,7 @@
         <attributes.xslt.param.entries />
       </xslt>
 
-      <delete dir="${doc.build.classes.dir}" />
+      <delete dir="@{doc.build.dir}/classes" />
     </sequential>
   </macrodef>
 

@@ -8,7 +8,8 @@
 ]>
 <chapter xml:id="chapter.application-suite" 
          xmlns="http://docbook.org/ns/docbook" version="5.0"
-         xmlns:product="http://www.carrot2.org">
+         xmlns:product="http://www.carrot2.org"
+         xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Application suite</title>
   <subtitle>Applications shipped with &PROD;</subtitle>
 
@@ -164,13 +165,17 @@
           <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.5.0 or newer) if you have not done so.</para>
         </listitem>
       
-        <listitem>
+        <listitem role="private">
           <para>
             Download &DCW; <product:workbench-download-link os="win32" wm="win32">Windows binaries</product:workbench-download-link>
             or <product:workbench-download-link os="linux" wm="gtk">Linux binaries</product:workbench-download-link>
             and extract the archive to some local disk location.
           </para>
         </listitem>
+         
+        <xi:include href="application-suite-dcw-download.xml">
+          <xi:fallback />
+        </xi:include>
         
         <listitem>
           <para>Run <command>&PRODID;-workbench.exe</command> (Windows) or <command>&PRODID;-workbench</command> (Linux).</para>
@@ -280,12 +285,16 @@
           <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.5.0 or newer) if you have not done so.</para>
         </listitem>
       
-        <listitem>
+        <listitem role="private">
           <para>
             Download <product:dcs-download-link>&DCS; binaries</product:dcs-download-link> and
             extract the archive to some local disk location.
           </para>
         </listitem>
+         
+        <xi:include href="application-suite-dcs-download.xml">
+          <xi:fallback />
+        </xi:include>
         
         <listitem>
           <para>Run <command>dcs.cmd</command> (Windows) or <command>dcs.sh</command> (Linux).</para>
@@ -432,13 +441,17 @@
           <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.5.0 or newer) if you have not done so.</para>
         </listitem>
       
-        <listitem>
+        <listitem role="private">
           <para>
             Download <product:cli-download-link>&CLI; binaries</product:cli-download-link> and
             extract the archive to some local disk location.
           </para>
         </listitem>
         
+        <xi:include href="application-suite-cli-download.xml">
+          <xi:fallback />
+        </xi:include>
+
         <listitem>
           <para>
             Run <command>batch.cmd</command> (Windows) or <command>batch.sh</command> 
