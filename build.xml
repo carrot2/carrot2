@@ -709,7 +709,9 @@
       <mapper type="flatten" />
     </copy>
     <copy todir="${api.dir}">
-      <fileset dir="${jar.dir}" />
+      <fileset dir="${jar.dir}">
+        <include name="carrot2-core*.jar" />
+      </fileset>
       <fileset dir="${carrot2.master.basedir}">
         <include name="carrot2.LICENSE" />
         <include name="carrot2.CONTRIBUTORS" />
@@ -717,6 +719,12 @@
     </copy>
     <copy todir="${api.dir}/examples">
       <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/src" />
+      <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
+        <include name="suites/suite-examples.xml" />
+        <include name="suites/source-microsoft-live*.xml" />
+        <include name="suites/algorithm-lingo*.xml" />
+        <include name="suites/algorithm-stc*.xml" />
+      </fileset>
     </copy>
     <copy todir="${api.dir}" file="${carrot2.master.basedir}/applications/carrot2-examples/build.xml" />
     <carrot2.readme readme.src="${carrot2.master.basedir}/applications/carrot2-examples/etc/readme.txt"

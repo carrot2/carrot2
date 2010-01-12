@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -53,8 +52,8 @@ public class ProcessingComponentSuite
     }
 
     /**
-     * Returns the internal list of document sources. Changes to this list will
-     * affect the suite.
+     * Returns the internal list of document sources. Changes to this list will affect the
+     * suite.
      */
     public List<DocumentSourceDescriptor> getSources()
     {
@@ -62,8 +61,8 @@ public class ProcessingComponentSuite
     }
 
     /**
-     * Returns the internal list of algorithms. Changes to this list will
-     * affect the suite.
+     * Returns the internal list of algorithms. Changes to this list will affect the
+     * suite.
      */
     public List<ProcessingComponentDescriptor> getAlgorithms()
     {
@@ -198,6 +197,15 @@ public class ProcessingComponentSuite
     }
 
     /**
+     * Deserializes component suite information from an XML stream.
+     */
+    public static ProcessingComponentSuite deserialize(InputStream inputStream)
+        throws Exception
+    {
+        return deserialize(inputStream, true);
+    }
+
+    /**
      * Deserializes component suite information from an XML stream and optionally clears
      * the internal implementation information that should not be exposed to the caller.
      */
@@ -205,30 +213,41 @@ public class ProcessingComponentSuite
         boolean clearInternals) throws Exception
     {
         if (resource == null) throw new IOException("Resource not found.");
-        
+
         final InputStream inputStream = resource.open();
         try
         {
-            final ProcessingComponentSuite suite = new Persister().read(
-                ProcessingComponentSuite.class, inputStream);
-            if (clearInternals)
-            {
-                suite.includes = null;
-                for (ProcessingComponentDescriptor processingComponentDescriptor : suite.algorithms)
-                {
-                    processingComponentDescriptor.position = null;
-                }
-                for (DocumentSourceDescriptor documentSourceDescriptor : suite.sources)
-                {
-                    documentSourceDescriptor.position = null;
-                }
-            }
-            return suite;
+            return deserialize(inputStream, clearInternals);
         }
         finally
         {
             CloseableUtils.close(inputStream);
         }
+    }
+
+    /**
+     * Deserializes component suite information from an XML stream and optionally clears
+     * the internal implementation information that should not be exposed to the caller.
+     * The provided {@link InputStream} will not be closed.
+     */
+    private static ProcessingComponentSuite deserialize(final InputStream inputStream,
+        boolean clearInternals) throws Exception
+    {
+        final ProcessingComponentSuite suite = new Persister().read(
+            ProcessingComponentSuite.class, inputStream);
+        if (clearInternals)
+        {
+            suite.includes = null;
+            for (ProcessingComponentDescriptor processingComponentDescriptor : suite.algorithms)
+            {
+                processingComponentDescriptor.position = null;
+            }
+            for (DocumentSourceDescriptor documentSourceDescriptor : suite.sources)
+            {
+                documentSourceDescriptor.position = null;
+            }
+        }
+        return suite;
     }
 
     /**
@@ -246,10 +265,10 @@ public class ProcessingComponentSuite
      */
     public List<ProcessingComponentDescriptor> removeUnavailableComponents()
     {
-        ArrayList<ProcessingComponentDescriptor> failed = Lists.newArrayList();  
+        ArrayList<ProcessingComponentDescriptor> failed = Lists.newArrayList();
         ProcessingComponentDescriptor p;
-        for (Iterator<? extends ProcessingComponentDescriptor> 
-            i = Iterators.concat(sources.iterator(), algorithms.iterator()); i.hasNext();)
+        for (Iterator<? extends ProcessingComponentDescriptor> i = Iterators.concat(
+            sources.iterator(), algorithms.iterator()); i.hasNext();)
         {
             if (!(p = i.next()).isComponentAvailable())
             {
@@ -257,7 +276,7 @@ public class ProcessingComponentSuite
                 i.remove();
             }
         }
-        
+
         return failed;
     }
 }

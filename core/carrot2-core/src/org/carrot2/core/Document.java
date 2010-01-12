@@ -13,6 +13,7 @@ package org.carrot2.core;
 
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
@@ -67,7 +68,8 @@ public final class Document
     public static final String SOURCES = "sources";
 
     /**
-     * @deprecated please use {@link #PARTITIONS}. This field will be removed in version 3.2.
+     * @deprecated please use {@link #PARTITIONS}. This field will be removed in version
+     *             3.2.
      */
     public static final String TOPIC = "topic";
 
@@ -113,6 +115,14 @@ public final class Document
     }
 
     /**
+     * Creates a document with the provided <code>title</code> and <code>summary</code>.
+     */
+    public Document(String title, String summary)
+    {
+        this(title, summary, null);
+    }
+
+    /**
      * Creates a document with the provided <code>title</code>, <code>summary</code> and
      * <code>contentUrl</code>.
      */
@@ -120,7 +130,11 @@ public final class Document
     {
         setField(TITLE, title);
         setField(SUMMARY, summary);
-        setField(CONTENT_URL, contentUrl);
+
+        if (StringUtils.isNotBlank(contentUrl))
+        {
+            setField(CONTENT_URL, contentUrl);
+        }
     }
 
     /**

@@ -307,7 +307,7 @@
   <target name="carrot2.webapp.xslt.debug">
     <delete file="tmp/startup.html" />
     <xslt style="${carrot2.webapp.basedir}/web/skins/fancy-compact/page.xsl"
-          in="etc/xslt-debug/startup.xml" 
+          in="${carrot2.webapp.basedir}/etc/xslt-debug/startup.xml" 
           out="tmp/startup.html" />
   </target>
 

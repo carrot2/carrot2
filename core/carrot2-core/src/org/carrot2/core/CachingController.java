@@ -126,6 +126,14 @@ public final class CachingController implements IController
         this.componentPool = componentPool;
     }
 
+    /**
+     * Initializes this controller with an empty map of initialization-time attributes.
+     */
+    public void init() throws ComponentInitializationException
+    {
+        init(Collections.<String, Object>emptyMap());
+    }
+
     /*
      * 
      */

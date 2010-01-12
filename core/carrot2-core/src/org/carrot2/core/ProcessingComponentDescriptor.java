@@ -321,8 +321,7 @@ public class ProcessingComponentDescriptor
             final InputStream inputStream = resource.open();
             try
             {
-                attributeSets = AttributeValueSets.deserialize(new InputStreamReader(
-                    inputStream, "UTF-8"));
+                attributeSets = AttributeValueSets.deserialize(inputStream);
             }
             finally
             {
