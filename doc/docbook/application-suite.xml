@@ -29,7 +29,7 @@
         <title>&DCW;</title>
         <para>
           which is a standalone GUI application you can use to experiment with &PROD;
-          clustering on data from common search engines or your own data.
+          clustering on data from common search engines or your own data,
         </para>
       </formalpara>
     </listitem>
@@ -38,7 +38,16 @@
       <formalpara>
         <title>&DCS;</title>
         <para>
-          which exposes &PROD; clustering as a REST service.
+          which exposes &PROD; clustering as a REST service,
+        </para>
+      </formalpara>
+    </listitem>
+
+    <listitem>
+      <formalpara>
+        <title>&CLI;</title>
+        <para>
+          applications which allow invoking &PROD; clustering from command line,
         </para>
       </formalpara>
     </listitem>

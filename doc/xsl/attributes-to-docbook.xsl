@@ -30,24 +30,6 @@
       </db:para>
 
       <xsl:variable name="doc" select="." />
-      <xsl:for-each select="$doc/groups/string">
-        <xsl:variable name="group" select="string(.)" />
-        
-        <xsl:if test="$doc/attribute[attribute-descriptor/metadata/group = $group]">
-          <db:section role="notoc">
-            <db:title><xsl:value-of select="$group" /></db:title>
-            <xsl:apply-templates select="$doc/attribute[attribute-descriptor/metadata/group = $group]" />
-          </db:section>
-        </xsl:if>
-      </xsl:for-each>
-      
-      <xsl:if test="$doc/attribute[not(attribute-descriptor/metadata/group)]">
-        <db:section>
-          <db:title>Ungrouped</db:title>
-          <xsl:apply-templates select="$doc/attribute[not(attribute-descriptor/metadata/group)]" />
-        </db:section>
-      </xsl:if>
-      
       <db:section role="notoc" xml:id="section.component.{component-descriptor/@id}.by-level">
         <db:title><xsl:apply-templates select="component-descriptor/title" /> input attributes by level</db:title>
         
@@ -71,6 +53,42 @@
         
         <xsl:apply-templates select="$doc/attribute/attribute-descriptor" mode="level-check" />
       </db:section>
+      
+      <db:section role="notoc" xml:id="section.component.{component-descriptor/@id}.by-direction">
+        <db:title><xsl:apply-templates select="component-descriptor/title" /> attributes by direction</db:title>
+        
+        <xsl:call-template name="processing-component-doc-by-direction">
+          <xsl:with-param name="doc" select="$doc" />
+          <xsl:with-param name="direction" select="'Input'" />
+        </xsl:call-template>
+        
+        <xsl:call-template name="processing-component-doc-by-direction">
+          <xsl:with-param name="doc" select="$doc" />
+          <xsl:with-param name="direction" select="'Output'" />
+        </xsl:call-template>
+      </db:section>
+
+      <xsl:for-each select="$doc/groups/string">
+        <xsl:variable name="group" select="string(.)" />
+        
+        <xsl:if test="$doc/attribute[attribute-descriptor/metadata/group = $group]">
+          <db:section role="notoc">
+            <db:title><xsl:value-of select="$group" /></db:title>
+            <xsl:apply-templates select="$doc/attribute[attribute-descriptor/metadata/group = $group]">
+              <xsl:sort select="concat(attribute-descriptor/metadata/label, attribute-descriptor/metadata/title)" />
+            </xsl:apply-templates>
+          </db:section>
+        </xsl:if>
+      </xsl:for-each>
+      
+      <xsl:if test="$doc/attribute[not(attribute-descriptor/metadata/group)]">
+        <db:section>
+          <db:title>Ungrouped</db:title>
+          <xsl:apply-templates select="$doc/attribute[not(attribute-descriptor/metadata/group)]">
+            <xsl:sort select="concat(attribute-descriptor/metadata/label, attribute-descriptor/metadata/title)" />
+          </xsl:apply-templates>
+        </db:section>
+      </xsl:if>
     </db:section>
   </xsl:template>
 
@@ -87,7 +105,9 @@
   
         <para>
           <db:itemizedlist spacing="compact">
-            <xsl:apply-templates select="$descriptors" mode="links" />
+            <xsl:apply-templates select="$descriptors" mode="links">
+              <xsl:sort select="concat(metadata/label, metadata/title)" />
+            </xsl:apply-templates>
           </db:itemizedlist>
         </para>
       </db:section>
@@ -97,6 +117,27 @@
   <xsl:template match="attribute-descriptor" mode="level-check">
     <xsl:if test="annotations/annotation[string(.) = 'Input'] and (not(metadata/level) or not(contains('BASIC MEDIUM ADVANCED', string(metadata/level))))">
       <xsl:message>Attribute level not defined for: <xsl:value-of select="@key" /></xsl:message>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="processing-component-doc-by-direction">
+    <xsl:param name="doc" />
+    <xsl:param name="direction" />
+    
+    <xsl:variable name="descriptors" select="$doc/attribute[descendant::annotation[string(.) = $direction]]/attribute-descriptor" />
+    
+    <xsl:if test="$descriptors">
+      <db:section role="notoc">
+        <db:title><xsl:value-of select="$direction" /></db:title>
+  
+        <para>
+          <db:itemizedlist spacing="compact">
+            <xsl:apply-templates select="$descriptors" mode="links">
+              <xsl:sort select="concat(metadata/label, metadata/title)" />
+            </xsl:apply-templates>
+          </db:itemizedlist>
+        </para>
+      </db:section>
     </xsl:if>
   </xsl:template>
 
@@ -167,13 +208,13 @@
               <db:entry role="rowhead">Direction</db:entry>
               <db:entry>
                 <xsl:if test="annotations[annotation = 'Input']">
-                  Input
+                  <db:constant>Input</db:constant>
                 </xsl:if>
                 <xsl:if test="annotations[annotation = 'Input' and annotation = 'Output']">
                   and
                 </xsl:if>
                 <xsl:if test="annotations[annotation = 'Output']">
-                  Output
+                  <db:constant>Output</db:constant>
                 </xsl:if>
               </db:entry>
             </db:row>
@@ -402,7 +443,7 @@
   </xsl:template>
   
   <!-- Copy certain Docbook elements -->
-  <xsl:template match="db:chapter|db:appendix|db:para|db:section|db:title|db:subtitle|db:example|db:xref|db:programlisting|db:sgmltag|db:classname|db:filename|db:note|db:phrase|db:link|db:itemizedlist|db:listitem">
+  <xsl:template match="db:chapter|db:appendix|db:para|db:formalpara|db:section|db:title|db:subtitle|db:example|db:xref|db:programlisting|db:sgmltag|db:classname|db:filename|db:note|db:phrase|db:superscript|db:link|db:itemizedlist|db:listitem">
     <xsl:copy>
       <xsl:copy-of select="@*" />
       <xsl:apply-templates />
