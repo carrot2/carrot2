@@ -21,8 +21,10 @@ import org.carrot2.util.attribute.AttributeValueSets;
 
 /**
  * This example shows how to export a set of attribute values to XML. This code may come
- * in handy when transferring clustering algorithm settings from the Document Clustering
- * Workbench e.g. to the Document Clustering Webapp.
+ * in handy when you cannot <a href="http://download.carrot2.org/head/manual/#section.customizing.component-suites-and-attributes.saving-with-workbench">use 
+ * Carrot2 Document Clustering Workbench to save the attributes XML</a>.
+ * 
+ * @see LoadingAttributeValuesFromXml
  */
 public class SavingAttributeValuesToXml
 {

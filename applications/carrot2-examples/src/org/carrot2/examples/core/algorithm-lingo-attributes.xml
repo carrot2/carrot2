@@ -1,0 +1,24 @@
+<attribute-sets default="more-clusters">
+  <attribute-set id="more-clusters">
+    <value-set>
+      <label>More clusters</label>
+      <attribute key="LingoClusteringAlgorithm.desiredClusterCountBase">
+        <value type="java.lang.Integer" value="35"/>
+      </attribute>
+    </value-set>
+  </attribute-set>
+  <attribute-set id="faster-clustering">
+    <value-set>
+      <label>Faster clustering</label>
+      <attribute key="LingoClusteringAlgorithm.desiredClusterCountBase">
+        <value type="java.lang.Integer" value="20"/>
+      </attribute>
+      <attribute key="LingoClusteringAlgorithm.factorizationQuality">
+        <value type="org.carrot2.matrix.factorization.IterationNumberGuesser$FactorizationQuality" value="LOW"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.maximumMatrixSize">
+        <value type="java.lang.Integer" value="30000"/>
+      </attribute>
+    </value-set>
+  </attribute-set>
+</attribute-sets>

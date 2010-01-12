@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -125,8 +124,8 @@ public final class ProcessingResult
 
     /**
      * Returns a specific attribute of this result set. This method is equivalent to
-     * calling {@link #getAttributes()} and then getting the required attribute from
-     * the map.
+     * calling {@link #getAttributes()} and then getting the required attribute from the
+     * map.
      * 
      * @param key key of the attribute to return
      * @return value of the attribute
@@ -136,7 +135,7 @@ public final class ProcessingResult
     {
         return (T) attributesView.get(key);
     }
-    
+
     /**
      * Returns the documents that have been processed. The returned collection is
      * unmodifiable.
@@ -233,7 +232,7 @@ public final class ProcessingResult
             {
                 documentsById.put(document.id, document);
             }
-            
+
             for (Cluster cluster : clusters)
             {
                 documentIdToReference(cluster, documentsById);
@@ -317,12 +316,12 @@ public final class ProcessingResult
     /**
      * Deserializes a {@link ProcessingResult} from an XML character stream.
      * 
-     * <p>NOTE: This method is overused in the code, we should remove it to avoid bugs as in
-     * <a href="http://issues.carrot2.org/browse/CARROT-582">CARROT-582</a>.</p>
-     * 
      * @param reader the reader to deserialize a {@link ProcessingResult} from. The reader
      *            will <strong>not</strong> be closed.
      * @return deserialized {@link ProcessingResult}
+     * @deprecated Please use {@link #deserialize(InputStream)}. This method will be
+     *             removed in version 3.3.0. For more details, please see 
+     *             <a href="http://issues.carrot2.org/browse/CARROT-582">this issue</a>.
      * @throws Exception is case of any problems with deserialization
      */
     @Deprecated
@@ -333,9 +332,9 @@ public final class ProcessingResult
 
     /**
      * Deserializes a {@link ProcessingResult} from an XML stream.
-     *
-     * @param input the input XML stream to deserialize a {@link ProcessingResult} from. The stream
-     *            will <strong>not</strong> be closed.
+     * 
+     * @param input the input XML stream to deserialize a {@link ProcessingResult} from.
+     *            The stream will <strong>not</strong> be closed.
      * @return deserialized {@link ProcessingResult}
      * @throws Exception is case of any problems with deserialization
      */
