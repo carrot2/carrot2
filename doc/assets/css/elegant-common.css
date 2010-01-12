@@ -239,7 +239,7 @@ div.chapter {
 
 /** Object titles */
 
-.example, .figure, .table {
+.example, .figure, .table, p.margin {
   margin-bottom: 6mm;
   position: relative;
 }
@@ -261,7 +261,8 @@ div.chapter {
 
 .table p.title,
 .example p.title,
-.figure p.title
+.figure p.title,
+p.margin > b
 {
   font-style: italic;
   position: absolute;
@@ -271,6 +272,11 @@ div.chapter {
   left: -38mm;
   top: 0;
 }
+
+p.margin > b {
+  top: 0.5mm;
+}
+
 
 .programlisting {
   border: 1px solid #b0b0b0;
