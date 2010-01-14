@@ -27,6 +27,8 @@ import com.google.common.collect.Maps;
  * <ul>
  *  <li>{@link #POLISH} makes use of Morfologik stemming library
  *  if it is available in the classpath.</li>
+ *  <li>{@link #CHINESE_SIMPLIFIED} makes use of Lucene's smartcn tokenizer
+ *  if it is available in the classpath.</li>
  * </ul> 
  */
 public enum LanguageCode

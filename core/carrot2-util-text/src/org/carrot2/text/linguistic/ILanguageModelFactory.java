@@ -21,13 +21,13 @@ public interface ILanguageModelFactory
      * @return Returns {@link ILanguageModel} for the current language or
      *         <code>null</code> if such language model is not available.
      */
-    public ILanguageModel getCurrentLanguage();
+    public ILanguageModel getDefaultLanguageModel();
 
     /**
      * @return Return a {@link ILanguageModel} associated with the given code or
      *         <code>null</code> if this language is not supported or its resources are
      *         not available.
      */
-    public ILanguageModel getLanguage(LanguageCode language);
+    public ILanguageModel getLanguageModel(LanguageCode language);
 
 }

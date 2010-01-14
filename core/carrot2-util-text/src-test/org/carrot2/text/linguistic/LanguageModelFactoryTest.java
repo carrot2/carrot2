@@ -24,7 +24,7 @@ public class LanguageModelFactoryTest
     @Test
     public void testDefaultLanguageEnglish()
     {
-        final ILanguageModel model = new DefaultLanguageModelFactory().getCurrentLanguage();
+        final ILanguageModel model = new DefaultLanguageModelFactory().getDefaultLanguageModel();
         assertNotNull(model);
         assertEquals(LanguageCode.ENGLISH, model.getLanguageCode());
     }
@@ -32,7 +32,7 @@ public class LanguageModelFactoryTest
     @Test
     public void testLanguageDutch()
     {
-        final ILanguageModel model = new DefaultLanguageModelFactory().getLanguage(LanguageCode.DUTCH);
+        final ILanguageModel model = new DefaultLanguageModelFactory().getLanguageModel(LanguageCode.DUTCH);
         assertNotNull(model);
         assertEquals(LanguageCode.DUTCH, model.getLanguageCode());
     }
@@ -42,7 +42,7 @@ public class LanguageModelFactoryTest
     {
         for (LanguageCode l : LanguageCode.values())
         {
-            new DefaultLanguageModelFactory().getLanguage(l);
+            new DefaultLanguageModelFactory().getLanguageModel(l);
         }
         
         assertFalse("There were problems with loading certain lexical resources. Check the logs.", 

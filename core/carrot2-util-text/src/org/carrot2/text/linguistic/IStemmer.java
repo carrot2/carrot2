@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,5 +17,10 @@ package org.carrot2.text.linguistic;
  */
 public interface IStemmer
 {
+    /**
+     * Returns the base form of the provided word or <code>null</code> if the base form
+     * cannot be determined. In the latter case, the base form will be assumed to be the
+     * same as the original word.
+     */
     public CharSequence stem(CharSequence word);
 }

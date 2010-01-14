@@ -24,8 +24,11 @@ import org.apache.lucene.util.PriorityQueue;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
-import org.carrot2.text.linguistic.*;
-import org.carrot2.text.preprocessing.*;
+import org.carrot2.text.linguistic.ILanguageModel;
+import org.carrot2.text.linguistic.LanguageCode;
+import org.carrot2.text.preprocessing.LabelFormatter;
+import org.carrot2.text.preprocessing.PreprocessingContext;
+import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.collect.primitive.IntQueue;
 
@@ -41,7 +44,7 @@ import com.google.common.collect.Lists;
  * 
  * @label STC Clustering
  */
-@Bindable
+@Bindable(prefix = "STCClusteringAlgorithm")
 public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
@@ -75,29 +78,9 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     public List<Cluster> clusters = null;
 
     /**
-     * Tokenizer used by the algorithm, contains bindable attributes.
+     * Common preprocessing tasks handler.
      */
-    public Tokenizer tokenizer = new Tokenizer();
-
-    /**
-     * Case normalizer used by the algorithm, contains bindable attributes.
-     */
-    public CaseNormalizer caseNormalizer = new CaseNormalizer();
-
-    /**
-     * Stemmer used by the algorithm, contains bindable attributes.
-     */
-    public LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
-
-    /**
-     * Stop list marker used by the algorithm, contains bindable attributes.
-     */
-    public StopListMarker stopListMarker = new StopListMarker();
-
-    /**
-     * Language model factory used by the algorithm, contains bindable attributes.
-     */
-    public ILanguageModelFactory languageModelFactory = new DefaultLanguageModelFactory();
+    public BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
     /**
      * Parameters and thresholds of the algorithm.
@@ -195,13 +178,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         /*
          * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
          */
-        final ILanguageModel lang = languageModelFactory.getCurrentLanguage();
-        context = new PreprocessingContext(lang, documents, null);
-        tokenizer.tokenize(context);
-        caseNormalizer.dfThreshold = 0;
-        caseNormalizer.normalize(context);
-        languageModelStemmer.stem(context);
-        stopListMarker.mark(context);
+        context = preprocessingPipeline.preprocess(documents, query);
 
         /*
          * Step 2: Create a generalized suffix tree from phrases in the input.

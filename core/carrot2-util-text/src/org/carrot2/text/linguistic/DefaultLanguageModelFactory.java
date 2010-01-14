@@ -93,15 +93,15 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
     /**
      * @see #current
      */
-    public ILanguageModel getCurrentLanguage()
+    public ILanguageModel getDefaultLanguageModel()
     {
-        return getLanguage(current);
+        return getLanguageModel(current);
     }
 
     /**
      * @return Return a language model for one of the languages in {@link LanguageCode}.
      */
-    public ILanguageModel getLanguage(LanguageCode language)
+    public ILanguageModel getLanguageModel(LanguageCode language)
     {
         synchronized (DefaultLanguageModelFactory.class)
         {

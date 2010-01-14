@@ -20,6 +20,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.matrix.NNIInterface;
 import org.carrot2.text.preprocessing.*;
+import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.attribute.*;
@@ -101,7 +102,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * Common preprocessing tasks handler.
      */
-    public PreprocessingPipeline preprocessingPipeline = new PreprocessingPipeline();
+    public CompletePreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
 
     /**
      * Term-document matrix builder for the algorithm, contains bindable attributes.

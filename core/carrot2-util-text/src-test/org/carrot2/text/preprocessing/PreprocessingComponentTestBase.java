@@ -62,7 +62,7 @@ public class PreprocessingComponentTestBase
             languageFactory = new DefaultLanguageModelFactory();
         }
 
-        context = new PreprocessingContext(languageFactory.getCurrentLanguage(),
+        context = new PreprocessingContext(languageFactory.getDefaultLanguageModel(),
             documents, query);
     }
 
@@ -129,7 +129,7 @@ public class PreprocessingComponentTestBase
         final Tokenizer temporaryTokenizer = new Tokenizer();
         final CaseNormalizer temporaryCaseNormalizer = new CaseNormalizer();
         final PreprocessingContext temporaryContext = new PreprocessingContext(
-            languageFactory.getCurrentLanguage(), documents, null);
+            languageFactory.getDefaultLanguageModel(), documents, null);
         beforePrepareWordIndices(temporaryTokenizer, temporaryCaseNormalizer);
 
         temporaryTokenizer.tokenize(temporaryContext);

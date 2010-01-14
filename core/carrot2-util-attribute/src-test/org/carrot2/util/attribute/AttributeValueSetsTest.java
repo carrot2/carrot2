@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.tools.ant.filters.StringInputStream;
 import org.junit.Test;
 import org.simpleframework.xml.Root;
 
@@ -321,7 +322,7 @@ public class AttributeValueSetsTest
         sets.serialize(stringWriter);
 
         final AttributeValueSets deserialized = AttributeValueSets
-            .deserialize(new StringReader(stringWriter.getBuffer().toString()));
+            .deserialize(new StringInputStream(stringWriter.getBuffer().toString()));
 
         assertEquals(sets.defaultAttributeValueSetId,
             deserialized.defaultAttributeValueSetId);

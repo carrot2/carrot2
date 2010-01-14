@@ -18,14 +18,14 @@ public final class TestLanguageModelFactory implements ILanguageModelFactory
 {
     private static final TestLanguageModel TEST_LANGUAGE_MODEL = new TestLanguageModel();
 
-    public ILanguageModel getCurrentLanguage()
+    public ILanguageModel getDefaultLanguageModel()
     {
         return TEST_LANGUAGE_MODEL;
     }
 
-    public ILanguageModel getLanguage(LanguageCode language)
+    public ILanguageModel getLanguageModel(LanguageCode language)
     {
-        return getCurrentLanguage();
+        return getDefaultLanguageModel();
     }
 
     private final static class TestLanguageModel implements ILanguageModel
