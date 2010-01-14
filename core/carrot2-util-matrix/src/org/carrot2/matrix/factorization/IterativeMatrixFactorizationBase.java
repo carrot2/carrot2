@@ -157,6 +157,7 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
             System.out.println(Arrays.toString(aggregates));
             System.out.println("Matrix1");
             System.out.println(VT);
+            throw e;
         }
         try
         {
@@ -169,6 +170,7 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
             System.out.println(Arrays.toString(aggregatesCopy));
             System.out.println("Matrix2");
             System.out.println(U.viewDice());
+            throw e;
         }
 
         // Revert back to positive values of aggregates
