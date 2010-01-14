@@ -1,3 +1,4 @@
+
 /*
  * Carrot2 project.
  *
@@ -15,7 +16,6 @@ import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 
-import org.apache.mahout.math.Arrays;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.apache.mahout.math.matrix.doublealgo.Sorting;
 import org.apache.mahout.math.matrix.linalg.Algebra;
@@ -146,32 +146,10 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
         // Need to make a copy of aggregates because they get sorted as well
         double [] aggregatesCopy = aggregates.clone();
 
-        try
-        {
-            V = NNIDoubleFactory2D.asNNIMatrix(Sorting.quickSort.sort(VT, aggregates)
-                .viewDice());
-        }
-        catch (ArrayIndexOutOfBoundsException e)
-        {
-            System.out.println("Aggregates1");
-            System.out.println(Arrays.toString(aggregates));
-            System.out.println("Matrix1");
-            System.out.println(VT);
-            throw e;
-        }
-        try
-        {
-            U = NNIDoubleFactory2D.asNNIMatrix(Sorting.quickSort.sort(U.viewDice(),
-                aggregatesCopy).viewDice());
-        }
-        catch (ArrayIndexOutOfBoundsException e)
-        {
-            System.out.println("Aggregates2");
-            System.out.println(Arrays.toString(aggregatesCopy));
-            System.out.println("Matrix2");
-            System.out.println(U.viewDice());
-            throw e;
-        }
+        V = NNIDoubleFactory2D.asNNIMatrix(Sorting.quickSort.sort(VT, aggregates)
+            .viewDice());
+        U = NNIDoubleFactory2D.asNNIMatrix(Sorting.quickSort.sort(U.viewDice(),
+            aggregatesCopy).viewDice());
 
         // Revert back to positive values of aggregates
         for (int i = 0; i < aggregates.length; i++)
