@@ -15,7 +15,7 @@ package org.carrot2.clustering.lingo;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
 import bak.pcj.map.IntKeyIntMap;
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Assigns labels to base vectors obtained from the factorization.

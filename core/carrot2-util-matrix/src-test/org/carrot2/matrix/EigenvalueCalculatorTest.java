@@ -20,8 +20,8 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.linalg.EigenvalueDecomposition;
 
 /**
  * Test cases for {@link EigenvalueCalculator}.

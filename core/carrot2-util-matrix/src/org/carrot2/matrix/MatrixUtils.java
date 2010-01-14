@@ -17,12 +17,12 @@ import java.util.Arrays;
 import org.carrot2.util.DoubleComparators;
 
 import bak.pcj.DoubleComparator;
-import cern.colt.function.DoubleFunction;
-import cern.colt.list.DoubleArrayList;
-import cern.colt.list.IntArrayList;
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.jet.math.Functions;
+import org.apache.mahout.math.function.DoubleFunction;
+import org.apache.mahout.math.list.DoubleArrayList;
+import org.apache.mahout.math.list.IntArrayList;
+import org.apache.mahout.math.matrix.DoubleMatrix1D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.jet.math.Functions;
 
 /**
  * A set of {@link DoubleMatrix2D} shorthands and utility methods.

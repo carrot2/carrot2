@@ -17,7 +17,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
 
 import bak.pcj.set.IntSet;
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Stores intermediate data required during Lingo clustering.

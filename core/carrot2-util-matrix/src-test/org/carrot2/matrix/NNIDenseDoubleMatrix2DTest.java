@@ -19,8 +19,8 @@ import org.carrot2.matrix.NNIDenseDoubleMatrix2D;
 import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.junit.Test;
 
-import cern.colt.matrix.*;
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 /**
  * Test cases for {@link NNIDenseDoubleMatrix2D}.

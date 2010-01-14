@@ -18,7 +18,7 @@ import java.util.Random;
 
 import org.carrot2.matrix.factorization.*;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Quickly checks if the native BLAS libraries can be loaded and what the performance gain

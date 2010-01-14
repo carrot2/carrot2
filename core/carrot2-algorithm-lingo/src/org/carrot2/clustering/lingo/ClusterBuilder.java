@@ -30,8 +30,8 @@ import bak.pcj.list.IntList;
 import bak.pcj.map.*;
 import bak.pcj.set.IntBitSet;
 import bak.pcj.set.IntSet;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.jet.math.Functions;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.jet.math.Functions;
 
 /**
  * Builds cluster labels based on the reduced term-document matrix and assigns documents

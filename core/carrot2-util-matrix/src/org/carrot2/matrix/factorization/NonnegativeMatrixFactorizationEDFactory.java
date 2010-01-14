@@ -12,7 +12,7 @@
 
 package org.carrot2.matrix.factorization;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * A factory for {@link NonnegativeMatrixFactorizationED}s.

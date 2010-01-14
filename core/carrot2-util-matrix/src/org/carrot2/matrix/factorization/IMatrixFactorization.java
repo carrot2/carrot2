@@ -12,7 +12,7 @@
 
 package org.carrot2.matrix.factorization;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * For an <i>m</i> &times; <i>n</i> matrix <i>A</i> and given <i>k</i>, computes an <i>m

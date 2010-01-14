@@ -13,8 +13,8 @@
 package org.carrot2.matrix;
 
 import nni.LAPACK;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.linalg.EigenvalueDecomposition;
 
 /**
  * Calculates eigenvalues for given matrix. Uses Native Numerical Interface (NNI) calls to

@@ -22,7 +22,7 @@ import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
 import org.carrot2.util.test.Assertions;
 import org.junit.Test;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Test cases for matrix factorizations.

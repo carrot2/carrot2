@@ -12,9 +12,9 @@
 
 package org.carrot2.matrix;
 
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.jet.math.Functions;
+import org.apache.mahout.math.matrix.DoubleMatrix1D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.jet.math.Functions;
 
 /**
  *

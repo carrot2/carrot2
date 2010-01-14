@@ -13,12 +13,12 @@
 package org.carrot2.matrix;
 
 import nni.BLAS;
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix1D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 /**
- * A very crude native implementation of Colt's @link cern.colt.matrix.DoubleMatrix2D
+ * A very crude native implementation of Colt's @link org.apache.mahout.math.matrix.DoubleMatrix2D
  * based on the Native Numerical Interface (NNI). For the time being, the only method that
  * uses the native routines is the Level 3 zMult(). The other methods use the
  * implementations provided in DenseDoubleMatrix2D.

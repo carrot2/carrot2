@@ -13,22 +13,24 @@
 package org.carrot2.text.vsm;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.mahout.math.GenericPermuting;
+import org.apache.mahout.math.matrix.DoubleFactory2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.SparseDoubleMatrix2D;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.*;
+import org.carrot2.util.IndirectComparator;
+import org.carrot2.util.IndirectSort;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.*;
 
 import bak.pcj.map.IntKeyIntMap;
 import bak.pcj.map.IntKeyIntOpenHashMap;
 import bak.pcj.set.IntBitSet;
-import cern.colt.GenericPermuting;
-import cern.colt.matrix.DoubleFactory2D;
-import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * Builds a term document matrix based on the provided {@link PreprocessingContext}.
@@ -306,7 +308,7 @@ public class TermDocumentMatrixBuilder
             return DoubleFactory2D.dense.make(stemToRowIndex.size(), 0);
         }
 
-        final DoubleMatrix2D phraseMatrix = DoubleFactory2D.sparse.make(stemToRowIndex
+        final DoubleMatrix2D phraseMatrix = new SparseDoubleMatrix2D(stemToRowIndex
             .size(), featureIndex.length);
 
         final PreprocessingContext preprocessingContext = vsmContext.preprocessingContext;

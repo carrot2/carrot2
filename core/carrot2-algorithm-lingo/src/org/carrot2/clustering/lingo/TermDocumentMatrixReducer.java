@@ -21,7 +21,7 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 
-import cern.colt.matrix.DoubleFactory2D;
+import org.apache.mahout.math.matrix.DoubleFactory2D;
 
 /**
  * Reduces the dimensionality of a term-document matrix using a matrix factorization

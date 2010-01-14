@@ -14,8 +14,8 @@ package org.carrot2.matrix.factorization.seeding;
 
 import java.util.Random;
 
-import cern.colt.function.DoubleFunction;
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.function.DoubleFunction;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Random matrix factorization seeding.

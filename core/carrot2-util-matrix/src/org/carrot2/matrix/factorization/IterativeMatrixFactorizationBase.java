@@ -16,10 +16,10 @@ import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.doublealgo.Sorting;
-import cern.colt.matrix.linalg.Algebra;
-import cern.jet.math.Functions;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.doublealgo.Sorting;
+import org.apache.mahout.math.matrix.linalg.Algebra;
+import org.apache.mahout.math.jet.math.Functions;
 
 /**
  * Base functionality for {@link IIterativeMatrixFactorization}s.

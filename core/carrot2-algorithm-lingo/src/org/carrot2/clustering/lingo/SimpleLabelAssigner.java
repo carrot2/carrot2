@@ -19,8 +19,8 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.Bindable;
 
 import bak.pcj.map.IntKeyIntMap;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.jet.math.Functions;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.jet.math.Functions;
 
 /**
  * Uses a very simple algorithm to match labels to base vectors.

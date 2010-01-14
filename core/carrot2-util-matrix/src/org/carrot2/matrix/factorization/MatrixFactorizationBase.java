@@ -14,7 +14,7 @@ package org.carrot2.matrix.factorization;
 
 import org.carrot2.matrix.NNIDoubleFactory2D;
 
-import cern.colt.matrix.*;
+import org.apache.mahout.math.matrix.*;
 
 /**
  * Abstract implementation of the {@link IMatrixFactorization} interface.

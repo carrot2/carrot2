@@ -124,7 +124,7 @@
   </patternset>
 
   <patternset id="lib.core.mini">
-    <include name="lib/**/colt*" />
+    <include name="lib/**/org.apache.mahout.math*" />
     <include name="lib/**/commons-lang*" />
     <include name="lib/**/ehcache*" />
     <include name="lib/**/google-collect*" />

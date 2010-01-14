@@ -17,7 +17,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.assertions.AssertExtension;
 import org.fest.assertions.Delta;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Assertions on {@link DoubleMatrix2D}.

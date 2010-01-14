@@ -20,7 +20,7 @@ import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategyFactory;
 
 import com.google.common.collect.Maps;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * This class helps to guesstimate the number of iterations for iterative factorization

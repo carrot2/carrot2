@@ -19,7 +19,7 @@ import org.carrot2.util.attribute.Bindable;
 import bak.pcj.list.DoubleArrayList;
 import bak.pcj.list.IntArrayList;
 import bak.pcj.map.IntKeyIntMap;
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Assigns unique labels to each base vector using a greedy algorithm.

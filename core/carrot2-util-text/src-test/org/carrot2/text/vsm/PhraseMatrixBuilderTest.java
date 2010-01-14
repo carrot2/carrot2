@@ -17,7 +17,7 @@ import static org.carrot2.matrix.MatrixAssertions.assertThat;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Test cases for phrase matrix building.

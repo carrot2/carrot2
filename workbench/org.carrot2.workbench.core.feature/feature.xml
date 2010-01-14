@@ -286,7 +286,7 @@
          unpack="false"/>
 
    <plugin
-         id="cern.colt"
+         id="org.apache.mahout.math"
          download-size="0"
          install-size="0"
          version="0.0.0"

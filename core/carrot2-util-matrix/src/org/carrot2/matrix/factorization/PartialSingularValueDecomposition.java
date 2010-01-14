@@ -15,9 +15,9 @@ package org.carrot2.matrix.factorization;
 import org.carrot2.matrix.*;
 
 import nni.LAPACK;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.*;
-import cern.colt.matrix.linalg.SingularValueDecomposition;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.*;
+import org.apache.mahout.math.matrix.linalg.SingularValueDecomposition;
 
 /**
  * Performs matrix factorization using the Singular Value Decomposition algorithm.
@@ -86,7 +86,7 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
             {
                 U = U.viewPart(0, 0, U.rows(), k);
                 V = V.viewPart(0, 0, V.rows(), k);
-                S = cern.colt.Arrays.trimToCapacity(S, k);
+                S = org.apache.mahout.math.Arrays.trimToCapacity(S, k);
             }
         }
         else
@@ -149,7 +149,7 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
 
                 U = Uk;
                 V = Vk;
-                S = cern.colt.Arrays.trimToCapacity(S, k);
+                S = org.apache.mahout.math.Arrays.trimToCapacity(S, k);
             }
         }
     }

@@ -14,7 +14,7 @@ package org.carrot2.matrix.factorization.seeding;
 
 import org.carrot2.matrix.factorization.KMeansMatrixFactorization;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Matrix seeding based on the k-means algorithms.

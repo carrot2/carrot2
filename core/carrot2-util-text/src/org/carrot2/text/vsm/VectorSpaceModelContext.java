@@ -17,7 +17,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
 
 import bak.pcj.map.IntKeyIntMap;
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Stores data related to the Vector Space Model of the processed documents.

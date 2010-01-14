@@ -17,8 +17,8 @@ import junit.framework.TestCase;
 import org.fest.assertions.Delta;
 import org.junit.Test;
 
-import cern.colt.matrix.DoubleFactory2D;
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleFactory2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Test cases for {@link MatrixUtils}.

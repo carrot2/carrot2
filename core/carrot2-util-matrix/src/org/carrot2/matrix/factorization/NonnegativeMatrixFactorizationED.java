@@ -12,9 +12,9 @@
 
 package org.carrot2.matrix.factorization;
 
-import cern.colt.function.DoubleFunction;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.jet.math.Functions;
+import org.apache.mahout.math.function.DoubleFunction;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.jet.math.Functions;
 
 /**
  * Performs matrix factorization using the Non-negative Matrix Factorization algorithm
