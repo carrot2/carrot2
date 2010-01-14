@@ -24,7 +24,6 @@ import org.apache.lucene.util.PriorityQueue;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
-import org.carrot2.text.linguistic.ILanguageModel;
 import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -138,7 +137,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Custom priority queue for collecting base clusters.
      */
-    private final static class BaseClusterQueue extends PriorityQueue
+    private final static class BaseClusterQueue extends PriorityQueue<ClusterCandidate>
     {
         private final int maxSize;
     
@@ -149,11 +148,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         }
         
         @Override
-        protected boolean lessThan(Object o1, Object o2)
+        protected boolean lessThan(ClusterCandidate c1, ClusterCandidate c2)
         {
-            final ClusterCandidate c1 = (ClusterCandidate) o1;
-            final ClusterCandidate c2 = (ClusterCandidate) o2;
-    
             return c1.score < c2.score;
         }
     
