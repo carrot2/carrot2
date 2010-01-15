@@ -238,7 +238,7 @@ public class DocumentAssignerTest extends LabelFilterTestBase
             .hasSize(expectedDocumentIndices.length);
         for (int i = 0; i < expectedDocumentIndices.length; i++)
         {
-            assertThat(context.allLabels.documentIndices[i].toArray()).as(
+            assertThat(PcjCompat.toIntArray(context.allLabels.documentIndices[i])).as(
                 "allLabels.documentIndices[" + i + "]").isEqualTo(
                 expectedDocumentIndices[i]);
         }

@@ -20,8 +20,7 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
-import bak.pcj.list.IntArrayList;
-import bak.pcj.list.IntList;
+import com.carrotsearch.hppc.IntArrayList;
 
 /**
  * Test cases for {@link GraphUtils}.
@@ -31,29 +30,18 @@ public class GraphUtilsTest
     @Test
     public void testEmpty()
     {
-        checkAsserts(0, new int [0] [], false, Lists.<IntList> newArrayList());
+        checkAsserts(0, new int [0] [], false, Lists.<IntArrayList> newArrayList());
     }
 
     @Test
     public void testTrivialArcs()
     {
-        checkAsserts(3, new int [0] [], true, Lists.<IntList> newArrayList());
-        checkAsserts(3, new int [0] [], false, Arrays.asList(new IntList []
+        checkAsserts(3, new int [0] [], true, Lists.<IntArrayList> newArrayList());
+        checkAsserts(3, new int [0] [], false, Arrays.asList(new IntArrayList []
         {
-            new IntArrayList(new int []
-            {
-                0
-            }),
-
-            new IntArrayList(new int []
-            {
-                1
-            }),
-
-            new IntArrayList(new int []
-            {
-                2
-            })
+            IntArrayList.from(0),
+            IntArrayList.from(1),
+            IntArrayList.from(2),
         }));
     }
 
@@ -69,24 +57,14 @@ public class GraphUtilsTest
             }
         };
 
-        checkAsserts(vertices, arcs, true, Arrays.asList(new IntList []
+        checkAsserts(vertices, arcs, true, Arrays.asList(new IntArrayList []
         {
-            new IntArrayList(new int []
-            {
-                0, 1
-            })
+            IntArrayList.from(0, 1),
         }));
-        checkAsserts(vertices, arcs, false, Arrays.asList(new IntList []
+        checkAsserts(vertices, arcs, false, Arrays.asList(new IntArrayList []
         {
-            new IntArrayList(new int []
-            {
-                0, 1
-            }),
-
-            new IntArrayList(new int []
-            {
-                2
-            })
+            IntArrayList.from(0, 1),
+            IntArrayList.from(2),
         }));
     }
 
@@ -117,19 +95,13 @@ public class GraphUtilsTest
             }
         };
 
-        checkAsserts(vertices, arcs, true, Arrays.asList(new IntList []
+        checkAsserts(vertices, arcs, true, Arrays.asList(new IntArrayList []
         {
-            new IntArrayList(new int []
-            {
-                0, 1, 2, 3, 4
-            })
+            IntArrayList.from(0, 1, 2, 3, 4),
         }));
-        checkAsserts(vertices, arcs, false, Arrays.asList(new IntList []
+        checkAsserts(vertices, arcs, false, Arrays.asList(new IntArrayList []
         {
-            new IntArrayList(new int []
-            {
-                0, 1, 2, 3, 4
-            })
+            IntArrayList.from(0, 1, 2, 3, 4),
         }));
     }
 
@@ -155,34 +127,20 @@ public class GraphUtilsTest
             }
         };
 
-        checkAsserts(vertices, arcs, true, Arrays.asList(new IntList []
+        checkAsserts(vertices, arcs, true, Arrays.asList(new IntArrayList []
         {
-            new IntArrayList(new int []
-            {
-                0, 1, 2
-            }),
-
-            new IntArrayList(new int []
-            {
-                3, 4
-            })
+            IntArrayList.from(0, 1, 2),
+            IntArrayList.from(3, 4),
         }));
-        checkAsserts(vertices, arcs, false, Arrays.asList(new IntList []
+        checkAsserts(vertices, arcs, false, Arrays.asList(new IntArrayList []
         {
-            new IntArrayList(new int []
-            {
-                0, 1, 2
-            }),
-
-            new IntArrayList(new int []
-            {
-                3, 4
-            })
+            IntArrayList.from(0, 1, 2),
+            IntArrayList.from(3, 4),
         }));
     }
 
     private void checkAsserts(int vertexCount, int [][] arcs,
-        boolean pruneOneNodeSubgraphs, List<IntList> expected)
+        boolean pruneOneNodeSubgraphs, List<IntArrayList> expected)
     {
         assertThat(
             GraphUtils.findCoherentSubgraphs(vertexCount, new ArrayArcPredicate(

@@ -12,13 +12,13 @@
 
 package org.carrot2.text.preprocessing;
 
-import bak.pcj.map.IntKeyIntMap;
+import com.carrotsearch.hppc.IntIntOpenHashMap;
 
 /**
  * Represents a general substring. Contains information on the substring's boundaries and
  * absolute frequency.
  */
-class Substring
+final class Substring
 {
     /** The substring's unique id */
     public int id;
@@ -33,7 +33,7 @@ class Substring
     public int frequency;
 
     /** This substring's frequency across documents */
-    public IntKeyIntMap tfByDocument;
+    public IntIntOpenHashMap tfByDocument;
 
     /** Used to properly aggregate phrase frequencies */
     public int documentIndexToOffset = -1;

@@ -12,29 +12,28 @@
 
 package org.carrot2.util;
 
-import bak.pcj.map.IntKeyIntMap;
-import bak.pcj.map.IntKeyIntMapIterator;
+import com.carrotsearch.hppc.IntIntCursor;
+import com.carrotsearch.hppc.IntIntOpenHashMap;
 
 /**
- * A number of utilities for working with {@link IntKeyIntMap}s.
+ * A number of utilities for working with {@link IntIntOpenHashMap}s.
  */
 public final class IntMapUtils
 {
     /**
-     * Converts an {@link IntKeyIntMap} into a flat int [] array. Even indexes
+     * Converts an {@link IntIntOpenHashMap} into a flat int [] array. Even indexes
      * in the flat array represent keys and the corresponding odd indexes --
      * values. Note: the order of keys in the flat array is arbitrary.
      */
-    public static final int [] flatten(IntKeyIntMap map)
+    public static final int [] flatten(IntIntOpenHashMap map)
     {
         int [] result = new int [map.size() * 2];
 
         int index = 0;
-        for (IntKeyIntMapIterator it = map.entries(); it.hasNext();)
+        for (IntIntCursor c : map)
         {
-            it.next();
-            result[index++] = it.getKey();
-            result[index++] = it.getValue();
+            result[index++] = c.key;
+            result[index++] = c.value;
         }
 
         return result;

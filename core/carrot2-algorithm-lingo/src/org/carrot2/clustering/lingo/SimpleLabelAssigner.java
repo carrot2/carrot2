@@ -18,7 +18,7 @@ import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.Bindable;
 
-import bak.pcj.map.IntKeyIntMap;
+import bak.pcj.map.IntIntOpenHashMap;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.apache.mahout.math.jet.math.Functions;
 
@@ -29,7 +29,7 @@ import org.apache.mahout.math.jet.math.Functions;
 public class SimpleLabelAssigner implements ILabelAssigner
 {
     public void assignLabels(LingoProcessingContext context, DoubleMatrix2D stemCos,
-        IntKeyIntMap filteredRowToStemIndex, DoubleMatrix2D phraseCos)
+        IntIntOpenHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos)
     {
         final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final int firstPhraseIndex = preprocessingContext.allLabels.firstPhraseIndex;

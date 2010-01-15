@@ -12,7 +12,7 @@
 
 package org.carrot2.util;
 
-import bak.pcj.DoubleComparator;
+import org.apache.mahout.math.function.DoubleComparator;
 
 /**
  * A number of implementations of {@link DoubleComparator}s.
@@ -30,35 +30,24 @@ public final class DoubleComparators
     public static final DoubleComparator REVERSED_ORDER = new ReversedOrderDoubleComparator();
 
     /**
-     * Natural int order.
+     * Natural order.
      */
     private static class NaturalOrderDoubleComparator implements DoubleComparator
     {
         public int compare(double v1, double v2)
         {
-            if (v1 > v2)
-            {
-                return 1;
-            }
-            else if (v1 < v2)
-            {
-                return -1;
-            }
-            else
-            {
-                return 0;
-            }
+            return Double.compare(v1, v2);
         }
     }
 
     /**
-     * Reversed int order.
+     * Reversed order.
      */
     private static class ReversedOrderDoubleComparator implements DoubleComparator
     {
         public int compare(double v1, double v2)
         {
-            return -DoubleComparators.NATURAL_ORDER.compare(v1, v2);
+            return -Double.compare(v1, v2);
         }
     }
 

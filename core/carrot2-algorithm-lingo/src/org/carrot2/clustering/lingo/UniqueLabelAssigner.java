@@ -16,9 +16,9 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.Pair;
 import org.carrot2.util.attribute.Bindable;
 
-import bak.pcj.list.DoubleArrayList;
-import bak.pcj.list.IntArrayList;
-import bak.pcj.map.IntKeyIntMap;
+import com.carrotsearch.hppc.DoubleArrayList;
+import com.carrotsearch.hppc.IntArrayList;
+import bak.pcj.map.IntIntOpenHashMap;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
@@ -28,7 +28,7 @@ import org.apache.mahout.math.matrix.DoubleMatrix2D;
 public class UniqueLabelAssigner implements ILabelAssigner
 {
     public void assignLabels(LingoProcessingContext context, DoubleMatrix2D stemCos,
-        IntKeyIntMap filteredRowToStemIndex, DoubleMatrix2D phraseCos)
+        IntIntOpenHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos)
     {
         final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final int firstPhraseIndex = preprocessingContext.allLabels.firstPhraseIndex;

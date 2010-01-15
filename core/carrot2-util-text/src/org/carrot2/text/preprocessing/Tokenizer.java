@@ -32,8 +32,8 @@ import org.carrot2.util.Pair;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
-import bak.pcj.list.ByteArrayList;
-import bak.pcj.list.IntArrayList;
+import com.carrotsearch.hppc.ByteArrayList;
+import com.carrotsearch.hppc.IntArrayList;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

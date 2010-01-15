@@ -12,7 +12,7 @@
 
 package org.carrot2.text.suffixtree;
 
-import bak.pcj.list.IntArrayList;
+import com.carrotsearch.hppc.IntArrayList;
 import bak.pcj.map.LongKeyIntMapIterator;
 import bak.pcj.map.LongKeyIntOpenHashMap;
 

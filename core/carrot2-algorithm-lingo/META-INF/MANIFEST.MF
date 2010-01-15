@@ -7,7 +7,6 @@ Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.core,
  org.carrot2.util.common,
  org.carrot2.text;visibility:=reexport,
- bak.pcj;bundle-version="1.2.0",
  org.carrot2.util.matrix;visibility:=reexport,
  org.apache.mahout.math;bundle-version="0.3.0";visibility:=reexport
 Bundle-ClassPath: META-INF/,

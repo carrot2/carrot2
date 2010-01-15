@@ -14,15 +14,14 @@ package org.carrot2.matrix;
 
 import java.util.Arrays;
 
-import org.carrot2.util.DoubleComparators;
-
-import bak.pcj.DoubleComparator;
+import org.apache.mahout.math.function.DoubleComparator;
 import org.apache.mahout.math.function.DoubleFunction;
+import org.apache.mahout.math.jet.math.Functions;
 import org.apache.mahout.math.list.DoubleArrayList;
 import org.apache.mahout.math.list.IntArrayList;
 import org.apache.mahout.math.matrix.DoubleMatrix1D;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.jet.math.Functions;
+import org.carrot2.util.DoubleComparators;
 
 /**
  * A set of {@link DoubleMatrix2D} shorthands and utility methods.
