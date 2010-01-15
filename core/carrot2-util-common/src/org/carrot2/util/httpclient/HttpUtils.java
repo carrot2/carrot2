@@ -18,7 +18,6 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.slf4j.Logger;
 import org.carrot2.util.StreamUtils;
 
 /**
