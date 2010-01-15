@@ -9,7 +9,7 @@
   <xsl:import href="i10n.xsl"/>
 
   <xsl:output indent="yes" omit-xml-declaration="yes"
-       media-type="text/html" encoding="utf-8"
+       media-type="text/html" encoding="UTF-8"
        doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
        doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
 

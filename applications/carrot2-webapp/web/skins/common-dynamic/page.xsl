@@ -7,7 +7,7 @@
   <xsl:output indent="no" omit-xml-declaration="yes" method="xml"
               doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
               doctype-system="DTD/xhtml1-transitional.dtd"
-              media-type="text/html" encoding="utf-8" />
+              media-type="text/html" encoding="UTF-8" />
 
   <xsl:strip-space elements="*"/>
 

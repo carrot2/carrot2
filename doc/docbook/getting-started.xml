@@ -258,7 +258,7 @@
      xmlns:media="http://search.yahoo.com/mrss">
 
   <xsl:output indent="yes" omit-xml-declaration="no"
-       media-type="application/xml" encoding="utf-8" />
+       media-type="application/xml" encoding="UTF-8" />
 
   <xsl:template match="/">
     <searchresult>

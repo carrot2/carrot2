@@ -7,7 +7,7 @@
   <xsl:strip-space elements="*"/>
 
   <xsl:output indent="yes" omit-xml-declaration="no"
-       encoding="utf-8" cdata-section-elements="programlisting" />
+       encoding="UTF-8" cdata-section-elements="programlisting" />
        
   <xsl:param name="metadata" select="document('components-metadata.xml')" />
   <xsl:param name="carrot2.javadoc.url" />

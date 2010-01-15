@@ -883,13 +883,13 @@
       <exclude name="**/tmp/**" />
     </patternset>
 
-    <fixcrlf srcdir="." eol="unix" encoding="utf-8">
+    <fixcrlf srcdir="." eol="unix" encoding="UTF-8">
       <patternset refid="fix-line-endings-excludes" />
       <exclude name="**/*.cmd" />
       <exclude name="**/*.bat" />
       <exclude name="**/csharp/**" />
     </fixcrlf>
-    <fixcrlf srcdir="." eol="dos" encoding="utf-8">
+    <fixcrlf srcdir="." eol="dos" encoding="UTF-8">
       <patternset refid="fix-line-endings-excludes" />
       <include name="**/*.cmd" />
       <include name="**/*.bat" />
