@@ -15,20 +15,19 @@ package org.carrot2.clustering.lingo;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.matrix.NNIInterface;
-import org.carrot2.text.preprocessing.*;
+import org.carrot2.text.preprocessing.LabelFormatter;
+import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.DoubleRange;
+import org.slf4j.Logger;
 
-import bak.pcj.IntIterator;
-import bak.pcj.set.IntSet;
-
+import com.carrotsearch.hppc.BitSet;
 import com.google.common.collect.Lists;
 
 /**
@@ -176,7 +175,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
 
             // Format final clusters
             final int [] clusterLabelIndex = lingoContext.clusterLabelFeatureIndex;
-            final IntSet [] clusterDocuments = lingoContext.clusterDocuments;
+            final BitSet [] clusterDocuments = lingoContext.clusterDocuments;
             final double [] clusterLabelScore = lingoContext.clusterLabelScore;
             for (int i = 0; i < clusterLabelIndex.length; i++)
             {
@@ -194,9 +193,10 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                 cluster.setAttribute(Cluster.SCORE, clusterLabelScore[i]);
 
                 // Add documents
-                for (IntIterator it = clusterDocuments[i].iterator(); it.hasNext();)
+                final BitSet bs = clusterDocuments[i];
+                for (int bit = bs.nextSetBit(0); bit >= 0; bit = bs.nextSetBit(bit + 1))
                 {
-                    cluster.addDocuments(documents.get(it.next()));
+                    cluster.addDocuments(documents.get(bit));
                 }
 
                 // Add cluster

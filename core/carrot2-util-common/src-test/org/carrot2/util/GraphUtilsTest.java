@@ -15,11 +15,8 @@ package org.carrot2.util;
 import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.*;
-
 import org.junit.Test;
-
 import com.google.common.collect.Lists;
-
 import com.carrotsearch.hppc.IntArrayList;
 
 /**
@@ -142,9 +139,15 @@ public class GraphUtilsTest
     private void checkAsserts(int vertexCount, int [][] arcs,
         boolean pruneOneNodeSubgraphs, List<IntArrayList> expected)
     {
-        assertThat(
-            GraphUtils.findCoherentSubgraphs(vertexCount, new ArrayArcPredicate(
-                vertexCount, arcs), pruneOneNodeSubgraphs)).isEqualTo(expected);
+        List<IntArrayList> subgraphs = GraphUtils.findCoherentSubgraphs(
+            vertexCount, 
+            new ArrayArcPredicate(vertexCount, arcs), pruneOneNodeSubgraphs);
+
+        assertThat(subgraphs.size()).isEqualTo(expected.size());
+        for (int i = 0; i < subgraphs.size(); i++)
+        {
+            assertThat(PcjCompat.equals(expected.get(i), subgraphs.get(i))).isTrue();
+        }
     }
 
     private static class ArrayArcPredicate implements GraphUtils.IArcPredicate

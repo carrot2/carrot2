@@ -12,14 +12,12 @@
 
 package org.carrot2.clustering.lingo;
 
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.Pair;
 import org.carrot2.util.attribute.Bindable;
 
-import com.carrotsearch.hppc.DoubleArrayList;
-import com.carrotsearch.hppc.IntArrayList;
-import bak.pcj.map.IntIntOpenHashMap;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import com.carrotsearch.hppc.*;
 
 /**
  * Assigns unique labels to each base vector using a greedy algorithm.

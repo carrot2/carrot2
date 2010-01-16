@@ -14,13 +14,13 @@ package org.carrot2.clustering.lingo;
 
 import java.util.Arrays;
 
+import org.apache.mahout.math.jet.math.Functions;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.Bindable;
 
-import bak.pcj.map.IntIntOpenHashMap;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.jet.math.Functions;
+import com.carrotsearch.hppc.IntIntOpenHashMap;
 
 /**
  * Uses a very simple algorithm to match labels to base vectors.

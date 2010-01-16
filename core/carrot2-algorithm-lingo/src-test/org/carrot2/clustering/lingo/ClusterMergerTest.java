@@ -16,6 +16,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.text.vsm.TfTermWeighting;
+import org.carrot2.util.PcjCompat;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -142,7 +143,8 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase
             if (expectedDocumentIndices[i] != null)
             {
                 assertThat(lingoContext.clusterDocuments[i]).as(description).isNotNull();
-                assertThat(lingoContext.clusterDocuments[i].toArray()).as(description)
+                assertThat(
+                    PcjCompat.toIntArray(lingoContext.clusterDocuments[i])).as(description)
                     .containsOnly(expectedDocumentIndices[i]);
             }
             else

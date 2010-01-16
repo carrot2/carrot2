@@ -156,8 +156,8 @@ public class SuffixTreeTest
                     if (stree.isLeaf(state)) buffer.append(" [leaf]");
                     nodes.add(buffer.toString());
 
-                    states.removeElementAt(states.size() - 1);
-                    states.removeElementAt(states.size() - 1);
+                    states.remove(states.size() - 1);
+                    states.remove(states.size() - 1);
                 }
             };
 

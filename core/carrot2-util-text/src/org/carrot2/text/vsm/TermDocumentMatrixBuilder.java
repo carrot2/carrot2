@@ -22,10 +22,8 @@ import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.NNIDoubleFactory2D;
-import org.carrot2.text.preprocessing.PcjCompat;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.IndirectComparator;
-import org.carrot2.util.IndirectSort;
+import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.*;
 
