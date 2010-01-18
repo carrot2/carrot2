@@ -18,7 +18,7 @@ import java.util.*;
 import org.carrot2.text.suffixtree.SuffixTree.VisitorAdapter;
 import org.junit.Test;
 
-import bak.pcj.list.IntArrayList;
+import com.carrotsearch.hppc.IntArrayList;
 
 /**
  * Sanity and validation tests for the {@link SuffixTree} class.
@@ -156,8 +156,8 @@ public class SuffixTreeTest
                     if (stree.isLeaf(state)) buffer.append(" [leaf]");
                     nodes.add(buffer.toString());
 
-                    states.removeElementAt(states.size() - 1);
-                    states.removeElementAt(states.size() - 1);
+                    states.remove(states.size() - 1);
+                    states.remove(states.size() - 1);
                 }
             };
 

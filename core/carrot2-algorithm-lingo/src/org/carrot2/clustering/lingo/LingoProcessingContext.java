@@ -12,12 +12,12 @@
 
 package org.carrot2.clustering.lingo;
 
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
 
-import bak.pcj.set.IntSet;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import com.carrotsearch.hppc.BitSet;
 
 /**
  * Stores intermediate data required during Lingo clustering.
@@ -40,7 +40,7 @@ public class LingoProcessingContext
     double [] clusterLabelScore;
 
     /** Documents assigned to clusters */
-    IntSet [] clusterDocuments;
+    BitSet [] clusterDocuments;
 
     LingoProcessingContext(VectorSpaceModelContext vsmContext)
     {

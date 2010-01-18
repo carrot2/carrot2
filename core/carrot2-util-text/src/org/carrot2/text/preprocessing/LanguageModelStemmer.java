@@ -22,9 +22,8 @@ import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.Bindable;
 
-import bak.pcj.list.IntArrayList;
-import bak.pcj.list.IntList;
-import bak.pcj.set.*;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.BitSet;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -111,8 +110,8 @@ public final class LanguageModelStemmer
 
         // Lists to accommodate the results
         final List<char []> stemImages = new ArrayList<char []>(allWordsCount);
-        final IntList stemTf = new IntArrayList(allWordsCount);
-        final IntList stemMostFrequentWordIndexes = new IntArrayList(allWordsCount);
+        final IntArrayList stemTf = new IntArrayList(allWordsCount);
+        final IntArrayList stemMostFrequentWordIndexes = new IntArrayList(allWordsCount);
         final List<int []> stemTfByDocumentList = new ArrayList<int []>(allWordsCount);
         final List<byte []> fieldIndexList = Lists.newArrayList();
 
@@ -120,14 +119,13 @@ public final class LanguageModelStemmer
         int totalTf = wordTfArray[stemImagesOrder[0]];
         int mostFrequentWordFrequency = wordTfArray[stemImagesOrder[0]];
         int mostFrequentWordIndex = stemImagesOrder[0];
-        final IntSet originalWordIndexesSet = new IntBitSet(allWordsCount);
-        originalWordIndexesSet.add(stemImagesOrder[0]);
+        final BitSet originalWordIndexesSet = new BitSet(allWordsCount);
+        originalWordIndexesSet.set(stemImagesOrder[0]);
         int stemIndex = 0;
         final int [] stemTfByDocument = new int [context.documents.size()];
         IntArrayUtils.addAllFromSparselyEncoded(stemTfByDocument,
             wordTfByDocumentArray[stemImagesOrder[0]]);
-        final ByteBitSet fieldIndices = new ByteBitSet(
-            (byte) context.allFields.name.length);
+        final BitSet fieldIndices = new BitSet(context.allFields.name.length);
         addAll(fieldIndices, wordsFieldIndices[0]);
 
         // For locating query words
@@ -164,7 +162,7 @@ public final class LanguageModelStemmer
                     mostFrequentWordFrequency = wordTfArray[nextInOrderIndex];
                     mostFrequentWordIndex = nextInOrderIndex;
                 }
-                originalWordIndexesSet.add(nextInOrderIndex);
+                originalWordIndexesSet.set(nextInOrderIndex);
             }
             else
             {
@@ -173,14 +171,14 @@ public final class LanguageModelStemmer
                 stemMostFrequentWordIndexes.add(mostFrequentWordIndex);
                 stemTfByDocumentList
                     .add(IntArrayUtils.toSparseEncoding(stemTfByDocument));
-                fieldIndexList.add(fieldIndices.toArray());
+                fieldIndexList.add(PcjCompat.toByteArray(fieldIndices));
 
                 stemIndex++;
                 totalTf = wordTfArray[nextInOrderIndex];
                 mostFrequentWordFrequency = wordTfArray[nextInOrderIndex];
                 mostFrequentWordIndex = nextInOrderIndex;
                 originalWordIndexesSet.clear();
-                originalWordIndexesSet.add(nextInOrderIndex);
+                originalWordIndexesSet.set(nextInOrderIndex);
                 fieldIndices.clear();
                 addAll(fieldIndices, wordsFieldIndices[nextInOrderIndex]);
 
@@ -199,7 +197,7 @@ public final class LanguageModelStemmer
         stemMostFrequentWordIndexes.add(mostFrequentWordIndex);
         stemIndexesArray[stemImagesOrder[stemImagesOrder.length - 1]] = stemIndex;
         stemTfByDocumentList.add(IntArrayUtils.toSparseEncoding(stemTfByDocument));
-        fieldIndexList.add(fieldIndices.toArray());
+        fieldIndexList.add(PcjCompat.toByteArray(fieldIndices));
         if (inQuery)
         {
             wordsFlag[stemImagesOrder[stemImagesOrder.length - 1]] |= AllWords.FLAG_QUERY;
@@ -219,11 +217,11 @@ public final class LanguageModelStemmer
         context.allWords.stemIndex = stemIndexesArray;
     }
 
-    private final static void addAll(ByteBitSet set, byte [] values)
+    private final static void addAll(BitSet set, byte [] values)
     {
         for (byte b : values)
         {
-            set.add(b);
+            set.set(b);
         }
     }
 

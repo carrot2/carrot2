@@ -12,13 +12,14 @@ Export-Package: org.carrot2.util,
  org.carrot2.util.xml
 Require-Bundle: org.apache.commons;visibility:=reexport,
  com.google.collections;visibility:=reexport,
- bak.pcj;bundle-version="1.2.0";visibility:=reexport,
  org.simpleframework.xml;visibility:=reexport,
  org.fest;resolution:=optional;visibility:=reexport,
  org.junit4.ext;resolution:=optional;visibility:=reexport,
  org.easymock;resolution:=optional;visibility:=reexport,
  org.slf4j;bundle-version="1.5.8";visibility:=reexport,
- org.codehaus.jackson;bundle-version="0.9.2";visibility:=reexport
+ org.codehaus.jackson;bundle-version="0.9.2";visibility:=reexport,
+ org.apache.mahout.math;bundle-version="0.3.0";visibility:=reexport,
+ com.carrotsearch.hppc;bundle-version="0.1.0";visibility:=reexport
 Bundle-ClassPath: .
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: dependent,registered

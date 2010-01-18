@@ -134,8 +134,8 @@
     <include name="lib/**/lucene-core*" />
     <include name="lib/**/lucene-snowball*" />
     <include name="lib/**/lucene.LICENSE" />
-    <include name="lib/**/pcj.jar" />
-    <include name="lib/**/pcj.LICENSE" />
+    <include name="lib/**/hppc-*.jar" />
+    <include name="lib/**/hppc*.LICENSE" />
     <include name="core/*carrot2-util-matrix/lib/nni*" />
 
     <include name="lib/**/slf4j-api*.jar" />

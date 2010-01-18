@@ -12,9 +12,7 @@
 
 package org.carrot2.text.suffixtree;
 
-import bak.pcj.list.IntArrayList;
-import bak.pcj.map.LongKeyIntMapIterator;
-import bak.pcj.map.LongKeyIntOpenHashMap;
+import com.carrotsearch.hppc.*;
 
 /**
  * Builds a suffix tree (or generalized suffix tree) on a sequence of any integers (or
@@ -30,11 +28,6 @@ public final class SuffixTree
 {
     /** A constant to represent invalid suffix link from a state. */
     private final static int NO_SUFFIX_LINK = Integer.MIN_VALUE;
-
-    /**
-     * Grow factor for internal data structures (one megabyte at a time).
-     */
-    public final static int GROW_FACTOR = 1024 * 1024 / 4;
 
     /**
      * Leaf state marker in {@link #states}.
@@ -68,15 +61,14 @@ public final class SuffixTree
      * <li>after the tree is built, the first edge from a given state (edge pointer).</li>
      * </ul>
      */
-    private IntArrayList states = new IntArrayList(0, GROW_FACTOR);
+    private IntArrayList states = new IntArrayList();
 
     /**
      * A hash map of transitions (edges) between states in the suffix tree. The map is
      * keyed by a combination of state (upper 32 bits) and symbol (lower 32 bits). The
      * value is an index in the transitions array.
      */
-    private final LongKeyIntOpenHashMap transitions_map = new LongKeyIntOpenHashMap(
-        GROW_FACTOR, 0.5d, GROW_FACTOR);
+    private final LongIntOpenHashMap transitions_map = new LongIntOpenHashMap();
 
     /**
      * An array of all transitions.
@@ -84,7 +76,7 @@ public final class SuffixTree
      * @see #addTransition(int, int, int)
      * @see #reuseTransition(int, int, int, int, int)
      */
-    private final IntArrayList transitions = new IntArrayList(0, GROW_FACTOR);
+    private final IntArrayList transitions = new IntArrayList();
 
     /**
      * Variables used during tree construction. See Ukkonen's algorithm for details.
@@ -215,12 +207,10 @@ public final class SuffixTree
         for (int i = states.size() - 1; i >= 0; i--)
             states.set(i, LEAF_STATE);
 
-        final LongKeyIntMapIterator i = transitions_map.entries();
-        while (i.hasNext())
+        for (LongIntCursor c : transitions_map)
         {
-            i.next();
-            final int g = i.getValue();
-            final int state = (int) (i.getKey() >>> 32);
+            final int g = c.value;
+            final int state = (int) (c.key >>> 32);
             final int prev = states.get(state);
             if (prev != LEAF_STATE)
             {

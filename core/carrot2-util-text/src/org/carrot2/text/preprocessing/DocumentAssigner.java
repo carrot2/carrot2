@@ -19,15 +19,13 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 
-import bak.pcj.list.IntArrayList;
-import bak.pcj.set.IntBitSet;
-import bak.pcj.set.IntSet;
-
+import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.IntArrayList;
 import com.google.common.collect.Lists;
 
 /**
  * Assigns document to label candidates. For each label candidate from
- * {@link AllLabels#featureIndex} an {@link IntSet} with the assigned documents is
+ * {@link AllLabels#featureIndex} an {@link BitSet} with the assigned documents is
  * constructed. The assignment algorithm is rather simple: in order to be assigned to a
  * label, a document must contain at least one occurrence of each non-stop word from the
  * label.
@@ -88,11 +86,11 @@ public class DocumentAssigner
         final int wordCount = wordsStemIndex.length;
         final int documentCount = context.documents.size();
 
-        final IntSet [] labelsDocumentIndices = new IntSet [labelsFeatureIndex.length];
+        final BitSet [] labelsDocumentIndices = new BitSet [labelsFeatureIndex.length];
 
         for (int i = 0; i < labelsFeatureIndex.length; i++)
         {
-            final IntBitSet documentIndices = new IntBitSet(documentCount);
+            final BitSet documentIndices = new BitSet(documentCount);
 
             final int featureIndex = labelsFeatureIndex[i];
             if (featureIndex < wordCount)
@@ -126,10 +124,11 @@ public class DocumentAssigner
                             }
                             else
                             {
-                                final IntBitSet temp = new IntBitSet(documentCount);
+                                final BitSet temp = new BitSet(documentCount);
                                 addTfByDocumentToBitSet(temp,
                                     stemsTfByDocument[wordsStemIndex[wordIndex]]);
-                                documentIndices.retainAll(temp);
+                                // .retainAll == set intersection
+                                documentIndices.and(temp);
                             }
                         }
                     }
@@ -144,19 +143,19 @@ public class DocumentAssigner
         {
             final IntArrayList newFeatureIndex = new IntArrayList(
                 labelsFeatureIndex.length);
-            final ArrayList<IntSet> newDocumentIndices = Lists
+            final ArrayList<BitSet> newDocumentIndices = Lists
                 .newArrayListWithExpectedSize(labelsFeatureIndex.length);
 
             for (int i = 0; i < labelsFeatureIndex.length; i++)
             {
-                if (labelsDocumentIndices[i].size() >= minClusterSize)
+                if (labelsDocumentIndices[i].cardinality() >= minClusterSize)
                 {
                     newFeatureIndex.add(labelsFeatureIndex[i]);
                     newDocumentIndices.add(labelsDocumentIndices[i]);
                 }
             }
             context.allLabels.documentIndices = newDocumentIndices
-                .toArray(new IntSet [newDocumentIndices.size()]);
+                .toArray(new BitSet [newDocumentIndices.size()]);
             context.allLabels.featureIndex = newFeatureIndex.toArray();
             LabelFilterProcessor.updateFirstPhraseIndex(context);
         }
@@ -166,12 +165,12 @@ public class DocumentAssigner
         }
     }
 
-    private static void addTfByDocumentToBitSet(final IntBitSet documentIndices,
+    private static void addTfByDocumentToBitSet(final BitSet documentIndices,
         final int [] tfByDocument)
     {
         for (int j = 0; j < tfByDocument.length / 2; j++)
         {
-            documentIndices.add(tfByDocument[j * 2]);
+            documentIndices.set(tfByDocument[j * 2]);
         }
     }
 }

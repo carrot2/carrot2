@@ -12,10 +12,10 @@
 
 package org.carrot2.clustering.lingo;
 
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
-import bak.pcj.map.IntKeyIntMap;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import com.carrotsearch.hppc.IntIntOpenHashMap;
 
 /**
  * Assigns labels to base vectors obtained from the factorization.
@@ -34,5 +34,5 @@ public interface ILabelAssigner
      * @param phraseCos base vector -- phrase cosine matrix
      */
     public void assignLabels(LingoProcessingContext context, DoubleMatrix2D stemCos,
-        final IntKeyIntMap filteredRowToStemIndex, DoubleMatrix2D phraseCos);
+        final IntIntOpenHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos);
 }

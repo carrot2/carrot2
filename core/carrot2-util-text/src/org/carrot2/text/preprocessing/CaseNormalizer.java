@@ -20,15 +20,12 @@ import org.carrot2.text.analysis.ITokenType;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
-import org.carrot2.util.IndirectSort;
-import org.carrot2.util.IntArrayUtils;
+import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 
-import bak.pcj.list.IntArrayList;
-import bak.pcj.list.IntList;
-import bak.pcj.set.*;
-
+import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.IntArrayList;
 import com.google.common.collect.Lists;
 
 /**
@@ -85,10 +82,10 @@ public final class CaseNormalizer
 
         // Create holders for new arrays
         final List<char []> normalizedWordImages = Lists.newArrayList();
-        final IntList normalizedWordTf = new IntArrayList();
+        final IntArrayList normalizedWordTf = new IntArrayList();
         final List<int []> wordTfByDocumentList = Lists.newArrayList();
         final List<byte []> fieldIndexList = Lists.newArrayList();
-        final IntList types = new IntArrayList();
+        final IntArrayList types = new IntArrayList();
 
         final int [] wordIndexes = new int [tokenCount];
         Arrays.fill(wordIndexes, -1);
@@ -101,17 +98,17 @@ public final class CaseNormalizer
         int variantStartIndex = 0;
 
         // An int set for document frequency calculation
-        final IntSet documentIndices = new IntBitSet(documentCount);
+        final BitSet documentIndices = new BitSet(documentCount);
 
         // A byte set for word fields tracking
-        final ByteSet fieldIndices = new ByteBitSet((byte) context.allFields.name.length);
+        final BitSet fieldIndices = new BitSet(context.allFields.name.length);
 
         // An array for tracking words' tf across documents
         int [] wordTfByDocument = new int [documentCount];
 
         if (documentIndexesArray[tokenImagesOrder[0]] >= 0)
         {
-            documentIndices.add(documentIndexesArray[tokenImagesOrder[0]]);
+            documentIndices.set(documentIndexesArray[tokenImagesOrder[0]]);
             wordTfByDocument[documentIndexesArray[tokenImagesOrder[0]]] = 1;
         }
 
@@ -144,7 +141,7 @@ public final class CaseNormalizer
                 continue;
             }
 
-            fieldIndices.add(tokensFieldIndex[tokenImagesOrder[i]]);
+            fieldIndices.set(tokensFieldIndex[tokenImagesOrder[i]]);
 
             // Now check if image case is changing
             final boolean sameCase = CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR
@@ -155,7 +152,7 @@ public final class CaseNormalizer
                 tf++;
                 totalTf++;
 
-                documentIndices.add(documentIndex);
+                documentIndices.set(documentIndex);
                 wordTfByDocument[documentIndex] += 1;
                 continue;
             }
@@ -176,7 +173,7 @@ public final class CaseNormalizer
             if (sameImage)
             {
                 totalTf++;
-                documentIndices.add(documentIndex);
+                documentIndices.set(documentIndex);
                 wordTfByDocument[documentIndex] += 1;
             }
             else
@@ -185,13 +182,13 @@ public final class CaseNormalizer
                 // Before we start processing the new image, we need to
                 // see if we want to store the previous image, and if so
                 // we need add some data about it to the arrays
-                int wordDf = documentIndices.size();
+                int wordDf = (int) documentIndices.cardinality();
                 if (wordDf >= dfThreshold)
                 {
                     // Add the word to the word list
                     normalizedWordImages.add(tokenImages[maxTfVariantIndex]);
                     normalizedWordTf.add(totalTf);
-                    fieldIndexList.add(fieldIndices.toArray());
+                    fieldIndexList.add(PcjCompat.toByteArray(fieldIndices));
                     types.add(tokenType);
 
                     // Add this word's index in AllWords to all its instances
@@ -237,15 +234,15 @@ public final class CaseNormalizer
      * Initializes the counters for the a token image.
      */
     private void resetForNewTokenImage(final int [] documentIndexesArray,
-        final int [] tokenImagesOrder, final IntSet documentIndices,
-        final ByteSet fieldIndices, int [] wordTfByDocument, int i)
+        final int [] tokenImagesOrder, final BitSet documentIndices,
+        final BitSet fieldIndices, int [] wordTfByDocument, int i)
     {
         documentIndices.clear();
         fieldIndices.clear();
         Arrays.fill(wordTfByDocument, 0);
         if (documentIndexesArray[tokenImagesOrder[i + 1]] >= 0)
         {
-            documentIndices.add(documentIndexesArray[tokenImagesOrder[i + 1]]);
+            documentIndices.set(documentIndexesArray[tokenImagesOrder[i + 1]]);
             wordTfByDocument[documentIndexesArray[tokenImagesOrder[i + 1]]] += 1;
         }
     }
