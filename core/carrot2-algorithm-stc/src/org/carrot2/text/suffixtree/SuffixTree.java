@@ -19,8 +19,6 @@ import com.carrotsearch.hppc.*;
  * objects that can be represented as unique integers). A direct implementation of Esko
  * Ukkonen's algorithm, but optimized for Java to use primitive data types instead of
  * objects (or boxed types).
- * <p>
- * Requires PCJ library (primitive collections for Java).
  * 
  * @see "E. Ukkonen, On-line construction of suffix trees, Algorithmica, 1995, volume 14, number 3, pages 249-260." 
  */

@@ -26,3 +26,4 @@ Export-Package:
  org.apache.mahout.math.stats
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.slf4j;bundle-version="1.5.8"
