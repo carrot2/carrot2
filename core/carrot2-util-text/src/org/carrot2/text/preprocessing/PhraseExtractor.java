@@ -140,7 +140,7 @@ public class PhraseExtractor
                     totalPhraseTf = nextSubstring.frequency;
                     mostFrequentOriginal = nextSubstring;
                     phraseTfByDocument.clear();
-                    PcjCompat.putAll(phraseTfByDocument, nextSubstring.tfByDocument);
+                    phraseTfByDocument.putAll(nextSubstring.tfByDocument);
                 }
             }
 

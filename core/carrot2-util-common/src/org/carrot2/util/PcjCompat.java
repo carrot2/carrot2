@@ -58,14 +58,6 @@ public final class PcjCompat
         return clone;
     }
 
-    public static void putAll(IntIntOpenHashMap into, IntIntOpenHashMap from)
-    {
-        for (IntIntCursor c : from)
-        {
-            into.put(c.key, c.value);
-        }
-    }
-
     public static boolean equals(IntArrayList o1, IntArrayList o2)
     {
         if (o1 == o2) return true;
