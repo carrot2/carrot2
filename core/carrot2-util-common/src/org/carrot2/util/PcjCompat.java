@@ -1,5 +1,9 @@
 package org.carrot2.util;
 
+import java.util.Arrays;
+
+import org.apache.commons.lang.ObjectUtils;
+
 import com.carrotsearch.hppc.*;
 
 /**
@@ -88,5 +92,67 @@ public final class PcjCompat
         }
 
         return true;
+    }
+
+    public static boolean equals(LongIntOpenHashMap o1,
+        LongIntOpenHashMap o2)
+    {
+        if (o1 == o2) return true;
+        if (o1.size() != o2.size()) return false;
+
+        // In case of open-addressed hash maps, there is no other way to check
+        // than just by iteration over keys.
+        for (LongIntCursor c1 : o1) 
+        {
+            if (o2.containsKey(c1.key) && o2.lget() == c1.value)
+                continue;
+            return false;
+        }
+
+        return true;
+    }
+
+    public static BitSet newIntBitSet(int... setBits)
+    {
+        final BitSet bs = new BitSet();
+        for (int bit : setBits) bs.set(bit);
+        return bs;
+    }
+
+    public static boolean equals(
+        IntObjectOpenHashMap<?> o1, IntObjectOpenHashMap<?> o2)
+    {
+        if (o1 == o2) return true;
+        if (o1.size() != o2.size()) return false;
+
+        // In case of open-addressed hash maps, there is no other way to check
+        // than just by iteration over keys.
+        for (IntObjectCursor<?> c1 : o1) 
+        {
+            if (o2.containsKey(c1.key) && ObjectUtils.equals(o2.lget(), c1.value))
+                continue;
+            return false;
+        }
+
+        return true;
+    }
+
+    public static int [][] toIntArray(BitSet [] bsets)
+    {
+        int [][] result = new int [bsets.length][];
+        for (int i = 0; i < bsets.length; i++)
+            result[i] = toIntArray(bsets[i]);
+        return result;
+    }
+
+    public static int [][] toIntArray(IntOpenHashSet [] sets)
+    {
+        int [][] result = new int [sets.length][];
+        for (int i = 0; i < sets.length; i++)
+        {
+            result[i] = sets[i].toArray();
+            Arrays.sort(result[i]);
+        }
+        return result;
     }
 }
