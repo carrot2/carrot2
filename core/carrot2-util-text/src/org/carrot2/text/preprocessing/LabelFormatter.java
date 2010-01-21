@@ -11,7 +11,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.linguistic.LanguageCode;
+import org.carrot2.core.LanguageCode;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.attribute.Bindable;
 

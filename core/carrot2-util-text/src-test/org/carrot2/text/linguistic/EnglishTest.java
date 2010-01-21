@@ -14,6 +14,7 @@ package org.carrot2.text.linguistic;
 
 import java.util.regex.Pattern;
 
+import org.carrot2.core.LanguageCode;
 import org.junit.Assert;
 import org.junit.Test;
 

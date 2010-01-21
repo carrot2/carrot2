@@ -12,17 +12,13 @@
 
 package org.carrot2.text.linguistic;
 
+import org.carrot2.core.LanguageCode;
+
 /**
  * A factory for {@link ILanguageModel} implementations.
  */
 public interface ILanguageModelFactory
 {
-    /**
-     * @return Returns {@link ILanguageModel} for the current language or
-     *         <code>null</code> if such language model is not available.
-     */
-    public ILanguageModel getDefaultLanguageModel();
-
     /**
      * @return Return a {@link ILanguageModel} associated with the given code or
      *         <code>null</code> if this language is not supported or its resources are

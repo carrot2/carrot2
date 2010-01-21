@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -72,6 +71,23 @@ public class ClusterAssertion implements AssertExtension
         assertThatClusters(actualCluster.getSubclusters()).isEquivalentTo(
             expectedCluster.getSubclusters(), checkDocuments);
 
+        return this;
+    }
+
+    /**
+     * Asserts that the cluster's Other Topics flag is set to the required state. 
+     */
+    public ClusterAssertion isOtherTopics(boolean isOtherTopics, String otherTopicsLabel)
+    {
+        assertThat(actualCluster.isOtherTopics()).isEqualTo(isOtherTopics);
+        if (isOtherTopics)
+        {
+            assertThat(actualCluster.getPhrases()).contains(otherTopicsLabel);
+        }
+        else
+        {
+            assertThat(actualCluster.getPhrases()).excludes(otherTopicsLabel);
+        }
         return this;
     }
 }

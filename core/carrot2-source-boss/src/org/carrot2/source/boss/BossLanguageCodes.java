@@ -15,7 +15,7 @@ package org.carrot2.source.boss;
 import java.util.Collections;
 import java.util.Map;
 
-import org.carrot2.text.linguistic.LanguageCode;
+import org.carrot2.core.LanguageCode;
 import org.carrot2.util.attribute.constraint.IValueHintMapping;
 
 import com.google.common.collect.Maps;

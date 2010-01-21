@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.carrot2.core.Document;
+import org.carrot2.core.LanguageCode;
 import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.junit.Before;
@@ -62,8 +62,8 @@ public class PreprocessingComponentTestBase
             languageFactory = new DefaultLanguageModelFactory();
         }
 
-        context = new PreprocessingContext(languageFactory.getDefaultLanguageModel(),
-            documents, query);
+        context = new PreprocessingContext(languageFactory
+            .getLanguageModel(LanguageCode.ENGLISH), documents, query);
     }
 
     /**
@@ -129,7 +129,7 @@ public class PreprocessingComponentTestBase
         final Tokenizer temporaryTokenizer = new Tokenizer();
         final CaseNormalizer temporaryCaseNormalizer = new CaseNormalizer();
         final PreprocessingContext temporaryContext = new PreprocessingContext(
-            languageFactory.getDefaultLanguageModel(), documents, null);
+            languageFactory.getLanguageModel(LanguageCode.ENGLISH), documents, null);
         beforePrepareWordIndices(temporaryTokenizer, temporaryCaseNormalizer);
 
         temporaryTokenizer.tokenize(temporaryContext);

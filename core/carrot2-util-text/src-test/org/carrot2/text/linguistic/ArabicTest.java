@@ -12,6 +12,8 @@
 
 package org.carrot2.text.linguistic;
 
+import org.carrot2.core.LanguageCode;
+
 
 /**
  * Test support for {@link LanguageCode#ENGLISH}.

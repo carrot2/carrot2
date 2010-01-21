@@ -15,6 +15,7 @@ package org.carrot2.core.test;
 import java.util.*;
 
 import org.carrot2.core.Document;
+import org.carrot2.core.LanguageCode;
 
 import com.google.common.collect.ImmutableList;
 
@@ -1241,7 +1242,2005 @@ public final class SampleDocumentData
 
         DOCUMENTS_DAWID = Collections.unmodifiableList(documents);
     }
+
+    public final static Collection<Document> DOCUMENTS_SALSA_MULTILINGUAL;
+    static
+    {
+        DOCUMENTS_SALSA_MULTILINGUAL = ImmutableList.of(
+
+            new Document(
+              "© Salsa Cycles 2009",
+              "Bikes. Chili Con Crosso Dos Niner ... Salsa Cycles CroMoto Bicycle Stems. Click Here for Further Information ... ©2009 Salsa Cycles, all rights reserved ...",
+              "http://www.salsacycles.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa (dance) - Wikipedia, the free encyclopedia",
+              "Salsa is a syncretic dance genre created by Spanish-speaking people from the Caribbean. Salsa dancing mixes African and European dance influences through the music and dance fusions ...",
+              "http://en.wikipedia.org/wiki/Salsa_(dance)",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa music - Wikipedia, the free encyclopedia",
+              "Salsa music is a musical genre that was brought to international fame by Puerto Rican musicians. Popular across Latin America, salsa incorporates multiple styles and variations; the ...",
+              "http://en.wikipedia.org/wiki/Salsa_music",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "SALSA - Safe and Local Supplier Approval",
+              "SALSA is a new supplier approval scheme designed to help local and regional food and drink producers supply their products to national and regional buyers.",
+              "http://www.salsafood.co.uk/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Latin Entertainment Events All O",
+              "Dance Partner Tips Even MORE Words of Wisdom, From Edie, The Salsa FREAK .... Zurich, Switzerland - February 26-28, 2010 - Europe's Finest Salsa Congress ...",
+              "http://www.salsaweb.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa History of Salsa Dancing",
+              "Origin of Salsa Dance. Salsa is a distillation of many Latin and Afro-Caribbean dances. Origin of Latin dances, ballroom and country western dances.",
+              "http://www.centralhome.com/ballroomcountry/salsa.htm",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "salsa.ch - the swiss salsa portal for events, pictures, congresses ...",
+              "Salsa-Band aus Zürich (Con Sabor). Biografie, RealAudio und MP3, Konzertdaten, Links.",
+              "http://www.salsa.ch/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa (sauce)",
+              "Wikipedia: Well-known salsas include. Salsa roja,  red sauce : used as a condiment in Mexican and Southwestern cuisine, and usually made with cooked tomatoes, chili peppers, onion, garlic, and fresh cilantro. Salsa cruda ( raw sauce ), also known as…",
+              "http://en.wikipedia.org/wiki/Salsa_(sauce)",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa Dancing Worldwide: Salsa Dance Resources, Events, Dance Classes &amp; ...",
+              "Salsa dance events and worldwide salsa dancing news.",
+              "http://www.salsacrazy.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "www.salsa.com",
+              "",
+              "http://www.salsa.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "SalsaCrazy's Salsa Dance Videos and DVDs. Seven Free Salsa Dance Videos!",
+              "Salsa Dance! ... Discover Seven Amazing Learn to Salsa Dance Videos, That Contain Secrets Most People Will Never Know About Salsa Dance... ...   SalsaCrazy  and  Salsa Crazy  are trademarks used by SalsaCrazy, Inc..",
+              "http://www.salsadancedvd.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Just Salsa Magazine ~ Find: Salsa Music &amp; Dance, Salsa History ...",
+              "Just Salsa - A Web Magazine Dedicated to Latin Music, Dance, and Culture, Find: Salsa Music, Salsa Dance, Salsa Clubs, Salsa History, Salsa Photos, ...",
+              "http://www.justsalsa.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "SKY.fm Salsa - Free Hot Salsa Internet Radio",
+              "SKY.fm Salsa is your number destination for hot sizzzling free Salsa Music broadcasting 24 hours a day. Tune into to SKY.fm Salsa to here the best Salsa on ...",
+              "http://www.sky.fm/salsa/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Index of /~clay/cookbook/salsa",
+              "Index of /~clay/cookbook/salsa. Icon Name Last modified Size Description. [DIR] Parent Directory - [ ] 3 21-Jun-2003 16:26 4.3K [IMG] ...",
+              "http://www.panix.com/clay/cookbook/salsa.html",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "SalsaJapan!",
+              "Bienvenido! Welcome! Japanese | English.",
+              "http://www.salsa.org/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Learn to dance Salsa with Ballroomdancers.com!",
+              "Hip Movement: In Salsa, the hip action is usually relaxed and subtle, especially for men. Weight is normally placed onto a slightly bent knee. ...",
+              "http://www.ballroomdancers.com/Dances/dance_menu.asp?Dance=SAL",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "salsa.ch - the swiss salsa portal for events, pictures, congresses ...",
+              "el portal de la salsa en suiza ... has accompanied salsa stars such as Cheo Feliciano, Adalberto Santiago, Tito ... with his Salsa con Soul Orchestra as well as ...",
+              "http://www.salsa.ch/news_view.php?idnews=1005",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa Na Nartach 2010",
+              "Salsa Na Nartach to taneczno-narciarski wyjazd • zadzwoń 0 5000 SALSA ... Salsa Na Nartach 2010 ...",
+              "http://www.salsananartach.pl/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa",
+              "Salsa may mean: Salsa (sauce), any of various sauces of Spanish, Italian or Latin American origin, from the Spanish or Italian word for ...",
+              "http://en.wikipedia.org/wiki/Salsa",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Dietary omega-3 polyunsaturated fatty acids plus vitamin E restore …",
+              "Sixty patients with generalized solid tumors were randomized to receive dietary supplementation with either fish oil (18 g of omega-3 polyunsaturated fatty acids, PUFA) or placebo daily until death. Each group included 15 well-nourished and 15…",
+              "http://www3.interscience.wiley.com/journal/75000274/abstract",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Music Genre: Salsa - Music of Puerto Rico",
+              "Today, the center of salsa has shifted from New York to Puerto Rico. ... Others critics say that salsa is a combination of fast Latin music that embraces ...",
+              "http://www.musicofpuertorico.com/index.php/genre/salsa/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "GourmetSleuth - History of Salsa",
+              "Recipes and Related Reading Tomatillo Salsa - Gourmetsleuth Recipe for Tomatillo Salsa with onions, garlic, lime, serrano chiles and cilantro. Molcajete Salsa with Roasted Chilies - Gourmetsleuth - Recipe for Molcajete Salsa with Roasted Chilies.…",
+              "http://www.gourmetsleuth.com/historyofsalsa.htm",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa (2000 film)",
+              "Salsa or ¡Salsa! is a 1999 French -Spanish romance film . The film was directed by Joyce Buñuel , and stars Vincent Lecoeur , Christianne ...",
+              "http://en.wikipedia.org/wiki/Salsa_(2000_film)",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "A backward Harnack inequality and Fatou theorem for nonnegative solutions of …",
+              "It is not an uncommon happening in the development of elliptic and parabolic pde, that resolutionof a problem first appears in the elliptic case and shortly after there is an attempttotdapt the techniques to the corre- sponding parabolic problem. In…",
+              "http://www.projecteuclid.org/DPubS/Repository/1.0/Disseminate?handle=euclid.ijm/1256064230&amp;view=body&amp;content-type=pdf_1",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa Pa'ti",
+              "FELIPE POLANCO - PUERTO RICAN SALSA MASTER ... Einführung in die Salsa Puertorriqueña und das Tanzen on CLAVE. Drehungstechnick on CLAVE. ...",
+              "http://www.salsapati.ch/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Mexican Food To Go, Gift Box, Tex Mex Salsa, Recipes, Tortilla",
+              "We maintain salsa is only as good as its tomatoes and chilies and they are always better fresh out of the garden, so let us supply you with salsa recipe tips such as using white onions for salsa or ...",
+              "http://www.texmextogo.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa Central - Home",
+              "Latest Salsa Reviews (CD, DVD, Events, and more) The Berlin Salsa Congress 25-27th September 2009. The Berlin Salsa Congress 25-27th September 2009 This congress was organised by Franco Sparfeld and his team Pura Salsa.",
+              "http://www.salsa-central.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Caloric functions in Lipschitz domains and the regularity of solutions to phase …",
+              "Annals of Mathematics, 143 (1996), 413-434 Caloric functions in Lipschitz domains and the regularity of solutions to phase transition problems By I. Athanasopoulos/1) L. Caffarelli/2) S. Salsa^3)* Introduction By a A-caloric function (and if Л = 1,…",
+              "http://www.jstor.org/stable/2118531",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Picason - Salsa cubana from Switzerland - Home",
+              "Picason - Salsa cubana from Switzerland ...",
+              "http://www.picason.ch/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Home Page",
+              "An all natural gourmet fusion product of Alaskan Salmon and Salsa. ... Alaskan Salsa Salmon, LLC is the original fire breathing Salmon, with a sombrero ...",
+              "http://www.salsasalmon.net/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Home | J Smooth Salsa",
+              "... key in becoming a salsa dancer. Instruct By providing salsa lessons in fully developed and detailed formats, we want our attendees to salsa dance quickly without compromising ... Play some Salsa music?",
+              "http://www.jsmoothsalsa.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "National Center for Home Food Preservation | How Do I? Can Fruits",
+              "... Can Salsa. Canning Salsa.",
+              "http://www.uga.edu/nchfp/how/can_salsa.html",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa Talks!",
+              "",
+              "http://www.salsatalks.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Regularity of the free boundary in parabolic phase-transition problems",
+              "In this paper we start the study of the regularity properties of the free boundary, for parabolic two-phase free boundary problems. May be the best known example of a parabolic two-phase free boundary problem is the Stefan problem, a simplified…",
+              "http://www.springerlink.com/index/P413HH8470840382.pdf",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa Reisen, Quito",
+              "cuador Rundreisen mit Reisebuch Autor Volker Feser, Salsa Reisen offeriert Galapagos, Amazonas Urwald, Indianer Märkte im Hochland von Ecuador und Peru, ...",
+              "http://www.salsareisen.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Welcome to Salsa Londons Number 1 Latin Live Music Venue",
+              "Welcome to Salsa Londons Number 1 Latin Live Music Venue, Food Served At Bar Salsa! Organize Parties At Bar Salsa! Our Clubs! Live Music At Bar Salsa!",
+              "http://www.barsalsa.info/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa! Salsa Dance School in Zurich. Salsa Courses, Salsa Information ...",
+              "Salsapassion Dance School. Information about Salsa, Clubs, events, tricks and tips. ... The Partner-dance in Salsa is spontaneous based in it's leading and following ...",
+              "http://www.salsapassion.net/e_salsa.htm",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Rumbanana Salsa Group - Rockin' the Casino Salsa World!",
+              "... Photos: Salsa Rueda Congress, Miami 2009 Photos: Salsa Extravaganza, Palm Springs 2009 Stay in ... Seriously, we love Cuban Salsa (Casino), Rueda de Casino and are totally addicted to Timba.",
+              "http://www.rumbanana.org/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Fresh Salsa Recipes by John Raven",
+              "Cool salsa slightly and in a blender pulse until coarsely chopped (use caution when blending hot liquids). Salsa may be made up to this point 2 days ahead and cooled, uncovered, before being chilled, covered. Bring salsa to room temperature or…",
+              "http://www.texascooking.com/features/feb2001raven.htm",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Cerebral Autosomal Dominant Arteriopathy with Subcortical Infarcts and …",
+              "Cerebral autosomal dominant arteriopathy with subcortical infarcts and leukoencephalopathy (CADASIL) is a recently identified autosomal dominant cerebral arteriopathy char- acterized by the recurrence of subcortical infarcts leading to dementia. A…",
+              "http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=1914956",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "www.sky.fm",
+              "[playlist] NumberOfEntries=1. File1=http://72.26.204.18:6136. Title1=S K Y . F M - Salsa - Best Salsa Collection In the World! Length1=-1. Version=2",
+              "http://www.sky.fm/aacplus/salsa.pls",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "www.alexander-martinez.com // www.weltklasse-salsa.ch",
+              "both websites are under construction -",
+              "http://www.alexandermartinez.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Lion Salsa Congress",
+              "",
+              "http://www.lionsalsacongress.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "World Salsa News . com",
+              "... Zealand Sydney Salsa Congress Inssbruck Salsa Congress Austria Hawaii Salsa Festival Milano Italy Hong Kong Salsa Festival Chicago Salsa Congress Salt Lake Salsa Congress USA Pattaya ...",
+              "http://www.worldsalsanews.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Mango Salsa",
+              "Maybe you've heard of this unique salsa or you've already tried it. Mango salsa is the perfect summer time recipe that can be used as an appetizer, snack or topping. An unusual twist on an old favorite. Tomatoes and cilantro form the base and little…",
+              "http://mexicanfood.about.com/od/supersalsas/r/MangoSalsa.htm",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa Celtica",
+              "Scottish folk and salsa band. Includes profile, tour news, album information, and audio samples",
+              "http://www.salsaceltica.com/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Latin American music",
+              "Salsa: Salsa music. in rhythm, tempo, baseline, riffs and instrumentation, Salsa represents an amalgamation of musical styles, including rock ...",
+              "http://en.wikipedia.org/wiki/Latin_American_music",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "The stochastic approach for link-structure analysis (SALSA) and the TKC effect",
+              "Today, when searching for information on the World Wide Web, one usually performs a query through a term-based search engine. These engines return, as the query's result, a list of Web sites whose contents match the query. For broad topic queries,…",
+              "http://linkinghub.elsevier.com/retrieve/pii/S1389128600000347",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Welcome to Salsa Londons Number 1 Latin…",
+              "Welcome to Salsa Londons Number 1 Latin Live Music Venue, Food Served At Bar Salsa! Organize Parties At Bar Salsa! Our Clubs! Live Music At Bar Salsa! ... Check out Bar Salsa's ...",
+              "http://www.barsalsa.eu/info/",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa - All Recipes",
+              "Looking for salsa recipes? Allrecipes has more than 140 trusted salsa recipes complete with ratings, reviews and preparation tips.",
+              "http://allrecipes.com/recipes/appetizers-and-snacks/dips-and-spreads/salsa/main.aspx",
+              LanguageCode.ENGLISH
+            ),
+
+            
+            new Document(
+              "Salsa (Tanz) – Wikipedia",
+              "Salsa ist ein moderner Gesellschaftstanz aus den USA und Lateinamerika, der ... Wie die Salsa-Musik ist auch der dazugehörige Tanz eine Verbindung ...",
+              "http://de.wikipedia.org/wiki/Salsa_(Tanz)",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa – Wikipedia",
+              "Salsa (spanisch für „Sauce“) bezeichnet: eine Sauce, siehe Salsa (Gericht) eine lateinamerikanische Musikrichtung, siehe Salsa (Musik) einen lateinamerikanischen Tanz, siehe Salsa ...",
+              "http://de.wikipedia.org/wiki/Salsa",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "salsa.ch - the swiss salsa portal for events, pictures, congresses ...",
+              "Salsa-Band aus Zürich (Con Sabor). Biografie, RealAudio und MP3, Konzertdaten, Links.",
+              "http://www.salsa.ch/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa will change your life - Salsafestival Switzerland, the Salsa ...",
+              "13.01.2010: Der provisorische Workshop-Plan 2010 ist online... »mehr. 12.12.2009: Das Salsafestival Switzerland neu mit 5 Dance Floors... »mehr",
+              "http://www.salsafestival.com/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa in Berlin / Deutschland: Salsa Events, MP3 Downloads, Salsa ...",
+              "Salsa in Berlin / Deutschland: Salsa Clubs, MP3 Downloads, Tanzschulen, Salsa Events. Weiterhin: Anfänger Guide, MP3 Download, Monatliche CD-Besprechung und CD Tipps, Tanzpartner ...",
+              "http://www.salsa-berlin.de/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa Tanzschule Kurs Tanzkurs Zürich Luzern Salsa 1-2-3",
+              "Salsa Tanzschule Kurs Tanzkurs Zürich Luzern. Salsa Kurse, Kurse Zug, Salsa lernen, Salsa Privatlektionen, Salsa Workshops Privat-Tanzkurse für Anfänger bis ...",
+              "http://www.salsa123.ch/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "SalsaDE - das Portal für Salsa in Deutschland :: Startseite",
+              "viele Informationen zum Thema Salsa in Deutschland.",
+              "http://www.salsa.de/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa in Austria - Salsa in Österreich",
+              "Salsa Österreich - Salsa dancing in Austria, Germany and worldwide: adresses and thousands of pictures of the salsa clubs - Tanzpartner, Adressen und Photos der Salsatecas ...",
+              "http://www.salsa.at/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa Tanzschule Zürich. Nur 5min von Zürich HB. Salsa mit Passion!",
+              "Salsa für Anfänger klicke hier. Alle Salsakurse / Workhsop klicke hier. Weihnachtsparty ... Salsa , Merengue, Bachata Kurse, Cha Cha Cha und Lady Styling Wokshop für ...",
+              "http://www.salsapassion.net/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa in Germany and Austria - Adressen und Bilder der Salsa ...",
+              "Salsa dancing in Austria, Germany and worldwide: adresses and thousands of pictures of the salsa clubs - Adressen und Photos der Salsatecas ( = Salsa-Clubs , ...",
+              "http://www.salsatecas.de/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsapictures | Startseite",
+              "2008 Salsapictures.ch - All rights reserverd - Website by CTEK GmbH.",
+              "http://www.salsapictures.ch/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "salsa.ch - the swiss salsa portal for events, pictures, congresses ...",
+              "GRANDE NOCHE DE SALSA, Im grossen Saal des Paulusheims, Luzern. Discoteca ... I LOVE SALSA, Viscose Bar Lounge Event, Luzern, 6020 Emmenbrücke. Discoteca ...",
+              "http://www.salsa.ch/events.php",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa Reisen, Quito",
+              "cuador Rundreisen mit Reisebuch Autor Volker Feser, Salsa Reisen offeriert Galapagos, Amazonas Urwald, Indianer Märkte im Hochland von Ecuador und Peru, ...",
+              "http://www.salsareisen.com/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa (Musik) – Wikipedia",
+              "5.2 Timba, tumba, bongó: Die Rhythmus-Sektion in der Salsa. 5.3 Geschwindigkeit ... Der andere gewichtige musikalische Strang hin zur Salsa stammt aus dem Latin Jazz. ...",
+              "http://de.wikipedia.org/wiki/Salsa_(Musik)",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa-Forum.DE - Party, Salsa Dancing in Germany, Salsa Berlin ...",
+              "Das Salsa Deutschland Portal. Hier finden Sie aktuelle Party-News aus der Szene, den Salsa Guide Berlin, Frankfurt, München, Salsa Party Kalender, Bands, ...",
+              "http://www.salsa-forum.de/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Tanzfiguren-Beschreibungen: Salsa",
+              "Salsa heißt soviel wie  Soße  und ist eine Mixtur diverser oft unbenannter ... Aus dem Salsa haben sich die lateinamerikanischen Tänze Rumba und ChaCha ...",
+              "http://www.1ngo.de/tanz/salsa.html",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa-Stuttgart.com / Salsa-Community.de - Salsa, Events ...",
+              "Immer neue Salsa-Fotoserien und Reports über deutschlandweite Großevents. Außerdem alles zum Thema Salsa: die Musik, der Tanz, Videoclips.",
+              "http://www.salsa-stuttgart.com/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Willkommen bei SalsaRica - Die Salsa Tanzschule in Zürich",
+              "SalsaRica - Tanzschule für Salsa in Zürich. Salsa, Puerto, Bachata, Merengue, ChaChaCha, Son, Reggaeton..Wir bieten Kurse und Workshops von Anfänger bis auf ...",
+              "http://www.salsarica.ch/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa in Hamburg mit der cubanischen Choreographin Requena Delgado",
+              "Salsa, Son, Merengue, Mambo, Rumba, Cha Cha Ch, die ganze Vielfalt der caribischen Tnze mit Requena Delgado, Workshops und Tanzkurse Im oberen Bereich erhältst Du Infos zum Programm Requena Delgados, sowie zu ihrem fachlichen Background als…",
+              "http://www.salsaplus.de/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Floridita- Salsa Club",
+              "salsa szene national · burgenland · kärnten · niederösterreich · oberösterreich · salzburg · steiermark ... salsa szene international ...",
+              "http://www.floridita.at/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "SAA und SALSA: Zwei Fragebögen zur subjektiven Arbeitsanalyse",
+              "397 SAA und SALSA: Zwei Fragebögen zur subjektiven Arbeitsanalyse Ivars Udris und Martin Rimann Zusammenfassung Mit dem Fragebogen zur „Subjektiven Arbeitsanalyse (SAA) sowie dem Fra- gebogen „Salutogenetische Subjektive Arbeitsanalyse (SALSA)…",
+              "http://books.google.com/books?hl=en&amp;lr=lang_de&amp;id=Hmv7yeA7SYkC&amp;oi=fnd&amp;pg=PA397&amp;dq=salsa&amp;ots=bvVGpaXumg&amp;sig=qIUSIb43TlbojM9Guo-mpqRy4QU",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Home - Salsa, Samba, Merengue, Bachata, Latin-Shows, Tanzshow, Tanzkurse",
+              "Salsa, Samba, Merengue, Bachata, Salsa Rueda, Capoeira, Zumba, Yoga, Hula, Salsa Aerobic, Pilates und Bauchtanz Kurse! ... Salsa, Samba, Merengue, Bachata, Salsa Rueda, Capoeira, Zumba, Yoga, Pilates ...",
+              "http://www.tumbao.at/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Zur Chemie der Halophyten",
+              "... der Seev6gel herrtihrend) und mit einem Prozentsatz an wasserl6slichen Salzen yon 2 5 bis 3O/o . Ein Tell der auf den salzhaltigen BSden wachsenden Pflanzen trg.gt den Habitus yon Sukkulenten, so z. B. Salicornia herbacea L., Suaeda arili1a Dum.…",
+              "http://www.springerlink.com/index/JU1QQ22670011T36.pdf",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa in Germany and Austria - Adressen und Bilder der Salsa-Locations ...",
+              "Salsa dancing in Austria, Germany and worldwide: adresses and thousands of pictures of the salsa clubs - Adressen und Photos der Salsatecas ( = Salsa-Clubs, Salsa-Discos, Latino ...",
+              "http://www.salsatecas.net/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa Magica, Salsa Tanzschule Luzern",
+              "Salsa Magica, Salsa Tanzschule Luzern Kriens",
+              "http://www.salsa-magica.ch/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa Picante",
+              "Salsa Picante ist eine deutsche Salsa-Band.",
+              "http://www.salsapicante-online.de/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "… einer Zweikomponenten-Hochauftriebskonfiguration mit Vergleich zu LDA …",
+              "... Zum Einsatz kommen Eingleichungsmodelle (Spalart–Allmaras, SALSA) und Zweigleichungsmodelle ( LL k-ε, Wilcox k-ω, LLR k-ω ). ... SALSA Eingleichungsmodell Beim SALSA Modell handelt es sich um eine Erweiterung des Eingleichungsmodells nach…",
+              "http://www.cfd.tu-berlin.de/~schatz/PUBLICATIONS/nitsche.pdf",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Home - Gozando Salsa, die Tanzschule in Zürich (Salsa, Tanzkurs, Zürich ...",
+              "Gozando la salsa, geniesse die Salsa, lautet das Motto unserer Schule. ... Herzlich willkommen bei gozando salsa, der Tanzschule am Albisriederplatz in Zürich. ...",
+              "http://www.gozando-salsa.ch/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa-Tickets.com - Salsa, Events, Tickets , Salsa Reisen, Salsa Tickets,... !",
+              "Zum Login Freitag, 31.07.2009 german | english Warenkorb | Zur Kasse Salsacongress Stuttgart Latin-Festival 2009 - by latin.de ... Für Alle Salseros gibt es das Latin-Christmas-Festival",
+              "http://www.salsa-tickets.com/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa (Gericht)",
+              "thumb | 150px | Salsa verde und Salsa roja thumb | 150px | Pico de gallo Salsa ist das spanische Wort für Sauce . Begriff Salsa meist, …",
+              "http://de.wikipedia.org/wiki/Salsa_(Gericht)",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "RANS-BASIERTE DIREKTE NUMERISCHE OPTIMIERUNG ADAPTIVER …",
+              "... 4.025% TAB. 1: Gitterkonvergenzindize für das DA VA2 Profil bei Verwendung des SALSA Turbu- lenzmodells. Die ... on. Hierfür wurde das SALSA Turbulenzmodell und die SCB Asymmetrie des besten Entwurfs verwen- det. Liegt ...",
+              "https://www.iag.uni-stuttgart.de/IAG/institut/abteilungen/luftfahrzeugaerodynamik/paper/DGLR-JT-2004-055.pdf",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa Son Band aus Basel Schweiz",
+              "... Gruppe spielt kubanische Son-Nummern, Salsa romantico und Boleros, Cumbias, Cha-cha-cha usw. ... Band präsentiert ausgefeilte Salsa Nummern und präzise ...",
+              "http://www.salsa-son.ch/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Home - Salsa, Samba Show, Unterricht, Workshop",
+              "Mit viel Temperament, Rhytmus, Sonne im Herzen, und einem strahlenden Lächeln machen Lira Mosquera, ihr Ensemble und ihre Band auch ihre Veranstaltung zu einem unvergesslichen Fest südamerikanischer Lebensfreude. Seite über Salsa Tanzprojekte,…",
+              "http://www.arte-de-salsa.de/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa Picante",
+              "Salsa Picante ist eine deutsche Salsa-Band. Salsa Picante wurde 1981 in Düsseldorf von Thomas Kukulies, Georg Corman, Günther Rink und …",
+              "http://de.wikipedia.org/wiki/Salsa_Picante",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Granularzelltumor: ein gutartiger Tumor der Brustdrüse, der ein Karzinom …",
+              "Granularzelltumor: ein gutartiger Tumor der Brustdrüse, der ein Karzinom vortäuscht. R DOLIF, A SALSA, A SCAGNOL, E MÜLLER-HOLZNER, G MIKUZ RöFo. Fortschritte auf dem Gebiete der Röntgenstrahlen und der Nuklearmedizin 149:44, 438-439, Thieme, 1988. .…",
+              "http://cat.inist.fr/?aModele=afficheN&amp;cpsidt=7279897",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Hauptseite",
+              "Aktuell Kalender Kurse Clubs Discografie DJs Galerie Salsa in Deutschland. Willkommen bei SalsaDE, der Quelle für Salsa in Deutschland.",
+              "http://www.salsa.de/hauptseite.html",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "SALSA - South Argentinean Lake Sediment Archives and Modelling",
+              "Welcome to the homepage of. (South Argentinean Lake Sediment Archives and Modelling)",
+              "http://www.salsa.uni-bremen.de/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa de Cuba, Ignacio Camblor - Salsa, Tanzkurse",
+              "",
+              "http://www.salsa-de-cuba.de/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Congas &amp; Percussion",
+              "Congas et musique afro-cubaine",
+              "http://www.congas.ch/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "World Salsa Championships",
+              "World Salsa Championships (dt. „Salsa Weltmeisterschaft“) ist ein Salsa -Tanzturnier , das den Anspruch erhebt, die offizielle …",
+              "http://de.wikipedia.org/wiki/World_Salsa_Championships",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Monets  le Dejeuner : Interieur und Weiblichkeit-ein konstruierter Raum …",
+              "GRIN - Verlag für akademische Texte Der GRIN Verlag mit Sitz in München und Ravensburg hat sich seit der Gründung im Jahr 1998 auf die Veröffentlichung akademischer Texte spezia- lisiert. Die Verlagswebseite www.grin.com ist für Studenten,…",
+              "http://books.google.com/books?hl=en&amp;lr=lang_de&amp;id=ZCF2vylJq24C&amp;oi=fnd&amp;pg=PT13&amp;dq=salsa&amp;ots=1bk0hJ8QcF&amp;sig=S89ZBA6t6Wn_thNh8QDPT6IMtSA",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa - Musik, Tanz, Videos, MP3",
+              "Salsa ist Kult, Rhythmus und Lebensgefül aus Lateinamerika. Auf Deutschlands größtem Portal findet ihr die neusten Videos, Songs, MP3 und Schritte und Styles.",
+              "http://www.salsa-latinoamericana.de/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsastudio Tanzschule",
+              "Täglich Salsa Tanzkurse in Zürich Nähe Airport.",
+              "http://www.salsastudio.ch/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa Cubana - Tanzschule Luzern",
+              "Salsa Cubana Tanzschule, Tanzenlernen in Luzern, latino,Son cubano, Merengue, Lebensfreude, ... Neue Salsa Einsteigerkurse ab: Di 5.1.2010 19:00 Uhr. Mi 6.1. ...",
+              "http://www.salsacubana.ch/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa Festival Switzerland",
+              "",
+              "http://www.salsa-switzerland.ch/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa tanzen Salsa Infos Salsa/Latin in München mit Salsa Munich. Latin/Salsa/Brasil/Afro-Veranstaltungen",
+              "Stets aktuelle Salsa - München - Infos. ... Latin/Salsa-Clubs, Salsa-Discos, Salsatecas und Latin Bars. ... Salsa Photos oder Salsa Fotos.",
+              "http://www.salsa-munich.de/",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Salsa Loca",
+              "Salsa Loca ist eine dänische Gruppe aus Kopenhagen . Datei:Salsa Loca. jpg | Salsa Loca Live in Concert im Copenhagen Jazzhouse am 15. …",
+              "http://de.wikipedia.org/wiki/Salsa_Loca",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "Die Funktionen eines Galeristen als Intermediär",
+              "2.1. Ökonomische Analyse des Kunstmarktes................................................................................. 4 2.1.1. Marktorganisation und Marktformen des Kunstmarktes........................................................... .…",
+              "http://www.grin.com/e-book/129932/die-funktionen-eines-galeristen-als-intermediaer",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "salsa.ch - the swiss salsa portal for events, pictures, congresses ...",
+              "el portal de la salsa en suiza ... British Pianist and Producer, Alex Wilson, relocates to the Zürichsee. The creator of hits such as the salsa version of Ain't Nobody, the soul-salsa ...",
+              "http://salsa.ch/home.php",
+              LanguageCode.GERMAN
+            ),
+
+            
+            new Document(
+              "SALSA – Musica Online, Discografias, MP3, Videos, Canciones, Fans ...",
+              "SALSA - Es el lugar donde Encontraras musica online de Salsa, como de ,Adolescents Orquesta,Andy Montañez,Antonio Cartagena,Camaguey,Caribeños,Celia Cruz,Costa Brava,Dan Den,Dani ...",
+              "http://www.fulltono.com/salsa/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa (género musical) - Wikipedia, la enciclopedia libre",
+              "Salsa es el nombre comúnmente utilizado para describir una mezcla de varios ritmos cubanos. La salsa no es un ritmo. Es un nombre comercial que se adoptó a ...",
+              "http://es.wikipedia.org/wiki/Salsa_(g%C3%A9nero_musical)",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "salsa.ch - the swiss salsa portal for events, pictures, congresses ...",
+              "Salsa-Band aus Zürich (Con Sabor). Biografie, RealAudio und MP3, Konzertdaten, Links.",
+              "http://www.salsa.ch/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa, Noticias, Musica, Bachata, Merengue, Baile",
+              "Salsa Noticias Musica Merengue Bachata Reggaton Pop Salsa News Dancing Latin Music Descarga Baile. Salsanoticias.com. C/ Ermita 7 · 46007 Valencia · +34 963 ...",
+              "http://www.salsanoticias.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa dancing and music",
+              "Salsa dancing, salsa music, La salsa y su historia, la música cubana, ficheros midi de salsa, radios de salsa y también vídeos, libros y Cds.",
+              "http://www.esto.es/salsa/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa en Cuba - Música Salsa - Cursos de Salsa en Cuba",
+              "Información del mundo del baile cubano, incluyendo detalles acerca del origen, historia, métodos de enseñanza, artistas y agencias.",
+              "http://www.salsa-in-cuba.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa - Wikipedia, la enciclopedia libre",
+              "El término salsa puede referirse a: la salsa en gastronomía, un aderezo líquido o pastoso utilizado en los alimentos; la música salsa, un género musical resultado de fusionar ...",
+              "http://es.wikipedia.org/wiki/Salsa",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa | Musica Salsa Music | Baile Salsa Dance | Salsa en Argentina Chile Colombia Cuba España Mexico",
+              "Salsa interviews, articles, salsa pictures and videos, biographies of salsa artists, salsa dictionary, information on salsa dance clubs, dance classes, salsa dance schools and academies, salsa dance ...",
+              "http://www.americasalsa.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa (gastronomía) - Wikipedia, la enciclopedia libre",
+              "En gastronomía se denomina salsa a una mezcla líquida de ingredientes (fríos o calientes) que tienen por objeto acompañar a un plato. ...",
+              "http://es.wikipedia.org/wiki/Salsa_(gastronom%C3%ADa)",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "SalsaClasica.com / La Salsa de ayer, hoy, manana y siempre",
+              "Recuerda la Salsa Clasica, discografia, liricas, fotos y mas. ... Join the Salsa Ranking. Bienvenidos a SalsaClasica.com La misión de esta página es recordar la Salsa Clásica ...",
+              "http://salsaclasica.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Puerto Rico Salsa Congress - Aqui Empezò Todo",
+              "14mo PUERTO RICO SALSA CONGRESS Julio 24 – 31, 2010 @ EL SAN JUAN HOTEL &amp; CASINO. Pronto las nuevas informaciones!!! Entra a la pagina 2009 ...",
+              "http://www.puertoricosalsacongress.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Música Salsa Gratis con letras y video para escuchar y dedicar | Buenamusica.com",
+              "Listas de musica gratis para escuchar en linea incluyendo generos como reggaeton, pop y rock en español, bachata, hip-hop, cristiana, salsa, merengue, vallenato, electronica ...",
+              "http://www.buenamusica.com/salsa",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "La X Estéreo - 100% Pura Salsa - Salsa Radio",
+              "100% Pura Salsa, Salsa con el Sabor de Cali Colombia, Salsa Radio, Emisora Colombiana, Emisora de Salsa, Salsa 24 horas.",
+              "http://www.laxestereo.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "www.RosarioSalsa.com.ar - Salsa sin limites!!! Argentina, Mexico ...",
+              "RosarioSalsa.com.ar - Salsa sin limites! - Tu musica en la web. Donde aprender a bailar salsa en Rosario y en Argentina. Pensada para vos.",
+              "http://www.rosariosalsa.com.ar/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Simposium Internacional Salsa 2010",
+              "Inicio · Artistas · Abakua · Programa · Talleres · Precios · Inscripciones · Hoteles · Localización · DVDs · Fotos · Videos · Televisión · Prensa ...",
+              "http://www.simposalsa.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Clases de Salsa en Málaga 20 euros al mes (ó 50 euros trimestrales). ( salsamalaga)",
+              " Manda güevos  intentar cobrar matrícula por aprender a bailar salsa. · Posibilidad de clases particulares de salsa en Español o en Inglés. English private salsa lessons in Malaga. Insisto en que las clases en grupo son mucho más divertidas.",
+              "http://sites.google.com/site/clasesdesalsaenmalaga/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "SalsaSevilla",
+              "Sevilla. at 23: 00 El Rincon de la Salsa El Rincon de la Salsa Time: 23: 00 Alcalá de Guadaira at 23: 00 Carpe Diem Copas Carpe Diem Copas Time: 23: 00 Fiesta salsera.",
+              "http://www.salsasevilla.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsapaca",
+              "SALSAPACA: SALSA, LATIN JAZZ &amp; SONIDOS AFROAMERICANOS EN FRANCIA Y EN CUALQUIER LUGAR DEL MUNDO. ... Spécial II Mercado Cultural del Caribe Colombia y Perú: Memorias de la Salsa La Eurosalsa llegó....",
+              "http://www.salsapaca.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              ".: Los chicos en su salsa :.",
+              "",
+              "http://www.loschicosensusalsa.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Quasilinear elliptic equations with quadratic growth in the gradient",
+              "Quasilinear elliptic equations with quadratic growth in the gradient. C MADERNA, C DOMENICO PAGANI, S SALSA Journal of differential equations 97:11, 54-70, Academic Press, 1992. Equation elliptique; Elliptic equation; Ecuación ...",
+              "http://cat.inist.fr/?aModele=afficheN&amp;cpsidt=5304069",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa X",
+              "",
+              "http://www.salsax.net/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa, sabor y control!: sociología de la música  tropical ",
+              "ÍNDICE PREFACIO 13 1. DEL CANTO, EL BAILE... Y EL TIEMPO 32 2. DE  EL PABLO PUEBLO  A  LA MAESTRA VIDA': Mito, historia y cotidianeidad en la expresión salsera 87 3. EL TAMBOR CAMUFLADO: La melodización de ritmos y la etnicidad cimarroneada ...",
+              "http://books.google.com/books?hl=en&amp;lr=lang_es&amp;id=BPoZWWucsNgC&amp;oi=fnd&amp;pg=PA7&amp;dq=salsa&amp;ots=56ykFJRjGa&amp;sig=CMUvs3jQj1T5wKaKCoCaYUeVErM",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "YouTube - Salsa Music Video Mix",
+              "here is a salsa video i did of most of the salsa movies i had available thanks to my gf Maria :) :) song was suggested by my friend claudia , ENJOY :) song ...",
+              "http://www.youtube.com/watch?v=Mv1ZsSrE03o",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa Radio Stations on the internet! SalsaPower.com",
+              "19 Oct 2009 ... Radio Stations on the Internet - The best source for Cuban Casino-style Salsa, dancing, salsa music, live internet radio, cd reviews, ...",
+              "http://www.salsapower.com/cities/fl/radio.htm",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa123.ch: Salsa y Reggaeton para mujeres",
+              "Salsa 1-2-3 Overview Actualidades Filosofia Metodo1-2-3 Team Links Derecho ... Zurich Clases de prueba gratis Salsa y Reggaeton para mujeresWeekend-Cursos ...",
+              "http://salsa123.ch/?url=/zurich/Salsa_Reggaeton&amp;change_language=4",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa Inmobiliaria",
+              "Salsa Inmobiliaria · Lang_es_1 · Lang_en_0 · EL GRUPO; |; BUSCADOR INMOBILIARIO; |; NOTICIAS; |; CONTACTO. Newsletter. Introduzca su e-mail para recibir ...",
+              "http://www.salsa.es/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "O valor nutritivo da mandioquinha-salsa..",
+              "... Signatura : CNPH (3337). Corporativo : EMBRAPA-CNPH. Autor : PEREIRA, AS. Título : O valor nutritivo da mandioquinha-salsa.. P.imprenta : In: ENCONTRO NACIONAL SOBRE MANDIOQUINHA-SALSA, 5., 1995, Venda Nova do Imigrante, ES. Palestra e trabalhos…",
+              "http://orton.catie.ac.cr/cgi-bin/wxis.exe/?IsisScript=ACERVO.xis&amp;method=post&amp;formato=2&amp;cantidad=1&amp;expresion=mfn=062757",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "salsamovimiento te saluda!",
+              "",
+              "http://www.salsamovimiento.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa - En Blogalaxia",
+              "SALSA BARBACOA En Video Blog Cocina el 2009.09.15 receta cocinero fiel salsa barbacoa costillas cerdo... Tags: receta , cocinero , fiel , salsa , ... Flickr. com Terminó Salsa al parque.",
+              "http://www.blogalaxia.com/tags/salsa",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsorro.com. Salsa, noticias, eventos, tienda, viajes, opinion, salsa en galicia...",
+              "Durante la celebración de Salsorro 2009, la dirección de Salsorro entregó la tercera edición de los galardones de Salsorro, para destacar a diferentes profesionales por su labor de divulgación de la salsa a nivel local, nacional e internacional.",
+              "http://www.salsorro.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa de tomate",
+              "La salsa de tomate es una salsa o pasta elaborada principalmente a partir de pulpa de tomates, a la que se le añade, dependiendo del tipo ...",
+              "http://es.wikipedia.org/wiki/Salsa_de_tomate",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "'SALSA NO TIENE FRONTERA': ORQUESTA DE LA LUZ AND THE …",
+              "This article discusses key dynamics in the globalization of popular music, more specifically the interplay between technology, social and commercial structure, and meaningful sound forms. It analyses Orquesta de la Luz, an all-Japanese salsa band,…",
+              "http://www.ingentaconnect.com/content/routledg/rcus/1999/00000013/00000003/art00007",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "MUSICA DE SALSA – Escucha Musica SALSA en…",
+              "TuEscuchas.COM - Es el lugar donde Encontraras MUSICA EN LINEA de Salsa, como de: Adalberto, Adolecentes, Andy Montanez, Antonio Cartagena, Camaguey, Caribenos, Celia Cruz, Costa ...",
+              "http://www.tuescuchas.com/musica/salsa/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "SALSA PA GOZAR",
+              "... lo intentara con la salsa, me hizo caso y le gusto mucho a partir de ahí ... la Salsa o los ... conocido  León dela Salsa  permanecía internado en la ...",
+              "http://www.salsapagozar.es/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "www.misalsa.cl",
+              "",
+              "http://www.misalsa.cl/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsas",
+              "Salsas. Seleccion de las recetas de salsas más conocidas en la cocina española e internacional. Recetas de salsas...",
+              "http://www.euroresidentes.com/Recetas/salsas/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa picante",
+              "Una salsa picante (en inglés muy conocido: hot sauce) es una salsa altamente especia da empleada frecuentemente como condimento , y en ...",
+              "http://es.wikipedia.org/wiki/Salsa_picante",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "A cultura da mandioquinha-salsa no Brasil..",
+              "... Autor : SANTOS, FF dos. Título : A cultura da mandioquinha-salsa no Brasil.. ... Descriptores: Mandioquinha-salsa%Batata-baroa%Producao%Comercializacao%Arracacia xanthorrhiza%Peruvian carrot%Arracacha%Production%Marketing%Brazil. ...",
+              "http://orton.catie.ac.cr/cgi-bin/wxis.exe/?IsisScript=ACERVO.xis&amp;method=post&amp;formato=2&amp;cantidad=1&amp;expresion=mfn=018774",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Vídeos de Salsa - Adrian y Anita,…",
+              "Vídeos de salsa: Swinguys, Frankie Martinez, Fabian y Esther, Tito y Tamara y muchos mas.",
+              "http://www.al1yal2.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa123.ch: Team",
+              "Salsa 1-2-3 Overview Actualidades Filosofia Metodo1-2-3 TeamLinks Derecho ... El trabaja también como un instructor en Salsa -los clubs y los partidos privados. ...",
+              "http://salsa123.ch/?url=/Salsa_Team&amp;change_language=4",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa - En Peru Blogs",
+              "Tags: morenas , noche de copas , salsa 30. ... PeruTags: salsa tony vega watussi all stars el mas que... ... Tags: salsa , confio en ti , la elite , elite Plátanos en Salsa de Tomate En ...",
+              "http://www.perublogs.com/tags/salsa",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa (baile)",
+              "Salsa es un moderno baile de salón de los Estados Unidos de América y de América ... La salsa es el baile creado por gente de habla hispana ...",
+              "http://es.wikipedia.org/wiki/Salsa_(baile)",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Doencas da mandioquinha-salsa..",
+              "... 1 / 1 Seleccione referencia / Select reference. Signatura : CNPH. Corporativo : EMBRAPA-CNPH, Brasilia, DF. Autor : LOPES, CA%HENZ, GP. Título : Doencas da mandioquinha-salsa.. P.imprenta : Informe Agropecuario, Belo Horizonte, v.19, n.190, p.…",
+              "http://orton.catie.ac.cr/cgi-bin/wxis.exe/?IsisScript=ACERVO.xis&amp;method=post&amp;formato=2&amp;cantidad=1&amp;expresion=mfn=022564",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Generos: Salsa - Música de Puerto Rico",
+              "Introducción a nuestra colección de biografías de compositores y artistas incluidos en este web site",
+              "http://www.musicofpuertorico.com/index.php/generos/salsa/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "100x100 SALSA",
+              "La salsa en Venezuela ha tenido de todo: orquestas, combos, sextetos, vocalistas destacados, compositores importantes. Cuando uno encuentra el caso de un ...",
+              "http://www.100x100salsa.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "¡Salsa!",
+              "Figuras y emisoras de salsa, recetas para cócteles y mucho más ... Salsa-Rueda ... Salsa en Suiza ...",
+              "http://hamwaves.com/salsa/salsa.html",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "salsasur - Clases de Salsa en Málaga 20€/mes",
+              "Precio de las clases de salsa: 20 € mensuales (o 50€ cada 3 meses). ... Aristófanes 4 donde imparto las clases de salsa. ... Así a ojo. · El curso de salsa, merengue y bachata dura un año.",
+              "http://salsasur.googlepages.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Sabor Dominicano Musica latina merengue bachata y Reggaeton | Sabordominicano",
+              "musica latina, merengue, bachata, salsa, reggaeton, balada, musica, dominicana, chat latino, videos musicales [929 lecturas] Salsa. Jackeline y Fernando Villalona se unen nuevamente Después del éxito alcanzado en 1998, con el tema Me muero por ti,…",
+              "http://www.sabordominicano.com/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa Sabrosa Kraków - salsa Kraków, kursy, pokazy, animacje - salsa ...",
+              "... Salsa Sabrosa Krakow ... Salsa Sabrosa Kraków - najstarsza szkoła salsy w Krakowie",
+              "http://www.salsasabrosa.pl/",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Bechamel",
+              "La salsa bechamel es una  salsa madre , base de muchas otras salsas. Características: Los ingredientes básicos de esta salsa casi siempre son ...",
+              "http://es.wikipedia.org/wiki/Bechamel",
+              LanguageCode.SPANISH
+            ),
+
+            
+            new Document(
+              "Salsa - Wikipédia",
+              "La salsa (mot espagnol qui signifie « sauce ») désigne à la fois une danse, un genre musical, mais également une famille de genres musicaux (musique latino-américaine).",
+              "http://fr.wikipedia.org/wiki/Salsa",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "SalsaFrance.com - le portail de la Salsa en France",
+              "Magazine sur l'actualité de la Salsa en France, forum de discussion sur la Salsa, critiques de CDs et DVDs de Salsa, profils et biographies d'artistes Salsa, annuaire des cours de ...",
+              "http://www.salsafrance.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "[Busca Salsa]",
+              "Site consacré à la Salsa mais plus généralement aux musiques afro caribéennes. Articles, entrevues, traductions de chansons, chroniques de disques, ...",
+              "http://www.buscasalsa.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Tryptico : VIDEOS de SALSA (portoricaine, cubaine, colombienne et ...",
+              "VIDEOS de salsa cubaine, de salsa portoricaine (on1 et on2), de salsa colombiana, des shines, des choregraphies salsa ainsi que des videos de bachata et autres danses latines",
+              "http://www.tryptico.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Video gratuite: 518 VIDEOS de SALSA cubaine, portoricaine ...",
+              "VIDEOSALSA.COM : Videos de salsa de qualité professionelle gratuites à visionner et télécharger. Cours de salsa à télécharger, DVD Salsa, Salsa DVDs, Leçons de salsa ...",
+              "http://www.videosalsa.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "SALSA - BORDEAUX SALSA - Infos sur soirées, concerts, stages ...",
+              "Le site de la salsa sur Bordeaux. Un site très dynamique avec un forum, des photos à télécharger.",
+              "http://www.bordeauxsalsa.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa Montréal | LA RÉFÉRENCE SALSA et PLUS!",
+              "L'Équipe Toca Danse invite les amoureux des danses latines, Salsa, Cha cha, Merengue et Bachata, aux cours d'essai GRATUIT qui se dérouleront du 9 au 15 ...",
+              "http://www.salsamontreal.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Paris, Cours de salsa, stage de salsa à l'Ecole de danse latine ...",
+              "Cours de salsa à Paris, stage de salsa, salsa cubaine, salsa portoricaine, cha cha, samba, danse africaine, merengue, bachata, tango, danse orientale.",
+              "http://www.salsadanse.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsafolie_montreal_salsa_montreal",
+              "Roberto &amp; Marie Josée de Chilital - cours de Salsa Intermédiaire Salsalicious Et bien entendu, prenez part chaque semaine à nos cours de salsa de niveau ...",
+              "http://www.salsafolie.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "École de danse Salsa Etc",
+              "Sauter l'introduction / Télécharger FLASH Player 9",
+              "http://www.salsaetc.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsavirus.com Ecole de Salsa à Genève",
+              "Ecole de Salsa à Genève, salsa cubaine, salsa portoricaine... Tous les vendredis : Les meilleures soirées salsa, west coast swing et rock avec ...",
+              "http://www.salsavirus.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "La Salsa pour les Nuls - SalsaFrance.com",
+              "Vous avez débuté la salsa il y a peu et vous avez déjà ruiné deux paires de chaussures de ville ? Vous avez testé quelques soirées et vous commencez à vous ...",
+              "http://www.salsafrance.com/salsa/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa, Cours de Salsa à Paris, Stages et soirées Salsa",
+              "La Salsa, prenez des cours de Salsa à Paris et découvrez nos soirées Salsa. Tout pour danser la Salsa !",
+              "http://www.salsapassionparis.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa-Ouest.Com - Accueil",
+              "Salsa-Ouest.Com, le site de la Salsa dans le Grand Ouest : agenda, cours, associations...",
+              "http://www.salsaouest.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Danse salsa Marseille : Ecole, cours de…",
+              "Marseille salsa - Cours à l'école de danse pour apprendre à danser la salsa, rock, tango argentin, be-bop, mambo, lindy hop, bebop et salon. Association Marseille Club Danse ...",
+              "http://www.studio-2000.net/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Les danses à deux : Salsa portoricaine, Salsa cubaine, Rock'n'Roll , Tango Argentin, Danse de salon",
+              "Planning ( calendrier ) des soirées et sorties danse a 2 sur Paris et toute la France : Salsa portoricaine, Salsa cubaine, Bachata, Rock'n'Roll, Tango Argentin, Danse de salon ...",
+              "http://www.jesors.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa Marseille",
+              "cours de salsa à Marseille, stages et soirées salsa, école de danse pour apprendre la salsa cubaine et la salsa portoricaine à Marseille",
+              "http://www.cours-salsa-marseille.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Annuaire annuaires salsa agenda evenements events agendas ...",
+              "salsa portails salsas portail annuaire annuaires Portail informatif de salsa, soirées salsa, forum Ecole de danse salsa partenaires et couples écoles de ...",
+              "http://www.salsapartners.net/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "SalsArcade, Cours de salsa à Genève",
+              "Ecole de Salsa Genève, salsa cubaine, salsa portoricaine ... Horaires des cours. Nos tarifs. Contact. Vous etes le visiteur n° ...",
+              "http://www.salsarcade.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa Sunrise",
+              "Salsa Sunrise : des cours et des soirées Salsa.",
+              "http://www.salsasunrise.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "INRIA - Équipe SALSA",
+              "L'objectif principal du projet de recherche SALSA est la résolution de systèmes polynomiaux, à coefficients rationnels ou dans des corps finis, en dimension ...",
+              "http://www.inria.fr/recherche/equipes/salsa.fr.html",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa Monaco",
+              "Festival Salsa Monaco 2010 - Reservation en ligne.",
+              "http://www.salsamonaco.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Étude des systèmes algébriques surdéterminés. Applications aux codes …",
+              "... Magali TURREL BARDET Soutenance de th`ese de doctorat 8 D´ecembre 2004 http://www-calfor.lip6.fr/˜bardet Projets SALSA – CODES – INRIA Rocquencourt LIP6/CALFOR – Universit´e Paris 6 Magali Bardet – Soutenance de th`ese – 8 Décembre 2004 – p.1/46…",
+              "http://www-calfor.lip6.fr/~bardet/soutenance.pdf.gz",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa will change your life - Salsafestival Switzerland, the Salsa ...",
+              "Comme d'habitude, nous démarrons notre Week-end de Salsa avec une superbe avant-fête en collaboration avec Salsamania et le Club X-TRA, la plus grande fête ...",
+              "http://www.salsafestival.com/index.php?article_id=2&amp;clang=2",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Expresion salsa par Esteban",
+              "Expresión De Salsa offre un large éventail de cours pour découvrir, comprendre et déguster la Salsa",
+              "http://www.expresion-salsa.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Penas y salsa",
+              "bouger sur le rythme endiablé de la salsa. L'association Peña Salbaïa. Peñas y Salsa, 9e edition le 13 juin 2009 ! La nouvelle édition de Peñas y Salsa se tiendra comme chaque année aux Arènes de Bayonne le 13 juin...",
+              "http://www.penasysalsa.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa (film, 2000)",
+              "Salsa est un film franco -espagnol réalisé par Joyce Buñuel avec Vincent Lecœur dans le rôle-titre. Le film est sorti en France le 9 ...",
+              "http://fr.wikipedia.org/wiki/Salsa_(film,_2000)",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa: Puerto Rican and Latino Music",
+              "Salsa: Puerto Rican and Latino Music. FM PADILLA Journal of popular culture 24:11, 87-104, Blackwell Publishing, 1990. Les débuts de la « salsa » musique portoricaine de New York à la fin des années 60, et son évolution depuis. ...",
+              "http://cat.inist.fr/?aModele=afficheN&amp;cpsidt=6154734",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Lion salsa congress",
+              "",
+              "http://www.lionsalsacongress.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "école salsamas offre cours de salsa cubaine sur Genève.",
+              "Salsamas est une école de salsa cubaine à Genève, on y apprend aussi la rueda de casino, le lady styling et salsa fit. ... connection ...",
+              "http://www.salsamas.ch/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Sauce salsa",
+              "La sauce salsa , qui tient son nom d'un pléonasme (salsa signifie déjà « sauce » en espagnol ), est une sauce courante utilisée dans la ...",
+              "http://fr.wikipedia.org/wiki/Sauce_salsa",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Pulmonary tubercolosis in Italian children by age at presentation",
+              "Aim. To evaluate the clinical characteristics, diagnostic methods and outcome of paediatric pulmonary tuberculosis(PTB) in relation to children's ages when observed. Methods. Children under 15, who had been admitted to the Children's Hospital with…",
+              "http://cat.inist.fr/?aModele=afficheN&amp;cpsidt=15909824",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa Valais",
+              "Les news sur les événements salsa en valais, information sur les soirées, cours, stages, concerts, sorties,",
+              "http://www.salsavalais.info/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "salsa",
+              "Annuaire salsa 4075 Sites référencés dans notre annuaire salsa Indexation garantie à 100% dans l'annuaires salsa salsa .: Accueil .: Nouveauté .: Les plus visités .: Ajouter un site ...",
+              "http://salsa.deboref.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Fania",
+              "l'échec du catapultage de la salsa dans le marché américain avec Columbia Records et Atlantic, et l'arrivée des modes du merengue ...",
+              "http://fr.wikipedia.org/wiki/Fania",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Entre imaginaires et réalités, la géographie mouvante des danses latines",
+              "Christophe APPRILL, Elisabeth DORIER-APPRILL Autrement. Série mutations(1989) 207, 32-47, Autrement, 2001. Tango, salsa, samba, rumba... s' insèrent depuis le début du siècle dans une vogue mondiale de l'exotisme. ...",
+              "http://cat.inist.fr/?aModele=afficheN&amp;cpsidt=13416399",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "SALSA Cours Salsa - Vidéos de salsa",
+              "SALSA Cours de salsa, vidéos salsa, forum de discussion sur la Salsa, news, soirées... Vous saurez tout sur la Salsa",
+              "http://dingadesalsa.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Fabio Salsa",
+              "trouvez le salon Fabio Salsa près de chez vous. les produits ... découvrez les nouvelles tendances automne-hiver 2009 de Fabio Salsa. les collections ...",
+              "http://www.fabiosalsa.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "salsa.ch - the swiss salsa portal for events, pictures, congresses ...",
+              "el portal de la salsa en suiza ... Pour votre publicité sur salsa.ch, nous vous proposons les variantes suivantes: Banners (468x60 px) sur salsa.ch en général ...",
+              "http://www.salsa.ch/contact.php?&amp;to_lang=F",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Cours danse Toulouse : Ecole de rock salsa tango valse salon",
+              "... à danser le rock, le tango, la salsa, le paso, la valse ou le ... Les principales danses de salon sont le rock, la valse, le tango, la salsa et les danses latines (cha-cha, rumba, samba, mambo, etc.).",
+              "http://www.cours-danse-toulouse.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa-ragga et salsaton",
+              "La fusion salsa -ragga s'est opérée dans les années 1990 et a apporté un souffle nouveau à la salsa . fusion de la salsa et du ...",
+              "http://fr.wikipedia.org/wiki/Salsa-ragga_et_salsaton",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Indication of the growth of Cl. perfringens in aseptically packed …",
+              "... Bacteria ; Clostridiales ; Clostridiaceae ; Espacio cabeza ; Clostridium perfringens ; Contaminación ; Indicador redox ; Control microbiológico ; Control calidad ; Empaque aséptico ; Acondicionamiento ; Producto de carne ; Salsa ; Espacio cabeza…",
+              "http://cat.inist.fr/?aModele=afficheN&amp;cpsidt=19328677",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "salsa - Wiktionnaire",
+              "Dernière modification de cette page le 4 novembre 2009 à 13:44. Les textes sont disponibles sous licence Creative Commons attribution partage à l’identique; d’autres termes ...",
+              "http://fr.wiktionary.org/wiki/salsa",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Ecole K'Danse: cours et stages de salsa, disco-fox, hip-hop ...",
+              "Ecole K'Danse, l'école de toutes les danses. Un choix inégalé en Suisse Romande de cours, de stages, de salles et de professeurs.",
+              "http://www.kdanse.ch/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "La salsa",
+              "salsa, salsa cubaine, ... Le mot  salsa , inventé aux Etats-Unis, devient populaire ... La salsa en tant que danse arrive et se répand en Europe à ...",
+              "http://www.salsarcade.com/salsa.htm",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa",
+              "Salsa Suggerer un site Nouveaux sites Contact Référencement Annuaire SALSA Acheter et vendre Actualite Agence de voyage Agriculture Annonces immobilier Architecture ancienne et ...",
+              "http://salsa.bonnerecherche.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Peñas y Salsa",
+              "Peñas y Salsa est un festival de musique salsa qui se tient depuis 2001 aux arènes de Bayonne le samedi soir à la mi-juin, organisé par ...",
+              "http://fr.wikipedia.org/wiki/Pe%C3%B1as_y_Salsa",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Beaucoup est Ailleurs. Expressions de degré et sous-spécification catégorielle",
+              "... etre divisees en trois classes La premiere classe contient, par exemple, quelque et trois, qui fonctionnent uniquement dans le domaine nominal, comme le montrent les exemples de (l): (l) a Jean a lu trois/quelques tivres b* Jean a trois/quelque…",
+              "http://books.google.com/books?hl=en&amp;lr=lang_fr&amp;id=6VeV13i-OogC&amp;oi=fnd&amp;pg=PA125&amp;dq=salsa&amp;ots=lazNymPWIy&amp;sig=12vcDDSAMCL21ArQu-iOy1O-GUQ",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Annuaire annuaires salsa agenda…",
+              "salsa portails salsas portail annuaire annuaires Portail informatif de salsa, soirées salsa, forum Ecole de danse salsa partenaires et couples écoles de danses salsas ecoles ...",
+              "http://salsapartners.net/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Cours de danse Rock'n roll Swing - salsa, rock'n roll et lindy hop ...",
+              "Rock'n roll Swing : cours de danse lindy hop, salsa et rock'n roll sur Annemasse et Genève. Cours collectifs et cours particuliers, stages, spectacles, ...",
+              "http://www.rocknrollswing.com/",
+              LanguageCode.FRENCH
+            ),
+
+            
+            new Document(
+              "Salsa (danza) - Wikipedia",
+              "La salsa è il ballo di coppia danzato sulle note dell'omonimo genere musicale, ed ha movimenti e regole codificate. Esistono varie scuole, stili e tecniche diverse; tuttavia le ...",
+              "http://it.wikipedia.org/wiki/Salsa_(danza)",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa.it! La Salsa in Italia. Locali, serate, musica latina, testi ...",
+              "Il sito offre: un glossario dei termini, biografie di artisti, testi e Midi file di canzoni, recensioni e classifiche di dischi e una serie di editoriali e ...",
+              "http://www.salsa.it/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "La Salsa in Italia! Locali, serate, eventi, musica latina e ballo ...",
+              "Locali salsa, scuole di ballo, testi e traduzioni, classifica salsa cubana e salsa portoricana, bachata, forum salsa, cd e dvd musica latina e molto altro.",
+              "http://www.ballilatini.it/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa Social Club - HOME PAGE",
+              "Salsa Social Club - Webzine mensile sul mondo della Salsa e della musica latina. News, musica, concerti, interviste, opinioni e molto altro!",
+              "http://www.salsasocialclub.com/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "ANGELA CARLI...SALSA PLANET_Salsa Cubana a Roma, Scuola di ballo ...",
+              "Angela Carli rivela tutto sulla Danza Salsa, Locali,corsi, e Concerti di musica salsa e Afro-Cubana a Roma e Lazio!",
+              "http://www.salsaplanet.net/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Video di salsa baciata bachata merengue in dvd e vhs",
+              "Video di salsa baciata bachata merengue anche portoricana, cha cha cha in VHS e DVD dove il maestro Marco Anzellini insegna a ballare.",
+              "http://www.salsaschool.it/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "WORLD SALSA MEETING | HOME | Milano 22-23 &amp; 24 Gennaio 2010",
+              "WORLD SALSA MEETING, Milano ... © 2009 World Salsa Meeting - Infoline: +39 0247999301- Prenotazioni hotel: +39 0282221 - info@worldsalsameeting.com - P.IVA 06344730962",
+              "http://www.worldsalsameeting.com/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa (musica) - Wikipedia",
+              "Con il termine salsa vengono denominati vari ritmi, in gran parte caraibici, popolari in molte nazioni latinoamericane. Non è chiaro chi e perché abbia dato ...",
+              "http://it.wikipedia.org/wiki/Salsa_(musica)",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "www.salsamania.it-Il portale italiano multimediale della musica salsa",
+              "Il portale italiano multimediale sulla musica salsa. Qui troverai i video , i concerti , la musica salsa ,la timba cubana, il son cubano.",
+              "http://www.salsamania.it/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa - Wikipedia",
+              "Salsa - preparazione alimentare; Salsa - genere musicale; Salsa - ballo di coppia; Salsa - fenomeno geotermale; Salsa, film del 1988 di Boaz Davidson; Salsa, film del 2000 di Joyce Buñuel",
+              "http://it.wikipedia.org/wiki/Salsa",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "YouTube - Corso di Salsa ITA in coppia",
+              "Corso di Salsa Cubana primi passi in coppia per principianti ballerini.",
+              "http://www.youtube.com/watch?v=ELDxjdfQsAI",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Danze Caraibiche:nel cuore della salsa",
+              "DANZE CARAIBICHE:nel cuore della salsa",
+              "http://www.danzecaraibiche.com/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "General Software System Integrator: Consulenza Unix, Oracle, Monitoraggio sistemi e Security",
+              "Consulenza su sistemi complessi Linux, Unix, Oracle, Veritas quali cluster - disaster recovery - monitoraggio dei sistemi e security (ids)",
+              "http://salsa.gensoft.it/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Repubblica.it - Blog - Europe » Blog Archive » Diplomazia europea ...",
+              "5 gen 2010 ... 9 commenti a “Diplomazia europea in salsa inglese”. mdffs scrive: 7 gennaio 2010 alle 21:28. Molti britannici ovviamente tra il serio e lo ...",
+              "http://bonanni.blogautore.repubblica.it/2010/01/05/diplomazia-europea-in-salsa-inglese/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsamix Il portale Latino Americano Salsa Bachata Forum Musica ...",
+              "Portale dedicato alla musica latina, vende diversi articoli delle principali marche, per il ballo e non. Acquisti previa registrazione.",
+              "http://www.salsamix.it/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              ".:. La Salsa Vive . org .:. Salsa - Guaguanco - Latin Jazz - Mambo",
+              "La Salsa Vive . org - Portale e forum dedicati alla salsa classica.",
+              "http://www.lasalsavive.org/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa.it! Classifiche",
+              "Sei un DJ e vuoi pubblicare la tua classifica su Salsa.it? Clicca qui. Se sei già registrato Clicca qui. OFFICIAL DJ di SALSA.IT ...",
+              "http://www.salsa.it/classifiche.aspx",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "SALSA WORLD FESTIVAL ROMA - SALSA CONGRESS",
+              "Il festival di musica e ballo latinoamericano più importante d'Italia. Gli artisti più importanti del mondo per una tre giorni a Roma, ogni anno.",
+              "http://www.salsaworldfestival.com/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Bologna Salsa Festival Stage e Show di salsa cubana, portoricana ...",
+              "Bologna Salsa Festival un week-end di ballo, musica, show e piÃ¹ di 60 ore di stage a tutti i livelli con artisti di fama nazionale ed internazionale con ...",
+              "http://www.bolognasalsafestival.com/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "salsa.ch - the swiss salsa portal for events, pictures, congresses ...",
+              "el portal de la salsa en suiza ... Ballare la salsa - come a Cuba... a Locarno il congresso di salsa internazionale, in un modo completamente diverso ...",
+              "http://www.salsa.ch/news_view.php?idnews=153",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa.it! La Salsa in Italia. Locali,…",
+              "Salsa.it! La musica latino americana ... 15/01/2010 (NEWS) HAITI, UN TERREMOTO DEVASTANTE Questo sito generalmente parla del mondo del sud America e in particolare del mondo ...",
+              "http://www.salsa.it/index.aspx",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa a Cuba - Corsi di salsa - Scuole di salsa -",
+              "Salsa a Cuba - Corsi di salsa - Scuole di salsa . Scuole di salsa - Corsi di salsa - Cos'è la Salsa - La musica salsa - Il ballo salsa - Artisti di salsa ...",
+              "http://www.salsa-in-cuba.com/ita/index.html",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa will change your life - Salsafestival Switzerland, the Salsa ...",
+              "Lunedì 1 marzo 2010 / Salsa Rica nel Maag Areal. Il Salsafestival Switzerland è troppo bello per finire il lunedì mattina. Salsa Rica è la serata del lunedì sera a ...",
+              "http://www.salsafestival.com/index.php?article_id=2&amp;clang=3",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Forum BalliLatini.it: la Salsa in Italia!…",
+              "Nuovi Messaggi dall'ultima visita. Vecchi Messaggi. ( 20 o più risposte.) Discussione Bloccata.",
+              "http://www.ballilatini.it/forum.salsa/forum.asp?FORUM_ID=3",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Chi conosce un corso buono di salsa a Roma? - Yahoo! Answers",
+              "7 gen 2010 ... Risposte alla domanda Chi conosce un corso buono di salsa a Roma? nella categoria Danza di Yahoo! Answers.",
+              "http://it.answers.yahoo.com/question/index?qid=20100107153023AAY0wh2",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa will change your life - Salsafestival Switzerland, the Salsa ...",
+              "Il programma sconvolgente del Salsafestival é leggendario. ... Partner: RobertoCopyright by Salsa Kongress GmbH - Disclaimer - Website by CTEK GmbH ...",
+              "http://www.salsafestival.com/?promo=chicho-dj&amp;clang=3",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Chips &amp; Salsa",
+              "Ménard ha espresso la sua opinione in maniera problematica, ma senza dubbio una frontiera l’ha voluta passare, che non è quella della libertà, ma quella della disumanità. E non basta a giustificarlo l’orrore del terrorismo sanguinario, né il nobile…",
+              "http://chipsandsalsa.wordpress.com/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa (cucina)",
+              "La salsa è una preparazione di cucina o di pasticceria con consistenza pastosa, cremosa o semiliquida. La salsa ha come scopo quello di ...",
+              "http://it.wikipedia.org/wiki/Salsa_(cucina)",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Maremma Que Salsa!",
+              "Maremma Que Salsa un weekend di ballo latino americano con i migliori artisti internazionali e le scuole di salsa d tutta Italia organizzato da ...",
+              "http://www.maremmaquesalsa.com/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "TISalsa.ch - Il portale del mondo latino in Ticino",
+              "Salsa. Merengue. Bachata. Salsa. Merengue. Bachata ... al mondo latino, in particolar modo ai suoi balli: salsa, merengue e bachata. ...",
+              "http://www.tisalsa.ch/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa di soia",
+              "thumb | Tradizionale salsa di soia giapponese. La salsa di soia o shoyu (cinese tradizionale : 醬油 pinyin : jiàng yóu, giapponese : 醤油 rōmaji ...",
+              "http://it.wikipedia.org/wiki/Salsa_di_soia",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "salsa ::: mondo salsa::: il nuovo portale salsero",
+              "Il sito dedicato al ballo della salsa, bachata, con biografia artisti, eventi vari, le scuole di salsa che fanno corso di salsa e merengue, il tutto curato ...",
+              "http://www.mondosalsa.com/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa123.ch: Team",
+              "Salsa 1-2-3 Übersicht Notizie Filosofia de la Scuola Metodo 1-2-3 TeamLinks ... Lavora anche come un istruttore a Salsa -le discoteche ed i partiti privati. ...",
+              "http://salsa123.ch/?url=/Salsa_Team&amp;change_language=5",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Niente più temi in salsa Wikipedia un software debella il copia-incolla - Scuola&amp;Giovani - Repubblica.it",
+              "Niente più temi in salsa Wikipedia un software debella il copia-incolla. Repubblica.it: il quotidiano online con tutte le notizie in tempo reale. News e ultime notizie. Niente più temi in salsa Wikipedia un software debella il copia-incolla -…",
+              "http://www.repubblica.it/2008/05/sezioni/scuola_e_universita/servizi/copiaincolla-addio/copiaincolla-addio/copiaincolla-addio.html",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "spiaggia nudista Torre Salsa",
+              "spiaggia nudista Torre Salsa Spiaggia nudista Torre Salsa. Spettacolare!!! Il nudismo è tollerato da più di 20 anni. Basta posteggiare nel parcheggio ...",
+              "http://wikimapia.org/4532657/it/spiaggia-nudista-Torre-Salsa",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "DjMaximo - Baila Salsa",
+              "ENTRA NEL SITO ...",
+              "http://www.bailasalsa.ch/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Tabasco (salsa)",
+              "Il Tabasco è una salsa a base di peperoncini piccanti macerati nel sale e lasciati ad invecchiare per tre anni in botti di quercia, ...",
+              "http://it.wikipedia.org/wiki/Tabasco_(salsa)",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa - Latina - Musica - www.real.com",
+              "Salsa represents the ongoing evolution and assimilation of a variety of styles which have traveled from Cuba and Puerto Rico to New York, Miami, ...",
+              "http://www.it.real.com/music/genre/Salsa/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa Sandro - Politecnico di Milano - Dipartimento di Matematica",
+              "Sandro Salsa Professore Ordinario. e-mail. Sede Milano Leonardo Dip. Matematica 7° Piano. Telefono: +39 02 2399 4553. Telefono segreteria: +39 02 2399 4500 ...",
+              "http://web.mate.polimi.it/viste/pagina_personale/pagina_personale.php?id=80",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa123.ch: Salsa_Cristiana",
+              "Salsa 1-2-3 Übersicht Notizie Filosofia de la Scuola Metodo 1-2-3 Team Links ... Zurigo Salsa immagini Übersicht Impresions del corso di ballo Premuto ...",
+              "http://salsa123.ch/?url=/Cristliche_Salsa&amp;change_language=5",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Sito Internet Scuola di Salsa  Sbandao  Chioggia",
+              "sito internet  sbandao  sbandao@sbandao. net Iniziano i nuovi corsi a Chioggia e Vicenza... chiama per informazioni 3288507507 TEL 328 8 507 507 home corsi dove siamo insegnanti foto ...",
+              "http://www.sbandao.net/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Arancini di riso dolce al maritozzo e salsa di cioccolato | Le ricette di Ginger &amp; Tomato...",
+              "Servite le palline spolverate con poco zucchero a velo vanigliato e accompagnate dalla salsa al cioccolato. Se volete rendere questa ricetta un pochino più estiva potete sostituire la salsa E' stato scritto un commento su  Arancini di riso dolce al…",
+              "http://www.gingerandtomato.com/ricette-dolci/arancini-riso-dolce-maritozzo-salsa-cioccolato/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa (geologia)",
+              "La salsa è un fenomeno geologico di vulcanismo secondario, consistente nella fuoriuscita del terreno di fango , acqua salata, misto a gas ...",
+              "http://it.wikipedia.org/wiki/Salsa_(geologia)",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "DANZE…",
+              "danze caraibiche-musica-video-abbigliamento-corsi di ballo-maestri-testi-forum-classifiche-evento-latino-salsa 2009",
+              "http://www.danzecaraibiche.com/salsa/salsa.php",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsafestival Switzerland 2010 - Salsa will change your life ...",
+              "Dopo otto anni di costante sviluppo il Salsafestival Switzerland é l'evento-Top di Salsa in Europa e uno dei congressi di salsa più grandi e prestigioso al ...",
+              "http://www.salsafestival.com/index.php?article_id=1&amp;clang=3",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Storia Salsa",
+              "La salsa incorpora vari stili e varianti; il termine può essere utilizzato per ... Il più diretto antenato della salsa è il son montuno di Cuba, che è una ...",
+              "http://www.newstyledance.ch/html/storia_salsa.html",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "::: STEP EVOLUTION - Dance &amp; Fitness School :::",
+              "Giovedì 17 settembre 2009 ... ASSOCIAZIONE SPORTIVA DILETTANTISTICA STEP EVOLUTION - DANCE &amp; FITNESS SCHOOL PRESSO CIRCOLO  LA TORRETTA  VIA MAZZINI, 2 - MOLINELLA (BO) - info@stepevolution. it",
+              "http://www.isdancers.com/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Timballo di riso con salsa di lamponi | Le ricette di Ginger &amp; Tomato",
+              "Quando i timballini saranno abbastanza freddi sformateli e serviteli con la salsa di lamponi. [photo courtesy of Alexipharmaka] Articoli correlati a  Timballo di riso con salsa di lamponi  E' stato scritto un commento su  Timballo di riso con salsa…",
+              "http://www.gingerandtomato.com/ricette-dolci/timballo-riso-salsa-lamponi/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "SALSAROMACLUB...Salsa a Roma,corsi e…",
+              "SALSAROMACLUB...Salsa a Roma,corsi e stage di salsa,bachata,merengue,rueda de casino,cha cha cha,son,organizzazione serate ed eventi..",
+              "http://www.salsaromaclub.it/",
+              LanguageCode.ITALIAN
+            ),
+
+            
+            new Document(
+              "Salsa Worcester",
+              "La salsa Worcester (o salsa Worcestershire) è una salsa inglese, agrodolce e leggermente piccante, che prende il nome dall'omonima città ...",
+              "http://it.wikipedia.org/wiki/Salsa_Worcester",
+              LanguageCode.ITALIAN
+            )
+        );
+    }
     
     public final static List<Collection<Document>> ALL = ImmutableList.of(
-        DOCUMENTS_DATA_MINING, DOCUMENTS_DAWID);
+        DOCUMENTS_DATA_MINING, DOCUMENTS_DAWID, DOCUMENTS_SALSA_MULTILINGUAL);
 }

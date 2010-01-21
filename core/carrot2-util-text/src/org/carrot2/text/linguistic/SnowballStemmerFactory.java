@@ -14,6 +14,7 @@ package org.carrot2.text.linguistic;
 
 import java.util.HashMap;
 
+import org.carrot2.core.LanguageCode;
 import org.tartarus.snowball.SnowballProgram;
 import org.tartarus.snowball.ext.*;
 

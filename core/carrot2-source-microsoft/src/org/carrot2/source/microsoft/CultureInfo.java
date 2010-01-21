@@ -15,7 +15,7 @@ package org.carrot2.source.microsoft;
 import java.util.Collections;
 import java.util.Map;
 
-import org.carrot2.text.linguistic.LanguageCode;
+import org.carrot2.core.LanguageCode;
 
 import com.google.common.collect.Maps;
 

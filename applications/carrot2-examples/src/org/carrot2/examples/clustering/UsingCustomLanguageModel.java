@@ -14,12 +14,14 @@ package org.carrot2.examples.clustering;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.source.etools.EToolsDocumentSource;
+import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
 import org.carrot2.text.linguistic.*;
 
 import com.google.common.collect.ImmutableSet;
@@ -68,11 +70,6 @@ public class UsingCustomLanguageModel
      */
     public static class CustomLanguageModelFactory implements ILanguageModelFactory
     {
-        public ILanguageModel getDefaultLanguageModel()
-        {
-            return getLanguageModel(null);
-        }
-
         public ILanguageModel getLanguageModel(LanguageCode language)
         {
             // Here we always return the same language model, regardless of the requested
@@ -111,6 +108,12 @@ public class UsingCustomLanguageModel
                             : null;
                     }
                 };
+            }
+            
+
+            public Analyzer getTokenizer()
+            {
+                return new ExtendedWhitespaceAnalyzer();
             }
 
             public LanguageCode getLanguageCode()

@@ -90,7 +90,7 @@ public class ContaminationMetricTest extends IdealPartitioningBasedMetricTest
     public void testAllDocumentsInOtherTopics()
     {
         final Cluster otherTopics = clusterWithPartitions("t1", "t2", "t3");
-        otherTopics.setAttribute(Cluster.OTHER_TOPICS, true);
+        otherTopics.setOtherTopics(true);
         check(otherTopics, null);
     }
 

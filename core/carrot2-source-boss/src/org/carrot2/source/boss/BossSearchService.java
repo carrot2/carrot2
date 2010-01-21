@@ -21,7 +21,6 @@ import org.apache.commons.httpclient.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
-import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpHeaders;
@@ -350,17 +349,6 @@ public abstract class BossSearchService
     public BossLanguageCodes languageAndRegion;
 
     /**
-     * An internal attribute to capture the previously set active language and possibly
-     * set a new better matching value based on the supplied {@link #languageAndRegion} value.
-     */
-    @Processing
-    @Input
-    @Output
-    @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
-    @Internal
-    private LanguageCode language;
-
-    /**
      * BOSS engine current metadata.
      */
     protected MultipageSearchEngineMetadata metadata = DEFAULT_METADATA;
@@ -415,15 +403,6 @@ public abstract class BossSearchService
             {
                 throw new IOException("Language value: " + languageAndRegion);
             }
-            
-            if (language == null)
-            {
-                final LanguageCode bestMatchingLanguageCode = languageAndRegion.toLanguageCode();
-                if (bestMatchingLanguageCode != null)
-                {
-                    language = bestMatchingLanguageCode;
-                }
-            }
         }
 
         final String serviceURI = URLResourceWithParams.substituteAttributes(
@@ -467,7 +446,7 @@ public abstract class BossSearchService
     /**
      * Parse the response stream.
      */
-    private static SearchEngineResponse parseResponseXML(final InputStream is)
+    private SearchEngineResponse parseResponseXML(final InputStream is)
         throws IOException
     {
         try
@@ -477,7 +456,7 @@ public abstract class BossSearchService
                 is);
 
             response.metadata.put(YBOSS_RESPONSE, yresponse);
-            yresponse.populate(response);
+            yresponse.populate(response, languageAndRegion.toLanguageCode());
 
             return response;
         }

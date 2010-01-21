@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.text.linguistic;
+package org.carrot2.core;
 
 import java.util.Locale;
 import java.util.Map;
@@ -21,7 +21,7 @@ import com.google.common.collect.Maps;
 
 /**
  * Codes for languages for which linguistic resources are available 
- * in {@link DefaultLanguageModelFactory}.
+ * in {@link org.carrot2.text.linguistic.DefaultLanguageModelFactory}.
  * <p>
  * Notes about third-party or extra implementation needs.
  * <ul>
@@ -33,11 +33,6 @@ import com.google.common.collect.Maps;
  */
 public enum LanguageCode
 {
-    /*
-     * When adding a language, check:
-     * - language mappings in carrot2-source-(boss|microsoft).
-     */
-
     ARABIC ("ar"),
     CHINESE_SIMPLIFIED ("zh_cn"),
     DANISH ("da"),

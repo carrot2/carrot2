@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,6 +17,8 @@ import java.util.List;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.httpclient.HttpStatus;
+import org.carrot2.core.Document;
+import org.carrot2.core.LanguageCode;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
 import org.carrot2.util.StringUtils;
@@ -43,6 +44,15 @@ public class PubMedDocumentSource extends SimpleSearchEngine
     protected SearchEngineResponse fetchSearchResponse() throws Exception
     {
         return getPubMedAbstracts(getPubMedIds(query, results));
+    }
+
+    @Override
+    protected void afterFetch(SearchEngineResponse response)
+    {
+        for (Document document : response.results)
+        {
+            document.setLanguage(LanguageCode.ENGLISH);
+        }
     }
 
     /**
@@ -92,8 +102,8 @@ public class PubMedDocumentSource extends SimpleSearchEngine
         final PubMedFetchHandler fetchHandler = new PubMedFetchHandler();
         reader.setContentHandler(fetchHandler);
 
-        final String url = E_FETCH_URL
-            + "?db=pubmed&retmode=xml&rettype=abstract&id=" + getIdsString(ids);
+        final String url = E_FETCH_URL + "?db=pubmed&retmode=xml&rettype=abstract&id="
+            + getIdsString(ids);
 
         final HttpUtils.Response response = HttpUtils.doGET(url, null, null);
 

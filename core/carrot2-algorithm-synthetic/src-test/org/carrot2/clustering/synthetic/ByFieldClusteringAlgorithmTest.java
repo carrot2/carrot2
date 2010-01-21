@@ -76,7 +76,7 @@ public class ByFieldClusteringAlgorithmTest extends
         if (unclustered.length > 0)
         {
             final Cluster otherTopics = new Cluster("Other Topics", unclustered);
-            otherTopics.setAttribute(Cluster.OTHER_TOPICS, true);
+            otherTopics.setOtherTopics(true);
             expectedClusters.add(otherTopics);
         }
         assertThatClusters(clusters).isEquivalentTo(expectedClusters);

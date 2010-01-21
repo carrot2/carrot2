@@ -81,7 +81,7 @@ public class ContaminationMetric extends IdealPartitioningBasedMetric
 
         for (Cluster cluster : clusters)
         {
-            if (cluster.getAttribute(Cluster.OTHER_TOPICS) != null)
+            if (cluster.isOtherTopics())
             {
                 continue;
             }

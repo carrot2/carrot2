@@ -14,6 +14,7 @@ package org.carrot2.text.linguistic;
 
 import static org.junit.Assert.*;
 
+import org.carrot2.core.LanguageCode;
 import org.junit.Test;
 
 /**
@@ -21,14 +22,6 @@ import org.junit.Test;
  */
 public class LanguageModelFactoryTest
 {
-    @Test
-    public void testDefaultLanguageEnglish()
-    {
-        final ILanguageModel model = new DefaultLanguageModelFactory().getDefaultLanguageModel();
-        assertNotNull(model);
-        assertEquals(LanguageCode.ENGLISH, model.getLanguageCode());
-    }
-    
     @Test
     public void testLanguageDutch()
     {

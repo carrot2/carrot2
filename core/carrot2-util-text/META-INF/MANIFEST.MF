@@ -13,6 +13,7 @@ Bundle-ClassPath: META-INF/,
  .,
  src-resources/
 Export-Package: org.carrot2.text.analysis,
+ org.carrot2.text.clustering,
  org.carrot2.text.linguistic,
  org.carrot2.text.preprocessing,
  org.carrot2.text.preprocessing.filter,

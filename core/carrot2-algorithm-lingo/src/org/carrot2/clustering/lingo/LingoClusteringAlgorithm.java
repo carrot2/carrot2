@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,6 +17,9 @@ import java.util.List;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.matrix.NNIInterface;
+import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
+import org.carrot2.text.clustering.MultilingualClustering;
+import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
@@ -29,6 +31,7 @@ import org.slf4j.Logger;
 
 import com.carrotsearch.hppc.BitSet;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 
 /**
  * Lingo clustering algorithm.
@@ -37,7 +40,8 @@ import com.google.common.collect.Lists;
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(LingoClusteringAlgorithm.class);
+    private static final Logger log = org.slf4j.LoggerFactory
+        .getLogger(LingoClusteringAlgorithm.class);
 
     /**
      * Report the warning about native libraries only once.
@@ -123,6 +127,11 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      */
     public LabelFormatter labelFormatter = new LabelFormatter();
 
+    /**
+     * A helper for performing multilingual clustering.
+     */
+    public MultilingualClustering multilingualClustering = new MultilingualClustering();
+
     @Override
     public void init(IControllerContext context)
     {
@@ -143,13 +152,48 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      * Performs Lingo clustering of {@link #documents}.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void process() throws ProcessingException
     {
         nativeMatrixUsed = NNIInterface.isNativeBlasAvailable();
 
+        // There is a tiny trick here to support multilingual clustering without
+        // refactoring the whole component: we remember the original list of documents
+        // and invoke clustering for each language separately within the
+        // IMonolingualClusteringAlgorithm implementation below. This is safe because
+        // processing components are not thread-safe by definition and
+        // IMonolingualClusteringAlgorithm forbids concurrent execution by contract.
+        final List<Document> originalDocuments = documents;
+        clusters = multilingualClustering.process(documents,
+            new IMonolingualClusteringAlgorithm()
+            {
+                public List<Cluster> process(List<Document> documents,
+                    LanguageCode language)
+                {
+                    LingoClusteringAlgorithm.this.documents = documents;
+                    LingoClusteringAlgorithm.this.cluster(language);
+                    return LingoClusteringAlgorithm.this.clusters;
+                }
+            });
+        documents = originalDocuments;
+
+        if (multilingualClustering.languageAggregationStrategy == LanguageAggregationStrategy.FLATTEN_ALL)
+        {
+            Collections.sort(clusters, Ordering.compound(Lists.newArrayList(
+                Cluster.OTHER_TOPICS_AT_THE_END, Cluster
+                    .byReversedWeightedScoreAndSizeComparator(scoreWeight))));
+        }
+    }
+
+    /**
+     * Performs the actual clustering with an assumption that all documents are written in
+     * one <code>language</code>.
+     */
+    private void cluster(LanguageCode language)
+    {
         // Preprocessing of documents
         final PreprocessingContext context = preprocessingPipeline.preprocess(documents,
-            query);
+            query, language);
 
         // Further processing only if there are words to process
         clusters = Lists.newArrayList();

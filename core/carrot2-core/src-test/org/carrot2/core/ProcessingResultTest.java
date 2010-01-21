@@ -289,7 +289,7 @@ public class ProcessingResultTest
         sourceProcessingResult.serialize(writer, documentsDeserialized,
             clustersDeserialized);
         CloseableUtils.close(writer);
-
+        
         final ProcessingResult deserialized = ProcessingResult.deserialize(
             new ByteArrayInputStream(outputStream.toByteArray()));
 
@@ -335,6 +335,7 @@ public class ProcessingResultTest
         document.setField("testInteger", 10);
         document.setField("testDouble", 10.3);
         document.setField("testBoolean", true);
+        document.setLanguage(LanguageCode.POLISH);
         document.id = 3; // assign an id so that the max id is larger than the list size
         Document.assignDocumentIds(documents);
 

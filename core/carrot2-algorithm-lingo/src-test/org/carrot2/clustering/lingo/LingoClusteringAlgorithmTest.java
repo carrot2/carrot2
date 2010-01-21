@@ -58,9 +58,9 @@ public class LingoClusteringAlgorithmTest extends
     public void testNoLabelCandidates()
     {
         final List<Document> documents = Lists.newArrayList();
-        documents.add(new Document("test", null, null));
-        documents.add(new Document("test", null, null));
-        documents.add(new Document("test", null, null));
+        documents.add(new Document("test"));
+        documents.add(new Document("test"));
+        documents.add(new Document("test"));
         processingAttributes.put(AttributeNames.QUERY, "test");
 
         final List<Cluster> clusters = cluster(documents).getClusters();

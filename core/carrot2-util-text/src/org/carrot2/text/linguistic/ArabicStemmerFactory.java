@@ -14,6 +14,7 @@ package org.carrot2.text.linguistic;
 
 import java.nio.CharBuffer;
 
+import org.carrot2.core.LanguageCode;
 import org.slf4j.Logger;
 
 

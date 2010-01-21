@@ -14,7 +14,11 @@ package org.carrot2.text.linguistic;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.carrot2.core.LanguageCode;
 import org.carrot2.core.attribute.*;
+import org.carrot2.text.analysis.ChineseAnalyzer;
+import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
 
@@ -31,12 +35,6 @@ import com.google.common.collect.*;
 @Bindable(prefix = "DefaultLanguageModelFactory")
 public final class DefaultLanguageModelFactory implements ILanguageModelFactory
 {
-    @Required
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
-    public LanguageCode current = LanguageCode.ENGLISH;
-
     /**
      * Reloads cached stop words and stop labels on every processing request. For best
      * performance, lexical resource reloading should be disabled in production.
@@ -89,14 +87,11 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
      * instance has its own instance of {@link DefaultLanguageModelFactory}).
      */
     private final HashMap<LanguageCode, IStemmer> stemmerCache = Maps.newHashMap();
-
+    
     /**
-     * @see #current
+     * A tokenizer cache for this particular factory.
      */
-    public ILanguageModel getDefaultLanguageModel()
-    {
-        return getLanguageModel(current);
-    }
+    private final HashMap<LanguageCode, Analyzer> tokenizerCache = Maps.newHashMap();
 
     /**
      * @return Return a language model for one of the languages in {@link LanguageCode}.
@@ -162,7 +157,18 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
             }
         }
 
-        return new DefaultLanguageModel(language, lexicalResources, stemmer);
+        Analyzer tokenizer;
+        synchronized (tokenizerCache)
+        {
+            tokenizer = tokenizerCache.get(language);
+            if (!tokenizerCache.containsKey(language))
+            {
+                tokenizer = createTokenizer(language);
+                tokenizerCache.put(language, tokenizer);
+            }
+        }
+        
+        return new DefaultLanguageModel(language, lexicalResources, stemmer, tokenizer);
     }
 
     /**
@@ -205,6 +211,26 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
                  * For other languages, try to use snowball's stemming. 
                  */
                 return SnowballStemmerFactory.createStemmer(language);
+        }
+    }
+    
+    private Analyzer createTokenizer(LanguageCode language)
+    {
+        switch (language)
+        {
+            case CHINESE_SIMPLIFIED:
+                return new ChineseAnalyzer();
+
+            /*
+             * We use our own analyzer for Arabic. Lucene's version has special support
+             * for Nonspacing-Mark characters (see http://www.fileformat.info/info/unicode/category/Mn/index.htm),
+             * but we have them included as letters in the parser.
+             */
+            case ARABIC:
+                // Intentional fall-through.
+
+            default:
+                return new ExtendedWhitespaceAnalyzer();
         }
     }
 }

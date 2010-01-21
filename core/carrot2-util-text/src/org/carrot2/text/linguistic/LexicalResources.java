@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.slf4j.Logger;
+import org.carrot2.core.LanguageCode;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceUtils;

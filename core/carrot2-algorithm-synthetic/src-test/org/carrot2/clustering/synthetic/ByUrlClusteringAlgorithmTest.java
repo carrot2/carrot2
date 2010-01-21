@@ -108,7 +108,7 @@ public class ByUrlClusteringAlgorithmTest extends
         final List<Cluster> expectedFacets = Lists.newArrayList();
         final Cluster facet11 = new Cluster("mail.cos.pl", docs.get(0), docs.get(3));
         final Cluster facet12 = new Cluster("Other Sites", docs.get(1), docs.get(2))
-            .setAttribute(Cluster.OTHER_TOPICS, Boolean.TRUE);
+            .setOtherTopics(true);
         final Cluster facet1 = new Cluster("cos.pl").addSubclusters(facet11, facet12);
         expectedFacets.add(facet1);
 

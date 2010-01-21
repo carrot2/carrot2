@@ -75,5 +75,10 @@ public class FubDocumentSource extends ProcessingComponentBase implements IDocum
     {
         this.documents = data.getDocumentsForTopic(topicId, requestedResults,
             minTopicSize, includeDocumentsWithoutTopic);
+        
+        for (Document document : documents)
+        {
+            document.setLanguage(LanguageCode.ENGLISH);
+        }
     }
 }

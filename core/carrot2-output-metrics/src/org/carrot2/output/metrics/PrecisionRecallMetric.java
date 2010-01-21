@@ -142,8 +142,7 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedMetric
             for (Cluster cluster : clusters)
             {
                 final List<Document> clusterDocuments = cluster.getAllDocuments();
-                if (cluster.getAttribute(Cluster.OTHER_TOPICS) != null
-                    || clusterDocuments.size() == 0)
+                if (cluster.isOtherTopics() || clusterDocuments.size() == 0)
                 {
                     continue;
                 }

@@ -15,9 +15,11 @@ package org.carrot2.source.etools;
 import java.util.Collections;
 import java.util.Map;
 
+import org.carrot2.core.Document;
+import org.carrot2.core.LanguageCode;
 import org.carrot2.core.attribute.*;
+import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
-import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -163,17 +165,6 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     public Language language = Language.ENGLISH;
 
     /**
-     * An internal attribute to capture the previously set active language and possibly
-     * set a new better matching value based on the supplied {@link #language} value.
-     */
-    @Processing
-    @Input
-    @Output
-    @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
-    @Internal
-    private LanguageCode activeLanguage;
-
-    /**
      * Maximum time in milliseconds to wait for all data sources to return results.
      * 
      * @label Timeout
@@ -308,17 +299,12 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     }
 
     @Override
-    public void process()
+    protected void afterFetch(SearchEngineResponse response)
     {
-        super.process();
-        
-        if (activeLanguage == null)
+        // Set document's language
+        for (Document document : response.results)
         {
-            LanguageCode bestMatchingLanguageCode = language.toLanguageCode();
-            if (bestMatchingLanguageCode != null)
-            {
-                activeLanguage = bestMatchingLanguageCode;
-            }
+            document.setLanguage(language.toLanguageCode());
         }
     }
 }

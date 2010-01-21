@@ -11,14 +11,12 @@
 
 package org.carrot2.text.preprocessing.pipeline;
 
-import java.util.List;
-
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.Bindable;
 
 /**
- * Performs a complete preprocessing on the provided documents. The
- * {@link #preprocess(List, String)} method applies the following preprocessing steps:
+ * Performs a complete preprocessing on the provided documents. The preprocessing consists
+ * of the following steps:
  * <ol>
  * <li>{@link Tokenizer#tokenize(PreprocessingContext)}</li>
  * <li>{@link CaseNormalizer#normalize(PreprocessingContext)}</li>

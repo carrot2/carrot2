@@ -12,6 +12,7 @@
 
 package org.carrot2.text.linguistic;
 
+import org.carrot2.core.LanguageCode;
 import org.slf4j.Logger;
 import java.util.List;
 

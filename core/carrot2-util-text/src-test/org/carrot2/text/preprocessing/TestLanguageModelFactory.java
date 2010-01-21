@@ -12,20 +12,18 @@
 
 package org.carrot2.text.preprocessing;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.carrot2.core.LanguageCode;
+import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
 import org.carrot2.text.linguistic.*;
 
 public final class TestLanguageModelFactory implements ILanguageModelFactory
 {
     private static final TestLanguageModel TEST_LANGUAGE_MODEL = new TestLanguageModel();
 
-    public ILanguageModel getDefaultLanguageModel()
-    {
-        return TEST_LANGUAGE_MODEL;
-    }
-
     public ILanguageModel getLanguageModel(LanguageCode language)
     {
-        return getDefaultLanguageModel();
+        return TEST_LANGUAGE_MODEL;
     }
 
     private final static class TestLanguageModel implements ILanguageModel
@@ -61,6 +59,11 @@ public final class TestLanguageModelFactory implements ILanguageModelFactory
         public boolean isStopLabel(CharSequence formattedLabel)
         {
             return formattedLabel.toString().startsWith("stoplabel");
+        }
+
+        public Analyzer getTokenizer()
+        {
+            return new ExtendedWhitespaceAnalyzer();
         }
     }
 }

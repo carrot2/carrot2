@@ -82,7 +82,7 @@ public class NormalizedMutualInformationMetricTest extends IdealPartitioningBase
     public void testAllDocumentsInOtherTopics()
     {
         final Cluster otherTopics = clusterWithPartitions("t1", "t2", "t3");
-        otherTopics.setAttribute(Cluster.OTHER_TOPICS, true);
+        otherTopics.setOtherTopics(true);
         check(0.0, otherTopics);
     }
 

@@ -24,7 +24,9 @@ import org.apache.lucene.util.PriorityQueue;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
-import org.carrot2.text.linguistic.LanguageCode;
+import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
+import org.carrot2.text.clustering.MultilingualClustering;
+import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
@@ -85,6 +87,11 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      * Parameters and thresholds of the algorithm.
      */
     public STCClusteringParameters params = new STCClusteringParameters();
+
+    /**
+     * A helper for performing multilingual clustering.
+     */
+    public MultilingualClustering multilingualClustering = new MultilingualClustering();
 
     /**
      * Stores the preprocessing context during {@link #process()}.
@@ -169,12 +176,54 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Override
     public void process() throws ProcessingException
     {
+        // There is a tiny trick here to support multilingual clustering without
+        // refactoring the whole component: we remember the original list of documents
+        // and invoke clustering for each language separately within the 
+        // IMonolingualClusteringAlgorithm implementation below. This is safe because
+        // processing components are not thread-safe by definition and 
+        // IMonolingualClusteringAlgorithm forbids concurrent execution by contract.
+        final List<Document> originalDocuments = documents;
+        clusters = multilingualClustering.process(documents,
+            new IMonolingualClusteringAlgorithm()
+            {
+                public List<Cluster> process(List<Document> documents,
+                    LanguageCode language)
+                {
+                    STCClusteringAlgorithm.this.documents = documents;
+                    STCClusteringAlgorithm.this.cluster(language);
+                    return STCClusteringAlgorithm.this.clusters;
+                }
+            });
+        documents = originalDocuments;
+
+        if (multilingualClustering.languageAggregationStrategy == LanguageAggregationStrategy.FLATTEN_ALL)
+        {
+            Collections.sort(clusters, new Comparator<Cluster>() {
+                public int compare(Cluster c1, Cluster c2)
+                {
+                    if (c1.isOtherTopics()) return 1;
+                    if (c2.isOtherTopics()) return -1;
+                    if (c1.getScore() < c2.getScore()) return 1;
+                    if (c1.getScore() > c2.getScore()) return -1;
+                    if (c1.size() < c2.size()) return 1;
+                    if (c1.size() > c2.size()) return -1;
+                    return 0;
+                } 
+            });
+        }}
+
+    /**
+     * Performs the actual clustering with an assumption that all documents are written in
+     * one <code>language</code>.
+     */
+    private void cluster(LanguageCode language)
+    {
         clusters = new ArrayList<Cluster>();
 
         /*
          * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
          */
-        context = preprocessingPipeline.preprocess(documents, query);
+        context = preprocessingPipeline.preprocess(documents, query, language);
 
         /*
          * Step 2: Create a generalized suffix tree from phrases in the input.
@@ -710,16 +759,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             phrases.clear();
         }
 
-        // Check if there are any unassigned documents.
-        all.flip(0, documents.size());
-        if (all.cardinality() > 0)
-        {
-            final Cluster junk = new Cluster();
-            junk.setAttribute(Cluster.OTHER_TOPICS, true);
-            junk.addPhrases(Cluster.OTHER_TOPICS);
-            junk.addDocuments(collectDocuments(new ArrayList<Document>(), all));
-            this.clusters.add(junk);
-        }
+        Cluster.appendOtherTopics(this.documents, this.clusters);
     }
     
     /**

@@ -17,7 +17,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.core.IController;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.AttributeNames;
 
 /**
  * Search process model is the core model around which all other views revolve (editors,
@@ -96,20 +95,6 @@ public final class SearchResult
      */
     private void fireProcessingResultUpdated()
     {
-        /*
-         * QUICK FIX for issue: http://issues.carrot2.org/browse/CARROT-542
-         */
-        if (input.getAttribute(AttributeNames.ACTIVE_LANGUAGE) == null)
-        {
-            /*
-             * Propagate active-language back to input attributes, if it 
-             * has been set. Do not fire attribute changed events - this causes
-             * double reprocessing when auto-update trigger is enabled.
-             */
-            input.setAttribute(AttributeNames.ACTIVE_LANGUAGE, 
-                result.getAttribute(AttributeNames.ACTIVE_LANGUAGE), false);
-        }
-
         for (ISearchResultListener listener : listeners)
         {
             listener.processingResultUpdated(result);

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,6 +11,11 @@
 
 package org.carrot2.text.linguistic;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.Payload;
+import org.carrot2.core.LanguageCode;
+import org.carrot2.text.analysis.ITokenType;
+
 /**
  * Linguistic resources and tools dedicated to a given language. Instances of this
  * interface (and their derived resources) are not thread safe.
@@ -19,10 +23,10 @@ package org.carrot2.text.linguistic;
 public interface ILanguageModel
 {
     /**
-     * @return Returns <code>true</code> if <code>word</code> is common (meaningless)
-     *         in this language. Such words are referred to as "stop words" and are
-     *         usually ignored in information retrieval tasks. Depending on the
-     *         implementation, <code>word</code> may be lower-cased internally.
+     * @return Returns <code>true</code> if <code>word</code> is common (meaningless) in
+     *         this language. Such words are referred to as "stop words" and are usually
+     *         ignored in information retrieval tasks. Depending on the implementation,
+     *         <code>word</code> may be lower-cased internally.
      */
     public boolean isCommonWord(CharSequence word);
 
@@ -40,6 +44,13 @@ public interface ILanguageModel
      *         this language.
      */
     public IStemmer getStemmer();
+
+    /**
+     * @return Return an engine for splitting the input text into individual words
+     *         (tokens). The returned analyzer must provide token {@link Payload}
+     *         implementing {@link ITokenType}.
+     */
+    public Analyzer getTokenizer();
 
     /**
      * @return Returns {@link LanguageCode} for this model.
