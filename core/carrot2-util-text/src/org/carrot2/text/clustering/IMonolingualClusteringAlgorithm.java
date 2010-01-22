@@ -5,7 +5,9 @@ import java.util.List;
 import org.carrot2.core.*;
 
 /**
- * An internal interface of an algorithm performing clustering in one language.
+ * An internal interface of an algorithm performing clustering in one language. 
+ * Implementations are <strong>not</strong> assumed to be thread-safe and will not be
+ * called concurrently.
  */
 public interface IMonolingualClusteringAlgorithm
 {

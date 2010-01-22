@@ -193,7 +193,9 @@ public class MultilingualClustering
                 }
             });
 
-        // For each language, perform clustering
+        // For each language, perform clustering. Please note that implementations of 
+        // IMonolingualClusteringAlgorithm.cluster() are not guaranteed to be thread-save
+        // and hance the method must NOT be called concurrently.
         final Map<LanguageCode, Cluster> clusters = Maps.newHashMap();
         for (String language : documentsByLanguage.keySet())
         {
