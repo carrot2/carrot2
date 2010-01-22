@@ -196,6 +196,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             });
         documents = originalDocuments;
 
+        // TODO: be consistent here with Lingo implementation (sort with a compound).
         if (multilingualClustering.languageAggregationStrategy == LanguageAggregationStrategy.FLATTEN_ALL)
         {
             Collections.sort(clusters, new Comparator<Cluster>() {

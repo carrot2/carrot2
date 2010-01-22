@@ -594,6 +594,9 @@ public final class Cluster
         }).compound(BY_LABEL_COMPARATOR);
     }
 
+    // TODO: this is such an overkill... I know it's used as a partitioning step in the
+    // sorting routine anyway, but not knowing this, it's a smelly thing to do partitioning
+    // by sorting ( O(n^2) instead of O(n) ).
     /**
      * A comparator that puts {@link #OTHER_TOPICS} clusters at the end of the list.
      * In other words, to this comparator an {@link #OTHER_TOPICS} topics cluster

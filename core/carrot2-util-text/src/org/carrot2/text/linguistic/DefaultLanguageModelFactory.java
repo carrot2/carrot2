@@ -88,6 +88,7 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
      */
     private final HashMap<LanguageCode, IStemmer> stemmerCache = Maps.newHashMap();
     
+    // TODO: are Analyzer instances thread-safe? If not, then the cache is wrong.
     /**
      * A tokenizer cache for this particular factory.
      */
