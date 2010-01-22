@@ -151,11 +151,13 @@ final class YSearchResponse
         }
         
         // If language has not been set based on the response, set it based on the request
-        for (Document document : response.results)
-        {
-            if (document.getLanguage() == null)
+        if (requestedLanguage != null) {
+            for (Document document : response.results)
             {
-                document.setLanguage(requestedLanguage);
+                if (document.getLanguage() == null)
+                {
+                    document.setLanguage(requestedLanguage);
+                }
             }
         }
     }

@@ -13,9 +13,12 @@
 
 
 
-      <attribute key="active-language">
-        <value type="org.carrot2.text.linguistic.LanguageCode" value="ENGLISH"/>
+      <attribute key="MultilingualClustering.defaultLanguage">
+        <value type="org.carrot2.core.LanguageCode" value="ENGLISH"/>
       </attribute>
+      <attribute key="MultilingualClustering.languageAggregationStrategy">
+        <value type="org.carrot2.text.clustering.MultilingualClustering$LanguageAggregationStrategy" value="FLATTEN_MAJOR_LANGUAGE"/>
+      </attribute> 
       <attribute key="CaseNormalizer.dfThreshold">
         <value type="java.lang.Integer" value="1"/>
       </attribute>
@@ -69,11 +72,6 @@
       </attribute>
       <attribute key="STCClusteringAlgorithm.singleTermBoost">
         <value type="java.lang.Double" value="0.5"/>
-      </attribute>
-      <attribute key="Tokenizer.analyzer">
-        <value>
-          <wrapper class="org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer"/>
-        </value>
       </attribute>
       <attribute key="Tokenizer.documentFields">
         <value>

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -36,7 +35,8 @@ import org.slf4j.Logger;
 public abstract class BossSearchService
 {
     /** Logger for this object. */
-    protected final Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
+    protected final Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass()
+        .getName());
 
     /**
      * Yahoo BOSS application ID assigned to Carrot2/ Carrot Search. Use your own, please.
@@ -51,8 +51,8 @@ public abstract class BossSearchService
     public static final String YBOSS_RESPONSE = "boss.response";
 
     /**
-     * Application ID required for BOSS services. Please <strong>generate your own ID</strong>
-     * for production deployments and branches off the Carrot2.org's code.
+     * Application ID required for BOSS services. Please <strong>generate your own
+     * ID</strong> for production deployments and branches off the Carrot2.org's code.
      * 
      * @label Application ID
      * @level Advanced
@@ -84,7 +84,8 @@ public abstract class BossSearchService
      * <p>
      * The following languages and regions are currently (July 2009) supported:
      * </p>
-     * <table> <thead>
+     * <table>
+     * <thead>
      * <tr>
      * <th align="left">Country</th>
      * <th align="left">Region</th>
@@ -331,7 +332,8 @@ public abstract class BossSearchService
      * <td>ve</td>
      * <td>es</td>
      * </tr>
-     * </tbody> </table>
+     * </tbody>
+     * </table>
      * <p>
      * Use {@link BossLanguageCodes#getAttributeValue()} to acquire proper constant for
      * this field.
@@ -456,7 +458,8 @@ public abstract class BossSearchService
                 is);
 
             response.metadata.put(YBOSS_RESPONSE, yresponse);
-            yresponse.populate(response, languageAndRegion.toLanguageCode());
+            yresponse.populate(response, languageAndRegion != null ? languageAndRegion
+                .toLanguageCode() : null);
 
             return response;
         }
