@@ -19,6 +19,7 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.SimpleController;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
+import org.carrot2.source.etools.EToolsDocumentSource;
 import org.carrot2.source.google.GoogleDocumentSource;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeValueSets;
@@ -69,7 +70,7 @@ public class LoadingAttributeValuesFromXml
             // one that is the default in the XML file.
             requestAttributes = Maps.newHashMap(defaultAttributes);
             requestAttributes.put(AttributeNames.QUERY, "clustering");
-            results = controller.process(requestAttributes, GoogleDocumentSource.class,
+            results = controller.process(requestAttributes, EToolsDocumentSource.class,
                 LingoClusteringAlgorithm.class);
             ConsoleFormatter.displayClusters(results.getClusters());
         }
