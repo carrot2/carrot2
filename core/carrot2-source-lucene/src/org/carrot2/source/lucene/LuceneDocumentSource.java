@@ -17,7 +17,6 @@ import java.util.Collection;
 import java.util.IdentityHashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -32,6 +31,7 @@ import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
+import org.slf4j.Logger;
 
 import com.google.common.collect.Maps;
 
@@ -53,8 +53,9 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     static
     {
         SimpleXmlWrappers.addWrapper(FSDirectory.class, FSDirectoryWrapper.class, false);
+        SimpleXmlWrappers.addWrapper(StandardAnalyzer.class, StandardAnalyzerWrapper.class, true);
     }
-    
+
     @Processing
     @Input
     @Attribute(key = AttributeNames.RESULTS)
