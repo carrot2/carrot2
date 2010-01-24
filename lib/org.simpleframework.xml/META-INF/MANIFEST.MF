@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Simpleframework XML
+Bundle-Name: Simple XML Serialization
 Bundle-SymbolicName: org.simpleframework.xml
-Bundle-Version: 2.1.7
-Bundle-ClassPath: simple-xml-2.1.7.jar
-Bundle-Vendor: SimpleFramework
+Bundle-Version: 2.2
+Bundle-ClassPath: simple-xml-2.2.jar
+Bundle-Vendor: simple.sourceforge.net
 Export-Package: org.simpleframework.xml,
  org.simpleframework.xml.core,
  org.simpleframework.xml.filter,

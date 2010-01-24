@@ -420,6 +420,7 @@ public class SimpleXmlWrappersTest
         original.put(key, value);
         final StringWriter writer = new StringWriter();
         new Persister().write(new MapContainer(original), writer);
+        System.out.println("---\n" + writer.toString());
         final MapContainer deserialized = new Persister().read(MapContainer.class,
             new StringReader(writer.getBuffer().toString()));
         assertThat(deserialized.map).isEqualTo(original);
@@ -431,6 +432,7 @@ public class SimpleXmlWrappersTest
         original.add(value);
         final StringWriter writer = new StringWriter();
         new Persister().write(new ListContainer(original), writer);
+        System.out.println("---\n" + writer.toString());
         final ListContainer deserialized = new Persister().read(ListContainer.class,
             new StringReader(writer.getBuffer().toString()));
         assertThat(deserialized.list).isEqualTo(original);
@@ -442,6 +444,7 @@ public class SimpleXmlWrappersTest
         original.add(value);
         final StringWriter writer = new StringWriter();
         new Persister().write(new SetContainer(original), writer);
+        System.out.println("---\n" + writer.toString());
         final SetContainer deserialized = new Persister().read(SetContainer.class,
             new StringReader(writer.getBuffer().toString()));
         assertThat(deserialized.set).isEqualTo(original);
