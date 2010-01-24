@@ -153,12 +153,11 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
-            System.out.println("Aggregates1");
-            System.out.println(Arrays.toString(aggregates));
-            System.out.println("Matrix1");
-            System.out.println(VT);
-            throw new RuntimeException("Aggregates1: " + Arrays.toString(aggregates)
-                + "\nMatrix1: " + VT.toString());
+            String debugInfo = create(aggregates, VT);
+            System.out.println("Debug info 1: " + debugInfo);
+            throw new RuntimeException(
+                "Aggregates1: " + Arrays.toString(aggregates)
+                + "\nMatrix1: " + VT.toString(), e);
         }
         try
         {
@@ -167,12 +166,10 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
-            System.out.println("Aggregates2");
-            System.out.println(Arrays.toString(aggregatesCopy));
-            System.out.println("Matrix2");
-            System.out.println(U.viewDice());
+            String debugInfo = create(aggregatesCopy, U.viewDice());
+            System.out.println("Debug info 2: " + debugInfo);
             throw new RuntimeException("Aggregates2: " + Arrays.toString(aggregatesCopy)
-                + "\nMatrix2: " + U.viewDice().toString());
+                + "\nMatrix2: " + U.viewDice().toString(), e);
         }
 
         // Revert back to positive values of aggregates
@@ -180,6 +177,33 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
         {
             aggregates[i] = -aggregates[i];
         }
+    }
+
+    private String create(double [] aggregates, DoubleMatrix2D m)
+    {
+        StringBuilder b = new StringBuilder();
+
+        b.append("Aggregates: ");
+        for (int i = 0; i < aggregates.length; i++)
+        {
+            b.append(Double.doubleToRawLongBits(aggregates[i]));
+            b.append(", ");
+        }
+        b.append("\n");
+
+        b.append("Matrix: " + m.columns() + " " + m.rows());
+        for (int c = 0; c < m.columns(); c++)
+        {
+            for (int r = 0; r < m.rows(); r++)
+            {
+                b.append(Double.doubleToRawLongBits(m.get(r, c)));
+                b.append(", ");
+            }
+            b.append("\n");
+        }
+        b.append("\n");
+
+        return b.toString();
     }
 
     /**
