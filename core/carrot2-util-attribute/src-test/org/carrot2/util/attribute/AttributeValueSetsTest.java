@@ -15,7 +15,6 @@ package org.carrot2.util.attribute;
 import static junit.framework.Assert.*;
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -21,13 +21,13 @@ import com.google.common.collect.Maps;
 
 /**
  * Codes for languages for which linguistic resources are available 
- * in {@link org.carrot2.text.linguistic.DefaultLanguageModelFactory}.
+ * in <code>DefaultLanguageModelFactory</code>.
  * <p>
  * Notes about third-party or extra implementation needs.
  * <ul>
  *  <li>{@link #POLISH} makes use of Morfologik stemming library
  *  if it is available in the classpath.</li>
- *  <li>{@link #CHINESE_SIMPLIFIED} makes use of Lucene's smartcn tokenizer
+ *  <li>{@link #CHINESE_SIMPLIFIED} makes use of Lucene's <code>smartcn</code> tokenizer
  *  if it is available in the classpath.</li>
  * </ul> 
  */
