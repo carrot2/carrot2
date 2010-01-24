@@ -11,11 +11,9 @@
 
 package org.carrot2.cli.batch;
 
-import java.io.File;
-import java.io.Writer;
+import java.io.*;
 import java.util.*;
 
-import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.ProcessingComponentDescriptor.ProcessingComponentDescriptorToId;
@@ -257,28 +255,28 @@ public class BatchApp
                 XmlDocumentSource.class.getName(), algorithm);
 
             // Stick to UTF-8 encoding on the output.
-            Writer writer = null;
+            final String outputFileName = 
+                Format.JSON.equals(outputFormat) && fileName.endsWith(".xml") 
+                ? fileName.substring(0, fileName .length() - 4) + ".json" : fileName;
+
+            final OutputStream stream = new FileOutputStream(
+                new File(currentOutputDir, outputFileName));
             try
             {
-                final String outputFileName = Format.JSON.equals(outputFormat)
-                    && fileName.endsWith(".xml") ? fileName.substring(0, fileName
-                    .length() - 4)
-                    + ".json" : fileName;
-
-                writer = new FileWriterWithEncoding(new File(currentOutputDir,
-                    outputFileName), "UTF-8");
                 if (Format.JSON.equals(outputFormat))
                 {
-                    result.serializeJson(writer, null, outputDocuments, true);
+                    Writer w = new OutputStreamWriter(stream, "UTF-8");
+                    result.serializeJson(w, null, outputDocuments, true);
+                    w.flush();
                 }
                 else
                 {
-                    result.serialize(writer, outputDocuments, true);
+                    result.serialize(stream, outputDocuments, true);
                 }
             }
             finally
             {
-                CloseableUtils.close(writer);
+                CloseableUtils.close(stream);
             }
 
             log.info("Clustering " + fileOrDirectory.getAbsolutePath() + " ["

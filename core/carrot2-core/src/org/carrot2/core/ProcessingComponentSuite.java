@@ -251,11 +251,11 @@ public class ProcessingComponentSuite
     }
 
     /**
-     * Serializes this component suite as XML to the provided writer.
+     * Serializes this component suite as an UTF-8 encoded XML.
      */
-    public void serialize(Writer writer) throws Exception
+    public void serialize(OutputStream stream) throws Exception
     {
-        new Persister().write(this, writer);
+        new Persister().write(this, stream);
     }
 
     /**

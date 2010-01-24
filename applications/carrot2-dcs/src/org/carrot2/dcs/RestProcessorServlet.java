@@ -38,8 +38,11 @@ import com.google.common.collect.Maps;
  */
 public final class RestProcessorServlet extends HttpServlet
 {
+    /** Response constants */
     private final static String UTF8 = "UTF-8";
-
+    private final static String MIME_XML_UTF8 = "text/xml; charset=" + UTF8;
+    private final static String MIME_JSON_UTF8 = "text/json; charset=" + UTF8;
+    
     private static final long serialVersionUID = 1L;
 
     private transient DcsConfig config;
@@ -141,13 +144,12 @@ public final class RestProcessorServlet extends HttpServlet
         throws ServletException, IOException
     {
         final String command = getCommandName(request);
-        response.setCharacterEncoding(UTF8);
         if ("components".equals(command))
         {
             try
             {
-                response.setContentType("text/xml");
-                componentSuite.serialize(response.getWriter());
+                response.setContentType(MIME_XML_UTF8);
+                componentSuite.serialize(response.getOutputStream());
             }
             catch (Exception e)
             {
@@ -160,8 +162,8 @@ public final class RestProcessorServlet extends HttpServlet
         {
             try
             {
-                response.setContentType("text/xml");
-                EXAMPLE_INPUT.serialize(response.getWriter(), true, false);
+                response.setContentType(MIME_XML_UTF8);
+                EXAMPLE_INPUT.serialize(response.getOutputStream(), true, false);
             }
             catch (Exception e)
             {
@@ -174,8 +176,8 @@ public final class RestProcessorServlet extends HttpServlet
         {
             try
             {
-                response.setContentType("text/xml");
-                EXAMPLE_OUTPUT.serialize(response.getWriter());
+                response.setContentType(MIME_XML_UTF8);
+                EXAMPLE_OUTPUT.serialize(response.getOutputStream());
             }
             catch (Exception e)
             {
@@ -188,7 +190,7 @@ public final class RestProcessorServlet extends HttpServlet
         {
             try
             {
-                response.setContentType("text/json");
+                response.setContentType(MIME_JSON_UTF8);
                 EXAMPLE_OUTPUT
                     .serializeJson(response.getWriter(), null, true, true, true);
             }
@@ -203,8 +205,8 @@ public final class RestProcessorServlet extends HttpServlet
         {
             try
             {
-                response.setContentType("text/xml");
-                controller.getStatistics().serialize(response.getWriter());
+                response.setContentType(MIME_XML_UTF8);
+                controller.getStatistics().serialize(response.getOutputStream());
             }
             catch (Exception e)
             {
@@ -366,15 +368,15 @@ public final class RestProcessorServlet extends HttpServlet
         // Serialize the result
         try
         {
-            response.setCharacterEncoding(UTF8);
             if (OutputFormat.XML.equals(requestModel.outputFormat))
             {
-                response.setContentType(OutputFormat.XML.contentType);
-                result.serialize(response.getWriter(), !requestModel.clustersOnly, true);
+                response.setContentType(MIME_XML_UTF8);
+                result.serialize(response.getOutputStream(), 
+                    !requestModel.clustersOnly, true);
             }
             else if (OutputFormat.JSON.equals(requestModel.outputFormat))
             {
-                response.setContentType(OutputFormat.JSON.contentType);
+                response.setContentType(MIME_JSON_UTF8);
                 result.serializeJson(response.getWriter(), requestModel.jsonCallback,
                     !requestModel.clustersOnly, true);
             }

@@ -14,12 +14,13 @@ package org.carrot2.core;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatDocuments;
 
 import java.io.*;
 import java.util.*;
 
-import org.apache.commons.io.output.NullWriter;
+import org.apache.commons.io.output.NullOutputStream;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.CollectionUtils;
@@ -284,11 +285,10 @@ public class ProcessingResultTest
         final ProcessingResult sourceProcessingResult = prepareProcessingResult();
 
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        final Writer writer = new OutputStreamWriter(outputStream, "UTF-8");
-        sourceProcessingResult.serialize(new NullWriter());
-        sourceProcessingResult.serialize(writer, documentsDeserialized,
+        sourceProcessingResult.serialize(new NullOutputStream());
+        sourceProcessingResult.serialize(outputStream, documentsDeserialized,
             clustersDeserialized);
-        CloseableUtils.close(writer);
+        CloseableUtils.close(outputStream);
         
         final ProcessingResult deserialized = ProcessingResult.deserialize(
             new ByteArrayInputStream(outputStream.toByteArray()));

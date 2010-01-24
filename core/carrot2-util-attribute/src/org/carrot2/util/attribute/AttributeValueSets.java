@@ -284,13 +284,13 @@ public class AttributeValueSets
     /**
      * Serializes this collection of {@link AttributeValueSet}s to an XML stream.
      * 
-     * @param w the writer to serialize this {@link AttributeValueSets} to. The stream
+     * @param stream the stream to serialize this {@link AttributeValueSets} to. The stream
      *            will <strong>not</strong> be closed.
      * @throws Exception in case of any problems with serialization
      */
-    public void serialize(Writer w) throws Exception
+    public void serialize(OutputStream stream) throws Exception
     {
-        new Persister().write(this, w);
+        new Persister().write(this, stream);
     }
 
     /**
@@ -324,7 +324,7 @@ public class AttributeValueSets
      *             <a href="http://issues.carrot2.org/browse/CARROT-582">this issue</a>.
      * @throws Exception is case of any problems with deserialization.
      */
-    @Deprecated
+    @Deprecated /* remove in 3.3 */
     public static AttributeValueSets deserialize(Reader reader) throws Exception
     {
         final AttributeValueSets attributeValueSet = new Persister().read(

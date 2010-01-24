@@ -15,13 +15,13 @@ package org.carrot2.util.attribute;
 import static junit.framework.Assert.*;
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.io.StringWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.apache.tools.ant.filters.StringInputStream;
 import org.junit.Test;
 import org.simpleframework.xml.Root;
 
@@ -317,11 +317,11 @@ public class AttributeValueSetsTest
     private void checkSerializationDeserialization(AttributeValueSets sets)
         throws Exception
     {
-        final StringWriter stringWriter = new StringWriter();
-        sets.serialize(stringWriter);
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        sets.serialize(baos);
 
         final AttributeValueSets deserialized = AttributeValueSets
-            .deserialize(new StringInputStream(stringWriter.getBuffer().toString()));
+            .deserialize(new ByteArrayInputStream(baos.toByteArray()));
 
         assertEquals(sets.defaultAttributeValueSetId,
             deserialized.defaultAttributeValueSetId);

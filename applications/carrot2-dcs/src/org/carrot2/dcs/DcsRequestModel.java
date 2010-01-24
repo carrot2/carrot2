@@ -39,9 +39,9 @@ public class DcsRequestModel
     @Input
     @Attribute(key = "dcs.json.callback")
     public String jsonCallback;
-    
+
     /**
-     * Ouput format requested from DCS,
+     * Output format requested from DCS,
      */
     public enum OutputFormat
     {

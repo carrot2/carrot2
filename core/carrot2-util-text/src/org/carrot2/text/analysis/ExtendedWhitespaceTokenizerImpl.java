@@ -9,6 +9,7 @@ package org.carrot2.text.analysis;
  * on 3/20/09 12:28 PM from the specification file
  * <tt>/home/dweiss/carrot2/carrot2.sf.trunk/core/carrot2-util-text/src/org/carrot2/text/analysis/ExtendedWhitespaceTokenizerImpl.jflex</tt>
  */
+@SuppressWarnings("unused")
 final class ExtendedWhitespaceTokenizerImpl {
 
   /** This character denotes the end of file */

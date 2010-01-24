@@ -12,7 +12,7 @@
 
 package org.carrot2.core;
 
-import java.io.Writer;
+import java.io.OutputStream;
 
 import net.sf.ehcache.Statistics;
 
@@ -158,10 +158,10 @@ public final class CachingControllerStatistics
     }
 
     /**
-     * Serializes this statistics object as XML to the provided writer.
+     * Serializes this statistics object as XML stream.
      */
-    public void serialize(Writer writer) throws Exception
+    public void serialize(OutputStream stream) throws Exception
     {
-        new Persister().write(this, writer);
+        new Persister().write(this, stream);
     }
 }

@@ -12,7 +12,6 @@
 
 package org.carrot2.examples.core;
 
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,12 +46,12 @@ public class SavingResultsToXml
             MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
 
         // Now, we can serialize the entire result to XML like this
-        result.serialize(new PrintWriter(System.out));
+        result.serialize(System.out);
         System.out.println();
 
         // Optionally, we can choose whether we want to serialize documents and clusters
-        result.serialize(new PrintWriter(System.out), false /* don't save documents */,
+        result.serialize(System.out, 
+            false /* don't save documents */,
             true /* save clusters */);
-
     }
 }

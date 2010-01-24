@@ -12,8 +12,6 @@
 
 package org.carrot2.examples.core;
 
-import java.io.PrintWriter;
-
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
 import org.carrot2.util.attribute.AttributeValueSet;
@@ -52,6 +50,6 @@ public class SavingAttributeValuesToXml
         final AttributeValueSets attributeValueSets = new AttributeValueSets();
         attributeValueSets.addAttributeValueSet("example-id", attributeValueSet);
 
-        attributeValueSets.serialize(new PrintWriter(System.out));
+        attributeValueSets.serialize(System.out);
     }
 }

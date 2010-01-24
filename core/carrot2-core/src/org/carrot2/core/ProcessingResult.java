@@ -260,22 +260,22 @@ public final class ProcessingResult
     }
 
     /**
-     * Serializes this {@link ProcessingResult} to an XML file.
+     * Serializes this {@link ProcessingResult} to an XML stream.
      * 
-     * @param writer the writer to serialize this {@link ProcessingResult} to. The writer
+     * @param stream the stream to serialize this {@link ProcessingResult} to. The stream
      *            will <strong>not</strong> be closed.
      * @throws Exception in case of any problems with serialization
      */
-    public void serialize(Writer writer) throws Exception
+    public void serialize(OutputStream stream) throws Exception
     {
-        serialize(writer, true, true);
+        serialize(stream, true, true);
     }
 
     /**
-     * Serializes this {@link ProcessingResult} to a character stream. This method is not
+     * Serializes this {@link ProcessingResult} to a byte stream. This method is not
      * thread-safe, external synchronization must be applied if needed.
      * 
-     * @param writer the writer to serialize this {@link ProcessingResult} to. The writer
+     * @param stream the stream to serialize this {@link ProcessingResult} to. The stream
      *            will <strong>not</strong> be closed.
      * @param saveDocuments if <code>false</code>, documents will not be serialized.
      *            Notice that when deserializing XML containing clusters but not
@@ -284,7 +284,7 @@ public final class ProcessingResult
      * @param saveClusters if <code>false</code>, clusters will not be serialized
      * @throws Exception in case of any problems with serialization
      */
-    public void serialize(Writer writer, boolean saveDocuments, boolean saveClusters)
+    public void serialize(OutputStream stream, boolean saveDocuments, boolean saveClusters)
         throws Exception
     {
         final List<Document> documentsBackup = getDocuments();
@@ -300,7 +300,7 @@ public final class ProcessingResult
             attributes.remove(AttributeNames.CLUSTERS);
         }
 
-        new Persister().write(this, writer);
+        new Persister().write(this, stream);
 
         if (documentsBackup != null)
         {
@@ -324,7 +324,7 @@ public final class ProcessingResult
      *             <a href="http://issues.carrot2.org/browse/CARROT-582">this issue</a>.
      * @throws Exception is case of any problems with deserialization
      */
-    @Deprecated
+    @Deprecated /* remove in 3.3 */
     public static ProcessingResult deserialize(Reader reader) throws Exception
     {
         return new Persister().read(ProcessingResult.class, reader);
