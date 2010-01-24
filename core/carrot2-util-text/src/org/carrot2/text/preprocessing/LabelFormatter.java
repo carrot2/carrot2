@@ -98,23 +98,23 @@ public class LabelFormatter
     private static void appendFormatted(final StringBuilder label, final char [] image,
         boolean isFirst, boolean isCommon)
     {
-        if (CharArrayUtils.capitalizedRatio(image) > 0.0)
+        if (CharArrayUtils.hasCapitalizedLetters(image))
         {
             label.append(image);
         }
         else if (isFirst)
         {
-            label.append(CharArrayUtils.capitalize(image));
+            label.append(CharArrayUtils.toCapitalizedCopy(image));
         }
         else
         {
             if (isCommon)
             {
-                label.append(CharArrayUtils.toLowerCase(image));
+                label.append(CharArrayUtils.toLowerCaseCopy(image));
             }
             else
             {
-                label.append(CharArrayUtils.capitalize(image));
+                label.append(CharArrayUtils.toCapitalizedCopy(image));
             }
         }
     }

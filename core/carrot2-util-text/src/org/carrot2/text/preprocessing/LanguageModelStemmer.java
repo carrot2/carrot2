@@ -49,18 +49,23 @@ public final class LanguageModelStemmer
      */
     public void stem(PreprocessingContext context)
     {
-        final MutableCharArray current = new MutableCharArray("");
         final IStemmer stemmer = context.language.getStemmer();
 
         final char [][] wordImages = context.allWords.image;
         final char [][] stemImages = new char [wordImages.length] [];
 
+        final MutableCharArray mutableCharArray = new MutableCharArray("");
+        char [] buffer = new char [128];
+
         for (int i = 0; i < wordImages.length; i++)
         {
-            final char [] lowerCaseWord = CharArrayUtils.toLowerCase(wordImages[i]);
-            current.reset(lowerCaseWord);
-            final CharSequence stemmed = stemmer.stem(current);
+            final char [] word = wordImages[i];
+            if (buffer.length < word.length) buffer = new char [word.length];
 
+            final boolean different = CharArrayUtils.toLowerCase(word, buffer);
+
+            mutableCharArray.reset(buffer, 0, word.length);
+            final CharSequence stemmed = stemmer.stem(mutableCharArray);
             if (stemmed != null)
             {
                 stemImages[i] = CharSequenceUtils.toCharArray(stemmed);
@@ -69,7 +74,10 @@ public final class LanguageModelStemmer
             {
                 // We need to put the original word here, otherwise, we wouldn't be able
                 // to compute frequencies for stems.
-                stemImages[i] = lowerCaseWord;
+                if (different)
+                    stemImages[i] = CharArrayUtils.copyOf(buffer, 0, word.length);
+                else
+                    stemImages[i] = word;
             }
         }
 
