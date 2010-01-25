@@ -14,14 +14,14 @@ package org.carrot2.examples.clustering;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.Tokenizer;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.source.etools.EToolsDocumentSource;
-import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
+import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
 import org.carrot2.text.linguistic.*;
 
 import com.google.common.collect.ImmutableSet;
@@ -111,9 +111,9 @@ public class UsingCustomLanguageModel
             }
             
 
-            public Analyzer getTokenizer()
+            public Tokenizer getTokenizer()
             {
-                return new ExtendedWhitespaceAnalyzer();
+                return new ExtendedWhitespaceTokenizer();
             }
 
             public LanguageCode getLanguageCode()

@@ -44,17 +44,13 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
     private TermAttribute term;
     private PayloadAttribute payload;
 
-    /**
-     * 
-     */
-    public ExtendedWhitespaceTokenizer(Reader input)
+    public ExtendedWhitespaceTokenizer()
     {
-        this.parser = new ExtendedWhitespaceTokenizerImpl(input);
-        term = (TermAttribute) addAttribute(TermAttribute.class);
-        payload = (PayloadAttribute) addAttribute(PayloadAttribute.class);
-        reset(input);
+        parser = new ExtendedWhitespaceTokenizerImpl(input);
+        term = addAttribute(TermAttribute.class);
+        payload = addAttribute(PayloadAttribute.class);
     }
-
+    
     @Override
     public boolean incrementToken() throws IOException
     {
@@ -74,7 +70,7 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
     }
 
     /**
-     * Not implemented in this tokenizer. Use {@link #reset()} or {@link #close()}.
+     * Not implemented in this tokenizer. Use {@link #reset(Reader)} or {@link #close()}.
      */
     public void reset() throws IOException
     {

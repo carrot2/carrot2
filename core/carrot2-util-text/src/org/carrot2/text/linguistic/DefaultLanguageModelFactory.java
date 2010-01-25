@@ -11,18 +11,20 @@
 
 package org.carrot2.text.linguistic;
 
-import java.util.*;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.Tokenizer;
 import org.carrot2.core.LanguageCode;
-import org.carrot2.core.attribute.*;
-import org.carrot2.text.analysis.ChineseAnalyzer;
-import org.carrot2.text.analysis.ExtendedWhitespaceAnalyzer;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.analysis.*;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.ResourceUtils;
+import org.carrot2.util.resource.ResourceUtilsFactory;
 
-import com.google.common.collect.*;
+import com.google.common.collect.Maps;
 
 /**
  * Accessor to all {@link ILanguageModel} objects. Default implementation provides support
@@ -88,18 +90,10 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
      */
     private final HashMap<LanguageCode, IStemmer> stemmerCache = Maps.newHashMap();
     
-    /*
-     * Analyzer superclass is actually more than thread-safe, they contain thread-local
-     * instances of TokenStreams that can be reused by the same calling thread, if 
-     * necessary. If we assume a single thread in Carrot2 won't ever parse two streams
-     * at once (two open TokenStreams), then this field could be even static and
-     * initialized lazily once.
-     */
-   
     /**
      * A tokenizer cache for this particular factory.
      */
-    private final HashMap<LanguageCode, Analyzer> tokenizerCache = Maps.newHashMap();
+    private final HashMap<LanguageCode, Tokenizer> tokenizerCache = Maps.newHashMap();
 
     /**
      * @return Return a language model for one of the languages in {@link LanguageCode}.
@@ -165,7 +159,7 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
             }
         }
 
-        Analyzer tokenizer;
+        Tokenizer tokenizer;
         synchronized (tokenizerCache)
         {
             tokenizer = tokenizerCache.get(language);
@@ -222,12 +216,12 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
         }
     }
     
-    private Analyzer createTokenizer(LanguageCode language)
+    private Tokenizer createTokenizer(LanguageCode language)
     {
         switch (language)
         {
             case CHINESE_SIMPLIFIED:
-                return new ChineseAnalyzer();
+                return new ChineseTokenizer();
 
             /*
              * We use our own analyzer for Arabic. Lucene's version has special support
@@ -238,7 +232,7 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
                 // Intentional fall-through.
 
             default:
-                return new ExtendedWhitespaceAnalyzer();
+                return new ExtendedWhitespaceTokenizer();
         }
     }
 }

@@ -11,10 +11,11 @@
 
 package org.carrot2.text.analysis;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 
-import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 
@@ -26,7 +27,7 @@ abstract class TokenizerTestBase
     /**
      * Creates the Analyzer under tests.
      */
-    protected abstract TokenStream createTokenStream(Reader reader);
+    protected abstract Tokenizer createTokenStream() throws IOException;
 
     /**
      * Internal class for comparing sequences of tokens.
@@ -75,14 +76,14 @@ abstract class TokenizerTestBase
     {
         try
         {
-            final TokenStream tokenStream = createTokenStream(new StringReader(testString));
+            final Tokenizer tokenStream = createTokenStream();
+            tokenStream.reset(new StringReader(testString));
 
             final ArrayList<TokenImage> tokens = new ArrayList<TokenImage>();
             while (tokenStream.incrementToken())
             {
-                final TermAttribute term = (TermAttribute) tokenStream
-                    .getAttribute(TermAttribute.class);
-                final PayloadAttribute payloadAttribute = (PayloadAttribute) tokenStream
+                final TermAttribute term = tokenStream.getAttribute(TermAttribute.class);
+                final PayloadAttribute payloadAttribute = tokenStream
                     .getAttribute(PayloadAttribute.class);
                 tokens.add(new TokenImage(term.term(), ((ITokenType) payloadAttribute
                     .getPayload()).getRawFlags()));

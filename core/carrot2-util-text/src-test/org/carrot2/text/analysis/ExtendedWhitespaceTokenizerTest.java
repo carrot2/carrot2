@@ -12,9 +12,8 @@
 
 package org.carrot2.text.analysis;
 
-import java.io.Reader;
 
-import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
 import org.junit.Test;
 
 /**
@@ -23,9 +22,9 @@ import org.junit.Test;
 public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
 {
     @Override
-    protected TokenStream createTokenStream(Reader reader)
+    protected Tokenizer createTokenStream()
     {
-        return new ExtendedWhitespaceTokenizer(reader);
+        return new ExtendedWhitespaceTokenizer();
     }
 
     @Test

@@ -70,7 +70,7 @@ public class ClusteringNonEnglishContent
         /*
          * We use a CachingController here to reuse instances of Carrot2 processing
          * components. This is especially important when the components are expensive to
-         * create, which is the case with ChineseAnalyzer.
+         * create, which is the case with ChineseTokenizer.
          */
         final CachingController controller = new CachingController(IDocumentSource.class);
 

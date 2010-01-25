@@ -16,7 +16,6 @@ import java.io.StringReader;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.carrot2.core.Document;
@@ -24,8 +23,7 @@ import org.carrot2.core.attribute.Init;
 import org.carrot2.text.analysis.ITokenType;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
-import org.carrot2.util.ExceptionUtils;
-import org.carrot2.util.Pair;
+import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
 
 import com.carrotsearch.hppc.ByteArrayList;
@@ -135,10 +133,11 @@ public final class Tokenizer
 
                 if (!StringUtils.isEmpty(fieldValue))
                 {
+                    org.apache.lucene.analysis.Tokenizer ts = null;
                     try
                     {
-                        final TokenStream ts = context.language.getTokenizer()
-                            .tokenStream(null, new StringReader(fieldValue));
+                        ts = context.language.getTokenizer();
+                        ts.reset(new StringReader(fieldValue));
 
                         while (ts.incrementToken())
                         {
@@ -156,6 +155,10 @@ public final class Tokenizer
                     {
                         throw new RuntimeException("The analyzer must provide "
                             + ITokenType.class.getName() + " instances as payload.");
+                    }
+                    finally
+                    {
+                        CloseableUtils.close(ts);
                     }
 
                     if (it.hasNext())

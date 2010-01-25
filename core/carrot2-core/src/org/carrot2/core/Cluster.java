@@ -594,13 +594,16 @@ public final class Cluster
         }).compound(BY_LABEL_COMPARATOR);
     }
 
-    // TODO: this is such an overkill... I know it's used as a partitioning step in the
-    // sorting routine anyway, but not knowing this, it's a smelly thing to do partitioning
-    // by sorting ( O(n^2) instead of O(n) ).
     /**
-     * A comparator that puts {@link #OTHER_TOPICS} clusters at the end of the list.
-     * In other words, to this comparator an {@link #OTHER_TOPICS} topics cluster
-     * is "bigger" than a non-{{@link #OTHER_TOPICS} cluster.
+     * A comparator that puts {@link #OTHER_TOPICS} clusters at the end of the list. In
+     * other words, to this comparator an {@link #OTHER_TOPICS} topics cluster is "bigger"
+     * than a non-{{@link #OTHER_TOPICS} cluster.
+     * <p>
+     * <strong>Note:</strong> This comparator is designed for use in combination with
+     * other comparators, such as {@link #BY_REVERSED_SIZE_AND_LABEL_COMPARATOR}. If you
+     * only need to partition a list of clusters into regular and other topic ones, this
+     * is better done in linear time without resorting to {@link Collections#sort(List)}.
+     * </p>
      */
     public static Comparator<Cluster> OTHER_TOPICS_AT_THE_END = Ordering.natural()
         .onResultOf(new Function<Cluster, Double>()

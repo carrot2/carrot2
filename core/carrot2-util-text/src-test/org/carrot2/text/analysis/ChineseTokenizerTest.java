@@ -11,22 +11,20 @@
 
 package org.carrot2.text.analysis;
 
-import java.io.Reader;
+import java.io.IOException;
 
-import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
 import org.junit.Test;
 
 /**
- * Test cases for {@link ChineseAnalyzer}.
+ * Test cases for {@link ChineseTokenizer}.
  */
 public class ChineseTokenizerTest extends TokenizerTestBase
 {
-    private ChineseAnalyzer chineseAnalyzer = new ChineseAnalyzer();
-
     @Override
-    protected TokenStream createTokenStream(Reader reader)
+    protected Tokenizer createTokenStream() throws IOException
     {
-        return chineseAnalyzer.tokenStream(null, reader);
+        return new ChineseTokenizer();
     }
 
     @Test
