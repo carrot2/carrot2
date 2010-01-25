@@ -88,7 +88,14 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
      */
     private final HashMap<LanguageCode, IStemmer> stemmerCache = Maps.newHashMap();
     
-    // TODO: are Analyzer instances thread-safe? If not, then the cache is wrong.
+    /*
+     * Analyzer superclass is actually more than thread-safe, they contain thread-local
+     * instances of TokenStreams that can be reused by the same calling thread, if 
+     * necessary. If we assume a single thread in Carrot2 won't ever parse two streams
+     * at once (two open TokenStreams), then this field could be even static and
+     * initialized lazily once.
+     */
+   
     /**
      * A tokenizer cache for this particular factory.
      */
