@@ -58,13 +58,12 @@ public class RequestModel
     @Input
     @Attribute(key = WebappConfig.SOURCE_PARAM)
     @org.simpleframework.xml.Attribute
-    public String source = WebappConfig.INSTANCE.components.getSources().get(0).getId();
+    public String source;
 
     @Input
     @Attribute(key = WebappConfig.ALGORITHM_PARAM)
     @org.simpleframework.xml.Attribute
-    public String algorithm = WebappConfig.INSTANCE.components.getAlgorithms().get(0)
-        .getId();
+    public String algorithm;
 
     @Input
     @Attribute(key = WebappConfig.TYPE_PARAM)
@@ -91,6 +90,21 @@ public class RequestModel
     @SuppressWarnings("unused")
     @ElementMap(entry = "cookie", key = "key", attribute = true, inline = true, required = false)
     private HashMap<String, SimpleXmlWrapperValue> cookies;
+
+    /**
+     * 
+     */
+    public RequestModel(WebappConfig config)
+    {
+        // Set the default source and algorithm. Assuming there must be at least one here.
+        source = config.components.getSources().get(0).getId();
+        algorithm = config.components.getAlgorithms().get(0).getId();
+
+        // Setting other parameters
+        skin = ModelWithDefault.getDefault(config.skins).id;
+        results = ModelWithDefault.getDefault(config.sizes).size;
+        view = ModelWithDefault.getDefault(config.views).id;
+    }
 
     public void afterParametersBound(Map<String, Object> remainingHttpParameters,
         Map<String, String> cookies)

@@ -34,19 +34,19 @@ public class AttributeMetadataModel
     @ElementMap(entry = "init-values", key = "source", value = "init-values", attribute = true, inline = true)
     public HashMap<String, AttributeInitValues> attributes;
 
-    public AttributeMetadataModel()
+    public AttributeMetadataModel(WebappConfig config)
     {
         attributes = Maps.newHashMap();
-        for (Map.Entry<String, Map<String, Object>> entry : WebappConfig.INSTANCE.sourceInitializationAttributes
-            .entrySet())
+        for (Map.Entry<String, Map<String, Object>> entry : 
+            config.sourceInitializationAttributes.entrySet())
         {
             attributes.put(entry.getKey(), new AttributeInitValues(MapUtils
                 .asHashMap(SimpleXmlWrappers.wrap(entry.getValue()))));
         }
 
         descriptors = Maps.newHashMap();
-        for (Map.Entry<String, List<AttributeDescriptor>> entry : WebappConfig.INSTANCE.sourceAttributeMetadata
-            .entrySet())
+        for (Map.Entry<String, List<AttributeDescriptor>> entry : 
+            config.sourceAttributeMetadata.entrySet())
         {
             descriptors.put(entry.getKey(), new AttributeDescriptors(entry.getValue()));
         }
