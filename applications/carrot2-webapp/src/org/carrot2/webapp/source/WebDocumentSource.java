@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -101,6 +100,10 @@ public class WebDocumentSource extends SimpleSearchEngine
                         .getField(Document.CONTENT_URL), googleDocument);
                     googleDocument.setField(Document.SOURCES, Lists
                         .newArrayList("Google"));
+
+                    // Set the language based on the eTools source configuration
+                    googleDocument.setLanguage(etools.language != null ? etools.language
+                        .toLanguageCode() : null);
                 }
                 response.results.addAll(google.documents);
             }
