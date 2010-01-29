@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -72,14 +71,19 @@ public class XmlDocumentSourceHelper
      * transform if specified. This method can handle gzip-compressed streams if supported
      * by the data source.
      * 
-     * @param metadata if a non-<code>null</code> map is provided, request metadata
-     *            will be put into the map.
+     * @param metadata if a non-<code>null</code> map is provided, request metadata will
+     *            be put into the map.
+     * @param user if not <code>null</code>, the user name to use for HTTP Basic
+     *            Authentication
+     * @param password if not <code>null</code>, the password to use for HTTP Basic
+     *            Authentication
      */
     public ProcessingResult loadProcessingResult(String url, Templates stylesheet,
-        Map<String, String> xsltParameters, Map<String, Object> metadata)
-        throws Exception
+        Map<String, String> xsltParameters, Map<String, Object> metadata, String user,
+        String password) throws Exception
     {
-        final HttpUtils.Response response = HttpUtils.doGET(url, null, null);
+        final HttpUtils.Response response = HttpUtils.doGET(url, null, null, user,
+            password);
         final InputStream carrot2XmlStream = response.getPayloadAsStream();
 
         final int statusCode = response.status;

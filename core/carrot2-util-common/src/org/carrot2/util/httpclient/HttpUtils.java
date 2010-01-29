@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -17,6 +16,7 @@ import java.util.Collection;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.*;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.carrot2.util.StreamUtils;
 
@@ -78,10 +78,42 @@ public class HttpUtils
     public static Response doGET(String url, Collection<NameValuePair> params,
         Collection<Header> headers) throws HttpException, IOException
     {
+        return doGET(url, params, headers, null, null);
+    }
+
+    /**
+     * Opens a HTTP/1.1 connection to the given URL using the GET method, decompresses
+     * compressed response streams, if supported by the server.
+     * 
+     * @param url The URL to open. The URL must be properly escaped, this method will
+     *            <b>not</b> perform any escaping.
+     * @param params Query string parameters to be attached to the url.
+     * @param headers Any extra HTTP headers to add to the request.
+     * @param user if not <code>null</code>, the user name to send during Basic
+     *            Authentication
+     * @param password if not <code>null</code>, the password name to send during Basic
+     *            Authentication
+     * @return The {@link HttpUtils.Response} object. Note that entire payload is read and
+     *         buffered so that the HTTP connection can be closed when leaving this
+     *         method.
+     */
+    public static Response doGET(String url, Collection<NameValuePair> params,
+        Collection<Header> headers, String user, String password) throws HttpException,
+        IOException
+    {
         final HttpClient client = HttpClientFactory.getTimeoutingClient();
         client.getParams().setVersion(HttpVersion.HTTP_1_1);
 
         final GetMethod request = new GetMethod();
+
+        if (user != null && password != null)
+        {
+            client.getState().setCredentials(
+                new AuthScope(null, 80, null),
+                new UsernamePasswordCredentials(user, password));
+            request.setDoAuthentication(true);
+        }
+
         final Response response = new Response();
         try
         {
@@ -100,9 +132,9 @@ public class HttpUtils
                     request.setRequestHeader(header);
             }
 
-            org.slf4j.LoggerFactory.getLogger(HttpUtils.class).debug("GET: "
-                + request.getURI());
-            
+            org.slf4j.LoggerFactory.getLogger(HttpUtils.class).debug(
+                "GET: " + request.getURI());
+
             final int statusCode = client.executeMethod(request);
             response.status = statusCode;
 
@@ -119,11 +151,13 @@ public class HttpUtils
             }
 
             final Header [] respHeaders = request.getResponseHeaders();
-            response.headers = new String [respHeaders.length][];
+            response.headers = new String [respHeaders.length] [];
             for (int i = 0; i < respHeaders.length; i++)
             {
-                response.headers[i] = new String [] { 
-                    respHeaders[i].getName(), respHeaders[i].getValue() };
+                response.headers[i] = new String []
+                {
+                    respHeaders[i].getName(), respHeaders[i].getValue()
+                };
             }
 
             response.payload = StreamUtils.readFullyAndClose(stream);
