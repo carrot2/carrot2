@@ -31,7 +31,7 @@
       </sequential>
     </macrodef>
 
-    <target name="pde.build.prepare">
+    <target name="pde.build.prepare" depends="tasks">
         <property name="workbench.properties" location="${carrot2.master.basedir}/workbench.properties" />
         <available file="${workbench.properties}" type="file" 
             property="workbench.properties.available" value="true" />
