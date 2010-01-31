@@ -30,7 +30,7 @@ import com.google.common.collect.Maps;
 
 /**
  * A Carrot2 input component for the eTools service (http://www.etools.ch). For commercial
- * licensing of the eTools feed, please e-mail: contact@comcepta.com.
+ * licensing of the eTools feed, please e-mail: <code>contact@comcepta.com</code>.
  */
 @Bindable(prefix = "EToolsDocumentSource")
 public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
