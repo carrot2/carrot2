@@ -900,6 +900,8 @@
   </target>
 
   <target name="workbench.dist" depends="workbench.plugins.gather" description="Compile Workbench (ZIPs).">
+    <fail unless="dist.dir">Define: dist.dir property.</fail>
+
     <pde.build
         build.dir="${workbench.build.dir}/build" 
         props.file="${carrot2.master.basedir}/etc/buildinfo/workbench-platforms.properties" 
@@ -922,8 +924,8 @@
 
     <mkdir dir="${dist.dir}" />
     <copy todir="${dist.dir}" overwrite="true">
-      <fileset dir="${workbench.build.dir}/build/S.*">
-        <include name="*.zip" />
+      <fileset dir="${workbench.build.dir}/build">
+        <include name="S.*/*.zip" />
       </fileset>
 
       <chainedmapper>
