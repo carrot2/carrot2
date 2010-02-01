@@ -61,7 +61,7 @@
 
     <target name="workbench" depends="workbench.prepare, workbench.clean, workbench.test" description="Perform a full build of the workbench">
         <!-- build the workbench -->
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="workbench.dist" inheritall="false" />
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="workbench.dist" inheritall="true" />
     </target>
 
     <target name="workbench.prepare" depends="check" description="Prepares workbench build">
@@ -74,12 +74,12 @@
 
     <target name="workbench.test" depends="workbench.prepare, workbench.clean" description="Runs workbench tests">
         <!-- test the workbench -->
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="workbench.test" inheritall="false" />
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="workbench.test" inheritall="true" />
     </target>
 
     <target name="workbench.clean" depends="workbench.prepare" description="Cleans workbench binaries">
         <!-- clean everything -->
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="clean" inheritall="false" />
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="clean" inheritall="true" />
     </target>
 
     <target name="help">
