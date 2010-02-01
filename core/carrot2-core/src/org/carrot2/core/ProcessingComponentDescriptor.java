@@ -218,7 +218,7 @@ public class ProcessingComponentDescriptor
         try
         {
             AttributeBinder
-                .bind(instance, initAttributes, false, Input.class, Init.class);
+                .bind(instance, initAttributes, false, Input.class);
 
             if (init)
             {
