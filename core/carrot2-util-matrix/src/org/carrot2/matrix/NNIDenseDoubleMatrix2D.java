@@ -12,12 +12,13 @@
 
 package org.carrot2.matrix;
 
+import nni.BLAS;
 import org.apache.mahout.math.matrix.DoubleMatrix1D;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 /**
- * A very crude native implementation of Colt's {@link org.apache.mahout.math.matrix.DoubleMatrix2D}
+ * A very crude native implementation of Colt's @link org.apache.mahout.math.matrix.DoubleMatrix2D
  * based on the Native Numerical Interface (NNI). For the time being, the only method that
  * uses the native routines is the Level 3 zMult(). The other methods use the
  * implementations provided in DenseDoubleMatrix2D.
@@ -118,15 +119,16 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
             return super.zMult(B, C, alpha, beta, transposeA, transposeB);
         }
 
-        NNIInterface.getBridge().gemm(
-            this, 
-            (NNIDenseDoubleMatrix2D) B, 
-            (NNIDenseDoubleMatrix2D) C,
-            transposeA, transposeB,
-            columnsA,
-            alpha,
-            columns,
-            beta);
+        // Get the matrices data. It is in row-major format.
+        final double [] dataA = this.elements;
+        final double [] dataB = ((NNIDenseDoubleMatrix2D) B).getData();
+        final double [] dataC = ((NNIDenseDoubleMatrix2D) C).getData();
+
+        // Multiply
+        BLAS.gemm(BLAS.RowMajor, transposeA ? BLAS.Trans : BLAS.NoTrans,
+            transposeB ? BLAS.Trans : BLAS.NoTrans, C.rows(), C.columns(), columnsA,
+            alpha, dataA, Math.max(1, columns), dataB, Math.max(1, B.columns()), beta,
+            dataC, Math.max(1, C.columns()));
 
         return C;
     }
