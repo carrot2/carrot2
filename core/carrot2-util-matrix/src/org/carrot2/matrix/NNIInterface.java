@@ -12,46 +12,46 @@
 
 package org.carrot2.matrix;
 
-import nni.BLAS;
-import nni.LAPACK;
+import org.carrot2.matrix.nni.*;
 
 /**
  * An interface to native matrix computation routines.
  */
 public class NNIInterface
 {
-    /** Are native implementation available? */
-    private static boolean nativeBlasAvailable;
-    private static boolean nativeLapackAvailable;
-    private static boolean suppressNNI;
+    private static final IBlasOperations blas;
+    private static final ILapackOperations lapack;
+    
+    private static volatile boolean suppressNNI;
+
+    static
+    {
+        ILapackOperations a = null;
+        try
+        {
+            a = new LapackImpl();
+        }
+        catch (Throwable t)
+        {
+            // Not available, fall through.
+        }
+        lapack = a;
+        
+        IBlasOperations b = null;
+        try
+        {
+            b = new BlasImpl();
+        }
+        catch (Throwable t)
+        {
+            // Not available, fall through.
+        }
+        blas = b;
+    }
 
     private NNIInterface()
     {
         // No instance of this class
-    }
-
-    static
-    {
-        // Try to initialize the native libraries
-        try
-        {
-            BLAS.init();
-            nativeBlasAvailable = true;
-        }
-        catch (Throwable t)
-        {
-            nativeBlasAvailable = false;
-        }
-
-        try
-        {
-            LAPACK.init();
-            nativeLapackAvailable = true;
-        }
-        catch (Throwable t)
-        {
-            nativeLapackAvailable = false;
-        }
     }
 
     /**
@@ -63,7 +63,7 @@ public class NNIInterface
      */
     public static boolean isNativeBlasAvailable()
     {
-        return (suppressNNI ? false : nativeBlasAvailable);
+        return (suppressNNI ? false : blas != null);
     }
 
     /**
@@ -75,7 +75,7 @@ public class NNIInterface
      */
     public static boolean isNativeLapackAvailable()
     {
-        return (suppressNNI ? false : nativeLapackAvailable);
+        return (suppressNNI ? false : lapack != null);
     }
 
     /**
@@ -87,5 +87,27 @@ public class NNIInterface
     public static void suppressNNI(boolean suppress)
     {
         suppressNNI = suppress;
+    }
+
+    /**
+     * Return the native-code implementation of certain math routines, if possible.  
+     */
+    public static IBlasOperations getBlas()
+    {
+        if (blas == null)
+            throw new RuntimeException("No native blas available.");
+
+        return blas;
+    }
+    
+    /**
+     * Return the native-code implementation of certain math routines, if possible.  
+     */
+    public static ILapackOperations getLapack()
+    {
+        if (lapack == null)
+            throw new RuntimeException("No native blas available.");
+
+        return lapack;
     }
 }

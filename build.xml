@@ -146,7 +146,6 @@
     <include name="lib/**/lucene.LICENSE" />
     <include name="lib/**/hppc-*.jar" />
     <include name="lib/**/hppc*.LICENSE" />
-    <include name="core/*carrot2-util-matrix/lib/nni*" />
 
     <include name="lib/**/slf4j-api*.jar" />
     <include name="lib/**/slf4j-nop*.jar" />

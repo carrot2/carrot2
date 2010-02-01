@@ -3,14 +3,13 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Matrix Utilities
 Bundle-SymbolicName: org.carrot2.util.matrix
 Bundle-Version: 0.0.0.QUALIFIER
-Bundle-ClassPath: .,
- lib/nni.jar
+Bundle-ClassPath: .
 Export-Package: 
- nni,
  org.carrot2.matrix,
  org.carrot2.matrix.factorization,
  org.carrot2.matrix.factorization.seeding
 Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.util.common;bundle-version="0.0.0";visibility:=reexport,
- org.apache.mahout.math;bundle-version="0.3.0";visibility:=reexport
+ org.apache.mahout.math;bundle-version="0.3.0";visibility:=reexport,
+ com.carrotsearch.nni;bundle-version="0.0.0";resolution:=optional
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

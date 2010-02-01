@@ -71,7 +71,7 @@ public class EigenvalueCalculatorTest
     {
         assumeTrue(nativeLapackAvailable());
 
-        double [] eigenvalues = EigenvalueCalculator.computeEigenvaluesNNI(A);
+        double [] eigenvalues = NNIInterface.getLapack().computeEigenvaluesNNI(A);
         Arrays.sort(eigenvalues);
 
         double [] expectedEigenvalues = new EigenvalueDecomposition(A)
