@@ -24,5 +24,6 @@ public class GuiTests extends TestSuite
     public GuiTests()
     {
         this.addTestSuite(ProcessingJobTest.class);
+        this.addTestSuite(NativeLibrariesTest.class);
     }
 }
