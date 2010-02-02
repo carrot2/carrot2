@@ -78,13 +78,15 @@ public class NNIDenseDoubleMatrix2DTest
     @Test
     public void testZMultLevel3()
     {
+        DoubleMatrix2D nniA = new NNIDenseDoubleMatrix2D(A.toArray());
+        DoubleMatrix2D nniC = new NNIDenseDoubleMatrix2D(C.toArray());
         DoubleMatrix2D nniB = new NNIDenseDoubleMatrix2D(A.viewDice().toArray());
         DoubleMatrix2D coltB = new DenseDoubleMatrix2D(A.viewDice().toArray());
-        DoubleMatrix2D D = DoubleFactory2D.dense.random(3, 4);
+        DoubleMatrix2D D = NNIDoubleFactory2D.nni.random(3, 4);
 
-        assertThat(nniB.zMult(A, null)).isEquivalentTo(coltB.zMult(A, null));
-        assertThat(nniB.zMult(C, null, 1, 0, false, true)).isEquivalentTo(
-            coltB.zMult(C, null, 1, 0, false, true));
+        assertThat(nniB.zMult(nniA, null)).isEquivalentTo(coltB.zMult(A, null));
+        assertThat(nniB.zMult(nniC, null, 1, 0, false, true)).isEquivalentTo(
+            coltB.zMult(nniC, null, 1, 0, false, true));
         assertThat(nniB.zMult(D, null, 1, 0, true, true)).isEquivalentTo(
             coltB.zMult(D, null, 1, 0, true, true));
     }
