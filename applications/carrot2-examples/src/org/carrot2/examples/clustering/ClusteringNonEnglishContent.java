@@ -19,13 +19,9 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
-import org.carrot2.source.boss.BossDocumentSource;
-import org.carrot2.source.boss.BossSearchService;
-import org.carrot2.source.etools.EToolsDocumentSource;
 import org.carrot2.source.google.GoogleDocumentSource;
 import org.carrot2.source.microsoft.CultureInfo;
 import org.carrot2.source.microsoft.MicrosoftLiveDocumentSource;
-import org.carrot2.text.clustering.MultilingualClustering;
 
 import com.google.common.collect.Lists;
 
@@ -39,29 +35,32 @@ import com.google.common.collect.Lists;
  * There are two ways to indicate the desired clustering language to Carrot2:
  * </p>
  * <ol>
- * <li>By setting the language of each document in their {@link Document#LANGUAGE} field.
- * The language does not necessarily have to be the same for all documents on the input,
- * Carrot2 can handle multiple languages in one document set as well. Please see the
- * {@link MultilingualClustering#languageAggregationStrategy} attribute for more details.</li>
+ * <li>By setting the language of each document in their
+ * {@link org.carrot2.core.Document#LANGUAGE} field. The language does not necessarily
+ * have to be the same for all documents on the input, Carrot2 can handle multiple
+ * languages in one document set as well. Please see the
+ * {@link org.carrot2.text.clustering.MultilingualClustering#languageAggregationStrategy}
+ * attribute for more details.</li>
  * <li>By setting the fallback language. For documents with undefined
- * {@link Document#LANGUAGE} field, Carrot2 will assume the some fallback language, which
- * is English by default. You can change the fallback language by setting the
- * {@link MultilingualClustering#defaultLanguage} attribute.
+ * {@link org.carrot2.core.Document#LANGUAGE} field, Carrot2 will assume the some fallback
+ * language, which is English by default. You can change the fallback language by setting
+ * the {@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage}
+ * attribute.
  * </ol>
  * Additionally, a number of document sources automatically set the
- * {@link Document#LANGUAGE} of documents they produce based on their specific
- * language-related attributes. Currently, three documents support this scenario:
+ * {@link org.carrot2.core.Document#LANGUAGE} of documents they produce based on their
+ * specific language-related attributes. Currently, three documents support this scenario:
  * <ol>
- * <li>{@link MicrosoftLiveDocumentSource} through the
- * {@link MicrosoftLiveDocumentSource#culture} attribute</li>
- * <li>{@link BossDocumentSource} through the {@link BossSearchService#languageAndRegion}
- * attribute</li>
- * <li>{@link EToolsDocumentSource} through the {@link EToolsDocumentSource#language}
- * attribute</li>
+ * <li>{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource} through the
+ * {@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource#culture} attribute</li>
+ * <li>{@link org.carrot2.source.boss.BossDocumentSource} through the
+ * {@link org.carrot2.source.boss.BossSearchService#languageAndRegion} attribute</li>
+ * <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the
+ * {@link org.carrot2.source.etools.EToolsDocumentSource#language} attribute</li>
  * </ol>
  * For the document sources that do not set the documents' language automatically, the
  * easiest way to set the clustering language is through the
- * {@link MultilingualClustering#defaultLanguage} attribute.
+ * {@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage} attribute.
  */
 public class ClusteringNonEnglishContent
 {
@@ -69,9 +68,7 @@ public class ClusteringNonEnglishContent
     public static void main(String [] args)
     {
         /*
-         * We use a CachingController here to reuse instances of Carrot2 processing
-         * components. This is especially important when the components are expensive to
-         * create, which is the case with ChineseTokenizer.
+         * We use a CachingController to reuse instances of Carrot2 processing components.
          */
         final CachingController controller = new CachingController(IDocumentSource.class);
 

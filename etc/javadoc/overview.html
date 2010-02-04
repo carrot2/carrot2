@@ -140,8 +140,8 @@ You can also directly pass a list of {@link org.carrot2.core.Document} instances
 
         /*
          * Before using the caching controller, you must initialize it. On initialization,
-         * we can set some default values of input data (called attributes). In this
-         * example, we'll set the default results number to 50.
+         * you can set default values for some attributes. In this example, we'll set 
+         * the default results number to 50.
          */
         Map&lt;String, Object> globalAttributes = new HashMap&lt;String, Object>();
         globalAttributes.put(AttributeNames.RESULTS, 50);
@@ -178,43 +178,46 @@ You can also directly pass a list of {@link org.carrot2.core.Document} instances
 <h2>Clustering non-English content</h2>
 
 <p>
-  This example shows how to cluster non-English content. By default Carrot<sup>2</sup> assumes that
-  the documents provided for clustering are written in English. When clustering content
-  written in some different language, it is important to indicate the language to
-  Carrot<sup>2</sup>, so that it can use the lexical resources (stop words, tokenizer, stemmer)
-  appropriate for that language.
+This example shows how to cluster non-English content. By default Carrot2 assumes that
+the documents provided for clustering are written in English. When clustering content
+written in some different language, it is important to indicate the language to
+Carrot2, so that it can use the lexical resources (stop words, tokenizer, stemmer)
+appropriate for that language.
 </p>
 
 <p>
-  There are two ways to indicate the desired clustering language to Carrot<sup>2</sup>:
+There are two ways to indicate the desired clustering language to Carrot2:
 </p>
 
 <ol>
-  <li>By setting the language of each document in their {@link org.carrot2.core.Document#LANGUAGE} field.
-  The language does not necessarily have to be the same for all documents on the input,
-  Carrot<sup>2</sup> can handle multiple languages in one document set as well. Please see the
-  {@link org.carrot2.text.clustering.MultilingualClustering#languageAggregationStrategy} attribute for more details.</li>
-  <li>By setting the fallback language. For documents with undefined
-  {@link org.carrot2.core.Document#LANGUAGE} field, Carrot<sup>2</sup> will assume the some fallback language, which
-  is English by default. You can change the fallback language by setting the
-  {@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage} attribute.
-  </ol>
-  Additionally, a number of document sources automatically set the
-  {@link org.carrot2.core.Document#LANGUAGE} of documents they produce based on their specific
-  language-related attributes. Currently, three documents support this scenario:
-  <ol>
-  <li>{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource} through the
-  {@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource#culture} attribute</li>
-  <li>{@link org.carrot2.source.boss.BossDocumentSource} through the {@link org.carrot2.source.boss.BossSearchService#languageAndRegion}
-  attribute</li>
-  <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the {@link org.carrot2.source.etools.EToolsDocumentSource#language}
-  attribute</li>
+<li>By setting the language of each document in their
+{@link org.carrot2.core.Document#LANGUAGE} field. The language does not necessarily
+have to be the same for all documents on the input, Carrot2 can handle multiple
+languages in one document set as well. Please see the
+{@link org.carrot2.text.clustering.MultilingualClustering#languageAggregationStrategy}
+attribute for more details.</li>
+<li>By setting the fallback language. For documents with undefined
+{@link org.carrot2.core.Document#LANGUAGE} field, Carrot2 will assume the some fallback
+language, which is English by default. You can change the fallback language by setting
+the {@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage}
+attribute.
+</ol>
+Additionally, a number of document sources automatically set the
+{@link org.carrot2.core.Document#LANGUAGE} of documents they produce based on their
+specific language-related attributes. Currently, three documents support this scenario:
+<ol>
+<li>{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource} through the
+{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource#culture} attribute</li>
+<li>{@link org.carrot2.source.boss.BossDocumentSource} through the
+{@link org.carrot2.source.boss.BossSearchService#languageAndRegion} attribute</li>
+<li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the
+{@link org.carrot2.source.etools.EToolsDocumentSource#language} attribute</li>
 </ol>
 
 <p>
-  For the document sources that do not set the documents' language automatically, the
-  easiest way to set the clustering language is through the
-  {@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage} attribute.
+For the document sources that do not set the documents' language automatically, the
+easiest way to set the clustering language is through the
+{@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage} attribute.
 </p>
 
 <p>
@@ -223,9 +226,7 @@ You can also directly pass a list of {@link org.carrot2.core.Document} instances
 
 <pre class="brush: java">
 /*
- * We use a CachingController here to reuse instances of Carrot2 processing
- * components. This is especially important when the components are expensive to
- * create, which is the case with ChineseAnalyzer.
+ * We use a CachingController to reuse instances of Carrot2 processing components.
  */
 final CachingController controller = new CachingController(IDocumentSource.class);
 
@@ -242,14 +243,14 @@ controller.init(initAttributes);
 final List&lt;Document> documents = Lists.newArrayList();
 for (Document document : SampleDocumentData.DOCUMENTS_DATA_MINING)
 {
-    documents.add(new Document(document.getTitle(), document.getSummary(),
-        document.getContentUrl(), LanguageCode.ENGLISH));
+  documents.add(new Document(document.getTitle(), document.getSummary(),
+    document.getContentUrl(), LanguageCode.ENGLISH));
 }
 
 final Map&lt;String, Object> attributes = new HashMap&lt;String, Object>();
 attributes.put(AttributeNames.DOCUMENTS, documents);
 final ProcessingResult englishResult = controller.process(attributes,
-    LingoClusteringAlgorithm.class);
+  LingoClusteringAlgorithm.class);
 ConsoleFormatter.displayResults(englishResult);
 
 /*
@@ -263,7 +264,7 @@ attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
 attributes.put("MicrosoftLiveDocumentSource.culture", CultureInfo.CHINESE_CHINA);
 attributes.put(AttributeNames.RESULTS, 100);
 final ProcessingResult chineseResult = controller.process(attributes,
-    MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+  MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
 ConsoleFormatter.displayResults(chineseResult);
 
 /*
@@ -276,10 +277,10 @@ ConsoleFormatter.displayResults(chineseResult);
 attributes.clear();
 attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
 attributes.put("MultilingualClustering.defaultLanguage",
-    LanguageCode.CHINESE_SIMPLIFIED);
+  LanguageCode.CHINESE_SIMPLIFIED);
 attributes.put(AttributeNames.RESULTS, 100);
 final ProcessingResult chineseResult2 = controller.process(attributes,
-    GoogleDocumentSource.class, LingoClusteringAlgorithm.class);
+  GoogleDocumentSource.class, LingoClusteringAlgorithm.class);
 ConsoleFormatter.displayResults(chineseResult2);
 </pre>
 <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/ClusteringNonEnglishContent.java?r=trunk">View full source code</a>

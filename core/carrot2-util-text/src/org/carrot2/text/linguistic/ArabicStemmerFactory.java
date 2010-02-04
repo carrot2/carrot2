@@ -100,7 +100,7 @@ final class ArabicStemmerFactory
     }
 
     /**
-     * Attempts to instantiate <code>morfologik-stemming</code> (Lametyzator) stemmer.
+     * Attempts to instantiate <code>lucene-contrib</code> Arabic stemmer.
      */
     private static IStemmer createStemmerInternal()
     {
