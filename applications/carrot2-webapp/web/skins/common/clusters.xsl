@@ -43,7 +43,7 @@
           <xsl:attribute name="class">folded</xsl:attribute>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="#"><span class="label"><xsl:apply-templates select="title" /></span><span class="size">(<xsl:value-of select="@size" />)</span></a>
+      <a href="#"><span class="label"><xsl:apply-templates select="title" /></span><span class="size" dir="ltr">(<xsl:value-of select="@size" />)</span></a>
       <xsl:if test="group">
         <ul>
           <xsl:apply-templates select="group" />

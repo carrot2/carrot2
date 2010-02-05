@@ -42,7 +42,7 @@
   <xsl:template match="page" mode="about-links">
     <ul class="util-links">
       <li><a href="http://project.carrot2.org">About</a><xsl:call-template name="pipe" /></li>
-      <li class="hot"><a href="http://project.carrot2.org/release-3.0-notes.html">New features!</a><xsl:call-template name="pipe" /></li>
+      <li class="hot"><a href="http://project.carrot2.org/release-3.2.0-notes.html">New features!</a><xsl:call-template name="pipe" /></li>
       <li class="main"><a href="{$context-path}/{$search-url}?{$type-param}=SOURCES">Search feeds</a><xsl:call-template name="pipe" /></li>
       <li><a href="http://project.carrot2.org/download-search-plugins.html">Search plugins</a><xsl:call-template name="pipe" /></li>
       <li><a href="http://project.carrot2.org/download.html">Download</a><xsl:call-template name="pipe" /></li>
