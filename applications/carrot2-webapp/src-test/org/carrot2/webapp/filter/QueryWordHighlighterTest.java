@@ -80,6 +80,12 @@ public class QueryWordHighlighterTest
         check("x23+?.", "x23+?.g zz x23", "<b>x23+?.</b>g zz x23");
     }
     
+    @Test
+    public void testDoubleQuotes()
+    {
+        check("\"the query\"", "the snippet with the query", "<b>the</b> snippet with <b>the</b> <b>query</b>");
+    }
+    
     private void check(String query, String snippetToHighlight, String expectedSnippet)
     {
         final Document document = new Document();
