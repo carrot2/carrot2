@@ -4,13 +4,13 @@
   <target name="webtest" depends="webtest.utf8, webtest.utf16" />
   
   <target name="webtest.utf16">
-    <webtest name="Clustering from UTF16 file">
+    <webtest name="Clustering from UTF8 file">
       <clusterFromFile fileName="../src-test/xml/carrot2-kaczynski.utf8.xml" />
     </webtest>
   </target>
       
   <target name="webtest.utf8">
-    <webtest name="Clustering from UTF8 file">
+    <webtest name="Clustering from UTF16 file">
       <clusterFromFile fileName="../src-test/xml/carrot2-kaczynski.utf16.xml" />
     </webtest>
   </target>
