@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -606,7 +605,7 @@ public final class Cluster
      * is better done in linear time without resorting to {@link Collections#sort(List)}.
      * </p>
      */
-    public static Comparator<Cluster> OTHER_TOPICS_AT_THE_END = Ordering.natural()
+    public static final Comparator<Cluster> OTHER_TOPICS_AT_THE_END = Ordering.natural()
         .onResultOf(new Function<Cluster, Double>()
         {
             public Double apply(Cluster cluster)

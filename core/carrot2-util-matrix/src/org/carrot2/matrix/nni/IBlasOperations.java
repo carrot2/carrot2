@@ -14,6 +14,9 @@ package org.carrot2.matrix.nni;
 
 import org.carrot2.matrix.NNIDenseDoubleMatrix2D;
 
+/**
+ * Operations used from native BLAS implementations.
+ */
 public interface IBlasOperations
 {
     public void gemm(

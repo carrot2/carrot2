@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
-import org.carrot2.util.xml.TemplatesPool;
+import org.carrot2.util.xslt.TemplatesPool;
 
 /**
  * A servlet filter applying XSLT stylesheets to the result of a request. The filter is

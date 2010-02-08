@@ -149,4 +149,25 @@ public final class ChineseTokenizer extends Tokenizer
                     + "make sure Lucene's Smart Chinese Analyzer JAR is in the classpath",
                 e);
     }
+    
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (other instanceof ChineseTokenizer)
+        {
+            return super.equals(other);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode()
+    {
+        // Just to document we're fine with using AttributeSource.hashCode()
+        return super.hashCode();
+    }
 }

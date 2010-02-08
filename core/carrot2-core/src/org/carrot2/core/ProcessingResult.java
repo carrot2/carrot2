@@ -315,23 +315,6 @@ public final class ProcessingResult
     }
 
     /**
-     * Deserializes a {@link ProcessingResult} from an XML character stream.
-     * 
-     * @param reader the reader to deserialize a {@link ProcessingResult} from. The reader
-     *            will <strong>not</strong> be closed.
-     * @return deserialized {@link ProcessingResult}
-     * @deprecated Please use {@link #deserialize(InputStream)}. This method will be
-     *             removed in version 3.3.0. For more details, please see 
-     *             <a href="http://issues.carrot2.org/browse/CARROT-582">this issue</a>.
-     * @throws Exception is case of any problems with deserialization
-     */
-    @Deprecated /* remove in 3.3 */
-    public static ProcessingResult deserialize(Reader reader) throws Exception
-    {
-        return new Persister().read(ProcessingResult.class, reader);
-    }
-
-    /**
      * Deserializes a {@link ProcessingResult} from an XML stream.
      * 
      * @param input the input XML stream to deserialize a {@link ProcessingResult} from.

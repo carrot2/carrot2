@@ -16,6 +16,9 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 
+/**
+ * Maps Lucene index's fields onto Carrot2 {@link Document} fields.
+ */
 public interface IFieldMapper
 {
     /**

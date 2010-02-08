@@ -21,7 +21,7 @@ import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
-import org.carrot2.source.etools.EToolsDocumentSource;
+import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
 import org.carrot2.text.linguistic.*;
 
@@ -54,15 +54,16 @@ public class UsingCustomLanguageModel
     }
 
     /**
-     * Clusters results for query "data minig" and displays the clusters.
+     * Clusters results for query "data mining" and displays the clusters.
      */
     private static void clusterAndDisplayClusters(final CachingController controller,
         final Class<? extends IClusteringAlgorithm> clusteringAlgorithm)
     {
         final Map<String, Object> processingAttributes = Maps.newHashMap();
+        processingAttributes.put(AttributeNames.DOCUMENTS, SampleDocumentData.DOCUMENTS_DATA_MINING);
         processingAttributes.put(AttributeNames.QUERY, "data mining");
-        final ProcessingResult result = controller.process(processingAttributes,
-            EToolsDocumentSource.class, clusteringAlgorithm);
+        final ProcessingResult result = controller.process(processingAttributes, 
+            clusteringAlgorithm);
         ConsoleFormatter.displayClusters(result.getClusters(), 0);
     }
 

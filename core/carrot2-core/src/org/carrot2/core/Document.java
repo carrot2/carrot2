@@ -77,12 +77,6 @@ public final class Document
     public static final String LANGUAGE = "language";
 
     /**
-     * @deprecated please use {@link #PARTITIONS}. This field will be removed in version
-     *             3.2.
-     */
-    public static final String TOPIC = "topic";
-
-    /**
      * Identifiers of reference clustering partitions this document belongs to. Currently,
      * this field is used only to calculate various clustering quality metrics. In the
      * future, clustering algorithms may be able to use values of this field to increase
@@ -338,20 +332,6 @@ public final class Document
     public <T> T getField(String name)
     {
         return (T) fields.get(name);
-    }
-
-    /**
-     * Adds a field to this document.
-     * 
-     * @param name of the field to be added
-     * @param value value of the field
-     * @return this document for convenience
-     * @deprecated Please use {@link #setField(String, Object)} instead. This method will
-     *             be removed in version 3.2.
-     */
-    public Document addField(String name, Object value)
-    {
-        return setField(name, value);
     }
 
     /**

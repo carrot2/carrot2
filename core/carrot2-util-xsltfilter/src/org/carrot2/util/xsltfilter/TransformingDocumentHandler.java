@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.*;
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.carrot2.util.xml.TemplatesPool;
-import org.carrot2.util.xml.TransformerErrorListener;
+import org.carrot2.util.xslt.TemplatesPool;
+import org.carrot2.util.xslt.TransformerErrorListener;
 import org.slf4j.Logger;
 import org.xml.sax.*;
 import org.xml.sax.ContentHandler;

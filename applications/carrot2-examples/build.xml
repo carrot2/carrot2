@@ -37,6 +37,7 @@
     <run.example classname="org.carrot2.examples.clustering.ClusteringDocumentList" />
     <run.example classname="org.carrot2.examples.clustering.UsingCachingController" />
     <run.example classname="org.carrot2.examples.clustering.UsingComponentSuites" />
+    <run.example classname="org.carrot2.examples.clustering.UsingCustomLanguageModel" />
     <run.example classname="org.carrot2.examples.core.LoadingAttributeValuesFromXml" />
     <run.example classname="org.carrot2.examples.core.SavingAttributeValuesToXml" />
   </target>

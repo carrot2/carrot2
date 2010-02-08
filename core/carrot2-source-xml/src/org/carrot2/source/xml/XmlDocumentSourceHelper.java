@@ -26,7 +26,7 @@ import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.IResource;
-import org.carrot2.util.xml.TemplatesPool;
+import org.carrot2.util.xslt.TemplatesPool;
 import org.xml.sax.SAXException;
 
 /**

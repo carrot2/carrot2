@@ -14,6 +14,9 @@ package org.carrot2.matrix.nni;
 
 import org.carrot2.matrix.NNIDenseDoubleMatrix2D;
 
+/**
+ * Operations used from native LAPACK implementations.
+ */
 public interface ILapackOperations
 {
     public double [] computeEigenvaluesSymmetricalNNI(NNIDenseDoubleMatrix2D A);

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<section xml:id="section.architecture.json-formats">
+  <title>&C2; JSON data format</title>
+  
+  <para>
+    This section shows examples of &C2; output JSON format, used consistently
+    by all &PROD; applications, including &DCS; and &JA;.  
+  </para>
+  
+  <section xml:id="section.architecture.output-json">
+    <title>&C2; output JSON format</title>
+    
+    <para>
+      &PROD; saves documents and the clusters in the following JSON format:
+    </para>
+
+    <figure xml:id="figure.output-json-format">
+      <title>&C2; output JSON format</title>
+      <programlisting><![CDATA[{
+  "clusters": [
+    {
+      "attributes": {
+        "score": 1.0
+      }, 
+      "documents": [
+        0, 
+        2
+      ], 
+      "id": 0, 
+      "phrases": [
+        "Cluster 1"
+      ], 
+      "score": 1.0, 
+      "size": 2
+    }, 
+    {
+      "attributes": {
+        "score": 0.63
+      }, 
+      "clusters": [
+        {
+          "attributes": {
+            "score": 0.3
+          }, 
+          "documents": [
+            1
+          ], 
+          "id": 2, 
+          "phrases": [
+            "Cluster 2.1"
+          ], 
+          "score": 0.3, 
+          "size": 1
+        }, 
+        {
+          "attributes": {
+            "score": 0.15
+          }, 
+          "documents": [
+            2
+          ], 
+          "id": 3, 
+          "phrases": [
+            "Cluster 2.2"
+          ], 
+          "score": 0.15, 
+          "size": 1
+        }
+      ], 
+      "documents": [
+        0
+      ], 
+      "id": 1, 
+      "phrases": [
+        "Cluster 2"
+      ], 
+      "score": 0.63, 
+      "size": 3
+    }
+  ], 
+  "documents": [
+    {
+      "id": 0, 
+      "snippet": "Document 1 Content.", 
+      "title": "Document 1 Title", 
+      "url": "http://document.url/1"
+    }, 
+    {
+      "id": 1, 
+      "snippet": "Document 2 Content.", 
+      "title": "Document 2 Title", 
+      "url": "http://document.url/2"
+    }, 
+    {
+      "id": 2, 
+      "snippet": "Document 3 Content.", 
+      "title": "Document 3 Title", 
+      "url": "http://document.url/3"
+    }
+  ], 
+  "query": "query (optional)"
+}]]></programlisting>      
+    </figure>
+  </section>
+</section>

@@ -314,28 +314,6 @@ public class AttributeValueSets
         return attributeValueSet;
     }
 
-    /**
-     * Deserializes a collection of {@link AttributeValueSet}s from XML.
-     * 
-     * @param reader the reader to deserialize a {@link AttributeValueSets} from. The
-     *            stream will <strong>not</strong> be closed.
-     * @return Deserialized collection of {@link AttributeValueSet}s
-     * @deprecated Please use {@link #deserialize(InputStream)}. This method will be
-     *             removed in version 3.3.0. For more details, please see 
-     *             <a href="http://issues.carrot2.org/browse/CARROT-582">this issue</a>.
-     * @throws Exception is case of any problems with deserialization.
-     */
-    @Deprecated /* remove in 3.3 */
-    public static AttributeValueSets deserialize(Reader reader) throws Exception
-    {
-        final AttributeValueSets attributeValueSet = new Persister().read(
-            AttributeValueSets.class, reader);
-
-        checkDefaultAttributeValueSetExists(attributeValueSet);
-
-        return attributeValueSet;
-    }
-
     private static void checkDefaultAttributeValueSetExists(
         final AttributeValueSets attributeValueSet)
     {

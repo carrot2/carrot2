@@ -22,7 +22,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 
 import org.slf4j.Logger;
-import org.carrot2.util.xml.TemplatesPool;
+import org.carrot2.util.xslt.TemplatesPool;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 

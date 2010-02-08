@@ -47,6 +47,14 @@ public class ProcessingComponentDumper
             {
                 algorithms.add(new ProcessingComponentDoc(descriptor));
             }
+            Collections.sort(algorithms, new Comparator<ProcessingComponentDoc>()
+            {
+                public int compare(ProcessingComponentDoc o1, ProcessingComponentDoc o2)
+                {
+                    return o1.componentDescriptor.getLabel().compareTo(
+                        o2.componentDescriptor.getLabel());
+                }
+            });
         }
     }
 

@@ -41,7 +41,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class GoogleDocumentSource extends MultipageSearchEngine
 {
     /**
-     * Service URL.
+     * Service URL. Google web search service URL.
+     * 
+     * @group Service
+     * @level Advanced
+     * @label Service URL
      */
     @Input
     @Processing
@@ -50,13 +54,13 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     public String serviceUrl = "http://ajax.googleapis.com/ajax/services/search/web";
 
     /**
-     * Request Referer Header. Please do not use the default value when deploying this
+     * Request referer. Please do not use the default value when deploying this
      * component in production environments. Instead, put the URL to your application
      * here.
      * 
-     * @group Postprocessing
+     * @group Service
      * @level Advanced
-     * @label Keep highlights
+     * @label Referer
      */
     @Input
     @Processing
@@ -69,7 +73,9 @@ public class GoogleDocumentSource extends MultipageSearchEngine
      * using the bold HTML tag. Set this attribute to <code>true</code> to keep these
      * highlights.
      * 
-     * @label Ke
+     * @group Postprocessing
+     * @level Advanced
+     * @label Keep highlights
      */
     @Input
     @Processing
@@ -78,11 +84,18 @@ public class GoogleDocumentSource extends MultipageSearchEngine
 
     /**
      * Google API Key. Please do not use the default key when deploying this component in
-     * production environments. Instead, apply for your own key.
+     * production environments. Instead, apply generate and use your own key.
      * 
-     * @see <a href="http://code.google.com/apis/ajaxsearch/signup.html">Google AJAX
-     *      signup</a>
+     * @see <a href="http://code.google.com/apis/ajaxsearch/signup.html">Google AJAX signup</a>
+     * 
+     * @group Service
+     * @level Advanced
+     * @label Google API Key
      */
+    @Input
+    @Processing
+    @Internal
+    @Attribute
     public String apiKey = "ABQIAAAA_XmITjrzoipJYoBApAgGJhS8yIvkL4-1sNwOJWkV7nbkjq_Z_BQW0-uzOh5lKXRtEXQDTGbzIEz06Q";
 
     /**

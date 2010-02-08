@@ -32,7 +32,8 @@ import com.google.common.collect.Maps;
  * {@link CachingController#process(Map, String...)} method.
  * <p>
  * One example where this setting may be useful is when your application serves multiple
- * customers, each of which
+ * customers, each of which need a different configuration of a document source or a
+ * clustering algorithm.
  * </p>
  */
 public class MoreConfigurationsOfOneAlgorithmInCachingController

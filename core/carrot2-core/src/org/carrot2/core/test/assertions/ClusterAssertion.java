@@ -91,4 +91,12 @@ public class ClusterAssertion implements AssertExtension
         }
         return this;
     }
+    
+    /**
+     * Asserts that the cluster's Other Topics flag is set to the required state. 
+     */
+    public ClusterAssertion isOtherTopics(boolean isOtherTopics)
+    {
+        return isOtherTopics(isOtherTopics, "Other Topics");
+    }
 }

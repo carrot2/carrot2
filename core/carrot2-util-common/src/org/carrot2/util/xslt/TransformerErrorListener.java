@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.util.xml;
+package org.carrot2.util.xslt;
 
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.TransformerException;
@@ -18,12 +18,19 @@ import javax.xml.transform.TransformerException;
 import org.slf4j.Logger;
 
 /**
- * An {@link ErrorListener} that reacts to errors when parsing (compiling) the stylesheet.
+ * An {@link ErrorListener} that reacts to errors when transforming (applying) a
+ * stylesheet.
  */
-public final class StylesheetErrorListener implements ErrorListener
+public final class TransformerErrorListener implements ErrorListener
 {
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(StylesheetErrorListener.class);
-    
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(TransformerErrorListener.class);
+
+    /**
+     * We store the exception internally as a workaround to xalan, which reports
+     * {@link TransformerException} as {@link RuntimeException} (wrapped).
+     */
+    public TransformerException exception;
+
     /*
      * 
      */
@@ -46,6 +53,8 @@ public final class StylesheetErrorListener implements ErrorListener
     public void fatalError(TransformerException e) throws TransformerException
     {
         logger.error("Fatal error: " + e.getMessage());
+
+        this.exception = e;
         throw e;
     }
 }

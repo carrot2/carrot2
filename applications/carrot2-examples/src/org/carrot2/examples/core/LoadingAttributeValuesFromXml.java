@@ -20,8 +20,7 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.SimpleController;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
-import org.carrot2.source.etools.EToolsDocumentSource;
-import org.carrot2.source.google.GoogleDocumentSource;
+import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeValueSets;
 
@@ -62,17 +61,17 @@ public class LoadingAttributeValuesFromXml
 
             // Perform clustering using the attribute set provided at initialization time
             Map<String, Object> requestAttributes = Maps.newHashMap();
-            requestAttributes.put(AttributeNames.QUERY, "clustering");
-            ProcessingResult results = controller.process(requestAttributes,
-                GoogleDocumentSource.class, LingoClusteringAlgorithm.class);
+            requestAttributes.put(AttributeNames.DOCUMENTS, SampleDocumentData.DOCUMENTS_DATA_MINING);
+            requestAttributes.put(AttributeNames.QUERY, "data mining");
+            ProcessingResult results = controller.process(requestAttributes, LingoClusteringAlgorithm.class);
             ConsoleFormatter.displayClusters(results.getClusters());
 
             // Perform clustering using some other attribute set, in this case the
             // one that is the default in the XML file.
             requestAttributes = Maps.newHashMap(defaultAttributes);
-            requestAttributes.put(AttributeNames.QUERY, "clustering");
-            results = controller.process(requestAttributes, EToolsDocumentSource.class,
-                LingoClusteringAlgorithm.class);
+            requestAttributes.put(AttributeNames.DOCUMENTS, SampleDocumentData.DOCUMENTS_DATA_MINING);
+            requestAttributes.put(AttributeNames.QUERY, "data mining");
+            results = controller.process(requestAttributes, LingoClusteringAlgorithm.class);
             ConsoleFormatter.displayClusters(results.getClusters());
         }
         finally

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,8 +11,8 @@
 
 package org.carrot2.core.test.assertions;
 
-import static org.fest.assertions.Assertions.assertThat;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.List;
 
@@ -54,8 +53,8 @@ public class ClusterListAssertion
      * {@link ClusterAssertion#isEquivalentTo(Cluster, boolean)}.
      * 
      * @param expectedClusterList the expected cluster list
-     * @param checkDocuments if <code>false</code>, cluster's document references will
-     *            not be checked
+     * @param checkDocuments if <code>false</code>, cluster's document references will not
+     *            be checked
      * @return this assertion for convenience
      */
     public ClusterListAssertion isEquivalentTo(List<Cluster> expectedClusterList,
@@ -79,6 +78,20 @@ public class ClusterListAssertion
     public ClusterListAssertion hasSize(int expectedSize)
     {
         Assertions.assertThat(actualClusterList).hasSize(expectedSize);
+        return this;
+    }
+
+    /**
+     * Asserts that there are no Other Topics clusters on the provided list.
+     * 
+     * @return this assertion for convenience
+     */
+    public ClusterListAssertion doesNotContainOtherTopicsClusters()
+    {
+        for (int i = 0; i < actualClusterList.size(); i++)
+        {
+            assertThat(actualClusterList.get(i)).isOtherTopics(false);
+        }
         return this;
     }
 }

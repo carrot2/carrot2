@@ -199,8 +199,9 @@
     <para>
       &DCS; (DCS) exposes &PROD; clustering as a REST service. 
       It can cluster documents from an external source (e.g. a search engine) or 
-      documents provided directly as an XML stream and returns results in XML or 
-      JSON formats. 
+      documents provided directly as an XML stream and returns results in 
+      <link linkend="section.architecture.input-xml">XML</link> or 
+      <link linkend="section.architecture.output-json">JSON</link> formats. 
     </para>
     
     <para>
@@ -229,8 +230,8 @@
         <formalpara>
           <title>XML and JSON response formats.</title>
           <para>
-            &DCS; can return results both in XML and JSON formats. JSON-P (with callback) 
-            is also supported.
+            &DCS; can return results both in XML and <link linkend="section.architecture.output-json">JSON</link> 
+            formats. JSON-P (with callback) is also supported.
           </para>
         </formalpara>
       </listitem>
@@ -436,8 +437,9 @@
       from the command line. Currently, the only available CLI application is &CLIBP;, which
       performs &PROD; clustering on one or more files in the &C2; <link linkend="section.architecture.input-xml">XML format</link>
       and saves the results as <link linkend="section.architecture.output-xml">XML</link> 
-      or JSON. Apart from clustering large number of documents sets at one time, you
-      can use the &CLIBP; to integrate &PROD; with your non-Java applications.
+      or <link linkend="section.architecture.output-json">JSON</link>. Apart from 
+      clustering large number of documents sets at one time, you can use the &CLIBP; 
+      to integrate &PROD; with your non-Java applications.
     </para>
     
     <section xml:id="section.cli.bp.installation" role="notoc">
@@ -507,7 +509,7 @@
             </listitem>
           
             <listitem>
-              <para>To save the results in JSON, use the <option>-f JSON</option> option:</para>
+              <para>To save the results in <link linkend="section.architecture.output-json">JSON</link>, use the <option>-f JSON</option> option:</para>
               
               <programlisting><![CDATA[batch input/ -f JSON]]></programlisting>
             </listitem>
