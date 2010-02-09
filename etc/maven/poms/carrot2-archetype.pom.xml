@@ -16,14 +16,28 @@
       <version>@carrot2.version@</version>
     </dependency>
 
-    <!-- Optional, enables support for the Polish language. -->
-    <!--
-          <dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.5.8</version>
+    </dependency>
+
+    <!-- Optional dependencies (can be removed). -->
+
+    <dependency>
       <groupId>org.carrot2</groupId>
       <artifactId>morfologik</artifactId>
-      <version>1.1.2</version>
+      <version>1.2.2</version>
+      <optional>true</optional> 
     </dependency>
-    -->
+    
+    <dependency>
+      <groupId>com.carrotsearch</groupId>
+      <artifactId>nni</artifactId>
+      <version>1.0.0</version>
+      <optional>true</optional>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -47,6 +61,14 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <archive>
@@ -55,7 +77,7 @@
               <addExtensions>true</addExtensions>
               <classpathPrefix>./lib/</classpathPrefix>
               <mainClass>
-                org.carrot2.examples.clustering.ClusteringDataFromDocumentSources
+                org.carrot2.examples.clustering.ClusteringDocumentList
               </mainClass>
             </manifest>
           </archive>

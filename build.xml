@@ -789,6 +789,7 @@
     </jar>
 
     <antcall target="carrot2.maven.deploy" />
+    <antcall target="carrot2.maven.verify" />
     <delete>
         <fileset dir="${jar.dir}" includes="carrot2-core-*.jar" />
     </delete>
