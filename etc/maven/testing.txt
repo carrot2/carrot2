@@ -1,0 +1,23 @@
+mvn archetype:generate   \
+ -DarchetypeRepository=file:///home/dweiss/carrot2/carrot2.sf.trunk/tmp/maven  \
+ -DarchetypeGroupId=org.carrot2 \
+ -DarchetypeArtifactId=carrot2-example-archetype \
+ -DarchetypeVersion=3.2.0-dev \
+ -DgroupId=com.mycompany \
+ -DartifactId=myproject \
+ -DinteractiveMode=false
+
+cd myproject
+
+mvn -DreResolve=false dependency:purge-local-repository
+
+mvn eclipse:eclipse
+mvn install
+mvn exec:java -Dexec.mainClass=org.carrot2.examples.clustering.ClusteringDocumentList
+
+
+-> how to build profile (adding local snapshot repo)
+-> detecting build failures
+-> add slf4j
+
+

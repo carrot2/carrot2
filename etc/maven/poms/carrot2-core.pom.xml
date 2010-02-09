@@ -131,11 +131,11 @@
     </dependency>
 
     <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.5.8</version>
     </dependency>
-        
+
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-core</artifactId>
@@ -181,7 +181,7 @@
     <dependency>
       <groupId>org.simpleframework</groupId>
       <artifactId>simple-xml</artifactId>
-      <version>2.1.7</version>
+      <version>2.2</version>
     </dependency>
 
     <dependency>
@@ -209,10 +209,17 @@
     </dependency>
 
     <dependency>
-      <groupId>org.carrot2</groupId>
+      <groupId>com.carrotsearch</groupId>
       <artifactId>nni</artifactId>
       <version>1.0.0</version>
+      <optional>true</optional>
     </dependency>
+
+    <dependency>
+      <groupId>com.carrotsearch</groupId>
+      <artifactId>hppc</artifactId>
+      <version>0.1.0</version>
+    </dependency>    
   </dependencies>
 </project>
 

@@ -88,6 +88,16 @@
             <artifact:remoteRepository url="${maven.repository.url}" />
         </artifact:deploy>
 
+        <artifact:deploy file="${carrot2.master.basedir}/lib/com.carrotsearch.hppc/hppc-0.1-dev.jar">
+            <artifact:pom file="${poms.dir}/hppc.pom.xml" />
+            <artifact:remoteRepository url="${maven.repository.url}" />
+        </artifact:deploy>
+
+        <artifact:deploy file="${carrot2.master.basedir}/lib/org.apache.mahout.math/mahout-math-0.3-SNAPSHOT.jar" uniqueVersion="false">
+            <artifact:pom file="${poms.dir}/mahout-math.pom.xml" />
+            <artifact:remoteRepository url="${maven.repository.url}" />
+        </artifact:deploy>
+
         <copy todir="${carrot2.maven.basedir}/tmp/archetype">
             <fileset dir="${carrot2.maven.basedir}/archetype" />
         </copy>
@@ -121,6 +131,11 @@
         </artifact:deploy>
     </target>
 
+    <target name="verify">
+      <!-- Verify the archetype works as in http://download.carrot2.org/head/manual/#section.integration.setting-up-maven-project -->
+      
+    </target>
+    
     <target name="default">
         <echo>This build file is part of the master build file. Do not run separately.</echo>
     </target>

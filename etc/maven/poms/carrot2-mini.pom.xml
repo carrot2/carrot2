@@ -70,9 +70,9 @@
     </dependency>
 
     <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.5.8</version>
     </dependency>
         
     <dependency>
@@ -112,9 +112,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.carrot2</groupId>
-      <artifactId>nni</artifactId>
-      <version>1.0.0</version>
-    </dependency>
+      <groupId>com.carrotsearch</groupId>
+      <artifactId>hppc</artifactId>
+      <version>0.1.0</version>
+    </dependency>        
   </dependencies>
 </project>
