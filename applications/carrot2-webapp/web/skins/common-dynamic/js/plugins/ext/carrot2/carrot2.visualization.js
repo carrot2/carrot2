@@ -7,17 +7,23 @@
   $(document).ready(function() {
     if (typeof $.visualization.dataUrl != 'undefined') {
       var flashvars = {
-          data_sourceURL: $.visualization.dataUrl,
-          callback_onGroupClick: "groupClicked",
-          callback_onDocumentClick: "documentClicked",
-          callback_onSelectionClear: "selectionCleared",
-          openDocumentsOnClick: "true"
+          startup_data_URL: $.visualization.dataUrl,
+
+          callback_onGroupSelection: "onGroupSelection",
+          callback_onDocumentSelection: "onDocumentSelection",
+          openDocumentsOnClick: true,
+
+          documentsPanel: "AUTO",
+          maxVisibleDocuments: 400,
+
+          logo: "carrot2"
         };
+
       var params = {};
       var attributes = {};
 
       swfobject.embedSWF($.visualization.skinPath + "/common-dynamic/swf/org.carrotsearch.vis.circles.swf", 
-          "clusters-visu", "100%", "100%", "9.0.0", $.visualization.skinPath + "/common/swf/expressInstall.swf",
+          "clusters-visu", "100%", "100%", "10.0.0", $.visualization.skinPath + "/common/swf/expressInstall.swf",
           flashvars, params, attributes);
     }
   });
@@ -30,11 +36,41 @@
   });
 })(jQuery);
 
+/**
+ * An array of selected cluster IDs in the visualization SWF.
+ */
+var selectedClusters = [];
+
+/**
+ * A cache of document identifiers for each cluster ID, as given by
+ * the visualization. The same data is created in <code>carrot2.clusters.core.js</code>,
+ * so perhaps we could reuse it?
+ */
+var flattenedDocuments0 = {};
+
 // Callback function invoked by the visualization:
-// a group has been selected.
-function groupClicked(clusterId, docList) {
-  var documentIndexes = docList.split(",");
-  $("#clusters-panel").trigger("carrot2-clusters-selected", [ clusterId, documentIndexes ]);
+// a group has been selected or deselected.
+function onGroupSelection(clusterId, isSelected, docList) {
+  var i  = jQuery.inArray(clusterId, selectedClusters);
+
+  // If re-selected, re-push at the top of the stack.
+  if (i != -1) selectedClusters.splice(i, 1);
+  if (isSelected) selectedClusters.unshift(clusterId);
+
+  if (selectedClusters.length == 0) {
+    $("#clusters-panel").trigger("carrot2-clusters-selected-top");
+  } else {
+    /*
+     * TODO: selectedClusters contains identifiers of clusters to be shown.
+     * one could either merge their documents, or display one cluster after
+     * another in the documents panel (my pick).
+     */
+    flattenedDocuments0[clusterId] = docList.split(",");
+
+    var cluster = selectedClusters[0];
+    var documentIndexes = flattenedDocuments0[cluster];
+    $("#clusters-panel").trigger("carrot2-clusters-selected", [ cluster, documentIndexes ]);
+  }
 }
 
 // Callback function invoked by the visualization:
@@ -44,7 +80,7 @@ function selectionCleared() {
 }
 
 // Callback function invoked by the visualization
-function documentClicked(documentId) {
+function onDocumentSelection(documentId) {
   // Ignore the click feedback, using flash directly to open a new
   // browser window (see openDocumentsOnClick above).
   //

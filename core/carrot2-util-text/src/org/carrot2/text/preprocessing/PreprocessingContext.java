@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -19,8 +19,7 @@ import org.carrot2.text.analysis.ITokenType;
 import org.carrot2.text.linguistic.ILanguageModel;
 import org.carrot2.text.linguistic.IStemmer;
 
-import bak.pcj.set.IntSet;
-
+import com.carrotsearch.hppc.BitSet;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
@@ -380,7 +379,7 @@ public final class PreprocessingContext
          * <p>
          * This array is produced by {@link DocumentAssigner}.
          */
-        public IntSet [] documentIndices;
+        public BitSet [] documentIndices;
 
         /**
          * Index of the first phrase in {@link AllLabels}, or -1 if there are no phrases

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,9 +14,8 @@ package org.carrot2.util;
 
 import java.util.List;
 
-import bak.pcj.list.*;
-import bak.pcj.set.IntSet;
-
+import com.carrotsearch.hppc.IntArrayDeque;
+import com.carrotsearch.hppc.IntArrayList;
 import com.google.common.collect.Lists;
 
 /**
@@ -32,28 +31,29 @@ public class GraphUtils
      *            arc
      * @param pruneOneNodeSubrgaphs if <code>true</code>, one-node subgraphs will not be
      *            included in the result
-     * @return a list of {@link IntSet}s containing vertices of the coherent subgraphs
+     * @return a list of {@link IntArrayList}s containing vertices of the coherent subgraphs
      */
-    public static List<IntList> findCoherentSubgraphs(int vertexCount,
+    public static List<IntArrayList> findCoherentSubgraphs(int vertexCount,
         IArcPredicate arcPredicate, boolean pruneOneNodeSubrgaphs)
     {
         // Find coherent sub-graphs using breadth-first search
         final boolean [] nodesChecked = new boolean [vertexCount];
-        final List<IntList> clusterGroups = Lists.newArrayList();
+        final List<IntArrayList> clusterGroups = Lists.newArrayList();
+        final IntArrayDeque nodeQueue = new IntArrayDeque();
+
         for (int i = 0; i < vertexCount; i++)
         {
             if (!nodesChecked[i])
             {
-                IntDeque nodeQueue = new IntArrayDeque(vertexCount);
-                nodeQueue.add(i);
+                nodeQueue.clear();
+                nodeQueue.addLast(i);
                 nodesChecked[i] = true;
                 IntArrayList clusterGroup = new IntArrayList();
 
                 while (!nodeQueue.isEmpty())
                 {
                     // Get a node from the queue
-                    int node = nodeQueue.get(0);
-                    nodeQueue.removeElementAt(0);
+                    int node = nodeQueue.removeFirst();
 
                     // Add to the current sub-graph (cluster group)
                     clusterGroup.add(node);
@@ -65,7 +65,7 @@ public class GraphUtils
                         {
                             if (arcPredicate.isArcPresent(node, j))
                             {
-                                nodeQueue.add(j);
+                                nodeQueue.addLast(j);
                                 nodesChecked[j] = true;
                             }
                         }

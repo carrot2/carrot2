@@ -3,7 +3,7 @@
   <xsl:output indent="yes" omit-xml-declaration="yes"
        doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
-       media-type="text/html" encoding="utf-8" />
+       media-type="text/html" encoding="UTF-8" />
   
   <xsl:template match="/">
 <html xmlns="http://www.w3.org/1999/xhtml">

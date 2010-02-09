@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -73,5 +73,30 @@ public class ClusterAssertion implements AssertExtension
             expectedCluster.getSubclusters(), checkDocuments);
 
         return this;
+    }
+
+    /**
+     * Asserts that the cluster's Other Topics flag is set to the required state. 
+     */
+    public ClusterAssertion isOtherTopics(boolean isOtherTopics, String otherTopicsLabel)
+    {
+        assertThat(actualCluster.isOtherTopics()).isEqualTo(isOtherTopics);
+        if (isOtherTopics)
+        {
+            assertThat(actualCluster.getPhrases()).contains(otherTopicsLabel);
+        }
+        else
+        {
+            assertThat(actualCluster.getPhrases()).excludes(otherTopicsLabel);
+        }
+        return this;
+    }
+    
+    /**
+     * Asserts that the cluster's Other Topics flag is set to the required state. 
+     */
+    public ClusterAssertion isOtherTopics(boolean isOtherTopics)
+    {
+        return isOtherTopics(isOtherTopics, "Other Topics");
     }
 }

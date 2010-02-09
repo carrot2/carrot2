@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -286,7 +287,7 @@ public final class AttributeGroups extends Composite implements IAttributeEventP
         for (Object groupKey : descriptor.attributeGroups.keySet())
         {
             final String groupLabel;
-            if (groupKey instanceof Class)
+            if (groupKey instanceof Class<?>)
             {
                 groupLabel = ((Class<?>) groupKey).getSimpleName();
             }

@@ -22,27 +22,46 @@
         </fileset>
       </classpath>
     </javac>
+
+    <copy todir="tmp/classes">
+      <fileset dir="examples/">
+        <include name="suites/**" />
+        <include name="org/carrot2/examples/core/algorithm-lingo-attributes.xml" />
+      </fileset>
+    </copy>
   </target>
 
+  <!-- Runs selected classes -->
   <target name="carrot2.api.test" depends="carrot2.api.build">
-    <!-- Run two example classes -->
-    <java classname="org.carrot2.examples.clustering.ClusteringDocumentList"
-          outputproperty="dev.null" failonerror="true">
-      <classpath>
-        <fileset dir=".">
-          <include name="**/*.jar" />
-        </fileset>
-        <pathelement location="tmp/classes"/>
-      </classpath>
-    </java>
-    <java classname="org.carrot2.examples.clustering.UsingCachingController"
-          outputproperty="dev.null" failonerror="true">
-      <classpath>
-        <fileset dir=".">
-          <include name="**/*.jar" />
-        </fileset>
-        <pathelement location="tmp/classes"/>
-      </classpath>
-    </java>
+    <!-- Run some example classes -->
+    <run.example classname="org.carrot2.examples.clustering.ClusteringDocumentList" />
+    <run.example classname="org.carrot2.examples.clustering.UsingCachingController" />
+    <run.example classname="org.carrot2.examples.clustering.UsingComponentSuites" />
+    <run.example classname="org.carrot2.examples.clustering.UsingCustomLanguageModel" />
+    <run.example classname="org.carrot2.examples.core.LoadingAttributeValuesFromXml" />
+    <run.example classname="org.carrot2.examples.core.SavingAttributeValuesToXml" />
   </target>
+
+  <!-- Removes all compiled binaries -->
+  <target name="clean">
+    <delete dir="tmp" />
+  </target>
+
+  <!-- A macro that runs the specified class. -->
+  <macrodef name="run.example">
+    <attribute name="classname" />
+
+    <sequential>
+      <echo>Running: @{classname}</echo>
+      <java classname="@{classname}" logError="true"
+            failonerror="true">
+        <classpath>
+          <fileset dir=".">
+            <include name="**/*.jar" />
+          </fileset>
+          <pathelement location="tmp/classes"/>
+        </classpath>
+      </java>
+    </sequential>
+  </macrodef>
 </project>

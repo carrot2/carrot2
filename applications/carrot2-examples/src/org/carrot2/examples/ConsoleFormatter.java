@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -68,11 +69,17 @@ public class ConsoleFormatter
 
     public static void displayClusters(final Collection<Cluster> clusters)
     {
+        displayClusters(clusters, Integer.MAX_VALUE);
+    }
+
+    public static void displayClusters(final Collection<Cluster> clusters,
+        int maxNumberOfDocumentsToShow)
+    {
         System.out.println("\n\nCreated " + clusters.size() + " clusters\n");
         int clusterNumber = 1;
         for (final Cluster cluster : clusters)
         {
-            displayCluster(0, "" + clusterNumber++, cluster);
+            displayCluster(0, "" + clusterNumber++, cluster, maxNumberOfDocumentsToShow);
         }
     }
 
@@ -90,7 +97,8 @@ public class ConsoleFormatter
         System.out.println();
     }
 
-    private static void displayCluster(final int level, String tag, Cluster cluster)
+    private static void displayCluster(final int level, String tag, Cluster cluster,
+        int maxNumberOfDocumentsToShow)
     {
         final String label = cluster.getLabel();
 
@@ -103,16 +111,29 @@ public class ConsoleFormatter
             + " documents, score: " + cluster.getScore() + ")");
 
         // if this cluster has documents, display three topmost documents.
+        int documentsShown = 0;
         for (final Document document : cluster.getDocuments())
         {
+            if (documentsShown >= maxNumberOfDocumentsToShow)
+            {
+                break;
+            }
             displayDocument(level + 1, document);
+            documentsShown++;
+        }
+        if (maxNumberOfDocumentsToShow > 0
+            && (cluster.getDocuments().size() > documentsShown))
+        {
+            System.out.println(getIndent(level + 1) + "... and "
+                + (cluster.getDocuments().size() - documentsShown) + " more\n");
         }
 
         // finally, if this cluster has subclusters, descend into recursion.
         final int num = 1;
         for (final Cluster subcluster : cluster.getSubclusters())
         {
-            displayCluster(level + 1, tag + "." + num, subcluster);
+            displayCluster(level + 1, tag + "." + num, subcluster,
+                maxNumberOfDocumentsToShow);
         }
     }
 

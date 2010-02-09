@@ -1,5 +1,6 @@
 
 #parse("_header.vm")
+#parse("_document.vm")
 
 #*
 	Template displayed on show(ProcessingResult). 
@@ -9,11 +10,17 @@
 	  result
 	  results-total-formatted
 	  query
+	  maxDisplay
 *#
 
 #if ($result)
     #set ( $totalProcessingSec = ${result.Attributes.processing-time-total} / 1000.0 )
     #set ( $documents = $result.Documents )
+    #set ( $remaining = $documents.size() - $maxDisplay )
+    
+    #if ( $remaining > 0 )
+        #set ( $documents = $documents.subList(0, $maxDisplay) )
+    #end
 #end
 
 #if ($documents.isEmpty())
@@ -26,8 +33,12 @@
     </ul>
 #else
 	#foreach ($document in $documents)
-		#parse("_document.vm")
+		#document( $document )
 	#end
+
+    #if( $remaining > 0 )
+        <p class="more">...and $remaining more.</p>
+    #end
 #end
 
 #parse("_footer.vm")

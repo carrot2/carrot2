@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -76,7 +76,7 @@ public class ByFieldClusteringAlgorithmTest extends
         if (unclustered.length > 0)
         {
             final Cluster otherTopics = new Cluster("Other Topics", unclustered);
-            otherTopics.setAttribute(Cluster.OTHER_TOPICS, true);
+            otherTopics.setOtherTopics(true);
             expectedClusters.add(otherTopics);
         }
         assertThatClusters(clusters).isEquivalentTo(expectedClusters);

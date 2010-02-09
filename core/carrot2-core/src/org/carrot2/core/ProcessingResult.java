@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -25,7 +25,7 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.impl.DefaultPrettyPrinter;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.load.*;
+import org.simpleframework.xml.core.*;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -125,8 +125,8 @@ public final class ProcessingResult
 
     /**
      * Returns a specific attribute of this result set. This method is equivalent to
-     * calling {@link #getAttributes()} and then getting the required attribute from
-     * the map.
+     * calling {@link #getAttributes()} and then getting the required attribute from the
+     * map.
      * 
      * @param key key of the attribute to return
      * @return value of the attribute
@@ -136,7 +136,7 @@ public final class ProcessingResult
     {
         return (T) attributesView.get(key);
     }
-    
+
     /**
      * Returns the documents that have been processed. The returned collection is
      * unmodifiable.
@@ -233,7 +233,7 @@ public final class ProcessingResult
             {
                 documentsById.put(document.id, document);
             }
-            
+
             for (Cluster cluster : clusters)
             {
                 documentIdToReference(cluster, documentsById);
@@ -261,22 +261,22 @@ public final class ProcessingResult
     }
 
     /**
-     * Serializes this {@link ProcessingResult} to an XML file.
+     * Serializes this {@link ProcessingResult} to an XML stream.
      * 
-     * @param writer the writer to serialize this {@link ProcessingResult} to. The writer
+     * @param stream the stream to serialize this {@link ProcessingResult} to. The stream
      *            will <strong>not</strong> be closed.
      * @throws Exception in case of any problems with serialization
      */
-    public void serialize(Writer writer) throws Exception
+    public void serialize(OutputStream stream) throws Exception
     {
-        serialize(writer, true, true);
+        serialize(stream, true, true);
     }
 
     /**
-     * Serializes this {@link ProcessingResult} to an XML writer. This method is not
+     * Serializes this {@link ProcessingResult} to a byte stream. This method is not
      * thread-safe, external synchronization must be applied if needed.
      * 
-     * @param writer the writer to serialize this {@link ProcessingResult} to. The writer
+     * @param stream the stream to serialize this {@link ProcessingResult} to. The stream
      *            will <strong>not</strong> be closed.
      * @param saveDocuments if <code>false</code>, documents will not be serialized.
      *            Notice that when deserializing XML containing clusters but not
@@ -285,7 +285,7 @@ public final class ProcessingResult
      * @param saveClusters if <code>false</code>, clusters will not be serialized
      * @throws Exception in case of any problems with serialization
      */
-    public void serialize(Writer writer, boolean saveDocuments, boolean saveClusters)
+    public void serialize(OutputStream stream, boolean saveDocuments, boolean saveClusters)
         throws Exception
     {
         final List<Document> documentsBackup = getDocuments();
@@ -301,7 +301,7 @@ public final class ProcessingResult
             attributes.remove(AttributeNames.CLUSTERS);
         }
 
-        new Persister().write(this, writer);
+        new Persister().write(this, stream);
 
         if (documentsBackup != null)
         {
@@ -315,16 +315,16 @@ public final class ProcessingResult
     }
 
     /**
-     * Deserializes a {@link ProcessingResult} from an XML character stream.
+     * Deserializes a {@link ProcessingResult} from an XML stream.
      * 
-     * @param reader the reader to deserialize a {@link ProcessingResult} from. The reader
-     *            will <strong>not</strong> be closed.
+     * @param input the input XML stream to deserialize a {@link ProcessingResult} from.
+     *            The stream will <strong>not</strong> be closed.
      * @return deserialized {@link ProcessingResult}
      * @throws Exception is case of any problems with deserialization
      */
-    public static ProcessingResult deserialize(Reader reader) throws Exception
+    public static ProcessingResult deserialize(InputStream input) throws Exception
     {
-        return new Persister().read(ProcessingResult.class, reader);
+        return new Persister().read(ProcessingResult.class, input);
     }
 
     /**

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -26,7 +26,7 @@ import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.IResource;
-import org.carrot2.util.xml.TemplatesPool;
+import org.carrot2.util.xslt.TemplatesPool;
 import org.xml.sax.SAXException;
 
 /**
@@ -72,14 +72,19 @@ public class XmlDocumentSourceHelper
      * transform if specified. This method can handle gzip-compressed streams if supported
      * by the data source.
      * 
-     * @param metadata if a non-<code>null</code> map is provided, request metadata
-     *            will be put into the map.
+     * @param metadata if a non-<code>null</code> map is provided, request metadata will
+     *            be put into the map.
+     * @param user if not <code>null</code>, the user name to use for HTTP Basic
+     *            Authentication
+     * @param password if not <code>null</code>, the password to use for HTTP Basic
+     *            Authentication
      */
     public ProcessingResult loadProcessingResult(String url, Templates stylesheet,
-        Map<String, String> xsltParameters, Map<String, Object> metadata)
-        throws Exception
+        Map<String, String> xsltParameters, Map<String, Object> metadata, String user,
+        String password) throws Exception
     {
-        final HttpUtils.Response response = HttpUtils.doGET(url, null, null);
+        final HttpUtils.Response response = HttpUtils.doGET(url, null, null, user,
+            password);
         final InputStream carrot2XmlStream = response.getPayloadAsStream();
 
         final int statusCode = response.status;
@@ -108,8 +113,7 @@ public class XmlDocumentSourceHelper
         try
         {
             carrot2XmlStream = getCarrot2XmlStream(xml, stylesheet, xsltParameters);
-            return ProcessingResult.deserialize(new InputStreamReader(carrot2XmlStream,
-                "utf-8"));
+            return ProcessingResult.deserialize(carrot2XmlStream);
         }
         finally
         {

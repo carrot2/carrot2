@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -47,7 +47,7 @@ public final class SaveAsXMLActionDelegate extends Action
     @Override
     public void run()
     {
-        Writer writer = null;
+        OutputStream os = null;
         try
         {
             final File destinationFile = new File(options.getFullPath());
@@ -56,10 +56,8 @@ public final class SaveAsXMLActionDelegate extends Action
                 destinationFile.createNewFile();
             }
 
-            writer = new OutputStreamWriter(new FileOutputStream(destinationFile),
-                "UTF-8");
-
-            results.serialize(writer, options.includeDocuments, options.includeClusters);
+            os = new FileOutputStream(destinationFile);
+            results.serialize(os, options.includeDocuments, options.includeClusters);
         }
         catch (Exception e)
         {
@@ -68,7 +66,7 @@ public final class SaveAsXMLActionDelegate extends Action
         }
         finally
         {
-            CloseableUtils.close(writer);
+            CloseableUtils.close(os);
         }
     }
 }

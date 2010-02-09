@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -19,7 +20,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.carrot2.util.ListUtils;
 import org.carrot2.util.attribute.constraint.*;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.load.Persist;
+import org.simpleframework.xml.core.Persist;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;

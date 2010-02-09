@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,6 +15,8 @@ package org.carrot2.clustering.lingo;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.mahout.math.jet.math.Functions;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.vsm.ITermWeighting;
@@ -24,14 +26,7 @@ import org.carrot2.util.LinearApproximation;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.*;
 
-import bak.pcj.IntIterator;
-import bak.pcj.list.IntArrayList;
-import bak.pcj.list.IntList;
-import bak.pcj.map.*;
-import bak.pcj.set.IntBitSet;
-import bak.pcj.set.IntSet;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.jet.math.Functions;
+import com.carrotsearch.hppc.*;
 
 /**
  * Builds cluster labels based on the reduced term-document matrix and assigns documents
@@ -146,7 +141,7 @@ public class ClusterBuilder
         final int [] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
         final int [] mostFrequentOriginalWordIndex = preprocessingContext.allStems.mostFrequentOriginalWordIndex;
         final int [][] phrasesWordIndices = preprocessingContext.allPhrases.wordIndices;
-        final IntSet [] labelsDocumentIndices = preprocessingContext.allLabels.documentIndices;
+        final BitSet [] labelsDocumentIndices = preprocessingContext.allLabels.documentIndices;
         final int wordCount = preprocessingContext.allWords.image.length;
         final int documentCount = preprocessingContext.documents.size();
 
@@ -155,7 +150,7 @@ public class ClusterBuilder
         // as individual stems. For this reason, for matching single word labels
         // we should use only those stems that appeared in AllLabels as one-word
         // candidates.
-        final IntBitSet oneWordCandidateStemIndices = new IntBitSet();
+        final BitSet oneWordCandidateStemIndices = new BitSet();
         for (int i = 0; i < labelsFeatureIndex.length; i++)
         {
             final int featureIndex = labelsFeatureIndex[i];
@@ -163,22 +158,20 @@ public class ClusterBuilder
             {
                 break;
             }
-            oneWordCandidateStemIndices.add(wordsStemIndex[featureIndex]);
+            oneWordCandidateStemIndices.set(wordsStemIndex[featureIndex]);
         }
 
-        final IntKeyIntMap stemToRowIndex = vsmContext.stemToRowIndex;
-        final IntKeyIntMap filteredRowToStemIndex = new IntKeyIntOpenHashMap();
+        final IntIntOpenHashMap stemToRowIndex = vsmContext.stemToRowIndex;
+        final IntIntOpenHashMap filteredRowToStemIndex = new IntIntOpenHashMap();
         final IntArrayList filteredRows = new IntArrayList();
         int filteredRowIndex = 0;
-        for (IntKeyIntMapIterator it = stemToRowIndex.entries(); it.hasNext();)
+        for (IntIntCursor it : stemToRowIndex)
         {
-            it.next();
-            if (oneWordCandidateStemIndices.contains(it.getKey()))
+            if (oneWordCandidateStemIndices.get(it.key))
             {
-                filteredRowToStemIndex.put(filteredRowIndex++, it.getKey());
-                filteredRows.add(it.getValue());
+                filteredRowToStemIndex.put(filteredRowIndex++, it.key);
+                filteredRows.add(it.value);
             }
-
         }
 
         // Request additional feature scores
@@ -269,10 +262,10 @@ public class ClusterBuilder
     }
 
     private double getDocumentCountPenalty(int labelIndex, int documentCount,
-        IntSet [] labelsDocumentIndices)
+        BitSet [] labelsDocumentIndices)
     {
-        return documentSizeCoefficients.getValue(labelsDocumentIndices[labelIndex].size()
-            / (double) documentCount);
+        return documentSizeCoefficients.getValue(
+            labelsDocumentIndices[labelIndex].cardinality() / (double) documentCount);
     }
 
     /**
@@ -281,11 +274,11 @@ public class ClusterBuilder
     void assignDocuments(LingoProcessingContext context)
     {
         final int [] clusterLabelFeatureIndex = context.clusterLabelFeatureIndex;
-        final IntSet [] clusterDocuments = new IntBitSet [clusterLabelFeatureIndex.length];
+        final BitSet [] clusterDocuments = new BitSet [clusterLabelFeatureIndex.length];
 
         final int [] labelsFeatureIndex = context.preprocessingContext.allLabels.featureIndex;
-        final IntSet [] documentIndices = context.preprocessingContext.allLabels.documentIndices;
-        final IntKeyIntMap featureValueToIndex = new IntKeyIntOpenHashMap();
+        final BitSet [] documentIndices = context.preprocessingContext.allLabels.documentIndices;
+        final IntIntOpenHashMap featureValueToIndex = new IntIntOpenHashMap();
 
         for (int i = 0; i < labelsFeatureIndex.length; i++)
         {
@@ -307,53 +300,58 @@ public class ClusterBuilder
      */
     void merge(LingoProcessingContext context)
     {
-        final IntSet [] clusterDocuments = context.clusterDocuments;
+        final BitSet [] clusterDocuments = context.clusterDocuments;
         final int [] clusterLabelFeatureIndex = context.clusterLabelFeatureIndex;
         final double [] clusterLabelScore = context.clusterLabelScore;
 
-        final List<IntList> mergedClusters = GraphUtils.findCoherentSubgraphs(
+        final List<IntArrayList> mergedClusters = GraphUtils.findCoherentSubgraphs(
             clusterDocuments.length, new GraphUtils.IArcPredicate()
             {
-                private IntBitSet temp = new IntBitSet();
+                private BitSet temp = new BitSet();
 
                 public boolean isArcPresent(int clusterA, int clusterB)
                 {
                     temp.clear();
                     int size;
-                    IntSet setA = clusterDocuments[clusterA];
-                    IntSet setB = clusterDocuments[clusterB];
+                    BitSet setA = clusterDocuments[clusterA];
+                    BitSet setB = clusterDocuments[clusterB];
 
                     // Suitable for flat clustering
                     // A small subgroup contained within a bigger group
                     // will give small overlap ratio. Big ratios will
                     // be produced only for balanced group sizes.
-                    if (setA.size() < setB.size())
+                    if (setA.cardinality() < setB.cardinality())
                     {
-                        temp.addAll(setA);
-                        temp.retainAll(setB);
-                        size = setB.size();
+                        // addAll == or
+                        // reiatinAll == and | intersect
+                        temp.or(setA);
+                        temp.intersect(setB);
+                        size = (int) setB.cardinality();
                     }
                     else
                     {
-                        temp.addAll(setB);
-                        temp.retainAll(setA);
-                        size = setA.size();
+                        temp.or(setB);
+                        temp.intersect(setA);
+                        size = (int) setA.cardinality();
                     }
 
-                    return temp.size() / (double) size >= clusterMergingThreshold;
+                    return temp.cardinality() / (double) size >= clusterMergingThreshold;
                 }
             }, true);
 
         
-        // For each merge group, choose the cluster with the highets score and
+        // For each merge group, choose the cluster with the highest score and
         // merge the rest to it
-        for (IntList clustersToMerge : mergedClusters)
+        for (IntArrayList clustersToMerge : mergedClusters)
         {
             int mergeBaseClusterIndex = -1;
             double maxScore = -1;
-            for (IntIterator it = clustersToMerge.iterator(); it.hasNext();)
+            
+            final int [] buf = clustersToMerge.buffer;
+            final int max = clustersToMerge.size();
+            for (int i = 0; i < max; i++)
             {
-                final int clusterIndex = it.next();
+                final int clusterIndex = buf[i];
                 if (clusterLabelScore[clusterIndex] > maxScore)
                 {
                     mergeBaseClusterIndex = clusterIndex;
@@ -361,13 +359,13 @@ public class ClusterBuilder
                 }
             }
 
-            for (IntIterator it = clustersToMerge.iterator(); it.hasNext();)
+            for (int i = 0; i < max; i++)
             {
-                final int clusterIndex = it.next();
+                final int clusterIndex = buf[i];
                 if (clusterIndex != mergeBaseClusterIndex)
                 {
-                    clusterDocuments[mergeBaseClusterIndex]
-                        .addAll(clusterDocuments[clusterIndex]);
+                    clusterDocuments[mergeBaseClusterIndex].or(
+                        clusterDocuments[clusterIndex]);
                     clusterLabelFeatureIndex[clusterIndex] = -1;
                     clusterDocuments[clusterIndex] = null;
                 }

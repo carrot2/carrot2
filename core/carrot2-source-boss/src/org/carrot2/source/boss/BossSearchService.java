@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -18,17 +18,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.httpclient.*;
-import org.slf4j.Logger;
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
-import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpHeaders;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.URLResourceWithParams;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
+import org.slf4j.Logger;
 
 /**
  * A superclass shared between various Boss verticals.
@@ -37,7 +36,8 @@ import org.simpleframework.xml.load.Persister;
 public abstract class BossSearchService
 {
     /** Logger for this object. */
-    protected final Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
+    protected final Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass()
+        .getName());
 
     /**
      * Yahoo BOSS application ID assigned to Carrot2/ Carrot Search. Use your own, please.
@@ -52,8 +52,8 @@ public abstract class BossSearchService
     public static final String YBOSS_RESPONSE = "boss.response";
 
     /**
-     * Application ID required for BOSS services. Please <strong>generate your own ID</strong>
-     * for production deployments and branches off the Carrot2.org's code.
+     * Application ID required for BOSS services. Please <strong>generate your own
+     * ID</strong> for production deployments and branches off the Carrot2.org's code.
      * 
      * @label Application ID
      * @level Advanced
@@ -85,7 +85,8 @@ public abstract class BossSearchService
      * <p>
      * The following languages and regions are currently (July 2009) supported:
      * </p>
-     * <table> <thead>
+     * <table>
+     * <thead>
      * <tr>
      * <th align="left">Country</th>
      * <th align="left">Region</th>
@@ -332,7 +333,8 @@ public abstract class BossSearchService
      * <td>ve</td>
      * <td>es</td>
      * </tr>
-     * </tbody> </table>
+     * </tbody>
+     * </table>
      * <p>
      * Use {@link BossLanguageCodes#getAttributeValue()} to acquire proper constant for
      * this field.
@@ -348,17 +350,6 @@ public abstract class BossSearchService
     @Processing
     @Attribute
     public BossLanguageCodes languageAndRegion;
-
-    /**
-     * An internal attribute to capture the previously set active language and possibly
-     * set a new better matching value based on the supplied {@link #languageAndRegion} value.
-     */
-    @Processing
-    @Input
-    @Output
-    @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
-    @Internal
-    private LanguageCode language;
 
     /**
      * BOSS engine current metadata.
@@ -415,15 +406,6 @@ public abstract class BossSearchService
             {
                 throw new IOException("Language value: " + languageAndRegion);
             }
-            
-            if (language == null)
-            {
-                final LanguageCode bestMatchingLanguageCode = languageAndRegion.toLanguageCode();
-                if (bestMatchingLanguageCode != null)
-                {
-                    language = bestMatchingLanguageCode;
-                }
-            }
         }
 
         final String serviceURI = URLResourceWithParams.substituteAttributes(
@@ -467,7 +449,7 @@ public abstract class BossSearchService
     /**
      * Parse the response stream.
      */
-    private static SearchEngineResponse parseResponseXML(final InputStream is)
+    private SearchEngineResponse parseResponseXML(final InputStream is)
         throws IOException
     {
         try
@@ -477,7 +459,8 @@ public abstract class BossSearchService
                 is);
 
             response.metadata.put(YBOSS_RESPONSE, yresponse);
-            yresponse.populate(response);
+            yresponse.populate(response, languageAndRegion != null ? languageAndRegion
+                .toLanguageCode() : null);
 
             return response;
         }

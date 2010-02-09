@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -37,13 +37,18 @@ public final class StopListMarker
     {
         final char [][] wordImages = context.allWords.image;
         final boolean [] commonTermFlags = new boolean [wordImages.length];
-        final MutableCharArray current = new MutableCharArray("");
+
+        final MutableCharArray mutableCharArray = new MutableCharArray("");
+        char [] buffer = new char [128];
 
         for (int i = 0; i < commonTermFlags.length; i++)
         {
-            final char [] imageLowerCase = CharArrayUtils.toLowerCase(wordImages[i]);
-            current.reset(imageLowerCase);
-            commonTermFlags[i] = context.language.isCommonWord(current);
+            final char [] word = wordImages[i];
+            if (buffer.length < word.length) buffer = new char [word.length];
+
+            CharArrayUtils.toLowerCase(word, buffer);
+            mutableCharArray.reset(buffer, 0, word.length);
+            commonTermFlags[i] = context.language.isCommonWord(mutableCharArray);
         }
 
         context.allWords.commonTermFlag = commonTermFlags;

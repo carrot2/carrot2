@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -75,7 +75,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
         }
 
         // Create regexp patterns for each query word
-        final String [] queryWords = query.split("\\s+");
+        final String [] queryWords = query.replace("\"", "").split("\\s+");
         final Pattern [] queryPatterns = new Pattern [queryWords.length];
         for (int i = 0; i < queryWords.length; i++)
         {

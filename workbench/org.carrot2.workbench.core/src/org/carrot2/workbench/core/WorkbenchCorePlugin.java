@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -21,8 +21,6 @@ import org.carrot2.core.*;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.resource.*;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.core.ui.adapters.ClusterAdapterFactory;
-import org.carrot2.workbench.core.ui.adapters.PropertySourceAdapterFactory;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -100,12 +98,6 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
 
         controller = new CachingController(IDocumentSource.class);
         controller.init(new HashMap<String, Object>(), componentSuite);
-
-        /*
-         * Register adapters.
-         */
-        PropertySourceAdapterFactory.register(Platform.getAdapterManager());
-        ClusterAdapterFactory.register(Platform.getAdapterManager());
     }
 
     /*

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -70,6 +70,20 @@ public class GoogleDocumentSourceTest extends
         {
             final String snippet = document.getField(Document.SUMMARY);
             assertThat(snippet).doesNotMatch(".*</?b>.*");
+        }
+    }
+
+    @Test
+    public void testNoUrlEncodingInUrls()
+    {
+        assumeTrue(externalApiTestsEnabled());
+        runQuery("help", getSmallQuerySize());
+
+        final List<Document> documents = getDocuments();
+        for (Document document : documents)
+        {
+            final String url = document.getField(Document.CONTENT_URL);
+            assertThat(url).doesNotMatch(".*%3[Ff].*");
         }
     }
 }

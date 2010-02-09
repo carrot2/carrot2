@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -58,9 +58,9 @@ public class LingoClusteringAlgorithmTest extends
     public void testNoLabelCandidates()
     {
         final List<Document> documents = Lists.newArrayList();
-        documents.add(new Document("test", null, null));
-        documents.add(new Document("test", null, null));
-        documents.add(new Document("test", null, null));
+        documents.add(new Document("test"));
+        documents.add(new Document("test"));
+        documents.add(new Document("test"));
         processingAttributes.put(AttributeNames.QUERY, "test");
 
         final List<Cluster> clusters = cluster(documents).getClusters();

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -17,8 +17,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.carrot2.core.IController;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.AttributeNames;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * Search process model is the core model around which all other views revolve (editors,
@@ -41,31 +39,6 @@ public final class SearchResult
      * An array of listeners interested in events happening on this search result.
      */
     private List<ISearchResultListener> listeners = new CopyOnWriteArrayList<ISearchResultListener>();
-
-    /**
-     * Dispatch {@link ISearchResultListener#processingResultUpdated(ProcessingResult)}
-     * to listeners.
-     */
-    private final Runnable dispatchResultUpdated = new Runnable()
-    {
-        public void run()
-        {
-            /*
-             * QUICK FIX for issue: http://issues.carrot2.org/browse/CARROT-542
-             * Propagate active-language back to input attributes, if it has been set.
-             */
-            if (input.getAttribute(AttributeNames.ACTIVE_LANGUAGE) == null)
-            {
-                input.setAttribute(AttributeNames.ACTIVE_LANGUAGE, 
-                    result.getAttribute(AttributeNames.ACTIVE_LANGUAGE));
-            }
-
-            for (ISearchResultListener listener : listeners)
-            {
-                listener.processingResultUpdated(result);
-            }
-        }
-    };
 
     /**
      * 
@@ -122,13 +95,9 @@ public final class SearchResult
      */
     private void fireProcessingResultUpdated()
     {
-        if (PlatformUI.isWorkbenchRunning())
+        for (ISearchResultListener listener : listeners)
         {
-            PlatformUI.getWorkbench().getDisplay().asyncExec(dispatchResultUpdated);
-        }
-        else
-        {
-            dispatchResultUpdated.run();
+            listener.processingResultUpdated(result);
         }
     }
 

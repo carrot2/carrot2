@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -34,7 +34,7 @@ import org.carrot2.webapp.model.*;
 import org.carrot2.webapp.util.UserAgentUtils;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 import org.slf4j.Logger;
 
@@ -64,6 +64,12 @@ public class QueryProcessorServlet extends HttpServlet
     /** A reference to custom log appenders. */
     private transient volatile LogInitContextListener logInitializer;
 
+    /** Global configuration. */
+    private WebappConfig webappConfig;
+
+    /** @see UnknownToDefaultTransformer */
+    private UnknownToDefaultTransformer unknownToDefaultTransformer;
+
     /**
      * Define this system property to enable statistical information from the query
      * processor. A GET request to {@link QueryProcessorServlet} with parameter
@@ -85,6 +91,7 @@ public class QueryProcessorServlet extends HttpServlet
     public void init(ServletConfig config) throws ServletException
     {
         super.init(config);
+
         final ServletContext servletContext = config.getServletContext();
 
         /*
@@ -94,8 +101,17 @@ public class QueryProcessorServlet extends HttpServlet
         logInitializer = (LogInitContextListener) servletContext
             .getAttribute(LogInitContextListener.CONTEXT_ID);
 
+        /*
+         * Initialize global configuration and publish it.
+         */
+        this.webappConfig = WebappConfig.getSingleton();
+        this.unknownToDefaultTransformer = new UnknownToDefaultTransformer(webappConfig);
+
+        /*
+         * Initialize the controller.
+         */
         controller = new CachingController(IDocumentSource.class);
-        controller.init(new HashMap<String, Object>(), WebappConfig.INSTANCE.components);
+        controller.init(new HashMap<String, Object>(), webappConfig.components);
 
         jawrUrlGenerator = new JawrUrlGenerator(servletContext);
     }
@@ -167,14 +183,13 @@ public class QueryProcessorServlet extends HttpServlet
         try
         {
             // Build model for this request
-            final RequestModel requestModel = WebappConfig.INSTANCE
-                .setDefaults(new RequestModel());
+            final RequestModel requestModel = new RequestModel(webappConfig);
 
             requestModel.modern = UserAgentUtils.isModernBrowser(request);
             final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = new AttributeBinder.AttributeBinderActionBind(
                 Input.class, requestParameters, true,
                 AttributeBinder.AttributeTransformerFromString.INSTANCE,
-                UnknownToDefaultTransformer.INSTANCE);
+                unknownToDefaultTransformer);
             AttributeBinder.bind(requestModel,
                 new AttributeBinder.IAttributeBinderAction []
                 {
@@ -217,7 +232,7 @@ public class QueryProcessorServlet extends HttpServlet
         RequestModel requestModel) throws Exception
     {
         response.setContentType(MIME_XML_UTF8);
-        final AjaxAttributesModel model = new AjaxAttributesModel(requestModel);
+        final AjaxAttributesModel model = new AjaxAttributesModel(webappConfig, requestModel);
 
         final Persister persister = new Persister(getPersisterFormat(requestModel));
         persister.write(model, response.getWriter());
@@ -236,11 +251,12 @@ public class QueryProcessorServlet extends HttpServlet
 
         @Element(name = "attribute-metadata")
         @SuppressWarnings("unused")
-        public final AttributeMetadataModel attributesModel = new AttributeMetadataModel();
+        public final AttributeMetadataModel attributesModel;
 
-        private AjaxAttributesModel(RequestModel requestModel)
+        private AjaxAttributesModel(WebappConfig config, RequestModel requestModel)
         {
             this.requestModel = requestModel;
+            this.attributesModel = new AttributeMetadataModel(config);
         }
     }
 
@@ -252,7 +268,7 @@ public class QueryProcessorServlet extends HttpServlet
         RequestModel requestModel) throws Exception
     {
         response.setContentType(MIME_XML_UTF8);
-        final PageModel pageModel = new PageModel(request, requestModel,
+        final PageModel pageModel = new PageModel(webappConfig, request, requestModel,
             jawrUrlGenerator, null, null);
 
         final Persister persister = new Persister(
@@ -332,7 +348,7 @@ public class QueryProcessorServlet extends HttpServlet
 
         // Remove values corresponding to internal attributes
         requestParameters.keySet().removeAll(
-            WebappConfig.INSTANCE.componentInternalAttributeKeys);
+            webappConfig.componentInternalAttributeKeys);
 
         // Perform processing
         ProcessingResult processingResult = null;
@@ -366,7 +382,7 @@ public class QueryProcessorServlet extends HttpServlet
 
         // Send response, sets encoding of the response writer.
         response.setContentType(MIME_XML_UTF8);
-        final PageModel pageModel = new PageModel(request, requestModel,
+        final PageModel pageModel = new PageModel(webappConfig, request, requestModel,
             jawrUrlGenerator, processingResult, processingException);
 
         final Persister persister = new Persister(
@@ -413,7 +429,7 @@ public class QueryProcessorServlet extends HttpServlet
     {
         return new Format(2, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             + "<?ext-stylesheet resource=\""
-            + WebappConfig.getContextRelativeSkinStylesheet(requestModel.skin) + "\" ?>");
+            + webappConfig.getContextRelativeSkinStylesheet(requestModel.skin) + "\" ?>");
     }
 
     private Map<String, String> extractCookies(HttpServletRequest request)
@@ -440,10 +456,7 @@ public class QueryProcessorServlet extends HttpServlet
         private final Map<String, Collection<?>> knownValues;
         private final Map<String, Object> defaultValues;
 
-        private final static UnknownToDefaultTransformer INSTANCE = new UnknownToDefaultTransformer(
-            WebappConfig.INSTANCE);
-
-        private UnknownToDefaultTransformer(WebappConfig config)
+        public UnknownToDefaultTransformer(WebappConfig config)
         {
             knownValues = Maps.newHashMap();
             defaultValues = Maps.newHashMap();
@@ -456,7 +469,7 @@ public class QueryProcessorServlet extends HttpServlet
             }
             knownValues.put(WebappConfig.RESULTS_PARAM, resultSizes);
             defaultValues.put(WebappConfig.RESULTS_PARAM, ModelWithDefault
-                .getDefault(WebappConfig.INSTANCE.sizes).size);
+                .getDefault(config.sizes).size);
 
             // Skins
             final Set<String> skinIds = Sets.newHashSet();
@@ -466,7 +479,7 @@ public class QueryProcessorServlet extends HttpServlet
             }
             knownValues.put(WebappConfig.SKIN_PARAM, skinIds);
             defaultValues.put(WebappConfig.SKIN_PARAM, ModelWithDefault
-                .getDefault(WebappConfig.INSTANCE.skins).id);
+                .getDefault(config.skins).id);
 
             // Views
             final Set<String> viewIds = Sets.newHashSet();
@@ -476,12 +489,12 @@ public class QueryProcessorServlet extends HttpServlet
             }
             knownValues.put(WebappConfig.VIEW_PARAM, viewIds);
             defaultValues.put(WebappConfig.VIEW_PARAM, ModelWithDefault
-                .getDefault(WebappConfig.INSTANCE.views).id);
+                .getDefault(config.views).id);
 
             // Sources
             knownValues.put(WebappConfig.SOURCE_PARAM,
-                WebappConfig.INSTANCE.sourceAttributeMetadata.keySet());
-            defaultValues.put(WebappConfig.SOURCE_PARAM, WebappConfig.INSTANCE.components
+                config.sourceAttributeMetadata.keySet());
+            defaultValues.put(WebappConfig.SOURCE_PARAM, config.components
                 .getSources().get(0).getId());
 
             // Algorithms
@@ -490,10 +503,10 @@ public class QueryProcessorServlet extends HttpServlet
                     WebappConfig.ALGORITHM_PARAM,
                     Lists
                         .transform(
-                            WebappConfig.INSTANCE.components.getAlgorithms(),
+                            config.components.getAlgorithms(),
                             ProcessingComponentDescriptor.ProcessingComponentDescriptorToId.INSTANCE));
             defaultValues.put(WebappConfig.ALGORITHM_PARAM,
-                WebappConfig.INSTANCE.components.getAlgorithms().get(0).getId());
+                config.components.getAlgorithms().get(0).getId());
 
         }
 

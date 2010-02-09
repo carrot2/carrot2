@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -78,7 +78,7 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
         for (Document document : documents)
         {
             final Object field = document.getField(fieldName);
-            if (field instanceof Collection)
+            if (field instanceof Collection<?>)
             {
                 for (Object value : (Collection<?>) field)
                 {

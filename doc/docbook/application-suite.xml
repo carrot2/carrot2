@@ -8,7 +8,8 @@
 ]>
 <chapter xml:id="chapter.application-suite" 
          xmlns="http://docbook.org/ns/docbook" version="5.0"
-         xmlns:product="http://www.carrot2.org">
+         xmlns:product="http://www.carrot2.org"
+         xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Application suite</title>
   <subtitle>Applications shipped with &PROD;</subtitle>
 
@@ -28,7 +29,7 @@
         <title>&DCW;</title>
         <para>
           which is a standalone GUI application you can use to experiment with &PROD;
-          clustering on data from common search engines or your own data.
+          clustering on data from common search engines or your own data,
         </para>
       </formalpara>
     </listitem>
@@ -37,7 +38,16 @@
       <formalpara>
         <title>&DCS;</title>
         <para>
-          which exposes &PROD; clustering as a REST service.
+          which exposes &PROD; clustering as a REST service,
+        </para>
+      </formalpara>
+    </listitem>
+
+    <listitem>
+      <formalpara>
+        <title>&CLI;</title>
+        <para>
+          applications which allow invoking &PROD; clustering from command line,
         </para>
       </formalpara>
     </listitem>
@@ -161,19 +171,23 @@
       
       <orderedlist>
         <listitem>
-          <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.5.0 or newer) if you have not done so</para>
+          <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.5.0 or newer) if you have not done so.</para>
         </listitem>
       
-        <listitem>
+        <listitem role="private">
           <para>
             Download &DCW; <product:workbench-download-link os="win32" wm="win32">Windows binaries</product:workbench-download-link>
             or <product:workbench-download-link os="linux" wm="gtk">Linux binaries</product:workbench-download-link>
             and extract the archive to some local disk location.
           </para>
         </listitem>
+         
+        <xi:include href="application-suite-dcw-download.xml">
+          <xi:fallback />
+        </xi:include>
         
         <listitem>
-          <para>Run <command>&PRODID;-workbench.exe</command> (Windows) or <command>&PRODID;-workbench</command> (Linux)</para>
+          <para>Run <command>&PRODID;-workbench.exe</command> (Windows) or <command>&PRODID;-workbench</command> (Linux).</para>
         </listitem>
       </orderedlist>
     </section>
@@ -185,8 +199,9 @@
     <para>
       &DCS; (DCS) exposes &PROD; clustering as a REST service. 
       It can cluster documents from an external source (e.g. a search engine) or 
-      documents provided directly as an XML stream and returns results in XML or 
-      JSON formats. 
+      documents provided directly as an XML stream and returns results in 
+      <link linkend="section.architecture.input-xml">XML</link> or 
+      <link linkend="section.architecture.output-json">JSON</link> formats. 
     </para>
     
     <para>
@@ -215,8 +230,8 @@
         <formalpara>
           <title>XML and JSON response formats.</title>
           <para>
-            &DCS; can return results both in XML and JSON formats. JSON-P (with callback) 
-            is also supported.
+            &DCS; can return results both in XML and <link linkend="section.architecture.output-json">JSON</link> 
+            formats. JSON-P (with callback) is also supported.
           </para>
         </formalpara>
       </listitem>
@@ -277,22 +292,26 @@
       
       <orderedlist>
         <listitem>
-          <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.5.0 or newer) if you have not done so</para>
+          <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.5.0 or newer) if you have not done so.</para>
         </listitem>
       
-        <listitem>
+        <listitem role="private">
           <para>
             Download <product:dcs-download-link>&DCS; binaries</product:dcs-download-link> and
             extract the archive to some local disk location.
           </para>
         </listitem>
+         
+        <xi:include href="application-suite-dcs-download.xml">
+          <xi:fallback />
+        </xi:include>
         
         <listitem>
-          <para>Run <command>dcs.cmd</command> (Windows) or <command>dcs.sh</command> (Linux)</para>
+          <para>Run <command>dcs.cmd</command> (Windows) or <command>dcs.sh</command> (Linux).</para>
         </listitem>
         
         <listitem>
-          <para>Point your browser to <uri>http://localhost:8080</uri> for further instructions</para>
+          <para>Point your browser to <uri>http://localhost:8080</uri> for further instructions.</para>
         </listitem>
         
         <listitem>
@@ -410,6 +429,111 @@
     </section>      
   </section>
       
+  <section xml:id="section.cli">
+    <title>&CLI;</title>
+    
+    <para>
+      &CLI; (CLI) is a set of applications that allow invoking &PROD; clustering
+      from the command line. Currently, the only available CLI application is &CLIBP;, which
+      performs &PROD; clustering on one or more files in the &C2; <link linkend="section.architecture.input-xml">XML format</link>
+      and saves the results as <link linkend="section.architecture.output-xml">XML</link> 
+      or <link linkend="section.architecture.output-json">JSON</link>. Apart from 
+      clustering large number of documents sets at one time, you can use the &CLIBP; 
+      to integrate &PROD; with your non-Java applications.
+    </para>
+    
+    <section xml:id="section.cli.bp.installation" role="notoc">
+      <title>Installation and running</title>
+    
+      <para>To run &CLIBP;:</para>
+      
+      <orderedlist>
+        <listitem>
+          <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.5.0 or newer) if you have not done so.</para>
+        </listitem>
+      
+        <listitem role="private">
+          <para>
+            Download <product:cli-download-link>&CLI; binaries</product:cli-download-link> and
+            extract the archive to some local disk location.
+          </para>
+        </listitem>
+        
+        <xi:include href="application-suite-cli-download.xml">
+          <xi:fallback />
+        </xi:include>
+
+        <listitem>
+          <para>
+            Run <command>batch.cmd</command> (Windows) or <command>batch.sh</command> 
+            (Linux) for an overview of the syntax. The &CLIBP; ships with two example
+            input data sets located in the <filename>input/</filename> directory.
+            Below is a list of some common example invocations.
+          </para>
+          
+          <itemizedlist>
+            <listitem>
+              <para>To cluster one or more input files, specify their paths:</para>
+              
+              <programlisting><![CDATA[batch input/data-mining.xml input/seattle.xml]]></programlisting>
+              
+              <para>
+                Clustering will be performed using the default clustering algorithm
+                and the results in the XML format will be saved to the <filename>output</filename>
+                directory relative to the current working directory.
+              </para>
+            </listitem>
+          
+            <listitem>
+              <para>You can also cluster files from one or more directories:</para>
+              
+              <programlisting><![CDATA[batch input/]]></programlisting>
+              
+              <para>
+                Each directory will be processed recursively, i.e. including subdirectories.
+                For each specified input directory, a corresponding directory with results
+                will be created in the output directory.
+              </para>
+            </listitem>
+          
+            <listitem>
+              <para>To save results in the non-default directory, use the <option>-o</option> option:</para>
+              
+              <programlisting><![CDATA[batch input/ -o results]]></programlisting>
+            </listitem>
+          
+            <listitem>
+              <para>To repeat the input documents on the output, use the <option>-d</option> option:</para>
+              
+              <programlisting><![CDATA[batch input/ -d]]></programlisting>
+            </listitem>
+          
+            <listitem>
+              <para>To save the results in <link linkend="section.architecture.output-json">JSON</link>, use the <option>-f JSON</option> option:</para>
+              
+              <programlisting><![CDATA[batch input/ -f JSON]]></programlisting>
+            </listitem>
+          
+            <listitem>
+              <para>To use a different clustering algorithm, use the <option>-a</option> 
+                option followed by the identifier of the algorithm:</para>
+              
+              <programlisting><![CDATA[batch input/ -a url]]></programlisting>
+              
+              <para>To see the list of available algorithm identifiers, run the application without arguments.</para>
+            </listitem>
+
+          
+            <listitem>
+              <para>In case of processing errors, you can use the <option>-v</option>
+                option to see detailed messages and stack traces.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </orderedlist>
+    </section>
+  </section>
+  
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="application-suite-sections-suffix.xml" /> 
 
 </chapter>

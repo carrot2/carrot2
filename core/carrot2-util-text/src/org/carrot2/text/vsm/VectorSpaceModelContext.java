@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,12 +12,12 @@
 
 package org.carrot2.text.vsm;
 
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
 
-import bak.pcj.map.IntKeyIntMap;
-import cern.colt.matrix.DoubleMatrix2D;
+import com.carrotsearch.hppc.IntIntOpenHashMap;
 
 /**
  * Stores data related to the Vector Space Model of the processed documents.
@@ -60,7 +60,7 @@ public class VectorSpaceModelContext
      * {@link TermDocumentMatrixBuilder#buildTermDocumentMatrix(VectorSpaceModelContext)}.
      * </p>
      */
-    public IntKeyIntMap stemToRowIndex;
+    public IntIntOpenHashMap stemToRowIndex;
 
     /**
      * Creates a vector space model context with the provided preprocessing context.

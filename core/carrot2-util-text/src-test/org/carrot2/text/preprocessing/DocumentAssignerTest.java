@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,6 +16,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
+import org.carrot2.util.PcjCompat;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -238,7 +239,7 @@ public class DocumentAssignerTest extends LabelFilterTestBase
             .hasSize(expectedDocumentIndices.length);
         for (int i = 0; i < expectedDocumentIndices.length; i++)
         {
-            assertThat(context.allLabels.documentIndices[i].toArray()).as(
+            assertThat(PcjCompat.toIntArray(context.allLabels.documentIndices[i])).as(
                 "allLabels.documentIndices[" + i + "]").isEqualTo(
                 expectedDocumentIndices[i]);
         }

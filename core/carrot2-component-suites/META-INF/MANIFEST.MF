@@ -6,8 +6,8 @@ Bundle-Version: 0.0.0.QUALIFIER
 Export-Package: org.carrot2.core
 Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.core,
- org.carrot2.algorithm.lingo;visibility:=reexport,
- org.carrot2.algorithm.stc;visibility:=reexport,
+ org.carrot2.algorithm.lingo;resolution:=optional;visibility:=reexport,
+ org.carrot2.algorithm.stc;resolution:=optional;visibility:=reexport,
  org.carrot2.algorithm.synthetic;visibility:=reexport,
  org.carrot2.source.etools;visibility:=reexport,
  org.carrot2.source.microsoft;visibility:=reexport,

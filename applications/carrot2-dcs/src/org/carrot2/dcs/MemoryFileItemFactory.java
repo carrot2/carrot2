@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -97,7 +97,7 @@ final class MemoryFileItemFactory implements FileItemFactory
         {
             try
             {
-                return new String(this.baos.toByteArray(), "utf-8");
+                return new String(this.baos.toByteArray(), "UTF-8");
             }
             catch (UnsupportedEncodingException e)
             {

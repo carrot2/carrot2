@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -25,7 +25,7 @@ import com.google.common.collect.Maps;
  * objects get created using parameterless constructors. The pool holds objects using
  * {@link SoftReference}s, so they can be garbage collected when memory is needed.
  */
-public final class SoftUnboundedPool<T, P>
+public final class SoftUnboundedPool<T, P> implements IParameterizedPool<T, P>
 {
     /*
      * TODO: [dw] Performance impact of storing soft references may not be worth it. If
@@ -37,17 +37,12 @@ public final class SoftUnboundedPool<T, P>
     private Map<Pair<Class<? extends T>, P>, List<SoftReference<? extends T>>> instances = Maps
         .newHashMap();
 
-    private final IInstantiationListener<T, P> instantiationListener;
-    private final IActivationListener<T, P> activationListener;
-    private final IPassivationListener<T, P> passivationListener;
-    private final IDisposalListener<T, P> disposalListener;
+    private IInstantiationListener<T, P> instantiationListener;
+    private IActivationListener<T, P> activationListener;
+    private IPassivationListener<T, P> passivationListener;
+    private IDisposalListener<T, P> disposalListener;
 
-    public SoftUnboundedPool()
-    {
-        this(null, null, null, null);
-    }
-
-    public SoftUnboundedPool(IInstantiationListener<T, P> objectInstantiationListener,
+    public void init(IInstantiationListener<T, P> objectInstantiationListener,
         IActivationListener<T, P> objectActivationListener,
         IPassivationListener<T, P> objectPassivationListener,
         IDisposalListener<T, P> objectDisposalListener)
@@ -57,30 +52,7 @@ public final class SoftUnboundedPool<T, P>
         this.passivationListener = objectPassivationListener;
         this.disposalListener = objectDisposalListener;
     }
-
-    /**
-     * Borrows an object from the pool. If no instance is available, a parameterless
-     * constructor will be used to create a new one.
-     * 
-     * @param clazz class of object to be borrowed
-     */
-    public <I extends T> I borrowObject(Class<I> clazz) throws InstantiationException,
-        IllegalAccessException
-    {
-        return borrowObject(clazz, null);
-    }
-
-    /**
-     * Borrows an object from the pool. If no instance is available, a parameterless
-     * constructor will be used to create a new one.
-     * 
-     * @param clazz class of object to be borrowed
-     * @param parameter additional parameter passed to all listeners when managing the
-     *            life cycle of the pooled object. The parameter can be <code>null</code>.
-     *            Exactly the same value of the parameter must be passed to
-     *            {@link #returnObject(Object, Object)}. Otherwise, different instances
-     *            of the same class will get mixed up within the pool.
-     */
+    
     @SuppressWarnings("unchecked")
     public <I extends T> I borrowObject(Class<I> clazz, P parameter)
         throws InstantiationException, IllegalAccessException
@@ -126,23 +98,6 @@ public final class SoftUnboundedPool<T, P>
         return instance;
     }
 
-    /**
-     * Returns an object to the pool.
-     */
-    public void returnObject(T object)
-    {
-        returnObject(object, null);
-    }
-
-    /**
-     * Returns an object to the pool.
-     * 
-     * @param object object to return
-     * @param parameter parameter provided when borrowing the object. If the parameter was
-     *            not <code>null</code> when borrowing the object, the same value must
-     *            be passed here. Otherwise, different instances of the same class will
-     *            get mixed up within the pool.
-     */
     @SuppressWarnings("unchecked")
     public void returnObject(T object, P parameter)
     {
@@ -175,9 +130,6 @@ public final class SoftUnboundedPool<T, P>
         }
     }
 
-    /**
-     * Disposes of the pool. No objects can be borrowed from the pool after disposed.
-     */
     public void dispose()
     {
         synchronized (this)

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,7 +15,7 @@ package org.carrot2.source.boss;
 import java.util.Collections;
 import java.util.Map;
 
-import org.carrot2.text.linguistic.LanguageCode;
+import org.carrot2.core.LanguageCode;
 import org.carrot2.util.attribute.constraint.IValueHintMapping;
 
 import com.google.common.collect.Maps;
@@ -106,6 +106,7 @@ public enum BossLanguageCodes implements IValueHintMapping
         map.put(SWITZERLAND_GERMAN, LanguageCode.GERMAN);
         map.put(HUNGARY, LanguageCode.HUNGARIAN);
         map.put(ITALIAN, LanguageCode.ITALIAN);
+        map.put(KOREA, LanguageCode.KOREAN);
         map.put(NORWAY, LanguageCode.NORWEGIAN);
         map.put(BRAZIL, LanguageCode.PORTUGUESE);
         map.put(ROMANIA, LanguageCode.ROMANIAN);

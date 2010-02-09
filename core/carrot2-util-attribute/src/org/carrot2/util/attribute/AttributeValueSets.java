@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -17,7 +17,7 @@ import java.util.*;
 
 import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.*;
+import org.simpleframework.xml.core.*;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -136,12 +136,12 @@ public class AttributeValueSets
      * {@link AttributeValueSet} corresponds to the <code>id</code>.
      * 
      * @param id identifier of the {@link AttributeValueSet} to return
-     * @param useDefault if <code>true</code>, the default {@link AttributeValueSet}
-     *            will be returned if the {@link AttributeValueSet} with the provided id
-     *            does not exist.
+     * @param useDefault if <code>true</code>, the default {@link AttributeValueSet} will
+     *            be returned if the {@link AttributeValueSet} with the provided id does
+     *            not exist.
      * @return the {@link AttributeValueSet} corresponding to the provided <code>id</code>
-     *         or the default {@link AttributeValueSet} (possibly <code>null</code>) if
-     *         no {@link AttributeValueSet} corresponds to the <code>id</code>.
+     *         or the default {@link AttributeValueSet} (possibly <code>null</code>) if no
+     *         {@link AttributeValueSet} corresponds to the <code>id</code>.
      */
     public AttributeValueSet getAttributeValueSet(String id, boolean useDefault)
     {
@@ -285,29 +285,38 @@ public class AttributeValueSets
     /**
      * Serializes this collection of {@link AttributeValueSet}s to an XML stream.
      * 
-     * @param w the writer to serialize this {@link AttributeValueSets} to. The
-     *            stream will <strong>not</strong> be closed.
+     * @param stream the stream to serialize this {@link AttributeValueSets} to. The stream
+     *            will <strong>not</strong> be closed.
      * @throws Exception in case of any problems with serialization
      */
-    public void serialize(Writer w) throws Exception
+    public void serialize(OutputStream stream) throws Exception
     {
-        new Persister().write(this, w);
+        new Persister().write(this, stream);
     }
 
     /**
-     * Deserializes a collection of {@link AttributeValueSet}s from XML.
+     * Deserializes a collection of {@link AttributeValueSet}s from an XML stream.
      * 
-     * @param reader the reader to deserialize a {@link AttributeValueSets} from. The
-     *            stream will <strong>not</strong> be closed.
+     * @param inputStream the {@link InputStream} to deserialize a
+     *            {@link AttributeValueSets} from. The stream will <strong>not</strong> be
+     *            closed.
      * @return Deserialized collection of {@link AttributeValueSet}s
      * @throws Exception is case of any problems with deserialization.
      */
-    public static AttributeValueSets deserialize(Reader reader)
+    public static AttributeValueSets deserialize(InputStream inputStream)
         throws Exception
     {
         final AttributeValueSets attributeValueSet = new Persister().read(
-            AttributeValueSets.class, reader);
+            AttributeValueSets.class, inputStream);
 
+        checkDefaultAttributeValueSetExists(attributeValueSet);
+
+        return attributeValueSet;
+    }
+
+    private static void checkDefaultAttributeValueSetExists(
+        final AttributeValueSets attributeValueSet)
+    {
         if (attributeValueSet.defaultAttributeValueSetId != null
             && !attributeValueSet.attributeValueSets
                 .containsKey(attributeValueSet.defaultAttributeValueSetId))
@@ -315,17 +324,15 @@ public class AttributeValueSets
             throw new RuntimeException("Default attribute value set not found: "
                 + attributeValueSet.defaultAttributeValueSetId);
         }
-
-        return attributeValueSet;
     }
-    
+
     /*
      * 
      */
     @Override
     public String toString()
     {
-        return "AttributeValueSet [set IDs: " + 
-            Arrays.toString(this.getAttributeValueSetIds().toArray()) + "]";
+        return "AttributeValueSet [set IDs: "
+            + Arrays.toString(this.getAttributeValueSetIds().toArray()) + "]";
     }
 }

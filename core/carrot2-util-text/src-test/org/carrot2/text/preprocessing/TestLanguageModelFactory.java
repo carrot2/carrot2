@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,20 +12,17 @@
 
 package org.carrot2.text.preprocessing;
 
+import org.carrot2.core.LanguageCode;
+import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
 import org.carrot2.text.linguistic.*;
 
 public final class TestLanguageModelFactory implements ILanguageModelFactory
 {
     private static final TestLanguageModel TEST_LANGUAGE_MODEL = new TestLanguageModel();
 
-    public ILanguageModel getCurrentLanguage()
+    public ILanguageModel getLanguageModel(LanguageCode language)
     {
         return TEST_LANGUAGE_MODEL;
-    }
-
-    public ILanguageModel getLanguage(LanguageCode language)
-    {
-        return getCurrentLanguage();
     }
 
     private final static class TestLanguageModel implements ILanguageModel
@@ -61,6 +58,11 @@ public final class TestLanguageModelFactory implements ILanguageModelFactory
         public boolean isStopLabel(CharSequence formattedLabel)
         {
             return formattedLabel.toString().startsWith("stoplabel");
+        }
+
+        public org.apache.lucene.analysis.Tokenizer getTokenizer()
+        {
+            return new ExtendedWhitespaceTokenizer();
         }
     }
 }

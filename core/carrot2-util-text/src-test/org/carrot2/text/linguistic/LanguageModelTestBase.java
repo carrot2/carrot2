@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,6 +14,7 @@ package org.carrot2.text.linguistic;
 
 import static org.junit.Assert.*;
 
+import org.carrot2.core.LanguageCode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +39,7 @@ public abstract class LanguageModelTestBase
     @Before
     public void setupLanguage()
     {
-        this.languageModel = new DefaultLanguageModelFactory().getLanguage(getLanguageCode());
+        this.languageModel = new DefaultLanguageModelFactory().getLanguageModel(getLanguageCode());
     }
 
     /**
@@ -71,9 +72,10 @@ public abstract class LanguageModelTestBase
 
         for (String [] pair : testData)
         {
+            CharSequence stemmed = stemmer.stem(pair[0]);
             assertEquals("Stemming difference: " + pair[0] + " should become " + pair[1]
-                + " but was transformed into " + stemmer.stem(pair[0]), pair[1], stemmer
-                .stem(pair[0]));
+                + " but was transformed into " 
+                + stemmed, pair[1], stemmed == null ? null : stemmed.toString());
         }
     }
 

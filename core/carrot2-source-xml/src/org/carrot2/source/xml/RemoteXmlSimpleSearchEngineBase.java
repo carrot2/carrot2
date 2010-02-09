@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -60,7 +61,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
 
         final ProcessingResult processingResult = xmlDocumentSourceHelper
             .loadProcessingResult(serviceURL, toCarrot2Xslt, getXsltParameters(),
-                response.metadata);
+                response.metadata, getUser(), getPassword());
 
         final List<Document> documents = processingResult.getDocuments();
         if (documents != null)
@@ -106,4 +107,20 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
      * before this method the call to this method.
      */
     protected abstract String buildServiceUrl();
+
+    /**
+     * Returns the user name to use for HTTP Basic Authentication.
+     */
+    protected String getUser()
+    {
+        return null;
+    }
+
+    /**
+     * Returns the password to use for HTTP Basic Authentication.
+     */
+    protected String getPassword()
+    {
+        return null;
+    }
 }

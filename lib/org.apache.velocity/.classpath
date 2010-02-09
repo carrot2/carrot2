@@ -2,11 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry exported="true" kind="lib" path="velocity-1.5.jar" sourcepath="D:/_tmp/velocity-1.5/src/java/">
-		<attributes>
-			<attribute name="javadoc_location" value="http://velocity.apache.org/engine/releases/velocity-1.5/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="velocity-tools-generic-1.4.jar" sourcepath="org.apache.velocitysrc.zip"/>
+	<classpathentry exported="true" kind="lib" path="velocity-1.6.2.jar" />
+	<classpathentry exported="true" kind="lib" path="velocity-tools-generic-1.4.jar" />
 	<classpathentry kind="output" path="bin"/>
 </classpath>

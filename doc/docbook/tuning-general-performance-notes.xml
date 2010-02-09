@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<simplesect>
+  <para>
+    As a rule of thumb, the more documents you put on input and the longer the documents
+    are, the larger clustering times. Interestingly, in many cases short document
+    excerpts (such as contextual snippets for search results, title and abstracts or first 
+    couple sentences of non-search results) may work just as well or even better than 
+    full documents. Hence the first two most important performance tuning tips:
+  </para>
+  
+  <formalpara>
+    <title>Reduce the size of the input documents</title>
+    
+    <para>
+      You can achieve this in a few ways:
+      
+      <itemizedlist>
+        <listitem>
+          <para>Rather than full text of documents, use their titles and abstracts, if available.</para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            In case of search results, use the contextual snippet rather than the full
+            document text. Not only will this improve clustering performance, but it
+            will very likely increase the quality of clusters as well because you will 
+            be clustering specifically the fragments the users asked for in their query. 
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            If you don't have document abstracts, but have access to some automatically
+            generated summaries, use them. Otherwise, try clustering the title
+            and the first few sentences of each document.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            In certain cases, you may get decent clustering results with document titles 
+            only, this variant is worth trying too.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </formalpara>
+
+  
+  <formalpara>
+    <title>Reduce the number of input documents</title>
+    
+    <para>
+      While removing large part of the input document set may not always be an option, 
+      in many cases dividing the input into two or more batches, clustering separately 
+      and then merging based on cluster label text may give reasonable results. The
+      downside of this approach is that very small clusters containing just a few 
+      documents are likely to be lost during this process.
+    </para>
+  </formalpara>
+</simplesect>

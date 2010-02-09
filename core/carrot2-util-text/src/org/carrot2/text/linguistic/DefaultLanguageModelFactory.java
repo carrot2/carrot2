@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -11,14 +12,20 @@
 
 package org.carrot2.text.linguistic;
 
-import java.util.*;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import org.carrot2.core.attribute.*;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.Tokenizer;
+import org.carrot2.core.LanguageCode;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.analysis.*;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.ResourceUtils;
+import org.carrot2.util.resource.ResourceUtilsFactory;
 
-import com.google.common.collect.*;
+import com.google.common.collect.Maps;
 
 /**
  * Accessor to all {@link ILanguageModel} objects. Default implementation provides support
@@ -31,12 +38,6 @@ import com.google.common.collect.*;
 @Bindable(prefix = "DefaultLanguageModelFactory")
 public final class DefaultLanguageModelFactory implements ILanguageModelFactory
 {
-    @Required
-    @Processing
-    @Input
-    @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
-    public LanguageCode current = LanguageCode.ENGLISH;
-
     /**
      * Reloads cached stop words and stop labels on every processing request. For best
      * performance, lexical resource reloading should be disabled in production.
@@ -89,19 +90,16 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
      * instance has its own instance of {@link DefaultLanguageModelFactory}).
      */
     private final HashMap<LanguageCode, IStemmer> stemmerCache = Maps.newHashMap();
-
+    
     /**
-     * @see #current
+     * A tokenizer cache for this particular factory.
      */
-    public ILanguageModel getCurrentLanguage()
-    {
-        return getLanguage(current);
-    }
+    private final HashMap<LanguageCode, Tokenizer> tokenizerCache = Maps.newHashMap();
 
     /**
      * @return Return a language model for one of the languages in {@link LanguageCode}.
      */
-    public ILanguageModel getLanguage(LanguageCode language)
+    public ILanguageModel getLanguageModel(LanguageCode language)
     {
         synchronized (DefaultLanguageModelFactory.class)
         {
@@ -162,7 +160,18 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
             }
         }
 
-        return new DefaultLanguageModel(language, lexicalResources, stemmer);
+        Tokenizer tokenizer;
+        synchronized (tokenizerCache)
+        {
+            tokenizer = tokenizerCache.get(language);
+            if (!tokenizerCache.containsKey(language))
+            {
+                tokenizer = createTokenizer(language);
+                tokenizerCache.put(language, tokenizer);
+            }
+        }
+        
+        return new DefaultLanguageModel(language, lexicalResources, stemmer, tokenizer);
     }
 
     /**
@@ -173,15 +182,58 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
         switch (language)
         {
             case POLISH:
+                /*
+                 * For Polish, we use a dictionary-backed stemmer
+                 * from the Morfologik project.
+                 */
                 return PolishStemmerFactory.createStemmer();
+
             case CHINESE_SIMPLIFIED:
                 /*
-                 * Return identity stemmer for Chinese. Chinese requires proper word
-                 * segmentation, however (input text analyzer).
+                 * Return identity stemmer for Chinese. Chinese requires proper 
+                 * prior word segmentation (from Lucene).
+                 */
+                return IdentityStemmer.INSTANCE;
+
+            case KOREAN:
+                /*
+                 * Korean is agglutinative, but the extent of affixes is unknown to
+                 * me [DW] and I don't know whether a stemming engine for Korean 
+                 * exists. We fall back to identity. 
                  */
                 return IdentityStemmer.INSTANCE; 
+
+            case ARABIC:
+                /*
+                 * We return specialized stemmer for Arabic (from Lucene).
+                 */
+                return ArabicStemmerFactory.createStemmer();
+
             default:
+                /*
+                 * For other languages, try to use snowball's stemming. 
+                 */
                 return SnowballStemmerFactory.createStemmer(language);
+        }
+    }
+    
+    private Tokenizer createTokenizer(LanguageCode language)
+    {
+        switch (language)
+        {
+            case CHINESE_SIMPLIFIED:
+                return new ChineseTokenizer();
+
+            /*
+             * We use our own analyzer for Arabic. Lucene's version has special support
+             * for Nonspacing-Mark characters (see http://www.fileformat.info/info/unicode/category/Mn/index.htm),
+             * but we have them included as letters in the parser.
+             */
+            case ARABIC:
+                // Intentional fall-through.
+
+            default:
+                return new ExtendedWhitespaceTokenizer();
         }
     }
 }

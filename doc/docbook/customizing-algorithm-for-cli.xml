@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<section xml:id="section.customizing.customizing-lingo-for-cli">
+  <title>Customizing Lingo for &CLI;</title>
+    
+  <para>
+    To run the &CLI; with custom <link linkend="section.component.lingo">attributes of the Lingo clustering algorithm</link>:
+  </para>
+  
+  <orderedlist>
+    <listitem>
+      <para>
+        <link linkend="section.customizing.component-suites-and-attributes.component-attributes">Use the &DCW; to save the attribute set XML file</link> 
+        with the desired Lingo attribute values.
+      </para>
+    </listitem>
+    
+    <listitem>
+      <para>
+        Replace the contents of <filename>algorithm-lingo-attributes.xml</filename>, located in
+        the <filename>/suites</filename> directory of the <filename>carrot2-mini.jar</filename>
+        file, located in the <filename>lib/</filename> directory of the CLI distribution, 
+        with the XML file saved in the previous step.
+      </para>
+    </listitem>
+    
+    <listitem>
+      <para>
+        Run the CLI application.
+      </para>
+    </listitem>        
+  </orderedlist>
+  
+  <para>
+    You can use the same procedure to customize other algorithms, e.g. 
+    <link linkend="section.component.stc">STC</link>.
+  </para>
+</section>

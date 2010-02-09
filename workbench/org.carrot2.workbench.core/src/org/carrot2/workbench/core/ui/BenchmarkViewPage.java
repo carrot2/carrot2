@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -11,12 +12,9 @@
 
 package org.carrot2.workbench.core.ui;
 
-import java.io.File;
 import java.util.Locale;
 
 import org.carrot2.workbench.core.helpers.Utils;
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.*;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -25,10 +23,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.editors.text.EditorsUI;
-import org.eclipse.ui.editors.text.IEncodingSupport;
-import org.eclipse.ui.ide.FileStoreEditorInput;
+import org.eclipse.ui.internal.browser.WebBrowserEditor;
+import org.eclipse.ui.internal.browser.WebBrowserEditorInput;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
 
@@ -37,6 +33,7 @@ import org.eclipse.ui.progress.UIJob;
  * A single benchmark view page is associated with a given editor (and hence with the
  * given input and algorithm).
  */
+@SuppressWarnings("restriction")
 final class BenchmarkViewPage extends Page
 {
     private final static String START_TEXT = "Start";
@@ -180,17 +177,15 @@ final class BenchmarkViewPage extends Page
     private void endBenchmark()
     {
         assert Display.getCurrent() != null;
-        
+
         try
         {
             if (benchmarkJob.settings.openLogsInEditor)
             {
-                final File file = benchmarkJob.logFile;
-                final IFileStore fileStore = EFS.getLocalFileSystem().fromLocalFile(file);
-                final IEditorPart part = getSite().getWorkbenchWindow().getActivePage().openEditor(
-                    new FileStoreEditorInput(fileStore), EditorsUI.DEFAULT_TEXT_EDITOR_ID);
-
-                ((IEncodingSupport) part.getAdapter(IEncodingSupport.class)).setEncoding("UTF-8");                
+                getSite().getWorkbenchWindow().getActivePage().openEditor(
+                    new WebBrowserEditorInput(
+                        benchmarkJob.logFile.toURL()),
+                    WebBrowserEditor.WEB_BROWSER_EDITOR_ID);
             }
         }
         catch (Exception e)

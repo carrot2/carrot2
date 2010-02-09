@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,8 +12,6 @@
 
 package org.carrot2.examples.core;
 
-import java.io.PrintWriter;
-
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
 import org.carrot2.util.attribute.AttributeValueSet;
@@ -21,8 +19,10 @@ import org.carrot2.util.attribute.AttributeValueSets;
 
 /**
  * This example shows how to export a set of attribute values to XML. This code may come
- * in handy when transferring clustering algorithm settings from the Document Clustering
- * Workbench e.g. to the Document Clustering Webapp.
+ * in handy when you cannot <a href="http://download.carrot2.org/head/manual/#section.customizing.component-suites-and-attributes.saving-with-workbench">use 
+ * Carrot2 Document Clustering Workbench to save the attributes XML</a>.
+ * 
+ * @see LoadingAttributeValuesFromXml
  */
 public class SavingAttributeValuesToXml
 {
@@ -50,6 +50,6 @@ public class SavingAttributeValuesToXml
         final AttributeValueSets attributeValueSets = new AttributeValueSets();
         attributeValueSets.addAttributeValueSet("example-id", attributeValueSet);
 
-        attributeValueSets.serialize(new PrintWriter(System.out));
+        attributeValueSets.serialize(System.out);
     }
 }

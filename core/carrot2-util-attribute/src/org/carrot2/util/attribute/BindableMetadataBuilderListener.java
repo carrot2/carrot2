@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,7 +15,7 @@ package org.carrot2.util.attribute;
 import java.io.File;
 import java.util.Map;
 
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 
 import com.google.common.collect.Maps;

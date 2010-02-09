@@ -1,16 +1,32 @@
 <!DOCTYPE project SYSTEM "../dtd/Project.dtd">
 
 <project name="Clustering smoke test" default="webtest">
-  <target name="webtest">
-    <webtest name="Clustering from file">
+  <target name="webtest" depends="webtest.utf8, webtest.utf16" />
+  
+  <target name="webtest.utf16">
+    <webtest name="Clustering from UTF8 file">
+      <clusterFromFile fileName="../src-test/xml/carrot2-kaczynski.utf8.xml" />
+    </webtest>
+  </target>
+      
+  <target name="webtest.utf8">
+    <webtest name="Clustering from UTF16 file">
+      <clusterFromFile fileName="../src-test/xml/carrot2-kaczynski.utf16.xml" />
+    </webtest>
+  </target>
+  
+  <macrodef name="clusterFromFile">
+    <attribute name="fileName" />
+
+    <sequential>
       <invoke url="/" description="Get quick start page" />
       <setRadioButton htmlId="source-from-file" />
-      <setFileField name="dcs.c2stream" fileName="../src-test/xml/carrot2-kaczynski.xml" />
+      <setFileField name="dcs.c2stream" fileName="@{fileName}" />
       
       <!-- Wait for AJAX stuff to load -->
       <sleep seconds="5" />
       <clickButton name="submit" />
       <!-- As long as we get 200 code, it's fine. We have more coverage in unit tests. -->
-    </webtest>
-  </target>
+    </sequential>
+  </macrodef>
 </project>

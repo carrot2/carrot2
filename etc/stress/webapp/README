@@ -1,0 +1,43 @@
+
+How to put some load on the webapp?
+===================================
+
+PREPARATION
+
+Extract sample queries from Carrot2 logs:
+
+extract-queries.rb /path/to/logs/c2-logs* | sort -u | shuf > queries
+
+Edit the replay script and define algorithms and sources you wish
+to involve in the stress test (some of them perhaps should be spared so that
+we don't put too much traffic on smaller search engines)
+
+vi stress.rb
+
+
+LOAD TESTING
+
+Run the replay script, piping queries pool to pick from.
+
+cat queries | ./stress.rb -t 5 -m 5
+
+(see ./stress.rb -h for help)
+
+
+REDEPLOY TESTING
+
+Seeking memory leaks? Try this: edit properties in stress_redeploy.sh
+to match your configuration. Start catalina (Tomcat) with jpda or some
+other form of profiling.
+
+Start the script and observe memory consumption. We experimented with
+the following options:
+
+-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl 
+-verbose:gc 
+-XX:MaxPermSize=64m
+-XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses 
+-XX:+PrintGCDetails 
+-XX:+UseConcMarkSweepGC 
+-XX:+CMSClassUnloadingEnabled 
+-XX:+CMSPermGenSweepingEnabled 

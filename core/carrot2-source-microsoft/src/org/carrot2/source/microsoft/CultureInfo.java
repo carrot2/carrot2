@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,7 +15,7 @@ package org.carrot2.source.microsoft;
 import java.util.Collections;
 import java.util.Map;
 
-import org.carrot2.text.linguistic.LanguageCode;
+import org.carrot2.core.LanguageCode;
 
 import com.google.common.collect.Maps;
 
@@ -93,6 +93,7 @@ public enum CultureInfo
     {
         final Map<CultureInfo, LanguageCode> map = Maps.newEnumMap(CultureInfo.class);
         
+        map.put(ARABIC_ARABIA, LanguageCode.ARABIC);
         map.put(CHINESE_CHINA, LanguageCode.CHINESE_SIMPLIFIED);
         // TODO: Hong kong uses traditional Chinese I believe.
         map.put(CHINESE_HONG_KONG_SAR, LanguageCode.CHINESE_SIMPLIFIED);
@@ -122,6 +123,7 @@ public enum CultureInfo
         map.put(GERMAN_SWITZERLAND, LanguageCode.GERMAN);
         map.put(HUNGARIAN_HUNGARY, LanguageCode.HUNGARIAN);
         map.put(ITALIAN_ITALY, LanguageCode.ITALIAN);
+        map.put(KOREAN_KOREA, LanguageCode.KOREAN);
         map.put(NORWEGIAN_NORWAY, LanguageCode.NORWEGIAN);
         map.put(POLISH_POLAND, LanguageCode.POLISH);
         map.put(PORTUGUESE_BRAZIL, LanguageCode.PORTUGUESE);

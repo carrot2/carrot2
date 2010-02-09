@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -38,6 +39,11 @@ import com.google.common.collect.Maps;
  */
 public final class RestProcessorServlet extends HttpServlet
 {
+    /** Response constants */
+    private final static String UTF8 = "UTF-8";
+    private final static String MIME_XML_UTF8 = "text/xml; charset=" + UTF8;
+    private final static String MIME_JSON_UTF8 = "text/json; charset=" + UTF8;
+    
     private static final long serialVersionUID = 1L;
 
     private transient DcsConfig config;
@@ -139,13 +145,12 @@ public final class RestProcessorServlet extends HttpServlet
         throws ServletException, IOException
     {
         final String command = getCommandName(request);
-        response.setCharacterEncoding("utf-8");
         if ("components".equals(command))
         {
             try
             {
-                response.setContentType("text/xml");
-                componentSuite.serialize(response.getWriter());
+                response.setContentType(MIME_XML_UTF8);
+                componentSuite.serialize(response.getOutputStream());
             }
             catch (Exception e)
             {
@@ -158,8 +163,8 @@ public final class RestProcessorServlet extends HttpServlet
         {
             try
             {
-                response.setContentType("text/xml");
-                EXAMPLE_INPUT.serialize(response.getWriter(), true, false);
+                response.setContentType(MIME_XML_UTF8);
+                EXAMPLE_INPUT.serialize(response.getOutputStream(), true, false);
             }
             catch (Exception e)
             {
@@ -172,8 +177,8 @@ public final class RestProcessorServlet extends HttpServlet
         {
             try
             {
-                response.setContentType("text/xml");
-                EXAMPLE_OUTPUT.serialize(response.getWriter());
+                response.setContentType(MIME_XML_UTF8);
+                EXAMPLE_OUTPUT.serialize(response.getOutputStream());
             }
             catch (Exception e)
             {
@@ -186,7 +191,7 @@ public final class RestProcessorServlet extends HttpServlet
         {
             try
             {
-                response.setContentType("text/json");
+                response.setContentType(MIME_JSON_UTF8);
                 EXAMPLE_OUTPUT
                     .serializeJson(response.getWriter(), null, true, true, true);
             }
@@ -201,8 +206,8 @@ public final class RestProcessorServlet extends HttpServlet
         {
             try
             {
-                response.setContentType("text/xml");
-                controller.getStatistics().serialize(response.getWriter());
+                response.setContentType(MIME_XML_UTF8);
+                controller.getStatistics().serialize(response.getOutputStream());
             }
             catch (Exception e)
             {
@@ -271,8 +276,7 @@ public final class RestProcessorServlet extends HttpServlet
                 // Deserialize documents from the stream
                 try
                 {
-                    input = ProcessingResult.deserialize(new InputStreamReader(
-                        uploadInputStream, "utf-8"));
+                    input = ProcessingResult.deserialize(uploadInputStream);
                 }
                 catch (Exception e)
                 {
@@ -365,15 +369,15 @@ public final class RestProcessorServlet extends HttpServlet
         // Serialize the result
         try
         {
-            response.setCharacterEncoding("utf-8");
             if (OutputFormat.XML.equals(requestModel.outputFormat))
             {
-                response.setContentType(OutputFormat.XML.contentType);
-                result.serialize(response.getWriter(), !requestModel.clustersOnly, true);
+                response.setContentType(MIME_XML_UTF8);
+                result.serialize(response.getOutputStream(), 
+                    !requestModel.clustersOnly, true);
             }
             else if (OutputFormat.JSON.equals(requestModel.outputFormat))
             {
-                response.setContentType(OutputFormat.JSON.contentType);
+                response.setContentType(MIME_JSON_UTF8);
                 result.serializeJson(response.getWriter(), requestModel.jsonCallback,
                     !requestModel.clustersOnly, true);
             }
@@ -440,7 +444,7 @@ public final class RestProcessorServlet extends HttpServlet
         final FileAppender appender = new FileAppender(new PatternLayout(
             "%d{ISO8601} [%-5p] [%c] %m%n"), logPrefix + "/c2-dcs-" + contextPath
             + "-full.log", true);
-        appender.setEncoding("UTF-8");
+        appender.setEncoding(UTF8);
         return appender;
     }
 
@@ -457,12 +461,10 @@ public final class RestProcessorServlet extends HttpServlet
         {
             streamInput = new ClassResource(RestProcessorServlet.class,
                 "example-input.xml").open();
-            EXAMPLE_INPUT = ProcessingResult.deserialize(new InputStreamReader(
-                streamInput, "utf-8"));
+            EXAMPLE_INPUT = ProcessingResult.deserialize(streamInput);
             streamOutput = new ClassResource(RestProcessorServlet.class,
                 "example-output.xml").open();
-            EXAMPLE_OUTPUT = ProcessingResult.deserialize(new InputStreamReader(
-                streamOutput, "utf-8"));
+            EXAMPLE_OUTPUT = ProcessingResult.deserialize(streamOutput);
         }
         catch (Exception e)
         {

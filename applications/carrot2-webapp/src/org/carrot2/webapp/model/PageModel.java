@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -30,7 +30,7 @@ import org.simpleframework.xml.*;
 public class PageModel
 {
     @Element(name = "config")
-    public final WebappConfig webappConfig = WebappConfig.INSTANCE;
+    public final WebappConfig webappConfig;
 
     @Element(name = "asset-urls")
     public final AssetUrlsModel assetUrls;
@@ -68,13 +68,14 @@ public class PageModel
     @Attribute(name = "current-year")
     public final int currentYear;
 
-    public PageModel(HttpServletRequest request, RequestModel requestModel,
+    public PageModel(WebappConfig config, HttpServletRequest request, RequestModel requestModel,
         JawrUrlGenerator urlGenerator, ProcessingResult processingResult,
         ProcessingException processingException)
     {
+        this.webappConfig = config;
         this.processingResult = processingResult;
         this.requestModel = requestModel;
-        this.attributesModel = new AttributeMetadataModel();
+        this.attributesModel = new AttributeMetadataModel(config);
         this.type = processingException == null ? requestModel.type : RequestType.ERROR;
         this.processingExceptionMessage = processingException == null ? null
             : processingException.getMessage();
@@ -84,7 +85,7 @@ public class PageModel
             && !RequestType.CLUSTERS.equals(requestModel.type);
 
         this.contextPath = request.getContextPath();
-        this.skinPath = contextPath + "/" + WebappConfig.INSTANCE.skinsFolder;
+        this.skinPath = contextPath + "/" + webappConfig.skinsFolder;
         this.assetUrls = new AssetUrlsModel(webappConfig.getSkinById(requestModel.skin),
             request, urlGenerator);
 

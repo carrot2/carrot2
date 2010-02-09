@@ -59,22 +59,27 @@
         </copy>
     </target>
 
-    <target name="workbench" description="Perform a full build of the workbench">
-        <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
+    <target name="workbench" depends="workbench.prepare, workbench.clean, workbench.test" description="Perform a full build of the workbench">
+        <!-- build the workbench -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="workbench.dist" inheritall="true" />
+    </target>
+
+    <target name="workbench.prepare" depends="check" description="Prepares workbench build">
         <fail unless="dist.dir">Define: dist.dir property.</fail>
         <property file="${carrot2.code.dir}/etc/version/carrot2.version" />
 
         <copy file="${workbench.properties}" tofile="${carrot2.code.dir}/workbench.properties" overwrite="true" />
         <copy file="${workbench.test.properties}" tofile="${carrot2.code.dir}/workbench.test.properties" overwrite="true" />
-        
-        <!-- clean everything -->
-        <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="clean" inheritall="true" />
+    </target>
 
+    <target name="workbench.test" depends="workbench.prepare, workbench.clean" description="Runs workbench tests">
         <!-- test the workbench -->
-        <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="test" inheritall="true" />
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="workbench.test" inheritall="true" />
+    </target>
 
-        <!-- build the workbench -->
-        <ant dir="${carrot2.code.dir}" antfile="build-workbench.xml" target="dist" inheritall="true" />
+    <target name="workbench.clean" depends="workbench.prepare" description="Cleans workbench binaries">
+        <!-- clean everything -->
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="clean" inheritall="true" />
     </target>
 
     <target name="help">

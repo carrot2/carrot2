@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,6 +16,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.text.vsm.TfTermWeighting;
+import org.carrot2.util.PcjCompat;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -126,7 +127,8 @@ public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBas
 
         for (int i = 0; i < expectedDocumentIndices.length; i++)
         {
-            assertThat(lingoContext.clusterDocuments[i].toArray()).as(
+            assertThat(
+                PcjCompat.toIntArray(lingoContext.clusterDocuments[i])).as(
                 "clusterDocuments[" + i + "]").containsOnly(expectedDocumentIndices[i]);
         }
     }

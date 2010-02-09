@@ -46,3 +46,7 @@ img.t {
 	margin-right: 4px;
 	margin-bottom: 4px;
 }
+
+p.more {
+    color: gray;
+}

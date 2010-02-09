@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -119,7 +119,6 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @SuppressWarnings("deprecation")
     private void openIndexDialog()
     {
         final DirectoryDialog dialog = new DirectoryDialog(this.resourceInfo.getShell());
@@ -145,7 +144,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
                 EditorsPlugin.getDefault().getPreferenceStore().setValue(
                     PREF_LAST_SELECTED_LUCENE_DIR, file.getAbsolutePath());
 
-                setValue(FSDirectory.getDirectory(file));
+                setValue(FSDirectory.open(file));
             }
             catch (Exception e)
             {

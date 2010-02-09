@@ -29,6 +29,7 @@
 
       <tstamp>
         <format property="build.date" pattern="yyyy-MM-dd HH:mm:ss" />
+        <format property="current.year" pattern="yyyy" />
       </tstamp>
 
       <copy file="${carrot2.master.basedir}/tmp/readme/readme.txt" tofile="@{readme.dest}" filtering="yes">
@@ -37,6 +38,7 @@
           <filter token="build.number" value="${build.number}" />
           <filter token="build.date" value="${build.date}" />
           <filter token="user.name" value="${user.name}" />
+          <filter token="current.year" value="${current.year}" />
           <filters />
         </filterset>
       </copy>

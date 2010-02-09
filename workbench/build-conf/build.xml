@@ -1,0 +1,56 @@
+
+<!--
+  Macros for PDE-build.
+  -->
+<project name="carrot2.pde.build" default="">
+    <fail unless="carrot2.master.basedir" />
+    <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
+
+    <macrodef name="pde.build">
+      <attribute name="buildfile" default="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml" />
+      <attribute name="builder"   default="${carrot2.master.basedir}/workbench/build-conf/" />
+      <attribute name="build.dir" />
+      <attribute name="props.file" />
+      <attribute name="extra.args" default="" />
+      <sequential>
+        <fail unless="eclipse.home" />
+        <fail unless="equinox.launcher.plugin.jar">Call pde.build.prepare first.</fail>
+
+        <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}" fork="true" failonerror="true">
+          <arg line="-application org.eclipse.ant.core.antRunner" />
+          <arg line="-buildfile @{buildfile}" />
+          <arg line="-Dbuilder=@{builder}" />
+          <arg line="-DbuildDirectory=@{build.dir}" />
+          <arg line="-Dtarget.platform=${target.platform}" />
+
+          <arg line="-Dcarrot2.master.basedir=${carrot2.master.basedir}" />
+
+          <arg line="@{extra.args}" />
+          <arg line="-propertyfile @{props.file}" />
+        </java>
+      </sequential>
+    </macrodef>
+
+    <target name="pde.build.prepare" depends="tasks">
+        <property name="workbench.properties" location="${carrot2.master.basedir}/workbench.properties" />
+        <available file="${workbench.properties}" type="file" 
+            property="workbench.properties.available" value="true" />
+        <fail unless="workbench.properties.available">workbench.properties not found: ${workbench.properties}</fail>
+    
+        <property file="${workbench.properties}" />
+        <property file="${carrot2.master.basedir}/workbench/build-conf/build.properties" />
+        <fail unless="eclipse.home" />
+
+        <findVersion property="equinox.launcher.plugin.jar"
+                     eclipsehome="${eclipse.home}"
+                     pluginid="org.eclipse.equinox.launcher"
+                     pluginform="jar" />
+    
+        <findVersion property="pde.build.plugin"
+                     eclipsehome="${eclipse.home}"
+                     pluginid="org.eclipse.pde.build"
+                     pluginform="dir" />
+
+        <echo>PDE Build: ${pde.build.plugin}, Equinox: ${equinox.launcher.plugin.jar}</echo>
+    </target>
+</project>

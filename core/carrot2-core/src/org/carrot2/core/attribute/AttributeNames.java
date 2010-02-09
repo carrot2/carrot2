@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -59,6 +59,7 @@ public final class AttributeNames
      * Documents returned by the search engine/ document retrieval system.
      * 
      * @label Documents
+     * @level Basic
      * @group Documents
      */
     public static final String DOCUMENTS = "documents";
@@ -104,32 +105,18 @@ public final class AttributeNames
     public static final String PROCESSING_TIME_ALGORITHM = "processing-time-algorithm";
 
     /**
-     * Language in which to perform clustering. Suggestion for the clustering algorithm to perform
-     * clustering in the specified language. Based on the suggestion, the algorithm can
-     * determine e.g. the stemmer or list of stop words the algorithm uses. A mismatch
-     * between the processing language hint and the actual language of processed documents
-     * may result in poor clustering quality.
-     * 
-     * @label Processing Language
-     * @level Basic
-     * @group Preprocessing
-     * @see "org.carrot2.text.linguistic.LanguageCode"
-     */
-    public static final String ACTIVE_LANGUAGE = "active-language";
-
-    /**
-     * Processing result title. A typical title for a processing result will be the
-     * query used to fetch documents from that source. For certain document sources
-     * the query may not be needed (on-disk XML, feed of syndicated news); in such cases,
-     * the input component should set its title properly for visual interfaces such
-     * as the workbench.
+     * Processing result title. A typical title for a processing result will be the query
+     * used to fetch documents from that source. For certain document sources the query
+     * may not be needed (on-disk XML, feed of syndicated news); in such cases, the input
+     * component should set its title properly for visual interfaces such as the
+     * workbench.
      * 
      * @label Title
      * @level Advanced
      * @group Search request information
      */
     public static final String PROCESSING_RESULT_TITLE = "processing-result.title";
-    
+
     /*
      *
      */

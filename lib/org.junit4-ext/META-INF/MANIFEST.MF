@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.junit4-ext
 Bundle-SymbolicName: org.junit4.ext
-Bundle-Version: 4.3.1
-Bundle-Vendor: JUnit
+Bundle-Version: 4.6.0
+Bundle-Vendor: JUnit.org
 Require-Bundle: org.eclipse.core.runtime
 Bundle-ClassPath: junit-4.6.jar
 Export-Package: junit.extensions,

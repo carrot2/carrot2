@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,15 +14,14 @@ package org.carrot2.matrix;
 
 import java.util.Arrays;
 
+import org.apache.mahout.math.function.DoubleComparator;
+import org.apache.mahout.math.function.DoubleFunction;
+import org.apache.mahout.math.jet.math.Functions;
+import org.apache.mahout.math.list.DoubleArrayList;
+import org.apache.mahout.math.list.IntArrayList;
+import org.apache.mahout.math.matrix.DoubleMatrix1D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.util.DoubleComparators;
-
-import bak.pcj.DoubleComparator;
-import cern.colt.function.DoubleFunction;
-import cern.colt.list.DoubleArrayList;
-import cern.colt.list.IntArrayList;
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.jet.math.Functions;
 
 /**
  * A set of {@link DoubleMatrix2D} shorthands and utility methods.

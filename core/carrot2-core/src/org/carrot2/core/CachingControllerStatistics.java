@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,14 +12,14 @@
 
 package org.carrot2.core;
 
-import java.io.Writer;
+import java.io.OutputStream;
 
 import net.sf.ehcache.Statistics;
 
 import org.carrot2.util.RollingWindowAverage;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
 
 /**
  * Provides some statistics about processing performed in a {@link CachingController}.
@@ -158,10 +158,10 @@ public final class CachingControllerStatistics
     }
 
     /**
-     * Serializes this statistics object as XML to the provided writer.
+     * Serializes this statistics object as XML stream.
      */
-    public void serialize(Writer writer) throws Exception
+    public void serialize(OutputStream stream) throws Exception
     {
-        new Persister().write(this, writer);
+        new Persister().write(this, stream);
     }
 }

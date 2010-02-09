@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,6 +12,8 @@
 
 package org.carrot2.source.google;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
@@ -22,6 +24,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
+import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.codehaus.jackson.*;
@@ -38,7 +41,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class GoogleDocumentSource extends MultipageSearchEngine
 {
     /**
-     * Service URL.
+     * Service URL. Google web search service URL.
+     * 
+     * @group Service
+     * @level Advanced
+     * @label Service URL
      */
     @Input
     @Processing
@@ -47,13 +54,13 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     public String serviceUrl = "http://ajax.googleapis.com/ajax/services/search/web";
 
     /**
-     * Request Referer Header. Please do not use the default value when deploying this
+     * Request referer. Please do not use the default value when deploying this
      * component in production environments. Instead, put the URL to your application
      * here.
      * 
-     * @group Postprocessing
+     * @group Service
      * @level Advanced
-     * @label Keep highlights
+     * @label Referer
      */
     @Input
     @Processing
@@ -66,7 +73,9 @@ public class GoogleDocumentSource extends MultipageSearchEngine
      * using the bold HTML tag. Set this attribute to <code>true</code> to keep these
      * highlights.
      * 
-     * @label Ke
+     * @group Postprocessing
+     * @level Advanced
+     * @label Keep highlights
      */
     @Input
     @Processing
@@ -75,11 +84,18 @@ public class GoogleDocumentSource extends MultipageSearchEngine
 
     /**
      * Google API Key. Please do not use the default key when deploying this component in
-     * production environments. Instead, apply for your own key.
+     * production environments. Instead, apply generate and use your own key.
      * 
-     * @see <a href="http://code.google.com/apis/ajaxsearch/signup.html">Google AJAX
-     *      signup</a>
+     * @see <a href="http://code.google.com/apis/ajaxsearch/signup.html">Google AJAX signup</a>
+     * 
+     * @group Service
+     * @level Advanced
+     * @label Google API Key
      */
+    @Input
+    @Processing
+    @Internal
+    @Attribute
     public String apiKey = "ABQIAAAA_XmITjrzoipJYoBApAgGJhS8yIvkL4-1sNwOJWkV7nbkjq_Z_BQW0-uzOh5lKXRtEXQDTGbzIEz06Q";
 
     /**
@@ -181,5 +197,23 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     protected void afterFetch(SearchEngineResponse response)
     {
         clean(response, keepHighlights, Document.TITLE, Document.SUMMARY);
+        
+        // Decode URLs
+        for (Document document : response.results)
+        {
+            final String url = document.getField(Document.CONTENT_URL);
+            if (url != null)
+            {
+                try
+                {
+                    document.setField(Document.CONTENT_URL, URLDecoder.decode(url, "UTF-8"));
+                }
+                catch (UnsupportedEncodingException e)
+                {
+                    // Should not happen
+                    throw ExceptionUtils.wrapAsRuntimeException(e);
+                }
+            }
+        }
     }
 }

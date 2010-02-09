@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -22,7 +23,7 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.load.Commit;
+import org.simpleframework.xml.core.Commit;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
@@ -218,7 +219,7 @@ public class ProcessingComponentDescriptor
         try
         {
             AttributeBinder
-                .bind(instance, initAttributes, false, Input.class, Init.class);
+                .bind(instance, initAttributes, false, Input.class);
 
             if (init)
             {
@@ -321,8 +322,7 @@ public class ProcessingComponentDescriptor
             final InputStream inputStream = resource.open();
             try
             {
-                attributeSets = AttributeValueSets.deserialize(new InputStreamReader(
-                    inputStream, "UTF-8"));
+                attributeSets = AttributeValueSets.deserialize(inputStream);
             }
             finally
             {

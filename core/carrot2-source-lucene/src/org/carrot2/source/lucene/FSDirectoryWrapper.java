@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -19,8 +19,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.carrot2.util.simplexml.ISimpleXmlWrapper;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Commit;
-import org.simpleframework.xml.load.Persist;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persist;
 
 /**
  * Wraps {@link FSDirectory} for serialization with SimpleXML.

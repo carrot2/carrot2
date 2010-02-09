@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,9 +15,11 @@ package org.carrot2.source.etools;
 import java.util.Collections;
 import java.util.Map;
 
+import org.carrot2.core.Document;
+import org.carrot2.core.LanguageCode;
 import org.carrot2.core.attribute.*;
+import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
-import org.carrot2.text.linguistic.LanguageCode;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -28,7 +30,7 @@ import com.google.common.collect.Maps;
 
 /**
  * A Carrot2 input component for the eTools service (http://www.etools.ch). For commercial
- * licensing of the eTools feed, please e-mail: contact@comcepta.com.
+ * licensing of the eTools feed, please e-mail: <code>contact@comcepta.com</code>.
  */
 @Bindable(prefix = "EToolsDocumentSource")
 public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
@@ -161,17 +163,6 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Processing
     @Attribute
     public Language language = Language.ENGLISH;
-
-    /**
-     * An internal attribute to capture the previously set active language and possibly
-     * set a new better matching value based on the supplied {@link #language} value.
-     */
-    @Processing
-    @Input
-    @Output
-    @Attribute(key = AttributeNames.ACTIVE_LANGUAGE)
-    @Internal
-    private LanguageCode activeLanguage;
 
     /**
      * Maximum time in milliseconds to wait for all data sources to return results.
@@ -308,17 +299,12 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     }
 
     @Override
-    public void process()
+    protected void afterFetch(SearchEngineResponse response)
     {
-        super.process();
-        
-        if (activeLanguage == null)
+        // Set document's language
+        for (Document document : response.results)
         {
-            LanguageCode bestMatchingLanguageCode = language.toLanguageCode();
-            if (bestMatchingLanguageCode != null)
-            {
-                activeLanguage = bestMatchingLanguageCode;
-            }
+            document.setLanguage(language.toLanguageCode());
         }
     }
 }

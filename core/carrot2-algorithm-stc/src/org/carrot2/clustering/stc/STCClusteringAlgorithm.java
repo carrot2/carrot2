@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -24,8 +24,12 @@ import org.apache.lucene.util.PriorityQueue;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
-import org.carrot2.text.linguistic.*;
-import org.carrot2.text.preprocessing.*;
+import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
+import org.carrot2.text.clustering.MultilingualClustering;
+import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
+import org.carrot2.text.preprocessing.LabelFormatter;
+import org.carrot2.text.preprocessing.PreprocessingContext;
+import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.collect.primitive.IntQueue;
 
@@ -41,12 +45,13 @@ import com.google.common.collect.Lists;
  * 
  * @label STC Clustering
  */
-@Bindable
+@Bindable(prefix = "STCClusteringAlgorithm")
 public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
     /**
-     * Query that produced the documents, optional.
+     * Query that produced the documents. The query will help the algorithm to create
+     * better clusters. Therefore, providing the query is optional but desirable.
      */
     @Processing
     @Input
@@ -74,34 +79,19 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     public List<Cluster> clusters = null;
 
     /**
-     * Tokenizer used by the algorithm, contains bindable attributes.
+     * Common preprocessing tasks handler.
      */
-    public Tokenizer tokenizer = new Tokenizer();
-
-    /**
-     * Case normalizer used by the algorithm, contains bindable attributes.
-     */
-    public CaseNormalizer caseNormalizer = new CaseNormalizer();
-
-    /**
-     * Stemmer used by the algorithm, contains bindable attributes.
-     */
-    public LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
-
-    /**
-     * Stop list marker used by the algorithm, contains bindable attributes.
-     */
-    public StopListMarker stopListMarker = new StopListMarker();
-
-    /**
-     * Language model factory used by the algorithm, contains bindable attributes.
-     */
-    public ILanguageModelFactory languageModelFactory = new DefaultLanguageModelFactory();
+    public BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
     /**
      * Parameters and thresholds of the algorithm.
      */
     public STCClusteringParameters params = new STCClusteringParameters();
+
+    /**
+     * A helper for performing multilingual clustering.
+     */
+    public MultilingualClustering multilingualClustering = new MultilingualClustering();
 
     /**
      * Stores the preprocessing context during {@link #process()}.
@@ -154,7 +144,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Custom priority queue for collecting base clusters.
      */
-    private final static class BaseClusterQueue extends PriorityQueue
+    private final static class BaseClusterQueue extends PriorityQueue<ClusterCandidate>
     {
         private final int maxSize;
     
@@ -165,11 +155,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         }
         
         @Override
-        protected boolean lessThan(Object o1, Object o2)
+        protected boolean lessThan(ClusterCandidate c1, ClusterCandidate c2)
         {
-            final ClusterCandidate c1 = (ClusterCandidate) o1;
-            final ClusterCandidate c2 = (ClusterCandidate) o2;
-    
             return c1.score < c2.score;
         }
     
@@ -189,18 +176,55 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Override
     public void process() throws ProcessingException
     {
+        // There is a tiny trick here to support multilingual clustering without
+        // refactoring the whole component: we remember the original list of documents
+        // and invoke clustering for each language separately within the 
+        // IMonolingualClusteringAlgorithm implementation below. This is safe because
+        // processing components are not thread-safe by definition and 
+        // IMonolingualClusteringAlgorithm forbids concurrent execution by contract.
+        final List<Document> originalDocuments = documents;
+        clusters = multilingualClustering.process(documents,
+            new IMonolingualClusteringAlgorithm()
+            {
+                public List<Cluster> process(List<Document> documents,
+                    LanguageCode language)
+                {
+                    STCClusteringAlgorithm.this.documents = documents;
+                    STCClusteringAlgorithm.this.cluster(language);
+                    return STCClusteringAlgorithm.this.clusters;
+                }
+            });
+        documents = originalDocuments;
+
+        // TODO: be consistent here with Lingo implementation (sort with a compound).
+        if (multilingualClustering.languageAggregationStrategy == LanguageAggregationStrategy.FLATTEN_ALL)
+        {
+            Collections.sort(clusters, new Comparator<Cluster>() {
+                public int compare(Cluster c1, Cluster c2)
+                {
+                    if (c1.isOtherTopics()) return 1;
+                    if (c2.isOtherTopics()) return -1;
+                    if (c1.getScore() < c2.getScore()) return 1;
+                    if (c1.getScore() > c2.getScore()) return -1;
+                    if (c1.size() < c2.size()) return 1;
+                    if (c1.size() > c2.size()) return -1;
+                    return 0;
+                } 
+            });
+        }}
+
+    /**
+     * Performs the actual clustering with an assumption that all documents are written in
+     * one <code>language</code>.
+     */
+    private void cluster(LanguageCode language)
+    {
         clusters = new ArrayList<Cluster>();
 
         /*
          * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
          */
-        final ILanguageModel lang = languageModelFactory.getCurrentLanguage();
-        context = new PreprocessingContext(lang, documents, null);
-        tokenizer.tokenize(context);
-        caseNormalizer.dfThreshold = 0;
-        caseNormalizer.normalize(context);
-        languageModelStemmer.stem(context);
-        stopListMarker.mark(context);
+        context = preprocessingPipeline.preprocess(documents, query, language);
 
         /*
          * Step 2: Create a generalized suffix tree from phrases in the input.
@@ -736,16 +760,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             phrases.clear();
         }
 
-        // Check if there are any unassigned documents.
-        all.flip(0, documents.size());
-        if (all.cardinality() > 0)
-        {
-            final Cluster junk = new Cluster();
-            junk.setAttribute(Cluster.OTHER_TOPICS, true);
-            junk.addPhrases(Cluster.OTHER_TOPICS);
-            junk.addDocuments(collectDocuments(new ArrayList<Document>(), all));
-            this.clusters.add(junk);
-        }
+        Cluster.appendOtherTopics(this.documents, this.clusters);
     }
     
     /**

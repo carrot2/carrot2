@@ -258,7 +258,7 @@
      xmlns:media="http://search.yahoo.com/mrss">
 
   <xsl:output indent="yes" omit-xml-declaration="no"
-       media-type="application/xml" encoding="utf-8" />
+       media-type="application/xml" encoding="UTF-8" />
 
   <xsl:template match="/">
     <searchresult>
@@ -404,10 +404,10 @@
     </section>
     
     <section xml:id="section.getting-started.saving-clusters">
-      <title>Saving clusters for further processing</title>
+      <title>Saving documents or clusters for further processing</title>
       
       <para>
-        To save clusters produced by &PROD; for further processing:
+        To save doocuments and/or clusters produced by &PROD; for further processing:
       </para>
       
       <orderedlist>
@@ -420,10 +420,21 @@
         <listitem>
           <para>
             Use the <guilabel>File &gt; Save as...</guilabel> dialog to save the 
-            documents and clusters into a file in <link linkend="figure.output-xml-format">&C2; XML format</link>.
+            documents and/or clusters into a file in the <link linkend="figure.output-xml-format">&C2; XML format</link>.
           </para>
         </listitem>
       </orderedlist>
+      
+      <tip>
+        <para>
+          Saving documents into XML can be particularly useful when there is a need to
+          capture the output of some remote or non-public document source to a local file,
+          which can be then passed on to someone else for further inspection. 
+          Documents saved into XML can be opened for clustering within &DCW; using 
+          the <link linkend="section.getting-started.xml-files"><guilabel>XML</guilabel> 
+          document source.</link> 
+        </para>
+      </tip>
     </section>    
   </section>
   

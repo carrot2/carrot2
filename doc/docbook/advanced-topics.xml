@@ -143,6 +143,14 @@
   <section xml:id="section.advanced-topics.building-from-source-code">
     <title>Building &C2; from source code</title>
     
+    <para>
+      To build &C2; applications from source code, you will need Java Softwade Development 
+      Kit (Java SDK) version 1.6 or higher and Apache Ant version 1.7.1 or higher.
+      You can chcek out the latest &C2; source code from the following SVN location:
+    </para>
+    
+    <programlisting><![CDATA[https://carrot2.svn.sourceforge.net/svnroot/carrot2/trunk]]></programlisting>
+    
     <section xml:id="section.advanced-topics.building-from-source-code.workbench">
       <title>Building &DCW;</title>
       
@@ -196,7 +204,7 @@
           </para>
         </listitem>
       </orderedlist>
-    </section>
+      </section>
     
     <section xml:id="section.advanced-topics.building-from-source-code.webapp">
       <title>Building &WA;</title>

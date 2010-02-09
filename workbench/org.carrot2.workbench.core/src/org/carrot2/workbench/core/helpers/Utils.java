@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -96,6 +96,16 @@ public final class Utils
         }
     }
 
+    /*
+     * 
+     */
+    public static void logInfo(String message)
+    {
+        IStatus status = new Status(IStatus.INFO,
+            WorkbenchCorePlugin.PLUGIN_ID, message);
+        WorkbenchCorePlugin.getDefault().getLog().log(status);        
+    }
+    
     /*
      * 
      */

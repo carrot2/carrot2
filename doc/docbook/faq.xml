@@ -87,9 +87,9 @@
             <para>
               The most important characteristic of &PROD; algorithms to keep in mind is
               that they perform in-memory clustering. For this reason, as a rule of
-              thumb, &PROD; should successfully deal with up to a thousand of
-              documents, a few paragraphs each. For algorithms designed to process
-              millions of documents, you may want to check out the 
+              thumb, depending on the algorithm, &PROD; should successfully deal with up 
+              to a few thousands of documents, a few paragraphs each. 
+              For algorithms designed to process millions of documents, you may want to check out the 
               <link xlink:href="http://lucene.apache.org/mahout/">Mahout</link> project.
             </para> 
           </answer>
@@ -170,6 +170,20 @@
           </answer>
         </qandaentry>
 
+        <qandaentry xml:id="section.faq.using.which-algorithm">
+          <question>
+            <para>Which &PROD; clustering algorithm is the best?</para>
+          </question>
+          <answer>
+            <para>
+              There is no one clear answer to this question. The choice of the algorithm
+              depends on the input data and the desired characteristics of clusters.
+              Please see <xref linkend="section.advanced-topics.fine-tuning.choosing-algorithm" />
+              for some guidelines.
+            </para>
+          </answer>
+        </qandaentry>
+
         <qandaentry xml:id="section.faq.using.boolean-queries">
           <question>
             <para>Does &C2; support boolean querying?</para>
@@ -212,6 +226,18 @@
               <emphasis>read</emphasis> or <emphasis>site</emphasis>. Please see
               <xref linkend="section.advanced-topics.fine-tuning.stop-regexps" /> for
               information on how to remove them.
+            </para>
+          </answer>
+        </qandaentry>
+        
+        <qandaentry xml:id="section.faq.tuning.label-filtering">
+          <question>
+            <para>How can I improve the performance of &PROD;?</para>
+          </question>
+          <answer>
+            <para>
+              Please see <xref linkend="section.advanced-topics.fine-tuning.performance" />
+              for some clustering performance tips.
             </para>
           </answer>
         </qandaentry>

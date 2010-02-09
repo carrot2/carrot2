@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -18,7 +18,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext.*;
 import org.carrot2.text.preprocessing.filter.*;
 import org.carrot2.util.attribute.Bindable;
 
-import bak.pcj.list.IntArrayList;
+import com.carrotsearch.hppc.IntArrayList;
 
 /**
  * Applies basic filtering to words and phrases to produce candidates for cluster labels.

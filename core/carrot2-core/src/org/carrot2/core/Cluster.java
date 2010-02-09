@@ -1,7 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -19,8 +19,8 @@ import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.load.Commit;
-import org.simpleframework.xml.load.Persist;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persist;
 
 import com.google.common.base.Function;
 import com.google.common.collect.*;
@@ -37,8 +37,8 @@ import com.google.common.collect.*;
 public final class Cluster
 {
     /**
-     * Indicates that the cluster is an "(Other Topics)" cluster. Such a cluster contains
-     * documents that remain unclustered at given level of cluster hierarchy.
+     * Indicates that the cluster is an <i>Other Topics</i> cluster. Such a cluster
+     * contains documents that remain unclustered at given level of cluster hierarchy.
      * <p>
      * Type of this attribute is {@link Boolean}.
      * </p>
@@ -47,6 +47,11 @@ public final class Cluster
      * @see #getAttribute(String)
      */
     public static final String OTHER_TOPICS = "other-topics";
+
+    /**
+     * Default label for the <i>Other Topics</i> cluster.
+     */
+    static final String OTHER_TOPICS_LABEL = "Other Topics";
 
     /**
      * Score of this cluster that indicates the clustering algorithm's beliefs on the
@@ -470,6 +475,27 @@ public final class Cluster
     }
 
     /**
+     * Returns <code>true</code> if this cluster is the {@link #OTHER_TOPICS} cluster.
+     */
+    public boolean isOtherTopics()
+    {
+        final Boolean otherTopics = getAttribute(OTHER_TOPICS);
+        return otherTopics != null && otherTopics.booleanValue();
+    }
+
+    /**
+     * Sets the {@link #OTHER_TOPICS} attribute of this cluster.
+     * 
+     * @param isOtherTopics if <code>true</code>, this cluster will be marked as an
+     *            <i>Other Topics</i> cluster.
+     * @return this cluster for convenience
+     */
+    public Cluster setOtherTopics(boolean isOtherTopics)
+    {
+        return setAttribute(OTHER_TOPICS, isOtherTopics).setScore(0.0);
+    }
+
+    /**
      * Compares clusters by size as returned by {@link #size()}. Clusters with more
      * documents are larger.
      */
@@ -567,6 +593,26 @@ public final class Cluster
             }
         }).compound(BY_LABEL_COMPARATOR);
     }
+
+    /**
+     * A comparator that puts {@link #OTHER_TOPICS} clusters at the end of the list. In
+     * other words, to this comparator an {@link #OTHER_TOPICS} topics cluster is "bigger"
+     * than a non-{{@link #OTHER_TOPICS} cluster.
+     * <p>
+     * <strong>Note:</strong> This comparator is designed for use in combination with
+     * other comparators, such as {@link #BY_REVERSED_SIZE_AND_LABEL_COMPARATOR}. If you
+     * only need to partition a list of clusters into regular and other topic ones, this
+     * is better done in linear time without resorting to {@link Collections#sort(List)}.
+     * </p>
+     */
+    public static final Comparator<Cluster> OTHER_TOPICS_AT_THE_END = Ordering.natural()
+        .onResultOf(new Function<Cluster, Double>()
+        {
+            public Double apply(Cluster cluster)
+            {
+                return cluster.isOtherTopics() ? 1.0 : -1.0;
+            }
+        });
 
     /**
      * Assigns sequential identifiers to the provided <code>clusters</code> (and their
@@ -677,7 +723,7 @@ public final class Cluster
     public static Cluster buildOtherTopics(List<Document> allDocuments,
         List<Cluster> clusters)
     {
-        return buildOtherTopics(allDocuments, clusters, "Other Topics");
+        return buildOtherTopics(allDocuments, clusters, OTHER_TOPICS_LABEL);
     }
 
     /**
@@ -705,7 +751,7 @@ public final class Cluster
 
         final Cluster otherTopics = new Cluster(label);
         otherTopics.addDocuments(unclusteredDocuments);
-        otherTopics.setAttribute(Cluster.OTHER_TOPICS, Boolean.TRUE);
+        otherTopics.setOtherTopics(true);
 
         return otherTopics;
     }
@@ -719,7 +765,7 @@ public final class Cluster
     public static void appendOtherTopics(List<Document> allDocuments,
         List<Cluster> clusters)
     {
-        appendOtherTopics(allDocuments, clusters, "Other Topics");
+        appendOtherTopics(allDocuments, clusters, OTHER_TOPICS_LABEL);
     }
 
     /**

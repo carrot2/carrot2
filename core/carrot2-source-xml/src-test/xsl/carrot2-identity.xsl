@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
   <xsl:output indent="yes" omit-xml-declaration="no"
-       media-type="application/xml" encoding="utf-8" />
+       media-type="application/xml" encoding="UTF-8" />
 
   <xsl:template match="/">
     <xsl:apply-templates />

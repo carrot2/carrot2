@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -37,10 +37,10 @@ public class SoftUnboundedPoolTest
     public void testBorrowOneObject() throws InstantiationException,
         IllegalAccessException
     {
-        final String newString = pool.borrowObject(String.class);
-        pool.returnObject(newString);
+        final String newString = pool.borrowObject(String.class, null);
+        pool.returnObject(newString, null);
 
-        final String recycledString = pool.borrowObject(String.class);
+        final String recycledString = pool.borrowObject(String.class, null);
         assertSame(newString, recycledString);
     }
 
@@ -48,28 +48,28 @@ public class SoftUnboundedPoolTest
     public void testBorrowMoreObjects() throws InstantiationException,
         IllegalAccessException
     {
-        final String newStringA = pool.borrowObject(String.class);
-        final String newStringB = pool.borrowObject(String.class);
+        final String newStringA = pool.borrowObject(String.class, null);
+        final String newStringB = pool.borrowObject(String.class, null);
 
         assertNotSame(newStringA, newStringB);
 
-        pool.returnObject(newStringA);
-        final String recycledString = pool.borrowObject(String.class);
+        pool.returnObject(newStringA, null);
+        final String recycledString = pool.borrowObject(String.class, null);
         assertSame(newStringA, recycledString);
     }
 
     @Test(expected = IllegalStateException.class)
     public void testDispose() throws InstantiationException, IllegalAccessException
     {
-        final String newString = pool.borrowObject(String.class);
-        pool.returnObject(newString);
+        final String newString = pool.borrowObject(String.class, null);
+        pool.returnObject(newString, null);
 
-        final String recycledString = pool.borrowObject(String.class);
+        final String recycledString = pool.borrowObject(String.class, null);
         assertSame(newString, recycledString);
 
         pool.dispose();
-        pool.returnObject(recycledString); // still can return, nothing is done anyway
-        pool.borrowObject(String.class);
+        pool.returnObject(recycledString, null); // still can return, nothing is done anyway
+        pool.borrowObject(String.class, null);
     }
 
     @Test
@@ -84,13 +84,13 @@ public class SoftUnboundedPoolTest
         instantiationListener.objectInstantiated(isA(String.class), (String) isNull());
         mocksControl.replay();
 
-        SoftUnboundedPool<String, String> poolWithListeners = new SoftUnboundedPool<String, String>(
-            instantiationListener, null, null, null);
+        SoftUnboundedPool<String, String> poolWithListeners = new SoftUnboundedPool<String, String>();
+        poolWithListeners.init(instantiationListener, null, null, null);
 
         final String objectP1 = poolWithListeners.borrowObject(String.class, "p1");
         poolWithListeners.returnObject(objectP1, "p1");
 
-        final String objectNull = poolWithListeners.borrowObject(String.class);
+        final String objectNull = poolWithListeners.borrowObject(String.class, null);
 
         assertNotSame(objectP1, objectNull);
         mocksControl.verify();

@@ -215,10 +215,17 @@
         An <tag>attribute-sets</tag> element can contain one or more 
         <tag>attribute-set</tag>s. Each <tag>attribute-set</tag> must specify a unique
         <tag>id</tag> and a <tag>value-set</tag>.
-        As the syntax of the <tag>value</tag> elements depends on the type of the 
-        attribute being set, the easiest way to obtain the XML file is to use
-        the &DCW;.
       </para>
+      
+      <formalpara role="margin" xml:id="section.customizing.component-suites-and-attributes.saving-with-workbench">
+        <title>Saving attributes to XML using &DCW;</title>
+        
+        <para>
+          As the syntax of the <tag>value</tag> elements depends on the type of the 
+          attribute being set, the easiest way to obtain the XML file is to use
+          the &DCW;.
+        </para>
+      </formalpara>
       
       <para>
         To generate attribute set XML for a document source:
@@ -443,6 +450,9 @@
 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" 
               href="customizing-algorithm-for-dcs.xml" />
+  
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" 
+              href="customizing-algorithm-for-cli.xml" />
   
   <section role="carrot2">
     <title>Adding document sources to &DCW;</title>

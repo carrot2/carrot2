@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,10 +14,9 @@ package org.carrot2.matrix.factorization;
 
 import org.carrot2.matrix.*;
 
-import nni.LAPACK;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.*;
-import cern.colt.matrix.linalg.SingularValueDecomposition;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.*;
+import org.apache.mahout.math.matrix.linalg.SingularValueDecomposition;
 
 /**
  * Performs matrix factorization using the Singular Value Decomposition algorithm.
@@ -86,7 +85,7 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
             {
                 U = U.viewPart(0, 0, U.rows(), k);
                 V = V.viewPart(0, 0, V.rows(), k);
-                S = cern.colt.Arrays.trimToCapacity(S, k);
+                S = org.apache.mahout.math.Arrays.trimToCapacity(S, k);
             }
         }
         else
@@ -110,28 +109,21 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
             System.arraycopy(data, 0, dataA, 0, dataA.length);
 
             int [] info = new int [1];
-            LAPACK.gesdd(new char []
-            {
-                'S'
-            }, new int []
-            {
-                m
-            }, new int []
-            {
-                n
-            }, dataA, new int []
-            {
-                Math.max(1, m)
-            }, S, ((NNIDenseDoubleMatrix2D) V).getData(), new int []
-            {
-                Math.max(1, m)
-            }, ((NNIDenseDoubleMatrix2D) U).getData(), new int []
-            {
-                Math.max(1, n)
-            }, work, new int []
-            {
-                work.length
-            }, iwork, info);
+
+            NNIInterface.getLapack().gesdd(
+                new char [] {'S'}, 
+                new int [] {m}, 
+                new int [] {n}, 
+                dataA, 
+                new int [] {Math.max(1, m)}, 
+                S, 
+                ((NNIDenseDoubleMatrix2D) V).getData(), 
+                new int [] {Math.max(1, m)}, 
+                ((NNIDenseDoubleMatrix2D) U).getData(), 
+                new int []{Math.max(1, n)}, 
+                work, 
+                new int []{ work.length}, 
+                iwork, info);
 
             // LAPACK calculates V' instead of V so need to do a deep transpose
             ((NNIDenseDoubleMatrix2D) V).transpose();
@@ -149,7 +141,7 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
 
                 U = Uk;
                 V = Vk;
-                S = cern.colt.Arrays.trimToCapacity(S, k);
+                S = org.apache.mahout.math.Arrays.trimToCapacity(S, k);
             }
         }
     }
@@ -165,28 +157,22 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
         // Query optimal workspace
         work = new double [1];
         int [] info = new int [1];
-        LAPACK.gesdd(new char []
-        {
-            'S'
-        }, new int []
-        {
-            m
-        }, new int []
-        {
-            n
-        }, new double [0], new int []
-        {
-            Math.max(1, m)
-        }, new double [0], new double [0], new int []
-        {
-            Math.max(1, m)
-        }, new double [0], new int []
-        {
-            Math.max(1, n)
-        }, work, new int []
-        {
-            -1
-        }, iwork, info);
+
+        NNIInterface.getLapack().gesdd(
+            new char [] { 'S' }, 
+            new int [] { m }, 
+            new int [] { n }, 
+            new double [0], 
+            new int [] {Math.max(1, m)}, 
+            new double [0], 
+            new double [0], 
+            new int [] {Math.max(1, m)}, 
+            new double [0], 
+            new int [] {Math.max(1, n)}, 
+            work, 
+            new int [] {-1}, 
+            iwork, 
+            info);
 
         // Allocate workspace
         int lwork = -1;

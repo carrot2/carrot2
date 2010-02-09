@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,13 +12,13 @@
 
 package org.carrot2.matrix;
 
-import cern.colt.matrix.DoubleFactory2D;
-import cern.colt.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.DoubleFactory2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * A factory for convenient construction of 2D matrices backed by the NNI interface. Use
  * the <code>nni</code> static field to obtain the instance of the NNI matrix factory. For
- * more details on using this factory see {@link cern.colt.matrix.DoubleFactory2D}.
+ * more details on using this factory see {@link org.apache.mahout.math.matrix.DoubleFactory2D}.
  */
 public class NNIDoubleFactory2D extends DoubleFactory2D
 {

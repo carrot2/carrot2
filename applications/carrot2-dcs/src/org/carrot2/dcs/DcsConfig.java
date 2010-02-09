@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,17 +15,17 @@ package org.carrot2.dcs;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.slf4j.Logger;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.resource.IResource;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
+import org.slf4j.Logger;
 
 /**
  * Configuration of the Document Clustering Server. This configuration is initialized
  * either from command line arguments (when launched from the console) or from the
- * config.xml file when lauched in a Servlet container.
+ * config.xml file when launched in a Servlet container.
  */
 @Root(name = "config")
 class DcsConfig

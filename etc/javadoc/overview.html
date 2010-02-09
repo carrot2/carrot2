@@ -140,8 +140,8 @@ You can also directly pass a list of {@link org.carrot2.core.Document} instances
 
         /*
          * Before using the caching controller, you must initialize it. On initialization,
-         * we can set some default values of input data (called attributes). In this
-         * example, we'll set the default results number to 50.
+         * you can set default values for some attributes. In this example, we'll set 
+         * the default results number to 50.
          */
         Map&lt;String, Object> globalAttributes = new HashMap&lt;String, Object>();
         globalAttributes.put(AttributeNames.RESULTS, 50);
@@ -178,72 +178,110 @@ You can also directly pass a list of {@link org.carrot2.core.Document} instances
 <h2>Clustering non-English content</h2>
 
 <p>
-  By default Carrot2 algorithms assume the content is in English and use the
-  tokenizer, stemmer and stop words appropriate for that language. There are
-  two ways of performing non-English clustering in Carrot2:
-  <ol>
-    <li>Set the {@link org.carrot2.core.attribute.AttributeNames#ACTIVE_LANGUAGE} attribute to the appropriate value
-    from {@link org.carrot2.text.linguistic.LanguageCode}, which will make the clustering algorithm use the tokenizer,
-    stemmer and lexical resources dedicated to that language</li>
-    <li>When using a document source that can return content in different languages,
-    {@link org.carrot2.core.attribute.AttributeNames#ACTIVE_LANGUAGE} will be determined based on the source-specific
-    language attribute. Currently, three document sources support language choice:
-    <ol>
-      <li>{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource} through the
-      {@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource#culture} attribute</li>
-      <li>{@link org.carrot2.source.boss.BossDocumentSource} through the {@link org.carrot2.source.boss.BossSearchService#languageAndRegion}
-      attribute</li>
-      <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the {@link org.carrot2.source.etools.EToolsDocumentSource#language}
-      attribute</li>
-    </ol></li>
-  </ol>
+This example shows how to cluster non-English content. By default Carrot2 assumes that
+the documents provided for clustering are written in English. When clustering content
+written in some different language, it is important to indicate the language to
+Carrot2, so that it can use the lexical resources (stop words, tokenizer, stemmer)
+appropriate for that language.
+</p>
+
+<p>
+There are two ways to indicate the desired clustering language to Carrot2:
+</p>
+
+<ol>
+<li>By setting the language of each document in their
+{@link org.carrot2.core.Document#LANGUAGE} field. The language does not necessarily
+have to be the same for all documents on the input, Carrot2 can handle multiple
+languages in one document set as well. Please see the
+{@link org.carrot2.text.clustering.MultilingualClustering#languageAggregationStrategy}
+attribute for more details.</li>
+<li>By setting the fallback language. For documents with undefined
+{@link org.carrot2.core.Document#LANGUAGE} field, Carrot2 will assume the some fallback
+language, which is English by default. You can change the fallback language by setting
+the {@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage}
+attribute.
+</ol>
+Additionally, a number of document sources automatically set the
+{@link org.carrot2.core.Document#LANGUAGE} of documents they produce based on their
+specific language-related attributes. Currently, three documents support this scenario:
+<ol>
+<li>{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource} through the
+{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource#culture} attribute</li>
+<li>{@link org.carrot2.source.boss.BossDocumentSource} through the
+{@link org.carrot2.source.boss.BossSearchService#languageAndRegion} attribute</li>
+<li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the
+{@link org.carrot2.source.etools.EToolsDocumentSource#language} attribute</li>
+</ol>
+
+<p>
+For the document sources that do not set the documents' language automatically, the
+easiest way to set the clustering language is through the
+{@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage} attribute.
+</p>
+
+<p>
   The following example demonstrates both approaches:
 </p>
 
 <pre class="brush: java">
-        /*
-         * We use a CachingController here to reuse instances of Carrot2 processing
-         * components. This is especially important when the components are expensive to
-         * create, which is the case with ChineseAnalyzer.
-         */
-        CachingController controller = new CachingController(IDocumentSource.class);
+/*
+ * We use a CachingController to reuse instances of Carrot2 processing components.
+ */
+final CachingController controller = new CachingController(IDocumentSource.class);
 
-        /*
-         * No special initialization-time attributes in this example.
-         */
-        Map&lt;String, Object> initAttributes = new HashMap&lt;String, Object>();
-        controller.init(initAttributes);
+/*
+ * No special initialization-time attributes in this example.
+ */
+final Map&lt;String, Object> initAttributes = new HashMap&lt;String, Object>();
+controller.init(initAttributes);
 
-        /*
-         * In the first call, we will fetch Chinese search results from MSN Live, but as
-         * we don't explicitly set the document source's language to Chinese, we'll need
-         * to provide the active language attribute.
-         */
-        Map&lt;String, Object> attributes = new HashMap&lt;String, Object>();
-        attributes.put(AttributeNames.QUERY, "??"); // clustering?
-        attributes.put(AttributeNames.RESULTS, 100);
-        attributes.put(AttributeNames.ACTIVE_LANGUAGE, LanguageCode.CHINESE_SIMPLIFIED);
+/*
+ * In the first call, we'll cluster a document list, setting the language for each
+ * document separately.
+ */
+final List&lt;Document> documents = Lists.newArrayList();
+for (Document document : SampleDocumentData.DOCUMENTS_DATA_MINING)
+{
+  documents.add(new Document(document.getTitle(), document.getSummary(),
+    document.getContentUrl(), LanguageCode.ENGLISH));
+}
 
-        /*
-         * Perform clustering and display results.
-         */
-        ProcessingResult chineseResult = controller.process(attributes,
-            MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
-        List&lt;Cluster> chineseClusters = chineseResult.getClusters();
+final Map&lt;String, Object> attributes = new HashMap&lt;String, Object>();
+attributes.put(AttributeNames.DOCUMENTS, documents);
+final ProcessingResult englishResult = controller.process(attributes,
+  LingoClusteringAlgorithm.class);
+ConsoleFormatter.displayResults(englishResult);
 
-        /*
-         * In the second call, we will fetch German search results from eTools, and
-         * explicitly instruct the document source to return results in German. In this
-         * case, we don't need to set the active language attribute because the document
-         * source will set it for us accordingly.
-         */
-        attributes.clear();
-        attributes.put(AttributeNames.QUERY, "bundestag");
-        attributes.put(AttributeNames.RESULTS, 100);
-        attributes.put("EToolsDocumentSource.language", EToolsDocumentSource.Language.GERMAN);
-        ProcessingResult germanResult = controller.process(attributes,
-            EToolsDocumentSource.class, LingoClusteringAlgorithm.class);
-        List&lt;Cluster> germanClusters = germanResult.getClusters();
+/*
+ * In the second call, we will fetch results for a Chinese query from MSN Live,
+ * setting explicitly the MSN Live's specific language attribute. Based on that
+ * attribute, the document source will set the appropriate language for each
+ * document.
+ */
+attributes.clear();
+attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
+attributes.put("MicrosoftLiveDocumentSource.culture", CultureInfo.CHINESE_CHINA);
+attributes.put(AttributeNames.RESULTS, 100);
+final ProcessingResult chineseResult = controller.process(attributes,
+  MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+ConsoleFormatter.displayResults(chineseResult);
+
+/*
+ * In the third call, we will fetch results for the same Chinese query from
+ * Google. As Google document source does not have its specific attribute for
+ * setting the language, it will not set the documents' language for us. To make
+ * sure the right lexical resources are used, we will need to set the
+ * MultilingualClustering.defaultLanguage attribute to Chinese on our own.
+ */
+attributes.clear();
+attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
+attributes.put("MultilingualClustering.defaultLanguage",
+  LanguageCode.CHINESE_SIMPLIFIED);
+attributes.put(AttributeNames.RESULTS, 100);
+final ProcessingResult chineseResult2 = controller.process(attributes,
+  GoogleDocumentSource.class, LingoClusteringAlgorithm.class);
+ConsoleFormatter.displayResults(chineseResult2);
 </pre>
 <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/ClusteringNonEnglishContent.java?r=trunk">View full source code</a>
 <p>

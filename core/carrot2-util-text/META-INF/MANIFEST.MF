@@ -7,15 +7,17 @@ Require-Bundle:
  org.carrot2.core;bundle-version="0.0.0";visibility:=reexport,
  org.carrot2.util.matrix;bundle-version="0.0.0";visibility:=reexport,
  org.apache.lucene.v2;bundle-version="2.9.0";visibility:=reexport,
- bak.pcj;bundle-version="1.2.0";visibility:=reexport,
- morfologik;bundle-version="1.1.2";resolution:=optional;visibility:=reexport
+ morfologik;bundle-version="1.1.2";resolution:=optional;visibility:=reexport,
+ com.carrotsearch.hppc;bundle-version="0.1.0";visibility:=reexport
 Bundle-ClassPath: META-INF/,
  .,
  src-resources/
 Export-Package: org.carrot2.text.analysis,
+ org.carrot2.text.clustering,
  org.carrot2.text.linguistic,
  org.carrot2.text.preprocessing,
  org.carrot2.text.preprocessing.filter,
+ org.carrot2.text.preprocessing.pipeline,
  org.carrot2.text.util,
  org.carrot2.text.vsm
 Bundle-Vendor: Carrot2.org

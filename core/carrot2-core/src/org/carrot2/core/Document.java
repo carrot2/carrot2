@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,13 +14,14 @@ package org.carrot2.core;
 
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.load.Commit;
-import org.simpleframework.xml.load.Persist;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persist;
 
 import com.google.common.base.Function;
 import com.google.common.collect.*;
@@ -67,9 +69,12 @@ public final class Document
     public static final String SOURCES = "sources";
 
     /**
-     * @deprecated please use {@link #PARTITIONS}. This field will be removed in version 3.2.
+     * Field name for the language in which the document is written. Value type:
+     * {@link LanguageCode}. If the <code>language</code> field is not defined or is
+     * <code>null</code>, it means the language of the document is unknown or it is
+     * outside of the list defined in {@link LanguageCode}.
      */
-    public static final String TOPIC = "topic";
+    public static final String LANGUAGE = "language";
 
     /**
      * Identifiers of reference clustering partitions this document belongs to. Currently,
@@ -111,6 +116,31 @@ public final class Document
     public Document()
     {
     }
+    
+    /**
+     * Creates a document with the provided <code>title</code>.
+     */
+    public Document(String title)
+    {
+        this(title, null);
+    }
+
+    /**
+     * Creates a document with the provided <code>title</code> and <code>summary</code>.
+     */
+    public Document(String title, String summary)
+    {
+        this(title, summary, (String) null);
+    }
+
+    /**
+     * Creates a document with the provided <code>title</code>, <code>summary</code> and
+     * <code>language</code>.
+     */
+    public Document(String title, String summary, LanguageCode language)
+    {
+        this(title, summary, null, language);
+    }
 
     /**
      * Creates a document with the provided <code>title</code>, <code>summary</code> and
@@ -118,9 +148,27 @@ public final class Document
      */
     public Document(String title, String summary, String contentUrl)
     {
+        this(title, summary, contentUrl, null);
+    }
+
+    /**
+     * Creates a document with the provided <code>title</code>, <code>summary</code>,
+     * <code>contentUrl</code> and <code>language</code>.
+     */
+    public Document(String title, String summary, String contentUrl, LanguageCode language)
+    {
         setField(TITLE, title);
         setField(SUMMARY, summary);
-        setField(CONTENT_URL, contentUrl);
+
+        if (StringUtils.isNotBlank(contentUrl))
+        {
+            setField(CONTENT_URL, contentUrl);
+        }
+
+        if (language != null)
+        {
+            setField(LANGUAGE, language);
+        }
     }
 
     /**
@@ -225,6 +273,29 @@ public final class Document
     }
 
     /**
+     * Returns this document's {@link #LANGUAGE}.
+     */
+    @JsonGetter
+    @Attribute(required = false)
+    public LanguageCode getLanguage()
+    {
+        return getField(LANGUAGE);
+    }
+
+    
+    /**
+     * Sets this document's {@link #LANGUAGE}.
+     * 
+     * @param language the language to set
+     * @return this document for convenience
+     */
+    @Attribute(required = false)
+    public Document setLanguage(LanguageCode language)
+    {
+        return setField(LANGUAGE, language);
+    }
+
+    /**
      * For JSON and XML serialization only.
      */
     @JsonGetter("fields")
@@ -236,6 +307,7 @@ public final class Document
         otherFields.remove(SUMMARY);
         otherFields.remove(CONTENT_URL);
         otherFields.remove(SOURCES);
+        otherFields.remove(LANGUAGE);
         return otherFields.isEmpty() ? null : otherFields;
     }
 
@@ -260,20 +332,6 @@ public final class Document
     public <T> T getField(String name)
     {
         return (T) fields.get(name);
-    }
-
-    /**
-     * Adds a field to this document.
-     * 
-     * @param name of the field to be added
-     * @param value value of the field
-     * @return this document for convenience
-     * @deprecated Please use {@link #setField(String, Object)} instead. This method will
-     *             be removed in version 3.2.
-     */
-    public Document addField(String name, Object value)
-    {
-        return setField(name, value);
     }
 
     /**
@@ -384,6 +442,7 @@ public final class Document
         otherFieldsForSerialization.remove(SUMMARY);
         otherFieldsForSerialization.remove(CONTENT_URL);
         otherFieldsForSerialization.remove(SOURCES);
+        otherFieldsForSerialization.remove(LANGUAGE);
     }
 
     /**

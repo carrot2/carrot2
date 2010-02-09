@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,7 +15,6 @@ package org.carrot2.workbench.editors.lucene;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexReader.FieldOption;
 import org.apache.lucene.store.Directory;
@@ -66,7 +65,6 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
     /*
      * 
      */
-    @SuppressWarnings({"deprecation", "unchecked"})
     private void refreshFields(Object directory)
     {
         BiMap<Object, String> valueToName = HashBiMap.create();

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -487,6 +487,24 @@ public class AttributeBinderTest
         checkFieldValues(instance.notBindableReference, new Object []
         {
             "processingInput", 5
+        });
+    }
+    
+    @Test
+    public void testReferenceWithReferenceInstanceInAttributes() throws InstantiationException
+    {
+        final CoercedReferenceContainer instance = new CoercedReferenceContainer();
+        instance.coerced = new CoercedInterfaceImpl();
+        
+        final CoercedInterfaceImpl reference = new CoercedInterfaceImpl();
+        addAttribute(CoercedReferenceContainer.class, "coerced", reference);
+        addAttribute(CoercedInterfaceImpl.class, "initInput", 7);
+
+        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
+
+        checkFieldValues(instance.coerced, new Object []
+        {
+            "initInput", 7
         });
     }
 

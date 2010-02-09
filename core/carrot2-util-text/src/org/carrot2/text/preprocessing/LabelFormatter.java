@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -11,7 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.linguistic.LanguageCode;
+import org.carrot2.core.LanguageCode;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.attribute.Bindable;
 
@@ -98,23 +99,23 @@ public class LabelFormatter
     private static void appendFormatted(final StringBuilder label, final char [] image,
         boolean isFirst, boolean isCommon)
     {
-        if (CharArrayUtils.capitalizedRatio(image) > 0.0)
+        if (CharArrayUtils.hasCapitalizedLetters(image))
         {
             label.append(image);
         }
         else if (isFirst)
         {
-            label.append(CharArrayUtils.capitalize(image));
+            label.append(CharArrayUtils.toCapitalizedCopy(image));
         }
         else
         {
             if (isCommon)
             {
-                label.append(CharArrayUtils.toLowerCase(image));
+                label.append(CharArrayUtils.toLowerCaseCopy(image));
             }
             else
             {
-                label.append(CharArrayUtils.capitalize(image));
+                label.append(CharArrayUtils.toCapitalizedCopy(image));
             }
         }
     }

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -20,8 +20,8 @@ import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.resource.*;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Commit;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persister;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.*;
@@ -53,8 +53,8 @@ public class ProcessingComponentSuite
     }
 
     /**
-     * Returns the internal list of document sources. Changes to this list will
-     * affect the suite.
+     * Returns the internal list of document sources. Changes to this list will affect the
+     * suite.
      */
     public List<DocumentSourceDescriptor> getSources()
     {
@@ -62,8 +62,8 @@ public class ProcessingComponentSuite
     }
 
     /**
-     * Returns the internal list of algorithms. Changes to this list will
-     * affect the suite.
+     * Returns the internal list of algorithms. Changes to this list will affect the
+     * suite.
      */
     public List<ProcessingComponentDescriptor> getAlgorithms()
     {
@@ -198,6 +198,15 @@ public class ProcessingComponentSuite
     }
 
     /**
+     * Deserializes component suite information from an XML stream.
+     */
+    public static ProcessingComponentSuite deserialize(InputStream inputStream)
+        throws Exception
+    {
+        return deserialize(inputStream, true);
+    }
+
+    /**
      * Deserializes component suite information from an XML stream and optionally clears
      * the internal implementation information that should not be exposed to the caller.
      */
@@ -205,25 +214,11 @@ public class ProcessingComponentSuite
         boolean clearInternals) throws Exception
     {
         if (resource == null) throw new IOException("Resource not found.");
-        
+
         final InputStream inputStream = resource.open();
         try
         {
-            final ProcessingComponentSuite suite = new Persister().read(
-                ProcessingComponentSuite.class, inputStream);
-            if (clearInternals)
-            {
-                suite.includes = null;
-                for (ProcessingComponentDescriptor processingComponentDescriptor : suite.algorithms)
-                {
-                    processingComponentDescriptor.position = null;
-                }
-                for (DocumentSourceDescriptor documentSourceDescriptor : suite.sources)
-                {
-                    documentSourceDescriptor.position = null;
-                }
-            }
-            return suite;
+            return deserialize(inputStream, clearInternals);
         }
         finally
         {
@@ -232,11 +227,36 @@ public class ProcessingComponentSuite
     }
 
     /**
-     * Serializes this component suite as XML to the provided writer.
+     * Deserializes component suite information from an XML stream and optionally clears
+     * the internal implementation information that should not be exposed to the caller.
+     * The provided {@link InputStream} will not be closed.
      */
-    public void serialize(Writer writer) throws Exception
+    private static ProcessingComponentSuite deserialize(final InputStream inputStream,
+        boolean clearInternals) throws Exception
     {
-        new Persister().write(this, writer);
+        final ProcessingComponentSuite suite = new Persister().read(
+            ProcessingComponentSuite.class, inputStream);
+        if (clearInternals)
+        {
+            suite.includes = null;
+            for (ProcessingComponentDescriptor processingComponentDescriptor : suite.algorithms)
+            {
+                processingComponentDescriptor.position = null;
+            }
+            for (DocumentSourceDescriptor documentSourceDescriptor : suite.sources)
+            {
+                documentSourceDescriptor.position = null;
+            }
+        }
+        return suite;
+    }
+
+    /**
+     * Serializes this component suite as an UTF-8 encoded XML.
+     */
+    public void serialize(OutputStream stream) throws Exception
+    {
+        new Persister().write(this, stream);
     }
 
     /**
@@ -246,10 +266,10 @@ public class ProcessingComponentSuite
      */
     public List<ProcessingComponentDescriptor> removeUnavailableComponents()
     {
-        ArrayList<ProcessingComponentDescriptor> failed = Lists.newArrayList();  
+        ArrayList<ProcessingComponentDescriptor> failed = Lists.newArrayList();
         ProcessingComponentDescriptor p;
-        for (Iterator<? extends ProcessingComponentDescriptor> 
-            i = Iterators.concat(sources.iterator(), algorithms.iterator()); i.hasNext();)
+        for (Iterator<? extends ProcessingComponentDescriptor> i = Iterators.concat(
+            sources.iterator(), algorithms.iterator()); i.hasNext();)
         {
             if (!(p = i.next()).isComponentAvailable())
             {
@@ -257,7 +277,7 @@ public class ProcessingComponentSuite
                 i.remove();
             }
         }
-        
+
         return failed;
     }
 }

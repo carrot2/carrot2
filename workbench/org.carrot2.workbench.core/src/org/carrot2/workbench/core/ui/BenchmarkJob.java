@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -244,7 +244,7 @@ final class BenchmarkJob extends Job
     {
         final String logName = 
             String.format(Locale.ENGLISH, 
-                "benchmark_%1$tF_%1$tH-%1$tM-%1$tS.log", new Date());
+                "benchmark_%1$tF_%1$tH-%1$tM-%1$tS.txt", new Date());
 
         try
         {

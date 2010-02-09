@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,6 +15,7 @@ package org.carrot2.workbench.core.ui;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.core.IController;
 import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
@@ -93,24 +94,33 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
     }
 
     /**
+     * Internal method that sets a given attribute without firing 
+     * change events.
+     *  
+     * @return <code>true</code> if the attribute's value has changed compared
+     * to the old value.
+     */
+    boolean setAttribute(String key, Object value, boolean fireEvent)
+    {
+        final Object prev = getAttribute(key);
+        if (ObjectUtils.equals(prev, value))
+        {
+            return false;
+        }
+
+        this.attributes.setAttributeValue(key, value);
+        if (fireEvent) fireAttributeChanged(key, value);
+
+        return true;
+    }
+
+    /**
      * Sets the value of a given processing attribute, fires events to 
      * listeners. 
      */
     public void setAttribute(String key, Object value)
     {
-        final Object prev = getAttribute(key);
-        if (prev != null && prev.equals(value))
-        {
-            return;
-        }
-        
-        if (prev == null && value == null)
-        {
-            return;
-        }
-
-        this.attributes.setAttributeValue(key, value);
-        fireAttributeChanged(key, value);
+        setAttribute(key, value, true);
     }
 
     /**

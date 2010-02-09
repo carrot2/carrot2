@@ -8,6 +8,6 @@ curl $DCS_HOST -# \
      -F "query=berlin" \
      -F "EToolsDocumentSource.language=GERMAN" \
      -F "LingoClusteringAlgorithm.factorizationQuality=MEDIUM" \
-     -F "active-language=GERMAN" \
+     -F "MultilingualClustering.defaultLanguage=GERMAN" \
      -o $RESULT
 echo Results saved to $RESULT

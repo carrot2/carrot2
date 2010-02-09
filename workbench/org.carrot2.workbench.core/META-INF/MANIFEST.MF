@@ -8,7 +8,6 @@ Bundle-Activator: org.carrot2.workbench.core.WorkbenchCorePlugin
 Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.eclipse.core.runtime;visibility:=reexport,
  org.eclipse.ui.forms;visibility:=reexport,
- org.eclipse.ui.ide;visibility:=reexport,
  org.eclipse.ui.browser,
  org.carrot2.util.common;visibility:=reexport,
  org.carrot2.text,
@@ -16,8 +15,6 @@ Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.carrot2.core,
  org.apache.velocity,
  org.eclipse.ui.workbench;bundle-version="3.5.0",
- org.eclipse.ui.workbench.texteditor;bundle-version="3.4.1",
- org.eclipse.ui.editors;bundle-version="3.4.0",
  org.eclipse.core.resources;bundle-version="3.4.1",
  org.eclipse.core.filesystem;bundle-version="1.2.0"
 Bundle-ActivationPolicy: lazy

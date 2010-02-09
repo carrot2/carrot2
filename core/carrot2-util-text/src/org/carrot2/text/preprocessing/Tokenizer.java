@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,25 +17,18 @@ import java.io.StringReader;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
-import org.apache.lucene.index.Payload;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Processing;
-import org.carrot2.text.analysis.*;
+import org.carrot2.text.analysis.ITokenType;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
-import org.carrot2.util.ExceptionUtils;
-import org.carrot2.util.Pair;
+import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
-import bak.pcj.list.ByteArrayList;
-import bak.pcj.list.IntArrayList;
-
+import com.carrotsearch.hppc.ByteArrayList;
+import com.carrotsearch.hppc.IntArrayList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -52,26 +46,6 @@ import com.google.common.collect.Maps;
 @Bindable(prefix = "Tokenizer")
 public final class Tokenizer
 {
-    /**
-     * Analyzer used to split documents into individual tokens (terms). This analyzer must
-     * provide token {@link Payload} implementing {@link ITokenType}.
-     * 
-     * @level Medium
-     * @group Preprocessing
-     * @label Analyzer
-     */
-    @Init
-    @Processing
-    @Input
-    @Attribute
-    @Required
-    @ImplementingClasses(classes =
-    {
-        ActiveLanguageAnalyzer.class, ChineseAnalyzer.class,
-        ExtendedWhitespaceAnalyzer.class
-    }, strict = false)
-    public Analyzer analyzer = new ActiveLanguageAnalyzer();
-
     /**
      * Textual fields of documents that should be tokenized and parsed for clustering.
      * 
@@ -116,12 +90,6 @@ public final class Tokenizer
      */
     public void tokenize(PreprocessingContext context)
     {
-        if (analyzer instanceof ActiveLanguageAnalyzer)
-        {
-            ((ActiveLanguageAnalyzer) analyzer).setActiveLanguage(context.language
-                .getLanguageCode());
-        }
-
         // Documents to tokenize
         final List<Document> documents = context.documents;
 
@@ -166,17 +134,17 @@ public final class Tokenizer
 
                 if (!StringUtils.isEmpty(fieldValue))
                 {
+                    org.apache.lucene.analysis.Tokenizer ts = null;
                     try
                     {
-                        final TokenStream ts = analyzer.tokenStream(null,
-                            new StringReader(fieldValue));
+                        ts = context.language.getTokenizer();
+                        ts.reset(new StringReader(fieldValue));
 
                         while (ts.incrementToken())
                         {
-                            add(documentIndex, fieldNameToIndex.get(fieldName),
-                                (TermAttribute) ts.getAttribute(TermAttribute.class),
-                                (PayloadAttribute) ts
-                                    .getAttribute(PayloadAttribute.class));
+                            add(documentIndex, fieldNameToIndex.get(fieldName), ts
+                                .getAttribute(TermAttribute.class), ts
+                                .getAttribute(PayloadAttribute.class));
                         }
                     }
                     catch (IOException e)
@@ -188,6 +156,10 @@ public final class Tokenizer
                     {
                         throw new RuntimeException("The analyzer must provide "
                             + ITokenType.class.getName() + " instances as payload.");
+                    }
+                    finally
+                    {
+                        CloseableUtils.close(ts);
                     }
 
                     if (it.hasNext())

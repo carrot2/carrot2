@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,12 +13,10 @@
 package org.carrot2.workbench.vis.circles;
 
 import java.io.IOException;
-import java.io.Writer;
+import java.io.OutputStream;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.util.CloseableUtils;
@@ -58,7 +56,7 @@ public class PullDataServlet extends HttpServlet
         else
         {
             resp.setContentType("text/xml; charset=UTF-8");
-            final Writer w = resp.getWriter();
+            final OutputStream w = resp.getOutputStream();
             try
             {
                 pr.serialize(w, true, true);

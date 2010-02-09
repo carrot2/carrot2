@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -11,22 +12,20 @@
 
 package org.carrot2.text.analysis;
 
-import java.io.Reader;
+import java.io.IOException;
 
-import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
 import org.junit.Test;
 
 /**
- * Test cases for {@link ChineseAnalyzer}.
+ * Test cases for {@link ChineseTokenizer}.
  */
 public class ChineseTokenizerTest extends TokenizerTestBase
 {
-    private ChineseAnalyzer chineseAnalyzer = new ChineseAnalyzer();
-
     @Override
-    protected TokenStream createTokenStream(Reader reader)
+    protected Tokenizer createTokenStream() throws IOException
     {
-        return chineseAnalyzer.tokenStream(null, reader);
+        return new ChineseTokenizer();
     }
 
     @Test

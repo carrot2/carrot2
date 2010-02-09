@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,7 +15,7 @@ package org.carrot2.matrix.factorization;
 import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.matrix.factorization.seeding.*;
 
-import cern.colt.matrix.DoubleFactory2D;
+import org.apache.mahout.math.matrix.DoubleFactory2D;
 
 /**
  * A factory for {@link IMatrixFactorization}s.

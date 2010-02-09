@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -21,7 +22,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
 
 /**
  * Utilities for storing and reading preferences ({@link IMemento},

@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -23,7 +24,7 @@ import org.carrot2.util.resource.FileResource;
 import org.junit.Before;
 import org.junit.Test;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.load.*;
+import org.simpleframework.xml.core.*;
 
 import com.google.common.collect.*;
 
@@ -420,6 +421,7 @@ public class SimpleXmlWrappersTest
         original.put(key, value);
         final StringWriter writer = new StringWriter();
         new Persister().write(new MapContainer(original), writer);
+        System.out.println("---\n" + writer.toString());
         final MapContainer deserialized = new Persister().read(MapContainer.class,
             new StringReader(writer.getBuffer().toString()));
         assertThat(deserialized.map).isEqualTo(original);
@@ -431,6 +433,7 @@ public class SimpleXmlWrappersTest
         original.add(value);
         final StringWriter writer = new StringWriter();
         new Persister().write(new ListContainer(original), writer);
+        System.out.println("---\n" + writer.toString());
         final ListContainer deserialized = new Persister().read(ListContainer.class,
             new StringReader(writer.getBuffer().toString()));
         assertThat(deserialized.list).isEqualTo(original);
@@ -442,6 +445,7 @@ public class SimpleXmlWrappersTest
         original.add(value);
         final StringWriter writer = new StringWriter();
         new Persister().write(new SetContainer(original), writer);
+        System.out.println("---\n" + writer.toString());
         final SetContainer deserialized = new Persister().read(SetContainer.class,
             new StringReader(writer.getBuffer().toString()));
         assertThat(deserialized.set).isEqualTo(original);

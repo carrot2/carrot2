@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -20,8 +20,8 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.linalg.EigenvalueDecomposition;
 
 /**
  * Test cases for {@link EigenvalueCalculator}.
@@ -71,7 +71,7 @@ public class EigenvalueCalculatorTest
     {
         assumeTrue(nativeLapackAvailable());
 
-        double [] eigenvalues = EigenvalueCalculator.computeEigenvaluesNNI(A);
+        double [] eigenvalues = NNIInterface.getLapack().computeEigenvaluesNNI(A);
         Arrays.sort(eigenvalues);
 
         double [] expectedEigenvalues = new EigenvalueDecomposition(A)

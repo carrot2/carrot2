@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,12 +14,13 @@ package org.carrot2.core;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatDocuments;
 
 import java.io.*;
 import java.util.*;
 
-import org.apache.commons.io.output.NullWriter;
+import org.apache.commons.io.output.NullOutputStream;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.CollectionUtils;
@@ -73,9 +74,8 @@ public class ProcessingResultTest
         xml.append("</document>\n");
         xml.append("</searchresult>\n");
 
-        final StringReader reader = new StringReader(xml.toString());
-
-        final ProcessingResult deserialized = ProcessingResult.deserialize(reader);
+        final ProcessingResult deserialized = ProcessingResult.deserialize(
+            new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
@@ -135,9 +135,8 @@ public class ProcessingResultTest
         xml.append("</group>");
         xml.append("</searchresult>\n");
 
-        final StringReader reader = new StringReader(xml.toString());
-
-        final ProcessingResult deserialized = ProcessingResult.deserialize(reader);
+        final ProcessingResult deserialized = ProcessingResult.deserialize(
+            new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
@@ -286,16 +285,13 @@ public class ProcessingResultTest
         final ProcessingResult sourceProcessingResult = prepareProcessingResult();
 
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        final Writer writer = new OutputStreamWriter(outputStream, "UTF-8");
-        sourceProcessingResult.serialize(new NullWriter());
-        sourceProcessingResult.serialize(writer, documentsDeserialized,
+        sourceProcessingResult.serialize(new NullOutputStream());
+        sourceProcessingResult.serialize(outputStream, documentsDeserialized,
             clustersDeserialized);
-        CloseableUtils.close(writer);
-
-        final Reader reader = new InputStreamReader(new ByteArrayInputStream(outputStream
-            .toByteArray()), "utf-8");
-
-        final ProcessingResult deserialized = ProcessingResult.deserialize(reader);
+        CloseableUtils.close(outputStream);
+        
+        final ProcessingResult deserialized = ProcessingResult.deserialize(
+            new ByteArrayInputStream(outputStream.toByteArray()));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
@@ -339,6 +335,7 @@ public class ProcessingResultTest
         document.setField("testInteger", 10);
         document.setField("testDouble", 10.3);
         document.setField("testBoolean", true);
+        document.setLanguage(LanguageCode.POLISH);
         document.id = 3; // assign an id so that the max id is larger than the list size
         Document.assignDocumentIds(documents);
 

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -19,13 +19,11 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllPhrases;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.util.IntMapUtils;
+import org.carrot2.util.PcjCompat;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 
-import bak.pcj.list.IntArrayList;
-import bak.pcj.list.IntList;
-import bak.pcj.map.*;
-
+import com.carrotsearch.hppc.*;
 import com.google.common.collect.Lists;
 
 /**
@@ -96,7 +94,7 @@ public class PhraseExtractor
         List<Substring> rcs = discoverRcs(suffixArray, lcpArray, documentIndexArray);
 
         List<int []> phraseWordIndexes = Lists.newArrayList();
-        IntList phraseTf = new IntArrayList();
+        IntArrayList phraseTf = new IntArrayList();
         List<int []> phraseTfByDocumentList = Lists.newArrayList();
 
         if (rcs.size() > 0)
@@ -108,8 +106,8 @@ public class PhraseExtractor
 
             int totalPhraseTf = rcs.get(0).frequency;
             Substring mostFrequentOriginal = rcs.get(0);
-            IntKeyIntMap phraseTfByDocument = new IntKeyIntOpenHashMap(
-                mostFrequentOriginal.tfByDocument);
+            IntIntOpenHashMap phraseTfByDocument =
+                PcjCompat.clone(mostFrequentOriginal.tfByDocument);
 
             // Don't change the rcs list type from ArrayList or we'll
             // run into O(n^2) iteration cost :)
@@ -203,7 +201,7 @@ public class PhraseExtractor
                             rcsStack[sp] = new Substring(i, currentSuffixIndex,
                                 currentSuffixIndex + currentLcp - j, (j == lower ? 2 : 1));
 
-                            rcsStack[sp].tfByDocument = new IntKeyIntOpenHashMap();
+                            rcsStack[sp].tfByDocument = new IntIntOpenHashMap();
                             rcsStack[sp].tfByDocument.put(
                                 documentIndexArray[suffixArray[i - 1]], 1);
                             if (j == lower)
@@ -241,7 +239,7 @@ public class PhraseExtractor
                             rcsStack[sp] = new Substring(i, currentSuffixIndex,
                                 currentSuffixIndex + currentLcp - j, (j == lower ? 2 : 1));
 
-                            rcsStack[sp].tfByDocument = new IntKeyIntOpenHashMap();
+                            rcsStack[sp].tfByDocument = new IntIntOpenHashMap();
                             rcsStack[sp].tfByDocument.put(
                                 documentIndexArray[suffixArray[i - 1]], 1);
                             if (j == lower)
@@ -308,14 +306,13 @@ public class PhraseExtractor
         return result;
     }
 
-    private static void addAllWithOffset(IntKeyIntMap dest, IntKeyIntMap src,
+    private static void addAllWithOffset(IntIntOpenHashMap dest, IntIntOpenHashMap src,
         int documentIndexToOffset)
     {
-        for (IntKeyIntMapIterator it = src.entries(); it.hasNext();)
+        for (IntIntCursor c : src)
         {
-            it.next();
-            final int key = it.getKey();
-            final int value = it.getValue();
+            final int key = c.key;
+            final int value = c.value;
 
             if (key != documentIndexToOffset)
             {
@@ -328,7 +325,7 @@ public class PhraseExtractor
         }
     }
 
-    private static void addValue(IntKeyIntMap map, int key, int value)
+    private static void addValue(IntIntOpenHashMap map, int key, int value)
     {
         map.put(key, map.get(key) + value);
     }

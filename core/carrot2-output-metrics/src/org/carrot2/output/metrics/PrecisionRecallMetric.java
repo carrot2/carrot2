@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -142,8 +143,7 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedMetric
             for (Cluster cluster : clusters)
             {
                 final List<Document> clusterDocuments = cluster.getAllDocuments();
-                if (cluster.getAttribute(Cluster.OTHER_TOPICS) != null
-                    || clusterDocuments.size() == 0)
+                if (cluster.isOtherTopics() || clusterDocuments.size() == 0)
                 {
                     continue;
                 }

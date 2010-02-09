@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -29,24 +29,24 @@ import com.google.common.collect.Maps;
 public class AttributeMetadataModel
 {
     @ElementMap(entry = "attribute-descriptors", key = "source", value = "attribute-descriptors", attribute = true, inline = true)
-    public final HashMap<String, AttributeDescriptors> descriptors;
+    public HashMap<String, AttributeDescriptors> descriptors;
 
     @ElementMap(entry = "init-values", key = "source", value = "init-values", attribute = true, inline = true)
-    public final HashMap<String, AttributeInitValues> attributes;
+    public HashMap<String, AttributeInitValues> attributes;
 
-    public AttributeMetadataModel()
+    public AttributeMetadataModel(WebappConfig config)
     {
         attributes = Maps.newHashMap();
-        for (Map.Entry<String, Map<String, Object>> entry : WebappConfig.INSTANCE.sourceInitializationAttributes
-            .entrySet())
+        for (Map.Entry<String, Map<String, Object>> entry : 
+            config.sourceInitializationAttributes.entrySet())
         {
             attributes.put(entry.getKey(), new AttributeInitValues(MapUtils
                 .asHashMap(SimpleXmlWrappers.wrap(entry.getValue()))));
         }
 
         descriptors = Maps.newHashMap();
-        for (Map.Entry<String, List<AttributeDescriptor>> entry : WebappConfig.INSTANCE.sourceAttributeMetadata
-            .entrySet())
+        for (Map.Entry<String, List<AttributeDescriptor>> entry : 
+            config.sourceAttributeMetadata.entrySet())
         {
             descriptors.put(entry.getKey(), new AttributeDescriptors(entry.getValue()));
         }
@@ -58,6 +58,7 @@ public class AttributeMetadataModel
      */
     private static class AttributeDescriptors
     {
+        @SuppressWarnings("unused")
         @ElementList(name = "attributes", inline = true)
         final List<AttributeDescriptor> descriptors;
 
@@ -73,6 +74,7 @@ public class AttributeMetadataModel
      */
     private static class AttributeInitValues
     {
+        @SuppressWarnings("unused")
         @ElementMap(name = "init-value", key = "key", entry="init-value",  attribute = true, inline = true)
         final HashMap<String, SimpleXmlWrapperValue> initValues;
 

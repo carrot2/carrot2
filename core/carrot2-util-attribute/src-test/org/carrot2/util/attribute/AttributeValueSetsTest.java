@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,8 +15,8 @@ package org.carrot2.util.attribute;
 import static junit.framework.Assert.*;
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Map;
@@ -317,11 +317,11 @@ public class AttributeValueSetsTest
     private void checkSerializationDeserialization(AttributeValueSets sets)
         throws Exception
     {
-        final StringWriter stringWriter = new StringWriter();
-        sets.serialize(stringWriter);
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        sets.serialize(baos);
 
         final AttributeValueSets deserialized = AttributeValueSets
-            .deserialize(new StringReader(stringWriter.getBuffer().toString()));
+            .deserialize(new ByteArrayInputStream(baos.toByteArray()));
 
         assertEquals(sets.defaultAttributeValueSetId,
             deserialized.defaultAttributeValueSetId);

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -19,8 +19,8 @@ import org.carrot2.matrix.NNIDenseDoubleMatrix2D;
 import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.junit.Test;
 
-import cern.colt.matrix.*;
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 /**
  * Test cases for {@link NNIDenseDoubleMatrix2D}.
@@ -78,13 +78,15 @@ public class NNIDenseDoubleMatrix2DTest
     @Test
     public void testZMultLevel3()
     {
+        DoubleMatrix2D nniA = new NNIDenseDoubleMatrix2D(A.toArray());
+        DoubleMatrix2D nniC = new NNIDenseDoubleMatrix2D(C.toArray());
         DoubleMatrix2D nniB = new NNIDenseDoubleMatrix2D(A.viewDice().toArray());
         DoubleMatrix2D coltB = new DenseDoubleMatrix2D(A.viewDice().toArray());
-        DoubleMatrix2D D = DoubleFactory2D.dense.random(3, 4);
+        DoubleMatrix2D D = NNIDoubleFactory2D.nni.random(3, 4);
 
-        assertThat(nniB.zMult(A, null)).isEquivalentTo(coltB.zMult(A, null));
-        assertThat(nniB.zMult(C, null, 1, 0, false, true)).isEquivalentTo(
-            coltB.zMult(C, null, 1, 0, false, true));
+        assertThat(nniB.zMult(nniA, null)).isEquivalentTo(coltB.zMult(A, null));
+        assertThat(nniB.zMult(nniC, null, 1, 0, false, true)).isEquivalentTo(
+            coltB.zMult(nniC, null, 1, 0, false, true));
         assertThat(nniB.zMult(D, null, 1, 0, true, true)).isEquivalentTo(
             coltB.zMult(D, null, 1, 0, true, true));
     }

@@ -18,10 +18,12 @@
   <!-- Import other build scripts. -->
   <import file="${carrot2.master.basedir}/applications/carrot2-webapp/build.xml" />
   <import file="${carrot2.master.basedir}/applications/carrot2-dcs/build.xml" />
+  <import file="${carrot2.master.basedir}/applications/carrot2-cli/build.xml" />
   <import file="${carrot2.master.basedir}/doc/build.xml" />
   <import file="${carrot2.master.basedir}/etc/maven/build.xml" />
   <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/readme.xml" />
+  <import file="${carrot2.master.basedir}/workbench/build-conf/build.xml" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />
@@ -29,7 +31,7 @@
   <property name="workbench.dir" location="${carrot2.master.basedir}/workbench" />
   <property name="lib.dir" location="${carrot2.master.basedir}/lib" />
   <property name="etc.dir" location="${carrot2.master.basedir}/etc" />
-  
+
   <!-- Output dirs -->
   <property name="build.dir" location="${carrot2.master.basedir}/tmp/classes" />
   <property name="jar.dir" location="${carrot2.master.basedir}/tmp/jar" />
@@ -49,6 +51,15 @@
   <property name="clover.jar" location="${clover.home}/lib/clover.jar" />
   <property name="pmd.jar" location="${pmd.home}/lib/" />
   <property name="smartsprites.home" location="${carrot2.master.basedir}/etc/smartsprites" />
+
+  <!-- Workbench properties. Define default location and load presets. -->
+  <property name="workbench.properties"  location="${carrot2.master.basedir}/workbench.properties" />
+  <property file="${workbench.properties}" />
+
+  <property name="workbench.build.dir" location="tmp/workbench" />
+  <property name="workbench.tests.html.report.dir" location="${workbench.build.dir}/test-report" />
+  <property name="workbench.tests.txt.report.dir"  location="${workbench.build.dir}/test-report-txt" />
+
 
   <!-- Compilation presets. -->
   <presetdef name="javac">
@@ -123,18 +134,22 @@
   </patternset>
 
   <patternset id="lib.core.mini">
-    <include name="lib/**/colt*.jar" />
-    <include name="lib/**/commons-lang*.jar" />
-    <include name="lib/**/ehcache*.jar" />
-    <include name="lib/**/google-collect*.jar" />
-    <include name="lib/**/jackson*.jar" />
-    <include name="lib/**/lucene-core*.jar" />
-    <include name="lib/**/lucene-snowball*.jar" />
-    <include name="lib/**/nni*.jar" />
-    <include name="lib/**/pcj*.jar" />
+    <include name="lib/**/mahout-math*.jar" />
+    <include name="lib/**/mahout.LICENSE" />
+    <include name="lib/**/colt.LICENSE" />
+    <include name="lib/**/commons-lang*" />
+    <include name="lib/**/ehcache*" />
+    <include name="lib/**/google-collect*" />
+    <include name="lib/**/jackson*" />
+    <include name="lib/**/lucene-core*" />
+    <include name="lib/**/lucene-snowball*" />
+    <include name="lib/**/lucene.LICENSE" />
+    <include name="lib/**/hppc-*.jar" />
+    <include name="lib/**/hppc*.LICENSE" />
 
     <include name="lib/**/slf4j-api*.jar" />
     <include name="lib/**/slf4j-nop*.jar" />
+    <include name="lib/**/slf4j.LICENSE" />
   </patternset>
 
   <patternset id="licenses.core">
@@ -634,8 +649,10 @@
     <delete includeEmptyDirs="true">
       <fileset dir="${jar.mini.dir}">
         <include name="org.carrot2.source*.xml" />
+        <include name="org.carrot2.source.xml*.xml" />
         <include name="org.carrot2.output*.xml" />
         <include name="org/carrot2/source/**" />
+        <exclude name="org/carrot2/source/xml/**" />
         <include name="org/carrot2/output/**" />
         <include name="com/**" />
       </fileset>
@@ -703,7 +720,9 @@
       <mapper type="flatten" />
     </copy>
     <copy todir="${api.dir}">
-      <fileset dir="${jar.dir}" />
+      <fileset dir="${jar.dir}">
+        <include name="carrot2-core*.jar" />
+      </fileset>
       <fileset dir="${carrot2.master.basedir}">
         <include name="carrot2.LICENSE" />
         <include name="carrot2.CONTRIBUTORS" />
@@ -711,6 +730,12 @@
     </copy>
     <copy todir="${api.dir}/examples">
       <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/src" />
+      <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
+        <include name="suites/suite-examples.xml" />
+        <include name="suites/source-microsoft-live*.xml" />
+        <include name="suites/algorithm-lingo*.xml" />
+        <include name="suites/algorithm-stc*.xml" />
+      </fileset>
     </copy>
     <copy todir="${api.dir}" file="${carrot2.master.basedir}/applications/carrot2-examples/build.xml" />
     <carrot2.readme readme.src="${carrot2.master.basedir}/applications/carrot2-examples/etc/readme.txt"
@@ -739,7 +764,7 @@
   <target name="all" depends="clean.classes, webapp, dcs, javadoc, doc" description="Builds all Carrot2 applications and documentation" />
   <target name="dist" depends="dist.doc.without, carrot2.doc.dist" description="Builds Carrot2 distribution files" />
   <target name="dist.doc.only" depends="clean.classes, carrot2.doc.dist" />
-  <target name="dist.doc.without" depends="clean.classes, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, carrot2.core.dist, maven">
+  <target name="dist.doc.without" depends="clean.classes, carrot2.core.dist, carrot2.cli.dist, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, maven">
     <!-- 
          After this target runs, we'll copy the entire content of tmp/ 
          to the distribution dir on the server, so we need to remove
@@ -753,6 +778,7 @@
 
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
+  <target name="cli" depends="carrot2.cli.build" description="Builds Carrot2 Command Line Interface" />
 
   <!--
       Maven artefacts.
@@ -804,7 +830,190 @@
       Compile and define custom ANT tasks.
    -->
   <target name="antlib" depends="carrot2.common.antlib.tasks" />
-  
+
+  <!--
+      Workbench compilation section.
+  -->
+  <target name="workbench.plugins.gather" depends="carrot2.common.antlib.tasks, pde.build.prepare, attrs">
+    <patternset id="temporary.files">
+      <exclude name="**/.svn/**" />
+      <exclude name="**/tmp/**" />
+      <exclude name="**/.clover/**" />
+      <exclude name="**/build-conf/**" />
+    </patternset>
+
+    <!-- Copy source plugins and features to the build folder. -->
+    <copy todir="${workbench.build.dir}/plugins">
+      <fileset dir="${carrot2.master.basedir}">
+        <include name="core/**" />
+        <include name="lib/**" />
+        <include name="workbench/**" />
+        <patternset refid="temporary.files" />
+      </fileset>
+      <regexpmapper from="[^/]+/(.*)" to="\1" handledirsep="yes" />
+    </copy>
+
+    <copy todir="${workbench.build.dir}/plugins" overwrite="true" filtering="true">
+      <fileset dir="${carrot2.master.basedir}">
+        <include name="core/**/MANIFEST.MF" />
+        <include name="lib/**/MANIFEST.MF" />
+        <include name="workbench/**/MANIFEST.MF" />
+        <patternset refid="temporary.files" />
+      </fileset>
+
+      <regexpmapper from="[^/]+/(.*)" to="\1" handledirsep="yes" />
+
+      <filterchain id="workbench.version.filterchain">
+        <replacestring from="0.0.0.QUALIFIER" to="${carrot2.version.workbench}"/>
+      </filterchain>
+    </copy>
+    
+    <!-- Prepare verbose build info. -->
+    <carrot2.readme readme.src="${carrot2.master.basedir}/workbench/org.carrot2.workbench.feature/readme.txt"
+                    readme.dest="${workbench.build.dir}/static/readme.txt" />
+
+    <pathconvert property="pde.pluginPath">
+        <path>
+            <pathelement location="${workbench.build.dir}/plugins/" />
+        </path>
+    </pathconvert>
+  </target>
+
+  <target name="workbench" depends="workbench.plugins.gather" description="Compile Workbench (folder).">
+    <pde.build
+        build.dir="${workbench.build.dir}/build" 
+        props.file="${workbench.properties}" 
+        extra.args="
+            -Dproduct=/org.carrot2.workbench.feature/Workbench.product
+
+            -DarchivePrefix=${carrot2.workbench.base}-${carrot2.version}
+            -DbuildId=${carrot2.workbench.base}
+            -DbuildType=I
+
+            -DpluginPath=${pde.pluginPath}
+
+            -Dcarrot2.version=${carrot2.version}
+            -Dcarrot2.workbench.base=${carrot2.workbench.base}
+            -Dworkbench.static=${workbench.build.dir}/static
+        " />
+  </target>
+
+  <target name="workbench.dist" depends="workbench.plugins.gather" description="Compile Workbench (ZIPs).">
+    <fail unless="dist.dir">Define: dist.dir property.</fail>
+
+    <pde.build
+        build.dir="${workbench.build.dir}/build" 
+        props.file="${carrot2.master.basedir}/etc/buildinfo/workbench-platforms.properties" 
+        extra.args="
+            -Dproduct=/org.carrot2.workbench.feature/Workbench.product
+
+            -DarchivePrefix=${carrot2.workbench.base}-${carrot2.version}
+            -DbuildId=${carrot2.workbench.base}
+            -DbuildType=S
+
+            -Dtarget.platform=${target.platform}
+            -Declipse.home=${eclipse.home}
+
+            -DpluginPath=${pde.pluginPath}
+
+            -Dcarrot2.version=${carrot2.version}
+            -Dcarrot2.workbench.base=${carrot2.workbench.base}
+            -Dworkbench.static=${workbench.build.dir}/static
+        " />
+
+    <mkdir dir="${dist.dir}" />
+    <copy todir="${dist.dir}" overwrite="true">
+      <fileset dir="${workbench.build.dir}/build">
+        <include name="S.*/*.zip" />
+      </fileset>
+
+      <chainedmapper>
+        <mapper type="flatten" />
+        <mapper type="glob" from="*.zip" to="*-${carrot2.version}.zip"/>
+      </chainedmapper>
+    </copy>
+  </target>
+
+  <target name="workbench.test" depends="workbench.plugins.gather" description="Run Workbench tests.">
+    <pde.build
+        build.dir="${workbench.build.dir}/test" 
+        props.file="${workbench.properties}" 
+        extra.args="
+            -Dproduct=/org.carrot2.workbench.feature/Workbench.product
+            -DfeatureList=org.carrot2.workbench.core.test.feature
+
+            -Dconfigs=${test.os},${test.ws},${test.arch}
+            -DarchivesFormat=${test.os},${test.ws},${test.arch}-folder
+
+            -DarchivePrefix=${carrot2.workbench.base}-${carrot2.version}
+            -DbuildId=${carrot2.workbench.base}
+            -DbuildType=T
+
+            -DpluginPath=${pde.pluginPath}
+
+            -Dcarrot2.version=${carrot2.version}
+            -Dcarrot2.workbench.base=${carrot2.workbench.base}
+            -Dworkbench.static=${workbench.build.dir}/static
+        " />
+
+    <pathconvert property="test.buildfile.location">
+        <path>
+            <fileset dir="${workbench.build.dir}/test/tmp/" 
+                includes="**/org.carrot2.workbench.core.test*/test.xml" />
+        </path>
+    </pathconvert>
+
+    <property name="workbench.test.home"
+        location="${workbench.build.dir}/test/tmp/${carrot2.workbench.base}-${carrot2.version}" />
+
+    <findVersion property="eclipse.test.plugin"
+        eclipsehome="${workbench.test.home}"
+        pluginid="org.eclipse.test"
+        pluginform="dir" />
+
+    <property name="library-file"
+        location="${workbench.test.home}/plugins/${eclipse.test.plugin}/library.xml" />
+
+    <!-- For some reason we must run the tests via Equinox (and sub-ANT). To investigate later. -->
+    <delete dir="${workbench.test.home}/junit.results" />
+    <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}" fork="true" failonerror="true">
+      <arg line="-application org.eclipse.ant.core.antRunner" />
+      <arg line="-buildfile ${test.buildfile.location}" />
+      <arg line="-Declipse-home=${workbench.test.home}" />
+      <arg line="-Dlibrary.xml.location=${library-file}" />
+      <arg line="-Dos=${test.os} -Dws=${test.ws} -Darch=${test.arch}" />
+    </java>
+
+    <property name="workbench.tests.html.report.dir" location="${workbench.build.dir}/test-report" />
+    <mkdir dir="${workbench.tests.html.report.dir}" />
+
+    <!-- Collect the results and render the report. -->
+    <junitreport todir="${workbench.tests.html.report.dir}">
+      <fileset dir="${workbench.test.home}">
+        <include name="*.xml" />
+      </fileset>
+      <report format="frames"
+              todir="${workbench.tests.html.report.dir}" />
+    </junitreport>
+
+    <!-- 
+        A hacky way of finding out whether tests passed. The Eclipse runner doesn't
+        seem to expose this information directly.
+      -->
+    <loadfile property="workbench.test.results"
+              srcFile="${workbench.tests.html.report.dir}/TESTS-TestSuites.xml" />
+    <fail message="Tests failed, see ${workbench.tests.html.report.dir} for report.">
+      <condition>
+          <matches string="${workbench.test.results}" pattern="(failures|errors)=.[1-9][0-9]*" />
+      </condition>
+    </fail>
+    <fail message="Tests did not run, see ${workbench.tests.txt.report.dir} for logs.">
+      <condition>
+          <matches string="${workbench.test.results}" pattern="testsuites />" />
+      </condition>
+    </fail>
+  </target>
+
   <!--
       Source code management: license headers list and replace.
     -->
@@ -866,13 +1075,13 @@
       <exclude name="**/tmp/**" />
     </patternset>
 
-    <fixcrlf srcdir="." eol="unix" encoding="utf-8">
+    <fixcrlf srcdir="." eol="unix" encoding="UTF-8">
       <patternset refid="fix-line-endings-excludes" />
       <exclude name="**/*.cmd" />
       <exclude name="**/*.bat" />
       <exclude name="**/csharp/**" />
     </fixcrlf>
-    <fixcrlf srcdir="." eol="dos" encoding="utf-8">
+    <fixcrlf srcdir="." eol="dos" encoding="UTF-8">
       <patternset refid="fix-line-endings-excludes" />
       <include name="**/*.cmd" />
       <include name="**/*.bat" />

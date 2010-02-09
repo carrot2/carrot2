@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,14 +12,13 @@
 
 package org.carrot2.matrix.factorization;
 
+import org.apache.mahout.math.jet.math.Functions;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.doublealgo.Sorting;
+import org.apache.mahout.math.matrix.linalg.Algebra;
 import org.carrot2.matrix.NNIDoubleFactory2D;
-import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
-
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.doublealgo.Sorting;
-import cern.colt.matrix.linalg.Algebra;
-import cern.jet.math.Functions;
+import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategy;
 
 /**
  * Base functionality for {@link IIterativeMatrixFactorization}s.
@@ -113,7 +112,7 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
         }
 
         // Approximation error
-        double newApproximationError = Algebra.DEFAULT.normF(U.zMult(V, null, 1, 0,
+        double newApproximationError = Algebra.normF(U.zMult(V, null, 1, 0,
             false, true).assign(A, Functions.minus));
         approximationErrors[iterationsCompleted] = newApproximationError;
 
@@ -146,10 +145,10 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
         // Need to make a copy of aggregates because they get sorted as well
         double [] aggregatesCopy = aggregates.clone();
 
-        V = NNIDoubleFactory2D.asNNIMatrix(Sorting.quickSort.sort(VT, aggregates)
-            .viewDice());
-        U = NNIDoubleFactory2D.asNNIMatrix(Sorting.quickSort.sort(U.viewDice(),
-            aggregatesCopy).viewDice());
+        V = NNIDoubleFactory2D.asNNIMatrix(
+            Sorting.quickSort.sort(VT, aggregates).viewDice());
+        U = NNIDoubleFactory2D.asNNIMatrix(
+            Sorting.quickSort.sort(U.viewDice(), aggregatesCopy).viewDice());
 
         // Revert back to positive values of aggregates
         for (int i = 0; i < aggregates.length; i++)

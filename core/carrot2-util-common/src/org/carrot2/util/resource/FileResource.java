@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,14 +14,16 @@ package org.carrot2.util.resource;
 
 import java.io.*;
 
+import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.load.Commit;
+import org.simpleframework.xml.core.Commit;
 
 /**
  * A local filesystem resource.
  */
 @Root(name = "file-resource")
+@JsonAutoDetect(JsonMethod.NONE)
 public final class FileResource implements IResource
 {
     /**
@@ -73,7 +75,7 @@ public final class FileResource implements IResource
 
     @Override
     public String toString()
-   {
+    {
         return info;
     }
 
@@ -83,9 +85,17 @@ public final class FileResource implements IResource
         file = new File(info);
     }
 
+    @JsonIgnore
     public File getFile()
     {
         return file;
+    }
+    
+    @JsonGetter
+    @SuppressWarnings("unused")
+    private String getAbsolutePath()
+    {
+        return info;
     }
     
     public static FileResource valueOf(String path)

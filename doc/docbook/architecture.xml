@@ -120,4 +120,5 @@
   </section>
 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="architecture-xml-formats.xml" /> 
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="architecture-json-formats.xml" /> 
 </chapter>

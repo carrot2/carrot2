@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,6 +14,7 @@ package org.carrot2.text.linguistic;
 
 import static org.junit.Assert.*;
 
+import org.carrot2.core.LanguageCode;
 import org.junit.Test;
 
 /**
@@ -22,17 +23,9 @@ import org.junit.Test;
 public class LanguageModelFactoryTest
 {
     @Test
-    public void testDefaultLanguageEnglish()
-    {
-        final ILanguageModel model = new DefaultLanguageModelFactory().getCurrentLanguage();
-        assertNotNull(model);
-        assertEquals(LanguageCode.ENGLISH, model.getLanguageCode());
-    }
-    
-    @Test
     public void testLanguageDutch()
     {
-        final ILanguageModel model = new DefaultLanguageModelFactory().getLanguage(LanguageCode.DUTCH);
+        final ILanguageModel model = new DefaultLanguageModelFactory().getLanguageModel(LanguageCode.DUTCH);
         assertNotNull(model);
         assertEquals(LanguageCode.DUTCH, model.getLanguageCode());
     }
@@ -42,7 +35,7 @@ public class LanguageModelFactoryTest
     {
         for (LanguageCode l : LanguageCode.values())
         {
-            new DefaultLanguageModelFactory().getLanguage(l);
+            new DefaultLanguageModelFactory().getLanguageModel(l);
         }
         
         assertFalse("There were problems with loading certain lexical resources. Check the logs.", 

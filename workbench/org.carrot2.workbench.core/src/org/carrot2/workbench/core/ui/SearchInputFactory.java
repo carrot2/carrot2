@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,8 +12,7 @@
 
 package org.carrot2.workbench.core.ui;
 
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -63,7 +62,7 @@ public final class SearchInputFactory implements IElementFactory
                 if (data != null)
                 {
                     final AttributeValueSets sets = AttributeValueSets
-                        .deserialize(new StringReader(data));
+                        .deserialize(new ByteArrayInputStream(data.getBytes("UTF-8")));
                     attributes = sets.getDefaultAttributeValueSet();
                 }
             }
@@ -130,13 +129,14 @@ public final class SearchInputFactory implements IElementFactory
                 }
             }
 
-            final StringWriter w = new StringWriter();
+            final ByteArrayOutputStream os = new ByteArrayOutputStream();
             AttributeValueSets sets = new AttributeValueSets();
             sets.addAttributeValueSet("default", filtered);
-            sets.serialize(w);
-            w.close();
+            sets.serialize(os);
+            os.close();
 
-            memento.createChild(ATTRIBUTES_ELEMENT).putTextData(w.toString());
+            memento.createChild(ATTRIBUTES_ELEMENT).putTextData(
+                new String(os.toByteArray(), "UTF-8"));
         }
         catch (Exception e)
         {

@@ -239,11 +239,12 @@ div.chapter {
 
 /** Object titles */
 
-.example, .figure {
+.example, .figure, .table, p.margin {
   margin-bottom: 6mm;
   position: relative;
 }
 
+.table .title .n,
 .example .title .n,
 .figure .title .n
 {
@@ -251,14 +252,17 @@ div.chapter {
   font-weight: bold;
 }
 
+.table p.title b,
 .example p.title b,
 .figure p.title b 
 {
   font-weight: normal;
 }
 
+.table p.title,
 .example p.title,
-.figure p.title
+.figure p.title,
+p.margin > b
 {
   font-style: italic;
   position: absolute;
@@ -268,6 +272,11 @@ div.chapter {
   left: -38mm;
   top: 0;
 }
+
+p.margin > b {
+  top: 0.5mm;
+}
+
 
 .programlisting {
   border: 1px solid #b0b0b0;
@@ -312,21 +321,40 @@ div.note h3.title, div.important h3.title, div.tip h3.title, div.caution h3.titl
   border-bottom: 1px dotted #404040;
 }
 
+/** Tables */
+
+div.table table,
 div.informaltable table {
   border-collapse: collapse;
   margin-top: 4px;
   width: 100%;
 }
 
+div.table table th,
+div.table table td,
 div.informaltable table td {
   vertical-align: top;
   padding: 2px 4px;
   border: 1px dotted #808080;
 }
 
+div.table table th {
+  vertical-align: middle;
+}
+  
+div.table thead tr,
 div.informaltable table td.rowhead {
   width: 8em;
   background-color: #e8e8e8;
+}
+
+td.center {
+  text-align: center !important;
+  vertical-align: middle !important;
+} 
+
+tbody.footnotes td {
+  border: none !important;
 }
 
 /** Inline elements */

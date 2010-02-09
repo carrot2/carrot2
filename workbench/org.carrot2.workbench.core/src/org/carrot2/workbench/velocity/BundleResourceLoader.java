@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -27,6 +27,7 @@ import org.osgi.framework.Bundle;
 
 /**
  * A Velocity {@link ResourceLoader} that loads resources relative to a given bundle.
+ * A local cache is used to store resource URLs to increase performance.
  */
 public final class BundleResourceLoader extends ResourceLoader
 {

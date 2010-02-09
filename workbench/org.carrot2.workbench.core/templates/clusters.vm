@@ -1,5 +1,6 @@
 
 #parse("_header.vm")
+#parse("_document.vm")
 
 #*
 	Template displayed on show(Cluster...). 
@@ -8,6 +9,7 @@
 
 	  clusters
 	  comparator
+	  maxDisplay
 *#
 
 #foreach ($cluster in $clusters)
@@ -17,10 +19,20 @@
 		</div>
 	#end
 
+    #set ( $documents = $cluster.getAllDocuments($comparator) )
+    #set ( $remaining = $documents.size() - $maxDisplay )
+    
+    #if ( $remaining > 0 )
+        #set ( $documents = $documents.subList(0, $maxDisplay) )
+    #end
 
-	#foreach ($document in $cluster.getAllDocuments($comparator))
-		#parse("_document.vm")
+	#foreach ($document in $documents)
+		#document( $document )
 	#end
+
+    #if( $remaining > 0 )
+        <p class="more">...and $remaining more.</p>
+    #end
 #end
 
 #parse("_footer.vm")

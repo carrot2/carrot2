@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,14 +16,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.core.ui.SearchEditor;
-import org.carrot2.workbench.core.ui.SearchResultListenerAdapter;
+import org.carrot2.workbench.core.ui.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
@@ -32,6 +30,7 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
@@ -123,14 +122,24 @@ final class CirclesViewPage extends Page
      * Selection refresh job.
      */
     private PostponableJob selectionJob = new PostponableJob(new UIJob("Browser (selection)...") {
+        @SuppressWarnings("unchecked")
         public IStatus runInUIThread(IProgressMonitor monitor)
         {
-            if (browser.isDisposed() || last == null)
+            final IStructuredSelection sel = 
+                (IStructuredSelection) editor.getSite().getSelectionProvider().getSelection();
+            final List<Cluster> selected = (List<Cluster>) sel.toList();
+
+            if (browser.isDisposed())
             {
                 return Status.OK_STATUS;
             }
 
-            browser.execute("javascript:selectGroupById(" + last + ");");
+            browser.execute("javascript:clearSelection(false);");
+            for (Cluster cluster : selected)
+            {
+                browser.execute("javascript:selectGroupById(" + cluster.getId() + ", true, false);");
+            }
+
             return Status.OK_STATUS;
         }
     });
@@ -151,19 +160,12 @@ final class CirclesViewPage extends Page
      */
     private final int id;
 
-    /** 
-     * Last selected cluster ID (to avoid repetitions).
-     */
-    private Integer last;
-
     /**
      * Editor selection listener.
      */
     private final ISelectionChangedListener selectionListener = 
         new ISelectionChangedListener()
     {
-        private IStructuredSelection lastSelection;  
-
         /* */
         public void selectionChanged(SelectionChangedEvent event)
         {
@@ -171,25 +173,23 @@ final class CirclesViewPage extends Page
             if (selection != null && selection instanceof IStructuredSelection)
             {
                 final IStructuredSelection ss = (IStructuredSelection) selection;
-                if (lastSelection == null || !lastSelection.equals(ss))
+                LoggerFactory.getLogger(CirclesViewPage.class)
+                    .debug("editor->circles: " + ss);
+
+                final IAdapterManager mgr = Platform.getAdapterManager();
+                final ArrayList<Cluster> selectedGroups = Lists.newArrayList();
+
+                final Object[] selected = ss.toArray();
+                for (Object ob : selected)
                 {
-                    final IAdapterManager mgr = Platform.getAdapterManager();
-                    final Cluster cluster = (Cluster)
-                        mgr.getAdapter(ss.getFirstElement(), Cluster.class);
+                    final Cluster cluster = 
+                        (Cluster) mgr.getAdapter(ob, Cluster.class);
 
                     if (cluster != null)
-                    {
-                        final int id = cluster.getId();
-    
-                        if (!ObjectUtils.equals(id, last))
-                        {
-                            last = id;
-                            selectionJob.reschedule(BROWSER_SELECTION_DELAY);
-                        }
-                    }
-
-                    lastSelection = new StructuredSelection(ss.toArray());
+                        selectedGroups.add(cluster);
                 }
+
+                selectionJob.reschedule(BROWSER_SELECTION_DELAY);
             }
         }
     };
@@ -234,25 +234,16 @@ final class CirclesViewPage extends Page
         /*
          * Register custom callback functions.
          */
-        new BrowserFunction(browser, "swt_selectionCleared") {
-            public Object function(Object [] arguments)
-            {
-                if (!browserInitialized) return null;
-
-                editor.setSelection(StructuredSelection.EMPTY);
-                return null;
-            }
-        };
-
         new BrowserFunction(browser, "swt_groupClicked") {
             public Object function(Object [] arguments)
             {
                 if (!browserInitialized) return null;
 
-                if (arguments.length == 2)
+                // clusterId, isSelected, docList
+                if (arguments.length == 3)
                 {
                     final int groupId = (int) Double.parseDouble(arguments[0].toString());
-                    doGroupSelection(groupId);
+                    doGroupSelection(groupId, Boolean.parseBoolean(arguments[1].toString()));
                 }
 
                 return null;
@@ -274,8 +265,18 @@ final class CirclesViewPage extends Page
             }
         };
 
+        new BrowserFunction(browser, "swt_onModelChanged") {
+            public Object function(Object [] arguments)
+            {
+                if (!browserInitialized) return null;
+                selectionJob.reschedule(BROWSER_SELECTION_DELAY);
+                return null;
+            }
+        };
+
         editor.getSearchResult().addListener(editorSyncListener);
-        editor.addPostSelectionChangedListener(selectionListener);
+        editor.getSite().getSelectionProvider().addSelectionChangedListener(
+            selectionListener);
     }
 
     /*
@@ -303,7 +304,8 @@ final class CirclesViewPage extends Page
     public void dispose()
     {
         editor.getSearchResult().removeListener(editorSyncListener);
-        editor.removePostSelectionChangedListener(selectionListener);
+        editor.getSite().getSelectionProvider().removeSelectionChangedListener(
+            selectionListener);
         browser.dispose();
 
         super.dispose();
@@ -320,37 +322,17 @@ final class CirclesViewPage extends Page
     /*
      * 
      */
-    private void doGroupSelection(int groupId)
+    private void doGroupSelection(int groupId, boolean selected)
     {
-        final ProcessingResult pr = getProcessingResult();
-        if (pr == null) return;
+        LoggerFactory.getLogger(CirclesViewPage.class)
+            .debug("circles->editor: " + groupId + " " + selected);
 
-        final List<Cluster> clusters = pr.getClusters();
+        SearchEditorSelectionProvider prov = 
+            (SearchEditorSelectionProvider) editor.getSite().getSelectionProvider();
 
-        if (clusters != null && !clusters.isEmpty())
-        {
-            ClusterWithParent c = 
-                ClusterWithParent.find(groupId, ClusterWithParent.wrap(clusters));
-
-            if (c != null)
-            {
-                /*
-                 * Construct full tree path to allow automatic expansion of 
-                 * tree selection observers.
-                 */
-                final ArrayList<ClusterWithParent> path = Lists.newArrayList();
-                while (c != null)
-                {
-                    path.add(0, c);
-                    c = c.parent;
-                }
-
-                editor.setSelection(
-                    new StructuredSelection(new TreePath(path.toArray())));
-            }
-        }
+        prov.toggleSelected(groupId, selected, selectionListener);
     }
-    
+
     private void doDocumentSelection(int documentId)
     {
         final ProcessingResult pr = getProcessingResult();

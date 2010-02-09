@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -18,18 +18,20 @@ import static org.junit.Assume.assumeTrue;
 
 import java.io.*;
 import java.net.MalformedURLException;
+import java.util.HashMap;
 
+import org.apache.commons.io.FileUtils;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.StreamUtils;
-import org.carrot2.util.resource.IResource;
-import org.carrot2.util.resource.ResourceUtilsFactory;
+import org.carrot2.util.resource.*;
 import org.junit.*;
 
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
+import com.google.common.collect.Maps;
 
 /**
  * Test cases for the {@link DcsApp}.
@@ -38,12 +40,39 @@ public class DcsAppTest
 {
     private static DcsApp dcs;
 
+    private static String KEY_KACZYNSKI = "/xml/carrot2-kaczynski.utf8.xml";
+    private static HashMap<String, File> testFiles = Maps.newHashMap();
+
     @BeforeClass
     public static void startDcs() throws Exception
     {
         dcs = new DcsApp("dcs");
         dcs.port = 57913;
         dcs.start(System.getProperty("dcs.test.web.dir.prefix"));
+    }
+
+    @BeforeClass
+    public static void prepareStaticFiles() throws Exception
+    {
+        String [] resources =
+        {
+            "/xml/carrot2-kaczynski.utf8.xml",
+            "/xml/carrot2-kaczynski.utf16.xml"
+        };
+
+        final ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
+        for (String resource : resources)
+        {
+            final IResource res = resUtils.getFirst(resource, DcsAppTest.class);
+            assertThat(res).isNotNull();
+
+            final File tmp = File.createTempFile("dcs-xml-data", ".xml");
+            StreamUtils.copyAndClose(
+                res.open(), new FileOutputStream(tmp), 8192);
+            tmp.deleteOnExit();
+
+            testFiles.put(resource, tmp);
+        }
     }
 
     @AfterClass
@@ -95,14 +124,17 @@ public class DcsAppTest
     @Test
     public void testFileUpload() throws Exception
     {
-        final HtmlForm form = getSearchForm();
+        for (String resource : testFiles.keySet())
+        {
+            final HtmlForm form = getSearchForm();
 
-        // Click on the appropriate radio option to enable fields
-        ((HtmlRadioButtonInput) form.getHtmlElementById("source-from-file")).click();
-        final File dataFile = createXmlDataFile();
-        form.getInputByName("dcs.c2stream").setValueAttribute(dataFile.getAbsolutePath());
+            // Click on the appropriate radio option to enable fields
+            ((HtmlRadioButtonInput) form.getHtmlElementById("source-from-file")).click();
+            final File dataFile = testFiles.get(resource);
+            form.getInputByName("dcs.c2stream").setValueAttribute(dataFile.getAbsolutePath());
 
-        checkXmlOutput("kaczyński", form);
+            checkXmlOutput("kaczyński", form);
+        }
     }
 
     @Test
@@ -185,7 +217,8 @@ public class DcsAppTest
 
         // Click on the appropriate radio option to enable fields
         ((HtmlRadioButtonInput) form.getHtmlElementById("source-from-string")).click();
-        form.getTextAreaByName("dcs.c2stream").setText(getXmlData());
+        form.getTextAreaByName("dcs.c2stream").setText(
+            FileUtils.readFileToString(testFiles.get(KEY_KACZYNSKI), "UTF-8"));
         return form;
     }
 
@@ -201,8 +234,8 @@ public class DcsAppTest
         final XmlPage dcsResponse = (XmlPage) form.getButtonByName("submit").click();
         final String responseXml = dcsResponse.asXml();
 
-        final ProcessingResult dcsResult = ProcessingResult.deserialize(new StringReader(
-            responseXml));
+        final ProcessingResult dcsResult = ProcessingResult.deserialize(
+            new ByteArrayInputStream(responseXml.getBytes("UTF-8")));
         assertThat(dcsResult.getAttributes().get(AttributeNames.QUERY)).isEqualTo(query);
         if (onlyClusters)
         {
@@ -237,40 +270,5 @@ public class DcsAppTest
         final HtmlPage startPage = getStartPage();
         final HtmlForm form = startPage.getFormByName("dcs");
         return form;
-    }
-
-    /**
-     * Returns test XML input as string.
-     */
-    private String getXmlData()
-    {
-        final IResource xml = getXmlDataResource();
-        try
-        {
-            return new String(StreamUtils.readFullyAndClose(new InputStreamReader(xml
-                .open(), "UTF-8")));
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Could not load XML data", e);
-        }
-    }
-
-    /**
-     * Creates a file with test XML input data.
-     */
-    private File createXmlDataFile() throws IOException
-    {
-        final File tmp = File.createTempFile("dcs-xml-data", null);
-        StreamUtils.copyAndClose(getXmlDataResource().open(), new FileOutputStream(tmp),
-            8192);
-        tmp.deleteOnExit();
-        return tmp;
-    }
-
-    private IResource getXmlDataResource()
-    {
-        return ResourceUtilsFactory.getDefaultResourceUtils().getFirst(
-            "/xml/carrot2-kaczynski.xml", DcsAppTest.class);
     }
 }

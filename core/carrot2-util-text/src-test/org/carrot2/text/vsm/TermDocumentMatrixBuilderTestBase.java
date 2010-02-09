@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,6 +14,7 @@ package org.carrot2.text.vsm;
 
 import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
+import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
 import org.junit.Before;
 
 /**
@@ -28,12 +29,12 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     protected VectorSpaceModelContext vsmContext;
 
     /** Preprocessing pipeline used for tests */
-    protected PreprocessingPipeline preprocessingPipeline;
+    protected CompletePreprocessingPipeline preprocessingPipeline;
     
     @Before
     public void setUpMatrixBuilder()
     {
-        preprocessingPipeline = new PreprocessingPipeline();
+        preprocessingPipeline = new CompletePreprocessingPipeline();
         preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
         matrixBuilder = new TermDocumentMatrixBuilder();
         matrixBuilder.termWeighting = new TfTermWeighting();

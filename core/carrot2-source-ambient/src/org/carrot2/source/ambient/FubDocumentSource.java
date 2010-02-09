@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -75,5 +76,10 @@ public class FubDocumentSource extends ProcessingComponentBase implements IDocum
     {
         this.documents = data.getDocumentsForTopic(topicId, requestedResults,
             minTopicSize, includeDocumentsWithoutTopic);
+        
+        for (Document document : documents)
+        {
+            document.setLanguage(LanguageCode.ENGLISH);
+        }
     }
 }

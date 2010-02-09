@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -30,6 +30,7 @@ import org.eclipse.swt.browser.*;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
+import org.slf4j.LoggerFactory;
 
 /**
  * Simple SWT composite displaying a list of {@link Document} or {@link Cluster} objects.
@@ -66,6 +67,16 @@ public final class DocumentList extends Composite
      * Internal HTML browser for displaying rendered results.
      */
     private Browser browser;
+
+    /**
+     * Maximum number of documents to display for a search result.
+     */
+    private int maxDisplayPerResult = 1000;
+
+    /**
+     * Maximum number of documents to display per cluster.
+     */
+    private int maxDisplayPerCluster = 1000;
 
     /**
      * Velocity instance for processing templates.
@@ -116,6 +127,7 @@ public final class DocumentList extends Composite
             query = "";
         }
         context.put("query", query);
+        context.put("maxDisplay", maxDisplayPerResult);
 
         update(context, TEMPLATE_PROCESSING_RESULT);
     }
@@ -136,6 +148,7 @@ public final class DocumentList extends Composite
             final Comparator<Document> comparator = Document.BY_ID_COMPARATOR;
             context.put("comparator", comparator);
             context.put("clusters", Arrays.asList(clusters));
+            context.put("maxDisplay", maxDisplayPerCluster);
 
             update(context, TEMPLATE_CLUSTERS);
         }
@@ -163,11 +176,15 @@ public final class DocumentList extends Composite
      */
     private void update(VelocityContext context, String templateName)
     {
+        long start = System.currentTimeMillis();
+        long merged = 0;
+
         StringWriter sw = new StringWriter();
         try
         {
             final Template template = velocity.getTemplate(templateName, "UTF-8");
             template.merge(context, sw);
+            merged = System.currentTimeMillis() - start;
         }
         catch (Exception e)
         {
@@ -176,6 +193,13 @@ public final class DocumentList extends Composite
         }
 
         browser.setText(sw.toString());
+        long displayed = System.currentTimeMillis() - start - merged;
+
+        LoggerFactory.getLogger(DocumentList.class).debug(
+            String.format(Locale.ENGLISH, 
+                "Velocity [rendering: %.2f, display: %.2f]",
+                merged / 1000.0,
+                displayed / 1000.0));
     }
 
     /**

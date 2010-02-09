@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,17 +15,16 @@ package org.carrot2.webapp.model;
 import java.io.InputStream;
 import java.util.*;
 
-import org.slf4j.Logger;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.InternalAttributePredicate;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.resource.IResource;
-import org.carrot2.util.resource.ResourceUtilsFactory;
+import org.carrot2.util.resource.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.load.Persister;
+import org.simpleframework.xml.core.Persister;
+import org.slf4j.Logger;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -104,53 +103,54 @@ public class WebappConfig
     @Attribute(name = "skin-param", required = false)
     public final static String SKIN_PARAM = "skin";
 
-    /** Application-wide instance of the configuration. */
-    public final static WebappConfig INSTANCE;
-
     /*
-     * TODO: Static initialization blocks suck because you can't really predict when they
-     * are called and thus which exception handlers may potentially consume their failure.
-     * Ideally, webapp-global resources should be stored in the servlet context (and
-     * initialized by one of the servlets in the init() method. I see the calls
-     * to INSTANCE are scattered all over the place, so it will be hard to achieve this,
-     * but even a lazy-init factory method seems better than a static block to me. This
-     * is a potential headache waiting to happen, especially if somebody wants to 
-     * modify component suites on their own.
+     * TODO: can we move all these assertions to a method in @Commit or inside deserialize and
+     * then move the entire initialization code to QueryProcessorServlet?
      */
-    static
+    /**
+     * @return Initialize the global configuration and return it.
+     */
+    public final static WebappConfig getSingleton()
     {
         try
         {
             // Load configuration
-            INSTANCE = deserialize(ResourceUtilsFactory.getDefaultResourceUtils()
-                .getFirst("config.xml"));
+            final ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
+            final WebappConfig conf = deserialize(resUtils.getFirst("config.xml"));
 
-            if (INSTANCE.skins.size() == 0)
+            if (conf.skins.size() == 0)
             {
-                throw new RuntimeException("Configuration must contain at leas one skin");
+                throw new RuntimeException("Configuration must contain at least one skin");
             }
-            if (INSTANCE.views.size() == 0)
+
+            if (conf.views.size() == 0)
             {
-                throw new RuntimeException("Configuration must contain at leas one view");
+                throw new RuntimeException("Configuration must contain at least one view");
             }
-            if (INSTANCE.sizes.size() == 0)
+
+            if (conf.sizes.size() == 0)
             {
                 throw new RuntimeException(
-                    "Configuration must contain at leas one result list size");
+                    "Configuration must contain at least one result list size");
             }
 
             // Load component suite
-            INSTANCE.components = ProcessingComponentSuite
-                .deserialize(ResourceUtilsFactory.getDefaultResourceUtils().getFirst(
-                    INSTANCE.componentSuite));
-            log.info("Loaded " + INSTANCE.components.getSources().size()
-                + " sources and " + INSTANCE.components.getAlgorithms().size()
+            conf.components = ProcessingComponentSuite.deserialize(
+                resUtils.getFirst(conf.componentSuite));
+
+            log.info("Loaded " + conf.components.getSources().size()
+                + " sources and " + conf.components.getAlgorithms().size()
                 + " algorithms");
 
             // Prepare attribute descriptors for document sources
-            INSTANCE.sourceAttributeMetadata = prepareSourceAttributeMetadata(INSTANCE.components);
-            INSTANCE.sourceInitializationAttributes = prepareSourceInitializationAttributes(INSTANCE.components);
-            INSTANCE.componentInternalAttributeKeys = prepareComponentInternalAttributeKeys(INSTANCE.components);
+            conf.sourceAttributeMetadata = 
+                prepareSourceAttributeMetadata(conf.components);
+            conf.sourceInitializationAttributes = 
+                prepareSourceInitializationAttributes(conf.components);
+            conf.componentInternalAttributeKeys = 
+                prepareComponentInternalAttributeKeys(conf.components);
+
+            return conf;
         }
         catch (Exception e)
         {
@@ -159,9 +159,9 @@ public class WebappConfig
         }
     }
 
-    public static String getContextRelativeSkinStylesheet(String skinName)
+    public String getContextRelativeSkinStylesheet(String skinName)
     {
-        return "/" + INSTANCE.skinsFolder + "/" + skinName + "/page.xsl";
+        return "/" + skinsFolder + "/" + skinName + "/page.xsl";
     }
 
     public SkinModel getSkinById(String skinId)
@@ -176,15 +176,6 @@ public class WebappConfig
         }
 
         return ModelWithDefault.getDefault(skins);
-    }
-
-    public RequestModel setDefaults(RequestModel requestModel)
-    {
-        requestModel.skin = ModelWithDefault.getDefault(skins).id;
-        requestModel.results = ModelWithDefault.getDefault(sizes).size;
-        requestModel.view = ModelWithDefault.getDefault(views).id;
-
-        return requestModel;
     }
 
     private static WebappConfig deserialize(IResource resource) throws Exception

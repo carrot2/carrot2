@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -51,7 +51,7 @@ public class SimpleXmlWrapperValue
     Object wrapper;
 
     /**
-     * Type we can handle using toStirng() and valueOf() methods.
+     * Type we can handle using toString() and valueOf() methods.
      */
     private static final Set<Class<?>> TO_STRING_VALUE_OF_TYPES = ImmutableSet
         .<Class<?>> of(Byte.class, Short.class, Integer.class, Long.class, Float.class,

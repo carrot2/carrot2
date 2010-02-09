@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -82,7 +83,7 @@ public class NormalizedMutualInformationMetricTest extends IdealPartitioningBase
     public void testAllDocumentsInOtherTopics()
     {
         final Cluster otherTopics = clusterWithPartitions("t1", "t2", "t3");
-        otherTopics.setAttribute(Cluster.OTHER_TOPICS, true);
+        otherTopics.setOtherTopics(true);
         check(0.0, otherTopics);
     }
 

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,6 +13,10 @@
 package org.carrot2.text.vsm;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.mahout.math.GenericPermuting;
+import org.apache.mahout.math.matrix.DoubleFactory2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.SparseDoubleMatrix2D;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
@@ -23,12 +27,8 @@ import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.*;
 
-import bak.pcj.map.IntKeyIntMap;
-import bak.pcj.map.IntKeyIntOpenHashMap;
-import bak.pcj.set.IntBitSet;
-import cern.colt.GenericPermuting;
-import cern.colt.matrix.DoubleFactory2D;
-import cern.colt.matrix.DoubleMatrix2D;
+import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.IntIntOpenHashMap;
 
 /**
  * Builds a term document matrix based on the provided {@link PreprocessingContext}.
@@ -54,7 +54,7 @@ public class TermDocumentMatrixBuilder
      * Maximum matrix size. The maximum number of the term-document matrix elements. The
      * larger the size, the more accurate, time- and memory-consuming clustering.
      * 
-     * @level Advanced
+     * @level Medium
      * @group Matrix model
      * @label Maximum matrix size
      */
@@ -115,7 +115,7 @@ public class TermDocumentMatrixBuilder
         if (documentCount == 0)
         {
             vsmContext.termDocumentMatrix = NNIDoubleFactory2D.nni.make(0, 0);
-            vsmContext.stemToRowIndex = new IntKeyIntOpenHashMap();
+            vsmContext.stemToRowIndex = new IntIntOpenHashMap();
             return;
         }
 
@@ -180,7 +180,7 @@ public class TermDocumentMatrixBuilder
         GenericPermuting.permute(stemsToInclude, stemWeightOrder);
         stemsToInclude = ArrayUtils.subarray(stemsToInclude, 0, tdMatrix.rows());
 
-        final IntKeyIntMap stemToRowIndex = new IntKeyIntOpenHashMap();
+        final IntIntOpenHashMap stemToRowIndex = new IntIntOpenHashMap();
         for (int i = 0; i < stemsToInclude.length; i++)
         {
             stemToRowIndex.put(stemsToInclude[i], i);
@@ -199,7 +199,7 @@ public class TermDocumentMatrixBuilder
     public void buildTermPhraseMatrix(VectorSpaceModelContext context)
     {
         final PreprocessingContext preprocessingContext = context.preprocessingContext;
-        final IntKeyIntMap stemToRowIndex = context.stemToRowIndex;
+        final IntIntOpenHashMap stemToRowIndex = context.stemToRowIndex;
         final int [] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
         final int firstPhraseIndex = preprocessingContext.allLabels.firstPhraseIndex;
 
@@ -250,7 +250,7 @@ public class TermDocumentMatrixBuilder
 
         final int [][] stemsTfByDocument = context.allStems.tfByDocument;
         int documentCount = context.documents.size();
-        final IntBitSet requiredStemIndices = new IntBitSet(labelsFeatureIndex.length);
+        final BitSet requiredStemIndices = new BitSet(labelsFeatureIndex.length);
 
         for (int i = 0; i < labelsFeatureIndex.length; i++)
         {
@@ -275,21 +275,21 @@ public class TermDocumentMatrixBuilder
             }
         }
 
-        return requiredStemIndices.toArray();
+        return PcjCompat.toIntArray(requiredStemIndices);
     }
 
     /**
      * Adds stem index to the set with a check on the stem's document frequency.
      */
     private void addStemIndex(final int [] wordsStemIndex, int documentCount,
-        int [][] stemsTfByDocument, final IntBitSet requiredStemIndices,
+        int [][] stemsTfByDocument, final BitSet requiredStemIndices,
         final int featureIndex)
     {
         final int stemIndex = wordsStemIndex[featureIndex];
         final int df = stemsTfByDocument[stemIndex].length / 2;
         if (((double) df / documentCount) <= maxWordDf)
         {
-            requiredStemIndices.add(stemIndex);
+            requiredStemIndices.set(stemIndex);
         }
     }
 
@@ -300,13 +300,13 @@ public class TermDocumentMatrixBuilder
     static DoubleMatrix2D buildAlignedMatrix(VectorSpaceModelContext vsmContext,
         int [] featureIndex, ITermWeighting termWeighting)
     {
-        final IntKeyIntMap stemToRowIndex = vsmContext.stemToRowIndex;
+        final IntIntOpenHashMap stemToRowIndex = vsmContext.stemToRowIndex;
         if (featureIndex.length == 0)
         {
             return DoubleFactory2D.dense.make(stemToRowIndex.size(), 0);
         }
 
-        final DoubleMatrix2D phraseMatrix = DoubleFactory2D.sparse.make(stemToRowIndex
+        final DoubleMatrix2D phraseMatrix = new SparseDoubleMatrix2D(stemToRowIndex
             .size(), featureIndex.length);
 
         final PreprocessingContext preprocessingContext = vsmContext.preprocessingContext;

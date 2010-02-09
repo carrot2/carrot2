@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,39 +12,23 @@
 
 package org.carrot2.workbench.vis.aduna;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Panel;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.JRootPane;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
+import org.carrot2.core.*;
 import org.carrot2.core.Cluster;
-import org.carrot2.core.Document;
-import org.carrot2.core.ProcessingResult;
 import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
-import org.carrot2.workbench.core.ui.PropertyChangeListenerAdapter;
-import org.carrot2.workbench.core.ui.SearchEditor;
-import org.carrot2.workbench.core.ui.SearchResultListenerAdapter;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
+import org.carrot2.workbench.core.ui.*;
+import org.eclipse.core.runtime.*;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -56,14 +40,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
+import org.slf4j.Logger;
 
-import biz.aduna.map.cluster.Classification;
-import biz.aduna.map.cluster.ClusterGraphPanel;
-import biz.aduna.map.cluster.ClusterMap;
-import biz.aduna.map.cluster.ClusterMapFactory;
-import biz.aduna.map.cluster.ClusterMapMediator;
-import biz.aduna.map.cluster.DefaultClassification;
-import biz.aduna.map.cluster.DefaultObject;
+import biz.aduna.map.cluster.*;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -102,7 +81,7 @@ final class AdunaClusterMapViewPage extends Page
     private PostponableJob selectionJob = new PostponableJob(new UIJob(
         "Aduna ClusterMap (selection)...")
     {
-        private StructuredSelection lastSelection = null;
+        private IStructuredSelection lastSelection = null;
 
         @SuppressWarnings("unchecked")
         @Override
@@ -114,7 +93,7 @@ final class AdunaClusterMapViewPage extends Page
 
             if (root != null)
             {
-                final StructuredSelection currentSelection;
+                final IStructuredSelection currentSelection;
                 switch (mode)
                 {
                     case SHOW_ALL_CLUSTERS:
@@ -135,7 +114,8 @@ final class AdunaClusterMapViewPage extends Page
 
                 if (!currentSelection.equals(lastSelection))
                 {
-                    final java.util.List selected = selectionToClassification(currentSelection);
+                    final java.util.List selected = 
+                        selectionToClassification(currentSelection);
                     logger.debug("Applying selection: " + selected);
                     mapMediator.visualize(selected);
 
@@ -150,7 +130,7 @@ final class AdunaClusterMapViewPage extends Page
          * 
          */
         private java.util.List<Classification> selectionToClassification(
-            StructuredSelection s)
+            IStructuredSelection s)
         {
             final IAdapterManager mgr = Platform.getAdapterManager();
 
@@ -171,31 +151,24 @@ final class AdunaClusterMapViewPage extends Page
                     }
                 }
             }
+
             return selected;
         }
 
-        /*
-         * 
+        /**
+         * Return the currently selected clusters.
          */
-        private StructuredSelection getSelected()
+        private IStructuredSelection getSelected()
         {
-            final ISelection selection = editor.getSelection();
-            if (selection == null || selection.isEmpty()
-                || !(selection instanceof StructuredSelection))
-            {
-                return StructuredSelection.EMPTY;
-            }
-            else
-            {
-                final StructuredSelection ss = (StructuredSelection) selection;
-                return ss;
-            }
+            final ISelectionProvider sProvider = editor.getSite().getSelectionProvider();
+            final ISelection selection = sProvider.getSelection();
+            return (IStructuredSelection) selection;
         }
 
-        /*
-         * 
+        /**
+         * Return the first level of clusters as the selection.
          */
-        private StructuredSelection getFirstLevel()
+        private IStructuredSelection getFirstLevel()
         {
             if (root == null)
             {
@@ -207,8 +180,11 @@ final class AdunaClusterMapViewPage extends Page
             }
         }
 
+        /**
+         * Return All clusters as the selection. 
+         */
         @SuppressWarnings("unchecked")
-        protected StructuredSelection getAll()
+        protected IStructuredSelection getAll()
         {
             if (root == null)
             {
@@ -384,7 +360,8 @@ final class AdunaClusterMapViewPage extends Page
         }
 
         editor.getSearchResult().addListener(editorSyncListener);
-        editor.addPostSelectionChangedListener(selectionListener);
+        editor.getSite().getSelectionProvider()
+            .addSelectionChangedListener(selectionListener);
     }
 
     /*
@@ -506,7 +483,7 @@ final class AdunaClusterMapViewPage extends Page
     public void dispose()
     {
         editor.getSearchResult().removeListener(editorSyncListener);
-        editor.removePostSelectionChangedListener(selectionListener);
+        editor.getSite().getSelectionProvider().removeSelectionChangedListener(selectionListener);
 
         disposeBin.dispose();
 

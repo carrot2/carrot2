@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -38,12 +38,6 @@ public final class ClusterLabelProvider extends LabelProvider
         if (element instanceof Cluster)
         {
             final Cluster cluster = (Cluster) element;
-            label = cluster.getLabel();
-            documentCount = cluster.size();
-        }
-        else if (element instanceof ClusterWithParent)
-        {
-            final Cluster cluster = ((ClusterWithParent) element).cluster;
             label = cluster.getLabel();
             documentCount = cluster.size();
         }

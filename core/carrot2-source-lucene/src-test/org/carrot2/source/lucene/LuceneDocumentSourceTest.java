@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2009, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -136,5 +137,12 @@ public class LuceneDocumentSourceTest extends
 
         assertThat(runQuery(null, getLargeQuerySize())).as("Number of results")
             .isGreaterThan(10);
+    }
+
+    @Test
+    public void testAdvancedQueries() throws Exception
+    {
+        assertThat(runQuery("\"data mining\"", getLargeQuerySize())).as(
+            "Number of results").isEqualTo(99);
     }
 }
