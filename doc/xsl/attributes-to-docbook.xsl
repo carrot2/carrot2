@@ -399,6 +399,18 @@
     </db:para>
   </xsl:template>
   
+  <xsl:template match="i">
+    <db:emphasis>
+      <xsl:apply-templates />
+    </db:emphasis>
+  </xsl:template>
+  
+  <xsl:template match="b|strong">
+    <db:emphasis role="bold">
+      <xsl:apply-templates />
+    </db:emphasis>
+  </xsl:template>
+  
   <xsl:template match="table">
     <db:informaltable frame="none">
       <db:tgroup cols="{count(.//th)}">

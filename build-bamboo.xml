@@ -52,6 +52,7 @@
             <!-- Exclude reports, we'll link these directly to the build server -->
             <exclude name="*-report/**" />
             <exclude name="workbench/**" />
+            <exclude name="maven-test/**" />
             <exclude name="jar/**" />
             <exclude name="classes/**" />
             <exclude name="attrs-cache.properties" />

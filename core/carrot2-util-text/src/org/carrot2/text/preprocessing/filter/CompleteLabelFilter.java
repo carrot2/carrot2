@@ -27,8 +27,13 @@ import org.carrot2.util.attribute.constraint.DoubleRange;
 public class CompleteLabelFilter implements ILabelFilter
 {
     /**
-     * Remove truncated phrases. Try to remove "incomplete" cluster labels, e.g. prefer
-     * "Conference on Data" to "Conference on Data Mining".
+     * Remove truncated phrases. Tries to remove "incomplete" cluster labels. For example,
+     * in a collection of documents related to <i>Data Mining</i>, the phrase
+     * <i>Conference on Data</i> is incomplete in a sense that most likely it should be
+     * <i>Conference on Data Mining</i> or even <i>Conference on Data Mining in Large
+     * Databases</i>. When truncated phrase removal is enabled, the algorithm would try to
+     * remove the "incomplete" phrases like the former one and leave only the more
+     * informative variants.
      * 
      * @level Basic
      * @group Label filtering

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -68,7 +67,22 @@ public class TermDocumentMatrixBuilder
     /**
      * Maximum word document frequency. The maximum document frequency allowed for words
      * as a fraction of all documents. Words with document frequency larger than
-     * <code>maxWordDf</code> will be ignored.
+     * <code>maxWordDf</code> will be ignored. For example, when <code>maxWordDf</code> is
+     * <code>0.4</code>, words appearing in more than 40% of documents will be be ignored.
+     * The default value of <code>1.0</code> means that all words will be taken into
+     * account, no matter in how many documents they appear.
+     * <p>
+     * This attribute may be useful when certain words appear in most of the input
+     * documents (e.g. company name from header or footer) and such words dominate the
+     * cluster labels. In such case, setting <code>maxWordDf</code> to a value lower than
+     * <code>1.0</code>, e.g. <code>0.9</code> may improve the clusters. 
+     * </p>
+     * <p>
+     * Another useful application of this attribute is when there is a need to generate
+     * only very specific clusters, i.e. clusters containing small numbers of documents.
+     * This can be achieved by setting <code>maxWordDf</code> to extremely low values,
+     * e.g. <code>0.1</code> or <code>0.05</code>.
+     * </p>
      * 
      * @level Advanced
      * @group Matrix model
@@ -77,7 +91,7 @@ public class TermDocumentMatrixBuilder
     @Input
     @Processing
     @Attribute
-    @DoubleRange(min = 0.2, max = 1.0)
+    @DoubleRange(min = 0.00, max = 1.0)
     public double maxWordDf = 1.0;
 
     /**
@@ -144,8 +158,8 @@ public class TermDocumentMatrixBuilder
                 stemsTfByDocument[stemIndex].length / 2, documentCount)
                 * getWeightBoost(titleFieldIndex, stemsFieldIndices[stemIndex]);
         }
-        final int [] stemWeightOrder = IndirectSort.sort(0,
-            stemsWeight.length, new IndirectComparator.DescendingDoubleComparator(stemsWeight));
+        final int [] stemWeightOrder = IndirectSort.sort(0, stemsWeight.length,
+            new IndirectComparator.DescendingDoubleComparator(stemsWeight));
 
         // Calculate the number of terms we can include to fulfill the max matrix size
         final int maxRows = maximumMatrixSize / documentCount;
