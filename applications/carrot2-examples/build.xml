@@ -54,7 +54,7 @@
     <sequential>
       <echo>Running: @{classname}</echo>
       <java classname="@{classname}" logError="true"
-            failonerror="true">
+            failonerror="true" outputproperty="dev.null">
         <classpath>
           <fileset dir=".">
             <include name="**/*.jar" />

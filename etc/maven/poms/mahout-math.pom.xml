@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.carrotsearch</groupId>
-  <artifactId>nni</artifactId>
-  <version>1.0.0</version>
+  <groupId>org.apache.mahout</groupId>
+  <artifactId>mahout-math</artifactId>
+  <version>0.3-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <licenses>
     <license>
-      <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
+      <name>Apache2 License</name>
       <distribution>repo</distribution>
     </license>
   </licenses>
