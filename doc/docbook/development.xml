@@ -357,13 +357,6 @@ carrot2.version.workbench=3.3.0.dev-snapshot]]></programlisting>
           using the WAR file instead of command line).
         </para>
       </listitem>
-      
-      <listitem>
-        <para>
-          Check that a &C2; project <link linkend="section.integration.setting-up-maven-project">set up using Maven archetype</link>
-          builds correctly.
-        </para>
-      </listitem>
     </orderedlist>
   </section>
 </chapter>
