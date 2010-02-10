@@ -23,7 +23,12 @@ import org.carrot2.util.attribute.Bindable;
 import com.carrotsearch.hppc.IntIntOpenHashMap;
 
 /**
- * Uses a very simple algorithm to match labels to base vectors.
+ * A simple and fast label assigner. For each base vector chooses the label that maximizes
+ * the base vector--label term vector cosine similarity. Different vectors can get the
+ * same label assigned, which means the number of final labels (after duplicate removal)
+ * may be smaller than the number of base vectors on input. 
+ * 
+ * @see UniqueLabelAssigner
  */
 @Bindable
 public class SimpleLabelAssigner implements ILabelAssigner

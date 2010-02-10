@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -20,7 +19,13 @@ import org.carrot2.util.attribute.Bindable;
 import com.carrotsearch.hppc.*;
 
 /**
- * Assigns unique labels to each base vector using a greedy algorithm.
+ * Assigns unique labels to each base vector using a greedy algorithm. For each base
+ * vector chooses the label that maximizes the base vector--label term vector cosine
+ * similarity and has not been previously selected. Once a label is selected, it will not
+ * be used to label any other vector. This algorithm does not create duplicate cluster
+ * labels, which usually means that this assignment method will create more clusters than
+ * {@link SimpleLabelAssigner}. This method is slightly slower than
+ * {@link SimpleLabelAssigner}.
  */
 @Bindable
 public class UniqueLabelAssigner implements ILabelAssigner
