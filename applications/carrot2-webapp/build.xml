@@ -80,7 +80,7 @@
       <lib dir="${lib.flattened}">
       	<exclude name="**/slf4j-nop-*.jar" />
       	<exclude name="**/carrot2-mini*.jar" />
-      	<exclude name="**/carrot2-sources*.jar" />
+      	<exclude name="**/carrot2-core-sources*.jar" />
       </lib>
       <lib dir="${webapp.lib.dir}" />
 
