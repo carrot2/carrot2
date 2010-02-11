@@ -181,6 +181,8 @@
       </fileset>
       <lib dir="${lib.flattened}">
       	<exclude name="**/slf4j-*" />
+      	<exclude name="**/carrot2-mini*.jar" />
+      	<exclude name="**/carrot2-core-sources*.jar" />
       </lib>
       <lib dir="${dcs.lib.dir}" />
       <classes dir="${dcs.dir}/classes">
