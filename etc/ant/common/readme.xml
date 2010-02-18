@@ -17,7 +17,7 @@
         </classpath>
       </typedef> 
      
-      <svn javahl="false">
+      <svn javahl="false" failonerror="false">
         <svninfos />
       </svn>
 
