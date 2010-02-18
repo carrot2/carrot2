@@ -15,35 +15,13 @@
 
       <!-- Ant's unzip task does not preserve permissions, so we need to set them here once again. -->
       <chmod dir="${unpacked}" includes="**/*.sh" perm="755" />
-      
-      <exec executable="cmd" dir="${unpacked}" failonerror="true" os="Windows XP">
-        <arg value="/c"/>
-        <arg value="batch.cmd"/>
-        <arg value="input" />
-        <arg value="-o" />
-        <arg value="output" />
+
+      <exec executable="batch" dir="${unpacked}" failonerror="true" vmlauncher="false">
+        <arg line="input -o output" />
       </exec>
-      <exec executable="cmd" dir="${unpacked}" failonerror="true" os="Windows XP">
-        <arg value="/c"/>
-        <arg value="batch.cmd"/>
-        <arg value="input" />
-        <arg value="-o" />
-        <arg value="output" />
-        <arg value="-f" />
-        <arg value="JSON" />
-      </exec>
-      
-      <exec executable="${unpacked}/batch.sh" dir="${unpacked}" failonerror="true" os="Linux">
-        <arg value="input" />
-        <arg value="-o" />
-        <arg value="output" />
-      </exec>
-      <exec executable="${unpacked}/batch.sh" dir="${unpacked}" failonerror="true" os="Linux">
-        <arg value="input" />
-        <arg value="-o" />
-        <arg value="output" />
-        <arg value="-f" />
-        <arg value="JSON" />
+
+      <exec executable="batch" dir="${unpacked}" failonerror="true" vmlauncher="false">
+        <arg line="input -o output -f JSON" />
       </exec>
 
       <available file="${unpacked}/output" property="dir.created" />
