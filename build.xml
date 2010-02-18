@@ -769,6 +769,7 @@
          After this target runs, we'll copy the entire content of tmp/ 
          to the distribution dir on the server, so we need to remove
          useless dirs.
+         [DW] can we just copy what's needed and avoid doing antcall's? They break topo-sorting of targets, among other things.
       -->
     <antcall target="clean.jar" />
     <antcall target="clean.classes" />
