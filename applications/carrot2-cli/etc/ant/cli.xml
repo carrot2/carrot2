@@ -16,11 +16,17 @@
       <!-- Ant's unzip task does not preserve permissions, so we need to set them here once again. -->
       <chmod dir="${unpacked}" includes="**/*.sh" perm="755" />
 
-      <exec executable="batch" dir="${unpacked}" failonerror="true" vmlauncher="false">
+      <!-- Add .sh extension to all builds except Windows builds. -->
+      <condition property="script.ext" value="">
+         <os family="windows" />
+      </condition>
+      <property name="script.ext" value=".sh" />
+
+      <exec executable="${unpacked}/batch${script.ext}" dir="${unpacked}" failonerror="true" vmlauncher="false">
         <arg line="input -o output" />
       </exec>
 
-      <exec executable="batch" dir="${unpacked}" failonerror="true" vmlauncher="false">
+      <exec executable="${unpacked}/batch${script.ext}" dir="${unpacked}" failonerror="true" vmlauncher="false">
         <arg line="input -o output -f JSON" />
       </exec>
 
