@@ -1104,18 +1104,6 @@
        Pre-release source code updates.
     -->
   <target name="prerelease" depends="licenses.update, fix-line-endings" />
-  
-  <!--
-       Target dependencies.
-    -->
-  <target name="target.graph">
-    <typedef resource="net/ggtools/grand/antlib.xml">
-      <classpath>
-        <fileset dir="etc/grand" includes="*.jar" />
-      </classpath>
-    </typedef>
 
-    <grand output="tmp/targets.dot" />
-  </target>
 </project>
 
