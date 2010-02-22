@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,11 +15,14 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatDocuments;
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.io.*;
 import java.util.*;
 
 import org.apache.commons.io.output.NullOutputStream;
+import org.carrot2.core.ProcessingResult.Rss;
+import org.carrot2.core.ProcessingResult.Rss.RssItem;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.CollectionUtils;
@@ -74,8 +76,8 @@ public class ProcessingResultTest
         xml.append("</document>\n");
         xml.append("</searchresult>\n");
 
-        final ProcessingResult deserialized = ProcessingResult.deserialize(
-            new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
+        final ProcessingResult deserialized = ProcessingResult
+            .deserialize(new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
@@ -135,8 +137,8 @@ public class ProcessingResultTest
         xml.append("</group>");
         xml.append("</searchresult>\n");
 
-        final ProcessingResult deserialized = ProcessingResult.deserialize(
-            new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
+        final ProcessingResult deserialized = ProcessingResult
+            .deserialize(new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
@@ -170,7 +172,8 @@ public class ProcessingResultTest
         clusterB.setAttribute(Cluster.SCORE, 0.55);
         clusterB.addDocuments(documents.get(1), documents.get(2));
 
-        assertThatClusters(clusters).isEquivalentTo(Lists.newArrayList(clusterA, clusterB));
+        assertThatClusters(clusters).isEquivalentTo(
+            Lists.newArrayList(clusterA, clusterB));
         Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
             .isEqualTo(query);
     }
@@ -231,8 +234,7 @@ public class ProcessingResultTest
 
     private void checkJsonQuery(final JsonNode root)
     {
-        Assertions.assertThat(root.get("query").getTextValue()).isEqualTo(
-            "query");
+        Assertions.assertThat(root.get("query").getTextValue()).isEqualTo("query");
     }
 
     private void checkJsonClusters(final ProcessingResult result, final JsonNode root)
@@ -289,9 +291,9 @@ public class ProcessingResultTest
         sourceProcessingResult.serialize(outputStream, documentsDeserialized,
             clustersDeserialized);
         CloseableUtils.close(outputStream);
-        
-        final ProcessingResult deserialized = ProcessingResult.deserialize(
-            new ByteArrayInputStream(outputStream.toByteArray()));
+
+        final ProcessingResult deserialized = ProcessingResult
+            .deserialize(new ByteArrayInputStream(outputStream.toByteArray()));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
@@ -320,12 +322,58 @@ public class ProcessingResultTest
             .isEqualTo(sourceProcessingResult.getAttributes().get(AttributeNames.QUERY));
     }
 
+    @Test
+    public void testProcessingResultToRss() throws Exception
+    {
+        final ProcessingResult result = prepareProcessingResult();
+
+        final Cluster clusterA = result.getClusters().get(0);
+        final Cluster clusterAA = result.getClusters().get(0).getSubclusters().get(0);
+        final Cluster clusterB = result.getClusters().get(1);
+
+        final Rss rss = Rss.from(result, true);
+
+        assertThat(rss).isNotNull();
+        assertThat(rss.channels).isNotEmpty();
+
+        final RssItem channel = rss.channels.get(0);
+        final String query = (String) result.getAttribute(AttributeNames.QUERY);
+        assertThat(channel.title).isEqualTo(query);
+        assertThat(channel.description).contains(query);
+        assertThat(channel.categories).isEmpty();
+
+        final RssItem item1 = channel.items.get(0);
+        final RssItem item2 = channel.items.get(1);
+        final RssItem item3 = channel.items.get(2);
+        final RssItem item4 = channel.items.get(3);
+
+        checkDocumentAndItem(item1, result.getDocuments().get(0));
+        checkDocumentAndItem(item2, result.getDocuments().get(1));
+        checkDocumentAndItem(item3, result.getDocuments().get(2));
+        checkDocumentAndItem(item4, result.getDocuments().get(3));
+
+        assertThat(item1.categories).containsOnly(clusterA.getLabel(),
+            clusterAA.getLabel());
+        assertThat(item2.categories).containsOnly(clusterA.getLabel(),
+            clusterAA.getLabel(), clusterB.getLabel());
+        assertThat(item3.categories).containsOnly(clusterB.getLabel());
+        assertThat(item4.categories).isEmpty();
+    }
+
+    private void checkDocumentAndItem(RssItem item, Document document)
+    {
+        assertThat(item.title).isEqualTo(document.getTitle());
+        assertThat(item.description).isEqualTo(document.getSummary());
+        assertThat(item.link).isEqualTo(document.getContentUrl());
+    }
+
     private ProcessingResult prepareProcessingResult()
     {
         final List<Document> documents = Lists.newArrayList(new Document("Test title 1",
             "Test snippet 1", "http://test1.com"), new Document("Test title 2",
             "Test snippet 2", "http://test2.com/test"), new Document("Test title 3",
-            "Test snippet 3. Some more words and <b>html</b>", "http://test2.com"));
+            "Test snippet 3. Some more words and <b>html</b>", "http://test2.com"),
+            new Document("Other", "Other", "Other"));
         final Map<String, Object> attributes = Maps.newHashMap();
         attributes.put(AttributeNames.DOCUMENTS, documents);
 
@@ -357,7 +405,12 @@ public class ProcessingResultTest
         clusterB.setAttribute(Cluster.SCORE, 0.55);
         clusterB.addDocuments(documents.get(1), documents.get(2));
 
-        final List<Cluster> clusters = Lists.newArrayList(clusterA, clusterB);
+        final Cluster clusterO = new Cluster();
+        clusterO.setOtherTopics(true);
+        clusterO.addPhrases(Cluster.OTHER_TOPICS_LABEL);
+        clusterO.addDocuments(documents.get(3));
+        
+        final List<Cluster> clusters = Lists.newArrayList(clusterA, clusterB, clusterO);
         attributes.put(AttributeNames.CLUSTERS, clusters);
 
         attributes.put(AttributeNames.QUERY, "query");

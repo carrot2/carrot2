@@ -20,6 +20,7 @@ import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.SearchEditor.SaveOptions;
+import org.carrot2.workbench.core.ui.SearchEditor.SaveOptions.SaveFormat;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 
@@ -57,7 +58,11 @@ public final class SaveAsXMLActionDelegate extends Action
             }
 
             os = new FileOutputStream(destinationFile);
-            results.serialize(os, options.includeDocuments, options.includeClusters);
+            if (options.format == SaveFormat.C2XML) {
+                results.serialize(os, options.includeDocuments, options.includeClusters);
+            } else {
+                results.serializeRss(os, options.includeClusters);
+            }
         }
         catch (Exception e)
         {

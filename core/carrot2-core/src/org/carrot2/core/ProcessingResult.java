@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -27,8 +26,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.*;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.base.Function;
+import com.google.common.collect.*;
 
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes
@@ -410,6 +409,118 @@ public final class ProcessingResult
         if (StringUtils.isNotBlank(callback))
         {
             writer.write(");");
+        }
+    }
+
+    /**
+     * Serializes this processing result as RSS 2.0. Each document will be converted to an
+     * <code>item</code> element. Each cluster a document belongs to will be represented
+     * as the <code>item</code>'s <code>category</code> element.
+     * 
+     * @param stream the stream to serialize this {@link ProcessingResult} to. The stream
+     *            will <strong>not</strong> be closed.
+     * @param saveClusters if <code>false</code>, clusters will not be serialized
+     */
+    public void serializeRss(OutputStream outputStream, boolean saveClusters)
+        throws Exception
+    {
+        new Persister().write(Rss.from(this, saveClusters), outputStream);
+    }
+
+    /**
+     * For RSS 2.0 serialization.
+     */
+    @Root(name = "rss")
+    static class Rss
+    {
+        @Attribute
+        final String version = "2.0";
+
+        @ElementList(entry = "channel", inline = true)
+        List<RssItem> channels = Lists.newArrayList();
+
+        static Rss from(ProcessingResult processingResult, boolean saveClusters)
+        {
+            final Rss rss = new Rss();
+            final RssItem channel = new RssItem();
+            rss.channels.add(channel);
+
+            final String query = processingResult.getAttribute(AttributeNames.QUERY);
+            if (StringUtils.isNotBlank(query))
+            {
+                channel.title = query;
+                channel.description = "Search results "
+                    + (saveClusters ? "and clusters" : "") + "for query: " + query;
+            }
+
+            channel.items = Lists.transform(processingResult.getDocuments(),
+                new DocumentToRssItem(processingResult, saveClusters));
+
+            return rss;
+        }
+
+        static class RssItem
+        {
+            @Element(required = false)
+            String title;
+
+            @Element(required = false)
+            String description;
+
+            @Element(required = false)
+            String link = "http://carrot2.org";
+
+            @ElementList(entry = "category", inline = true)
+            List<String> categories = Lists.newArrayList();
+
+            @ElementList(entry = "item", inline = true)
+            List<RssItem> items = Lists.newArrayList();
+        }
+
+        static class DocumentToRssItem implements Function<Document, RssItem>
+        {
+            private ProcessingResult result;
+            private boolean saveClusters;
+
+            DocumentToRssItem(ProcessingResult result, boolean saveClusters)
+            {
+                this.result = result;
+                this.saveClusters = saveClusters;
+            }
+
+            public RssItem apply(Document document)
+            {
+                final RssItem item = new RssItem();
+                item.title = document.getTitle();
+                item.description = document.getSummary();
+                item.link = document.getContentUrl();
+
+                if (saveClusters)
+                {
+                    for (Cluster cluster : result.getClusters())
+                    {
+                        addClusterCategories(item, document, cluster);
+                    }
+                }
+                return item;
+            }
+
+            private void addClusterCategories(RssItem item, Document document,
+                Cluster cluster)
+            {
+                if (!cluster.isOtherTopics())
+                {
+                    if (cluster.getAllDocuments().contains(document))
+                    {
+                        item.categories.add(cluster.getLabel());
+                    }
+
+                    for (Cluster subcluster : cluster.getSubclusters())
+                    {
+                        addClusterCategories(item, document, subcluster);
+                    }
+                }
+            }
         }
     }
 }
