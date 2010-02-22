@@ -199,6 +199,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             fileNameTextLData.verticalAlignment = GridData.FILL;
             fileNameTextLData.horizontalIndent = 5;
             fileNameTextLData.minimumWidth = 280;
+            fileNameTextLData.widthHint = 280;
             fileNameText = new Text(root, SWT.BORDER);
             fileNameText.setLayoutData(fileNameTextLData);
         }
