@@ -747,6 +747,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final Shell shell = this.getEditorSite().getShell();
         if (new SearchEditorSaveAsDialog(shell, newOptions).open() == Window.OK)
         {
+            this.saveOptions = newOptions;
             doSave(saveOptions);
         }
         this.saveOptions = newOptions;
