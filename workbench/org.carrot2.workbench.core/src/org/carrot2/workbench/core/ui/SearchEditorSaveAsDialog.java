@@ -79,9 +79,9 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             }
         });
     }
-    
+
     @Override
-    public boolean close()
+    protected void okPressed()
     {
         final File f = new File(this.fileNameText.getText());
         options.directory = f.getParent();
@@ -92,8 +92,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             .getFirstElement());
 
         FileDialogs.rememberPath(GLOBAL_PATH_PREF, new Path(options.directory));
-
-        return super.close();
+        super.okPressed();
     }
 
     /*
@@ -252,7 +251,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             clusterOption.setText("Include clusters");
             clusterOption.setSelection(options.includeClusters);
         }
-        
+
         docOption.setEnabled(options.format != SaveFormat.RSS20);
         if (options.format == SaveFormat.RSS20)
         {

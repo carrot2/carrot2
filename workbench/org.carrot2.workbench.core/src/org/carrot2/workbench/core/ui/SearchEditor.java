@@ -750,7 +750,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             this.saveOptions = newOptions;
             doSave(saveOptions);
         }
-        this.saveOptions = newOptions;
     }
 
     /**
