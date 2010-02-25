@@ -473,6 +473,9 @@ public final class ProcessingResult
             @ElementList(entry = "category", inline = true)
             List<String> categories = Lists.newArrayList();
 
+            @ElementList(entry = "source", inline = true)
+            List<String> sources = Lists.newArrayList();
+
             @ElementList(entry = "item", inline = true)
             List<RssItem> items = Lists.newArrayList();
         }
@@ -494,6 +497,10 @@ public final class ProcessingResult
                 item.title = document.getTitle();
                 item.description = document.getSummary();
                 item.link = document.getContentUrl();
+                if (document.getSources() != null)
+                {
+                    item.sources.addAll(document.getSources());
+                }
 
                 if (saveClusters)
                 {

@@ -352,11 +352,12 @@ public class ProcessingResultTest
         checkDocumentAndItem(item3, result.getDocuments().get(2));
         checkDocumentAndItem(item4, result.getDocuments().get(3));
 
-        assertThat(item1.categories).containsOnly(clusterA.getLabel(),
+        assertThat(item1.categories).containsExactly(clusterA.getLabel(),
             clusterAA.getLabel());
-        assertThat(item2.categories).containsOnly(clusterA.getLabel(),
+        assertThat(item1.sources).containsExactly(result.getDocuments().get(0).getSources().toArray());
+        assertThat(item2.categories).containsExactly(clusterA.getLabel(),
             clusterAA.getLabel(), clusterB.getLabel());
-        assertThat(item3.categories).containsOnly(clusterB.getLabel());
+        assertThat(item3.categories).containsExactly(clusterB.getLabel());
         assertThat(item4.categories).isEmpty();
     }
 
@@ -384,6 +385,7 @@ public class ProcessingResultTest
         document.setField("testDouble", 10.3);
         document.setField("testBoolean", true);
         document.setLanguage(LanguageCode.POLISH);
+        document.setSources(Lists.newArrayList("s1", "s2"));
         document.id = 3; // assign an id so that the max id is larger than the list size
         Document.assignDocumentIds(documents);
 
