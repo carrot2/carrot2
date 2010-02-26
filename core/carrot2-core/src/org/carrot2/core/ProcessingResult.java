@@ -468,16 +468,20 @@ public final class ProcessingResult
             String description;
 
             @Element(required = false)
-            String link = "http://carrot2.org";
+            String link;
 
             @ElementList(entry = "category", inline = true)
             List<String> categories = Lists.newArrayList();
 
-            @ElementList(entry = "source", inline = true)
-            List<String> sources = Lists.newArrayList();
-
             @ElementList(entry = "item", inline = true)
             List<RssItem> items = Lists.newArrayList();
+
+            RssItem()
+            {
+                final String channelLink = System.getProperty("carrot2.rss.channel.link");
+                link = StringUtils.isBlank(channelLink) ? "http://carrot2.org"
+                    : channelLink;
+            }
         }
 
         static class DocumentToRssItem implements Function<Document, RssItem>
@@ -499,7 +503,7 @@ public final class ProcessingResult
                 item.link = document.getContentUrl();
                 if (document.getSources() != null)
                 {
-                    item.sources.addAll(document.getSources());
+                    item.categories.addAll(document.getSources());
                 }
 
                 if (saveClusters)
