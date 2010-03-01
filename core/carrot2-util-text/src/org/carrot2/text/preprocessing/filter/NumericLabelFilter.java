@@ -53,7 +53,7 @@ public class NumericLabelFilter extends SingleLabelFilterBase
 
     private final boolean isNumeric(int type)
     {
-        return (type & ITokenType.TT_NUMERIC) != 0;
+        return (type & ITokenType.TYPE_MASK) == ITokenType.TT_NUMERIC;
     }
 
     public boolean isEnabled()

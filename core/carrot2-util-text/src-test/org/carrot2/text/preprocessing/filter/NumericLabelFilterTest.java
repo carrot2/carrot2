@@ -38,7 +38,7 @@ public class NumericLabelFilterTest extends LabelFilterTestBase
     @Test
     public void testNonNumericWords()
     {
-        createDocuments("aa . aa", "bb . bb");
+        createDocuments("aa . aa", "bb.com.pl . bb.com.pl");
 
         final int [] expectedLabelsFeatureIndex = new int []
         {
