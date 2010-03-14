@@ -83,7 +83,8 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
     public void testUrlTokens()
     {
         String test = " urls http://www.google.com http://www.cs.put.poznan.pl/index.jsp?query=term&query2=term "
-            + " ftp://ftp.server.pl www.google.com   not.an.url   go2.pl/mail http://www.digimine.com/usama/datamine/.";
+            + " ftp://ftp.server.pl www.google.com   not.an.url   go2.pl/mail http://www.digimine.com/usama/datamine/." +
+            " http://www.herold.at/gelbe-seiten/krems-an-der-donau/lDk8q/yoga-krems-wachau-j%C3%BCrgen-ullrich/";
         TokenImage [] tokens =
         {
             new TokenImage("urls", ITokenType.TT_TERM),
@@ -99,6 +100,9 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
             new TokenImage("go2.pl/mail", ITokenType.TT_FULL_URL),
 
             new TokenImage("http://www.digimine.com/usama/datamine/.",
+                ITokenType.TT_FULL_URL),
+            
+            new TokenImage("http://www.herold.at/gelbe-seiten/krems-an-der-donau/lDk8q/yoga-krems-wachau-j%C3%BCrgen-ullrich/",
                 ITokenType.TT_FULL_URL),
         };
 

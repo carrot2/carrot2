@@ -39,7 +39,7 @@ TERM       = ({LETTER}|{DIGIT})* {LETTER} ({LETTER}|{DIGIT}|(("'" | "`")({LETTER
 SYMBOL     = ({LETTER}|{DIGIT})({LETTER}|{DIGIT}|"_"|"-")*
 BARE_URL   = {SYMBOL}("."{SYMBOL})*"."{DOMAIN}
 /* URL_PATH   = ("/" {SYMBOL})+ ("." {SYMBOL})? ("/")? ("?" {SYMBOL} ((";" | ":" | "@" | "&" | "=") {SYMBOL})*)? */
-URL_PATH   = (";" | ":" | "@" | "&" | "=" | "?" | "/" | "_" | "%" | "." | {LETTER} | {DIGIT})+
+URL_PATH   = (";" | ":" | "@" | "&" | "=" | "?" | "/" | "_" | "%" | "-" | "." | {LETTER} | {DIGIT})+
 
 %%
 
