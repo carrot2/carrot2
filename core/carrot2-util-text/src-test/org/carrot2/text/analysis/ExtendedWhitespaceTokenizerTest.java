@@ -82,9 +82,11 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
     @Test
     public void testUrlTokens()
     {
+        final String allCharsUrl = "http://url.with.all.allowed.characters/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ/!*'();:@&=+$,/?%#[]-_.~";
         String test = " urls http://www.google.com http://www.cs.put.poznan.pl/index.jsp?query=term&query2=term "
-            + " ftp://ftp.server.pl www.google.com   not.an.url   go2.pl/mail http://www.digimine.com/usama/datamine/." +
-            " http://www.herold.at/gelbe-seiten/krems-an-der-donau/lDk8q/yoga-krems-wachau-j%C3%BCrgen-ullrich/";
+            + " ftp://ftp.server.pl www.google.com   not.an.url   go2.pl/mail http://www.digimine.com/usama/datamine/."
+            + " http://www.herold.at/gelbe-seiten/krems-an-der-donau/lDk8q/yoga-krems-wachau-j%C3%BCrgen-ullrich/"
+            + " " + allCharsUrl;
         TokenImage [] tokens =
         {
             new TokenImage("urls", ITokenType.TT_TERM),
@@ -103,6 +105,9 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
                 ITokenType.TT_FULL_URL),
             
             new TokenImage("http://www.herold.at/gelbe-seiten/krems-an-der-donau/lDk8q/yoga-krems-wachau-j%C3%BCrgen-ullrich/",
+                ITokenType.TT_FULL_URL),
+                
+            new TokenImage(allCharsUrl,
                 ITokenType.TT_FULL_URL),
         };
 

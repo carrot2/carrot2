@@ -38,8 +38,7 @@ DIGIT      = [\u0030-\u0039\u0660-\u0669\u06f0-\u06f9\u0966-\u096f\u09e6-\u09ef\
 TERM       = ({LETTER}|{DIGIT})* {LETTER} ({LETTER}|{DIGIT}|(("'" | "`")({LETTER})))*
 SYMBOL     = ({LETTER}|{DIGIT})({LETTER}|{DIGIT}|"_"|"-")*
 BARE_URL   = {SYMBOL}("."{SYMBOL})*"."{DOMAIN}
-/* URL_PATH   = ("/" {SYMBOL})+ ("." {SYMBOL})? ("/")? ("?" {SYMBOL} ((";" | ":" | "@" | "&" | "=") {SYMBOL})*)? */
-URL_PATH   = (";" | ":" | "@" | "&" | "=" | "?" | "/" | "_" | "%" | "-" | "." | {LETTER} | {DIGIT})+
+URL_PATH   = ([!*'();:@&=+$,/?%#_.~] | "-" | "[" | "]" | {LETTER} | {DIGIT})+
 
 %%
 
