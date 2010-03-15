@@ -46,7 +46,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
     public void testSmallQuery() throws Exception
     {
         assumeTrue(externalApiTestsEnabled());
-        checkMinimumResults(getSmallQueryText(), getSmallQuerySize(),
+        runAndCheckMinimumResults(getSmallQueryText(), getSmallQuerySize(),
             getSmallQuerySize() / 2);
     }
 
@@ -55,14 +55,14 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
     {
         assumeTrue(externalApiTestsEnabled());
         assumeTrue(hasUtfResults());
-        checkMinimumResults("kaczyński", getSmallQuerySize(), getSmallQuerySize() / 2);
+        runAndCheckMinimumResults("kaczyński", getSmallQuerySize(), getSmallQuerySize() / 2);
     }
 
     @Test
     public void testLargeQuery() throws Exception
     {
         assumeTrue(externalApiTestsEnabled());
-        checkMinimumResults(getLargeQueryText(), getLargeQuerySize(),
+        runAndCheckMinimumResults(getLargeQueryText(), getLargeQuerySize(),
             getLargeQuerySize() / 2);
     }
 
@@ -268,7 +268,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         return query.toString();
     }
 
-    private void checkMinimumResults(String query, int resultsToRequest,
+    protected void runAndCheckMinimumResults(String query, int resultsToRequest,
         int minimumExpectedResults)
     {
         int actualResults = runQuery(query, resultsToRequest);
