@@ -55,7 +55,7 @@ public class DocumentTest
         assertThat(d5.id).isEqualTo(8);
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNonUniqueIdentifiers()
     {
         final Document d1 = new Document();
@@ -64,5 +64,7 @@ public class DocumentTest
         d2.id = 0;
 
         Document.assignDocumentIds(Lists.newArrayList(d1, d2));
+        assertThat(d1.id).isEqualTo(0);
+        assertThat(d2.id).isEqualTo(1);
     }
 }

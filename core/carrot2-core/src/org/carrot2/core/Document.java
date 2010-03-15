@@ -366,19 +366,21 @@ public final class Document
         {
             final HashSet<Integer> ids = Sets.newHashSet();
 
-            // First, find the start value for the id and check uniqueness of the ids
-            // already provided.
+            // First, find the start value for the id, check uniqueness of the ids
+            // already provided and erase duplicated ids.
             int maxId = Integer.MIN_VALUE;
             for (final Document document : documents)
             {
                 if (document.id != null)
                 {
-                    if (!ids.add(document.id))
+                    if (ids.add(document.id))
                     {
-                        throw new IllegalArgumentException(
-                            "Non-unique document id found: " + document.id);
+                        maxId = Math.max(maxId, document.id);
+                    } 
+                    else
+                    {
+                        document.id = null;
                     }
-                    maxId = Math.max(maxId, document.id);
                 }
             }
 
