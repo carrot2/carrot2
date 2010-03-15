@@ -13,14 +13,17 @@
 package org.carrot2.source.xml;
 
 import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.carrot2.core.Document;
 import org.carrot2.core.IController;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTestBase;
@@ -143,7 +146,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             DOCUMENT_TO_ID));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDuplicatedIdsInSourceXml()
     {
         IResource xml = resourceUtils.getFirst("/xml/carrot2-duplicated-ids.xml",
@@ -152,6 +155,9 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
             xml);
         runQuery();
+        final List<Document> documents = getDocuments();
+        assertThat(documents.get(0).getId()).isEqualTo(1);
+        assertThat(documents.get(1).getId()).isEqualTo(2);
     }
 
     @Test
