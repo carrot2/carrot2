@@ -203,6 +203,21 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
                  */
                 return IdentityStemmer.INSTANCE; 
 
+            case BULGARIAN:
+            case CZECH:
+            case ESTONIAN:
+            case GREEK:
+            case IRISH:
+            case LATVIAN:
+            case LITHUANIAN:
+            case MALTESE:
+            case SLOVAK:
+            case SLOVENE:
+                /*
+                 * No stemming engine for these languages at the moment.
+                 */
+                return IdentityStemmer.INSTANCE; 
+                
             case ARABIC:
                 /*
                  * We return specialized stemmer for Arabic (from Lucene).
