@@ -2,6 +2,7 @@
   <!-- Includes DCS sources and algorithms. -->
   <include suite="suites/suite-dcs.xml" />
   <include suite="suites/source-ambient.xml" />
+  <include suite="suites/source-lucene.xml" />
 
   <sources>
     <!-- Generic (uninitialized) instance of OpenSearchDocumentSource -->

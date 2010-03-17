@@ -121,6 +121,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
      */
     @Input
     @Init
+    @Processing
     @Required
     @Attribute
     @Internal
