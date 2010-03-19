@@ -31,7 +31,7 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-        
+
   <servlet>
     <servlet-name>CSSServlet</servlet-name>
     <servlet-class>net.jawr.web.servlet.JawrServlet</servlet-class>
@@ -87,15 +87,29 @@
     <filter-name>CompressingFilter</filter-name>
     <filter-class>com.planetj.servlet.filter.compression.CompressingFilter</filter-class>
   </filter>
- 
+
+  <filter>
+    <filter-name>ContentLengthFilter</filter-name>
+    <filter-class>org.carrot2.webapp.ContentLengthFilter</filter-class>
+  </filter>
+
+  <!-- The order of filters declaration here matters! -->
+
+  <filter-mapping>
+    <filter-name>ContentLengthFilter</filter-name>
+    <url-pattern>/xml</url-pattern>
+  </filter-mapping>
+
   <filter-mapping>
     <filter-name>CompressingFilter</filter-name>
     <url-pattern>/xml</url-pattern>
   </filter-mapping>
+ 
   <filter-mapping>
     <filter-name>CompressingFilter</filter-name>
     <url-pattern>/search</url-pattern>
   </filter-mapping>
+
   <filter-mapping>
     <filter-name>CompressingFilter</filter-name>
     <url-pattern>*.js</url-pattern>
@@ -115,7 +129,7 @@
     <filter-name>xslt-filter</filter-name>
     <url-pattern>/search</url-pattern>
   </filter-mapping>
-  
+
   <filter>
     <filter-name>FarFutureExpires</filter-name>
     <filter-class>org.carrot2.webapp.filter.FarFutureExpiresHeaderFilter</filter-class>
@@ -136,4 +150,6 @@
   <filter-mapping>
       <filter-name>FarFutureExpires</filter-name>
       <url-pattern>*.jjs</url-pattern>
-  </filter-mapping></web-app>
+  </filter-mapping>
+
+</web-app>
