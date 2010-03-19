@@ -2,7 +2,7 @@
 
 #set ( $page = ${request.getParameter("page")} )
 #set ( $source = "servlets/pull?page=" + $page )
-#set ( $swf = "org.carrotsearch.vis.circles.swf" )
+#set ( $swf = "org.carrotsearch.visualizations.circles.swf" )
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>

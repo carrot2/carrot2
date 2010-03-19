@@ -22,7 +22,7 @@
       var params = {};
       var attributes = {};
 
-      swfobject.embedSWF($.visualization.skinPath + "/common-dynamic/swf/org.carrotsearch.vis.circles.swf", 
+      swfobject.embedSWF($.visualization.skinPath + "/common-dynamic/swf/org.carrotsearch.visualizations.circles.swf",
           "clusters-visu", "100%", "100%", "10.0.0", $.visualization.skinPath + "/common/swf/expressInstall.swf",
           flashvars, params, attributes);
     }
