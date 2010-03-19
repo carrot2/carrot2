@@ -198,22 +198,23 @@ public class QueryProcessorServlet extends HttpServlet
             requestModel.afterParametersBound(attributeBinderActionBind.remainingValues,
                 extractCookies(request));
 
-            if (RequestType.STATS.equals(requestModel.type))
+            switch (requestModel.type)
             {
-                handleStatsRequest(request, response, requestParameters, requestModel);
-            }
-            else if (RequestType.ATTRIBUTES.equals(requestModel.type))
-            {
-                handleAttributesRequest(request, response, requestParameters,
-                    requestModel);
-            }
-            else if (RequestType.SOURCES.equals(requestModel.type))
-            {
-                handleSourcesRequest(request, response, requestParameters, requestModel);
-            }
-            else
-            {
-                handleSearchRequest(request, response, requestParameters, requestModel);
+                case STATS:
+                    handleStatsRequest(request, response, requestParameters, requestModel);
+                    break;
+
+                case ATTRIBUTES:
+                    handleAttributesRequest(request, response, requestParameters,
+                        requestModel);
+                    break;
+
+                case SOURCES:
+                    handleSourcesRequest(request, response, requestParameters, requestModel);
+                    break;
+
+                default:
+                    handleSearchRequest(request, response, requestParameters, requestModel);
             }
         }
         catch (Exception e)
@@ -357,20 +358,26 @@ public class QueryProcessorServlet extends HttpServlet
         {
             if (requestModel.type.requiresProcessing)
             {
-                if (RequestType.CLUSTERS.equals(requestModel.type)
-                    || RequestType.FULL.equals(requestModel.type)
-                    || RequestType.CARROT2.equals(requestModel.type))
+                switch (requestModel.type)
                 {
-                    logQuery(true, requestModel, null);
-                    processingResult = controller.process(requestParameters,
-                        requestModel.source, requestModel.algorithm);
-                    logQuery(false, requestModel, processingResult);
+                    case CLUSTERS:
+                    case FULL:
+                    case CARROT2:
+                        logQuery(true, requestModel, null);
+                        processingResult = controller.process(requestParameters,
+                            requestModel.source, requestModel.algorithm);
+                        logQuery(false, requestModel, processingResult);
+                        break;
+
+                    case DOCUMENTS:
+                        processingResult = controller.process(requestParameters,
+                            requestModel.source, QueryWordHighlighter.class.getName());
+                        break;
+
+                    default:
+                        throw new RuntimeException("Should not reach here.");
                 }
-                else if (RequestType.DOCUMENTS.equals(requestModel.type))
-                {
-                    processingResult = controller.process(requestParameters,
-                        requestModel.source, QueryWordHighlighter.class.getName());
-                }
+
                 setExpires(response, 5);
             }
         }
