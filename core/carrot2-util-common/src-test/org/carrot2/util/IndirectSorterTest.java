@@ -18,11 +18,13 @@ import java.util.Comparator;
 
 import org.junit.Test;
 
+import com.carrotsearch.hppc.sorting.IndirectComparator;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 import com.google.common.collect.Ordering;
 
 /**
- * Test cases for the deprecated and removed <code>IndirectSorter<code>. The replacement class
- * {@link IndirectSort} should provide the same functionality.
+ * Test cases for the legacy (removed) <code>IndirectSorter<code>. The replacement class
+ * {@link IndirectSort} from HPPC should provide the same functionality.
  */
 public class IndirectSorterTest
 {

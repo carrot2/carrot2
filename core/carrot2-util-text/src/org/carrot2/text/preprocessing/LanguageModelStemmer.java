@@ -22,9 +22,9 @@ import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.Bindable;
 
-import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.BitSet;
-
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 

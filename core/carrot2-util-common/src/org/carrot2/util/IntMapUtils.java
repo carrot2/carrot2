@@ -12,8 +12,8 @@
 
 package org.carrot2.util;
 
-import com.carrotsearch.hppc.IntIntCursor;
 import com.carrotsearch.hppc.IntIntOpenHashMap;
+import com.carrotsearch.hppc.cursors.IntIntCursor;
 
 /**
  * A number of utilities for working with {@link IntIntOpenHashMap}s.

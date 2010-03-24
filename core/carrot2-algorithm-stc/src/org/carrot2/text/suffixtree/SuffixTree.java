@@ -12,7 +12,9 @@
 
 package org.carrot2.text.suffixtree;
 
-import com.carrotsearch.hppc.*;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.LongIntOpenHashMap;
+import com.carrotsearch.hppc.cursors.LongIntCursor;
 
 /**
  * Builds a suffix tree (or generalized suffix tree) on a sequence of any integers (or

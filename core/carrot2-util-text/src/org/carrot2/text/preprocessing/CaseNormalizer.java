@@ -20,12 +20,14 @@ import org.carrot2.text.analysis.ITokenType;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
-import org.carrot2.util.*;
+import org.carrot2.util.IntArrayUtils;
+import org.carrot2.util.PcjCompat;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 import com.google.common.collect.Lists;
 
 /**

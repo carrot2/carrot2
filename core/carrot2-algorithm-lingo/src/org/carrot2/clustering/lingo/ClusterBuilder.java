@@ -27,6 +27,7 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.*;
 
 import com.carrotsearch.hppc.*;
+import com.carrotsearch.hppc.cursors.IntIntCursor;
 
 /**
  * Builds cluster labels based on the reduced term-document matrix and assigns documents

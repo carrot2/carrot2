@@ -22,12 +22,14 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.*;
+import org.carrot2.util.PcjCompat;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.*;
 
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntIntOpenHashMap;
+import com.carrotsearch.hppc.sorting.IndirectComparator;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 
 /**
  * Builds a term document matrix based on the provided {@link PreprocessingContext}.

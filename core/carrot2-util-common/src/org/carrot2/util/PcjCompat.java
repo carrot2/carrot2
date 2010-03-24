@@ -17,6 +17,7 @@ import java.util.Arrays;
 import org.apache.commons.lang.ObjectUtils;
 
 import com.carrotsearch.hppc.*;
+import com.carrotsearch.hppc.cursors.*;
 
 /**
  * PCJ compatibility routines.

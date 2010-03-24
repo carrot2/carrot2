@@ -15,7 +15,6 @@ package org.carrot2.text.linguistic;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Tokenizer;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.attribute.Init;
