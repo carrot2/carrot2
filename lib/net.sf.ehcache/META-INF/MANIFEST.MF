@@ -18,5 +18,6 @@ Export-Package: net.sf.ehcache,
  net.sf.ehcache.management,
  net.sf.ehcache.store,
  net.sf.ehcache.util
-Require-Bundle: org.apache.commons
+Require-Bundle: org.apache.commons,
+ org.slf4j;bundle-version="1.5.8"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
