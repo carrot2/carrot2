@@ -39,6 +39,14 @@
     <url>http://issues.carrot2.org/</url>
   </issueManagement>
 
+  <repositories>
+      <repository>
+          <id>carrotsearch.labs.releases</id>
+          <name>Carrot Search Labs Releases Repository</name>
+          <url>http://repository.carrotsearch.com/labs/releases</url>
+      </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>org.carrot2</groupId>
@@ -218,7 +226,7 @@
     <dependency>
       <groupId>com.carrotsearch</groupId>
       <artifactId>hppc</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.0</version>
     </dependency>    
   </dependencies>
 </project>

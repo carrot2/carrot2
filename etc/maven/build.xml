@@ -88,11 +88,6 @@
             <artifact:remoteRepository url="${maven.repository.url}" />
         </artifact:deploy>
 
-        <artifact:deploy file="${carrot2.master.basedir}/lib/com.carrotsearch.hppc/hppc-0.1-dev.jar">
-            <artifact:pom file="${poms.dir}/hppc.pom.xml" />
-            <artifact:remoteRepository url="${maven.repository.url}" />
-        </artifact:deploy>
-
         <artifact:deploy file="${carrot2.master.basedir}/lib/org.apache.mahout.math/mahout-math-0.3-SNAPSHOT.jar" uniqueVersion="false">
             <artifact:pom file="${poms.dir}/mahout-math.pom.xml" />
             <artifact:remoteRepository url="${maven.repository.url}" />
