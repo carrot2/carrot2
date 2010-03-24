@@ -36,7 +36,8 @@ public class UsingCustomLanguageModel
 {
     public static void main(String [] args)
     {
-        final CachingController controller = new CachingController(IDocumentSource.class);
+        @SuppressWarnings("unchecked")
+        final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
 
         // We will pass our custom language model factory class as a initialization-time
         // attribute. It is preferred to passing it as a processing-time attribute
@@ -56,7 +57,7 @@ public class UsingCustomLanguageModel
     /**
      * Clusters results for query "data mining" and displays the clusters.
      */
-    private static void clusterAndDisplayClusters(final CachingController controller,
+    private static void clusterAndDisplayClusters(final Controller controller,
         final Class<? extends IClusteringAlgorithm> clusteringAlgorithm)
     {
         final Map<String, Object> processingAttributes = Maps.newHashMap();

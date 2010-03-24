@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,18 +13,15 @@ package org.carrot2.core;
 
 import java.io.OutputStream;
 
-import net.sf.ehcache.Statistics;
-
-import org.carrot2.util.RollingWindowAverage;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Persister;
 
 /**
- * Provides some statistics about processing performed in a {@link CachingController}.
+ * Provides some statistics about processing performed in a {@link Controller}.
  */
 @Root(name = "statistics")
-public final class CachingControllerStatistics
+public final class ControllerStatistics
 {
     /**
      * Total number of queries handled, including queries resulting in an exception.
@@ -97,64 +93,60 @@ public final class CachingControllerStatistics
     public final long totalTimeWindowSize;
 
     /**
-     * Number of requests that generated cache misses.
+     * Number of requests that generated cache misses. May be null if the controller does
+     * not perform caching.
      */
-    @Attribute(name = "cache-misses")
-    public final long cacheMisses;
+    @Attribute(name = "cache-misses", required = false)
+    public final Long cacheMisses;
 
     /**
-     * Number of requests served from cache.
+     * Number of requests served from cache. May be null if the controller does not
+     * perform caching.
      */
-    @Attribute(name = "cache-hits-total")
-    public final long cacheHitsTotal;
+    @Attribute(name = "cache-hits-total", required = false)
+    public final Long cacheHitsTotal;
 
     /**
-     * Number of requests served from in-memory cache.
+     * Number of requests served from in-memory cache. May be null if the controller does
+     * not perform caching.
      */
-    @Attribute(name = "cache-hits-memory")
-    public final long cacheHitsMemory;
+    @Attribute(name = "cache-hits-memory", required = false)
+    public final Long cacheHitsMemory;
 
     /**
-     * Number of requests served from on-disk cache.
+     * Number of requests served from on-disk cache. May be null if the controller does
+     * not perform caching.
      */
-    @Attribute(name = "cache-hits-disk")
-    public final long cacheHitsDisk;
+    @Attribute(name = "cache-hits-disk", required = false)
+    public final Long cacheHitsDisk;
 
-    /**
-     * Populates the statistics. References to the arguments will not (and must not) be
-     * retained nor exposed.
-     */
-    CachingControllerStatistics(CachingController.ProcessingStatistics controllerStats,
-        Statistics ehcacheStats)
+    ControllerStatistics(long totalQueries, long goodQueries,
+        double algorithmTimeAverageInWindow, long algorithmTimeMeasurementsInWindow,
+        long algorithmTimeWindowSize, double sourceTimeAverageInWindow,
+        long sourceTimeMeasurementsInWindow, long sourceTimeWindowSize,
+        double totalTimeAverageInWindow, long totalTimeMeasurementsInWindow,
+        long totalTimeWindowSize, Long cacheMisses, Long cacheHitsTotal,
+        Long cacheHitsMemory, Long cacheHitsDisk)
     {
-        synchronized (controllerStats)
-        {
-            // Total queries
-            totalQueries = controllerStats.totalQueries;
-            goodQueries = controllerStats.goodQueries;
+        this.totalQueries = totalQueries;
+        this.goodQueries = goodQueries;
 
-            // Averages
-            final RollingWindowAverage algorithmTimeAverage = controllerStats.algorithmTimeAverage;
-            algorithmTimeAverageInWindow = algorithmTimeAverage.getCurrentAverage();
-            algorithmTimeMeasurementsInWindow = algorithmTimeAverage.getUpdatesInWindow();
-            algorithmTimeWindowSize = algorithmTimeAverage.getWindowSizeMillis();
+        this.algorithmTimeAverageInWindow = algorithmTimeAverageInWindow;
+        this.algorithmTimeMeasurementsInWindow = algorithmTimeMeasurementsInWindow;
+        this.algorithmTimeWindowSize = algorithmTimeWindowSize;
 
-            final RollingWindowAverage sourceTimeAverage = controllerStats.sourceTimeAverage;
-            sourceTimeAverageInWindow = sourceTimeAverage.getCurrentAverage();
-            sourceTimeMeasurementsInWindow = sourceTimeAverage.getUpdatesInWindow();
-            sourceTimeWindowSize = sourceTimeAverage.getWindowSizeMillis();
+        this.sourceTimeAverageInWindow = sourceTimeAverageInWindow;
+        this.sourceTimeMeasurementsInWindow = sourceTimeMeasurementsInWindow;
+        this.sourceTimeWindowSize = sourceTimeWindowSize;
 
-            final RollingWindowAverage totalTimeAverage = controllerStats.totalTimeAverage;
-            totalTimeAverageInWindow = totalTimeAverage.getCurrentAverage();
-            totalTimeMeasurementsInWindow = totalTimeAverage.getUpdatesInWindow();
-            totalTimeWindowSize = totalTimeAverage.getWindowSizeMillis();
+        this.totalTimeAverageInWindow = totalTimeAverageInWindow;
+        this.totalTimeMeasurementsInWindow = totalTimeMeasurementsInWindow;
+        this.totalTimeWindowSize = totalTimeWindowSize;
 
-            // Cache stats
-            cacheMisses = ehcacheStats.getCacheMisses();
-            cacheHitsTotal = ehcacheStats.getCacheHits();
-            cacheHitsMemory = ehcacheStats.getInMemoryHits();
-            cacheHitsDisk = ehcacheStats.getOnDiskHits();
-        }
+        this.cacheMisses = cacheMisses;
+        this.cacheHitsTotal = cacheHitsTotal;
+        this.cacheHitsMemory = cacheHitsMemory;
+        this.cacheHitsDisk = cacheHitsDisk;
     }
 
     /**

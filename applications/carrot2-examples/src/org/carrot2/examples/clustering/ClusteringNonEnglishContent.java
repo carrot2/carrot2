@@ -68,9 +68,10 @@ public class ClusteringNonEnglishContent
     public static void main(String [] args)
     {
         /*
-         * We use a CachingController to reuse instances of Carrot2 processing components.
+         * We use a Controller that reuse instances of Carrot2 processing components 
+         * and caches results produced by document sources.
          */
-        final CachingController controller = new CachingController(IDocumentSource.class);
+        final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
 
         /*
          * No special initialization-time attributes in this example.

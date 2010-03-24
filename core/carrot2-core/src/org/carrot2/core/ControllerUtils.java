@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -26,7 +25,7 @@ import com.google.common.collect.Maps;
  * This code is refactored to make sure the tests can perform exactly the same sequence of
  * actions without using the controller as a whole.
  */
-public final class ControllerUtils
+final class ControllerUtils
 {
     /**
      *
@@ -41,22 +40,23 @@ public final class ControllerUtils
      */
     @SuppressWarnings("unchecked")
     public static void init(IProcessingComponent processingComponent,
-        Map<String, Object> attributes, boolean checkRequiredAttributes,
-        IControllerContext context) throws ProcessingException
+        Map<String, Object> inputAttributes, Map<String, Object> outputAttributes,
+        boolean checkRequiredAttributes, IControllerContext context)
+        throws ComponentInitializationException
     {
         try
         {
-            AttributeBinder.bind(processingComponent, attributes,
+            AttributeBinder.bind(processingComponent, inputAttributes,
                 checkRequiredAttributes, Input.class, Init.class);
 
             processingComponent.init(context);
 
-            AttributeBinder.bind(processingComponent, attributes,
+            AttributeBinder.bind(processingComponent, outputAttributes,
                 checkRequiredAttributes, Output.class, Init.class);
         }
         catch (final InstantiationException e)
         {
-            throw new ProcessingException("Attribute binding failed", e);
+            throw new ComponentInitializationException("Attribute binding failed", e);
         }
     }
 
@@ -87,96 +87,22 @@ public final class ControllerUtils
     }
 
     /**
-     * Perform all life cycle required to do processing.
-     */
-    public static void performProcessing(IProcessingComponent processingComponent,
-        Map<String, Object> attributes) throws ProcessingException
-    {
-        processingComponent.process();
-    }
-
-    /**
-     * Perform processing on the provided {@link IProcessingComponent}s, including
-     * {@link IProcessingComponent#beforeProcessing()} and
-     * {@link IProcessingComponent#afterProcessing()} hooks. If requested, stores
-     * processing times in the attributes map on return.
-     * 
-     * @param measureTime if <code>true</code>, processing time will be measured and
-     *            stored in the attributes map
-     * @see AttributeNames#PROCESSING_TIME_ALGORITHM
-     * @see AttributeNames#PROCESSING_TIME_SOURCE
-     * @see AttributeNames#PROCESSING_TIME_TOTAL
-     */
-    public static void performProcessing(Map<String, Object> attributes,
-        boolean measureTime, IProcessingComponent... processingComponents)
-    {
-        for (final IProcessingComponent element : processingComponents)
-        {
-            performProcessing(element, attributes, measureTime);
-        }
-    }
-
-    /**
      * Performs processing with the provided {@link IProcessingComponent}, including
      * {@link IProcessingComponent#beforeProcessing()} and
-     * {@link IProcessingComponent#afterProcessing()} hooks. If requested, stores
-     * processing times in the attributes map.
-     * 
-     * @param measureTime if <code>true</code>, processing time will be measured and
-     *            stored in the attributes map
-     * @see AttributeNames#PROCESSING_TIME_ALGORITHM
-     * @see AttributeNames#PROCESSING_TIME_SOURCE
-     * @see AttributeNames#PROCESSING_TIME_TOTAL
+     * {@link IProcessingComponent#afterProcessing()} hooks. Please note that outputAttributes
+     * <strong>will not</strong> be copied back to the inputAttributes. 
      */
     public static void performProcessing(IProcessingComponent processingComponent,
-        Map<String, Object> attributes, boolean measureTime)
+        Map<String, Object> inputAttributes, Map<String, Object> outputAttributes)
     {
-        long componentStart = System.currentTimeMillis();
         try
         {
-            beforeProcessing(processingComponent, attributes);
-            performProcessing(processingComponent, attributes);
+            beforeProcessing(processingComponent, inputAttributes);
+            processingComponent.process();
         }
         finally
         {
-            afterProcessing(processingComponent, attributes);
-
-            if (measureTime)
-            {
-                long componentStop = System.currentTimeMillis();
-
-                final long time = componentStop - componentStart;
-                if (processingComponent instanceof IDocumentSource)
-                {
-                    addTime(AttributeNames.PROCESSING_TIME_SOURCE, time, attributes);
-                }
-                if (processingComponent instanceof IClusteringAlgorithm)
-                {
-                    addTime(AttributeNames.PROCESSING_TIME_ALGORITHM, time, attributes);
-                }
-                addTime(AttributeNames.PROCESSING_TIME_TOTAL, time, attributes);
-            }
-        }
-    }
-
-    /**
-     * Adds time to the specified time attribute.
-     */
-    static void addTime(String key, Long timeToAdd, Map<String, Object> attributes)
-    {
-        if (timeToAdd == null)
-        {
-            return;
-        }
-
-        final Long time = (Long) attributes.get(key);
-        if (time == null)
-        {
-            attributes.put(key, timeToAdd);
-        }
-        else
-        {
-            attributes.put(key, time + timeToAdd);
+            afterProcessing(processingComponent, outputAttributes);
         }
     }
 
@@ -191,10 +117,11 @@ public final class ControllerUtils
         {
             processingComponent.afterProcessing();
 
-          final Map<String, Object> outputAttributesWithNulls = Maps.newHashMap();
-          AttributeBinder.bind(processingComponent, outputAttributesWithNulls, Output.class,
-              Processing.class);
-          attributes.putAll(Maps.filterValues(outputAttributesWithNulls, Predicates.notNull()));
+            final Map<String, Object> outputAttributesWithNulls = Maps.newHashMap();
+            AttributeBinder.bind(processingComponent, outputAttributesWithNulls,
+                Output.class, Processing.class);
+            attributes.putAll(Maps.filterValues(outputAttributesWithNulls, Predicates
+                .notNull()));
         }
         catch (final InstantiationException e)
         {

@@ -36,7 +36,7 @@ public class ClusteringQualityBenchmark
     {
         // Disable excessive logging
         final AmbientTopic [] topics = AmbientDocumentSource.AmbientTopic.values();
-        SimpleController controller = new SimpleController();
+        final Controller controller = ControllerFactory.createSimple();
 
         // List of algorithms to test
         final ArrayList<Class<? extends IProcessingComponent>> algorithms = Lists

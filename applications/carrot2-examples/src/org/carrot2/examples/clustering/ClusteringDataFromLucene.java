@@ -38,7 +38,6 @@ import org.carrot2.util.attribute.AttributeUtils;
  */
 public class ClusteringDataFromLucene
 {
-    @SuppressWarnings("unchecked")
     public static void main(String [] args) throws IOException
     {
         /*
@@ -56,7 +55,7 @@ public class ClusteringDataFromLucene
          * caching of documents from Lucene index to Lucene and the operating system
          * caches.
          */
-        CachingController controller = new CachingController();
+        final Controller controller = ControllerFactory.createPooling();
 
         /*
          * Prepare a map with component-specific attributes. Here, this map will contain

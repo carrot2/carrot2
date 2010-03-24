@@ -47,7 +47,7 @@ import com.google.common.collect.*;
 public class QueryProcessorServlet extends HttpServlet
 {
     /** Controller that performs all searches */
-    private transient CachingController controller;
+    private transient Controller controller;
 
     /** Generates urls to combined CSS/Javascript files */
     private transient JawrUrlGenerator jawrUrlGenerator;
@@ -110,8 +110,8 @@ public class QueryProcessorServlet extends HttpServlet
         /*
          * Initialize the controller.
          */
-        controller = new CachingController(IDocumentSource.class);
-        controller.init(new HashMap<String, Object>(), webappConfig.components);
+        controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
+        controller.init(new HashMap<String, Object>(), webappConfig.components.getComponentConfigurations());
 
         jawrUrlGenerator = new JawrUrlGenerator(servletContext);
     }
@@ -287,7 +287,7 @@ public class QueryProcessorServlet extends HttpServlet
         final String key = System.getProperty(STATS_KEY);
         if (key != null && key.equals(requestModel.statsKey))
         {
-            final CachingControllerStatistics statistics = controller.getStatistics();
+            final ControllerStatistics statistics = controller.getStatistics();
 
             // Sets encoding for the response writer
             response.setContentType(MIME_TEXT_PLAIN_UTF8);

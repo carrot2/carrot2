@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,8 +11,10 @@
 
 package org.carrot2.core;
 
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
 /**
  * Represents a specific configuration of a {@link IProcessingComponent}.
@@ -48,11 +49,12 @@ public class ProcessingComponentConfiguration
     {
         this.componentClass = componentClass;
         this.componentId = componentId;
-        this.attributes = attributes;
+        this.attributes = ImmutableMap.copyOf(attributes);
     }
-    
+
     /**
-     * Creates a new component configuration with an empty set of initialization attributes.
+     * Creates a new component configuration with an empty set of initialization
+     * attributes.
      * 
      * @param componentClass the specific {@link IProcessingComponent} class.
      * @param componentId identifier of the component.
@@ -61,5 +63,21 @@ public class ProcessingComponentConfiguration
         Class<? extends IProcessingComponent> componentClass, String componentId)
     {
         this(componentClass, componentId, Collections.<String, Object> emptyMap());
+    }
+
+    static Map<String, ProcessingComponentConfiguration> indexByComponentId(
+        ProcessingComponentConfiguration... configurations)
+    {
+        final HashMap<String, ProcessingComponentConfiguration> componentIdToConfiguration = Maps
+            .newHashMapWithExpectedSize(configurations.length);
+        for (ProcessingComponentConfiguration configuration : configurations)
+        {
+            if (componentIdToConfiguration.put(configuration.componentId, configuration) != null)
+            {
+                throw new IllegalArgumentException("Duplicate processing component id: "
+                    + configuration.componentId);
+            }
+        }
+        return Collections.unmodifiableMap(componentIdToConfiguration);
     }
 }

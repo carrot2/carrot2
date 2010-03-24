@@ -16,8 +16,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.SimpleController;
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
@@ -54,7 +53,7 @@ public class LoadingAttributeValuesFromXml
                 .getAttributeValueSet("faster-clustering").getAttributeValues();
 
             // Perform processing using the attribute values
-            final SimpleController controller = new SimpleController();
+            final Controller controller = ControllerFactory.createSimple();
 
             // Initialize the controller with one attribute set
             controller.init(fasterClusteringAttributes);

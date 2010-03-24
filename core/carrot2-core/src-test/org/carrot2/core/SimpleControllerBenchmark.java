@@ -107,7 +107,7 @@ public class SimpleControllerBenchmark
 
     public static void main(String [] args) throws InstantiationException
     {
-        final SimpleController controller = new SimpleController();
+        final Controller controller = ControllerFactory.createSimple();
 
         final int requests = 100000;
 

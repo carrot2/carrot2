@@ -21,7 +21,7 @@ import org.carrot2.util.attribute.Output;
  * Defines the life cycle of a Carrot<sup>2</sup> processing component. The life cycle
  * governs how {@link IProcessingComponent} instances are initialized and disposed of ({@link #init(IControllerContext)},
  * {@link #dispose()}) and how processing proceeds ({@link #beforeProcessing()},
- * {@link #process()}, {@link #afterProcessing()}). See {@link SimpleController} for a
+ * {@link #process()}, {@link #afterProcessing()}). See {@link Controller} for a
  * reference implementation of this life cycle.
  */
 public interface IProcessingComponent

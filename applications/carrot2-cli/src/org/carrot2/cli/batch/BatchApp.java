@@ -99,11 +99,11 @@ public class BatchApp
     /**
      * Processes all input.
      */
-    @SuppressWarnings("unchecked")
     private int process() throws Exception
     {
-        final CachingController controller = new CachingController();
-        controller.init(Collections.<String, Object> emptyMap(), componentSuite);
+        final Controller controller = ControllerFactory.createPooling();
+        controller.init(Collections.<String, Object> emptyMap(), componentSuite
+            .getComponentConfigurations());
 
         // Prepare the algorithm
         if (StringUtils.isBlank(algorithm))
@@ -219,7 +219,7 @@ public class BatchApp
      * Processes an individual file or a directory.
      */
     private void process(File fileOrDirectory, File currentOutputDir,
-        CachingController controller) throws Exception
+        Controller controller) throws Exception
     {
         if (!fileOrDirectory.exists())
         {

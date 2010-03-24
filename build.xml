@@ -97,6 +97,8 @@
     <exclude name="**/carrot2-source-microsoft/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-opensearch/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-microsoft/src/com/microsoft/msnsearch/**/*.java" />
+    <exclude name="**/carrot2-core/src/org/carrot2/core/CachingController.java" />
+    <exclude name="**/carrot2-core/src/org/carrot2/core/SimpleController.java" />
   </fileset>
 
   <patternset id="lib.test">

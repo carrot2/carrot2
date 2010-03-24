@@ -58,7 +58,7 @@ public class ClusteringDataFromLuceneWithCustomFields
          * caching of documents from Lucene index to Lucene and the operating system
          * caches.
          */
-        CachingController controller = new CachingController();
+        final Controller controller = ControllerFactory.createPooling();
 
         /*
          * Prepare a map with component-specific attributes. Here, this map will contain

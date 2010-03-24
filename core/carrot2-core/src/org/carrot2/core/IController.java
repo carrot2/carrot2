@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -22,6 +21,11 @@ import org.simpleframework.xml.Attribute;
 /**
  * Performs processing using {@link IProcessingComponent}s. Implementations must enforce
  * the life cycle described in {@link IProcessingComponent}.
+ * 
+ * @deprecated Please use {@link ControllerFactory} to obtain a suitably configured
+ *             {@link Controller}. {@link Controller}s can be further tuned with custom
+ *             {@link IProcessingComponentManager}s. This interface will be removed
+ *             in the 3.4.0 release of Carrot2.
  */
 public interface IController
 {
@@ -30,9 +34,13 @@ public interface IController
      * calls are made to the {@link #process(Map, Class...)} method.
      * 
      * @param attributes {@link Init}-time attributes for components instantiated in
-     *  {@link #process(Map, Class...)}. 
+     *            {@link #process(Map, Class...)}.
      */
     public void init(Map<String, Object> attributes)
+        throws ComponentInitializationException;
+
+    public void init(Map<String, Object> attributes,
+        ProcessingComponentConfiguration... configurations)
         throws ComponentInitializationException;
 
     /**
@@ -55,4 +63,7 @@ public interface IController
      */
     public ProcessingResult process(Map<String, Object> attributes,
         Class<?>... processingComponentClasses) throws ProcessingException;
+
+    public ProcessingResult process(Map<String, Object> attributes,
+        Object... processingComponentClassesOrIds) throws ProcessingException;
 }

@@ -64,7 +64,7 @@ public abstract class FubDocumentSourceTestBase<T extends IDocumentSource> exten
     public void testResultsNumber()
     {
         final int results = 50;
-        final SimpleController controller = getSimpleController(initAttributes);
+        final Controller controller = getSimpleController(initAttributes);
         processingAttributes.put(AttributeUtils.getKey(getComponentClass(), "topic"),
             getAllTopics()[0]);
         processingAttributes.put(AttributeNames.RESULTS, results);
@@ -101,7 +101,7 @@ public abstract class FubDocumentSourceTestBase<T extends IDocumentSource> exten
     private void checkAllTopics(final int minTopicSize,
         final boolean includeDocumentsWithoutTopic)
     {
-        final SimpleController controller = getSimpleController(initAttributes);
+        final Controller controller = getSimpleController(initAttributes);
         int topicIndex = 1;
         for (Object topic : getAllTopics())
         {

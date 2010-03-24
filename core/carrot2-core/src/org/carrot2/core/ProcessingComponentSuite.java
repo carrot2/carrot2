@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -279,5 +278,23 @@ public class ProcessingComponentSuite
         }
 
         return failed;
+    }
+
+    /**
+     * Returns all processing component configurations available in this suite.
+     * 
+     * @see Controller#init(Map, ProcessingComponentConfiguration...)
+     */
+    public ProcessingComponentConfiguration [] getComponentConfigurations()
+    {
+        final List<ProcessingComponentDescriptor> components = getComponents();
+        final ProcessingComponentConfiguration [] result = new ProcessingComponentConfiguration [components
+            .size()];
+        int i = 0;
+        for (ProcessingComponentDescriptor processingComponentDescriptor : components)
+        {
+            result[i++] = processingComponentDescriptor.getComponentConfiguration();
+        }
+        return result;
     }
 }

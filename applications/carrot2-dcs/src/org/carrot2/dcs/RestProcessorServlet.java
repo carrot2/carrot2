@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -43,14 +42,14 @@ public final class RestProcessorServlet extends HttpServlet
     private final static String UTF8 = "UTF-8";
     private final static String MIME_XML_UTF8 = "text/xml; charset=" + UTF8;
     private final static String MIME_JSON_UTF8 = "text/json; charset=" + UTF8;
-    
+
     private static final long serialVersionUID = 1L;
 
     private transient DcsConfig config;
 
     private transient ProcessingComponentSuite componentSuite;
 
-    private transient CachingController controller;
+    private transient Controller controller;
 
     private transient boolean loggerInitialized;
 
@@ -108,9 +107,10 @@ public final class RestProcessorServlet extends HttpServlet
             cachedComponentClasses.add(IClusteringAlgorithm.class);
         }
 
-        controller = new CachingController(cachedComponentClasses
+        controller = ControllerFactory.createCachingPooling(cachedComponentClasses
             .toArray(new Class [cachedComponentClasses.size()]));
-        controller.init(Collections.<String, Object> emptyMap(), componentSuite);
+        controller.init(Collections.<String, Object> emptyMap(), componentSuite
+            .getComponentConfigurations());
     }
 
     @Override
@@ -372,8 +372,8 @@ public final class RestProcessorServlet extends HttpServlet
             if (OutputFormat.XML.equals(requestModel.outputFormat))
             {
                 response.setContentType(MIME_XML_UTF8);
-                result.serialize(response.getOutputStream(), 
-                    !requestModel.clustersOnly, true);
+                result.serialize(response.getOutputStream(), !requestModel.clustersOnly,
+                    true);
             }
             else if (OutputFormat.JSON.equals(requestModel.outputFormat))
             {

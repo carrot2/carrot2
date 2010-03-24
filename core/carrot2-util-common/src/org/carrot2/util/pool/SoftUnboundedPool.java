@@ -134,6 +134,11 @@ public final class SoftUnboundedPool<T, P> implements IParameterizedPool<T, P>
     {
         synchronized (this)
         {
+            if (this.instances == null)
+            {
+                return;
+            }
+            
             Map<Pair<Class<? extends T>, P>, List<SoftReference<? extends T>>> instancesRef = this.instances;
             this.instances = null;
 

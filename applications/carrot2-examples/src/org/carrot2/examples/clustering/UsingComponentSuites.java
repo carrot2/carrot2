@@ -34,9 +34,8 @@ public class UsingComponentSuites
 {
     public static void main(String [] args) throws Exception
     {
-        // To use component suites, we need to use CachingController. Here, we'll
-        // have it cache the results we fetch from document sources.
-        final CachingController controller = new CachingController(IDocumentSource.class);
+        @SuppressWarnings("unchecked")
+        final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
 
         // Initialization-time attributes that will apply to all components.
         final Map<String, Object> initAttributes = Maps.newHashMap();
@@ -55,7 +54,7 @@ public class UsingComponentSuites
             
             // Initialize the controller with the suite. All components from the suite
             // will be available for processing within this controller.
-            controller.init(initAttributes, suite);
+            controller.init(initAttributes, suite.getComponentConfigurations());
 
             // From the suite definition, you can get the document sources and clustering
             // algorithm descriptors.
