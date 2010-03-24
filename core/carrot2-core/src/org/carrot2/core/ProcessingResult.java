@@ -417,7 +417,7 @@ public final class ProcessingResult
      * <code>item</code> element. Each cluster a document belongs to will be represented
      * as the <code>item</code>'s <code>category</code> element.
      * 
-     * @param stream the stream to serialize this {@link ProcessingResult} to. The stream
+     * @param outputStream the stream to serialize this {@link ProcessingResult} to. The stream
      *            will <strong>not</strong> be closed.
      * @param saveClusters if <code>false</code>, clusters will not be serialized
      */
