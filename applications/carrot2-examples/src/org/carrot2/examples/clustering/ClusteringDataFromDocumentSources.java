@@ -45,7 +45,7 @@ public class ClusteringDataFromDocumentSources
          * source. Note that the API key defaults to the one assigned for the Carrot2
          * project. Please use your own key for production use.
          */
-        final Controller controller = ControllerFactory.createSimple();
+        final Controller controller = ControllerFactory.createSimple().init();
 
         /*
          * As the simple controller discards component instances after processing, the

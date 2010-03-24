@@ -112,7 +112,7 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
 
     public static void main(String [] args)
     {
-        final Controller controller = ControllerFactory.createSimple();
+        final Controller controller = ControllerFactory.createSimple().init();
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put(AttributeUtils.getKey(ExampleDocumentSource.class, "modulo"), 2);
         params.put(AttributeUtils.getKey(ExampleDocumentSource.class, "analyzer"),
