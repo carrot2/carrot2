@@ -8,6 +8,7 @@ package org.carrot2.text.analysis;
  * on 15.03.10 19:18 from the specification file
  * <tt>E:/repositories/sourceforge.net/carrot2-3.0/core/carrot2-util-text/src/org/carrot2/text/analysis/ExtendedWhitespaceTokenizerImpl.jflex</tt>
  */
+@SuppressWarnings("unused")
 final class ExtendedWhitespaceTokenizerImpl {
 
   /** This character denotes the end of file */
