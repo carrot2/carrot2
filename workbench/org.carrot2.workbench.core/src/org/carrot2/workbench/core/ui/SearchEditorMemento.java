@@ -14,10 +14,8 @@ package org.carrot2.workbench.core.ui;
 
 import java.util.Map;
 
-import org.carrot2.workbench.core.ui.SearchEditor.PanelName;
-import org.carrot2.workbench.core.ui.SearchEditor.PanelState;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
+import org.carrot2.workbench.core.ui.SearchEditor.*;
+import org.simpleframework.xml.*;
 
 /**
  * Persistent state for {@link SearchInputView}.
@@ -33,4 +31,10 @@ public final class SearchEditorMemento
      */
     @ElementMap
     public Map<String, Boolean> sectionsExpansionState;
+
+    /**
+     * Per-editor save options.
+     */
+    @Element(required = false)
+    public SaveOptions saveOptions;
 }

@@ -38,12 +38,6 @@ import org.eclipse.swt.widgets.*;
  */
 final class SearchEditorSaveAsDialog extends TrayDialog
 {
-    /**
-     * Global most recent path in case the editor did not have a previous one.
-     */
-    private static final String GLOBAL_PATH_PREF = 
-        SearchEditorSaveAsDialog.class.getName() + ".savePath";
-
     private Text fileNameText;
     private Button browseButton;
 
@@ -52,9 +46,9 @@ final class SearchEditorSaveAsDialog extends TrayDialog
     private ComboViewer format;
 
     /**
-     * Save options.
+     * Save options (from the editor).
      */
-    public SaveOptions options;
+    public SaveOptions editorOptions;
 
     /*
      * 
@@ -62,7 +56,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
     public SearchEditorSaveAsDialog(Shell parentShell, SearchEditor.SaveOptions options)
     {
         super(parentShell);
-        this.options = options;
+        this.editorOptions = options;
     }
 
     @Override
@@ -84,14 +78,14 @@ final class SearchEditorSaveAsDialog extends TrayDialog
     protected void okPressed()
     {
         final File f = new File(this.fileNameText.getText());
-        options.directory = f.getParent();
-        options.fileName = f.getName();
-        options.includeClusters = clusterOption.getSelection();
-        options.includeDocuments = docOption.getSelection();
-        options.format = (SaveFormat) (((StructuredSelection) format.getSelection())
+        editorOptions.directory = f.getParent();
+        editorOptions.fileName = f.getName();
+        editorOptions.includeClusters = clusterOption.getSelection();
+        editorOptions.includeDocuments = docOption.getSelection();
+        editorOptions.format = (SaveFormat) (((StructuredSelection) format.getSelection())
             .getFirstElement());
 
-        FileDialogs.rememberPath(GLOBAL_PATH_PREF, new Path(options.directory));
+        editorOptions.saveGlobal();
         super.okPressed();
     }
 
@@ -104,13 +98,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
         final Composite root = (Composite) super.createDialogArea(parent);
         createControls(root);
 
-        if (options.directory == null)
-        {
-            options.directory = 
-                FileDialogs.recallPath(GLOBAL_PATH_PREF).toOSString();
-        }
-
-        final Path fullPath = new Path(options.getFullPath());
+        final Path fullPath = new Path(editorOptions.getFullPath());
         fileNameText.setText(fullPath.toOSString());
         browseButton.addListener(Selection, new Listener()
         {
@@ -227,7 +215,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             format = new ComboViewer(combo);
             format.setContentProvider(new ArrayContentProvider());
             format.setInput(Arrays.asList(SaveFormat.values()));
-            format.setSelection(new StructuredSelection(options.format));
+            format.setSelection(new StructuredSelection(editorOptions.format));
         }
         {
             new Label(root, SWT.NONE).setVisible(false);
@@ -238,7 +226,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             docOptionLData.horizontalIndent = 5;
             docOption.setLayoutData(docOptionLData);
             docOption.setText("Include documents");
-            docOption.setSelection(options.includeDocuments);
+            docOption.setSelection(editorOptions.includeDocuments);
         }
         {
             new Label(root, SWT.NONE).setVisible(false);
@@ -249,11 +237,11 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             clusterOptionLData.horizontalSpan = 2;
             clusterOption.setLayoutData(clusterOptionLData);
             clusterOption.setText("Include clusters");
-            clusterOption.setSelection(options.includeClusters);
+            clusterOption.setSelection(editorOptions.includeClusters);
         }
 
-        docOption.setEnabled(options.format != SaveFormat.RSS20);
-        if (options.format == SaveFormat.RSS20)
+        docOption.setEnabled(editorOptions.format != SaveFormat.RSS20);
+        if (editorOptions.format == SaveFormat.RSS20)
         {
             docOption.setSelection(true);
         }
