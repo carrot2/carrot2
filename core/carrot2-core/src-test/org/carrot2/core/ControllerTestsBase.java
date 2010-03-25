@@ -17,7 +17,7 @@ import org.junit.*;
 import com.google.common.collect.Maps;
 
 /**
- *
+ * Base class for {@link Controller} tests.
  */
 public abstract class ControllerTestsBase
 {

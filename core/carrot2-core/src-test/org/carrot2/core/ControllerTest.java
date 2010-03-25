@@ -8,7 +8,7 @@ import org.junit.runners.Suite;
 import com.google.common.collect.ImmutableMap;
 
 /**
- *
+ * Runs matrix tests on {@link Controller} in all realistic configurations.
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses(
@@ -31,8 +31,8 @@ public class ControllerTest
 {
     public static class ComponentManagerIndependentTests
     {
-        @Test(expected = IllegalStateException.class)
-        public void testUninitialized()
+        @Test
+        public void testAutomaticInitialization()
         {
             Controller controller = null;
             try
@@ -44,6 +44,7 @@ public class ControllerTest
             {
                 controller.dispose();
             }
+            // If we don't get an exception here, the test is passed
         }
 
         @Test(expected = IllegalStateException.class)
@@ -162,7 +163,7 @@ public class ControllerTest
         }
 
         @Override
-        boolean hasPooling()
+        public boolean hasPooling()
         {
             return true;
         }
@@ -187,7 +188,7 @@ public class ControllerTest
         }
 
         @Override
-        boolean hasPooling()
+        public boolean hasPooling()
         {
             return true;
         }
@@ -213,13 +214,13 @@ public class ControllerTest
         }
 
         @Override
-        boolean hasCaching()
+        public boolean hasCaching()
         {
             return true;
         }
 
         @Override
-        boolean hasPooling()
+        public boolean hasPooling()
         {
             return true;
         }
@@ -235,7 +236,7 @@ public class ControllerTest
         }
 
         @Override
-        boolean hasCaching()
+        public boolean hasCaching()
         {
             return true;
         }
@@ -252,7 +253,7 @@ public class ControllerTest
         }
 
         @Override
-        boolean hasPooling()
+        public boolean hasPooling()
         {
             return true;
         }
@@ -278,7 +279,7 @@ public class ControllerTest
         }
 
         @Override
-        boolean hasCaching()
+        public boolean hasCaching()
         {
             return true;
         }

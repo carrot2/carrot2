@@ -8,13 +8,13 @@ import org.carrot2.util.attribute.Bindable;
 import org.junit.Test;
 
 /**
- *
+ * Tests pooling functionality of a {@link Controller}.
  */
 public abstract class ControllerTestsPooling extends ControllerTestsBase
 {
-    abstract Controller getPoolingController();
+    public abstract Controller getPoolingController();
 
-    boolean hasCaching()
+    public boolean hasCaching()
     {
         return false;
     }
@@ -163,7 +163,7 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
         performProcessingAndDispose(ComponentWithInstanceCounter.class);
         assertThat(ComponentWithInstanceCounter.instanceCount).isEqualTo(1);
     }
-    
+
     @Bindable
     public static class ComponentWithInstanceCounter extends ProcessingComponentBase
     {

@@ -15,18 +15,20 @@ import org.junit.*;
 import com.google.common.collect.*;
 
 /**
- *
+ * Tests common functionality of a {@link Controller}. The fact that we need to resort to
+ * having {@link #hasCaching()} and {@link #hasPooling()} methods here isn't pretty, but
+ * makes testing a lot easier.
  */
 public abstract class ControllerTestsCommon extends ControllerTestsBase
 {
-    abstract Controller getSimpleController();
+    public abstract Controller getSimpleController();
 
-    boolean hasCaching()
+    public boolean hasCaching()
     {
         return false;
     }
 
-    boolean hasPooling()
+    public boolean hasPooling()
     {
         return false;
     }

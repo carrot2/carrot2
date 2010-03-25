@@ -38,7 +38,7 @@ public class ClusteringDataFromPubMed
          * caching. If you need to cache documents, clusters or Carrot2 component
          * instances, please see the CachingController example.
          */
-        final Controller controller = ControllerFactory.createSimple().init();
+        final Controller controller = ControllerFactory.createSimple();
         Map<String, Object> attributes = new HashMap<String, Object>();
 
         /*

@@ -8,13 +8,13 @@ import org.junit.*;
 import com.google.common.collect.Maps;
 
 /**
- *
+ * Tests caching functionality of a {@link Controller}.
  */
 public abstract class ControllerTestsCaching extends ControllerTestsBase
 {
-    abstract Controller getCachingController(Class<? extends IProcessingComponent>... cachedComponentClasses);
+    public abstract Controller getCachingController(Class<? extends IProcessingComponent>... cachedComponentClasses);
 
-    boolean hasPooling()
+    public boolean hasPooling()
     {
         return false;
     }

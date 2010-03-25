@@ -49,7 +49,7 @@ public class ClusteringDocumentList
         /*
          * We are clustering using a simple controller (no caching, one-time shot).
          */
-        final Controller controller = ControllerFactory.createSimple().init();
+        final Controller controller = ControllerFactory.createSimple();
 
         /*
          * All data for components (and between them) is passed using a Map. Place the

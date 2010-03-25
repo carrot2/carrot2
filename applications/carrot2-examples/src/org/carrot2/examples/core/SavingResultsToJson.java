@@ -34,7 +34,7 @@ public class SavingResultsToJson
     public static void main(String [] args) throws Exception
     {
         // Let's fetch some results from MSN first
-        final Controller controller = ControllerFactory.createSimple().init();
+        final Controller controller = ControllerFactory.createSimple();
         final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put(AttributeNames.DOCUMENTS, SampleDocumentData.DOCUMENTS_DATA_MINING);
         attributes.put(AttributeNames.QUERY, "data mining");

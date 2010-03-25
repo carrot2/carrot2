@@ -89,11 +89,9 @@ public final class Controller
     }
 
     /**
-     * Initializes this controller with an empty {@link Init}-time attributes map.
-     * <p>
-     * Any of the {@link #init()} methods must complete successfully before this
-     * controller is made visible to other threads and can perform processing.
-     * </p>
+     * Initializes this controller with an empty {@link Init}-time attributes map. Calling
+     * this method is optional, if {@link #process(Map, Object...)} is called on an
+     * uninitialized controller, {@link #init()} will be called automatically.
      * 
      * @return this controller for convenience
      */
@@ -107,10 +105,6 @@ public final class Controller
      * provided attributes will be applied to all processing components managed by this
      * controller. {@link Init}-time attributes can be overridden at processing time, see
      * {@link #process(Map, Class...)} or {@link #process(Map, Object...)}.
-     * <p>
-     * Any of the {@link #init()} methods must complete successfully before this
-     * controller is made visible to other threads and can perform processing.
-     * </p>
      * 
      * @param attributes initialization-time attributes to be applied to all processing
      *            components in this controller
@@ -127,10 +121,6 @@ public final class Controller
      * additional component-specific {@link Init}-time attributes. {@link Init}-time
      * attributes can be overridden at processing time, see
      * {@link #process(Map, Class...)} or {@link #process(Map, Object...)}.
-     * <p>
-     * Any of the {@link #init()} methods must complete successfully before this
-     * controller is made visible to other threads and can perform processing.
-     * </p>
      * 
      * @param attributes initialization-time attributes to be applied to all processing
      *            components in this controller
@@ -219,13 +209,15 @@ public final class Controller
     public ProcessingResult process(Map<String, Object> attributes,
         Object... processingComponentClassesOrIds) throws ProcessingException
     {
-        // To be 100% correct, we'd need to synchronize here, but it's cheaper not to.
-        // We made a remark in the class JavaDoc about controller initialization and
-        // controller instance visibility.
-        if (componentIdToConfiguration == null)
+        // Automatically initialize the controller if the caller has not done that
+        // explicitly. The extra synchronization overhead does exist, but it's very
+        // small compared to the API simplification benefits.
+        synchronized (this)
         {
-            throw new IllegalStateException(
-                "To perform processing with this controller, call init() first.");
+            if (componentIdToConfiguration == null) 
+            {
+                init();
+            }
         }
 
         // Prepare components for processing

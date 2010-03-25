@@ -10,7 +10,7 @@ Export-Package: org.carrot2.core,
  org.carrot2.source
 Require-Bundle: org.carrot2.util.attribute;visibility:=reexport,
  org.carrot2.util.common;visibility:=reexport,
- net.sf.ehcache;bundle-version="1.4.1",
+ net.sf.ehcache,
  org.codehaus.jackson
 Bundle-ClassPath: META-INF/,
  .

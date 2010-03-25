@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="lib" path="lib/h2-1.2.132.jar"/>
+	<classpathentry kind="lib" path="lib/junit-benchmarks-0.1.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.google.collections"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.junit4-ext"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-attribute"/>
+	<classpathentry kind="output" path="tmp/eclipse"/>
+</classpath>

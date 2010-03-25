@@ -74,12 +74,6 @@ public class ClusteringNonEnglishContent
         final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
 
         /*
-         * No special initialization-time attributes in this example.
-         */
-        final Map<String, Object> initAttributes = new HashMap<String, Object>();
-        controller.init(initAttributes);
-
-        /*
          * In the first call, we'll cluster a document list, setting the language for each
          * document separately.
          */
