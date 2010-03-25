@@ -125,7 +125,7 @@ public class ControllerOverheadBenchmark extends AbstractBenchmark
     public static void shutDownExecutor() throws InterruptedException
     {
         executorService.shutdown();
-        executorService.awaitTermination(1, TimeUnit.MINUTES);
+        executorService.awaitTermination(5, TimeUnit.SECONDS);
     }
 
     @Test
