@@ -15,6 +15,7 @@ package org.carrot2.text.linguistic;
 import static org.junit.Assert.*;
 
 import org.carrot2.core.LanguageCode;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -22,10 +23,18 @@ import org.junit.Test;
  */
 public class LanguageModelFactoryTest
 {
+    private DefaultLanguageModelFactory factory;
+
+    @Before
+    public void createFactory()
+    {
+        factory = new DefaultLanguageModelFactory();
+    }
+    
     @Test
     public void testLanguageDutch()
     {
-        final ILanguageModel model = new DefaultLanguageModelFactory().getLanguageModel(LanguageCode.DUTCH);
+        final ILanguageModel model = factory.getLanguageModel(LanguageCode.DUTCH);
         assertNotNull(model);
         assertEquals(LanguageCode.DUTCH, model.getLanguageCode());
     }
@@ -35,11 +44,24 @@ public class LanguageModelFactoryTest
     {
         for (LanguageCode l : LanguageCode.values())
         {
-            new DefaultLanguageModelFactory().getLanguageModel(l);
+            factory.getLanguageModel(l);
         }
         
         assertFalse("There were problems with loading certain lexical resources. Check the logs.", 
             LexicalResources.hasIssues());
+    }
+    
+    @Test
+    public void testResourcesPath()
+    {
+        factory.resourcePath = "/nonexisting/";
+        factory.reloadResources = true;
+        factory.getLanguageModel(LanguageCode.ENGLISH);
+        
+        // If we're unable to load resources, the resource path setting must be working.
+        // If the previous test passes too, this gives us good chances that the
+        // resourcePath setting actually works.
+        assertTrue(LexicalResources.hasIssues());
     }
 }
 
