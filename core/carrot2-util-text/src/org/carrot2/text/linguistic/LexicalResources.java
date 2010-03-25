@@ -179,6 +179,16 @@ final class LexicalResources
             || !regexpProblemsCache.isEmpty();
     }
     
+    /**
+     * Used for testing only.
+     */
+    static void clearIssues()
+    {
+        missingStoplabelsCache.clear();
+        missingStoplabelsCache.clear();
+        regexpProblemsCache.clear();
+    }
+    
     static String withSeparator(String path)
     {
         return path.endsWith("/") ? path : path + "/";

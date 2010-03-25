@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -30,7 +29,7 @@ public class LanguageModelFactoryTest
     {
         factory = new DefaultLanguageModelFactory();
     }
-    
+
     @Test
     public void testLanguageDutch()
     {
@@ -38,7 +37,7 @@ public class LanguageModelFactoryTest
         assertNotNull(model);
         assertEquals(LanguageCode.DUTCH, model.getLanguageCode());
     }
-    
+
     @Test
     public void testLinguisticResourcesAvailable()
     {
@@ -46,22 +45,33 @@ public class LanguageModelFactoryTest
         {
             factory.getLanguageModel(l);
         }
-        
-        assertFalse("There were problems with loading certain lexical resources. Check the logs.", 
+
+        assertFalse(
+            "There were problems with loading certain lexical resources. Check the logs.",
             LexicalResources.hasIssues());
     }
-    
+
     @Test
     public void testResourcesPath()
     {
-        factory.resourcePath = "/nonexisting/";
-        factory.reloadResources = true;
-        factory.getLanguageModel(LanguageCode.ENGLISH);
-        
-        // If we're unable to load resources, the resource path setting must be working.
-        // If the previous test passes too, this gives us good chances that the
-        // resourcePath setting actually works.
-        assertTrue(LexicalResources.hasIssues());
+        try
+        {
+            factory.resourcePath = "/nonexisting/";
+            factory.reloadResources = true;
+            factory.getLanguageModel(LanguageCode.ENGLISH);
+
+            // If we're unable to load resources, the resource path setting must be
+            // working.
+            // If the previous test passes too, this gives us good chances that the
+            // resourcePath setting actually works.
+            assertTrue(LexicalResources.hasIssues());
+        }
+        finally
+        {
+            // Reload correct resource to the static data structures
+            factory.resourcePath = "/";
+            LexicalResources.clearIssues();
+            testLinguisticResourcesAvailable();
+        }
     }
 }
-
