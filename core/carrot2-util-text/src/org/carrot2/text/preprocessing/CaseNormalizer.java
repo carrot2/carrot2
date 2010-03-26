@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -79,8 +78,8 @@ public final class CaseNormalizer
         final int documentCount = context.documents.size();
 
         // Sort token images
-        final int [] tokenImagesOrder = IndirectSort.sort(tokenImages, 0, tokenImages.length,
-            CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR);
+        final int [] tokenImagesOrder = IndirectSort.sort(tokenImages, 0,
+            tokenImages.length, CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR);
 
         // Create holders for new arrays
         final List<char []> normalizedWordImages = Lists.newArrayList();
@@ -129,17 +128,13 @@ public final class CaseNormalizer
             }
 
             // Check if we want to index this token at all
-            if (isIndexed(tokenType))
+            if (isNotIndexed(tokenType))
             {
                 variantStartIndex = i + 1;
                 maxTfVariantIndex = tokenImagesOrder[i + 1];
 
-                final int nextTokenType = tokenTypesArray[tokenImagesOrder[i]];
-                if (isIndexed(nextTokenType))
-                {
-                    resetForNewTokenImage(documentIndexesArray, tokenImagesOrder,
-                        documentIndices, fieldIndices, wordTfByDocument, i);
-                }
+                resetForNewTokenImage(documentIndexesArray, tokenImagesOrder,
+                    documentIndices, fieldIndices, wordTfByDocument, i);
                 continue;
             }
 
@@ -252,7 +247,7 @@ public final class CaseNormalizer
     /**
      * Determines whether we should include the token in AllWords.
      */
-    private boolean isIndexed(final int tokenType)
+    private boolean isNotIndexed(final int tokenType)
     {
         return tokenType == ITokenType.TT_PUNCTUATION
             || tokenType == ITokenType.TT_FULL_URL
