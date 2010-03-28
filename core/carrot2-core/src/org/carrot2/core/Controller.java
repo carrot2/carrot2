@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Init;
 import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.RollingWindowAverage;
 import org.carrot2.util.attribute.Input;

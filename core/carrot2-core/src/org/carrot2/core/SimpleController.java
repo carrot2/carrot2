@@ -22,11 +22,11 @@ import java.util.Map;
  * classes are used, for <b>each query</b> the controller creates, initializes and
  * destroys instances of all components involved in the processing. For long-running
  * applications (e.g. web applications) please consider the
- * {@link ControllerFactory#createCachingPooling()}, which offers processing component
+ * {@link ControllerFactory#createCachingPooling(Class...)}, which offers processing component
  * pooling and result caching.
  * <p>
  * Thread-safety of processing on instantiated component (
- * {@link #process(Map, IProcessingComponent...)}) instances is not enforced in any way
+ * {@link #process(Map, Object...)}) instances is not enforced in any way
  * and must be assured externally. Processing on component classes (
  * {@link #process(Map, Class...)}) is thread safe, but there is an additional overhead of
  * creating new component instances for each query (which may or may not be a performance

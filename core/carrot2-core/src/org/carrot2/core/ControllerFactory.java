@@ -22,7 +22,7 @@ public final class ControllerFactory
      * controller with component pooling and/or caching.
      * </p>
      * 
-     * @see #createPooling(Class...)
+     * @see #createPooling()
      * @see #createCaching(Class...)
      * @see #create(boolean, Class...)
      */
@@ -63,7 +63,7 @@ public final class ControllerFactory
      * create, otherwise performance will suffer.
      * </p>
      * 
-     * @param cachedComponentClasses classes of components whose output should be cached
+     * @param cachedProcessingComponents classes of components whose output should be cached
      *            by the controller. If a superclass is provided here, e.g.
      *            {@link IDocumentSource}, all its subclasses will be subject to caching.
      *            If {@link IProcessingComponent} is provided here, output of all
@@ -83,7 +83,7 @@ public final class ControllerFactory
      * Use this component in long-running applications that handle repeated requests.
      * </p>
      * 
-     * @param cachedComponentClasses classes of components whose output should be cached
+     * @param cachedProcessingComponents classes of components whose output should be cached
      *            by the controller. If a superclass is provided here, e.g.
      *            {@link IDocumentSource}, all its subclasses will be subject to caching.
      *            If {@link IProcessingComponent} is provided here, output of all
@@ -99,7 +99,7 @@ public final class ControllerFactory
      * Creates a controller with the specified pooling and caching settings.
      * 
      * @param componentPooling if <code>true</code>, component pooling will be performed
-     * @param cachedComponentClasses classes of components whose output should be cached
+     * @param cachedProcessingComponents classes of components whose output should be cached
      *            by the controller. If a superclass is provided here, e.g.
      *            {@link IDocumentSource}, all its subclasses will be subject to caching.
      *            If {@link IProcessingComponent} is provided here, output of all
