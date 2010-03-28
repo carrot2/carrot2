@@ -50,7 +50,7 @@ public class MemTimeBenchmark
      * (preferably short, because longer input is simulated by concatenating documents
      * together).
      */
-    private final static ArrayList<Document> documents = new ArrayList<Document>();
+    protected static ArrayList<Document> documents = new ArrayList<Document>();
 
     /**
      * Directory with input XML files. Files should be organized using file name
@@ -204,7 +204,7 @@ public class MemTimeBenchmark
         {
             w = new OutputStreamWriter(new FileOutputStream(output), "UTF-8");
 
-            String header = "docs size[KB] time[s] mem[MB]";
+            String header = "docs size[MB] time[s] mem[MB]";
             w.write(header + "\n");
             logger.info(header);
 

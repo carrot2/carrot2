@@ -18,5 +18,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.slf4j"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-log4j"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-matrix"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.commons"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
