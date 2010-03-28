@@ -97,27 +97,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         @org.simpleframework.xml.Attribute(required = false)
         public Boolean includeClusters = true;
 
-        @org.simpleframework.xml.Attribute(required = false)
-        public SaveFormat format = SaveFormat.C2XML;
-
-        public enum SaveFormat 
-        { 
-            C2XML("Carrot2 XML"), RSS20("RSS2.0");
-            
-            private String label;
-
-            private SaveFormat(String label)
-            {
-                this.label = label;
-            }
-
-            @Override
-            public String toString()
-            {
-                return label;
-            }
-        }
-
         public String getFullPath()
         {
             Path path = FileDialogs.checkOrDefault(directory);

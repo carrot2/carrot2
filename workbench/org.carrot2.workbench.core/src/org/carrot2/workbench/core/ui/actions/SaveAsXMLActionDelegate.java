@@ -14,13 +14,19 @@ package org.carrot2.workbench.core.ui.actions;
 
 import java.io.*;
 
+import javax.xml.transform.*;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.ExceptionUtils;
+import org.carrot2.util.xslt.NopURIResolver;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.SearchEditor.SaveOptions;
-import org.carrot2.workbench.core.ui.SearchEditor.SaveOptions.SaveFormat;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 
@@ -32,7 +38,8 @@ public final class SaveAsXMLActionDelegate extends Action
 {
     private final ProcessingResult results;
     private final SaveOptions options;
-
+    private final Transformer transformer;
+    
     /*
      * 
      */
@@ -40,6 +47,44 @@ public final class SaveAsXMLActionDelegate extends Action
     {
         this.results = result;
         this.options = options;
+        
+        final TransformerFactory tFactory = TransformerFactory.newInstance();
+        tFactory.setURIResolver(new NopURIResolver());
+        
+        final String xslt = System.getProperty("carrot2.workbench.save-as-xml.xslt");
+        InputStream xsltStream = null;
+        
+        Transformer t = null;
+        try
+        {
+            if (StringUtils.isNotBlank(xslt))
+            {
+                try
+                {
+                    xsltStream = new FileInputStream(xslt);
+                    t = tFactory.newTransformer(new StreamSource(xsltStream));
+                }
+                catch (FileNotFoundException e)
+                {
+                    Utils.showError(new Status(Status.WARNING, WorkbenchCorePlugin.PLUGIN_ID,
+                        "Could not XSLT stylesheet", e));
+                    t = tFactory.newTransformer();
+                }
+                finally {
+                    CloseableUtils.close(xsltStream);
+                }
+            }
+            else
+            {
+                t = tFactory.newTransformer();
+            }
+        }
+        catch (TransformerConfigurationException e1)
+        {
+            throw ExceptionUtils.wrapAsRuntimeException(e1);
+        }
+        
+        transformer = t;
     }
 
     /**
@@ -57,12 +102,12 @@ public final class SaveAsXMLActionDelegate extends Action
                 destinationFile.createNewFile();
             }
 
+            final ByteArrayOutputStream output = new ByteArrayOutputStream();
+            
             os = new FileOutputStream(destinationFile);
-            if (options.format == SaveFormat.C2XML) {
-                results.serialize(os, options.includeDocuments, options.includeClusters);
-            } else {
-                results.serializeRss(os, options.includeClusters);
-            }
+            results.serialize(output, options.includeDocuments, options.includeClusters);
+            transformer.transform(new StreamSource(new ByteArrayInputStream(output
+                .toByteArray())), new StreamResult(os));
         }
         catch (Exception e)
         {

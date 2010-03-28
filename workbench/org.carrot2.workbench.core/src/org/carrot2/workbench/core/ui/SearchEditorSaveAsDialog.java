@@ -17,14 +17,11 @@ import static org.eclipse.swt.SWT.Modify;
 import static org.eclipse.swt.SWT.Selection;
 
 import java.io.File;
-import java.util.Arrays;
 
 import org.carrot2.workbench.core.ui.SearchEditor.SaveOptions;
-import org.carrot2.workbench.core.ui.SearchEditor.SaveOptions.SaveFormat;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
-import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
@@ -43,7 +40,6 @@ final class SearchEditorSaveAsDialog extends TrayDialog
 
     private Button clusterOption;
     private Button docOption;
-    private ComboViewer format;
 
     /**
      * Save options (from the editor).
@@ -82,8 +78,6 @@ final class SearchEditorSaveAsDialog extends TrayDialog
         editorOptions.fileName = f.getName();
         editorOptions.includeClusters = clusterOption.getSelection();
         editorOptions.includeDocuments = docOption.getSelection();
-        editorOptions.format = (SaveFormat) (((StructuredSelection) format.getSelection())
-            .getFirstElement());
 
         editorOptions.saveGlobal();
         super.okPressed();
@@ -119,23 +113,6 @@ final class SearchEditorSaveAsDialog extends TrayDialog
                 validateInput();
             }
         };
-        
-        final ISelectionChangedListener alwaysSaveDocumentsForRss = new ISelectionChangedListener()
-        {
-            public void selectionChanged(SelectionChangedEvent event)
-            {
-                final SaveFormat formatChoice = (SaveFormat) (((StructuredSelection) format
-                    .getSelection()).getFirstElement());
-                
-                docOption.setEnabled(formatChoice != SaveFormat.RSS20);
-                if (formatChoice == SaveFormat.RSS20)
-                {
-                    docOption.setSelection(true);
-                }
-            }
-        };
-
-        format.addSelectionChangedListener(alwaysSaveDocumentsForRss);
         
         docOption.addListener(Selection, correctnessChecker);
         clusterOption.addListener(Selection, correctnessChecker);
@@ -202,22 +179,6 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             browseButton.setLayoutData(dialogButtonLData);
         }
         {
-            Label formatLabel = new Label(root, SWT.NONE);
-            formatLabel.setText("Format:");
-
-            final Combo combo = new Combo(root, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
-            GridData formatLData = new GridData();
-            formatLData.horizontalIndent = 5;
-            formatLData.horizontalSpan = 2;
-            combo.setLayoutData(formatLData);
-            combo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-
-            format = new ComboViewer(combo);
-            format.setContentProvider(new ArrayContentProvider());
-            format.setInput(Arrays.asList(SaveFormat.values()));
-            format.setSelection(new StructuredSelection(editorOptions.format));
-        }
-        {
             new Label(root, SWT.NONE).setVisible(false);
 
             docOption = new Button(root, SWT.CHECK | SWT.LEFT);
@@ -238,12 +199,6 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             clusterOption.setLayoutData(clusterOptionLData);
             clusterOption.setText("Include clusters");
             clusterOption.setSelection(editorOptions.includeClusters);
-        }
-
-        docOption.setEnabled(editorOptions.format != SaveFormat.RSS20);
-        if (editorOptions.format == SaveFormat.RSS20)
-        {
-            docOption.setSelection(true);
         }
     }
 }

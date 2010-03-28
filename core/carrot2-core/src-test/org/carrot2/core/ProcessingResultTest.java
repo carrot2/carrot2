@@ -21,8 +21,6 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.commons.io.output.NullOutputStream;
-import org.carrot2.core.ProcessingResult.Rss;
-import org.carrot2.core.ProcessingResult.Rss.RssItem;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.CollectionUtils;
@@ -320,52 +318,6 @@ public class ProcessingResultTest
 
         Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
             .isEqualTo(sourceProcessingResult.getAttributes().get(AttributeNames.QUERY));
-    }
-
-    @Test
-    public void testProcessingResultToRss() throws Exception
-    {
-        final ProcessingResult result = prepareProcessingResult();
-
-        final Cluster clusterA = result.getClusters().get(0);
-        final Cluster clusterAA = result.getClusters().get(0).getSubclusters().get(0);
-        final Cluster clusterB = result.getClusters().get(1);
-
-        final Rss rss = Rss.from(result, true);
-
-        assertThat(rss).isNotNull();
-        assertThat(rss.channels).isNotEmpty();
-
-        final RssItem channel = rss.channels.get(0);
-        final String query = (String) result.getAttribute(AttributeNames.QUERY);
-        assertThat(channel.title).isEqualTo(query);
-        assertThat(channel.description).contains(query);
-        assertThat(channel.categories).isEmpty();
-
-        final RssItem item1 = channel.items.get(0);
-        final RssItem item2 = channel.items.get(1);
-        final RssItem item3 = channel.items.get(2);
-        final RssItem item4 = channel.items.get(3);
-
-        checkDocumentAndItem(item1, result.getDocuments().get(0));
-        checkDocumentAndItem(item2, result.getDocuments().get(1));
-        checkDocumentAndItem(item3, result.getDocuments().get(2));
-        checkDocumentAndItem(item4, result.getDocuments().get(3));
-
-        assertThat(item1.categories).contains(clusterA.getLabel(), clusterAA.getLabel());
-        assertThat(item1.categories).contains(
-            result.getDocuments().get(0).getSources().toArray());
-        assertThat(item2.categories).containsExactly(clusterA.getLabel(),
-            clusterAA.getLabel(), clusterB.getLabel());
-        assertThat(item3.categories).containsExactly(clusterB.getLabel());
-        assertThat(item4.categories).isEmpty();
-    }
-
-    private void checkDocumentAndItem(RssItem item, Document document)
-    {
-        assertThat(item.title).isEqualTo(document.getTitle());
-        assertThat(item.description).isEqualTo(document.getSummary());
-        assertThat(item.link).isEqualTo(document.getContentUrl());
     }
 
     private ProcessingResult prepareProcessingResult()

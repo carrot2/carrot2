@@ -7,7 +7,6 @@ import junit.framework.TestCase;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.carrot2.workbench.core.ui.SearchEditor.SaveOptions;
-import org.carrot2.workbench.core.ui.SearchEditor.SaveOptions.SaveFormat;
 import junit.framework.Assert;
 import org.simpleframework.xml.core.Persister;
 
@@ -19,7 +18,6 @@ public class SaveOptionsSerializationTest extends TestCase
         saveLoad(opts);
         opts.directory = "abc";
         saveLoad(opts);
-        opts.format = SaveFormat.RSS20;
         saveLoad(opts);
     }
 

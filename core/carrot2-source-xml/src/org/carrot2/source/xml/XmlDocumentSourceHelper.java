@@ -26,6 +26,7 @@ import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.IResource;
+import org.carrot2.util.xslt.NopURIResolver;
 import org.carrot2.util.xslt.TemplatesPool;
 import org.xml.sax.SAXException;
 
@@ -42,13 +43,7 @@ public class XmlDocumentSourceHelper
     /**
      * URI resolver. Does nothing.
      */
-    private final static URIResolver uriResolver = new URIResolver()
-    {
-        public Source resolve(String href, String base) throws TransformerException
-        {
-            return null;
-        }
-    };
+    private final static URIResolver uriResolver = new NopURIResolver();
 
     /**
      *
