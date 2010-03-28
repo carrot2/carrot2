@@ -19,13 +19,17 @@ import org.carrot2.text.analysis.ITokenType;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
-import org.carrot2.util.IntArrayUtils;
 import org.carrot2.util.PcjCompat;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.IntIntOpenHashMap;
+import com.carrotsearch.hppc.IntStack;
+import com.carrotsearch.hppc.cursors.IntIntCursor;
 import com.carrotsearch.hppc.sorting.IndirectSort;
 import com.google.common.collect.Lists;
 
@@ -50,6 +54,11 @@ import com.google.common.collect.Lists;
 @Bindable(prefix = "CaseNormalizer")
 public final class CaseNormalizer
 {
+    /**
+     * An empty <code>int []</code>. 
+     */
+    private static final int [] EMPTY_INT_ARRAY = new int [0];
+
     /**
      * Word Document Frequency threshold. Words appearing in fewer than
      * <code>dfThreshold</code> documents will be ignored.
@@ -104,13 +113,13 @@ public final class CaseNormalizer
         // A byte set for word fields tracking
         final BitSet fieldIndices = new BitSet(context.allFields.name.length);
 
-        // An array for tracking words' tf across documents
-        int [] wordTfByDocument = new int [documentCount];
+        // A stack for pushing information about the term's documents.
+        final IntStack wordDocuments = new IntStack();
 
         if (documentIndexesArray[tokenImagesOrder[0]] >= 0)
         {
             documentIndices.set(documentIndexesArray[tokenImagesOrder[0]]);
-            wordTfByDocument[documentIndexesArray[tokenImagesOrder[0]]] = 1;
+            wordDocuments.push(documentIndexesArray[tokenImagesOrder[0]]);
         }
 
         // Go through the ordered token images
@@ -134,7 +143,7 @@ public final class CaseNormalizer
                 maxTfVariantIndex = tokenImagesOrder[i + 1];
 
                 resetForNewTokenImage(documentIndexesArray, tokenImagesOrder,
-                    documentIndices, fieldIndices, wordTfByDocument, i);
+                    documentIndices, fieldIndices, wordDocuments, i);
                 continue;
             }
 
@@ -150,7 +159,7 @@ public final class CaseNormalizer
                 totalTf++;
 
                 documentIndices.set(documentIndex);
-                wordTfByDocument[documentIndex] += 1;
+                wordDocuments.push(documentIndex);
                 continue;
             }
 
@@ -171,7 +180,7 @@ public final class CaseNormalizer
             {
                 totalTf++;
                 documentIndices.set(documentIndex);
-                wordTfByDocument[documentIndex] += 1;
+                wordDocuments.push(documentIndex);
             }
             else
             {
@@ -196,8 +205,8 @@ public final class CaseNormalizer
                     }
 
                     // Flatten the wordTfByDocument map and add to the list
-                    wordTfByDocumentList.add(IntArrayUtils
-                        .toSparseEncoding(wordTfByDocument));
+                    int [] sparseEncoding = toSparseEncoding(wordDocuments);
+                    wordTfByDocumentList.add(sparseEncoding);
                 }
 
                 // Reinitialize counters
@@ -209,7 +218,7 @@ public final class CaseNormalizer
 
                 // Re-initialize int set used for document frequency calculation
                 resetForNewTokenImage(documentIndexesArray, tokenImagesOrder,
-                    documentIndices, fieldIndices, wordTfByDocument, i);
+                    documentIndices, fieldIndices, wordDocuments, i);
             }
         }
 
@@ -219,12 +228,115 @@ public final class CaseNormalizer
         context.allWords.image = normalizedWordImages
             .toArray(new char [normalizedWordImages.size()] []);
         context.allWords.tf = normalizedWordTf.toArray();
-        context.allWords.tfByDocument = wordTfByDocumentList
-            .toArray(new int [wordTfByDocumentList.size()] []);
-        context.allWords.fieldIndices = fieldIndexList.toArray(new byte [fieldIndexList
-            .size()] []);
+        context.allWords.tfByDocument = 
+            wordTfByDocumentList.toArray(new int [wordTfByDocumentList.size()] []);
+        context.allWords.fieldIndices = fieldIndexList.toArray(
+            new byte [fieldIndexList.size()] []);
         context.allWords.type = types.toArray();
         context.allWords.flag = new int [types.size()];
+    }
+
+    /**
+     * Convert a list of documents to sparse document-count representation.
+     */
+    private int [] toSparseEncoding(IntStack documents)
+    {
+        if (documents.size() == 0)
+            return EMPTY_INT_ARRAY;
+
+        // For smaller arrays, count using sorting.
+        if (documents.size() < 1000)
+        {
+            return toSparseEncodingBySort(documents);
+        }
+        else
+        {
+            return toSparseEncodingByHash(documents);
+        }
+    }
+
+    /**
+     * Convert to sparse encoding using a hash map.
+     */
+    private int [] toSparseEncodingByHash(IntStack documents)
+    {
+        final IntIntOpenHashMap map = new IntIntOpenHashMap();
+
+        final int toIndex = documents.size();
+        final int [] buffer = documents.buffer;
+        for (int i = 0; i < toIndex; i++)
+        {
+            map.putOrAdd(buffer[i], 1, 1);
+        }
+
+        final int [] result = new int [map.size() * 2];
+        int k = 0;
+        for (IntIntCursor c : map)
+        {
+            result[k++] = c.key;
+            result[k++] = c.value;
+        }
+        return result;
+    }
+
+    /**
+     * Convert to sparse encoding using sorting and counting.
+     */
+    private int [] toSparseEncodingBySort(IntStack documents)
+    {
+        Arrays.sort(documents.buffer, 0, documents.size());
+        final int [] result = new int [2 * countUnique(documents.buffer, 0, documents.size())];
+
+        final int fromIndex = 0;
+        final int toIndex = documents.size();
+        final int [] buffer = documents.buffer;
+
+        int doc = buffer[fromIndex];
+        int count = 1;
+        int k = 0;
+        for (int i = fromIndex + 1; i < toIndex; i++)
+        {
+            final int newDoc = buffer[i];
+            if (newDoc != doc)
+            {
+                result[k++] = doc;
+                result[k++] = count;
+                count = 0;
+                doc = newDoc;
+            }
+            count++;
+        }
+        if (k < result.length)
+        {
+            result[k++] = doc;
+            result[k++] = count;
+        }
+        assert k == result.length;
+        return result;
+    }
+
+    /**
+     * Count unique values in the sorted array.
+     */
+    private int countUnique(int [] buffer, int fromIndex, int toIndex)
+    {
+        int unique = 0;
+        if (fromIndex < toIndex)
+        {
+            int val = buffer[fromIndex];
+            unique++;
+            for (int i = fromIndex + 1; i < toIndex; i++)
+            {
+                final int j = buffer[i];
+                assert j >= val : "Not sorted as expected.";
+                if (val != j)
+                {
+                    unique++;
+                    val = j;
+                }
+            }
+        }
+        return unique;
     }
 
     /**
@@ -232,15 +344,15 @@ public final class CaseNormalizer
      */
     private void resetForNewTokenImage(final int [] documentIndexesArray,
         final int [] tokenImagesOrder, final BitSet documentIndices,
-        final BitSet fieldIndices, int [] wordTfByDocument, int i)
+        final BitSet fieldIndices, IntStack wordDocuments, int i)
     {
         documentIndices.clear();
         fieldIndices.clear();
-        Arrays.fill(wordTfByDocument, 0);
+        wordDocuments.clear();
         if (documentIndexesArray[tokenImagesOrder[i + 1]] >= 0)
         {
             documentIndices.set(documentIndexesArray[tokenImagesOrder[i + 1]]);
-            wordTfByDocument[documentIndexesArray[tokenImagesOrder[i + 1]]] += 1;
+            wordDocuments.push(documentIndexesArray[tokenImagesOrder[i + 1]]);
         }
     }
 
