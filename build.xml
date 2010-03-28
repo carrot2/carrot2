@@ -561,6 +561,7 @@
              use="false"
              encoding="UTF-8"
              docencoding="UTF-8"
+             includenosourcepackages="true"
              windowtitle="Carrot2 v${carrot2.version} API Documentation (JavaDoc)"
              doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} API Documentation"
              header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} &lt;br&gt;API Documentation&lt;/div&gt;"
@@ -576,10 +577,16 @@
       <sourcefiles>
         <fileset dir="core">
           <include name="**/src/**/*.java" />
+          <include name="**/src/**/doc-files" />
           <exclude name="**/org/carrot2/core/test/**" />
           <exclude name="**/com/microsoft/msnsearch/**" />
         </fileset>
       </sourcefiles>
+
+      <!-- Unfortunately this needs to be given explicitly for doc-files to work... -->
+      <packageset dir="core/carrot2-util-text/src" defaultexcludes="yes">
+        <include name="org/**"/>
+      </packageset>
 
       <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
 
@@ -621,6 +628,7 @@
         <exclude name="odp239/**" />
         <exclude name="org.carrot2.util.attribute*.xml" />
         <exclude name="**/*.html" />
+        <exclude name="**/doc-files/**" />
       </fileset>
     </jar>
   </target>
@@ -658,6 +666,7 @@
         <exclude name="org/carrot2/source/xml/**" />
         <include name="org/carrot2/output/**" />
         <include name="com/**" />
+        <exclude name="**/doc-files/**" />
       </fileset>
     </delete>
 

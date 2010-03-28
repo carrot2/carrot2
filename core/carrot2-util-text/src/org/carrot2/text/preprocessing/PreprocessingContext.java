@@ -26,6 +26,9 @@ import com.google.common.base.Predicates;
 /**
  * Document preprocessing context provides low-level (usually integer-coded) data
  * structures useful for further processing.
+ * 
+ * <p><img src="doc-files/preprocessing-arrays.png"
+ *      alt="Internals of PreprocessingContext"/></p>
  */
 public final class PreprocessingContext
 {
@@ -92,6 +95,8 @@ public final class PreprocessingContext
          * Token's {@link ITokenType} bit flags.
          * <p>
          * This array is produced by {@link Tokenizer}.
+         * 
+         * TODO: save twice the amount of memory by making this short[] type
          */
         public int [] type;
 
@@ -109,6 +114,8 @@ public final class PreprocessingContext
          * separators.
          * <p>
          * This array is produced by {@link Tokenizer}.
+         * 
+         * TODO: is this always needed? Seems awfully repetitive, esp. for long docs.
          */
         public int [] documentIndex;
 
@@ -185,6 +192,10 @@ public final class PreprocessingContext
          * appeared 3 times, the image will be equal to <em>MacOS</em>.
          * <p>
          * This array is produced by {@link CaseNormalizer}.
+         * 
+         * TODO: we could make this an int pointer (index) back to {@link AllTokens#image}? 
+         * The saving would be twofold because then we wouldn't need {@link #type} field
+         * (duplicated in AllTokens).  
          */
         public char [][] image;
 
@@ -215,6 +226,10 @@ public final class PreprocessingContext
          * the near future.</b>
          * <p>
          * This array is produced by {@link CaseNormalizer}.
+         * 
+         * TODO: replace with BitSet or replace with byte[] and place real flags? Alternatively,
+         * integrate with refactoring of {@link #image} and integrate stop word flag
+         * with {@link AllTokens#type}?
          */
         public boolean [] commonTermFlag;
 
@@ -222,6 +237,8 @@ public final class PreprocessingContext
          * Token type of this word. See {@link ITokenType} for available types.
          * <p>
          * This array is produced by {@link CaseNormalizer}.
+         * 
+         * TODO: see the potential refactoring of {@link #image}. Also, see {@link AllWords#type}.
          */
         public int [] type;
 
@@ -230,6 +247,8 @@ public final class PreprocessingContext
          * <p>
          * This array is produced by {@link CaseNormalizer}. The
          * {@link AllWords#FLAG_QUERY} is set by {@link LanguageModelStemmer}.
+         * 
+         * TODO: only one flag for now? Why not integrate it with {@link #type}? 
          */
         public int [] flag;
 
@@ -285,8 +304,8 @@ public final class PreprocessingContext
         public int [] mostFrequentOriginalWordIndex;
 
         /**
-         * Term frequency of the stem, i.e. the sum of all words from {@link AllWords}
-         * pointing to the stem.
+         * Term frequency of the stem, i.e. the sum of all {@link AllWords#tf} values
+         * for which the {@link AllWords#stemIndex} points to this stem.
          * <p>
          * This array is produced by {@link LanguageModelStemmer}.
          */
@@ -326,7 +345,7 @@ public final class PreprocessingContext
     public static class AllPhrases
     {
         /**
-         * Pointers to {@link AllWords} for each word in the sequence.
+         * Pointers to {@link AllWords} for each word in the phrase sequence.
          * <p>
          * This array is produced by {@link PhraseExtractor}.
          */
@@ -386,6 +405,8 @@ public final class PreprocessingContext
          * in {@link AllLabels}.
          * <p>
          * This value is set by {@link LabelFilterProcessor}.
+         * 
+         * TODO: explain what this is for, please?
          */
         public int firstPhraseIndex;
     }
