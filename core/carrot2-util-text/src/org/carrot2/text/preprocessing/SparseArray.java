@@ -50,6 +50,14 @@ final class SparseArray
             map.putOrAdd(buffer[i], 1, 1);
         }
 
+        return hashToKeyValuePairs(map);
+    }
+
+    /*
+     * 
+     */
+    private static int [] hashToKeyValuePairs(IntIntOpenHashMap map)
+    {
         final int [] result = new int [map.size() * 2];
         int k = 0;
         for (IntIntCursor c : map)
@@ -118,5 +126,24 @@ final class SparseArray
             }
         }
         return unique;
+    }
+
+    /**
+     * Merge data from one or more sparse arrays.
+     */
+    public static int [] mergeSparseArrays(Iterable<int []> source)
+    {
+        final IntIntOpenHashMap m = new IntIntOpenHashMap();
+        for (int[] list : source)
+        {
+            final int max = list.length;
+            for (int i = 0; i < max; i += 2)
+            {
+                final int v = list[i + 1];
+                m.putOrAdd(list[i], v, v);
+            }
+        }
+
+        return hashToKeyValuePairs(m);
     }
 }

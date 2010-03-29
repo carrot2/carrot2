@@ -95,7 +95,6 @@ public class BasicPreprocessingPipeline
     {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
-
         languageModelStemmer.stem(context);
         stopListMarker.mark(context);
     }
