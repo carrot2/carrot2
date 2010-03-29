@@ -127,8 +127,6 @@ public final class LanguageModelStemmer
         int totalTf = wordTfArray[stemImagesOrder[0]];
         int mostFrequentWordFrequency = wordTfArray[stemImagesOrder[0]];
         int mostFrequentWordIndex = stemImagesOrder[0];
-        final BitSet originalWordIndexesSet = new BitSet(allWordsCount);
-        originalWordIndexesSet.set(stemImagesOrder[0]);
         int stemIndex = 0;
 
         // A list of document-term-frequency pairs, by document, for all words with identical stems.
@@ -171,7 +169,6 @@ public final class LanguageModelStemmer
                     mostFrequentWordFrequency = wordTfArray[nextInOrderIndex];
                     mostFrequentWordIndex = nextInOrderIndex;
                 }
-                originalWordIndexesSet.set(nextInOrderIndex);
             }
             else
             {
@@ -185,8 +182,6 @@ public final class LanguageModelStemmer
                 totalTf = wordTfArray[nextInOrderIndex];
                 mostFrequentWordFrequency = wordTfArray[nextInOrderIndex];
                 mostFrequentWordIndex = nextInOrderIndex;
-                originalWordIndexesSet.clear();
-                originalWordIndexesSet.set(nextInOrderIndex);
                 fieldIndices.clear();
                 addAll(fieldIndices, wordsFieldIndices[nextInOrderIndex]);
 
