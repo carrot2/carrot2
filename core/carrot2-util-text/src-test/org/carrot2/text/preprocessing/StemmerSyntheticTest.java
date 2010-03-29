@@ -193,11 +193,13 @@ public class StemmerSyntheticTest extends StemmerTestBase
         int [][] expectedStemTfByDocument = new int [] []
         {
             {
-                0, 3, 1, 1, 3, 1
+                // HASHMAP-order dependent.
+                3, 1, 1, 1, 0, 3,
             },
 
             {
-                1, 2, 2, 1, 3, 1
+                // HASHMAP-order dependent.    
+                3, 1, 1, 2, 2, 1,
             }
         };
         byte [][] expectedFieldIndices = new byte [] []
