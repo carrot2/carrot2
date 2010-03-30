@@ -125,6 +125,11 @@ public class CharArrayComparators
             {
                 return -1;
             }
+            
+            if (a1 == a2)
+            {
+                return 0;
+            }
 
             final int l1 = a1.length;
             final int l2 = a2.length;
