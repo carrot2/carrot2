@@ -89,9 +89,9 @@ public final class Tokenizer
     private final MutableCharArray wrapper = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
 
     /**
-     * Token interning cache.
+     * Preprocessing context (access to interning cache).
      */
-    private ObjectOpenHashSet<MutableCharArray> tokenCache;  
+    private PreprocessingContext context;  
 
     /**
      * Performs tokenization and saves the results to the <code>context</code>.
@@ -113,7 +113,7 @@ public final class Tokenizer
         final Iterator<Document> docIterator = documents.iterator();
         int documentIndex = 0;
         final org.apache.lucene.analysis.Tokenizer ts = context.language.getTokenizer();
-        tokenCache = context.tokenCache;
+        this.context = context;
         final ITokenTypeAttribute type = ts.getAttribute(ITokenTypeAttribute.class);
         final TermAttribute term = ts.getAttribute(TermAttribute.class);
 
@@ -183,21 +183,8 @@ public final class Tokenizer
         final int termLength = term.termLength();
         final char [] termBuffer = term.termBuffer();
 
-        final char [] tokenImage;
         this.wrapper.reset(termBuffer, 0, termLength);
-        if (tokenCache.contains(wrapper))
-        {
-            tokenImage = tokenCache.lget().getBuffer();
-            assert tokenImage.length == termLength;
-        }
-        else
-        {
-            tokenImage = new char [termLength];
-            System.arraycopy(termBuffer, 0, tokenImage, 0, termLength);
-            tokenCache.add(new MutableCharArray(tokenImage));
-        }
-
-        add(documentIndex, fieldIndex, tokenImage, type.getRawFlags());
+        add(documentIndex, fieldIndex, context.intern(wrapper), type.getRawFlags());
     }
 
     /**

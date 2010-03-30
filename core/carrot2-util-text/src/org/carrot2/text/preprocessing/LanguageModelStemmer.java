@@ -54,7 +54,7 @@ public final class LanguageModelStemmer
         final char [][] wordImages = context.allWords.image;
         final char [][] stemImages = new char [wordImages.length] [];
 
-        final MutableCharArray mutableCharArray = new MutableCharArray("");
+        final MutableCharArray mutableCharArray = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
         char [] buffer = new char [128];
 
         for (int i = 0; i < wordImages.length; i++)
@@ -68,14 +68,15 @@ public final class LanguageModelStemmer
             final CharSequence stemmed = stemmer.stem(mutableCharArray);
             if (stemmed != null)
             {
-                stemImages[i] = CharSequenceUtils.toCharArray(stemmed);
+                mutableCharArray.reset(stemmed);
+                stemImages[i] = context.intern(mutableCharArray);
             }
             else
             {
                 // We need to put the original word here, otherwise, we wouldn't be able
                 // to compute frequencies for stems.
                 if (different)
-                    stemImages[i] = CharArrayUtils.copyOf(buffer, 0, word.length);
+                    stemImages[i] = context.intern(mutableCharArray);
                 else
                     stemImages[i] = word;
             }

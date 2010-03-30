@@ -61,6 +61,12 @@ public final class PreprocessingContext
     public final ILanguageModel language;
 
     /**
+     * Token interning cache. Token images are interned to save memory and allow reference
+     * comparisons.
+     */
+    public ObjectOpenHashSet<MutableCharArray> tokenCache = new ObjectOpenHashSet<MutableCharArray>();
+
+    /**
      * Creates a preprocessing context for the provided <code>documents</code> and with
      * the provided <code>languageModel</code>.
      */
@@ -419,12 +425,6 @@ public final class PreprocessingContext
     public final AllLabels allLabels = new AllLabels();
 
     /**
-     * Token interning cache. Token images are interned to save memory and allow reference
-     * comparisons.
-     */
-    public ObjectOpenHashSet<MutableCharArray> tokenCache = new ObjectOpenHashSet<MutableCharArray>();
-
-    /**
      * Returns <code>true</code> if this context contains any words.
      */
     public boolean hasWords()
@@ -440,6 +440,11 @@ public final class PreprocessingContext
         return allLabels.featureIndex != null && allLabels.featureIndex.length > 0;
     }
 
+    /* 
+     * These should really be package-private, shouldn't they? We'd need to move classes under pipeline.
+     * here for accessibility.
+     */
+
     /**
      * This method should be invoked after all preprocessing contributors have been executed
      * to release temporary data structures. 
@@ -447,5 +452,23 @@ public final class PreprocessingContext
     public void preprocessingFinished()
     {
         this.tokenCache = null;
+    }
+
+    /**
+     * Return a unique char buffer representing a given character sequence.
+     */
+    public char [] intern(MutableCharArray chs)
+    {
+        if (tokenCache.contains(chs))
+        {
+            return tokenCache.lget().getBuffer();
+        }
+        else
+        {
+            final char [] tokenImage = new char [chs.length()];
+            System.arraycopy(chs.getBuffer(), 0, tokenImage, 0, chs.length());
+            tokenCache.add(new MutableCharArray(tokenImage));
+            return tokenImage;
+        }
     }
 }
