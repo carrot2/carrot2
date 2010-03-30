@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -17,7 +16,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 
 /**
@@ -80,14 +78,13 @@ abstract class TokenizerTestBase
             final Tokenizer tokenStream = createTokenStream();
             tokenStream.reset(new StringReader(testString));
 
+            final TermAttribute term = tokenStream.getAttribute(TermAttribute.class);
+            final ITokenTypeAttribute type = tokenStream
+                .getAttribute(ITokenTypeAttribute.class);
             final ArrayList<TokenImage> tokens = new ArrayList<TokenImage>();
             while (tokenStream.incrementToken())
             {
-                final TermAttribute term = tokenStream.getAttribute(TermAttribute.class);
-                final PayloadAttribute payloadAttribute = tokenStream
-                    .getAttribute(PayloadAttribute.class);
-                tokens.add(new TokenImage(term.term(), ((ITokenType) payloadAttribute
-                    .getPayload()).getRawFlags()));
+                tokens.add(new TokenImage(term.term(), type.getRawFlags()));
             }
 
             org.junit.Assert.assertArrayEquals(expectedTokens, tokens.toArray());
@@ -100,16 +97,16 @@ abstract class TokenizerTestBase
 
     protected TokenImage term(String image)
     {
-        return new TokenImage(image, ITokenType.TT_TERM);
+        return new TokenImage(image, ITokenTypeAttribute.TT_TERM);
     }
 
     protected TokenImage punctuation(String image)
     {
-        return new TokenImage(image, ITokenType.TT_PUNCTUATION);
+        return new TokenImage(image, ITokenTypeAttribute.TT_PUNCTUATION);
     }
 
     protected TokenImage numeric(String image)
     {
-        return new TokenImage(image, ITokenType.TT_NUMERIC);
+        return new TokenImage(image, ITokenTypeAttribute.TT_NUMERIC);
     }
 }

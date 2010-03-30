@@ -17,11 +17,10 @@ import java.io.StringReader;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Init;
-import org.carrot2.text.analysis.ITokenType;
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.util.*;
@@ -30,7 +29,6 @@ import org.carrot2.util.attribute.*;
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * Performs tokenization of documents.
@@ -69,7 +67,7 @@ public final class Tokenizer
     /**
      * An array of token types.
      * 
-     * @see ITokenType
+     * @see ITokenTypeAttribute
      */
     private IntArrayList tokenTypes;
 
@@ -92,6 +90,9 @@ public final class Tokenizer
     {
         // Documents to tokenize
         final List<Document> documents = context.documents;
+        
+        // Fields to tokenize
+        final String [] fieldNames = documentFields.toArray(new String [documentFields.size()]); 
 
         // Prepare arrays
         images = Lists.newArrayList();
@@ -99,72 +100,42 @@ public final class Tokenizer
         documentIndices = new IntArrayList();
         fieldIndices = new ByteArrayList();
 
-        // Map field names to their indices in AllFields
-        final Map<String, Byte> fieldNameToIndex = createFieldNameToIndexMap(context,
-            documentFields);
-        final String [] fieldNames = fieldNameToIndex.keySet().toArray(
-            new String [fieldNameToIndex.keySet().size()]);
-
-        final ArrayList<Pair<String, String>> nonEmptyFieldValues = Lists.newArrayList();
-
         final Iterator<Document> docIterator = documents.iterator();
         int documentIndex = 0;
+        final org.apache.lucene.analysis.Tokenizer ts = context.language.getTokenizer();
+        final ITokenTypeAttribute type = ts.getAttribute(ITokenTypeAttribute.class);
+        final TermAttribute term = ts.getAttribute(TermAttribute.class);
+
         while (docIterator.hasNext())
         {
             final Document doc = docIterator.next();
 
-            // Queue all non-empty document fields for this document.
-            nonEmptyFieldValues.clear();
-            for (String fieldName : documentFields)
+            boolean hadTokens = false;
+            for (int i = 0; i < fieldNames.length; i++)
             {
+                final byte fieldIndex = (byte) i;
+                final String fieldName = fieldNames[i];
                 final String fieldValue = doc.getField(fieldName);
-                if (!StringUtils.isEmpty(fieldValue))
-                {
-                    nonEmptyFieldValues.add(new Pair<String, String>(fieldName,
-                        fieldValue));
-                }
-            }
-
-            for (Iterator<Pair<String, String>> it = nonEmptyFieldValues.iterator(); it
-                .hasNext();)
-            {
-                final Pair<String, String> fieldEntry = it.next();
-                final String fieldName = fieldEntry.objectA;
-                final String fieldValue = fieldEntry.objectB;
 
                 if (!StringUtils.isEmpty(fieldValue))
                 {
-                    org.apache.lucene.analysis.Tokenizer ts = null;
                     try
                     {
-                        ts = context.language.getTokenizer();
                         ts.reset(new StringReader(fieldValue));
-
-                        while (ts.incrementToken())
+                        if (ts.incrementToken())
                         {
-                            add(documentIndex, fieldNameToIndex.get(fieldName), ts
-                                .getAttribute(TermAttribute.class), ts
-                                .getAttribute(PayloadAttribute.class));
+                            if (hadTokens) addFieldSeparator(documentIndex);
+                            do
+                            {
+                                add(documentIndex, fieldIndex, term, type);
+                            } while (ts.incrementToken());
+                            hadTokens = true;
                         }
                     }
                     catch (IOException e)
                     {
                         // Not possible (StringReader above)?
                         throw ExceptionUtils.wrapAsRuntimeException(e);
-                    }
-                    catch (ClassCastException e)
-                    {
-                        throw new RuntimeException("The analyzer must provide "
-                            + ITokenType.class.getName() + " instances as payload.");
-                    }
-                    finally
-                    {
-                        CloseableUtils.close(ts);
-                    }
-
-                    if (it.hasNext())
-                    {
-                        addFieldSeparator(documentIndex);
                     }
                 }
             }
@@ -193,28 +164,11 @@ public final class Tokenizer
         documentIndices = null;
     }
 
-    private Map<String, Byte> createFieldNameToIndexMap(PreprocessingContext context,
-        Collection<String> documentFields)
-    {
-        final Map<String, Byte> result = Maps.newLinkedHashMap();
-
-        byte fieldCode = 0;
-        for (String docmentField : documentFields)
-        {
-            result.put(docmentField, fieldCode++);
-        }
-
-        return result;
-    }
-
     /**
-     * Add the token's code to the list. The <code>token</code> must carry
-     * {@link ITokenType} payload.
+     * Add the token's code to the list.
      */
-    void add(int documentIndex, byte fieldIndex, TermAttribute term,
-        PayloadAttribute payload)
+    void add(int documentIndex, byte fieldIndex, TermAttribute term, ITokenTypeAttribute type)
     {
-        final ITokenType type = (ITokenType) payload.getPayload();
         final int termLength = term.termLength();
         final char [] buffer = new char [termLength];
         System.arraycopy(term.termBuffer(), 0, buffer, 0, termLength);
@@ -226,7 +180,7 @@ public final class Tokenizer
      */
     void addTerminator()
     {
-        add(-1, (byte) -1, null, ITokenType.TF_TERMINATOR);
+        add(-1, (byte) -1, null, ITokenTypeAttribute.TF_TERMINATOR);
     }
 
     /**
@@ -234,7 +188,7 @@ public final class Tokenizer
      */
     void addDocumentSeparator()
     {
-        add(-1, (byte) -1, null, ITokenType.TF_SEPARATOR_DOCUMENT);
+        add(-1, (byte) -1, null, ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT);
     }
 
     /**
@@ -242,7 +196,7 @@ public final class Tokenizer
      */
     void addFieldSeparator(int documentIndex)
     {
-        add(documentIndex, (byte) -1, null, ITokenType.TF_SEPARATOR_FIELD);
+        add(documentIndex, (byte) -1, null, ITokenTypeAttribute.TF_SEPARATOR_FIELD);
     }
 
     /**
@@ -250,7 +204,7 @@ public final class Tokenizer
      */
     void addSentenceSeparator(int documentIndex, byte fieldIndex)
     {
-        add(documentIndex, fieldIndex, null, ITokenType.TF_SEPARATOR_FIELD);
+        add(documentIndex, fieldIndex, null, ITokenTypeAttribute.TF_SEPARATOR_FIELD);
     }
 
     /**

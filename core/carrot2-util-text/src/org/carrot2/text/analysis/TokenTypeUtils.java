@@ -13,7 +13,7 @@
 package org.carrot2.text.analysis;
 
 /**
- * Utility methods for working with {@link ITokenType}s.
+ * Utility methods for working with {@link ITokenTypeAttribute}s.
  */
 public final class TokenTypeUtils
 {
@@ -28,14 +28,14 @@ public final class TokenTypeUtils
      */
     public static int maskType(int rawType) 
     {
-        return rawType & ITokenType.TYPE_MASK;
+        return rawType & ITokenTypeAttribute.TYPE_MASK;
     }
 
     /**
-     * Returns <code>true</code> if the given type has {@link ITokenType#TF_SEPARATOR_DOCUMENT} set.
+     * Returns <code>true</code> if the given type has {@link ITokenTypeAttribute#TF_SEPARATOR_DOCUMENT} set.
      */
     public static boolean isDocumentSeparator(int type)
     {
-        return (type & ITokenType.TF_SEPARATOR_DOCUMENT) != 0;
+        return (type & ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT) != 0;
     }
 }

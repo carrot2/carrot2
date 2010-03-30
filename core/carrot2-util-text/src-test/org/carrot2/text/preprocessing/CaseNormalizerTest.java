@@ -17,7 +17,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.Arrays;
 
-import org.carrot2.text.analysis.ITokenType;
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -210,8 +210,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
         int [] expectedType = new int []
         {
-            ITokenType.TT_NUMERIC, ITokenType.TT_TERM, ITokenType.TT_FILE,
-            ITokenType.TT_BARE_URL, ITokenType.TT_EMAIL
+            ITokenTypeAttribute.TT_NUMERIC, ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TT_FILE,
+            ITokenTypeAttribute.TT_BARE_URL, ITokenTypeAttribute.TT_EMAIL
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
@@ -730,7 +730,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
     private int [] createTermTokenTypes(int count)
     {
         final int [] result = new int [count];
-        Arrays.fill(result, ITokenType.TT_TERM);
+        Arrays.fill(result, ITokenTypeAttribute.TT_TERM);
         return result;
     }
 }

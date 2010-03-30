@@ -15,7 +15,7 @@ package org.carrot2.text.linguistic;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.index.Payload;
 import org.carrot2.core.LanguageCode;
-import org.carrot2.text.analysis.ITokenType;
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 
 /**
  * Linguistic resources and tools dedicated to a given language. Instances of this
@@ -49,7 +49,7 @@ public interface ILanguageModel
     /**
      * @return Return an engine for splitting the input text into individual words
      *         (tokens). The returned tokenizer must provide tokens {@link Payload}
-     *         implementing {@link ITokenType}.
+     *         implementing {@link ITokenTypeAttribute}.
      */
     public Tokenizer getTokenizer();
 

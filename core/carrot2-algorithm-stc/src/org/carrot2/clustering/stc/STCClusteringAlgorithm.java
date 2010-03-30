@@ -12,8 +12,8 @@
 
 package org.carrot2.clustering.stc;
 
-import static org.carrot2.text.analysis.ITokenType.TF_SEPARATOR_DOCUMENT;
-import static org.carrot2.text.analysis.ITokenType.TF_TERMINATOR;
+import static org.carrot2.text.analysis.ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT;
+import static org.carrot2.text.analysis.ITokenTypeAttribute.TF_TERMINATOR;
 
 import java.io.IOException;
 import java.util.*;

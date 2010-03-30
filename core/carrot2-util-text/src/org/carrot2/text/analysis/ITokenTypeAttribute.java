@@ -12,6 +12,8 @@
 
 package org.carrot2.text.analysis;
 
+import org.apache.lucene.util.Attribute;
+
 /**
  * <p>
  * Provides bitwise flags with additional information about each token:
@@ -26,7 +28,7 @@ package org.carrot2.text.analysis;
  * 
  * @see TokenTypeUtils
  */
-public interface ITokenType
+public interface ITokenTypeAttribute extends Attribute
 {
     /*
      * Token type mask: 0x00ff
@@ -62,4 +64,9 @@ public interface ITokenType
      * @return Returns raw bitmask associated with the token.
      */
     public int getRawFlags();
+
+    /**
+     * Set new flags.
+     */
+    public void setRawFlags(int newFlags);
 }

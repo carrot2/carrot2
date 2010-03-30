@@ -33,15 +33,15 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
         String test = " simple simple's simples` terms simpleterm 9numterm numerm99x \"quoted string\"";
         TokenImage [] tokens =
         {
-            new TokenImage("simple", ITokenType.TT_TERM),
-            new TokenImage("simple's", ITokenType.TT_TERM),
-            new TokenImage("simples`", ITokenType.TT_TERM),
-            new TokenImage("terms", ITokenType.TT_TERM),
-            new TokenImage("simpleterm", ITokenType.TT_TERM),
-            new TokenImage("9numterm", ITokenType.TT_TERM),
-            new TokenImage("numerm99x", ITokenType.TT_TERM),
-            new TokenImage("quoted", ITokenType.TT_TERM),
-            new TokenImage("string", ITokenType.TT_TERM)
+            new TokenImage("simple", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("simple's", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("simples`", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("terms", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("simpleterm", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("9numterm", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("numerm99x", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("quoted", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("string", ITokenTypeAttribute.TT_TERM)
         };
 
         assertEqualTokens(test, tokens);
@@ -53,10 +53,10 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
         String test = " ...  S_NI_P token";
         TokenImage [] tokens =
         {
-            new TokenImage("...", ITokenType.TT_PUNCTUATION
-                | ITokenType.TF_SEPARATOR_SENTENCE),
-            new TokenImage("S_NI_P", ITokenType.TT_FILE),
-            new TokenImage("token", ITokenType.TT_TERM)
+            new TokenImage("...", ITokenTypeAttribute.TT_PUNCTUATION
+                | ITokenTypeAttribute.TF_SEPARATOR_SENTENCE),
+            new TokenImage("S_NI_P", ITokenTypeAttribute.TT_FILE),
+            new TokenImage("token", ITokenTypeAttribute.TT_TERM)
         };
 
         assertEqualTokens(test, tokens);
@@ -68,12 +68,12 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
         String test = "e-mails dweiss@go2.pl dawid.weiss@go2.com.pl bubu@some-host.com me@me.org bubu99@yahoo.com";
         TokenImage [] tokens =
         {
-            new TokenImage("e-mails", ITokenType.TT_HYPHTERM),
-            new TokenImage("dweiss@go2.pl", ITokenType.TT_EMAIL),
-            new TokenImage("dawid.weiss@go2.com.pl", ITokenType.TT_EMAIL),
-            new TokenImage("bubu@some-host.com", ITokenType.TT_EMAIL),
-            new TokenImage("me@me.org", ITokenType.TT_EMAIL),
-            new TokenImage("bubu99@yahoo.com", ITokenType.TT_EMAIL)
+            new TokenImage("e-mails", ITokenTypeAttribute.TT_HYPHTERM),
+            new TokenImage("dweiss@go2.pl", ITokenTypeAttribute.TT_EMAIL),
+            new TokenImage("dawid.weiss@go2.com.pl", ITokenTypeAttribute.TT_EMAIL),
+            new TokenImage("bubu@some-host.com", ITokenTypeAttribute.TT_EMAIL),
+            new TokenImage("me@me.org", ITokenTypeAttribute.TT_EMAIL),
+            new TokenImage("bubu99@yahoo.com", ITokenTypeAttribute.TT_EMAIL)
         };
 
         assertEqualTokens(test, tokens);
@@ -89,26 +89,26 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
             + " " + allCharsUrl;
         TokenImage [] tokens =
         {
-            new TokenImage("urls", ITokenType.TT_TERM),
-            new TokenImage("http://www.google.com", ITokenType.TT_FULL_URL),
+            new TokenImage("urls", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("http://www.google.com", ITokenTypeAttribute.TT_FULL_URL),
             new TokenImage(
                 "http://www.cs.put.poznan.pl/index.jsp?query=term&query2=term",
-                ITokenType.TT_FULL_URL),
-            new TokenImage("ftp://ftp.server.pl", ITokenType.TT_FULL_URL),
-            new TokenImage("www.google.com", ITokenType.TT_BARE_URL),
+                ITokenTypeAttribute.TT_FULL_URL),
+            new TokenImage("ftp://ftp.server.pl", ITokenTypeAttribute.TT_FULL_URL),
+            new TokenImage("www.google.com", ITokenTypeAttribute.TT_BARE_URL),
 
-            new TokenImage("not.an.url", ITokenType.TT_FILE),
+            new TokenImage("not.an.url", ITokenTypeAttribute.TT_FILE),
 
-            new TokenImage("go2.pl/mail", ITokenType.TT_FULL_URL),
+            new TokenImage("go2.pl/mail", ITokenTypeAttribute.TT_FULL_URL),
 
             new TokenImage("http://www.digimine.com/usama/datamine/.",
-                ITokenType.TT_FULL_URL),
+                ITokenTypeAttribute.TT_FULL_URL),
             
             new TokenImage("http://www.herold.at/gelbe-seiten/krems-an-der-donau/lDk8q/yoga-krems-wachau-j%C3%BCrgen-ullrich/",
-                ITokenType.TT_FULL_URL),
+                ITokenTypeAttribute.TT_FULL_URL),
                 
             new TokenImage(allCharsUrl,
-                ITokenType.TT_FULL_URL),
+                ITokenTypeAttribute.TT_FULL_URL),
         };
 
         assertEqualTokens(test, tokens);
@@ -120,15 +120,15 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
         String test = " acronyms I.B.M. S.C. z o.o. AT&T garey&johnson&willet";
         TokenImage [] tokens =
         {
-            new TokenImage("acronyms", ITokenType.TT_TERM),
-            new TokenImage("I.B.M.", ITokenType.TT_ACRONYM),
-            new TokenImage("S.C.", ITokenType.TT_ACRONYM),
+            new TokenImage("acronyms", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("I.B.M.", ITokenTypeAttribute.TT_ACRONYM),
+            new TokenImage("S.C.", ITokenTypeAttribute.TT_ACRONYM),
 
-            new TokenImage("z", ITokenType.TT_TERM),
-            new TokenImage("o.o.", ITokenType.TT_ACRONYM),
+            new TokenImage("z", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("o.o.", ITokenTypeAttribute.TT_ACRONYM),
 
-            new TokenImage("AT&T", ITokenType.TT_ACRONYM),
-            new TokenImage("garey&johnson&willet", ITokenType.TT_ACRONYM),
+            new TokenImage("AT&T", ITokenTypeAttribute.TT_ACRONYM),
+            new TokenImage("garey&johnson&willet", ITokenTypeAttribute.TT_ACRONYM),
         };
 
         assertEqualTokens(test, tokens);
@@ -140,15 +140,15 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
         String test = " numeric 127 0 12.87 12,12 12-2003/23 term2003 2003term ";
         TokenImage [] tokens =
         {
-            new TokenImage("numeric", ITokenType.TT_TERM),
+            new TokenImage("numeric", ITokenTypeAttribute.TT_TERM),
 
-            new TokenImage("127", ITokenType.TT_NUMERIC),
-            new TokenImage("0", ITokenType.TT_NUMERIC),
-            new TokenImage("12.87", ITokenType.TT_NUMERIC),
-            new TokenImage("12,12", ITokenType.TT_NUMERIC),
-            new TokenImage("12-2003/23", ITokenType.TT_NUMERIC),
-            new TokenImage("term2003", ITokenType.TT_TERM),
-            new TokenImage("2003term", ITokenType.TT_TERM)
+            new TokenImage("127", ITokenTypeAttribute.TT_NUMERIC),
+            new TokenImage("0", ITokenTypeAttribute.TT_NUMERIC),
+            new TokenImage("12.87", ITokenTypeAttribute.TT_NUMERIC),
+            new TokenImage("12,12", ITokenTypeAttribute.TT_NUMERIC),
+            new TokenImage("12-2003/23", ITokenTypeAttribute.TT_NUMERIC),
+            new TokenImage("term2003", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("2003term", ITokenTypeAttribute.TT_TERM)
 
         };
 
@@ -164,10 +164,10 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
         {
             new TokenImage(
                 "http://r.office.microsoft.com/r/rlidLiveMeeting?p1=7&amp;p2=en_US&amp;p3=LMInfo&amp;p4=DownloadWindowsConsole",
-                ITokenType.TT_FULL_URL),
+                ITokenTypeAttribute.TT_FULL_URL),
             new TokenImage(
                 "https://www.livemeeting.com/cc/askme/join?id=58937J&amp;role=present&amp;pw=mNjC%27%25%3D%218",
-                ITokenType.TT_FULL_URL),
+                ITokenTypeAttribute.TT_FULL_URL),
         };
 
         assertEqualTokens(test, tokens);
@@ -179,8 +179,8 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
         String test = "안녕하세요 한글입니다";
         TokenImage [] tokens =
         {
-            new TokenImage("안녕하세요", ITokenType.TT_TERM),
-            new TokenImage("한글입니다", ITokenType.TT_TERM),
+            new TokenImage("안녕하세요", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("한글입니다", ITokenTypeAttribute.TT_TERM),
         };
 
         assertEqualTokens(test, tokens);
@@ -192,13 +192,13 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
         String test = "Dawid Weiss, Data Mining!";
         TokenImage [] tokens =
         {
-            new TokenImage("Dawid", ITokenType.TT_TERM),
-            new TokenImage("Weiss", ITokenType.TT_TERM),
-            new TokenImage(",", ITokenType.TT_PUNCTUATION),
-            new TokenImage("Data", ITokenType.TT_TERM),
-            new TokenImage("Mining", ITokenType.TT_TERM),
-            new TokenImage("!", ITokenType.TT_PUNCTUATION
-                | ITokenType.TF_SEPARATOR_SENTENCE)
+            new TokenImage("Dawid", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("Weiss", ITokenTypeAttribute.TT_TERM),
+            new TokenImage(",", ITokenTypeAttribute.TT_PUNCTUATION),
+            new TokenImage("Data", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("Mining", ITokenTypeAttribute.TT_TERM),
+            new TokenImage("!", ITokenTypeAttribute.TT_PUNCTUATION
+                | ITokenTypeAttribute.TF_SEPARATOR_SENTENCE)
         };
 
         assertEqualTokens(test, tokens);
