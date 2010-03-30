@@ -112,6 +112,15 @@ public final class MutableCharArray implements CharSequence
     }
 
     /**
+     * @return Returns the internal buffer <i>currently</i> used to store the content
+     * of this char sequence.
+     */
+    public char [] getBuffer()
+    {
+        return this.buffer;
+    }
+    
+    /**
      * 
      */
     public final char charAt(final int index)

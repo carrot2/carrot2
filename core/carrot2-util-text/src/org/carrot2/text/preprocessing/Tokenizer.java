@@ -23,11 +23,11 @@ import org.carrot2.core.attribute.Init;
 import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
+import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.*;
 
-import com.carrotsearch.hppc.ByteArrayList;
-import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.*;
 import com.google.common.collect.Lists;
 
 /**
@@ -82,6 +82,16 @@ public final class Tokenizer
      * @see AllFields
      */
     private ByteArrayList fieldIndices;
+
+    /**
+     * A wrapper for pseudo-interning of token images.
+     */
+    private final MutableCharArray wrapper = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
+    
+    /**
+     * Token interning cache.
+     */
+    private final ObjectOpenHashSet<MutableCharArray> tokenCache = new ObjectOpenHashSet<MutableCharArray>();  
 
     /**
      * Performs tokenization and saves the results to the <code>context</code>.
@@ -170,9 +180,23 @@ public final class Tokenizer
     void add(int documentIndex, byte fieldIndex, TermAttribute term, ITokenTypeAttribute type)
     {
         final int termLength = term.termLength();
-        final char [] buffer = new char [termLength];
-        System.arraycopy(term.termBuffer(), 0, buffer, 0, termLength);
-        add(documentIndex, fieldIndex, buffer, type.getRawFlags());
+        final char [] termBuffer = term.termBuffer();
+
+        final char [] tokenImage;
+        this.wrapper.reset(termBuffer, 0, termLength);
+        if (tokenCache.contains(wrapper))
+        {
+            tokenImage = tokenCache.lget().getBuffer();
+            assert tokenImage.length == termLength;
+        }
+        else
+        {
+            tokenImage = new char [termLength];
+            System.arraycopy(termBuffer, 0, tokenImage, 0, termLength);
+            tokenCache.add(new MutableCharArray(tokenImage));
+        }
+
+        add(documentIndex, fieldIndex, tokenImage, type.getRawFlags());
     }
 
     /**
