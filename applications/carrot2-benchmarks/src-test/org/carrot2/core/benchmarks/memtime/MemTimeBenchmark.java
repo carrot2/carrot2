@@ -14,6 +14,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.Index;
+import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.Field.TermVector;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriter.MaxFieldLength;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Version;
 import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.Document;
@@ -32,6 +43,7 @@ import com.google.common.collect.Maps;
 /**
  * Compute approximate memory and time characteristic for a given algorithm and input.
  */
+@SuppressWarnings("unused")
 public class MemTimeBenchmark
 {
     /**
@@ -57,7 +69,7 @@ public class MemTimeBenchmark
      * convention:
      * 
      * <pre>
-     * response-xxxxx.xml
+     * response - xxxxx.xml
      * </pre>
      * 
      * where <code>xxxxx</code> is a sequential number starting from 0.
@@ -132,26 +144,14 @@ public class MemTimeBenchmark
      */
     private static void dumpJVMInfo() throws Exception
     {
-        String [] properties = {
-            "java.runtime.name",
-            "java.vm.version",
-            "java.vm.vendor",
-            "java.vm.name",
-            "java.vm.specification.name",
-            "java.runtime.version",
-            "os.arch",
-            "java.vm.specification.vendor",
-            "os.name",
-            "java.specification.name",
-            "sun.management.compiler",
-            "os.version",
-            "java.specification.version",
-            "java.vm.specification.version",
-            "sun.arch.data.model",
-            "java.specification.vendor",
-            "java.vm.info",
-            "java.version",
-            "java.vendor",
+        String [] properties =
+        {
+            "java.runtime.name", "java.vm.version", "java.vm.vendor", "java.vm.name",
+            "java.vm.specification.name", "java.runtime.version", "os.arch",
+            "java.vm.specification.vendor", "os.name", "java.specification.name",
+            "sun.management.compiler", "os.version", "java.specification.version",
+            "java.vm.specification.version", "sun.arch.data.model",
+            "java.specification.vendor", "java.vm.info", "java.version", "java.vendor",
             "sun.cpu.isalist",
         };
         Arrays.sort(properties);
@@ -162,8 +162,8 @@ public class MemTimeBenchmark
         {
             w = new OutputStreamWriter(new FileOutputStream(output), "UTF-8");
             w.write("Benchmark executed at: " + new Date() + "\n\n");
-            
-            for (String prop : properties)            
+
+            for (String prop : properties)
             {
                 w.write(prop + "=" + System.getProperty(prop, "n/a") + "\n");
             }
@@ -192,8 +192,7 @@ public class MemTimeBenchmark
      * Perform the time/memory evaluation for a single algorithm.
      */
     protected void evalShortDocs(String resultPrefix,
-        Class<? extends IProcessingComponent> algorithm,
-        int MIN, int MAX, int STEP)
+        Class<? extends IProcessingComponent> algorithm, int MIN, int MAX, int STEP)
     {
         final Logger logger = LoggerFactory.getLogger(resultPrefix);
 
@@ -215,10 +214,11 @@ public class MemTimeBenchmark
 
                 final long start = now();
                 final HashMap<String, Object> attributes = Maps.newHashMap();
-                final List<Document> inputList = 
-                    documents.subList(0, Math.min(docs, documents.size()));
+                final List<Document> inputList = documents.subList(0, Math.min(docs,
+                    documents.size()));
                 attributes.put(AttributeNames.DOCUMENTS, inputList);
 
+                // luceneIndex(inputList);
                 controller.process(attributes, algorithm);
                 final long end = now();
 
@@ -227,8 +227,8 @@ public class MemTimeBenchmark
                 final double mbLength = countByteLength(inputList) / (1024 * 1024.0);
                 final int docsCount = inputList.size();
 
-                final String logLine = String.format(Locale.ENGLISH, 
-                    "%d %.2f %.2f %.2f", docsCount, mbLength, timeSecs, memUsedMB);
+                final String logLine = String.format(Locale.ENGLISH, "%d %.2f %.2f %.2f",
+                    docsCount, mbLength, timeSecs, memUsedMB);
 
                 logger.info(logLine);
                 w.write(logLine + "\n");
@@ -246,6 +246,37 @@ public class MemTimeBenchmark
         finally
         {
             CloseableUtils.close(w);
+        }
+    }
+
+    /**
+     * Index documents in-memory using Lucene.
+     */
+    private void luceneIndex(List<Document> inputList)
+    {
+        try
+        {
+            Directory dir = new RAMDirectory();
+            IndexWriter w = new IndexWriter(dir, new StandardAnalyzer(Version.LUCENE_30),
+                MaxFieldLength.UNLIMITED);
+
+            for (Document d : inputList)
+            {
+                final org.apache.lucene.document.Document nd = new org.apache.lucene.document.Document();
+                nd.add(new Field("title", StringUtils.defaultIfEmpty(d.getTitle(), ""),
+                    Store.NO, Index.ANALYZED, TermVector.YES));
+                nd.add(new Field("snippet", StringUtils
+                    .defaultIfEmpty(d.getSummary(), ""), Store.NO, Index.ANALYZED,
+                    TermVector.YES));
+                w.addDocument(nd);
+            }
+
+            w.optimize(true);
+            w.close();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
         }
     }
 
