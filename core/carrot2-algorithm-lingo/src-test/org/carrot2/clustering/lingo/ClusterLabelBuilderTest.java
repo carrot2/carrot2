@@ -40,7 +40,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
     @Test
     public void testEmpty()
     {
-        check(new int [0]);
+        buildModelAndCheck(new int [0]);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
         };
 
         reducer.desiredClusterCountBase = 30;
-        check(expectedFeatureIndex);
+        buildModelAndCheck(expectedFeatureIndex);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
         };
 
         reducer.desiredClusterCountBase = 10;
-        check(expectedFeatureIndex);
+        buildModelAndCheck(expectedFeatureIndex);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
         };
 
         reducer.desiredClusterCountBase = 15;
-        check(expectedFeatureIndex);
+        buildModelAndCheck(expectedFeatureIndex);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
 
         reducer.desiredClusterCountBase = 10;
         createPreprocessingContext("query word");
-        check(expectedFeatureIndex);
+        buildModelAndCheck(expectedFeatureIndex);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
         {
             6, 7, 2, 3
         };
-        check(expectedFeatureIndex);
+        buildModelAndCheck(expectedFeatureIndex);
 
         // Make a copy of feature indices
         final int [] featureIndex = lingoContext.preprocessingContext.allLabels.featureIndex;
@@ -148,12 +148,16 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
         }
     }
 
-    private void check(int [] expectedFeatureIndex)
+    private void buildModelAndCheck(int [] expectedFeatureIndex)
     {
         buildTermDocumentMatrix();
         reducer.reduce(lingoContext);
-        clusterBuilder.buildLabels(lingoContext, new TfTermWeighting());
+        check(expectedFeatureIndex);
+    }
 
+    private void check(int [] expectedFeatureIndex)
+    {
+        clusterBuilder.buildLabels(lingoContext, new TfTermWeighting());
         assertThat(lingoContext.clusterLabelFeatureIndex).as("clusterLabelFeatureIndex")
             .containsOnly(expectedFeatureIndex);
     }
