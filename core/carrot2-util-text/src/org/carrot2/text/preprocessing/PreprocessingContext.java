@@ -18,8 +18,10 @@ import org.carrot2.core.Document;
 import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.linguistic.ILanguageModel;
 import org.carrot2.text.linguistic.IStemmer;
+import org.carrot2.text.util.MutableCharArray;
 
 import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.ObjectOpenHashSet;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
@@ -417,6 +419,12 @@ public final class PreprocessingContext
     public final AllLabels allLabels = new AllLabels();
 
     /**
+     * Token interning cache. Token images are interned to save memory and allow reference
+     * comparisons.
+     */
+    public ObjectOpenHashSet<MutableCharArray> tokenCache = new ObjectOpenHashSet<MutableCharArray>();
+
+    /**
      * Returns <code>true</code> if this context contains any words.
      */
     public boolean hasWords()
@@ -430,5 +438,14 @@ public final class PreprocessingContext
     public boolean hasLabels()
     {
         return allLabels.featureIndex != null && allLabels.featureIndex.length > 0;
+    }
+
+    /**
+     * This method should be invoked after all preprocessing contributors have been executed
+     * to release temporary data structures. 
+     */
+    public void preprocessingFinished()
+    {
+        this.tokenCache = null;
     }
 }

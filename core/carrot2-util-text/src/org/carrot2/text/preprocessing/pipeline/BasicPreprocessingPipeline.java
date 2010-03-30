@@ -97,5 +97,6 @@ public class BasicPreprocessingPipeline
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context);
         stopListMarker.mark(context);
+        context.preprocessingFinished();
     }
 }

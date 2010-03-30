@@ -87,11 +87,11 @@ public final class Tokenizer
      * A wrapper for pseudo-interning of token images.
      */
     private final MutableCharArray wrapper = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
-    
+
     /**
      * Token interning cache.
      */
-    private final ObjectOpenHashSet<MutableCharArray> tokenCache = new ObjectOpenHashSet<MutableCharArray>();  
+    private ObjectOpenHashSet<MutableCharArray> tokenCache;  
 
     /**
      * Performs tokenization and saves the results to the <code>context</code>.
@@ -113,6 +113,7 @@ public final class Tokenizer
         final Iterator<Document> docIterator = documents.iterator();
         int documentIndex = 0;
         final org.apache.lucene.analysis.Tokenizer ts = context.language.getTokenizer();
+        tokenCache = context.tokenCache;
         final ITokenTypeAttribute type = ts.getAttribute(ITokenTypeAttribute.class);
         final TermAttribute term = ts.getAttribute(TermAttribute.class);
 
