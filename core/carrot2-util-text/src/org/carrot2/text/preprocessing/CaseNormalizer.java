@@ -83,7 +83,7 @@ public final class CaseNormalizer
         final IntArrayList normalizedWordTf = new IntArrayList();
         final List<int []> wordTfByDocumentList = Lists.newArrayList();
         final List<byte []> fieldIndexList = Lists.newArrayList();
-        final IntArrayList types = new IntArrayList();
+        final ShortArrayList types = new ShortArrayList();
 
         final int [] wordIndexes = new int [tokenCount];
         Arrays.fill(wordIndexes, -1);
@@ -183,9 +183,9 @@ public final class CaseNormalizer
     
                         // Add the word to the word list
                         normalizedWordImages.add(tokenImages[maxTfVariantIndex]);
+                        types.add(tokenTypesArray[maxTfVariantIndex]);
                         normalizedWordTf.add(totalTf);
                         fieldIndexList.add(PcjCompat.toByteArray(fieldIndices));
-                        types.add(tokenType);
     
                         // Add this word's index in AllWords to all its instances
                         // in the AllTokens multiarray
@@ -220,7 +220,6 @@ public final class CaseNormalizer
         context.allWords.fieldIndices = fieldIndexList.toArray(
             new byte [fieldIndexList.size()] []);
         context.allWords.type = types.toArray();
-        context.allWords.flag = new int [types.size()];
     }
 
     /**

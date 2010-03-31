@@ -14,6 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -72,6 +73,12 @@ public class WordMarkerTest extends PreprocessingComponentTestBase
         languageModelStemmer.stem(context);
         stopListMarker.mark(context);
 
-        assertThat(context.allWords.commonTermFlag).isEqualTo(expectedCommonTermFlag);
+        boolean [] actual = new boolean [context.allWords.type.length];
+        for (int i = 0; i < actual.length; i++)
+        {
+            actual[i] = ((context.allWords.type[i] & ITokenTypeAttribute.TF_COMMON_WORD) != 0);
+        }
+
+        assertThat(actual).isEqualTo(expectedCommonTermFlag);
     }
 }

@@ -15,6 +15,7 @@ package org.carrot2.text.preprocessing;
 import static org.carrot2.util.test.Assertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.junit.Before;
 
 /**
@@ -54,12 +55,18 @@ public class StemmerTestBase extends PreprocessingComponentTestBase
             expectedFieldIndices);
     }
 
-    protected void check(String query, int [] expectedWordsFlag)
+    protected void check(String query, short [] expectedWordsFlag)
     {
         createPreprocessingContext(query);
         performProcessing();
 
-        assertThat(context.allWords.flag).as("allWords.flag")
+        short [] cloned = new short [context.allWords.type.length];
+        System.arraycopy(context.allWords.type, 0, cloned, 0, context.allWords.type.length);
+
+        for (int i = 0; i < cloned.length; i++)
+            cloned[i] &= ITokenTypeAttribute.TF_QUERY_WORD;
+
+        assertThat(cloned).as("allWords.flag")
             .isEqualTo(expectedWordsFlag);
     }
 

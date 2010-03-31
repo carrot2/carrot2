@@ -38,4 +38,12 @@ public final class TokenTypeUtils
     {
         return (type & ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT) != 0;
     }
+    
+    /**
+     * Return <code>true</code> if {@link ITokenTypeAttribute#TF_COMMON_WORD} is set.
+     */
+    public static boolean isCommon(int flag)
+    {
+        return (flag & ITokenTypeAttribute.TF_COMMON_WORD) != 0;
+    }    
 }

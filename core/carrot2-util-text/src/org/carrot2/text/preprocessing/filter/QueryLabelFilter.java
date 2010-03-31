@@ -13,9 +13,11 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
 
 /**
  * Accepts labels that do not consist only of query words.
@@ -40,7 +42,7 @@ public class QueryLabelFilter extends SingleLabelFilterBase
     public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
     {
         final int [] wordIndices = context.allPhrases.wordIndices[phraseIndex];
-        final int [] flag = context.allWords.flag;
+        final short [] flag = context.allWords.type;
 
         for (int i = 0; i < wordIndices.length; i++)
         {
@@ -56,12 +58,12 @@ public class QueryLabelFilter extends SingleLabelFilterBase
     @Override
     public boolean acceptWord(PreprocessingContext context, int wordIndex)
     {
-        return !isQueryWord(context.allWords.flag[wordIndex]);
+        return !isQueryWord(context.allWords.type[wordIndex]);
     }
 
-    private final boolean isQueryWord(int flag)
+    private final boolean isQueryWord(short flag)
     {
-        return (flag & AllWords.FLAG_QUERY) != 0;
+        return (flag & ITokenTypeAttribute.TF_QUERY_WORD) != 0;
     }
 
     public boolean isEnabled()

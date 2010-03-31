@@ -208,7 +208,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
                 0
             }
         };
-        int [] expectedType = new int []
+        short [] expectedType = new short []
         {
             ITokenTypeAttribute.TT_NUMERIC, ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TT_FILE,
             ITokenTypeAttribute.TT_BARE_URL, ITokenTypeAttribute.TT_EMAIL
@@ -703,7 +703,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
 
     private void check(char [][] expectedWordImages, int [] expectedWordTf,
         int [] expectedWordIndices, int [][] expectedWordTfByDocument,
-        byte [][] expectedFieldIndex, int [] expectedType)
+        byte [][] expectedFieldIndex, short [] expectedType)
     {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
@@ -727,10 +727,10 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         temporaryCaseNormalizer.dfThreshold = caseNormalizer.dfThreshold;
     }
 
-    private int [] createTermTokenTypes(int count)
+    private short [] createTermTokenTypes(int count)
     {
-        final int [] result = new int [count];
-        Arrays.fill(result, ITokenTypeAttribute.TT_TERM);
+        final short [] result = new short [count];
+        Arrays.fill(result, (short) ITokenTypeAttribute.TT_TERM);
         return result;
     }
 }

@@ -13,6 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import org.carrot2.core.LanguageCode;
+import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.attribute.Bindable;
 
@@ -41,12 +42,12 @@ public class LabelFormatter
         {
             final boolean insertSpace = context.language.getLanguageCode() != LanguageCode.CHINESE_SIMPLIFIED;
             final int [] wordIndices = phrasesWordIndices[featureIndex - wordCount];
-            final boolean [] commonTermFlag = context.allWords.commonTermFlag;
+            final short [] termTypes = context.allWords.type;
             for (int i = 0; i < wordIndices.length; i++)
             {
                 final int wordIndex = wordIndices[i];
                 appendFormatted(label, wordsImage[wordIndex], i == 0,
-                    commonTermFlag[wordIndex]);
+                    TokenTypeUtils.isCommon(termTypes[wordIndex]));
                 if (insertSpace && i < wordIndices.length - 1)
                 {
                     label.append(' ');

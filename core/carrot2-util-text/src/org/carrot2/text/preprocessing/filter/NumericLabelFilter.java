@@ -40,7 +40,7 @@ public class NumericLabelFilter extends SingleLabelFilterBase
     public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
     {
         final int [] wordIndices = context.allPhrases.wordIndices[phraseIndex];
-        final int [] type = context.allWords.type;
+        final short [] type = context.allWords.type;
 
         return !isNumeric(type[wordIndices[0]]);
     }
@@ -51,7 +51,7 @@ public class NumericLabelFilter extends SingleLabelFilterBase
         return !isNumeric(context.allWords.type[wordIndex]);
     }
 
-    private final boolean isNumeric(int type)
+    private final boolean isNumeric(short type)
     {
         return (type & ITokenTypeAttribute.TYPE_MASK) == ITokenTypeAttribute.TT_NUMERIC;
     }

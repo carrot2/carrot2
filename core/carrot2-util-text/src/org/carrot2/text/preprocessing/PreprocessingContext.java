@@ -202,9 +202,6 @@ public final class PreprocessingContext
      */
     public static class AllWords
     {
-        /** Flags words that are contained in the query (inflection-insensitive) */
-        public static final int FLAG_QUERY = 1;
-
         /**
          * The most frequently appearing variant of the word with respect to case. E.g. if
          * a token <em>MacOS</em> appeared 12 times in the input and <em>macos</em>
@@ -217,6 +214,19 @@ public final class PreprocessingContext
          * (duplicated in AllTokens).  
          */
         public char [][] image;
+
+        /**
+         * Token type of this word copied from {@link AllTokens#type}. Additional
+         * flags are set for each word by 
+         * {@link CaseNormalizer} and {@link LanguageModelStemmer}.
+         * 
+         * <p>
+         * This array is produced by {@link CaseNormalizer}.
+         * This array is modified by {@link LanguageModelStemmer}.
+         * 
+         * @see ITokenTypeAttribute
+         */
+        public short [] type;
 
         /**
          * Term Frequency of the word, aggregated across all variants with respect to
@@ -238,38 +248,6 @@ public final class PreprocessingContext
          * This array is produced by {@link CaseNormalizer}.
          */
         public int [][] tfByDocument;
-
-        /**
-         * Common word flag for the word, equal to <code>true</code> if the word is a stop
-         * word. <b>This array will be replaced with a more generic word flags array in
-         * the near future.</b>
-         * <p>
-         * This array is produced by {@link CaseNormalizer}.
-         * 
-         * TODO: replace with BitSet or replace with byte[] and place real flags? Alternatively,
-         * integrate with refactoring of {@link #image} and integrate stop word flag
-         * with {@link AllTokens#type}?
-         */
-        public boolean [] commonTermFlag;
-
-        /**
-         * Token type of this word. See {@link ITokenTypeAttribute} for available types.
-         * <p>
-         * This array is produced by {@link CaseNormalizer}.
-         * 
-         * TODO: see the potential refactoring of {@link #image}. Also, see {@link AllWords#type}.
-         */
-        public int [] type;
-
-        /**
-         * Additional flags for this word.
-         * <p>
-         * This array is produced by {@link CaseNormalizer}. The
-         * {@link AllWords#FLAG_QUERY} is set by {@link LanguageModelStemmer}.
-         * 
-         * TODO: only one flag for now? Why not integrate it with {@link #type}? 
-         */
-        public int [] flag;
 
         /**
          * A pointer to the {@link AllStems} arrays for this word.

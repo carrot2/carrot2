@@ -14,6 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import java.util.*;
 
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
@@ -38,8 +39,10 @@ import com.google.common.collect.Sets;
  * <li>{@link AllStems#mostFrequentOriginalWordIndex}</li>
  * <li>{@link AllStems#tf}</li>
  * <li>{@link AllStems#tfByDocument}</li>
- * <li>{@link AllWords#FLAG_QUERY} in This class requires that {@link Tokenizer}
- * and {@link CaseNormalizer} be invoked first.
+ * <li>{@link AllWords#type} is populated with {@link ITokenTypeAttribute#TF_QUERY_WORD}</li>
+ * </ul>
+ * 
+ * This class requires that {@link Tokenizer} and {@link CaseNormalizer} be invoked first.
  */
 @Bindable(prefix = "LanguageModelStemmer")
 public final class LanguageModelStemmer
@@ -98,7 +101,7 @@ public final class LanguageModelStemmer
         final int [] wordTfArray = context.allWords.tf;
         final int [][] wordTfByDocumentArray = context.allWords.tfByDocument;
         final byte [][] wordsFieldIndices = context.allWords.fieldIndices;
-        final int [] wordsFlag = context.allWords.flag;
+        final short [] wordsType = context.allWords.type;
 
         final int allWordsCount = wordTfArray.length;
 
@@ -153,7 +156,7 @@ public final class LanguageModelStemmer
             stemIndexesArray[orderIndex] = stemIndex;
             if (inQuery)
             {
-                wordsFlag[orderIndex] |= AllWords.FLAG_QUERY;
+                wordsType[orderIndex] |= ITokenTypeAttribute.TF_QUERY_WORD;
             }
 
             // Now check if token image is changing
@@ -203,7 +206,7 @@ public final class LanguageModelStemmer
         fieldIndexList.add(PcjCompat.toByteArray(fieldIndices));
         if (inQuery)
         {
-            wordsFlag[stemImagesOrder[stemImagesOrder.length - 1]] |= AllWords.FLAG_QUERY;
+            wordsType[stemImagesOrder[stemImagesOrder.length - 1]] |= ITokenTypeAttribute.TF_QUERY_WORD;
         }
 
         // Convert lists to arrays and store them in allStems

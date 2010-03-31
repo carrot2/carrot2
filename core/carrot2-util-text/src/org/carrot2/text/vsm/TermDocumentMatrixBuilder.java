@@ -21,6 +21,8 @@ import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.NNIDoubleFactory2D;
+import org.carrot2.text.analysis.ITokenTypeAttribute;
+import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.PcjCompat;
 import org.carrot2.util.attribute.*;
@@ -260,7 +262,7 @@ public class TermDocumentMatrixBuilder
     {
         final int [] labelsFeatureIndex = context.allLabels.featureIndex;
         final int [] wordsStemIndex = context.allWords.stemIndex;
-        final boolean [] wordsCommonTermFlag = context.allWords.commonTermFlag;
+        final short [] wordsTypes = context.allWords.type;
         final int [][] phrasesWordIndices = context.allPhrases.wordIndices;
         final int wordCount = wordsStemIndex.length;
 
@@ -282,7 +284,7 @@ public class TermDocumentMatrixBuilder
                 for (int j = 0; j < wordIndices.length; j++)
                 {
                     final int wordIndex = wordIndices[j];
-                    if (!wordsCommonTermFlag[wordIndex])
+                    if (!TokenTypeUtils.isCommon(wordsTypes[wordIndex]))
                     {
                         addStemIndex(wordsStemIndex, documentCount, stemsTfByDocument,
                             requiredStemIndices, wordIndex);

@@ -15,6 +15,7 @@ package org.carrot2.text.preprocessing;
 import java.util.ArrayList;
 
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
@@ -80,7 +81,7 @@ public class DocumentAssigner
         final int [] labelsFeatureIndex = context.allLabels.featureIndex;
         final int [][] stemsTfByDocument = context.allStems.tfByDocument;
         final int [] wordsStemIndex = context.allWords.stemIndex;
-        final boolean [] wordsCommonTerm = context.allWords.commonTermFlag;
+        final short [] wordsTypes = context.allWords.type;
         final int [][] phrasesTfByDocument = context.allPhrases.tfByDocument;
         final int [][] phrasesWordIndices = context.allPhrases.wordIndices;
         final int wordCount = wordsStemIndex.length;
@@ -114,7 +115,7 @@ public class DocumentAssigner
                     for (int j = 0; j < wordIndices.length; j++)
                     {
                         final int wordIndex = wordIndices[j];
-                        if (!wordsCommonTerm[wordIndex])
+                        if (!TokenTypeUtils.isCommon(wordsTypes[wordIndex]))
                         {
                             if (!firstAdded)
                             {

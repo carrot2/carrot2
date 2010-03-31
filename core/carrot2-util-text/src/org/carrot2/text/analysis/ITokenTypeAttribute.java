@@ -48,6 +48,7 @@ public interface ITokenTypeAttribute extends Attribute
     /*
      * Additional token flags, mask: 0xFF00
      */
+
     /** Current token is a sentence separator. */
     public static final short TF_SEPARATOR_SENTENCE = 0x0100;
     
@@ -59,6 +60,18 @@ public interface ITokenTypeAttribute extends Attribute
     
     /** Current token terminates the input (never returned from parsing). */
     public static final short TF_TERMINATOR = 0x0800;
+
+    /*
+     * Token flags related to processing steps after tokenization. To save some memory,
+     * these token flags are stored together with token type. These flags may not
+     * be available directly from the tokenizer. 
+     */
+
+    /** The current token is common. */
+    public static final short TF_COMMON_WORD = 0x1000;
+
+    /** The current token is part of the query. */
+    public static final short TF_QUERY_WORD = 0x2000;
 
     /**
      * @return Returns raw bitmask associated with the token.

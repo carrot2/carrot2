@@ -36,6 +36,7 @@ import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
@@ -701,12 +702,13 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
 
         final int start = words.size();
         final int [] phraseIndices  = p.cluster.phrases.get(0);
+        final short [] tokenTypes = context.allWords.type;
         for (int i = 0; i < phraseIndices.length; i += 2)
         {
             for (int j = phraseIndices[i]; j <= phraseIndices[i + 1]; j++)
             {
                 final int termIndex = sb.input.get(j);
-                if (!context.allWords.commonTermFlag[termIndex])
+                if (!TokenTypeUtils.isCommon(tokenTypes[termIndex]))
                 {
                     words.push(termIndex);
                 }
@@ -738,12 +740,13 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         final int start = words.size();
         
         final int [] phraseIndices  = p.cluster.phrases.get(0);
+        final short [] tokenTypes = context.allWords.type;
         for (int i = 0; i < phraseIndices.length; i += 2)
         {
             for (int j = phraseIndices[i]; j <= phraseIndices[i + 1]; j++)
             {
                 final int termIndex = sb.input.get(j);
-                if (!context.allWords.commonTermFlag[termIndex])
+                if (!TokenTypeUtils.isCommon(tokenTypes[termIndex]))
                 {
                     words.push(termIndex);
                 }
@@ -833,7 +836,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         // Extract terms info for the phrase and construct the label.
         final boolean [] stopwords = new boolean[termsCount];
         final char [][] images = new char [termsCount][];
-    
+        final short [] tokenTypes = context.allWords.type;
+
         int k = 0;
         for (int i = 0; i < phraseIndices.length; i += 2)
         {
@@ -841,7 +845,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             {
                 final int termIndex = sb.input.get(j);
                 images[k] = context.allWords.image[termIndex];
-                stopwords[k] = context.allWords.commonTermFlag[termIndex];
+                stopwords[k] = TokenTypeUtils.isCommon(tokenTypes[termIndex]);
             }
         }
         
@@ -870,6 +874,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
 
         String sep = "";
         int k = 0;
+        final short [] tokenTypes = context.allWords.type;
         for (int i = 0; i < phraseIndices.length; i += 2)
         {
             for (int j = phraseIndices[i]; j <= phraseIndices[i + 1]; j++, k++)
@@ -879,7 +884,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                 final int termIndex = sb.input.get(j);
                 b.append(context.allWords.image[termIndex]);
 
-                if (context.allWords.commonTermFlag[termIndex]) b.append("[S]");
+                if (TokenTypeUtils.isCommon(tokenTypes[termIndex])) b.append("[S]");
                 sep = " ";
             }
             sep = "_";
@@ -913,9 +918,10 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         assert path.size() > 0;
 
         final int [] terms = sb.input.buffer;
+        final short [] tokenTypes = context.allWords.type;
 
         // Ignore nodes that start with a stop word.
-        if (context.allWords.commonTermFlag[terms[path.get(0)]])
+        if (TokenTypeUtils.isCommon(tokenTypes[terms[path.get(0)]]))
         {
             return false;
         }
@@ -924,7 +930,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         int i = path.get(path.size() - 2);
         int j = path.get(path.size() - 1);
         final int k = j;
-        while (i <= j && context.allWords.commonTermFlag[terms[j]])
+        while (i <= j && TokenTypeUtils.isCommon(tokenTypes[terms[j]]))
         {
             j--;
         }
@@ -973,7 +979,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                 final int termIndex = terms[j];
 
                 // If this term is a stop word, don't count it.
-                if (context.allWords.commonTermFlag[termIndex])
+                if (TokenTypeUtils.isCommon(context.allWords.type[termIndex]))
                 {
                     continue;
                 }
