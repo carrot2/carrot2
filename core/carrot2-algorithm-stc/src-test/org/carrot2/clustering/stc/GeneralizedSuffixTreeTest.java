@@ -20,8 +20,9 @@ import java.util.Collections;
 import org.apache.lucene.util.OpenBitSet;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.text.suffixtree.SuffixTree;
-import org.carrot2.util.collect.primitive.IntQueue;
 import org.junit.Test;
+
+import com.carrotsearch.hppc.IntStack;
 
 /**
  * Tests running GST-functionality on top of a {@link SuffixTree}. This is for demonstration
@@ -38,7 +39,7 @@ public class GeneralizedSuffixTreeTest
             super(sb, 2);
         }
 
-        protected void visit(int state, int card, OpenBitSet bset, IntQueue edges)
+        protected void visit(int state, int card, OpenBitSet bset, IntStack edges)
         {
             final StringBuilder b = new StringBuilder();
             for (int i = 0; i < edges.size(); i += 2)

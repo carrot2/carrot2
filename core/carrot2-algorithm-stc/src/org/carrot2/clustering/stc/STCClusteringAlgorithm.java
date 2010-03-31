@@ -16,23 +16,39 @@ import static org.carrot2.text.analysis.ITokenTypeAttribute.TF_SEPARATOR_DOCUMEN
 import static org.carrot2.text.analysis.ITokenTypeAttribute.TF_TERMINATOR;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.util.OpenBitSet;
 import org.apache.lucene.util.PriorityQueue;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.Document;
+import org.carrot2.core.IClusteringAlgorithm;
+import org.carrot2.core.LanguageCode;
+import org.carrot2.core.ProcessingComponentBase;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
-import org.carrot2.util.attribute.*;
-import org.carrot2.util.collect.primitive.IntQueue;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
+import org.carrot2.util.attribute.Required;
 
+import com.carrotsearch.hppc.IntStack;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -304,7 +320,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         // Walk the internal nodes of the suffix tree.
         new GeneralizedSuffixTree.Visitor(sb, params.minBaseClusterSize) {
             protected void visit(int state, int cardinality, 
-                OpenBitSet documents, IntQueue path)
+                OpenBitSet documents, IntStack path)
             {
                 // Check minimum base cluster cardinality.
                 assert cardinality >= params.minBaseClusterSize;
@@ -366,7 +382,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
 
         // [i] - next neighbor or END, [i + 1] - neighbor cluster index.
         final int END = -1;
-        final IntQueue neighborList = new IntQueue();
+        final IntStack neighborList = new IntStack();
         neighborList.push(END);
         final int [] neighbors = new int [baseClusters.size()];
         final float m = (float) params.mergeThreshold;
@@ -402,8 +418,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
 
         final ArrayList<ClusterCandidate> mergedClusters = 
             Lists.newArrayListWithCapacity(baseClusters.size());
-        final IntQueue stack = new IntQueue(baseClusters.size());
-        final IntQueue mergeList = new IntQueue(baseClusters.size());
+        final IntStack stack = new IntStack(baseClusters.size());
+        final IntStack mergeList = new IntStack(baseClusters.size());
         int mergedIndex = 0;
         for (int v = 0; v < baseClusters.size(); v++)
         {
@@ -413,7 +429,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             stack.push(v);
             while (stack.size() > 0)
             {
-                final int c = stack.popGet();
+                final int c = stack.pop();
 
                 assert merged[c] == NO_INDEX || merged[c] == mergedIndex;
                 if (merged[c] == mergedIndex) continue;
@@ -469,7 +485,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Merge a list of base clusters into one.
      */
-    private ClusterCandidate merge(IntQueue mergeList, 
+    private ClusterCandidate merge(IntStack mergeList, 
         List<ClusterCandidate> baseClusters)
     {
         assert mergeList.size() > 0;
@@ -531,11 +547,11 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         final int max = phrases.size();
 
         // A list of all words for each candidate phrase.
-        final IntQueue words = new IntQueue(
+        final IntStack words = new IntStack(
             params.maxDescPhraseLength * phrases.size());
 
         // Offset pairs in the words list -- a pair [start, length].
-        final IntQueue offsets = new IntQueue(phrases.size() * 2);
+        final IntStack offsets = new IntStack(phrases.size() * 2);
 
         for (PhraseCandidate p : phrases)
         {
@@ -614,11 +630,11 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         final int max = phrases.size();
 
         // A list of all unique words for each candidate phrase.
-        final IntQueue words = new IntQueue(
+        final IntStack words = new IntStack(
             params.maxDescPhraseLength * phrases.size());
 
         // Offset pairs in the words list -- a pair [start, length].
-        final IntQueue offsets = new IntQueue(phrases.size() * 2);
+        final IntStack offsets = new IntStack(phrases.size() * 2);
 
         for (PhraseCandidate p : phrases)
         {
@@ -679,7 +695,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Collect all unique non-stop word from a phrase. 
      */
-    private void appendUniqueWords(IntQueue words, IntQueue offsets, PhraseCandidate p)
+    private void appendUniqueWords(IntStack words, IntStack offsets, PhraseCandidate p)
     {
         assert p.cluster.phrases.size() == 1;
 
@@ -717,7 +733,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Collect all words from a phrase.
      */
-    private void appendWords(IntQueue words, IntQueue offsets, PhraseCandidate p)
+    private void appendWords(IntStack words, IntStack offsets, PhraseCandidate p)
     {
         final int start = words.size();
         
@@ -892,7 +908,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      * somewhere in the suffix tree on the edge).</dd>
      * </dl>
      */
-    final boolean checkAcceptablePhrase(IntQueue path)
+    final boolean checkAcceptablePhrase(IntStack path)
     {
         assert path.size() > 0;
 
@@ -943,7 +959,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      * Calculate "effective phrase length", that is the number of non-ignored words
      * in the phrase.
      */
-    final int effectivePhraseLength(IntQueue path)
+    final int effectivePhraseLength(IntStack path)
     {
         final int [] terms = sb.input.buffer;
         final int lower = params.ignoreWordIfInFewerDocs;

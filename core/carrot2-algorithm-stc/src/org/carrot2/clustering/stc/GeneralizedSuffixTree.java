@@ -18,8 +18,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.lucene.util.OpenBitSet;
-import org.carrot2.text.suffixtree.*;
-import org.carrot2.util.collect.primitive.IntQueue;
+import org.carrot2.text.suffixtree.ISequence;
+import org.carrot2.text.suffixtree.IntegerSequence;
+import org.carrot2.text.suffixtree.SuffixTree;
+import org.carrot2.text.suffixtree.SuffixTreeBuilder;
+
+import com.carrotsearch.hppc.IntStack;
 
 /**
  * A suffix tree dedicated to finding frequent phrases in documents.
@@ -35,17 +39,17 @@ final class GeneralizedSuffixTree
     {
         private int separator = -1;
 
-        public final IntQueue input = new IntQueue();
+        public final IntStack input = new IntStack();
 
         /**
          * Positions in {@link #input} where documents end.
          */
-        public IntQueue documentMarkers = new IntQueue();
+        public IntStack documentMarkers = new IntStack();
 
         /**
          * We keep the document number for each leaf state.
          */
-        public IntQueue stateOriginDocument = new IntQueue();
+        public IntStack stateOriginDocument = new IntStack();
 
         /**
          * A suffix tree built from the input phrases.
@@ -126,7 +130,7 @@ final class GeneralizedSuffixTree
     static abstract class Visitor
     {
         /** Path from the root (edges index ranges) when walking through the tree. */
-        private final IntQueue edges = new IntQueue();
+        private final IntStack edges = new IntStack();
         
         /** Bitsets used to compute cardinality in each node. */
         private final ArrayList<OpenBitSet> bsets = new ArrayList<OpenBitSet>();
@@ -177,7 +181,7 @@ final class GeneralizedSuffixTree
                     Arrays.fill(child.getBits(), 0);
                     edges.push(stree.getStartIndex(edge), stree.getEndIndex(edge));
                     countDocs(level + 1, childState);
-                    edges.pop(2);
+                    edges.discard(2);
                     me.or(child);
                 }
             }
@@ -192,7 +196,7 @@ final class GeneralizedSuffixTree
             }
         }
 
-        protected abstract void visit(int state, int cardinality, OpenBitSet documents, IntQueue path);
+        protected abstract void visit(int state, int cardinality, OpenBitSet documents, IntStack path);
 
         private OpenBitSet getBitSet(int level)
         {
