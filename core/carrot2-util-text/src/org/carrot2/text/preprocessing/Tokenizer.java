@@ -19,6 +19,7 @@ import java.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.carrot2.core.Document;
+import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
@@ -103,6 +104,11 @@ public final class Tokenizer
         
         // Fields to tokenize
         final String [] fieldNames = documentFields.toArray(new String [documentFields.size()]); 
+
+        if (fieldNames.length > 8)
+        {
+            throw new ProcessingException("Maximum number of tokenized fields is 8.");
+        }
 
         // Prepare arrays
         images = Lists.newArrayList();

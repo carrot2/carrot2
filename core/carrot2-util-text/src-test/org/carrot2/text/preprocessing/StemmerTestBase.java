@@ -52,7 +52,7 @@ public class StemmerTestBase extends PreprocessingComponentTestBase
         assertThat(context.allStems.tfByDocument).as("allStems.tfByDocument").isEqualTo(
             expectedStemTfByDocument);
         assertThat(context.allStems.fieldIndices).as("allStems.fieldIndices").isEqualTo(
-            expectedFieldIndices);
+            CaseNormalizerTest.flattenToBits(expectedFieldIndices));
     }
 
     protected void check(String query, short [] expectedWordsFlag)

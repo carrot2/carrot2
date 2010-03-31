@@ -257,12 +257,14 @@ public final class PreprocessingContext
         public int [] stemIndex;
 
         /**
-         * Indices of all fields in which this word appears at least once. Values are
-         * pointers to the {@link AllFields} arrays.
+         * A bit-packed indices of all fields in which this word appears at least once. 
+         * Indexes (positions) of selected bits are pointers to the 
+         * {@link AllFields} arrays. Fast conversion between the bit-packed representation
+         * and <code>byte[]</code> with index values is done by {@link #toFieldIndexes(byte)}  
          * <p>
          * This array is produced by {@link CaseNormalizer}.
          */
-        public byte [][] fieldIndices;
+        public byte [] fieldIndices;
     }
 
     /**
@@ -317,12 +319,14 @@ public final class PreprocessingContext
         public int [][] tfByDocument;
 
         /**
-         * Indices of all fields in which this stem appears at least once. Values are
-         * pointers to the {@link AllFields} arrays.
+         * A bit-packed indices of all fields in which this word appears at least once. 
+         * Indexes (positions) of selected bits are pointers to the 
+         * {@link AllFields} arrays. Fast conversion between the bit-packed representation
+         * and <code>byte[]</code> with index values is done by {@link #toFieldIndexes(byte)}  
          * <p>
          * This array is produced by {@link LanguageModelStemmer}
          */
-        public byte [][] fieldIndices;
+        public byte [] fieldIndices;
     }
 
     /**
@@ -427,6 +431,32 @@ public final class PreprocessingContext
     public boolean hasLabels()
     {
         return allLabels.featureIndex != null && allLabels.featureIndex.length > 0;
+    }
+
+    /**
+     * Static conversion between selected bits and an array of indexes of these bits. 
+     */
+    private final static int [][] bitsCache;
+    static
+    {
+        bitsCache = new int [0x100][];
+        for (int i = 0; i < 0x100; i++)
+        {
+            bitsCache[i] = new int [Integer.bitCount(i & 0xFF)];
+            for (int v = 0, bit = 0, j = i & 0xff; j != 0; j >>>= 1, bit++)
+            {
+                if ((j & 0x1) != 0)
+                    bitsCache[i][v++] = bit;
+            }
+        }
+    }
+    
+    /**
+     * Convert the selected bits in a byte to an array of indexes.
+     */
+    public int [] toFieldIndexes(byte b)
+    {
+        return bitsCache[b & 0xff];
     }
 
     /* 

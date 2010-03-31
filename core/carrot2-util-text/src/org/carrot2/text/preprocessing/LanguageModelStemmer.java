@@ -12,7 +12,8 @@
 
 package org.carrot2.text.preprocessing;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Set;
 
 import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.linguistic.IStemmer;
@@ -20,11 +21,11 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
 import org.carrot2.text.util.MutableCharArray;
-import org.carrot2.util.*;
+import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.attribute.Bindable;
 
-import com.carrotsearch.hppc.*;
-import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.ByteArrayList;
+import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.sorting.IndirectSort;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -100,7 +101,7 @@ public final class LanguageModelStemmer
         // Local array references
         final int [] wordTfArray = context.allWords.tf;
         final int [][] wordTfByDocumentArray = context.allWords.tfByDocument;
-        final byte [][] wordsFieldIndices = context.allWords.fieldIndices;
+        final byte [] wordsFieldIndices = context.allWords.fieldIndices;
         final short [] wordsType = context.allWords.type;
 
         final int allWordsCount = wordTfArray.length;
@@ -114,7 +115,7 @@ public final class LanguageModelStemmer
             context.allStems.mostFrequentOriginalWordIndex = new int [0];
             context.allStems.tf = new int [0];
             context.allStems.tfByDocument = new int [0] [];
-            context.allStems.fieldIndices = new byte [0] [];
+            context.allStems.fieldIndices = new byte [0];
 
             context.allWords.stemIndex = new int [context.allWords.image.length];
             return;
@@ -125,7 +126,7 @@ public final class LanguageModelStemmer
         final IntArrayList stemTf = new IntArrayList(allWordsCount);
         final IntArrayList stemMostFrequentWordIndexes = new IntArrayList(allWordsCount);
         final ArrayList<int []> stemTfByDocumentList = new ArrayList<int []>(allWordsCount);
-        final ArrayList<byte []> fieldIndexList = Lists.newArrayList();
+        final ByteArrayList fieldIndexList = new ByteArrayList();
 
         // Counters
         int totalTf = wordTfArray[stemImagesOrder[0]];
@@ -137,8 +138,8 @@ public final class LanguageModelStemmer
         final ArrayList<int[]> stemTfsByDocument = Lists.newArrayList();
         
         stemTfsByDocument.add(wordTfByDocumentArray[stemImagesOrder[0]]);
-        final BitSet fieldIndices = new BitSet(context.allFields.name.length);
-        addAll(fieldIndices, wordsFieldIndices[0]);
+        byte fieldIndices = 0;
+        fieldIndices |= wordsFieldIndices[0];
 
         // For locating query words
         final MutableCharArray buffer = new MutableCharArray(
@@ -167,7 +168,7 @@ public final class LanguageModelStemmer
             {
                 totalTf += wordTfArray[nextInOrderIndex];
                 stemTfsByDocument.add(wordTfByDocumentArray[nextInOrderIndex]);
-                addAll(fieldIndices, wordsFieldIndices[nextInOrderIndex]);
+                fieldIndices |= wordsFieldIndices[nextInOrderIndex];
                 if (mostFrequentWordFrequency < wordTfArray[nextInOrderIndex])
                 {
                     mostFrequentWordFrequency = wordTfArray[nextInOrderIndex];
@@ -180,14 +181,14 @@ public final class LanguageModelStemmer
                 stemTf.add(totalTf);
                 stemMostFrequentWordIndexes.add(mostFrequentWordIndex);
                 storeTfByDocument(stemTfByDocumentList, stemTfsByDocument);
-                fieldIndexList.add(PcjCompat.toByteArray(fieldIndices));
+                fieldIndexList.add(fieldIndices);
 
                 stemIndex++;
                 totalTf = wordTfArray[nextInOrderIndex];
                 mostFrequentWordFrequency = wordTfArray[nextInOrderIndex];
                 mostFrequentWordIndex = nextInOrderIndex;
-                fieldIndices.clear();
-                addAll(fieldIndices, wordsFieldIndices[nextInOrderIndex]);
+                fieldIndices = 0;
+                fieldIndices |= wordsFieldIndices[nextInOrderIndex];
 
                 stemTfsByDocument.clear();
                 stemTfsByDocument.add(wordTfByDocumentArray[nextInOrderIndex]);
@@ -203,7 +204,7 @@ public final class LanguageModelStemmer
         stemMostFrequentWordIndexes.add(mostFrequentWordIndex);
         stemIndexesArray[stemImagesOrder[stemImagesOrder.length - 1]] = stemIndex;
         storeTfByDocument(stemTfByDocumentList, stemTfsByDocument);
-        fieldIndexList.add(PcjCompat.toByteArray(fieldIndices));
+        fieldIndexList.add(fieldIndices);
         if (inQuery)
         {
             wordsType[stemImagesOrder[stemImagesOrder.length - 1]] |= ITokenTypeAttribute.TF_QUERY_WORD;
@@ -216,8 +217,7 @@ public final class LanguageModelStemmer
         context.allStems.tf = stemTf.toArray();
         context.allStems.tfByDocument = stemTfByDocumentList
             .toArray(new int [stemTfByDocumentList.size()] []);
-        context.allStems.fieldIndices = fieldIndexList.toArray(new byte [fieldIndexList
-            .size()] []);
+        context.allStems.fieldIndices = fieldIndexList.toArray();
 
         // References in allWords
         context.allWords.stemIndex = stemIndexesArray;
@@ -240,14 +240,6 @@ public final class LanguageModelStemmer
         {
             // Merge sparse representations if more than one.
             target.add(SparseArray.mergeSparseArrays(source));
-        }
-    }
-
-    private final static void addAll(BitSet set, byte [] values)
-    {
-        for (byte b : values)
-        {
-            set.set(b);
         }
     }
 

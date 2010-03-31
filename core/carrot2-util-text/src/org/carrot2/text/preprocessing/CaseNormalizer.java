@@ -19,11 +19,16 @@ import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
-import org.carrot2.util.PcjCompat;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.constraint.IntRange;
 
-import com.carrotsearch.hppc.*;
+import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.ByteArrayList;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.IntStack;
+import com.carrotsearch.hppc.ShortArrayList;
 import com.carrotsearch.hppc.sorting.IndirectSort;
 import com.google.common.collect.Lists;
 
@@ -82,7 +87,7 @@ public final class CaseNormalizer
         final List<char []> normalizedWordImages = Lists.newArrayList();
         final IntArrayList normalizedWordTf = new IntArrayList();
         final List<int []> wordTfByDocumentList = Lists.newArrayList();
-        final List<byte []> fieldIndexList = Lists.newArrayList();
+        final ByteArrayList fieldIndexList = new ByteArrayList();
         final ShortArrayList types = new ShortArrayList();
 
         final int [] wordIndexes = new int [tokenCount];
@@ -185,8 +190,8 @@ public final class CaseNormalizer
                         normalizedWordImages.add(tokenImages[maxTfVariantIndex]);
                         types.add(tokenTypesArray[maxTfVariantIndex]);
                         normalizedWordTf.add(totalTf);
-                        fieldIndexList.add(PcjCompat.toByteArray(fieldIndices));
-    
+                        fieldIndexList.add((byte) fieldIndices.bits[0]);
+
                         // Add this word's index in AllWords to all its instances
                         // in the AllTokens multiarray
                         for (int j = variantStartIndex; j < i + 1; j++)
@@ -217,8 +222,7 @@ public final class CaseNormalizer
         context.allWords.tf = normalizedWordTf.toArray();
         context.allWords.tfByDocument = 
             wordTfByDocumentList.toArray(new int [wordTfByDocumentList.size()] []);
-        context.allWords.fieldIndices = fieldIndexList.toArray(
-            new byte [fieldIndexList.size()] []);
+        context.allWords.fieldIndices = fieldIndexList.toArray();
         context.allWords.type = types.toArray();
     }
 

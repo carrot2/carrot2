@@ -716,8 +716,23 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         assertThat(context.allWords.tfByDocument).as("allWords.tfByDocument").isEqualTo(
             expectedWordTfByDocument);
         assertThat(context.allWords.fieldIndices).as("allWords.fieldIndex").isEqualTo(
-            expectedFieldIndex);
+            flattenToBits(expectedFieldIndex));
         assertThat(context.allWords.type).as("allWords.type").isEqualTo(expectedType);
+    }
+
+    public static byte [] flattenToBits(byte [][] expectedFieldIndex)
+    {
+        byte [] result = new byte [expectedFieldIndex.length];
+        for (int i = 0; i < result.length; i++)
+        {
+            byte b = 0;
+            for (byte v : expectedFieldIndex[i])
+            {
+                b |= (1 << v);
+            }
+            result[i] = b;
+        }
+        return result;
     }
 
     @Override
