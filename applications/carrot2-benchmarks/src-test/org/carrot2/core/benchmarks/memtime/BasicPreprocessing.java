@@ -28,8 +28,8 @@ import org.carrot2.util.attribute.Required;
  * This class simulates running {@link BasicPreprocessingPipeline} and
  * {@link MultilingualClustering} only, no clustering is performed.
  */
-@Bindable(prefix = "PreprocessingOnly")
-public final class BasicPreprocessingOnly extends ProcessingComponentBase implements
+@Bindable(prefix = "BasicPreprocessing")
+public final class BasicPreprocessing extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
     /**
@@ -74,9 +74,9 @@ public final class BasicPreprocessingOnly extends ProcessingComponentBase implem
                 public List<Cluster> process(List<Document> documents,
                     LanguageCode language)
                 {
-                    BasicPreprocessingOnly.this.documents = documents;
-                    BasicPreprocessingOnly.this.cluster(language);
-                    return BasicPreprocessingOnly.this.clusters;
+                    BasicPreprocessing.this.documents = documents;
+                    BasicPreprocessing.this.cluster(language);
+                    return BasicPreprocessing.this.clusters;
                 }
             });
         documents = originalDocuments;

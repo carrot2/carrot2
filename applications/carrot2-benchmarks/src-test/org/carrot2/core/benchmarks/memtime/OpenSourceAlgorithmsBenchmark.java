@@ -14,7 +14,7 @@ public class OpenSourceAlgorithmsBenchmark extends MemTimeBenchmark
     public void evalBasicPreprocessing()
     {
         evalShortDocs("basic-preprocessing", 
-            BasicPreprocessingOnly.class, MIN, MAX, STEP);
+            BasicPreprocessing.class, MIN, MAX, STEP);
     }
 
     @Test
