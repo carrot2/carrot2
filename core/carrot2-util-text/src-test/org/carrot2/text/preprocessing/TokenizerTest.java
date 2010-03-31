@@ -48,7 +48,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         {
             -1
         };
-        final int [] expectedTokensTypes = new int []
+        final short [] expectedTokensTypes = new short []
         {
             ITokenTypeAttribute.TF_TERMINATOR
         };
@@ -74,7 +74,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         {
             -1, -1
         };
-        final int [] expectedTokensTypes = new int []
+        final short [] expectedTokensTypes = new short []
         {
             ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT, ITokenTypeAttribute.TF_TERMINATOR
         };
@@ -100,7 +100,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         {
             0, -1
         };
-        final int [] expectedTokensTypes = new int []
+        final short [] expectedTokensTypes = new short []
         {
             ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TF_TERMINATOR
         };
@@ -127,7 +127,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         {
             0, 0, 0, 0, 0, -1
         };
-        final int [] expectedTokensTypes = new int []
+        final short [] expectedTokensTypes = new short []
         {
             ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TF_SEPARATOR_FIELD,
             ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TF_TERMINATOR
@@ -158,7 +158,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         {
             0, 0, 0, 0, 0, -1, 1, 1, 1, 1, -1, 2, 2, 2, -1
         };
-        final int [] expectedTokensTypes = new int []
+        final short [] expectedTokensTypes = new short []
         {
             ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TF_SEPARATOR_FIELD,
             ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT,
@@ -193,7 +193,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         {
             0, 0, 0, 0, 0, -1
         };
-        final int [] expectedTokensTypes = new int []
+        final short [] expectedTokensTypes = new short []
         {
             ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TF_SEPARATOR_FIELD,
             ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TF_TERMINATOR
@@ -221,7 +221,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         {
             0, 0, 0, -1
         };
-        final int [] expectedTokensTypes = new int []
+        final short [] expectedTokensTypes = new short []
         {
             ITokenTypeAttribute.TT_TERM,
             ITokenTypeAttribute.TF_SEPARATOR_SENTENCE | ITokenTypeAttribute.TT_PUNCTUATION,
@@ -237,7 +237,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
     }
 
     private void check(char [][] expectedTokensImages,
-        final int [] expectedTokensDocumentIndices, final int [] expectedTokensTypes,
+        final int [] expectedTokensDocumentIndices, final short [] expectedTokensTypes,
         final byte [] expectedTokensFieldIndices, String [] expectedFieldNames)
     {
         tokenizer.tokenize(context);

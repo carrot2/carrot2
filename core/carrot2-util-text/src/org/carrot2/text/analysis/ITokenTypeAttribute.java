@@ -31,9 +31,9 @@ import org.apache.lucene.util.Attribute;
 public interface ITokenTypeAttribute extends Attribute
 {
     /*
-     * Token type mask: 0x00ff
+     * Token type mask: 0x000f
      */
-    public static final int TYPE_MASK = 0x00ff;
+    public static final int TYPE_MASK = 0x000f;
 
     public static final int TT_TERM = 0x0001;
     public static final int TT_NUMERIC = 0x0002;
@@ -46,27 +46,27 @@ public interface ITokenTypeAttribute extends Attribute
     public static final int TT_HYPHTERM = 0x0009;
 
     /*
-     * Additional token flags, mask: 0x0f00
+     * Additional token flags, mask: 0xFF00
      */
     /** Current token is a sentence separator. */
-    public static final int TF_SEPARATOR_SENTENCE = 0x0100;
+    public static final short TF_SEPARATOR_SENTENCE = 0x0100;
     
     /** Current token is a document separator (never returned from parsing). */
-    public static final int TF_SEPARATOR_DOCUMENT = 0x0200;
+    public static final short TF_SEPARATOR_DOCUMENT = 0x0200;
     
     /** Current token separates document's logical fields. */
-    public static final int TF_SEPARATOR_FIELD = 0x0800;
+    public static final short TF_SEPARATOR_FIELD = 0x0400;
     
     /** Current token terminates the input (never returned from parsing). */
-    public static final int TF_TERMINATOR = 0x1000;
+    public static final short TF_TERMINATOR = 0x0800;
 
     /**
      * @return Returns raw bitmask associated with the token.
      */
-    public int getRawFlags();
+    public short getRawFlags();
 
     /**
      * Set new flags.
      */
-    public void setRawFlags(int newFlags);
+    public void setRawFlags(short newFlags);
 }

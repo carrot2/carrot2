@@ -98,7 +98,7 @@ public final class ChineseTokenizer extends Tokenizer
             term.setTermBuffer(image, 0, termLength);
             term.setTermLength(termLength);
 
-            int flags = 0;
+            short flags = 0;
             tempCharSequence.reset(image, 0, termLength);
             if (termLength == 1 && image[0] == ',')
             {

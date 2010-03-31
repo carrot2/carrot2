@@ -69,7 +69,7 @@ public final class Tokenizer
      * 
      * @see ITokenTypeAttribute
      */
-    private IntArrayList tokenTypes;
+    private ShortArrayList tokenTypes;
 
     /**
      * An array of document indexes.
@@ -106,7 +106,7 @@ public final class Tokenizer
 
         // Prepare arrays
         images = Lists.newArrayList();
-        tokenTypes = new IntArrayList();
+        tokenTypes = new ShortArrayList();
         documentIndices = new IntArrayList();
         fieldIndices = new ByteArrayList();
 
@@ -222,7 +222,7 @@ public final class Tokenizer
     /**
      * Adds custom token code to the sequence. May be used to add separator constants.
      */
-    void add(int documentIndex, byte fieldIndex, char [] image, int tokenTypeCode)
+    void add(int documentIndex, byte fieldIndex, char [] image, short tokenTypeCode)
     {
         documentIndices.add(documentIndex);
         fieldIndices.add(fieldIndex);

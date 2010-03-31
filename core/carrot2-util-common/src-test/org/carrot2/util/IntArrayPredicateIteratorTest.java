@@ -12,27 +12,35 @@
 
 package org.carrot2.util;
 
-import java.util.*;
+import java.util.ArrayList;
 
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Test;
 
-import com.google.common.base.*;
+import com.carrotsearch.hppc.predicates.ShortPredicate;
 
 /**
  * 
  */
 public class IntArrayPredicateIteratorTest
 {
-    private final int SEP = -1;
-    private Predicate<Integer> equalsSep = Predicates.equalTo(SEP);
+    private final static int SEP = -1;
+    private ShortPredicate equalsSep = new ShortPredicate()
+    {
+        
+        public boolean apply(short arg)
+        {
+            return arg == SEP;
+        }
+    };
 
     @Test
     public void testSimpleCase() {
         compare(
-            new int [] {
+            new short [] {
                 0, SEP,   0, 1, SEP, 0
             },
-            new int [] {
+            new short [] {
                 0, 1,     2, 2,   5, 1
             });
     }
@@ -40,10 +48,10 @@ public class IntArrayPredicateIteratorTest
     @Test
     public void testBorderCase() {
         compare(
-            new int [] {
+            new short [] {
                 SEP, SEP, 1, SEP
             },
-            new int [] {
+            new short [] {
                 0, 0,   1, 0,   2, 1,   4, 0
             });
     }
@@ -51,19 +59,19 @@ public class IntArrayPredicateIteratorTest
     @Test
     public void testEmptyArray() {
         compare(
-            new int [] {
+            new short [] {
             },
-            new int [] {
+            new short [] {
             });
     }
 
     @Test
     public void testNoSeparator() {
         compare(
-            new int [] {
+            new short [] {
                 0, 0, 0, 0
             },
-            new int [] {
+            new short [] {
                 0, 4
             });
     }
@@ -71,20 +79,20 @@ public class IntArrayPredicateIteratorTest
     @Test
     public void testSubrange() {
         compare(
-            new int [] {
+            new short [] {
                 SEP, 0, 1, 2, SEP, 3
             },
             1, 3,
-            new int [] {
+            new short [] {
                 1, 3
             });
 
         compare(
-            new int [] {
+            new short [] {
                 SEP, 0, 1, 2, SEP, 3
             },
             2, 3,
-            new int [] {
+            new short [] {
                 2, 2,
                 5, 0,
             });
@@ -93,7 +101,7 @@ public class IntArrayPredicateIteratorTest
     /*
      * 
      */
-    private void compare(int [] data, int [] expectedValues)
+    private void compare(short [] data, short [] expectedValues)
     {
         compare(data, 0, data.length, expectedValues);
     }
@@ -101,7 +109,7 @@ public class IntArrayPredicateIteratorTest
     /*
      * 
      */
-    private void compare(int [] data, int from, int length, int [] expectedValues)
+    private void compare(short [] data, int from, int length, short [] expectedValues)
     {
         final ArrayList<Integer> results = new ArrayList<Integer>();
         final IntArrayPredicateIterator i = new IntArrayPredicateIterator(data, from, length, equalsSep);

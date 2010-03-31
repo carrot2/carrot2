@@ -232,7 +232,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         sb = new GeneralizedSuffixTree.SequenceBuilder();
 
         final int [] tokenIndex = context.allTokens.wordIndex;
-        final int [] tokenType = context.allTokens.type;
+        final short [] tokenType = context.allTokens.type;
         for (int i = 0; i < tokenIndex.length; i++)
         {
             /* Advance until the first real token. */

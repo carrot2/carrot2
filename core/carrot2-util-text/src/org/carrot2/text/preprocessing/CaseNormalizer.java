@@ -69,7 +69,7 @@ public final class CaseNormalizer
     {
         // Local references to already existing arrays
         final char [][] tokenImages = context.allTokens.image;
-        final int [] tokenTypesArray = context.allTokens.type;
+        final short [] tokenTypesArray = context.allTokens.type;
         final int [] documentIndexesArray = context.allTokens.documentIndex;
         final byte [] tokensFieldIndex = context.allTokens.fieldIndex;
         final int tokenCount = tokenImages.length;

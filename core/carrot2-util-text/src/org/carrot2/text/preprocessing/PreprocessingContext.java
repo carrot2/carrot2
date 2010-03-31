@@ -22,8 +22,7 @@ import org.carrot2.text.util.MutableCharArray;
 
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.ObjectOpenHashSet;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
+import com.carrotsearch.hppc.predicates.ShortPredicate;
 
 /**
  * Document preprocessing context provides low-level (usually integer-coded) data
@@ -35,21 +34,35 @@ import com.google.common.base.Predicates;
 public final class PreprocessingContext
 {
     /** Predicate for splitting on document separator. */
-    public static final Predicate<Integer> ON_DOCUMENT_SEPARATOR = Predicates
-        .equalTo(ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT);
+    public static final ShortPredicate ON_DOCUMENT_SEPARATOR = 
+        equalTo(ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT);
 
     /** Predicate for splitting on field separator. */
-    public static final Predicate<Integer> ON_FIELD_SEPARATOR = Predicates
-        .equalTo(ITokenTypeAttribute.TF_SEPARATOR_FIELD);
+    public static final ShortPredicate ON_FIELD_SEPARATOR = 
+        equalTo(ITokenTypeAttribute.TF_SEPARATOR_FIELD);
 
     /** Predicate for splitting on sentence separator. */
-    public static final Predicate<Integer> ON_SENTENCE_SEPARATOR = new Predicate<Integer>()
+    public static final ShortPredicate ON_SENTENCE_SEPARATOR = new ShortPredicate()
     {
-        public boolean apply(Integer tokenType)
+        public boolean apply(short tokenType)
         {
-            return (tokenType.intValue() & ITokenTypeAttribute.TF_SEPARATOR_SENTENCE) != 0;
+            return (tokenType & ITokenTypeAttribute.TF_SEPARATOR_SENTENCE) != 0;
         }
     };
+
+    /** 
+     * Return a new {@link ShortPredicate} returning <code>true</code>
+     * if the argument equals a given value. 
+     */
+    public static final ShortPredicate equalTo(final short t)
+    {
+        return new ShortPredicate() {
+            public boolean apply(short value)
+            {
+                return value == t; 
+            }
+        };
+    }
 
     /** Query used to perform processing, may be <code>null</code> */
     public final String query;
@@ -103,10 +116,8 @@ public final class PreprocessingContext
          * Token's {@link ITokenTypeAttribute} bit flags.
          * <p>
          * This array is produced by {@link Tokenizer}.
-         * 
-         * TODO: save twice the amount of memory by making this short[] type
          */
-        public int [] type;
+        public short [] type;
 
         /**
          * Document field the token came from. The index points to arrays in

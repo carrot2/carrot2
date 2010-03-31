@@ -60,7 +60,7 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
             return false;
         }
 
-        type.setRawFlags(tokenType);
+        type.setRawFlags((short) tokenType);
         term.setTermBuffer(parser.yybuffer(), parser.yystart(), parser.yylength());
         term.setTermLength(parser.yylength());
         return true;

@@ -26,12 +26,12 @@ public final class TokenTypeAttributeImpl extends AttributeImpl implements IToke
     /**
      * Flags associated with the current token.
      */
-    private int flags;
+    private short flags;
 
     /**
      * @see ITokenTypeAttribute#getRawFlags()
      */
-    public int getRawFlags()
+    public short getRawFlags()
     {
         return flags;
     }
@@ -39,7 +39,7 @@ public final class TokenTypeAttributeImpl extends AttributeImpl implements IToke
     /**
      * Sets {@link #flags}.
      */
-    public void setRawFlags(int flags)
+    public void setRawFlags(short flags)
     {
         this.flags = flags;
     }
