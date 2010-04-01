@@ -208,10 +208,6 @@ public final class PreprocessingContext
          * appeared 3 times, the image will be equal to <em>MacOS</em>.
          * <p>
          * This array is produced by {@link CaseNormalizer}.
-         * 
-         * TODO: we could make this an int pointer (index) back to {@link AllTokens#image}? 
-         * The saving would be twofold because then we wouldn't need {@link #type} field
-         * (duplicated in AllTokens).  
          */
         public char [][] image;
 
