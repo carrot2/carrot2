@@ -398,12 +398,13 @@ public final class PreprocessingContext
         public BitSet [] documentIndices;
 
         /**
-         * Index of the first phrase in {@link AllLabels}, or -1 if there are no phrases
-         * in {@link AllLabels}.
+         * The first index in {@link #featureIndex} which 
+         * points to {@link AllPhrases}, or -1 if there are no phrases
+         * in {@link #featureIndex}.
          * <p>
          * This value is set by {@link LabelFilterProcessor}.
          * 
-         * TODO: explain what this is for, please?
+         * @see #featureIndex
          */
         public int firstPhraseIndex;
     }
