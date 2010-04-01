@@ -17,6 +17,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
+import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
@@ -50,6 +51,12 @@ public final class BasicPreprocessing extends ProcessingComponentBase implements
     @Internal
     @Attribute(key = AttributeNames.CLUSTERS)
     public List<Cluster> clusters = null;
+    
+    @Processing
+    @Output
+    @Internal
+    @Attribute(key = "context")
+    public PreprocessingContext context;
 
     /**
      * Common preprocessing tasks handler.
@@ -106,6 +113,6 @@ public final class BasicPreprocessing extends ProcessingComponentBase implements
     private void cluster(LanguageCode language)
     {
         clusters = new ArrayList<Cluster>();
-        preprocessingPipeline.preprocess(documents, null, language);
+        context = preprocessingPipeline.preprocess(documents, null, language);
     }
 }
