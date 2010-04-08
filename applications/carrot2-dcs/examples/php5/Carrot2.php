@@ -6,7 +6,7 @@ if (!function_exists('curl_init')) {
 
 //
 // This code is based on the Carrot2 integration code from:
-// http://roryoung.co.uk/blog/post/playing-with-carrot2-clustering-in-php.html
+// http://www.roryoung.co.uk/2008/03/15/playing-with-carrot2-clustering-in-php/
 //
 
 /**
