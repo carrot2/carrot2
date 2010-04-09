@@ -185,7 +185,7 @@ public class MemTimeBenchmark
         overrideDefaults();
         readData();
         dumpJVMInfo();
-        controller = ControllerFactory.createSimple();
+        controller = ControllerFactory.createPooling();
     }
 
     /**
