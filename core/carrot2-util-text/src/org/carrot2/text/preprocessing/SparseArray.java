@@ -10,7 +10,7 @@ import com.carrotsearch.hppc.cursors.IntIntCursor;
  * Sparse array encoding utilities. Sparse means an index and its value are kept
  * in an array as a pair.
  */
-final class SparseArray
+public final class SparseArray
 {
     /**
      * An empty <code>int []</code>. 
