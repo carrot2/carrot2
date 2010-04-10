@@ -184,7 +184,7 @@ final class BenchmarkViewPage extends Page
             {
                 getSite().getWorkbenchWindow().getActivePage().openEditor(
                     new WebBrowserEditorInput(
-                        benchmarkJob.logFile.toURL()),
+                        benchmarkJob.logFile.toURI().toURL()),
                     WebBrowserEditor.WEB_BROWSER_EDITOR_ID);
             }
         }

@@ -22,7 +22,7 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * A processing job runs a query specified by the {@link SearchInput} on an instance of
- * the {@link IController} acquired from {@link WorkbenchCorePlugin}.
+ * the {@link Controller} acquired from {@link WorkbenchCorePlugin}.
  */
 public final class SearchJob extends Job
 {

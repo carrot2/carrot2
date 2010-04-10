@@ -33,7 +33,7 @@ import com.google.common.collect.Maps;
 
 /**
  * The activator class (plug-in's entry point), controls the life-cycle and contains a
- * reference to the Carrot2 {@link IController}.
+ * reference to the Carrot2 {@link Controller}.
  */
 public class WorkbenchCorePlugin extends AbstractUIPlugin
 {
