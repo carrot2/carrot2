@@ -622,7 +622,7 @@
   <target name="jar" description="Builds Carrot2 core JAR"
     depends="compile, attrs, resources">
     <mkdir dir="${jar.dir}" />
-    <jar destfile="${jar.dir}/carrot2-core.jar">
+    <jar destfile="${jar.dir}/carrot2-core-${carrot2.version}.jar">
       <fileset dir="${build.dir}">
         <exclude name="ambient/**" />
         <exclude name="odp239/**" />
@@ -641,7 +641,7 @@
             <mapper type="regexp" from="^(.+)/src/(.+)" to="\2"/>
         </chainedmapper> 
     </copy>
-    <jar destfile="${jar.dir}/carrot2-core-sources.jar">
+    <jar destfile="${jar.dir}/carrot2-core-sources-${carrot2.version}.jar">
       <fileset dir="${jar.dir}/sources" />
     </jar>
     <delete dir="${jar.dir}/sources" />
@@ -655,7 +655,7 @@
   <target name="jar.mini.build" depends="jar">
     <property name="jar.mini.dir" location="${carrot2.master.basedir}/tmp/jar-mini" />
     <mkdir dir="${jar.mini.dir}" />
-    <unzip src="${jar.dir}/carrot2-core.jar" dest="${jar.mini.dir}" />
+    <unzip src="${jar.dir}/carrot2-core-${carrot2.version}.jar" dest="${jar.mini.dir}" />
 
     <delete includeEmptyDirs="true">
       <fileset dir="${jar.mini.dir}">
@@ -670,7 +670,7 @@
       </fileset>
     </delete>
 
-    <jar destfile="${jar.dir}/carrot2-mini.jar">
+    <jar destfile="${jar.dir}/carrot2-mini-${carrot2.version}.jar">
       <fileset dir="${jar.mini.dir}" />
     </jar>
     <delete dir="${jar.mini.dir}" />
@@ -685,7 +685,7 @@
            compiler="modern">
       <include name="**/ClusteringDocumentList.java" />
       <classpath>
-        <path location="${jar.dir}/carrot2-mini.jar" />
+        <path location="${jar.dir}/carrot2-mini-${carrot2.version}.jar" />
         <fileset dir="${carrot2.master.basedir}">
           <patternset refid="lib.core.mini" />
           <!-- 
@@ -701,7 +701,7 @@
           outputproperty="dev.null" failonerror="true">
       <classpath>
         <pathelement path="${jar.mini.test.classes.dir}" />
-        <pathelement location="${jar.dir}/carrot2-mini.jar" />
+        <pathelement location="${jar.dir}/carrot2-mini-${carrot2.version}.jar" />
         <fileset dir="${carrot2.master.basedir}">
           <patternset refid="lib.core.mini" />
         </fileset>
@@ -797,7 +797,7 @@
       Maven artefacts.
     -->
   <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini" description="Deploy Maven artifacts">
-    <jar destfile="${jar.dir}/carrot2-core-javadoc.jar">
+    <jar destfile="${jar.dir}/carrot2-core-javadoc-${carrot2.version}.jar">
       <fileset dir="${javadoc.dir}" />
     </jar>
 

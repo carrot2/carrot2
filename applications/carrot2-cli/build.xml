@@ -85,7 +85,7 @@
     <mkdir dir="${cli.lib.dir}" />
   
     <copy todir="${cli.lib.dir}">
-      <fileset file="${jar.dir}/carrot2-mini.jar" />
+      <fileset file="${jar.dir}/carrot2-mini-${carrot2.version}.jar" />
       <fileset dir="${carrot2.master.basedir}">
         <patternset refid="lib.core.mini" />
         <exclude name="lib/**/slf4j-nop*.jar" />

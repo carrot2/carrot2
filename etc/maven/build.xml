@@ -53,15 +53,15 @@
 
         <echo>Maven2 deployment location: ${maven.repository.url}</echo>
         
-        <artifact:deploy file="${jar.dir}/carrot2-core.jar">
+        <artifact:deploy file="${jar.dir}/carrot2-core-${carrot2.version}.jar">
             <artifact:pom file="${poms.dir}/carrot2-core.pom.xml" />
             <artifact:remoteRepository url="${maven.repository.url}" />
 
-            <attach classifier="sources" file="${jar.dir}/carrot2-core-sources.jar" type="jar" />
-            <attach classifier="javadoc" file="${jar.dir}/carrot2-core-javadoc.jar" type="jar" />
+            <attach classifier="sources" file="${jar.dir}/carrot2-core-sources-${carrot2.version}.jar" type="jar" />
+            <attach classifier="javadoc" file="${jar.dir}/carrot2-core-javadoc-${carrot2.version}.jar" type="jar" />
         </artifact:deploy>
         
-        <artifact:deploy file="${jar.dir}/carrot2-mini.jar">
+        <artifact:deploy file="${jar.dir}/carrot2-mini-${carrot2.version}.jar">
             <artifact:pom file="${poms.dir}/carrot2-mini.pom.xml" />
             <artifact:remoteRepository url="${maven.repository.url}" />
         </artifact:deploy>

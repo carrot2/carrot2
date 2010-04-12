@@ -168,7 +168,7 @@
            target="1.5"
            encoding="UTF-8">
       <classpath refid="lib.classpath" />
-      <classpath path="${jar.dir}/carrot2-core.jar" />
+      <classpath path="${jar.dir}/carrot2-core-${carrot2.version}.jar" />
     </javac>
 
     <copy tofile="${dcs.dir}/classes/log4j.xml"

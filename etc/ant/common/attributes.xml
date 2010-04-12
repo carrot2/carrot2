@@ -2,7 +2,7 @@
 <project name="carrot2.common.attributes">
   <path id="attrs.classpath">
       <fileset dir="${carrot2.master.basedir}">
-          <include name="tmp/jar/carrot2-core.jar" />
+          <include name="tmp/jar/carrot2-core*.jar" />
           <include name="lib/com.thoughtworks.qdox/*.jar" />
           <include name="lib/com.google.collections/*.jar" />
           <include name="lib/org.apache.commons/*.jar" />
