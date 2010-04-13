@@ -134,6 +134,11 @@ div.noscript
   color: #b0b0b0;
 }
 
+#main-area {
+  min-width: 900px;
+  -width: 900px;
+} 
+
 /** Startup screen */
 #startup #logo {
   background-repeat: no-repeat;
