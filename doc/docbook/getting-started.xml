@@ -127,10 +127,8 @@
           &DCW; can automatically determine the Google Desktop Query URL only when it 
           is run on Windows with Administrator's privileges. For other setups, please
           refer to <link xlink:href="http://code.google.com/apis/desktop/docs/queryapi.html#httpxml">Google Desktop API Documentation</link>
-          for instructions about obtaining the Query URL. You can set the Query URL
-          attribute in the optional attributes section, shown after clicking the
-          <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-optional-attributes.png" /></imageobject></inlinemediaobject></guiicon>            
-          button on the <guilabel>Search</guilabel> view toolbar. 
+          for instructions about obtaining the Query URL. You can set the <guilabel>Query URL</guilabel>
+          attribute in the advanced attributes section. 
         </para>
         
         <para>
@@ -167,9 +165,7 @@
             create an XSLT style sheet that transforms your data into &C2; format,
             see <xref linkend="section.getting-started.xml-feed" /> for an example.
             Provide a path to your style sheet in the <guilabel>XSLT Stylesheet</guilabel>
-            field, which is an optional field. 
-            You can show optional fields by clicking the <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-optional-attributes.png" /></imageobject></inlinemediaobject></guiicon>            
-            button on the <guilabel>Search</guilabel> view toolbar (<xref linkend="figure.search-view-xml" />).
+            field in the <guilabel>Medium</guilabel> section.
           </para>
         </listitem>
         
@@ -237,9 +233,7 @@
         <listitem>
           <para>
             Provide a path to the transformation style sheet in the <guilabel>XSLT Stylesheet</guilabel>
-            field, which is an optional field. 
-            You can show optional fields by clicking the <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-optional-attributes.png" /></imageobject></inlinemediaobject></guiicon>            
-            button on the <guilabel>Search</guilabel> view toolbar (<xref linkend="figure.search-view-xml" />).
+            field in the <guilabel>Medium</guilabel> section.
           </para>
         </listitem>
         
@@ -308,9 +302,6 @@
         <listitem>
           <para>
             In the <guilabel>Search</guilabel> view of &DCW;, choose Lucene source. 
-            Click the <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-optional-attributes.png" /></imageobject></inlinemediaobject></guiicon>            
-            button on the view's toolbar (<xref linkend="figure.search-view-lucene" />) 
-            to show optional attributes.
           </para>
         </listitem>
         
@@ -323,7 +314,8 @@
         
         <listitem>
           <para>
-            Choose fields from your Lucene index in at least one of <guilabel>Document title field</guilabel>
+            In the <guilabel>Medium</guilabel> section, choose fields from your Lucene 
+            index in at least one of <guilabel>Document title field</guilabel>
             and <guilabel>Document content field</guilabel> combo boxes.
           </para>
         </listitem>
@@ -356,22 +348,20 @@
         <listitem>
           <para>
             In the <guilabel>Search</guilabel> view of &DCW;, choose Solr source. 
-            Click the <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-optional-attributes.png" /></imageobject></inlinemediaobject></guiicon>            
-            button on the view's toolbar (<xref linkend="figure.search-view-solr" />) 
-            to show optional attributes.
           </para>
         </listitem>
         
         <listitem>
           <para>
-            Provide the URL at which your Solr instance is available in the 
-            <guilabel>Service URL</guilabel> field.
+            In the <guilabel>Advanced</guilabel> section, provide the URL at which 
+            your Solr instance is available in the  <guilabel>Service URL</guilabel> field.
           </para>
         </listitem>
         
         <listitem>
           <para>
-            Provide fields that should be used as document title, content and URL (optional)
+            In the <guilabel>Medium</guilabel> section, provide fields that should 
+            be used as document title, content and URL (optional)
             in the <guilabel>Title field name</guilabel>, <guilabel>Summary field name</guilabel> 
             and <guilabel>URL field name</guilabel> field, respectively.
           </para>

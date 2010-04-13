@@ -6,7 +6,7 @@ package org.carrot2.core;
  * <ul>
  * <li>{@link #createSimple()}: for one-time processing and quick experiments with the
  * code;</li>
- * <li>{@link #create(boolean, Class...)}: for long-running applications (e.g. web
+ * <li>{@link #createCachingPooling(Class...)}: for long-running applications (e.g. web
  * applications) handling repeated (cacheable) requests.</li>
  * </ul>
  */
