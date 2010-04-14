@@ -1,3 +1,15 @@
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
+
 package org.carrot2.core;
 
 import static org.easymock.EasyMock.isA;
@@ -133,7 +145,7 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
     @Test
     public void testComponentConfigurationInitProcessingAttributeCreation()
     {
-        BindableInstanceCounter.createdInstances = 0;
+        BindableInstanceCounter.reset();
         initAttributes.put("initProcessing", BindableInstanceCounter.class);
 
         assertThat(BindableInstanceCounter.createdInstances).isEqualTo(0);
@@ -153,7 +165,7 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
     @Test
     public void testComponentInstanceReused()
     {
-        ComponentWithInstanceCounter.instanceCount = 0;
+        ComponentWithInstanceCounter.reset();
         performProcessing(ComponentWithInstanceCounter.class);
         assertThat(ComponentWithInstanceCounter.instanceCount).isEqualTo(1);
         performProcessing(ComponentWithInstanceCounter.class);
@@ -175,6 +187,11 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
             {
                 instanceCount++;
             }
+        }
+        
+        static void reset()
+        {
+            instanceCount = 0;
         }
     }
 }

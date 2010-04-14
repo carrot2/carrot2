@@ -1,3 +1,15 @@
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
+
 package org.carrot2.core.benchmarks.memtime;
 
 import java.io.File;
@@ -62,7 +74,7 @@ public class MemTimeBenchmark
      * (preferably short, because longer input is simulated by concatenating documents
      * together).
      */
-    protected static ArrayList<Document> documents = new ArrayList<Document>();
+    static ArrayList<Document> documents = new ArrayList<Document>();
 
     /**
      * Directory with input XML files. Files should be organized using file name
@@ -89,17 +101,17 @@ public class MemTimeBenchmark
     /**
      * Minimum documents to cluster.
      */
-    protected static int MIN;
+    static int MIN;
 
     /**
      * Maximum documents to cluster.
      */
-    protected static int MAX;
+    static int MAX;
 
     /**
      * Increment step for the documents to cluster range.
      */
-    protected static int STEP;
+    static int STEP;
 
     /**
      * The controller used to drive the clustering process.
