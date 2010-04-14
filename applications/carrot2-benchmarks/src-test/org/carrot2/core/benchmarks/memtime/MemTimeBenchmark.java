@@ -74,7 +74,7 @@ public class MemTimeBenchmark
      * (preferably short, because longer input is simulated by concatenating documents
      * together).
      */
-    static ArrayList<Document> documents = new ArrayList<Document>();
+    protected static ArrayList<Document> documents = new ArrayList<Document>();
 
     /**
      * Directory with input XML files. Files should be organized using file name
@@ -101,17 +101,17 @@ public class MemTimeBenchmark
     /**
      * Minimum documents to cluster.
      */
-    static int MIN;
+    protected static int MIN;
 
     /**
      * Maximum documents to cluster.
      */
-    static int MAX;
+    protected static int MAX;
 
     /**
      * Increment step for the documents to cluster range.
      */
-    static int STEP;
+    protected static int STEP;
 
     /**
      * The controller used to drive the clustering process.

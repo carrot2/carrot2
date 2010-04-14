@@ -1083,9 +1083,11 @@
       <exclude name="**/*.dll" />
       <exclude name="**/*.jpeg" />
       <exclude name="**/*.psd" />
+      <exclude name="**/*.odg" />
       <exclude name="**/*.pdf" />
       <exclude name="**/*.ico" />
       <exclude name="**/*.swp" />
+      <exclude name="**/*.utf16.xml" />
       <exclude name="**/tmp/**" />
     </patternset>
 
