@@ -21,8 +21,8 @@
   <property name="cli.lib.dir" location="${cli.dir}/lib" />
 
   <!-- CLI dist file name base -->
-  <property name="cli.dist.base" value="${carrot2.cli.base}" />
-  <property name="cli.dist.folder" value="${cli.dist.base}-${carrot2.version}" />
+  <property name="cli.dist.name" value="${carrot2.cli.base}-${carrot2.version}" />
+  <property name="cli.dist.folder" value="${cli.dist.name}" />
   <property name="cli.dist.zip" location="${cli.dir}/../${cli.dist.folder}.zip" />
 
   <!--
@@ -126,7 +126,7 @@
     <copy tofile="${cli.dir}/classes/log4j.xml"
           file="${carrot2.master.basedir}/core/carrot2-util-log4j/src/log4j-cli.xml" />
 
-    <jar destfile="${cli.lib.dir}/${cli.dist.base}.jar">
+    <jar destfile="${cli.lib.dir}/${cli.dist.name}.jar">
       <fileset dir="${cli.dir}/classes" />
       <fileset dir="${carrot2.master.basedir}/core/carrot2-util-log4j/src">
         <include name="appender-*" />
