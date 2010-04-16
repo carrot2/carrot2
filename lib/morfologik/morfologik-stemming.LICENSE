@@ -1,6 +1,6 @@
 
 Copyright (c) 2006 Dawid Weiss
-Copyright (c) 2007-2009 Dawid Weiss, Marcin Miłkowski
+Copyright (c) 2007-2010 Dawid Weiss, Marcin Miłkowski
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, 
@@ -30,5 +30,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---
 
-Polish dictionary licensed under GPL, LGPL, MPL and Creative Commons ShareAlike licenses.
-Details: http://www.sjp.pl/slownik/en/
+LICENCE
+
+The dictionary comes from Morfologik project. Morfologik uses data from 
+Polish ispell/myspell dictionary hosted at http://www.sjp.pl/slownik/en/ and 
+is licenced on the terms of (inter alia) LGPL and Creative Commons 
+ShareAlike. The part-of-speech tags were added in Morfologik project and
+are not found in the data from sjp.pl. The tagset is similar to IPI PAN
+tagset.
