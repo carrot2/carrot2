@@ -632,6 +632,12 @@ public class SearchInputView extends ViewPart
         {
             this.attributeGroups.setExpanded(state.sectionsExpansionState);            
         }
+        else
+        {
+            // Set the default expansion state.
+            this.attributeGroups.setExpanded(false);
+            this.attributeGroups.setExpanded(AttributeLevel.BASIC.toString(), true);
+        }
     }
 
     /**

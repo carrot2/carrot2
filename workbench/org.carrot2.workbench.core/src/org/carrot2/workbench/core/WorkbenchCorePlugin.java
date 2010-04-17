@@ -33,7 +33,7 @@ import com.google.common.collect.Maps;
 
 /**
  * The activator class (plug-in's entry point), controls the life-cycle and contains a
- * reference to the Carrot2 {@link IController}.
+ * reference to the Carrot2 {@link Controller}.
  */
 public class WorkbenchCorePlugin extends AbstractUIPlugin
 {
@@ -49,7 +49,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     /**
      * Shared, thread-safe caching controller instance.
      */
-    private CachingController controller;
+    private Controller controller;
 
     /**
      * All loaded components ({@link IDocumentSource}s and {@link IClusteringAlgorithm}.
@@ -96,8 +96,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         // Scan the list of suite extension points.
         scanSuites();
 
-        controller = new CachingController(IDocumentSource.class);
-        controller.init(new HashMap<String, Object>(), componentSuite);
+        controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
+        controller.init(new HashMap<String, Object>(), componentSuite.getComponentConfigurations());
     }
 
     /*
@@ -116,7 +116,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     /**
      * Returns an initialized shared controller instance.
      */
-    public CachingController getController()
+    public Controller getController()
     {
         return controller;
     }

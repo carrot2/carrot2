@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,10 +11,11 @@
 
 package org.carrot2.core.test;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
+import static org.carrot2.core.test.SampleDocumentData.DOCUMENTS_DATA_MINING;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.*;
-import static org.carrot2.core.test.SampleDocumentData.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -76,22 +76,21 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testRepeatedClusteringWithCache()
     {
-        final IController controller = new CachingController(IDocumentSource.class);
-        controller.init(new HashMap());
+        final Controller controller = getCachingController(initAttributes,
+            IClusteringAlgorithm.class);
 
-        final HashMap processingAttributes = Maps.newHashMap();
-        processingAttributes.put(AttributeNames.DOCUMENTS, DOCUMENTS_DATA_MINING);
+        final Map<String, Object> processingAttributes = ImmutableMap.of(
+            AttributeNames.DOCUMENTS, (Object) DOCUMENTS_DATA_MINING);
 
         controller.process(processingAttributes, getComponentClass());
         controller.process(processingAttributes, getComponentClass());
     }
 
     /**
-     * Performs a very simple stress test using {@link CachingController}. The test is
-     * performed with default init attributes.
+     * Performs a very simple stress test using a {@link Controller} with caching. The
+     * test is performed with default init attributes.
      */
     @Test
     public void testStress() throws InterruptedException, ExecutionException
@@ -99,7 +98,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
         final int numberOfThreads = 4;
         final int queriesPerThread = 25;
 
-        final CachingController controller = getCachingController(initAttributes);
+        final Controller controller = getCachingController(initAttributes);
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         List<Callable<ProcessingResult>> callables = Lists.newArrayList();
@@ -148,6 +147,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
                 Assertions.assertThat(firstClusterList).isNotEmpty();
                 while (iterator.hasNext())
                 {
+                    System.out.println(dataSetIndex);
                     assertThatClusters(firstClusterList).isEquivalentTo(iterator.next());
                 }
             }
@@ -159,7 +159,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     }
 
     /**
-     * Performs clustering using {@link SimpleController}.
+     * Performs clustering using {@link Controller}.
      * 
      * @param documents Documents to be clustered.
      * @return {@link ProcessingResult} returned from the controller.

@@ -109,7 +109,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     {
         SimpleAnalyzer.class, StandardAnalyzer.class, WhitespaceAnalyzer.class
     }, strict = false)
-    public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
+    public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
 
     /**
      * {@link IFieldMapper} provides the link between Carrot2 {@link Document} fields and
@@ -121,6 +121,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
      */
     @Input
     @Init
+    @Processing
     @Required
     @Attribute
     @Internal
@@ -238,12 +239,12 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             if (searchFields.length == 1)
             {
                 query = new QueryParser(
-                    Version.LUCENE_CURRENT, searchFields[0], analyzer).parse(textQuery);
+                    Version.LUCENE_30, searchFields[0], analyzer).parse(textQuery);
             }
             else
             {
                 query = new MultiFieldQueryParser(
-                    Version.LUCENE_CURRENT, searchFields, analyzer)
+                    Version.LUCENE_30, searchFields, analyzer)
                     .parse(textQuery);
             }
         }

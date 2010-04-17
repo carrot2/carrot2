@@ -71,7 +71,7 @@ public class EToolsDocumentSourceTest extends
         assumeTrue(externalApiTestsEnabled());
 
         runQuery("apache", 50);
-        assertThat(processingAttributes).includes(
+        assertThat(resultAttributes).includes(
             MapAssert.entry(AttributeUtils.getKey(SearchEngineBase.class, "compressed"),
                 true));
     }

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,11 +11,10 @@
 
 package org.carrot2.core.test;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
@@ -32,10 +30,10 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
 {
     /**
      * Runs a query without specifying any additional attributes. The query is run using
-     * the {@link SimpleController}.
+     * a simple {@link Controller}.
      * 
      * @return Returns the number of fetched documents. Access
-     *         {@link #processingAttributes} map to get hold of the actual documents.
+     *         {@link #resultAttributes} map to get hold of the actual documents.
      */
     protected int runQuery()
     {
@@ -44,10 +42,10 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
 
     /**
      * Runs a query without specifying any additional attributes. The query is run using
-     * the {@link CachingController}.
+     * a {@link Controller} with caching.
      * 
      * @return Returns the number of fetched documents. Access
-     *         {@link #processingAttributes} map to get hold of the actual documents.
+     *         {@link #resultAttributes} map to get hold of the actual documents.
      */
     protected int runQueryInCachingController()
     {
@@ -59,27 +57,28 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
      * 
      * @param controller the {@link IController} to perform the query
      * @return Returns the number of fetched documents. Access
-     *         {@link #processingAttributes} map to get hold of the actual documents.
+     *         {@link #resultAttributes} map to get hold of the actual documents.
      */
     @SuppressWarnings("unchecked")
-    protected int runQuery(IController controller)
+    protected int runQuery(Controller controller)
     {
         final ProcessingResult result = controller.process(processingAttributes,
             getComponentClass());
+        resultAttributes = result.getAttributes();
 
-        final Collection<Document> documents = (Collection<Document>) processingAttributes
+        final List<Document> documents = (List<Document>) resultAttributes
             .get(AttributeNames.DOCUMENTS);
         assertNotNull(result.getDocuments());
-        assertSame(result.getDocuments(), documents);
+        assertThat(result.getDocuments()).isEqualTo(documents);
         return documents.size();
     }
 
     /**
-     * Runs a <code>query</code> and asks for <code>results</code> results. The query
-     * is run using the {@link SimpleController}.
+     * Runs a <code>query</code> and asks for <code>results</code> results. The query is
+     * run using a simple {@link Controller}.
      * 
      * @return Returns the number of fetched documents. Access
-     *         {@link #processingAttributes} map to get hold of the actual documents.
+     *         {@link #resultAttributes} map to get hold of the actual documents.
      */
     protected final int runQuery(String query, int results)
     {

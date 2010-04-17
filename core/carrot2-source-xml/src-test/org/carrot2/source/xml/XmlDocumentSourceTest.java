@@ -13,15 +13,17 @@
 package org.carrot2.source.xml;
 
 import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.IController;
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
@@ -56,7 +58,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             300);
         final int documentCount = runQuery();
         assertEquals(200, documentCount);
-        assertEquals("apple computer", processingAttributes.get(AttributeNames.QUERY));
+        assertEquals("apple computer", resultAttributes.get(AttributeNames.QUERY));
     }
 
     @Test
@@ -72,7 +74,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             false);
         final int documentCount = runQuery();
         assertEquals(50, documentCount);
-        assertEquals("apple computer", processingAttributes.get(AttributeNames.QUERY));
+        assertEquals("apple computer", resultAttributes.get(AttributeNames.QUERY));
     }
 
     @Test
@@ -143,7 +145,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             DOCUMENT_TO_ID));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDuplicatedIdsInSourceXml()
     {
         IResource xml = resourceUtils.getFirst("/xml/carrot2-duplicated-ids.xml",
@@ -152,6 +154,9 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
             xml);
         runQuery();
+        final List<Document> documents = getDocuments();
+        assertThat(documents.get(0).getId()).isEqualTo(1);
+        assertThat(documents.get(1).getId()).isEqualTo(2);
     }
 
     @Test
@@ -178,7 +183,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
             initXslt);
         
-        IController controller = getCachingController(initAttributes);
+        Controller controller = getCachingController(initAttributes);
 
         // Run with identity XSLT
         {
@@ -223,7 +228,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
             initXslt);
 
-        IController controller = getCachingController(initAttributes);
+        Controller controller = getCachingController(initAttributes);
         
         // Run with swapping XSLT
         {
@@ -273,13 +278,13 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         processingAttributes.put(AttributeNames.RESULTS, 50);
         final int documentCount = runQuery();
         assertEquals(50, documentCount);
-        assertEquals(query, processingAttributes.get(AttributeNames.QUERY));
+        assertEquals(query, resultAttributes.get(AttributeNames.QUERY));
     }
 
     private void assertTransformedDocumentsEqual(final int documentCount)
     {
         assertEquals(2, documentCount);
-        assertEquals("xslt test", processingAttributes.get(AttributeNames.QUERY));
+        assertEquals("xslt test", resultAttributes.get(AttributeNames.QUERY));
         assertEquals(Lists.newArrayList(498967, 831478), Lists.transform(getDocuments(),
             DOCUMENT_TO_ID));
         assertEquals(Lists.newArrayList("IBM's MARS Block Cipher.",

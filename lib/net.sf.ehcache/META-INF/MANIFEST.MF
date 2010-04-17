@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EhCache
 Bundle-SymbolicName: net.sf.ehcache
-Bundle-Version: 1.4.1
-Bundle-ClassPath: ehcache-1.6.2.jar
+Bundle-Version: 1.7.1
+Bundle-ClassPath: ehcache-core-1.7.1.jar
 Bundle-Vendor: ehcache.sourceforge.net
 Export-Package: net.sf.ehcache,
  net.sf.ehcache.bootstrap,
@@ -18,5 +18,6 @@ Export-Package: net.sf.ehcache,
  net.sf.ehcache.management,
  net.sf.ehcache.store,
  net.sf.ehcache.util
-Require-Bundle: org.apache.commons
+Require-Bundle: org.apache.commons,
+ org.slf4j;bundle-version="1.5.8"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

@@ -14,7 +14,7 @@ package org.carrot2.util;
 
 import java.util.Iterator;
 
-import com.google.common.base.Predicate;
+import com.carrotsearch.hppc.predicates.ShortPredicate;
 
 /**
  * Iterates over <i>ranges</i> between elements for which a given predicate returns
@@ -38,8 +38,8 @@ import com.google.common.base.Predicate;
  */
 public final class IntArrayPredicateIterator implements Iterator<Integer>
 {
-    private Predicate<Integer> separator;
-    private int [] array;
+    private ShortPredicate separator;
+    private short [] array;
 
     private int rangeStart;
     private int rangeLength;
@@ -47,7 +47,7 @@ public final class IntArrayPredicateIterator implements Iterator<Integer>
     private final int length;
     private final int toIndex;
 
-    public IntArrayPredicateIterator(int [] array, int from, int length, Predicate<Integer> separator)
+    public IntArrayPredicateIterator(short [] array, int from, int length, ShortPredicate separator)
     {
         this.separator = separator;
         this.array = array;
@@ -58,7 +58,7 @@ public final class IntArrayPredicateIterator implements Iterator<Integer>
         rangeStart = from - 1;
     }
 
-    public IntArrayPredicateIterator(int [] array, Predicate<Integer> separator)
+    public IntArrayPredicateIterator(short [] array, ShortPredicate separator)
     {
         this(array, 0, array.length, separator);
     }

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -27,8 +26,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.*;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.base.Function;
+import com.google.common.collect.*;
 
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes

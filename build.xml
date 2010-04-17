@@ -97,6 +97,8 @@
     <exclude name="**/carrot2-source-microsoft/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-opensearch/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-microsoft/src/com/microsoft/msnsearch/**/*.java" />
+    <exclude name="**/carrot2-core/src/org/carrot2/core/CachingController.java" />
+    <exclude name="**/carrot2-core/src/org/carrot2/core/SimpleController.java" />
   </fileset>
 
   <patternset id="lib.test">
@@ -104,6 +106,7 @@
     <include name="lib/**/*.jar" />
     <include name="applications/carrot2-dcs/**/*.jar" />
     <include name="applications/carrot2-webapp/lib/*.jar" />
+    <include name="applications/carrot2-benchmarks/lib/*.jar" />
     <exclude name="lib/org.slf4j/slf4j-log4j12*" />
   </patternset>
 
@@ -558,6 +561,7 @@
              use="false"
              encoding="UTF-8"
              docencoding="UTF-8"
+             includenosourcepackages="true"
              windowtitle="Carrot2 v${carrot2.version} API Documentation (JavaDoc)"
              doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} API Documentation"
              header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} &lt;br&gt;API Documentation&lt;/div&gt;"
@@ -573,10 +577,16 @@
       <sourcefiles>
         <fileset dir="core">
           <include name="**/src/**/*.java" />
+          <include name="**/src/**/doc-files" />
           <exclude name="**/org/carrot2/core/test/**" />
           <exclude name="**/com/microsoft/msnsearch/**" />
         </fileset>
       </sourcefiles>
+
+      <!-- Unfortunately this needs to be given explicitly for doc-files to work... -->
+      <packageset dir="core/carrot2-util-text/src" defaultexcludes="yes">
+        <include name="org/**"/>
+      </packageset>
 
       <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
 
@@ -612,12 +622,13 @@
   <target name="jar" description="Builds Carrot2 core JAR"
     depends="compile, attrs, resources">
     <mkdir dir="${jar.dir}" />
-    <jar destfile="${jar.dir}/carrot2-core.jar">
+    <jar destfile="${jar.dir}/carrot2-core-${carrot2.version}.jar">
       <fileset dir="${build.dir}">
         <exclude name="ambient/**" />
         <exclude name="odp239/**" />
         <exclude name="org.carrot2.util.attribute*.xml" />
         <exclude name="**/*.html" />
+        <exclude name="**/doc-files/**" />
       </fileset>
     </jar>
   </target>
@@ -630,7 +641,7 @@
             <mapper type="regexp" from="^(.+)/src/(.+)" to="\2"/>
         </chainedmapper> 
     </copy>
-    <jar destfile="${jar.dir}/carrot2-core-sources.jar">
+    <jar destfile="${jar.dir}/carrot2-core-sources-${carrot2.version}.jar">
       <fileset dir="${jar.dir}/sources" />
     </jar>
     <delete dir="${jar.dir}/sources" />
@@ -644,7 +655,7 @@
   <target name="jar.mini.build" depends="jar">
     <property name="jar.mini.dir" location="${carrot2.master.basedir}/tmp/jar-mini" />
     <mkdir dir="${jar.mini.dir}" />
-    <unzip src="${jar.dir}/carrot2-core.jar" dest="${jar.mini.dir}" />
+    <unzip src="${jar.dir}/carrot2-core-${carrot2.version}.jar" dest="${jar.mini.dir}" />
 
     <delete includeEmptyDirs="true">
       <fileset dir="${jar.mini.dir}">
@@ -655,10 +666,11 @@
         <exclude name="org/carrot2/source/xml/**" />
         <include name="org/carrot2/output/**" />
         <include name="com/**" />
+        <exclude name="**/doc-files/**" />
       </fileset>
     </delete>
 
-    <jar destfile="${jar.dir}/carrot2-mini.jar">
+    <jar destfile="${jar.dir}/carrot2-mini-${carrot2.version}.jar">
       <fileset dir="${jar.mini.dir}" />
     </jar>
     <delete dir="${jar.mini.dir}" />
@@ -673,7 +685,7 @@
            compiler="modern">
       <include name="**/ClusteringDocumentList.java" />
       <classpath>
-        <path location="${jar.dir}/carrot2-mini.jar" />
+        <path location="${jar.dir}/carrot2-mini-${carrot2.version}.jar" />
         <fileset dir="${carrot2.master.basedir}">
           <patternset refid="lib.core.mini" />
           <!-- 
@@ -689,7 +701,7 @@
           outputproperty="dev.null" failonerror="true">
       <classpath>
         <pathelement path="${jar.mini.test.classes.dir}" />
-        <pathelement location="${jar.dir}/carrot2-mini.jar" />
+        <pathelement location="${jar.dir}/carrot2-mini-${carrot2.version}.jar" />
         <fileset dir="${carrot2.master.basedir}">
           <patternset refid="lib.core.mini" />
         </fileset>
@@ -769,6 +781,7 @@
          After this target runs, we'll copy the entire content of tmp/ 
          to the distribution dir on the server, so we need to remove
          useless dirs.
+         [DW] can we just copy what's needed and avoid doing antcall's? They break topo-sorting of targets, among other things.
       -->
     <antcall target="clean.jar" />
     <antcall target="clean.classes" />
@@ -784,7 +797,7 @@
       Maven artefacts.
     -->
   <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini" description="Deploy Maven artifacts">
-    <jar destfile="${jar.dir}/carrot2-core-javadoc.jar">
+    <jar destfile="${jar.dir}/carrot2-core-javadoc-${carrot2.version}.jar">
       <fileset dir="${javadoc.dir}" />
     </jar>
 
@@ -1070,9 +1083,11 @@
       <exclude name="**/*.dll" />
       <exclude name="**/*.jpeg" />
       <exclude name="**/*.psd" />
+      <exclude name="**/*.odg" />
       <exclude name="**/*.pdf" />
       <exclude name="**/*.ico" />
       <exclude name="**/*.swp" />
+      <exclude name="**/*.utf16.xml" />
       <exclude name="**/tmp/**" />
     </patternset>
 
@@ -1103,18 +1118,6 @@
        Pre-release source code updates.
     -->
   <target name="prerelease" depends="licenses.update, fix-line-endings" />
-  
-  <!--
-       Target dependencies.
-    -->
-  <target name="target.graph">
-    <typedef resource="net/ggtools/grand/antlib.xml">
-      <classpath>
-        <fileset dir="etc/grand" includes="*.jar" />
-      </classpath>
-    </typedef>
 
-    <grand output="tmp/targets.dot" />
-  </target>
 </project>
 

@@ -1,0 +1,24 @@
+Benchmark executed at: Wed Mar 31 10:03:12 CEST 2010
+
+java.runtime.name=Java(TM) SE Runtime Environment
+java.runtime.version=1.6.0_18-b07
+java.specification.name=Java Platform API Specification
+java.specification.vendor=Sun Microsystems Inc.
+java.specification.version=1.6
+java.vendor=Sun Microsystems Inc.
+java.version=1.6.0_18
+java.vm.info=mixed mode
+java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.vm.specification.vendor=Sun Microsystems Inc.
+java.vm.specification.version=1.0
+java.vm.vendor=Sun Microsystems Inc.
+java.vm.version=16.0-b13
+os.arch=amd64
+os.name=Windows 7
+os.version=6.1
+sun.arch.data.model=64
+sun.cpu.isalist=amd64
+sun.management.compiler=HotSpot 64-Bit Server Compiler
+processors=8
+

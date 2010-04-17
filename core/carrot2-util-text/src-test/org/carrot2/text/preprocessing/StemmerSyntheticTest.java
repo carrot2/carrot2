@@ -12,8 +12,8 @@
 
 package org.carrot2.text.preprocessing;
 
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.junit.Test;
 
 /**
@@ -193,11 +193,13 @@ public class StemmerSyntheticTest extends StemmerTestBase
         int [][] expectedStemTfByDocument = new int [] []
         {
             {
-                0, 3, 1, 1, 3, 1
+                // HASHMAP-order dependent.
+                3, 1, 1, 1, 0, 3,
             },
 
             {
-                1, 2, 2, 1, 3, 1
+                // HASHMAP-order dependent.    
+                3, 1, 1, 2, 2, 1,
             }
         };
         byte [][] expectedFieldIndices = new byte [] []
@@ -270,10 +272,10 @@ public class StemmerSyntheticTest extends StemmerTestBase
     {
         createDocuments("q1 q2", "q3");
 
-        int [] expectedFordsFlag = new int [3];
-        expectedFordsFlag[wordIndices.get("q1")] = AllWords.FLAG_QUERY;
-        expectedFordsFlag[wordIndices.get("q2")] = AllWords.FLAG_QUERY;
-        expectedFordsFlag[wordIndices.get("q3")] = AllWords.FLAG_QUERY;
+        short [] expectedFordsFlag = new short [3];
+        expectedFordsFlag[wordIndices.get("q1")] = ITokenTypeAttribute.TF_QUERY_WORD;
+        expectedFordsFlag[wordIndices.get("q2")] = ITokenTypeAttribute.TF_QUERY_WORD;
+        expectedFordsFlag[wordIndices.get("q3")] = ITokenTypeAttribute.TF_QUERY_WORD;
 
         check("q1 q2 q3", expectedFordsFlag);
     }
@@ -283,9 +285,9 @@ public class StemmerSyntheticTest extends StemmerTestBase
     {
         createDocuments("test q2", "aa q1");
 
-        int [] expectedFordsFlag = new int [4];
-        expectedFordsFlag[wordIndices.get("q1")] = AllWords.FLAG_QUERY;
-        expectedFordsFlag[wordIndices.get("q2")] = AllWords.FLAG_QUERY;
+        short [] expectedFordsFlag = new short [4];
+        expectedFordsFlag[wordIndices.get("q1")] = ITokenTypeAttribute.TF_QUERY_WORD;
+        expectedFordsFlag[wordIndices.get("q2")] = ITokenTypeAttribute.TF_QUERY_WORD;
 
         check("q1 q2 q3", expectedFordsFlag);
     }
@@ -295,8 +297,7 @@ public class StemmerSyntheticTest extends StemmerTestBase
     {
         createDocuments("q2", "aa q1");
 
-        int [] expectedFordsFlag = new int [3];
-
+        short [] expectedFordsFlag = new short [3];
         check("q3", expectedFordsFlag);
     }
 
@@ -305,8 +306,7 @@ public class StemmerSyntheticTest extends StemmerTestBase
     {
         createDocuments("q2", "aa q1");
 
-        int [] expectedFordsFlag = new int [3];
-
+        short [] expectedFordsFlag = new short [3];
         check("", expectedFordsFlag);
     }
 
@@ -315,8 +315,7 @@ public class StemmerSyntheticTest extends StemmerTestBase
     {
         createDocuments("q2", "aa q1");
 
-        int [] expectedFordsFlag = new int [3];
-
+        short [] expectedFordsFlag = new short [3];
         check(null, expectedFordsFlag);
     }
 
@@ -325,10 +324,9 @@ public class StemmerSyntheticTest extends StemmerTestBase
     {
         createDocuments("que01 que02", "test word");
 
-        int [] expectedFordsFlag = new int [4];
-        expectedFordsFlag[wordIndices.get("que01")] = AllWords.FLAG_QUERY;
-        expectedFordsFlag[wordIndices.get("que02")] = AllWords.FLAG_QUERY;
-
+        short [] expectedFordsFlag = new short [4];
+        expectedFordsFlag[wordIndices.get("que01")] = ITokenTypeAttribute.TF_QUERY_WORD;
+        expectedFordsFlag[wordIndices.get("que02")] = ITokenTypeAttribute.TF_QUERY_WORD;
         check("que04", expectedFordsFlag);
     }
 

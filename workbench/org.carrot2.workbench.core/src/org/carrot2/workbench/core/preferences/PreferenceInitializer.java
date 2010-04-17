@@ -59,8 +59,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         /*
          * SearchInputView
          */
-        store.setDefault(PreferenceConstants.SHOW_OPTIONAL, false);
-        store.setDefault(PreferenceConstants.GROUPING_INPUT_VIEW, GroupingMethod.NONE.name());
+        store.setDefault(PreferenceConstants.SHOW_OPTIONAL, true);
+        store.setDefault(PreferenceConstants.GROUPING_INPUT_VIEW, GroupingMethod.LEVEL.name());
         
         /*
          * SearchEditor

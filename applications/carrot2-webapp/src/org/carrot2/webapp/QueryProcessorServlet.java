@@ -47,7 +47,7 @@ import com.google.common.collect.*;
 public class QueryProcessorServlet extends HttpServlet
 {
     /** Controller that performs all searches */
-    private transient CachingController controller;
+    private transient Controller controller;
 
     /** Generates urls to combined CSS/Javascript files */
     private transient JawrUrlGenerator jawrUrlGenerator;
@@ -110,8 +110,8 @@ public class QueryProcessorServlet extends HttpServlet
         /*
          * Initialize the controller.
          */
-        controller = new CachingController(IDocumentSource.class);
-        controller.init(new HashMap<String, Object>(), webappConfig.components);
+        controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
+        controller.init(new HashMap<String, Object>(), webappConfig.components.getComponentConfigurations());
 
         jawrUrlGenerator = new JawrUrlGenerator(servletContext);
     }
@@ -198,22 +198,23 @@ public class QueryProcessorServlet extends HttpServlet
             requestModel.afterParametersBound(attributeBinderActionBind.remainingValues,
                 extractCookies(request));
 
-            if (RequestType.STATS.equals(requestModel.type))
+            switch (requestModel.type)
             {
-                handleStatsRequest(request, response, requestParameters, requestModel);
-            }
-            else if (RequestType.ATTRIBUTES.equals(requestModel.type))
-            {
-                handleAttributesRequest(request, response, requestParameters,
-                    requestModel);
-            }
-            else if (RequestType.SOURCES.equals(requestModel.type))
-            {
-                handleSourcesRequest(request, response, requestParameters, requestModel);
-            }
-            else
-            {
-                handleSearchRequest(request, response, requestParameters, requestModel);
+                case STATS:
+                    handleStatsRequest(request, response, requestParameters, requestModel);
+                    break;
+
+                case ATTRIBUTES:
+                    handleAttributesRequest(request, response, requestParameters,
+                        requestModel);
+                    break;
+
+                case SOURCES:
+                    handleSourcesRequest(request, response, requestParameters, requestModel);
+                    break;
+
+                default:
+                    handleSearchRequest(request, response, requestParameters, requestModel);
             }
         }
         catch (Exception e)
@@ -286,7 +287,7 @@ public class QueryProcessorServlet extends HttpServlet
         final String key = System.getProperty(STATS_KEY);
         if (key != null && key.equals(requestModel.statsKey))
         {
-            final CachingControllerStatistics statistics = controller.getStatistics();
+            final ControllerStatistics statistics = controller.getStatistics();
 
             // Sets encoding for the response writer
             response.setContentType(MIME_TEXT_PLAIN_UTF8);
@@ -357,20 +358,26 @@ public class QueryProcessorServlet extends HttpServlet
         {
             if (requestModel.type.requiresProcessing)
             {
-                if (RequestType.CLUSTERS.equals(requestModel.type)
-                    || RequestType.FULL.equals(requestModel.type)
-                    || RequestType.CARROT2.equals(requestModel.type))
+                switch (requestModel.type)
                 {
-                    logQuery(true, requestModel, null);
-                    processingResult = controller.process(requestParameters,
-                        requestModel.source, requestModel.algorithm);
-                    logQuery(false, requestModel, processingResult);
+                    case CLUSTERS:
+                    case FULL:
+                    case CARROT2:
+                        logQuery(true, requestModel, null);
+                        processingResult = controller.process(requestParameters,
+                            requestModel.source, requestModel.algorithm);
+                        logQuery(false, requestModel, processingResult);
+                        break;
+
+                    case DOCUMENTS:
+                        processingResult = controller.process(requestParameters,
+                            requestModel.source, QueryWordHighlighter.class.getName());
+                        break;
+
+                    default:
+                        throw new RuntimeException("Should not reach here.");
                 }
-                else if (RequestType.DOCUMENTS.equals(requestModel.type))
-                {
-                    processingResult = controller.process(requestParameters,
-                        requestModel.source, QueryWordHighlighter.class.getName());
-                }
+
                 setExpires(response, 5);
             }
         }

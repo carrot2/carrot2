@@ -20,8 +20,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.lang.mutable.MutableInt;
-import org.carrot2.core.CachingController;
-import org.carrot2.core.ProcessingComponentDescriptor;
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
@@ -126,7 +125,7 @@ final class BenchmarkJob extends Job
     private Callable<Long> createBenchmarkRunner()
     {
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();
-        final CachingController controller = core.getController();
+        final Controller controller = core.getController();
 
         final ProcessingComponentDescriptor source = core.getComponent(input.getSourceId());
         final ProcessingComponentDescriptor algorithm = core.getComponent(input.getAlgorithmId());

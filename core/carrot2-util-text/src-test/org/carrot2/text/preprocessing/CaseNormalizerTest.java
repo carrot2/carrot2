@@ -17,7 +17,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.Arrays;
 
-import org.carrot2.text.analysis.ITokenType;
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -208,10 +208,10 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
                 0
             }
         };
-        int [] expectedType = new int []
+        short [] expectedType = new short []
         {
-            ITokenType.TT_NUMERIC, ITokenType.TT_TERM, ITokenType.TT_FILE,
-            ITokenType.TT_BARE_URL, ITokenType.TT_EMAIL
+            ITokenTypeAttribute.TT_NUMERIC, ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TT_FILE,
+            ITokenTypeAttribute.TT_BARE_URL, ITokenTypeAttribute.TT_EMAIL
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
@@ -703,7 +703,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
 
     private void check(char [][] expectedWordImages, int [] expectedWordTf,
         int [] expectedWordIndices, int [][] expectedWordTfByDocument,
-        byte [][] expectedFieldIndex, int [] expectedType)
+        byte [][] expectedFieldIndex, short [] expectedType)
     {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
@@ -716,8 +716,23 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         assertThat(context.allWords.tfByDocument).as("allWords.tfByDocument").isEqualTo(
             expectedWordTfByDocument);
         assertThat(context.allWords.fieldIndices).as("allWords.fieldIndex").isEqualTo(
-            expectedFieldIndex);
+            flattenToBits(expectedFieldIndex));
         assertThat(context.allWords.type).as("allWords.type").isEqualTo(expectedType);
+    }
+
+    public static byte [] flattenToBits(byte [][] expectedFieldIndex)
+    {
+        byte [] result = new byte [expectedFieldIndex.length];
+        for (int i = 0; i < result.length; i++)
+        {
+            byte b = 0;
+            for (byte v : expectedFieldIndex[i])
+            {
+                b |= (1 << v);
+            }
+            result[i] = b;
+        }
+        return result;
     }
 
     @Override
@@ -727,10 +742,10 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         temporaryCaseNormalizer.dfThreshold = caseNormalizer.dfThreshold;
     }
 
-    private int [] createTermTokenTypes(int count)
+    private short [] createTermTokenTypes(int count)
     {
-        final int [] result = new int [count];
-        Arrays.fill(result, ITokenType.TT_TERM);
+        final short [] result = new short [count];
+        Arrays.fill(result, (short) ITokenTypeAttribute.TT_TERM);
         return result;
     }
 }

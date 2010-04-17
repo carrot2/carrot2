@@ -62,7 +62,7 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
         processingAttributes.put("search-mode", SearchMode.CONSERVATIVE);
 
         runAndCheckNoResultsQuery();
-        assertEquals(1, processingAttributes.get(AttributeUtils.getKey(
+        assertEquals(1, resultAttributes.get(AttributeUtils.getKey(
             SearchEngineStats.class, "pageRequests")));
     }
 
@@ -73,7 +73,7 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
         processingAttributes.put("search-mode", SearchMode.SPECULATIVE);
 
         runAndCheckNoResultsQuery(getSearchEngineMetadata().resultsPerPage + 1);
-        assertEquals(2, processingAttributes.get(AttributeUtils.getKey(
+        assertEquals(2, resultAttributes.get(AttributeUtils.getKey(
             SearchEngineStats.class, "pageRequests")));
     }
 }

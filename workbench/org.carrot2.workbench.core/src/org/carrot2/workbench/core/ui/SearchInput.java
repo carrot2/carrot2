@@ -16,12 +16,16 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.carrot2.core.IController;
+import org.carrot2.core.Controller;
 import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.carrot2.workbench.editors.*;
+import org.carrot2.workbench.editors.AttributeEvent;
+import org.carrot2.workbench.editors.IAttributeEventProvider;
+import org.carrot2.workbench.editors.IAttributeListener;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.*;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IPersistableElement;
 
 /**
  * Instances of this class constitute the input to a search/clustering process (required
@@ -30,12 +34,12 @@ import org.eclipse.ui.*;
 public class SearchInput implements IEditorInput, IPersistableElement, IAttributeEventProvider
 {
     /**
-     * Document source identifier for a {@link IController} instance.
+     * Document source identifier for a {@link Controller} instance.
      */
     private final String sourceId;
 
     /**
-     * Algorithm identifier for a {@link IController} instance.
+     * Algorithm identifier for a {@link Controller} instance.
      */
     private final String algorithmId;
 

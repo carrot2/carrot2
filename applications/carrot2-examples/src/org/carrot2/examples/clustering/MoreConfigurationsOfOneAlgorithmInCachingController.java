@@ -25,11 +25,11 @@ import org.carrot2.source.microsoft.MicrosoftLiveDocumentSource;
 import com.google.common.collect.Maps;
 
 /**
- * With {@link CachingController}, it is possible to initialize a number of different
+ * It is possible to initialize a {@link Controller} to host a number of different
  * configurations of the same {@link IDocumentSource} or {@link IClusteringAlgorithm} and
  * invoke them as appropriate. This is achieved by assigning a string identifier to each
  * configuration and then passing the identifier to the
- * {@link CachingController#process(Map, String...)} method.
+ * {@link Controller#process(Map, String...)} method.
  * <p>
  * One example where this setting may be useful is when your application serves multiple
  * customers, each of which need a different configuration of a document source or a
@@ -47,7 +47,7 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
         /*
          * Create a controller that caches all documents.
          */
-        CachingController controller = new CachingController(IDocumentSource.class);
+        final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
 
         /*
          * You can define global values for some attributes. These will apply to all

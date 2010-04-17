@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,16 +15,21 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.text.analysis.ITokenType;
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
-import org.carrot2.util.*;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.IntStack;
+import com.carrotsearch.hppc.ShortArrayList;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 import com.google.common.collect.Lists;
 
 /**
@@ -70,22 +74,21 @@ public final class CaseNormalizer
     {
         // Local references to already existing arrays
         final char [][] tokenImages = context.allTokens.image;
-        final int [] tokenTypesArray = context.allTokens.type;
+        final short [] tokenTypesArray = context.allTokens.type;
         final int [] documentIndexesArray = context.allTokens.documentIndex;
         final byte [] tokensFieldIndex = context.allTokens.fieldIndex;
         final int tokenCount = tokenImages.length;
-        final int documentCount = context.documents.size();
 
         // Sort token images
-        final int [] tokenImagesOrder = IndirectSort.sort(tokenImages, 0, tokenImages.length,
-            CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR);
+        final int [] tokenImagesOrder = IndirectSort.sort(tokenImages, 0,
+            tokenImages.length, CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR);
 
         // Create holders for new arrays
         final List<char []> normalizedWordImages = Lists.newArrayList();
         final IntArrayList normalizedWordTf = new IntArrayList();
         final List<int []> wordTfByDocumentList = Lists.newArrayList();
-        final List<byte []> fieldIndexList = Lists.newArrayList();
-        final IntArrayList types = new IntArrayList();
+        final ByteArrayList fieldIndexList = new ByteArrayList();
+        final ShortArrayList types = new ShortArrayList();
 
         final int [] wordIndexes = new int [tokenCount];
         Arrays.fill(wordIndexes, -1);
@@ -97,19 +100,15 @@ public final class CaseNormalizer
         int totalTf = 1;
         int variantStartIndex = 0;
 
-        // An int set for document frequency calculation
-        final BitSet documentIndices = new BitSet(documentCount);
-
         // A byte set for word fields tracking
         final BitSet fieldIndices = new BitSet(context.allFields.name.length);
 
-        // An array for tracking words' tf across documents
-        int [] wordTfByDocument = new int [documentCount];
+        // A stack for pushing information about the term's documents.
+        final IntStack wordDocuments = new IntStack();
 
         if (documentIndexesArray[tokenImagesOrder[0]] >= 0)
         {
-            documentIndices.set(documentIndexesArray[tokenImagesOrder[0]]);
-            wordTfByDocument[documentIndexesArray[tokenImagesOrder[0]]] = 1;
+            wordDocuments.push(documentIndexesArray[tokenImagesOrder[0]]);
         }
 
         // Go through the ordered token images
@@ -127,17 +126,13 @@ public final class CaseNormalizer
             }
 
             // Check if we want to index this token at all
-            if (isIndexed(tokenType))
+            if (isNotIndexed(tokenType))
             {
                 variantStartIndex = i + 1;
                 maxTfVariantIndex = tokenImagesOrder[i + 1];
 
-                final int nextTokenType = tokenTypesArray[tokenImagesOrder[i]];
-                if (isIndexed(nextTokenType))
-                {
-                    resetForNewTokenImage(documentIndexesArray, tokenImagesOrder,
-                        documentIndices, fieldIndices, wordTfByDocument, i);
-                }
+                resetForNewTokenImage(documentIndexesArray, tokenImagesOrder, 
+                    fieldIndices, wordDocuments, i);
                 continue;
             }
 
@@ -151,9 +146,7 @@ public final class CaseNormalizer
                 // Case has not changed, just increase counters
                 tf++;
                 totalTf++;
-
-                documentIndices.set(documentIndex);
-                wordTfByDocument[documentIndex] += 1;
+                wordDocuments.push(documentIndex);
                 continue;
             }
 
@@ -173,8 +166,7 @@ public final class CaseNormalizer
             if (sameImage)
             {
                 totalTf++;
-                documentIndices.set(documentIndex);
-                wordTfByDocument[documentIndex] += 1;
+                wordDocuments.push(documentIndex);
             }
             else
             {
@@ -182,25 +174,31 @@ public final class CaseNormalizer
                 // Before we start processing the new image, we need to
                 // see if we want to store the previous image, and if so
                 // we need add some data about it to the arrays
-                int wordDf = (int) documentIndices.cardinality();
-                if (wordDf >= dfThreshold)
+                
+                // wordDocuments.size() may contain duplicate entries from the same document, 
+                // but this check is faster than deduping, so we do it first.  
+                if (wordDocuments.size() >= dfThreshold)
                 {
-                    // Add the word to the word list
-                    normalizedWordImages.add(tokenImages[maxTfVariantIndex]);
-                    normalizedWordTf.add(totalTf);
-                    fieldIndexList.add(PcjCompat.toByteArray(fieldIndices));
-                    types.add(tokenType);
-
-                    // Add this word's index in AllWords to all its instances
-                    // in the AllTokens multiarray
-                    for (int j = variantStartIndex; j < i + 1; j++)
+                    // Flatten the list of documents this term occurred in.
+                    final int [] sparseEncoding = SparseArray.toSparseEncoding(wordDocuments);
+                    final int df = (sparseEncoding.length >> 1); 
+                    if (df >= dfThreshold)
                     {
-                        wordIndexes[tokenImagesOrder[j]] = normalizedWordImages.size() - 1;
-                    }
+                        wordTfByDocumentList.add(sparseEncoding);
+    
+                        // Add the word to the word list
+                        normalizedWordImages.add(tokenImages[maxTfVariantIndex]);
+                        types.add(tokenTypesArray[maxTfVariantIndex]);
+                        normalizedWordTf.add(totalTf);
+                        fieldIndexList.add((byte) fieldIndices.bits[0]);
 
-                    // Flatten the wordTfByDocument map and add to the list
-                    wordTfByDocumentList.add(IntArrayUtils
-                        .toSparseEncoding(wordTfByDocument));
+                        // Add this word's index in AllWords to all its instances
+                        // in the AllTokens multiarray
+                        for (int j = variantStartIndex; j < i + 1; j++)
+                        {
+                            wordIndexes[tokenImagesOrder[j]] = normalizedWordImages.size() - 1;
+                        }
+                    }
                 }
 
                 // Reinitialize counters
@@ -212,7 +210,7 @@ public final class CaseNormalizer
 
                 // Re-initialize int set used for document frequency calculation
                 resetForNewTokenImage(documentIndexesArray, tokenImagesOrder,
-                    documentIndices, fieldIndices, wordTfByDocument, i);
+                    fieldIndices, wordDocuments, i);
             }
         }
 
@@ -222,38 +220,34 @@ public final class CaseNormalizer
         context.allWords.image = normalizedWordImages
             .toArray(new char [normalizedWordImages.size()] []);
         context.allWords.tf = normalizedWordTf.toArray();
-        context.allWords.tfByDocument = wordTfByDocumentList
-            .toArray(new int [wordTfByDocumentList.size()] []);
-        context.allWords.fieldIndices = fieldIndexList.toArray(new byte [fieldIndexList
-            .size()] []);
+        context.allWords.tfByDocument = 
+            wordTfByDocumentList.toArray(new int [wordTfByDocumentList.size()] []);
+        context.allWords.fieldIndices = fieldIndexList.toArray();
         context.allWords.type = types.toArray();
-        context.allWords.flag = new int [types.size()];
     }
 
     /**
      * Initializes the counters for the a token image.
      */
     private void resetForNewTokenImage(final int [] documentIndexesArray,
-        final int [] tokenImagesOrder, final BitSet documentIndices,
-        final BitSet fieldIndices, int [] wordTfByDocument, int i)
+        final int [] tokenImagesOrder,
+        final BitSet fieldIndices, IntStack wordDocuments, int i)
     {
-        documentIndices.clear();
         fieldIndices.clear();
-        Arrays.fill(wordTfByDocument, 0);
+        wordDocuments.clear();
         if (documentIndexesArray[tokenImagesOrder[i + 1]] >= 0)
         {
-            documentIndices.set(documentIndexesArray[tokenImagesOrder[i + 1]]);
-            wordTfByDocument[documentIndexesArray[tokenImagesOrder[i + 1]]] += 1;
+            wordDocuments.push(documentIndexesArray[tokenImagesOrder[i + 1]]);
         }
     }
 
     /**
      * Determines whether we should include the token in AllWords.
      */
-    private boolean isIndexed(final int tokenType)
+    private boolean isNotIndexed(final int tokenType)
     {
-        return tokenType == ITokenType.TT_PUNCTUATION
-            || tokenType == ITokenType.TT_FULL_URL
-            || (tokenType & ITokenType.TF_SEPARATOR_SENTENCE) != 0;
+        return tokenType == ITokenTypeAttribute.TT_PUNCTUATION
+            || tokenType == ITokenTypeAttribute.TT_FULL_URL
+            || (tokenType & ITokenTypeAttribute.TF_SEPARATOR_SENTENCE) != 0;
     }
 }

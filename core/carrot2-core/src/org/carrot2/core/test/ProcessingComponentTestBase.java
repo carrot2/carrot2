@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -21,22 +20,25 @@ import org.junit.Before;
 
 /**
  * A very basic base class for testing {@link IProcessingComponent}s. This class provides
- * an instance of a {@link IController}, a map for attributes and a method that initializes
- * them.
+ * an instance of a {@link IController}, a map for attributes and a method that
+ * initializes them.
  */
 public abstract class ProcessingComponentTestBase<T extends IProcessingComponent>
 {
     /** Simple controller used for tests. */
-    private SimpleController simpleController;
+    private Controller simpleController;
 
     /** Caching controller used for tests. */
-    private CachingController cachingController;
+    private Controller cachingController;
 
     /** A map of initialization attributes used for tests. */
     protected Map<String, Object> initAttributes;
 
     /** A map of processing attributes used for tests. */
     protected Map<String, Object> processingAttributes;
+
+    /** A map of processing attributes used for tests. */
+    protected Map<String, Object> resultAttributes;
 
     /**
      * @return Return the class of the component being tested.
@@ -71,27 +73,25 @@ public abstract class ProcessingComponentTestBase<T extends IProcessingComponent
     }
 
     /**
-     * Return an instance of a {@link SimpleController}, initializing it on the way.
+     * Return an instance of a simple {@link Controller}, initializing it on the way.
      */
-    protected final SimpleController getSimpleController(
-        Map<String, Object> initAttributes)
+    protected final Controller getSimpleController(Map<String, Object> initAttributes)
     {
         if (this.simpleController != null)
         {
             throw new RuntimeException("One simple controller per test case, please.");
         }
 
-        simpleController = new SimpleController();
+        simpleController = ControllerFactory.createSimple();
         simpleController.init(initAttributes);
 
         return simpleController;
     }
 
     /**
-     * Return an instance of a {@link CachingController}, initializing it on the way.
+     * Return an instance of a {@link Controller} with caching, initializing it on the way.
      */
-    protected final CachingController getCachingController(
-        Map<String, Object> initAttributes,
+    protected final Controller getCachingController(Map<String, Object> initAttributes,
         Class<? extends IProcessingComponent>... cachedComponentClasses)
     {
         if (this.cachingController != null)
@@ -99,18 +99,19 @@ public abstract class ProcessingComponentTestBase<T extends IProcessingComponent
             throw new RuntimeException("One caching controller per test case, please.");
         }
 
-        cachingController = new CachingController(cachedComponentClasses);
+        cachingController = ControllerFactory
+            .createCachingPooling(cachedComponentClasses);
         cachingController.init(initAttributes);
 
         return cachingController;
     }
 
     /**
-     * Returns the documents stored in {@link #processingAttributes}.
+     * Returns the documents stored in {@link #resultAttributes}.
      */
     @SuppressWarnings("unchecked")
     protected List<Document> getDocuments()
     {
-        return (List<Document>) processingAttributes.get(AttributeNames.DOCUMENTS);
+        return (List<Document>) resultAttributes.get(AttributeNames.DOCUMENTS);
     }
 }

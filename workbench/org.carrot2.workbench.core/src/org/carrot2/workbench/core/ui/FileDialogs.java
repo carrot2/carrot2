@@ -126,7 +126,18 @@ public final class FileDialogs
         String pathAsString = 
             WorkbenchCorePlugin.getPreferences().get(preferencesKey, getDefaultPath().toOSString());
 
-        final File file = new File(pathAsString);
+        return checkOrDefault(pathAsString);
+    }
+
+    /**
+     * Check if a given path points to a directory. If not, return the default path. 
+     */
+    public static Path checkOrDefault(String path)
+    {
+        if (path == null)
+            return getDefaultPath();
+
+        final File file = new File(path);
         if (file.getParentFile() == null || file.getParentFile().exists())
         {
             return new Path(file.getAbsolutePath());

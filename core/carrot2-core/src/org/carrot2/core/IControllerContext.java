@@ -15,9 +15,9 @@ package org.carrot2.core;
 /**
  * <p>
  * The controller context is a map of key-value pairs, attached to an initialized
- * {@link IController} instance. The context is created in
- * {@link IController#init(java.util.Map)} method and remains valid until
- * {@link IController#dispose()} is invoked.
+ * {@link Controller} instance. The context is created in
+ * {@link Controller#init()} methods and remains valid until
+ * {@link Controller#dispose()} is invoked.
  * </p>
  * <p>
  * The context instance is passed to all components that take part in query processing
@@ -29,7 +29,8 @@ package org.carrot2.core;
  * destroyed.
  * </p>
  * 
- * @see IController#dispose()
+ * @see Controller#init()
+ * @see Controller#dispose()
  * @see IProcessingComponent#init(IControllerContext)
  */
 public interface IControllerContext

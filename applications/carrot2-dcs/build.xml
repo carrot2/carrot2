@@ -63,7 +63,7 @@
 
     <copy tofile="${dcs.dir}/classes/log4j.xml"
           file="core/carrot2-util-log4j/src/log4j-dcs.xml" />
-    <jar jarfile="${dcs.dir}/lib/carrot2-dcs-bootstrap.jar">
+    <jar jarfile="${dcs.dir}/lib/carrot2-dcs-bootstrap-${carrot2.version}.jar">
       <fileset dir="${dcs.dir}/classes">
         <include name="**/DcsApp*.class" />
         <include name="**/Log4jJettyLog.class" />
@@ -168,7 +168,7 @@
            target="1.5"
            encoding="UTF-8">
       <classpath refid="lib.classpath" />
-      <classpath path="${jar.dir}/carrot2-core.jar" />
+      <classpath path="${jar.dir}/carrot2-core-${carrot2.version}.jar" />
     </javac>
 
     <copy tofile="${dcs.dir}/classes/log4j.xml"

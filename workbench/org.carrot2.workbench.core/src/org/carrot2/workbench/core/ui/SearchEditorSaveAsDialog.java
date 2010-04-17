@@ -35,12 +35,6 @@ import org.eclipse.swt.widgets.*;
  */
 final class SearchEditorSaveAsDialog extends TrayDialog
 {
-    /**
-     * Global most recent path in case the editor did not have a previous one.
-     */
-    private static final String GLOBAL_PATH_PREF = 
-        SearchEditorSaveAsDialog.class.getName() + ".savePath";
-
     private Text fileNameText;
     private Button browseButton;
 
@@ -48,9 +42,9 @@ final class SearchEditorSaveAsDialog extends TrayDialog
     private Button docOption;
 
     /**
-     * Save options.
+     * Save options (from the editor).
      */
-    public SaveOptions options;
+    public SaveOptions editorOptions;
 
     /*
      * 
@@ -58,7 +52,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
     public SearchEditorSaveAsDialog(Shell parentShell, SearchEditor.SaveOptions options)
     {
         super(parentShell);
-        this.options = options;
+        this.editorOptions = options;
     }
 
     @Override
@@ -80,12 +74,12 @@ final class SearchEditorSaveAsDialog extends TrayDialog
     protected void okPressed()
     {
         final File f = new File(this.fileNameText.getText());
-        options.directory = f.getParent();
-        options.fileName = f.getName();
-        options.includeClusters = clusterOption.getSelection();
-        options.includeDocuments = docOption.getSelection();
+        editorOptions.directory = f.getParent();
+        editorOptions.fileName = f.getName();
+        editorOptions.includeClusters = clusterOption.getSelection();
+        editorOptions.includeDocuments = docOption.getSelection();
 
-        FileDialogs.rememberPath(GLOBAL_PATH_PREF, new Path(options.directory));
+        editorOptions.saveGlobal();
         super.okPressed();
     }
 
@@ -98,13 +92,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
         final Composite root = (Composite) super.createDialogArea(parent);
         createControls(root);
 
-        if (options.directory == null)
-        {
-            options.directory = 
-                FileDialogs.recallPath(GLOBAL_PATH_PREF).toOSString();
-        }
-
-        final Path fullPath = new Path(options.getFullPath());
+        final Path fullPath = new Path(editorOptions.getFullPath());
         fileNameText.setText(fullPath.toOSString());
         browseButton.addListener(Selection, new Listener()
         {
@@ -125,7 +113,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
                 validateInput();
             }
         };
-
+        
         docOption.addListener(Selection, correctnessChecker);
         clusterOption.addListener(Selection, correctnessChecker);
         fileNameText.addListener(Modify, correctnessChecker);
@@ -175,6 +163,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             fileNameTextLData.verticalAlignment = GridData.FILL;
             fileNameTextLData.horizontalIndent = 5;
             fileNameTextLData.minimumWidth = 280;
+            fileNameTextLData.widthHint = 280;
             fileNameText = new Text(root, SWT.BORDER);
             fileNameText.setLayoutData(fileNameTextLData);
         }
@@ -190,20 +179,26 @@ final class SearchEditorSaveAsDialog extends TrayDialog
             browseButton.setLayoutData(dialogButtonLData);
         }
         {
+            new Label(root, SWT.NONE).setVisible(false);
+
             docOption = new Button(root, SWT.CHECK | SWT.LEFT);
             GridData docOptionLData = new GridData();
-            docOptionLData.horizontalSpan = 3;
+            docOptionLData.horizontalSpan = 2;
+            docOptionLData.horizontalIndent = 5;
             docOption.setLayoutData(docOptionLData);
             docOption.setText("Include documents");
-            docOption.setSelection(true);
+            docOption.setSelection(editorOptions.includeDocuments);
         }
         {
+            new Label(root, SWT.NONE).setVisible(false);
+            
             clusterOption = new Button(root, SWT.CHECK | SWT.LEFT);
             GridData clusterOptionLData = new GridData();
-            clusterOptionLData.horizontalSpan = 3;
+            clusterOptionLData.horizontalIndent = 5;
+            clusterOptionLData.horizontalSpan = 2;
             clusterOption.setLayoutData(clusterOptionLData);
             clusterOption.setText("Include clusters");
-            clusterOption.setSelection(true);
+            clusterOption.setSelection(editorOptions.includeClusters);
         }
     }
 }

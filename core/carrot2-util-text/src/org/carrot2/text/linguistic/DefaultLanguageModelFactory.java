@@ -15,7 +15,6 @@ package org.carrot2.text.linguistic;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Tokenizer;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.attribute.Init;
@@ -38,6 +37,22 @@ import com.google.common.collect.Maps;
 @Bindable(prefix = "DefaultLanguageModelFactory")
 public final class DefaultLanguageModelFactory implements ILanguageModelFactory
 {
+    /**
+     * Lexical resources path. A path within the classpath to load lexical resources from.
+     * For example, if resource path is <code>/my/custom/resources</code>, stopwords
+     * for English will be loaded from
+     * <code>/my/custom/resources/stopwords.en</code>. Other lexical resources
+     * and other languages will be loaded in the same way.
+     * 
+     * @group Preprocessing
+     * @level Advanced
+     * @label Lexical resources path
+     */
+    @Init
+    @Input
+    @Attribute(key = "resource-path")
+    public String resourcePath = "/";
+    
     /**
      * Reloads cached stop words and stop labels on every processing request. For best
      * performance, lexical resource reloading should be disabled in production.
@@ -124,7 +139,7 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
                         }
 
                         LEXICAL_RESOURCES_CACHE.put(lang, LexicalResources.load(
-                            resourceLoaders, lang));
+                            resourceLoaders, lang, resourcePath));
                     }
 
                     LEXICAL_RESOURCES_MERGED = LexicalResources
@@ -134,7 +149,7 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
                 {
                     // Load stopwords for this language only.
                     LEXICAL_RESOURCES_CACHE.put(language, LexicalResources.load(
-                        resourceLoaders, language));
+                        resourceLoaders, language, resourcePath));
                 }
             }
         }
@@ -203,6 +218,21 @@ public final class DefaultLanguageModelFactory implements ILanguageModelFactory
                  */
                 return IdentityStemmer.INSTANCE; 
 
+            case BULGARIAN:
+            case CZECH:
+            case ESTONIAN:
+            case GREEK:
+            case IRISH:
+            case LATVIAN:
+            case LITHUANIAN:
+            case MALTESE:
+            case SLOVAK:
+            case SLOVENE:
+                /*
+                 * No stemming engine for these languages at the moment.
+                 */
+                return IdentityStemmer.INSTANCE; 
+                
             case ARABIC:
                 /*
                  * We return specialized stemmer for Arabic (from Lucene).

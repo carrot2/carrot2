@@ -20,8 +20,10 @@ package org.carrot2.text.util;
  * underlying character buffers does not change. In case the buffers is changed, the
  * resulting behavior is unpredictable.
  */
-public final class MutableCharArray implements CharSequence
+public final class MutableCharArray implements CharSequence, Cloneable
 {
+    private static final char [] EMPTY = new char [0];
+
     /**
      * Internal buffer with character data. The buffer may be smaller or larger than the
      * actual sequence represented by this object.
@@ -42,6 +44,14 @@ public final class MutableCharArray implements CharSequence
      * Hash code (lazily calculated).
      */
     private int hash;
+
+    /**
+     * Creates an empty {@link MutableCharArray}.
+     */
+    public MutableCharArray()
+    {
+        reset(EMPTY);
+    }
 
     /**
      * Creates a {@link MutableCharArray} from another {@link CharSequence}.
@@ -111,6 +121,15 @@ public final class MutableCharArray implements CharSequence
         this.hash = hashCode(buffer, start, length);
     }
 
+    /**
+     * @return Returns the internal buffer <i>currently</i> used to store the content
+     * of this char sequence.
+     */
+    public char [] getBuffer()
+    {
+        return this.buffer;
+    }
+    
     /**
      * 
      */
@@ -206,5 +225,18 @@ public final class MutableCharArray implements CharSequence
         }
 
         return h;
+    }
+
+    /*
+     * 
+     */
+    public MutableCharArray clone()
+    {
+        if (this.length == 0)
+            return new MutableCharArray();
+
+        final char [] cloned = new char [length];
+        System.arraycopy(buffer, start, cloned, 0, length);
+        return new MutableCharArray(cloned);
     }
 }

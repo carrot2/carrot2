@@ -12,8 +12,8 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.util.IndirectComparator;
-import org.carrot2.util.IndirectSort;
+import com.carrotsearch.hppc.sorting.IndirectComparator;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 
 /**
  * A simple suffix sorting utility based on the generic sorting routines from {@link IndirectSort}.

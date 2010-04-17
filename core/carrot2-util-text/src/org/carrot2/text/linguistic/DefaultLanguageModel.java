@@ -30,7 +30,11 @@ final class DefaultLanguageModel implements ILanguageModel
     private final Tokenizer tokenizer;
     private final IStemmer stemmer;
     private final Set<MutableCharArray> stopwords;
-    private final List<Pattern> stoplabels;
+
+    /**
+     * An artificial union of all regular expressions from the input.
+     */
+    private final Pattern stoplabels;
 
     /** Internal buffer for lookups in {@link #stopwords}. */
     private final MutableCharArray buffer = new MutableCharArray("");
@@ -42,10 +46,27 @@ final class DefaultLanguageModel implements ILanguageModel
         IStemmer stemmer, Tokenizer tokenizer)
     {
         this.languageCode = languageCode;
-        this.stopwords = lexicalResources.stopwords;
-        this.stoplabels = lexicalResources.stoplabels;
         this.stemmer = stemmer;
         this.tokenizer = tokenizer;
+        this.stopwords = lexicalResources.stopwords;
+
+        final StringBuilder union = new StringBuilder();
+        final List<Pattern> patterns = lexicalResources.stoplabels;
+        if (patterns.size() > 0)
+        {
+            union.append("(");
+            for (int i = 0; i < patterns.size(); i++)
+            {
+                if (i > 0) union.append(")|(");
+                union.append(patterns.get(i).toString());
+            }
+            union.append(")");
+            this.stoplabels = Pattern.compile(union.toString());
+        }
+        else
+        {
+            this.stoplabels = null;
+        }
     }
 
     public LanguageCode getLanguageCode()
@@ -78,14 +99,7 @@ final class DefaultLanguageModel implements ILanguageModel
 
     public boolean isStopLabel(CharSequence formattedLabel)
     {
-        for (Pattern pattern : stoplabels)
-        {
-            if (pattern.matcher(formattedLabel).matches())
-            {
-                return true;
-            }
-        }
-
-        return false;
+        if (stoplabels == null) return false;
+        return stoplabels.matcher(formattedLabel).matches();
     }
 }

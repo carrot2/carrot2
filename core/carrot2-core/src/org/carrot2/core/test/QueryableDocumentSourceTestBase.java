@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -46,7 +45,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
     public void testSmallQuery() throws Exception
     {
         assumeTrue(externalApiTestsEnabled());
-        checkMinimumResults(getSmallQueryText(), getSmallQuerySize(),
+        runAndCheckMinimumResults(getSmallQueryText(), getSmallQuerySize(),
             getSmallQuerySize() / 2);
     }
 
@@ -55,14 +54,15 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
     {
         assumeTrue(externalApiTestsEnabled());
         assumeTrue(hasUtfResults());
-        checkMinimumResults("kaczyński", getSmallQuerySize(), getSmallQuerySize() / 2);
+        runAndCheckMinimumResults("kaczyński", getSmallQuerySize(),
+            getSmallQuerySize() / 2);
     }
 
     @Test
     public void testLargeQuery() throws Exception
     {
         assumeTrue(externalApiTestsEnabled());
-        checkMinimumResults(getLargeQueryText(), getLargeQuerySize(),
+        runAndCheckMinimumResults(getLargeQueryText(), getLargeQuerySize(),
             getLargeQuerySize() / 2);
     }
 
@@ -73,19 +73,17 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         assumeTrue(hasTotalResultsEstimate());
         runQuery(getSmallQueryText(), getSmallQuerySize());
 
-        assertNotNull(processingAttributes.get(AttributeNames.RESULTS_TOTAL));
-        assertTrue((Long) processingAttributes.get(AttributeNames.RESULTS_TOTAL) > 0);
+        assertNotNull(resultAttributes.get(AttributeNames.RESULTS_TOTAL));
+        assertTrue((Long) resultAttributes.get(AttributeNames.RESULTS_TOTAL) > 0);
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testURLsUnique() throws Exception
     {
         assumeTrue(externalApiTestsEnabled());
         assumeTrue(mustReturnUniqueUrls());
         runQuery(getLargeQueryText(), getLargeQuerySize());
-        assertFieldUnique((Collection<Document>) processingAttributes
-            .get(AttributeNames.DOCUMENTS), Document.CONTENT_URL);
+        assertFieldUnique(getDocuments(), Document.CONTENT_URL);
     }
 
     @Test
@@ -118,13 +116,13 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
     public void testInCachingController() throws InterruptedException, ExecutionException
     {
         assumeTrue(externalApiTestsEnabled());
-        
+
         final Map<String, Object> attributes = Maps.newHashMap();
         attributes.put(AttributeNames.QUERY, getSmallQueryText());
         attributes.put(AttributeNames.RESULTS, getSmallQuerySize());
 
         // Cache results from all DataSources
-        final CachingController cachingController = getCachingController(initAttributes,
+        final Controller controller = getCachingController(initAttributes,
             IDocumentSource.class);
 
         int count = 3;
@@ -137,8 +135,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
                 public ProcessingResult call() throws Exception
                 {
                     Map<String, Object> localAttributes = Maps.newHashMap(attributes);
-                    return cachingController
-                        .process(localAttributes, getComponentClass());
+                    return controller.process(localAttributes, getComponentClass());
                 }
             });
         }
@@ -170,7 +167,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
             index++;
         }
 
-        cachingController.dispose();
+        controller.dispose();
     }
 
     /**
@@ -268,7 +265,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         return query.toString();
     }
 
-    private void checkMinimumResults(String query, int resultsToRequest,
+    protected void runAndCheckMinimumResults(String query, int resultsToRequest,
         int minimumExpectedResults)
     {
         int actualResults = runQuery(query, resultsToRequest);

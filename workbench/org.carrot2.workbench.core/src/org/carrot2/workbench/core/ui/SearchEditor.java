@@ -12,8 +12,7 @@
 
 package org.carrot2.workbench.core.ui;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 
@@ -21,8 +20,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
-import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
@@ -77,17 +75,70 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /**
      * Options required for {@link #doSave(IProgressMonitor)}.
      */
+    @Root(name = "save-dialog-options")
     public static final class SaveOptions implements Cloneable
     {
+        /**
+         * Preference key for global options.
+         */
+        @org.simpleframework.xml.Transient
+        private static final String GLOBAL_OPTIONS_PREFKEY = 
+            SearchEditorSaveAsDialog.class.getName() + ".saveOptions";
+
+        @org.simpleframework.xml.Attribute(required = false)
         public String directory;
+
+        @org.simpleframework.xml.Attribute(required = false)
         public String fileName;
 
-        public boolean includeDocuments = true;
-        public boolean includeClusters = true;
+        @org.simpleframework.xml.Attribute(required = false)
+        public Boolean includeDocuments = true;
+
+        @org.simpleframework.xml.Attribute(required = false)
+        public Boolean includeClusters = true;
 
         public String getFullPath()
         {
-            return new File(new File(directory), fileName).getAbsolutePath();
+            Path path = FileDialogs.checkOrDefault(directory);
+            return new File(path.toFile(), fileName).getAbsolutePath();
+        }
+        
+        /**
+         * Preserve save options in a global preference key.
+         */
+        public static SaveOptions getGlobalOrDefault()
+        {
+            try
+            {
+                String xml = 
+                    WorkbenchCorePlugin.getPreferences().get(GLOBAL_OPTIONS_PREFKEY, null);
+                if (xml != null)
+                {
+                    return SimpleXmlMemento.fromString(SaveOptions.class, xml);
+                }
+            }
+            catch (IOException e)
+            {
+                // fall through
+            }
+
+            return new SaveOptions();
+        }
+
+        /**
+         * Preserve save options in a global preference key.
+         */
+        public void saveGlobal()
+        {
+            try
+            {
+                WorkbenchCorePlugin.getPreferences().put(
+                    GLOBAL_OPTIONS_PREFKEY, SimpleXmlMemento.toString(this));
+            }
+            catch (IOException e)
+            {
+                Utils.logError(e, false);
+            }
         }
     }
 
@@ -545,6 +596,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
             final SearchEditorMemento state = new SearchEditorMemento();
             state.panels = getPanelState(); 
             state.sectionsExpansionState = this.attributesPanel.getExpansionStates();
+            state.saveOptions = this.saveOptions;
             SimpleXmlMemento.addChild(memento, state);
         }
         catch (IOException e)
@@ -653,6 +705,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
                 panels.get(e.getKey()).state = e.getValue();
             }
             this.attributesPanel.setExpanded(state.sectionsExpansionState);
+            this.saveOptions = state.saveOptions;
         }
 
         /*
@@ -720,7 +773,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         SaveOptions newOptions = saveOptions;
         if (newOptions == null)
         {
-            newOptions = new SaveOptions();
+            newOptions = SaveOptions.getGlobalOrDefault();
             newOptions.fileName = 
                 FileDialogs.sanitizeFileName(getFullInputTitle(getSearchResult())) + ".xml";
         }

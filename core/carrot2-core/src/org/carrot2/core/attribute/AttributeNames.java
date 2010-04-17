@@ -73,7 +73,7 @@ public final class AttributeNames
     public static final String CLUSTERS = "clusters";
 
     /**
-     * Total processing time. A sum of processing times of all components in the chain.
+     * Total processing time in milliseconds. A sum of processing times of all components in the chain.
      * Total processing time may be greater than the sum of
      * {@link #PROCESSING_TIME_SOURCE} and {@link #PROCESSING_TIME_ALGORITHM}.
      * 
@@ -83,7 +83,7 @@ public final class AttributeNames
     public static final String PROCESSING_TIME_TOTAL = "processing-time-total";
 
     /**
-     * Data source processing time. A sum of processing times of all
+     * Data source processing time in milliseconds. A sum of processing times of all
      * {@link IDocumentSource}s in the chain, including the
      * {@link IProcessingComponent#beforeProcessing()} and
      * {@link IProcessingComponent#afterProcessing()} hooks.
@@ -94,7 +94,7 @@ public final class AttributeNames
     public static final String PROCESSING_TIME_SOURCE = "processing-time-source";
 
     /**
-     * Algorithm processing time. A sum of processing times of all
+     * Algorithm processing time in milliseconds. A sum of processing times of all
      * {@link IClusteringAlgorithm}s in the chain, including the
      * {@link IProcessingComponent#beforeProcessing()} and
      * {@link IProcessingComponent#afterProcessing()} hooks.

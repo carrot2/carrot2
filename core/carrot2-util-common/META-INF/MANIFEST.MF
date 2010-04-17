@@ -4,7 +4,6 @@ Bundle-Name: Common utilities
 Bundle-SymbolicName: org.carrot2.util.common
 Bundle-Version: 0.0.0.QUALIFIER
 Export-Package: org.carrot2.util,
- org.carrot2.util.collect.primitive,
  org.carrot2.util.httpclient,
  org.carrot2.util.pool,
  org.carrot2.util.resource,

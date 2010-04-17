@@ -11,6 +11,7 @@
   <info>
     <title>&C2;</title>
     <subtitle>User and Developer Manual</subtitle>
+    <releaseinfo>for version <product:version /></releaseinfo>
 
     <abstract>
       <para>

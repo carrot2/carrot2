@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.junit.launchconfig">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/carrot2-benchmarks/src-test/org/carrot2/core/benchmarks/memtime/OpenSourceAlgorithmsBenchmark.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
+<booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
+<stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
+<stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit4"/>
+<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.carrot2.core.benchmarks.memtime.OpenSourceAlgorithmsBenchmark"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="carrot2-benchmarks"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-server&#13;&#10;-Xmx500m&#13;&#10;-DinputFilesDir=${carrot2.benchmark-input.dir}&#13;&#10;-DMIN=100&#13;&#10;-DMAX=20000&#13;&#10;-DSTEP=200&#13;&#10;-Djava.library.path=${resource_loc:/org.carrot2.util.matrix.win32.x86/os/win32/x86}"/>
+</launchConfiguration>

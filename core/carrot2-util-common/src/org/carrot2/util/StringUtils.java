@@ -91,4 +91,23 @@ public final class StringUtils
     {
         return WordUtils.capitalizeFully(string.replace('_', ' '));
     }
+    
+    /**
+     * Join a list of non-null objects with <code>delim</code> and return it
+     * as a string.
+     */
+    public static String join(String delim, Object... objects)
+    {
+        final StringBuilder b = new StringBuilder();
+        for (Object s : objects)
+        {
+            if (s != null)
+            {
+                if (b.length() > 0) b.append(delim);
+                b.append(s.toString());
+            }
+        }
+        return b.toString();
+    }
+
 }

@@ -15,9 +15,8 @@ package org.carrot2.workbench.core;
 import junit.framework.TestSuite;
 
 import org.carrot2.workbench.core.helpers.SimpleXmlMementoTest;
-import org.carrot2.workbench.editors.factory.DedicatedEditorWrapperTest;
-import org.carrot2.workbench.editors.factory.FactoryTest;
-import org.carrot2.workbench.editors.factory.TypeEditorWrapperTest;
+import org.carrot2.workbench.core.ui.SaveOptionsSerializationTest;
+import org.carrot2.workbench.editors.factory.*;
 import org.eclipse.ui.IWorkbench;
 
 /**
@@ -36,6 +35,6 @@ public class CoreTests extends TestSuite
         this.addTestSuite(DedicatedEditorWrapperTest.class);
         this.addTestSuite(FactoryTest.class);
         this.addTestSuite(SimpleXmlMementoTest.class);
+        this.addTestSuite(SaveOptionsSerializationTest.class);
     }
-
 }

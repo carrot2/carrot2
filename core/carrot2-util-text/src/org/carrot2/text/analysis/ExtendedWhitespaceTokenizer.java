@@ -16,14 +16,13 @@ import java.io.IOException;
 import java.io.Reader;
 
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.carrot2.util.CloseableUtils;
 
 /**
  * A tokenizer separating input characters on whitespace, but capable of extracting more
  * complex tokens, such as URLs, e-mail addresses and sentence delimiters. Provides
- * {@link TermAttribute}s and {@link PayloadAttribute}s implementing {@link ITokenType}.
+ * {@link TermAttribute}s and {@link TokenTypeAttributeImpl}s implementing {@link ITokenTypeAttribute}.
  */
 public final class ExtendedWhitespaceTokenizer extends Tokenizer
 {
@@ -37,24 +36,22 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
      */
     private final ExtendedWhitespaceTokenizerImpl parser;
 
-    /**
-     * Reusable object for returning token type.
-     */
-    private final TokenTypePayload tokenPayload = new TokenTypePayload();
-
-    private TermAttribute term;
-    private PayloadAttribute payload;
+    private final TermAttribute term;
+    private final ITokenTypeAttribute type;
 
     public ExtendedWhitespaceTokenizer()
     {
         parser = new ExtendedWhitespaceTokenizerImpl(input);
+        super.addAttributeImpl(new TokenTypeAttributeImpl());
+        type = addAttribute(ITokenTypeAttribute.class);
         term = addAttribute(TermAttribute.class);
-        payload = addAttribute(PayloadAttribute.class);
     }
     
     @Override
     public boolean incrementToken() throws IOException
     {
+        super.clearAttributes();
+
         final int tokenType = parser.getNextToken();
 
         // EOF?
@@ -63,8 +60,7 @@ public final class ExtendedWhitespaceTokenizer extends Tokenizer
             return false;
         }
 
-        tokenPayload.setRawFlags(tokenType);
-        payload.setPayload(tokenPayload);
+        type.setRawFlags((short) tokenType);
         term.setTermBuffer(parser.yybuffer(), parser.yystart(), parser.yylength());
         term.setTermLength(parser.yylength());
         return true;

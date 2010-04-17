@@ -51,9 +51,14 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
      */
     public void preprocess(PreprocessingContext context)
     {
-        super.preprocess(context);
+        tokenizer.tokenize(context);
+        caseNormalizer.normalize(context);
+        languageModelStemmer.stem(context);
+        stopListMarker.mark(context);
         phraseExtractor.extractPhrases(context);
         labelFilterProcessor.process(context);
         documentAssigner.assign(context);
+
+        context.preprocessingFinished();
     }
 }

@@ -2,13 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.carrot2</groupId>
-  <artifactId>morfologik</artifactId>
-  <version>1.2.2</version>
+  <artifactId>morfologik-stemming</artifactId>
+  <version>1.4.0</version>
   <packaging>jar</packaging>
 
   <licenses>
     <license>
-      <name>BSD license</name>
+      <name>BSD license (code), CreativeCommons-ShareAlike (Polish dictionary)</name>
       <distribution>repo</distribution>
     </license>
   </licenses>

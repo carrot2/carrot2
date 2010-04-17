@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,6 +15,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatDocuments;
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.io.*;
 import java.util.*;
@@ -74,8 +74,8 @@ public class ProcessingResultTest
         xml.append("</document>\n");
         xml.append("</searchresult>\n");
 
-        final ProcessingResult deserialized = ProcessingResult.deserialize(
-            new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
+        final ProcessingResult deserialized = ProcessingResult
+            .deserialize(new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
@@ -135,8 +135,8 @@ public class ProcessingResultTest
         xml.append("</group>");
         xml.append("</searchresult>\n");
 
-        final ProcessingResult deserialized = ProcessingResult.deserialize(
-            new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
+        final ProcessingResult deserialized = ProcessingResult
+            .deserialize(new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
@@ -170,7 +170,8 @@ public class ProcessingResultTest
         clusterB.setAttribute(Cluster.SCORE, 0.55);
         clusterB.addDocuments(documents.get(1), documents.get(2));
 
-        assertThatClusters(clusters).isEquivalentTo(Lists.newArrayList(clusterA, clusterB));
+        assertThatClusters(clusters).isEquivalentTo(
+            Lists.newArrayList(clusterA, clusterB));
         Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
             .isEqualTo(query);
     }
@@ -231,8 +232,7 @@ public class ProcessingResultTest
 
     private void checkJsonQuery(final JsonNode root)
     {
-        Assertions.assertThat(root.get("query").getTextValue()).isEqualTo(
-            "query");
+        Assertions.assertThat(root.get("query").getTextValue()).isEqualTo("query");
     }
 
     private void checkJsonClusters(final ProcessingResult result, final JsonNode root)
@@ -289,9 +289,9 @@ public class ProcessingResultTest
         sourceProcessingResult.serialize(outputStream, documentsDeserialized,
             clustersDeserialized);
         CloseableUtils.close(outputStream);
-        
-        final ProcessingResult deserialized = ProcessingResult.deserialize(
-            new ByteArrayInputStream(outputStream.toByteArray()));
+
+        final ProcessingResult deserialized = ProcessingResult
+            .deserialize(new ByteArrayInputStream(outputStream.toByteArray()));
 
         assertNotNull(deserialized);
         assertNotNull(deserialized.getAttributes());
@@ -325,7 +325,8 @@ public class ProcessingResultTest
         final List<Document> documents = Lists.newArrayList(new Document("Test title 1",
             "Test snippet 1", "http://test1.com"), new Document("Test title 2",
             "Test snippet 2", "http://test2.com/test"), new Document("Test title 3",
-            "Test snippet 3. Some more words and <b>html</b>", "http://test2.com"));
+            "Test snippet 3. Some more words and <b>html</b>", "http://test2.com"),
+            new Document("Other", "Other", "Other"));
         final Map<String, Object> attributes = Maps.newHashMap();
         attributes.put(AttributeNames.DOCUMENTS, documents);
 
@@ -336,6 +337,7 @@ public class ProcessingResultTest
         document.setField("testDouble", 10.3);
         document.setField("testBoolean", true);
         document.setLanguage(LanguageCode.POLISH);
+        document.setSources(Lists.newArrayList("s1", "s2"));
         document.id = 3; // assign an id so that the max id is larger than the list size
         Document.assignDocumentIds(documents);
 
@@ -357,7 +359,12 @@ public class ProcessingResultTest
         clusterB.setAttribute(Cluster.SCORE, 0.55);
         clusterB.addDocuments(documents.get(1), documents.get(2));
 
-        final List<Cluster> clusters = Lists.newArrayList(clusterA, clusterB);
+        final Cluster clusterO = new Cluster();
+        clusterO.setOtherTopics(true);
+        clusterO.addPhrases(Cluster.OTHER_TOPICS_LABEL);
+        clusterO.addDocuments(documents.get(3));
+
+        final List<Cluster> clusters = Lists.newArrayList(clusterA, clusterB, clusterO);
         attributes.put(AttributeNames.CLUSTERS, clusters);
 
         attributes.put(AttributeNames.QUERY, "query");

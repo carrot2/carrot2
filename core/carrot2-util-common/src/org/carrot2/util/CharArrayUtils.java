@@ -17,6 +17,8 @@ package org.carrot2.util;
  */
 public class CharArrayUtils
 {
+    public final static char [] EMPTY_ARRAY = new char [0];
+
     /**
      * In place to lower case conversion. In input array is returned for convenience.
      */

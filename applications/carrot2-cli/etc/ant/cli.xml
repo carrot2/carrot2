@@ -15,35 +15,19 @@
 
       <!-- Ant's unzip task does not preserve permissions, so we need to set them here once again. -->
       <chmod dir="${unpacked}" includes="**/*.sh" perm="755" />
-      
-      <exec executable="cmd" dir="${unpacked}" failonerror="true" os="Windows XP">
-        <arg value="/c"/>
-        <arg value="batch.cmd"/>
-        <arg value="input" />
-        <arg value="-o" />
-        <arg value="output" />
+
+      <!-- Add .sh extension to all builds except Windows builds. -->
+      <condition property="script.ext" value="">
+         <os family="windows" />
+      </condition>
+      <property name="script.ext" value=".sh" />
+
+      <exec executable="${unpacked}/batch${script.ext}" dir="${unpacked}" failonerror="true" vmlauncher="false">
+        <arg line="input -o output" />
       </exec>
-      <exec executable="cmd" dir="${unpacked}" failonerror="true" os="Windows XP">
-        <arg value="/c"/>
-        <arg value="batch.cmd"/>
-        <arg value="input" />
-        <arg value="-o" />
-        <arg value="output" />
-        <arg value="-f" />
-        <arg value="JSON" />
-      </exec>
-      
-      <exec executable="${unpacked}/batch.sh" dir="${unpacked}" failonerror="true" os="Linux">
-        <arg value="input" />
-        <arg value="-o" />
-        <arg value="output" />
-      </exec>
-      <exec executable="${unpacked}/batch.sh" dir="${unpacked}" failonerror="true" os="Linux">
-        <arg value="input" />
-        <arg value="-o" />
-        <arg value="output" />
-        <arg value="-f" />
-        <arg value="JSON" />
+
+      <exec executable="${unpacked}/batch${script.ext}" dir="${unpacked}" failonerror="true" vmlauncher="false">
+        <arg line="input -o output -f JSON" />
       </exec>
 
       <available file="${unpacked}/output" property="dir.created" />

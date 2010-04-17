@@ -21,13 +21,21 @@ import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.NNIDoubleFactory2D;
+import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.*;
-import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.*;
+import org.carrot2.util.PcjCompat;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Required;
+import org.carrot2.util.attribute.constraint.DoubleRange;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntIntOpenHashMap;
+import com.carrotsearch.hppc.sorting.IndirectComparator;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 
 /**
  * Builds a term document matrix based on the provided {@link PreprocessingContext}.
@@ -124,7 +132,7 @@ public class TermDocumentMatrixBuilder
         final int documentCount = preprocessingContext.documents.size();
         final int [] stemsTf = preprocessingContext.allStems.tf;
         final int [][] stemsTfByDocument = preprocessingContext.allStems.tfByDocument;
-        final byte [][] stemsFieldIndices = preprocessingContext.allStems.fieldIndices;
+        final byte [] stemsFieldIndices = preprocessingContext.allStems.fieldIndices;
 
         if (documentCount == 0)
         {
@@ -171,7 +179,7 @@ public class TermDocumentMatrixBuilder
             final int stemIndex = stemsToInclude[stemWeightOrder[i]];
             final int [] tfByDocument = stemsTfByDocument[stemIndex];
             final int df = tfByDocument.length / 2;
-            final byte [] fieldIndices = stemsFieldIndices[stemIndex];
+            final byte fieldIndices = stemsFieldIndices[stemIndex];
 
             int tfByDocumentIndex = 0;
             for (int documentIndex = 0; documentIndex < documentCount; documentIndex++)
@@ -238,15 +246,13 @@ public class TermDocumentMatrixBuilder
     /**
      * Calculates the boost we should apply to a stem, based on the field indices array.
      */
-    private double getWeightBoost(int titleFieldIndex, final byte [] fieldIndices)
+    private double getWeightBoost(int titleFieldIndex, final byte fieldIndices)
     {
-        for (int fieldIndex = 0; fieldIndex < fieldIndices.length; fieldIndex++)
+        if ((fieldIndices & (1 << titleFieldIndex)) != 0)
         {
-            if (fieldIndices[fieldIndex] == titleFieldIndex)
-            {
-                return titleWordsBoost;
-            }
+            return titleWordsBoost;
         }
+
         return 1;
     }
 
@@ -258,7 +264,7 @@ public class TermDocumentMatrixBuilder
     {
         final int [] labelsFeatureIndex = context.allLabels.featureIndex;
         final int [] wordsStemIndex = context.allWords.stemIndex;
-        final boolean [] wordsCommonTermFlag = context.allWords.commonTermFlag;
+        final short [] wordsTypes = context.allWords.type;
         final int [][] phrasesWordIndices = context.allPhrases.wordIndices;
         final int wordCount = wordsStemIndex.length;
 
@@ -280,7 +286,7 @@ public class TermDocumentMatrixBuilder
                 for (int j = 0; j < wordIndices.length; j++)
                 {
                     final int wordIndex = wordIndices[j];
-                    if (!wordsCommonTermFlag[wordIndex])
+                    if (!TokenTypeUtils.isCommon(wordsTypes[wordIndex]))
                     {
                         addStemIndex(wordsStemIndex, documentCount, stemsTfByDocument,
                             requiredStemIndices, wordIndex);

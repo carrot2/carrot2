@@ -72,10 +72,10 @@ final class LexicalResources
     /**
      * Loads lexical resources (stop words, stop labels) for a given {@link LanguageCode}.
      */
-    static LexicalResources load(ResourceUtils resourceLoaders, LanguageCode lang)
+    static LexicalResources load(ResourceUtils resourceLoaders, LanguageCode lang, String resourcePath)
     {
-        return new LexicalResources(loadStopLabels(resourceLoaders, lang), loadStopWords(
-            resourceLoaders, lang));
+        return new LexicalResources(loadStopLabels(resourceLoaders, lang, resourcePath), loadStopWords(
+            resourceLoaders, lang, resourcePath));
     }
 
     /**
@@ -83,13 +83,13 @@ final class LexicalResources
      * silently if the given resource cannot be found.
      */
     private static Set<MutableCharArray> loadStopWords(ResourceUtils resourceLoaders,
-        LanguageCode lang)
+        LanguageCode lang, String resourcePath)
     {
         try
         {
             final Set<MutableCharArray> result = Sets.newHashSet();
 
-            final String resourceName = "stopwords." + lang.getIsoCode();
+            final String resourceName = withSeparator(resourcePath) + "stopwords." + lang.getIsoCode();
             final IResource resource = resourceLoaders.getFirst(resourceName,
                 DefaultLanguageModelFactory.class);
 
@@ -131,13 +131,13 @@ final class LexicalResources
      * silently if the given resource cannot be found.
      */
     private static List<Pattern> loadStopLabels(ResourceUtils resourceLoaders,
-        LanguageCode lang)
+        LanguageCode lang, String resourcePath)
     {
         try
         {
             final ArrayList<Pattern> result = Lists.newArrayList();
 
-            final String resourceName = "stoplabels." + lang.getIsoCode();
+            final String resourceName = withSeparator(resourcePath) + "stoplabels." + lang.getIsoCode();
             final IResource resource = resourceLoaders.getFirst(resourceName,
                 DefaultLanguageModelFactory.class);
 
@@ -177,5 +177,20 @@ final class LexicalResources
     {
         return !missingStoplabelsCache.isEmpty() || !missingStoplabelsCache.isEmpty()
             || !regexpProblemsCache.isEmpty();
+    }
+    
+    /**
+     * Used for testing only.
+     */
+    static void clearIssues()
+    {
+        missingStoplabelsCache.clear();
+        missingStoplabelsCache.clear();
+        regexpProblemsCache.clear();
+    }
+    
+    static String withSeparator(String path)
+    {
+        return path.endsWith("/") ? path : path + "/";
     }
 }

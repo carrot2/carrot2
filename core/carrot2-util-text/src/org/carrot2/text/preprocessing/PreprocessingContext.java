@@ -15,36 +15,54 @@ package org.carrot2.text.preprocessing;
 import java.util.List;
 
 import org.carrot2.core.Document;
-import org.carrot2.text.analysis.ITokenType;
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.linguistic.ILanguageModel;
 import org.carrot2.text.linguistic.IStemmer;
+import org.carrot2.text.util.MutableCharArray;
 
 import com.carrotsearch.hppc.BitSet;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
+import com.carrotsearch.hppc.ObjectOpenHashSet;
+import com.carrotsearch.hppc.predicates.ShortPredicate;
 
 /**
  * Document preprocessing context provides low-level (usually integer-coded) data
  * structures useful for further processing.
+ * 
+ * <p><img src="doc-files/preprocessing-arrays.png"
+ *      alt="Internals of PreprocessingContext"/></p>
  */
 public final class PreprocessingContext
 {
     /** Predicate for splitting on document separator. */
-    public static final Predicate<Integer> ON_DOCUMENT_SEPARATOR = Predicates
-        .equalTo(ITokenType.TF_SEPARATOR_DOCUMENT);
+    public static final ShortPredicate ON_DOCUMENT_SEPARATOR = 
+        equalTo(ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT);
 
     /** Predicate for splitting on field separator. */
-    public static final Predicate<Integer> ON_FIELD_SEPARATOR = Predicates
-        .equalTo(ITokenType.TF_SEPARATOR_FIELD);
+    public static final ShortPredicate ON_FIELD_SEPARATOR = 
+        equalTo(ITokenTypeAttribute.TF_SEPARATOR_FIELD);
 
     /** Predicate for splitting on sentence separator. */
-    public static final Predicate<Integer> ON_SENTENCE_SEPARATOR = new Predicate<Integer>()
+    public static final ShortPredicate ON_SENTENCE_SEPARATOR = new ShortPredicate()
     {
-        public boolean apply(Integer tokenType)
+        public boolean apply(short tokenType)
         {
-            return (tokenType.intValue() & ITokenType.TF_SEPARATOR_SENTENCE) != 0;
+            return (tokenType & ITokenTypeAttribute.TF_SEPARATOR_SENTENCE) != 0;
         }
     };
+
+    /** 
+     * Return a new {@link ShortPredicate} returning <code>true</code>
+     * if the argument equals a given value. 
+     */
+    public static final ShortPredicate equalTo(final short t)
+    {
+        return new ShortPredicate() {
+            public boolean apply(short value)
+            {
+                return value == t; 
+            }
+        };
+    }
 
     /** Query used to perform processing, may be <code>null</code> */
     public final String query;
@@ -54,6 +72,12 @@ public final class PreprocessingContext
 
     /** Language model to be used */
     public final ILanguageModel language;
+
+    /**
+     * Token interning cache. Token images are interned to save memory and allow reference
+     * comparisons.
+     */
+    public ObjectOpenHashSet<MutableCharArray> tokenCache = new ObjectOpenHashSet<MutableCharArray>();
 
     /**
      * Creates a preprocessing context for the provided <code>documents</code> and with
@@ -80,20 +104,20 @@ public final class PreprocessingContext
     {
         /**
          * Token image as it appears in the input. On positions where {@link #type} is
-         * equal to one of {@link ITokenType#TF_TERMINATOR},
-         * {@link ITokenType#TF_SEPARATOR_DOCUMENT} or
-         * {@link ITokenType#TF_SEPARATOR_FIELD} , image is <code>null</code>.
+         * equal to one of {@link ITokenTypeAttribute#TF_TERMINATOR},
+         * {@link ITokenTypeAttribute#TF_SEPARATOR_DOCUMENT} or
+         * {@link ITokenTypeAttribute#TF_SEPARATOR_FIELD} , image is <code>null</code>.
          * <p>
          * This array is produced by {@link Tokenizer}.
          */
         public char [][] image;
 
         /**
-         * Token's {@link ITokenType} bit flags.
+         * Token's {@link ITokenTypeAttribute} bit flags.
          * <p>
          * This array is produced by {@link Tokenizer}.
          */
-        public int [] type;
+        public short [] type;
 
         /**
          * Document field the token came from. The index points to arrays in
@@ -109,12 +133,14 @@ public final class PreprocessingContext
          * separators.
          * <p>
          * This array is produced by {@link Tokenizer}.
+         * 
+         * TODO: is this always needed? Seems awfully repetitive, esp. for long docs.
          */
         public int [] documentIndex;
 
         /**
          * A pointer to {@link AllWords} arrays for this token. Equal to <code>-1</code>
-         * for document, field and {@link ITokenType#TT_PUNCTUATION} tokens (including
+         * for document, field and {@link ITokenTypeAttribute#TT_PUNCTUATION} tokens (including
          * sentence separators).
          * <p>
          * This array is produced by {@link CaseNormalizer}.
@@ -176,9 +202,6 @@ public final class PreprocessingContext
      */
     public static class AllWords
     {
-        /** Flags words that are contained in the query (inflection-insensitive) */
-        public static final int FLAG_QUERY = 1;
-
         /**
          * The most frequently appearing variant of the word with respect to case. E.g. if
          * a token <em>MacOS</em> appeared 12 times in the input and <em>macos</em>
@@ -187,6 +210,19 @@ public final class PreprocessingContext
          * This array is produced by {@link CaseNormalizer}.
          */
         public char [][] image;
+
+        /**
+         * Token type of this word copied from {@link AllTokens#type}. Additional
+         * flags are set for each word by 
+         * {@link CaseNormalizer} and {@link LanguageModelStemmer}.
+         * 
+         * <p>
+         * This array is produced by {@link CaseNormalizer}.
+         * This array is modified by {@link LanguageModelStemmer}.
+         * 
+         * @see ITokenTypeAttribute
+         */
+        public short [] type;
 
         /**
          * Term Frequency of the word, aggregated across all variants with respect to
@@ -210,30 +246,6 @@ public final class PreprocessingContext
         public int [][] tfByDocument;
 
         /**
-         * Common word flag for the word, equal to <code>true</code> if the word is a stop
-         * word. <b>This array will be replaced with a more generic word flags array in
-         * the near future.</b>
-         * <p>
-         * This array is produced by {@link CaseNormalizer}.
-         */
-        public boolean [] commonTermFlag;
-
-        /**
-         * Token type of this word. See {@link ITokenType} for available types.
-         * <p>
-         * This array is produced by {@link CaseNormalizer}.
-         */
-        public int [] type;
-
-        /**
-         * Additional flags for this word.
-         * <p>
-         * This array is produced by {@link CaseNormalizer}. The
-         * {@link AllWords#FLAG_QUERY} is set by {@link LanguageModelStemmer}.
-         */
-        public int [] flag;
-
-        /**
          * A pointer to the {@link AllStems} arrays for this word.
          * <p>
          * This array is produced by {@link LanguageModelStemmer}.
@@ -241,12 +253,14 @@ public final class PreprocessingContext
         public int [] stemIndex;
 
         /**
-         * Indices of all fields in which this word appears at least once. Values are
-         * pointers to the {@link AllFields} arrays.
+         * A bit-packed indices of all fields in which this word appears at least once. 
+         * Indexes (positions) of selected bits are pointers to the 
+         * {@link AllFields} arrays. Fast conversion between the bit-packed representation
+         * and <code>byte[]</code> with index values is done by {@link #toFieldIndexes(byte)}  
          * <p>
          * This array is produced by {@link CaseNormalizer}.
          */
-        public byte [][] fieldIndices;
+        public byte [] fieldIndices;
     }
 
     /**
@@ -285,8 +299,8 @@ public final class PreprocessingContext
         public int [] mostFrequentOriginalWordIndex;
 
         /**
-         * Term frequency of the stem, i.e. the sum of all words from {@link AllWords}
-         * pointing to the stem.
+         * Term frequency of the stem, i.e. the sum of all {@link AllWords#tf} values
+         * for which the {@link AllWords#stemIndex} points to this stem.
          * <p>
          * This array is produced by {@link LanguageModelStemmer}.
          */
@@ -301,12 +315,14 @@ public final class PreprocessingContext
         public int [][] tfByDocument;
 
         /**
-         * Indices of all fields in which this stem appears at least once. Values are
-         * pointers to the {@link AllFields} arrays.
+         * A bit-packed indices of all fields in which this word appears at least once. 
+         * Indexes (positions) of selected bits are pointers to the 
+         * {@link AllFields} arrays. Fast conversion between the bit-packed representation
+         * and <code>byte[]</code> with index values is done by {@link #toFieldIndexes(byte)}  
          * <p>
          * This array is produced by {@link LanguageModelStemmer}
          */
-        public byte [][] fieldIndices;
+        public byte [] fieldIndices;
     }
 
     /**
@@ -326,7 +342,7 @@ public final class PreprocessingContext
     public static class AllPhrases
     {
         /**
-         * Pointers to {@link AllWords} for each word in the sequence.
+         * Pointers to {@link AllWords} for each word in the phrase sequence.
          * <p>
          * This array is produced by {@link PhraseExtractor}.
          */
@@ -382,10 +398,13 @@ public final class PreprocessingContext
         public BitSet [] documentIndices;
 
         /**
-         * Index of the first phrase in {@link AllLabels}, or -1 if there are no phrases
-         * in {@link AllLabels}.
+         * The first index in {@link #featureIndex} which 
+         * points to {@link AllPhrases}, or -1 if there are no phrases
+         * in {@link #featureIndex}.
          * <p>
          * This value is set by {@link LabelFilterProcessor}.
+         * 
+         * @see #featureIndex
          */
         public int firstPhraseIndex;
     }
@@ -409,5 +428,63 @@ public final class PreprocessingContext
     public boolean hasLabels()
     {
         return allLabels.featureIndex != null && allLabels.featureIndex.length > 0;
+    }
+
+    /**
+     * Static conversion between selected bits and an array of indexes of these bits. 
+     */
+    private final static int [][] bitsCache;
+    static
+    {
+        bitsCache = new int [0x100][];
+        for (int i = 0; i < 0x100; i++)
+        {
+            bitsCache[i] = new int [Integer.bitCount(i & 0xFF)];
+            for (int v = 0, bit = 0, j = i & 0xff; j != 0; j >>>= 1, bit++)
+            {
+                if ((j & 0x1) != 0)
+                    bitsCache[i][v++] = bit;
+            }
+        }
+    }
+    
+    /**
+     * Convert the selected bits in a byte to an array of indexes.
+     */
+    public int [] toFieldIndexes(byte b)
+    {
+        return bitsCache[b & 0xff];
+    }
+
+    /* 
+     * These should really be package-private, shouldn't they? We'd need to move classes under pipeline.
+     * here for accessibility.
+     */
+
+    /**
+     * This method should be invoked after all preprocessing contributors have been executed
+     * to release temporary data structures. 
+     */
+    public void preprocessingFinished()
+    {
+        this.tokenCache = null;
+    }
+
+    /**
+     * Return a unique char buffer representing a given character sequence.
+     */
+    public char [] intern(MutableCharArray chs)
+    {
+        if (tokenCache.contains(chs))
+        {
+            return tokenCache.lget().getBuffer();
+        }
+        else
+        {
+            final char [] tokenImage = new char [chs.length()];
+            System.arraycopy(chs.getBuffer(), 0, tokenImage, 0, chs.length());
+            tokenCache.add(new MutableCharArray(tokenImage));
+            return tokenImage;
+        }
     }
 }

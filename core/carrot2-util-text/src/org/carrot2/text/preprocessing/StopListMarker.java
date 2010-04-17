@@ -12,6 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
@@ -22,7 +23,7 @@ import org.carrot2.util.attribute.Bindable;
  * <p>
  * This class saves the following results to the {@link PreprocessingContext}:
  * <ul>
- * <li>{@link AllWords#commonTermFlag}</li>
+ * <li>{@link AllWords#type}</li>
  * </ul>
  * <p>
  * This class requires that {@link Tokenizer} and {@link CaseNormalizer} be invoked first.
@@ -36,21 +37,22 @@ public final class StopListMarker
     public void mark(PreprocessingContext context)
     {
         final char [][] wordImages = context.allWords.image;
-        final boolean [] commonTermFlags = new boolean [wordImages.length];
+        final short [] types = context.allWords.type;
 
         final MutableCharArray mutableCharArray = new MutableCharArray("");
         char [] buffer = new char [128];
 
-        for (int i = 0; i < commonTermFlags.length; i++)
+        for (int i = 0; i < wordImages.length; i++)
         {
             final char [] word = wordImages[i];
             if (buffer.length < word.length) buffer = new char [word.length];
 
             CharArrayUtils.toLowerCase(word, buffer);
             mutableCharArray.reset(buffer, 0, word.length);
-            commonTermFlags[i] = context.language.isCommonWord(mutableCharArray);
+            if (context.language.isCommonWord(mutableCharArray))
+            {
+                types[i] |= ITokenTypeAttribute.TF_COMMON_WORD;
+            }
         }
-
-        context.allWords.commonTermFlag = commonTermFlags;
     }
 }

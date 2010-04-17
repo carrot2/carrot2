@@ -26,8 +26,8 @@
 
     <dependency>
       <groupId>org.carrot2</groupId>
-      <artifactId>morfologik</artifactId>
-      <version>1.2.2</version>
+      <artifactId>morfologik-stemming</artifactId>
+      <version>1.4.0</version>
       <optional>true</optional> 
     </dependency>
     
