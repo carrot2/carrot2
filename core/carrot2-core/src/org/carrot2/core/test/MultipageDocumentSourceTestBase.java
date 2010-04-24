@@ -51,7 +51,7 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
 
     protected double slack()
     {
-        return 1.25;
+        return 1.5;
     }
     
     
