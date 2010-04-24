@@ -39,4 +39,10 @@ public class BossDocumentSourceTest extends
     {
         return true;
     }
+
+    @Override
+    protected double slack()
+    {
+        return 1.5;
+    }
 }
