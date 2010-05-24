@@ -26,7 +26,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.*;
 
-import com.google.common.base.Function;
 import com.google.common.collect.*;
 
 /**

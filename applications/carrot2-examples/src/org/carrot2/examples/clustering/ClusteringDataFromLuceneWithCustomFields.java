@@ -40,7 +40,6 @@ import org.carrot2.source.lucene.*;
  */
 public class ClusteringDataFromLuceneWithCustomFields
 {
-    @SuppressWarnings("unchecked")
     public static void main(String [] args) throws IOException
     {
         /*

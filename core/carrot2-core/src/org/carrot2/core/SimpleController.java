@@ -37,7 +37,6 @@ import java.util.Map;
  *             further tuned with custom {@link IProcessingComponentManager}s. This class
  *             will be removed in the 3.4.0 release of Carrot2.
  */
-@SuppressWarnings("deprecation")
 public final class SimpleController implements IController
 {
     private Controller delegate = new Controller(new SimpleProcessingComponentManager());

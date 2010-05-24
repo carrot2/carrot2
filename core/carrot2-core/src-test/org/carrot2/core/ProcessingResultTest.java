@@ -15,7 +15,6 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatDocuments;
-import static org.fest.assertions.Assertions.assertThat;
 
 import java.io.*;
 import java.util.*;

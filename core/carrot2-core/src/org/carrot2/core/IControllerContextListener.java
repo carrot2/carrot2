@@ -20,8 +20,6 @@ public interface IControllerContextListener
     /**
      * Invoked before the context is disposed and any keys (values) should be cleaned up
      * to allow garbage collection.
-     * 
-     * @see IController#dispose()
      */
     public void beforeDisposal(IControllerContext context);
 }

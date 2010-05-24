@@ -19,8 +19,8 @@ import org.junit.After;
 import org.junit.Before;
 
 /**
- * A very basic base class for testing {@link IProcessingComponent}s. This class provides
- * an instance of a {@link IController}, a map for attributes and a method that
+ * A base class for testing {@link IProcessingComponent}s. This class provides
+ * simple and caching controller along with maps for attributes and a method that
  * initializes them.
  */
 public abstract class ProcessingComponentTestBase<T extends IProcessingComponent>

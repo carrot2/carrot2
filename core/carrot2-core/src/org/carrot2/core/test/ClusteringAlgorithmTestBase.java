@@ -75,6 +75,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
         assertThat(clusters.size()).isGreaterThan(0);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testRepeatedClusteringWithCache()
     {

@@ -37,7 +37,6 @@ import org.carrot2.util.pool.SoftUnboundedPool;
  *             be further tuned with custom {@link IProcessingComponentManager}s. This
  *             class will be removed in the 3.4.0 release of Carrot2.
  */
-@SuppressWarnings("deprecation")
 public final class CachingController implements IController
 {
     private Controller delegate = new Controller(new SimpleProcessingComponentManager());
