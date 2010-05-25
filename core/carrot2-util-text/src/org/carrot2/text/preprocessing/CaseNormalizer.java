@@ -68,6 +68,11 @@ public final class CaseNormalizer
     public int dfThreshold = 1;
 
     /**
+     * Double-linked map for doc. index counting.
+     */
+    private IntIntDoubleLinkedMap doubleLinkedMap;
+    
+    /**
      * Performs normalization and saves the results to the <code>context</code>.
      */
     public void normalize(PreprocessingContext context)
@@ -99,6 +104,9 @@ public final class CaseNormalizer
         int maxTfVariantIndex = tokenImagesOrder[0];
         int totalTf = 1;
         int variantStartIndex = 0;
+        
+        final int documentsCount = context.documents.size();
+        doubleLinkedMap = new IntIntDoubleLinkedMap(documentsCount, documentsCount);
 
         // A byte set for word fields tracking
         final BitSet fieldIndices = new BitSet(context.allFields.name.length);
@@ -180,12 +188,13 @@ public final class CaseNormalizer
                 if (wordDocuments.size() >= dfThreshold)
                 {
                     // Flatten the list of documents this term occurred in.
-                    final int [] sparseEncoding = SparseArray.toSparseEncoding(wordDocuments);
-                    final int df = (sparseEncoding.length >> 1); 
+                    toSparseEncodingByDoubleLinkedMap(wordDocuments);
+                    final int df = doubleLinkedMap.size(); 
                     if (df >= dfThreshold)
                     {
+                        final int [] sparseEncoding = doubleLinkedMap.toArray();
                         wordTfByDocumentList.add(sparseEncoding);
-    
+
                         // Add the word to the word list
                         normalizedWordImages.add(tokenImages[maxTfVariantIndex]);
                         types.add(tokenTypesArray[maxTfVariantIndex]);
@@ -227,12 +236,27 @@ public final class CaseNormalizer
     }
 
     /**
+     * Convert double-linked map of document indexes and counts to a sparse array.
+     */
+    private final void toSparseEncodingByDoubleLinkedMap(IntStack documents)
+    {
+        final IntIntDoubleLinkedMap map = doubleLinkedMap;
+        final int toIndex = documents.size();
+        final int [] buffer = documents.buffer;
+        for (int i = 0; i < toIndex; i++)
+        {
+            map.putOrAdd(buffer[i], 1, 1);
+        }
+    }
+
+    /**
      * Initializes the counters for the a token image.
      */
     private void resetForNewTokenImage(final int [] documentIndexesArray,
         final int [] tokenImagesOrder,
         final BitSet fieldIndices, IntStack wordDocuments, int i)
     {
+        doubleLinkedMap.clear();
         fieldIndices.clear();
         wordDocuments.clear();
         if (documentIndexesArray[tokenImagesOrder[i + 1]] >= 0)

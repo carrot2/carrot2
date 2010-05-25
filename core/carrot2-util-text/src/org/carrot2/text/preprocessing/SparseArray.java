@@ -28,7 +28,7 @@ public final class SparseArray
      * An empty <code>int []</code>. 
      */
     private static final int [] EMPTY_INT_ARRAY = new int [0];
-
+    
     /**
      * Convert a list of documents to sparse document-count representation.
      */
