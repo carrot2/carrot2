@@ -2,22 +2,27 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jackson JSON Processor
 Bundle-SymbolicName: org.codehaus.jackson;singleton:=true
-Bundle-Version: 0.9.2
-Bundle-ClassPath: jackson-core-asl-0.9.9-6.jar,
- jackson-mapper-asl-0.9.9-6.jar
+Bundle-Version: 1.5.2
+Bundle-ClassPath: jackson-core-asl-1.5.2.jar,
+ jackson-mapper-asl-1.5.2.jar
+Bundle-Vendor: jackson.codehaus.org
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: org.codehaus.jackson,
  org.codehaus.jackson.annotate,
  org.codehaus.jackson.impl,
  org.codehaus.jackson.io,
  org.codehaus.jackson.map,
+ org.codehaus.jackson.map.annotate,
  org.codehaus.jackson.map.deser,
+ org.codehaus.jackson.map.ext,
  org.codehaus.jackson.map.introspect,
+ org.codehaus.jackson.map.jsontype,
+ org.codehaus.jackson.map.jsontype.impl,
  org.codehaus.jackson.map.ser,
  org.codehaus.jackson.map.type,
  org.codehaus.jackson.map.util,
  org.codehaus.jackson.node,
+ org.codehaus.jackson.schema,
  org.codehaus.jackson.sym,
  org.codehaus.jackson.type,
  org.codehaus.jackson.util
-Bundle-Vendor: jackson.codehaus.org
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
