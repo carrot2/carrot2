@@ -50,7 +50,12 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
     }
 
     /**
-     * TODO: what is this param for? 
+     * Some sources return fewer results than requested, slack aims to account for this.
+     * Slack can be used in asserts on the number of returned documents like this:
+     * 
+     * <pre>assertThat(documentsReturned).isGreaterThan((int) (needed / slack()))</pre>
+     * 
+     * See {@link #testQueryLargerThanPage()}.
      */
     protected double slack()
     {
