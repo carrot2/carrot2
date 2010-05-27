@@ -14,6 +14,10 @@
   left: 124px;
 }
 
+#source-tabs {
+  min-width: 800px; 
+}
+
 ul.tabs {
   font-size: 14px;
   font-weight: bold;
@@ -113,8 +117,8 @@ ul.tabs li.tab .google {
   background-image: url('../img/sources/google.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
-ul.tabs li.tab .msn-web {
-  background-image: url('../img/sources/msn.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+ul.tabs li.tab .bing-web {
+  background-image: url('../img/sources/bing.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
 ul.tabs li.tab .wiki {

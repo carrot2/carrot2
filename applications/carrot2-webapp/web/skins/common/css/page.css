@@ -135,8 +135,8 @@ div.noscript
 }
 
 #main-area {
-  min-width: 900px;
-  -width: 900px;
+  min-width: 950px;
+  -width: 950px;
 } 
 
 /** Startup screen */
