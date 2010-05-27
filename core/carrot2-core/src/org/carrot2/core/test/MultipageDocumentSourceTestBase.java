@@ -49,11 +49,13 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
         assertThat(documentsReturned).isGreaterThan((int) (needed / slack()));
     }
 
+    /**
+     * TODO: what is this param for? 
+     */
     protected double slack()
     {
         return 1.25;
     }
-    
     
     @Test
     public void testConservativeMode() throws Exception
