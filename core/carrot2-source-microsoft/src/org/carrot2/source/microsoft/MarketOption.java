@@ -21,9 +21,9 @@ import com.google.common.collect.Maps;
 
 
 /**
- * Culture and language restriction.
+ * Language and country/region information for {@link BingDocumentSource}.
  */
-public enum CultureInfo
+public enum MarketOption
 {
     ARABIC_ARABIA            ("ar-XA", "Arabic – Arabia"),
     BULGARIAN_BULGARIA       ("bg-BG", "Bulgarian – Bulgaria"),
@@ -87,11 +87,11 @@ public enum CultureInfo
     /**
      * Maps <b>some</b> of the values of this enum to {@link LanguageCode}s.
      */
-    public static final Map<CultureInfo, LanguageCode> TO_LANGUAGE_CODE;
+    public static final Map<MarketOption, LanguageCode> TO_LANGUAGE_CODE;
     
     static 
     {
-        final Map<CultureInfo, LanguageCode> map = Maps.newEnumMap(CultureInfo.class);
+        final Map<MarketOption, LanguageCode> map = Maps.newEnumMap(MarketOption.class);
         
         map.put(ARABIC_ARABIA, LanguageCode.ARABIC);
         map.put(CHINESE_CHINA, LanguageCode.CHINESE_SIMPLIFIED);
@@ -145,16 +145,16 @@ public enum CultureInfo
     /**
      * Culture info code for Live API.
      */
-    public final String cultureInfoCode;
+    public final String marketCode;
     
     /**
      * Culture info description.
      */
     public final String description;
 
-    private CultureInfo(String cultureInfo, String description)
+    private MarketOption(String cultureInfo, String description)
     {
-        this.cultureInfoCode = cultureInfo;
+        this.marketCode = cultureInfo;
         this.description = description;
     }
 
@@ -169,7 +169,7 @@ public enum CultureInfo
     
     /**
      * Returns a corresponding {@link LanguageCode} or <code>null</code> if no
-     * {@link LanguageCode} corresponds to this {@link CultureInfo} constant.
+     * {@link LanguageCode} corresponds to this {@link MarketOption} constant.
      */
     public LanguageCode toLanguageCode()
     {

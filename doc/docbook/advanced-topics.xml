@@ -295,7 +295,7 @@
     
     <para>
       Two sources that currently do not support the above properties are: 
-      MicrosoftLiveDocumentSource and OpenSearchDocumentSource.
+      BingDocumentSource and OpenSearchDocumentSource.
     </para>
     
     <note>

@@ -31,7 +31,7 @@ using some {@link org.carrot2.core.IClusteringAlgorithm}. The general pattern
 for this kind of invocation is to put all input data required for processing
 (query and required number of results in this case) into a map and pass that
 map to an {@link org.carrot2.core.IController} that will perform all the processing.
-The code shown below retrieves 100 search results from {@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource}
+The code shown below retrieves 100 search results from {@link org.carrot2.source.microsoft.BingDocumentSource}
 and clusters them using the {@link org.carrot2.clustering.lingo.LingoClusteringAlgorithm}.
 </p>
 
@@ -46,7 +46,7 @@ and clusters them using the {@link org.carrot2.clustering.lingo.LingoClusteringA
 
         /* Perform processing */
         ProcessingResult result = controller.process(attributes,
-            MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+            BingDocumentSource.class, LingoClusteringAlgorithm.class);
         
         /* Documents fetched from the document source, clusters created by Carrot2. */
         List&lt;Document> documents = result.getDocuments();
@@ -160,7 +160,7 @@ You can also directly pass a list of {@link org.carrot2.core.Document} instances
         attributes = new HashMap&lt;String, Object>();
         attributes.put(AttributeNames.QUERY, "data mining");
         result = controller.process(attributes,
-            MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+            BingDocumentSource.class, LingoClusteringAlgorithm.class);
         duration = System.currentTimeMillis() - start;
         System.out.println(duration + " ms (empty cache)");
         
@@ -168,7 +168,7 @@ You can also directly pass a list of {@link org.carrot2.core.Document} instances
         attributes = new HashMap&lt;String, Object>();
         attributes.put(AttributeNames.QUERY, "data mining");
         result = controller.process(attributes,
-            MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+            BingDocumentSource.class, LingoClusteringAlgorithm.class);
         duration = System.currentTimeMillis() - start;
         System.out.println(duration + " ms (documents and clusters from cache)");
 </pre>
@@ -206,8 +206,8 @@ Additionally, a number of document sources automatically set the
 {@link org.carrot2.core.Document#LANGUAGE} of documents they produce based on their
 specific language-related attributes. Currently, three documents support this scenario:
 <ol>
-<li>{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource} through the
-{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource#culture} attribute</li>
+<li>{@link org.carrot2.source.microsoft.BingDocumentSource} through the
+{@link org.carrot2.source.microsoft.BingDocumentSource#market} attribute</li>
 <li>{@link org.carrot2.source.boss.BossDocumentSource} through the
 {@link org.carrot2.source.boss.BossSearchService#languageAndRegion} attribute</li>
 <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the
@@ -261,10 +261,10 @@ ConsoleFormatter.displayResults(englishResult);
  */
 attributes.clear();
 attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
-attributes.put("MicrosoftLiveDocumentSource.culture", CultureInfo.CHINESE_CHINA);
+attributes.put("BingDocumentSource.market", MarketOption.CHINESE_CHINA);
 attributes.put(AttributeNames.RESULTS, 100);
 final ProcessingResult chineseResult = controller.process(attributes,
-  MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+  BingDocumentSource.class, LingoClusteringAlgorithm.class);
 ConsoleFormatter.displayResults(chineseResult);
 
 /*

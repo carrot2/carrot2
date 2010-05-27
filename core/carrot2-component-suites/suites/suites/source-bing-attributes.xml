@@ -13,14 +13,14 @@
 
 
 
-      <attribute key="MicrosoftLiveDocumentSource.appid">
-        <value type="java.lang.String" value="DE531D8A42139F590B253CADFAD7A86172F93B96"/>
+      <attribute key="BingDocumentSource.appid">
+        <value type="java.lang.String" value="EFABBE1342FC43467F3CD65B1B83F450093B16B4"/>
       </attribute>
-      <attribute key="MicrosoftLiveDocumentSource.culture">
+      <attribute key="BingDocumentSource.market">
         <value type="java.lang.String" value="FRENCH_FRANCE"/>
       </attribute>
-      <attribute key="MicrosoftLiveDocumentSource.safeSearch">
-        <value type="java.lang.String" value="STRICT"/>
+      <attribute key="BingDocumentSource.adult">
+        <value type="java.lang.String" value="Strict"/>
       </attribute>
       <attribute key="search-mode">
         <value type="java.lang.String" value="SPECULATIVE"/>

@@ -20,7 +20,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
-import org.carrot2.source.microsoft.MicrosoftLiveDocumentSource;
+import org.carrot2.source.microsoft.BingDocumentSource;
 
 import com.google.common.collect.Maps;
 
@@ -95,11 +95,11 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
         attributes.put(AttributeNames.QUERY, "data mining");
 
         final ProcessingResult fastResult = controller.process(attributes,
-            MicrosoftLiveDocumentSource.class.getName(), "lingo-fast");
+            BingDocumentSource.class.getName(), "lingo-fast");
         ConsoleFormatter.displayClusters(fastResult.getClusters());
         
         final ProcessingResult accurateResult = controller.process(attributes,
-            MicrosoftLiveDocumentSource.class.getName(), "lingo-accurate");
+            BingDocumentSource.class.getName(), "lingo-accurate");
         ConsoleFormatter.displayClusters(accurateResult.getClusters());
     }
 }

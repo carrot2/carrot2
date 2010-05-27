@@ -16,10 +16,6 @@
 <!-- Apache HTTP client -->
 <logger name="httpclient"><level value="warn"/></logger>
 
-<!-- Apache Axis -->
-<logger name="org.apache.axis"><level value="warn"/></logger>
-<logger name="org.apache.axis.utils.JavaUtils"><level value="error"/></logger>
-
 <!-- JETTY -->
 <logger name="org.mortbay"><level value="warn"/></logger>
 <logger name="jetty"><level value="warn"/></logger>

@@ -1,0 +1,18 @@
+<!-- Components included in all applications -->
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.microsoft.BingDocumentSource" id="bing-web"
+            attribute-sets-resource="/suites/source-bing-attributes.xml">
+      <label>Bing</label>
+      <title>Bing Search</title>
+      <mnemonic>B</mnemonic>
+      <description>Searches the web using Bing Search</description>
+      <icon-path>icons/bing.png</icon-path>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>lucene</example-query>
+        <example-query>java</example-query>
+      </example-queries>
+    </source>
+  </sources>
+</component-suite>

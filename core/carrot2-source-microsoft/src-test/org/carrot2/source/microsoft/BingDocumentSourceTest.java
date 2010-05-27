@@ -12,8 +12,15 @@
 
 package org.carrot2.source.microsoft;
 
+import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
+
+import org.carrot2.core.LanguageCode;
 import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
+import org.carrot2.util.attribute.AttributeUtils;
+import org.junit.Test;
 
 /**
  * Tests Microsoft Bing document source.
@@ -21,6 +28,19 @@ import org.carrot2.source.MultipageSearchEngineMetadata;
 public class BingDocumentSourceTest extends
     MultipageDocumentSourceTestBase<BingDocumentSource>
 {
+    @Test
+    public void testMarketOption() throws Exception
+    {
+        assumeTrue(externalApiTestsEnabled());
+
+        super.processingAttributes.put(
+            AttributeUtils.getKey(BingDocumentSource.class, "market"), MarketOption.POLISH_POLAND);
+        final int documentsReturned = runQuery("warszawa", 10);
+
+        assertThat(documentsReturned).isGreaterThan(0);
+        assertThat(getDocuments().get(0).getLanguage()).isEqualTo(LanguageCode.POLISH);
+    }
+
     @Override
     public Class<BingDocumentSource> getComponentClass()
     {
@@ -30,7 +50,7 @@ public class BingDocumentSourceTest extends
     @Override
     protected MultipageSearchEngineMetadata getSearchEngineMetadata()
     {
-        return MicrosoftLiveDocumentSource.metadata;
+        return BingDocumentSource.metadata;
     }
 
     @Override

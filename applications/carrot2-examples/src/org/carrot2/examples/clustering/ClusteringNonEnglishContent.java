@@ -20,8 +20,9 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.source.google.GoogleDocumentSource;
-import org.carrot2.source.microsoft.CultureInfo;
-import org.carrot2.source.microsoft.MicrosoftLiveDocumentSource;
+import org.carrot2.source.microsoft.BingDocumentSource;
+import org.carrot2.source.microsoft.MarketOption;
+import org.carrot2.util.attribute.AttributeUtils;
 
 import com.google.common.collect.Lists;
 
@@ -51,8 +52,8 @@ import com.google.common.collect.Lists;
  * {@link org.carrot2.core.Document#LANGUAGE} of documents they produce based on their
  * specific language-related attributes. Currently, three documents support this scenario:
  * <ol>
- * <li>{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource} through the
- * {@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource#culture} attribute</li>
+ * <li>{@link org.carrot2.source.microsoft.BingDocumentSource} through the
+ * {@link org.carrot2.source.microsoft.BingDocumentSource#market} attribute</li>
  * <li>{@link org.carrot2.source.boss.BossDocumentSource} through the
  * {@link org.carrot2.source.boss.BossSearchService#languageAndRegion} attribute</li>
  * <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the
@@ -91,17 +92,18 @@ public class ClusteringNonEnglishContent
         ConsoleFormatter.displayResults(englishResult);
 
         /*
-         * In the second call, we will fetch results for a Chinese query from MSN Live,
-         * setting explicitly the MSN Live's specific language attribute. Based on that
+         * In the second call, we will fetch results for a Chinese query from Bing,
+         * setting explicitly the Bing's specific language attribute. Based on that
          * attribute, the document source will set the appropriate language for each
          * document.
          */
         attributes.clear();
         attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
-        attributes.put("MicrosoftLiveDocumentSource.culture", CultureInfo.CHINESE_CHINA);
+        attributes.put(AttributeUtils.getKey(BingDocumentSource.class, "market"), 
+            MarketOption.CHINESE_CHINA);
         attributes.put(AttributeNames.RESULTS, 100);
         final ProcessingResult chineseResult = controller.process(attributes,
-            MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+            BingDocumentSource.class, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(chineseResult);
 
         /*

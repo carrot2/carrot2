@@ -19,7 +19,7 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.httpclient.*;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.*;
 import org.carrot2.source.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.Attribute;
@@ -77,24 +77,86 @@ public final class BingDocumentSource extends MultipageSearchEngine
     public String appid = CARROTSEARCH_APPID;
 
     /**
-     * Culture and language restriction.
+     * Language and country/region information for the request.
      * 
-     * @label Culture
+     * @label Market
      * @group Results filtering
-     * @level Medium
+     * @level Basic
      */
-    /*
     @Input
     @Processing
     @Attribute
     @Required
-    public CultureInfo culture = CultureInfo.ENGLISH_UNITED_STATES;
-    /*
+    public MarketOption market = MarketOption.ENGLISH_UNITED_STATES;
+
+    /**
+     * Adult search restriction (porn filter).
+     * 
+     * @label Safe Search
+     * @group Results filtering
+     * @level Medium
+     */
+    @Processing
+    @Input
+    @Attribute
+    public AdultOption adult;
+
+    /**
+     * Miscellaneous request options. Bing provides the following options:
+     * <ul>
+     * <li>DisableLocationDetection</li>
+     * <li>EnableHighlighting</li>
+     * </ul>
+     * 
+     * <p>Options should be space-separated.</p>
+     * 
+     * @label Request Options
+     * @group Miscellaneous
+     * @level Advanced
+     */
+    @Processing
+    @Input
+    @Attribute
+    @Internal
+    public String options = "DisableLocationDetection";
+
+    /**
+     * Miscellaneous Web-request specific options. Bing provides the following options:
+     * <ul>
+     * <li>DisableHostCollapsing</li>
+     * <li>DisableQueryAlterations</li>
+     * </ul>
+     * 
+     * <p>Options should be space-separated.</p>
+     * 
+     * @label Web Request Options
+     * @group Miscellaneous
+     * @level Advanced
+     */
+    @Processing
+    @Input
+    @Attribute
+    @Internal
+    public String webOptions;
+
+    /**
+     * Specify the allowed file types. Space-separated list of file extensions (upper-case). 
+     * See <a href="http://msdn.microsoft.com/en-us/library/dd250876%28v=MSDN.10%29.aspx">Bing documentation</a>.
+     * 
+     * @label File Types
+     * @group Results filtering
+     * @level Advanced
+     */
+    @Processing
+    @Input
+    @Attribute
+    @Internal
+    public String fileTypes;
 
     /**
      * Microsoft Live! metadata.
      */
-    private static final MultipageSearchEngineMetadata metadata 
+    static final MultipageSearchEngineMetadata metadata 
         = new MultipageSearchEngineMetadata(50, 1000);
 
     /**
@@ -140,10 +202,20 @@ public final class BingDocumentSource extends MultipageSearchEngine
         params.add(new NameValuePair("JsonType", "raw"));
 
         /*
+         * Modify options.
+         */
+        if (options != null) params.add(new NameValuePair("Options", options));
+        if (webOptions != null) params.add(new NameValuePair("Web.Options", webOptions));
+        if (fileTypes != null) params.add(new NameValuePair("Web.FileType", fileTypes));
+
+        /*
          * Optional parameters. 
          */
         params.add(new NameValuePair("Web.Offset", Integer.toString(startAt)));
         params.add(new NameValuePair("Web.Count", Integer.toString(totalResultsRequested)));
+        params.add(new NameValuePair("Market", market.marketCode));
+
+        if (adult != null) params.add(new NameValuePair("Adult", adult.toString()));
 
         final String serviceURI = "http://api.bing.net/xml.aspx";
         final HttpUtils.Response response = HttpUtils.doGET(serviceURI, params, HTTP_HEADERS);
@@ -172,7 +244,6 @@ public final class BingDocumentSource extends MultipageSearchEngine
         }
     }
 
-    
     @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/web")
     @Root(name = "WebResult", strict = false)
     public static class WebResult
@@ -259,9 +330,12 @@ public final class BingDocumentSource extends MultipageSearchEngine
         
         if (response.web != null && response.web.results != null)
         {
+            final LanguageCode langCode = market.toLanguageCode();
             for (WebResult wr : response.web.results)
             {
-                ser.results.add(wr.toDocument());
+                final Document doc = wr.toDocument();
+                doc.setLanguage(langCode);
+                ser.results.add(doc);
             }
         }
 

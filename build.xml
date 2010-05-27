@@ -112,7 +112,6 @@
 
   <!-- Excludes both JAR and LICENSE files -->
   <patternset id="lib.core.excludes">
-    <exclude name="lib/**/axis-ant.jar" />
     <exclude name="lib/**/easymock*" />
     <exclude name="lib/**/fest-*" />
     <exclude name="lib/**/servlet-api-*.jar" />
