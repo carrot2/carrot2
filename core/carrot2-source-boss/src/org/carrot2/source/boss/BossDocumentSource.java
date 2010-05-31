@@ -13,8 +13,12 @@
 package org.carrot2.source.boss;
 
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
@@ -94,9 +98,28 @@ public final class BossDocumentSource extends MultipageSearchEngine
         };
     }
 
+    private static final Pattern WBR_PATTERN = Pattern.compile("<wbr>");
+    
     @Override
     protected void afterFetch(SearchEngineResponse response)
     {
-        clean(response, keepHighlights, Document.TITLE, Document.SUMMARY);
+        final String [] fields = new String[] { Document.TITLE, Document.SUMMARY };
+        clean(response, keepHighlights, fields);
+
+        // Remove all occurrences of <wbr>. It is used for optional breaking of words,
+        // so removing (instead of replacing with space) is just right.
+        // http://www.quirksmode.org/oddsandends/wbr.html
+        for (Document document : response.results)
+        {
+            for (String field : fields)
+            {
+                final String originalField = document.getField(field);
+                if (StringUtils.isNotBlank(originalField))
+                {
+                    final Matcher matcher = WBR_PATTERN.matcher(originalField);
+                    document.setField(field, matcher.replaceAll(""));
+                }
+            }
+        }
     }
 }

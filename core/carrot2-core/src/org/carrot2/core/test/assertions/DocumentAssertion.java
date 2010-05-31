@@ -14,6 +14,8 @@ package org.carrot2.core.test.assertions;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import java.util.Map;
+
 import org.carrot2.core.Document;
 import org.fest.assertions.AssertExtension;
 
@@ -57,5 +59,20 @@ public class DocumentAssertion implements AssertExtension
     {
         this.description = description;
         return this;
+    }
+    
+    public void stringFieldsDoNotMatchPattern(String pattern)
+    {
+        final Map<String, Object> fields = actualDocument.getFields();
+        for (Map.Entry<String, Object> entry : fields.entrySet())
+        {
+            final Object field = entry.getValue();
+            if (field instanceof String) 
+            {
+                assertThat((String) field).as(
+                    description + "[field: " + entry.getKey() + "]")
+                    .doesNotMatch(pattern);
+            }
+        }
     }
 }

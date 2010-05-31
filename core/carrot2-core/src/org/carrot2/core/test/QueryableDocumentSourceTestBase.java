@@ -12,6 +12,7 @@
 package org.carrot2.core.test;
 
 import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
@@ -96,18 +97,8 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         int i = 0;
         for (Document document : documents)
         {
-            final String snippet = (String) document.getField(Document.SUMMARY);
-            if (snippet != null)
-            {
-                assertThat(snippet).as("snippet[" + i + "]").doesNotMatch(".*&lt;.*");
-            }
-            final Object title = document.getField(Document.TITLE);
-            if (title != null)
-            {
-                assertThat((String) title).as("title[" + i + "]")
-                    .doesNotMatch(".*&lt;.*");
-            }
-            i++;
+            assertThat(document).as("doc[" + i++ + "]").stringFieldsDoNotMatchPattern(
+                ".*&lt;.*");
         }
     }
 
