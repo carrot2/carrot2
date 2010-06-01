@@ -321,7 +321,12 @@ public class AttributeBinder
                 {
                     throw new AttributeBindingException(key, e.getMessage(), e);
                 }
-                catch (final Exception e)
+                catch (AttributeBindingException e)
+                {
+                    // Rethrow the original binding exception.
+                    throw e;
+                }
+                catch (Exception e)
                 {
                     throw new AttributeBindingException(key, "Could not get field value "
                         + object.getClass().getName() + "#" + field.getName(), e);
