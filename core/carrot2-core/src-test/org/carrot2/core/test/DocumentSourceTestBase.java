@@ -55,7 +55,7 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
     /**
      * Runs a query without specifying any additional attributes.
      * 
-     * @param controller the {@link IController} to perform the query
+     * @param controller the {@link Controller} to perform the query
      * @return Returns the number of fetched documents. Access
      *         {@link #resultAttributes} map to get hold of the actual documents.
      */
