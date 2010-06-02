@@ -16,7 +16,6 @@ import static org.carrot2.matrix.MatrixAssertions.assertThat;
 import static org.junit.Assume.assumeTrue;
 import static org.carrot2.matrix.NNITestAssumptions.nativeLapackAvailable;
 
-import org.carrot2.core.test.Assertions;
 import org.carrot2.matrix.*;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
@@ -119,8 +118,7 @@ public class MatrixFactorizationTest
         };
 
         check(expectedU, expectedV, factorization);
-        Assertions.assertThat(factorization.getSingularValues()).as("S").isEqualTo(
-            expectedS, DELTA);
+        org.junit.Assert.assertArrayEquals(expectedS, factorization.getSingularValues(), DELTA);
     }
 
     @Test

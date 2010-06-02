@@ -12,7 +12,6 @@
 
 package org.carrot2.matrix;
 
-import static org.carrot2.core.test.Assertions.assertThat;
 import static org.carrot2.matrix.NNITestAssumptions.nativeLapackAvailable;
 import static org.junit.Assume.assumeTrue;
 
@@ -63,7 +62,7 @@ public class EigenvalueCalculatorTest
         double [] eigenvalues = EigenvalueCalculator.computeEigenvaluesSymmetrical(Asym);
         Arrays.sort(eigenvalues);
 
-        assertThat(expectedEigenvalues).isEqualTo(expectedEigenvalues, DELTA);
+        org.junit.Assert.assertArrayEquals(expectedEigenvalues, eigenvalues, DELTA);
     }
 
     @Test
@@ -78,6 +77,6 @@ public class EigenvalueCalculatorTest
             .getRealEigenvalues().toArray();
         Arrays.sort(expectedEigenvalues);
 
-        assertThat(expectedEigenvalues).isEqualTo(expectedEigenvalues, DELTA);
+        org.junit.Assert.assertArrayEquals(expectedEigenvalues, eigenvalues, DELTA);
     }
 }
