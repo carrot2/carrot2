@@ -10,48 +10,45 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.util.test;
+package org.carrot2.core.test;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.assertions.AssertExtension;
-import org.fest.assertions.Delta;
 
 /**
- * Additional assertions on <code>double []</code> arrays.
+ * Assertions on <code>byte [][]</code> arrays.
  */
-public class DoubleArrayAssert implements AssertExtension
+public class ByteByteArrayAssert implements AssertExtension
 {
     /** The actual array */
-    private double [] actualArray;
+    private byte [][] actualArray;
 
     /** Description of the assertion */
     private String description;
 
-    DoubleArrayAssert(double [] array)
+    ByteByteArrayAssert(byte [][] array)
     {
         this.actualArray = array;
     }
 
     /**
-     * Asserts that the array is equal to the provided with a <code>delta</code> on each
-     * element.
+     * Asserts that the array is equal to the provided
      */
-    public DoubleArrayAssert isEqualTo(double [] expected, double delta)
+    public ByteByteArrayAssert isEqualTo(byte [][] expected)
     {
         assertThat(expected).as(description).isNotNull();
         assertThat(actualArray.length).as(description).isEqualTo(expected.length);
 
-        final Delta deltaObject = Delta.delta(delta);
         for (int i = 0; i < expected.length; i++)
         {
             assertThat(actualArray[i]).as(description + "[" + i + "]").isEqualTo(
-                expected[i], deltaObject);
+                expected[i]);
         }
         return this;
     }
 
-    public DoubleArrayAssert as(String description)
+    public ByteByteArrayAssert as(String description)
     {
         this.description = description;
         return this;

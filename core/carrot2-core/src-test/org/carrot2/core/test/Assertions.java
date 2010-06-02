@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.util.test;
+package org.carrot2.core.test;
 
 /**
  * Additional FEST-style assertions.

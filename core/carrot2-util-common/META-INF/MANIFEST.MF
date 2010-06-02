@@ -7,7 +7,6 @@ Export-Package: org.carrot2.util,
  org.carrot2.util.httpclient,
  org.carrot2.util.pool,
  org.carrot2.util.resource,
- org.carrot2.util.test,
  org.carrot2.util.xslt
 Require-Bundle: org.apache.commons;visibility:=reexport,
  com.google.collections;visibility:=reexport,

@@ -12,8 +12,8 @@
 
 package org.carrot2.matrix;
 
+import static org.carrot2.core.test.Assertions.assertThat;
 import static org.carrot2.matrix.NNITestAssumptions.nativeLapackAvailable;
-import static org.carrot2.util.test.Assertions.assertThat;
 import static org.junit.Assume.assumeTrue;
 
 import java.util.Arrays;
