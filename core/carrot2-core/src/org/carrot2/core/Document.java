@@ -178,7 +178,7 @@ public final class Document
      * 
      * @return unique identifier of this document
      */
-    @JsonGetter
+    @JsonProperty
     public Integer getId()
     {
         return id;
@@ -187,7 +187,7 @@ public final class Document
     /**
      * Returns this document's {@link #TITLE} field.
      */
-    @JsonGetter
+    @JsonProperty
     @Element(required = false)
     public String getTitle()
     {
@@ -209,7 +209,7 @@ public final class Document
     /**
      * Returns this document's {@link #SUMMARY} field.
      */
-    @JsonGetter("snippet")
+    @JsonProperty("snippet")
     @Element(name = "snippet", required = false)
     public String getSummary()
     {
@@ -231,7 +231,7 @@ public final class Document
     /**
      * Returns this document's {@link #CONTENT_URL} field.
      */
-    @JsonGetter("url")
+    @JsonProperty("url")
     @Element(name = "url", required = false)
     public String getContentUrl()
     {
@@ -253,7 +253,7 @@ public final class Document
     /**
      * Returns this document's {@link #SOURCES} field.
      */
-    @JsonGetter
+    @JsonProperty
     @ElementList(entry = "source", required = false)
     public List<String> getSources()
     {
@@ -275,7 +275,7 @@ public final class Document
     /**
      * Returns this document's {@link #LANGUAGE}.
      */
-    @JsonGetter
+    @JsonProperty
     @Attribute(required = false)
     public LanguageCode getLanguage()
     {
@@ -298,7 +298,7 @@ public final class Document
     /**
      * For JSON and XML serialization only.
      */
-    @JsonGetter("fields")
+    @JsonProperty("fields")
     @SuppressWarnings("unused")
     private Map<String, Object> getOtherFields()
     {
