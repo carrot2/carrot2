@@ -35,13 +35,6 @@ import org.carrot2.util.attribute.constraint.IntRange;
 public class SimpleFieldMapper implements IFieldMapper
 {
     /**
-     * Each {@link org.carrot2.core.Document} will have an additional
-     * field named like this constant, pointing to the original
-     * Lucene {@link Document}.
-     */
-    public static final String LUCENE_DOCUMENT = "lucene.doc";
-
-    /**
      * Document title field name.
      * 
      * @label Document title field
@@ -233,11 +226,6 @@ public class SimpleFieldMapper implements IFieldMapper
                 throw ExceptionUtils.wrapAsRuntimeException(e);
             }
         }
-        
-        /*
-         * Add a reference to Lucene document.
-         */
-        doc.setField(LUCENE_DOCUMENT, luceneDoc);
     }
 
     /*
