@@ -13,6 +13,7 @@
 package org.carrot2.util;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 import java.util.*;
 import org.junit.Test;
@@ -146,7 +147,7 @@ public class GraphUtilsTest
         assertThat(subgraphs.size()).isEqualTo(expected.size());
         for (int i = 0; i < subgraphs.size(); i++)
         {
-            assertThat(PcjCompat.equals(expected.get(i), subgraphs.get(i))).isTrue();
+            assertEquals(expected.get(i), subgraphs.get(i));
         }
     }
 

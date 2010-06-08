@@ -23,7 +23,6 @@ import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.PcjCompat;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
@@ -295,7 +294,7 @@ public class TermDocumentMatrixBuilder
             }
         }
 
-        return PcjCompat.toIntArray(requiredStemIndices);
+        return requiredStemIndices.asIntLookupContainer().toArray();
     }
 
     /**
