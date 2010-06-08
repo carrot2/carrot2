@@ -108,6 +108,7 @@ public class PhraseExtractor
             int totalPhraseTf = rcs.get(0).frequency;
             Substring mostFrequentOriginal = rcs.get(0);
             IntIntOpenHashMap phraseTfByDocument = new IntIntOpenHashMap();
+            phraseTfByDocument.putAll(mostFrequentOriginal.tfByDocument);
 
             // Don't change the rcs list type from ArrayList or we'll
             // run into O(n^2) iteration cost :)
@@ -120,7 +121,6 @@ public class PhraseExtractor
                     .isEquivalentTo(nextSubstring, wordIndexesArray, stemIndexes))
                 {
                     totalPhraseTf += nextSubstring.frequency;
-                    phraseTfByDocument.putAll(mostFrequentOriginal.tfByDocument);
                     addAllWithOffset(phraseTfByDocument, nextSubstring.tfByDocument, -1);
                     if (mostFrequentOriginal.frequency < nextSubstring.frequency)
                     {
@@ -140,6 +140,7 @@ public class PhraseExtractor
 
                     totalPhraseTf = nextSubstring.frequency;
                     mostFrequentOriginal = nextSubstring;
+                    phraseTfByDocument.clear();
                     phraseTfByDocument.putAll(nextSubstring.tfByDocument);
                 }
             }
