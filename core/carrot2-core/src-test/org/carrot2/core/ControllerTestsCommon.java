@@ -33,6 +33,10 @@ import com.google.common.collect.*;
  */
 public abstract class ControllerTestsCommon extends ControllerTestsBase
 {
+    /*
+     * TODO: this method claims to return simple controller, but overrides don't do it -- they
+     * return other implementations. wtf?
+     */
     public abstract Controller getSimpleController();
 
     public boolean hasCaching()
