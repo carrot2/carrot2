@@ -436,6 +436,42 @@ public abstract class ControllerTestsBase
     }
 
     @Bindable
+    public static class ComponentWithOutputAttribute extends
+        ProcessingComponentBase
+    {
+        @Output
+        @Processing
+        @Attribute(key = "documents")
+        @SuppressWarnings("unused")
+        private String result;
+
+        @Override
+        public void process() throws ProcessingException
+        {
+            result = "anything";
+        }
+    }
+
+    @Bindable
+    public static class ComponentWithRequiredProcessingAttribute extends
+        ProcessingComponentBase
+    {
+        @Input
+        @Processing
+        @Required
+        @Internal
+        @Attribute(key = "documents")
+        private String result;
+
+        @Override
+        public void process() throws ProcessingException
+        {
+            if (result == null) 
+                throw new RuntimeException();
+        }
+    }
+
+    @Bindable
     public static class BindableInstanceCounter
     {
         static int createdInstances = 0;

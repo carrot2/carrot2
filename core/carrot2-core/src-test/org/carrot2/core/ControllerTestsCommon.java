@@ -443,6 +443,21 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         controller.dispose();
         controller = null;
     }
+    
+    @Test
+    public void testPassingRequiredProcessingAttribute()
+    {
+        controller = prepareController();
+
+        final Map<String, Object> attributes = Maps.newHashMap();
+
+        controller.process(attributes, 
+            ComponentWithOutputAttribute.class,
+            ComponentWithRequiredProcessingAttribute.class);
+
+        controller.dispose();
+        controller = null;
+    }
 
     @Test
     public void testComponentConfigurationDifferentInitAttributes()
