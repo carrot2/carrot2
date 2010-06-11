@@ -33,9 +33,9 @@ import com.google.common.collect.*;
  */
 public abstract class ControllerTestsCommon extends ControllerTestsBase
 {
-    /*
-     * TODO: this method claims to return simple controller, but overrides don't do it -- they
-     * return other implementations. wtf?
+    /**
+     * Returns a controller that implements at least basic processing functionality.
+     * All simple, pooling and caching controllers fit here. 
      */
     public abstract Controller getSimpleController();
 

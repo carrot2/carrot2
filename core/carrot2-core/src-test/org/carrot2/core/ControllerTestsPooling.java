@@ -24,6 +24,10 @@ import org.junit.Test;
  */
 public abstract class ControllerTestsPooling extends ControllerTestsBase
 {
+    /**
+     * Returns a controller that implements basic processing and component instance
+     * pooling functionality.
+     */
     public abstract Controller getPoolingController();
 
     public boolean hasCaching()

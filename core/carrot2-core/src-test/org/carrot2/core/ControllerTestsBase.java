@@ -441,7 +441,7 @@ public abstract class ControllerTestsBase
     {
         @Output
         @Processing
-        @Attribute(key = "documents")
+        @Attribute(key = "attr")
         @SuppressWarnings("unused")
         private String result;
 
@@ -460,7 +460,7 @@ public abstract class ControllerTestsBase
         @Processing
         @Required
         @Internal
-        @Attribute(key = "documents")
+        @Attribute(key = "attr")
         private String result;
 
         @Override

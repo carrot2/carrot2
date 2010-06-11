@@ -37,19 +37,16 @@ public abstract class DelegatingProcessingComponent implements IProcessingCompon
 
     public void init(IControllerContext context)
     {
-//        System.out.println(getDelegate() + ".init()");
         getDelegate().init(context);
     }
 
     public void beforeProcessing() throws ProcessingException
     {
-//        System.out.println(getDelegate() + ".beforeProcessing()");
         getDelegate().beforeProcessing();
     }
 
     public void process() throws ProcessingException
     {
-//        System.out.println(getDelegate() + ".process()");
         getDelegate().process();
 
         // Do some simple processing
@@ -59,13 +56,11 @@ public abstract class DelegatingProcessingComponent implements IProcessingCompon
 
     public void afterProcessing()
     {
-//        System.out.println(getDelegate() + ".afterProcessing()");
         getDelegate().afterProcessing();
     }
 
     public void dispose()
     {
-//        System.out.println(getDelegate() + ".dispose()");
         getDelegate().dispose();
     }
 
