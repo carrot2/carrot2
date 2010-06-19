@@ -24,7 +24,9 @@ import org.simpleframework.xml.core.Persist;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.collect.*;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 /**
  * Provides a full description of an individual attribute, including its {@link #key},
