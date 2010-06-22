@@ -762,7 +762,7 @@
   </target>
 
   <target name="core.test" depends="core">
-    <ant antfile="${api.dir}/build.xml" dir="${api.dir}" inheritall="false" /> 
+    <ant antfile="build.xml" dir="${api.dir}" inheritall="false" /> 
   </target>
   
   <target name="clean.core">
