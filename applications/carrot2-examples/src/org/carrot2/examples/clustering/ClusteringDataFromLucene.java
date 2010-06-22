@@ -14,14 +14,14 @@ package org.carrot2.examples.clustering;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.lucene.store.FSDirectory;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
+import org.carrot2.examples.CreateLuceneIndex;
 import org.carrot2.source.lucene.LuceneDocumentSource;
 import org.carrot2.source.lucene.SimpleFieldMapper;
 import org.carrot2.util.attribute.AttributeUtils;
@@ -33,6 +33,8 @@ import org.carrot2.util.attribute.AttributeUtils;
  * It is assumed that you are familiar with {@link ClusteringDocumentList} and
  * {@link UsingCachingController} examples.
  * 
+ * @see CreateLuceneIndex
+ * @see ClusteringDataFromLuceneWithCustomFields
  * @see ClusteringDocumentList
  * @see UsingCachingController
  */
@@ -69,8 +71,9 @@ public class ClusteringDataFromLucene
         {
             indexPath = args[0];
         }
+
         final String titleFieldName = "title";
-        final String contentFieldName = "summary";
+        final String contentFieldName = "snippet";
 
         luceneGlobalAttributes.put(AttributeUtils.getKey(LuceneDocumentSource.class,
             "directory"), FSDirectory.open(new File(indexPath)));
@@ -78,6 +81,9 @@ public class ClusteringDataFromLucene
             "titleField"), titleFieldName);
         luceneGlobalAttributes.put(AttributeUtils.getKey(SimpleFieldMapper.class,
             "contentField"), contentFieldName);
+
+        luceneGlobalAttributes.put(AttributeUtils.getKey(SimpleFieldMapper.class,
+            "searchFields"), Arrays.asList(new String [] {"titleField", "fullContent"}));
 
         /*
          * Initialize the controller passing the above attributes as component-specific
@@ -93,7 +99,9 @@ public class ClusteringDataFromLucene
          * Perform processing.
          */
         final Map<String, Object> processingAttributes = new HashMap<String, Object>();
-        processingAttributes.put(AttributeNames.QUERY, "test");
+        
+        String query = "mining";
+        processingAttributes.put(AttributeNames.QUERY, query);
 
         /*
          * We need to refer to the Lucene component by its identifier we set during

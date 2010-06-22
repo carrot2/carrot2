@@ -17,14 +17,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
+import org.carrot2.examples.CreateLuceneIndex;
 import org.carrot2.source.lucene.*;
 
 /**
@@ -34,12 +36,16 @@ import org.carrot2.source.lucene.*;
  * It is assumed that you are familiar with {@link ClusteringDocumentList},
  * {@link UsingCachingController} and {@link ClusteringDataFromLucene} examples.
  * 
+ * @see CreateLuceneIndex
+ * @see ClusteringDataFromLucene
  * @see ClusteringDocumentList
  * @see UsingCachingController
- * @see ClusteringDataFromLucene
  */
 public class ClusteringDataFromLuceneWithCustomFields
 {
+    /**
+     * Entry point. 
+     */
     public static void main(String [] args) throws IOException
     {
         /*
@@ -82,7 +88,7 @@ public class ClusteringDataFromLuceneWithCustomFields
          * required, you can implement your own version of IFieldMapper as below.
          * 
          * Note that we could also provide here an instance of the mapper rather than
-         * its class. The differences are summarised below:
+         * its class. The differences are summarized below:
          * 
          * > Class: Class has to have a no-parameter constructor. Instances of the
          *   class will not be shared between processing threads, which means the
@@ -98,8 +104,8 @@ public class ClusteringDataFromLuceneWithCustomFields
          * The Analyzer used by Lucene while searching can also be provided. Here again
          * it's better to provide the analyzer class rather than an instance.
          */
-        luceneGlobalAttributes.put("LuceneDocumentSource.analyzer", WhitespaceAnalyzer.class);
-        
+        luceneGlobalAttributes.put("LuceneDocumentSource.analyzer", StandardAnalyzerWrapper.class);
+
         /*
          * Initialize the controller passing the above attributes as component-specific
          * for Lucene. The global attributes map will be empty. Note that we've provided
@@ -114,7 +120,9 @@ public class ClusteringDataFromLuceneWithCustomFields
          * Perform processing.
          */
         final Map<String, Object> processingAttributes = new HashMap<String, Object>();
-        processingAttributes.put(AttributeNames.QUERY, "test");
+
+        final String query = "mining";
+        processingAttributes.put(AttributeNames.QUERY, query);
 
         /*
          * We need to refer to the Lucene component by its identifier we set during
@@ -131,7 +139,7 @@ public class ClusteringDataFromLuceneWithCustomFields
      * Our custom Lucene -> Carrot2 content mapper. You can {@link SimpleFieldMapper}
      * source code for the default implementation.
      */
-    private static final class CustomFieldMapper implements IFieldMapper
+    public static final class CustomFieldMapper implements IFieldMapper
     {
         public void map(Query luceneQuery, Analyzer analyzer, Document luceneDoc,
             org.carrot2.core.Document carrot2Doc)
@@ -140,6 +148,7 @@ public class ClusteringDataFromLuceneWithCustomFields
              * Here we need to transfer the desired content from the provided Lucene
              * document to the provided Carrot2 document.
              */
+            carrot2Doc.setContentUrl(luceneDoc.get("url"));
             carrot2Doc.setTitle(luceneDoc.get("title"));
             carrot2Doc.setSummary(luceneDoc.get("snippet"));
             carrot2Doc.setField("category", luceneDoc.get("rating"));
@@ -156,6 +165,18 @@ public class ClusteringDataFromLuceneWithCustomFields
             {
                 "fullContent"
             };
+        }
+    }
+
+    /**
+     * Carrot2 attribute classes require parameterless constructor, so we wrap StandardAnalyzer
+     * here.
+     */
+    public static final class StandardAnalyzerWrapper extends StandardAnalyzer
+    {
+        public StandardAnalyzerWrapper()
+        {
+            super(Version.LUCENE_30);
         }
     }
 }
