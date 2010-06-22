@@ -577,20 +577,13 @@ public class AttributeBinder
                     final Class<?> clazz = ((Class<?>) value);
                     try
                     {
-                        value = clazz.newInstance();
+                        value = newInstance(clazz);
                         if (clazz.isAnnotationPresent(Bindable.class))
                         {
                             bind(value, values, false, Input.class, predicate);
                         }
                     }
                     catch (final InstantiationException e)
-                    {
-                        throw new InstantiationException(
-                            "Could not create instance of class: " + clazz.getName()
-                                + " for attribute " + key
-                                + ": " + e.getMessage());
-                    }
-                    catch (final IllegalAccessException e)
                     {
                         throw new InstantiationException(
                             "Could not create instance of class: " + clazz.getName()
@@ -625,6 +618,50 @@ public class AttributeBinder
                 }
 
                 remainingValues.remove(key);
+            }
+        }
+
+        /**
+         * Create an instance of a given class using parameterless constructor. Creates
+         * instances of private classes as well (sets them to accessible temporarily).
+         */
+        private Object newInstance(Class<?> clazz)
+            throws InstantiationException
+        {
+            try
+            {
+                final Constructor<?> c = clazz.getDeclaredConstructor(new Class [0]);
+                final boolean accessible = c.isAccessible();
+                c.setAccessible(true);
+                try
+                {
+                    return c.newInstance();
+                }
+                finally
+                {
+                    c.setAccessible(accessible);
+                }
+            }
+            catch (NoSuchMethodException e)
+            {
+                throw new InstantiationException("Parameterless constructor is required: "
+                    + clazz.getName());
+            }
+            catch (IllegalArgumentException e)
+            {
+                throw new RuntimeException("Should not happen.", e);
+            }
+            catch (IllegalAccessException e)
+            {
+                InstantiationException t = new InstantiationException();
+                t.initCause(e.getCause());
+                throw t;
+            }
+            catch (InvocationTargetException e)
+            {
+                InstantiationException t = new InstantiationException();
+                t.initCause(e.getCause());
+                throw t;
             }
         }
     }
