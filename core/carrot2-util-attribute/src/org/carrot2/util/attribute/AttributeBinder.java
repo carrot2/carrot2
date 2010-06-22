@@ -587,13 +587,15 @@ public class AttributeBinder
                     {
                         throw new InstantiationException(
                             "Could not create instance of class: " + clazz.getName()
-                                + " for attribute " + key);
+                                + " for attribute " + key
+                                + ": " + e.getMessage());
                     }
                     catch (final IllegalAccessException e)
                     {
                         throw new InstantiationException(
                             "Could not create instance of class: " + clazz.getName()
-                                + " for attribute " + key);
+                                + " for attribute " + key
+                                + ": " + e.getMessage());
                     }
                 }
 
