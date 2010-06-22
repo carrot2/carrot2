@@ -34,7 +34,7 @@ public class CreateLuceneIndex
         if (indexDir.exists())
         {
             System.out.println("Index directory already exists: " + indexDir.getAbsolutePath());
-            System.exit(-1);
+            System.exit(-2);
         }
 
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);

@@ -42,7 +42,7 @@
     <run.example classname="org.carrot2.examples.core.SavingAttributeValuesToXml" />
       
     <!-- Create a simple Lucene index and run Lucene examples. -->
-    <delete dir="index" failonerror="false" />
+    <delete dir="index" failonerror="true" includeemptydirs="true" />
     <run.example classname="org.carrot2.examples.CreateLuceneIndex">
       <arg line="index" />
     </run.example>
