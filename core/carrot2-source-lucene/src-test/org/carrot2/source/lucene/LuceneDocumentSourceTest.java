@@ -15,6 +15,7 @@ package org.carrot2.source.lucene;
 import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.index.Term;
@@ -144,5 +145,17 @@ public class LuceneDocumentSourceTest extends
     {
         assertThat(runQuery("\"data mining\"", getLargeQuerySize())).as(
             "Number of results").isEqualTo(99);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testMultiEntryField() throws Exception
+    {
+        runQuery("\"termb\"", getLargeQuerySize());
+
+        final List<Document> list = (List<Document>) super.resultAttributes.get(AttributeNames.DOCUMENTS);
+        assertThat(list.size()).isEqualTo(1);
+        assertThat(list.get(0).getSummary()).contains("terma");
+        assertThat(list.get(0).getSummary()).contains("termb");
     }
 }

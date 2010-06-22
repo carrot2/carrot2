@@ -19,6 +19,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.highlight.*;
 import org.carrot2.core.attribute.*;
@@ -238,8 +239,21 @@ public class SimpleFieldMapper implements IFieldMapper
             return null;
         }
 
-        final String value = doc.get(fieldName);
-        return value;
+        StringBuilder builder = null;
+        for (Fieldable field : doc.getFields())
+        {
+            if (field.name().equals(fieldName) && (!field.isBinary()))
+            {
+                if (builder == null) 
+                    builder = new StringBuilder();
+                if (builder.length() > 0) 
+                    builder.append(" ");
+
+                builder.append(field.stringValue());
+            }
+        }
+
+        return builder == null ? null : builder.toString();
     }
 
     /*
