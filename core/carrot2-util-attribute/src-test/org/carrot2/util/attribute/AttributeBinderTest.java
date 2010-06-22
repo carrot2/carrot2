@@ -377,6 +377,16 @@ public class AttributeBinderTest
         };
     }
 
+    @Bindable
+    public static class PrivateImplementationAttribute
+    {
+        @Input
+        @Required
+        @Attribute(key = "attr")
+        @ImplementingClasses(classes = Runnable.class, strict = false)
+        public Runnable attr;
+    }
+
     @Before
     public void initAttributes()
     {
@@ -962,6 +972,14 @@ public class AttributeBinderTest
             10
         });
 
+        AttributeBinder.bind(instance, attributes, Input.class);
+    }
+
+    @Test
+    public void testNonPublicBindingClasses() throws Exception
+    {
+        PrivateImplementationAttribute instance = new PrivateImplementationAttribute();
+        attributes.put("attr", AttributeBinderTestHelpers.getPrivateImplClassRef());
         AttributeBinder.bind(instance, attributes, Input.class);
     }
 
