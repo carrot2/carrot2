@@ -577,18 +577,26 @@ public class AttributeBinder
                     final Class<?> clazz = ((Class<?>) value);
                     try
                     {
-                        value = newInstance(clazz);
+                        value = clazz.newInstance();
                         if (clazz.isAnnotationPresent(Bindable.class))
                         {
                             bind(value, values, false, Input.class, predicate);
                         }
                     }
-                    catch (final InstantiationException e)
+                    catch (Throwable e)
                     {
-                        throw new InstantiationException(
-                            "Could not create instance of class: " + clazz.getName()
-                                + " for attribute " + key
-                                + ": " + e.getMessage());
+                        String message = null;
+                        if (e instanceof IllegalAccessException || e instanceof InstantiationException)
+                        {
+                            message = detailedExceptionInfo(clazz);
+                        }
+
+                        final InstantiationException ie = 
+                            new InstantiationException("Could not create instance of class: " + clazz.getName()
+                            + " for attribute " + key
+                            + (message != null ? ": " + message : ""));
+                        ie.initCause(e);
+                        throw ie;
                     }
                 }
 
@@ -622,47 +630,28 @@ public class AttributeBinder
         }
 
         /**
-         * Create an instance of a given class using parameterless constructor. Creates
-         * instances of private classes as well (sets them to accessible temporarily).
+         * Return a somewhat more detailed reason why instantiation couldn't progress.
          */
-        private Object newInstance(Class<?> clazz)
-            throws InstantiationException
+        private String detailedExceptionInfo(Class<?> clazz)
         {
+            if (!Modifier.isPublic(clazz.getModifiers()))
+                return "Class " + clazz.getName() + " is not public.";
+
+            if (clazz.isMemberClass() && !Modifier.isStatic(clazz.getModifiers()))
+            {
+                return "Nested class " + clazz.getName() + " is not static.";
+            }
+
             try
             {
-                final Constructor<?> c = clazz.getDeclaredConstructor(new Class [0]);
-                final boolean accessible = c.isAccessible();
-                c.setAccessible(true);
-                try
-                {
-                    return c.newInstance();
-                }
-                finally
-                {
-                    c.setAccessible(accessible);
-                }
+                clazz.getConstructor(new Class<?> [0]);
             }
-            catch (NoSuchMethodException e)
+            catch (Exception e)
             {
-                throw new InstantiationException("Parameterless constructor is required: "
-                    + clazz.getName());
+                return "Class " + clazz.getName() + " must have a public parameterless constructor.";
             }
-            catch (IllegalArgumentException e)
-            {
-                throw new RuntimeException("Should not happen.", e);
-            }
-            catch (IllegalAccessException e)
-            {
-                InstantiationException t = new InstantiationException();
-                t.initCause(e.getCause());
-                throw t;
-            }
-            catch (InvocationTargetException e)
-            {
-                InstantiationException t = new InstantiationException();
-                t.initCause(e.getCause());
-                throw t;
-            }
+            
+            return null;
         }
     }
 

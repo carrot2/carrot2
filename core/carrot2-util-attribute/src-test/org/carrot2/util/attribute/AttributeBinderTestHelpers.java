@@ -5,15 +5,55 @@ package org.carrot2.util.attribute;
  */
 public class AttributeBinderTestHelpers
 {
-    private static class PrivateAttribute implements Runnable 
+    public static class RunnableAdapter implements Runnable
     {
         public void run()
         {
+            // Nothing.
         }
     }
 
-    public static Class<? extends Runnable> getPrivateImplClassRef()
+    private static class PrivateStaticClass extends RunnableAdapter 
     {
-        return PrivateAttribute.class;
     }
+
+    public class PrivateNestedClass extends RunnableAdapter 
+    {
+    }
+
+    public static class PublicNoConstructorClass extends RunnableAdapter 
+    {
+        private PublicNoConstructorClass()
+        {
+            // Hide the constructor.
+        }
+    }
+
+    public static class ExceptionInConstructor extends RunnableAdapter 
+    {
+        public ExceptionInConstructor()
+        {
+            throw new Error("(original exception)");
+        }
+    }
+    
+    public static Class<? extends Runnable> getPrivateStaticClassRef()
+    {
+        return PrivateStaticClass.class;
+    }
+
+    public static Class<? extends Runnable> getPrivateNestedClassRef()
+    {
+        return PrivateNestedClass.class;
+    }
+    
+    public static Class<? extends Runnable> getPublicNoConstructor()
+    {
+        return PublicNoConstructorClass.class;
+    }
+
+    public static Class<? extends Runnable> getExceptionInConstructor()
+    {
+        return ExceptionInConstructor.class;
+    }        
 }
