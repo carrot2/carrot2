@@ -124,7 +124,7 @@
     <exclude name="lib/org.mortbay.jetty/**" />
     <exclude name="lib/org.kohsuke.args4j/**" />
     <exclude name="lib/org.apache.xml/**" />
-    <exclude name="lib/com.google.collections/ri*" />
+    <exclude name="lib/com.google.guava/ri*" />
     <exclude name="lib/org.slf4j/slf4j-log4j12*" />
     <exclude name="lib/org.apache.log4j/*" />
   </patternset>
@@ -141,7 +141,7 @@
     <include name="lib/**/colt.LICENSE" />
     <include name="lib/**/commons-lang*" />
     <include name="lib/**/ehcache*" />
-    <include name="lib/**/google-collect*" />
+    <include name="lib/**/guava*" />
     <include name="lib/**/jackson*" />
     <include name="lib/**/lucene-core*" />
     <include name="lib/**/lucene-snowball*" />

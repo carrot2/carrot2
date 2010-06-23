@@ -4,7 +4,7 @@
       <fileset dir="${carrot2.master.basedir}">
           <include name="tmp/jar/carrot2-core*.jar" />
           <include name="lib/com.thoughtworks.qdox/*.jar" />
-          <include name="lib/com.google.collections/*.jar" />
+          <include name="lib/com.google.guava/*.jar" />
           <include name="lib/org.apache.commons/*.jar" />
           <include name="lib/org.simpleframework.xml/*.jar" />
           <include name="lib/org.codehaus.woodstox/*.jar" />

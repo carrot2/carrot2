@@ -88,7 +88,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
         Class<? extends IProcessingComponent>... cachedComponentClasses)
     {
         this.delegate = delegate;
-        this.cachedComponentClasses = ImmutableSet.of(cachedComponentClasses);
+        this.cachedComponentClasses = ImmutableSet.copyOf(cachedComponentClasses);
 
         // Initialize cache
         try
