@@ -3,7 +3,7 @@
 
   <groupId>org.carrot2</groupId>
   <artifactId>rome-fetcher</artifactId>
-  <version>0.7</version>
+  <version>1.0</version>
   <packaging>jar</packaging>
 
   <licenses>

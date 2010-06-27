@@ -3,7 +3,7 @@
 
   <groupId>org.carrot2</groupId>
   <artifactId>rome</artifactId>
-  <version>1.0.RC1</version>
+  <version>1.0</version>
   <packaging>jar</packaging>
 
   <licenses>
