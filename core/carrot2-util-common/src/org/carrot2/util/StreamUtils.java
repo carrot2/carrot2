@@ -164,19 +164,4 @@ public final class StreamUtils
      * A dummy writer with empty implementations of {@link Writer} methods.
      */
     public static final Writer NULL_WRITER = new NullWriter();
-
-    /**
-     * Close quietly.
-     */
-    public static void closeQuietly(InputStream inputStream)
-    {
-        try
-        {
-            inputStream.close();
-        }
-        catch (IOException e)
-        {
-            // ignore.
-        }
-    }
 }
