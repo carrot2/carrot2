@@ -40,12 +40,16 @@ public class DcsAppTest
 {
     private static DcsApp dcs;
 
+    private static String appenderProp;
     private static String KEY_KACZYNSKI = "/xml/carrot2-kaczynski.utf8.xml";
     private static HashMap<String, File> testFiles = Maps.newHashMap();
 
     @BeforeClass
     public static void startDcs() throws Exception
     {
+        appenderProp = System.getProperty(RestProcessorServlet.ENABLE_CUSTOM_APPENDER);
+        System.setProperty(RestProcessorServlet.ENABLE_CUSTOM_APPENDER, "false");
+
         dcs = new DcsApp("dcs");
         dcs.port = 57913;
         dcs.start(System.getProperty("dcs.test.web.dir.prefix"));
@@ -79,6 +83,11 @@ public class DcsAppTest
     public static void stopDcs() throws Exception
     {
         dcs.stop();
+        
+        if (appenderProp != null)
+            System.setProperty(RestProcessorServlet.ENABLE_CUSTOM_APPENDER, appenderProp);
+        else
+            System.clearProperty(RestProcessorServlet.ENABLE_CUSTOM_APPENDER);
     }
 
     @Test

@@ -38,6 +38,9 @@ import com.google.common.collect.Maps;
  */
 public final class RestProcessorServlet extends HttpServlet
 {
+    /** System property to enable/ disable custom appenders. */
+    final static String ENABLE_CUSTOM_APPENDER = "custom.appender";
+
     /** Response constants */
     private final static String UTF8 = "UTF-8";
     private final static String MIME_XML_UTF8 = "text/xml; charset=" + UTF8;
@@ -54,6 +57,13 @@ public final class RestProcessorServlet extends HttpServlet
     private transient boolean loggerInitialized;
 
     private String defaultAlgorithmId;
+    
+    /**
+     * Enable custom Log4J appender configured in {@link #getLogAppender(HttpServletRequest)}. 
+     * The appender is disabled for tests.
+     */
+    private boolean enableCustomAppender = "true".equalsIgnoreCase(
+        System.getProperty(ENABLE_CUSTOM_APPENDER, "true"));
 
     @Override
     @SuppressWarnings("unchecked")
@@ -133,7 +143,10 @@ public final class RestProcessorServlet extends HttpServlet
         {
             if (!loggerInitialized)
             {
-                Logger.getRootLogger().addAppender(getLogAppender(request));
+                if (enableCustomAppender)
+                {
+                    Logger.getRootLogger().addAppender(getLogAppender(request));
+                }
                 loggerInitialized = true;
             }
         }
