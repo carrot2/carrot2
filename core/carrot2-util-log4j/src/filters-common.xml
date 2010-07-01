@@ -31,3 +31,6 @@
 
 <!-- JAWR -->
 <logger name="net.jawr"><level value="warn" /></logger>
+
+<!--  HTMLUnit -->
+<logger name="com.gargoylesoftware.htmlunit"><level value="warn" /></logger>
