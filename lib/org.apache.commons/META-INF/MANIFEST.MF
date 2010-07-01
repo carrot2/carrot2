@@ -70,5 +70,5 @@ Export-Package: org.apache.commons.codec,
  org.apache.commons.lang.mutable,
  org.apache.commons.lang.text,
  org.apache.commons.lang.time
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.commons.logging

@@ -12,4 +12,4 @@ Export-Package: morfologik.fsa,
  morfologik.stemming,
  morfologik.tools,
  morfologik.util
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -6,4 +6,4 @@ Bundle-Version: 1.0.0
 Bundle-ClassPath: nni.jar
 Export-Package: nni
 Bundle-Vendor: BLAS/LAPACK
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

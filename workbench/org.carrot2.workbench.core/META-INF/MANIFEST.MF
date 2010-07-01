@@ -26,5 +26,5 @@ Export-Package: org.carrot2.workbench.core,
  org.carrot2.workbench.editors,
  org.carrot2.workbench.editors.factory,
  org.carrot2.workbench.velocity
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Carrot2.org

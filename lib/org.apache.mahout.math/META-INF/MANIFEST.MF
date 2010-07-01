@@ -24,5 +24,5 @@ Export-Package:
  org.apache.mahout.math.matrix.linalg,
  org.apache.mahout.math.stats
 Bundle-Vendor: Apache Foundation
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.slf4j;bundle-version="1.5.8"

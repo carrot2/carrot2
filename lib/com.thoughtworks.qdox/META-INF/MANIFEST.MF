@@ -17,4 +17,4 @@ Export-Package: com.thoughtworks.qdox,
  com.thoughtworks.qdox.tools
 Require-Bundle: org.apache.ant
 Bundle-Vendor: com.thoughtworks.qdox
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

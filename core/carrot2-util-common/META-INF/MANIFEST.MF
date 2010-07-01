@@ -21,4 +21,4 @@ Require-Bundle: org.apache.commons;visibility:=reexport,
 Bundle-ClassPath: .
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: dependent,registered
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

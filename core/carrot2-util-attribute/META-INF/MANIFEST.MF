@@ -15,4 +15,4 @@ Require-Bundle: org.carrot2.util.common;visibility:=reexport,
  org.apache.ant;bundle-version="1.7.0";resolution:=optional
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: registered
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

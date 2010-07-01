@@ -12,4 +12,4 @@ Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.util.common;bundle-version="0.0.0";visibility:=reexport,
  org.apache.mahout.math;bundle-version="0.3.0";visibility:=reexport,
  com.carrotsearch.nni;bundle-version="0.0.0";resolution:=optional
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

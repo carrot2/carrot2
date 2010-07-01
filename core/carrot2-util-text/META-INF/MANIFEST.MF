@@ -21,4 +21,4 @@ Export-Package: org.carrot2.text.analysis,
  org.carrot2.text.util,
  org.carrot2.text.vsm
 Bundle-Vendor: Carrot2.org
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

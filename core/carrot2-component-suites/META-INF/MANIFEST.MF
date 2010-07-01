@@ -22,4 +22,4 @@ Require-Bundle: org.carrot2.core,
  org.carrot2.source.lucene;resolution:=optional;visibility:=reexport,
  org.carrot2.source.ambient;resolution:=optional;visibility:=reexport,
  org.carrot2.output.metrics;resolution:=optional
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
