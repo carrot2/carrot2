@@ -12,6 +12,8 @@
 
 package org.carrot2.matrix.nni;
 
+import java.util.Arrays;
+
 import nni.LAPACK;
 
 import org.carrot2.matrix.NNIDenseDoubleMatrix2D;
@@ -110,8 +112,7 @@ public final class LapackImpl implements ILapackOperations
         // Copy the data array of the A matrix (LAPACK will overwrite the
         // input data)
         final double [] data = A.getData();
-        double [] dataA = new double [data.length];
-        System.arraycopy(data, 0, dataA, 0, dataA.length);
+        double [] dataA = Arrays.copyOf(data, data.length);
 
         LAPACK.syevr(new char []
         {
@@ -211,8 +212,7 @@ public final class LapackImpl implements ILapackOperations
         // Copy the data array of the A matrix (LAPACK will overwrite the
         // input data)
         double [] data = A.getData();
-        double [] dataA = new double [data.length];
-        System.arraycopy(data, 0, dataA, 0, dataA.length);
+        double [] dataA = Arrays.copyOf(data, data.length);
 
         LAPACK.geev(new char []
         {

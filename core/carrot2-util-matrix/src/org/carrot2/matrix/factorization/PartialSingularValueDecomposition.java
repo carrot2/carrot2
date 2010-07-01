@@ -12,6 +12,8 @@
 
 package org.carrot2.matrix.factorization;
 
+import java.util.Arrays;
+
 import org.carrot2.matrix.*;
 
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
@@ -105,8 +107,7 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
             // Copy the data array of the A matrix (LAPACK will overwrite the
             // input data)
             final double [] data = ((NNIDenseDoubleMatrix2D) A).getData();
-            double [] dataA = new double [data.length];
-            System.arraycopy(data, 0, dataA, 0, dataA.length);
+            double [] dataA = Arrays.copyOf(data, data.length);
 
             int [] info = new int [1];
 
