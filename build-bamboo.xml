@@ -89,11 +89,7 @@
 
     <target name="check">
       <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
-      
-      <echo>
-        workbench.properties=${workbench.properties}
-        dist.dir=${dist.dir}
-      </echo>
+
       <echo>All required variables defined.</echo>
     </target>
 </project>
