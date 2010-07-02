@@ -40,6 +40,16 @@ import com.google.common.collect.*;
 public class CachingProcessingComponentManager implements IProcessingComponentManager,
     Controller.IControllerStatisticsProvider
 {
+    static
+    {
+        /*
+         * Disable ehcache update check, unless explicitly given.
+         */
+        if (System.getProperty("net.sf.ehcache.skipUpdateCheck") == null)
+        {
+            System.setProperty("net.sf.ehcache.skipUpdateCheck", "true");
+        }
+    }
     /** The delegate manager that prepares the actual processing components */
     private final IProcessingComponentManager delegate;
 
