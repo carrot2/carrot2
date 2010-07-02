@@ -120,7 +120,7 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
         return getCachingController(IProcessingComponent.class);
     }
     
-    @Test
+    @Test @Ignore
     public void testConcurrentDocumentModifications()
     {
         final Controller c = prepareController();
