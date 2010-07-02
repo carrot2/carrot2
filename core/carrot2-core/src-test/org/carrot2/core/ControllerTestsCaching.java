@@ -15,6 +15,11 @@ package org.carrot2.core;
 import static org.easymock.EasyMock.isA;
 import static org.junit.Assert.assertEquals;
 
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
+
+import org.carrot2.core.attribute.*;
+import org.carrot2.util.attribute.*;
 import org.junit.*;
 
 import com.google.common.collect.Maps;
@@ -29,6 +34,70 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
      * functionality. 
      */
     public abstract Controller getCachingController(Class<? extends IProcessingComponent>... cachedComponentClasses);
+
+    /**
+     * @see ControllerTestsCaching#testConcurrentDocumentModifications()
+     */
+    @Bindable
+    public static class ConcurrentComponent1 extends ProcessingComponentBase
+    {
+        volatile static CountDownLatch latch1;
+        volatile static CountDownLatch latch2;
+
+        @Processing
+        @Input
+        @Required
+        @Attribute(key = AttributeNames.DOCUMENTS)
+        public List<Document> documents;
+
+        @Override @SuppressWarnings("unused")
+        public void process() throws ProcessingException
+        {
+            /*
+             * Iterate over documents' fields, slowly...
+             */
+            try
+            {
+                for (Document d : documents)
+                {
+                    for (Map.Entry<String, Object> f : d.getFields().entrySet())
+                    {
+                        latch1.countDown();
+                        latch2.await();
+                    }
+                }
+            }
+            catch (InterruptedException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * @see ControllerTestsCaching#testConcurrentDocumentModifications()
+     */
+    @Bindable
+    public static class ConcurrentComponent2 extends ConcurrentComponent1
+    {
+        @Override
+        public void process() throws ProcessingException
+        {
+            try
+            {
+                latch1.await();
+                for (Document d : documents)
+                {
+                    d.setField("new-field", new Object());
+                }
+                latch2.countDown();
+            }
+            catch (InterruptedException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     public boolean hasPooling()
     {
@@ -49,6 +118,26 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
     public Controller prepareController()
     {
         return getCachingController(IProcessingComponent.class);
+    }
+    
+    @Test
+    public void testConcurrentDocumentModifications()
+    {
+        final Controller c = prepareController();
+
+        final HashMap<String, Object> attrs = Maps.newHashMap();
+        attrs.put(AttributeNames.DOCUMENTS, Arrays.asList(new Document("title", "summary")));
+
+        ConcurrentComponent1.latch1 = new CountDownLatch(1);
+        ConcurrentComponent1.latch2 = new CountDownLatch(1);
+
+        new Thread() {
+            public void run() {
+                c.process(attrs, ConcurrentComponent2.class);
+            }
+        }.start();
+
+        c.process(attrs, ConcurrentComponent1.class);
     }
 
     @Test
