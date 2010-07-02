@@ -157,8 +157,15 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
 
     public void dispose()
     {
-        delegate.dispose();
-        cacheManager.removeCache(dataCache.getName());
+        try
+        {
+            delegate.dispose();
+            cacheManager.removeCache(dataCache.getName());
+        }
+        finally
+        {
+            cacheManager.shutdown();
+        }
     }
 
     public Map<String, Object> getStatistics()
