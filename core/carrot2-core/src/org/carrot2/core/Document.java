@@ -90,10 +90,10 @@ public final class Document
     public static final String PARTITIONS = "partitions";
 
     /** Fields of this document */
-    private Map<String, Object> fields = Maps.newHashMap();
+    private final Map<String, Object> fields = Maps.newHashMap();
 
     /** Read-only collection of fields exposed in {@link #getField(String)}. */
-    private Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
+    private final Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
 
     /**
      * Internal identifier of the document. This identifier is assigned dynamically after
@@ -331,7 +331,10 @@ public final class Document
     @SuppressWarnings("unchecked")
     public <T> T getField(String name)
     {
-        return (T) fields.get(name);
+        synchronized (fields)
+        {
+            return (T) fields.get(name);
+        }
     }
 
     /**
