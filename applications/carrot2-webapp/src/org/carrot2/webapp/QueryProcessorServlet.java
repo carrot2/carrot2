@@ -12,8 +12,7 @@
 
 package org.carrot2.webapp;
 
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -389,19 +388,30 @@ public class QueryProcessorServlet extends HttpServlet
 
         // Send response, sets encoding of the response writer.
         response.setContentType(MIME_XML_UTF8);
-        final PageModel pageModel = new PageModel(webappConfig, request, requestModel,
-            jawrUrlGenerator, processingResult, processingException);
 
-        final Persister persister = new Persister(
-            getPersisterFormat(pageModel.requestModel));
-
+        final Persister persister = new Persister(getPersisterFormat(requestModel));
+        final PrintWriter writer = response.getWriter();
         if (RequestType.CARROT2.equals(requestModel.type))
         {
-            persister.write(processingResult, response.getWriter());
+            // Check for an empty processing result.
+            if (processingException != null)
+            {
+                response.sendError(
+                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "Internal server error: " + processingException.getMessage());
+                return;
+            }
+
+            persister.write(processingResult, writer);
         }
         else
         {
-            persister.write(pageModel, response.getWriter());
+            response.setContentType(MIME_XML_UTF8);
+
+            final PageModel pageModel = new PageModel(webappConfig, request, requestModel,
+                jawrUrlGenerator, processingResult, processingException);
+
+            persister.write(pageModel, writer);
         }
     }
 
