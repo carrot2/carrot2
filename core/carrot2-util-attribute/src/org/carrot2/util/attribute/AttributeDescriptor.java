@@ -20,7 +20,6 @@ import org.apache.commons.lang.ClassUtils;
 import org.carrot2.util.ListUtils;
 import org.carrot2.util.attribute.constraint.*;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.core.Persist;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -140,6 +139,8 @@ public class AttributeDescriptor
         this.inputAttribute = field.getAnnotation(Input.class) != null;
         this.outputAttribute = field.getAnnotation(Output.class) != null;
         this.requiredAttribute = field.getAnnotation(Required.class) != null;
+
+        prepareForSerialization();
     }
 
     /**
@@ -201,12 +202,10 @@ public class AttributeDescriptor
         return key + "=" + type;
     }
 
-    @Persist
-    @SuppressWarnings(
-    {
-        "unused", "unchecked"
-    })
-    private void beforeSerialization()
+    /**
+     * @see "http://issues.carrot2.org/browse/CARROT-693"
+     */
+    private void prepareForSerialization()
     {
         attributeFieldString = attributeField.getName();
 
@@ -227,9 +226,9 @@ public class AttributeDescriptor
             }
             else
             {
-                if (defaultValue instanceof Enum)
+                if (defaultValue instanceof Enum<?>)
                 {
-                    defaultValueString = ((Enum) defaultValue).name();
+                    defaultValueString = ((Enum<?>) defaultValue).name();
                 }
                 else
                 {
