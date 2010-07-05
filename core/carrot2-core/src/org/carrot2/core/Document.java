@@ -442,12 +442,12 @@ public final class Document
             // to avoid concurrent modification exceptions in setters
             otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
                 .wrap(fields));
+            otherFieldsForSerialization.remove(TITLE);
+            otherFieldsForSerialization.remove(SUMMARY);
+            otherFieldsForSerialization.remove(CONTENT_URL);
+            otherFieldsForSerialization.remove(SOURCES);
+            otherFieldsForSerialization.remove(LANGUAGE);
         }
-        otherFieldsForSerialization.remove(TITLE);
-        otherFieldsForSerialization.remove(SUMMARY);
-        otherFieldsForSerialization.remove(CONTENT_URL);
-        otherFieldsForSerialization.remove(SOURCES);
-        otherFieldsForSerialization.remove(LANGUAGE);
     }
 
     /**
