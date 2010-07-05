@@ -440,8 +440,8 @@ public final class Document
         {
             // Wrapper iterates over the whole map, so we need to synchronize
             // to avoid concurrent modification exceptions in setters
-            otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
-                .wrap(fields));
+            otherFieldsForSerialization = 
+                MapUtils.asHashMap(SimpleXmlWrappers.wrap(fields));
             otherFieldsForSerialization.remove(TITLE);
             otherFieldsForSerialization.remove(SUMMARY);
             otherFieldsForSerialization.remove(CONTENT_URL);
@@ -463,6 +463,7 @@ public final class Document
             {
                 fields.putAll(SimpleXmlWrappers.unwrap(otherFieldsForSerialization));
             }
+            otherFieldsForSerialization = null;
         }
     }
 }
