@@ -176,32 +176,41 @@ public final class ProcessingResult
     @SuppressWarnings("unused")
     private void beforeSerialization()
     {
-        query = (String) attributes.get(AttributeNames.QUERY);
-        if (getDocuments() != null)
+        /*
+         * See http://issues.carrot2.org/browse/CARROT-693; this monitor does not save us
+         * in multi-threaded environment anyway. A better solution would be to prepare this
+         * eagerly in the constructor, but we try to balance overhead and full correctness here.
+         */
+        synchronized (this)
         {
-            documents = Lists.newArrayList(getDocuments());
-        }
-        else
-        {
-            documents = null;
-        }
-        if (getClusters() != null)
-        {
-            clusters = Lists.newArrayList(getClusters());
-        }
-        else
-        {
-            clusters = null;
-        }
-
-        otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
-            .wrap(attributes));
-        otherAttributesForSerialization.remove(AttributeNames.QUERY);
-        otherAttributesForSerialization.remove(AttributeNames.CLUSTERS);
-        otherAttributesForSerialization.remove(AttributeNames.DOCUMENTS);
-        if (otherAttributesForSerialization.isEmpty())
-        {
-            otherAttributesForSerialization = null;
+            query = (String) attributes.get(AttributeNames.QUERY);
+    
+            if (getDocuments() != null)
+            {
+                documents = Lists.newArrayList(getDocuments());
+            }
+            else
+            {
+                documents = null;
+            }
+    
+            if (getClusters() != null)
+            {
+                clusters = Lists.newArrayList(getClusters());
+            }
+            else
+            {
+                clusters = null;
+            }
+    
+            otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers.wrap(attributes));
+            otherAttributesForSerialization.remove(AttributeNames.QUERY);
+            otherAttributesForSerialization.remove(AttributeNames.CLUSTERS);
+            otherAttributesForSerialization.remove(AttributeNames.DOCUMENTS);
+            if (otherAttributesForSerialization.isEmpty())
+            {
+                otherAttributesForSerialization = null;
+            }
         }
     }
 
