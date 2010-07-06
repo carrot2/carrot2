@@ -31,7 +31,7 @@ public final class ControllerFactory
     
     /**
      * Creates a controller with no processing component pooling and no results caching.
-     * The returned controller will instantiate new processing components object for each
+     * The returned controller will instantiate new processing component instances for each
      * processing request and will not perform any caching of the processing results.
      * <p>
      * This controller is useful for one-time processing or fast experiments with the
