@@ -18,14 +18,14 @@ import org.mortbay.jetty.webapp.WebAppContext;
 
 public class WebApp
 {
-    /**
-     * Starts embedded JETTY server.
-     */
-    private void startJetty(final int port) throws Exception
+    Server server;
+
+    void start(int port) throws Exception
     {
-        final Server server = new Server();
+        server = new Server();
         SelectChannelConnector connector = new SelectChannelConnector();
         connector.setPort(port);
+        connector.setReuseAddress(false);
         connector.setAcceptQueueSize(20);
         server.addConnector(connector);
 
@@ -34,12 +34,38 @@ public class WebApp
         wac.setContextPath("/");
         wac.setWar("web");
         wac.setDefaultsDescriptor("etc/webdefault.xml");
+
         server.setHandler(wac);
         server.setStopAtShutdown(true);
 
-        server.start();
+        // Start the http server.
+        try
+        {
+            server.start();
+        }
+        catch (Exception e)
+        {
+            stop();
+            throw e;
+        }
     }
 
+    void stop()
+    {
+        if (server != null)
+        {
+            try
+            {
+                server.stop();
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    
     /**
      * Command-line entry point.
      */
@@ -55,7 +81,6 @@ public class WebApp
          */
         System.setProperty("org.mortbay.util.URI.charset", "UTF-8");
 
-        final int port = 8080;
-        new WebApp().startJetty(port);
+        new WebApp().start(8080);
     }
 }
