@@ -86,7 +86,6 @@ public class QueryProcessorServlet extends HttpServlet
      * Servlet lifecycle.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public void init(ServletConfig config) throws ServletException
     {
         super.init(config);
@@ -109,7 +108,7 @@ public class QueryProcessorServlet extends HttpServlet
         /*
          * Initialize the controller.
          */
-        controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
+        controller = ControllerFactory.createCachingPooling(ResultsCacheModel.toClassArray(webappConfig.caches));
         controller.init(new HashMap<String, Object>(), webappConfig.components.getComponentConfigurations());
 
         jawrUrlGenerator = new JawrUrlGenerator(servletContext);

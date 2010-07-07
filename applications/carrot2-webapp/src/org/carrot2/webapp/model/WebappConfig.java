@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -35,7 +34,8 @@ import com.google.common.collect.*;
  */
 public class WebappConfig
 {
-    private final static Logger log = org.slf4j.LoggerFactory.getLogger(WebappConfig.class);
+    private final static Logger log = org.slf4j.LoggerFactory
+        .getLogger(WebappConfig.class);
 
     @Element(required = false)
     public ProcessingComponentSuite components;
@@ -69,6 +69,9 @@ public class WebappConfig
     @ElementList(entry = "view")
     public ArrayList<ResultsViewModel> views;
 
+    @ElementList(entry = "cache", required = false)
+    public ArrayList<ResultsCacheModel> caches = Lists.newArrayList();
+    
     @Attribute(name = "skins-folder")
     public String skinsFolder;
 
@@ -104,8 +107,8 @@ public class WebappConfig
     public final static String SKIN_PARAM = "skin";
 
     /*
-     * TODO: can we move all these assertions to a method in @Commit or inside deserialize and
-     * then move the entire initialization code to QueryProcessorServlet?
+     * TODO: can we move all these assertions to a method in @Commit or inside deserialize
+     * and then move the entire initialization code to QueryProcessorServlet?
      */
     /**
      * @return Initialize the global configuration and return it.
@@ -135,20 +138,16 @@ public class WebappConfig
             }
 
             // Load component suite
-            conf.components = ProcessingComponentSuite.deserialize(
-                resUtils.getFirst(conf.componentSuite));
+            conf.components = ProcessingComponentSuite.deserialize(resUtils
+                .getFirst(conf.componentSuite));
 
-            log.info("Loaded " + conf.components.getSources().size()
-                + " sources and " + conf.components.getAlgorithms().size()
-                + " algorithms");
+            log.info("Loaded " + conf.components.getSources().size() + " sources and "
+                + conf.components.getAlgorithms().size() + " algorithms");
 
             // Prepare attribute descriptors for document sources
-            conf.sourceAttributeMetadata = 
-                prepareSourceAttributeMetadata(conf.components);
-            conf.sourceInitializationAttributes = 
-                prepareSourceInitializationAttributes(conf.components);
-            conf.componentInternalAttributeKeys = 
-                prepareComponentInternalAttributeKeys(conf.components);
+            conf.sourceAttributeMetadata = prepareSourceAttributeMetadata(conf.components);
+            conf.sourceInitializationAttributes = prepareSourceInitializationAttributes(conf.components);
+            conf.componentInternalAttributeKeys = prepareComponentInternalAttributeKeys(conf.components);
 
             return conf;
         }
