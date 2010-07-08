@@ -68,6 +68,7 @@ public class QueryProcessorServlet extends HttpServlet
 
     /** @see UnknownToDefaultTransformer */
     private UnknownToDefaultTransformer unknownToDefaultTransformer;
+    private UnknownToDefaultTransformer unknownToDefaultTransformerWithMaxResults;
 
     /**
      * Define this system property to enable statistical information from the query
@@ -103,7 +104,8 @@ public class QueryProcessorServlet extends HttpServlet
          * Initialize global configuration and publish it.
          */
         this.webappConfig = WebappConfig.getSingleton();
-        this.unknownToDefaultTransformer = new UnknownToDefaultTransformer(webappConfig);
+        this.unknownToDefaultTransformer = new UnknownToDefaultTransformer(webappConfig, false);
+        this.unknownToDefaultTransformerWithMaxResults = new UnknownToDefaultTransformer(webappConfig, true);
 
         /*
          * Initialize the controller.
@@ -182,12 +184,21 @@ public class QueryProcessorServlet extends HttpServlet
         {
             // Build model for this request
             final RequestModel requestModel = new RequestModel(webappConfig);
-
             requestModel.modern = UserAgentUtils.isModernBrowser(request);
-            final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = new AttributeBinder.AttributeBinderActionBind(
-                Input.class, requestParameters, true,
-                AttributeBinder.AttributeTransformerFromString.INSTANCE,
-                unknownToDefaultTransformer);
+
+            // Request type is normally bound to the model, but we need to know
+            // the type before binding to choose the unknown values resolution strategy
+            final String requestType = (String)requestParameters.get(WebappConfig.TYPE_PARAM);
+            
+            final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = 
+                new AttributeBinder.AttributeBinderActionBind(
+                    Input.class,
+                    requestParameters,
+                    true,
+                    AttributeBinder.AttributeTransformerFromString.INSTANCE,
+                    RequestType.CARROT2DOCUMENTS.name().equals(requestType) ? 
+                        unknownToDefaultTransformerWithMaxResults : 
+                        unknownToDefaultTransformer);
             AttributeBinder.bind(requestModel,
                 new AttributeBinder.IAttributeBinderAction []
                 {
@@ -371,6 +382,11 @@ public class QueryProcessorServlet extends HttpServlet
                         processingResult = controller.process(requestParameters,
                             requestModel.source, QueryWordHighlighter.class.getName());
                         break;
+                        
+                    case CARROT2DOCUMENTS:
+                        processingResult = controller.process(requestParameters,
+                            requestModel.source);
+                        break;
 
                     default:
                         throw new RuntimeException("Should not reach here.");
@@ -390,7 +406,8 @@ public class QueryProcessorServlet extends HttpServlet
 
         final Persister persister = new Persister(getPersisterFormat(requestModel));
         final PrintWriter writer = response.getWriter();
-        if (RequestType.CARROT2.equals(requestModel.type))
+        if (RequestType.CARROT2.equals(requestModel.type) || 
+            RequestType.CARROT2DOCUMENTS.equals(requestModel.type))
         {
             // Check for an empty processing result.
             if (processingException != null)
@@ -472,10 +489,16 @@ public class QueryProcessorServlet extends HttpServlet
         private final Map<String, Collection<?>> knownValues;
         private final Map<String, Object> defaultValues;
 
-        public UnknownToDefaultTransformer(WebappConfig config)
+        private final boolean useMaxCarrot2Results;
+        private final Integer maxCarrot2Results;
+        
+        public UnknownToDefaultTransformer(WebappConfig config, boolean useMaxCarrot2Results)
         {
             knownValues = Maps.newHashMap();
             defaultValues = Maps.newHashMap();
+            
+            this.maxCarrot2Results = config.maxCarrot2Results;
+            this.useMaxCarrot2Results = useMaxCarrot2Results;
 
             // Result sizes
             final Set<Integer> resultSizes = Sets.newHashSet();
@@ -531,6 +554,26 @@ public class QueryProcessorServlet extends HttpServlet
         {
             final Object defaultValue = defaultValues.get(key);
 
+            if (maxCarrot2Results != null && useMaxCarrot2Results
+                && WebappConfig.RESULTS_PARAM.equals(key))
+            {
+                if (value == null)
+                {
+                    return defaultValues.get(key);
+                }
+                
+                // Just check if the requested number of results is smaller than
+                // the maximum configured for this instance of the webapp
+                if (((Integer) value) <= maxCarrot2Results)
+                {
+                    return value;
+                }
+                else
+                {
+                    return maxCarrot2Results;
+                }
+            }
+            
             // Check if we want to handle this attribute at all
             if (defaultValue != null)
             {

@@ -84,6 +84,9 @@ public class WebappConfig
     @Attribute(name = "xml-url", required = false)
     public final String xmlUrl = "xml";
 
+    @Attribute(name = "max-carrot2-results", required = false)
+    public Integer maxCarrot2Results = null;
+
     @Attribute(name = "query-param", required = false)
     public final static String QUERY_PARAM = AttributeNames.QUERY;
     public final static String QUERY_PARAM_ALIAS = "q";
