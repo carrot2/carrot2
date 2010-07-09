@@ -102,7 +102,30 @@ public class HttpUtils
         Collection<Header> headers, String user, String password) throws HttpException,
         IOException
     {
-        final HttpClient client = HttpClientFactory.getTimeoutingClient();
+        return doGET(url, params, headers, user, password, HttpClientFactory.DEFAULT_TIMEOUT);
+    }
+    
+    /**
+     * Opens a HTTP/1.1 connection to the given URL using the GET method, decompresses
+     * compressed response streams, if supported by the server.
+     * 
+     * @param url The URL to open. The URL must be properly escaped, this method will
+     *            <b>not</b> perform any escaping.
+     * @param params Query string parameters to be attached to the url.
+     * @param headers Any extra HTTP headers to add to the request.
+     * @param user if not <code>null</code>, the user name to send during Basic
+     *            Authentication
+     * @param password if not <code>null</code>, the password name to send during Basic
+     *            Authentication
+     * @return The {@link HttpUtils.Response} object. Note that entire payload is read and
+     *         buffered so that the HTTP connection can be closed when leaving this
+     *         method.
+     */
+    public static Response doGET(String url, Collection<NameValuePair> params,
+        Collection<Header> headers, String user, String password, int timeout) throws HttpException,
+        IOException
+        {
+        final HttpClient client = HttpClientFactory.getTimeoutingClient(timeout);
         client.getParams().setVersion(HttpVersion.HTTP_1_1);
 
         final GetMethod request = new GetMethod();

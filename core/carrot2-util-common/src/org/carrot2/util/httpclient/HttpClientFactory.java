@@ -34,7 +34,7 @@ public final class HttpClientFactory
     /**
      * Default timeout for {@link #getTimeoutingClient()} in milliseconds.
      */
-    private static int DEFAULT_TIMEOUT = 8 * 1000;
+    static int DEFAULT_TIMEOUT = 8 * 1000;
 
     /*
      * 

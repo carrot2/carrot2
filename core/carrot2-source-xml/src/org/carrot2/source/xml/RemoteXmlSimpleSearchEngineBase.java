@@ -21,12 +21,14 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
+import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.resource.IResource;
 
 /**
  * A base class for implementing data sources based on XML/XSLT. The XSLT stylesheet will
  * be loaded once during component initialization and cached for all further requests.
  */
+@Bindable
 public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
 {
     /** A helper class that groups common functionality for XML/XSLT based data sources. */
