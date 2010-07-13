@@ -100,6 +100,7 @@ body, input, select, label, button {
   border: 1px solid #0054a6;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+  border-radius: 3px;
   padding: 2px 2px 1px 2px;
   margin-right: 3px; 
   -height: 20px;
@@ -115,6 +116,7 @@ body, input, select, label, button {
   border: 1px solid #b6afa8;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+  border-radius: 3px;
   padding: 3px 2px 3px 2px;
   margin-right: 3px; 
   width: 350px;
@@ -187,6 +189,8 @@ body, input, select, label, button {
   right: 0px;
   border: 1px solid #B6AFA8;
   -moz-border-radius: 5px; 
+  -webkit-border-radius: 5px; 
+  border-radius: 5px; 
   margin: 10px;
   margin-top: 0;
   -width: expression(document.documentElement.clientWidth - 20);
@@ -219,6 +223,10 @@ body, input, select, label, button {
   border-top: 1px solid #e0e0e0;
   -moz-border-radius-bottomleft: 5px;
   -moz-border-radius-bottomright: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
   padding: 0 4px;
   -width: expression(document.documentElement.clientWidth - 29);
 }

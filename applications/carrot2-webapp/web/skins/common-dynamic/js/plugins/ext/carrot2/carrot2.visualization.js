@@ -16,7 +16,7 @@
           documentsPanel: "AUTO",
           maxVisibleDocuments: 400,
 
-          logo: "carrot2"
+          logo: jQuery.visualization.logo
         };
 
       var params = {};

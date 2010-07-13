@@ -93,7 +93,9 @@
     <script src="{.}" type="text/javascript"><xsl:comment></xsl:comment></script>
   </xsl:template>
   
-  <xsl:template match="/page" mode="js" />
+  <xsl:template match="/page" mode="js">
+    <xsl:apply-imports />
+  </xsl:template>
   
   <!-- Body tag id -->
   <xsl:template name="page-body-id">
@@ -112,7 +114,7 @@
   <xsl:template match="page[@type = 'PAGE' or @type = 'FULL' or @type = 'SOURCES']">
     <div><!-- We need this extra div to fix IE7 bug: http://www.brunildo.org/test/IEWapie2.html -->
       <xsl:if test="/page/request/@modern = 'false'">
-        <span id="use-modern">Use a <a href="http://browsehappy.com/">modern browser</a> for best experience!</span>
+        <xsl:apply-templates select=".."  mode="old-browser-text" />
       </xsl:if>
                 
       <div id="logo">
@@ -414,9 +416,7 @@
   
   <xsl:template match="page" mode="source-descriptions">
     <div id="search-area">
-      <p id="source-descriptions-intro">
-        Carrot<sup>2</sup> clusters results from the following search feeds:
-      </p>
+      <xsl:apply-templates select=".." mode="document-sources-intro" />    
       <ul id="source-descriptions" class="tabs">
         <xsl:apply-templates select="//source" mode="source-descriptions" />
       </ul>
