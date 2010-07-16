@@ -24,7 +24,6 @@ import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.Init;
-import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;

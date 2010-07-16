@@ -15,7 +15,6 @@ package org.carrot2.text.preprocessing;
 import java.util.List;
 
 import org.carrot2.core.Document;
-import org.carrot2.text.analysis.ITokenTypeAttribute;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.ILanguageModel;
 import org.carrot2.text.linguistic.IStemmer;
