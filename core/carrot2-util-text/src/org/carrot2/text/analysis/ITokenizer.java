@@ -14,10 +14,9 @@ package org.carrot2.text.analysis;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.LanguageModelStemmer;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.preprocessing.StopListMarker;
-import org.carrot2.text.preprocessing.Tokenizer;
 import org.carrot2.text.util.MutableCharArray;
 
 /**

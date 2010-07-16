@@ -234,7 +234,6 @@ public class ExtendedLanguageModelFactory extends DefaultLanguageModelFactory
                 this.sentenceTokenizer = new SentenceTokenizer(null);
             }
 
-            @Override
             public short nextToken() throws IOException
             {
                 final boolean hasNextToken = wordTokenFilter.incrementToken();
@@ -264,13 +263,11 @@ public class ExtendedLanguageModelFactory extends DefaultLanguageModelFactory
                 return ITokenizer.TT_EOF;
             }
 
-            @Override
             public void setTermBuffer(MutableCharArray array)
             {
                 array.reset(term.termBuffer(), 0, term.termLength());
             }
 
-            @Override
             public void reset(Reader input) throws IOException
             {
                 try
