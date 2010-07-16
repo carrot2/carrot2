@@ -14,7 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.carrot2.text.analysis.ITokenTypeAttribute;
+import org.carrot2.text.analysis.ITokenizer;
 import org.junit.Before;
 
 /**
@@ -63,7 +63,7 @@ public class StemmerTestBase extends PreprocessingComponentTestBase
         System.arraycopy(context.allWords.type, 0, cloned, 0, context.allWords.type.length);
 
         for (int i = 0; i < cloned.length; i++)
-            cloned[i] &= ITokenTypeAttribute.TF_QUERY_WORD;
+            cloned[i] &= ITokenizer.TF_QUERY_WORD;
 
         assertThat(cloned).as("allWords.flag")
             .isEqualTo(expectedWordsFlag);

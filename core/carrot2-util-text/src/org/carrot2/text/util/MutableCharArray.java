@@ -131,6 +131,16 @@ public final class MutableCharArray implements CharSequence, Cloneable
     }
     
     /**
+     * @return the offset at which the data <i>currently</i> starts in the buffer.
+     * @see #getBuffer()
+     * @see #length 
+     */
+    public int getStart()
+    {
+        return this.start;
+    }
+    
+    /**
      * 
      */
     public final char charAt(final int index)

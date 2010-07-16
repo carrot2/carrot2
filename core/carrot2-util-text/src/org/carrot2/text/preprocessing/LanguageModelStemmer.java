@@ -15,7 +15,7 @@ package org.carrot2.text.preprocessing;
 import java.util.ArrayList;
 import java.util.Set;
 
-import org.carrot2.text.analysis.ITokenTypeAttribute;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
@@ -40,7 +40,7 @@ import com.google.common.collect.Sets;
  * <li>{@link AllStems#mostFrequentOriginalWordIndex}</li>
  * <li>{@link AllStems#tf}</li>
  * <li>{@link AllStems#tfByDocument}</li>
- * <li>{@link AllWords#type} is populated with {@link ITokenTypeAttribute#TF_QUERY_WORD}</li>
+ * <li>{@link AllWords#type} is populated with {@link ITokenizer#TF_QUERY_WORD}</li>
  * </ul>
  * 
  * This class requires that {@link Tokenizer} and {@link CaseNormalizer} be invoked first.
@@ -157,7 +157,7 @@ public final class LanguageModelStemmer
             stemIndexesArray[orderIndex] = stemIndex;
             if (inQuery)
             {
-                wordsType[orderIndex] |= ITokenTypeAttribute.TF_QUERY_WORD;
+                wordsType[orderIndex] |= ITokenizer.TF_QUERY_WORD;
             }
 
             // Now check if token image is changing
@@ -207,7 +207,7 @@ public final class LanguageModelStemmer
         fieldIndexList.add(fieldIndices);
         if (inQuery)
         {
-            wordsType[stemImagesOrder[stemImagesOrder.length - 1]] |= ITokenTypeAttribute.TF_QUERY_WORD;
+            wordsType[stemImagesOrder[stemImagesOrder.length - 1]] |= ITokenizer.TF_QUERY_WORD;
         }
 
         // Convert lists to arrays and store them in allStems

@@ -28,22 +28,22 @@ public final class TokenTypeUtils
      */
     public static int maskType(int rawType) 
     {
-        return rawType & ITokenTypeAttribute.TYPE_MASK;
+        return rawType & ITokenizer.TYPE_MASK;
     }
 
     /**
-     * Returns <code>true</code> if the given type has {@link ITokenTypeAttribute#TF_SEPARATOR_DOCUMENT} set.
+     * Returns <code>true</code> if the given type has {@link ITokenizer#TF_SEPARATOR_DOCUMENT} set.
      */
     public static boolean isDocumentSeparator(int type)
     {
-        return (type & ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT) != 0;
+        return (type & ITokenizer.TF_SEPARATOR_DOCUMENT) != 0;
     }
     
     /**
-     * Return <code>true</code> if {@link ITokenTypeAttribute#TF_COMMON_WORD} is set.
+     * Return <code>true</code> if {@link ITokenizer#TF_COMMON_WORD} is set.
      */
     public static boolean isCommon(int flag)
     {
-        return (flag & ITokenTypeAttribute.TF_COMMON_WORD) != 0;
+        return (flag & ITokenizer.TF_COMMON_WORD) != 0;
     }    
 }

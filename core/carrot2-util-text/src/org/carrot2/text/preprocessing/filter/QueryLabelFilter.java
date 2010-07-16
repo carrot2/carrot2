@@ -13,7 +13,7 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.text.analysis.ITokenTypeAttribute;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
@@ -63,7 +63,7 @@ public class QueryLabelFilter extends SingleLabelFilterBase
 
     private final boolean isQueryWord(short flag)
     {
-        return (flag & ITokenTypeAttribute.TF_QUERY_WORD) != 0;
+        return (flag & ITokenizer.TF_QUERY_WORD) != 0;
     }
 
     public boolean isEnabled()

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -72,10 +71,11 @@ final class LexicalResources
     /**
      * Loads lexical resources (stop words, stop labels) for a given {@link LanguageCode}.
      */
-    static LexicalResources load(ResourceUtils resourceLoaders, LanguageCode lang, String resourcePath)
+    static LexicalResources load(ResourceUtils resourceLoaders, LanguageCode lang,
+        String resourcePath)
     {
-        return new LexicalResources(loadStopLabels(resourceLoaders, lang, resourcePath), loadStopWords(
-            resourceLoaders, lang, resourcePath));
+        return new LexicalResources(loadStopLabels(resourceLoaders, lang, resourcePath),
+            loadStopWords(resourceLoaders, lang, resourcePath));
     }
 
     /**
@@ -89,9 +89,10 @@ final class LexicalResources
         {
             final Set<MutableCharArray> result = Sets.newHashSet();
 
-            final String resourceName = withSeparator(resourcePath) + "stopwords." + lang.getIsoCode();
+            final String resourceName = withSeparator(resourcePath) + "stopwords."
+                + lang.getIsoCode();
             final IResource resource = resourceLoaders.getFirst(resourceName,
-                DefaultLanguageModelFactory.class);
+                LexicalResources.class);
 
             if (resource == null)
             {
@@ -137,9 +138,10 @@ final class LexicalResources
         {
             final ArrayList<Pattern> result = Lists.newArrayList();
 
-            final String resourceName = withSeparator(resourcePath) + "stoplabels." + lang.getIsoCode();
+            final String resourceName = withSeparator(resourcePath) + "stoplabels."
+                + lang.getIsoCode();
             final IResource resource = resourceLoaders.getFirst(resourceName,
-                DefaultLanguageModelFactory.class);
+                LexicalResources.class);
 
             if (resource == null)
             {
@@ -164,8 +166,11 @@ final class LexicalResources
         }
         catch (IOException e)
         {
-            problemWarn(missingStoplabelsCache, lang, "Stop labels for language "
-                + lang.toString() + " not found: " + e.getMessage());
+            problemWarn(
+                missingStoplabelsCache,
+                lang,
+                "Stop labels for language " + lang.toString() + " not found: "
+                    + e.getMessage());
             return Collections.emptyList();
         }
     }
@@ -178,7 +183,7 @@ final class LexicalResources
         return !missingStoplabelsCache.isEmpty() || !missingStoplabelsCache.isEmpty()
             || !regexpProblemsCache.isEmpty();
     }
-    
+
     /**
      * Used for testing only.
      */
@@ -188,7 +193,7 @@ final class LexicalResources
         missingStoplabelsCache.clear();
         regexpProblemsCache.clear();
     }
-    
+
     static String withSeparator(String path)
     {
         return path.endsWith("/") ? path : path + "/";

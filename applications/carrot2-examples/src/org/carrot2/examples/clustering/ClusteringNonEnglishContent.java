@@ -12,18 +12,27 @@
 
 package org.carrot2.examples.clustering;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.Document;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.LanguageCode;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.source.google.GoogleDocumentSource;
 import org.carrot2.source.microsoft.BingDocumentSource;
 import org.carrot2.source.microsoft.MarketOption;
+import org.carrot2.text.linguistic.ExtendedLanguageModelFactory;
 import org.carrot2.util.attribute.AttributeUtils;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 /**
@@ -73,6 +82,13 @@ public class ClusteringNonEnglishContent
          * and caches results produced by document sources.
          */
         final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
+        
+        /*
+         * To cluster Chinese content, we need to use the ExtendedLanguageModelFactory 
+         * instead of the default one.
+         */
+        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
+            (Object)new ExtendedLanguageModelFactory()));
 
         /*
          * In the first call, we'll cluster a document list, setting the language for each

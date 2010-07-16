@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
+import org.carrot2.text.linguistic.ExtendedLanguageModelFactory;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.resource.*;
 import org.carrot2.workbench.core.helpers.Utils;
@@ -28,6 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.*;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -97,7 +99,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         scanSuites();
 
         controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
-        controller.init(new HashMap<String, Object>(), componentSuite.getComponentConfigurations());
+        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
+            (Object)new ExtendedLanguageModelFactory()), componentSuite.getComponentConfigurations());
     }
 
     /*

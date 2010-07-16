@@ -20,6 +20,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.ProcessingComponentDescriptor.ProcessingComponentDescriptorToId;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.source.xml.XmlDocumentSource;
+import org.carrot2.text.linguistic.ExtendedLanguageModelFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.resource.FileResource;
@@ -27,6 +28,7 @@ import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.kohsuke.args4j.*;
 import org.slf4j.Logger;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -102,8 +104,8 @@ public class BatchApp
     private int process() throws Exception
     {
         final Controller controller = ControllerFactory.createPooling();
-        controller.init(Collections.<String, Object> emptyMap(), componentSuite
-            .getComponentConfigurations());
+        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
+            (Object)new ExtendedLanguageModelFactory()), componentSuite.getComponentConfigurations());
 
         // Prepare the algorithm
         if (StringUtils.isBlank(algorithm))

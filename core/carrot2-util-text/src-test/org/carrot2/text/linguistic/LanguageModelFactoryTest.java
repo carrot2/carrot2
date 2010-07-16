@@ -11,23 +11,26 @@
 
 package org.carrot2.text.linguistic;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.carrot2.core.LanguageCode;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests {@link DefaultLanguageModelFactory}.
+ * Tests {@link ExtendedLanguageModelFactory}.
  */
 public class LanguageModelFactoryTest
 {
-    private DefaultLanguageModelFactory factory;
+    private ExtendedLanguageModelFactory factory;
 
     @Before
     public void createFactory()
     {
-        factory = new DefaultLanguageModelFactory();
+        factory = new ExtendedLanguageModelFactory();
     }
 
     @Test

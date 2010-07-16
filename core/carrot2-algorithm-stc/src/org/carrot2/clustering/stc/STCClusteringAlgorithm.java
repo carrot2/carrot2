@@ -12,9 +12,6 @@
 
 package org.carrot2.clustering.stc;
 
-import static org.carrot2.text.analysis.ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT;
-import static org.carrot2.text.analysis.ITokenTypeAttribute.TF_TERMINATOR;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +33,7 @@ import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
@@ -255,7 +253,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             /* Advance until the first real token. */
             if (tokenIndex[i] == -1)
             {
-                if ((tokenType[i] & (TF_SEPARATOR_DOCUMENT | TF_TERMINATOR)) != 0)
+                if ((tokenType[i] & (ITokenizer.TF_SEPARATOR_DOCUMENT | ITokenizer.TF_TERMINATOR)) != 0)
                 {
                     sb.endDocument();
                 }

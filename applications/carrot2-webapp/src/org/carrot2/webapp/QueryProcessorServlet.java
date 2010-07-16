@@ -23,6 +23,7 @@ import javax.servlet.http.*;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.text.linguistic.ExtendedLanguageModelFactory;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
@@ -111,7 +112,8 @@ public class QueryProcessorServlet extends HttpServlet
          * Initialize the controller.
          */
         controller = ControllerFactory.createCachingPooling(ResultsCacheModel.toClassArray(webappConfig.caches));
-        controller.init(new HashMap<String, Object>(), webappConfig.components.getComponentConfigurations());
+        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
+            (Object)new ExtendedLanguageModelFactory()), webappConfig.components.getComponentConfigurations());
 
         jawrUrlGenerator = new JawrUrlGenerator(servletContext);
     }

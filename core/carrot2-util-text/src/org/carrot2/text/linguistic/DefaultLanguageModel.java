@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.apache.lucene.analysis.Tokenizer;
 import org.carrot2.core.LanguageCode;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.util.MutableCharArray;
 
 /**
@@ -27,7 +27,7 @@ import org.carrot2.text.util.MutableCharArray;
 final class DefaultLanguageModel implements ILanguageModel
 {
     private final LanguageCode languageCode;
-    private final Tokenizer tokenizer;
+    private final ITokenizer tokenizer;
     private final IStemmer stemmer;
     private final Set<MutableCharArray> stopwords;
 
@@ -43,7 +43,7 @@ final class DefaultLanguageModel implements ILanguageModel
      * Creates a new language model based on provided resources.
      */
     DefaultLanguageModel(LanguageCode languageCode, LexicalResources lexicalResources,
-        IStemmer stemmer, Tokenizer tokenizer)
+        IStemmer stemmer, ITokenizer tokenizer)
     {
         this.languageCode = languageCode;
         this.stemmer = stemmer;
@@ -74,7 +74,7 @@ final class DefaultLanguageModel implements ILanguageModel
         return languageCode;
     }
 
-    public Tokenizer getTokenizer()
+    public ITokenizer getTokenizer()
     {
         return tokenizer;
     }

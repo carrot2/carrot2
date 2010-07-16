@@ -10,11 +10,12 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.text.analysis;
+package org.carrot2.text.linguistic;
 
 import java.io.IOException;
 
-import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.cn.ChineseTokenizer;
+import org.carrot2.text.analysis.ITokenizer;
 import org.junit.Test;
 
 /**
@@ -23,9 +24,9 @@ import org.junit.Test;
 public class ChineseTokenizerTest extends TokenizerTestBase
 {
     @Override
-    protected Tokenizer createTokenStream() throws IOException
+    protected ITokenizer createTokenStream() throws IOException
     {
-        return new ChineseTokenizer();
+        return ExtendedLanguageModelFactory.ChineseTokenizerFactory.createTokenizer();
     }
 
     @Test

@@ -39,7 +39,7 @@ public abstract class LanguageModelTestBase
     @Before
     public void setupLanguage()
     {
-        this.languageModel = new DefaultLanguageModelFactory().getLanguageModel(getLanguageCode());
+        this.languageModel = new ExtendedLanguageModelFactory().getLanguageModel(getLanguageCode());
     }
 
     /**

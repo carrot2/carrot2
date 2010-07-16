@@ -14,21 +14,30 @@ package org.carrot2.text.preprocessing;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.text.analysis.ITokenTypeAttribute;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.util.MutableCharArray;
-import org.carrot2.util.*;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.CharArrayUtils;
+import org.carrot2.util.ExceptionUtils;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
 
-import com.carrotsearch.hppc.*;
+import com.carrotsearch.hppc.ByteArrayList;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.ShortArrayList;
 import com.google.common.collect.Lists;
 
 /**
@@ -85,16 +94,6 @@ public final class Tokenizer
     private ByteArrayList fieldIndices;
 
     /**
-     * A wrapper for pseudo-interning of token images.
-     */
-    private final MutableCharArray wrapper = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
-
-    /**
-     * Preprocessing context (access to interning cache).
-     */
-    private PreprocessingContext context;  
-
-    /**
      * Performs tokenization and saves the results to the <code>context</code>.
      */
     public void tokenize(PreprocessingContext context)
@@ -118,10 +117,8 @@ public final class Tokenizer
 
         final Iterator<Document> docIterator = documents.iterator();
         int documentIndex = 0;
-        final org.apache.lucene.analysis.Tokenizer ts = context.language.getTokenizer();
-        this.context = context;
-        final ITokenTypeAttribute type = ts.getAttribute(ITokenTypeAttribute.class);
-        final TermAttribute term = ts.getAttribute(TermAttribute.class);
+        final ITokenizer ts = context.language.getTokenizer();
+        final MutableCharArray wrapper = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
 
         while (docIterator.hasNext())
         {
@@ -138,14 +135,17 @@ public final class Tokenizer
                 {
                     try
                     {
+                        short tokenType;
+                        
                         ts.reset(new StringReader(fieldValue));
-                        if (ts.incrementToken())
+                        if ((tokenType = ts.nextToken()) != ITokenizer.TT_EOF)
                         {
                             if (hadTokens) addFieldSeparator(documentIndex);
                             do
                             {
-                                add(documentIndex, fieldIndex, term, type);
-                            } while (ts.incrementToken());
+                                ts.setTermBuffer(wrapper);
+                                add(documentIndex, fieldIndex, context.intern(wrapper), tokenType);
+                            } while ( (tokenType = ts.nextToken()) != ITokenizer.TT_EOF);
                             hadTokens = true;
                         }
                     }
@@ -182,23 +182,11 @@ public final class Tokenizer
     }
 
     /**
-     * Add the token's code to the list.
-     */
-    void add(int documentIndex, byte fieldIndex, TermAttribute term, ITokenTypeAttribute type)
-    {
-        final int termLength = term.termLength();
-        final char [] termBuffer = term.termBuffer();
-
-        this.wrapper.reset(termBuffer, 0, termLength);
-        add(documentIndex, fieldIndex, context.intern(wrapper), type.getRawFlags());
-    }
-
-    /**
      * Adds a special terminating token required at the very end of all documents.
      */
     void addTerminator()
     {
-        add(-1, (byte) -1, null, ITokenTypeAttribute.TF_TERMINATOR);
+        add(-1, (byte) -1, null, ITokenizer.TF_TERMINATOR);
     }
 
     /**
@@ -206,7 +194,7 @@ public final class Tokenizer
      */
     void addDocumentSeparator()
     {
-        add(-1, (byte) -1, null, ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT);
+        add(-1, (byte) -1, null, ITokenizer.TF_SEPARATOR_DOCUMENT);
     }
 
     /**
@@ -214,7 +202,7 @@ public final class Tokenizer
      */
     void addFieldSeparator(int documentIndex)
     {
-        add(documentIndex, (byte) -1, null, ITokenTypeAttribute.TF_SEPARATOR_FIELD);
+        add(documentIndex, (byte) -1, null, ITokenizer.TF_SEPARATOR_FIELD);
     }
 
     /**
@@ -222,7 +210,7 @@ public final class Tokenizer
      */
     void addSentenceSeparator(int documentIndex, byte fieldIndex)
     {
-        add(documentIndex, fieldIndex, null, ITokenTypeAttribute.TF_SEPARATOR_FIELD);
+        add(documentIndex, fieldIndex, null, ITokenizer.TF_SEPARATOR_FIELD);
     }
 
     /**
