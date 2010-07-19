@@ -166,6 +166,7 @@
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-smartcn</artifactId>
       <version>3.0.1</version>
+      <optional>true</optional>
     </dependency>
         
     <dependency>

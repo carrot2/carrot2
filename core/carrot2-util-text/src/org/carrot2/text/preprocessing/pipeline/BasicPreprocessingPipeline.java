@@ -72,7 +72,7 @@ public class BasicPreprocessingPipeline
     @Attribute
     @ImplementingClasses(classes =
     {
-        DefaultLanguageModelFactory.class, ExtendedLanguageModelFactory.class
+        DefaultLanguageModelFactory.class
     }, strict = false)
     public ILanguageModelFactory languageModelFactory = new DefaultLanguageModelFactory();
 
