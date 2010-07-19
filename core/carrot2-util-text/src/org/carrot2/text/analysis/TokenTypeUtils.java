@@ -13,7 +13,7 @@
 package org.carrot2.text.analysis;
 
 /**
- * Utility methods for working with {@link ITokenTypeAttribute}s.
+ * Utility methods for working with {@link ITokenizer} attributes.
  */
 public final class TokenTypeUtils
 {
