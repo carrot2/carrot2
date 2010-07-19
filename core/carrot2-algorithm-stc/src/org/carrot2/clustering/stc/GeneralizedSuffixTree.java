@@ -15,14 +15,13 @@ package org.carrot2.clustering.stc;
 import static org.carrot2.text.suffixtree.SuffixTree.NO_EDGE;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import org.apache.lucene.util.OpenBitSet;
 import org.carrot2.text.suffixtree.ISequence;
 import org.carrot2.text.suffixtree.IntegerSequence;
 import org.carrot2.text.suffixtree.SuffixTree;
 import org.carrot2.text.suffixtree.SuffixTreeBuilder;
 
+import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntStack;
 
 /**
@@ -133,7 +132,7 @@ final class GeneralizedSuffixTree
         private final IntStack edges = new IntStack();
         
         /** Bitsets used to compute cardinality in each node. */
-        private final ArrayList<OpenBitSet> bsets = new ArrayList<OpenBitSet>();
+        private final ArrayList<BitSet> bsets = new ArrayList<BitSet>();
         
         /** Suffix tree on all the input.*/
         private final SuffixTree stree;
@@ -166,7 +165,7 @@ final class GeneralizedSuffixTree
         {
             assert !stree.isLeaf(state);
 
-            final OpenBitSet me = getBitSet(level);
+            final BitSet me = getBitSet(level);
             for (int edge = stree.firstEdge(state); edge != NO_EDGE; edge = stree.nextEdge(edge))
             {
                 final int childState = stree.getToState(edge);
@@ -177,8 +176,8 @@ final class GeneralizedSuffixTree
                 }
                 else
                 {
-                    final OpenBitSet child = getBitSet(level + 1);
-                    Arrays.fill(child.getBits(), 0);
+                    final BitSet child = getBitSet(level + 1);
+                    child.clear();
                     edges.push(stree.getStartIndex(edge), stree.getEndIndex(edge));
                     countDocs(level + 1, childState);
                     edges.discard(2);
@@ -196,11 +195,11 @@ final class GeneralizedSuffixTree
             }
         }
 
-        protected abstract void visit(int state, int cardinality, OpenBitSet documents, IntStack path);
+        protected abstract void visit(int state, int cardinality, BitSet documents, IntStack path);
 
-        private OpenBitSet getBitSet(int level)
+        private BitSet getBitSet(int level)
         {
-            while (bsets.size() <= level) bsets.add(new OpenBitSet());
+            while (bsets.size() <= level) bsets.add(new BitSet());
             return bsets.get(level);
         }
     };

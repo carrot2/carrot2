@@ -14,8 +14,7 @@ package org.carrot2.clustering.stc;
 
 import java.util.ArrayList;
 
-import org.apache.lucene.util.OpenBitSet;
-
+import com.carrotsearch.hppc.BitSet;
 import com.google.common.collect.Lists;
 
 /**
@@ -31,7 +30,7 @@ final class ClusterCandidate
     /**
      * Indexes of documents this cluster covers.
      */
-    OpenBitSet documents;
+    BitSet documents;
 
     /**
      * Pairs of integers denoting a range of indices in {@link GeneralizedSuffixTree.SequenceBuilder#input}
@@ -48,11 +47,11 @@ final class ClusterCandidate
     ClusterCandidate()
     {
         this.phrases = Lists.newArrayList();
-        this.documents = new OpenBitSet();
+        this.documents = new BitSet();
     }
 
     /* */
-    ClusterCandidate(int [] phraseIndices, OpenBitSet documents, int cardinality, float score)
+    ClusterCandidate(int [] phraseIndices, BitSet documents, int cardinality, float score)
     {
         assert documents.cardinality() == cardinality;
 
