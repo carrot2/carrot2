@@ -64,7 +64,7 @@
   <!-- Compilation presets. -->
   <presetdef name="javac">
       <javac deprecation="true" debug="true"
-          target="1.5" source="1.5"
+          target="1.6" source="1.6"
           encoding="UTF-8" includeantruntime="true" optimize="true" />
   </presetdef>
 
@@ -587,7 +587,7 @@
         <include name="org/**"/>
       </packageset>
 
-      <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
+      <link href="http://java.sun.com/j2se/1.6.0/docs/api/" />
 
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Core" packages="org.carrot2.core*" />
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Demos and Examples" packages="org.carrot2.examples*" />
@@ -901,6 +901,9 @@
         extra.args="
             -Dproduct=/org.carrot2.workbench.feature/Workbench.product
 
+            -DjavacSource=1.6
+            -DjavacTarget=1.6
+
             -DarchivePrefix=${carrot2.workbench.base}-${carrot2.version}
             -DbuildId=${carrot2.workbench.base}
             -DbuildType=I
@@ -921,6 +924,9 @@
         props.file="${carrot2.master.basedir}/etc/buildinfo/workbench-platforms.properties" 
         extra.args="
             -Dproduct=/org.carrot2.workbench.feature/Workbench.product
+
+            -DjavacSource=1.6
+            -DjavacTarget=1.6
 
             -DarchivePrefix=${carrot2.workbench.base}-${carrot2.version}
             -DbuildId=${carrot2.workbench.base}
@@ -956,6 +962,9 @@
         extra.args="
             -Dproduct=/org.carrot2.workbench.feature/Workbench.product
             -DfeatureList=org.carrot2.workbench.core.test.feature
+
+            -DjavacSource=1.6
+            -DjavacTarget=1.6
 
             -Dconfigs=${test.os},${test.ws},${test.arch}
             -DarchivesFormat=${test.os},${test.ws},${test.arch}-folder

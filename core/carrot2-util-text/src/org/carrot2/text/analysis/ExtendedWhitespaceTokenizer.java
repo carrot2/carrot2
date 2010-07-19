@@ -36,18 +36,20 @@ public final class ExtendedWhitespaceTokenizer implements ITokenizer
     /**
      * Reset this tokenizer to start parsing another stream.
      */
+    @Override
     public void reset(Reader input)
     {
         this.parser.yyreset(input);
     }
 
-
+    @Override
     public short nextToken() throws IOException
     {
         final short result = (short) parser.getNextToken();
         return result == ExtendedWhitespaceTokenizerImpl.YYEOF ? ITokenizer.TT_EOF : result;
     }
 
+    @Override
     public void setTermBuffer(MutableCharArray array)
     {
         array.reset(parser.yybuffer(), parser.yystart(), parser.yylength());
