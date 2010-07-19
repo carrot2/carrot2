@@ -113,7 +113,7 @@ public final class PreprocessingContext
         public char [][] image;
 
         /**
-         * Token's {@link ITokenTypeAttribute} bit flags.
+         * Token's {@link ITokenizer} bit flags.
          * <p>
          * This array is produced by {@link Tokenizer}.
          */
@@ -220,7 +220,7 @@ public final class PreprocessingContext
          * This array is produced by {@link CaseNormalizer}.
          * This array is modified by {@link LanguageModelStemmer}.
          * 
-         * @see ITokenTypeAttribute
+         * @see ITokenizer
          */
         public short [] type;
 

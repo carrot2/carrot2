@@ -76,7 +76,7 @@ public final class Tokenizer
     /**
      * An array of token types.
      * 
-     * @see ITokenTypeAttribute
+     * @see ITokenizer
      */
     private ShortArrayList tokenTypes;
 

@@ -18,7 +18,6 @@ import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.attribute.*;
 import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
-import org.carrot2.text.linguistic.ExtendedLanguageModelFactory;
 import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.*;
