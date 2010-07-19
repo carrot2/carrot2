@@ -664,7 +664,6 @@
         <include name="org/carrot2/source/**" />
         <exclude name="org/carrot2/source/xml/**" />
         <include name="org/carrot2/output/**" />
-        <include name="org/carrot2/text/linguistic/ExtendedLanguageModelFactory*" />
         <include name="com/**" />
         <exclude name="**/doc-files/**" />
       </fileset>
