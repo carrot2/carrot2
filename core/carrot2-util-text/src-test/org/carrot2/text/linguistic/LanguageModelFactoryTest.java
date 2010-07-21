@@ -25,12 +25,12 @@ import org.junit.Test;
  */
 public class LanguageModelFactoryTest
 {
-    private ExtendedLanguageModelFactory factory;
+    private DefaultLanguageModelFactory factory;
 
     @Before
     public void createFactory()
     {
-        factory = new ExtendedLanguageModelFactory();
+        factory = new DefaultLanguageModelFactory();
     }
 
     @Test

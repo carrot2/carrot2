@@ -16,11 +16,19 @@ import java.util.List;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
-import org.carrot2.core.attribute.*;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.linguistic.BaseLanguageModelFactory;
 import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.preprocessing.*;
-import org.carrot2.util.attribute.*;
+import org.carrot2.text.preprocessing.CaseNormalizer;
+import org.carrot2.text.preprocessing.LanguageModelStemmer;
+import org.carrot2.text.preprocessing.PreprocessingContext;
+import org.carrot2.text.preprocessing.StopListMarker;
+import org.carrot2.text.preprocessing.Tokenizer;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
@@ -69,11 +77,8 @@ public class BasicPreprocessingPipeline
     @Processing
     @Internal
     @Attribute
-    @ImplementingClasses(classes =
-    {
-        DefaultLanguageModelFactory.class
-    }, strict = false)
-    public ILanguageModelFactory languageModelFactory = new DefaultLanguageModelFactory();
+    @ImplementingClasses(classes = {}, strict = false)
+    public ILanguageModelFactory languageModelFactory = new BaseLanguageModelFactory();
 
     /**
      * Performs preprocessing on the provided list of documents. Results can be obtained

@@ -12,25 +12,49 @@
 
 package org.carrot2.webapp;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.ControllerStatistics;
+import org.carrot2.core.ProcessingComponentDescriptor;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.text.linguistic.ExtendedLanguageModelFactory;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.AttributeBinder;
-import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.AttributeBinder.IAttributeTransformer;
+import org.carrot2.util.attribute.Input;
 import org.carrot2.webapp.filter.QueryWordHighlighter;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
-import org.carrot2.webapp.model.*;
+import org.carrot2.webapp.model.AttributeMetadataModel;
+import org.carrot2.webapp.model.ModelWithDefault;
+import org.carrot2.webapp.model.PageModel;
+import org.carrot2.webapp.model.RequestModel;
+import org.carrot2.webapp.model.RequestType;
+import org.carrot2.webapp.model.ResultsCacheModel;
+import org.carrot2.webapp.model.ResultsSizeModel;
+import org.carrot2.webapp.model.ResultsViewModel;
+import org.carrot2.webapp.model.SkinModel;
+import org.carrot2.webapp.model.WebappConfig;
 import org.carrot2.webapp.util.UserAgentUtils;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -38,7 +62,10 @@ import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 import org.slf4j.Logger;
 
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * Processes search requests.
@@ -113,7 +140,7 @@ public class QueryProcessorServlet extends HttpServlet
          */
         controller = ControllerFactory.createCachingPooling(ResultsCacheModel.toClassArray(webappConfig.caches));
         controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
-            (Object)new ExtendedLanguageModelFactory()), webappConfig.components.getComponentConfigurations());
+            (Object)new DefaultLanguageModelFactory()), webappConfig.components.getComponentConfigurations());
 
         jawrUrlGenerator = new JawrUrlGenerator(servletContext);
     }

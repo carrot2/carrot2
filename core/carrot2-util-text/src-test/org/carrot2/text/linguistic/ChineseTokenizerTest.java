@@ -15,6 +15,7 @@ package org.carrot2.text.linguistic;
 import java.io.IOException;
 
 import org.apache.lucene.analysis.cn.ChineseTokenizer;
+import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ITokenizer;
 import org.junit.Test;
 
@@ -26,7 +27,7 @@ public class ChineseTokenizerTest extends TokenizerTestBase
     @Override
     protected ITokenizer createTokenStream() throws IOException
     {
-        return ExtendedLanguageModelFactory.ChineseTokenizerFactory.createTokenizer();
+        return new DefaultLanguageModelFactory().createTokenizer(LanguageCode.CHINESE_SIMPLIFIED);
     }
 
     @Test

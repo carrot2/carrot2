@@ -11,24 +11,42 @@
 
 package org.carrot2.dcs;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.*;
-import org.carrot2.core.*;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.Document;
+import org.carrot2.core.IClusteringAlgorithm;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.IProcessingComponent;
+import org.carrot2.core.ProcessingComponentSuite;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.dcs.DcsRequestModel.OutputFormat;
-import org.carrot2.text.linguistic.ExtendedLanguageModelFactory;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.ClassResource;
+import org.carrot2.util.resource.PrefixDecoratorLocator;
+import org.carrot2.util.resource.ResourceUtils;
+import org.carrot2.util.resource.ResourceUtilsFactory;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -122,7 +140,7 @@ public final class RestProcessorServlet extends HttpServlet
         controller = ControllerFactory.createCachingPooling(cachedComponentClasses
             .toArray(new Class [cachedComponentClasses.size()]));
         controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
-            (Object)new ExtendedLanguageModelFactory()), componentSuite.getComponentConfigurations());
+            (Object)new DefaultLanguageModelFactory()), componentSuite.getComponentConfigurations());
     }
 
     @Override
