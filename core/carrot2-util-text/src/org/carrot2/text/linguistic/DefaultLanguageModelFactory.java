@@ -80,6 +80,9 @@ public class DefaultLanguageModelFactory extends BaseLanguageModelFactory
             case ARABIC:
                 return ArabicStemmerFactory.createStemmer(); 
                 
+            case CHINESE_SIMPLIFIED:
+                // No stemming in Chinese, returning identity stemmer to avoid a useless warning.
+                return IdentityStemmer.INSTANCE;
                 
             default:
                 /*
@@ -208,17 +211,16 @@ public class DefaultLanguageModelFactory extends BaseLanguageModelFactory
         {
             try
             {
-                ReflectionUtils.classForName(ArabicStemmer.class.getName());
-                ReflectionUtils.classForName(ArabicNormalizer.class.getName());
+                ReflectionUtils.classForName(ArabicStemmer.class.getName(), false);
+                ReflectionUtils.classForName(ArabicNormalizer.class.getName(), false);
             }
-            catch (ClassNotFoundException e)
+            catch (Throwable e)
             {
                 logger
                     .warn(
                         "Could not instantiate Lucene stemmer for Arabic, clustering quality "
                             + "of Chinese content may be degraded. For best quality clusters, "
-                            + "make sure Lucene's Arabic analyzer JAR is in the classpath",
-                        e);
+                            + "make sure Lucene's Arabic analyzer JAR is in the classpath");
             }
         }
 
@@ -301,16 +303,16 @@ public class DefaultLanguageModelFactory extends BaseLanguageModelFactory
         {
             try
             {
-                ReflectionUtils.classForName(ChineseTokenizer.class.getName());
+                ReflectionUtils.classForName(WordTokenFilter.class.getName(), false);
+                ReflectionUtils.classForName(SentenceTokenizer.class.getName(), false);
             }
-            catch (ClassNotFoundException e)
+            catch (Throwable e)
             {
                 logger
                     .warn(
                         "Could not instantiate Smart Chinese Analyzer, clustering quality "
                             + "of Chinese content may be degraded. For best quality clusters, "
-                            + "make sure Lucene's Smart Chinese Analyzer JAR is in the classpath",
-                        e);
+                            + "make sure Lucene's Smart Chinese Analyzer JAR is in the classpath");
             }
         }
 
