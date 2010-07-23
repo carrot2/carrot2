@@ -4,6 +4,7 @@ applications/carrot2-webapp/src/org.carrot2.webapp.model.RequestModel.xml
 applications/carrot2-webapp/src/org.carrot2.webapp.source.WebDocumentSource.xml
 applications/carrot2-webapp/web/WEB-INF/web.xml
 applications/carrot2-webapp/web/skins/common/variables.xsl
+core/carrot2-util-text/src/org.carrot2.text.linguistic.BaseLanguageModelFactory.xml
 core/carrot2-algorithm-lingo/src/org.carrot2.clustering.lingo.ClusterBuilder.xml
 core/carrot2-algorithm-lingo/src/org.carrot2.clustering.lingo.LingoClusteringAlgorithm.xml
 core/carrot2-algorithm-lingo/src/org.carrot2.clustering.lingo.SimpleLabelAssigner.xml
