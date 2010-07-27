@@ -30,7 +30,8 @@ public final class AttributeNames
     public static final String START = "start";
 
     /**
-     * Maximum number of documents/ search results to fetch.
+     * Maximum number of documents/ search results to fetch. The query hint can be used
+     * by clustering algorithms to avoid creating trivial clusters (combination of query words).
      * 
      * @label Results
      * @level Basic
