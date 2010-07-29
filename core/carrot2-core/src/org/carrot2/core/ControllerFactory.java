@@ -12,6 +12,8 @@
 
 package org.carrot2.core;
 
+import org.carrot2.core.attribute.AspectModified;
+
 /**
  * Creates {@link Controller}s in a number of common configurations. The most useful
  * configurations are:
@@ -125,29 +127,26 @@ public final class ControllerFactory
     public static Controller create(boolean componentPooling,
         Class<? extends IProcessingComponent>... cachedProcessingComponents)
     {
-        final IProcessingComponentManager baseManager;
-        if (componentPooling)
-        {
-            baseManager = new PoolingProcessingComponentManager();
-        }
-        else
-        {
-            baseManager = new SimpleProcessingComponentManager();
-        }
+        final IProcessingComponentManager baseManager = 
+            (componentPooling 
+                ? new PoolingProcessingComponentManager()
+                : new SimpleProcessingComponentManager());
 
-        final IProcessingComponentManager manager;
+        return new Controller(addCachingManager(baseManager, cachedProcessingComponents));
+    }
 
-        if (cachedProcessingComponents.length > 0)
-        {
-            // Add a caching wrapper
-            manager = new CachingProcessingComponentManager(baseManager,
-                cachedProcessingComponents);
-        }
-        else
-        {
-            manager = baseManager;
-        }
+    /**
+     * Adds caching manager wrapper if caching is requested.
+     */
+    @AspectModified("Throws an exception in .NET")
+    private static IProcessingComponentManager addCachingManager(
+        IProcessingComponentManager baseManager, 
+        Class<? extends IProcessingComponent>... cachedProcessingComponents)
+    {
+        if (cachedProcessingComponents.length == 0)
+            return baseManager;
 
-        return new Controller(manager);
+        return new CachingProcessingComponentManager(baseManager,
+            cachedProcessingComponents);
     }
 }
