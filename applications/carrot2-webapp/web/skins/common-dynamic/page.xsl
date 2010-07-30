@@ -92,6 +92,8 @@ $(document).ready(function() {
             with <span id="status-cluster-size"><xsl:comment></xsl:comment></span> documents
           </span>
         </div>
+        
+        <xsl:apply-templates select="." mode="documents-panel-extra" />
       </div>
 
       <div id="status-bar">
@@ -110,6 +112,10 @@ $(document).ready(function() {
   </xsl:template>
   
   <xsl:template match="page" mode="results-area-extra">
+    <xsl:apply-imports />
+  </xsl:template>
+  
+  <xsl:template match="page" mode="documents-panel-extra">
     <xsl:apply-imports />
   </xsl:template>
   

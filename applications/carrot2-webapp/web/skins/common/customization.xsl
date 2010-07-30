@@ -3,4 +3,5 @@
   <!-- Put your customizations in this stylesheet. -->
   <xsl:template match="/page" mode="js" />
   <xsl:template match="/page" mode="results-area-extra" />
+  <xsl:template match="page" mode="documents-panel-extra" />
 </xsl:stylesheet>
