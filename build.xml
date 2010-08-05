@@ -63,7 +63,7 @@
 
   <!-- Compilation presets. -->
   <presetdef name="javac">
-      <javac deprecation="true" debug="true"
+      <javac deprecation="false" debug="true"
           target="1.6" source="1.6"
           encoding="UTF-8" includeantruntime="true" optimize="true" />
   </presetdef>
@@ -136,7 +136,7 @@
   </patternset>
 
   <patternset id="lib.core.mini">
-    <include name="lib/**/mahout-math*.jar" />
+    <include name="lib/**/mahout-*.jar" />
     <include name="lib/**/mahout.LICENSE" />
     <include name="lib/**/colt.LICENSE" />
     <include name="lib/**/commons-lang*" />
