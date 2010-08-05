@@ -27,8 +27,7 @@ import com.google.common.collect.Maps;
  */
 public final class SoftUnboundedPool<T, P> implements IParameterizedPool<T, P>
 {
-    private Map<Pair<Class<? extends T>, P>, List<SoftReference<? extends T>>> instances = Maps
-        .newHashMap();
+    private Map<Pair<Class<? extends T>, P>, List<SoftReference<T>>> instances = Maps.newHashMap();
 
     private IInstantiationListener<T, P> instantiationListener;
     private IActivationListener<T, P> activationListener;
@@ -60,15 +59,17 @@ public final class SoftUnboundedPool<T, P> implements IParameterizedPool<T, P>
 
             final Pair<Class<? extends T>, P> key = new Pair<Class<? extends T>, P>(
                 clazz, parameter);
-            List<SoftReference<? extends T>> list = instances.get(key);
+            List<SoftReference<T>> list = instances.get(key);
             if (list == null)
             {
-                list = new ArrayList<SoftReference<? extends T>>();
+                list = new ArrayList<SoftReference<T>>();
                 instances.put(key, list);
             }
 
             while (list.size() > 0 && instance == null)
             {
+                // This cast goes unchecked and can be broken by bad calls, but we shift
+                // the responsibility to the users of this class.
                 instance = (I) list.remove(0).get();
             }
         }
@@ -112,7 +113,7 @@ public final class SoftUnboundedPool<T, P> implements IParameterizedPool<T, P>
             }
 
             final Pair key = new Pair(object.getClass(), parameter);
-            final List<SoftReference<? extends T>> list = instances.get(key);
+            final List<SoftReference<T>> list = instances.get(key);
             if (list == null)
             {
                 throw new IllegalStateException(
@@ -132,13 +133,12 @@ public final class SoftUnboundedPool<T, P> implements IParameterizedPool<T, P>
                 return;
             }
             
-            Map<Pair<Class<? extends T>, P>, List<SoftReference<? extends T>>> instancesRef = this.instances;
+            Map<Pair<Class<? extends T>, P>, List<SoftReference<T>>> instancesRef = this.instances;
             this.instances = null;
 
-            for (Entry<Pair<Class<? extends T>, P>, List<SoftReference<? extends T>>> entry : instancesRef
-                .entrySet())
+            for (Entry<Pair<Class<? extends T>, P>, List<SoftReference<T>>> entry : instancesRef.entrySet())
             {
-                for (SoftReference<? extends T> reference : entry.getValue())
+                for (SoftReference<T> reference : entry.getValue())
                 {
                     T instance = reference.get();
                     if (instance != null && disposalListener != null)
