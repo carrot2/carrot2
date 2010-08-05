@@ -587,7 +587,8 @@
         <include name="org/**"/>
       </packageset>
 
-      <link href="http://java.sun.com/j2se/1.6.0/docs/api/" />
+      <!-- Oracle only allows browsers (user-agent firewall restriction), so link to the docs, but keep the package-list offline. -->
+      <link offline="true" href="http://download.oracle.com/javase/6/docs/api/" packagelistLoc="${basedir}/etc/javadoc/jdk6" />
 
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Core" packages="org.carrot2.core*" />
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Demos and Examples" packages="org.carrot2.examples*" />
