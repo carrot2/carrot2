@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests {@link ExtendedLanguageModelFactory}.
+ * Tests {@link DefaultLanguageModelFactory}.
  */
 public class LanguageModelFactoryTest
 {

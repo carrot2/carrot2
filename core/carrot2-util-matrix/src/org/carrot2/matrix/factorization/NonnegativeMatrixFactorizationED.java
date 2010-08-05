@@ -12,14 +12,15 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.apache.mahout.math.function.DoubleFunction;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.jet.math.Functions;
+import org.apache.mahout.math.function.UnaryFunction;
+import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.function.Functions;
 
 /**
  * Performs matrix factorization using the Non-negative Matrix Factorization algorithm
  * with minimization of Euclidean Distance between A and UV' and multiplicative updating.
  */
+@SuppressWarnings("deprecation")
 public class NonnegativeMatrixFactorizationED extends IterativeMatrixFactorizationBase
 {
     /**
@@ -65,7 +66,7 @@ public class NonnegativeMatrixFactorizationED extends IterativeMatrixFactorizati
         DoubleMatrix2D UT2 = doubleFactory2D.make(A.rows(), k);
         DoubleMatrix2D VT1 = doubleFactory2D.make(A.columns(), k);
         DoubleMatrix2D VT2 = doubleFactory2D.make(A.columns(), k);
-        DoubleFunction plusEps = Functions.plus(eps);
+        UnaryFunction plusEps = Functions.plus(eps);
 
         if (stopThreshold >= 0)
         {

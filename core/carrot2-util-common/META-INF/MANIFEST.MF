@@ -16,7 +16,7 @@ Require-Bundle: org.apache.commons;visibility:=reexport,
  org.easymock;resolution:=optional;visibility:=reexport,
  org.slf4j;bundle-version="1.5.8";visibility:=reexport,
  org.codehaus.jackson;bundle-version="0.9.2";visibility:=reexport,
- org.apache.mahout.math;bundle-version="0.3.0";visibility:=reexport,
+ org.apache.mahout;bundle-version="0.3.0";visibility:=reexport,
  com.carrotsearch.hppc;bundle-version="0.3.0";visibility:=reexport
 Bundle-ClassPath: .
 Bundle-Vendor: Carrot2.org

@@ -14,11 +14,12 @@ package org.carrot2.matrix.factorization.seeding;
 
 import org.carrot2.matrix.factorization.KMeansMatrixFactorization;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 
 /**
  * Matrix seeding based on the k-means algorithms.
  */
+@SuppressWarnings("deprecation")
 public class KMeansSeedingStrategy implements ISeedingStrategy
 {
     /** The maximum number of KMeans iterations */

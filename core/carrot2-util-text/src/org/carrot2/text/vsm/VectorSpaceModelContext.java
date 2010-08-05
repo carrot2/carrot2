@@ -12,7 +12,7 @@
 
 package org.carrot2.text.vsm;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
@@ -22,6 +22,7 @@ import com.carrotsearch.hppc.IntIntOpenHashMap;
 /**
  * Stores data related to the Vector Space Model of the processed documents.
  */
+@SuppressWarnings("deprecation")
 public class VectorSpaceModelContext
 {
     /** Preprocessing context for the underlying documents. */

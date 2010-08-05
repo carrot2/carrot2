@@ -17,11 +17,12 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.assertions.AssertExtension;
 import org.fest.assertions.Delta;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 
 /**
- * Assertions on {@link DoubleMatrix2D}.
+ * Assertions on <code>DoubleMatrix2D</code>.
  */
+@SuppressWarnings("deprecation")
 public class DoubleMatrix2DAssertion implements AssertExtension
 {
     /** The actual matrix */

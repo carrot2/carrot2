@@ -16,16 +16,17 @@ import java.util.Arrays;
 
 import org.apache.mahout.math.function.DoubleComparator;
 import org.apache.mahout.math.function.DoubleFunction;
-import org.apache.mahout.math.jet.math.Functions;
+import org.apache.mahout.math.function.Functions;
 import org.apache.mahout.math.list.DoubleArrayList;
 import org.apache.mahout.math.list.IntArrayList;
 import org.apache.mahout.math.matrix.DoubleMatrix1D;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 import org.carrot2.util.DoubleComparators;
 
 /**
- * A set of {@link DoubleMatrix2D} shorthands and utility methods.
+ * A set of <code>DoubleMatrix2D</code> shorthands and utility methods.
  */
+@SuppressWarnings("deprecation")
 public class MatrixUtils
 {
     /**

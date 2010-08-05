@@ -36,7 +36,7 @@ public final class ReflectionUtils
      * class loader.
      * 
      * @param clazzName class name to load
-     * @param if <code>true</code>, a warning will be logged if class cannot be found
+     * @param logWarning if <code>true</code>, a warning will be logged if class cannot be found
      */
     public static Class<?> classForName(String clazzName, boolean logWarning)
         throws ClassNotFoundException

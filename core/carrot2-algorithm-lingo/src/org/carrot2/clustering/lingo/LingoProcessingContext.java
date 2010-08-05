@@ -12,7 +12,7 @@
 
 package org.carrot2.clustering.lingo;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
@@ -22,6 +22,7 @@ import com.carrotsearch.hppc.BitSet;
 /**
  * Stores intermediate data required during Lingo clustering.
  */
+@SuppressWarnings("deprecation")
 public class LingoProcessingContext
 {
     /** Preprocessing context */

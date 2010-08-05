@@ -16,13 +16,14 @@ import java.util.Arrays;
 
 import org.carrot2.matrix.*;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 import org.apache.mahout.math.matrix.impl.*;
 import org.apache.mahout.math.matrix.linalg.SingularValueDecomposition;
 
 /**
  * Performs matrix factorization using the Singular Value Decomposition algorithm.
  */
+@SuppressWarnings("deprecation")
 public class PartialSingularValueDecomposition extends MatrixFactorizationBase implements
     IMatrixFactorization
 {

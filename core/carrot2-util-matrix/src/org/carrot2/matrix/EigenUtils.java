@@ -13,13 +13,14 @@
 package org.carrot2.matrix;
 
 import org.apache.mahout.math.matrix.DoubleMatrix1D;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.jet.math.Functions;
+import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.function.Functions;
 
 /**
  *
  */
-public class EigenUtils
+@SuppressWarnings("deprecation")
+class EigenUtils
 {
     public static final double DEFAULT_EPSILON = 0.001;
 

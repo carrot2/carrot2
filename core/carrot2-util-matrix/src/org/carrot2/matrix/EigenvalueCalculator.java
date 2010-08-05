@@ -12,13 +12,14 @@
 
 package org.carrot2.matrix;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.matrix.linalg.EigenvalueDecomposition;
+import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.matrix.linalg.*;
 
 /**
  * Calculates eigenvalues for given matrix. Uses Native Numerical Interface (NNI) calls to
  * speed up calculations wherever possible.
  */
+@SuppressWarnings("deprecation")
 public class EigenvalueCalculator
 {
     /**

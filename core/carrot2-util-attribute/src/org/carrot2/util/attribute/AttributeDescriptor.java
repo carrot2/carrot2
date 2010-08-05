@@ -205,6 +205,7 @@ public class AttributeDescriptor
     /**
      * @see "http://issues.carrot2.org/browse/CARROT-693"
      */
+    @SuppressWarnings("unchecked")
     private void prepareForSerialization()
     {
         attributeFieldString = attributeField.getName();

@@ -14,8 +14,8 @@ package org.carrot2.clustering.lingo;
 
 import java.util.Arrays;
 
-import org.apache.mahout.math.jet.math.Functions;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.function.Functions;
+import org.apache.mahout.math.matrix.*;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.Bindable;
@@ -30,6 +30,7 @@ import com.carrotsearch.hppc.IntIntOpenHashMap;
  * 
  * @see UniqueLabelAssigner
  */
+@SuppressWarnings("deprecation")
 @Bindable
 public class SimpleLabelAssigner implements ILabelAssigner
 {

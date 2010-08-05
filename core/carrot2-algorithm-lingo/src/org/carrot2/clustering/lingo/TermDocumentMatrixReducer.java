@@ -27,6 +27,7 @@ import org.apache.mahout.math.matrix.DoubleFactory2D;
  * Reduces the dimensionality of a term-document matrix using a matrix factorization
  * algorithm.
  */
+@SuppressWarnings("deprecation")
 @Bindable(prefix = "LingoClusteringAlgorithm")
 public class TermDocumentMatrixReducer
 {

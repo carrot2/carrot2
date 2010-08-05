@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" kind="lib" path="mahout-collections-0.3.jar" sourcepath="/home/dweiss/.m2/repository/org/apache/mahout/mahout-collections/0.3/mahout-collections-0.3-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="mahout-math-0.3.jar" sourcepath="/home/dweiss/.m2/repository/org/apache/mahout/mahout-math/0.3/mahout-math-0.3-sources.jar"/>
+	<classpathentry kind="output" path="tmp/eclipse"/>
+</classpath>

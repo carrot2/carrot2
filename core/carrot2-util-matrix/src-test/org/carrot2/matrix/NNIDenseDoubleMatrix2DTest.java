@@ -25,6 +25,7 @@ import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 /**
  * Test cases for {@link NNIDenseDoubleMatrix2D}.
  */
+@SuppressWarnings("deprecation")
 public class NNIDenseDoubleMatrix2DTest
 {
     /** An example input matrix */

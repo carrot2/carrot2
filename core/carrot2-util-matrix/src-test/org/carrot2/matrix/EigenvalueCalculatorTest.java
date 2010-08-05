@@ -19,12 +19,13 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 import org.apache.mahout.math.matrix.linalg.EigenvalueDecomposition;
 
 /**
  * Test cases for {@link EigenvalueCalculator}.
  */
+@SuppressWarnings("deprecation")
 public class EigenvalueCalculatorTest
 {
     /** Default delta for comparisons */

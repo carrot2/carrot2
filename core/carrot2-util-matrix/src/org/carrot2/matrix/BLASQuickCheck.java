@@ -18,12 +18,13 @@ import java.util.Random;
 
 import org.carrot2.matrix.factorization.*;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 
 /**
  * Quickly checks if the native BLAS libraries can be loaded and what the performance gain
  * is.
  */
+@SuppressWarnings("deprecation")
 class BLASQuickCheck
 {
     /** Used to calculate the number of rows of the test matrix */

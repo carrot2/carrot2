@@ -20,6 +20,7 @@ import org.apache.mahout.math.matrix.DoubleFactory2D;
 /**
  * A factory for {@link IMatrixFactorization}s.
  */
+@SuppressWarnings("deprecation")
 public abstract class IterativeMatrixFactorizationFactory implements
     IMatrixFactorizationFactory
 {
@@ -145,7 +146,7 @@ public abstract class IterativeMatrixFactorizationFactory implements
     }
 
     /**
-     * Sets the {@link DoubleFactory2D} to be used to construct result matrices.
+     * Sets the <code>DoubleFactory2D</code> to be used to construct result matrices.
      */
     public DoubleFactory2D getDoubleFactory2D()
     {

@@ -21,11 +21,12 @@ import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
 import org.junit.Test;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 
 /**
  * Test cases for matrix factorizations.
  */
+@SuppressWarnings("deprecation")
 public class MatrixFactorizationTest
 {
     /** Factorization parameters */

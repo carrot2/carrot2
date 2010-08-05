@@ -14,16 +14,16 @@ package org.carrot2.matrix.factorization;
 
 import org.carrot2.matrix.MatrixUtils;
 
-import org.apache.mahout.math.function.DoubleDoubleFunction;
-import org.apache.mahout.math.function.DoubleFunction;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.jet.math.Functions;
+import org.apache.mahout.math.function.*;
+import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.function.Functions;
 
 /**
  * Performs matrix factorization using the Local Non-negative Matrix Factorization
  * algorithm with minimization of the Kullback-Leibler divergence between A and UV' and
  * multiplicative updating.
  */
+@SuppressWarnings("deprecation")
 public class LocalNonnegativeMatrixFactorization extends IterativeMatrixFactorizationBase
 {
     /**
@@ -74,9 +74,9 @@ public class LocalNonnegativeMatrixFactorization extends IterativeMatrixFactoriz
         double [] work = new double [U.columns()];
 
         // Colt functions
-        DoubleDoubleFunction invDiv = Functions.swapArgs(Functions.div);
-        DoubleDoubleFunction sqrtMult = Functions.chain(Functions.sqrt, Functions.mult);
-        DoubleFunction plusEps = Functions.plus(eps);
+        BinaryFunction invDiv = Functions.swapArgs(Functions.div);
+        BinaryFunction sqrtMult = Functions.chain(Functions.sqrt, Functions.mult);
+        UnaryFunction plusEps = Functions.plus(eps);
 
         if (stopThreshold >= 0)
         {

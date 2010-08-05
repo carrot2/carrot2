@@ -14,14 +14,15 @@ package org.carrot2.matrix.factorization;
 
 import org.carrot2.matrix.MatrixUtils;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.jet.math.Functions;
-import org.apache.mahout.math.jet.math.Mult;
+import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.function.Functions;
+import org.apache.mahout.math.function.Mult;
 
 /**
  * Performs matrix factorization using the K-means clustering algorithm. This kind of
  * factorization is sometimes referred to as Concept Decomposition Factorization.
  */
+@SuppressWarnings("deprecation")
 public class KMeansMatrixFactorization extends IterativeMatrixFactorizationBase
 {
     /**

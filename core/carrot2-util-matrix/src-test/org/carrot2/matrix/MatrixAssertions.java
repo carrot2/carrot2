@@ -13,11 +13,12 @@
 package org.carrot2.matrix;
 
 import org.apache.mahout.math.matrix.DoubleMatrix1D;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 
 /**
  * FEST-style assertions for Colt matrices.
  */
+@SuppressWarnings("deprecation")
 public class MatrixAssertions
 {
     /**

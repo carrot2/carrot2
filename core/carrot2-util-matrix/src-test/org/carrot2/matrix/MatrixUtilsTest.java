@@ -19,11 +19,12 @@ import org.fest.assertions.Delta;
 import org.junit.Test;
 
 import org.apache.mahout.math.matrix.DoubleFactory2D;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 
 /**
  * Test cases for {@link MatrixUtils}.
  */
+@SuppressWarnings("deprecation")
 public class MatrixUtilsTest extends TestCase
 {
     @Test

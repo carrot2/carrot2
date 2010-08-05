@@ -38,6 +38,7 @@ public final class LapackImpl implements ILapackOperations
         lazyInit();
     }
 
+    @SuppressWarnings("deprecation")
     public double [] computeEigenvaluesSymmetricalNNI(NNIDenseDoubleMatrix2D A)
     {
         // Some parts of the code borrowed from NNI
@@ -161,6 +162,7 @@ public final class LapackImpl implements ILapackOperations
     /**
      * Computes eigenvalues matrix <code>A</code>, requires that NNI is available.
      */
+    @SuppressWarnings("deprecation")
     public double [] computeEigenvaluesNNI(NNIDenseDoubleMatrix2D A)
     {
         // Some parts of the code borrowed from NNI
