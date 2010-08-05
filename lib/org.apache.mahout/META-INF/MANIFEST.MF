@@ -3,10 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Apache Mahout Math and Collections
 Bundle-SymbolicName: org.apache.mahout
 Bundle-Version: 0.3.0
-Bundle-ClassPath: mahout-math-0.3.jar
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.slf4j;bundle-version="1.5.8"
+Bundle-ClassPath: mahout-collections-0.3.jar,
+ mahout-math-0.3.jar
 Export-Package: org.apache.mahout.collections,
  org.apache.mahout.math,
  org.apache.mahout.math.bitvector,
