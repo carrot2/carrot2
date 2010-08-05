@@ -27,13 +27,6 @@ import com.google.common.collect.Maps;
  */
 public final class SoftUnboundedPool<T, P> implements IParameterizedPool<T, P>
 {
-    /*
-     * TODO: [dw] Performance impact of storing soft references may not be worth it. If
-     * you need a pool, you tune it to your memory capacity. A pre-warmed pool with a
-     * fixed-size would be more practical to my intuition. [so] True -- there is an issue
-     * for it: CARROT-192
-     */
-
     private Map<Pair<Class<? extends T>, P>, List<SoftReference<? extends T>>> instances = Maps
         .newHashMap();
 

@@ -13,6 +13,7 @@
 package org.carrot2.core;
 
 import org.carrot2.core.ControllerTestsBase.ComponentWithInitParameter;
+import org.carrot2.util.attribute.Bindable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -166,6 +167,39 @@ public class ControllerTest
         }
     }
 
+    @Bindable
+    public static class TestProcessingComponent1 extends ProcessingComponentBase
+    {
+        @Override
+        public void process() throws ProcessingException
+        {
+            try
+            {
+                Thread.sleep(Long.MAX_VALUE);
+            }
+            catch (InterruptedException e)
+            {
+                // fall through.
+            }
+        }
+    }
+
+    public static class PoolingControllerWithFixedPoolCommonTests extends ControllerTestsCommon
+    {
+        @Override
+        public Controller getSimpleController()
+        {
+            // Create a size-one pool because tests depend on the first object instantiated.
+            return ControllerFactory.createPooling(1);
+        }
+
+        @Override
+        public boolean hasPooling()
+        {
+            return true;
+        }
+    }
+    
     public static class PoolingControllerCommonTests extends ControllerTestsCommon
     {
         @Override

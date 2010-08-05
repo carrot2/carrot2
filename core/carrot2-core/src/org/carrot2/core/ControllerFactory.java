@@ -13,6 +13,7 @@
 package org.carrot2.core;
 
 import org.carrot2.core.attribute.AspectModified;
+import org.carrot2.util.pool.FixedSizePool;
 
 /**
  * Creates {@link Controller}s in a number of common configurations. The most useful
@@ -53,7 +54,9 @@ public final class ControllerFactory
     /**
      * Creates a controller with processing component pooling but with no results caching.
      * The returned controller will maintain an internal pool of processing components, so
-     * that they are reused between processing requests.
+     * that they are reused between processing requests. Soft references are used to cache
+     * component instances. There is no upper bound on the number of instances the pool
+     * may cache.
      * <p>
      * Use this controller in long-running applications and when your processing
      * components are expensive to create. For applications that handle large numbers of
@@ -61,10 +64,34 @@ public final class ControllerFactory
      * </p>
      * 
      * @see #create(boolean, Class...)
+     * @see #createPooling(int)
      */
     public static Controller createPooling()
     {
         return create(true);
+    }
+
+    /**
+     * Creates a controller with processing component pooling but with no results caching.
+     * The returned controller will maintain an internal fixed-size, hard-referenced
+     * pool of processing components, so that they are reused between processing requests.
+     * <p>
+     * Use this controller in long-running applications and when your processing
+     * components are expensive to create. For applications that handle large numbers of
+     * repeated requests, consider using a caching and pooling controller.
+     * </p>
+     * 
+     * @param instancePoolSize Number of instances created for a single component 
+     * class-ID pair. For computational components it is sensible to set this pool to the
+     * number of CPU cores available on the machine. 
+     * 
+     * @see #create(int, Class...)
+     * @see #createPooling()
+     * @see Runtime#availableProcessors()
+     */
+    public static Controller createPooling(int instancePoolSize)
+    {
+        return create(instancePoolSize);
     }
 
     /**
@@ -117,7 +144,8 @@ public final class ControllerFactory
     /**
      * Creates a controller with the specified pooling and caching settings.
      * 
-     * @param componentPooling if <code>true</code>, component pooling will be performed
+     * @param componentPooling if <code>true</code>, component pooling 
+     *      will be performed (soft pool), otherwise no component pool will be used.
      * @param cachedProcessingComponents classes of components whose output should be cached
      *            by the controller. If a superclass is provided here, e.g.
      *            {@link IDocumentSource}, all its subclasses will be subject to caching.
@@ -135,6 +163,32 @@ public final class ControllerFactory
         return new Controller(addCachingManager(baseManager, cachedProcessingComponents));
     }
 
+    /**
+     * Creates a controller with the specified fixed-size pooling and caching settings.
+     * 
+     * @param instancePoolSize Number of instances created for a single component class-ID
+     *            pair. For computational components it is sensible to set this pool to
+     *            the number of CPU cores available on the machine.
+     * @param cachedProcessingComponents classes of components whose output should be
+     *            cached by the controller. If a superclass is provided here, e.g.
+     *            {@link IDocumentSource}, all its subclasses will be subject to caching.
+     *            If {@link IProcessingComponent} is provided here, output of all
+     *            components will be cached.
+     */
+    public static Controller create(int instancePoolSize,
+        Class<? extends IProcessingComponent>... cachedProcessingComponents)
+    {
+        if (instancePoolSize <= 0)
+            throw new IllegalArgumentException("Instance pool size must be greater than zero: "
+                + instancePoolSize);
+
+        final IProcessingComponentManager baseManager = 
+            new PoolingProcessingComponentManager(
+                new FixedSizePool<IProcessingComponent, String>(instancePoolSize));
+
+        return new Controller(addCachingManager(baseManager, cachedProcessingComponents));
+    }
+    
     /**
      * Adds caching manager wrapper if caching is requested.
      */
