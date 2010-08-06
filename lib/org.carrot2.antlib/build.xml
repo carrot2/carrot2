@@ -15,7 +15,7 @@
     </target>
 
     <target name="clean">
-        <delete dir="${carrot2.common.antlib.basedir}/tmp" />
+        <delete dir="${carrot2.common.antlib.basedir}/tmp/classes" />
     </target>
 
     <target name="jar" depends="clean">
