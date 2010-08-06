@@ -78,4 +78,9 @@ public final class ClassLoaderResource implements IResource
         return ObjectUtils.hashCode(clazzLoader) ^ ObjectUtils.hashCode(resource);
     }
 
+    @Override
+    public String toString()
+    {
+        return "[CLASSPATH RESOURCE: " + resource + "@" + clazzLoader.toString() + "]";
+    }
 }
