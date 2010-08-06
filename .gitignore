@@ -1,4 +1,3 @@
-lib/org.carrot2.antlib/org.carrot2.antlib.jar
 applications/carrot2-webapp/src/org.carrot2.webapp.filter.QueryWordHighlighter.xml
 applications/carrot2-webapp/src/org.carrot2.webapp.model.RequestModel.xml
 applications/carrot2-webapp/src/org.carrot2.webapp.source.WebDocumentSource.xml
@@ -82,7 +81,6 @@ core/carrot2-util-text/src/org.carrot2.text.preprocessing.filter.StopWordLabelFi
 core/carrot2-util-text/src/org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline.xml
 core/carrot2-util-text/src/org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline.xml
 core/carrot2-util-text/src/org.carrot2.text.vsm.TermDocumentMatrixBuilder.xml
-lib/org.carrot2.antlib/tmp
 local.properties
 workbench.properties
 tmp
