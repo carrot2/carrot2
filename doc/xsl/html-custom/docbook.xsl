@@ -14,7 +14,7 @@
        doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
 
   <xsl:param name="title-logo-file">img/logo.gif</xsl:param>
-  <xsl:param name="title-logo-alt">...</xsl:param>
+  <xsl:param name="title-logo-alt">Carrot2 Clustering Engine</xsl:param>
 
   <xsl:template match="processing-instruction('linebreak')"><br /></xsl:template>
 

@@ -4,6 +4,7 @@
 
 carrot2.manual.base=carrot2-manual
 carrot2.java-api.base=carrot2-java-api
+carrot2.csharp-api.base=carrot2-csharp-api
 carrot2.dcs.base=carrot2-dcs
 carrot2.webapp.base=carrot2-webapp
 carrot2.cli.base=carrot2-cli

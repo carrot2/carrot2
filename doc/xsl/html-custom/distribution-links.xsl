@@ -9,6 +9,7 @@
   <xsl:param name="product.demo.url" />
   
   <xsl:param name="product.java-api.base" />
+  <xsl:param name="product.csharp-api.base" />
   <xsl:param name="product.dcs.base" />
   <xsl:param name="product.webapp.base" />
   <xsl:param name="product.cli.base" />
@@ -18,6 +19,10 @@
   
   <xsl:template match="product:java-api-download-link">
     <a href="{$dist.url}/{$product.java-api.base}-{$product.version}.zip"><xsl:apply-templates /></a>
+  </xsl:template>
+    
+  <xsl:template match="product:csharp-api-download-link">
+    <a href="{$dist.url}/{$product.csharp-api.base}-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>
     
   <xsl:template match="product:dcs-download-link">

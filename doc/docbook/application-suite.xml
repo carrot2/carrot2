@@ -10,17 +10,18 @@
          xmlns="http://docbook.org/ns/docbook" version="5.0"
          xmlns:product="http://www.carrot2.org"
          xmlns:xi="http://www.w3.org/2001/XInclude">
-  <title>Application suite</title>
-  <subtitle>Applications shipped with &PROD;</subtitle>
+  <title>Tools and APIs</title>
+  <subtitle>&PROD; distribution suite</subtitle>
 
   <para>
-    &PROD; comes with a number of supporting applications that you can use to
-    quickly set up clustering on your own data, further tune clustering results
-    and expose &PROD; clustering as a remote service. 
+    &PROD; comes with a suite of tools and APIs that you can use to
+    quickly set up clustering on your own data, tune clustering results,
+    call &PROD; clustering from your Java or C# code or
+    access &PROD; clustering as a remote service. 
   </para>
   
   <para>
-    &PROD; application suite contains:
+    &PROD; distribution contains the following elements:
   </para>
   
   <itemizedlist>
@@ -30,6 +31,24 @@
         <para>
           which is a standalone GUI application you can use to experiment with &PROD;
           clustering on data from common search engines or your own data,
+        </para>
+      </formalpara>
+    </listitem>
+
+    <listitem>
+      <formalpara>
+        <title>&JA;</title>
+        <para>
+          for calling &PROD; document clustering from your Java code,
+        </para>
+      </formalpara>
+    </listitem>
+
+    <listitem>
+      <formalpara>
+        <title>&CSA;</title>
+        <para>
+          for calling &PROD; document clustering from your C# or .NET code,
         </para>
       </formalpara>
     </listitem>
@@ -193,6 +212,28 @@
     </section>
   </section>
   
+  <section xml:id="section.java-api">
+    <title>&JA;</title>
+    
+    <para>
+      The &JA; package contains &PROD; JAR files along with all dependencies, JavaDoc API reference
+      and Java code examples. You can use this package to integrate &PROD; clustering into your Java software. Please
+      see <xref linkend="section.integration.compiling-java-program-with-carrot2" /> and
+      <xref linkend="section.integration.seting-up-c2-project-in-eclipse" /> for instructions.
+    </para>
+  </section>
+  
+  <section xml:id="section.csharp-api">
+    <title>&CSA;</title>
+    
+    <para>
+      The &CSA; package contains all DLL libraries required to run &PROD;, 
+      C# API reference and code examples. You can use this package to integrate &PROD; 
+      clustering into your C# / .NET software. Please see 
+      <xref linkend="section.integration.compiling-csharp-program-with-carrot2" /> for instructions.
+    </para>
+  </section>
+    
   <section xml:id="section.dcs">
     <title>&DCS;</title>
     

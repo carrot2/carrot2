@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
                 xmlns:db="http://docbook.org/ns/docbook"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                exclude-result-prefixes="db">
+                xmlns:xlink="http://www.w3.org/1999/xlink">
 
   <xsl:strip-space elements="*"/>
 
@@ -103,13 +102,13 @@
       <db:section role="notoc">
         <db:title><xsl:value-of select="$level" /></db:title>
   
-        <para>
+        <db:para>
           <db:itemizedlist spacing="compact">
             <xsl:apply-templates select="$descriptors" mode="links">
               <xsl:sort select="concat(metadata/label, metadata/title)" />
             </xsl:apply-templates>
           </db:itemizedlist>
-        </para>
+        </db:para>
       </db:section>
     </xsl:if>
   </xsl:template>
@@ -130,13 +129,13 @@
       <db:section role="notoc">
         <db:title><xsl:value-of select="$direction" /></db:title>
   
-        <para>
+        <db:para>
           <db:itemizedlist spacing="compact">
             <xsl:apply-templates select="$descriptors" mode="links">
               <xsl:sort select="concat(metadata/label, metadata/title)" />
             </xsl:apply-templates>
           </db:itemizedlist>
-        </para>
+        </db:para>
       </db:section>
     </xsl:if>
   </xsl:template>
@@ -318,7 +317,7 @@
     <db:listitem>
       <db:code><xsl:call-template name="javadoc-link"><xsl:with-param name="value" select="string(.)" /></xsl:call-template></db:code>
       <xsl:if test="@label">
-        &#160;<phrase role="human-readable-label">(<xsl:value-of select="@label" />)</phrase>
+        &#160;<db:phrase role="human-readable-label">(<xsl:value-of select="@label" />)</db:phrase>
       </xsl:if>
     </db:listitem>
   </xsl:template>

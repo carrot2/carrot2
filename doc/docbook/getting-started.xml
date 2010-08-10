@@ -22,9 +22,14 @@
     
     <para>
       All &PROD; applications require <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link>
-      version 1.5.0 or higher (1.6.0 recommended). The &DCW; is distributed for Windows,
+      version 1.6.0. The &DCW; is distributed for Windows,
       Linux 32-bit and 64-bit versions and Mac OS x86. All other &PROD; applications
       will run on any platform supporting Java Runtime Environment version 1.5.0 or higher.
+    </para>
+    
+    <para>
+      The &CSA; package requires the .NET Framework version 3.5 or later; it does not require 
+      a Java Runtime Environment. 
     </para>
   </section>
   
@@ -431,9 +436,6 @@
   <section xml:id="section.integration">
     <title>Integrating &PROD; with your software</title>
     
-    <para>
-    </para>
-    
     <section xml:id="section.integration.compiling-java-program-with-carrot2">
       <title>Compiling a Java program using &PROD; API</title>
       
@@ -620,7 +622,7 @@
       
       <important>
         <para>
-          To set up &PROD; source code, you will need Eclipse IDE version 3.5 or higher
+          To set up &PROD; source code, you will need Eclipse IDE version 3.5 or later
           with the <emphasis role="bold">Plug-in Development Environment (PDE)</emphasis>.
           The required plugins are avaiilable e.g. in Eclipse for Plug-in Developers and
           Eclipse Classic distributions available at <link xlink:href="http://www.eclipse.org/downloads" />.
@@ -696,6 +698,53 @@
         </listitem>
       </orderedlist>  
     </section>
+ 
+    <section xml:id="section.integration.compiling-csharp-program-with-carrot2">
+      <title>Compiling a C# program using &PROD; API</title>
+      
+      <para>
+        The easiest way to integrate &PROD; with your C# / .NET programs is to use the &CSA; package:
+      </para>
+      
+      <orderedlist>
+        <listitem>
+          <para>
+            Make sure you have .NET framework version 3.5 or later installed in your environment.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            <product:csharp-api-download-link>Download &CSA;</product:csharp-api-download-link>
+            and unpack it to some local directory.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+            Compile example code based on the provided <command>msbuild</command> project file:
+          </para>
+<programlisting><![CDATA[CD examples
+C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild ]]>&PROD;<![CDATA[.Examples.csproj]]></programlisting>          
+        </listitem>
+        
+        <listitem>
+          <para>
+            Try running the executable files generated in the <filename>examples\</filename>
+            folder.
+          </para>
+        </listitem>
+      </orderedlist>
+
+      <tip>
+        <para>
+          The provided <command>msbuild</command> project is not directly compatible 
+          with Visual Studio To create a &PROD; project in Visual Studio, import the 
+          example source code and all the referenced DLLs to an existing or 
+          newly created project.
+        </para> 
+      </tip>
+    </section>
     
     <section xml:id="section.integration.calling-carrot2-from-non-java-software">
       <title>Calling &PROD; clustering from non-Java software</title>
@@ -708,5 +757,6 @@
         example code in PHP, C# and Ruby.
       </para>
     </section>
+
   </section>
 </chapter>
