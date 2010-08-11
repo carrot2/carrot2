@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
                 xmlns:d="http://docbook.org/ns/docbook" version="1.0">
 
-  <xsl:import href="../html/docbook.xsl"/>
+  <xsl:import href="http://docbook.sourceforge.net/release/xsl-ns/current/html/docbook.xsl"/>
   <xsl:import href="distribution-links.xsl"/>
   <xsl:import href="customization.xsl"/>
   <xsl:import href="attributes.xsl"/>
