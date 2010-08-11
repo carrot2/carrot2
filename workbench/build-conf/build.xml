@@ -33,13 +33,17 @@
 
     <target name="pde.build.prepare" depends="tasks">
         <property name="workbench.properties" location="${carrot2.master.basedir}/workbench.properties" />
-        <available file="${workbench.properties}" type="file" 
-            property="workbench.properties.available" value="true" />
-        <fail unless="workbench.properties.available">workbench.properties not found: ${workbench.properties}</fail>
-    
         <property file="${workbench.properties}" />
         <property file="${carrot2.master.basedir}/workbench/build-conf/build.properties" />
-        <fail unless="eclipse.home" />
+
+        <fail unless="target.platform" />
+        <fail unless="test.os" />
+        <fail unless="test.ws" />
+        <fail unless="test.arch" />
+        <fail unless="configs" />
+        <fail unless="archivesFormat" />
+
+        <property name="eclipse.home" location="${target.platform}/eclipse" />
 
         <findVersion property="equinox.launcher.plugin.jar"
                      eclipsehome="${eclipse.home}"
