@@ -37,11 +37,6 @@
         <property file="${carrot2.master.basedir}/workbench/build-conf/build.properties" />
 
         <fail unless="target.platform" />
-        <fail unless="test.os" />
-        <fail unless="test.ws" />
-        <fail unless="test.arch" />
-        <fail unless="configs" />
-        <fail unless="archivesFormat" />
 
         <property name="eclipse.home" location="${target.platform}/eclipse" />
 

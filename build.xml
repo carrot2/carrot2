@@ -957,6 +957,10 @@
   </target>
 
   <target name="workbench.test" depends="workbench.plugins.gather" description="Run Workbench tests.">
+    <fail unless="test.os" />
+    <fail unless="test.ws" />
+    <fail unless="test.arch" />
+  
     <pde.build
         build.dir="${workbench.build.dir}/test" 
         props.file="${workbench.properties}" 
