@@ -72,8 +72,9 @@ sup {
   font-weight: normal;
   font-size: 18pt;
   margin-left: 40mm;
-  padding-bottom: 2mm;
+  padding-bottom: 0mm;
   margin-bottom: 10mm;
+  margin-top: 1mm;
 }
 
 .titlepage .releaseinfo {
@@ -199,6 +200,7 @@ div.chapter {
   border-bottom: 0.8pt black solid;
   page-break-after: avoid;
   position: relative;
+  line-height: 1.4;
 }
 
 .section .titlepage h2.title .n {
