@@ -30,6 +30,7 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
+import javax.tools.Diagnostic.Kind;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 
@@ -334,6 +335,13 @@ public final class BindableProcessor extends AbstractProcessor
                  * it should (must?) be available.
                  */
                 metadata = readMetadataFromResource(clazzName);
+                if (metadata == null)
+                {
+                    // We failed to load metadata of this class (most likely due to class path
+                    // isses - apt preprocessors don't seem to be able to get to class path
+                    // resources normally). Skip.
+                    return;
+                }
             }
             
             final TypeElement depType = nameToType.get(clazzName);
@@ -408,7 +416,11 @@ public final class BindableProcessor extends AbstractProcessor
         catch (Exception e)
         {
             if (is != null) closeQuietly(is);
-            throw new RuntimeException("Could not load metadata for class: " + clazzName, e);
+            
+            super.processingEnv.getMessager().printMessage(Kind.WARNING, 
+                "Could not load resource metadata for class: " + clazzName);
+
+            return null;
         }
     }
 
@@ -454,7 +466,7 @@ public final class BindableProcessor extends AbstractProcessor
             if (fo == null) return null;
             return fo.openInputStream();
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             return null;
         }
@@ -486,15 +498,21 @@ public final class BindableProcessor extends AbstractProcessor
                 {
                     AttributeMetadata inherited = inheritedMetadata.get(attributeKey);
                     if (inherited == null)
-                        throw new RuntimeException("Class " + type.getSimpleName() 
+                    {
+                        super.processingEnv.getMessager().printMessage(
+                            Kind.WARNING,
+                            "Class " + type.getSimpleName() 
                             + " has no inherited attribute with key: "
                             + attributeKey + ", inherited attributes: " + formatInherited(inheritedMetadata));
-
-                    metadata.setTitle(notNull(metadata.getTitle(), inherited.getTitle()));
-                    metadata.setDescription(notNull(metadata.getDescription(), inherited.getDescription()));
-                    metadata.setGroup(notNull(metadata.getGroup(), inherited.getGroup()));
-                    metadata.setLabel(notNull(metadata.getLabel(), inherited.getLabel()));
-                    metadata.setLevel(notNull(metadata.getLevel(), inherited.getLevel()));
+                    }
+                    else
+                    {
+                        metadata.setTitle(notNull(metadata.getTitle(), inherited.getTitle()));
+                        metadata.setDescription(notNull(metadata.getDescription(), inherited.getDescription()));
+                        metadata.setGroup(notNull(metadata.getGroup(), inherited.getGroup()));
+                        metadata.setLabel(notNull(metadata.getLabel(), inherited.getLabel()));
+                        metadata.setLevel(notNull(metadata.getLevel(), inherited.getLevel()));
+                    }
                 }
 
                 // See http://issues.carrot2.org/browse/CARROT-706
