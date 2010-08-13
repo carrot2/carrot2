@@ -27,7 +27,6 @@ import org.carrot2.util.attribute.test.metadata.AttributeLevels;
 import org.carrot2.util.attribute.test.metadata.AttributeTitles;
 import org.carrot2.util.attribute.test.metadata.NoJavadoc;
 import org.carrot2.util.attribute.test.metadata.TestBindable;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class BindableMetadataBuilderTest
@@ -79,11 +78,10 @@ public class BindableMetadataBuilderTest
         checkTitle(AttributeTitles.class, "noTitle", null);
     }
 
-    // TODO: http://issues.carrot2.org/browse/CARROT-707
-    @Test @Ignore
+    @Test
     public void testEmptyTitle()
     {
-        checkTitle(AttributeTitles.class, "emptyTitle", "");
+        checkTitle(AttributeTitles.class, "emptyTitle", null);
     }
 
     @Test
