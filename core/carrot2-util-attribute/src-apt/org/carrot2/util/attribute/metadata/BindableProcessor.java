@@ -100,6 +100,11 @@ public final class BindableProcessor extends AbstractProcessor
         new HashMap<String, TypeElement>();
 
     /**
+     * Classpath resource lookup routines (and compiler-specific hacks). 
+     */
+    private final ArrayList<IClassPathLookup> resourceLookup = new ArrayList<IClassPathLookup>();
+
+    /**
      * Initialize processing environment.
      */
     @Override
@@ -110,6 +115,8 @@ public final class BindableProcessor extends AbstractProcessor
         elementUtils = this.processingEnv.getElementUtils();
         filer = this.processingEnv.getFiler();
         bindableTypes.clear();
+
+        initializeLookups();
     }
 
     /**
@@ -367,22 +374,33 @@ public final class BindableProcessor extends AbstractProcessor
      */
     private BindableMetadata readMetadataFromResource(String clazzName)
     {
+        final String metadataName = metadataFileName(clazzName);
         InputStream is = null;
         try
         {
             is = getResourceOrNull(StandardLocation.CLASS_OUTPUT, 
-                EMPTY_PACKAGE_NAME, metadataFileName(clazzName));
+                EMPTY_PACKAGE_NAME, metadataName);
             
             if (is == null)
             {
                 is = getResourceOrNull(StandardLocation.CLASS_PATH, 
-                    EMPTY_PACKAGE_NAME, metadataFileName(clazzName));
+                    EMPTY_PACKAGE_NAME, metadataName);
+            }
+            
+            /*
+             * javac has no support for reading CLASS_PATH resources (filer attempts
+             * to open a resource for writing, hardcoded under CLASS_OUTPUT)... try 
+             * compiler-specific hacks.
+             */
+            for (IClassPathLookup cpl : resourceLookup)
+            {
+                is = cpl.getResourceOrNull(metadataName);
+                if (is != null) break;
             }
 
             if (is == null)
             {
-                throw new IOException("Resource not found: "
-                    + metadataFileName(clazzName));
+                throw new IOException("Resource not found: " + metadataName);
             }
 
             return new Persister().read(BindableMetadata.class, is);
@@ -390,7 +408,36 @@ public final class BindableProcessor extends AbstractProcessor
         catch (Exception e)
         {
             if (is != null) closeQuietly(is);
-            throw new RuntimeException("Could not load metadata from class: " + clazzName, e);
+            throw new RuntimeException("Could not load metadata for class: " + clazzName, e);
+        }
+    }
+
+    /**
+     * Initialize lookup hacks.
+     */
+    private void initializeLookups()
+    {
+        this.resourceLookup.clear();
+
+        String [] hacks = {
+            "org.carrot2.util.attribute.metadata.Javac16CpLookup"
+        };
+
+        final ClassLoader classLoader = this.getClass().getClassLoader();
+        for (String clazzName : hacks)
+        {
+            try
+            {
+                Class<?> c = Class.forName(clazzName, true, classLoader);
+                IClassPathLookup cpl = (IClassPathLookup) c.newInstance();
+                cpl.init(super.processingEnv);
+                resourceLookup.add(cpl);
+            }
+            catch (Throwable t)
+            {
+                // Skipping this hack.
+                t.printStackTrace();
+            }
         }
     }
 
