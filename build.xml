@@ -986,6 +986,7 @@
     <mkdir dir="${utilities.build.dir}" />
     <javac destdir="${utilities.build.dir}" compiler="modern">
       <src location="${carrot2.master.basedir}/core/carrot2-util-attribute/src" />
+      <src location="${carrot2.master.basedir}/core/carrot2-util-attribute/src-apt" />
       <include name="org/carrot2/util/attribute/metadata/**" />
       <include name="org/carrot2/util/attribute/Bindable.java" />
       <include name="org/carrot2/util/attribute/Attribute.java" />
