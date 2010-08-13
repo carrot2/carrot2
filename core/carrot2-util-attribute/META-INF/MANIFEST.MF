@@ -17,3 +17,5 @@ Require-Bundle: org.carrot2.util.common;visibility:=reexport,
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: registered
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .apt_factory/org.carrot2.bindables.jar,
+ .
