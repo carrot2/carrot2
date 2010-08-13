@@ -448,7 +448,6 @@ public final class BindableProcessor extends AbstractProcessor
             catch (Throwable t)
             {
                 // Skipping this hack.
-                t.printStackTrace();
             }
         }
     }
