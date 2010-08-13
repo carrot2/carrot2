@@ -10,8 +10,9 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.util.attribute;
+package org.carrot2.util.attribute.metadata;
 
+import org.carrot2.util.attribute.AttributeLevel;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -28,16 +29,16 @@ public class AttributeMetadata extends CommonMetadata
     @Element(required = false)
     private AttributeLevel level;
 
-    AttributeMetadata()
+    public AttributeMetadata()
     {
     }
 
-    AttributeMetadata(String title, String label, String description)
+    public AttributeMetadata(String title, String label, String description)
     {
         this(title, label, description, null, null);
     }
 
-    AttributeMetadata(String title, String label, String description, String group,
+    public AttributeMetadata(String title, String label, String description, String group,
         AttributeLevel level)
     {
         this.title = title;
@@ -62,7 +63,7 @@ public class AttributeMetadata extends CommonMetadata
         return group;
     }
 
-    void setGroup(String group)
+    public void setGroup(String group)
     {
         this.group = group;
     }
@@ -76,7 +77,7 @@ public class AttributeMetadata extends CommonMetadata
         return level;
     }
 
-    void setLevel(AttributeLevel level)
+    public void setLevel(AttributeLevel level)
     {
         this.level = level;
     }

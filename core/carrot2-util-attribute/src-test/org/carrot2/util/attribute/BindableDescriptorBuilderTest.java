@@ -21,7 +21,16 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.attribute.test.binder.*;
+import org.carrot2.util.attribute.metadata.AttributeMetadata;
+import org.carrot2.util.attribute.test.binder.BindableReferenceContainer;
+import org.carrot2.util.attribute.test.binder.BindableReferenceImpl1;
+import org.carrot2.util.attribute.test.binder.BindableReferenceImpl2;
+import org.carrot2.util.attribute.test.binder.CircularReferenceContainer;
+import org.carrot2.util.attribute.test.binder.NonprimitiveAttribute;
+import org.carrot2.util.attribute.test.binder.NotBindable;
+import org.carrot2.util.attribute.test.binder.SingleClass;
+import org.carrot2.util.attribute.test.binder.SubClass;
+import org.carrot2.util.attribute.test.binder.SuperClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.simpleframework.xml.core.Persister;
@@ -185,8 +194,7 @@ public class BindableDescriptorBuilderTest
                 new AttributeDescriptor(referenceClass
                     .getDeclaredField("processingInputInt"), 10, Lists
                     .<Annotation> newArrayList(), new AttributeMetadata(
-                    "Processing input int", null, null))).hasMetadata(
-                new BindableMetadata());
+                    "Processing input int", null, null)));
     }
 
     @Test

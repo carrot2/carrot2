@@ -14,7 +14,7 @@ package org.carrot2.util.attribute.test.assertions;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.carrot2.util.attribute.CommonMetadata;
+import org.carrot2.util.attribute.metadata.CommonMetadata;
 
 /**
  * Assertions on {@link CommonMetadata}.

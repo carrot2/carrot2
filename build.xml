@@ -257,7 +257,7 @@
        Resources.
        Copies the runtime resources to the compiled classes directory.
     -->
-  <target name="resources" depends="attrs">
+  <target name="resources">
     <mkdir dir="${build.dir}" />
 
     <copy todir="${build.dir}" includeemptydirs="false">
@@ -299,7 +299,7 @@
        Unit tests.
     -->
   <target name="test"
-          depends="compile.test, attrs, resources.test"
+          depends="compile.test, resources.test"
           description="Runs all unit tests">
     <mkdir dir="${tests.report.dir}" />
 
@@ -358,44 +358,6 @@
   </target>
 
   <!-- 
-       Attribute metadata related targets and macros.
-    -->
-  <property name="common.attribute.names.source.path"
-            location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
-
-  <target name="attrs"
-          depends="compile, attrs.tasks">
-    <sequential>
-      <attributes-xml java.source="${core.dir}/carrot2-algorithm-lingo/src"        />
-      <attributes-xml java.source="${core.dir}/carrot2-algorithm-stc/src"          />
-      <attributes-xml java.source="${core.dir}/carrot2-algorithm-synthetic/src"    />
-      <attributes-xml java.source="${core.dir}/carrot2-core/src"                   />
-      <attributes-xml java.source="${core.dir}/carrot2-source-etools/src"          />
-      <attributes-xml java.source="${core.dir}/carrot2-source-yahoo/src"           />
-      <attributes-xml java.source="${core.dir}/carrot2-source-microsoft/src"       />
-      <attributes-xml java.source="${core.dir}/carrot2-source-pubmed/src"          />
-      <attributes-xml java.source="${core.dir}/carrot2-source-opensearch/src"      />
-      <attributes-xml java.source="${core.dir}/carrot2-source-boss/src"            />
-      <attributes-xml java.source="${core.dir}/carrot2-source-google/src"          />
-      <attributes-xml java.source="${core.dir}/carrot2-source-google-desktop/src"  />
-      <attributes-xml java.source="${core.dir}/carrot2-source-solr/src"            />
-      <attributes-xml java.source="${core.dir}/carrot2-source-xml/src"             />
-      <attributes-xml java.source="${core.dir}/carrot2-source-lucene/src"          />
-      <attributes-xml java.source="${core.dir}/carrot2-source-ambient/src"         />
-      <attributes-xml java.source="${core.dir}/carrot2-util-text/src"              />
-      <attributes-xml java.source="${core.dir}/carrot2-util-attribute/src-test"    />
-      <attributes-xml java.source="${workbench.dir}/org.carrot2.workbench.core/src" />
-      <attributes-xml java.source="${applications.dir}/carrot2-webapp/src" />
-    </sequential>
-  </target>
-
-  <target name="attrs.compile" depends="compile, attrs.tasks" 
-  	description="Generate custom attribute descriptors.">
-  	<fail unless="src.dir">Provide source folder to parse: -Dsrc.dir=&lt;location&gt;</fail>
-  	<attributes-xml java.source="${src.dir}" />
-  </target>
-
-  <!-- 
        Code duplication detection.
     -->
   <path id="pmd.classpath">
@@ -404,36 +366,6 @@
 
   <target name="pmd.tasks" if="pmd.home">
     <taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpathref="pmd.classpath" />
-  </target>
-
-  <target name="attrs.tasks" depends="compile, antlib">
-    <taskdef name="metadata-serializer" 
-        classname="org.carrot2.util.attribute.BindableMetadataSerializerTask" 
-        classpathref="test.classpath" 
-        loaderRef="attrs.classloader" />
-
-    <macrodef name="attributes-xml">
-      <attribute name="java.source" />
-      <sequential>
-        <switchClassLoader loaderRef="attrs.classloader">
-          <metadata-serializer destdir="@{java.source}">
-              <commonMetadata>
-                  <path location="${common.attribute.names.source.path}" />
-              </commonMetadata>
-          
-              <fileset dir="@{java.source}">
-                  <include name="**/*.java" />
-          
-                  <modified update="true" cache="propertyfile" algorithm="digest" comparator="equal">
-                      <param name="cache.cachefile"
-                          value="${carrot2.master.basedir}/tmp/attrs-cache.properties"/>
-                      <param name="algorithm.algorithm" value="MD5" />
-                  </modified>
-              </fileset>
-          </metadata-serializer>
-        </switchClassLoader>
-      </sequential>
-    </macrodef>
   </target>
 
   <target name="duplication"
@@ -620,7 +552,7 @@
        Build core JAR.
     -->
   <target name="jar" description="Builds Carrot2 core JAR"
-    depends="compile, attrs, resources">
+    depends="compile, resources">
     <mkdir dir="${jar.dir}" />
     <jar destfile="${jar.dir}/carrot2-core-${carrot2.version}.jar">
       <fileset dir="${build.dir}">
@@ -850,7 +782,7 @@
   <!--
       Workbench compilation section.
   -->
-  <target name="workbench.plugins.gather" depends="carrot2.common.antlib.tasks, pde.build.prepare, attrs">
+  <target name="workbench.plugins.gather" depends="carrot2.common.antlib.tasks, pde.build.prepare">
     <patternset id="temporary.files">
       <exclude name="**/.svn/**" />
       <exclude name="**/tmp/**" />
@@ -1043,6 +975,59 @@
     </fail>
   </target>
 
+
+  <!--
+      Compilation and assembly of static utility JARs (apt preprocessors).
+   -->
+  <target name="utility.jars" description="Re(create) utility JARs.">
+    <property name="utilities.build.dir" location="${carrot2.master.basedir}/tmp/utility.jars" />
+
+    <delete dir="${utilities.build.dir}" failonerror="false" />
+    <mkdir dir="${utilities.build.dir}" />
+    <javac destdir="${utilities.build.dir}" compiler="modern">
+      <src location="${carrot2.master.basedir}/core/carrot2-util-attribute/src" />
+      <include name="org/carrot2/util/attribute/metadata/**" />
+      <include name="org/carrot2/util/attribute/Bindable.java" />
+      <include name="org/carrot2/util/attribute/Attribute.java" />
+      <include name="org/carrot2/util/attribute/AttributeLevel.java" />
+
+      <classpath id="utility.classpath">
+        <fileset dir=".">
+          <include name="lib/org.apache.commons/commons-lang-*.jar" />
+          <include name="lib/com.thoughtworks.qdox/*.jar" />
+          <include name="lib/org.simpleframework.xml/*.jar" />
+        </fileset>
+      </classpath>
+    </javac>
+    
+    <pathconvert property="utility.manifest.classpath" pathsep=" " dirsep="/">
+        <!-- <path refid="utility.classpath" /> -->
+        <fileset dir="${carrot2.master.basedir}">
+          <include name="lib/org.apache.commons/commons-lang-*.jar" />
+          <include name="lib/com.thoughtworks.qdox/*.jar" />
+          <include name="lib/org.simpleframework.xml/*.jar" />
+        </fileset>
+        <mapper>
+          <chainedmapper>
+             <filtermapper><replacestring
+                from="${carrot2.master.basedir}" 
+                to="../../.."/></filtermapper> 
+          </chainedmapper>
+        </mapper>
+    </pathconvert>
+
+    <jar destfile="${carrot2.master.basedir}/core/carrot2-util-attribute/.apt_factory/org.carrot2.bindables.jar">
+      <fileset dir="${utilities.build.dir}" />
+      <service type="javax.annotation.processing.Processor" provider="org.carrot2.util.attribute.metadata.BindableProcessor" />
+      <manifest>
+        <attribute name="Class-Path" value="${utility.manifest.classpath}" />
+      </manifest>
+    </jar>
+
+    <delete dir="${utilities.build.dir}" failonerror="false" />
+  </target>
+
+
   <!--
       Source code management: license headers list and replace.
     -->
@@ -1122,7 +1107,7 @@
   <!--
        Generate development files for Eclipse.
    -->
-  <target name="eclipse" depends="attrs, carrot2.webapp.eclipse.setup" description="Generate Eclipse files for development." />
+  <target name="eclipse" depends="carrot2.webapp.eclipse.setup" description="Generate Eclipse files for development." />
 
   <!--
        Pre-commit check for developers

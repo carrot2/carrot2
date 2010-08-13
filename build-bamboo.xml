@@ -55,7 +55,6 @@
             <exclude name="maven-test/**" />
             <exclude name="jar/**" />
             <exclude name="classes/**" />
-            <exclude name="attrs-cache.properties" />
           </fileset>
         </copy>
     </target>

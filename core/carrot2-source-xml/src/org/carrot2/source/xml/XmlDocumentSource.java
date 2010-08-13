@@ -37,7 +37,7 @@ import com.google.common.collect.*;
  * 
  * @see #xml
  */
-@Bindable(prefix = "XmlDocumentSource")
+@Bindable(prefix = "XmlDocumentSource", inherit = AttributeNames.class)
 public class XmlDocumentSource extends ProcessingComponentBase implements IDocumentSource
 {
     /**
@@ -149,7 +149,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     @Input
     @Output
     @Processing
-    @Attribute(key = AttributeNames.QUERY)
+    @Attribute(key = AttributeNames.QUERY, inherit = true)
     public String query;
 
     /**
@@ -158,7 +158,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      */
     @Input
     @Processing
-    @Attribute(key = AttributeNames.RESULTS)
+    @Attribute(key = AttributeNames.RESULTS, inherit = true)
     @IntRange(min = 1)
     public int results = 100;
 
@@ -181,7 +181,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      */
     @Output
     @Processing
-    @Attribute(key = AttributeNames.PROCESSING_RESULT_TITLE)
+    @Attribute(key = AttributeNames.PROCESSING_RESULT_TITLE, inherit = true)
     public String title;
 
     /**
@@ -189,7 +189,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      */
     @Processing
     @Output
-    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
     public List<Document> documents;
 
     /**

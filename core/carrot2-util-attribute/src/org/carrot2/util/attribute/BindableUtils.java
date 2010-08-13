@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -60,26 +59,6 @@ final class BindableUtils
             }
             return fields;
         }
-    }
-
-    /**
-     * Returns all {@link Bindable} from the hierarchy of the provided <code>clazz</code>.
-     */
-    static Collection<Class<?>> getClassesFromBindableHerarchy(Class<?> clazz)
-    {
-        final Collection<Class<?>> classes = Lists.newArrayList();
-
-        while (clazz != null)
-        {
-            if (clazz.getAnnotation(Bindable.class) != null)
-            {
-                classes.add(clazz);
-            }
-
-            clazz = clazz.getSuperclass();
-        }
-
-        return classes;
     }
 
     /**

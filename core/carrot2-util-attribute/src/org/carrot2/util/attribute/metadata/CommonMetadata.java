@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.util.attribute;
+package org.carrot2.util.attribute.metadata;
 
 import org.apache.commons.lang.StringUtils;
 import org.simpleframework.xml.Element;
@@ -38,7 +38,7 @@ public class CommonMetadata
         return title;
     }
 
-    protected void setTitle(String title)
+    public void setTitle(String title)
     {
         this.title = title;
     }
@@ -52,7 +52,7 @@ public class CommonMetadata
         return label;
     }
 
-    protected void setLabel(String label)
+    public void setLabel(String label)
     {
         this.label = label;
     }
@@ -74,7 +74,7 @@ public class CommonMetadata
         return description;
     }
 
-    protected void setDescription(String plainTextDescription)
+    public void setDescription(String plainTextDescription)
     {
         this.description = plainTextDescription;
     }

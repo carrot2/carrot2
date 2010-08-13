@@ -270,7 +270,7 @@ public class AttributeBinderTest
         @Output
         @Required
         @Attribute
-        private Class initInputOutputClass;
+        private Class<?> initInputOutputClass;
     }
 
     @Bindable

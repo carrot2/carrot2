@@ -12,9 +12,13 @@
 
 package org.carrot2.util.attribute.test.metadata;
 
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+
 /**
  *
  */
+@Bindable
 public class TestAttributeNames
 {
     /**
@@ -22,5 +26,6 @@ public class TestAttributeNames
      *
      * @label label
      */
+    @Attribute(key = "title-description-label")
     public static final String TITLE_DESCRIPTION_LABEL = "title-description-label";
 }

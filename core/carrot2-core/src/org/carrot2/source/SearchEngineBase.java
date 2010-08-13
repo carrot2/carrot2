@@ -32,37 +32,37 @@ import org.carrot2.util.attribute.constraint.NotBlank;
  * @see SimpleSearchEngine
  * @see MultipageSearchEngine
  */
-@Bindable(prefix = "SearchEngineBase")
+@Bindable(prefix = "SearchEngineBase", inherit = AttributeNames.class)
 public abstract class SearchEngineBase extends ProcessingComponentBase implements
     IDocumentSource
 {
     @Processing
     @Input
-    @Attribute(key = AttributeNames.START)
+    @Attribute(key = AttributeNames.START, inherit = true)
     @IntRange(min = 0)
     public int start = 0;
 
     @Processing
     @Input
-    @Attribute(key = AttributeNames.RESULTS)
+    @Attribute(key = AttributeNames.RESULTS, inherit = true)
     @IntRange(min = 1)
     public int results = 100;
 
     @Processing
     @Input
-    @Attribute(key = AttributeNames.QUERY)
+    @Attribute(key = AttributeNames.QUERY, inherit = true)
     @Required
     @NotBlank
     public String query;
 
     @Processing
     @Output
-    @Attribute(key = AttributeNames.RESULTS_TOTAL)
+    @Attribute(key = AttributeNames.RESULTS_TOTAL, inherit = true)
     public long resultsTotal;
 
     @Processing
     @Output
-    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
     @Internal
     public Collection<Document> documents;
 

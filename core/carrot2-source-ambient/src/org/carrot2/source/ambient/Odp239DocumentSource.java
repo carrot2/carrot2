@@ -22,7 +22,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
  * Serves documents from the ODP239 test set. For more details, please see:
  * http://credo.fub.it/odp239/.
  */
-@Bindable(prefix = "Odp239DocumentSource")
+@Bindable(prefix = "Odp239DocumentSource", inherit = AttributeNames.class)
 public class Odp239DocumentSource extends FubDocumentSource
 {
     static final FubTestCollection DATA = new FubTestCollection("/odp239");
@@ -44,13 +44,13 @@ public class Odp239DocumentSource extends FubDocumentSource
 
     @Processing
     @Input
-    @Attribute(key = AttributeNames.RESULTS)
+    @Attribute(key = AttributeNames.RESULTS, inherit = true)
     @IntRange(min = 1, max = MAX_RESULTS_PER_TOPIC)
     public int results = MAX_RESULTS_PER_TOPIC;
 
     @Processing
     @Output
-    @Attribute(key = AttributeNames.RESULTS_TOTAL)
+    @Attribute(key = AttributeNames.RESULTS_TOTAL, inherit = true)
     public long resultsTotal = MAX_RESULTS_PER_TOPIC;
 
     /**

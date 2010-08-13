@@ -10,13 +10,10 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.util.attribute;
+package org.carrot2.util.attribute.metadata;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.thoughtworks.qdox.model.AbstractJavaEntity;
-import com.thoughtworks.qdox.model.Annotation;
 
 /**
  * A number of utility methods for working with JavaDoc comments.
@@ -44,32 +41,6 @@ final class MetadataExtractorUtils
     private MetadataExtractorUtils()
     {
         // No instantiation
-    }
-
-    /**
-     * Checks if the Java source element has the required annotation.
-     */
-    static boolean hasAnnotation(AbstractJavaEntity javaEntity,
-        Class<?> requestedAnnotationClass)
-    {
-        return getAnnotation(javaEntity, requestedAnnotationClass) != null;
-    }
-
-    /**
-     * Returns a required annotation for the provided Java source element.
-     */
-    static Annotation getAnnotation(AbstractJavaEntity javaEntity,
-        Class<?> requestedAnnotationClass)
-    {
-        for (final Annotation annotation : javaEntity.getAnnotations())
-        {
-            if (requestedAnnotationClass.getName()
-                .equals(annotation.getType().getValue()))
-            {
-                return annotation;
-            }
-        }
-        return null;
     }
 
     /**

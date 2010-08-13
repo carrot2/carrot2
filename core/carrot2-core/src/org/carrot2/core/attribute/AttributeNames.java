@@ -12,12 +12,19 @@
 
 package org.carrot2.core.attribute;
 
-import org.carrot2.core.*;
+import org.carrot2.core.IClusteringAlgorithm;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.IProcessingComponent;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
 
 /**
  * Certain constant attribute names. Note that not all attributes need to be specified
  * here.
+ * 
+ * 
  */
+@Bindable(prefix = "")
 public final class AttributeNames
 {
     /**
@@ -27,6 +34,7 @@ public final class AttributeNames
      * @level Advanced
      * @group Search query
      */
+    @Attribute(key = "start")
     public static final String START = "start";
 
     /**
@@ -37,6 +45,7 @@ public final class AttributeNames
      * @level Basic
      * @group Search query
      */
+    @Attribute(key = "results")
     public static final String RESULTS = "results";
 
     /**
@@ -46,6 +55,7 @@ public final class AttributeNames
      * @level Basic
      * @group Search query
      */
+    @Attribute(key = "query")
     public static final String QUERY = "query";
 
     /**
@@ -54,6 +64,7 @@ public final class AttributeNames
      * @label Total Results
      * @group Search request information
      */
+    @Attribute(key = "results-total")
     public static final String RESULTS_TOTAL = "results-total";
 
     /**
@@ -63,6 +74,7 @@ public final class AttributeNames
      * @level Basic
      * @group Documents
      */
+    @Attribute(key = "documents")
     public static final String DOCUMENTS = "documents";
 
     /**
@@ -71,6 +83,7 @@ public final class AttributeNames
      * @label Clusters
      * @group Clusters
      */
+    @Attribute(key = "clusters")
     public static final String CLUSTERS = "clusters";
 
     /**
@@ -81,6 +94,7 @@ public final class AttributeNames
      * @label Total Processing Time
      * @group Processing status
      */
+    @Attribute(key = "processing-time-total")
     public static final String PROCESSING_TIME_TOTAL = "processing-time-total";
 
     /**
@@ -92,6 +106,7 @@ public final class AttributeNames
      * @label Data Source Processing Time
      * @group Data source status
      */
+    @Attribute(key = "processing-time-source")
     public static final String PROCESSING_TIME_SOURCE = "processing-time-source";
 
     /**
@@ -103,6 +118,7 @@ public final class AttributeNames
      * @label Clustering Algorithm Processing Time
      * @group Clustering algorithm status
      */
+    @Attribute(key = "processing-time-algorithm")
     public static final String PROCESSING_TIME_ALGORITHM = "processing-time-algorithm";
 
     /**
@@ -116,6 +132,7 @@ public final class AttributeNames
      * @level Advanced
      * @group Search request information
      */
+    @Attribute(key = "processing-result.title")
     public static final String PROCESSING_RESULT_TITLE = "processing-result.title";
 
     /*

@@ -57,7 +57,7 @@ import com.google.common.collect.Lists;
  * 
  * @label STC Clustering
  */
-@Bindable(prefix = "STCClusteringAlgorithm")
+@Bindable(prefix = "STCClusteringAlgorithm", inherit = AttributeNames.class)
 public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
@@ -68,7 +68,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Processing
     @Input
     @Internal
-    @Attribute(key = AttributeNames.QUERY)
+    @Attribute(key = AttributeNames.QUERY, inherit = true)
     public String query = null;
 
     /**
@@ -78,7 +78,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Input
     @Required
     @Internal
-    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
     public List<Document> documents;
 
     /**
@@ -87,7 +87,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Processing
     @Output
     @Internal
-    @Attribute(key = AttributeNames.CLUSTERS)
+    @Attribute(key = AttributeNames.CLUSTERS, inherit = true)
     public List<Cluster> clusters = null;
 
     /**

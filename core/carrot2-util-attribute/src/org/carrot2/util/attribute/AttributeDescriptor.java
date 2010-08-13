@@ -19,6 +19,7 @@ import java.util.*;
 import org.apache.commons.lang.ClassUtils;
 import org.carrot2.util.ListUtils;
 import org.carrot2.util.attribute.constraint.*;
+import org.carrot2.util.attribute.metadata.AttributeMetadata;
 import org.simpleframework.xml.*;
 
 import com.google.common.base.Function;

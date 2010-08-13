@@ -115,7 +115,9 @@ public class SimpleXmlWrapperValue
      * 
      * @return the actual value or <code>null</code> if value cannot be unwrapped
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({
+        "unchecked", "rawtypes"
+    })
     Object unwrap()
     {
         if (value != null)
@@ -161,7 +163,7 @@ public class SimpleXmlWrapperValue
         {
             if (wrapper instanceof ISimpleXmlWrapper)
             {
-                return ((ISimpleXmlWrapper) wrapper).getValue();
+                return ((ISimpleXmlWrapper<?>) wrapper).getValue();
             }
             else
             {

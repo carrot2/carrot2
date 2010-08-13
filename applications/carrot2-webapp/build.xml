@@ -259,13 +259,13 @@
   <!--
        Generates metadata files for webapp-specific document sources.
     -->
-  <target name="carrot2.webapp.attributes.war" depends="basedir.check, attrs.tasks, attrs, compile">
+  <target name="carrot2.webapp.attributes.war" depends="basedir.check, compile">
   </target>
 
   <!--
        Generates metadata files for webapp-specific document sources.
     -->
-  <target name="carrot2.webapp.attributes.eclipse" depends="basedir.check, attrs.tasks, attrs, compile">
+  <target name="carrot2.webapp.attributes.eclipse" depends="basedir.check, compile">
   </target>
 
   <!--

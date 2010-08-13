@@ -23,12 +23,12 @@ import org.carrot2.util.attribute.constraint.IntRange;
 /**
  * A base document source for test collections developed at Fondazione Ugo Bordoni. 
  */
-@Bindable(prefix = "FubDocumentSource")
+@Bindable(prefix = "FubDocumentSource", inherit = AttributeNames.class)
 public class FubDocumentSource extends ProcessingComponentBase implements IDocumentSource
 {
     @Processing
     @Output
-    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
     @Internal
     public List<Document> documents;
 
@@ -47,7 +47,7 @@ public class FubDocumentSource extends ProcessingComponentBase implements IDocum
 
     @Processing
     @Output
-    @Attribute(key = AttributeNames.QUERY)
+    @Attribute(key = AttributeNames.QUERY, inherit = true)
     public String query;
 
     /**

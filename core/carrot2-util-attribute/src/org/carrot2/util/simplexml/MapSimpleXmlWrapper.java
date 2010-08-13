@@ -27,7 +27,7 @@ import org.simpleframework.xml.core.Persist;
 @Root(name = "map")
 @SuppressWarnings(
 {
-    "unchecked", "unused"
+    "unchecked", "unused", "rawtypes"
 })
 class MapSimpleXmlWrapper implements ISimpleXmlWrapper<Map>
 {

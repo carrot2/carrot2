@@ -32,4 +32,11 @@ public @interface Bindable
      * {@link Bindable#prefix()} works with attribute keys, see {@link Attribute#key()};
      */
     String prefix() default "";
+
+    /**
+     * Inherit attribute descriptions (metadata) from other bindable types. Each attribute
+     * should use <code>inherit</code> key to indicate which attribute it inherits 
+     * metadata from.
+     */
+    Class<?>[] inherit() default {};
 }

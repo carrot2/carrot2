@@ -17,7 +17,7 @@ import org.carrot2.util.attribute.test.metadata.TestAttributeNames;
 /**
  * Test named attribute container.
  */
-@Bindable
+@Bindable(inherit = TestAttributeNames.class)
 @SuppressWarnings("unused")
 public class NamedAttributes
 {
@@ -25,7 +25,7 @@ public class NamedAttributes
 
     @TestInit
     @Input
-    @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL)
+    @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL, inherit = true)
     private int noJavadoc;
 
     /**
@@ -33,7 +33,7 @@ public class NamedAttributes
      */
     @TestInit
     @Input
-    @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL)
+    @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL, inherit = true)
     private int labelOverride;
 
     /**
@@ -41,7 +41,7 @@ public class NamedAttributes
      */
     @TestInit
     @Input
-    @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL)
+    @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL, inherit = true)
     private int titleOverride;
 
     /**
@@ -49,16 +49,11 @@ public class NamedAttributes
      */
     @TestInit
     @Input
-    @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL)
+    @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL, inherit = true)
     private int titleDescriptionOverride;
 
     @TestInit
     @Input
     @Attribute(key = TEST)
     private int noDotInKey;
-
-    @TestInit
-    @Input
-    @Attribute(key = BindableMetadataBuilder.ATTRIBUTE_KEY_PARAMETER)
-    private int classNotInSourcePath;
 }

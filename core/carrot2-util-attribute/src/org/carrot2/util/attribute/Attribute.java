@@ -42,4 +42,13 @@ public @interface Attribute
      * the attribute field as returned by {@link Field#getName()}.
      */
     String key() default "";
+
+    /**
+     * If true, inherit attribute documentation from another attribute (field). Used in conjunction with
+     * {@link Bindable#inherit()}. The {@link #key()} of this attribute must match exactly one of
+     * the inherited attributes.
+     *
+     * @see Bindable#inherit()
+     */
+    boolean inherit() default false;
 }
