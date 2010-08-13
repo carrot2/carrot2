@@ -18,7 +18,11 @@ import java.util.*;
 
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.metadata.BindableMetadata;
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Test;
 
 import com.google.common.base.Function;
 
@@ -28,6 +32,21 @@ import com.google.common.base.Function;
 public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
     ProcessingComponentTestBase<T>
 {
+    /**
+     * Processing components should be bindable, so their metadata should 
+     * always be available.
+     */
+    @Test
+    public void testMetadataAvailable()
+    {
+        Class<? extends IDocumentSource> c = getComponentClass();
+        Assume.assumeTrue(c.getAnnotation(Bindable.class) != null);
+
+        BindableMetadata metadata = BindableMetadata.forClassWithParents(c);
+        assertNotNull(metadata);
+        assertNotNull(metadata.getAttributeMetadata());
+    }
+
     /**
      * Runs a query without specifying any additional attributes. The query is run using
      * a simple {@link Controller}.

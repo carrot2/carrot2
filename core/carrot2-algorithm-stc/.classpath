@@ -5,5 +5,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry exported="true" kind="lib" path="META-INF" sourcepath="META-INF"/>
+	<classpathentry kind="src" path=".apt_generated">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

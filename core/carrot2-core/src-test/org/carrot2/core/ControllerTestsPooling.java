@@ -12,7 +12,6 @@
 
 package org.carrot2.core;
 
-import static org.easymock.EasyMock.isA;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 

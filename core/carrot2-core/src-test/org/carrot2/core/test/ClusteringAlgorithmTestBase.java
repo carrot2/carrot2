@@ -17,15 +17,35 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-import org.carrot2.core.*;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.Controller;
+import org.carrot2.core.Document;
+import org.carrot2.core.IClusteringAlgorithm;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.metadata.BindableMetadata;
 import org.fest.assertions.Assertions;
+import org.junit.Assume;
 import org.junit.Test;
 
-import com.google.common.collect.*;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 
 /**
  * Simple baseline tests that apply to all clustering algorithms.
@@ -33,6 +53,20 @@ import com.google.common.collect.*;
 public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm> extends
     ProcessingComponentTestBase<T>
 {
+    /**
+     * Algorithms are bindable, so their metadata should always be available.
+     */
+    @Test
+    public void testMetadataAvailable()
+    {
+        Class<? extends IClusteringAlgorithm> c = getComponentClass();
+        Assume.assumeTrue(c.getAnnotation(Bindable.class) != null);
+        
+        BindableMetadata metadata = BindableMetadata.forClassWithParents(c);
+        assertNotNull(metadata);
+        assertNotNull(metadata.getAttributeMetadata());
+    }
+
     /**
      * A test to check if the algorithm does not fail with no documents.
      */
