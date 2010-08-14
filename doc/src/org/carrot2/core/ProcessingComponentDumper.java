@@ -82,7 +82,7 @@ public class ProcessingComponentDumper
 
             // Instantiate the component and get bindable metadata
             this.attributeDescriptors = Maps.newHashMap(descriptor
-                .getBindableDescriptor(false).attributeDescriptors);
+                .getBindableDescriptor().attributeDescriptors);
 
             // Determine groups (it's easier to do that here than in XSLT)
             final HashSet<String> groupSet = Sets.newHashSet();

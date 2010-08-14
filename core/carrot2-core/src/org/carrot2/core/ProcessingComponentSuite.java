@@ -270,7 +270,8 @@ public class ProcessingComponentSuite
         for (Iterator<? extends ProcessingComponentDescriptor> i = Iterators.concat(
             sources.iterator(), algorithms.iterator()); i.hasNext();)
         {
-            if (!(p = i.next()).isComponentAvailable())
+            p = i.next();
+            if (!p.isComponentAvailable())
             {
                 failed.add(p);
                 i.remove();

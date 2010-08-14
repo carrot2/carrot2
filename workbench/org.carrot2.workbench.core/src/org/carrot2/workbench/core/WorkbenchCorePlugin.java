@@ -342,12 +342,14 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             try
             {
                 final String id = pcd.getId();
+                BindableDescriptor bindableDescriptor = pcd.getBindableDescriptor();
+                bindableDescriptors.put(id, bindableDescriptor);
                 processingDescriptors.put(id, pcd);
-                bindableDescriptors.put(id, pcd.getBindableDescriptor());
             }
             catch (Exception e)
             {
-                Utils.logError("Could not extract descriptor from: " + pcd.getId(), e, false);
+                Utils.logError("Failed to extract descriptor from: " 
+                    + pcd.getId(), e, false);
             }
         }
         
@@ -371,7 +373,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     /**
      * @return Return failed component descriptors, if any.
      */
-    List<ProcessingComponentDescriptor> getFailed()
+    public List<ProcessingComponentDescriptor> getFailed()
     {
         return failed;
     }

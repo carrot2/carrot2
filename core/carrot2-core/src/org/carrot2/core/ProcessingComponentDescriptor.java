@@ -71,6 +71,11 @@ public class ProcessingComponentDescriptor
 
     @Attribute(required = false)
     Position position = Position.MIDDLE;
+    
+    /**
+     * Cached bindable descriptor for this component.
+     */
+    private BindableDescriptor bindableDescriptor;
 
     /**
      * The relative positioning of the component within the suite.
@@ -247,7 +252,7 @@ public class ProcessingComponentDescriptor
     public BindableDescriptor getBindableDescriptor() throws InstantiationException,
         IllegalAccessException
     {
-        return getBindableDescriptor(true);
+        return bindableDescriptor;
     }
 
     /**
@@ -263,7 +268,7 @@ public class ProcessingComponentDescriptor
      *            {@link IProcessingComponent#init(IControllerContext)} will not be
      *            called.
      */
-    public BindableDescriptor getBindableDescriptor(boolean init)
+    private BindableDescriptor getBindableDescriptor(boolean init)
         throws InstantiationException, IllegalAccessException
     {
         return BindableDescriptorBuilder.buildDescriptor(newInitializedInstance(init));
@@ -276,6 +281,14 @@ public class ProcessingComponentDescriptor
     public boolean isComponentAvailable()
     {
         return this.initializationException == null;
+    }
+
+    /**
+     * Returns initialization failure ({@link Throwable}) or <code>null</code>.
+     */
+    public Throwable getInitializationFailure()
+    {
+        return this.initializationException;
     }
 
     /**
@@ -348,11 +361,12 @@ public class ProcessingComponentDescriptor
         {
             loadAttributeSets();
             newInitializedInstance(true);
+            bindableDescriptor = getBindableDescriptor(true);
         }
         catch (Throwable e)
         {
             org.slf4j.LoggerFactory.getLogger(this.getClass()).warn(
-                "Component availability failure: " + componentClassName, e);
+                "Component unavailable: " + componentClassName, e);
             this.initializationException = e;
         }
     }
@@ -373,13 +387,5 @@ public class ProcessingComponentDescriptor
         {
             return descriptor.id;
         }
-    }
-
-    /**
-     * Returns initialization failure ({@link Throwable}) or <code>null</code>.
-     */
-    public Throwable getInitializationFailure()
-    {
-        return this.initializationException;
     }
 }
