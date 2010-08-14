@@ -208,7 +208,7 @@ public class ProcessingComponentDescriptor
      * </p>
      */
     @SuppressWarnings("unchecked")
-    private IProcessingComponent newInitializedInstance(boolean init)
+    private IProcessingComponent newInitializedInstance()
         throws InstantiationException, IllegalAccessException
     {
         final IProcessingComponent instance = getComponentClass().newInstance();
@@ -226,9 +226,13 @@ public class ProcessingComponentDescriptor
             AttributeBinder
                 .bind(instance, initAttributes, false, Input.class);
 
-            if (init)
+            try
             {
                 instance.init(context);
+            }
+            catch (Throwable t)
+            {
+                // Ignore if failed to initialize.
             }
 
             AttributeBinder.bind(instance, initAttributes, false, Output.class,
@@ -249,29 +253,13 @@ public class ProcessingComponentDescriptor
      * provide values for some required {@link Bindable} {@link Init} attributes, the
      * returned descriptor may be incomplete.
      */
-    public BindableDescriptor getBindableDescriptor() throws InstantiationException,
-        IllegalAccessException
+    public BindableDescriptor getBindableDescriptor()
     {
-        return bindableDescriptor;
-    }
+        if (bindableDescriptor == null)
+            throw new RuntimeException(
+                "Descriptor not available.", this.initializationException);
 
-    /**
-     * Builds and returns a {@link BindableDescriptor} for an instance of this
-     * descriptor's {@link IProcessingComponent}, with default {@link Init} attributes
-     * initialized with the default attribute set. If the default attribute set does not
-     * provide values for some required {@link Bindable} {@link Init} attributes, the
-     * returned descriptor may be incomplete.
-     * 
-     * @param init if <code>true</code>, the component will be initialized by calling
-     *            {@link IProcessingComponent#init(IControllerContext)}. Otherwise, the
-     *            {@link Init} attributes will be bound but
-     *            {@link IProcessingComponent#init(IControllerContext)} will not be
-     *            called.
-     */
-    private BindableDescriptor getBindableDescriptor(boolean init)
-        throws InstantiationException, IllegalAccessException
-    {
-        return BindableDescriptorBuilder.buildDescriptor(newInitializedInstance(init));
+        return bindableDescriptor;
     }
 
     /**
@@ -360,8 +348,9 @@ public class ProcessingComponentDescriptor
         try
         {
             loadAttributeSets();
-            newInitializedInstance(true);
-            bindableDescriptor = getBindableDescriptor(true);
+            bindableDescriptor = 
+                BindableDescriptorBuilder.buildDescriptor(
+                    newInitializedInstance(), true);
         }
         catch (Throwable e)
         {
