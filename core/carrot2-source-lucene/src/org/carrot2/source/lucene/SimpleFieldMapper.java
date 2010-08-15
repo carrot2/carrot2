@@ -40,7 +40,7 @@ public class SimpleFieldMapper implements IFieldMapper
      * 
      * @label Document title field
      * @group Index field mapping
-     * @level Medium
+     * @level Basic
      */
     @Input
     @Attribute
@@ -54,7 +54,7 @@ public class SimpleFieldMapper implements IFieldMapper
      * 
      * @label Document content field
      * @group Index field mapping
-     * @level Medium
+     * @level Basic
      */
     @Input
     @Attribute
