@@ -12,7 +12,10 @@
 
 package org.carrot2.matrix;
 
-import org.carrot2.matrix.nni.*;
+import org.carrot2.matrix.nni.BlasImpl;
+import org.carrot2.matrix.nni.IBlasOperations;
+import org.carrot2.matrix.nni.ILapackOperations;
+import org.carrot2.matrix.nni.LapackImpl;
 
 /**
  * An interface to native matrix computation routines.
@@ -26,29 +29,10 @@ public class NNIInterface
 
     static
     {
-        ILapackOperations a = null;
-        try
-        {
-            a = new LapackImpl();
-        }
-        catch (Throwable t)
-        {
-            // Not available, fall through.
-        }
-        lapack = a;
-        
-        IBlasOperations b = null;
-        try
-        {
-            b = new BlasImpl();
-        }
-        catch (Throwable t)
-        {
-            // Not available, fall through.
-        }
-        blas = b;
+        lapack = instantiateLapack();
+        blas = instantiateBlas();
     }
-
+    
     private NNIInterface()
     {
         // No instance of this class
@@ -109,5 +93,39 @@ public class NNIInterface
             throw new RuntimeException("No native blas available.");
 
         return lapack;
+    }
+    
+    /**
+     * Instantiate Lapack (native).
+     */
+    // @AspectModified()
+    private final static ILapackOperations instantiateLapack()
+    {
+        try
+        {
+            return new LapackImpl();
+        }
+        catch (Throwable t)
+        {
+            // Not available, fall through.
+        }
+        return null;
+    }
+
+    /**
+     * Instantiate blas (native).
+     */
+    // @AspectModified()
+    private final static IBlasOperations instantiateBlas()
+    {
+        try
+        {
+            return new BlasImpl();
+        }
+        catch (Throwable t)
+        {
+            // Not available, fall through.
+        }
+        return null;
     }
 }
