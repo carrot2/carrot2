@@ -35,7 +35,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 /**
- * Lingo clustering algorithm.
+ * Lingo clustering algorithm. Implementation as described in: <i>
+ * Stanisław Osiński, Dawid Weiss: A Concept-Driven Algorithm for Clustering 
+ * Search Results. IEEE Intelligent Systems, May/June, 3 (vol. 20), 2005, 
+ * pp. 48—54.</i>.
  */
 @Bindable(prefix = "LingoClusteringAlgorithm", inherit = AttributeNames.class)
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
