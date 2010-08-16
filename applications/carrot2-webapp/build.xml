@@ -130,14 +130,7 @@
   <target name="carrot2.webapp.classes" depends="basedir.check, jar">
     <mkdir dir="${webapp.classes.dir}" />
 
-    <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac srcdir="${carrot2.webapp.basedir}/src"
-           destdir="${webapp.classes.dir}"
-           compiler="modern"
-           source="1.5"
-           target="1.5"
-	         debug="true"
-           encoding="UTF-8">
+    <javac srcdir="${carrot2.webapp.basedir}/src" destdir="${webapp.classes.dir}">
       <classpath refid="lib.classpath" />
       <classpath path="${jar.dir}/carrot2-core-${carrot2.version}.jar" />
     </javac>

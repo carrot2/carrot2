@@ -161,12 +161,7 @@
     <mkdir dir="${dcs.dir}/war" />
     <mkdir dir="${dcs.dir}/classes" />
 
-    <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac srcdir="${carrot2.dcs.basedir}/src"
-           destdir="${dcs.dir}/classes"
-           source="1.5"
-           target="1.5"
-           encoding="UTF-8">
+    <javac srcdir="${carrot2.dcs.basedir}/src" destdir="${dcs.dir}/classes">
       <classpath refid="lib.classpath" />
       <classpath path="${jar.dir}/carrot2-core-${carrot2.version}.jar" />
     </javac>
@@ -210,10 +205,10 @@
   </target>
 
   <!-- Copies the runtime resources to the compiled classes directory. -->
-  <target name="carrot2.dcs.resources" depends="basedir.check">
-    <mkdir dir="${build.dir}" />
+  <target name="carrot2.dcs.resources.test" depends="basedir.check">
+    <mkdir dir="${build.dir.tests}" />
 
-    <copy todir="${build.dir}" includeemptydirs="false">
+    <copy todir="${build.dir.tests}" includeemptydirs="false">
       <fileset dir="applications">
         <include name="carrot2-dcs/src/**/*.xml" />
       </fileset>

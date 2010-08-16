@@ -113,13 +113,7 @@
   <target name="carrot2.cli.jar" depends="basedir.check, carrot2.cli.lib">
     <mkdir dir="${cli.dir}/classes" />
 
-    <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac srcdir="${carrot2.cli.basedir}/src"
-           destdir="${cli.dir}/classes"
-           source="1.5"
-           target="1.5"
-           compiler="modern"
-           encoding="UTF-8">
+    <javac srcdir="${carrot2.cli.basedir}/src" destdir="${cli.dir}/classes">
       <classpath>
         <fileset dir="${cli.lib.dir}" />
       </classpath>
