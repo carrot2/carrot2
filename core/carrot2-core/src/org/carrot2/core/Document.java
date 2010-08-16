@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -116,7 +115,7 @@ public final class Document
     public Document()
     {
     }
-    
+
     /**
      * Creates a document with the provided <code>title</code>.
      */
@@ -275,24 +274,52 @@ public final class Document
     /**
      * Returns this document's {@link #LANGUAGE}.
      */
-    @JsonProperty
-    @Attribute(required = false)
     public LanguageCode getLanguage()
     {
         return getField(LANGUAGE);
     }
 
-    
     /**
      * Sets this document's {@link #LANGUAGE}.
      * 
      * @param language the language to set
      * @return this document for convenience
      */
-    @Attribute(required = false)
     public Document setLanguage(LanguageCode language)
     {
         return setField(LANGUAGE, language);
+    }
+
+    @SuppressWarnings("unused")
+    @JsonProperty("language")
+    @Attribute(required = false, name = "language")
+    private String getLanguageIsoCode()
+    {
+        final LanguageCode language = getLanguage();
+        return language != null ? language.getIsoCode() : null;
+    }
+
+    @SuppressWarnings("unused")
+    @Attribute(required = false, name = "language")
+    private void setLanguageIsoCode(String languageIsoCode)
+    {
+        if (languageIsoCode != null)
+        {
+            final LanguageCode language = LanguageCode.forISOCode(languageIsoCode);
+            if (language != null)
+            {
+                setLanguage(language);
+            }
+            else
+            {
+                // Try by enum name for backward-compatibility
+                setLanguage(LanguageCode.valueOf(languageIsoCode));
+            }
+        }
+        else
+        {
+            setLanguage(null);
+        }
     }
 
     /**
@@ -379,7 +406,7 @@ public final class Document
                     if (ids.add(document.id))
                     {
                         maxId = Math.max(maxId, document.id);
-                    } 
+                    }
                     else
                     {
                         document.id = null;
@@ -440,8 +467,8 @@ public final class Document
         {
             // Wrapper iterates over the whole map, so we need to synchronize
             // to avoid concurrent modification exceptions in setters
-            otherFieldsForSerialization = 
-                MapUtils.asHashMap(SimpleXmlWrappers.wrap(fields));
+            otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
+                .wrap(fields));
             otherFieldsForSerialization.remove(TITLE);
             otherFieldsForSerialization.remove(SUMMARY);
             otherFieldsForSerialization.remove(CONTENT_URL);

@@ -15,15 +15,26 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatDocuments;
+import static org.fest.assertions.Assertions.assertThat;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.output.NullOutputStream;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.CollectionUtils;
-import org.codehaus.jackson.*;
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
@@ -84,8 +95,40 @@ public class ProcessingResultTest
         assertEquals(title, deserializedDocument.getField(Document.TITLE));
         assertEquals(snippet, deserializedDocument.getField(Document.SUMMARY));
         assertEquals(url, deserializedDocument.getField(Document.CONTENT_URL));
+        assertEquals(null, deserializedDocument.getField(Document.LANGUAGE));
         Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
             .isEqualTo(query);
+    }
+
+    @Test
+    public void testDocumentDeserializationLanguageByIsoCode() throws Exception
+    {
+        final LanguageCode language = LanguageCode.POLISH;
+        assertThat(
+            ProcessingResult.deserialize(documentXml(language.getIsoCode()))
+                .getDocuments().get(0).getLanguage()).isEqualTo(language);
+
+    }
+
+    @Test
+    public void testDocumentDeserializationLanguageByEnumCode() throws Exception
+    {
+        final LanguageCode language = LanguageCode.POLISH;
+        assertThat(
+            ProcessingResult.deserialize(documentXml(language.name())).getDocuments()
+                .get(0).getLanguage()).isEqualTo(language);
+
+    }
+
+    private InputStream documentXml(String language) throws Exception
+    {
+        final StringBuilder xml = new StringBuilder();
+        xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        xml.append("<searchresult>\n");
+        xml.append("<document id=\"0\" language=\"" + language + "\">");
+        xml.append("</document>\n");
+        xml.append("</searchresult>\n");
+        return new ByteArrayInputStream(xml.toString().getBytes("UTF8"));
     }
 
     @Test
@@ -198,8 +241,8 @@ public class ProcessingResultTest
 
         Assertions.assertThat(jsonString).startsWith(callback + "(").endsWith(");");
 
-        final String data = jsonString.substring(callback.length() + 1, jsonString
-            .length() - 2);
+        final String data = jsonString.substring(callback.length() + 1,
+            jsonString.length() - 2);
         final JsonNode root = getJsonRootNode(data);
 
         checkJsonQuery(root);
