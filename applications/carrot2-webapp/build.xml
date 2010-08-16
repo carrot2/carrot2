@@ -11,6 +11,10 @@
   <property name="carrot2.master.basedir"
             location="${carrot2.webapp.basedir}/../../" />
 
+  <!-- Build number, provided by Bamboo -->
+  <property name="build.number" value="" />
+  <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
+
   <!-- Import common macros -->
   <import file="${carrot2.master.basedir}/etc/ant/common/basedir.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/webtest.xml" />
@@ -26,9 +30,6 @@
             location="${carrot2.webapp.basedir}/src/config.template.xml" />
   <property name="war.name.base" value="${carrot2.webapp.base}" />
   
-  <!-- Build number, provided by Bamboo -->
-  <property name="build.number" value="" />
-  <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
 
   <!-- Webapp build dirs -->
   <property name="webapp.dir" location="tmp/webapp" />

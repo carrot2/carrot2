@@ -39,8 +39,5 @@
 #webtest.home=
 #tomcat.home=
 
-# To run webtests on a machine without display, uncomment the property below
-#wt.headless=true
-
-# The browser to emulate in webtests
-#wt.config.browser=FF3
+# To see a GUI progress inticator when running webtests, uncomment the property below
+#wt.headless=false
