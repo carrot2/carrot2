@@ -33,6 +33,7 @@ import org.carrot2.core.Cluster;
 import org.carrot2.core.Controller;
 import org.carrot2.core.Document;
 import org.carrot2.core.IClusteringAlgorithm;
+import org.carrot2.core.Platform;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.Bindable;
@@ -113,6 +114,9 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     @Test
     public void testRepeatedClusteringWithCache()
     {
+        // Caching controller is not available for .NET at the moment.
+        Assume.assumeTrue(Platform.getPlatform() == Platform.JAVA);
+
         final Controller controller = getCachingController(initAttributes,
             IClusteringAlgorithm.class);
 
@@ -124,7 +128,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     }
 
     /**
-     * Performs a very simple stress test using a {@link Controller} with caching. The
+     * Performs a very simple stress test using a pooling {@link Controller}. The
      * test is performed with default init attributes.
      */
     @Test
@@ -133,6 +137,10 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
         final int numberOfThreads = 4;
         final int queriesPerThread = 25;
 
+        /*
+         * This yields a pooling controller effectively, because no cache interfaces
+         * are passed.
+         */
         final Controller controller = getCachingController(initAttributes);
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
