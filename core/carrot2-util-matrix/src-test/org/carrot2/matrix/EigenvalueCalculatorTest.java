@@ -12,7 +12,6 @@
 
 package org.carrot2.matrix;
 
-import static org.carrot2.matrix.NNITestAssumptions.nativeLapackAvailable;
 import static org.junit.Assume.assumeTrue;
 
 import java.util.Arrays;
@@ -69,7 +68,7 @@ public class EigenvalueCalculatorTest
     @Test
     public void testAsymmetrical()
     {
-        assumeTrue(nativeLapackAvailable());
+        assumeTrue(NNIInterface.isNativeLapackAvailable());
 
         double [] eigenvalues = NNIInterface.getLapack().computeEigenvaluesNNI(A);
         Arrays.sort(eigenvalues);
