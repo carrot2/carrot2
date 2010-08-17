@@ -12,8 +12,8 @@
 
 package org.carrot2.source.opensearch;
 
-import org.carrot2.core.ComponentInitializationException;
 import org.carrot2.core.DummyControllerContext;
+import org.carrot2.core.ProcessingException;
 import org.junit.Test;
 
 /**
@@ -21,25 +21,25 @@ import org.junit.Test;
  */
 public class OpenSearchDocumentSourceTest
 {
-    @Test(expected = ComponentInitializationException.class)
+    @Test(expected = ProcessingException.class)
     public void testSearchTermsNotPresent()
     {
         testFeedTemplate("http://test.com?sp=${startPage}");
     }
 
-    @Test(expected = ComponentInitializationException.class)
+    @Test(expected = ProcessingException.class)
     public void testNoStartPresent()
     {
         testFeedTemplate("http://test.com?q=${searchTerms}");
     }
 
-    @Test(expected = ComponentInitializationException.class)
+    @Test(expected = ProcessingException.class)
     public void testBothStartsPresent()
     {
         testFeedTemplate("http://test.com?sp=${startPage}&si=${startIndex}");
     }
 
-    @Test(expected = ComponentInitializationException.class)
+    @Test(expected = ProcessingException.class)
     public void testResultsPerPageNotSet()
     {
         testFeedTemplate("http://test.com?sp=${startPage}&q=${searchTerms}&c=${count}");
@@ -61,10 +61,8 @@ public class OpenSearchDocumentSourceTest
     private void testFeedTemplate(String template)
     {
         final OpenSearchDocumentSource source = new OpenSearchDocumentSource();
+        source.resultsPerPage = 0;
         source.feedUrlTemplate = template;
-
-        final DummyControllerContext ctx = new DummyControllerContext();
-        source.init(ctx);
-        ctx.dispose();
+        source.beforeProcessing();
     }
 }

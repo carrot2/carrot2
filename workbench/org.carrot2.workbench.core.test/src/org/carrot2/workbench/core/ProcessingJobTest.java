@@ -49,7 +49,7 @@ public class ProcessingJobTest extends TestCase
      * fail often and we don't want them to cause the whole Workbench build to fail.
      */
     private final static Set<String> EXCLUDED_SOURCES = ImmutableSet.of("solr", "lucene",
-        "wiki", "boss-images", "boss-web", "boss-news", "yahoo-news", "pubmed");
+        "wiki", "boss-images", "boss-web", "boss-news", "yahoo-news", "pubmed", "opensearch");
 
     @Override
     protected void setUp() throws Exception
