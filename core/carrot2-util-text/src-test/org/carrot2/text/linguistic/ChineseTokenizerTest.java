@@ -16,7 +16,10 @@ import java.io.IOException;
 
 import org.apache.lucene.analysis.cn.ChineseTokenizer;
 import org.carrot2.core.LanguageCode;
+import org.carrot2.core.Platform;
 import org.carrot2.text.analysis.ITokenizer;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -28,6 +31,12 @@ public class ChineseTokenizerTest extends TokenizerTestBase
     protected ITokenizer createTokenStream() throws IOException
     {
         return new DefaultLanguageModelFactory().createTokenizer(LanguageCode.CHINESE_SIMPLIFIED);
+    }
+    
+    @Before
+    public void before()
+    {
+        Assume.assumeTrue(Platform.getPlatform() == Platform.JAVA);
     }
 
     @Test
