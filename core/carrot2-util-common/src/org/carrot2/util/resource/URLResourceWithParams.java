@@ -16,17 +16,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.NameValuePair;
 import org.carrot2.util.StringUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
-
-import com.google.common.collect.Maps;
 
 /**
  * A {@link IResource} implementation that allows URLs to be parameterized. The attribute
@@ -102,20 +98,6 @@ public class URLResourceWithParams implements IResource
                 StringUtils.urlEncodeWrapException(entry.getValue().toString(), "UTF-8"));
         }
         return parameterizedURL;
-    }
-
-    /**
-     * Performs attribute substitution.
-     */
-    public static String substituteAttributes(String parameterizedURL,
-        NameValuePair... pairs)
-    {
-        final HashMap<String, Object> attributes = Maps.newHashMap();
-        for (NameValuePair nameValue : pairs)
-        {
-            attributes.put(nameValue.getName(), nameValue.getValue());
-        }
-        return substituteAttributes(parameterizedURL, attributes);
     }
 
     /**
