@@ -12,13 +12,22 @@
 
 package org.carrot2.util.attribute.constraint;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-import org.carrot2.util.attribute.test.constraint.*;
+import org.carrot2.util.attribute.test.constraint.ConstraintAnnotationWithWrongImplementingClass;
+import org.carrot2.util.attribute.test.constraint.TestConstraint1;
+import org.carrot2.util.attribute.test.constraint.TestConstraint1Constraint;
+import org.carrot2.util.attribute.test.constraint.TestConstraint2;
+import org.carrot2.util.attribute.test.constraint.TestConstraint2Constraint;
 import org.junit.Test;
 
 public class ConstraintCreatorTest
@@ -89,6 +98,15 @@ public class ConstraintCreatorTest
             .getAnnotations());
 
         assertEquals(2, constraints.size());
+
+        Collections.sort(constraints, new Comparator<Constraint>()
+        {
+            public int compare(Constraint o1, Constraint o2)
+            {
+                return o1.getClass().getName().toString()
+                    .compareTo(o2.getClass().getName().toString());
+            }
+        });
 
         final TestConstraint1Constraint constraint1Impl = (TestConstraint1Constraint) constraints
             .get(0);
