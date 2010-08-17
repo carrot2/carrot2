@@ -380,13 +380,30 @@
     </db:itemizedlist>
   </xsl:template>
   
+  <xsl:template match="ol">
+    <db:orderedlist>
+      <xsl:apply-templates />
+    </db:orderedlist>
+  </xsl:template>
+  
+  <xsl:template match="dl">
+    <db:variablelist>
+      <xsl:for-each select="dt">
+        <db:varlistentry>
+           <db:term><xsl:apply-templates select="." /></db:term>
+           <db:listitem><para><xsl:apply-templates select="following-sibling::dd[1]" /></para></db:listitem>
+        </db:varlistentry>
+      </xsl:for-each>
+    </db:variablelist>
+  </xsl:template>
+  
   <xsl:template match="li">
     <db:listitem>
       <xsl:apply-templates />
     </db:listitem>
   </xsl:template>
 
-  <xsl:template match="code">
+  <xsl:template match="code|tt">
     <db:code>
       <xsl:apply-templates />
     </db:code>

@@ -419,3 +419,10 @@ span.guiicon span.inlinemediaobject img {
 span.human-readable-label {
   color: #aaa;
 }
+
+
+div[title="Feed URL template"] dl > dd > p > code {
+	display: block;
+	width: 26em;
+	word-wrap: break-word;
+}

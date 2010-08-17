@@ -14,6 +14,7 @@
     <!-- PubMed, Indeed job search. -->
     <include suite="suites/source-pubmed.xml" />
     <include suite="suites/source-indeed.xml" />
+    <include suite="suites/source-opensearch.xml" />
 
     <!-- Algorithms -->
     <include suite="suites/algorithm-lingo.xml" />
