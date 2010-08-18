@@ -19,6 +19,8 @@ import static org.junit.Assert.assertSame;
 
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 
 import com.google.common.base.Function;
@@ -95,15 +97,26 @@ public class ClusterWithParentTest
     /**
      * Currently, cycle detection is not supported.
      */
-    @Test(expected = StackOverflowError.class)
+    @Test
     public void testCyclicReferences()
     {
-        final Cluster cluster = new Cluster();
-        final Cluster subcluster = new Cluster();
-        cluster.addSubclusters(subcluster);
-        subcluster.addSubclusters(cluster); // Cyclic reference here
+        // stack overflow causes the process to exit under .NET.
+        Assume.assumeTrue(Platform.getPlatform() == Platform.JAVA);
 
-        ClusterWithParent.wrap(cluster);
+        try
+        {
+            final Cluster cluster = new Cluster();
+            final Cluster subcluster = new Cluster();
+            cluster.addSubclusters(subcluster);
+            subcluster.addSubclusters(cluster); // Cyclic reference here
+    
+            ClusterWithParent.wrap(cluster);
+            Assert.fail();
+        }
+        catch (StackOverflowError e)
+        {
+            // Expected.
+        }
     }
 
     @Test
