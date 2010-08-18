@@ -97,6 +97,9 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         @org.simpleframework.xml.Attribute(required = false)
         public Boolean includeClusters = true;
 
+        @org.simpleframework.xml.Attribute(required = false)
+        public Boolean includeAttributes = false;
+        
         public String getFullPath()
         {
             Path path = FileDialogs.checkOrDefault(directory);
@@ -851,7 +854,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /**
      * {@link SearchEditor} adaptations.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     @Override
     public Object getAdapter(Class adapter)
     {

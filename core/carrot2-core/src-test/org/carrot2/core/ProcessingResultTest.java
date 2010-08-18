@@ -50,19 +50,25 @@ public class ProcessingResultTest
     @Test
     public void testSerializationDeserializationAll() throws Exception
     {
-        checkSerializationDeserialization(true, true);
+        checkSerializationDeserialization(true, true, true);
     }
 
     @Test
     public void testSerializationDeserializationDocumentsOnly() throws Exception
     {
-        checkSerializationDeserialization(true, false);
+        checkSerializationDeserialization(true, false, false);
     }
 
     @Test
     public void testSerializationDeserializationClustersOnly() throws Exception
     {
-        checkSerializationDeserialization(false, true);
+        checkSerializationDeserialization(false, true, false);
+    }
+    
+    @Test
+    public void testSerializationDeserializationAttributesOnly() throws Exception
+    {
+        checkSerializationDeserialization(false, false, true);
     }
 
     @Test
@@ -222,11 +228,12 @@ public class ProcessingResultTest
     public void testJsonSerializationAll() throws IOException
     {
         final ProcessingResult result = prepareProcessingResult();
-        final JsonNode root = getJsonRootNode(result, null, true, true);
+        final JsonNode root = getJsonRootNode(result, null, true, true, true);
 
         checkJsonQuery(root);
         checkJsonClusters(result, root);
         checkJsonDocuments(result, root);
+        Assertions.assertThat(root.get("results")).isNotNull();
     }
 
     @Test
@@ -248,30 +255,46 @@ public class ProcessingResultTest
         checkJsonQuery(root);
         checkJsonClusters(result, root);
         checkJsonDocuments(result, root);
+        Assertions.assertThat(root.get("results")).isNotNull();
     }
 
     @Test
     public void testJsonSerializationDocumentsOnly() throws IOException
     {
         final ProcessingResult result = prepareProcessingResult();
-        final JsonNode root = getJsonRootNode(result, null, true, false);
+        final JsonNode root = getJsonRootNode(result, null, true, false, false);
 
         checkJsonQuery(root);
         checkJsonDocuments(result, root);
         Assertions.assertThat(root.get("clusters")).isNull();
+        Assertions.assertThat(root.get("results")).isNull();
     }
 
     @Test
     public void testJsonSerializationClustersOnly() throws IOException
     {
         final ProcessingResult result = prepareProcessingResult();
-        final JsonNode root = getJsonRootNode(result, null, false, true);
+        final JsonNode root = getJsonRootNode(result, null, false, true, false);
 
         checkJsonQuery(root);
         checkJsonClusters(result, root);
         Assertions.assertThat(root.get("documents")).isNull();
+        Assertions.assertThat(root.get("results")).isNull();
     }
 
+    
+    @Test
+    public void testJsonSerializationAttributesOnly() throws IOException
+    {
+        final ProcessingResult result = prepareProcessingResult();
+        final JsonNode root = getJsonRootNode(result, null, false, false, true);
+        
+        checkJsonQuery(root);
+        Assertions.assertThat(root.get("documents")).isNull();
+        Assertions.assertThat(root.get("clusters")).isNull();
+        Assertions.assertThat(root.get("results")).isNotNull();
+    }
+    
     private void checkJsonQuery(final JsonNode root)
     {
         Assertions.assertThat(root.get("query").getTextValue()).isEqualTo("query");
@@ -296,18 +319,18 @@ public class ProcessingResultTest
     }
 
     private JsonNode getJsonRootNode(final ProcessingResult result, String callback,
-        boolean saveDocuments, boolean saveClusters) throws IOException,
+        boolean saveDocuments, boolean saveClusters, boolean saveAttributes) throws IOException,
         JsonParseException
     {
         return getJsonRootNode(getJsonString(result, callback, saveDocuments,
-            saveClusters));
+            saveClusters, saveAttributes));
     }
 
     private String getJsonString(final ProcessingResult result, String callback,
-        boolean saveDocuments, boolean saveClusters) throws IOException
+        boolean saveDocuments, boolean saveClusters, boolean saveAttributes) throws IOException
     {
         final StringWriter json = new StringWriter();
-        result.serializeJson(json, callback, false, saveDocuments, saveClusters);
+        result.serializeJson(json, callback, false, saveDocuments, saveClusters, saveAttributes);
         return json.toString();
     }
 
@@ -322,14 +345,14 @@ public class ProcessingResultTest
     }
 
     private void checkSerializationDeserialization(boolean documentsDeserialized,
-        boolean clustersDeserialized) throws Exception
+        boolean clustersDeserialized, boolean attributesDeserialized) throws Exception
     {
         final ProcessingResult sourceProcessingResult = prepareProcessingResult();
 
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         sourceProcessingResult.serialize(new NullOutputStream());
         sourceProcessingResult.serialize(outputStream, documentsDeserialized,
-            clustersDeserialized);
+            clustersDeserialized, attributesDeserialized);
         CloseableUtils.close(outputStream);
 
         final ProcessingResult deserialized = ProcessingResult
@@ -356,6 +379,17 @@ public class ProcessingResultTest
         else
         {
             Assertions.assertThat(deserialized.getClusters()).isNull();
+        }
+
+        if (attributesDeserialized)
+        {
+            Assertions.assertThat(deserialized.getAttribute(AttributeNames.RESULTS))
+                .isEqualTo(sourceProcessingResult.getAttribute(AttributeNames.RESULTS));
+        }
+        else
+        {
+            Assertions.assertThat(deserialized.getAttribute(AttributeNames.RESULTS))
+                .isNull();
         }
 
         Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
@@ -410,6 +444,8 @@ public class ProcessingResultTest
         attributes.put(AttributeNames.CLUSTERS, clusters);
 
         attributes.put(AttributeNames.QUERY, "query");
+
+        attributes.put(AttributeNames.RESULTS, 120);
 
         return new ProcessingResult(attributes);
     }

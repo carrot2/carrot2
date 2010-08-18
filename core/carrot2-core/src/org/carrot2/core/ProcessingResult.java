@@ -91,8 +91,8 @@ public final class ProcessingResult
         if (documents != null)
         {
             Document.assignDocumentIds(documents);
-            attributes.put(AttributeNames.DOCUMENTS, Collections
-                .unmodifiableList(documents));
+            attributes.put(AttributeNames.DOCUMENTS,
+                Collections.unmodifiableList(documents));
         }
 
         // Replace a modifiable collection of clusters with an unmodifiable one
@@ -101,8 +101,8 @@ public final class ProcessingResult
         if (clusters != null)
         {
             Cluster.assignClusterIds(clusters);
-            attributes.put(AttributeNames.CLUSTERS, Collections
-                .unmodifiableList(clusters));
+            attributes.put(AttributeNames.CLUSTERS,
+                Collections.unmodifiableList(clusters));
         }
 
         // Store a reference to attributes as an unmodifiable map
@@ -178,13 +178,14 @@ public final class ProcessingResult
     {
         /*
          * See http://issues.carrot2.org/browse/CARROT-693; this monitor does not save us
-         * in multi-threaded environment anyway. A better solution would be to prepare this
-         * eagerly in the constructor, but we try to balance overhead and full correctness here.
+         * in multi-threaded environment anyway. A better solution would be to prepare
+         * this eagerly in the constructor, but we try to balance overhead and full
+         * correctness here.
          */
         synchronized (this)
         {
             query = (String) attributes.get(AttributeNames.QUERY);
-    
+
             if (getDocuments() != null)
             {
                 documents = Lists.newArrayList(getDocuments());
@@ -193,7 +194,7 @@ public final class ProcessingResult
             {
                 documents = null;
             }
-    
+
             if (getClusters() != null)
             {
                 clusters = Lists.newArrayList(getClusters());
@@ -202,8 +203,9 @@ public final class ProcessingResult
             {
                 clusters = null;
             }
-    
-            otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers.wrap(attributes));
+
+            otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
+                .wrap(attributes));
             otherAttributesForSerialization.remove(AttributeNames.QUERY);
             otherAttributesForSerialization.remove(AttributeNames.CLUSTERS);
             otherAttributesForSerialization.remove(AttributeNames.DOCUMENTS);
@@ -268,7 +270,11 @@ public final class ProcessingResult
     }
 
     /**
-     * Serializes this {@link ProcessingResult} to an XML stream.
+     * Serializes this {@link ProcessingResult} to an XML stream. The output includes all
+     * documents, clusters and other attributes.
+     * <p>
+     * This method is not thread-safe, external synchronization must be applied if needed.
+     * </p>
      * 
      * @param stream the stream to serialize this {@link ProcessingResult} to. The stream
      *            will <strong>not</strong> be closed.
@@ -280,8 +286,12 @@ public final class ProcessingResult
     }
 
     /**
-     * Serializes this {@link ProcessingResult} to a byte stream. This method is not
-     * thread-safe, external synchronization must be applied if needed.
+     * Serializes this {@link ProcessingResult} to a byte stream. Documents and clusters
+     * can be included or skipped in the output as requested. Other attributes are always
+     * included.
+     * <p>
+     * This method is not thread-safe, external synchronization must be applied if needed.
+     * </p>
      * 
      * @param stream the stream to serialize this {@link ProcessingResult} to. The stream
      *            will <strong>not</strong> be closed.
@@ -295,30 +305,38 @@ public final class ProcessingResult
     public void serialize(OutputStream stream, boolean saveDocuments, boolean saveClusters)
         throws Exception
     {
-        final List<Document> documentsBackup = getDocuments();
-        final List<Cluster> clustersBackup = getClusters();
+        serialize(stream, saveDocuments, saveClusters, true);
+    }
 
-        if (!saveDocuments)
-        {
-            attributes.remove(AttributeNames.DOCUMENTS);
-        }
+    /**
+     * Serializes this {@link ProcessingResult} to a byte stream. Documents, clusters and
+     * other attributes can be included or skipped in the output as requested.
+     * <p>
+     * This method is not thread-safe, external synchronization must be applied if needed.
+     * </p>
+     * 
+     * @param stream the stream to serialize this {@link ProcessingResult} to. The stream
+     *            will <strong>not</strong> be closed.
+     * @param saveDocuments if <code>false</code>, documents will not be serialized.
+     *            Notice that when deserializing XML containing clusters but not
+     *            documents, document references in {@link Cluster#getDocuments()} will
+     *            not be restored.
+     * @param saveClusters if <code>false</code>, clusters will not be serialized
+     * @param saveOtherAttributes if <code>false</code>, other attributes will not be
+     *            serialized
+     * @throws Exception in case of any problems with serialization
+     */
+    public void serialize(OutputStream stream, boolean saveDocuments,
+        boolean saveClusters, boolean saveOtherAttributes) throws Exception
+    {
+        final Map<String, Object> backupAttributes = attributes;
 
-        if (!saveClusters)
-        {
-            attributes.remove(AttributeNames.CLUSTERS);
-        }
+        attributes = prepareAttributesForSerialization(saveDocuments, saveClusters,
+            saveOtherAttributes);
 
         new Persister().write(this, stream);
 
-        if (documentsBackup != null)
-        {
-            attributes.put(AttributeNames.DOCUMENTS, documentsBackup);
-        }
-
-        if (clustersBackup != null)
-        {
-            attributes.put(AttributeNames.CLUSTERS, clustersBackup);
-        }
+        attributes = backupAttributes;
     }
 
     /**
@@ -335,7 +353,11 @@ public final class ProcessingResult
     }
 
     /**
-     * Serializes this processing result as JSON to the provided <code>writer</code>.
+     * Serializes this processing result as JSON to the provided <code>writer</code>. The
+     * output includes all documents, clusters and other attributes.
+     * <p>
+     * This method is not thread-safe, external synchronization must be applied if needed.
+     * </p>
      * 
      * @param writer the writer to serialize this processing result to. The writer will
      *            <strong>not</strong> be closed.
@@ -347,7 +369,11 @@ public final class ProcessingResult
     }
 
     /**
-     * Serializes this processing result as JSON to the provided <code>writer</code>.
+     * Serializes this processing result as JSON to the provided <code>writer</code>. The
+     * output includes all documents, clusters and other attributes.
+     * <p>
+     * This method is not thread-safe, external synchronization must be applied if needed.
+     * </p>
      * 
      * @param writer the writer to serialize this processing result to. The writer will
      *            <strong>not</strong> be closed.
@@ -362,6 +388,11 @@ public final class ProcessingResult
 
     /**
      * Serializes this processing result as JSON to the provided <code>writer</code>.
+     * Documents and clusters can be included or skipped in the output as requested. Other
+     * attributes are always included.
+     * <p>
+     * This method is not thread-safe, external synchronization must be applied if needed.
+     * </p>
      * 
      * @param writer the writer to serialize this processing result to. The writer will
      *            <strong>not</strong> be closed.
@@ -379,6 +410,9 @@ public final class ProcessingResult
 
     /**
      * Serializes this processing result as JSON to the provided <code>writer</code>.
+     * <p>
+     * This method is not thread-safe, external synchronization must be applied if needed.
+     * </p>
      * 
      * @param writer the writer to serialize this processing result to. The writer will
      *            <strong>not</strong> be closed.
@@ -392,6 +426,29 @@ public final class ProcessingResult
     public void serializeJson(Writer writer, String callback, boolean indent,
         boolean saveDocuments, boolean saveClusters) throws IOException
     {
+        serializeJson(writer, callback, indent, saveDocuments, saveClusters, true);
+    }
+
+    /**
+     * Serializes this processing result as JSON to the provided <code>writer</code>.
+     * Documents, clusters and other attributes can be included or skipped in the output
+     * as requested.
+     * 
+     * @param writer the writer to serialize this processing result to. The writer will
+     *            <strong>not</strong> be closed.
+     * @param callback JavaScript function name in which to wrap the JSON response or
+     *            <code>null</code>.
+     * @param indent if <code>true</code>, the output JSON will be pretty-printed
+     * @param saveDocuments if <code>false</code>, documents will not be serialized.
+     * @param saveClusters if <code>false</code>, clusters will not be serialized
+     * @param saveOtherAttributes if <code>false</code>, other attributes will not be
+     *            serialized
+     * @throws IOException in case of any problems with serialization
+     */
+    public void serializeJson(Writer writer, String callback, boolean indent,
+        boolean saveDocuments, boolean saveClusters, boolean saveOtherAttributes)
+        throws IOException
+    {
         final ObjectMapper mapper = new ObjectMapper();
         final JsonGenerator generator = new JsonFactory().createJsonGenerator(writer);
         if (indent)
@@ -399,24 +456,50 @@ public final class ProcessingResult
             generator.setPrettyPrinter(new DefaultPrettyPrinter());
         }
 
-        final Map<String, Object> mapToSerialize = Maps.newHashMap(attributes);
-        if (!saveDocuments)
-        {
-            mapToSerialize.remove(AttributeNames.DOCUMENTS);
-        }
-        if (!saveClusters)
-        {
-            mapToSerialize.remove(AttributeNames.CLUSTERS);
-        }
-
         if (StringUtils.isNotBlank(callback))
         {
             writer.write(callback + "(");
         }
-        mapper.writeValue(generator, mapToSerialize);
+        final Map<String, Object> attrs = prepareAttributesForSerialization(
+            saveDocuments, saveClusters, saveOtherAttributes);
+        mapper.writeValue(generator, attrs);
         if (StringUtils.isNotBlank(callback))
         {
             writer.write(");");
         }
+    }
+
+    /**
+     * Prepares a temporary attributes map for serialization purposes. Includes only the
+     * requested elements in the map.
+     */
+    private Map<String, Object> prepareAttributesForSerialization(boolean saveDocuments,
+        boolean saveClusters, boolean saveOtherAttributes)
+    {
+        final Map<String, Object> tempAttributes = Maps.newHashMap();
+
+        if (saveOtherAttributes)
+        {
+            tempAttributes.putAll(attributes);
+            tempAttributes.remove(AttributeNames.DOCUMENTS);
+            tempAttributes.remove(AttributeNames.CLUSTERS);
+        }
+        else
+        {
+            tempAttributes
+                .put(AttributeNames.QUERY, attributes.get(AttributeNames.QUERY));
+        }
+
+        if (saveDocuments)
+        {
+            tempAttributes.put(AttributeNames.DOCUMENTS, getDocuments());
+        }
+
+        if (saveClusters)
+        {
+            tempAttributes.put(AttributeNames.CLUSTERS, getClusters());
+        }
+
+        return tempAttributes;
     }
 }

@@ -105,7 +105,7 @@ public final class SaveAsXMLActionDelegate extends Action
             final ByteArrayOutputStream output = new ByteArrayOutputStream();
             
             os = new FileOutputStream(destinationFile);
-            results.serialize(output, options.includeDocuments, options.includeClusters);
+            results.serialize(output, options.includeDocuments, options.includeClusters, options.includeAttributes);
             transformer.transform(new StreamSource(new ByteArrayInputStream(output
                 .toByteArray())), new StreamResult(os));
         }
