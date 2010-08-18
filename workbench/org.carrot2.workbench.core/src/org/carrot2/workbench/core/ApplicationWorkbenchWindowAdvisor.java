@@ -12,21 +12,31 @@
 
 package org.carrot2.workbench.core;
 
-import java.util.*;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.ui.actions.DisplayWelcomeView;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.action.*;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.ICoolBarManager;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
-import org.eclipse.ui.application.*;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Monitor;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.application.ActionBarAdvisor;
+import org.eclipse.ui.application.IActionBarConfigurer;
+import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
+import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.views.IViewDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -200,8 +210,9 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
         /*
          * In case of component loading errors, display an error message and open the error log. 
          */
+        WorkbenchCorePlugin wbCore = WorkbenchCorePlugin.getDefault();
         final List<ProcessingComponentDescriptor> failed 
-            = WorkbenchCorePlugin.getDefault().getFailed();
+            = wbCore.getFailed();
         if (!failed.isEmpty())
         {
             final StringBuilder errorMessages = new StringBuilder();
@@ -221,6 +232,15 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
                 "Fatal errors", 
                 "Plugin loading errors. See the error log for details.", 
                 new Status(Status.ERROR, WorkbenchCorePlugin.PLUGIN_ID, errorMessages.toString()));
+        }
+
+        /*
+         * Open the welcome view on first execution.
+         */
+        if (!WorkbenchCorePlugin.getPreferences().getBoolean(
+            DisplayWelcomeView.ALREADY_DISPLAYED, false))
+        {
+            new DisplayWelcomeView().execute();
         }
     }
 

@@ -25,6 +25,6 @@ public class GuiTests extends TestSuite
     {
         this.addTestSuite(ProcessingJobTest.class);
         this.addTestSuite(NativeLibrariesTest.class);
-        this.addTestSuite(ComponentStartupTest.class);
+        this.addTestSuite(WorkbenchStartupTest.class);
     }
 }

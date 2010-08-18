@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 
 import org.carrot2.core.ProcessingComponentDescriptor;
 
-public class ComponentStartupTest extends TestCase
+public class WorkbenchStartupTest extends TestCase
 {
     public void testFailedStartupComponents() throws InterruptedException
     {

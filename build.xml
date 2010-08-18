@@ -765,21 +765,24 @@
       <regexpmapper from="[^/]+/(.*)" to="\1" handledirsep="yes" />
     </copy>
 
-    <copy todir="${workbench.build.dir}/plugins" overwrite="true" filtering="true">
+    <copy todir="${workbench.build.dir}/plugins" overwrite="true" filtering="true" encoding="UTF-8">
       <fileset dir="${carrot2.master.basedir}">
         <include name="core/**/MANIFEST.MF" />
         <include name="lib/**/MANIFEST.MF" />
         <include name="workbench/**/MANIFEST.MF" />
+        <include name="workbench/**/welcome/**/*.html" />
         <patternset refid="temporary.files" />
       </fileset>
 
       <regexpmapper from="[^/]+/(.*)" to="\1" handledirsep="yes" />
 
       <filterchain id="workbench.version.filterchain">
-        <replacestring from="0.0.0.QUALIFIER" to="${carrot2.version.workbench}"/>
+        <replacestring from="0.0.0.QUALIFIER"   to="${carrot2.version.workbench}"/>
+        <!-- Should we keep all these token values in one place somewhere? -->
+        <replacestring from="@carrot2.version@" to="${carrot2.version}" />
       </filterchain>
     </copy>
-    
+
     <!-- Prepare verbose build info. -->
     <carrot2.readme readme.src="${carrot2.master.basedir}/workbench/org.carrot2.workbench.feature/readme.txt"
                     readme.dest="${workbench.build.dir}/static/readme.txt" />

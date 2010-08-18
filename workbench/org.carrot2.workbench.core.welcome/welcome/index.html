@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Welcome</title>
+    <style>
+      body {
+        font-family: Georgia, Book Antiqua, Garamond, serif;
+        font-size: 11pt;
+        background-color: #f0f0f0;
+        margin: 0;
+      }
+
+      body > div {
+        background-color: #fafafa;
+        margin: 20px;
+        padding: 20px;
+        padding-bottom: 40px;
+      }
+      
+      p {
+        margin: 0 0 0 0;
+      }
+
+      ol, ul {
+        margin-top: 0.5em;
+        margin-bottom: 0;
+      }
+      
+      sup {
+        vertical-align: 30%;
+      }
+
+      em {
+        font-weight: bold;
+        font-style: normal;
+        font-family: sans-serif;
+      }
+
+      hr {
+        margin-top: 1em;
+        margin-bottom: 1em;
+        border-top: 1px solid #fff;
+        border-bottom: 1px solid #e8e8e8;
+        height: 2px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <p>
+        Welcome to Carrot<sup>2</sup> Document Clustering Workbench! You can use
+        this application to try Carrot<sup>2</sup> clustering on web search results or
+        your own data. 
+      </p>
+      <hr />
+
+
+      <p>
+        To run Carrot<sup>2</sup> clustering on web search results:
+      </p>
+
+      <ol>
+        <li>Type your search query in the <em>Query</em> field on the left</li>
+        <li>Press the <em>Process</em> button</li>
+      </ol>
+
+      <hr />
+
+      <p>
+        For further instructions, please see <a href="http://download.carrot2.org/stable/manual">Carrot<sup>2</sup> Manual</a>:
+      </p>
+
+      <ul>
+        <li><a href="http://download.carrot2.org/stable/manual/#section.getting-started.plain-text-ms-word-pdf">Clustering plain text, HTML and MS Word documents</a></li>
+        <li><a href="http://download.carrot2.org/stable/manual/#section.getting-started.xml-files">Clustering documents from XML files</a></li>
+        <li><a href="http://download.carrot2.org/stable/manual/#section.getting-started.xml-feed">Clustering documents from XML feeds</a></li>
+        <li><a href="http://download.carrot2.org/stable/manual/#section.getting-started.lucene">Clustering documents from a Lucene index</a></li>
+        <li><a href="http://download.carrot2.org/stable/manual/#section.getting-started.solr">Clustering documents from a Solr index</a></li>
+        <li><a href="http://download.carrot2.org/stable/manual/#section.tuning.in-workbench">Tuning clustering in Carrot2 Document Clustering Workbench</a></li>
+      </ul>
+    </div>
+    <iframe src="http://welcome.carrot2.org/index.html?carrot2-workbench=3.4.0-dev" width="0" height="0" frameborder="0"></iframe>
+  </body>
+</html>
+
+<!--
+Replaceable tokens: 
+ 
+Build version : @carrot2.version@
+Look at master build.xml#workbench.plugins.gather target, there is a filterchain there.
+
+-->
