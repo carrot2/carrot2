@@ -16,6 +16,7 @@ import org.carrot2.matrix.nni.BlasImpl;
 import org.carrot2.matrix.nni.IBlasOperations;
 import org.carrot2.matrix.nni.ILapackOperations;
 import org.carrot2.matrix.nni.LapackImpl;
+import org.slf4j.LoggerFactory;
 
 /**
  * An interface to native matrix computation routines.
@@ -107,7 +108,8 @@ public class NNIInterface
         }
         catch (Throwable t)
         {
-            // Not available, fall through.
+            LoggerFactory.getLogger(NNIInterface.class).debug(
+                "Failed to instantiate native LAPACK.", t);
         }
         return null;
     }
@@ -124,7 +126,8 @@ public class NNIInterface
         }
         catch (Throwable t)
         {
-            // Not available, fall through.
+            LoggerFactory.getLogger(NNIInterface.class).debug(
+                "Failed to instantiate native BLAS.", t);
         }
         return null;
     }
