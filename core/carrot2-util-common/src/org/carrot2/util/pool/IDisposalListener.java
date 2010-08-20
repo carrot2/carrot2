@@ -13,7 +13,7 @@
 package org.carrot2.util.pool;
 
 /**
- *
+ * Pooled object disposal listener.
  */
 public interface IDisposalListener<T, P>
 {

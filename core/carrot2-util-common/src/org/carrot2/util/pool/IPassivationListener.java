@@ -13,7 +13,7 @@
 package org.carrot2.util.pool;
 
 /**
- *
+ * Pooled object passivation listener.
  */
 public interface IPassivationListener<T, P>
 {

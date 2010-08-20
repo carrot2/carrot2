@@ -13,7 +13,7 @@
 package org.carrot2.util.pool;
 
 /**
- *
+ * Pooled object activation listener.
  */
 public interface IActivationListener<T, P>
 {

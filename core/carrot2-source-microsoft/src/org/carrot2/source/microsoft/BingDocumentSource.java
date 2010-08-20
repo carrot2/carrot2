@@ -326,10 +326,10 @@ public final class BingDocumentSource extends MultipageSearchEngine
         final BingResponse response = new Persister().read(BingResponse.class, payloadAsStream);
 
         SearchEngineResponse ser = new SearchEngineResponse();
-        ser.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, response.web.total);
         
         if (response.web != null && response.web.results != null)
         {
+            ser.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, response.web.total);
             final LanguageCode langCode = market.toLanguageCode();
             for (WebResult wr : response.web.results)
             {

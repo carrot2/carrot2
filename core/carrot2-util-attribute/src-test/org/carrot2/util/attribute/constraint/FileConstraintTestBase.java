@@ -33,11 +33,16 @@ public abstract class FileConstraintTestBase<T extends Annotation> extends
     public void prepareFiles() throws IOException
     {
         existingDirectory = File.createTempFile("carrot2", "temp");
+        
         /* 
          * Hope for the best, remove the temporary file and recreate it 
          * as a directory. 
          */
-        existingDirectory.delete();
+        if (!existingDirectory.delete()) 
+        {
+            throw new RuntimeException("Failed to delete a directory: "
+                + existingDirectory.getAbsolutePath());
+        }
         if (!existingDirectory.mkdir())
         {
             throw new RuntimeException("Failed to create a directory: "
