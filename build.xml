@@ -107,10 +107,10 @@
   <patternset id="lib.test">
     <include name="core/**/*.jar" />
     <include name="lib/**/*.jar" />
+    <exclude name="lib/org.slf4j/slf4j-nop*" />
     <include name="applications/carrot2-dcs/**/*.jar" />
     <include name="applications/carrot2-webapp/lib/*.jar" />
     <include name="applications/carrot2-benchmarks/lib/*.jar" />
-    <exclude name="lib/org.slf4j/slf4j-log4j12*" />
   </patternset>
 
   <!-- Excludes both JAR and LICENSE files -->
@@ -180,6 +180,7 @@
   <path id="test.classpath">
     <path refid="lib.classpath" />
     <path location="${core.dir}/carrot2-component-suites/suites" />
+    <path location="${core.dir}/carrot2-util-log4j/src" />
     <!-- Prepend classpath with clover-ified classes, if available. -->
     <path location="${build.dir.clover}" />
     <path location="${build.dir.tests}" />
