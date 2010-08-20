@@ -12,11 +12,12 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 
 /**
  * A factory for {@link NonnegativeMatrixFactorizationED}s.
  */
+@SuppressWarnings("deprecation")
 public class NonnegativeMatrixFactorizationEDFactory extends
     IterativeMatrixFactorizationFactory
 {

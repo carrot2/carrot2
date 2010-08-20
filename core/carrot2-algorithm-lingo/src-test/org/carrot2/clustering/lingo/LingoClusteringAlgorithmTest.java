@@ -13,14 +13,12 @@
 package org.carrot2.clustering.lingo;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.Collection;
 import java.util.List;
 
-import org.carrot2.core.Cluster;
-import org.carrot2.core.Document;
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
 import org.carrot2.core.test.SampleDocumentData;
@@ -40,6 +38,22 @@ public class LingoClusteringAlgorithmTest extends
     public Class<LingoClusteringAlgorithm> getComponentClass()
     {
         return LingoClusteringAlgorithm.class;
+    }
+
+    @Test
+    public void testNoRequiredDocuments()
+    {
+        try
+        {
+            getSimpleController(initAttributes).process(
+                processingAttributes, getComponentClass());
+
+            fail("Should fail with an exception.");
+        }
+        catch (ProcessingException e)
+        {
+            assertThat(e.getMessage()).contains("No value for required attribute");
+        }
     }
 
     @Test

@@ -1,5 +1,0 @@
-<project name="Attribute Metadata XML generator for Eclipse" default="attributes-eclipse">
-  <target name="attributes-eclipse">
-    <ant dir="../../../../" antfile="build.xml" target="attrs" />
-  </target>
-</project>

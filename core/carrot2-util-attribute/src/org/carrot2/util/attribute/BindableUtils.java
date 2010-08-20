@@ -13,9 +13,12 @@
 package org.carrot2.util.attribute;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * A set of utility methods for working with {@link Bindable} types.
@@ -26,7 +29,7 @@ final class BindableUtils
      * Caches the sets of declared fields determined for class hierarchies by the
      * {@link #getFieldsFromBindableHierarchy(Class)} method.
      */
-    private static final Map<Class<?>, Collection<Field>> FIELD_CACHE = new WeakHashMap<Class<?>, Collection<Field>>();
+    private static final HashMap<Class<?>, Collection<Field>> FIELD_CACHE = Maps.newHashMap();
 
     /**
      * Returns all fields from all {@link Bindable} types in the hierarchy of the provided
@@ -56,26 +59,6 @@ final class BindableUtils
             }
             return fields;
         }
-    }
-
-    /**
-     * Returns all {@link Bindable} from the hierarchy of the provided <code>clazz</code>.
-     */
-    static Collection<Class<?>> getClassesFromBindableHerarchy(Class<?> clazz)
-    {
-        final Collection<Class<?>> classes = Lists.newArrayList();
-
-        while (clazz != null)
-        {
-            if (clazz.getAnnotation(Bindable.class) != null)
-            {
-                classes.add(clazz);
-            }
-
-            clazz = clazz.getSuperclass();
-        }
-
-        return classes;
     }
 
     /**

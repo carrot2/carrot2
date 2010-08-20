@@ -40,6 +40,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
 
     private Button clusterOption;
     private Button docOption;
+    private Button attributesOption;
 
     /**
      * Save options (from the editor).
@@ -78,6 +79,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
         editorOptions.fileName = f.getName();
         editorOptions.includeClusters = clusterOption.getSelection();
         editorOptions.includeDocuments = docOption.getSelection();
+        editorOptions.includeAttributes = attributesOption.getSelection();
 
         editorOptions.saveGlobal();
         super.okPressed();
@@ -178,27 +180,24 @@ final class SearchEditorSaveAsDialog extends TrayDialog
                 + 2 * IDialogConstants.BUTTON_MARGIN;
             browseButton.setLayoutData(dialogButtonLData);
         }
-        {
-            new Label(root, SWT.NONE).setVisible(false);
+        
+        docOption = createCheckbox(root, "Include documents", editorOptions.includeDocuments);
+        clusterOption = createCheckbox(root, "Include clusters", editorOptions.includeClusters);
+        attributesOption = createCheckbox(root, "Include other attributes", editorOptions.includeAttributes);
+    }
 
-            docOption = new Button(root, SWT.CHECK | SWT.LEFT);
-            GridData docOptionLData = new GridData();
-            docOptionLData.horizontalSpan = 2;
-            docOptionLData.horizontalIndent = 5;
-            docOption.setLayoutData(docOptionLData);
-            docOption.setText("Include documents");
-            docOption.setSelection(editorOptions.includeDocuments);
-        }
-        {
-            new Label(root, SWT.NONE).setVisible(false);
-            
-            clusterOption = new Button(root, SWT.CHECK | SWT.LEFT);
-            GridData clusterOptionLData = new GridData();
-            clusterOptionLData.horizontalIndent = 5;
-            clusterOptionLData.horizontalSpan = 2;
-            clusterOption.setLayoutData(clusterOptionLData);
-            clusterOption.setText("Include clusters");
-            clusterOption.setSelection(editorOptions.includeClusters);
-        }
+    private Button createCheckbox(Composite root, final String label, final Boolean checked)
+    {
+        new Label(root, SWT.NONE).setVisible(false);
+        
+        final Button checkbox = new Button(root, SWT.CHECK | SWT.LEFT);
+        final GridData checkboxLData = new GridData();
+        checkboxLData.horizontalIndent = 5;
+        checkboxLData.horizontalSpan = 2;
+        checkbox.setLayoutData(checkboxLData);
+        checkbox.setText(label);
+        checkbox.setSelection(checked);
+        
+        return checkbox;
     }
 }

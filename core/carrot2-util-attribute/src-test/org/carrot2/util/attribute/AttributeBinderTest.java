@@ -270,7 +270,7 @@ public class AttributeBinderTest
         @Output
         @Required
         @Attribute
-        private Class initInputOutputClass;
+        private Class<?> initInputOutputClass;
     }
 
     @Bindable
@@ -375,6 +375,16 @@ public class AttributeBinderTest
         {
             10
         };
+    }
+
+    @Bindable
+    public static class PrivateImplementationAttribute
+    {
+        @Input
+        @Required
+        @Attribute(key = "attr")
+        @ImplementingClasses(classes = Runnable.class, strict = false)
+        public Runnable attr;
     }
 
     @Before
@@ -963,6 +973,70 @@ public class AttributeBinderTest
         });
 
         AttributeBinder.bind(instance, attributes, Input.class);
+    }
+
+    @Test
+    public void testPrivateStaticAttributeClass() throws Exception
+    {
+        try
+        {
+            PrivateImplementationAttribute instance = new PrivateImplementationAttribute();
+            attributes.put("attr", AttributeBinderTestHelpers.getPrivateStaticClassRef());
+            AttributeBinder.bind(instance, attributes, Input.class);
+            fail();
+        }
+        catch (AttributeBindingException e)
+        {
+            assertThat(e.getCause().getMessage()).contains("is not public");
+        }
+    }
+
+    @Test
+    public void testPrivateNestedAttributeClass() throws Exception
+    {
+        try
+        {
+            PrivateImplementationAttribute instance = new PrivateImplementationAttribute();
+            attributes.put("attr", AttributeBinderTestHelpers.getPrivateNestedClassRef());
+            AttributeBinder.bind(instance, attributes, Input.class);
+            fail();
+        }
+        catch (AttributeBindingException e)
+        {
+            assertThat(e.getCause().getMessage()).contains("is not static");
+        }
+    }
+
+    @Test
+    public void testNoPublicConstructorAttributeClass() throws Exception
+    {
+        try
+        {
+            PrivateImplementationAttribute instance = new PrivateImplementationAttribute();
+            attributes.put("attr", AttributeBinderTestHelpers.getPublicNoConstructor());
+            AttributeBinder.bind(instance, attributes, Input.class);
+            fail();
+        }
+        catch (AttributeBindingException e)
+        {
+            assertThat(e.getCause().getMessage()).contains("must have a public parameterless constructor.");
+        }
+    }
+
+    @Test
+    public void testTargetInvocationException() throws Exception
+    {
+        try
+        {
+            PrivateImplementationAttribute instance = new PrivateImplementationAttribute();
+            attributes.put("attr", AttributeBinderTestHelpers.getExceptionInConstructor());
+            AttributeBinder.bind(instance, attributes, Input.class);
+            fail();
+        }
+        catch (AttributeBindingException e)
+        {
+            assertThat(e.getCause().getCause().getMessage()).isEqualTo("(original exception)");
+        }
     }
 
     private void addAttribute(Class<?> clazz, String field, Object value)

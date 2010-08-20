@@ -14,7 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.carrot2.text.analysis.ITokenTypeAttribute;
+import org.carrot2.text.analysis.ITokenizer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -76,7 +76,7 @@ public class WordMarkerTest extends PreprocessingComponentTestBase
         boolean [] actual = new boolean [context.allWords.type.length];
         for (int i = 0; i < actual.length; i++)
         {
-            actual[i] = ((context.allWords.type[i] & ITokenTypeAttribute.TF_COMMON_WORD) != 0);
+            actual[i] = ((context.allWords.type[i] & ITokenizer.TF_COMMON_WORD) != 0);
         }
 
         assertThat(actual).isEqualTo(expectedCommonTermFlag);

@@ -19,6 +19,7 @@ import org.apache.mahout.math.matrix.*;
 /**
  * Abstract implementation of the {@link IMatrixFactorization} interface.
  */
+@SuppressWarnings("deprecation")
 abstract class MatrixFactorizationBase implements IMatrixFactorization
 {
     /** The matrix factory to be used when creating the result matrices */

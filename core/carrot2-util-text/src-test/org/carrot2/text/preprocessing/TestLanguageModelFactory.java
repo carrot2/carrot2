@@ -14,6 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.*;
 
 public final class TestLanguageModelFactory implements ILanguageModelFactory
@@ -60,7 +61,7 @@ public final class TestLanguageModelFactory implements ILanguageModelFactory
             return formattedLabel.toString().startsWith("stoplabel");
         }
 
-        public org.apache.lucene.analysis.Tokenizer getTokenizer()
+        public ITokenizer getTokenizer()
         {
             return new ExtendedWhitespaceTokenizer();
         }

@@ -24,7 +24,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
  * with a set of subtopics and a list of 100 ranked documents. For more information,
  * please see <a href="http://credo.fub.it/ambient/">Ambient home page</a>.
  */
-@Bindable(prefix = "AmbientDocumentSource")
+@Bindable(prefix = "AmbientDocumentSource", inherit = AttributeNames.class)
 public class AmbientDocumentSource extends FubDocumentSource
 {
     static final FubTestCollection DATA = new FubTestCollection("/ambient");
@@ -46,13 +46,13 @@ public class AmbientDocumentSource extends FubDocumentSource
 
     @Processing
     @Input
-    @Attribute(key = AttributeNames.RESULTS)
+    @Attribute(key = AttributeNames.RESULTS, inherit = true)
     @IntRange(min = 1, max = MAX_RESULTS_PER_TOPIC)
     public int results = 100;
 
     @Processing
     @Output
-    @Attribute(key = AttributeNames.RESULTS_TOTAL)
+    @Attribute(key = AttributeNames.RESULTS_TOTAL, inherit = true)
     public long resultsTotal = MAX_RESULTS_PER_TOPIC;
 
     /**

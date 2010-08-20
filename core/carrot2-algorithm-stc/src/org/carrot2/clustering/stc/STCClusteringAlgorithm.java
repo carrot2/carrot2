@@ -12,10 +12,6 @@
 
 package org.carrot2.clustering.stc;
 
-import static org.carrot2.text.analysis.ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT;
-import static org.carrot2.text.analysis.ITokenTypeAttribute.TF_TERMINATOR;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,9 +19,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.lucene.search.DocIdSetIterator;
-import org.apache.lucene.util.OpenBitSet;
-import org.apache.lucene.util.PriorityQueue;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
@@ -36,6 +29,7 @@ import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
@@ -43,13 +37,14 @@ import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStr
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
+import org.carrot2.util.PriorityQueue;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
 import org.carrot2.util.attribute.Required;
 
-import com.carrotsearch.hppc.IntStack;
+import com.carrotsearch.hppc.*;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -62,7 +57,7 @@ import com.google.common.collect.Lists;
  * 
  * @label STC Clustering
  */
-@Bindable(prefix = "STCClusteringAlgorithm")
+@Bindable(prefix = "STCClusteringAlgorithm", inherit = AttributeNames.class)
 public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
@@ -73,7 +68,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Processing
     @Input
     @Internal
-    @Attribute(key = AttributeNames.QUERY)
+    @Attribute(key = AttributeNames.QUERY, inherit = true)
     public String query = null;
 
     /**
@@ -83,7 +78,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Input
     @Required
     @Internal
-    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
     public List<Document> documents;
 
     /**
@@ -92,7 +87,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Processing
     @Output
     @Internal
-    @Attribute(key = AttributeNames.CLUSTERS)
+    @Attribute(key = AttributeNames.CLUSTERS, inherit = true)
     public List<Cluster> clusters = null;
 
     /**
@@ -123,7 +118,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Helper class for computing merged cluster labels.
      * 
-     * @see STCClusteringAlgorithm#merge(IntQueue, List)
+     * @see STCClusteringAlgorithm#merge
      */
     private static final class PhraseCandidate
     {
@@ -255,7 +250,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             /* Advance until the first real token. */
             if (tokenIndex[i] == -1)
             {
-                if ((tokenType[i] & (TF_SEPARATOR_DOCUMENT | TF_TERMINATOR)) != 0)
+                if ((tokenType[i] & (ITokenizer.TF_SEPARATOR_DOCUMENT | ITokenizer.TF_TERMINATOR)) != 0)
                 {
                     sb.endDocument();
                 }
@@ -321,7 +316,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         // Walk the internal nodes of the suffix tree.
         new GeneralizedSuffixTree.Visitor(sb, params.minBaseClusterSize) {
             protected void visit(int state, int cardinality, 
-                OpenBitSet documents, IntStack path)
+                BitSet documents, IntStack path)
             {
                 // Check minimum base cluster cardinality.
                 assert cardinality >= params.minBaseClusterSize;
@@ -351,7 +346,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                 {
                     pq.insertWithOverflow(
                         new ClusterCandidate(path.toArray(), 
-                            (OpenBitSet) documents.clone(), cardinality, score));
+                            (BitSet) documents.clone(), cardinality, score));
                 }
             }
         }.visit();
@@ -396,7 +391,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
 
                 final float a = c1.cardinality;
                 final float b = c2.cardinality;
-                final float c = OpenBitSet.intersectionCount(c1.documents, c2.documents);
+                final float c = BitSet.intersectionCount(c1.documents, c2.documents);
 
                 if (c / a > m && c / b > m)
                 {
@@ -763,7 +758,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     private void postProcessing(ArrayList<ClusterCandidate> clusters)
     {
         // Adapt to Carrot2 classes, counting used documents on the way.
-        final OpenBitSet all = new OpenBitSet(documents.size());
+        final BitSet all = new BitSet(documents.size());
         final ArrayList<Document> docs = Lists.newArrayListWithCapacity(documents.size());
         final ArrayList<String> phrases = Lists.newArrayListWithCapacity(3);
         for (ClusterCandidate c : clusters)
@@ -798,24 +793,19 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Collect documents from a bitset.
      */
-    private List<Document> collectDocuments(List<Document> l, OpenBitSet bitset)
+    private List<Document> collectDocuments(List<Document> l, BitSet bitset)
     {
-        if (l == null) l = Lists.newArrayListWithCapacity((int) bitset.cardinality());
-        try
+        if (l == null)
         {
-            DocIdSetIterator i = bitset.iterator();
-            int d;
-            while ((d = i.nextDoc()) != DocIdSetIterator.NO_MORE_DOCS)
-            {
-                l.add(documents.get(d));
-            }
-            return l;
+            l = Lists.newArrayListWithCapacity((int) bitset.cardinality());
         }
-        catch (IOException e)
+
+        final BitSetIterator i = bitset.iterator();
+        for (int d = i.nextSetBit(); d >= 0; d = i.nextSetBit())
         {
-            // Will never happen.
-            throw new RuntimeException(e);
+            l.add(documents.get(d));
         }
+        return l;
     }
 
     /**

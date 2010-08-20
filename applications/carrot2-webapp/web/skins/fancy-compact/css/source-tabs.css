@@ -14,6 +14,10 @@
   left: 90px;
 }
 
+#source-tabs {
+  min-width: 650px; 
+}
+
 ul.tabs {
   font-size: 11px;
   font-weight: bold;
@@ -107,8 +111,8 @@ ul.tabs li.tab .google {
   background-image: url('../img/sources/google.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
-ul.tabs li.tab .msn-web {
-  background-image: url('../img/sources/msn.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+ul.tabs li.tab .bing-web {
+  background-image: url('../img/sources/bing.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
 ul.tabs li.tab .pubmed {

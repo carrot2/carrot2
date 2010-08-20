@@ -321,7 +321,12 @@ public class AttributeBinder
                 {
                     throw new AttributeBindingException(key, e.getMessage(), e);
                 }
-                catch (final Exception e)
+                catch (AttributeBindingException e)
+                {
+                    // Rethrow the original binding exception.
+                    throw e;
+                }
+                catch (Exception e)
                 {
                     throw new AttributeBindingException(key, "Could not get field value "
                         + object.getClass().getName() + "#" + field.getName(), e);
@@ -578,17 +583,20 @@ public class AttributeBinder
                             bind(value, values, false, Input.class, predicate);
                         }
                     }
-                    catch (final InstantiationException e)
+                    catch (Throwable e)
                     {
-                        throw new InstantiationException(
-                            "Could not create instance of class: " + clazz.getName()
-                                + " for attribute " + key);
-                    }
-                    catch (final IllegalAccessException e)
-                    {
-                        throw new InstantiationException(
-                            "Could not create instance of class: " + clazz.getName()
-                                + " for attribute " + key);
+                        String message = null;
+                        if (e instanceof IllegalAccessException || e instanceof InstantiationException)
+                        {
+                            message = detailedExceptionInfo(clazz);
+                        }
+
+                        final InstantiationException ie = 
+                            new InstantiationException("Could not create instance of class: " + clazz.getName()
+                            + " for attribute " + key
+                            + (message != null ? ": " + message : ""));
+                        ie.initCause(e);
+                        throw ie;
                     }
                 }
 
@@ -619,6 +627,31 @@ public class AttributeBinder
 
                 remainingValues.remove(key);
             }
+        }
+
+        /**
+         * Return a somewhat more detailed reason why instantiation couldn't progress.
+         */
+        private String detailedExceptionInfo(Class<?> clazz)
+        {
+            if (!Modifier.isPublic(clazz.getModifiers()))
+                return "Class " + clazz.getName() + " is not public.";
+
+            if (clazz.isMemberClass() && !Modifier.isStatic(clazz.getModifiers()))
+            {
+                return "Nested class " + clazz.getName() + " is not static.";
+            }
+
+            try
+            {
+                clazz.getConstructor(new Class<?> [0]);
+            }
+            catch (Exception e)
+            {
+                return "Class " + clazz.getName() + " must have a public parameterless constructor.";
+            }
+            
+            return null;
         }
     }
 

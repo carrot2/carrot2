@@ -15,16 +15,24 @@ package org.carrot2.examples.clustering;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.lucene.analysis.Tokenizer;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.IClusteringAlgorithm;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.LanguageCode;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
-import org.carrot2.text.linguistic.*;
+import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.text.linguistic.ILanguageModel;
+import org.carrot2.text.linguistic.ILanguageModelFactory;
+import org.carrot2.text.linguistic.IStemmer;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
@@ -43,10 +51,8 @@ public class UsingCustomLanguageModel
         // attribute. It is preferred to passing it as a processing-time attribute
         // because it the instance created at initialization time is reused for all
         // further requests.
-        final Map<String, Object> initAttributes = Maps.newHashMap();
-        initAttributes.put("PreprocessingPipeline.languageModelFactory",
-            CustomLanguageModelFactory.class);
-        controller.init(initAttributes);
+        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
+            (Object) CustomLanguageModelFactory.class));
 
         // Cluster some data with Lingo and STC. Notice how the cluster quality degrades
         // when the stop word list is empty (especially for STC).
@@ -114,7 +120,7 @@ public class UsingCustomLanguageModel
             }
             
 
-            public Tokenizer getTokenizer()
+            public ITokenizer getTokenizer()
             {
                 return new ExtendedWhitespaceTokenizer();
             }

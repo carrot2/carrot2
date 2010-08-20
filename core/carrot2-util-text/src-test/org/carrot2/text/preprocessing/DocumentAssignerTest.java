@@ -16,7 +16,6 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
-import org.carrot2.util.PcjCompat;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -239,7 +238,7 @@ public class DocumentAssignerTest extends LabelFilterTestBase
             .hasSize(expectedDocumentIndices.length);
         for (int i = 0; i < expectedDocumentIndices.length; i++)
         {
-            assertThat(PcjCompat.toIntArray(context.allLabels.documentIndices[i])).as(
+            assertThat(context.allLabels.documentIndices[i].asIntLookupContainer().toArray()).as(
                 "allLabels.documentIndices[" + i + "]").isEqualTo(
                 expectedDocumentIndices[i]);
         }

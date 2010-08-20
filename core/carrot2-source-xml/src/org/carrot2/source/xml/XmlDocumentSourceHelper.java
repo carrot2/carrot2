@@ -22,8 +22,13 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.httpclient.HttpStatus;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.xslt.NopURIResolver;
@@ -35,8 +40,23 @@ import org.xml.sax.SAXException;
  * to need. This helper does note expose any attributes, so that different implementations
  * can decide which attributes they expose.
  */
+@Bindable(prefix = "XmlDocumentSourceHelper")
 public class XmlDocumentSourceHelper
 {
+    /**
+     * Data transfer timeout. Specifies the data transfer timeout, in seconds. A timeout value of 
+     * zero is interpreted as an infinite timeout.  
+     * 
+     * @label Data transfer timeout
+     * @level Advanced
+     * @group Service
+     */
+    @Input
+    @Processing
+    @Attribute
+    @IntRange(min = 0, max = 5 * 60)
+    public int timeout = 8;
+    
     /** Precompiled XSLT templates. */
     private final TemplatesPool pool;
 
@@ -79,7 +99,7 @@ public class XmlDocumentSourceHelper
         String password) throws Exception
     {
         final HttpUtils.Response response = HttpUtils.doGET(url, null, null, user,
-            password);
+            password, timeout * 1000);
         final InputStream carrot2XmlStream = response.getPayloadAsStream();
 
         final int statusCode = response.status;

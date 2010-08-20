@@ -12,14 +12,14 @@
 
 package org.carrot2.matrix;
 
-import org.apache.mahout.math.matrix.DoubleFactory2D;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 
 /**
  * A factory for convenient construction of 2D matrices backed by the NNI interface. Use
  * the <code>nni</code> static field to obtain the instance of the NNI matrix factory. For
- * more details on using this factory see {@link org.apache.mahout.math.matrix.DoubleFactory2D}.
+ * more details on using this factory see <code>org.apache.mahout.math.matrix.DoubleFactory2D</code>.
  */
+@SuppressWarnings("deprecation")
 public class NNIDoubleFactory2D extends DoubleFactory2D
 {
     private static final long serialVersionUID = 1L;
@@ -54,7 +54,7 @@ public class NNIDoubleFactory2D extends DoubleFactory2D
     }
 
     /**
-     * Converts a generic {@link DoubleMatrix2D} into an NNI-backed matrix.
+     * Converts a generic <code>DoubleMatrix2D</code> into an NNI-backed matrix.
      */
     public static DoubleMatrix2D asNNIMatrix(DoubleMatrix2D A)
     {

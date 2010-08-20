@@ -40,7 +40,7 @@ import com.google.common.collect.Maps;
  * The index should be binary-compatible with the Lucene version actually imported by this
  * plugin.
  */
-@Bindable(prefix = "LuceneDocumentSource")
+@Bindable(prefix = "LuceneDocumentSource", inherit = AttributeNames.class)
 public final class LuceneDocumentSource extends ProcessingComponentBase implements
     IDocumentSource
 {
@@ -58,18 +58,18 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
 
     @Processing
     @Input
-    @Attribute(key = AttributeNames.RESULTS)
+    @Attribute(key = AttributeNames.RESULTS, inherit = true)
     @IntRange(min = 1)
     public int results = 100;
 
     @Processing
     @Output
-    @Attribute(key = AttributeNames.RESULTS_TOTAL)
+    @Attribute(key = AttributeNames.RESULTS_TOTAL, inherit = true)
     public long resultsTotal;
 
     @Processing
     @Output
-    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
     @Internal
     public Collection<Document> documents;
 
@@ -135,13 +135,14 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
      * A pre-parsed {@link Query} object or a {@link String} parsed using the built-in
      * {@link QueryParser} over a set of search fields returned from the
      * {@link #fieldMapper}.
-     * 
+     *
      * @label Query
      * @group Search query
+     * @level Basic
      */
     @Input
     @Processing
-    @Attribute(key = AttributeNames.QUERY)
+    @Attribute(key = AttributeNames.QUERY, inherit = false) /* false intentional! */
     @Required
     @ImplementingClasses(classes =
     {

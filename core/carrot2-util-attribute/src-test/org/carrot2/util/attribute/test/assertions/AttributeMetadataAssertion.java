@@ -14,7 +14,7 @@ package org.carrot2.util.attribute.test.assertions;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.carrot2.util.attribute.AttributeMetadata;
+import org.carrot2.util.attribute.metadata.AttributeMetadata;
 
 /**
  * Assertions on {@link AttributeMetadata}.

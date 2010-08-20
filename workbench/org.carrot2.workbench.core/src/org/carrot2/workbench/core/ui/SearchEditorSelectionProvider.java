@@ -268,7 +268,7 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
         this.clustersById.clear();
         this.clusterTreePathsById.clear();
 
-        // Build mappings. We use Stack to keep 1.5 compatibility.
+        // Build mappings.
         final ArrayList<Cluster> path = new ArrayList<Cluster>();
         descend(processingResult.getClusters(), path);
     }

@@ -14,20 +14,41 @@ package org.carrot2.workbench.core;
 
 import java.io.File;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.DocumentSourceDescriptor;
+import org.carrot2.core.IClusteringAlgorithm;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.ProcessingComponentDescriptor;
+import org.carrot2.core.ProcessingComponentSuite;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.DirLocator;
+import org.carrot2.util.resource.IResourceLocator;
+import org.carrot2.util.resource.PrefixDecoratorLocator;
+import org.carrot2.util.resource.ResourceUtilsFactory;
+import org.carrot2.util.resource.URLResource;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IContributor;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -97,7 +118,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         scanSuites();
 
         controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
-        controller.init(new HashMap<String, Object>(), componentSuite.getComponentConfigurations());
+        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
+            (Object)new DefaultLanguageModelFactory()), componentSuite.getComponentConfigurations());
     }
 
     /*
@@ -320,12 +342,14 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             try
             {
                 final String id = pcd.getId();
+                BindableDescriptor bindableDescriptor = pcd.getBindableDescriptor();
+                bindableDescriptors.put(id, bindableDescriptor);
                 processingDescriptors.put(id, pcd);
-                bindableDescriptors.put(id, pcd.getBindableDescriptor());
             }
             catch (Exception e)
             {
-                Utils.logError("Could not extract descriptor from: " + pcd.getId(), e, false);
+                Utils.logError("Failed to extract descriptor from: " 
+                    + pcd.getId(), e, false);
             }
         }
         
@@ -349,7 +373,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     /**
      * @return Return failed component descriptors, if any.
      */
-    List<ProcessingComponentDescriptor> getFailed()
+    public List<ProcessingComponentDescriptor> getFailed()
     {
         return failed;
     }

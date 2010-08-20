@@ -14,6 +14,7 @@ package org.carrot2.util.resource;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.carrot2.util.StreamUtils;
@@ -41,8 +42,7 @@ public final class ResourceUtils
      */
     public ResourceUtils(IResourceLocator [] locators)
     {
-        this.locators = new IResourceLocator [locators.length];
-        System.arraycopy(locators, 0, this.locators, 0, locators.length);
+        this.locators = Arrays.copyOf(locators, locators.length); 
     }
 
     /**

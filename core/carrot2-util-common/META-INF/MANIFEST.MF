@@ -7,19 +7,18 @@ Export-Package: org.carrot2.util,
  org.carrot2.util.httpclient,
  org.carrot2.util.pool,
  org.carrot2.util.resource,
- org.carrot2.util.test,
  org.carrot2.util.xslt
 Require-Bundle: org.apache.commons;visibility:=reexport,
- com.google.collections;visibility:=reexport,
+ com.google.guava;visibility:=reexport,
  org.simpleframework.xml;visibility:=reexport,
  org.fest;resolution:=optional;visibility:=reexport,
  org.junit4.ext;resolution:=optional;visibility:=reexport,
  org.easymock;resolution:=optional;visibility:=reexport,
  org.slf4j;bundle-version="1.5.8";visibility:=reexport,
  org.codehaus.jackson;bundle-version="0.9.2";visibility:=reexport,
- org.apache.mahout.math;bundle-version="0.3.0";visibility:=reexport,
- com.carrotsearch.hppc;bundle-version="0.1.0";visibility:=reexport
+ org.apache.mahout;bundle-version="0.3.0";visibility:=reexport,
+ com.carrotsearch.hppc;bundle-version="0.3.0";visibility:=reexport
 Bundle-ClassPath: .
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: dependent,registered
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

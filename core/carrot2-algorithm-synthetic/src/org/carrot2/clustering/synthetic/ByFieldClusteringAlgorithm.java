@@ -28,7 +28,7 @@ import com.google.common.collect.Maps;
  * 
  * @label By Attribute Clustering
  */
-@Bindable(prefix = "ByAttributeClusteringAlgorithm")
+@Bindable(prefix = "ByAttributeClusteringAlgorithm", inherit = AttributeNames.class)
 public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
@@ -38,7 +38,7 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
     @Processing
     @Input
     @Internal
-    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
     public List<Document> documents;
 
     /**
@@ -47,7 +47,7 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
     @Processing
     @Output
     @Internal
-    @Attribute(key = AttributeNames.CLUSTERS)
+    @Attribute(key = AttributeNames.CLUSTERS, inherit = true)
     public List<Cluster> clusters = null;
 
     /**

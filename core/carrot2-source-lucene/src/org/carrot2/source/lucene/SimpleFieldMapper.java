@@ -19,6 +19,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.highlight.*;
 import org.carrot2.core.attribute.*;
@@ -35,18 +36,11 @@ import org.carrot2.util.attribute.constraint.IntRange;
 public class SimpleFieldMapper implements IFieldMapper
 {
     /**
-     * Each {@link org.carrot2.core.Document} will have an additional
-     * field named like this constant, pointing to the original
-     * Lucene {@link Document}.
-     */
-    public static final String LUCENE_DOCUMENT = "lucene.doc";
-
-    /**
      * Document title field name.
      * 
      * @label Document title field
      * @group Index field mapping
-     * @level Medium
+     * @level Basic
      */
     @Input
     @Attribute
@@ -60,7 +54,7 @@ public class SimpleFieldMapper implements IFieldMapper
      * 
      * @label Document content field
      * @group Index field mapping
-     * @level Medium
+     * @level Basic
      */
     @Input
     @Attribute
@@ -233,11 +227,6 @@ public class SimpleFieldMapper implements IFieldMapper
                 throw ExceptionUtils.wrapAsRuntimeException(e);
             }
         }
-        
-        /*
-         * Add a reference to Lucene document.
-         */
-        doc.setField(LUCENE_DOCUMENT, luceneDoc);
     }
 
     /*
@@ -250,8 +239,21 @@ public class SimpleFieldMapper implements IFieldMapper
             return null;
         }
 
-        final String value = doc.get(fieldName);
-        return value;
+        StringBuilder builder = null;
+        for (Fieldable field : doc.getFields())
+        {
+            if (field.name().equals(fieldName) && (!field.isBinary()))
+            {
+                if (builder == null) 
+                    builder = new StringBuilder();
+                if (builder.length() > 0) 
+                    builder.append(" ");
+
+                builder.append(field.stringValue());
+            }
+        }
+
+        return builder == null ? null : builder.toString();
     }
 
     /*

@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 
@@ -33,27 +32,38 @@ public abstract class FileConstraintTestBase<T extends Annotation> extends
     @Before
     public void prepareFiles() throws IOException
     {
-        existingDirectory = new File(System.getProperty("java.io.tmpdir"),
-            "tmp-test-dir");
+        existingDirectory = File.createTempFile("carrot2", "temp");
+        
+        /* 
+         * Hope for the best, remove the temporary file and recreate it 
+         * as a directory. 
+         */
+        if (!existingDirectory.delete()) 
+        {
+            throw new RuntimeException("Failed to delete a directory: "
+                + existingDirectory.getAbsolutePath());
+        }
         if (!existingDirectory.mkdir())
         {
             throw new RuntimeException("Failed to create a directory: "
                 + existingDirectory.getAbsolutePath());
         }
-        existingFile = new File(existingDirectory, "file");
-        FileUtils.touch(existingFile);
+        existingFile = File.createTempFile("tempfile", "tmp", existingDirectory);
         nonExisting = new File(existingDirectory, "nonexisting");
     }
 
     @After
     public void removeFiles()
     {
-        final boolean fileDeleted = existingFile.delete();
-        final boolean directoryDeleted = existingDirectory.delete();
-        if (!(fileDeleted && directoryDeleted))
+        if (!existingFile.delete())
         {
             throw new RuntimeException("Failed to delete: "
-                + existingFile.getAbsolutePath() + " or "
+                + existingFile.getAbsolutePath());
+        }
+
+        if (!existingDirectory.delete())
+        {
+            throw new RuntimeException("Failed to delete: "
                 + existingDirectory.getAbsolutePath());
         }
     }

@@ -39,6 +39,9 @@ span.id {
 a {
     color: #1678C4;
 }
+a:visited {
+    color: #51108d;
+}
 
 img.t {
 	float: left;

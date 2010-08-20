@@ -9,8 +9,8 @@
 <chapter xml:id="chapter.customizing" version="5.0"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:product="http://www.carrot2.org">
-  <title>Customizing applications</title>
-  <subtitle>Customizing &PROD; applications</subtitle>
+  <title>Customization</title>
+  <subtitle>Customizing &PROD; tools</subtitle>
 
   <para>
     This chapter will show you how to add new document sources and tune clustering 

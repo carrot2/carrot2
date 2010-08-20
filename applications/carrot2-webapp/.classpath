@@ -4,14 +4,15 @@
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.mortbay.jetty"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/javax.servlet"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-component-suites"/>
-	<classpathentry kind="lib" path="lib/jawr-2.4.2.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/javax.servlet"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-component-suites"/>
+	<classpathentry exported="true" kind="lib" path="lib/jawr-2.4.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.planetj.compression"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.simpleframework.xml"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.google.collections"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-xsltfilter"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-log4j"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.planetj.compression"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.simpleframework.xml"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.google.guava"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-xsltfilter"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-log4j"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.log4j"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

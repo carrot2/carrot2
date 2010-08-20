@@ -20,7 +20,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.source.boss.*;
-import org.carrot2.source.microsoft.MicrosoftLiveDocumentSource;
+import org.carrot2.source.microsoft.BingDocumentSource;
 import org.carrot2.util.attribute.AttributeUtils;
 
 /**
@@ -54,13 +54,13 @@ public class ClusteringDataFromDocumentSources
          * check CachingController for more advanced handling of component life cycle.
          */
         Map<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put(AttributeUtils.getKey(MicrosoftLiveDocumentSource.class, "appid"),
-            MicrosoftLiveDocumentSource.CARROTSEARCH_APPID);
+        attributes.put(AttributeUtils.getKey(BingDocumentSource.class, "appid"),
+            BingDocumentSource.CARROTSEARCH_APPID);
         attributes.put(AttributeNames.QUERY, "data mining");
         attributes.put(AttributeNames.RESULTS, 100);
 
         ProcessingResult result = controller.process(attributes,
-            MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+            BingDocumentSource.class, LingoClusteringAlgorithm.class);
 
         ConsoleFormatter.displayResults(result);
 

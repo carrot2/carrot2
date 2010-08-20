@@ -74,7 +74,6 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <addExtensions>true</addExtensions>
               <classpathPrefix>./lib/</classpathPrefix>
               <mainClass>
                 org.carrot2.examples.clustering.ClusteringDocumentList

@@ -12,7 +12,6 @@
 
 package org.carrot2.core;
 
-import static org.easymock.EasyMock.isA;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
@@ -24,6 +23,10 @@ import org.junit.Test;
  */
 public abstract class ControllerTestsPooling extends ControllerTestsBase
 {
+    /**
+     * Returns a controller that implements basic processing and component instance
+     * pooling functionality.
+     */
     public abstract Controller getPoolingController();
 
     public boolean hasCaching()
@@ -43,11 +46,11 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
     @Test
     public void testRepeatedExecution3Components()
     {
-        component1Mock.init(isA(IControllerContext.class));
+        invokeInit(component1Mock);
         invokeProcessing(component1Mock);
-        component2Mock.init(isA(IControllerContext.class));
+        invokeInit(component2Mock);
         invokeProcessing(component2Mock);
-        component3Mock.init(isA(IControllerContext.class));
+        invokeInit(component3Mock);
         invokeProcessing(component3Mock);
 
         invokeDisposal(component1Mock, component2Mock, component3Mock);
@@ -69,10 +72,10 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
     @Test
     public void testResettingPrimitiveAttribute()
     {
-        component1Mock.init(isA(IControllerContext.class));
+        invokeInit(component1Mock);
         invokeProcessing(component1Mock);
         invokeProcessing(component1Mock);
-        component1Mock.dispose();
+        invokeDisposal(component1Mock);
 
         mocksControl.replay();
 
@@ -112,12 +115,12 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
     @Test(expected = ProcessingException.class)
     public void testResettingRequiredProcessingAttributeToNull()
     {
-        component1Mock.init(isA(IControllerContext.class));
+        invokeInit(component1Mock);
         invokeProcessing(component1Mock);
         // beforeProcessing will fail because of missing required attributes
         // afterProcessing() still will be performed
         component1Mock.afterProcessing();
-        component1Mock.dispose();
+        invokeDisposal(component1Mock);
 
         mocksControl.replay();
 
@@ -153,13 +156,13 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
         performProcessing(ComponentWithInitProcessingInputReferenceAttribute.class);
         performProcessing(ComponentWithInitProcessingInputReferenceAttribute.class);
         assertThat(BindableInstanceCounter.createdInstances).isEqualTo(
-            hasCaching() ? 2 : 1);
+            hasCaching() ? 2 : eagerlyInitializedInstances());
 
         processingAttributes.put("initProcessing", BindableInstanceCounter.class);
         performProcessing(ComponentWithInitProcessingInputReferenceAttribute.class);
         performProcessingAndDispose(ComponentWithInitProcessingInputReferenceAttribute.class);
         assertThat(BindableInstanceCounter.createdInstances).isEqualTo(
-            hasCaching() ? 2 : 3);
+            hasCaching() ? 2 : eagerlyInitializedInstances() + 3 - 1);
     }
 
     @Test
@@ -167,13 +170,13 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
     {
         ComponentWithInstanceCounter.reset();
         performProcessing(ComponentWithInstanceCounter.class);
-        assertThat(ComponentWithInstanceCounter.instanceCount).isEqualTo(1);
+        assertThat(ComponentWithInstanceCounter.instanceCount).isEqualTo(eagerlyInitializedInstances());
         performProcessing(ComponentWithInstanceCounter.class);
         performProcessing(ComponentWithInstanceCounter.class);
         performProcessing(ComponentWithInstanceCounter.class);
-        assertThat(ComponentWithInstanceCounter.instanceCount).isEqualTo(1);
+        assertThat(ComponentWithInstanceCounter.instanceCount).isEqualTo(eagerlyInitializedInstances());
         performProcessingAndDispose(ComponentWithInstanceCounter.class);
-        assertThat(ComponentWithInstanceCounter.instanceCount).isEqualTo(1);
+        assertThat(ComponentWithInstanceCounter.instanceCount).isEqualTo(eagerlyInitializedInstances());
     }
 
     @Bindable

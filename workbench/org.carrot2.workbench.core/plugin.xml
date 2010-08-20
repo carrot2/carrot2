@@ -315,6 +315,11 @@
             id="org.carrot2.workbench.core.ui.actions.AutoUpdateCommand"
             name="Restart Processing Automatically">
       </command>
+      <command
+            description="Display the welcome view"
+            id="org.carrot2.workbench.core.handlers.DisplayWelcomeView"
+            name="Welcome">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.actionSets">
@@ -406,11 +411,6 @@
 			activityId="org.carrot2.activities.eclipse"
 			pattern=".+/org\.eclipse\.ui\.views\.(ContentOutline|ProblemView|ResourceNavigator|TaskList|BookmarkView|PropertySheet)">
 		</activityPatternBinding>
-		
-		<activityPatternBinding
-			activityId="org.carrot2.activities.eclipse"
-			pattern=".*helpContents">
-		</activityPatternBinding>
 
 		<!-- cluttering preference pages -->
 		<activityPatternBinding
@@ -428,4 +428,23 @@
 			pattern=".+/org\.eclipse\.pde\.runtime\.RegistryBrowse">
 		</activityPatternBinding>
 	</extension>
+ <extension
+       point="org.eclipse.ui.handlers">
+    <handler
+          class="org.carrot2.workbench.core.ui.actions.DisplayWelcomeView"
+          commandId="org.carrot2.workbench.core.handlers.DisplayWelcomeView">
+    </handler>
+ </extension>
+ <extension
+       point="org.eclipse.ui.menus">
+    <menuContribution
+          locationURI="menu:org.carrot2.menus.about?after=additions">
+       <command
+             commandId="org.carrot2.workbench.core.handlers.DisplayWelcomeView"
+             icon="icons/welcome16.gif"
+             label="Welcome"
+             style="push">
+       </command>
+    </menuContribution>
+ </extension>
 </plugin>

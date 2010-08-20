@@ -74,6 +74,8 @@
            dir="@{webtest.tests.dir}">
         <property name="wt.config.resultfile" value="@{webtest.report.dir}/webtest-results.xml" />
         <property name="wt.config.resultpath" location="@{webtest.report.dir}" />
+        <property name="wt.config.browser" value="FF3" />
+        <property name="wt.headless" value="true" />
   
         <property name="wt.config.host" value="@{webtest.host}" />
         <property name="wt.config.protocol" value="http" />

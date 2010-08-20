@@ -18,11 +18,12 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.junit.Test;
 
 import org.apache.mahout.math.matrix.DoubleMatrix1D;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 
 /**
  * Test cases for {@link EigenUtils}.
  */
+@SuppressWarnings("deprecation")
 public class EigenUtilsTest
 {
     @Test

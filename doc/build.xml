@@ -37,6 +37,7 @@
         <param name="dist.url" expression="${dist.url}" />
         <param name="carrot2.javadoc.url" expression="${dist.url}/javadoc" />
         <param name="product.java-api.base" expression="${carrot2.java-api.base}" />
+        <param name="product.csharp-api.base" expression="${carrot2.csharp-api.base}" />
         <param name="product.dcs.base" expression="${carrot2.dcs.base}" />
         <param name="product.cli.base" expression="${carrot2.cli.base}" />
         <param name="product.webapp.base" expression="${carrot2.webapp.base}" />

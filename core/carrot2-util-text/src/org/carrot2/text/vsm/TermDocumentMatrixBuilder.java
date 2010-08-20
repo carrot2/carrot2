@@ -14,7 +14,7 @@ package org.carrot2.text.vsm;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.mahout.math.GenericPermuting;
 import org.apache.mahout.math.matrix.DoubleFactory2D;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 import org.apache.mahout.math.matrix.impl.SparseDoubleMatrix2D;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Internal;
@@ -23,7 +23,6 @@ import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.PcjCompat;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
@@ -40,6 +39,7 @@ import com.carrotsearch.hppc.sorting.IndirectSort;
 /**
  * Builds a term document matrix based on the provided {@link PreprocessingContext}.
  */
+@SuppressWarnings("deprecation")
 @Bindable(prefix = "TermDocumentMatrixBuilder")
 public class TermDocumentMatrixBuilder
 {
@@ -295,7 +295,7 @@ public class TermDocumentMatrixBuilder
             }
         }
 
-        return PcjCompat.toIntArray(requiredStemIndices);
+        return requiredStemIndices.asIntLookupContainer().toArray();
     }
 
     /**

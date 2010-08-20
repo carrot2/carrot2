@@ -13,7 +13,7 @@
 package org.carrot2.util.pool;
 
 /**
- *
+ * Pooled object instantiation listener.
  */
 public interface IInstantiationListener<T, P>
 {

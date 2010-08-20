@@ -12,21 +12,35 @@
 
 package org.carrot2.cli.batch;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.core.ProcessingComponentDescriptor.ProcessingComponentDescriptorToId;
+import org.carrot2.core.ProcessingComponentSuite;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.source.xml.XmlDocumentSource;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.resource.FileResource;
 import org.carrot2.util.resource.ResourceUtilsFactory;
-import org.kohsuke.args4j.*;
+import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -102,8 +116,8 @@ public class BatchApp
     private int process() throws Exception
     {
         final Controller controller = ControllerFactory.createPooling();
-        controller.init(Collections.<String, Object> emptyMap(), componentSuite
-            .getComponentConfigurations());
+        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
+            (Object)new DefaultLanguageModelFactory()), componentSuite.getComponentConfigurations());
 
         // Prepare the algorithm
         if (StringUtils.isBlank(algorithm))

@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.carrot2.util.attribute
 Bundle-Version: 0.0.0.QUALIFIER
 Export-Package: org.carrot2.util.attribute,
  org.carrot2.util.attribute.constraint,
+ org.carrot2.util.attribute.metadata,
  org.carrot2.util.attribute.test.binder,
  org.carrot2.util.attribute.test.filtering,
  org.carrot2.util.attribute.test.metadata,
@@ -15,4 +16,6 @@ Require-Bundle: org.carrot2.util.common;visibility:=reexport,
  org.apache.ant;bundle-version="1.7.0";resolution:=optional
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: registered
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .apt_factory/org.carrot2.bindables.jar,
+ .

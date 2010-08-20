@@ -12,17 +12,27 @@
 
 package org.carrot2.examples.clustering;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.Document;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.LanguageCode;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.source.google.GoogleDocumentSource;
-import org.carrot2.source.microsoft.CultureInfo;
-import org.carrot2.source.microsoft.MicrosoftLiveDocumentSource;
+import org.carrot2.source.microsoft.BingDocumentSource;
+import org.carrot2.source.microsoft.MarketOption;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
+import org.carrot2.util.attribute.AttributeUtils;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 /**
@@ -51,8 +61,8 @@ import com.google.common.collect.Lists;
  * {@link org.carrot2.core.Document#LANGUAGE} of documents they produce based on their
  * specific language-related attributes. Currently, three documents support this scenario:
  * <ol>
- * <li>{@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource} through the
- * {@link org.carrot2.source.microsoft.MicrosoftLiveDocumentSource#culture} attribute</li>
+ * <li>{@link org.carrot2.source.microsoft.BingDocumentSource} through the
+ * {@link org.carrot2.source.microsoft.BingDocumentSource#market} attribute</li>
  * <li>{@link org.carrot2.source.boss.BossDocumentSource} through the
  * {@link org.carrot2.source.boss.BossSearchService#languageAndRegion} attribute</li>
  * <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the
@@ -72,6 +82,13 @@ public class ClusteringNonEnglishContent
          * and caches results produced by document sources.
          */
         final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
+        
+        /*
+         * To cluster Chinese content, we need to use the DefaultLanguageModelFactory,
+         * which contains the appropriate tokenizer. 
+         */
+        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
+            (Object)new DefaultLanguageModelFactory()));
 
         /*
          * In the first call, we'll cluster a document list, setting the language for each
@@ -91,17 +108,18 @@ public class ClusteringNonEnglishContent
         ConsoleFormatter.displayResults(englishResult);
 
         /*
-         * In the second call, we will fetch results for a Chinese query from MSN Live,
-         * setting explicitly the MSN Live's specific language attribute. Based on that
+         * In the second call, we will fetch results for a Chinese query from Bing,
+         * setting explicitly the Bing's specific language attribute. Based on that
          * attribute, the document source will set the appropriate language for each
          * document.
          */
         attributes.clear();
         attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
-        attributes.put("MicrosoftLiveDocumentSource.culture", CultureInfo.CHINESE_CHINA);
+        attributes.put(AttributeUtils.getKey(BingDocumentSource.class, "market"), 
+            MarketOption.CHINESE_CHINA);
         attributes.put(AttributeNames.RESULTS, 100);
         final ProcessingResult chineseResult = controller.process(attributes,
-            MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+            BingDocumentSource.class, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(chineseResult);
 
         /*

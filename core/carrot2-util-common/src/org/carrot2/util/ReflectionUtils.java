@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,7 +11,6 @@
 
 package org.carrot2.util;
 
-
 /**
  * Utilities related to Java reflection.
  */
@@ -25,9 +23,23 @@ public final class ReflectionUtils
 
     /**
      * Load and initialize (or return, if already defined) a given class using context
-     * class loader.
+     * class loader. If class cannot be found, a {@link ClassNotFoundException} is thrown
+     * and logged.
      */
     public static Class<?> classForName(String clazzName) throws ClassNotFoundException
+    {
+        return classForName(clazzName, true);
+    }
+
+    /**
+     * Load and initialize (or return, if already defined) a given class using context
+     * class loader.
+     * 
+     * @param clazzName class name to load
+     * @param logWarning if <code>true</code>, a warning will be logged if class cannot be found
+     */
+    public static Class<?> classForName(String clazzName, boolean logWarning)
+        throws ClassNotFoundException
     {
         try
         {
@@ -36,8 +48,11 @@ public final class ReflectionUtils
         }
         catch (ClassNotFoundException e)
         {
-            org.slf4j.LoggerFactory.getLogger(ReflectionUtils.class).warn("Could not load class: "
-                + clazzName + " (" + e.getMessage() + ").");
+            if (logWarning)
+            {
+                org.slf4j.LoggerFactory.getLogger(ReflectionUtils.class).warn(
+                    "Could not load class: " + clazzName + " (" + e.getMessage() + ").");
+            }
             throw e;
         }
     }

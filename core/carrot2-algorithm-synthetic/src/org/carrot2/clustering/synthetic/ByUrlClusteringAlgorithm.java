@@ -36,7 +36,7 @@ import com.google.common.collect.*;
  * 
  * @label By URL Clustering
  */
-@Bindable
+@Bindable(inherit = AttributeNames.class)
 public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
@@ -54,7 +54,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     @Processing
     @Input
     @Internal
-    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
     public List<Document> documents;
 
     /**
@@ -63,7 +63,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     @Processing
     @Output
     @Internal
-    @Attribute(key = AttributeNames.CLUSTERS)
+    @Attribute(key = AttributeNames.CLUSTERS, inherit = true)
     public List<Cluster> clusters = null;
 
     /**

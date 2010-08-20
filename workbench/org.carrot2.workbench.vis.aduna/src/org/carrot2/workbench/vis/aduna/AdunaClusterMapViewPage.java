@@ -26,6 +26,7 @@ import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.ui.*;
 import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.*;

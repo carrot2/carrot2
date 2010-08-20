@@ -19,8 +19,9 @@ import org.fest.assertions.Delta;
 import org.apache.mahout.math.matrix.DoubleMatrix1D;
 
 /**
- * Assertions on {@link DoubleMatrix1D}.
+ * Assertions on <code>DoubleMatrix1D</code>.
  */
+@SuppressWarnings("deprecation")
 public class DoubleMatrix1DAssertion
 {
     /** The actual matrix */

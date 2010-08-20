@@ -97,8 +97,10 @@ public class QueryWordHighlighterTest
 
         highlighter.process();
 
+        final Document highlightedDocument = highlighter.documents.get(0);
+        
         assertThat(
-            document.getField(Document.SUMMARY
+            highlightedDocument.getField(Document.SUMMARY
                 + QueryWordHighlighter.HIGHLIGHTED_FIELD_NAME_SUFFIX)).isEqualTo(
             expectedSnippet);
     }

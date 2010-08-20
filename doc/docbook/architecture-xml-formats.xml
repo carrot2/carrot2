@@ -82,18 +82,18 @@
 
   ...
 
-  <group id="0" size="60">
+  <group id="0" size="60" score="1.0">
     <title>
       <phrase>com</phrase>
     </title>
-    <group id="1" size="2">
+    <group id="1" size="2" score="1.0">
       <title>
         <phrase>amazon.com</phrase>
       </title>
       <document refid="43"/>
       <document refid="77"/>
     </group>
-    <group id="2" size="2">
+    <group id="2" size="2" score="0.8">
       <title>
         <phrase>boston.com</phrase>
       </title>
@@ -115,11 +115,11 @@
       ...
     </group>
   </group>
-  <group id="8" size="12">
+  <group id="8" size="12" score="0.72">
     <title>
       <phrase>org</phrase>
     </title>
-    <group id="9" size="2">
+    <group id="9" size="2" score="1.0">
       <title>
         <phrase>en.wikipedia.org</phrase>
       </title>

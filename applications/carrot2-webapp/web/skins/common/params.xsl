@@ -78,6 +78,18 @@
     To use Carrot<sup>2</sup>, please enable JavaScript in your browser.
   </xsl:template>
   
+  <!-- Message to show to old browser users -->
+  <xsl:template match="page" mode="old-browser-text">
+    <span id="use-modern">Use a <a href="http://browsehappy.com/">modern browser</a> for best experience!</span>
+  </xsl:template>
+  
+  <!-- Introduction to show on the document sources page -->
+  <xsl:template match="page" mode="document-sources-intro">
+    <p id="source-descriptions-intro">
+      Carrot<sup>2</sup> clusters results from the following search feeds:
+    </p>
+  </xsl:template>
+  
   <!-- The whole about section, override if you need better control of it -->
   <xsl:template match="page" mode="about">
     <h3 class="hide"><xsl:apply-templates select=".." mode="about-title" /></h3>
@@ -122,6 +134,18 @@
        set to either 'always' or 'hidden'.
     -->
   <xsl:param name="show-advanced-options">hidden</xsl:param>
+
+  <!-- 
+       The logo to display in the Circles visualization. Allowed values:
+       
+         * carrot2: Carrot2 logo
+         * carrot-search: Carrot Search logo
+         
+       A fully-brandable version of the visualization is available from
+       Carrot Search (http://carrotsearch.com/circles). 
+    -->
+  <xsl:param name="circles-logo">carrot2</xsl:param>
+  
   
   <!--
        Google Analytics web property id.  

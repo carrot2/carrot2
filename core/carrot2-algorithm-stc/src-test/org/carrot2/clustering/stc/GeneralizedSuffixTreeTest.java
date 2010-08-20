@@ -17,11 +17,11 @@ import static org.junit.Assert.assertArrayEquals;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.apache.lucene.util.OpenBitSet;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.text.suffixtree.SuffixTree;
 import org.junit.Test;
 
+import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntStack;
 
 /**
@@ -39,7 +39,7 @@ public class GeneralizedSuffixTreeTest
             super(sb, 2);
         }
 
-        protected void visit(int state, int card, OpenBitSet bset, IntStack edges)
+        protected void visit(int state, int card, BitSet bset, IntStack edges)
         {
             final StringBuilder b = new StringBuilder();
             for (int i = 0; i < edges.size(); i += 2)

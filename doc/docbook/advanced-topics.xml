@@ -55,25 +55,6 @@
         
         <listitem>
           <para>
-            Choose <guilabel>Run</guilabel> &gt; <guilabel>External Tools</guilabel> &gt; 
-            <guilabel>External Tools Configurations...</guilabel> from
-            the main menu and run the <varname>Attribute Metadata XML</varname> configuration.
-            This will build the metadata files required for Workbench to show descriptions
-            of &C2; components' attributes.
-          </para>
-          
-          <figure xml:id="figure.attribute-metadata-xml-run-configuration">
-            <title>Attribute Metadata XML Run Configuration</title>
-            <mediaobject>
-              <imageobject role="html">
-                <imagedata format="PNG" fileref="img/attribute-metadata-xml-run-configuration.png" />
-              </imageobject>
-            </mediaobject>  
-          </figure>
-        </listitem>
-        
-        <listitem>
-          <para>
             Choose <guilabel>Run</guilabel> &gt; <guilabel>Run Configurations...</guilabel> from
             the main menu and run the <varname>Workbench</varname> configuration.
           </para>
@@ -295,7 +276,7 @@
     
     <para>
       Two sources that currently do not support the above properties are: 
-      MicrosoftLiveDocumentSource and OpenSearchDocumentSource.
+      BingDocumentSource and OpenSearchDocumentSource.
     </para>
     
     <note>

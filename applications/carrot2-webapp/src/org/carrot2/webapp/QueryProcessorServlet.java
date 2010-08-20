@@ -13,24 +13,48 @@
 package org.carrot2.webapp;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.ControllerStatistics;
+import org.carrot2.core.ProcessingComponentDescriptor;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.AttributeBinder;
-import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.AttributeBinder.IAttributeTransformer;
+import org.carrot2.util.attribute.Input;
 import org.carrot2.webapp.filter.QueryWordHighlighter;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
-import org.carrot2.webapp.model.*;
+import org.carrot2.webapp.model.AttributeMetadataModel;
+import org.carrot2.webapp.model.ModelWithDefault;
+import org.carrot2.webapp.model.PageModel;
+import org.carrot2.webapp.model.RequestModel;
+import org.carrot2.webapp.model.RequestType;
+import org.carrot2.webapp.model.ResultsCacheModel;
+import org.carrot2.webapp.model.ResultsSizeModel;
+import org.carrot2.webapp.model.ResultsViewModel;
+import org.carrot2.webapp.model.SkinModel;
+import org.carrot2.webapp.model.WebappConfig;
 import org.carrot2.webapp.util.UserAgentUtils;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -38,7 +62,10 @@ import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 import org.slf4j.Logger;
 
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * Processes search requests.
@@ -69,6 +96,7 @@ public class QueryProcessorServlet extends HttpServlet
 
     /** @see UnknownToDefaultTransformer */
     private UnknownToDefaultTransformer unknownToDefaultTransformer;
+    private UnknownToDefaultTransformer unknownToDefaultTransformerWithMaxResults;
 
     /**
      * Define this system property to enable statistical information from the query
@@ -87,7 +115,6 @@ public class QueryProcessorServlet extends HttpServlet
      * Servlet lifecycle.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public void init(ServletConfig config) throws ServletException
     {
         super.init(config);
@@ -105,13 +132,15 @@ public class QueryProcessorServlet extends HttpServlet
          * Initialize global configuration and publish it.
          */
         this.webappConfig = WebappConfig.getSingleton();
-        this.unknownToDefaultTransformer = new UnknownToDefaultTransformer(webappConfig);
+        this.unknownToDefaultTransformer = new UnknownToDefaultTransformer(webappConfig, false);
+        this.unknownToDefaultTransformerWithMaxResults = new UnknownToDefaultTransformer(webappConfig, true);
 
         /*
          * Initialize the controller.
          */
-        controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
-        controller.init(new HashMap<String, Object>(), webappConfig.components.getComponentConfigurations());
+        controller = ControllerFactory.createCachingPooling(ResultsCacheModel.toClassArray(webappConfig.caches));
+        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
+            (Object)new DefaultLanguageModelFactory()), webappConfig.components.getComponentConfigurations());
 
         jawrUrlGenerator = new JawrUrlGenerator(servletContext);
     }
@@ -184,12 +213,21 @@ public class QueryProcessorServlet extends HttpServlet
         {
             // Build model for this request
             final RequestModel requestModel = new RequestModel(webappConfig);
-
             requestModel.modern = UserAgentUtils.isModernBrowser(request);
-            final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = new AttributeBinder.AttributeBinderActionBind(
-                Input.class, requestParameters, true,
-                AttributeBinder.AttributeTransformerFromString.INSTANCE,
-                unknownToDefaultTransformer);
+
+            // Request type is normally bound to the model, but we need to know
+            // the type before binding to choose the unknown values resolution strategy
+            final String requestType = (String)requestParameters.get(WebappConfig.TYPE_PARAM);
+            
+            final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = 
+                new AttributeBinder.AttributeBinderActionBind(
+                    Input.class,
+                    requestParameters,
+                    true,
+                    AttributeBinder.AttributeTransformerFromString.INSTANCE,
+                    RequestType.CARROT2DOCUMENTS.name().equals(requestType) ? 
+                        unknownToDefaultTransformerWithMaxResults : 
+                        unknownToDefaultTransformer);
             AttributeBinder.bind(requestModel,
                 new AttributeBinder.IAttributeBinderAction []
                 {
@@ -373,6 +411,11 @@ public class QueryProcessorServlet extends HttpServlet
                         processingResult = controller.process(requestParameters,
                             requestModel.source, QueryWordHighlighter.class.getName());
                         break;
+                        
+                    case CARROT2DOCUMENTS:
+                        processingResult = controller.process(requestParameters,
+                            requestModel.source);
+                        break;
 
                     default:
                         throw new RuntimeException("Should not reach here.");
@@ -389,19 +432,31 @@ public class QueryProcessorServlet extends HttpServlet
 
         // Send response, sets encoding of the response writer.
         response.setContentType(MIME_XML_UTF8);
-        final PageModel pageModel = new PageModel(webappConfig, request, requestModel,
-            jawrUrlGenerator, processingResult, processingException);
 
-        final Persister persister = new Persister(
-            getPersisterFormat(pageModel.requestModel));
-
-        if (RequestType.CARROT2.equals(requestModel.type))
+        final Persister persister = new Persister(getPersisterFormat(requestModel));
+        final PrintWriter writer = response.getWriter();
+        if (RequestType.CARROT2.equals(requestModel.type) || 
+            RequestType.CARROT2DOCUMENTS.equals(requestModel.type))
         {
-            persister.write(processingResult, response.getWriter());
+            // Check for an empty processing result.
+            if (processingException != null)
+            {
+                response.sendError(
+                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "Internal server error: " + processingException.getMessage());
+                return;
+            }
+
+            persister.write(processingResult, writer);
         }
         else
         {
-            persister.write(pageModel, response.getWriter());
+            response.setContentType(MIME_XML_UTF8);
+
+            final PageModel pageModel = new PageModel(webappConfig, request, requestModel,
+                jawrUrlGenerator, processingResult, processingException);
+
+            persister.write(pageModel, writer);
         }
     }
 
@@ -463,10 +518,16 @@ public class QueryProcessorServlet extends HttpServlet
         private final Map<String, Collection<?>> knownValues;
         private final Map<String, Object> defaultValues;
 
-        public UnknownToDefaultTransformer(WebappConfig config)
+        private final boolean useMaxCarrot2Results;
+        private final Integer maxCarrot2Results;
+        
+        public UnknownToDefaultTransformer(WebappConfig config, boolean useMaxCarrot2Results)
         {
             knownValues = Maps.newHashMap();
             defaultValues = Maps.newHashMap();
+            
+            this.maxCarrot2Results = config.maxCarrot2Results;
+            this.useMaxCarrot2Results = useMaxCarrot2Results;
 
             // Result sizes
             final Set<Integer> resultSizes = Sets.newHashSet();
@@ -522,6 +583,26 @@ public class QueryProcessorServlet extends HttpServlet
         {
             final Object defaultValue = defaultValues.get(key);
 
+            if (maxCarrot2Results != null && useMaxCarrot2Results
+                && WebappConfig.RESULTS_PARAM.equals(key))
+            {
+                if (value == null)
+                {
+                    return defaultValues.get(key);
+                }
+                
+                // Just check if the requested number of results is smaller than
+                // the maximum configured for this instance of the webapp
+                if (((Integer) value) <= maxCarrot2Results)
+                {
+                    return value;
+                }
+                else
+                {
+                    return maxCarrot2Results;
+                }
+            }
+            
             // Check if we want to handle this attribute at all
             if (defaultValue != null)
             {

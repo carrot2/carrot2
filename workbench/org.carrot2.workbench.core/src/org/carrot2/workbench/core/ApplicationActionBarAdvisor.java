@@ -37,7 +37,6 @@ final class ApplicationActionBarAdvisor extends ActionBarAdvisor
     private IWorkbenchAction closeAction;
     private IWorkbenchAction closeAllAction;
     private IWorkbenchAction closeOthersAction;
-    private IWorkbenchAction helpContentsAction;
     private IWorkbenchAction openPreferencesAction;
     private IWorkbenchAction exitAction;
     private IWorkbenchAction aboutAction;
@@ -73,9 +72,6 @@ final class ApplicationActionBarAdvisor extends ActionBarAdvisor
 
         closeOthersAction = ActionFactory.CLOSE_OTHERS.create(window);
         register(closeOthersAction);
-
-        helpContentsAction = ActionFactory.HELP_CONTENTS.create(window);
-        register(helpContentsAction);
 
         aboutAction = ActionFactory.ABOUT.create(window);
         register(aboutAction);
@@ -122,7 +118,7 @@ final class ApplicationActionBarAdvisor extends ActionBarAdvisor
         fileMenu.add(exitAction);
 
         final MenuManager aboutMenu = new MenuManager("&About", "org.carrot2.menus.about");
-        aboutMenu.add(helpContentsAction);
+        aboutMenu.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
         aboutMenu.add(aboutAction);
 
         final MenuManager changePerspMenuMgr = new MenuManager("Open Perspective", "org.carrot2.menus.openperspective");

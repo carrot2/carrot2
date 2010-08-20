@@ -29,7 +29,7 @@
          unpack="false"/>
 
    <plugin
-         id="com.google.collections"
+         id="com.google.guava"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -122,13 +122,6 @@
 
    <plugin
          id="org.eclipse.ui.browser"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.axis"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -279,7 +272,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.apache.mahout.math"
+         id="org.apache.mahout"
          download-size="0"
          install-size="0"
          version="0.0.0"

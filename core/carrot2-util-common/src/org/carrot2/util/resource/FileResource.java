@@ -91,7 +91,7 @@ public final class FileResource implements IResource
         return file;
     }
     
-    @JsonGetter
+    @JsonProperty
     @SuppressWarnings("unused")
     private String getAbsolutePath()
     {

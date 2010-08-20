@@ -32,6 +32,9 @@ public enum RequestType
     /** Documents and clusters in Carrot2 standard format */
     CARROT2(true),
     
+    /** Documents in Carrot2 standard format */
+    CARROT2DOCUMENTS(true),
+    
     /** Error page */
     ERROR(false),
     

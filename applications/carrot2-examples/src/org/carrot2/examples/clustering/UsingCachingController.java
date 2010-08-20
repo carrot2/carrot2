@@ -18,7 +18,7 @@ import java.util.Map;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.source.microsoft.MicrosoftLiveDocumentSource;
+import org.carrot2.source.microsoft.BingDocumentSource;
 import org.carrot2.util.attribute.AttributeUtils;
 
 /**
@@ -69,13 +69,13 @@ public class UsingCachingController
 
         /*
          * Let's globally override the default number of results requested from the search
-         * engine and provide application id for the MSN document source (please use your
+         * engine and provide application id for the Bing document source (please use your
          * own appid for production).
          */
         Map<String, Object> globalAttributes = new HashMap<String, Object>();
         globalAttributes.put(AttributeNames.RESULTS, 50);
-        globalAttributes.put(AttributeUtils.getKey(MicrosoftLiveDocumentSource.class,
-            "appid"), MicrosoftLiveDocumentSource.CARROTSEARCH_APPID);
+        globalAttributes.put(AttributeUtils.getKey(BingDocumentSource.class,
+            "appid"), BingDocumentSource.CARROTSEARCH_APPID);
         controller.init(globalAttributes);
 
         /*
@@ -100,7 +100,7 @@ public class UsingCachingController
 
             final long start = System.currentTimeMillis();
             ProcessingResult result = controller.process(attributes,
-                MicrosoftLiveDocumentSource.class, LingoClusteringAlgorithm.class);
+                BingDocumentSource.class, LingoClusteringAlgorithm.class);
             final long duration = System.currentTimeMillis() - start;
 
             System.out.println(String.format("\t%+10.3f", duration / 1000.0f));

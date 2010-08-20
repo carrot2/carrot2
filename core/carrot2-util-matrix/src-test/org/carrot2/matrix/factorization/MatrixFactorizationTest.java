@@ -14,19 +14,18 @@ package org.carrot2.matrix.factorization;
 
 import static org.carrot2.matrix.MatrixAssertions.assertThat;
 import static org.junit.Assume.assumeTrue;
-import static org.carrot2.matrix.NNITestAssumptions.nativeLapackAvailable;
 
 import org.carrot2.matrix.*;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
-import org.carrot2.util.test.Assertions;
 import org.junit.Test;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 
 /**
  * Test cases for matrix factorizations.
  */
+@SuppressWarnings("deprecation")
 public class MatrixFactorizationTest
 {
     /** Factorization parameters */
@@ -60,7 +59,7 @@ public class MatrixFactorizationTest
     @Test
     public void testNativeSVD()
     {
-        assumeTrue(nativeLapackAvailable());
+        assumeTrue(NNIInterface.isNativeLapackAvailable());
 
         NNIInterface.suppressNNI(false);
         PartialSingularValueDecompositionFactory factory = new PartialSingularValueDecompositionFactory();
@@ -119,8 +118,7 @@ public class MatrixFactorizationTest
         };
 
         check(expectedU, expectedV, factorization);
-        Assertions.assertThat(factorization.getSingularValues()).as("S").isEqualTo(
-            expectedS, DELTA);
+        org.junit.Assert.assertArrayEquals(expectedS, factorization.getSingularValues(), DELTA);
     }
 
     @Test

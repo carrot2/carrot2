@@ -12,7 +12,7 @@
 
 package org.carrot2.text.util;
 
-import static org.carrot2.util.test.Assertions.*;
+import static org.carrot2.core.test.Assertions.*;
 
 import java.util.Arrays;
 

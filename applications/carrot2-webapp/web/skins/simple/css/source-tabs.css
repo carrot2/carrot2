@@ -17,8 +17,10 @@ ul.tabs li.tab {
   border: 1px solid #b6afa8;
   -moz-border-radius-topleft: 5px;
   -moz-border-radius-topright: 5px;
-  -webkit-border-radius-topleft: 5px;
-  -webkit-border-radius-topright: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   margin-right: 2px;
   padding: 5px 5px 4px 5px;
   background-color: #ebe9e1;
@@ -70,8 +72,8 @@ ul.tabs li.tab .google {
   background-image: url('../img/sources/google.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
-ul.tabs li.tab .msn-web {
-  background-image: url('../img/sources/msn.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
+ul.tabs li.tab .bing-web {
+  background-image: url('../img/sources/bing.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
 ul.tabs li.tab .wiki {

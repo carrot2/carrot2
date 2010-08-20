@@ -12,12 +12,11 @@
 
 package org.carrot2.text.preprocessing;
 
-import static org.carrot2.util.test.Assertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.Arrays;
 
-import org.carrot2.text.analysis.ITokenTypeAttribute;
+import org.carrot2.text.analysis.ITokenizer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -210,8 +209,8 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         };
         short [] expectedType = new short []
         {
-            ITokenTypeAttribute.TT_NUMERIC, ITokenTypeAttribute.TT_TERM, ITokenTypeAttribute.TT_FILE,
-            ITokenTypeAttribute.TT_BARE_URL, ITokenTypeAttribute.TT_EMAIL
+            ITokenizer.TT_NUMERIC, ITokenizer.TT_TERM, ITokenizer.TT_FILE,
+            ITokenizer.TT_BARE_URL, ITokenizer.TT_EMAIL
         };
 
         check(expectedWordImages, expectedWordTf, expectedWordIndices,
@@ -745,7 +744,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
     private short [] createTermTokenTypes(int count)
     {
         final short [] result = new short [count];
-        Arrays.fill(result, (short) ITokenTypeAttribute.TT_TERM);
+        Arrays.fill(result, (short) ITokenizer.TT_TERM);
         return result;
     }
 }

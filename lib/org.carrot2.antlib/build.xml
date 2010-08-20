@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
 <project default="jar" name="carrot2.common.antlib">
-  <!-- Base dir determined from the build file location -->
-  <dirname property="carrot2.common.antlib.basedir"
-           file="${ant.file.carrot2.common.antlib}" />
+    <!-- Base dir determined from the build file location -->
+    <dirname property="carrot2.common.antlib.basedir"
+        file="${ant.file.carrot2.common.antlib}" />
 
-  <target name="tasks" depends="carrot2.common.antlib.jar">
-    <taskdef resource="org.carrot2.antlib.xml">
-      <classpath>
-        <pathelement location="${carrot2.common.antlib.basedir}/org.carrot2.antlib.jar" />
-      </classpath>
-    </taskdef>    
-  </target>
-  
-  <target name="clean">
-		<delete dir="${carrot2.common.antlib.basedir}/tmp" />
-	</target>
+    <!-- Invoked by build files into which this one is imported. -->
+    <target name="tasks">
+        <taskdef resource="org.carrot2.antlib.xml">
+            <classpath>
+                <pathelement location="${carrot2.common.antlib.basedir}/org.carrot2.antlib.jar" />
+            </classpath>
+        </taskdef>
+    </target>
 
-	<target name="jar">
-		<mkdir dir="${carrot2.common.antlib.basedir}/tmp/classes" />
-		<javac debug="true" destdir="${carrot2.common.antlib.basedir}/tmp/classes" 
-           source="1.5" target="1.5" includeantruntime="true">
-			<src path="${carrot2.common.antlib.basedir}/src" />
-		</javac>
-		<copy todir="${carrot2.common.antlib.basedir}/tmp/classes">
-			<fileset dir="${carrot2.common.antlib.basedir}/src">
-				<exclude name="**/*.java" />
-			</fileset>
-		</copy>
-		<jar jarfile="${carrot2.common.antlib.basedir}/org.carrot2.antlib.jar" basedir="${carrot2.common.antlib.basedir}/tmp/classes" />
-	</target>
+    <target name="clean">
+        <delete dir="${carrot2.common.antlib.basedir}/tmp/classes" />
+    </target>
+
+    <target name="jar" depends="clean">
+        <mkdir dir="${carrot2.common.antlib.basedir}/tmp/classes" />
+
+        <javac debug="true" destdir="${carrot2.common.antlib.basedir}/tmp/classes" includeantruntime="true">
+            <src path="${carrot2.common.antlib.basedir}/src" />
+        </javac>
+        <copy todir="${carrot2.common.antlib.basedir}/tmp/classes">
+            <fileset dir="${carrot2.common.antlib.basedir}/src">
+                <exclude name="**/*.java" />
+            </fileset>
+        </copy>
+        <jar jarfile="${carrot2.common.antlib.basedir}/org.carrot2.antlib.jar" basedir="${carrot2.common.antlib.basedir}/tmp/classes" />
+    </target>
 </project>

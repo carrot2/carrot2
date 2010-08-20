@@ -13,15 +13,16 @@
 package org.carrot2.matrix;
 
 import org.apache.mahout.math.matrix.DoubleMatrix1D;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 /**
- * A very crude native implementation of Colt's {@link org.apache.mahout.math.matrix.DoubleMatrix2D}
+ * A very crude native implementation of Colt's <code>org.apache.mahout.math.matrix.DoubleMatrix2D</code>
  * based on the Native Numerical Interface (NNI). For the time being, the only method that
  * uses the native routines is the Level 3 zMult(). The other methods use the
  * implementations provided in DenseDoubleMatrix2D.
  */
+@SuppressWarnings("deprecation")
 public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
 {
     private static final long serialVersionUID = 1L;
@@ -132,7 +133,7 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
     }
 
     /**
-     * Checks if the provided {@link DenseDoubleMatrix2D} is a view.
+     * Checks if the provided <code>DenseDoubleMatrix2D</code> is a view.
      */
     public boolean isView()
     {

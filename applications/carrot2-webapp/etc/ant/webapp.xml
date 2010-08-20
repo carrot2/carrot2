@@ -44,4 +44,41 @@
       </copy>
     </sequential>
   </macrodef>
+
+  <filterset id="version.filterset">
+    <filter token="VERSION" value="${build.number}" />
+  </filterset>
+  
+  <macrodef name="carrot2.webapp.templates.jawr">
+    <attribute name="jawr.properties.template.path" />
+    <attribute name="target.dir" />
+    
+    <sequential>
+      <condition property="sprite.suffix" value="sprite/" else="">
+        <isset property="smartsprites.home" />
+      </condition>
+  
+      <copy file="@{jawr.properties.template.path}"
+            tofile="@{target.dir}/jawr.properties"
+            overwrite="true">
+        <filterset refid="version.filterset" />
+        <filterset>
+          <filter token="SPRITE" value="${sprite.suffix}" />
+        </filterset>
+      </copy>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="carrot2.webapp.templates.config">
+    <attribute name="config.xml.template.path" />
+    <attribute name="target.dir" />
+    
+    <sequential>
+      <copy file="@{config.xml.template.path}"
+            tofile="@{target.dir}/config.xml"
+            overwrite="true">
+        <filterset refid="version.filterset" />
+      </copy>
+    </sequential>
+  </macrodef>
 </project>

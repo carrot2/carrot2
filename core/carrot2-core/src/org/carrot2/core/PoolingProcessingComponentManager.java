@@ -115,7 +115,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
             // the instance back to the pool. This requirement is actually imposed by the
             // SoftUnboundedPool API. Ideally, we'd move this mapping to SoftUnboundedPool,
             // but Apache Commons Pool (which is likely to be used as an alternative)
-            // also requires the at when returning the component.
+            // also requires the id when returning the component.
             if (id != null)
             {
                 componentHashToId.put(System.identityHashCode(component), id);

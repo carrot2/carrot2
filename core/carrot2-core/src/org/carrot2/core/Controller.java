@@ -34,7 +34,7 @@ import com.google.common.collect.Maps;
  * {@link IProcessingComponentManager} implementation.
  * <p>
  * Calls to {@link #process(Map, Class...)} are thread-safe, although some care should be
- * given to initialization. Controller must be initialized (using any of the
+ * given to initialization. Controller instance should be initialized (using any of the
  * {@link #init()} methods) before other threads are allowed to see its instance.
  * {@link #dispose()} should be called after all threads leave
  * {@link #process(Map, Class...)} and {@link #process(Map, Object...)}.

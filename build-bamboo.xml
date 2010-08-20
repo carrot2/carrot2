@@ -18,14 +18,14 @@
         <ant dir="${carrot2.code.dir}" antfile="build.xml" target="test" inheritall="true" />
     </target>
 
-    <target name="dist" description="Build Carrot2 distribution without documentation">
+    <target name="dist" description="Build Carrot2 distribution">
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist.doc.without" inheritall="true" />
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist" inheritall="true" />
     </target>
 
     <target name="doc" description="Build Carrot2 documentation">
         <fail unless="carrot2.code.dir">Define: carrot2.code.dir</fail>
-        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="dist.doc.only" inheritall="true" />
+        <ant dir="${carrot2.code.dir}" antfile="build.xml" target="doc" inheritall="true" />
     </target>
 
     <target name="publish" depends="publish.artifacts, publish.demo" />
@@ -49,13 +49,9 @@
 
         <copy todir="${dist.dir}" overwrite="true">
           <fileset dir="${carrot2.code.dir}/tmp">
-            <!-- Exclude reports, we'll link these directly to the build server -->
-            <exclude name="*-report/**" />
-            <exclude name="workbench/**" />
-            <exclude name="maven-test/**" />
-            <exclude name="jar/**" />
-            <exclude name="classes/**" />
-            <exclude name="attrs-cache.properties" />
+            <include name="javadoc/**" />
+            <include name="manual/**" />
+            <include name="*.zip" />
           </fileset>
         </copy>
     </target>

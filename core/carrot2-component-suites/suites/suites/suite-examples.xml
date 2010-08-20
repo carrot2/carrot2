@@ -8,8 +8,8 @@
       </source>
     </sources>
 
-    <!-- Some included search engine. -->
-    <include suite="suites/source-microsoft-live.xml" />
+    <!-- Additional search engines. -->
+    <include suite="suites/source-bing.xml" />
 
     <!-- Algorithms. -->
     <include suite="suites/algorithm-lingo.xml" />

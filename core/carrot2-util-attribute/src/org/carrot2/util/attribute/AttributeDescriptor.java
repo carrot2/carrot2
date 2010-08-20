@@ -19,12 +19,14 @@ import java.util.*;
 import org.apache.commons.lang.ClassUtils;
 import org.carrot2.util.ListUtils;
 import org.carrot2.util.attribute.constraint.*;
+import org.carrot2.util.attribute.metadata.AttributeMetadata;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.core.Persist;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.collect.*;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 /**
  * Provides a full description of an individual attribute, including its {@link #key},
@@ -138,6 +140,8 @@ public class AttributeDescriptor
         this.inputAttribute = field.getAnnotation(Input.class) != null;
         this.outputAttribute = field.getAnnotation(Output.class) != null;
         this.requiredAttribute = field.getAnnotation(Required.class) != null;
+
+        prepareForSerialization();
     }
 
     /**
@@ -199,12 +203,11 @@ public class AttributeDescriptor
         return key + "=" + type;
     }
 
-    @Persist
-    @SuppressWarnings(
-    {
-        "unused", "unchecked"
-    })
-    private void beforeSerialization()
+    /**
+     * @see "http://issues.carrot2.org/browse/CARROT-693"
+     */
+    @SuppressWarnings("unchecked")
+    private void prepareForSerialization()
     {
         attributeFieldString = attributeField.getName();
 
@@ -225,9 +228,9 @@ public class AttributeDescriptor
             }
             else
             {
-                if (defaultValue instanceof Enum)
+                if (defaultValue instanceof Enum<?>)
                 {
-                    defaultValueString = ((Enum) defaultValue).name();
+                    defaultValueString = ((Enum<?>) defaultValue).name();
                 }
                 else
                 {

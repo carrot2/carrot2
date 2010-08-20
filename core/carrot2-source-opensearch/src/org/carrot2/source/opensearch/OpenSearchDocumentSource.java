@@ -64,12 +64,23 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * to be searched. Mutually exclusive with <code>startIndex</code>.</li><li><code>
      * count</code> the number of search results per page</li>
      * </ul>
+     * <p>
+     * Example URL feed templates for public services:
+     * <dl>
+     *   <dt>nature.com</dt>
+     *   <dd><code>http://www.nature.com/opensearch/request?interface=opensearch&amp;operation=searchRetrieve&amp;query=${searchTerms}&amp;startRecord=${startIndex}&amp;maximumRecords=${count}&amp;httpAccept=application/rss%2Bxml</code></dd>
+     *   <dt>indeed.com</dt>
+     *   <dd><code>http://www.indeed.com/opensearch?q=${searchTerms}&amp;start=${startIndex}&amp;limit=${count}</code></dd>
+     * </dl>
+     * 
+     * </p>
      * 
      * @label Feed URL template
-     * @level Advanced
+     * @level Basic
      * @group Service
      */
     @Input
+    @Processing
     @Init
     @Attribute
     @Required
@@ -80,25 +91,27 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * the feed to return.
      * 
      * @label Results per page
-     * @level Advanced
+     * @level Basic
      * @group Service
      */
     @Input
+    @Processing
     @Init
     @Attribute
     @Required
     @IntRange(min = 1)
-    public int resultsPerPage;
+    public int resultsPerPage = 50;
 
     /**
      * Maximum number of results. The maximum number of results the document source can
      * deliver.
      * 
      * @label Maximum results
-     * @level Advanced
+     * @level Basic
      * @group Service
      */
     @Input
+    @Processing
     @Init
     @Attribute
     @IntRange(min = 1)
@@ -138,10 +151,8 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     private static final String COUNT_VARIABLE_NAME = "count";
 
     @Override
-    public void init(IControllerContext context)
+    public void beforeProcessing()
     {
-        super.init(context);
-
         // Verify that the attributes are legal
         final boolean hasStartPage = URLResourceWithParams.containsAttributePlaceholder(
             feedUrlTemplate, START_PAGE_VARIABLE_NAME);
@@ -150,7 +161,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
 
         if (!(hasStartPage ^ hasStartIndex))
         {
-            throw new ComponentInitializationException(
+            throw new ProcessingException(
                 "The feedUrlTemplate must contain either "
                     + URLResourceWithParams
                         .formatAttributePlaceholder(START_INDEX_VARIABLE_NAME)
@@ -163,7 +174,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
         if (!URLResourceWithParams.containsAttributePlaceholder(feedUrlTemplate,
             SEARCH_TERMS_VARIABLE_NAME))
         {
-            throw new ComponentInitializationException(
+            throw new ProcessingException(
                 "The feedUrlTemplate must contain "
                     + URLResourceWithParams
                         .formatAttributePlaceholder(SEARCH_TERMS_VARIABLE_NAME)
@@ -172,7 +183,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
 
         if (resultsPerPage == 0)
         {
-            throw new ComponentInitializationException("resultsPerPage must be set");
+            throw new ProcessingException("resultsPerPage must be set");
         }
 
         this.metadata = new MultipageSearchEngineMetadata(resultsPerPage, maximumResults,
@@ -192,7 +203,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     {
         return new SearchEngineResponseCallable()
         {
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings("rawtypes")
             public SearchEngineResponse search() throws Exception
             {
                 // Replace variables in the URL

@@ -13,6 +13,14 @@
   <!-- We'll be using Carrot2 internal Xalan -->
   <property name="xalan.home" location="${carrot2.master.basedir}/lib/org.apache.xml" />
 
+  <!-- Catalog for local copies of DocBook DTD and XSL-NS -->
+  <xmlcatalog id="docbook">
+    <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
+         location="${docbook.dtd.dir}/docbook.dtd" />
+    <dtd publicId="http://docbook.sourceforge.net/release/xsl-ns/current/html/docbook.xsl"
+         location="${docbook.xsl.dir}/html/docbook.xsl" />
+  </xmlcatalog>
+
   <!--
        Renders the DocBook manual into HTML.
     -->
@@ -74,23 +82,18 @@
             style="@{doc.build.dir}/xsl/filtering.xsl"
             out="@{doc.output.dir}/filtered.xml"
             force="yes">
-        <xmlcatalog>
-          <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
-               location="${docbook.dtd.dir}/docbook.dtd" />
-        </xmlcatalog>
+        <xmlcatalog refid="docbook" />
         
         <html.xslt.param.entries />
       </xslt>
 
       <!-- Build the actual manual -->
       <xslt in="@{doc.output.dir}/filtered.xml"
-            style="${docbook.xsl.dir}/html-custom/docbook.xsl"
+            style="@{doc.build.dir}/xsl/html-custom/docbook.xsl"
             out="@{doc.output.dir}/index.html"
+            basedir="${docbook.xsl.dir}"
             force="yes">
-        <xmlcatalog>
-          <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
-               location="${docbook.dtd.dir}/docbook.dtd" />
-        </xmlcatalog>
+        <xmlcatalog refid="docbook" />
 
         <classpath>
           <fileset dir="${xalan.home}">
@@ -189,10 +192,7 @@
       <xslt in="@{doc.build.dir}/docbook/components.template.xml"
             style="@{doc.build.dir}/xsl/attributes-to-docbook.xsl"
             out="@{doc.build.dir}/docbook/components.xml">
-        <xmlcatalog>     
-          <dtd publicId="-//OASIS//DTD DocBook XML V5.0//EN"
-               location="${docbook.dtd.dir}/docbook.dtd" />
-        </xmlcatalog>
+        <xmlcatalog refid="docbook" />
         <attributes.xslt.param.entries />
       </xslt>
 
@@ -220,11 +220,6 @@
           <include name="**/*.xsl" />
         </fileset>
       </copy>
-
-      <!-- Copy custom DocBook XSLTs -->
-      <copy todir="${docbook.xsl.dir}/html-custom">
-        <fileset dir="@{doc.base.dir}/xsl/html-custom" />
-      </copy>
     </sequential>
   </macrodef>
 
@@ -235,7 +230,6 @@
     <attribute name="doc.build.dir" />
     
     <sequential>
-      <delete dir="${docbook.xsl.dir}/html-custom" />
       <delete dir="@{doc.build.dir}" />
     </sequential>
   </macrodef>

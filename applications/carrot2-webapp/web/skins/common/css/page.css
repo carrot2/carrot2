@@ -29,6 +29,8 @@ div.noscript
   background-color: #fafafa;
   border: 1px #d0d0d0 solid;
   -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
   padding: 5px;
   padding-left: 30px;
   background-image: url('../img/icon-info.png');
@@ -56,6 +58,8 @@ div.noscript
   background-color: white; 
   z-index: 10;
   -moz-border-radius-bottomleft: 7px;
+  -webkit-border-bottom-left-radius: 7px;
+  border-bottom-left-radius: 7px;
 }
 
 /** Loading indicators */
@@ -78,6 +82,8 @@ div.noscript
   top: -1px;
   left: -1px;
   -moz-border-radius-bottomright: 7px;
+  -webkit-border-bottom-right-radius: 7px;
+  border-bottom-right-radius: 7px;
   border: 1px #c0c0c0 solid;
   background-color: #EFEDE5;
   color: #808080;
@@ -93,11 +99,15 @@ div.noscript
 
 #loading-clusters {
   -moz-border-radius-bottomleft: 7px;
+  -webkit-border-bottom-left-radius: 7px;
+  border-bottom-left-radius: 7px;
   border-right: none;
 }
 
 #loading-documents {
   -moz-border-radius-bottomright: 7px;
+  -webkit-border-bottom-right-radius: 7px;
+  border-bottom-right-radius: 7px;
   border-left: none;
 }
 
@@ -135,8 +145,8 @@ div.noscript
 }
 
 #main-area {
-  min-width: 900px;
-  -width: 900px;
+  min-width: 950px;
+  -width: 950px;
 } 
 
 /** Startup screen */
@@ -209,6 +219,8 @@ input, select {
   border: 1px solid #B6AFA8;
   padding: 2px;
   -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 
 input[type=checkbox] {
@@ -300,6 +312,8 @@ input[type=checkbox] {
   background-repeat: no-repeat;
   background-position: 3px 5px;
   -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
 }
 
 #use-modern {

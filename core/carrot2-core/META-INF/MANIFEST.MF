@@ -17,4 +17,4 @@ Bundle-ClassPath: META-INF/,
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: dependent
 Eclipse-RegisterBuddy: org.carrot2.util.attribute,org.carrot2.util.common
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

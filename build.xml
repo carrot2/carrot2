@@ -34,6 +34,10 @@
 
   <!-- Output dirs -->
   <property name="build.dir" location="${carrot2.master.basedir}/tmp/classes" />
+  <property name="build.dir.tests" location="${carrot2.master.basedir}/tmp/classes-test" />
+  <property name="build.dir.clover" location="${carrot2.master.basedir}/tmp/classes-clover" />
+  <property name="build.dir.findbugs" location="${carrot2.master.basedir}/tmp/classes-findbugs" />
+
   <property name="jar.dir" location="${carrot2.master.basedir}/tmp/jar" />
   <property name="api.dir" location="${carrot2.master.basedir}/tmp/api" />
 
@@ -63,14 +67,13 @@
 
   <!-- Compilation presets. -->
   <presetdef name="javac">
-      <javac deprecation="true" debug="true"
-          target="1.5" source="1.5"
+      <javac deprecation="false" debug="true"
+          target="1.6" source="1.6"
           encoding="UTF-8" includeantruntime="true" optimize="true" />
   </presetdef>
 
-  <!-- Source files to compile for tests -->
+  <!-- Source files to compile for tests. -->
   <path id="src.test.folders">
-    <dirset dir="${core.dir}" includes="**/src" />
     <dirset dir="${core.dir}" includes="**/src-test" />
     <dirset dir="${applications.dir}" includes="**/src" />
     <dirset dir="${applications.dir}" includes="**/src-test" />
@@ -104,15 +107,14 @@
   <patternset id="lib.test">
     <include name="core/**/*.jar" />
     <include name="lib/**/*.jar" />
+    <exclude name="lib/org.slf4j/slf4j-nop*" />
     <include name="applications/carrot2-dcs/**/*.jar" />
     <include name="applications/carrot2-webapp/lib/*.jar" />
     <include name="applications/carrot2-benchmarks/lib/*.jar" />
-    <exclude name="lib/org.slf4j/slf4j-log4j12*" />
   </patternset>
 
   <!-- Excludes both JAR and LICENSE files -->
   <patternset id="lib.core.excludes">
-    <exclude name="lib/**/axis-ant.jar" />
     <exclude name="lib/**/easymock*" />
     <exclude name="lib/**/fest-*" />
     <exclude name="lib/**/servlet-api-*.jar" />
@@ -125,7 +127,7 @@
     <exclude name="lib/org.mortbay.jetty/**" />
     <exclude name="lib/org.kohsuke.args4j/**" />
     <exclude name="lib/org.apache.xml/**" />
-    <exclude name="lib/com.google.collections/ri*" />
+    <exclude name="lib/com.google.guava/ri*" />
     <exclude name="lib/org.slf4j/slf4j-log4j12*" />
     <exclude name="lib/org.apache.log4j/*" />
   </patternset>
@@ -137,12 +139,12 @@
   </patternset>
 
   <patternset id="lib.core.mini">
-    <include name="lib/**/mahout-math*.jar" />
+    <include name="lib/**/mahout-*.jar" />
     <include name="lib/**/mahout.LICENSE" />
     <include name="lib/**/colt.LICENSE" />
     <include name="lib/**/commons-lang*" />
     <include name="lib/**/ehcache*" />
-    <include name="lib/**/google-collect*" />
+    <include name="lib/**/guava*" />
     <include name="lib/**/jackson*" />
     <include name="lib/**/lucene-core*" />
     <include name="lib/**/lucene-snowball*" />
@@ -178,6 +180,10 @@
   <path id="test.classpath">
     <path refid="lib.classpath" />
     <path location="${core.dir}/carrot2-component-suites/suites" />
+    <path location="${core.dir}/carrot2-util-log4j/src" />
+    <!-- Prepend classpath with clover-ified classes, if available. -->
+    <path location="${build.dir.clover}" />
+    <path location="${build.dir.tests}" />
     <path location="${build.dir}" />
     <path location="${clover.jar}" />
   </path>
@@ -185,7 +191,7 @@
   <!-- Path to the Carrot2 core JAR -->
   <path id="core.jar.classpath">
     <fileset dir="${jar.dir}">
-      <include name="*.jar" />
+      <include name="carrot2-core-${carrot2.version}.jar" />
     </fileset>
   </path>
   
@@ -207,58 +213,44 @@
     <delete dir="${carrot2.master.basedir}/tmp" failonerror="false" />
   </target>
 
-  <target name="clean.classes">
-    <delete dir="${carrot2.master.basedir}/tmp/classes" failonerror="false" />
-  </target>
-
-  <target name="clean.all" depends="coverage.clean">
-    <delete includeemptydirs="true">
-      <fileset dir="${carrot2.master.basedir}" includes="**/tmp/**" defaultexcludes="false" />
-    </delete>
-  </target>
-
   <!-- 
-       Source compilation.
-       Compiles production the code without clover instrumentation.
+       Core.
     -->
   <target name="compile">
     <mkdir dir="${build.dir}" />
 
-    <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac destdir="${build.dir}" compiler="modern">
+    <javac destdir="${build.dir}">
       <src refid="src.core.folders" />
       <classpath refid="lib.classpath" />
     </javac>
   </target>
 
-  <!-- Compiles the code for FindBugs analysis. -->
-  <target name="compile.findbugs">
-    <mkdir dir="${build.dir}" />
+  <!-- Tests. -->
+  <target name="compile.test">
+    <mkdir dir="${build.dir.tests}" />
 
-    <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac destdir="${build.dir}" compiler="modern">
+    <javac destdir="${build.dir.tests}">
       <src refid="src.test.folders" />
       <classpath refid="lib.classpath" />
+      <classpath location="${build.dir}" />
     </javac>
   </target>
 
-  <!-- Compiles the test code with clover instrumentation. -->
-  <target name="compile.test"
-          depends="with.clover">
-    <mkdir dir="${build.dir}" />
+  <!-- FindBugs. -->
+  <target name="compile.findbugs">
+    <mkdir dir="${build.dir.findbugs}" />
 
-    <javac destdir="${build.dir}">
+    <javac destdir="${build.dir.findbugs}">
+      <src refid="src.core.folders" />  
       <src refid="src.test.folders" />
-
       <classpath refid="lib.classpath" />
     </javac>
   </target>
 
   <!--
-       Resources.
-       Copies the runtime resources to the compiled classes directory.
+       Core resources.
     -->
-  <target name="resources" depends="attrs">
+  <target name="resources">
     <mkdir dir="${build.dir}" />
 
     <copy todir="${build.dir}" includeemptydirs="false">
@@ -277,12 +269,14 @@
     </copy>
   </target>
 
-  <!-- Copies the test resources to the compiled classes directory. -->
+  <!--
+       Test resources.
+    -->
   <target name="resources.test"
-          depends="resources, carrot2.dcs.resources">
-    <mkdir dir="${build.dir}" />
+          depends="resources, carrot2.dcs.resources.test">
+    <mkdir dir="${build.dir.tests}" />
 
-    <copy todir="${build.dir}" includeemptydirs="false">
+    <copy todir="${build.dir.tests}" includeemptydirs="false">
       <fileset dir="${core.dir}">
         <include name="**/src-test/**" />
         <exclude name="**/*.java" />
@@ -300,13 +294,10 @@
        Unit tests.
     -->
   <target name="test"
-          depends="compile.test, attrs, resources.test"
-          description="Runs all unit tests">
+          depends="compile, resources, compile.test, compile.coverage, resources.test"
+          description="Runs all unit tests.">
     <mkdir dir="${tests.report.dir}" />
 
-    <property name="source.paths" location="${core.dir}/carrot2-util-attribute/src-test" />
-    <property name="test.common.attribute.names.source.path"
-              location="${core.dir}/carrot2-util-attribute/src-test/org/carrot2/util/attribute/test/metadata/TestAttributeNames.java" />
     <condition property="carrot2.xml.feed.url.base.internal"
                value="${carrot2.xml.feed.url.base}"
                else="">
@@ -324,15 +315,12 @@
 
       <classpath refid="test.classpath" />
 
-      <sysproperty key="source.paths" value="${source.paths}" />
-      <sysproperty key="common.attribute.names.source.path"
-                   value="${test.common.attribute.names.source.path}" />
       <sysproperty key="external.api.tests.disabled" value="${external.api.tests.disabled}" />
       <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
       <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
 
       <batchtest todir="${tests.report.dir}">
-        <fileset dir="${build.dir}">
+        <fileset dir="${build.dir.tests}">
           <include name="**/*Test.class" />
           <exclude name="**/OpenSearchDocumentSourceByPageIncrementTest.class" 
             unless="icerocket.tests.enabled" />
@@ -359,44 +347,6 @@
   </target>
 
   <!-- 
-       Attribute metadata related targets and macros.
-    -->
-  <property name="common.attribute.names.source.path"
-            location="${core.dir}/carrot2-core/src/org/carrot2/core/attribute/AttributeNames.java" />
-
-  <target name="attrs"
-          depends="compile, attrs.tasks">
-    <sequential>
-      <attributes-xml java.source="${core.dir}/carrot2-algorithm-lingo/src"        />
-      <attributes-xml java.source="${core.dir}/carrot2-algorithm-stc/src"          />
-      <attributes-xml java.source="${core.dir}/carrot2-algorithm-synthetic/src"    />
-      <attributes-xml java.source="${core.dir}/carrot2-core/src"                   />
-      <attributes-xml java.source="${core.dir}/carrot2-source-etools/src"          />
-      <attributes-xml java.source="${core.dir}/carrot2-source-yahoo/src"           />
-      <attributes-xml java.source="${core.dir}/carrot2-source-microsoft/src"       />
-      <attributes-xml java.source="${core.dir}/carrot2-source-pubmed/src"          />
-      <attributes-xml java.source="${core.dir}/carrot2-source-opensearch/src"      />
-      <attributes-xml java.source="${core.dir}/carrot2-source-boss/src"            />
-      <attributes-xml java.source="${core.dir}/carrot2-source-google/src"          />
-      <attributes-xml java.source="${core.dir}/carrot2-source-google-desktop/src"  />
-      <attributes-xml java.source="${core.dir}/carrot2-source-solr/src"            />
-      <attributes-xml java.source="${core.dir}/carrot2-source-xml/src"             />
-      <attributes-xml java.source="${core.dir}/carrot2-source-lucene/src"          />
-      <attributes-xml java.source="${core.dir}/carrot2-source-ambient/src"         />
-      <attributes-xml java.source="${core.dir}/carrot2-util-text/src"              />
-      <attributes-xml java.source="${core.dir}/carrot2-util-attribute/src-test"    />
-      <attributes-xml java.source="${workbench.dir}/org.carrot2.workbench.core/src" />
-      <attributes-xml java.source="${applications.dir}/carrot2-webapp/src" />
-    </sequential>
-  </target>
-
-  <target name="attrs.compile" depends="compile, attrs.tasks" 
-  	description="Generate custom attribute descriptors.">
-  	<fail unless="src.dir">Provide source folder to parse: -Dsrc.dir=&lt;location&gt;</fail>
-  	<attributes-xml java.source="${src.dir}" />
-  </target>
-
-  <!-- 
        Code duplication detection.
     -->
   <path id="pmd.classpath">
@@ -405,36 +355,6 @@
 
   <target name="pmd.tasks" if="pmd.home">
     <taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpathref="pmd.classpath" />
-  </target>
-
-  <target name="attrs.tasks" depends="compile, antlib">
-    <taskdef name="metadata-serializer" 
-        classname="org.carrot2.util.attribute.BindableMetadataSerializerTask" 
-        classpathref="test.classpath" 
-        loaderRef="attrs.classloader" />
-
-    <macrodef name="attributes-xml">
-      <attribute name="java.source" />
-      <sequential>
-        <switchClassLoader loaderRef="attrs.classloader">
-          <metadata-serializer destdir="@{java.source}">
-              <commonMetadata>
-                  <path location="${common.attribute.names.source.path}" />
-              </commonMetadata>
-          
-              <fileset dir="@{java.source}">
-                  <include name="**/*.java" />
-          
-                  <modified update="true" cache="propertyfile" algorithm="digest" comparator="equal">
-                      <param name="cache.cachefile"
-                          value="${carrot2.master.basedir}/tmp/attrs-cache.properties"/>
-                      <param name="algorithm.algorithm" value="MD5" />
-                  </modified>
-              </fileset>
-          </metadata-serializer>
-        </switchClassLoader>
-      </sequential>
-    </macrodef>
   </target>
 
   <target name="duplication"
@@ -466,10 +386,10 @@
        FindBugs static analysis.
     -->
   <target name="findbugs"
+          depends="compile.findbugs"
           if="findbugs.home"
           description="Generates FindBugs report">
-    <antcall target="clean.classes" />
-    <antcall target="compile.findbugs" />
+
     <taskdef name="findbugs"
              classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
              classpath="${findbugs.home}/lib/findbugs-ant.jar" />
@@ -477,7 +397,7 @@
 
     <!-- Delete some classes we don't want to have analyzed -->
     <delete>
-      <fileset dir="${build.dir}">
+      <fileset dir="${build.dir.findbugs}">
         <include name="com/microsoft/msnsearch/**/*.class" />
         <include name="**/ExtendedWhitespaceTokenizerImpl.class" />
       </fileset>
@@ -493,7 +413,7 @@
               output="xml:withMessages"
               outputFile="${findbugs.report.dir}/findbugs.xml">
       <auxClasspath path="${lib.jars}" />
-      <class location="${build.dir}" />
+      <class location="${build.dir.findbugs}" />
     </findbugs>
 
     <xslt in="${findbugs.report.dir}/findbugs.xml"
@@ -508,31 +428,16 @@
     <taskdef resource="cloverlib.xml" classpath="${clover.jar}" />
   </target>
 
-  <target name="with.clover"
-          depends="clover.tasks"
-          if="clover.home">
-    <clover-setup>
-      <fileset refid="src.coverage" />
-    </clover-setup>
+  <target name="coverage.clean" depends="clover.tasks" if="clover.home">
+    <clover-clean />
   </target>
 
-  <target name="coverage"
-          depends="coverage.html, coverage.xml"
-          description="Generates code coverage reports" />
-
-  <target name="coverage.html"
-          depends="clover.tasks"
-          if="clover.home">
+  <target name="coverage" if="clover.home" depends="clover.tasks">
     <clover-report>
       <current outfile="${coverage.report.dir}" title="Carrot2 ${carrot2.version}">
         <format type="html" />
       </current>
     </clover-report>
-  </target>
-
-  <target name="coverage.xml"
-          depends="clover.tasks"
-          if="clover.home">
     <clover-report>
       <current outfile="${coverage.report.dir}/coverage.xml" title="Carrot2 ${carrot2.version} Unit Test Coverage Report">
         <format type="xml" />
@@ -540,10 +445,20 @@
     </clover-report>
   </target>
 
-  <target name="coverage.clean"
-          depends="clover.tasks"
-          if="clover.home">
-    <clover-clean />
+  <target name="compile.coverage" depends="clover.tasks" if="clover.home">
+    <clover-setup enabled="true">
+        <fileset refid="src.coverage" />
+    </clover-setup>
+
+    <mkdir dir="${build.dir.clover}" />
+
+    <javac destdir="${build.dir.clover}">
+      <src refid="src.core.folders" />  
+      <src refid="src.test.folders" />
+      <classpath refid="lib.classpath" />
+    </javac>
+
+    <clover-setup enabled="false" />
   </target>
 
   <!-- 
@@ -588,7 +503,8 @@
         <include name="org/**"/>
       </packageset>
 
-      <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
+      <!-- Oracle only allows browsers (user-agent firewall restriction), so link to the docs, but keep the package-list offline. -->
+      <link offline="true" href="http://download.oracle.com/javase/6/docs/api/" packagelistLoc="${basedir}/etc/javadoc/jdk6" />
 
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Core" packages="org.carrot2.core*" />
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Demos and Examples" packages="org.carrot2.examples*" />
@@ -614,13 +530,16 @@
         <include name="sh/*" />
       </fileset>
     </copy>
+
+    <jar destfile="${jar.dir}/carrot2-core-javadoc-${carrot2.version}.jar">
+      <fileset dir="${javadoc.dir}" />
+    </jar>
   </target>
 
   <!-- 
        Build core JAR.
     -->
-  <target name="jar" description="Builds Carrot2 core JAR"
-    depends="compile, attrs, resources">
+  <target name="jar" description="Builds Carrot2 core JAR" depends="compile, resources">
     <mkdir dir="${jar.dir}" />
     <jar destfile="${jar.dir}/carrot2-core-${carrot2.version}.jar">
       <fileset dir="${build.dir}">
@@ -648,7 +567,7 @@
   </target>
   
   <!--
-        Carrot2 mini JAR, just core and algorithms.
+        Carrot2 mini JAR, just core and algorithms. No extended support for Chinese and Arabic.
     -->
   <target name="jar.mini" depends="jar.mini.test" />
     
@@ -688,6 +607,7 @@
         <path location="${jar.dir}/carrot2-mini-${carrot2.version}.jar" />
         <fileset dir="${carrot2.master.basedir}">
           <patternset refid="lib.core.mini" />
+          <exclude name="**/*.LICENSE" />
           <!-- 
                We add SimpleXML only to stop compiler from complainig about missing
                annotation definitions. SimpleXML is not required to run basic clustering. 
@@ -704,6 +624,7 @@
         <pathelement location="${jar.dir}/carrot2-mini-${carrot2.version}.jar" />
         <fileset dir="${carrot2.master.basedir}">
           <patternset refid="lib.core.mini" />
+          <exclude name="**/*.LICENSE" />
         </fileset>
       </classpath>
     </java>
@@ -733,7 +654,7 @@
     </copy>
     <copy todir="${api.dir}">
       <fileset dir="${jar.dir}">
-        <include name="carrot2-core*.jar" />
+        <include name="carrot2-core-${carrot2.version}.jar" />
       </fileset>
       <fileset dir="${carrot2.master.basedir}">
         <include name="carrot2.LICENSE" />
@@ -763,31 +684,15 @@
   </target>
 
   <target name="core.test" depends="core">
-    <ant antfile="${api.dir}/build.xml" dir="${api.dir}" inheritall="false" /> 
+    <ant antfile="build.xml" dir="${api.dir}" inheritall="false" /> 
   </target>
-  
-  <target name="clean.core">
-    <delete dir="${api.dir}" />
-  </target>
-  
+
   <!--
        Build all apps.
     -->
-  <target name="all" depends="clean.classes, webapp, dcs, javadoc, doc" description="Builds all Carrot2 applications and documentation" />
-  <target name="dist" depends="dist.doc.without, carrot2.doc.dist" description="Builds Carrot2 distribution files" />
-  <target name="dist.doc.only" depends="clean.classes, carrot2.doc.dist" />
-  <target name="dist.doc.without" depends="clean.classes, carrot2.core.dist, carrot2.cli.dist, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, maven">
-    <!-- 
-         After this target runs, we'll copy the entire content of tmp/ 
-         to the distribution dir on the server, so we need to remove
-         useless dirs.
-         [DW] can we just copy what's needed and avoid doing antcall's? They break topo-sorting of targets, among other things.
-      -->
-    <antcall target="clean.jar" />
-    <antcall target="clean.classes" />
-    <antcall target="clean.lib" />
-  </target>
-  <target name="reports" depends="clean.classes, test, coverage, duplication, findbugs" description="Builds all Carrot2 test and code quality reports" />
+  <target name="all" depends="clean, webapp, dcs, javadoc, doc" description="Builds all Carrot2 applications and documentation" />
+  <target name="dist" depends="carrot2.core.dist, carrot2.cli.dist, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, maven, doc" description="Builds Carrot2 distribution files" />
+  <target name="reports" depends="test, coverage, duplication, findbugs" description="Builds all Carrot2 test and code quality reports" />
 
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
@@ -796,22 +701,14 @@
   <!--
       Maven artefacts.
     -->
-  <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini" description="Deploy Maven artifacts">
-    <jar destfile="${jar.dir}/carrot2-core-javadoc-${carrot2.version}.jar">
-      <fileset dir="${javadoc.dir}" />
-    </jar>
-
-    <antcall target="carrot2.maven.deploy" />
-    <antcall target="carrot2.maven.verify" />
-    <delete>
-        <fileset dir="${jar.dir}" includes="carrot2-core-*.jar" />
-    </delete>
+  <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini, carrot2.maven.deploy, carrot2.maven.verify" description="Deploy Maven artifacts">
   </target>
 
   <!-- 
       Builds the manual.
     -->
-  <target name="doc" depends="carrot2.doc.build" description="Builds Carrot2 Manual" />
+  <target name="doc" depends="carrot2.doc.build, carrot2.doc.dist" description="Builds Carrot2 Manual">
+  </target>
 
   <!-- 
        Flattened lib directory.
@@ -829,7 +726,9 @@
   
   <target name="lib.flattened" depends="lib-no-jar.flattened, jar">
     <copy todir="${lib.flattened}">
-      <fileset dir="${jar.dir}" />
+      <fileset dir="${jar.dir}">
+        <include name="carrot2-core-${carrot2.version}.jar" />
+      </fileset>
       <fileset dir="${carrot2.master.basedir}">
         <include name="carrot2.LICENSE" />
       </fileset>
@@ -848,7 +747,7 @@
   <!--
       Workbench compilation section.
   -->
-  <target name="workbench.plugins.gather" depends="carrot2.common.antlib.tasks, pde.build.prepare, attrs">
+  <target name="workbench.plugins.gather" depends="carrot2.common.antlib.tasks, pde.build.prepare">
     <patternset id="temporary.files">
       <exclude name="**/.svn/**" />
       <exclude name="**/tmp/**" />
@@ -867,21 +766,24 @@
       <regexpmapper from="[^/]+/(.*)" to="\1" handledirsep="yes" />
     </copy>
 
-    <copy todir="${workbench.build.dir}/plugins" overwrite="true" filtering="true">
+    <copy todir="${workbench.build.dir}/plugins" overwrite="true" filtering="true" encoding="UTF-8">
       <fileset dir="${carrot2.master.basedir}">
         <include name="core/**/MANIFEST.MF" />
         <include name="lib/**/MANIFEST.MF" />
         <include name="workbench/**/MANIFEST.MF" />
+        <include name="workbench/**/welcome/**/*.html" />
         <patternset refid="temporary.files" />
       </fileset>
 
       <regexpmapper from="[^/]+/(.*)" to="\1" handledirsep="yes" />
 
       <filterchain id="workbench.version.filterchain">
-        <replacestring from="0.0.0.QUALIFIER" to="${carrot2.version.workbench}"/>
+        <replacestring from="0.0.0.QUALIFIER"   to="${carrot2.version.workbench}"/>
+        <!-- Should we keep all these token values in one place somewhere? -->
+        <replacestring from="@carrot2.version@" to="${carrot2.version}" />
       </filterchain>
     </copy>
-    
+
     <!-- Prepare verbose build info. -->
     <carrot2.readme readme.src="${carrot2.master.basedir}/workbench/org.carrot2.workbench.feature/readme.txt"
                     readme.dest="${workbench.build.dir}/static/readme.txt" />
@@ -899,6 +801,9 @@
         props.file="${workbench.properties}" 
         extra.args="
             -Dproduct=/org.carrot2.workbench.feature/Workbench.product
+
+            -DjavacSource=1.6
+            -DjavacTarget=1.6
 
             -DarchivePrefix=${carrot2.workbench.base}-${carrot2.version}
             -DbuildId=${carrot2.workbench.base}
@@ -920,6 +825,9 @@
         props.file="${carrot2.master.basedir}/etc/buildinfo/workbench-platforms.properties" 
         extra.args="
             -Dproduct=/org.carrot2.workbench.feature/Workbench.product
+
+            -DjavacSource=1.6
+            -DjavacTarget=1.6
 
             -DarchivePrefix=${carrot2.workbench.base}-${carrot2.version}
             -DbuildId=${carrot2.workbench.base}
@@ -949,12 +857,19 @@
   </target>
 
   <target name="workbench.test" depends="workbench.plugins.gather" description="Run Workbench tests.">
+    <fail unless="test.os" />
+    <fail unless="test.ws" />
+    <fail unless="test.arch" />
+  
     <pde.build
         build.dir="${workbench.build.dir}/test" 
         props.file="${workbench.properties}" 
         extra.args="
             -Dproduct=/org.carrot2.workbench.feature/Workbench.product
             -DfeatureList=org.carrot2.workbench.core.test.feature
+
+            -DjavacSource=1.6
+            -DjavacTarget=1.6
 
             -Dconfigs=${test.os},${test.ws},${test.arch}
             -DarchivesFormat=${test.os},${test.ws},${test.arch}-folder
@@ -1027,6 +942,60 @@
       </condition>
     </fail>
   </target>
+
+
+  <!--
+      Compilation and assembly of static utility JARs (apt preprocessors).
+   -->
+  <target name="utility.jars" description="Re(create) utility JARs.">
+    <property name="utilities.build.dir" location="${carrot2.master.basedir}/tmp/utility.jars" />
+
+    <delete dir="${utilities.build.dir}" failonerror="false" />
+    <mkdir dir="${utilities.build.dir}" />
+    <javac destdir="${utilities.build.dir}" compiler="modern">
+      <src location="${carrot2.master.basedir}/core/carrot2-util-attribute/src" />
+      <src location="${carrot2.master.basedir}/core/carrot2-util-attribute/src-apt" />
+      <include name="org/carrot2/util/attribute/metadata/**" />
+      <include name="org/carrot2/util/attribute/Bindable.java" />
+      <include name="org/carrot2/util/attribute/Attribute.java" />
+      <include name="org/carrot2/util/attribute/AttributeLevel.java" />
+
+      <classpath id="utility.classpath">
+        <fileset dir=".">
+          <include name="lib/org.apache.commons/commons-lang-*.jar" />
+          <include name="lib/com.thoughtworks.qdox/*.jar" />
+          <include name="lib/org.simpleframework.xml/*.jar" />
+        </fileset>
+      </classpath>
+    </javac>
+    
+    <pathconvert property="utility.manifest.classpath" pathsep=" " dirsep="/">
+        <!-- <path refid="utility.classpath" /> -->
+        <fileset dir="${carrot2.master.basedir}">
+          <include name="lib/org.apache.commons/commons-lang-*.jar" />
+          <include name="lib/com.thoughtworks.qdox/*.jar" />
+          <include name="lib/org.simpleframework.xml/*.jar" />
+        </fileset>
+        <mapper>
+          <chainedmapper>
+             <filtermapper><replacestring
+                from="${carrot2.master.basedir}" 
+                to="../../.."/></filtermapper> 
+          </chainedmapper>
+        </mapper>
+    </pathconvert>
+
+    <jar destfile="${carrot2.master.basedir}/core/carrot2-util-attribute/.apt_factory/org.carrot2.bindables.jar">
+      <fileset dir="${utilities.build.dir}" />
+      <service type="javax.annotation.processing.Processor" provider="org.carrot2.util.attribute.metadata.BindableProcessor" />
+      <manifest>
+        <attribute name="Class-Path" value="${utility.manifest.classpath}" />
+      </manifest>
+    </jar>
+
+    <delete dir="${utilities.build.dir}" failonerror="false" />
+  </target>
+
 
   <!--
       Source code management: license headers list and replace.
@@ -1107,7 +1076,7 @@
   <!--
        Generate development files for Eclipse.
    -->
-  <target name="eclipse" depends="attrs, carrot2.webapp.eclipse.setup" description="Generate Eclipse files for development." />
+  <target name="eclipse" depends="carrot2.webapp.eclipse.setup" description="Generate Eclipse files for development." />
 
   <!--
        Pre-commit check for developers

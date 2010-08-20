@@ -5,15 +5,15 @@
       version="0.0.0.QUALIFIER">
 
    <description url="http://www.example.com/description">
-    [EMPTY]
+      [EMPTY]
    </description>
 
    <copyright url="http://www.example.com/copyright">
-    [EMPTY]
+      [EMPTY]
    </copyright>
 
    <license url="http://www.example.com/license">
-   	[EMPTY]
+      [EMPTY]
    </license>
 
    <includes
@@ -32,7 +32,13 @@
          id="org.carrot2.workbench.core.test"
          download-size="0"
          install-size="0"
-         unpack="true"
          version="0.0.0"/>
+
+   <plugin
+         id="org.carrot2.workbench.core.welcome"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"/>
 
 </feature>

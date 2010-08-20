@@ -18,4 +18,4 @@ Require-Bundle: org.carrot2.util.attribute,
  org.apache.lucene.v2;bundle-version="3.0.0",
  org.carrot2.util.matrix;bundle-version="0.0.0",
  org.junit;bundle-version="3.8.2"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

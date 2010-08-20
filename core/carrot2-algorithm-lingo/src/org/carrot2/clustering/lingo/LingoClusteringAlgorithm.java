@@ -35,9 +35,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 /**
- * Lingo clustering algorithm.
+ * Lingo clustering algorithm. Implementation as described in: <i>
+ * Stanisław Osiński, Dawid Weiss: A Concept-Driven Algorithm for Clustering 
+ * Search Results. IEEE Intelligent Systems, May/June, 3 (vol. 20), 2005, 
+ * pp. 48—54.</i>.
  */
-@Bindable(prefix = "LingoClusteringAlgorithm")
+@Bindable(prefix = "LingoClusteringAlgorithm", inherit = AttributeNames.class)
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
@@ -56,7 +59,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Processing
     @Input
     @Internal
-    @Attribute(key = AttributeNames.QUERY)
+    @Attribute(key = AttributeNames.QUERY, inherit = true)
     public String query = null;
 
     /**
@@ -66,13 +69,13 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Input
     @Required
     @Internal
-    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
     public List<Document> documents;
 
     @Processing
     @Output
     @Internal
-    @Attribute(key = AttributeNames.CLUSTERS)
+    @Attribute(key = AttributeNames.CLUSTERS, inherit = true)
     public List<Cluster> clusters = null;
 
     /**

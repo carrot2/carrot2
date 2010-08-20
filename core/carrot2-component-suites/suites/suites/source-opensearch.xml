@@ -1,0 +1,13 @@
+<component-suite>
+  <sources>
+    <!-- Generic (uninitialized) instance of OpenSearchDocumentSource -->
+    <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="opensearch">
+      <label>Open Search</label>
+      <title>Open Search</title>
+      <description>
+        Open Search document source retrieves search results from search engines supporting
+        the OpenSearch standard.
+      </description>
+    </source>
+  </sources>
+</component-suite>

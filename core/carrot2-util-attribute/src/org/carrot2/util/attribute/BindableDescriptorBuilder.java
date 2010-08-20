@@ -12,16 +12,18 @@
 
 package org.carrot2.util.attribute;
 
-import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.constraint.IsConstraint;
-import org.carrot2.util.resource.IResource;
-import org.carrot2.util.resource.ResourceUtilsFactory;
-import org.simpleframework.xml.core.Persister;
+import org.carrot2.util.attribute.metadata.AttributeMetadata;
+import org.carrot2.util.attribute.metadata.BindableMetadata;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -75,8 +77,8 @@ public class BindableDescriptorBuilder
         }
 
         // Load metadata
-        final BindableMetadata bindableMetadata = buildMetadataForBindableHierarchy(
-            clazz, loadMetadata);
+        final BindableMetadata bindableMetadata =
+            loadMetadata ? BindableMetadata.forClassWithParents(clazz) : null;
 
         // Build descriptors for direct attributes
         final Map<String, AttributeDescriptor> attributeDescriptors = buildAttributeDescriptors(
@@ -138,71 +140,6 @@ public class BindableDescriptorBuilder
         }
 
         return result;
-    }
-
-    /**
-     * Builds bindable metadata for a {@link Bindable} class.
-     */
-    private static BindableMetadata buildMetadataForBindableHierarchy(
-        final Class<?> clazz, boolean loadMetadata)
-    {
-        if (!loadMetadata)
-        {
-            return null;
-        }
-
-        final Collection<Class<?>> classesFromBindableHerarchy = BindableUtils
-            .getClassesFromBindableHerarchy(clazz);
-
-        final BindableMetadata bindableMetadata = getBindableMetadata(clazz);
-
-        for (final Class<?> bindableClass : classesFromBindableHerarchy)
-        {
-            if (bindableClass != clazz)
-            {
-                final BindableMetadata moreMetadata = getBindableMetadata(bindableClass);
-                bindableMetadata.getInternalAttributeMetadata().putAll(
-                    moreMetadata.getAttributeMetadata());
-            }
-        }
-
-        return bindableMetadata;
-    }
-
-    /**
-     * Deserializes metadata for a {@link Bindable} class.
-     */
-    private static BindableMetadata getBindableMetadata(final Class<?> clazz)
-    {
-        final IResource metadataXml = ResourceUtilsFactory.getDefaultResourceUtils()
-            .getFirst(clazz.getName() + ".xml", clazz);
-        BindableMetadata bindableMetadata = null;
-        if (metadataXml != null)
-        {
-            InputStream inputStream = null;
-            try
-            {
-                inputStream = metadataXml.open();
-                bindableMetadata = new Persister().read(BindableMetadata.class,
-                    inputStream);
-            }
-            catch (final Exception e)
-            {
-                throw new RuntimeException("Could not load attribute metadata from: "
-                    + metadataXml, e);
-            }
-            finally
-            {
-                CloseableUtils.close(inputStream);
-            }
-
-            return bindableMetadata;
-        }
-        else
-        {
-            throw new RuntimeException("Could not load attribute metadata from: "
-                + clazz.getName() + ".xml");
-        }
     }
 
     /**

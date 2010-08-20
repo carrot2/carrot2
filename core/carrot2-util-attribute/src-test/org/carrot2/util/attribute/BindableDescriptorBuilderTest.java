@@ -15,12 +15,25 @@ package org.carrot2.util.attribute;
 import static org.carrot2.util.attribute.test.assertions.AttributeAssertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
+import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.attribute.test.binder.*;
+import org.carrot2.util.attribute.metadata.AttributeMetadata;
+import org.carrot2.util.attribute.test.binder.BindableReferenceContainer;
+import org.carrot2.util.attribute.test.binder.BindableReferenceImpl1;
+import org.carrot2.util.attribute.test.binder.BindableReferenceImpl2;
+import org.carrot2.util.attribute.test.binder.CircularReferenceContainer;
+import org.carrot2.util.attribute.test.binder.NonprimitiveAttribute;
+import org.carrot2.util.attribute.test.binder.NotBindable;
+import org.carrot2.util.attribute.test.binder.SingleClass;
+import org.carrot2.util.attribute.test.binder.SubClass;
+import org.carrot2.util.attribute.test.binder.SuperClass;
+import org.junit.Assert;
 import org.junit.Test;
+import org.simpleframework.xml.core.Persister;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -75,6 +88,61 @@ public class BindableDescriptorBuilderTest
     }
 
     @Test
+    public void testConcurrentSerialization() throws Exception
+    {
+        final NonprimitiveAttribute instance = new NonprimitiveAttribute();
+        final Class<?> clazz = NonprimitiveAttribute.class;
+
+        final BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
+            .buildDescriptor(instance);
+        
+        final AttributeDescriptor descriptor = bindableDescriptor.attributeDescriptors.get(
+            AttributeUtils.getKey(clazz, "resource"));
+
+        final AtomicBoolean finish = new AtomicBoolean(false);
+
+        class Serializer extends Thread
+        {
+            private int count;
+            Exception e;
+
+            public Serializer(int count)
+            {
+                this.count = count;
+            }
+
+            @Override
+            public void run()
+            {
+                try
+                {
+                    Persister p = new Persister();
+                    while (count-- >= 0 && !finish.get())
+                    {
+                        p.write(descriptor, new StringWriter());
+                    }
+                }
+                catch (Exception e)
+                {
+                    this.e = e;
+                    finish.set(true);
+                }
+            }
+        }
+
+        Serializer s1 = new Serializer(4000);
+        s1.start();
+        Serializer s2 = new Serializer(4000);
+        s2.start(); 
+
+        s1.join();
+        s2.join();
+
+        Assert.assertTrue("Exception during serialization: " + s1.e, s1.e == null);
+        Assert.assertTrue("Exception during serialization: " + s2.e, s2.e == null);
+    }
+
+    @Test
     public void testSubClass() throws Exception
     {
         final Object instance = new SubClass();
@@ -126,8 +194,7 @@ public class BindableDescriptorBuilderTest
                 new AttributeDescriptor(referenceClass
                     .getDeclaredField("processingInputInt"), 10, Lists
                     .<Annotation> newArrayList(), new AttributeMetadata(
-                    "Processing input int", null, null))).hasMetadata(
-                new BindableMetadata());
+                    "Processing input int", null, null)));
     }
 
     @Test

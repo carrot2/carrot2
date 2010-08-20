@@ -16,7 +16,6 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.text.vsm.TfTermWeighting;
-import org.carrot2.util.PcjCompat;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -128,7 +127,7 @@ public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBas
         for (int i = 0; i < expectedDocumentIndices.length; i++)
         {
             assertThat(
-                PcjCompat.toIntArray(lingoContext.clusterDocuments[i])).as(
+                lingoContext.clusterDocuments[i].asIntLookupContainer().toArray()).as(
                 "clusterDocuments[" + i + "]").containsOnly(expectedDocumentIndices[i]);
         }
     }

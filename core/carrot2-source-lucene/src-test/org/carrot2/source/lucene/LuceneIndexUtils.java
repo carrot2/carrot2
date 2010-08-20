@@ -47,6 +47,17 @@ class LuceneIndexUtils
 
             w.addDocument(doc);
         }
+        
+        /*
+         * Add a test document with snippet (content) field with multiple values.  
+         */
+        org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document();
+        doc.add(new Field("snippet", "terma",
+            Store.YES, Field.Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS));
+        doc.add(new Field("snippet", "termb",
+            Store.YES, Field.Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS));
+        w.addDocument(doc);
+
         w.close();
     }
 }

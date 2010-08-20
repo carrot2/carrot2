@@ -1,0 +1,5 @@
+applications/carrot2-webapp/web/WEB-INF/web.xml
+applications/carrot2-webapp/web/skins/common/variables.xsl
+local.properties
+workbench.properties
+tmp

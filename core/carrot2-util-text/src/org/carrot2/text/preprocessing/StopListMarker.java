@@ -12,7 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.analysis.ITokenTypeAttribute;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
@@ -51,7 +51,7 @@ public final class StopListMarker
             mutableCharArray.reset(buffer, 0, word.length);
             if (context.language.isCommonWord(mutableCharArray))
             {
-                types[i] |= ITokenTypeAttribute.TF_COMMON_WORD;
+                types[i] |= ITokenizer.TF_COMMON_WORD;
             }
         }
     }

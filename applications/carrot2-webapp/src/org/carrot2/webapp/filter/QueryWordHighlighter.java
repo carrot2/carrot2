@@ -21,6 +21,8 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 
+import com.google.common.collect.Lists;
+
 /**
  * Highlights query words in documents using the &lt;b&gt; HTML tag. Highlighting is
  * performed on the fields specified in {@link #fields}, the results are saved in fields
@@ -49,6 +51,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
      */
     @Processing
     @Input
+    @Output
     @Required
     @Internal
     @Attribute(key = AttributeNames.DOCUMENTS)
@@ -84,13 +87,29 @@ public class QueryWordHighlighter extends ProcessingComponentBase
                 Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
         }
 
-        for (Document document : documents)
+        // As we're going to modify documents, we need to copy them to
+        // avoid ConcurrentModificationExceptions.
+        final List<Document> inputDocuments = documents;
+        final List<Document> outputDocuments = Lists
+            .newArrayListWithCapacity(inputDocuments.size());
+        
+        for (Document document : inputDocuments)
         {
+            final Document newDocument = new Document();
+            final Map<String, Object> newDocumentFields = document.getFields();
+            for (Map.Entry<String, Object> entry : newDocumentFields.entrySet())
+            {
+                newDocument.setField(entry.getKey(), entry.getValue());
+            }
+            
             for (String fieldName : fields)
             {
-                highlightQueryTerms(document, fieldName, queryPatterns);
+                highlightQueryTerms(newDocument, fieldName, queryPatterns);
             }
+            
+            outputDocuments.add(newDocument);
         }
+        documents = outputDocuments;
     }
 
     private void highlightQueryTerms(Document document, String fieldName,

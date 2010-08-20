@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="carrot2.common.apt">
+  <!--
+        Defines a path that points to APT processors used in Carrot2.
+    -->
+
+  <target name="paths">
+    <fail unless="carrot2.master.basedir">carrot2.master.basedir undefined.</fail>
+    <path id="carrot2.apt.jars">
+      <fileset dir="${carrot2.master.basedir}/core/carrot2-util-attribute/.apt_factory">
+        <include name="*.jar" />
+      </fileset>
+    </path>
+  </target>
+</project>

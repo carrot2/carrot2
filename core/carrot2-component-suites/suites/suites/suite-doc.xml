@@ -1,21 +1,36 @@
 <component-suite>
-  <!-- Includes DCS sources and algorithms. -->
-  <include suite="suites/suite-dcs.xml" />
-  <include suite="suites/source-ambient.xml" />
+  <!-- Search engines. -->
+  <include suite="suites/source-etools.xml" />
+  <include suite="suites/source-bing.xml" />
+  <include suite="suites/source-pubmed.xml" />
+
+  <!-- Local sources. -->
+  <include suite="suites/source-xml.xml" />
   <include suite="suites/source-lucene.xml" />
+  <include suite="suites/source-solr.xml" />
+  <include suite="suites/source-opensearch.xml" />
+  <include suite="suites/source-google-desktop.xml" />
+  <include suite="suites/source-ambient.xml" />
+
+  <!-- Algorithms. -->
+  <include suite="suites/algorithm-lingo.xml" />
+  <include suite="suites/algorithm-stc.xml" />
+  <include suite="suites/algorithm-synthetic.xml" />
 
   <sources>
-    <!-- Generic (uninitialized) instance of OpenSearchDocumentSource -->
-    <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" id="opensearch">
-      <label>Open Search</label>
-      <title>Open Search</title>
-      <description>
-        Open Search document source retrieves search results from search engines supporting
-        the OpenSearch standard.
-      </description>
+    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
+      <label>Yahoo</label>
+      <title>Yahoo Web Search</title>
+      <mnemonic>Y</mnemonic>
+      <description>Searches the web using Yahoo Boss Web Search API</description>
+      <icon-path>icons/yahoo.png</icon-path>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>olympics</example-query>
+        <example-query>London</example-query>
+      </example-queries>
     </source>
-    
-    <!-- Google web search -->
+
     <source component-class="org.carrot2.source.google.GoogleDocumentSource" id="google">
       <label>Google Web Search</label>
       <title>Google Web Search</title>

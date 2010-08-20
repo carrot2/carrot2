@@ -34,6 +34,7 @@
         <xsl:if test="/page/request/@view = 'visu'">
           jQuery.visualization.dataUrl = "<xsl:value-of select="$xml-url-encoded" />";
           jQuery.visualization.skinPath = "<xsl:value-of select="$skin-path" />";
+          jQuery.visualization.logo = "<xsl:value-of select="$circles-logo" />";
         </xsl:if>
       </xsl:if>
 
@@ -42,8 +43,10 @@ $(document).ready(function() {
   $("body").trigger("carrot2-loaded");
 });
     </script>
+    
+    <xsl:apply-imports />
   </xsl:template>
-
+  
   <xsl:template match="page" mode="results">
     <xsl:apply-templates select=".." mode="results.area" />
   </xsl:template>
@@ -54,6 +57,8 @@ $(document).ready(function() {
         <div id="loading-clusters">Loading...</div>
       </xsl:if>
       <div id="loading-documents">Loading...</div>
+      
+      <xsl:apply-templates select=".." mode="results-area-extra" />
       
       <xsl:if test="count(/page/config/views/view) > 1">
         <ul id="views">
@@ -87,6 +92,8 @@ $(document).ready(function() {
             with <span id="status-cluster-size"><xsl:comment></xsl:comment></span> documents
           </span>
         </div>
+        
+        <xsl:apply-templates select="." mode="documents-panel-extra" />
       </div>
 
       <div id="status-bar">
@@ -102,6 +109,14 @@ $(document).ready(function() {
         <span class="hide"> (<span id="algorithm-time"><xsl:comment></xsl:comment></span> ms)</span>
       </div>
     </div>
+  </xsl:template>
+  
+  <xsl:template match="page" mode="results-area-extra">
+    <xsl:apply-imports />
+  </xsl:template>
+  
+  <xsl:template match="page" mode="documents-panel-extra">
+    <xsl:apply-imports />
   </xsl:template>
   
   <xsl:template match="view">

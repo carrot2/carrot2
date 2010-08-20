@@ -9,6 +9,8 @@
 
 #views li.first {
   -moz-border-radius-topleft: 5px;
+  -webkit-border-top-left-radius: 5px;
+  border-top-left-radius: 5px;
   border-left: 1px solid;
 }
 

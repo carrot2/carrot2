@@ -32,7 +32,8 @@
         <format property="current.year" pattern="yyyy" />
       </tstamp>
 
-      <copy file="${carrot2.master.basedir}/tmp/readme/readme.txt" tofile="@{readme.dest}" filtering="yes">
+      <copy file="${carrot2.master.basedir}/tmp/readme/readme.txt" tofile="@{readme.dest}" 
+            filtering="yes" overwrite="true">
         <filterset>
           <filter token="build.key" value="${build.key}" />
           <filter token="build.number" value="${build.number}" />

@@ -19,6 +19,7 @@ import org.carrot2.matrix.NNIDenseDoubleMatrix2D;
 /**
  * JNI bridge to BLAS library.
  */
+@SuppressWarnings("deprecation")
 public final class BlasImpl implements IBlasOperations
 {
     private static boolean initialized;

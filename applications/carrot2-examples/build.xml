@@ -40,6 +40,18 @@
     <run.example classname="org.carrot2.examples.clustering.UsingCustomLanguageModel" />
     <run.example classname="org.carrot2.examples.core.LoadingAttributeValuesFromXml" />
     <run.example classname="org.carrot2.examples.core.SavingAttributeValuesToXml" />
+
+    <!-- Create a simple Lucene index and run Lucene examples. -->
+    <delete dir="index" failonerror="true" includeemptydirs="true" />
+    <run.example classname="org.carrot2.examples.CreateLuceneIndex">
+      <arg file="index" />
+    </run.example>
+    <run.example classname="org.carrot2.examples.clustering.ClusteringDataFromLucene">
+      <arg file="index" />
+    </run.example>
+    <run.example classname="org.carrot2.examples.clustering.ClusteringDataFromLuceneWithCustomFields">
+      <arg file="index" />
+    </run.example>
   </target>
 
   <!-- Removes all compiled binaries -->
@@ -50,6 +62,7 @@
   <!-- A macro that runs the specified class. -->
   <macrodef name="run.example">
     <attribute name="classname" />
+    <element name="args" implicit="true" optional="true" />
 
     <sequential>
       <echo>Running: @{classname}</echo>
@@ -61,6 +74,7 @@
           </fileset>
           <pathelement location="tmp/classes"/>
         </classpath>
+        <args />
       </java>
     </sequential>
   </macrodef>

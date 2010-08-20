@@ -15,7 +15,7 @@ package org.carrot2.text.preprocessing;
 import java.util.List;
 
 import org.carrot2.core.Document;
-import org.carrot2.text.analysis.ITokenTypeAttribute;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.ILanguageModel;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.util.MutableCharArray;
@@ -35,18 +35,18 @@ public final class PreprocessingContext
 {
     /** Predicate for splitting on document separator. */
     public static final ShortPredicate ON_DOCUMENT_SEPARATOR = 
-        equalTo(ITokenTypeAttribute.TF_SEPARATOR_DOCUMENT);
+        equalTo(ITokenizer.TF_SEPARATOR_DOCUMENT);
 
     /** Predicate for splitting on field separator. */
     public static final ShortPredicate ON_FIELD_SEPARATOR = 
-        equalTo(ITokenTypeAttribute.TF_SEPARATOR_FIELD);
+        equalTo(ITokenizer.TF_SEPARATOR_FIELD);
 
     /** Predicate for splitting on sentence separator. */
     public static final ShortPredicate ON_SENTENCE_SEPARATOR = new ShortPredicate()
     {
         public boolean apply(short tokenType)
         {
-            return (tokenType & ITokenTypeAttribute.TF_SEPARATOR_SENTENCE) != 0;
+            return (tokenType & ITokenizer.TF_SEPARATOR_SENTENCE) != 0;
         }
     };
 
@@ -104,16 +104,16 @@ public final class PreprocessingContext
     {
         /**
          * Token image as it appears in the input. On positions where {@link #type} is
-         * equal to one of {@link ITokenTypeAttribute#TF_TERMINATOR},
-         * {@link ITokenTypeAttribute#TF_SEPARATOR_DOCUMENT} or
-         * {@link ITokenTypeAttribute#TF_SEPARATOR_FIELD} , image is <code>null</code>.
+         * equal to one of {@link ITokenizer#TF_TERMINATOR},
+         * {@link ITokenizer#TF_SEPARATOR_DOCUMENT} or
+         * {@link ITokenizer#TF_SEPARATOR_FIELD} , image is <code>null</code>.
          * <p>
          * This array is produced by {@link Tokenizer}.
          */
         public char [][] image;
 
         /**
-         * Token's {@link ITokenTypeAttribute} bit flags.
+         * Token's {@link ITokenizer} bit flags.
          * <p>
          * This array is produced by {@link Tokenizer}.
          */
@@ -140,7 +140,7 @@ public final class PreprocessingContext
 
         /**
          * A pointer to {@link AllWords} arrays for this token. Equal to <code>-1</code>
-         * for document, field and {@link ITokenTypeAttribute#TT_PUNCTUATION} tokens (including
+         * for document, field and {@link ITokenizer#TT_PUNCTUATION} tokens (including
          * sentence separators).
          * <p>
          * This array is produced by {@link CaseNormalizer}.
@@ -220,7 +220,7 @@ public final class PreprocessingContext
          * This array is produced by {@link CaseNormalizer}.
          * This array is modified by {@link LanguageModelStemmer}.
          * 
-         * @see ITokenTypeAttribute
+         * @see ITokenizer
          */
         public short [] type;
 
@@ -482,7 +482,7 @@ public final class PreprocessingContext
         else
         {
             final char [] tokenImage = new char [chs.length()];
-            System.arraycopy(chs.getBuffer(), 0, tokenImage, 0, chs.length());
+            System.arraycopy(chs.getBuffer(), chs.getStart(), tokenImage, 0, chs.length());
             tokenCache.add(new MutableCharArray(tokenImage));
             return tokenImage;
         }

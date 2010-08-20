@@ -12,8 +12,8 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.apache.mahout.math.jet.math.Functions;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.function.Functions;
+import org.apache.mahout.math.matrix.*;
 import org.apache.mahout.math.matrix.doublealgo.Sorting;
 import org.apache.mahout.math.matrix.linalg.Algebra;
 import org.carrot2.matrix.NNIDoubleFactory2D;
@@ -23,6 +23,7 @@ import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategy;
 /**
  * Base functionality for {@link IIterativeMatrixFactorization}s.
  */
+@SuppressWarnings("deprecation")
 abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase implements
     IIterativeMatrixFactorization
 {

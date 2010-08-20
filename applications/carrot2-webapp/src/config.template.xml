@@ -19,4 +19,7 @@
       <label>Visualization</label>
     </view>
   </views>
+  <caches>
+    <cache component="org.carrot2.core.IDocumentSource"/>
+  </caches>
 </config>

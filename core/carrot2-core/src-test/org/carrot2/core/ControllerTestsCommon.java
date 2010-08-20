@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -33,6 +32,10 @@ import com.google.common.collect.*;
  */
 public abstract class ControllerTestsCommon extends ControllerTestsBase
 {
+    /**
+     * Returns a controller that implements at least basic processing functionality. All
+     * simple, pooling and caching controllers fit here.
+     */
     public abstract Controller getSimpleController();
 
     public boolean hasCaching()
@@ -246,7 +249,8 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         component2Mock.init(isA(IControllerContext.class));
         expectLastCall().andThrow(new ComponentInitializationException((String) null));
 
-        invokeDisposal(component1Mock, component2Mock);
+        component2Mock.dispose();
+        invokeDisposal(component1Mock);
 
         mocksControl.replay();
 
@@ -261,7 +265,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
 
         invokeProcessingWithInit(component1Mock);
 
-        component2Mock.init(isA(IControllerContext.class));
+        invokeInit(component2Mock);
         component2Mock.beforeProcessing();
         expectLastCall().andThrow(new ProcessingException("Before processing exception"));
         component2Mock.afterProcessing();
@@ -281,7 +285,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         invokeProcessingWithInit(component1Mock);
 
         invokeInitForCache(component2Mock);
-        component2Mock.init(isA(IControllerContext.class));
+        invokeInit(component2Mock);
         component2Mock.beforeProcessing();
         component2Mock.process();
         expectLastCall().andThrow(new ProcessingException("Processing exception"));
@@ -302,7 +306,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
 
         invokeProcessingWithInit(component1Mock);
 
-        component2Mock.init(isA(IControllerContext.class));
+        invokeInit(component2Mock);
         component2Mock.beforeProcessing();
         component2Mock.process();
         component2Mock.afterProcessing();
@@ -323,7 +327,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         final long c2Time = 500;
         final long c3Time = 750;
         final long totalTime = c1Time + c2Time + c3Time;
-        final double tolerance = 0.3;
+        final double tolerance = 0.5;
 
         mocksControl.resetToNice();
 
@@ -435,6 +439,20 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         assertThat(resultByClass.getAttribute("result")).isEqualTo("defaultdefault");
         assertThat(resultByClassName.getAttribute("result")).isEqualTo("defaultdefault");
         assertThat(resultById.getAttribute("result")).isEqualTo("defaultdefault");
+
+        controller.dispose();
+        controller = null;
+    }
+
+    @Test
+    public void testPassingRequiredProcessingAttribute()
+    {
+        controller = prepareController();
+
+        final Map<String, Object> attributes = Maps.newHashMap();
+
+        controller.process(attributes, ComponentWithOutputAttribute.class,
+            ComponentWithRequiredProcessingAttribute.class);
 
         controller.dispose();
         controller = null;

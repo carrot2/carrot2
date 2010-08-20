@@ -14,13 +14,14 @@ package org.carrot2.matrix.factorization;
 
 import junit.framework.TestCase;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 import org.apache.mahout.math.matrix.doublealgo.Sorting;
 import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 /**
  * Test AIOOB in Mahout's math/ sorting routine. 
  */
+@SuppressWarnings("deprecation")
 public class AIOOBInSortingTest extends TestCase
 {
     public void testAIOOB()

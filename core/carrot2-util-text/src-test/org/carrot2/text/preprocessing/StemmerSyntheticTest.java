@@ -12,7 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.analysis.ITokenTypeAttribute;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.junit.Test;
 
@@ -273,9 +273,9 @@ public class StemmerSyntheticTest extends StemmerTestBase
         createDocuments("q1 q2", "q3");
 
         short [] expectedFordsFlag = new short [3];
-        expectedFordsFlag[wordIndices.get("q1")] = ITokenTypeAttribute.TF_QUERY_WORD;
-        expectedFordsFlag[wordIndices.get("q2")] = ITokenTypeAttribute.TF_QUERY_WORD;
-        expectedFordsFlag[wordIndices.get("q3")] = ITokenTypeAttribute.TF_QUERY_WORD;
+        expectedFordsFlag[wordIndices.get("q1")] = ITokenizer.TF_QUERY_WORD;
+        expectedFordsFlag[wordIndices.get("q2")] = ITokenizer.TF_QUERY_WORD;
+        expectedFordsFlag[wordIndices.get("q3")] = ITokenizer.TF_QUERY_WORD;
 
         check("q1 q2 q3", expectedFordsFlag);
     }
@@ -286,8 +286,8 @@ public class StemmerSyntheticTest extends StemmerTestBase
         createDocuments("test q2", "aa q1");
 
         short [] expectedFordsFlag = new short [4];
-        expectedFordsFlag[wordIndices.get("q1")] = ITokenTypeAttribute.TF_QUERY_WORD;
-        expectedFordsFlag[wordIndices.get("q2")] = ITokenTypeAttribute.TF_QUERY_WORD;
+        expectedFordsFlag[wordIndices.get("q1")] = ITokenizer.TF_QUERY_WORD;
+        expectedFordsFlag[wordIndices.get("q2")] = ITokenizer.TF_QUERY_WORD;
 
         check("q1 q2 q3", expectedFordsFlag);
     }
@@ -325,8 +325,8 @@ public class StemmerSyntheticTest extends StemmerTestBase
         createDocuments("que01 que02", "test word");
 
         short [] expectedFordsFlag = new short [4];
-        expectedFordsFlag[wordIndices.get("que01")] = ITokenTypeAttribute.TF_QUERY_WORD;
-        expectedFordsFlag[wordIndices.get("que02")] = ITokenTypeAttribute.TF_QUERY_WORD;
+        expectedFordsFlag[wordIndices.get("que01")] = ITokenizer.TF_QUERY_WORD;
+        expectedFordsFlag[wordIndices.get("que02")] = ITokenizer.TF_QUERY_WORD;
         check("que04", expectedFordsFlag);
     }
 

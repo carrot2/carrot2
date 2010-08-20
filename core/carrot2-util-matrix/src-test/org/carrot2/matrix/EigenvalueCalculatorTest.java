@@ -12,20 +12,19 @@
 
 package org.carrot2.matrix;
 
-import static org.carrot2.matrix.NNITestAssumptions.nativeLapackAvailable;
-import static org.carrot2.util.test.Assertions.assertThat;
 import static org.junit.Assume.assumeTrue;
 
 import java.util.Arrays;
 
 import org.junit.Test;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 import org.apache.mahout.math.matrix.linalg.EigenvalueDecomposition;
 
 /**
  * Test cases for {@link EigenvalueCalculator}.
  */
+@SuppressWarnings("deprecation")
 public class EigenvalueCalculatorTest
 {
     /** Default delta for comparisons */
@@ -63,13 +62,13 @@ public class EigenvalueCalculatorTest
         double [] eigenvalues = EigenvalueCalculator.computeEigenvaluesSymmetrical(Asym);
         Arrays.sort(eigenvalues);
 
-        assertThat(expectedEigenvalues).isEqualTo(expectedEigenvalues, DELTA);
+        org.junit.Assert.assertArrayEquals(expectedEigenvalues, eigenvalues, DELTA);
     }
 
     @Test
     public void testAsymmetrical()
     {
-        assumeTrue(nativeLapackAvailable());
+        assumeTrue(NNIInterface.isNativeLapackAvailable());
 
         double [] eigenvalues = NNIInterface.getLapack().computeEigenvaluesNNI(A);
         Arrays.sort(eigenvalues);
@@ -78,6 +77,6 @@ public class EigenvalueCalculatorTest
             .getRealEigenvalues().toArray();
         Arrays.sort(expectedEigenvalues);
 
-        assertThat(expectedEigenvalues).isEqualTo(expectedEigenvalues, DELTA);
+        org.junit.Assert.assertArrayEquals(expectedEigenvalues, eigenvalues, DELTA);
     }
 }

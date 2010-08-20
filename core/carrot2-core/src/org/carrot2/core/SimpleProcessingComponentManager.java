@@ -56,7 +56,7 @@ public class SimpleProcessingComponentManager implements IProcessingComponentMan
 
             // To support a scenario where processing input attributes are provided
             // at init-time, we need to bind them here as well.
-            AttributeBinder.bind(component, inputAttributes, Input.class,
+            AttributeBinder.bind(component, inputAttributes, false, Input.class,
                 Processing.class);
 
             return component;

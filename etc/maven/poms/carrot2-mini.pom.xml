@@ -50,13 +50,13 @@
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-core-asl</artifactId>
-      <version>0.9.9-6</version>
+      <version>1.5.2</version>
     </dependency>
 
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-mapper-asl</artifactId>
-      <version>0.9.9-6</version>
+      <version>1.5.2</version>
     </dependency>
 
     <dependency>
@@ -72,9 +72,9 @@
     </dependency>
 
     <dependency>
-      <groupId>com.google.collections</groupId>
-      <artifactId>google-collections</artifactId>
-      <version>1.0</version>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>r05</version>
     </dependency>
 
     <dependency>
@@ -85,44 +85,26 @@
         
     <dependency>
       <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-core</artifactId>
-      <version>3.0.1</version>
-    </dependency>
-        
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-analyzers</artifactId>
-      <version>3.0.1</version>
-    </dependency>
-        
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-highlighter</artifactId>
-      <version>3.0.1</version>
-    </dependency>
-        
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-snowball</artifactId>
-      <version>3.0.1</version>
-    </dependency>
-        
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-memory</artifactId>
       <version>3.0.1</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.mahout</groupId>
       <artifactId>mahout-math</artifactId>
-      <version>0.3-SNAPSHOT</version>
+      <version>0.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.mahout</groupId>
+      <artifactId>mahout-collections</artifactId>
+      <version>0.3</version>
     </dependency>
 
     <dependency>
       <groupId>com.carrotsearch</groupId>
       <artifactId>hppc</artifactId>
-      <version>0.2.0</version>
+      <version>0.3.1</version>
     </dependency>        
   </dependencies>
 </project>

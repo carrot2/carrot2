@@ -11,6 +11,10 @@
   <property name="carrot2.master.basedir"
             location="${carrot2.webapp.basedir}/../../" />
 
+  <!-- Build number, provided by Bamboo -->
+  <property name="build.number" value="" />
+  <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
+
   <!-- Import common macros -->
   <import file="${carrot2.master.basedir}/etc/ant/common/basedir.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/webtest.xml" />
@@ -26,9 +30,6 @@
             location="${carrot2.webapp.basedir}/src/config.template.xml" />
   <property name="war.name.base" value="${carrot2.webapp.base}" />
   
-  <!-- Build number, provided by Bamboo -->
-  <property name="build.number" value="" />
-  <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
 
   <!-- Webapp build dirs -->
   <property name="webapp.dir" location="tmp/webapp" />
@@ -129,14 +130,7 @@
   <target name="carrot2.webapp.classes" depends="basedir.check, jar">
     <mkdir dir="${webapp.classes.dir}" />
 
-    <!-- Clover hack: we explicitly provide the compiler attribute to compile without Clover's instrumentation -->
-    <javac srcdir="${carrot2.webapp.basedir}/src"
-           destdir="${webapp.classes.dir}"
-           compiler="modern"
-           source="1.5"
-           target="1.5"
-	         debug="true"
-           encoding="UTF-8">
+    <javac srcdir="${carrot2.webapp.basedir}/src" destdir="${webapp.classes.dir}">
       <classpath refid="lib.classpath" />
       <classpath path="${jar.dir}/carrot2-core-${carrot2.version}.jar" />
     </javac>
@@ -210,29 +204,12 @@
     <attribute name="target.dir" />
     <attribute name="template.caching" default="true" />
     <sequential>
-      <condition property="sprite.suffix" value="sprite/" else="">
-        <isset property="smartsprites.home" />
-      </condition>
-
-      <filterset id="version.filterset">
-        <filter token="VERSION" value="${build.number}" />
-      </filterset>
-
-      <copy file="${jawr.properties.template.path}"
-            tofile="@{target.dir}/jawr.properties"
-            overwrite="true">
-        <filterset refid="version.filterset" />
-        <filterset>
-          <filter token="SPRITE" value="${sprite.suffix}" />
-        </filterset>
-      </copy>
-
-      <copy file="${config.xml.template.path}"
-            tofile="@{target.dir}/config.xml"
-            overwrite="true">
-        <filterset refid="version.filterset" />
-      </copy>
-
+      <carrot2.webapp.templates.config config.xml.template.path="${config.xml.template.path}"
+                                       target.dir="@{target.dir}" />
+      
+      <carrot2.webapp.templates.jawr jawr.properties.template.path="${jawr.properties.template.path}"
+                                     target.dir="@{target.dir}" />
+        
       <copy file="${carrot2.webapp.basedir}/web/WEB-INF/web.template.xml"
             tofile="${carrot2.webapp.basedir}/web/WEB-INF/web.xml"
             overwrite="true">
@@ -276,13 +253,13 @@
   <!--
        Generates metadata files for webapp-specific document sources.
     -->
-  <target name="carrot2.webapp.attributes.war" depends="basedir.check, attrs.tasks, attrs, compile">
+  <target name="carrot2.webapp.attributes.war" depends="basedir.check, compile">
   </target>
 
   <!--
        Generates metadata files for webapp-specific document sources.
     -->
-  <target name="carrot2.webapp.attributes.eclipse" depends="basedir.check, attrs.tasks, attrs, compile">
+  <target name="carrot2.webapp.attributes.eclipse" depends="basedir.check, compile">
   </target>
 
   <!--

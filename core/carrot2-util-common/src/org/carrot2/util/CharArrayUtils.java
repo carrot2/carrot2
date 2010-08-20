@@ -114,14 +114,4 @@ public class CharArrayUtils
         }
         return different;
     }
-
-    /**
-     * Create a copy of the input buffer's sub-range.
-     */
-    public static char [] copyOf(char [] buffer, int start, int length)
-    {
-        char [] copy = new char[length];
-        System.arraycopy(buffer, start, copy, 0, length);
-        return copy;
-    }
 }

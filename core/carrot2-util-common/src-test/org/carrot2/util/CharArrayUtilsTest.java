@@ -13,6 +13,9 @@
 package org.carrot2.util;
 
 import static org.junit.Assert.*;
+import static org.carrot2.util.CharArrayUtils.*;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -24,8 +27,8 @@ public class CharArrayUtilsTest
         char [] input1 = "ABC abc".toCharArray();
         char [] input2 = "abc abc".toCharArray();
 
-        assertSame(input2, CharArrayUtils.toLowerCaseInPlace(input2));
-        assertSame(input1, CharArrayUtils.toLowerCaseInPlace(input1));
+        assertSame(input2, toLowerCaseInPlace(input2));
+        assertSame(input1, toLowerCaseInPlace(input1));
         assertArrayEquals(input1, input2);
     }
 
@@ -35,11 +38,11 @@ public class CharArrayUtilsTest
         char [] input1 = "ABC abc".toCharArray();
         char [] input2 = "abc abc".toCharArray();
 
-        assertNotSame(input2, CharArrayUtils.toLowerCaseCopy(input2));
-        assertNotSame(input1, CharArrayUtils.toLowerCaseCopy(input1));
+        assertNotSame(input2, toLowerCaseCopy(input2));
+        assertNotSame(input1, toLowerCaseCopy(input1));
 
-        assertArrayEquals(input2, CharArrayUtils.toLowerCaseCopy(input2));
-        assertArrayEquals(input2, CharArrayUtils.toLowerCaseCopy(input1));
+        assertArrayEquals(input2, toLowerCaseCopy(input2));
+        assertArrayEquals(input2, toLowerCaseCopy(input1));
     }
 
     @Test
@@ -49,9 +52,9 @@ public class CharArrayUtilsTest
         char [] input2 = "abc abc".toCharArray();
         char [] input3 = "Łódź".toCharArray();
 
-        assertTrue(CharArrayUtils.hasCapitalizedLetters(input1));
-        assertFalse(CharArrayUtils.hasCapitalizedLetters(input2));
-        assertTrue(CharArrayUtils.hasCapitalizedLetters(input3));
+        assertTrue(hasCapitalizedLetters(input1));
+        assertFalse(hasCapitalizedLetters(input2));
+        assertTrue(hasCapitalizedLetters(input3));
     }
     
     @Test
@@ -63,9 +66,9 @@ public class CharArrayUtilsTest
         char [] buffer = new char [1024];
         
         assertTrue(CharArrayUtils.toLowerCase(input1, buffer));
-        assertArrayEquals(input2, CharArrayUtils.copyOf(buffer, 0, input1.length));
+        assertArrayEquals(input2, Arrays.copyOf(buffer, input1.length));
 
         assertFalse(CharArrayUtils.toLowerCase(input2, buffer));
-        assertArrayEquals(input2, CharArrayUtils.copyOf(buffer, 0, input2.length));
+        assertArrayEquals(input2, Arrays.copyOf(buffer, input2.length));
     }
 }

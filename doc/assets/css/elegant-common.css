@@ -1,5 +1,5 @@
 body {
-  font-family: Book Antiqua, Garamond, serif;
+  font-family: Georgia, Book Antiqua, Garamond, serif;
   font-size: 11pt;
   width: 180mm;
   margin: 0;
@@ -45,6 +45,11 @@ p {
   margin-bottom: 3mm;
 }
 
+sup {
+  font-size: 80%;
+  vertical-align: 30%;
+}
+
 .variablelist dt {
   font-weight: bold;
 }
@@ -67,8 +72,9 @@ p {
   font-weight: normal;
   font-size: 18pt;
   margin-left: 40mm;
-  padding-bottom: 2mm;
+  padding-bottom: 0mm;
   margin-bottom: 10mm;
+  margin-top: 1mm;
 }
 
 .titlepage .releaseinfo {
@@ -108,14 +114,22 @@ h3.author {
 .toc, .list-of-tables, .list-of-examples, .list-of-figures {
 }
 
-.toc p b, .list-of-tables p b, .list-of-examples p b, .list-of-figures p b {
+.toc dl {
+  margin: 0;
+}
+
+.toc > dl > dt {
+  margin-top: 0.7em;
+}
+
+.toc b, .list-of-tables b, .list-of-examples b, .list-of-figures b {
   font-weight: normal;
 }
 
 .toc p, .list-of-tables p, .list-of-examples p, .list-of-figures p {
   font-size: 28pt;
   margin-top: 10mm;
-  border-bottom: 0.3pt solid black;
+  border-bottom: 0.8pt solid black;
 }
 
 /** Left margin */
@@ -138,7 +152,7 @@ div.chapter {
 .chapter .titlepage .title {
   display: block;
   margin-top: 30mm;
-  border-bottom: 0.3pt solid black;
+  border-bottom: 0.8pt solid black;
   font-weight: normal;
   font-size: 34pt;
   position: relative;
@@ -183,9 +197,10 @@ div.chapter {
   margin: 0;
   margin-top: 7mm;
   margin-bottom: 5mm;
-  border-bottom: 0.3pt black solid;
+  border-bottom: 0.8pt black solid;
   page-break-after: avoid;
   position: relative;
+  line-height: 1.4;
 }
 
 .section .titlepage h2.title .n {
@@ -200,7 +215,7 @@ div.chapter {
   bottom: -2mm;
   top: auto;
   left: -28mm;
-  line-height: 120%;
+  line-height: 130%;
   border-bottom: 6pt black solid;
   padding-right: 0;
 }
@@ -345,7 +360,7 @@ div.informaltable table td {
 }
 
 div.table table th {
-  vertical-align: middle;
+  vertical-align: midle;
 }
   
 div.table thead tr,
@@ -403,4 +418,11 @@ span.guiicon span.inlinemediaobject img {
 
 span.human-readable-label {
   color: #aaa;
+}
+
+
+div[title="Feed URL template"] dl > dd > p > code {
+	display: block;
+	width: 26em;
+	word-wrap: break-word;
 }

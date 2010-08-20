@@ -40,6 +40,16 @@ import com.google.common.collect.*;
 public class CachingProcessingComponentManager implements IProcessingComponentManager,
     Controller.IControllerStatisticsProvider
 {
+    static
+    {
+        /*
+         * Disable ehcache update check, unless explicitly given.
+         */
+        if (System.getProperty("net.sf.ehcache.skipUpdateCheck") == null)
+        {
+            System.setProperty("net.sf.ehcache.skipUpdateCheck", "true");
+        }
+    }
     /** The delegate manager that prepares the actual processing components */
     private final IProcessingComponentManager delegate;
 
@@ -88,7 +98,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
         Class<? extends IProcessingComponent>... cachedComponentClasses)
     {
         this.delegate = delegate;
-        this.cachedComponentClasses = ImmutableSet.of(cachedComponentClasses);
+        this.cachedComponentClasses = ImmutableSet.copyOf(cachedComponentClasses);
 
         // Initialize cache
         try
@@ -157,8 +167,15 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
 
     public void dispose()
     {
-        delegate.dispose();
-        cacheManager.removeCache(dataCache.getName());
+        try
+        {
+            delegate.dispose();
+            cacheManager.removeCache(dataCache.getName());
+        }
+        finally
+        {
+            cacheManager.shutdown();
+        }
     }
 
     public Map<String, Object> getStatistics()

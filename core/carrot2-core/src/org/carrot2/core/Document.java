@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -90,10 +89,10 @@ public final class Document
     public static final String PARTITIONS = "partitions";
 
     /** Fields of this document */
-    private Map<String, Object> fields = Maps.newHashMap();
+    private final Map<String, Object> fields = Maps.newHashMap();
 
     /** Read-only collection of fields exposed in {@link #getField(String)}. */
-    private Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
+    private final Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
 
     /**
      * Internal identifier of the document. This identifier is assigned dynamically after
@@ -116,7 +115,7 @@ public final class Document
     public Document()
     {
     }
-    
+
     /**
      * Creates a document with the provided <code>title</code>.
      */
@@ -178,7 +177,7 @@ public final class Document
      * 
      * @return unique identifier of this document
      */
-    @JsonGetter
+    @JsonProperty
     public Integer getId()
     {
         return id;
@@ -187,7 +186,7 @@ public final class Document
     /**
      * Returns this document's {@link #TITLE} field.
      */
-    @JsonGetter
+    @JsonProperty
     @Element(required = false)
     public String getTitle()
     {
@@ -209,7 +208,7 @@ public final class Document
     /**
      * Returns this document's {@link #SUMMARY} field.
      */
-    @JsonGetter("snippet")
+    @JsonProperty("snippet")
     @Element(name = "snippet", required = false)
     public String getSummary()
     {
@@ -231,7 +230,7 @@ public final class Document
     /**
      * Returns this document's {@link #CONTENT_URL} field.
      */
-    @JsonGetter("url")
+    @JsonProperty("url")
     @Element(name = "url", required = false)
     public String getContentUrl()
     {
@@ -253,7 +252,7 @@ public final class Document
     /**
      * Returns this document's {@link #SOURCES} field.
      */
-    @JsonGetter
+    @JsonProperty
     @ElementList(entry = "source", required = false)
     public List<String> getSources()
     {
@@ -275,30 +274,58 @@ public final class Document
     /**
      * Returns this document's {@link #LANGUAGE}.
      */
-    @JsonGetter
-    @Attribute(required = false)
     public LanguageCode getLanguage()
     {
         return getField(LANGUAGE);
     }
 
-    
     /**
      * Sets this document's {@link #LANGUAGE}.
      * 
      * @param language the language to set
      * @return this document for convenience
      */
-    @Attribute(required = false)
     public Document setLanguage(LanguageCode language)
     {
         return setField(LANGUAGE, language);
     }
 
+    @SuppressWarnings("unused")
+    @JsonProperty("language")
+    @Attribute(required = false, name = "language")
+    private String getLanguageIsoCode()
+    {
+        final LanguageCode language = getLanguage();
+        return language != null ? language.getIsoCode() : null;
+    }
+
+    @SuppressWarnings("unused")
+    @Attribute(required = false, name = "language")
+    private void setLanguageIsoCode(String languageIsoCode)
+    {
+        if (languageIsoCode != null)
+        {
+            final LanguageCode language = LanguageCode.forISOCode(languageIsoCode);
+            if (language != null)
+            {
+                setLanguage(language);
+            }
+            else
+            {
+                // Try by enum name for backward-compatibility
+                setLanguage(LanguageCode.valueOf(languageIsoCode));
+            }
+        }
+        else
+        {
+            setLanguage(null);
+        }
+    }
+
     /**
      * For JSON and XML serialization only.
      */
-    @JsonGetter("fields")
+    @JsonProperty("fields")
     @SuppressWarnings("unused")
     private Map<String, Object> getOtherFields()
     {
@@ -331,7 +358,10 @@ public final class Document
     @SuppressWarnings("unchecked")
     public <T> T getField(String name)
     {
-        return (T) fields.get(name);
+        synchronized (fields)
+        {
+            return (T) fields.get(name);
+        }
     }
 
     /**
@@ -376,7 +406,7 @@ public final class Document
                     if (ids.add(document.id))
                     {
                         maxId = Math.max(maxId, document.id);
-                    } 
+                    }
                     else
                     {
                         document.id = null;
@@ -439,12 +469,12 @@ public final class Document
             // to avoid concurrent modification exceptions in setters
             otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
                 .wrap(fields));
+            otherFieldsForSerialization.remove(TITLE);
+            otherFieldsForSerialization.remove(SUMMARY);
+            otherFieldsForSerialization.remove(CONTENT_URL);
+            otherFieldsForSerialization.remove(SOURCES);
+            otherFieldsForSerialization.remove(LANGUAGE);
         }
-        otherFieldsForSerialization.remove(TITLE);
-        otherFieldsForSerialization.remove(SUMMARY);
-        otherFieldsForSerialization.remove(CONTENT_URL);
-        otherFieldsForSerialization.remove(SOURCES);
-        otherFieldsForSerialization.remove(LANGUAGE);
     }
 
     /**
@@ -460,6 +490,7 @@ public final class Document
             {
                 fields.putAll(SimpleXmlWrappers.unwrap(otherFieldsForSerialization));
             }
+            otherFieldsForSerialization = null;
         }
     }
 }

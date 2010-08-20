@@ -13,6 +13,7 @@
 package org.carrot2.core;
 
 import org.carrot2.core.ControllerTestsBase.ComponentWithInitParameter;
+import org.carrot2.util.attribute.Bindable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -166,6 +167,63 @@ public class ControllerTest
         }
     }
 
+    @Bindable
+    public static class TestProcessingComponent1 extends ProcessingComponentBase
+    {
+        @Override
+        public void process() throws ProcessingException
+        {
+            try
+            {
+                Thread.sleep(Long.MAX_VALUE);
+            }
+            catch (InterruptedException e)
+            {
+                // fall through.
+            }
+        }
+    }
+
+    public static class PoolingControllerWithFixedPoolCommonTests extends ControllerTestsCommon
+    {
+        private static final int EAGERLY_INITIALIZED_INSTANCES = 6;
+
+        @Override
+        public Controller getSimpleController()
+        {
+            return ControllerFactory.createPooling(EAGERLY_INITIALIZED_INSTANCES);
+        }
+
+        @Override
+        public boolean hasPooling()
+        {
+            return true;
+        }
+
+        @Override
+        public int eagerlyInitializedInstances()
+        {
+            return EAGERLY_INITIALIZED_INSTANCES;
+        }
+    }
+    
+    public static class PoolingControllerWithFixedPoolPoolingTests extends ControllerTestsPooling
+    {
+        private static final int EAGERLY_INITIALIZED_INSTANCES = 4;
+
+        @Override
+        public Controller getPoolingController()
+        {
+            return ControllerFactory.createPooling(EAGERLY_INITIALIZED_INSTANCES);
+        }
+
+        @Override
+        public int eagerlyInitializedInstances()
+        {
+            return EAGERLY_INITIALIZED_INSTANCES;
+        }
+    }
+    
     public static class PoolingControllerCommonTests extends ControllerTestsCommon
     {
         @Override

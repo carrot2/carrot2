@@ -15,7 +15,6 @@ package org.carrot2.text.vsm;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.matrix.MatrixAssertions;
-import org.carrot2.util.PcjCompat;
 import org.junit.Test;
 
 import com.carrotsearch.hppc.IntIntOpenHashMap;
@@ -23,6 +22,7 @@ import com.carrotsearch.hppc.IntIntOpenHashMap;
 /**
  * Test cases for {@link TermDocumentMatrixBuilder}.
  */
+@SuppressWarnings("deprecation")
 public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase
 {
     @Test
@@ -204,7 +204,6 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
             expectedStemToRowIndex.put(expectedTdMatrixStemIndices[i], i);
         }
 
-        assertThat(
-            PcjCompat.equals(vsmContext.stemToRowIndex, expectedStemToRowIndex)).isTrue();
+        assertThat(vsmContext.stemToRowIndex).isEqualTo(expectedStemToRowIndex);
     }
 }

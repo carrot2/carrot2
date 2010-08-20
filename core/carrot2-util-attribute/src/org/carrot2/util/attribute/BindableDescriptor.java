@@ -17,6 +17,9 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.Map.Entry;
 
+import org.carrot2.util.attribute.metadata.AttributeMetadata;
+import org.carrot2.util.attribute.metadata.BindableMetadata;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
@@ -327,7 +330,9 @@ public class BindableDescriptor
             AttributeDescriptor attributeDescriptor);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({
+        "unchecked", "rawtypes"
+    })
     static void buildAttributeGroups(
         Map<String, AttributeDescriptor> newAttributeDescriptors,
         Map<Object, Map<String, AttributeDescriptor>> newAttributeGroups,

@@ -23,6 +23,7 @@ import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.*;
 import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.*;

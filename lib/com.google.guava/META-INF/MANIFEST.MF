@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Google Guava
+Bundle-SymbolicName: com.google.guava
+Bundle-Version: 0.5.0
+Bundle-ClassPath: guava-r05.jar
+Bundle-Vendor: Google Inc.
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.google.common.annotations,
+ com.google.common.base,
+ com.google.common.base.internal,
+ com.google.common.collect,
+ com.google.common.io,
+ com.google.common.net,
+ com.google.common.primitives,
+ com.google.common.util.concurrent

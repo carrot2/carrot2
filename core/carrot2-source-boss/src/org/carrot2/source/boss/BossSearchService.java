@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import org.apache.commons.httpclient.*;
 import org.carrot2.core.attribute.*;
@@ -28,6 +29,8 @@ import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.URLResourceWithParams;
 import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
+
+import com.google.common.collect.Maps;
 
 /**
  * A superclass shared between various Boss verticals.
@@ -408,7 +411,7 @@ public abstract class BossSearchService
             }
         }
 
-        final String serviceURI = URLResourceWithParams.substituteAttributes(
+        final String serviceURI = substituteAttributes(
             getServiceURI(), new NameValuePair("query", query));
 
         final HttpUtils.Response response = HttpUtils.doGET(serviceURI, params, Arrays
@@ -444,6 +447,20 @@ public abstract class BossSearchService
             logger.warn(m);
             throw new IOException(m);
         }
+    }
+
+    /**
+     * Performs attribute substitution.
+     */
+    private static String substituteAttributes(String parameterizedURL,
+        NameValuePair... pairs)
+    {
+        final HashMap<String, Object> attributes = Maps.newHashMap();
+        for (NameValuePair nameValue : pairs)
+        {
+            attributes.put(nameValue.getName(), nameValue.getValue());
+        }
+        return URLResourceWithParams.substituteAttributes(parameterizedURL, attributes);
     }
 
     /**

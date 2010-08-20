@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -78,6 +77,11 @@ public abstract class ControllerTestsBase
         }
     }
 
+    public int eagerlyInitializedInstances()
+    {
+        return 1;
+    }
+
     protected ProcessingResult performProcessing(Object... classes)
     {
         if (controller == null)
@@ -122,11 +126,22 @@ public abstract class ControllerTestsBase
         }
     }
 
+    protected void invokeInit(final IProcessingComponent... components)
+    {
+        for (IProcessingComponent component : components)
+        {
+            for (int i = 0; i < eagerlyInitializedInstances(); i++)
+            {
+                component.init(isA(IControllerContext.class));
+            }
+        }
+    }
+
     protected void invokeProcessingWithInit(final IProcessingComponent... components)
     {
         for (IProcessingComponent component : components)
         {
-            component.init(isA(IControllerContext.class));
+            invokeInit(component);
             component.beforeProcessing();
             component.process();
             component.afterProcessing();
@@ -153,30 +168,34 @@ public abstract class ControllerTestsBase
         mocksControl.checkOrder(false);
         for (IProcessingComponent component : components)
         {
-            component.dispose();
+            for (int i = 0; i < eagerlyInitializedInstances(); i++)
+            {
+                component.dispose();
+            }
         }
         mocksControl.checkOrder(true);
     }
 
-    protected void checkTimes(final long c1Time, final long c2Time, final long totalTime, final double tolerance)
+    protected void checkTimes(final long c1Time, final long c2Time, final long totalTime,
+        final double tolerance)
     {
         assertThat(
             ((Long) (resultAttributes.get(AttributeNames.PROCESSING_TIME_TOTAL)))
-                .longValue()).as("Total time").isLessThan(
-            (long) (totalTime * (1 + tolerance) + 100 * tolerance)).isGreaterThan(
-            (long) (totalTime * (1 - tolerance) - 100 * tolerance));
-    
+                .longValue()).as("Total time")
+            .isLessThan((long) (totalTime * (1 + tolerance) + 100 * tolerance))
+            .isGreaterThan((long) (totalTime * (1 - tolerance) - 100 * tolerance));
+
         assertThat(
             ((Long) (resultAttributes.get(AttributeNames.PROCESSING_TIME_SOURCE)))
-                .longValue()).as("Source time").isLessThan(
-            (long) (c1Time * (1 + tolerance) + 100 * tolerance)).isGreaterThan(
-            (long) (c1Time * (1 - tolerance) - 100 * tolerance));
-    
+                .longValue()).as("Source time")
+            .isLessThan((long) (c1Time * (1 + tolerance) + 100 * tolerance))
+            .isGreaterThan((long) (c1Time * (1 - tolerance) - 100 * tolerance));
+
         assertThat(
             ((Long) (resultAttributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
-                .longValue()).as("Alorithm time").isLessThan(
-            (long) (c2Time * (1 + tolerance) + 100 * tolerance)).isGreaterThan(
-            (long) (c2Time * (1 - tolerance) - 100 * tolerance));
+                .longValue()).as("Alorithm time")
+            .isLessThan((long) (c2Time * (1 + tolerance) + 100 * tolerance))
+            .isGreaterThan((long) (c2Time * (1 - tolerance) - 100 * tolerance));
     }
 
     @Bindable
@@ -420,8 +439,8 @@ public abstract class ControllerTestsBase
     }
 
     @Bindable
-    public static class ComponentWithInitOutputAttribute extends
-        ProcessingComponentBase implements IClusteringAlgorithm
+    public static class ComponentWithInitOutputAttribute extends ProcessingComponentBase
+        implements IClusteringAlgorithm
     {
         @Init
         @Output
@@ -432,6 +451,40 @@ public abstract class ControllerTestsBase
         public void init(IControllerContext context)
         {
             initOutput = "initOutput";
+        }
+    }
+
+    @Bindable
+    public static class ComponentWithOutputAttribute extends ProcessingComponentBase
+    {
+        @Output
+        @Processing
+        @Attribute(key = "attr")
+        @SuppressWarnings("unused")
+        private String result;
+
+        @Override
+        public void process() throws ProcessingException
+        {
+            result = "anything";
+        }
+    }
+
+    @Bindable
+    public static class ComponentWithRequiredProcessingAttribute extends
+        ProcessingComponentBase
+    {
+        @Input
+        @Processing
+        @Required
+        @Internal
+        @Attribute(key = "attr")
+        private String result;
+
+        @Override
+        public void process() throws ProcessingException
+        {
+            if (result == null) throw new RuntimeException();
         }
     }
 
@@ -447,7 +500,7 @@ public abstract class ControllerTestsBase
                 createdInstances++;
             }
         }
-        
+
         public static void reset()
         {
             createdInstances = 0;

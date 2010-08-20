@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
                 xmlns:d="http://docbook.org/ns/docbook" version="1.0">
 
-  <xsl:import href="../html/docbook.xsl"/>
+  <xsl:import href="http://docbook.sourceforge.net/release/xsl-ns/current/html/docbook.xsl"/>
   <xsl:import href="distribution-links.xsl"/>
   <xsl:import href="customization.xsl"/>
   <xsl:import href="attributes.xsl"/>
@@ -14,7 +14,7 @@
        doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
 
   <xsl:param name="title-logo-file">img/logo.gif</xsl:param>
-  <xsl:param name="title-logo-alt">...</xsl:param>
+  <xsl:param name="title-logo-alt">Carrot2 Clustering Engine</xsl:param>
 
   <xsl:template match="processing-instruction('linebreak')"><br /></xsl:template>
 

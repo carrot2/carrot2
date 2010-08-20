@@ -174,7 +174,7 @@ public final class Cluster
      * 
      * @return phrases describing this cluster
      */
-    @JsonGetter
+    @JsonProperty
     public List<String> getPhrases()
     {
         return phrasesView;
@@ -193,7 +193,7 @@ public final class Cluster
     /**
      * For JSON serialization only.
      */
-    @JsonGetter("clusters")
+    @JsonProperty("clusters")
     @SuppressWarnings("unused")
     private List<Cluster> getSubclustersForSerialization()
     {
@@ -370,7 +370,7 @@ public final class Cluster
     /**
      * Returns this cluster's {@value #SCORE} field.
      */
-    @JsonGetter
+    @JsonProperty
     @Attribute(required = false)
     public Double getScore()
     {
@@ -443,7 +443,7 @@ public final class Cluster
     /**
      * For serialization only.
      */
-    @JsonGetter
+    @JsonProperty
     @Attribute(required = false)
     @SuppressWarnings("unused")
     private int getSize()
@@ -468,7 +468,7 @@ public final class Cluster
      * 
      * @see ProcessingResult
      */
-    @JsonGetter
+    @JsonProperty
     public Integer getId()
     {
         return id;
@@ -823,7 +823,7 @@ public final class Cluster
     /**
      * For JSON serialization only.
      */
-    @JsonGetter("documents")
+    @JsonProperty("documents")
     @SuppressWarnings("unused")
     private List<Integer> getDocumentIds()
     {
@@ -833,7 +833,7 @@ public final class Cluster
     /**
      * For JSON and XML serialization only.
      */
-    @JsonGetter("attributes")
+    @JsonProperty("attributes")
     @SuppressWarnings("unused")
     private Map<String, Object> getOtherAttributes()
     {

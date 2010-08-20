@@ -11,7 +11,7 @@
 
 package org.carrot2.clustering.lingo;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.*;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.Pair;
 import org.carrot2.util.attribute.Bindable;
@@ -27,6 +27,7 @@ import com.carrotsearch.hppc.*;
  * {@link SimpleLabelAssigner}. This method is slightly slower than
  * {@link SimpleLabelAssigner}.
  */
+@SuppressWarnings("deprecation")
 @Bindable
 public class UniqueLabelAssigner implements ILabelAssigner
 {
