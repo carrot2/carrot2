@@ -48,10 +48,6 @@
    * clusters finish loading.
    */
   function loaded() {
-    // Build and cache cluster-document relationship model 
-    flattenedDocuments = $.clusters.flatten(window.documents);
-    documentClusters = $.clusters.documentClusters(flattenedDocuments);
-    
     // Enhance makup, install listeners and cluster segmentation
     enhance();
     listeners();
@@ -282,6 +278,14 @@
     return flattenedDocuments[clusterId];
   }
 
+  /**
+   * Called from the AJAX-loaded clusters HTML part to pass cluster-document assignments.
+   */
+  jQuery.clusters.setDocuments = function(documents) {
+    flattenedDocuments = $.clusters.flatten(documents);
+    documentClusters = $.clusters.documentClusters(flattenedDocuments);
+  }
+  
   /**
    * Flatten a structure of cluster documents.
    */ 

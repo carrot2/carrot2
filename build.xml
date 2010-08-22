@@ -495,6 +495,7 @@
           <include name="**/src/**/doc-files" />
           <exclude name="**/org/carrot2/core/test/**" />
           <exclude name="**/com/microsoft/msnsearch/**" />
+          <exclude name="carrot2-util-text/src/**" />
         </fileset>
       </sourcefiles>
 
