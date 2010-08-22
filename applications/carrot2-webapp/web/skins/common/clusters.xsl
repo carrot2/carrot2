@@ -18,10 +18,10 @@
           </ul>
       
           <script>
-            var documentCount = <xsl:value-of select="count(searchresult/document)" />;
-            var documents = {
+            $.clusters.setDocuments({
               <xsl:apply-templates select="searchresult/group" mode="json" />
-            };
+            });
+            var documentCount = <xsl:value-of select="count(searchresult/document)" />;
             var algorithmTime = "<xsl:value-of select="searchresult/attribute[@key = 'processing-time-algorithm']/value/@value" />";
           </script>
         </xsl:when>
