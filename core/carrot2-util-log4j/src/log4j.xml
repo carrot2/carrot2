@@ -7,9 +7,7 @@
 ]>
 
 <!-- 
-    Default log4j configuration used in Eclipse projects (debugging):
-    	console appender and standard set of library filters,
-    	the rest set to DEBUG level.
+    Default log4j configuration.
 -->
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
@@ -23,7 +21,7 @@
 
     <!-- Root logger config. -->
     <root>
-        <priority value="debug" />
+        <priority value="info" />
 
         <appender-ref ref="appender-console" />
     </root>
