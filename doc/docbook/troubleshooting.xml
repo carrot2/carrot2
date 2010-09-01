@@ -8,10 +8,10 @@
 ]>
 <chapter xml:id="chapter.troubleshooting" xmlns="http://docbook.org/ns/docbook" version="5.0">
   <title>Troubleshooting</title>
-  <subtitle>Solving common problems with &C2;</subtitle>
+  <subtitle>Solving common problems with &PROD;</subtitle>
 
   <para>
-    This chapter discusses solutions to some common problems with &C2; code or applications.
+    This chapter discusses solutions to some common problems with &PROD; code or applications.
   </para>
 
   <section xml:id="section.troubleshooting.workbench">
@@ -31,13 +31,22 @@
           Using the above pattern you can specify any other JVM options if needed.
         </para>
       </tip>
+
+      <tip>
+        <para>
+          You can also add JVM path and options to the <filename>eclipse.ini</filename> 
+          file located in in &DCW; installation directory. Please see
+          <link xlink:href="http://wiki.eclipse.org/Eclipse.ini">Eclipse Wiki</link> 
+          for a list of all available options.
+        </para>
+      </tip>
     </section>
     
     <section xml:id="section.troubleshooting.workbench.stacktrace">
       <title>Getting exception stack trace</title>
       
       <para>
-        To get the stack trace (useful for &C2; team to spot errors) corresponding
+        To get the stack trace (useful for &PROD; team to spot errors) corresponding
         to a processing error in &DCW;, follow the following procedure:
       </para>
       
@@ -93,7 +102,7 @@
         <listitem>
           <para>
             Copy the exception stack trace from the <guilabel>Event Details</guilabel> dialog
-            and pass to &C2; team (<xref linkend="figure.dcw-event-details-dialog" />).
+            and pass to &PROD; team (<xref linkend="figure.dcw-event-details-dialog" />).
           </para>
           
           <figure xml:id="figure.dcw-event-details-dialog">
@@ -106,6 +115,36 @@
           </figure>
         </listitem>
       </orderedlist>
+    </section>
+
+    <section xml:id="section.troubleshooting.workbench.windows-64bit-circles-missing">
+      <title>Circles visualization not visible on Windows 64-bit</title>
+      
+      <section>
+        <title>Symptoms</title>
+        
+        <para>
+          The Circles visualization is not visible in &DCW; for Windows 64-bit.
+        </para>
+      </section>
+      
+      <section>
+        <title>Cause</title>
+        
+        <para>
+          Adobe does not provide 64-bit binaries of their Flash player plug-in.
+          As a result, &DCW; for Windows 64-bit is unable to display the visualization. 
+        </para>
+      </section>
+      
+      <section>
+        <title>Solution</title>
+        
+        <para>
+          To be able to use the Circels visualization on Windows 64-bit systems, downowad
+          and install a 32-bit Java Runtime Environment and run the 32-bit version of &DCW;. 
+        </para>
+      </section>
     </section>
   </section>    
   
