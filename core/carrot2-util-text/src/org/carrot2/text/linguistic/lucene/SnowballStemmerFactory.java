@@ -1,10 +1,14 @@
-package org.carrot2.text.linguistic;
+package org.carrot2.text.linguistic.lucene;
 
+import org.carrot2.text.linguistic.IStemmer;
+import org.carrot2.text.linguistic.IStemmerFactory;
+import org.carrot2.util.ReflectionUtils;
 import org.tartarus.snowball.SnowballProgram;
 
 public class SnowballStemmerFactory implements IStemmerFactory
 {
-    private Class<? extends SnowballProgram> clazz;
+    private final Class<? extends SnowballProgram> clazz;
+    private final String stemmerClazz;
 
     /**
      * An adapter converting Snowball programs into {@link IStemmer} interface.
@@ -32,14 +36,31 @@ public class SnowballStemmerFactory implements IStemmerFactory
         }
     }
 
-    public SnowballStemmerFactory(Class<? extends SnowballProgram> clazz)
+    @SuppressWarnings("unchecked")
+    public SnowballStemmerFactory(String snowballClazz)
     {
-        this.clazz = clazz;
+        this.stemmerClazz = snowballClazz;
+        
+        Class<?> clz;
+        try
+        {
+            clz =  ReflectionUtils.classForName(snowballClazz, false);
+        }
+        catch (Throwable t)
+        {
+            clz = null;
+        }
+        
+        clazz = (Class<? extends SnowballProgram>) clz;
     }
 
     @Override
     public IStemmer createInstance()
     {
+        if (clazz == null)
+            throw new RuntimeException("Snowball stemmer not available: "
+                + stemmerClazz);
+
         try
         {
             return new SnowballStemmerAdapter(clazz.newInstance());

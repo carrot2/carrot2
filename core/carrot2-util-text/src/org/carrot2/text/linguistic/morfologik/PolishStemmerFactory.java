@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.text.linguistic;
+package org.carrot2.text.linguistic.morfologik;
 
 import java.util.List;
 
@@ -18,6 +18,8 @@ import morfologik.stemming.PolishStemmer;
 import morfologik.stemming.WordData;
 
 import org.carrot2.core.LanguageCode;
+import org.carrot2.text.linguistic.IStemmer;
+import org.carrot2.text.linguistic.IStemmerFactory;
 
 
 /**
@@ -25,7 +27,7 @@ import org.carrot2.core.LanguageCode;
  * language if <a href="http://morfologik.blogspot.com/">Morfologik-stemming</a> library
  * is available in classpath.
  */
-final class PolishStemmerFactory implements IStemmerFactory
+public final class PolishStemmerFactory implements IStemmerFactory
 {
     /**
      * Adapter to Morfologik stemmer.

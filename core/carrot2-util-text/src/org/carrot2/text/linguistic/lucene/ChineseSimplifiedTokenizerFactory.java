@@ -1,4 +1,4 @@
-package org.carrot2.text.linguistic;
+package org.carrot2.text.linguistic.lucene;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -11,6 +11,7 @@ import org.apache.lucene.analysis.cn.smart.WordTokenFilter;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.text.linguistic.ITokenizerFactory;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.ExceptionUtils;
 
@@ -19,7 +20,7 @@ import org.carrot2.util.ExceptionUtils;
  * 
  * @see LanguageCode#CHINESE_SIMPLIFIED
  */
-class ChineseSimplifiedTokenizerFactory implements ITokenizerFactory
+public class ChineseSimplifiedTokenizerFactory implements ITokenizerFactory
 {
     /**
      * 

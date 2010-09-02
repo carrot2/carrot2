@@ -1,5 +1,7 @@
-package org.carrot2.text.linguistic;
+package org.carrot2.text.linguistic.lucene;
 
+import org.carrot2.text.linguistic.IStemmer;
+import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.util.MutableCharArray;
 
 /**
