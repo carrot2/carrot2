@@ -26,6 +26,7 @@ import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 /**
@@ -82,5 +83,18 @@ public class LingoClusteringAlgorithmTest extends
         assertNotNull(clusters);
         assertEquals(1, clusters.size());
         assertThat(clusters.get(0).size()).isEqualTo(documents.size());
+    }
+
+    @Test
+    public void testStemmingUsedWithDefaultAttributes()
+    {
+        final List<Document> documents = ImmutableList.of(new Document("program"),
+            new Document("programs"), new Document("programming"),
+            new Document("program"), new Document("programs"),
+            new Document("programming"), new Document("other"));
+
+        final List<Cluster> clusters = cluster(documents).getClusters();
+        assertThat(clusters).hasSize(2);
+        assertThat(clusters.get(0).getLabel().toLowerCase()).startsWith("program");
     }
 }
