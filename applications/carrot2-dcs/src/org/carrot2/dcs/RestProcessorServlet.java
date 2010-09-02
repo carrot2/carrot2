@@ -139,8 +139,6 @@ public final class RestProcessorServlet extends HttpServlet
 
         controller = ControllerFactory.createCachingPooling(cachedComponentClasses
             .toArray(new Class [cachedComponentClasses.size()]));
-        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
-            (Object)new DefaultLanguageModelFactory()), componentSuite.getComponentConfigurations());
     }
 
     @Override

@@ -139,8 +139,7 @@ public class QueryProcessorServlet extends HttpServlet
          * Initialize the controller.
          */
         controller = ControllerFactory.createCachingPooling(ResultsCacheModel.toClassArray(webappConfig.caches));
-        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
-            (Object)new DefaultLanguageModelFactory()), webappConfig.components.getComponentConfigurations());
+        controller.init();
 
         jawrUrlGenerator = new JawrUrlGenerator(servletContext);
     }

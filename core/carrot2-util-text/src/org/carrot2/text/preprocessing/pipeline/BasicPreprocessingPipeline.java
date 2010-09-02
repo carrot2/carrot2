@@ -19,7 +19,7 @@ import org.carrot2.core.LanguageCode;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.text.linguistic.BaseLanguageModelFactory;
+import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.text.preprocessing.LanguageModelStemmer;
@@ -78,7 +78,7 @@ public class BasicPreprocessingPipeline
     @Internal
     @Attribute
     @ImplementingClasses(classes = {}, strict = false)
-    public ILanguageModelFactory languageModelFactory = new BaseLanguageModelFactory();
+    public ILanguageModelFactory languageModelFactory = new DefaultLanguageModelFactory();
 
     /**
      * Performs preprocessing on the provided list of documents. Results can be obtained

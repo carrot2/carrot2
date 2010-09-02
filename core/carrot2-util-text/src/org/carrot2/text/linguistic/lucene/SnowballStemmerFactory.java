@@ -2,7 +2,6 @@ package org.carrot2.text.linguistic.lucene;
 
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.linguistic.IStemmerFactory;
-import org.carrot2.util.ReflectionUtils;
 import org.tartarus.snowball.SnowballProgram;
 
 public class SnowballStemmerFactory implements IStemmerFactory
@@ -41,16 +40,29 @@ public class SnowballStemmerFactory implements IStemmerFactory
     {
         this.stemmerClazz = snowballClazz;
         
-        Class<?> clz;
+        Class<?> clz = null;
         try
         {
-            clz =  ReflectionUtils.classForName(snowballClazz, false);
+            clz = Class.forName(snowballClazz, true, 
+                Thread.currentThread().getContextClassLoader());
         }
         catch (Throwable t)
         {
-            clz = null;
+            // ignore
         }
-        
+
+        if (clz == null)
+        {
+            try
+            {
+                clz = Class.forName(snowballClazz, true, this.getClass().getClassLoader());
+            }
+            catch (Throwable t)
+            {
+                // ignore
+            }
+        }
+
         clazz = (Class<? extends SnowballProgram>) clz;
     }
 

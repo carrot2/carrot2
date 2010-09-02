@@ -116,8 +116,6 @@ public class BatchApp
     private int process() throws Exception
     {
         final Controller controller = ControllerFactory.createPooling();
-        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
-            (Object)new DefaultLanguageModelFactory()), componentSuite.getComponentConfigurations());
 
         // Prepare the algorithm
         if (StringUtils.isBlank(algorithm))
