@@ -12,34 +12,21 @@
 
 package org.carrot2.text.linguistic;
 
-import org.carrot2.core.LanguageCode;
-import org.slf4j.Logger;
 import java.util.List;
 
 import morfologik.stemming.PolishStemmer;
 import morfologik.stemming.WordData;
 
+import org.carrot2.core.LanguageCode;
+
 
 /**
  * Factory of {@link IStemmer} implementations for the {@link LanguageCode#POLISH}
- * language. If <a href="http://morfologik.blogspot.com/">Morfologik-stemming</a> library
- * is available in classpath, a wrapper around this library is returned. Otherwise an
- * empty identity stemmer is returned.
+ * language if <a href="http://morfologik.blogspot.com/">Morfologik-stemming</a> library
+ * is available in classpath.
  */
-final class PolishStemmerFactory
+final class PolishStemmerFactory implements IStemmerFactory
 {
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(PolishStemmerFactory.class); 
-
-    private final static IStemmer stemmer;
-    static
-    {
-        stemmer = createStemmerInternal();
-        if (stemmer instanceof IdentityStemmer)
-        {
-            logger.warn("Morfologik classes not available in classpath.");
-        }
-    }
-
     /**
      * Adapter to Morfologik stemmer.
      */
@@ -48,7 +35,6 @@ final class PolishStemmerFactory
         private final morfologik.stemming.IStemmer stemmer;
 
         public MorfologikStemmerAdapter()
-            throws Exception
         {
             this.stemmer = new PolishStemmer();
         }
@@ -67,26 +53,9 @@ final class PolishStemmerFactory
         }
     }
 
-    /*
-     * 
-     */
-    public static IStemmer createStemmer()
+    @Override
+    public IStemmer createInstance()
     {
-        return stemmer;
-    }
-    
-    /**
-     * Attempts to instantiate <code>morfologik-stemming</code>.
-     */
-    private static IStemmer createStemmerInternal()
-    {
-        try
-        {
-            return new MorfologikStemmerAdapter();
-        }
-        catch (Throwable e)
-        {
-            return IdentityStemmer.INSTANCE;
-        }
+        return new MorfologikStemmerAdapter();
     }
 }
