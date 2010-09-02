@@ -14,6 +14,7 @@ package org.carrot2.dcs;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -139,6 +140,8 @@ public final class RestProcessorServlet extends HttpServlet
 
         controller = ControllerFactory.createCachingPooling(cachedComponentClasses
             .toArray(new Class [cachedComponentClasses.size()]));
+        controller.init(Collections.<String, Object> emptyMap(), 
+            componentSuite.getComponentConfigurations());        
     }
 
     @Override

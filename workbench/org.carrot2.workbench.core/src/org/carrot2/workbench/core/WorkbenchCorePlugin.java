@@ -15,6 +15,7 @@ package org.carrot2.workbench.core;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -116,7 +117,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         scanSuites();
 
         controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
-        controller.init();
+        controller.init(Collections.<String, Object> emptyMap(), 
+            componentSuite.getComponentConfigurations());        
     }
 
     /*

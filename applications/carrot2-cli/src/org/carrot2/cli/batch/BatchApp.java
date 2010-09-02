@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,6 @@ import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.source.xml.XmlDocumentSource;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.resource.FileResource;
@@ -40,7 +40,6 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -116,6 +115,8 @@ public class BatchApp
     private int process() throws Exception
     {
         final Controller controller = ControllerFactory.createPooling();
+        controller.init(Collections.<String, Object> emptyMap(), 
+            componentSuite.getComponentConfigurations());        
 
         // Prepare the algorithm
         if (StringUtils.isBlank(algorithm))
