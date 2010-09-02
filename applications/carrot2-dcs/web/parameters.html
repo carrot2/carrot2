@@ -128,7 +128,7 @@
               $select.html("");
               $(data).find(option).each(function() {
                 $this = $(this);
-                $select.append("<li><tt>" + $this.attr("id") + "</tt> &mdash " + $this.find("title").text() + "</li>"); 
+                $select.append("<li><tt>" + $this.attr("id") + "</tt> &mdash; " + $this.find("title").text() + "</li>"); 
               });
               if (callback) {
                   callback.call();
