@@ -92,12 +92,24 @@
           If a non-empty value is provided and output format is <tt>JSON</tt>, the response
           data will be wrapped with a function name as specified by the parameter value.
         </dd>
+        
+        <dt>MultilingualClustering.defaultLanguage</dt>
+        <dd>
+          The default language to use for documents with undefined language.
+          <p>
+            Possible values: ARABIC, BULGARIAN, CZECH, CHINESE_SIMPLIFIED, 
+            DANISH, DUTCH, ENGLISH, ESTONIAN, FINNISH, FRENCH, GERMAN, GREEK,
+            HUNGARIAN, ITALIAN, IRISH, KOREAN, LATVIAN, LITHUANIAN, MALTESE, 
+            NORWEGIAN, POLISH, PORTUGUESE, ROMANIAN, RUSSIAN, SLOVAK, SLOVENE, 
+            SPANISH, SWEDISH, TURKISH. 
+          </p>
+        </dd>           
 
         <dt>&lt;attribute-key&gt;</dt>
         <dd>
           Any other parameter names will be treated as attribute keys and will be passed, along with the value,
           to the respective component. A complete reference of each component's attributes
-          is available in the documentation and in the source code of each algorithm.  
+          is available in the documentation and in the source code of each algorithm.
         </dd>
       </dl>
 

@@ -45,8 +45,10 @@
         Document source time average: <b id="source-time"></b> ms<br />
         Clustering time average: <b id="algorithm-time"></b> ms<br />
         Total time average: <b id="total-time"></b> ms<br /><br />
-        Cache hits: <b id="cache-hits"></b><br />
-        Cache misses: <b id="cache-misses"></b>
+        <span id="cache-statistics" style="display: none;">
+	        Cache hits: <b id="cache-hits"></b><br />
+	        Cache misses: <b id="cache-misses"></b>
+        </span>
       </div>
     </div>      
     
@@ -65,8 +67,14 @@
             $("#source-time").html($data.attr("source-time-average-in-window"));
             $("#algorithm-time").html($data.attr("algorithm-time-average-in-window"));
             $("#total-time").html($data.attr("total-time-average-in-window"));
-            $("#cache-hits").html($data.attr("cache-hits-total"));
-            $("#cache-misses").html($data.attr("cache-misses"));
+
+            if ($data.attr("cache-hits-total")) {
+              $("#cache-statistics").show();
+	            $("#cache-hits").html($data.attr("cache-hits-total"));
+	            $("#cache-misses").html($data.attr("cache-misses"));
+            } else {
+              $("#cache-statistics").hide();
+            }
           }
         });
       });
