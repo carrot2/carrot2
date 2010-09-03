@@ -29,7 +29,7 @@ abstract class IsFileConstraintBase extends Constraint
             return false;
         }
 
-        checkAssignableFrom(File.class, value);
+        checkAssignableFrom(value, File.class);
 
         final File file = (File) value;
         if (mustExist || file.exists())

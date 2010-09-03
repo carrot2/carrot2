@@ -30,7 +30,7 @@ public class ValueHintEnumConstraint extends Constraint
      */
     protected boolean isMet(Object value)
     {
-        checkAssignableFrom(CharSequence.class, value);
+        checkAssignableFrom(value, CharSequence.class);
 
         /*
          * This is a hint-constraint, so we always return true.

@@ -12,6 +12,8 @@
 
 package org.carrot2.util.attribute.constraint;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.junit.Test;
 
 /**
@@ -61,5 +63,14 @@ public class IntModuloConstraintTest extends ConstraintTestBase<IntModulo>
         assertNotMet(3);
         assertNotMet(5);
         assertNotMet(12);
+    }
+    
+    @Test
+    public void testOtherAssignableTypes() throws Exception
+    {
+        assertMet((byte)2);
+        assertMet((short)2);
+        assertMet(2);
+        assertMet(new AtomicInteger(2));
     }
 }

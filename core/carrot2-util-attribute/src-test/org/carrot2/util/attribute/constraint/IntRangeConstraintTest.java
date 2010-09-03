@@ -12,6 +12,8 @@
 
 package org.carrot2.util.attribute.constraint;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.junit.Test;
 
 /**
@@ -71,5 +73,14 @@ public class IntRangeConstraintTest extends ConstraintTestBase<IntRange>
     public void testGreaterThanMax() throws Exception
     {
         assertNotMet(16);
+    }
+    
+    @Test
+    public void testOtherAssignableTypes() throws Exception
+    {
+        assertMet((byte)0);
+        assertMet((short)0);
+        assertMet(0);
+        assertMet(new AtomicInteger(0));
     }
 }

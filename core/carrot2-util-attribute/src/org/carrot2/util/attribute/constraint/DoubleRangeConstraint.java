@@ -46,9 +46,9 @@ class DoubleRangeConstraint extends Constraint
             return false;
         }
 
-        checkAssignableFrom(Double.class, value);
+        checkAssignableFrom(value, Number.class);
 
-        final Double v = (Double) value;
+        final double v = ((Number) value).doubleValue();
         return v >= min && v <= max;
     }
 

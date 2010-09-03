@@ -12,6 +12,10 @@
 
 package org.carrot2.util.attribute.constraint;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.junit.Test;
 
 /**
@@ -60,7 +64,7 @@ public class DoubleRangeConstraintTest extends ConstraintTestBase<DoubleRange>
     {
         assertMet(0.0);
     }
-    
+
     @Test
     public void testMaxBound() throws Exception
     {
@@ -71,5 +75,18 @@ public class DoubleRangeConstraintTest extends ConstraintTestBase<DoubleRange>
     public void testGreaterThanMax() throws Exception
     {
         assertNotMet(16.0);
+    }
+    
+    @Test
+    public void testOtherAssignableTypes() throws Exception
+    {
+        assertMet((byte)0);
+        assertMet((short)0);
+        assertMet(0);
+        assertMet(0L);
+        assertMet(0.0f);
+        assertMet(new BigDecimal("0"));
+        assertMet(new BigInteger("0"));
+        assertMet(new AtomicInteger(0));
     }
 }
