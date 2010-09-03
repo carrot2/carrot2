@@ -47,11 +47,30 @@
           <head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <title><xsl:apply-templates select="page" mode="head-title" /></title>
+            
+            <xsl:variable name="startup-text"><xsl:apply-templates select="page" mode="startup-text" /></xsl:variable>
+            <meta name="description" content="{normalize-space($startup-text)}" />
+            
+            <meta name="keywords" content="document clustering, text categorization, grouping, software, java library, .NET, c#, visualization, open source" />
+            <meta name="author" content="Stanislaw Osinski, Dawid Weiss, Carrot2 Project, Carrot Search s.c." />            
             <xsl:apply-templates select="page/asset-urls/css-urls/css-url" />
           </head>
           
           <body>
             <xsl:attribute name="id"><xsl:call-template name="page-body-id" /></xsl:attribute>
+            
+            <xsl:if test="$google-analytics-web-property-id">
+              <script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', '<xsl:value-of select="$google-analytics-web-property-id" />']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+})();  
+              </script>
+            </xsl:if>
     
             <!-- Debug box -->
             <xsl:if test="$debug = 'true'">
@@ -64,15 +83,6 @@
     
             <!-- Custom in-line javascript -->
             <xsl:apply-templates select="/page" mode="js" />
-            <xsl:if test="$google-analytics-web-property-id">
-              <script type="text/javascript"> var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www."); 
-                document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-              </script>
-              <script type="text/javascript">
-                var pageTracker = _gat._getTracker("<xsl:value-of select="$google-analytics-web-property-id" />");
-                pageTracker._trackPageview();
-              </script>
-            </xsl:if>
           </body>
         </html>
       </xsl:when>
