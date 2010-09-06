@@ -146,7 +146,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * Ver: UNKNOWN</code>.
      * 
      * @label User agent
-     * @level Medium
+     * @level Advanced
      * @group Service
      */
     @Input
