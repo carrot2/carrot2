@@ -11,6 +11,9 @@
       <attribute key="OpenSearchDocumentSource.maximumResults">
         <value type="java.lang.Integer" value="200" />
       </attribute>
+      <attribute key="OpenSearchDocumentSource.userAgent">
+        <value type="java.lang.String" value="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.8) Gecko/20100721  Firefox/3.6.8" />
+      </attribute>
     </value-set>
   </attribute-set>
 </attribute-sets>
