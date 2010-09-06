@@ -275,7 +275,7 @@ public class DefaultLanguageModelFactory implements ILanguageModelFactory
 
                 String message = "Stemmer for "
                     + lc.toString() + " (" + lc.getIsoCode() + ") is not available."
-                    + " This may degrade clustering accurracy.";
+                    + " This may degrade clustering quality of " + lc.toString() + " content.";
 
                 logger.warn(message);
             }
@@ -320,7 +320,7 @@ public class DefaultLanguageModelFactory implements ILanguageModelFactory
 
                 String message = "Tokenizer for "
                     + lc.toString() + " (" + lc.getIsoCode() + ") is not available."
-                    + " This may degrade clustering accurracy.";
+                    + " This may degrade clustering quality of " + lc.toString() + " content.";
 
                 logger.warn(message);
             }
