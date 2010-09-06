@@ -1,11 +1,14 @@
 package org.carrot2.text.linguistic.lucene;
 
+import org.carrot2.core.LanguageCode;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.util.MutableCharArray;
 
 /**
+ * Stemmer factory for Arabic.
  * 
+ * @see LanguageCode#ARABIC
  */
 public class ArabicStemmerFactory implements IStemmerFactory
 {

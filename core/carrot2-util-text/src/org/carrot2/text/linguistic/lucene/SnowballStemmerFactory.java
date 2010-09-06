@@ -4,6 +4,9 @@ import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.linguistic.IStemmerFactory;
 import org.tartarus.snowball.SnowballProgram;
 
+/**
+ * A factory of Snowball-based stemmers.
+ */
 public class SnowballStemmerFactory implements IStemmerFactory
 {
     private final Class<? extends SnowballProgram> clazz;
