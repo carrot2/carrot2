@@ -19,6 +19,7 @@ import net.sf.ehcache.*;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 
+import org.carrot2.core.Controller.IControllerStatisticsProvider;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.Pair;
@@ -182,9 +183,17 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
     {
         // Return some custom statistics
         final Statistics statistics = dataCache.getStatistics();
-        return ImmutableMap.of(CACHE_MISSES, (Object) statistics.getCacheMisses(),
-            CACHE_HITS_TOTAL, statistics.getCacheHits(), CACHE_HITS_DISK, statistics
-                .getOnDiskHits(), CACHE_HITS_MEMORY, statistics.getInMemoryHits());
+        final Map<String, Object> stats = Maps.newHashMap();
+        if (delegate instanceof IControllerStatisticsProvider) 
+        {
+            stats.putAll(((IControllerStatisticsProvider) delegate).getStatistics());
+        }
+        stats.put(CACHE_MISSES, (Object) statistics.getCacheMisses());
+        stats.put(CACHE_HITS_TOTAL, statistics.getCacheHits());
+        stats.put(CACHE_HITS_DISK, statistics.getOnDiskHits());
+        stats.put(CACHE_HITS_MEMORY, statistics.getInMemoryHits());
+        
+        return stats;
     }
 
     // Two extra attributes to add to the input map. This way, they will also become

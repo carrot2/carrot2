@@ -19,6 +19,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -139,8 +140,8 @@ public class QueryProcessorServlet extends HttpServlet
          * Initialize the controller.
          */
         controller = ControllerFactory.createCachingPooling(ResultsCacheModel.toClassArray(webappConfig.caches));
-        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
-            (Object)new DefaultLanguageModelFactory()), webappConfig.components.getComponentConfigurations());
+        controller.init(Collections.<String, Object> emptyMap(), 
+            webappConfig.components.getComponentConfigurations());        
 
         jawrUrlGenerator = new JawrUrlGenerator(servletContext);
     }

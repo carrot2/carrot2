@@ -82,13 +82,6 @@ public class ClusteringNonEnglishContent
          * and caches results produced by document sources.
          */
         final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
-        
-        /*
-         * To cluster Chinese content, we need to use the DefaultLanguageModelFactory,
-         * which contains the appropriate tokenizer. 
-         */
-        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
-            (Object)new DefaultLanguageModelFactory()));
 
         /*
          * In the first call, we'll cluster a document list, setting the language for each

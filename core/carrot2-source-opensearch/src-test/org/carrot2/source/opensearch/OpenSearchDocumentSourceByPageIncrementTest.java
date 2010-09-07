@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,7 +12,9 @@
 package org.carrot2.source.opensearch;
 
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
-import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.util.ExceptionUtils;
+import org.carrot2.util.attribute.AttributeValueSets;
+import org.carrot2.util.resource.ResourceUtils;
 
 /**
  * Test cases for {@link OpenSearchDocumentSource} with feeds where start result index is
@@ -51,13 +52,18 @@ public class OpenSearchDocumentSourceByPageIncrementTest extends
     {
         super.prepareComponent();
 
-        initAttributes
-            .put(
-                AttributeUtils.getKey(OpenSearchDocumentSource.class, "feedUrlTemplate"),
-                "http://blogs.icerocket.com/search?q=${searchTerms}&rss=1&os=1&p=${startPage}&n=${count}&tab=blog");
-        initAttributes.put(AttributeUtils.getKey(OpenSearchDocumentSource.class,
-            "resultsPerPage"), 50);
-        initAttributes.put(AttributeUtils.getKey(OpenSearchDocumentSource.class,
-            "maximumResults"), 200);
+        try
+        {
+            initAttributes.putAll(AttributeValueSets
+                .deserialize(
+                    ResourceUtils.prefetch(OpenSearchDocumentSourceByPageIncrementTest.class
+                        .getResourceAsStream("/" + OpenSearchDocumentSource.class.getName()
+                            + ".icerocket.attributes.xml"))).getDefaultAttributeValueSet()
+                .getAttributeValues());
+        }
+        catch (Exception e)
+        {
+            throw ExceptionUtils.wrapAsRuntimeException(e);
+        }
     }
 }

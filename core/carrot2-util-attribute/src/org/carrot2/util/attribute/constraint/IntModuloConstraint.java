@@ -13,6 +13,7 @@
 package org.carrot2.util.attribute.constraint;
 
 import java.lang.annotation.Annotation;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -36,9 +37,9 @@ class IntModuloConstraint extends Constraint
             return false;
         }
 
-        checkAssignableFrom(Integer.class, value);
+        checkAssignableFrom(value, Byte.class, Short.class, Integer.class, AtomicInteger.class);
 
-        final Integer v = (Integer) value;
+        final Integer v = ((Number) value).intValue();
         return Math.abs((v % modulo)) == offset;
     }
 

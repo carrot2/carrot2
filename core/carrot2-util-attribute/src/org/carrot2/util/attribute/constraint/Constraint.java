@@ -32,7 +32,7 @@ public abstract class Constraint
      * <code>clazz</code>. If not, an {@link IllegalArgumentException} will be thrown.
      * <code>null</code> values are assignable to any class.
      */
-    protected void checkAssignableFrom(Class<?> clazz, Object value)
+    protected void checkAssignableFrom(Object value, Class<?>... clazz)
     {
         /*
          * Null is assignable to anything.
@@ -42,13 +42,41 @@ public abstract class Constraint
             return;
         }
 
-        if (!clazz.isAssignableFrom(value.getClass()))
+        if (clazz.length == 0)
         {
-            throw new IllegalArgumentException("Expected an instance of "
-                + clazz.getName() + " but found " + value.getClass().getName());
+            throw new IllegalArgumentException("Classes array must not be empty");
         }
+        
+        for (Class<?> c : clazz)
+        {
+            if (c.isAssignableFrom(value.getClass()))
+            {
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Expected an instance of "
+            + classesToString(clazz) + " but found " + value.getClass().getName());
     }
 
+    private static String classesToString(Class<?>...classes)
+    {
+        if (classes.length == 1)
+        {
+            return classes[0].getName();
+        }
+        else
+        {
+            StringBuilder s = new StringBuilder("any of");
+            s.append(classes[0].getName());
+            for (int i = 1; i < classes.length; i++)
+            {
+                s.append(", ");
+                s.append(classes[i].getName());
+            }
+            return s.toString();
+        }
+    }
+    
     public final void populate(Annotation annotation)
     {
         this.annotation = annotation;

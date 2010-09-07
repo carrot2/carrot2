@@ -102,6 +102,8 @@
         <include name="lib/org.apache.lucene/lucene-analyzers-*.jar" />
         <include name="lib/org.codehaus.woodstox/*.jar" />
         <include name="lib/org.codehaus.woodstox/*.LICENSE" />
+        <include name="lib/morfologik/*.jar" />
+        <include name="lib/morfologik/*.LICENSE" />
       </fileset>
       <mapper type="flatten" />
     </copy>

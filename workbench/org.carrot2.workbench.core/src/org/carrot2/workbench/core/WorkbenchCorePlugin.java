@@ -15,6 +15,7 @@ package org.carrot2.workbench.core;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +27,6 @@ import org.carrot2.core.IClusteringAlgorithm;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.core.ProcessingComponentSuite;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.resource.DirLocator;
 import org.carrot2.util.resource.IResourceLocator;
@@ -48,7 +48,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -118,8 +117,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         scanSuites();
 
         controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
-        controller.init(ImmutableMap.of("PreprocessingPipeline.languageModelFactory", 
-            (Object)new DefaultLanguageModelFactory()), componentSuite.getComponentConfigurations());
+        controller.init(Collections.<String, Object> emptyMap(), 
+            componentSuite.getComponentConfigurations());        
     }
 
     /*

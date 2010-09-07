@@ -22,9 +22,65 @@
     
     <para>
       As of version 1.4 of Apache Solr, &C2; clustering can be performed directly
-      within Solr by means of the
-      <link xlink:href="http://wiki.apache.org/solr/ClusteringComponent">&PROD; Clustering Component</link>
+      within Solr. Please see the <link xlink:href="http://wiki.apache.org/solr/ClusteringComponent">&C2; 
+      Clustering Component wiki page</link> for information on configuring and running
+      &C2;-based search results clustering in Solr.
     </para>
+    
+    <para id="section.advanced-topics.integration-with-solr.solr-1.4.x-patch">  
+      The 1.4.x line of Apache Solr ships with version 3.1.0 of &C2; clustering algorithms.
+      If you would like to take advantage of the newer releases of &C2; algorithms, you need 
+      to apply a compatibility package as shown below.
+    </para>
+    
+    <para>
+      To upgrade &C2; algorithms in Solr 1.4.x to the newest version:
+    </para>
+      
+    <orderedlist>
+      <listitem>
+          Download  <link xlink:href="http://download.carrot2.org/stable/carrot2-solr-1.4.x-compatibility-3.4.1.zip">&C2; Solr 1.4.x compatibility package</link>.
+      </listitem>
+      
+      <listitem>
+        <para>
+          Remove the following files from your Solr 1.4.x installation:
+        </para>
+
+        <orderedlist spacing="compact">
+          <listitem>
+            <simpara>contrib/clustering/lib/* (all files)</simpara>
+          </listitem>
+          
+          <listitem>
+            <simpara>dist/apache-solr-clustering-1.4.1.jar (Solr 1.4.1) or</simpara>
+          </listitem>
+          
+          <listitem>
+            <simpara>dist/apache-solr-clustering-1.4.0.jar (Solr 1.4.0)</simpara>
+          </listitem>
+        </orderedlist>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Copy the contents of the downloaded archive over the Solr home directory.
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Start Solr, clustering should be performed by the updated Carrot2 algorithms.
+        </para>
+      </listitem>
+    </orderedlist>
+    
+    <note>
+      <para>
+        Solr nightly builds (trunk, branch_3x) already ship with the newest version of &C2;
+        and do not require the compatibility package.       
+      </para>
+    </note>
   </section>
   
   <section xml:id="section.advanced-topics.running-in-eclipse">

@@ -13,19 +13,28 @@
 package org.carrot2.source.opensearch;
 
 import java.net.URL;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.slf4j.Logger;
-import org.carrot2.core.*;
+import org.carrot2.core.Document;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.source.*;
+import org.carrot2.source.MultipageSearchEngine;
+import org.carrot2.source.MultipageSearchEngineMetadata;
+import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.StringUtils;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.URLResourceWithParams;
+import org.slf4j.Logger;
 
 import com.google.common.collect.Maps;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -129,6 +138,22 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     @Processing
     @Attribute
     public Map<String, String> feedUrlParams = null;
+    
+    /**
+     * User agent header. The contents of the User-Agent HTTP header to use when making
+     * requests to the feed URL. If empty or <code>null</code> value is provided,
+     * the following User-Agent will be sent: <code>Rome Client (http://tinyurl.com/64t5n) 
+     * Ver: UNKNOWN</code>.
+     * 
+     * @label User agent
+     * @level Advanced
+     * @group Service
+     */
+    @Input
+    @Init
+    @Processing
+    @Attribute
+    public String userAgent = null;
 
     /**
      * Search engine metadata create upon initialization.
@@ -189,6 +214,10 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
         this.metadata = new MultipageSearchEngineMetadata(resultsPerPage, maximumResults,
             hasStartPage);
         this.feedFetcher = new HttpURLFeedFetcher();
+        if (org.apache.commons.lang.StringUtils.isNotBlank(this.userAgent))
+        {
+            this.feedFetcher.setUserAgent(this.userAgent);
+        }
     }
 
     @Override

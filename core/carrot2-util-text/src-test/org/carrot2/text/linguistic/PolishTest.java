@@ -13,21 +13,12 @@
 package org.carrot2.text.linguistic;
 
 import org.carrot2.core.LanguageCode;
-import org.carrot2.core.Platform;
-import org.junit.Assume;
-import org.junit.Before;
 
 /**
  * Test support for {@link LanguageCode#POLISH}.
  */
 public class PolishTest extends LanguageModelTestBase
 {
-    @Before
-    public void before()
-    {
-        Assume.assumeTrue(Platform.getPlatform() == Platform.JAVA);
-    }
-
     protected LanguageCode getLanguageCode()
     {
         return LanguageCode.POLISH;

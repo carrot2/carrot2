@@ -54,7 +54,7 @@
 
   <xsl:template match="group/title">
     <xsl:choose>
-      <xsl:when test="../attribute[@key = 'other-topics']">Other topics</xsl:when>
+      <xsl:when test="../attribute[@key = 'other-topics']/value[@value = 'true']">Other topics</xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="phrase[1]" />
       </xsl:otherwise>

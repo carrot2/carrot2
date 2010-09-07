@@ -391,7 +391,7 @@
       <xsl:for-each select="dt">
         <db:varlistentry>
            <db:term><xsl:apply-templates select="." /></db:term>
-           <db:listitem><para><xsl:apply-templates select="following-sibling::dd[1]" /></para></db:listitem>
+           <db:listitem><db:para><xsl:apply-templates select="following-sibling::dd[1]" /></db:para></db:listitem>
         </db:varlistentry>
       </xsl:for-each>
     </db:variablelist>

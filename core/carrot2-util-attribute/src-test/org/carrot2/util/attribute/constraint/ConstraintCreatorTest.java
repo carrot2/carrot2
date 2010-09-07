@@ -104,7 +104,7 @@ public class ConstraintCreatorTest
             public int compare(Constraint o1, Constraint o2)
             {
                 return o1.getClass().getName()
-                    .compareTo(o2.getClass().getName().toString());
+                    .compareTo(o2.getClass().getName());
             }
         });
 

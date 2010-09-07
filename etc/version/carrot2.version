@@ -1,7 +1,7 @@
 # we need the same value in a property with a unique name for website build
-carrot2.version.stable=3.4.0
-carrot2.version=${carrot2.version.stable}
-carrot2.net.version=3.4.0.0
+carrot2.version.head=3.4.1-dev
+carrot2.version=${carrot2.version.head}
+carrot2.net.version=3.4.1.0
 
 # workbench plugin/ feature versions.
-carrot2.version.workbench=3.4.0
+carrot2.version.workbench=3.4.1.dev-snapshot 

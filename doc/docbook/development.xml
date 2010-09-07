@@ -287,6 +287,15 @@ carrot2.version.workbench=3.3.0.dev-snapshot]]></programlisting>
 
       <listitem>
         <formalpara>
+          <title>Update Wikipedia page</title>
+          <para>
+            If appropriate, update <link xlink:href="http://en.wikipedia.org/wiki/Carrot2">&C2; page on Wikipedia</link>.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
           <title>Consider upgrading &C2; in dependent projects</title>
           <para>
             If reasonable, upgrade &C2; dependency in other known projects, such as
