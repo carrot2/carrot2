@@ -12,6 +12,7 @@
 package org.carrot2.dcs;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -22,6 +23,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.Templates;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -40,16 +46,16 @@ import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.dcs.DcsRequestModel.OutputFormat;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.resource.ClassResource;
+import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.PrefixDecoratorLocator;
 import org.carrot2.util.resource.ResourceUtils;
 import org.carrot2.util.resource.ResourceUtilsFactory;
+import org.carrot2.util.xslt.NopURIResolver;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -78,13 +84,15 @@ public final class RestProcessorServlet extends HttpServlet
     private transient boolean loggerInitialized;
 
     private String defaultAlgorithmId;
-    
+
+    private transient Templates xsltTemplates;
+
     /**
-     * Enable custom Log4J appender configured in {@link #getLogAppender(HttpServletRequest)}. 
-     * The appender is disabled for tests.
+     * Enable custom Log4J appender configured in
+     * {@link #getLogAppender(HttpServletRequest)}. The appender is disabled for tests.
      */
-    private boolean enableCustomAppender = "true".equalsIgnoreCase(
-        System.getProperty(ENABLE_CUSTOM_APPENDER, "true"));
+    private boolean enableCustomAppender = "true".equalsIgnoreCase(System.getProperty(
+        ENABLE_CUSTOM_APPENDER, "true"));
 
     @Override
     @SuppressWarnings("unchecked")
@@ -126,6 +134,9 @@ public final class RestProcessorServlet extends HttpServlet
         }
         defaultAlgorithmId = componentSuite.getAlgorithms().get(0).getId();
 
+        // Initialize XSLT
+        initXslt(config, resUtils);
+
         // Initialize controller
         final List<Class<? extends IProcessingComponent>> cachedComponentClasses = Lists
             .newArrayListWithExpectedSize(2);
@@ -140,8 +151,8 @@ public final class RestProcessorServlet extends HttpServlet
 
         controller = ControllerFactory.createCachingPooling(cachedComponentClasses
             .toArray(new Class [cachedComponentClasses.size()]));
-        controller.init(Collections.<String, Object> emptyMap(), 
-            componentSuite.getComponentConfigurations());        
+        controller.init(Collections.<String, Object> emptyMap(),
+            componentSuite.getComponentConfigurations());
     }
 
     @Override
@@ -154,6 +165,47 @@ public final class RestProcessorServlet extends HttpServlet
         }
 
         super.destroy();
+    }
+
+    private void initXslt(DcsConfig config, ResourceUtils resourceUtils)
+    {
+        final TransformerFactory tFactory = TransformerFactory.newInstance();
+        tFactory.setURIResolver(new NopURIResolver());
+
+        InputStream xsltStream = null;
+
+        if (StringUtils.isNotBlank(config.xslt))
+        {
+            IResource resource = resourceUtils.getFirst(config.xslt, RestProcessorServlet.class);
+            if (resource == null)
+            {
+                config.logger.warn("XSLT stylesheet " + config.xslt
+                    + " not found. No XSLT transformation will be applied.");
+                return;
+            }
+
+            try
+            {
+                xsltStream = resource.open();
+                xsltTemplates = tFactory.newTemplates(new StreamSource(xsltStream));
+                config.logger.info("XSL stylesheet loaded successfully from: "
+                    + config.xslt);
+            }
+            catch (IOException e)
+            {
+                config.logger.warn(
+                    "Could not load stylesheet, no XSLT transform will be applied.", e);
+            }
+            catch (TransformerConfigurationException e)
+            {
+                config.logger.warn(
+                    "Could not load stylesheet, no XSLT transform will be applied", e);
+            }
+            finally
+            {
+                CloseableUtils.close(xsltStream);
+            }
+        }
     }
 
     @Override
@@ -211,8 +263,7 @@ public final class RestProcessorServlet extends HttpServlet
         {
             try
             {
-                response.setContentType(MIME_XML_UTF8);
-                EXAMPLE_OUTPUT.serialize(response.getOutputStream());
+                transformAndSerializeOutputXml(response, EXAMPLE_OUTPUT, true, true);
             }
             catch (Exception e)
             {
@@ -405,9 +456,7 @@ public final class RestProcessorServlet extends HttpServlet
         {
             if (OutputFormat.XML.equals(requestModel.outputFormat))
             {
-                response.setContentType(MIME_XML_UTF8);
-                result.serialize(response.getOutputStream(), !requestModel.clustersOnly,
-                    true);
+                transformAndSerializeOutputXml(response, result, !requestModel.clustersOnly, true);
             }
             else if (OutputFormat.JSON.equals(requestModel.outputFormat))
             {
@@ -425,6 +474,31 @@ public final class RestProcessorServlet extends HttpServlet
         catch (Exception e)
         {
             sendInternalServerError("Could not serialize results", response, e);
+        }
+    }
+
+    /**
+     * Serializes the result as XML, optionally applying the configured XSLT
+     * transformation.
+     */
+    private void transformAndSerializeOutputXml(HttpServletResponse response,
+        ProcessingResult result, boolean includeDocuments, boolean includeClusters)
+        throws Exception, IOException
+    {
+        response.setContentType(MIME_XML_UTF8);
+        if (xsltTemplates != null)
+        {
+            final ByteArrayOutputStream output = new ByteArrayOutputStream();
+            result.serialize(output, includeDocuments, includeClusters);
+            xsltTemplates.newTransformer().transform(
+                new StreamSource(new ByteArrayInputStream(output.toByteArray())),
+                new StreamResult(response.getOutputStream()));
+
+        }
+        else
+        {
+            result.serialize(response.getOutputStream(), includeDocuments,
+                includeClusters);
         }
     }
 

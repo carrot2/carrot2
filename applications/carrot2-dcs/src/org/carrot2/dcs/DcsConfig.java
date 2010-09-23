@@ -39,6 +39,9 @@ class DcsConfig
     @Attribute(name = "cache-clusters", required = false)
     boolean cacheClusters = false;
 
+    @Attribute(name = "xslt", required = false)
+    String xslt = null;
+    
     /**
      * Name of the component suite file with XML data about components and algorithms.
      */
