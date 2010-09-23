@@ -6,6 +6,6 @@
 	<classpathentry exported="true" kind="lib" path="commons-httpclient-3.1.jar" sourcepath="org.apache.commonssrc.zip"/>
 	<classpathentry exported="true" kind="lib" path="commons-collections-3.1.jar" sourcepath="org.apache.commonssrc.zip"/>
 	<classpathentry exported="true" kind="lib" path="commons-io-1.4.jar" sourcepath="org.apache.commonssrc.zip"/>
-	<classpathentry exported="true" kind="lib" path="commons-lang-2.4.jar" sourcepath="org.apache.commonssrc.zip"/>
+	<classpathentry exported="true" kind="lib" path="commons-lang-2.5.jar" sourcepath="org.apache.commonssrc.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

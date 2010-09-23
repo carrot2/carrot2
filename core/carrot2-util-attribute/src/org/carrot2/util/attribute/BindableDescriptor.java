@@ -33,6 +33,8 @@ import com.google.common.collect.Maps;
  * <p>
  * {@link BindableDescriptor}s can be obtained from
  * {@link BindableDescriptorBuilder#buildDescriptor(Object)}.
+ * 
+ * @see BindableDescriptorBuilder#buildDescriptor(Object)
  */
 public class BindableDescriptor
 {
@@ -183,7 +185,7 @@ public class BindableDescriptor
     }
 
     /**
-     * Preserves descriptors for which the provided <code>predicate</code> returns
+     * Preserves attribute descriptors for which the provided <code>predicate</code> returns
      * <code>true</code>. Notice that {@link BindableDescriptor}s are immutable, so
      * the filtered descriptor set is returned rather than filtering being applied to the
      * receiver.

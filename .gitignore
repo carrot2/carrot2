@@ -3,3 +3,4 @@ applications/carrot2-webapp/web/skins/common/variables.xsl
 local.properties
 workbench.properties
 tmp
+.apt_generated

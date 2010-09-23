@@ -59,6 +59,7 @@ public class ClusteringDocumentList
          * of every query). Refer to each component's documentation for details.
          */
         final Map<String, Object> attributes = new HashMap<String, Object>();
+
         attributes.put(AttributeNames.DOCUMENTS, documents);
 
         /*

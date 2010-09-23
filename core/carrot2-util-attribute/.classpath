@@ -10,5 +10,6 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.apache.velocity"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

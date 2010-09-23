@@ -1,0 +1,95 @@
+
+// APT-generated file.
+
+package ${packageName};
+
+import javax.annotation.*;
+import java.util.*;
+
+/**
+ * Automatically generated descriptor for the bindable type:
+ * <code>${sourceType.qualifiedName}</code>. 
+ */
+@Generated("Generated from ${sourceType.qualifiedName}")
+public final class ${className}
+{
+    /**
+     * The bindable class this descriptor was generated for. 
+     */
+    public final String bindableClassName = "${esc.java($sourceType.qualifiedName)}";
+
+    /**
+     * Common attribute prefix for the bindable.
+     */
+    public final String prefix = "${esc.java($bindable.prefix())}";
+
+    /**
+     * A one sentence summary of the element. Could be presented as a header of the tool
+     * tip of the corresponding UI component.
+     */
+    public final String title = "${esc.java($stringutils.defaultIfEmpty($metadata.title, ""))}";
+    
+    /**
+     * A short label for the element which can be presented as the label of the
+     * corresponding UI component.
+     */
+    public final String label = "${esc.java($stringutils.defaultIfEmpty($metadata.label, ""))}";
+
+    /**
+     * A longer, possibly multi sentence, description of the element. Could be presented
+     * as a body of the tool tip of the corresponding UI component.
+     */
+    public final String description = "${esc.java($stringutils.defaultIfEmpty($metadata.description, ""))}";
+    
+    
+    /**
+     * The builder pattern for collecting attributes of this bindable (not including any possible
+     * sub-bindables, but anything that can be resolved statically).
+     */
+    public static final class AttributeBuilder
+    {
+        public final Map<String, Object> map;
+
+        AttributeBuilder(Map<String, Object> map)
+        {
+            this.map = map;
+        }
+
+        public Map<String, Object> build()
+        {
+            return map;
+        }
+
+#foreach ($attr in $fieldInfos)
+        /**
+         * ${esc.java($attr.javaDoc)}
+         */
+        public AttributeBuilder ${attr.field.simpleName}($attr.field.asType() value)
+        {
+            map.put("$attr.key", value);
+            return this;
+        }
+
+#end
+    }
+
+    /**
+     * Return an attribute builder for this bindable. Provides type-safe checking alternative to
+     * using raw attribute keys.
+     */
+    public static AttributeBuilder attributeBuilder()
+    {
+        return new AttributeBuilder(new HashMap<String, Object>());
+    }
+
+    /**
+     * Return an attribute builder for this bindable. Provides type-safe checking alternative to
+     * using raw attribute keys.
+     * 
+     * @param attributeValues An existing map which should be used to collect attribute values.
+     */
+    public static AttributeBuilder attributeBuilder(Map<String, Object> attributeValues)
+    {
+        return new AttributeBuilder(attributeValues);
+    }
+}

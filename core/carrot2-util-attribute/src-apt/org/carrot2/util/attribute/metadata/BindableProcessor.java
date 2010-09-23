@@ -14,44 +14,21 @@ package org.carrot2.util.attribute.metadata;
 
 import static javax.lang.model.SourceVersion.RELEASE_6;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Filer;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedAnnotationTypes;
-import javax.annotation.processing.SupportedSourceVersion;
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
+import javax.annotation.processing.*;
+import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic.Kind;
-import javax.tools.FileObject;
-import javax.tools.StandardLocation;
+import javax.tools.*;
 
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.AttributeLevel;
-import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.metadata.AttributeMetadata;
-import org.carrot2.util.attribute.metadata.BindableMetadata;
-import org.carrot2.util.attribute.metadata.CommonMetadata;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.runtime.RuntimeInstance;
+import org.carrot2.util.attribute.*;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 
@@ -118,6 +95,11 @@ public final class BindableProcessor extends AbstractProcessor
     private final ArrayList<IClassPathLookup> resourceLookup = new ArrayList<IClassPathLookup>();
 
     /**
+     * Round number.
+     */
+    private int round;
+    
+    /**
      * Initialize processing environment.
      */
     @Override
@@ -127,7 +109,6 @@ public final class BindableProcessor extends AbstractProcessor
 
         elementUtils = this.processingEnv.getElementUtils();
         filer = this.processingEnv.getFiler();
-        bindableTypes.clear();
 
         initializeLookups();
     }
@@ -143,34 +124,38 @@ public final class BindableProcessor extends AbstractProcessor
             return false;
         }
 
-        if (!env.processingOver())
+        // Clear any previous junk.
+        bindableTypes.clear();
+        dependencies.clear();
+        thisRoundMetadata.clear();
+        nameToType.clear();
+
+        // Scan for all types marked with @Bindable and processed in this round.
+        round++;
+        for (TypeElement e : ElementFilter.typesIn(env.getElementsAnnotatedWith(Bindable.class)))
         {
-            // Scan for all types marked with @Bindable
-            for (TypeElement e : 
-                ElementFilter.typesIn(env.getElementsAnnotatedWith(Bindable.class)))
-            {
-                // e can be null in Eclipse...
-                if (e != null) bindableTypes.add(e);
-            }
+            // e can be null in Eclipse, so check for this case.
+            if (e != null) bindableTypes.add(e);
         }
-        else
+
+        // Do the round processing.
+        final long start = System.currentTimeMillis();
+        processBindables();
+        if (bindableTypes.size() > 0)
         {
-            // Do the final processing.
-            final long start = System.currentTimeMillis();
-            processBindables();
-            if (bindableTypes.size() > 0)
-            {
-                System.out.println(bindableTypes.size() + 
-                    " @Bindable metadata processed in: " + 
-                    ((System.currentTimeMillis() - start) / 1000.0) + " secs.");
-            }
+            System.out.println(
+                String.format(Locale.ENGLISH,
+                    "%d @Bindable metadata processed in round %d in %.2f secs.",
+                    bindableTypes.size(), 
+                    round, 
+                    (System.currentTimeMillis() - start) / 1000.0));
         }
 
         return false;
     }
 
     /**
-     * All bindable types have been collected, do the actual processing.
+     * All bindable types have been collected for this round, do the actual processing.
      */
     private void processBindables()
     {
@@ -204,12 +189,15 @@ public final class BindableProcessor extends AbstractProcessor
 
             // Collect this bindable's attribute metadata.
             final Map<String, AttributeMetadata> attributeMetadata = new LinkedHashMap<String, AttributeMetadata>();
-            extractAttributeMetadata(type, attributeMetadata, inheritedMetadata);
+            final List<AttributeFieldInfo> fieldInfos = new ArrayList<AttributeFieldInfo>();
+            extractAttributeMetadata(type, attributeMetadata, inheritedMetadata, fieldInfos);
             metadata.setAttributeMetadata(attributeMetadata);
 
             // Emit auxiliary metadata files (XMLs, classes, etc.).
             thisRoundMetadata.put(getName(type), metadata);
+
             emitXML(metadata, type);
+            emitMetadataClass(metadata, fieldInfos, type);
         }
     }
 
@@ -488,7 +476,8 @@ public final class BindableProcessor extends AbstractProcessor
      */
     private void extractAttributeMetadata(TypeElement type,
         Map<String, AttributeMetadata> attributeMetadata,
-        Map<String, AttributeMetadata> inheritedMetadata)
+        Map<String, AttributeMetadata> inheritedMetadata,
+        List<AttributeFieldInfo> attributeFields)
     {
         for (VariableElement field : ElementFilter.fieldsIn(type.getEnclosedElements()))
         {
@@ -525,6 +514,10 @@ public final class BindableProcessor extends AbstractProcessor
                         metadata.setLevel(notNull(metadata.getLevel(), inherited.getLevel()));
                     }
                 }
+                
+                // Fill in additional information.
+                attributeFields.add(
+                    new AttributeFieldInfo(attributeKey, metadata, javaDoc, field));
 
                 // See http://issues.carrot2.org/browse/CARROT-706
                 final String fieldName = field.getSimpleName().toString();
@@ -588,6 +581,49 @@ public final class BindableProcessor extends AbstractProcessor
             if (t != null) return t;
 
         return null;
+    }
+
+    /**
+     * Emit bindable matadata as a class with statically collected information.
+     * @param fieldInfos 
+     */
+    private void emitMetadataClass(BindableMetadata metadata, 
+        List<AttributeFieldInfo> fieldInfos, TypeElement type)
+    {
+        String packageName = elementUtils.getPackageOf(type).getQualifiedName().toString();
+        String className = type.getSimpleName().toString() + "Descriptor";
+        String fullyQualifiedName = packageName.isEmpty() ? className : packageName + "." + className;
+
+        PrintWriter w = null;
+        ClassLoader ccl = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
+        try
+        {
+            w = new PrintWriter(filer.createSourceFile(fullyQualifiedName, type).openWriter());
+
+            final RuntimeInstance velocity = VelocityInitializer.createInstance(
+                super.processingEnv.getMessager());
+            final VelocityContext context = VelocityInitializer.createContext();
+            context.put("packageName", packageName);
+            context.put("className", className);
+            context.put("sourceType", type);
+            context.put("bindable", type.getAnnotation(Bindable.class));
+            context.put("metadata", metadata);
+            context.put("fieldInfos", fieldInfos);
+
+            final Template template = velocity.getTemplate("BindableDescriptor.template", "UTF-8");
+            template.merge(context, w);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Could not serialize metadata for: "
+                + type.toString(), e);
+        }
+        finally
+        {
+            if (w != null) closeQuietly(w);
+            Thread.currentThread().setContextClassLoader(ccl);
+        }
     }
 
     /**

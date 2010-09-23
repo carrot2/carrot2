@@ -18,8 +18,7 @@ import java.util.List;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.matrix.NNIInterface;
-import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
-import org.carrot2.text.clustering.MultilingualClustering;
+import org.carrot2.text.clustering.*;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -36,9 +35,9 @@ import com.google.common.collect.Ordering;
 
 /**
  * Lingo clustering algorithm. Implementation as described in: <i>
- * Stanisław Osiński, Dawid Weiss: A Concept-Driven Algorithm for Clustering 
+ * "Stanisław Osiński, Dawid Weiss: A Concept-Driven Algorithm for Clustering 
  * Search Results. IEEE Intelligent Systems, May/June, 3 (vol. 20), 2005, 
- * pp. 48—54.</i>.
+ * pp. 48—54."</i>.
  */
 @Bindable(prefix = "LingoClusteringAlgorithm", inherit = AttributeNames.class)
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
