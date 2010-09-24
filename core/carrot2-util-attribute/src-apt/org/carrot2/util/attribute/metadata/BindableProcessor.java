@@ -58,6 +58,12 @@ public final class BindableProcessor extends AbstractProcessor
     private final static String INHERIT_ATTRIBUTE_NAME = "inherit";
 
     /**
+     * Ignored Eclipse compilation phases.
+     */
+    private final static Set<String> ignoredPhases = new HashSet<String>(
+        Arrays.asList("RECONCILE", "OTHER"));
+
+    /**
      * Mirror element utilities.
      */
     private Elements elementUtils;
@@ -119,6 +125,14 @@ public final class BindableProcessor extends AbstractProcessor
     @Override
     public boolean process(Set<? extends TypeElement> ann, RoundEnvironment env)
     {
+        // Check for Eclipse reconciliation phase and skip it.
+        final String phase = super.processingEnv.getOptions().get("phase");
+        if (phase != null && ignoredPhases.contains(phase))
+        {
+            return false;
+        }
+
+        // Check for any previous errors and skip.  
         if (env.errorRaised())
         {
             return false;
