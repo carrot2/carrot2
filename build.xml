@@ -818,6 +818,7 @@
             -Dcarrot2.version=${carrot2.version}
             -Dcarrot2.workbench.base=${carrot2.workbench.base}
             -Dworkbench.static=${workbench.build.dir}/static
+            -Dworkbench.build.dir=${workbench.build.dir}
         " />
   </target>
 
@@ -845,6 +846,7 @@
             -Dcarrot2.version=${carrot2.version}
             -Dcarrot2.workbench.base=${carrot2.workbench.base}
             -Dworkbench.static=${workbench.build.dir}/static
+            -Dworkbench.build.dir=${workbench.build.dir}
         " />
 
     <mkdir dir="${dist.dir}" />
@@ -887,6 +889,7 @@
             -Dcarrot2.version=${carrot2.version}
             -Dcarrot2.workbench.base=${carrot2.workbench.base}
             -Dworkbench.static=${workbench.build.dir}/static
+            -Dworkbench.build.dir=${workbench.build.dir}
         " />
 
     <pathconvert property="test.buildfile.location">
