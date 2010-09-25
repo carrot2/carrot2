@@ -40,8 +40,7 @@ public final class ${className}
      * as a body of the tool tip of the corresponding UI component.
      */
     public final String description = "${esc.java($stringutils.defaultIfEmpty($metadata.description, ""))}";
-    
-    
+
     /**
      * The builder pattern for collecting attributes of this bindable (not including any possible
      * sub-bindables, but anything that can be resolved statically).
@@ -69,7 +68,9 @@ public final class ${className}
             map.put("$attr.key", value);
             return this;
         }
+#if ($velocityHasNext )##emit EOL between methods
 
+#end
 #end
     }
 
