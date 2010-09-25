@@ -14,7 +14,7 @@ Require-Bundle: org.carrot2.util.common;visibility:=reexport,
  org.simpleframework.xml;visibility:=reexport,
  com.thoughtworks.qdox;resolution:=optional,
  org.apache.ant;bundle-version="1.7.0";resolution:=optional,
- org.apache.velocity;bundle-version="1.6.2";resolution:=optional;visibility:=reexport
+ org.apache.velocity;bundle-version="1.6.4";resolution:=optional;visibility:=reexport
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: registered
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
