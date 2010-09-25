@@ -29,10 +29,8 @@ import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.source.google.GoogleDocumentSource;
 import org.carrot2.source.microsoft.BingDocumentSource;
 import org.carrot2.source.microsoft.MarketOption;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.util.attribute.AttributeUtils;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 /**
