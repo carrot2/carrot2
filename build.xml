@@ -33,6 +33,7 @@
   <property name="etc.dir" location="${carrot2.master.basedir}/etc" />
 
   <!-- Output dirs -->
+  <property name="apt.generated" location="${carrot2.master.basedir}/tmp/apt_generated" />
   <property name="build.dir" location="${carrot2.master.basedir}/tmp/classes" />
   <property name="build.dir.tests" location="${carrot2.master.basedir}/tmp/classes-test" />
   <property name="build.dir.clover" location="${carrot2.master.basedir}/tmp/classes-clover" />
@@ -69,7 +70,11 @@
   <presetdef name="javac">
       <javac deprecation="false" debug="true"
           target="1.6" source="1.6"
-          encoding="UTF-8" includeantruntime="true" optimize="true" />
+          encoding="UTF-8" includeantruntime="true" optimize="true">
+          <!-- Generate sources into a separate folder. -->
+          <compilerarg value="-s" compiler="modern" />
+          <compilerarg value="${apt.generated}" compiler="modern" />
+      </javac>
   </presetdef>
 
   <!-- Source files to compile for tests. -->
@@ -206,6 +211,12 @@
     <path location="${ant.home}/lib/ant.jar" />
   </path>
 
+
+  <!-- -->
+  <target name="init">
+    <mkdir dir="${apt.generated}" />
+  </target>
+
   <!-- 
        Output cleanup.
     -->
@@ -216,7 +227,7 @@
   <!-- 
        Core.
     -->
-  <target name="compile">
+  <target name="compile" depends="init">
     <mkdir dir="${build.dir}" />
 
     <javac destdir="${build.dir}">
@@ -226,7 +237,7 @@
   </target>
 
   <!-- Tests. -->
-  <target name="compile.test">
+  <target name="compile.test" depends="init">
     <mkdir dir="${build.dir.tests}" />
 
     <javac destdir="${build.dir.tests}">
@@ -237,7 +248,7 @@
   </target>
 
   <!-- FindBugs. -->
-  <target name="compile.findbugs">
+  <target name="compile.findbugs" depends="init">
     <mkdir dir="${build.dir.findbugs}" />
 
     <javac destdir="${build.dir.findbugs}">
@@ -445,7 +456,7 @@
     </clover-report>
   </target>
 
-  <target name="compile.coverage" depends="clover.tasks" if="clover.home">
+  <target name="compile.coverage" depends="init, clover.tasks" if="clover.home">
     <clover-setup enabled="true">
         <fileset refid="src.coverage" />
     </clover-setup>
@@ -597,7 +608,7 @@
   </target>
 
   <!-- Check if the basic clustering example runs with the mini distribution -->
-  <target name="jar.mini.test" depends="jar.mini.build">
+  <target name="jar.mini.test" depends="init, jar.mini.build">
     <property name="jar.mini.test.classes.dir" location="${carrot2.master.basedir}/tmp/jar-mini-classes" />
     <mkdir dir="${jar.mini.test.classes.dir}" />
     <javac srcdir="${carrot2.master.basedir}/applications/carrot2-examples/src"
@@ -954,7 +965,7 @@
   <!--
       Compilation and assembly of static utility JARs (apt preprocessors).
    -->
-  <target name="utility.jars" description="Re(create) utility JARs.">
+  <target name="utility.jars" description="Re(create) utility JARs." depends="init">
     <property name="utilities.build.dir" location="${carrot2.master.basedir}/tmp/utility.jars" />
 
     <delete dir="${utilities.build.dir}" failonerror="false" />

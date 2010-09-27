@@ -531,7 +531,8 @@ public final class BindableProcessor extends AbstractProcessor
                 
                 // Fill in additional information.
                 attributeFields.add(
-                    new AttributeFieldInfo(attributeKey, metadata, javaDoc, field));
+                    new AttributeFieldInfo(attributeKey, metadata, javaDoc, field, 
+                        type.getQualifiedName()));
 
                 // See http://issues.carrot2.org/browse/CARROT-706
                 final String fieldName = field.getSimpleName().toString();
