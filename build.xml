@@ -77,6 +77,14 @@
       </javac>
   </presetdef>
 
+  <presetdef name="javac_apt">
+      <javac>
+          <!-- Generate sources into a separate folder. -->
+          <compilerarg value="-s" compiler="modern" />
+          <compilerarg value="${apt.generated}" compiler="modern" />
+      </javac>
+  </presetdef>
+
   <!-- Source files to compile for tests. -->
   <path id="src.test.folders">
     <dirset dir="${core.dir}" includes="**/src-test" />
@@ -230,32 +238,32 @@
   <target name="compile" depends="init">
     <mkdir dir="${build.dir}" />
 
-    <javac destdir="${build.dir}">
+    <javac_apt destdir="${build.dir}">
       <src refid="src.core.folders" />
       <classpath refid="lib.classpath" />
-    </javac>
+    </javac_apt>
   </target>
 
   <!-- Tests. -->
   <target name="compile.test" depends="init">
     <mkdir dir="${build.dir.tests}" />
 
-    <javac destdir="${build.dir.tests}">
+    <javac_apt destdir="${build.dir.tests}">
       <src refid="src.test.folders" />
       <classpath refid="lib.classpath" />
       <classpath location="${build.dir}" />
-    </javac>
+    </javac_apt>
   </target>
 
   <!-- FindBugs. -->
   <target name="compile.findbugs" depends="init">
     <mkdir dir="${build.dir.findbugs}" />
 
-    <javac destdir="${build.dir.findbugs}">
+    <javac_apt destdir="${build.dir.findbugs}">
       <src refid="src.core.folders" />  
       <src refid="src.test.folders" />
       <classpath refid="lib.classpath" />
-    </javac>
+    </javac_apt>
   </target>
 
   <!--
@@ -463,11 +471,11 @@
 
     <mkdir dir="${build.dir.clover}" />
 
-    <javac destdir="${build.dir.clover}">
+    <javac_apt destdir="${build.dir.clover}">
       <src refid="src.core.folders" />  
       <src refid="src.test.folders" />
       <classpath refid="lib.classpath" />
-    </javac>
+    </javac_apt>
 
     <clover-setup enabled="false" />
   </target>
