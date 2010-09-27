@@ -106,34 +106,34 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public double scoreWeight = 0.0;
 
     /**
-     * Common preprocessing tasks handler.
+     * Common preprocessing tasks handler, contains bindable attributes.
      */
-    public CompletePreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
+    public final CompletePreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
 
     /**
      * Term-document matrix builder for the algorithm, contains bindable attributes.
      */
-    public TermDocumentMatrixBuilder matrixBuilder = new TermDocumentMatrixBuilder();
+    public final TermDocumentMatrixBuilder matrixBuilder = new TermDocumentMatrixBuilder();
 
     /**
      * Term-document matrix reducer for the algorithm, contains bindable attributes.
      */
-    public TermDocumentMatrixReducer matrixReducer = new TermDocumentMatrixReducer();
+    public final TermDocumentMatrixReducer matrixReducer = new TermDocumentMatrixReducer();
 
     /**
      * Cluster label builder, contains bindable attributes.
      */
-    public ClusterBuilder clusterBuilder = new ClusterBuilder();
+    public final ClusterBuilder clusterBuilder = new ClusterBuilder();
 
     /**
      * Cluster label formatter, contains bindable attributes.
      */
-    public LabelFormatter labelFormatter = new LabelFormatter();
+    public final LabelFormatter labelFormatter = new LabelFormatter();
 
     /**
      * A helper for performing multilingual clustering.
      */
-    public MultilingualClustering multilingualClustering = new MultilingualClustering();
+    public final MultilingualClustering multilingualClustering = new MultilingualClustering();
 
     @Override
     public void init(IControllerContext context)

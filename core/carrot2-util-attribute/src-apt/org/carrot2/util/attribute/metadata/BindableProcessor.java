@@ -20,8 +20,7 @@ import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.ElementFilter;
-import javax.lang.model.util.Elements;
+import javax.lang.model.util.*;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.*;
 
@@ -624,7 +623,8 @@ public final class BindableProcessor extends AbstractProcessor
             context.put("sourceType", type);
             context.put("bindable", type.getAnnotation(Bindable.class));
             context.put("metadata", metadata);
-            context.put("fieldInfos", fieldInfos);
+            context.put("ownFields", fieldInfos);
+            context.put("nestedFields", extractStaticNestedBindables(type));
 
             final Template template = velocity.getTemplate("BindableDescriptor.template", "UTF-8");
             template.merge(context, w);
@@ -639,6 +639,36 @@ public final class BindableProcessor extends AbstractProcessor
             if (w != null) closeQuietly(w);
             Thread.currentThread().setContextClassLoader(ccl);
         }
+    }
+
+    /**
+     * Extract static nested bindables: final fields that whose type is {@link Bindable}
+     * and which can be integrated into the builder.
+     */
+    private List<BindableFieldInfo> extractStaticNestedBindables(TypeElement type)
+    {
+        final Messager messager = super.processingEnv.getMessager();
+        final Types typeUtils = super.processingEnv.getTypeUtils();
+        final List<BindableFieldInfo> list = new ArrayList<BindableFieldInfo>();
+        
+        for (VariableElement field : ElementFilter.fieldsIn(type.getEnclosedElements()))
+        {
+            Element element = typeUtils.asElement(field.asType());
+            if (element != null && element.getAnnotation(Bindable.class) != null)
+            {
+                if (field.getModifiers().contains(Modifier.FINAL))
+                {
+                    list.add(new BindableFieldInfo(field, element));
+                }
+                else
+                {
+                    messager.printMessage(Kind.WARNING, "Non-final bindable field: " +
+                        field + " in class " + type.getSimpleName());
+                }
+            }
+        }
+
+        return list;
     }
 
     /**

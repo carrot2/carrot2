@@ -93,17 +93,17 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Common preprocessing tasks handler.
      */
-    public BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
+    public final BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
     /**
      * Parameters and thresholds of the algorithm.
      */
-    public STCClusteringParameters params = new STCClusteringParameters();
+    public final STCClusteringParameters params = new STCClusteringParameters();
 
     /**
      * A helper for performing multilingual clustering.
      */
-    public MultilingualClustering multilingualClustering = new MultilingualClustering();
+    public final MultilingualClustering multilingualClustering = new MultilingualClustering();
 
     /**
      * Stores the preprocessing context during {@link #process()}.
