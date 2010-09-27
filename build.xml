@@ -70,11 +70,7 @@
   <presetdef name="javac">
       <javac deprecation="false" debug="true"
           target="1.6" source="1.6"
-          encoding="UTF-8" includeantruntime="true" optimize="true">
-          <!-- Generate sources into a separate folder. -->
-          <compilerarg value="-s" compiler="modern" />
-          <compilerarg value="${apt.generated}" compiler="modern" />
-      </javac>
+          encoding="UTF-8" includeantruntime="true" optimize="true"/>
   </presetdef>
 
   <presetdef name="javac_apt">
