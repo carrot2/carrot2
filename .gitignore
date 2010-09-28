@@ -4,3 +4,4 @@ local.properties
 workbench.properties
 tmp
 .apt_generated
+.clover
