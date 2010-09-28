@@ -233,14 +233,6 @@
     -->
   <target name="compile" depends="init">
     <mkdir dir="${build.dir}" />
-
-    <!-- Compile bindable classes first to generate descriptors. -->
-    <javac_apt destdir="${build.dir}">
-      <src refid="src.core.folders" />
-      <include name="**/SharedAttributes*" />
-      <classpath refid="lib.classpath" />
-    </javac_apt>
-
     <!-- Compile the rest. -->
     <javac_apt destdir="${build.dir}">
       <src refid="src.core.folders" />
