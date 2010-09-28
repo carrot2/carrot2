@@ -1,6 +1,5 @@
 package org.carrot2.util.attribute.metadata;
 
-import javax.lang.model.element.Name;
 import javax.lang.model.element.VariableElement;
 
 import org.carrot2.util.attribute.AttributeLevel;
@@ -14,16 +13,21 @@ public class AttributeFieldInfo
     private final AttributeMetadata metadata;
     private final String javaDoc;
     private final VariableElement field;
-    private final Name clazz;
+    private final String declaringClass;
+    private final String descriptorClass;
+    private final AttributeFieldInfo inherited;
 
     AttributeFieldInfo(String attributeKey, AttributeMetadata metadata,
-        String javaDoc, VariableElement field, Name clazz)
+        String javaDoc, VariableElement field, String declaringClass, String descriptorClass,
+        AttributeFieldInfo inherited)
     {
         this.key = attributeKey;
         this.metadata = metadata;
         this.javaDoc = javaDoc;
         this.field = field;
-        this.clazz = clazz;
+        this.declaringClass = declaringClass;
+        this.descriptorClass = descriptorClass;
+        this.inherited = inherited;
     }
 
     /**
@@ -44,9 +48,14 @@ public class AttributeFieldInfo
         return field;
     }
 
-    public Name getDeclaringClass()
+    public String getDeclaringClass()
     {
-        return clazz;
+        return declaringClass;
+    }
+
+    public String getDescriptorClass()
+    {
+        return descriptorClass;
     }
 
     public String getLabel()
@@ -72,5 +81,10 @@ public class AttributeFieldInfo
     public AttributeLevel getLevel()
     {
         return metadata.getLevel();
+    }
+    
+    public AttributeFieldInfo getInherited()
+    {
+        return inherited;
     }
 }

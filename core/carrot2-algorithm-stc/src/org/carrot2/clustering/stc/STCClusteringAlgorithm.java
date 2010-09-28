@@ -26,9 +26,7 @@ import org.carrot2.core.IClusteringAlgorithm;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingComponentBase;
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.Internal;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
@@ -57,7 +55,7 @@ import com.google.common.collect.Lists;
  * 
  * @label STC Clustering
  */
-@Bindable(prefix = "STCClusteringAlgorithm", inherit = AttributeNames.class)
+@Bindable(prefix = "STCClusteringAlgorithm", inherit = SharedAttributes.class)
 public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {

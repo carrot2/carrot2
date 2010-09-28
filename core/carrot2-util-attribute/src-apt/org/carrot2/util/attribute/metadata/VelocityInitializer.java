@@ -66,6 +66,7 @@ final class VelocityInitializer
 
         context.put("esc", new EscapeTool());
         context.put("stringutils", new StringUtils());
+        context.put("methodutils", new MethodUtils());
 
         return context;
     }

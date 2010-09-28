@@ -13,8 +13,7 @@
 package org.carrot2.source.ambient;
 
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 
@@ -22,7 +21,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
  * Serves documents from the ODP239 test set. For more details, please see:
  * http://credo.fub.it/odp239/.
  */
-@Bindable(prefix = "Odp239DocumentSource", inherit = AttributeNames.class)
+@Bindable(prefix = "Odp239DocumentSource", inherit = SharedAttributes.class)
 public class Odp239DocumentSource extends FubDocumentSource
 {
     static final FubTestCollection DATA = new FubTestCollection("/odp239");

@@ -37,7 +37,7 @@ import com.google.common.collect.*;
  * 
  * @see #xml
  */
-@Bindable(prefix = "XmlDocumentSource", inherit = AttributeNames.class)
+@Bindable(prefix = "XmlDocumentSource", inherit = SharedAttributes.class)
 public class XmlDocumentSource extends ProcessingComponentBase implements IDocumentSource
 {
     /**

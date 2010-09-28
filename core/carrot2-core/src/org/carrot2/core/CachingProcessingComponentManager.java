@@ -297,9 +297,9 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
 
                         // Build and store descriptors
                         descriptors = new InputOutputAttributeDescriptors(
-                            BindableDescriptorBuilder.buildDescriptor(component, false)
+                            BindableDescriptorBuilder.buildDescriptor(component)
                                 .only(Input.class, Processing.class).flatten().attributeDescriptors,
-                            BindableDescriptorBuilder.buildDescriptor(component, false)
+                            BindableDescriptorBuilder.buildDescriptor(component)
                                 .only(Output.class).flatten().attributeDescriptors);
 
                         cachedComponentAttributeDescriptors.put(

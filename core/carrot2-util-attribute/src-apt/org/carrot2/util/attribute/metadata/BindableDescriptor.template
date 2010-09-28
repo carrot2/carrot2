@@ -6,19 +6,16 @@
 
 package ${packageName};
 
-import javax.annotation.*;
 import java.util.*;
-
-#if ($ownFields.size() > 0)
-import org.carrot2.util.attribute.AttributeInfo;
-#end
+import javax.annotation.*;
+import org.carrot2.util.attribute.*;
 
 /**
  * Automatically generated descriptor for the bindable type:
  * <code>${sourceType.qualifiedName}</code>. 
  */
 @Generated("Generated from ${sourceType.qualifiedName}")
-public final class ${className}
+public final class ${sourceType.simpleName}Descriptor implements IBindableDescriptor
 {
     /**
      * The bindable class this descriptor was generated for. 
@@ -52,11 +49,127 @@ public final class ${className}
      * Bindable attributes (fields) that belong to this class only and can be (statically)
      * determined.
      */
-    public final static Attributes attributes = new Attributes(); 
+    public final static Attributes attributes; 
 
     /**
-     * Bindable attributes (fields) that belong to this class only and can be (statically)
-     * determined.
+     * Attributes that belong to this type only.
+     */
+    private final static Set<AttributeInfo> ownAttributes;
+
+    /**
+     * Attributes that belong to this type or superclasses.
+     */
+    private final static Set<AttributeInfo> allAttributes;
+
+    /**
+     * Attributes that belong to this type or superclasses, lookup dictionary by attribute key.
+     */
+    private final static Map<String, AttributeInfo> allAttributesByKey;
+
+    /**
+     * Attributes that belong to this type or superclasses, lookup dictionary by attribute's 
+     * field name.
+     */
+    private final static Map<String, AttributeInfo> allAttributesByFieldName;
+
+    /**
+     * Static initializer for internal collections.
+     */
+    static
+    {
+        attributes = new Attributes();
+
+        final Set<AttributeInfo> ownAttrs = new HashSet<AttributeInfo>();
+#foreach ($attr in $ownFields)
+        ownAttrs.add(attributes.${attr.field.simpleName});
+#end
+
+        final Set<AttributeInfo> allAttrs = new HashSet<AttributeInfo>();
+#foreach ($attr in $allFields)
+        allAttrs.add(${attr.descriptorClass}.attributes.${attr.field.simpleName});
+#end
+
+        allAttributes = Collections.unmodifiableSet(allAttrs);
+        ownAttributes = Collections.unmodifiableSet(ownAttrs);
+        
+        final Map<String, AttributeInfo> allAttrsByKey = new HashMap<String, AttributeInfo>();
+        final Map<String, AttributeInfo> allAttrsByFieldName = new HashMap<String, AttributeInfo>();
+        for (AttributeInfo ai : allAttrs)
+        {
+            allAttrsByKey.put(ai.key, ai);
+            allAttrsByFieldName.put(ai.fieldName, ai);
+        }
+
+        allAttributesByKey = Collections.unmodifiableMap(allAttrsByKey);
+        allAttributesByFieldName = Collections.unmodifiableMap(allAttrsByFieldName);
+    }
+
+    /* IBindableDescriptor */
+
+    @Override 
+    public String getPrefix()
+    {
+        return prefix;
+    }
+
+    @Override 
+    public String getTitle()
+    {
+        return title;
+    }
+    
+    @Override 
+    public String getLabel()      
+    { 
+        return label;
+    }
+    
+    @Override 
+    public String getDescription() 
+    { 
+        return description; 
+    }
+
+    @Override 
+    public Set<AttributeInfo> getOwnAttributes()
+    { 
+        return ownAttributes;
+    }
+
+    @Override 
+    public Set<AttributeInfo> getAttributes()
+    {
+        return allAttributes;
+    }
+
+    @Override 
+    public Map<String, AttributeInfo> getAttributesByKey()
+    {
+        return allAttributesByKey;
+    }
+
+    @Override 
+    public Map<String, AttributeInfo> getAttributesByFieldName()
+    {
+        return allAttributesByFieldName;
+    }
+
+
+    /* Keys and attribute descriptors. */
+
+    /**
+     * Constants for all attribute keys present in the bindable.
+     */
+    public static final class Keys
+    {
+#foreach ($attr in $ownFields)
+        /** Key for {@link Attributes#$attr.field.simpleName} */
+        public static final String $methodutils.asConstant($attr.field.simpleName.toString()) = "${esc.java($attr.key)}";
+#end
+    }
+
+    /**
+     * Bindable attributes (fields) that belong to this class.
      */
     public static final class Attributes
     {
@@ -64,19 +177,23 @@ public final class ${className}
 
 #foreach ($attr in $ownFields)
         /**
-         * ${esc.java($attr.javaDoc)}
+         * $!{esc.java($attr.javaDoc)}#if ($attr.inherited)#* *#
+         * 
+         * @see $attr.inherited.declaringClass#$attr.inherited.field.simpleName
+#end
          */
         public final AttributeInfo ${attr.field.simpleName} = 
             new AttributeInfo(
                 "${esc.java($attr.key)}",
                 "${esc.java($attr.declaringClass)}",
                 "${esc.java($attr.field.simpleName)}",
-                "${esc.java($attr.javaDoc)}",
-                "${esc.java($attr.label)}",
-                "${esc.java($attr.title)}",
-                "${esc.java($attr.description)}",
+                #stringOrNull($attr.javaDoc),
+                #stringOrNull($attr.label),
+                #stringOrNull($attr.title),
+                #stringOrNull($attr.description),
                 #stringOrNull($attr.group),
-                #if ($attr.level)org.carrot2.util.attribute.AttributeLevel.${attr.level.toString().toUpperCase()}#else#* *#null#end#* *#
+                #if ($attr.level)org.carrot2.util.attribute.AttributeLevel.${attr.level.toString().toUpperCase()}#else#* *#null#end,
+                #if ($attr.inherited)${attr.inherited.descriptorClass}.attributes.${attr.inherited.field.simpleName}#else#* *#null#end#* *#
             );
 #if ($velocityHasNext )##emit EOL between fields
 

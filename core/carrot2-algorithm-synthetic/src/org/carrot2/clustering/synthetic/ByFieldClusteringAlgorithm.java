@@ -28,7 +28,7 @@ import com.google.common.collect.Maps;
  * 
  * @label By Attribute Clustering
  */
-@Bindable(prefix = "ByAttributeClusteringAlgorithm", inherit = AttributeNames.class)
+@Bindable(prefix = "ByAttributeClusteringAlgorithm", inherit = SharedAttributes.class)
 public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {

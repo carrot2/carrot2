@@ -349,8 +349,7 @@ public class ProcessingComponentDescriptor
         {
             loadAttributeSets();
             bindableDescriptor = 
-                BindableDescriptorBuilder.buildDescriptor(
-                    newInitializedInstance(), true);
+                BindableDescriptorBuilder.buildDescriptor(newInitializedInstance());
         }
         catch (Throwable e)
         {

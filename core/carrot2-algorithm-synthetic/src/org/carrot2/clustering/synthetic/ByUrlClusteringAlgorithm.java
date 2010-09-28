@@ -36,7 +36,7 @@ import com.google.common.collect.*;
  * 
  * @label By URL Clustering
  */
-@Bindable(inherit = AttributeNames.class)
+@Bindable(inherit = SharedAttributes.class)
 public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {

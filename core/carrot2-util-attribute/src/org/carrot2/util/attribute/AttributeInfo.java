@@ -1,5 +1,8 @@
 package org.carrot2.util.attribute;
 
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Description of an {@link Attribute} of a {@link Bindable} type, including
  * javadoc documentation and compile-time extracted tags.
@@ -56,18 +59,31 @@ public final class AttributeInfo
      */
     public AttributeInfo(String key, String className, String fieldName, 
         String javaDoc, String label, String title, String description,
-        String group, AttributeLevel level)
+        String group, AttributeLevel level, AttributeInfo inheritFrom)
     {
-        this.key = key;
         this.fieldName = fieldName;
         this.className = className;
 
-        this.javaDoc = javaDoc;
-        this.label = label;
-        this.title = title;
-        this.description = description;
-        
-        this.group = group;
-        this.level = level;
+        this.key = key;
+        if (inheritFrom == null)
+        {
+            this.javaDoc = javaDoc;
+            this.label = label;
+            this.title = title;
+            this.description = description;
+
+            this.group = group;
+            this.level = level;
+        }
+        else
+        {
+            this.javaDoc = StringUtils.defaultString(javaDoc, inheritFrom.javaDoc);
+            this.label = StringUtils.defaultString(label, inheritFrom.label);
+            this.title = StringUtils.defaultString(title, inheritFrom.title);
+            this.description = StringUtils.defaultString(description, inheritFrom.description);
+    
+            this.group = StringUtils.defaultString(group, inheritFrom.group);
+            this.level = (AttributeLevel) ObjectUtils.defaultIfNull(level, inheritFrom.level);
+        }
     }
 }

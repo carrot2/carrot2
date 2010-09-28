@@ -39,7 +39,7 @@ import com.google.common.collect.Ordering;
  * Search Results. IEEE Intelligent Systems, May/June, 3 (vol. 20), 2005, 
  * pp. 48—54."</i>.
  */
-@Bindable(prefix = "LingoClusteringAlgorithm", inherit = AttributeNames.class)
+@Bindable(prefix = "LingoClusteringAlgorithm", inherit = SharedAttributes.class)
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
@@ -58,7 +58,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Processing
     @Input
     @Internal
-    @Attribute(key = AttributeNames.QUERY, inherit = true)
+    @Attribute(key = SharedAttributesDescriptor.Keys.QUERY, inherit = true)
     public String query = null;
 
     /**
@@ -68,13 +68,13 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Input
     @Required
     @Internal
-    @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
+    @Attribute(key = SharedAttributesDescriptor.Keys.DOCUMENTS, inherit = true)
     public List<Document> documents;
 
     @Processing
     @Output
     @Internal
-    @Attribute(key = AttributeNames.CLUSTERS, inherit = true)
+    @Attribute(key = SharedAttributesDescriptor.Keys.CLUSTERS, inherit = true)
     public List<Cluster> clusters = null;
 
     /**

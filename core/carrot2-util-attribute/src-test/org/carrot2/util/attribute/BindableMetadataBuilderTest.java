@@ -286,7 +286,7 @@ public class BindableMetadataBuilderTest
     public void testBindableMetadata()
     {
         final BindableMetadata metadata = BindableDescriptorBuilder.buildDescriptor(
-            new TestBindable(), true).metadata;
+            new TestBindable()).metadata;
 
         assertNotNull(metadata);
         assertEquals("Some test bindable", metadata.getTitle());
@@ -484,7 +484,7 @@ public class BindableMetadataBuilderTest
         {
             final Map<String, AttributeMetadata> componentAttributeMetadata =
                 BindableDescriptorBuilder.buildDescriptor(
-                    componentClass.newInstance(), true).metadata.getAttributeMetadata();
+                    componentClass.newInstance()).metadata.getAttributeMetadata();
     
             if (componentAttributeMetadata == null)
             {
