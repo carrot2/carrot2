@@ -58,7 +58,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Processing
     @Input
     @Internal
-    @Attribute(key = SharedAttributesDescriptor.Keys.QUERY, inherit = true)
+    @Attribute(key = AttributeNames.QUERY, inherit = true)
     public String query = null;
 
     /**
@@ -68,13 +68,13 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Input
     @Required
     @Internal
-    @Attribute(key = SharedAttributesDescriptor.Keys.DOCUMENTS, inherit = true)
+    @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
     public List<Document> documents;
 
     @Processing
     @Output
     @Internal
-    @Attribute(key = SharedAttributesDescriptor.Keys.CLUSTERS, inherit = true)
+    @Attribute(key = AttributeNames.CLUSTERS, inherit = true)
     public List<Cluster> clusters = null;
 
     /**
