@@ -103,4 +103,19 @@ public class BindableDescriptorGeneratorTest
 
         throw new AssertionError("No such nested class: " + nested);
     }
+    
+    @Bindable
+    public static class KeyCheck
+    {
+        @Attribute
+        public int field;
+    }
+
+    @Test
+    public void testKeyInKeyCheck()
+    {
+        IBindableDescriptor descriptor = BindableDescriptorUtils.getDescriptor(KeyCheck.class);
+        Map<String, AttributeInfo> attributesByKey = descriptor.getAttributesByKey();
+        assertTrue(attributesByKey.containsKey(AttributeUtils.getKey(KeyCheck.class, "field")));
+    }    
 }

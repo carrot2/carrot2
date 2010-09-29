@@ -360,9 +360,15 @@ public final class BindableProcessor extends AbstractProcessor
         {
             String bindablePrefix = getBindablePrefix((TypeElement) field.getEnclosingElement());
             if (bindablePrefix == null)
-                return field.getSimpleName().toString();
+            {
+                return elements.getBinaryName((TypeElement) field.getEnclosingElement())
+                    + "."
+                    + field.getSimpleName().toString();
+            }
             else
+            {
                 return bindablePrefix + "." + field.getSimpleName();
+            }
         }
     }
 
