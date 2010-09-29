@@ -35,6 +35,7 @@ import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipelineDescrip
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * This example shows how to perform clustering using a custom language model, including
@@ -51,9 +52,10 @@ public class UsingCustomLanguageModel
         // attribute. It is preferred to passing it as a processing-time attribute
         // because it the instance created at initialization time is reused for all
         // further requests.
-        controller.init(
-            BasicPreprocessingPipelineDescriptor.attributeBuilder()
-                .languageModelFactory(CustomLanguageModelFactory.class).map);
+        Map<String, Object> attrs = Maps.newHashMap();
+        BasicPreprocessingPipelineDescriptor.attributeBuilder(attrs)
+            .languageModelFactory(CustomLanguageModelFactory.class);
+        controller.init(attrs);
 
         // Cluster some data with Lingo and STC. Notice how the cluster quality degrades
         // when the stop word list is empty (especially for STC).
@@ -67,10 +69,11 @@ public class UsingCustomLanguageModel
     private static void clusterAndDisplayClusters(final Controller controller,
         final Class<? extends IClusteringAlgorithm> clusteringAlgorithm)
     {
-        final Map<String, Object> processingAttributes = 
-            SharedAttributesDescriptor.attributeBuilder()
-                .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
-                .query("data mining").map;
+        final Map<String, Object> processingAttributes = Maps.newHashMap();
+
+        SharedAttributesDescriptor.attributeBuilder(processingAttributes)
+            .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
+            .query("data mining");
 
         final ProcessingResult result = controller.process(processingAttributes, 
             clusteringAlgorithm);

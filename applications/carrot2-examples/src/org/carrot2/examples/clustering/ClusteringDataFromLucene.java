@@ -32,6 +32,8 @@ import org.carrot2.source.lucene.LuceneDocumentSource;
 import org.carrot2.source.lucene.LuceneDocumentSourceDescriptor;
 import org.carrot2.source.lucene.SimpleFieldMapperDescriptor;
 
+import com.google.common.collect.Maps;
+
 /**
  * This example shows how to cluster {@link Document}s retrieved from a Lucene index using
  * the {@link LuceneDocumentSource}.
@@ -105,8 +107,9 @@ public class ClusteringDataFromLucene
          * Perform processing.
          */
         String query = "mining";
-        final Map<String, Object> processingAttributes =
-            SharedAttributesDescriptor.attributeBuilder().query(query).map;
+        final Map<String, Object> processingAttributes = Maps.newHashMap();
+        SharedAttributesDescriptor.attributeBuilder(processingAttributes)
+            .query(query);
 
         /*
          * We need to refer to the Lucene component by its identifier we set during

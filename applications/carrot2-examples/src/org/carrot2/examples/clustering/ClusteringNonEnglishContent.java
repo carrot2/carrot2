@@ -32,6 +32,7 @@ import org.carrot2.source.microsoft.MarketOption;
 import org.carrot2.text.clustering.MultilingualClusteringDescriptor;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * This example shows how to cluster non-English content. By default Carrot2 assumes that
@@ -92,9 +93,9 @@ public class ClusteringNonEnglishContent
                 document.getContentUrl(), LanguageCode.ENGLISH));
         }
 
-        final Map<String, Object> attributes = 
-            SharedAttributesDescriptor.attributeBuilder()
-                .documents(documents).map;
+        final Map<String, Object> attributes = Maps.newHashMap();
+        SharedAttributesDescriptor.attributeBuilder(attributes)
+            .documents(documents);
         final ProcessingResult englishResult = controller.process(
             attributes, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(englishResult);

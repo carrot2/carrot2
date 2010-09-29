@@ -24,6 +24,8 @@ import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.examples.clustering.ClusteringDataFromDocumentSources;
 
+import com.google.common.collect.Maps;
+
 /**
  * This example shows how to save clustering results to XML.
  * <p>
@@ -37,10 +39,10 @@ public class SavingResultsToXml
     {
         // Let's fetch some results from MSN first
         final Controller controller = ControllerFactory.createSimple();
-        final Map<String, Object> attributes = 
-            SharedAttributesDescriptor.attributeBuilder()
-                .documents(new ArrayList<Document>(SampleDocumentData.DOCUMENTS_DATA_MINING))
-                .query("data mining").map;
+        final Map<String, Object> attributes = Maps.newHashMap();
+        SharedAttributesDescriptor.attributeBuilder(attributes)
+            .documents(new ArrayList<Document>(SampleDocumentData.DOCUMENTS_DATA_MINING))
+            .query("data mining");
 
         final ProcessingResult result = controller.process(attributes,
             LingoClusteringAlgorithm.class);

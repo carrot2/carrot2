@@ -87,9 +87,9 @@ public class UsingComponentSuites
                         + ", clustering with " + algorithms.get(a).getLabel());
 
                     // As usual, we pass attributes for processing
-                    final Map<String, Object> attributes = 
-                        SharedAttributesDescriptor.attributeBuilder()
-                            .query("data mining").map;
+                    final Map<String, Object> attributes = Maps.newHashMap();
+                    SharedAttributesDescriptor.attributeBuilder(attributes)
+                        .query("data mining");
 
                     // Pass component ids to the controller to perform processing
                     final ProcessingResult result = controller.process(attributes,

@@ -24,6 +24,8 @@ import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.source.microsoft.BingDocumentSource;
 import org.carrot2.source.microsoft.BingDocumentSourceDescriptor;
 
+import com.google.common.collect.Maps;
+
 /**
  * This example shows how to set up and use a {@link Controller} that reuses instances of
  * processing component and caches processing results. This example assumes you are
@@ -92,10 +94,9 @@ public class UsingCachingController
         System.out.println("Query times: ");
         for (int i = 0; i < 10; i++)
         {
-            Map<String, Object> attributes =
-                SharedAttributesDescriptor.attributeBuilder()
-                    .query("data mining")
-                    .map;
+            Map<String, Object> attributes = Maps.newHashMap();
+            SharedAttributesDescriptor.attributeBuilder(attributes)
+                .query("data mining");
 
             // If you want to override the number of results provided on initialization,
             // just pass a new value in processing time attribute map

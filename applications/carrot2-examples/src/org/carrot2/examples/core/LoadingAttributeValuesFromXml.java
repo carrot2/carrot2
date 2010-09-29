@@ -26,6 +26,7 @@ import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeValueSets;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * This example shows how load a set of attribute values from an XML stream.
@@ -61,17 +62,17 @@ public class LoadingAttributeValuesFromXml
             controller.init(fasterClusteringAttributes);
 
             // Perform clustering using the attribute set provided at initialization time
-            Map<String, Object> requestAttributes = 
-                SharedAttributesDescriptor.attributeBuilder()
-                    .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
-                    .query("data mining").map;
+            Map<String, Object> requestAttributes = Maps.newHashMap(); 
+            SharedAttributesDescriptor.attributeBuilder(requestAttributes)
+                .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
+                .query("data mining");
             ProcessingResult results = controller.process(requestAttributes, LingoClusteringAlgorithm.class);
             ConsoleFormatter.displayClusters(results.getClusters());
 
             // Perform clustering using some other attribute set, in this case the
             // one that is the default in the XML file.
             requestAttributes =
-                SharedAttributesDescriptor.attributeBuilder(defaultAttributes)
+                SharedAttributesDescriptor.attributeBuilder(Maps.newHashMap(defaultAttributes))
                     .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
                     .query("data mining").map;
 
