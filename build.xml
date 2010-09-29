@@ -560,6 +560,7 @@
         <exclude name="org.carrot2.util.attribute*.xml" />
         <exclude name="**/*.html" />
         <exclude name="**/doc-files/**" />
+        <exclude name="**/*.java" />
       </fileset>
     </jar>
   </target>
@@ -574,6 +575,9 @@
     </copy>
     <jar destfile="${jar.dir}/carrot2-core-sources-${carrot2.version}.jar">
       <fileset dir="${jar.dir}/sources" />
+      <fileset dir="${build.dir}">
+        <include name="**/*.java" />
+      </fileset>
     </jar>
     <delete dir="${jar.dir}/sources" />
   </target>
@@ -590,9 +594,6 @@
 
     <delete includeEmptyDirs="true">
       <fileset dir="${jar.mini.dir}">
-        <include name="org.carrot2.source*.xml" />
-        <include name="org.carrot2.source.xml*.xml" />
-        <include name="org.carrot2.output*.xml" />
         <include name="org/carrot2/source/**" />
         <exclude name="org/carrot2/source/xml/**" />
         <include name="org/carrot2/output/**" />

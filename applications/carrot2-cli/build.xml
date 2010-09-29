@@ -125,7 +125,7 @@
           file="${carrot2.master.basedir}/core/carrot2-util-log4j/src/log4j-cli.xml" />
 
     <jar destfile="${cli.lib.dir}/${cli.dist.name}.jar">
-      <fileset dir="${cli.dir}/classes" />
+      <fileset dir="${cli.dir}/classes" excludes="**/*.java" />
       <fileset dir="${carrot2.master.basedir}/core/carrot2-util-log4j/src">
         <include name="appender-*" />
         <include name="filters-*" />

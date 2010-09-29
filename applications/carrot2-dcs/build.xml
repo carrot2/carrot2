@@ -68,6 +68,7 @@
         <include name="**/DcsApp*.class" />
         <include name="**/Log4jJettyLog.class" />
         <include name="**/*.xml" />
+        <exclude name="**/*.java" />
       </fileset>
       <fileset dir="core/carrot2-util-log4j/src">
         <include name="appender-*" />
@@ -181,7 +182,7 @@
       </lib>
       <lib dir="${dcs.lib.dir}" />
       <classes dir="${dcs.dir}/classes">
-        <exclude name="*.java" />
+        <exclude name="**/*.java" />
       </classes>
       <classes dir="${carrot2.dcs.basedir}/src">
         <include name="**/*.xml" />
