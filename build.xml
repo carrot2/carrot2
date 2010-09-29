@@ -33,7 +33,6 @@
   <property name="etc.dir" location="${carrot2.master.basedir}/etc" />
 
   <!-- Output dirs -->
-  <property name="apt.generated" location="${carrot2.master.basedir}/tmp/apt_generated" />
   <property name="build.dir" location="${carrot2.master.basedir}/tmp/classes" />
   <property name="build.dir.tests" location="${carrot2.master.basedir}/tmp/classes-test" />
   <property name="build.dir.clover" location="${carrot2.master.basedir}/tmp/classes-clover" />
@@ -71,14 +70,6 @@
       <javac deprecation="false" debug="true"
           target="1.6" source="1.6"
           encoding="UTF-8" includeantruntime="true" optimize="true"/>
-  </presetdef>
-
-  <presetdef name="javac_apt">
-      <javac>
-          <!-- Generate sources into a separate folder. -->
-          <compilerarg value="-s" compiler="modern" />
-          <compilerarg value="${apt.generated}" compiler="modern" />
-      </javac>
   </presetdef>
 
   <!-- Source files to compile for tests. -->
@@ -216,11 +207,6 @@
   </path>
 
 
-  <!-- -->
-  <target name="init">
-    <mkdir dir="${apt.generated}" />
-  </target>
-
   <!-- 
        Output cleanup.
     -->
@@ -231,35 +217,40 @@
   <!-- 
        Core.
     -->
-  <target name="compile" depends="init">
+  <target name="compile">
     <mkdir dir="${build.dir}" />
     <!-- Compile the rest. -->
-    <javac_apt destdir="${build.dir}">
+    <javac destdir="${build.dir}">
       <src refid="src.core.folders" />
       <classpath refid="lib.classpath" />
-    </javac_apt>
+    </javac>
   </target>
 
   <!-- Tests. -->
-  <target name="compile.test" depends="init">
+  <target name="compile.test">
     <mkdir dir="${build.dir.tests}" />
 
-    <javac_apt destdir="${build.dir.tests}">
+    <javac destdir="${build.dir.tests}">
       <src refid="src.test.folders" />
-      <classpath refid="lib.classpath" />
       <classpath location="${build.dir}" />
-    </javac_apt>
+      <classpath refid="lib.classpath" />
+    </javac>
   </target>
 
   <!-- FindBugs. -->
-  <target name="compile.findbugs" depends="init">
+  <target name="compile.findbugs">
     <mkdir dir="${build.dir.findbugs}" />
 
-    <javac_apt destdir="${build.dir.findbugs}">
+    <javac destdir="${build.dir.findbugs}">
       <src refid="src.core.folders" />  
-      <src refid="src.test.folders" />
       <classpath refid="lib.classpath" />
-    </javac_apt>
+    </javac>
+
+    <javac destdir="${build.dir.findbugs}">
+      <src refid="src.test.folders" />
+      <classpath location="${build.dir.findbugs}" />
+      <classpath refid="lib.classpath" />
+    </javac>
   </target>
 
   <!--
@@ -460,18 +451,23 @@
     </clover-report>
   </target>
 
-  <target name="compile.coverage" depends="init, clover.tasks" if="clover.home">
+  <target name="compile.coverage" depends="clover.tasks" if="clover.home">
     <clover-setup enabled="true">
         <fileset refid="src.coverage" />
     </clover-setup>
 
     <mkdir dir="${build.dir.clover}" />
 
-    <javac_apt destdir="${build.dir.clover}">
+    <javac destdir="${build.dir.clover}">
       <src refid="src.core.folders" />  
-      <src refid="src.test.folders" />
       <classpath refid="lib.classpath" />
-    </javac_apt>
+    </javac>
+
+    <javac destdir="${build.dir.clover}">
+      <src refid="src.test.folders" />
+      <classpath location="${build.dir.clover}" />
+      <classpath refid="lib.classpath" />
+    </javac>
 
     <clover-setup enabled="false" />
   </target>
@@ -612,7 +608,7 @@
   </target>
 
   <!-- Check if the basic clustering example runs with the mini distribution -->
-  <target name="jar.mini.test" depends="init, jar.mini.build">
+  <target name="jar.mini.test" depends="jar.mini.build">
     <property name="jar.mini.test.classes.dir" location="${carrot2.master.basedir}/tmp/jar-mini-classes" />
     <mkdir dir="${jar.mini.test.classes.dir}" />
     <javac srcdir="${carrot2.master.basedir}/applications/carrot2-examples/src"
@@ -969,7 +965,7 @@
   <!--
       Compilation and assembly of static utility JARs (apt preprocessors).
    -->
-  <target name="utility.jars" description="Re(create) utility JARs." depends="init">
+  <target name="utility.jars" description="Re(create) utility JARs.">
     <property name="utilities.build.dir" location="${carrot2.master.basedir}/tmp/utility.jars" />
 
     <delete dir="${utilities.build.dir}" failonerror="false" />

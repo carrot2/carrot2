@@ -104,6 +104,127 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
         allAttributesByFieldName = Collections.unmodifiableMap(allAttrsByFieldName);
     }
 
+    
+    /* Attribute keys. */
+
+    /**
+     * Constants for all attribute keys present in the bindable.
+     */
+    public static class Keys #if ($superBindableDescriptor) extends ${superBindableDescriptor}.Keys #end#**#
+    {
+        protected Keys() {} 
+
+#foreach ($attr in $ownFields)
+        /** Attribute key for: {@link ${attr.declaringClass}#${attr.field.simpleName}}. */
+        public static final String $methodutils.asConstant($attr.field.simpleName.toString()) = "${esc.java($attr.key)}";
+#end
+    }
+
+
+    /* Attribute descriptors. */
+
+    /**
+     * Bindable attributes (fields) that belong to this class.
+     */
+    public static final class Attributes
+    {
+        private Attributes() { /* No public instances . */ }
+
+#foreach ($attr in $ownFields)
+        /**
+         * $!{esc.java($attr.javaDoc)}#if ($attr.inherited)#* *#
+         * 
+         * @see $attr.inherited.declaringClass#$attr.inherited.field.simpleName
+#end
+         */
+        public final AttributeInfo ${attr.field.simpleName} = 
+            new AttributeInfo(
+                "${esc.java($attr.key)}",
+                "${esc.java($attr.declaringClass)}",
+                "${esc.java($attr.field.simpleName)}",
+                #stringOrNull($attr.javaDoc),
+                #stringOrNull($attr.label),
+                #stringOrNull($attr.title),
+                #stringOrNull($attr.description),
+                #stringOrNull($attr.group),
+                #if ($attr.level)org.carrot2.util.attribute.AttributeLevel.${attr.level.toString().toUpperCase()}#else#* *#null#end,
+                #if ($attr.inherited)${attr.inherited.descriptorClass}.attributes.${attr.inherited.field.simpleName}#else#* *#null#end#* *#
+            );
+
+#end
+
+#foreach ($i in $nestedFields)
+        /**
+         * Attributes of a nested bindable type {@link ${i.fieldElement}}.
+         */
+        public final ${i.descriptorClass}.Attributes ${i.field.simpleName} =
+            ${i.descriptorClass}.attributes;
+
+#end
+    }
+
+    /**
+     * The builder pattern for collecting attributes of this bindable (not including any possible
+     * sub-bindables, but anything that can be resolved statically).
+     */
+    public static class AttributeBuilder #if ($superBindableDescriptor) extends ${superBindableDescriptor}.AttributeBuilder #end#**#
+    {
+        public final Map<String, Object> map;
+
+        protected AttributeBuilder(Map<String, Object> map)
+        {
+            #if ($superBindableDescriptor) super(map); #end#**#
+            this.map = map;
+        }
+
+#foreach ($i in $ownFields)
+        /**
+         * $!{esc.java($i.javaDoc)}
+         */
+        public AttributeBuilder ${i.field.simpleName}($i.field.asType() value)
+        {
+            map.put("$i.key", value);
+            return this;
+        }
+        #if ($i.generatesClassSetter)#**#
+
+        /**
+         * $!{esc.java($i.javaDoc)}
+         */
+        public AttributeBuilder ${i.field.simpleName}(Class<? extends $i.field.asType()> clazz)
+        {
+            map.put("$i.key", clazz);
+            return this;
+        }
+        #end
+
+#end
+
+#foreach ($i in $nestedFields)
+        /**
+         * Returns an attribute builder for a nested bindable type
+         * {@link ${i.fieldElement}}, backed by the same attribute map
+         * as the current builder.
+         */
+        public ${i.descriptorClass}.AttributeBuilder ${i.field.simpleName}()
+        {
+            return ${i.descriptorClass}.attributeBuilder(map);
+        }
+
+#end
+    }
+
+    /**
+     * Return an attribute builder for this bindable. Provides type-safe checking alternative to
+     * using raw attribute keys.
+     * 
+     * @param attributeValues An existing map which should be used to collect attribute values.
+     */
+    public static AttributeBuilder attributeBuilder(Map<String, Object> attributeValues)
+    {
+        return new AttributeBuilder(attributeValues);
+    }
+    
     /* IBindableDescriptor */
 
     @Override 
@@ -152,123 +273,5 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
     public Map<String, AttributeInfo> getAttributesByFieldName()
     {
         return allAttributesByFieldName;
-    }
-
-
-    /* Attribute keys. */
-
-    /**
-     * Constants for all attribute keys present in the bindable.
-     */
-    public static final class Keys
-    {
-#foreach ($attr in $ownFields)
-        /** Key for {@link Attributes#$attr.field.simpleName} */
-        public static final String $methodutils.asConstant($attr.field.simpleName.toString()) = "${esc.java($attr.key)}";
-#end
-    }
-
-
-    /* Attribute descriptors. */
-
-    /**
-     * Bindable attributes (fields) that belong to this class.
-     */
-    public static final class Attributes
-    {
-        Attributes() { /* No public instances . */ }
-
-#foreach ($attr in $ownFields)
-        /**
-         * $!{esc.java($attr.javaDoc)}#if ($attr.inherited)#* *#
-         * 
-         * @see $attr.inherited.declaringClass#$attr.inherited.field.simpleName
-#end
-         */
-        public final AttributeInfo ${attr.field.simpleName} = 
-            new AttributeInfo(
-                "${esc.java($attr.key)}",
-                "${esc.java($attr.declaringClass)}",
-                "${esc.java($attr.field.simpleName)}",
-                #stringOrNull($attr.javaDoc),
-                #stringOrNull($attr.label),
-                #stringOrNull($attr.title),
-                #stringOrNull($attr.description),
-                #stringOrNull($attr.group),
-                #if ($attr.level)org.carrot2.util.attribute.AttributeLevel.${attr.level.toString().toUpperCase()}#else#* *#null#end,
-                #if ($attr.inherited)${attr.inherited.descriptorClass}.attributes.${attr.inherited.field.simpleName}#else#* *#null#end#* *#
-            );
-
-#end
-
-#foreach ($i in $nestedFields)
-        /**
-         * Attributes of a nested bindable type {@link ${i.fieldElement}}.
-         */
-        public final ${i.fieldElement}Descriptor.Attributes ${i.field.simpleName} =
-            ${i.fieldElement}Descriptor.attributes;
-
-#end
-    }
-
-    /**
-     * The builder pattern for collecting attributes of this bindable (not including any possible
-     * sub-bindables, but anything that can be resolved statically).
-     */
-    public static final class AttributeBuilder
-    {
-        public final Map<String, Object> map;
-
-        AttributeBuilder(Map<String, Object> map)
-        {
-            this.map = map;
-        }
-
-#foreach ($i in $ownFields)
-        /**
-         * $!{esc.java($i.javaDoc)}
-         */
-        public AttributeBuilder ${i.field.simpleName}($i.field.asType() value)
-        {
-            map.put("$i.key", value);
-            return this;
-        }
-        #if ($i.generatesClassSetter)#**#
-
-        /**
-         * $!{esc.java($i.javaDoc)}
-         */
-        public AttributeBuilder ${i.field.simpleName}(Class<? extends $i.field.asType()> clazz)
-        {
-            map.put("$i.key", clazz);
-            return this;
-        }
-        #end
-
-#end
-
-#foreach ($i in $nestedFields)
-        /**
-         * Returns an attribute builder for a nested bindable type
-         * {@link ${i.fieldElement}}, backed by the same attribute map
-         * as the current builder.
-         */
-        public ${i.fieldElement}Descriptor.AttributeBuilder ${i.field.simpleName}()
-        {
-            return ${i.fieldElement}Descriptor.attributeBuilder(map);
-        }
-
-#end
-    }
-
-    /**
-     * Return an attribute builder for this bindable. Provides type-safe checking alternative to
-     * using raw attribute keys.
-     * 
-     * @param attributeValues An existing map which should be used to collect attribute values.
-     */
-    public static AttributeBuilder attributeBuilder(Map<String, Object> attributeValues)
-    {
-        return new AttributeBuilder(attributeValues);
     }
 }

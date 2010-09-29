@@ -30,4 +30,53 @@ public final class BindableDescriptorUtils
              + shortClassName
              + "Descriptor";
     }
+
+    /**
+     * @return Returns the descriptor class for a class marked with {@link Bindable}.
+     * @throws IllegalArgumentException If the class is not annotated with {@link Bindable}.
+     * @throws NoClassDefFoundError If the descriptor cannot be found.
+     */
+    @SuppressWarnings("unchecked")
+    public static Class<? extends IBindableDescriptor> getDescriptorClass(Class<?> clazz)
+    {
+        if (clazz.getAnnotation(Bindable.class) == null)
+            throw new IllegalArgumentException("Class not marked with @Bindable: "
+                + clazz.getName());
+
+        ClassLoader cl = clazz.getClassLoader();
+        String descriptorClassName = getDescriptorClassName(clazz.getName());
+        try
+        {
+            return (Class<? extends IBindableDescriptor>) 
+                Class.forName(descriptorClassName, true, cl);
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new NoClassDefFoundError("Descriptor class not found: "
+                + descriptorClassName);
+        }
+    }
+
+    /**
+     * @return Returns a descriptor instance for a class marked with {@link Bindable}.
+     * @throws IllegalArgumentException If the class is not annotated with {@link Bindable}.
+     * @throws NoClassDefFoundError If the descriptor cannot be found.
+     * @throws RuntimeException If instantiation fails for some reason.
+     */
+    public static IBindableDescriptor getDescriptor(Class<?> clazz)
+    {
+        try
+        {
+            // TODO: add a singleton field to the generated class?
+            return getDescriptorClass(clazz).newInstance();
+        }
+        catch (InstantiationException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
 }

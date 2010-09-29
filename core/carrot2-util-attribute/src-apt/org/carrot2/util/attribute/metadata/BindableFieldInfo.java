@@ -17,11 +17,14 @@ public class BindableFieldInfo
      * {@link #field}'s declared {@Bindable} type.
      */
     private final Element element;
+    
+    private final String descriptorClass;    
 
-    public BindableFieldInfo(VariableElement field, Element element)
+    public BindableFieldInfo(VariableElement field, Element element, String descriptorClass)
     {
         this.field = field;
         this.element = element;
+        this.descriptorClass = descriptorClass;
     }
     
     public VariableElement getField()
@@ -32,5 +35,10 @@ public class BindableFieldInfo
     public Element getFieldElement()
     {
         return element;
+    }
+    
+    public String getDescriptorClass()
+    {
+        return descriptorClass;
     }
 }

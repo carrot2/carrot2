@@ -60,32 +60,15 @@ public class BindableMetadata extends CommonMetadata
      */
     public static BindableMetadata forClassWithParents(final Class<?> clazz)
     {
-        final ClassLoader cl = clazz.getClassLoader();
-        try
-        {
-            final Class<?> descriptorClass = Class.forName(
-                BindableDescriptorUtils.getDescriptorClassName(clazz.getName()), true, cl);
-
-            IBindableDescriptor descriptor = (IBindableDescriptor) descriptorClass.newInstance(); 
-
-            final BindableMetadata bindable = new BindableMetadata();
-            bindable.setDescription(descriptor.getDescription());
-            bindable.setLabel(descriptor.getLabel());
-            bindable.setTitle(descriptor.getTitle());
-            bindable.setAttributeMetadata(
-                asAttributeMetadata(descriptor.getAttributes()));
-            return bindable;
-
-        }
-        catch (ClassNotFoundException e)
-        {
-            throw new RuntimeException("Descriptor class not found for class: "
-                + clazz.getName());
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Descriptor class could not be loaded.", e);
-        }
+        IBindableDescriptor descriptor = BindableDescriptorUtils.getDescriptor(clazz); 
+    
+        final BindableMetadata bindable = new BindableMetadata();
+        bindable.setDescription(descriptor.getDescription());
+        bindable.setLabel(descriptor.getLabel());
+        bindable.setTitle(descriptor.getTitle());
+        bindable.setAttributeMetadata(
+            asAttributeMetadata(descriptor.getAttributes()));
+        return bindable;
     }
 
     private static Map<String, AttributeMetadata> asAttributeMetadata(Set<AttributeInfo> attributes)

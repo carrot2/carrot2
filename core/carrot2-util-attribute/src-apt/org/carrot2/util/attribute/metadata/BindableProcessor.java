@@ -156,17 +156,9 @@ public final class BindableProcessor extends AbstractProcessor
         metadata.setAttributeMetadata(attributeMetadata);
 
         final List<AttributeFieldInfo> superFields = new ArrayList<AttributeFieldInfo>();
-        TypeMirror superType = type.getSuperclass();
-        while (superType.getKind() == TypeKind.DECLARED) 
+        for (TypeElement i = extractSuperBindable(type); i != null; i = extractSuperBindable(i))
         {
-            TypeElement asElement = (TypeElement) types.asElement(superType);
-
-            if (asElement != null && asElement.getAnnotation(Bindable.class) != null)
-            {
-                extractAttributeMetadata(asElement, superFields, null);
-            }
-
-            superType = asElement.getSuperclass();
+            extractAttributeMetadata(i, superFields, null);
         }
 
         final List<AttributeFieldInfo> allFields = new ArrayList<AttributeFieldInfo>();
@@ -174,6 +166,28 @@ public final class BindableProcessor extends AbstractProcessor
         allFields.addAll(superFields);
 
         emitMetadataClass(metadata, ownFields, allFields, type);
+    }
+
+    /**
+     * Extract the descriptor class for the first superclass that is {@link Bindable}
+     * or return null if none.
+     */
+    private TypeElement extractSuperBindable(TypeElement type)
+    {
+        TypeMirror superType = type.getSuperclass();
+        while (superType.getKind() == TypeKind.DECLARED) 
+        {
+            TypeElement asElement = (TypeElement) types.asElement(superType);
+
+            if (asElement != null && asElement.getAnnotation(Bindable.class) != null)
+            {
+                return asElement;
+            }
+
+            superType = asElement.getSuperclass();
+        }
+
+        return null;
     }
 
     /**
@@ -366,7 +380,6 @@ public final class BindableProcessor extends AbstractProcessor
 
     /**
      * Emit bindable matadata as a class with statically collected information.
-     * @param allFields 
      */
     private void emitMetadataClass(BindableMetadata metadata, 
         List<AttributeFieldInfo> ownFields, 
@@ -394,6 +407,12 @@ public final class BindableProcessor extends AbstractProcessor
             context.put("ownFields", ownFields);
             context.put("allFields", allFields);
             context.put("nestedFields", extractStaticNestedBindables(type));
+            
+            TypeElement superBindable = extractSuperBindable(type);
+            if (superBindable != null)
+            {
+                context.put("superBindableDescriptor", getDescriptorClassName(superBindable));
+            }
 
             final Template template = velocity.getTemplate("BindableDescriptor.template", "UTF-8");
             template.merge(context, w);
@@ -429,12 +448,13 @@ public final class BindableProcessor extends AbstractProcessor
         
         for (VariableElement field : ElementFilter.fieldsIn(type.getEnclosedElements()))
         {
-            Element element = types.asElement(field.asType());
-            if (element != null && element.getAnnotation(Bindable.class) != null)
+            TypeElement fieldClass = (TypeElement) types.asElement(field.asType());
+            if (fieldClass != null && fieldClass.getAnnotation(Bindable.class) != null)
             {
                 if (field.getModifiers().contains(Modifier.FINAL))
                 {
-                    list.add(new BindableFieldInfo(field, element));
+                    list.add(new BindableFieldInfo(
+                        field, fieldClass, getDescriptorClassName(fieldClass)));
                 }
                 else
                 {
