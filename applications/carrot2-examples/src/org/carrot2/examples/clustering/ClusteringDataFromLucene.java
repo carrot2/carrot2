@@ -14,17 +14,23 @@ package org.carrot2.examples.clustering;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.lucene.store.FSDirectory;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.Document;
+import org.carrot2.core.ProcessingComponentConfiguration;
+import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.CreateLuceneIndex;
 import org.carrot2.source.lucene.LuceneDocumentSource;
-import org.carrot2.source.lucene.SimpleFieldMapper;
-import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.source.lucene.LuceneDocumentSourceDescriptor;
+import org.carrot2.source.lucene.SimpleFieldMapperDescriptor;
 
 /**
  * This example shows how to cluster {@link Document}s retrieved from a Lucene index using
@@ -72,18 +78,18 @@ public class ClusteringDataFromLucene
             indexPath = args[0];
         }
 
-        final String titleFieldName = "title";
-        final String contentFieldName = "snippet";
+        LuceneDocumentSourceDescriptor
+            .attributeBuilder(luceneGlobalAttributes)
+            .directory(FSDirectory.open(new File(indexPath)));
 
-        luceneGlobalAttributes.put(AttributeUtils.getKey(LuceneDocumentSource.class,
-            "directory"), FSDirectory.open(new File(indexPath)));
-        luceneGlobalAttributes.put(AttributeUtils.getKey(SimpleFieldMapper.class,
-            "titleField"), titleFieldName);
-        luceneGlobalAttributes.put(AttributeUtils.getKey(SimpleFieldMapper.class,
-            "contentField"), contentFieldName);
-
-        luceneGlobalAttributes.put(AttributeUtils.getKey(SimpleFieldMapper.class,
-            "searchFields"), Arrays.asList(new String [] {"titleField", "fullContent"}));
+        /*
+         * Specify fields providing data inside your Lucene index.
+         */
+        SimpleFieldMapperDescriptor
+            .attributeBuilder(luceneGlobalAttributes)
+            .titleField("title")
+            .contentField("snippet")
+            .searchFields(Arrays.asList(new String [] {"titleField", "fullContent"}));
 
         /*
          * Initialize the controller passing the above attributes as component-specific
@@ -98,10 +104,9 @@ public class ClusteringDataFromLucene
         /*
          * Perform processing.
          */
-        final Map<String, Object> processingAttributes = new HashMap<String, Object>();
-        
         String query = "mining";
-        processingAttributes.put(AttributeNames.QUERY, query);
+        final Map<String, Object> processingAttributes =
+            SharedAttributesDescriptor.attributeBuilder().query(query).map;
 
         /*
          * We need to refer to the Lucene component by its identifier we set during

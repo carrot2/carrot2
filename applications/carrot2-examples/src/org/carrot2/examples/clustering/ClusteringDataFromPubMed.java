@@ -16,8 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
+import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor.AttributeBuilder;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.source.pubmed.PubMedDocumentSource;
@@ -44,17 +47,19 @@ public class ClusteringDataFromPubMed
         /*
          * Search attributes.
          */
-        attributes.put(AttributeNames.QUERY, "heart");
-        attributes.put(AttributeNames.RESULTS, 100);
+        SharedAttributesDescriptor
+            .attributeBuilder(attributes)
+            .query("heart")
+            .results(100);
 
         /*
          * Optionally, you can also pass some attributes for the clustering algorithm. See
          * http://download.carrot2.org/head/manual/#section.component.lingo for a full
          * list.
          */
-        attributes.put("LingoClusteringAlgorithm.factorizationFactory",
-            LocalNonnegativeMatrixFactorizationFactory.class);
-        attributes.put("LingoClusteringAlgorithm.titleWordsBoost", 7.0);
+        AttributeBuilder builder = LingoClusteringAlgorithmDescriptor.attributeBuilder(attributes);
+        builder.matrixReducer().factorizationFactory(LocalNonnegativeMatrixFactorizationFactory.class);
+        builder.matrixBuilder().titleWordsBoost(7);
 
         ProcessingResult result = controller.process(attributes,
             PubMedDocumentSource.class, LingoClusteringAlgorithm.class);

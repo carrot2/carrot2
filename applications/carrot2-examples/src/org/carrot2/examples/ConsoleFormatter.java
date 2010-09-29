@@ -12,11 +12,14 @@
 
 package org.carrot2.examples;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.Document;
+import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.SharedAttributesDescriptor;
 
 /**
  * Simple console formatter for dumping {@link ProcessingResult}.
@@ -57,10 +60,13 @@ public class ConsoleFormatter
     public static void displayAttributes(final Map<String, Object> attributes)
     {
         System.out.println("Attributes:");
+
+        String DOCUMENTS_ATTRIBUTE = SharedAttributesDescriptor.Keys.DOCUMENTS;
+        String CLUSTERS_ATTRIBUTE = SharedAttributesDescriptor.Keys.CLUSTERS;
         for (final Map.Entry<String, Object> attribute : attributes.entrySet())
         {
-            if (!AttributeNames.DOCUMENTS.equals(attribute.getKey())
-                && !AttributeNames.CLUSTERS.equals(attribute.getKey()))
+            if (!DOCUMENTS_ATTRIBUTE.equals(attribute.getKey())
+                && !CLUSTERS_ATTRIBUTE.equals(attribute.getKey()))
             {
                 System.out.println(attribute.getKey() + ":   " + attribute.getValue());
             }

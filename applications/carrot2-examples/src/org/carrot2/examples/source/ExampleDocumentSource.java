@@ -36,22 +36,22 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
 {
     @Processing
     @Input
-    @Attribute(key = AttributeNames.QUERY)
+    @Attribute(key = SharedAttributesDescriptor.Keys.QUERY)
     public String query;
 
     @Processing
     @Input
-    @Attribute(key = AttributeNames.RESULTS)
+    @Attribute(key = SharedAttributesDescriptor.Keys.RESULTS)
     @IntRange(min = 1, max = 1000)
     public int results = 20;
 
     /**
      * Documents produced by this document source. The documents are returned in an output
-     * attribute with key equal to {@link AttributeNames#DOCUMENTS},
+     * attribute with key equal to {@link SharedAttributesDescriptor.Keys#DOCUMENTS},
      */
     @Processing
     @Output
-    @Attribute(key = AttributeNames.DOCUMENTS)
+    @Attribute(key = SharedAttributesDescriptor.Keys.DOCUMENTS)
     @Internal
     public List<Document> documents;
 
@@ -114,9 +114,30 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
     {
         final Controller controller = ControllerFactory.createSimple();
         final Map<String, Object> params = new HashMap<String, Object>();
-        params.put(AttributeUtils.getKey(ExampleDocumentSource.class, "modulo"), 2);
-        params.put(AttributeUtils.getKey(ExampleDocumentSource.class, "analyzer"),
+
+        /*
+         * This computes the attribute key dynamically based on the class and field name. 
+         */
+        params.put(
+            AttributeUtils.getKey(ExampleDocumentSource.class, "modulo"), 
+            2);
+
+        params.put(
+            AttributeUtils.getKey(ExampleDocumentSource.class, "analyzer"), 
             new WhitespaceAnalyzer());
+        
+        /*
+         * An alternative is to generate additional descriptor classes for bindables.
+         * These classes provide type-safe attribute builders. Unfortunately due to
+         * limitations of java compiler preprocessors, the generated class cannot be used
+         * in the same compilation round as the code it is generated from (you can try
+         * to split the compilation into more than one phase, however).
+         * 
+         * ExampleDocumentSourceDescriptor.attributes()
+         *   .modulo(2)
+         *   .analyzer(new WhitespaceAnalyzer())
+         *   .build();
+         */
 
         final ProcessingResult result = controller.process(params,
             ExampleDocumentSource.class, LingoClusteringAlgorithm.class);

@@ -13,15 +13,21 @@
 package org.carrot2.examples.research;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
-import org.carrot2.core.*;
-import org.carrot2.output.metrics.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.IProcessingComponent;
+import org.carrot2.output.metrics.ClusteringMetricsCalculator;
+import org.carrot2.output.metrics.ContaminationMetricDescriptor;
+import org.carrot2.output.metrics.NormalizedMutualInformationMetricDescriptor;
+import org.carrot2.output.metrics.PrecisionRecallMetricDescriptor;
 import org.carrot2.source.ambient.AmbientDocumentSource;
 import org.carrot2.source.ambient.AmbientDocumentSource.AmbientTopic;
-import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.source.ambient.AmbientDocumentSourceDescriptor;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -45,13 +51,12 @@ public class ClusteringQualityBenchmark
         algorithms.add(STCClusteringAlgorithm.class);
 
         // List of metrics to output
-        final ArrayList<String> metrics = Lists.newArrayList(AttributeUtils.getKey(
-            ContaminationMetric.class, "weightedAverageContamination"), AttributeUtils
-            .getKey(PrecisionRecallMetric.class, "weightedAverageFMeasure"),
-            AttributeUtils
-                .getKey(PrecisionRecallMetric.class, "weightedAveragePrecision"),
-            AttributeUtils.getKey(PrecisionRecallMetric.class, "weightedAverageRecall"),
-            AttributeUtils.getKey(NormalizedMutualInformationMetric.class, "normalizedMutualInformation"));
+        final ArrayList<String> metrics = Lists.newArrayList(
+            ContaminationMetricDescriptor.Keys.WEIGHTED_AVERAGE_CONTAMINATION,
+            PrecisionRecallMetricDescriptor.Keys.WEIGHTED_AVERAGE_F_MEASURE,
+            PrecisionRecallMetricDescriptor.Keys.WEIGHTED_AVERAGE_PRECISION,
+            PrecisionRecallMetricDescriptor.Keys.WEIGHTED_AVERAGE_RECALL,
+            NormalizedMutualInformationMetricDescriptor.Keys.NORMALIZED_MUTUAL_INFORMATION);
 
         final Map<String, Object> attributes = Maps.newHashMap();
 
@@ -61,8 +66,8 @@ public class ClusteringQualityBenchmark
         {
             for (Class<? extends IProcessingComponent> algorithm : algorithms)
             {
-                attributes.put(AttributeUtils
-                    .getKey(AmbientDocumentSource.class, "topic"), topic);
+                AmbientDocumentSourceDescriptor
+                    .attributeBuilder(attributes).topic(topic);
 
                 controller.process(attributes, AmbientDocumentSource.class, algorithm,
                     ClusteringMetricsCalculator.class);

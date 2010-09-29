@@ -16,8 +16,14 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.DocumentSourceDescriptor;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.ProcessingComponentDescriptor;
+import org.carrot2.core.ProcessingComponentSuite;
+import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.util.CloseableUtils;
 
@@ -81,8 +87,9 @@ public class UsingComponentSuites
                         + ", clustering with " + algorithms.get(a).getLabel());
 
                     // As usual, we pass attributes for processing
-                    final Map<String, Object> attributes = Maps.newHashMap();
-                    attributes.put(AttributeNames.QUERY, "data mining");
+                    final Map<String, Object> attributes = 
+                        SharedAttributesDescriptor.attributeBuilder()
+                            .query("data mining").map;
 
                     // Pass component ids to the controller to perform processing
                     final ProcessingResult result = controller.process(attributes,

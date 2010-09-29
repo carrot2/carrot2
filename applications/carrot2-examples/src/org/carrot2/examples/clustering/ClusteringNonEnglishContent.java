@@ -12,7 +12,6 @@
 
 package org.carrot2.examples.clustering;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,13 +22,14 @@ import org.carrot2.core.Document;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.source.google.GoogleDocumentSource;
 import org.carrot2.source.microsoft.BingDocumentSource;
+import org.carrot2.source.microsoft.BingDocumentSourceDescriptor;
 import org.carrot2.source.microsoft.MarketOption;
-import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.text.clustering.MultilingualClusteringDescriptor;
 
 import com.google.common.collect.Lists;
 
@@ -92,10 +92,11 @@ public class ClusteringNonEnglishContent
                 document.getContentUrl(), LanguageCode.ENGLISH));
         }
 
-        final Map<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put(AttributeNames.DOCUMENTS, documents);
-        final ProcessingResult englishResult = controller.process(attributes,
-            LingoClusteringAlgorithm.class);
+        final Map<String, Object> attributes = 
+            SharedAttributesDescriptor.attributeBuilder()
+                .documents(documents).map;
+        final ProcessingResult englishResult = controller.process(
+            attributes, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(englishResult);
 
         /*
@@ -105,10 +106,14 @@ public class ClusteringNonEnglishContent
          * document.
          */
         attributes.clear();
-        attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
-        attributes.put(AttributeUtils.getKey(BingDocumentSource.class, "market"), 
-            MarketOption.CHINESE_CHINA);
-        attributes.put(AttributeNames.RESULTS, 100);
+        
+        SharedAttributesDescriptor.attributeBuilder(attributes)
+            .query("聚类" /* clustering? */)
+            .results(100);
+
+        BingDocumentSourceDescriptor.attributeBuilder(attributes)
+            .market(MarketOption.CHINESE_CHINA);
+
         final ProcessingResult chineseResult = controller.process(attributes,
             BingDocumentSource.class, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(chineseResult);
@@ -121,10 +126,14 @@ public class ClusteringNonEnglishContent
          * MultilingualClustering.defaultLanguage attribute to Chinese on our own.
          */
         attributes.clear();
-        attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
-        attributes.put("MultilingualClustering.defaultLanguage",
-            LanguageCode.CHINESE_SIMPLIFIED);
-        attributes.put(AttributeNames.RESULTS, 100);
+        
+        SharedAttributesDescriptor.attributeBuilder(attributes)
+            .query("聚类" /* clustering? */)
+            .results(100);
+
+        MultilingualClusteringDescriptor.attributeBuilder(attributes)
+            .defaultLanguage(LanguageCode.CHINESE_SIMPLIFIED);
+
         final ProcessingResult chineseResult2 = controller.process(attributes,
             GoogleDocumentSource.class, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(chineseResult2);

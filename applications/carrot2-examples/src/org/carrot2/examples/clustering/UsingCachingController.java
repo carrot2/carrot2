@@ -16,10 +16,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.source.microsoft.BingDocumentSource;
-import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.source.microsoft.BingDocumentSourceDescriptor;
 
 /**
  * This example shows how to set up and use a {@link Controller} that reuses instances of
@@ -73,9 +76,10 @@ public class UsingCachingController
          * own appid for production).
          */
         Map<String, Object> globalAttributes = new HashMap<String, Object>();
-        globalAttributes.put(AttributeNames.RESULTS, 50);
-        globalAttributes.put(AttributeUtils.getKey(BingDocumentSource.class,
-            "appid"), BingDocumentSource.CARROTSEARCH_APPID);
+        BingDocumentSourceDescriptor.attributeBuilder(globalAttributes)
+            .appid(BingDocumentSource.CARROTSEARCH_APPID);
+        SharedAttributesDescriptor.attributeBuilder(globalAttributes)
+            .results(50);
         controller.init(globalAttributes);
 
         /*
@@ -88,14 +92,16 @@ public class UsingCachingController
         System.out.println("Query times: ");
         for (int i = 0; i < 10; i++)
         {
-            Map<String, Object> attributes = new HashMap<String, Object>();
-            attributes.put(AttributeNames.QUERY, "data mining");
+            Map<String, Object> attributes =
+                SharedAttributesDescriptor.attributeBuilder()
+                    .query("data mining")
+                    .map;
 
             // If you want to override the number of results provided on initialization,
             // just pass a new value in processing time attribute map
             if (i % 2 == 0)
             {
-                attributes.put(AttributeNames.RESULTS, 100);
+                attributes.put(SharedAttributesDescriptor.Keys.RESULTS, 100);
             }
 
             final long start = System.currentTimeMillis();

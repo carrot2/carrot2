@@ -15,15 +15,21 @@ package org.carrot2.examples.clustering;
 import java.util.*;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
+import org.carrot2.clustering.stc.STCClusteringAlgorithmDescriptor;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.text.vsm.LinearTfIdfTermWeighting;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
+import org.carrot2.text.vsm.TermDocumentMatrixBuilderDescriptor;
 import org.carrot2.util.attribute.AttributeUtils;
+
+import com.google.common.collect.Lists;
 
 /**
  * This example shows how to cluster a set of documents available as an {@link ArrayList}.
@@ -60,14 +66,15 @@ public class ClusteringDocumentList
          */
         final Map<String, Object> attributes = new HashMap<String, Object>();
 
-        attributes.put(AttributeNames.DOCUMENTS, documents);
+        SharedAttributesDescriptor.attributeBuilder(attributes)
+            .documents(Lists.newArrayList(documents));
 
         /*
          * We will cluster by URL components first. The algorithm that does this is called
          * ByUrlClusteringAlgorithm. It has no parameters.
          */
-        ProcessingResult result = controller.process(attributes,
-            ByUrlClusteringAlgorithm.class);
+        ProcessingResult result = controller.process(
+            attributes, ByUrlClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(result);
 
         /*
@@ -78,15 +85,19 @@ public class ClusteringDocumentList
          */
         Class<?> algorithm = LingoClusteringAlgorithm.class;
         attributes.clear();
-        attributes.put(AttributeNames.DOCUMENTS, documents);
-        attributes.put(AttributeUtils.getKey(TermDocumentMatrixBuilder.class,
-            "termWeighting"), LinearTfIdfTermWeighting.class);
+        
+        LingoClusteringAlgorithmDescriptor.attributeBuilder(attributes)
+            .matrixBuilder()
+                .termWeighting(LinearTfIdfTermWeighting.class);
 
         /*
          * If you know what query generated the documents you're about to cluster, pass
          * the query to the algorithm, which will usually increase clustering quality.
          */
-        attributes.put(AttributeNames.QUERY, "data mining");
+        SharedAttributesDescriptor.attributeBuilder(attributes)
+            .documents(Lists.newArrayList(documents))
+            .query("data mining");
+
         result = controller.process(attributes, algorithm);
         ConsoleFormatter.displayResults(result);
 
@@ -97,17 +108,18 @@ public class ClusteringDocumentList
          * defaults to Java equivalents on all others).
          */
         Boolean nativeUsed = (Boolean) result.getAttributes().get(
-            AttributeUtils.getKey(algorithm, "nativeMatrixUsed"));
+            LingoClusteringAlgorithmDescriptor.Keys.NATIVE_MATRIX_USED);
         System.out.println("Native libraries used: " + nativeUsed);
-        
+
         /*
          * Finally, we'll cluster the same documents with another text clustering 
          * algorithm: Suffix Tree Clustering (STC).
          */
         algorithm = STCClusteringAlgorithm.class;
         attributes.clear();
-        attributes.put(AttributeNames.QUERY, "data mining");
-        attributes.put(AttributeNames.DOCUMENTS, documents);
+        STCClusteringAlgorithmDescriptor.attributeBuilder(attributes)
+            .query("data mining")
+            .documents(Lists.newArrayList(documents));
         result = controller.process(attributes, algorithm);
         ConsoleFormatter.displayResults(result);
     }
