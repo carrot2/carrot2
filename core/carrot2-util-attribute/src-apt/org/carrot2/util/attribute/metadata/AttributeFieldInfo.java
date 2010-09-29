@@ -16,10 +16,11 @@ public class AttributeFieldInfo
     private final String declaringClass;
     private final String descriptorClass;
     private final AttributeFieldInfo inherited;
+    private final boolean generatesClassSetter;
 
     AttributeFieldInfo(String attributeKey, AttributeMetadata metadata,
         String javaDoc, VariableElement field, String declaringClass, String descriptorClass,
-        AttributeFieldInfo inherited)
+        AttributeFieldInfo inherited, boolean generateClassSetter)
     {
         this.key = attributeKey;
         this.metadata = metadata;
@@ -28,6 +29,7 @@ public class AttributeFieldInfo
         this.declaringClass = declaringClass;
         this.descriptorClass = descriptorClass;
         this.inherited = inherited;
+        this.generatesClassSetter = generateClassSetter;
     }
 
     /**
@@ -86,5 +88,10 @@ public class AttributeFieldInfo
     public AttributeFieldInfo getInherited()
     {
         return inherited;
+    }
+
+    public boolean isGeneratesClassSetter()
+    {
+        return generatesClassSetter;
     }
 }

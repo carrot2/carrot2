@@ -52,7 +52,7 @@ public final class BindableProcessor extends AbstractProcessor
     /**
      * Mirror element utilities.
      */
-    private Elements elementUtils;
+    private Elements elements;
 
     /**
      * Apt filer utilities.
@@ -82,7 +82,7 @@ public final class BindableProcessor extends AbstractProcessor
     {
         super.init(processingEnv);
 
-        elementUtils = this.processingEnv.getElementUtils();
+        elements = this.processingEnv.getElementUtils();
         filer = this.processingEnv.getFiler();
         types = this.processingEnv.getTypeUtils();
         messager = this.processingEnv.getMessager();
@@ -227,10 +227,11 @@ public final class BindableProcessor extends AbstractProcessor
                             inherited = new AttributeFieldInfo(
                                 attributeKey, null, null, _field, 
                                 e.getQualifiedName().toString(), 
-                                getDescriptorClassName(e), null);
+                                getDescriptorClassName(e), null,
+                                false);
                         }
                     }
-                    
+
                     if (inherited == null)
                     {
                         String message = "No inheritable attribute for field " + field
@@ -244,7 +245,8 @@ public final class BindableProcessor extends AbstractProcessor
                 attributeFields.add(
                     new AttributeFieldInfo(attributeKey, metadata, javaDoc, field, 
                         type.getQualifiedName().toString(),
-                        getDescriptorClassName(type), inherited));
+                        getDescriptorClassName(type), inherited,
+                        shouldGenerateClassSetter(field)));
 
                 if (attributeMetadata != null)
                 {
@@ -307,7 +309,7 @@ public final class BindableProcessor extends AbstractProcessor
         for (AnnotationMirror m : type.getAnnotationMirrors())
         {
             final Map<? extends ExecutableElement, ? extends AnnotationValue> values = 
-                elementUtils.getElementValuesWithDefaults(m);
+                elements.getElementValuesWithDefaults(m);
 
             for (ExecutableElement e : values.keySet())
             {
@@ -371,7 +373,7 @@ public final class BindableProcessor extends AbstractProcessor
         List<AttributeFieldInfo> allFields, 
         TypeElement type)
     {
-        String packageName = elementUtils.getPackageOf(type).getQualifiedName().toString();
+        String packageName = elements.getPackageOf(type).getQualifiedName().toString();
         String descriptorClassName = getDescriptorClassName(type);
 
         PrintWriter w = null;
@@ -414,7 +416,7 @@ public final class BindableProcessor extends AbstractProcessor
     private String getDescriptorClassName(TypeElement type)
     {
         return BindableDescriptorUtils.getDescriptorClassName(
-            elementUtils.getBinaryName(type).toString());
+            elements.getBinaryName(type).toString());
     }
 
     /**
@@ -445,6 +447,27 @@ public final class BindableProcessor extends AbstractProcessor
         }
 
         return list;
+    }
+
+    /**
+     * Check if a field's type a primitive or a boxed primitive.
+     */
+    private boolean shouldGenerateClassSetter(VariableElement f)
+    {
+        TypeMirror asType = f.asType();
+        TypeKind kind = asType.getKind();
+
+        if (kind.isPrimitive() || kind != TypeKind.DECLARED)
+            return false;
+
+        String rawType = types.erasure(f.asType()).toString();
+        if (rawType.startsWith("java.lang.") || 
+            rawType.startsWith("java.util."))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /*
@@ -506,7 +529,7 @@ public final class BindableProcessor extends AbstractProcessor
     {
         final StringBuilder javaDocText = new StringBuilder();
 
-        final String javaDoc = elementUtils.getDocComment(e);
+        final String javaDoc = elements.getDocComment(e);
         if (javaDoc == null || javaDoc.trim().length() == 0)
         {
             return null;

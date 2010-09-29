@@ -155,7 +155,7 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
     }
 
 
-    /* Keys and attribute descriptors. */
+    /* Attribute keys. */
 
     /**
      * Constants for all attribute keys present in the bindable.
@@ -167,6 +167,9 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
         public static final String $methodutils.asConstant($attr.field.simpleName.toString()) = "${esc.java($attr.key)}";
 #end
     }
+
+
+    /* Attribute descriptors. */
 
     /**
      * Bindable attributes (fields) that belong to this class.
@@ -195,9 +198,7 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
                 #if ($attr.level)org.carrot2.util.attribute.AttributeLevel.${attr.level.toString().toUpperCase()}#else#* *#null#end,
                 #if ($attr.inherited)${attr.inherited.descriptorClass}.attributes.${attr.inherited.field.simpleName}#else#* *#null#end#* *#
             );
-#if ($velocityHasNext )##emit EOL between fields
 
-#end
 #end
 
 #foreach ($i in $nestedFields)
@@ -206,9 +207,7 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
          */
         public final ${i.fieldElement}Descriptor.Attributes ${i.field.simpleName} =
             ${i.fieldElement}Descriptor.attributes;
-#if ($velocityHasNext )##emit EOL between methods
 
-#end
 #end
     }
 
@@ -225,23 +224,27 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
             this.map = map;
         }
 
-        public Map<String, Object> build()
-        {
-            return map;
-        }
-
 #foreach ($i in $ownFields)
         /**
-         * ${esc.java($i.javaDoc)}
+         * $!{esc.java($i.javaDoc)}
          */
         public AttributeBuilder ${i.field.simpleName}($i.field.asType() value)
         {
             map.put("$i.key", value);
             return this;
         }
-#if ($velocityHasNext )##emit EOL between methods
+        #if ($i.generatesClassSetter)#**#
 
-#end
+        /**
+         * $!{esc.java($i.javaDoc)}
+         */
+        public AttributeBuilder ${i.field.simpleName}(Class<? extends $i.field.asType()> clazz)
+        {
+            map.put("$i.key", clazz);
+            return this;
+        }
+        #end
+
 #end
 
 #foreach ($i in $nestedFields)
@@ -254,19 +257,8 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
         {
             return ${i.fieldElement}Descriptor.attributeBuilder(map);
         }
-#if ($velocityHasNext )##emit EOL between methods
 
 #end
-#end
-    }
-
-    /**
-     * Return an attribute builder for this bindable. Provides type-safe checking alternative to
-     * using raw attribute keys.
-     */
-    public static AttributeBuilder attributeBuilder()
-    {
-        return new AttributeBuilder(new HashMap<String, Object>());
     }
 
     /**
