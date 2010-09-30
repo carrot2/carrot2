@@ -20,14 +20,10 @@ import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.clustering.stc.STCClusteringAlgorithmDescriptor;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.text.vsm.LinearTfIdfTermWeighting;
-import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
-import org.carrot2.text.vsm.TermDocumentMatrixBuilderDescriptor;
-import org.carrot2.util.attribute.AttributeUtils;
 
 import com.google.common.collect.Lists;
 

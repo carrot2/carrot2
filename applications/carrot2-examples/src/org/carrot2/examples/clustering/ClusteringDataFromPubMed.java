@@ -19,7 +19,6 @@ import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor.AttributeBuilder;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;

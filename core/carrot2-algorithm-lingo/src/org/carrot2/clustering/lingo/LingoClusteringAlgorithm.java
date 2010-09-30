@@ -79,8 +79,8 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
 
     /**
      * Indicates whether Lingo used fast native matrix computation routines. Value of this
-     * attribute is equal to {@link NNIInterface#isNativeBlasAvailable()} at the time of
-     * running the algorithm.
+     * attribute is equal to {@link org.carrot2.matrix.NNIInterface#isNativeBlasAvailable()} 
+     * at the time of running the algorithm.
      * 
      * @group Matrix model
      * @label Native matrix operations used

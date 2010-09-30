@@ -17,15 +17,11 @@ import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
-import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor.AttributeBuilder;
-import org.carrot2.clustering.stc.STCClusteringAlgorithmDescriptor;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
 import org.carrot2.source.microsoft.BingDocumentSource;
-import org.carrot2.text.preprocessing.CaseNormalizerDescriptor;
 
 import com.google.common.collect.Maps;
 

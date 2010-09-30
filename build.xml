@@ -508,6 +508,9 @@
           <exclude name="**/com/microsoft/msnsearch/**" />
           <exclude name="carrot2-util-text/src/**" />
         </fileset>
+        <fileset dir="${build.dir}">
+          <include name="**/*.java" />
+        </fileset>
       </sourcefiles>
 
       <!-- Unfortunately this needs to be given explicitly for doc-files to work... -->

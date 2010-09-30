@@ -24,7 +24,7 @@ import com.google.common.collect.*;
 
 /**
  * A helper for clustering multilingual collections of documents. The helper partitions
- * the input documents by {@link Document#LANGUAGE}, clusters each such monolingual
+ * the input documents by {@link org.carrot2.core.Document#LANGUAGE}, clusters each such monolingual
  * partition separately and then aggregates the partial cluster lists based on the
  * selected {@link LanguageAggregationStrategy}.
  */
@@ -74,7 +74,8 @@ public class MultilingualClustering
     /**
      * Language aggregation strategy. Determines how clusters generated for individual
      * languages should be combined to form the final result. Please see
-     * {@link LanguageAggregationStrategy} for the list of available options.
+     * {@link org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy} 
+     * for the list of available options.
      * 
      * @group Multilingual clustering
      * @level Medium
@@ -87,7 +88,7 @@ public class MultilingualClustering
 
     /**
      * Default clustering language. The default language to use for documents with
-     * undefined {@link Document#LANGUAGE}.
+     * undefined {@link org.carrot2.core.Document#LANGUAGE}.
      * 
      * @group Multilingual clustering
      * @level Medium
