@@ -172,8 +172,11 @@ public class BindableMetadataBuilderTest
 
         // Note that this scenario is not supported
         checkTitle(AttributeTitles.class, "descriptionWithLinks", "Title");
+        System.out.println(getDescription(AttributeTitles.class, "descriptionWithLinks"));
         checkDescription(AttributeTitles.class, "descriptionWithLinks",
-            "Description with <code>titleAtTheBottom</code> and <code>String</code> links.");
+            "Description with <code>" +
+            AttributeTitles.class.getName() + 
+            ".titleAtTheBottom</code> and <code>String</code> links.");
     }
 
     @Test
