@@ -42,11 +42,12 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
 {
     /**
      * The resource to load XML data from. You can either create instances of
-     * {@link IResource} implementations directly or use {@link ResourceUtils} to look up
-     * {@link IResource} instances from a variety of locations.
+     * {@link org.carrot2.util.resource.IResource} implementations directly or use 
+     * {@link org.carrot2.util.resource.ResourceUtils} to look up
+     * {@link org.carrot2.util.resource.IResource} instances from a variety of locations.
      * <p>
-     * One special {@link IResource} implementation you can use is
-     * {@link URLResourceWithParams}. It allows you to specify attribute placeholders in
+     * One special {@link org.carrot2.util.resource.IResource} implementation you can use is
+     * {@link org.carrot2.util.resource.URLResourceWithParams}. It allows you to specify attribute placeholders in
      * the URL that will be replaced with actual values at runtime. The placeholder format
      * is <code>${attribute}</code>. The following common attributes will be substituted:
      * </p>
@@ -82,9 +83,9 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      * The resource to load XSLT stylesheet from. The XSLT stylesheet is optional and is
      * useful when the source XML stream does not follow the Carrot2 format. The XSLT
      * transformation will be applied to the source XML stream, the transformed XML stream
-     * will be deserialized into {@link Document}s.
+     * will be deserialized into {@link org.carrot2.core.Document}s.
      * <p>
-     * The XSLT {@link IResource} can be provided both on initialization and processing
+     * The XSLT {@link org.carrot2.util.resource.IResource} can be provided both on initialization and processing
      * time. The stylesheet provided on initialization will be cached for the life time of
      * the component, while processing-time style sheets will be compiled every time
      * processing is requested and will override the initialization-time stylesheet.
@@ -111,7 +112,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
 
     /**
      * Values for custom placeholders in the XML URL. If the type of resource provided in
-     * the {@link #xml} attribute is {@link URLResourceWithParams}, this map provides
+     * the {@link #xml} attribute is {@link org.carrot2.util.resource.URLResourceWithParams}, this map provides
      * values for custom placeholders found in the XML URL. Keys of the map correspond to
      * placeholder names, values of the map will be used to replace the placeholders.
      * Please see {@link #xml} for the placeholder syntax.
@@ -276,7 +277,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     }
 
     /**
-     * Opens a {@link IResource}, also handles {@link URLResourceWithParams}s.
+     * Opens a {@link org.carrot2.util.resource.IResource}, also handles {@link org.carrot2.util.resource.URLResourceWithParams}s.
      */
     private InputStream openResource(IResource resource) throws IOException
     {

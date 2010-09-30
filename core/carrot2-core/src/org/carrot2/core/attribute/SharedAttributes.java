@@ -102,9 +102,9 @@ public final class SharedAttributes
 
     /**
      * Data source processing time in milliseconds. A sum of processing times of all
-     * {@link IDocumentSource}s in the chain, including the
-     * {@link IProcessingComponent#beforeProcessing()} and
-     * {@link IProcessingComponent#afterProcessing()} hooks.
+     * {@link org.carrot2.core.IDocumentSource}s in the chain, including the
+     * {@link org.carrot2.core.IProcessingComponent#beforeProcessing()} and
+     * {@link org.carrot2.core.IProcessingComponent#afterProcessing()} hooks.
      * 
      * @label Data Source Processing Time
      * @group Data source status
@@ -114,9 +114,9 @@ public final class SharedAttributes
 
     /**
      * Algorithm processing time in milliseconds. A sum of processing times of all
-     * {@link IClusteringAlgorithm}s in the chain, including the
-     * {@link IProcessingComponent#beforeProcessing()} and
-     * {@link IProcessingComponent#afterProcessing()} hooks.
+     * {@link org.carrot2.core.IClusteringAlgorithm}s in the chain, including the
+     * {@link org.carrot2.core.IProcessingComponent#beforeProcessing()} and
+     * {@link org.carrot2.core.IProcessingComponent#afterProcessing()} hooks.
      * 
      * @label Clustering Algorithm Processing Time
      * @group Clustering algorithm status

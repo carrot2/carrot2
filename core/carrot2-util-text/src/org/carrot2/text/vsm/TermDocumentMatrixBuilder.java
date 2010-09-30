@@ -45,7 +45,7 @@ public class TermDocumentMatrixBuilder
 {
     /**
      * Title word boost. Gives more weight to words that appeared in
-     * {@link Document#TITLE} fields.
+     * {@link org.carrot2.core.Document#TITLE} fields.
      * 
      * @level Medium
      * @group Labels

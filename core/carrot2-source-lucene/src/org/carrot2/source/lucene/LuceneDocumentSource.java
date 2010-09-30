@@ -112,7 +112,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
 
     /**
-     * {@link IFieldMapper} provides the link between Carrot2 {@link Document} fields and
+     * {@link IFieldMapper} provides the link between Carrot2 {@link org.carrot2.core.Document} fields and
      * Lucene index fields.
      * 
      * @label Field mapper
