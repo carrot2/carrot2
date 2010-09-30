@@ -136,7 +136,7 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
 
 #foreach ($attr in $ownFields)
         /**
-         * $!{esc.java($attr.javaDoc)}#if ($attr.inherited)#* *#
+         * $!{$attr.javaDoc}#if ($attr.inherited)#* *#
          * 
          * @see $attr.inherited.declaringClass#$attr.inherited.field.simpleName
 #end
@@ -183,7 +183,9 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
 
 #foreach ($i in $ownFields)
         /**
-         * $!{esc.java($i.javaDoc)}
+         * $!{i.javaDoc}
+         * 
+         * @see ${i.declaringClass}#${i.field.simpleName} 
          */
         public AttributeBuilder ${i.field.simpleName}($i.field.asType() value)
         {
@@ -193,7 +195,9 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
         #if ($i.generatesClassSetter)#**#
 
         /**
-         * $!{esc.java($i.javaDoc)}
+         * $!{i.javaDoc}
+         * 
+         * @see ${i.declaringClass}#${i.field.simpleName}
          */
         public AttributeBuilder ${i.field.simpleName}(Class<? extends $i.field.asType()> clazz)
         {
