@@ -8,7 +8,11 @@ package ${packageName};
 
 import java.util.*;
 import javax.annotation.*;
+
+// Imported for JavaDoc references mostly.
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.resource.*;
+import org.carrot2.core.*;
 
 /**
  * Automatically generated descriptor for the bindable type:

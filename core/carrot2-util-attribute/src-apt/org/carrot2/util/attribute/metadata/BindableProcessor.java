@@ -16,6 +16,7 @@ import static javax.lang.model.SourceVersion.RELEASE_6;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
@@ -592,7 +593,35 @@ public final class BindableProcessor extends AbstractProcessor
         {
             throw new RuntimeException("Could not parse JavaDoc of: " + e.toString(), x);
         }
+        
+        // Post-process the acquired JavaDoc.
+        String processed = javaDocText.toString();
+        
+        // Process local type references and add full prefix.
+        Pattern typeRefs = Pattern.compile("\\{\\@link\\s+\\#", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+        processed = typeRefs.matcher(processed).replaceAll(
+            "{@link " + typeOf(e).getQualifiedName() + "#");
 
-        return javaDocText.toString();
+        return processed.toString();
+    }
+
+    /**
+     * Get the class of an element (or return itself if it's a class already). 
+     */
+    private TypeElement typeOf(Element e)
+    {
+        switch (e.getKind())
+        {
+            case CLASS:
+            case ENUM:
+                return (TypeElement) e;
+
+            case METHOD:
+            case FIELD:
+                return (TypeElement) e.getEnclosingElement();
+
+            default:
+                throw new RuntimeException("Unexpected type: " + e);
+        }
     }
 }
