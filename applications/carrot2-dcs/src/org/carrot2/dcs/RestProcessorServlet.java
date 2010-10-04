@@ -526,7 +526,7 @@ public final class RestProcessorServlet extends HttpServlet
         Throwable e) throws IOException
     {
         final String finalMessage = message + ": " + e.getMessage();
-        config.logger.warn(finalMessage, e);
+        Logger.getRootLogger().error(finalMessage, e);
         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, finalMessage);
     }
 
@@ -534,7 +534,7 @@ public final class RestProcessorServlet extends HttpServlet
         throws IOException
     {
         final String finalMessage = message + ": " + e.getMessage();
-        config.logger.error(finalMessage);
+        Logger.getRootLogger().error(finalMessage);
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, finalMessage);
     }
 
@@ -553,6 +553,7 @@ public final class RestProcessorServlet extends HttpServlet
             "%d{ISO8601} [%-5p] [%c] %m%n"), logPrefix + "/c2-dcs-" + contextPath
             + "-full.log", true);
         appender.setEncoding(UTF8);
+        appender.setImmediateFlush(true);
         return appender;
     }
 
