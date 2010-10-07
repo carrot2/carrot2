@@ -95,6 +95,11 @@ public class PubMedDocumentSource extends SimpleSearchEngine
      */
     private SearchEngineResponse getPubMedAbstracts(List<String> ids) throws Exception
     {
+        if (ids.isEmpty()) 
+        {
+            return new SearchEngineResponse();
+        }
+        
         final XMLReader reader = SAXParserFactory.newInstance().newSAXParser()
             .getXMLReader();
         reader.setFeature("http://xml.org/sax/features/validation", false);
