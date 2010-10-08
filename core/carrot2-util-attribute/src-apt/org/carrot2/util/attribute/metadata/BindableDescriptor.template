@@ -13,64 +13,68 @@ import javax.annotation.*;
 import org.carrot2.util.attribute.*;
 
 /**
- * Automatically generated descriptor for the bindable type:
- * <code>${sourceType.qualifiedName}</code>. 
+ * Metadata and attributes of the {@link ${sourceType.qualifiedName}} component. You can use 
+ * this descriptor to obtain metadata, such as human readable name and description, about the component 
+ * as a whole as well as about its attributes. Using the {@link #attributeBuilder(Map)}
+ * you can obtain a builder for type-safe generation of the attribute maps. Please see the
+ * main overview for a complete code example. 
  */
 @Generated("Generated from ${sourceType.qualifiedName}")
 public final class ${sourceType.simpleName}Descriptor implements IBindableDescriptor
 {
     /**
-     * The bindable class this descriptor was generated for. 
+     * The component class for which this descriptor was generated. 
      */
     public final String bindableClassName = "${esc.java($sourceType.qualifiedName)}";
 
     /**
-     * Common attribute prefix for the bindable.
+     * Attribute prefix used by the component.
      */
     public final String prefix = "${esc.java($bindable.prefix())}";
 
     /**
-     * A one sentence summary of the element. Could be presented as a header of the tool
+     * A one sentence summary of the component. It could be presented as a header of the tool
      * tip of the corresponding UI component.
      */
     public final String title = #stringOrEmpty($metadata.title);
     
     /**
-     * A short label for the element which can be presented as the label of the
+     * A short label for the component. It can be presented as a label of the
      * corresponding UI component.
      */
     public final String label = #stringOrEmpty($metadata.label);
 
     /**
-     * A longer, possibly multi sentence, description of the element. Could be presented
+     * A longer, possibly multi sentence, description of the component. It could be presented
      * as a body of the tool tip of the corresponding UI component.
      */
     public final String description = #stringOrEmpty($metadata.description);
 
     /**
-     * Bindable attributes (fields) that belong to this class only and can be (statically)
-     * determined.
+     * Attributes of the component. Note that only statically reachable fields are included.
+     * Additional attributes may be available at run time. 
      */
     public final static Attributes attributes; 
 
     /**
-     * Attributes that belong to this type only.
+     * Attributes declared directly by the component.
      */
     private final static Set<AttributeInfo> ownAttributes;
 
     /**
-     * Attributes that belong to this type or superclasses.
+     * Attributes declared by the component or its superclasses.
      */
     private final static Set<AttributeInfo> allAttributes;
 
     /**
-     * Attributes that belong to this type or superclasses, lookup dictionary by attribute key.
+     * Attributes declared by the component or its superclasses, lookup dictionary 
+     * by attribute key.
      */
     private final static Map<String, AttributeInfo> allAttributesByKey;
 
     /**
-     * Attributes that belong to this type or superclasses, lookup dictionary by attribute's 
-     * field name.
+     * Attributes declared by the component or its superclasses, lookup dictionary by 
+     * attribute's field name.
      */
     private final static Map<String, AttributeInfo> allAttributesByFieldName;
 
@@ -110,7 +114,7 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
     /* Attribute keys. */
 
     /**
-     * Constants for all attribute keys present in the bindable.
+     * Constants for all attribute keys of the {@link ${sourceType.qualifiedName}} component.
      */
     public static class Keys #if ($superBindableDescriptor) extends ${superBindableDescriptor}.Keys #end#**#
     {
@@ -126,11 +130,11 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
     /* Attribute descriptors. */
 
     /**
-     * Bindable attributes (fields) that belong to this class.
+     * All attributes of the {@link ${sourceType.qualifiedName}} component.
      */
     public static final class Attributes
     {
-        private Attributes() { /* No public instances . */ }
+        private Attributes() { /* No public instances. */ }
 
 #foreach ($attr in $ownFields)
         /**
@@ -157,7 +161,7 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
 
 #foreach ($i in $nestedFields)
         /**
-         * Attributes of a nested bindable type {@link ${i.fieldElement}}.
+         * Attributes of the nested {@link ${i.fieldElement}} component.
          */
         public final ${i.descriptorClass}.Attributes ${i.field.simpleName} =
             ${i.descriptorClass}.attributes;
@@ -166,13 +170,17 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
     }
 
     /**
-     * The builder pattern for collecting attributes of this bindable (not including any possible
-     * sub-bindables, but anything that can be resolved statically).
+     * Attribute map builder for the  {@link ${sourceType.qualifiedName}} component. You can use this
+     * builder as a type-safe alternative to populating the attribute map using attribute keys.
      */
     public static class AttributeBuilder #if ($superBindableDescriptor) extends ${superBindableDescriptor}.AttributeBuilder #end#**#
     {
+        /** The attribute map populated by this builder. */
         public final Map<String, Object> map;
 
+        /**
+         * Creates a builder backed by the provided map.
+         */
         protected AttributeBuilder(Map<String, Object> map)
         {
             #if ($superBindableDescriptor) super(map); #end#**#
@@ -208,8 +216,8 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
 
 #foreach ($i in $nestedFields)
         /**
-         * Returns an attribute builder for a nested bindable type
-         * {@link ${i.fieldElement}}, backed by the same attribute map
+         * Returns an attribute builder for the nested
+         * {@link ${i.fieldElement}} component, backed by the same attribute map
          * as the current builder.
          */
         public ${i.descriptorClass}.AttributeBuilder ${i.field.simpleName}()
@@ -221,10 +229,12 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
     }
 
     /**
-     * Return an attribute builder for this bindable. Provides type-safe checking alternative to
-     * using raw attribute keys.
+     * Creates an attribute map builder for the component. You can use this
+     * builder as a type-safe alternative to populating the attribute map using attribute keys.
      * 
-     * @param attributeValues An existing map which should be used to collect attribute values.
+     * @param attributeValues An existing map which should be used to collect attribute values. 
+     *        Attribute values set by this builder will be added to the provided map, overwriting
+     *        previously defined mappings, if any.
      */
     public static AttributeBuilder attributeBuilder(Map<String, Object> attributeValues)
     {
