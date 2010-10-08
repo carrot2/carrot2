@@ -11,6 +11,7 @@
 
 package org.carrot2.core;
 
+import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import org.carrot2.core.attribute.*;
@@ -69,7 +70,7 @@ final class ControllerUtils
     {
         try
         {
-            AttributeBinder.bind(processingComponent, attributes, Input.class,
+            bind(processingComponent, attributes, Input.class,
                 Processing.class);
 
             processingComponent.beforeProcessing();
@@ -118,7 +119,7 @@ final class ControllerUtils
             processingComponent.afterProcessing();
 
             final Map<String, Object> outputAttributesWithNulls = Maps.newHashMap();
-            AttributeBinder.bind(processingComponent, outputAttributesWithNulls,
+            bind(processingComponent, outputAttributesWithNulls,
                 Output.class, Processing.class);
             attributes.putAll(Maps.filterValues(outputAttributesWithNulls, Predicates
                 .notNull()));
@@ -126,6 +127,19 @@ final class ControllerUtils
         catch (final InstantiationException e)
         {
             throw new ProcessingException("Attribute binding failed", e);
+        }
+    }
+    
+    private static <T> void bind(T object, Map<String, Object> values,
+        Class<? extends Annotation> bindingDirectionAnnotation,
+        Class<? extends Annotation>... filteringAnnotations)
+        throws AttributeBindingException, InstantiationException
+    {
+        // Check if we need to do binding.
+        if (object.getClass().getAnnotation(Bindable.class) != null)
+        {
+            AttributeBinder.bind(object, values, bindingDirectionAnnotation,
+                filteringAnnotations);
         }
     }
 }

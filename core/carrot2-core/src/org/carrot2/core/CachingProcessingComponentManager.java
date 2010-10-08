@@ -209,7 +209,6 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
      * A stub component that fetches the data from the cache and adds the results to the
      * attribute map.
      */
-    @Bindable
     private final class CachedProcessingComponent extends ProcessingComponentBase
     {
         private final Class<? extends IProcessingComponent> componentClass;
