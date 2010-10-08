@@ -25,10 +25,9 @@
   <!-- DCS-specific filters. -->
   <logger name="org.carrot2.util.xslt.TemplatesPool"><level value="error" /></logger>
 
-  <!-- Redirect DCS loggers to console appender -->
-  <logger name="dcs" additivity="false">
+  <!-- Redirect DCS loggers to console appender only (does not propagate to root appenders). -->
+  <logger name="dcs">
       <level value="info" />
-      <appender-ref ref="appender-console" />
   </logger>
   
   <!-- Root logger config. -->

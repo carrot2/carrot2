@@ -48,12 +48,10 @@ class DcsConfig
     @Attribute(name = "component-suite-resource", required = true)
     String componentSuiteResource;
 
-    final Logger logger;
-
-    DcsConfig()
-    {
-        logger = org.slf4j.LoggerFactory.getLogger(DCS_APP_NAME);
-    }
+    /**
+     * Console-only logger.
+     */
+    final Logger logger = org.slf4j.LoggerFactory.getLogger(DCS_APP_NAME);
 
     static DcsConfig deserialize(IResource configResource) throws Exception
     {

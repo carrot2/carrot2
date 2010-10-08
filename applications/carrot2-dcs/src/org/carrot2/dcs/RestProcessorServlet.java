@@ -65,8 +65,8 @@ import com.google.common.collect.Maps;
  */
 public final class RestProcessorServlet extends HttpServlet
 {
-    /** System property to enable/ disable custom appenders. */
-    final static String ENABLE_CUSTOM_APPENDER = "custom.appender";
+    /** System property to disable log file appender. */
+    final static String DISABLE_LOGFILE_APPENDER = "disable.logfile";
 
     /** Response constants */
     private final static String UTF8 = "UTF-8";
@@ -88,11 +88,12 @@ public final class RestProcessorServlet extends HttpServlet
     private transient Templates xsltTemplates;
 
     /**
-     * Enable custom Log4J appender configured in
-     * {@link #getLogAppender(HttpServletRequest)}. The appender is disabled for tests.
+     * Disable log file appender configured in
+     * {@link #getLogAppender(HttpServletRequest)}. 
+     * The appender is enabled by default, but disabled
+     * for tests.
      */
-    private boolean enableCustomAppender = "true".equalsIgnoreCase(System.getProperty(
-        ENABLE_CUSTOM_APPENDER, "true"));
+    private boolean disableLogFileAppender = Boolean.getBoolean(DISABLE_LOGFILE_APPENDER);
 
     @Override
     @SuppressWarnings("unchecked")
@@ -216,7 +217,7 @@ public final class RestProcessorServlet extends HttpServlet
         {
             if (!loggerInitialized)
             {
-                if (enableCustomAppender)
+                if (!disableLogFileAppender)
                 {
                     Logger.getRootLogger().addAppender(getLogAppender(request));
                 }
@@ -526,7 +527,7 @@ public final class RestProcessorServlet extends HttpServlet
         Throwable e) throws IOException
     {
         final String finalMessage = message + ": " + e.getMessage();
-        Logger.getRootLogger().error(finalMessage, e);
+        config.logger.error(finalMessage, e);
         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, finalMessage);
     }
 
@@ -534,7 +535,7 @@ public final class RestProcessorServlet extends HttpServlet
         throws IOException
     {
         final String finalMessage = message + ": " + e.getMessage();
-        Logger.getRootLogger().error(finalMessage);
+        config.logger.error(finalMessage);
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, finalMessage);
     }
 
