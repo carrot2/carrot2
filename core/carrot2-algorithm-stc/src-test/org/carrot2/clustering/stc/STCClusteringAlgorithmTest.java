@@ -53,7 +53,7 @@ public class STCClusteringAlgorithmTest extends
     public void testMaxClusters()
     {
         processingAttributes.put(
-            AttributeUtils.getKey(STCClusteringParameters.class, "maxClusters"), 9);
+            AttributeUtils.getKey(STCClusteringAlgorithm.class, "maxClusters"), 9);
         
         final Collection<Cluster> clusters = 
             cluster(SampleDocumentData.DOCUMENTS_DATA_MINING).getClusters();
@@ -66,7 +66,7 @@ public class STCClusteringAlgorithmTest extends
     public void testSampleClustering()
     {
         this.processingAttributes.put(
-            AttributeUtils.getKey(STCClusteringParameters.class, "maxPhraseOverlap"), 
+            AttributeUtils.getKey(STCClusteringAlgorithm.class, "maxPhraseOverlap"), 
             0.6d);
 
         final Collection<Cluster> clusters = 
