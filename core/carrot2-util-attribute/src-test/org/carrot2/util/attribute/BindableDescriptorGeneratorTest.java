@@ -1,5 +1,6 @@
 package org.carrot2.util.attribute;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.junit.Test;
@@ -11,6 +12,7 @@ public class BindableDescriptorGeneratorTest
     public static class D
     {
         @Attribute(key = "d")
+        @Input
         public int attrD;
     }
 
@@ -18,9 +20,11 @@ public class BindableDescriptorGeneratorTest
     public static class A
     {
         @Attribute(key = "a")
+        @Input
         public int attrA;
         
         @Attribute(key = "c")
+        @Input
         public int attrC;        
     }
     
@@ -32,6 +36,7 @@ public class BindableDescriptorGeneratorTest
     public static class C extends B
     {
         @Attribute(key = "c")
+        @Input
         public int attrC;
 
         /* nested bindable type. */
@@ -117,5 +122,81 @@ public class BindableDescriptorGeneratorTest
         IBindableDescriptor descriptor = BindableDescriptorUtils.getDescriptor(KeyCheck.class);
         Map<String, AttributeInfo> attributesByKey = descriptor.getAttributesByKey();
         assertTrue(attributesByKey.containsKey(AttributeUtils.getKey(KeyCheck.class, "field")));
+    }
+    
+    /*
+     * http://issues.carrot2.org/browse/CARROT-734 
+     */
+    @Bindable
+    public static class OutputAttributeCheck
+    {
+        @Attribute
+        @Input
+        @Output
+        public int inout;
+
+        @Attribute
+        @Input
+        public int in;
+
+        @Attribute
+        @Output
+        public int out;
+        
+        @Attribute
+        @Input
+        @Output
+        public A inoutRef;
+
+        @Attribute
+        @Input
+        public A inRef;
+
+        @Attribute
+        @Output
+        public A outRef;
+    }
+
+    /*
+     * http://issues.carrot2.org/browse/CARROT-734
+     */
+    @Test
+    public void testInputOutputGettersSetters()
+    {
+        IBindableDescriptor descriptor = 
+            BindableDescriptorUtils.getDescriptor(OutputAttributeCheck.class);
+
+        Class<?> builder = getNestedClass(descriptor.getClass(), "AttributeBuilder");
+
+        assertNotNull(getMethod(builder, "in", int.class));
+        assertNotNull(getMethod(builder, "inout", int.class));
+        assertNotNull("Expected getter for inout", getMethod(builder, "inout"));
+        assertNotNull("Expected getter for out", getMethod(builder, "out"));
+        assertNull("Unexpected setter for out", getMethod(builder, "out", int.class));
+
+        assertNotNull(getMethod(builder, "inRef", A.class));
+        assertNotNull(getMethod(builder, "inRef", Class.class));
+        assertNotNull(getMethod(builder, "inoutRef", A.class));
+        assertNotNull(getMethod(builder, "inoutRef", Class.class));
+        assertNotNull("Expected getter for inoutRef", getMethod(builder, "inoutRef"));
+        assertNotNull("Expected getter for outRef", getMethod(builder, "outRef"));
+        assertNull("Unexpected setter for outRef", getMethod(builder, "outRef", A.class));
+        assertNull(getMethod(builder, "outRef", Class.class));
+    }
+
+    private Method getMethod(Class<?> clazz, String methodName, Class<?>... args)
+    {
+        try
+        {
+            return clazz.getMethod(methodName, args);
+        }
+        catch (SecurityException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (NoSuchMethodException e)
+        {
+            return null;
+        }
     }    
 }

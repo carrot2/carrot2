@@ -240,7 +240,7 @@ public final class BindableProcessor extends AbstractProcessor
                             DummyVariableElement _field = new DummyVariableElement(field.getSimpleName());
 
                             inherited = new AttributeFieldInfo(
-                                attributeKey, null, null, _field, 
+                                attributeKey, null, null, _field, types, 
                                 e.getQualifiedName().toString(), 
                                 getDescriptorClassName(e), null,
                                 false);
@@ -258,7 +258,7 @@ public final class BindableProcessor extends AbstractProcessor
                 }
 
                 attributeFields.add(
-                    new AttributeFieldInfo(attributeKey, metadata, javaDoc, field, 
+                    new AttributeFieldInfo(attributeKey, metadata, javaDoc, field, types, 
                         type.getQualifiedName().toString(),
                         getDescriptorClassName(type), inherited,
                         shouldGenerateClassSetter(field)));

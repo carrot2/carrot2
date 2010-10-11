@@ -188,30 +188,47 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
         }
 
 #foreach ($i in $ownFields)
+
+        #* Generate exact type setter for @Input attributes. *#
+        #if ($i.input)#**#
         /**
          * $!{i.javaDoc}
          * 
          * @see ${i.declaringClass}#${i.field.simpleName} 
          */
-        public AttributeBuilder ${i.field.simpleName}($i.field.asType() value)
+        public AttributeBuilder ${i.field.simpleName}($i.type value)
         {
             map.put("$i.key", value);
             return this;
         }
-        #if ($i.generatesClassSetter)#**#
+        #end
 
+        #* Generate type-class setter for @Input attributes that are references. *#
+        #if ($i.generatesClassSetter)#**#
         /**
          * $!{i.javaDoc}
          * 
          * @see ${i.declaringClass}#${i.field.simpleName}
          */
-        public AttributeBuilder ${i.field.simpleName}(Class<? extends $i.field.asType()> clazz)
+        public AttributeBuilder ${i.field.simpleName}(Class<? extends $i.type> clazz)
         {
             map.put("$i.key", clazz);
             return this;
         }
         #end
 
+        #* Generate getter for @Output attributes. *#
+        #if ($i.output)#**#
+        /**
+         * $!{i.javaDoc}
+         * 
+         * @see ${i.declaringClass}#${i.field.simpleName} 
+         */
+        public $i.type ${i.field.simpleName}()
+        {
+            return ($i.boxedType) map.get("$i.key");
+        }
+        #end        
 #end
 
 #foreach ($i in $nestedFields)

@@ -17,6 +17,8 @@ import java.util.List;
 import org.carrot2.core.*;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
 
 /**
  * Attributes shared and inherited by many clustering algorithms. Extracted for consistency.
@@ -37,6 +39,7 @@ public final class SharedAttributes
      * @level Advanced
      * @group Search query
      */
+    @Input
     @Attribute(key = "start")
     public int start;
 
@@ -48,6 +51,7 @@ public final class SharedAttributes
      * @level Basic
      * @group Search query
      */
+    @Input
     @Attribute(key = "results")
     public int results;
 
@@ -58,6 +62,7 @@ public final class SharedAttributes
      * @level Basic
      * @group Search query
      */
+    @Input
     @Attribute(key = "query")
     public String query;
 
@@ -67,16 +72,20 @@ public final class SharedAttributes
      * @label Total Results
      * @group Search request information
      */
+    @Output
     @Attribute(key = "results-total")
     public Long resultsTotal;
 
     /**
-     * Documents returned by the search engine/ document retrieval system.
+     * Documents returned by the search engine/ document retrieval system or
+     * documents passed as input to the clustering algorithm.
      * 
      * @label Documents
      * @level Basic
      * @group Documents
      */
+    @Input
+    @Output
     @Attribute(key = "documents")
     public List<Document> documents;
 
@@ -86,6 +95,7 @@ public final class SharedAttributes
      * @label Clusters
      * @group Clusters
      */
+    @Output
     @Attribute(key = "clusters")
     public List<Cluster> clusters;
 
@@ -97,6 +107,7 @@ public final class SharedAttributes
      * @label Total Processing Time
      * @group Processing status
      */
+    @Output
     @Attribute(key = "processing-time-total")
     public Long processingTimeTotal;
 
@@ -109,6 +120,7 @@ public final class SharedAttributes
      * @label Data Source Processing Time
      * @group Data source status
      */
+    @Output
     @Attribute(key = "processing-time-source")
     public Long processingTimeSource;
 
@@ -121,6 +133,7 @@ public final class SharedAttributes
      * @label Clustering Algorithm Processing Time
      * @group Clustering algorithm status
      */
+    @Output
     @Attribute(key = "processing-time-algorithm")
     public Long processingTimeAlgorithm;
 
@@ -135,6 +148,7 @@ public final class SharedAttributes
      * @level Advanced
      * @group Search request information
      */
+    @Output
     @Attribute(key = "processing-result.title")
     public String processingResultTitle;
 }

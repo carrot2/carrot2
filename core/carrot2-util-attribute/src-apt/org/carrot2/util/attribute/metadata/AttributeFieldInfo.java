@@ -1,14 +1,20 @@
 package org.carrot2.util.attribute.metadata;
 
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.PrimitiveType;
+import javax.lang.model.util.Types;
 
 import org.carrot2.util.attribute.AttributeLevel;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
 
 /**
  * Additional information about an attribute field.
  */
 public class AttributeFieldInfo
 {
+    private final Types types;
+
     private final String key;
     private final AttributeMetadata metadata;
     private final String javaDoc;
@@ -19,9 +25,12 @@ public class AttributeFieldInfo
     private final boolean generatesClassSetter;
 
     AttributeFieldInfo(String attributeKey, AttributeMetadata metadata,
-        String javaDoc, VariableElement field, String declaringClass, String descriptorClass,
+        String javaDoc, VariableElement field, Types types, 
+        String declaringClass, String descriptorClass,
         AttributeFieldInfo inherited, boolean generateClassSetter)
     {
+        this.types = types;
+
         this.key = attributeKey;
         this.metadata = metadata;
         this.javaDoc = javaDoc;
@@ -92,6 +101,31 @@ public class AttributeFieldInfo
 
     public boolean isGeneratesClassSetter()
     {
-        return generatesClassSetter;
+        return generatesClassSetter && isInput();
+    }
+
+    public boolean isInput()
+    {
+        return field.getAnnotation(Input.class) != null;
+    }
+
+    public boolean isOutput()
+    {
+        return field.getAnnotation(Output.class) != null;
+    }    
+    
+    public String getType()
+    {
+        return field.asType().toString();
+    }
+    
+    public String getBoxedType()
+    {
+        if (field.asType().getKind().isPrimitive())
+        {
+            return types.boxedClass((PrimitiveType) field.asType()).toString();
+        }
+
+        return getType();
     }
 }
