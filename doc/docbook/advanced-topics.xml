@@ -79,16 +79,6 @@
           <para>
             Choose <guilabel>Run</guilabel> &gt; <guilabel>External Tools</guilabel> &gt; 
             <guilabel>External Tools Configurations...</guilabel> from
-            the main menu and run the <varname>Attribute Metadata XML</varname> configuration.
-            This will build the metadata files required for the web application to show 
-            advanced options of document sources.
-          </para>
-        </listitem>
-
-        <listitem>
-          <para>
-            Choose <guilabel>Run</guilabel> &gt; <guilabel>External Tools</guilabel> &gt; 
-            <guilabel>External Tools Configurations...</guilabel> from
             the main menu and run the <varname>Web Application Setup [carrot2]</varname> configuration.
             This will preprocess various configuration files required by the web application.
           </para>
