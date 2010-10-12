@@ -201,7 +201,7 @@ public final class Controller
      * @param processingComponentClasses classes of components to perform processing in
      *            the order they should be arranged in the pipeline. Each provided class
      *            must implement {@link IProcessingComponent}.
-     * @return
+     * @return results of the processing
      * @throws ProcessingException
      */
     public ProcessingResult process(List<Document> documents, String queryHint,

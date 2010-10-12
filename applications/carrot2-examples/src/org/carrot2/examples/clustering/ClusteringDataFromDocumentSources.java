@@ -34,7 +34,7 @@ import org.carrot2.source.microsoft.BingDocumentSource;
  * This example shows how to cluster {@link Document}s retrieved from
  * {@link IDocumentSource}s. There are a number of implementations of this interface in the
  * Carrot2 project, in this example we will cluster results from Microsoft Live (Web
- * search) and Yahoo Boss (news search).
+ * search) and Yahoo Boss.
  * 
  * <p>
  * It is assumed that you are familiar with {@link ClusteringDocumentList} example.
@@ -54,8 +54,8 @@ public class ClusteringDataFromDocumentSources
          * One common way to use Carrot2 Java API is to fetch a number of documents 
          * from some {@link org.carrot2.core.IDocumentSource} and cluster them using some 
          * {@link org.carrot2.core.IClusteringAlgorithm}. The simplest yet least flexible
-         * way to do it is to use the {@link org.carrot2.core.Controller#process(String, int, Class...)} 
-         * from the {@link org.carrot2.core.Controller}. The code shown below retrieves 
+         * way to do it is to use the {@link org.carrot2.core.Controller#process(String, Integer, Class...)} 
+         * method from the {@link org.carrot2.core.Controller}. The code shown below retrieves 
          * 100 search results for query <em>data mining</em> from 
          * {@link org.carrot2.source.microsoft.BingDocumentSource} and clusters them using 
          * the {@link org.carrot2.clustering.lingo.LingoClusteringAlgorithm}.

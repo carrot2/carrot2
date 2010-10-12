@@ -569,7 +569,9 @@
     </taskdef>
 
     <extractor outputdir="${overview.dir}/snippets">
-      <fileset dir="${applications.dir}/carrot2-examples/src" />
+      <fileset dir="${applications.dir}/carrot2-examples/src">
+        <include name="**/*.java" />
+      </fileset>
     </extractor>
     
     <setProperty sysproperty="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration" />

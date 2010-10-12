@@ -49,9 +49,9 @@ public class ClusteringDocumentList
          * 
          * <ul>
          * <li>document content: a query-in-context snippet, document abstract or full text,</li>
-         * <li>document title: optional, some clustering algorithms give more weight to document titles</li>
+         * <li>document title: optional, some clustering algorithms give more weight to document titles,</li>
          * <li>document URL: optional, used by the {@link org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm}, 
-         * ignored by other algorithms</li>
+         * ignored by other algorithms.</li>
          * </ul>
          * 
          * <p>

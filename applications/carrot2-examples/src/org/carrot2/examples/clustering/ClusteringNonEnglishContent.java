@@ -66,11 +66,11 @@ import com.google.common.collect.Maps;
  * specific language-related attributes. Currently, three documents support this scenario:
  * <ol>
  * <li>{@link org.carrot2.source.microsoft.BingDocumentSource} through the
- * {@link org.carrot2.source.microsoft.BingDocumentSource#market} attribute</li>
+ * {@link org.carrot2.source.microsoft.BingDocumentSource#market} attribute,</li>
  * <li>{@link org.carrot2.source.boss.BossDocumentSource} through the
- * {@link org.carrot2.source.boss.BossSearchService#languageAndRegion} attribute</li>
+ * {@link org.carrot2.source.boss.BossSearchService#languageAndRegion} attribute,</li>
  * <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the
- * {@link org.carrot2.source.etools.EToolsDocumentSource#language} attribute</li>
+ * {@link org.carrot2.source.etools.EToolsDocumentSource#language} attribute.</li>
  * </ol>
  * For the document sources that do not set the documents' language automatically, the
  * easiest way to set the clustering language is through the
