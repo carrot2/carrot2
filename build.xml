@@ -7,8 +7,11 @@
   <!-- Basedir relative to this build file -->
   <dirname property="carrot2.master.basedir" file="${ant.file.carrot2.master}"/>
   
+  <!-- Tmp dir -->
+  <property name="tmp.dir" location="tmp" />
+  
   <!-- Directory with flattened lib files, to be visible in imported scripts -->
-  <property name="lib.flattened" location="${carrot2.master.basedir}/tmp/lib" />
+  <property name="lib.flattened" location="${tmp.dir}/lib" />
 
   <!-- Import local properties and version -->
   <property file="${carrot2.master.basedir}/local.properties" />
@@ -33,20 +36,20 @@
   <property name="etc.dir" location="${carrot2.master.basedir}/etc" />
 
   <!-- Output dirs -->
-  <property name="build.dir" location="${carrot2.master.basedir}/tmp/classes" />
-  <property name="build.dir.tests" location="${carrot2.master.basedir}/tmp/classes-test" />
-  <property name="build.dir.clover" location="${carrot2.master.basedir}/tmp/classes-clover" />
-  <property name="build.dir.findbugs" location="${carrot2.master.basedir}/tmp/classes-findbugs" />
+  <property name="build.dir" location="${tmp.dir}/classes" />
+  <property name="build.dir.tests" location="${tmp.dir}/classes-test" />
+  <property name="build.dir.clover" location="${tmp.dir}/classes-clover" />
+  <property name="build.dir.findbugs" location="${tmp.dir}/classes-findbugs" />
 
-  <property name="jar.dir" location="${carrot2.master.basedir}/tmp/jar" />
-  <property name="api.dir" location="${carrot2.master.basedir}/tmp/api" />
+  <property name="jar.dir" location="${tmp.dir}/jar" />
+  <property name="api.dir" location="${tmp.dir}/api" />
 
-  <property name="javadoc.dir" location="${carrot2.master.basedir}/tmp/javadoc" />
-  <property name="tests.report.dir" location="${carrot2.master.basedir}/tmp/test-report" />
-  <property name="coverage.report.dir" location="${carrot2.master.basedir}/tmp/coverage-report" />
-  <property name="duplication.report.dir" location="${carrot2.master.basedir}/tmp/duplication-report" />
-  <property name="findbugs.report.dir" location="${carrot2.master.basedir}/tmp/findbugs-report" />
-  <property name="maven.repository.dir" location="${carrot2.master.basedir}/tmp/maven" />
+  <property name="javadoc.dir" location="${tmp.dir}/javadoc" />
+  <property name="tests.report.dir" location="${tmp.dir}/test-report" />
+  <property name="coverage.report.dir" location="${tmp.dir}/coverage-report" />
+  <property name="duplication.report.dir" location="${tmp.dir}/duplication-report" />
+  <property name="findbugs.report.dir" location="${tmp.dir}/findbugs-report" />
+  <property name="maven.repository.dir" location="${tmp.dir}/maven" />
 
   <!-- Java API distribution -->
   <property name="api.dist.base" value="${carrot2.java-api.base}" />
@@ -211,7 +214,7 @@
        Output cleanup.
     -->
   <target name="clean" depends="coverage.clean" description="Cleans all build results">
-    <delete dir="${carrot2.master.basedir}/tmp" failonerror="false" />
+    <delete dir="${tmp.dir}" failonerror="false" />
   </target>
 
   <!-- 
@@ -475,9 +478,11 @@
   <!-- 
        JavaDoc generation.
     -->
-  <target name="javadoc" depends="jar" description="Generates JavaDocs for all core classes">
+  <property name="overview.dir" location="${tmp.dir}/javadoc-overview" />
+  
+  <target name="javadoc" depends="jar, javadoc.overview" description="Generates JavaDocs for all core classes">
     <delete dir="${javadoc.dir}" failonerror="false" />
-    <property name="tmp.src" location="${carrot2.master.basedir}/tmp/src" />
+    <property name="tmp.src" location="${tmp.dir}/src" />
 
     <mkdir dir="${javadoc.dir}" />
 
@@ -493,7 +498,7 @@
              header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} &lt;br&gt;API Documentation&lt;/div&gt;"
              footer="&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
              bottom="&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;&lt;script type=&quot;text/javascript&quot;&gt; var gaJsHost = ((&quot;https:&quot; == document.location.protocol) ? &quot;https://ssl.&quot; : &quot;http://www.&quot;); document.write(unescape(&quot;%3Cscript src='&quot; + gaJsHost + &quot;google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E&quot;)); &lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; var pageTracker = _gat._getTracker(&quot;UA-317750-1&quot;); pageTracker._trackPageview(); &lt;/script&gt;"
-             overview="${etc.dir}/javadoc/overview.html"
+             overview="${overview.dir}/overview.html"
              failonerror="true"
              stylesheetfile="${etc.dir}/javadoc/stylesheet.css"
              useexternalfile="true">
@@ -551,6 +556,34 @@
     </jar>
   </target>
 
+  <target name="javadoc.overview" depends="carrot2.common.antlib.tasks">
+    <mkdir dir="${overview.dir}" />
+    
+    <taskdef name="extractor" classname="com.carrotsearch.ant.snippets.SnippetExtractorTask">
+      <classpath>
+        <path location="${ant.home}/lib/ant.jar" /> 
+        <fileset dir="${etc.dir}/extractor">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+    </taskdef>
+
+    <extractor outputdir="${overview.dir}/snippets">
+      <fileset dir="${applications.dir}/carrot2-examples/src" />
+    </extractor>
+    
+    <setProperty sysproperty="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
+    <copy file="${etc.dir}/javadoc/overview.xsl" todir="${overview.dir}" />
+    <echoxml file="${overview.dir}/dummy.xml">
+      <dummy />
+    </echoxml>
+    <xslt style="${overview.dir}/overview.xsl" 
+          in="${overview.dir}/dummy.xml" 
+          out="${overview.dir}/overview.html" 
+          force="true" />
+  </target>
+
+  
   <!-- 
        Build core JAR.
     -->
@@ -591,7 +624,7 @@
   <target name="jar.mini" depends="jar.mini.test" />
     
   <target name="jar.mini.build" depends="jar">
-    <property name="jar.mini.dir" location="${carrot2.master.basedir}/tmp/jar-mini" />
+    <property name="jar.mini.dir" location="${tmp.dir}/jar-mini" />
     <mkdir dir="${jar.mini.dir}" />
     <unzip src="${jar.dir}/carrot2-core-${carrot2.version}.jar" dest="${jar.mini.dir}" />
 
@@ -613,7 +646,7 @@
 
   <!-- Check if the basic clustering example runs with the mini distribution -->
   <target name="jar.mini.test" depends="jar.mini.build">
-    <property name="jar.mini.test.classes.dir" location="${carrot2.master.basedir}/tmp/jar-mini-classes" />
+    <property name="jar.mini.test.classes.dir" location="${tmp.dir}/jar-mini-classes" />
     <mkdir dir="${jar.mini.test.classes.dir}" />
     <javac srcdir="${carrot2.master.basedir}/applications/carrot2-examples/src"
            destdir="${jar.mini.test.classes.dir}"
@@ -970,7 +1003,7 @@
       Compilation and assembly of static utility JARs (apt preprocessors).
    -->
   <target name="utility.jars" description="Re(create) utility JARs.">
-    <property name="utilities.build.dir" location="${carrot2.master.basedir}/tmp/utility.jars" />
+    <property name="utilities.build.dir" location="${tmp.dir}/utility.jars" />
 
     <delete dir="${utilities.build.dir}" failonerror="false" />
     <mkdir dir="${utilities.build.dir}" />

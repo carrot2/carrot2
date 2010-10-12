@@ -26,6 +26,7 @@ import org.carrot2.core.attribute.SharedAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.source.google.GoogleDocumentSource;
+import org.carrot2.source.google.GoogleDocumentSourceDescriptor;
 import org.carrot2.source.microsoft.BingDocumentSource;
 import org.carrot2.source.microsoft.BingDocumentSourceDescriptor;
 import org.carrot2.source.microsoft.MarketOption;
@@ -35,11 +36,15 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
+ * [[[start:clustering-non-english-content-intro]]]
+ * <div>
+ * <p>
  * This example shows how to cluster non-English content. By default Carrot2 assumes that
  * the documents provided for clustering are written in English. When clustering content
  * written in some different language, it is important to indicate the language to
  * Carrot2, so that it can use the lexical resources (stop words, tokenizer, stemmer)
  * appropriate for that language.
+ * </p>
  * <p>
  * There are two ways to indicate the desired clustering language to Carrot2:
  * </p>
@@ -54,7 +59,7 @@ import com.google.common.collect.Maps;
  * {@link org.carrot2.core.Document#LANGUAGE} field, Carrot2 will assume the some fallback
  * language, which is English by default. You can change the fallback language by setting
  * the {@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage}
- * attribute.
+ * attribute.</li>
  * </ol>
  * Additionally, a number of document sources automatically set the
  * {@link org.carrot2.core.Document#LANGUAGE} of documents they produce based on their
@@ -70,12 +75,15 @@ import com.google.common.collect.Maps;
  * For the document sources that do not set the documents' language automatically, the
  * easiest way to set the clustering language is through the
  * {@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage} attribute.
+ * </div>
+ * [[[end:clustering-non-english-content-intro]]]
  */
 public class ClusteringNonEnglishContent
 {
     @SuppressWarnings("unchecked")
     public static void main(String [] args)
     {
+        // [[[start:clustering-non-english-content]]]
         /*
          * We use a Controller that reuse instances of Carrot2 processing components 
          * and caches results produced by document sources.
@@ -114,6 +122,9 @@ public class ClusteringNonEnglishContent
 
         BingDocumentSourceDescriptor.attributeBuilder(attributes)
             .market(MarketOption.CHINESE_CHINA);
+        BingDocumentSourceDescriptor
+            .attributeBuilder(attributes)
+                .appid(BingDocumentSource.CARROTSEARCH_APPID); // use your own ID here
 
         final ProcessingResult chineseResult = controller.process(attributes,
             BingDocumentSource.class, LingoClusteringAlgorithm.class);
@@ -134,9 +145,13 @@ public class ClusteringNonEnglishContent
 
         MultilingualClusteringDescriptor.attributeBuilder(attributes)
             .defaultLanguage(LanguageCode.CHINESE_SIMPLIFIED);
+        GoogleDocumentSourceDescriptor
+            .attributeBuilder(attributes)
+                .apiKey(GoogleDocumentSource.CARROTSEARCH_API_KEY); // use your own key here
 
         final ProcessingResult chineseResult2 = controller.process(attributes,
             GoogleDocumentSource.class, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(chineseResult2);
+        // [[[end:clustering-non-english-content]]]
     }
 }

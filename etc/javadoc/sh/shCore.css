@@ -340,3 +340,12 @@
 { 
 	color: red !important; 
 }
+
+.syntaxhighlighter {
+	width: auto !important;
+	padding-left: 10px !important;
+}
+.syntaxhighlighter > .lines {
+	border: 5px solid white !important;
+	border-right: none !important;
+}

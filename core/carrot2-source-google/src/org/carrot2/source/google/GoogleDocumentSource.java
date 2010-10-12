@@ -41,6 +41,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class GoogleDocumentSource extends MultipageSearchEngine
 {
     /**
+     * Google API key assigned to Carrot2/ Carrot Search. Use your own, please.
+     */
+    public static final String CARROTSEARCH_API_KEY = "ABQIAAAA_XmITjrzoipJYoBApAgGJhS8yIvkL4-1sNwOJWkV7nbkjq_Z_BQW0-uzOh5lKXRtEXQDTGbzIEz06Q";
+
+    /**
      * Service URL. Google web search service URL.
      * 
      * @group Service
@@ -96,7 +101,7 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     @Processing
     @Internal
     @Attribute
-    public String apiKey = "ABQIAAAA_XmITjrzoipJYoBApAgGJhS8yIvkL4-1sNwOJWkV7nbkjq_Z_BQW0-uzOh5lKXRtEXQDTGbzIEz06Q";
+    public String apiKey = CARROTSEARCH_API_KEY;
 
     /**
      * Google search metadata.

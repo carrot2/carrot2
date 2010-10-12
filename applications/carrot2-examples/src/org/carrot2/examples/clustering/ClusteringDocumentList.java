@@ -12,20 +12,18 @@
 
 package org.carrot2.examples.clustering;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
-import org.carrot2.clustering.stc.STCClusteringAlgorithm;
-import org.carrot2.clustering.stc.STCClusteringAlgorithmDescriptor;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.SharedAttributesDescriptor;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.Document;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.examples.ConsoleFormatter;
-import org.carrot2.examples.SampleDocumentData;
-import org.carrot2.text.vsm.LinearTfIdfTermWeighting;
-
-import com.google.common.collect.Lists;
 
 /**
  * This example shows how to cluster a set of documents available as an {@link ArrayList}.
@@ -41,82 +39,92 @@ public class ClusteringDocumentList
 {
     public static void main(String [] args)
     {
-        /*
-         * Prepare a Collection of {@link Document} instances. Every document SHOULD have
-         * a unique URL (identifier), a title and a snippet (document content), but none
-         * of these are obligatory.
+        /* [[[start:clustering-document-list-intro]]]
+         * 
+         * <div>
+         * <p>
+         * The easiest way to get started with Carrot2 is to cluster a collection
+         * of {@link org.carrot2.core.Document}s. Each document can consist of:
+         * </p>
+         * 
+         * <ul>
+         * <li>document content: a query-in-context snippet, document abstract or full text,</li>
+         * <li>document title: optional, some clustering algorithms give more weight to document titles</li>
+         * <li>document URL: optional, used by the {@link org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm}, 
+         * ignored by other algorithms</li>
+         * </ul>
+         * 
+         * <p>
+         * To make the example short, the code shown below clusters only 5 documents. Use
+         * at least 20 to get reasonable clusters. If you have access to the query that generated
+         * the documents being clustered, you should also provide it to Carrot2 to get better clusters.
+         * </p>
+         * </div>
+         * 
+         * [[[end:clustering-document-list-intro]]]
          */
-        final Collection<Document> documents = SampleDocumentData.DOCUMENTS_DATA_MINING;
+        {
+            // [[[start:clustering-document-list]]]
+            /* A few example documents, normally you would need at least 20 for reasonable clusters. */
+            final String [][] data = new String [] []
+            {
+                {
+                    "http://en.wikipedia.org/wiki/Data_mining",
+                    "Data mining - Wikipedia, the free encyclopedia",
+                    "Article about knowledge-discovery in databases (KDD), the practice of automatically searching large stores of data for patterns."
+                },
 
-        /*
-         * We are clustering using a simple controller (no caching, one-time shot).
-         */
-        final Controller controller = ControllerFactory.createSimple();
+                {
+                    "http://www.ccsu.edu/datamining/resources.html",
+                    "CCSU - Data Mining",
+                    "A collection of Data Mining links edited by the Central Connecticut State University ... Graduate Certificate Program. Data Mining Resources. Resources. Groups ..."
+                },
 
-        /*
-         * All data for components (and between them) is passed using a Map. Place the
-         * required attributes and tuning options in the map below before you start
-         * processing. Each document source and algorithm comes with a set of attributes
-         * that can be tweaked at runtime (during component initialization or processing
-         * of every query). Refer to each component's documentation for details.
-         */
-        final Map<String, Object> attributes = new HashMap<String, Object>();
+                {
+                    "http://www.kdnuggets.com/",
+                    "KDnuggets: Data Mining, Web Mining, and Knowledge Discovery",
+                    "Newsletter on the data mining and knowledge industries, offering information on data mining, knowledge discovery, text mining, and web mining software, courses, jobs, publications, and meetings."
+                },
 
-        SharedAttributesDescriptor.attributeBuilder(attributes)
-            .documents(Lists.newArrayList(documents));
+                {
+                    "http://en.wikipedia.org/wiki/Data-mining",
+                    "Data mining - Wikipedia, the free encyclopedia",
+                    "Data mining is considered a subfield within the Computer Science field of knowledge discovery. ... claim to perform \"data mining\" by automating the creation ..."
+                },
 
-        /*
-         * We will cluster by URL components first. The algorithm that does this is called
-         * ByUrlClusteringAlgorithm. It has no parameters.
-         */
-        ProcessingResult result = controller.process(
-            attributes, ByUrlClusteringAlgorithm.class);
-        ConsoleFormatter.displayResults(result);
+                {
+                    "http://www.anderson.ucla.edu/faculty/jason.frand/teacher/technologies/palace/datamining.htm",
+                    "Data Mining: What is Data Mining?",
+                    "Outlines what knowledge discovery, the process of analyzing data from different perspectives and summarizing it into useful information, can do and how it works."
+                },
+            };
 
-        /*
-         * Now we will cluster the same documents using a more complex text clustering
-         * algorithm: Lingo. Note that the process is essentially the same, but we will
-         * set an algorithm parameter for term weighting to a non-default value to show
-         * how it is done.
-         */
-        Class<?> algorithm = LingoClusteringAlgorithm.class;
-        attributes.clear();
-        
-        LingoClusteringAlgorithmDescriptor.attributeBuilder(attributes)
-            .matrixBuilder()
-                .termWeighting(LinearTfIdfTermWeighting.class);
+            /* Prepare Carrot2 documents */
+            final ArrayList<Document> documents = new ArrayList<Document>();
+            for (String [] row : data)
+            {
+                documents.add(new Document(row[1], row[2], row[0]));
+            }
 
-        /*
-         * If you know what query generated the documents you're about to cluster, pass
-         * the query to the algorithm, which will usually increase clustering quality.
-         */
-        SharedAttributesDescriptor.attributeBuilder(attributes)
-            .documents(Lists.newArrayList(documents))
-            .query("data mining");
+            /* A controller to manage the processing pipeline. */
+            final Controller controller = ControllerFactory.createSimple();
 
-        result = controller.process(attributes, algorithm);
-        ConsoleFormatter.displayResults(result);
-
-        /*
-         * The ProcessingResult object contains everything that has been contributed to
-         * the output Map of values. We can, for example, check if native libraries have
-         * been used (Lingo uses native matrix libraries on supported platforms and
-         * defaults to Java equivalents on all others).
-         */
-        Boolean nativeUsed = (Boolean) result.getAttributes().get(
-            LingoClusteringAlgorithmDescriptor.Keys.NATIVE_MATRIX_USED);
-        System.out.println("Native libraries used: " + nativeUsed);
-
-        /*
-         * Finally, we'll cluster the same documents with another text clustering 
-         * algorithm: Suffix Tree Clustering (STC).
-         */
-        algorithm = STCClusteringAlgorithm.class;
-        attributes.clear();
-        STCClusteringAlgorithmDescriptor.attributeBuilder(attributes)
-            .query("data mining")
-            .documents(Lists.newArrayList(documents));
-        result = controller.process(attributes, algorithm);
-        ConsoleFormatter.displayResults(result);
+            /*
+             * Perform clustering by topic using the Lingo algorithm. Lingo can 
+             * take advantage of the original query, so we provide it along with the documents.
+             */
+            final ProcessingResult byTopicClusters = controller.process(documents, "data mining",
+                LingoClusteringAlgorithm.class);
+            final List<Cluster> clustersByTopic = byTopicClusters.getClusters();
+            
+            /* Perform clustering by domain. In this case query is not useful, hence it is null. */
+            final ProcessingResult byDomainClusters = controller.process(documents, null,
+                ByUrlClusteringAlgorithm.class);
+            final List<Cluster> clustersByDomain = byDomainClusters.getClusters();
+            // [[[end:clustering-document-list]]]
+            
+            ConsoleFormatter.displayClusters(clustersByTopic);
+            ConsoleFormatter.displayClusters(clustersByDomain);
+       }
     }
 }

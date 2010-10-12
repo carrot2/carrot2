@@ -17,7 +17,7 @@ import org.carrot2.util.attribute.*;
  * this descriptor to obtain metadata, such as human readable name and description, about the component 
  * as a whole as well as about its attributes. Using the {@link #attributeBuilder(Map)}
  * you can obtain a builder for type-safe generation of the attribute maps. Please see the
- * main overview for a complete code example. 
+ * <a href="{@docRoot}/overview-summary.html#setting-attributes">main overview</a> for a complete code example. 
  */
 @Generated("Generated from ${sourceType.qualifiedName}")
 public final class ${sourceType.simpleName}Descriptor implements IBindableDescriptor

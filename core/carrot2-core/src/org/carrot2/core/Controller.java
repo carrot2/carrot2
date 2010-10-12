@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,8 +12,10 @@
 package org.carrot2.core;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.ReflectionUtils;
@@ -158,6 +159,64 @@ public final class Controller
     }
 
     /**
+     * Convenience method for performing processing with the provided query and number of
+     * results. The typical use cases for this method is fetching the specified number of
+     * results from an {@link IDocumentSource} and, optionally, clustering them with an
+     * {@link IClusteringAlgorithm}.
+     * <p>
+     * For a method allowing to pass more attributes, see: {@link #process(Map, Class...)}.
+     * </p>
+     * 
+     * @param query the query to use during processing
+     * @param results the number of results to fetch. If <code>null</code> is provided,
+     *            the default number of results will be requested.
+     * @param processingComponentClasses classes of components to perform processing in
+     *            the order they should be arranged in the pipeline. Each provided class
+     *            must implement {@link IProcessingComponent}.
+     * @return results of the processing
+     */
+    public ProcessingResult process(String query, Integer results,
+        Class<?>... processingComponentClasses) throws ProcessingException
+    {
+        final Map<String, Object> attributes = Maps.newHashMap();
+        attributes.put(AttributeNames.QUERY, query);
+        if (results != null)
+        {
+            attributes.put(AttributeNames.RESULTS, results);
+        }
+        return process(attributes, processingComponentClasses);
+    }
+
+    /**
+     * Convenience method for clustering the provided list of {@link Document}s. If the
+     * query that generated the <code>documents</code> is available, it can be provided in
+     * the <code>queryHint</code> parameter to increase the quality of clusters.
+     * <p>
+     * For a method allowing to pass more attributes, see: {@link #process(Map, Class...)}.
+     * </p>
+     * 
+     * @param documents the documents to cluster
+     * @param queryHint the query that generated the documents, optional, can be
+     *            <code>null</code> if not available.
+     * @param processingComponentClasses classes of components to perform processing in
+     *            the order they should be arranged in the pipeline. Each provided class
+     *            must implement {@link IProcessingComponent}.
+     * @return
+     * @throws ProcessingException
+     */
+    public ProcessingResult process(List<Document> documents, String queryHint,
+        Class<?>... processingComponentClasses) throws ProcessingException
+    {
+        final Map<String, Object> attributes = Maps.newHashMap();
+        attributes.put(AttributeNames.DOCUMENTS, documents);
+        if (StringUtils.isNotBlank(queryHint))
+        {
+            attributes.put(AttributeNames.QUERY, queryHint);
+        }
+        return process(attributes, processingComponentClasses);
+    }
+
+    /**
      * Performs processing using components designated by their class. If you initialized
      * this controller using {@link #init(Map, ProcessingComponentConfiguration...)} and
      * would like to designate components by their identifiers, call
@@ -227,7 +286,7 @@ public final class Controller
         // small compared to the API simplification benefits.
         synchronized (this)
         {
-            if (componentIdToConfiguration == null) 
+            if (componentIdToConfiguration == null)
             {
                 init();
             }
@@ -387,8 +446,8 @@ public final class Controller
                     + clazz.getName());
             }
 
-            return new ProcessingComponentConfiguration(clazz
-                .asSubclass(IProcessingComponent.class), null);
+            return new ProcessingComponentConfiguration(
+                clazz.asSubclass(IProcessingComponent.class), null);
         }
 
         throw new IllegalArgumentException("Expected a String or a Class<? extends "
@@ -498,15 +557,19 @@ public final class Controller
             // worth the extra synchronizations though.
             synchronized (this)
             {
-                return new ControllerStatistics(totalQueries, goodQueries,
-                    algorithmTimeAverage.getCurrentAverage(), algorithmTimeAverage
-                        .getUpdatesInWindow(),
-                    algorithmTimeAverage.getWindowSizeMillis(), sourceTimeAverage
-                        .getCurrentAverage(), sourceTimeAverage.getUpdatesInWindow(),
-                    sourceTimeAverage.getWindowSizeMillis(), totalTimeAverage
-                        .getCurrentAverage(), totalTimeAverage.getUpdatesInWindow(),
-                    totalTimeAverage.getWindowSizeMillis(), (Long) extraStats
-                        .get(CachingProcessingComponentManager.CACHE_MISSES),
+                return new ControllerStatistics(
+                    totalQueries,
+                    goodQueries,
+                    algorithmTimeAverage.getCurrentAverage(),
+                    algorithmTimeAverage.getUpdatesInWindow(),
+                    algorithmTimeAverage.getWindowSizeMillis(),
+                    sourceTimeAverage.getCurrentAverage(),
+                    sourceTimeAverage.getUpdatesInWindow(),
+                    sourceTimeAverage.getWindowSizeMillis(),
+                    totalTimeAverage.getCurrentAverage(),
+                    totalTimeAverage.getUpdatesInWindow(),
+                    totalTimeAverage.getWindowSizeMillis(),
+                    (Long) extraStats.get(CachingProcessingComponentManager.CACHE_MISSES),
                     (Long) extraStats
                         .get(CachingProcessingComponentManager.CACHE_HITS_TOTAL),
                     (Long) extraStats
