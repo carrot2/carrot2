@@ -24,7 +24,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.SharedAttributesDescriptor;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.CreateLuceneIndex;
 import org.carrot2.source.lucene.*;
@@ -129,7 +129,7 @@ public class ClusteringDataFromLuceneWithCustomFields
          */
         final String query = "mining";
         final Map<String, Object> processingAttributes = Maps.newHashMap();
-        SharedAttributesDescriptor.attributeBuilder(processingAttributes)
+        CommonAttributesDescriptor.attributeBuilder(processingAttributes)
             .query(query);
 
         /*

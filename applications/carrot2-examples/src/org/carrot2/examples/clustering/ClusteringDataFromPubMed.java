@@ -19,7 +19,7 @@ import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor.AttributeBuilder;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.SharedAttributesDescriptor;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.source.pubmed.PubMedDocumentSource;
@@ -46,7 +46,7 @@ public class ClusteringDataFromPubMed
         /*
          * Search attributes.
          */
-        SharedAttributesDescriptor
+        CommonAttributesDescriptor
             .attributeBuilder(attributes)
             .query("heart")
             .results(100);

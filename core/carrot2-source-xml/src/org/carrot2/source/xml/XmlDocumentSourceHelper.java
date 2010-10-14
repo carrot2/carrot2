@@ -25,6 +25,7 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.StreamUtils;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
@@ -33,6 +34,8 @@ import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.xslt.NopURIResolver;
 import org.carrot2.util.xslt.TemplatesPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -64,6 +67,8 @@ public class XmlDocumentSourceHelper
      * URI resolver. Does nothing.
      */
     private final static URIResolver uriResolver = new NopURIResolver();
+    
+    private final static Logger log = LoggerFactory.getLogger(XmlDocumentSourceHelper.class);
 
     /**
      *
@@ -104,9 +109,7 @@ public class XmlDocumentSourceHelper
 
         final int statusCode = response.status;
 
-        if (statusCode == HttpStatus.SC_OK
-            || statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE
-            || statusCode == HttpStatus.SC_BAD_REQUEST)
+        if (statusCode == HttpStatus.SC_OK)
         {
             metadata.put(SearchEngineResponse.COMPRESSION_KEY, response.compression);
             return loadProcessingResult(carrot2XmlStream, stylesheet, xsltParameters);
@@ -148,6 +151,7 @@ public class XmlDocumentSourceHelper
         InputStream carrot2XmlInputStream;
         if (stylesheet != null)
         {
+            byte [] debugInput = null;
             try
             {
                 // Initialize transformer
@@ -163,11 +167,25 @@ public class XmlDocumentSourceHelper
                     }
                 }
 
+                if (log.isDebugEnabled())
+                {
+                    debugInput = StreamUtils.readFullyAndClose(xmlInputStream);
+                    xmlInputStream = new ByteArrayInputStream(debugInput);
+                }
+
                 // Perform transformation
                 transformer.transform(new StreamSource(xmlInputStream), new StreamResult(
                     outputStream));
-                carrot2XmlInputStream = new ByteArrayInputStream(outputStream
-                    .toByteArray());
+                carrot2XmlInputStream = new ByteArrayInputStream(
+                    outputStream.toByteArray());
+            }
+            catch (TransformerException e)
+            {
+                if (debugInput != null)
+                {
+                    log.debug("Transformer input: " + new String(debugInput, "UTF-8"));
+                }
+                throw e;
             }
             finally
             {

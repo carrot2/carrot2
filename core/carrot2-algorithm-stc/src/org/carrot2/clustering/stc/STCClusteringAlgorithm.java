@@ -57,7 +57,7 @@ import com.google.common.collect.Lists;
  * 
  * @label STC Clustering
  */
-@Bindable(prefix = "STCClusteringAlgorithm", inherit = SharedAttributes.class)
+@Bindable(prefix = "STCClusteringAlgorithm", inherit = CommonAttributes.class)
 public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {

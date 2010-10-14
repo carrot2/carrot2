@@ -22,7 +22,7 @@ import org.carrot2.core.Document;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.SharedAttributesDescriptor;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.source.google.GoogleDocumentSource;
@@ -102,7 +102,7 @@ public class ClusteringNonEnglishContent
         }
 
         final Map<String, Object> attributes = Maps.newHashMap();
-        SharedAttributesDescriptor.attributeBuilder(attributes)
+        CommonAttributesDescriptor.attributeBuilder(attributes)
             .documents(documents);
         final ProcessingResult englishResult = controller.process(
             attributes, LingoClusteringAlgorithm.class);
@@ -116,7 +116,7 @@ public class ClusteringNonEnglishContent
          */
         attributes.clear();
         
-        SharedAttributesDescriptor.attributeBuilder(attributes)
+        CommonAttributesDescriptor.attributeBuilder(attributes)
             .query("聚类" /* clustering? */)
             .results(100);
 
@@ -139,7 +139,7 @@ public class ClusteringNonEnglishContent
          */
         attributes.clear();
         
-        SharedAttributesDescriptor.attributeBuilder(attributes)
+        CommonAttributesDescriptor.attributeBuilder(attributes)
             .query("聚类" /* clustering? */)
             .results(100);
 

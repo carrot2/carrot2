@@ -23,7 +23,7 @@ import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.SharedAttributesDescriptor;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.util.CloseableUtils;
 
@@ -88,7 +88,7 @@ public class UsingComponentSuites
 
                     // As usual, we pass attributes for processing
                     final Map<String, Object> attributes = Maps.newHashMap();
-                    SharedAttributesDescriptor.attributeBuilder(attributes)
+                    CommonAttributesDescriptor.attributeBuilder(attributes)
                         .query("data mining");
 
                     // Pass component ids to the controller to perform processing

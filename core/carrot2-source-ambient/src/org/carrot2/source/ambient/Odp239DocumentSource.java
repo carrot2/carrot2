@@ -21,7 +21,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
  * Serves documents from the ODP239 test set. For more details, please see:
  * http://credo.fub.it/odp239/.
  */
-@Bindable(prefix = "Odp239DocumentSource", inherit = SharedAttributes.class)
+@Bindable(prefix = "Odp239DocumentSource", inherit = CommonAttributes.class)
 public class Odp239DocumentSource extends FubDocumentSource
 {
     static final FubTestCollection DATA = new FubTestCollection("/odp239");

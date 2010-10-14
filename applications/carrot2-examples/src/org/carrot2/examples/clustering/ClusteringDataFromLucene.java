@@ -25,7 +25,7 @@ import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingComponentConfiguration;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.SharedAttributesDescriptor;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.CreateLuceneIndex;
 import org.carrot2.source.lucene.LuceneDocumentSource;
@@ -108,7 +108,7 @@ public class ClusteringDataFromLucene
          */
         String query = "mining";
         final Map<String, Object> processingAttributes = Maps.newHashMap();
-        SharedAttributesDescriptor.attributeBuilder(processingAttributes)
+        CommonAttributesDescriptor.attributeBuilder(processingAttributes)
             .query(query);
 
         /*

@@ -24,10 +24,10 @@ import org.carrot2.util.attribute.Output;
  * Attributes shared and inherited by many clustering algorithms. Extracted for consistency.
  */
 @Bindable
-public final class SharedAttributes
+public final class CommonAttributes
 {
     // No instances.
-    private SharedAttributes()
+    private CommonAttributes()
     {
         // no instances.
     }

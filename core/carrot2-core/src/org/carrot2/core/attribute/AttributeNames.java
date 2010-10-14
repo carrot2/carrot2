@@ -13,60 +13,60 @@
 package org.carrot2.core.attribute;
 
 /**
- * Certain constant attribute names. Note that not all attributes need to be specified
- * here.
+ * Constants for common attribute names, only for the use in Carrot2 core code. When
+ * calling Carrot2 APIs, use {@link CommonAttributesDescriptor.Keys}.
  * 
- * @see SharedAttributesDescriptor.Keys
+ * @see CommonAttributesDescriptor.Keys
  */
 public final class AttributeNames
 {
     /**
-     * @see SharedAttributesDescriptor.Keys#START
+     * @see CommonAttributesDescriptor.Keys#START
      */
     public static final String START = "start";
 
     /**
-     * @see SharedAttributesDescriptor.Keys#RESULTS
+     * @see CommonAttributesDescriptor.Keys#RESULTS
      */
     public static final String RESULTS = "results";
 
     /**
-     * @see SharedAttributesDescriptor.Keys#QUERY
+     * @see CommonAttributesDescriptor.Keys#QUERY
      */
     public static final String QUERY = "query";
 
     /**
-     * @see SharedAttributesDescriptor.Keys#RESULTS_TOTAL
+     * @see CommonAttributesDescriptor.Keys#RESULTS_TOTAL
      */
     public static final String RESULTS_TOTAL = "results-total";
 
     /**
-     * @see SharedAttributesDescriptor.Keys#DOCUMENTS
+     * @see CommonAttributesDescriptor.Keys#DOCUMENTS
      */
     public static final String DOCUMENTS = "documents";
 
     /**
-     * @see SharedAttributesDescriptor.Keys#CLUSTERS
+     * @see CommonAttributesDescriptor.Keys#CLUSTERS
      */
     public static final String CLUSTERS = "clusters";
 
     /**
-     * @see SharedAttributesDescriptor.Keys#PROCESSING_TIME_TOTAL
+     * @see CommonAttributesDescriptor.Keys#PROCESSING_TIME_TOTAL
      */
     public static final String PROCESSING_TIME_TOTAL = "processing-time-total";
 
     /**
-     * @see SharedAttributesDescriptor.Keys#PROCESSING_TIME_SOURCE
+     * @see CommonAttributesDescriptor.Keys#PROCESSING_TIME_SOURCE
      */
     public static final String PROCESSING_TIME_SOURCE = "processing-time-source";
 
     /**
-     * @see SharedAttributesDescriptor.Keys#PROCESSING_TIME_ALGORITHM
+     * @see CommonAttributesDescriptor.Keys#PROCESSING_TIME_ALGORITHM
      */
     public static final String PROCESSING_TIME_ALGORITHM = "processing-time-algorithm";
 
     /**
-     * @see SharedAttributesDescriptor.Keys#PROCESSING_RESULT_TITLE
+     * @see CommonAttributesDescriptor.Keys#PROCESSING_RESULT_TITLE
      */
     public static final String PROCESSING_RESULT_TITLE = "processing-result.title";
 

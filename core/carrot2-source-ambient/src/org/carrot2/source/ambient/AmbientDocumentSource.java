@@ -23,7 +23,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
  * with a set of subtopics and a list of 100 ranked documents. For more information,
  * please see <a href="http://credo.fub.it/ambient/">Ambient home page</a>.
  */
-@Bindable(prefix = "AmbientDocumentSource", inherit = SharedAttributes.class)
+@Bindable(prefix = "AmbientDocumentSource", inherit = CommonAttributes.class)
 public class AmbientDocumentSource extends FubDocumentSource
 {
     static final FubTestCollection DATA = new FubTestCollection("/ambient");

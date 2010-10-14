@@ -19,7 +19,7 @@ import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.SharedAttributesDescriptor;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.util.CloseableUtils;
@@ -63,7 +63,7 @@ public class LoadingAttributeValuesFromXml
 
             // Perform clustering using the attribute set provided at initialization time
             Map<String, Object> requestAttributes = Maps.newHashMap(); 
-            SharedAttributesDescriptor.attributeBuilder(requestAttributes)
+            CommonAttributesDescriptor.attributeBuilder(requestAttributes)
                 .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
                 .query("data mining");
             ProcessingResult results = controller.process(requestAttributes, LingoClusteringAlgorithm.class);
@@ -72,7 +72,7 @@ public class LoadingAttributeValuesFromXml
             // Perform clustering using some other attribute set, in this case the
             // one that is the default in the XML file.
             requestAttributes =
-                SharedAttributesDescriptor.attributeBuilder(Maps.newHashMap(defaultAttributes))
+                CommonAttributesDescriptor.attributeBuilder(Maps.newHashMap(defaultAttributes))
                     .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
                     .query("data mining").map;
 

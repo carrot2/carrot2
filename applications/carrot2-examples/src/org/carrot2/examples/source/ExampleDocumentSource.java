@@ -36,22 +36,22 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
 {
     @Processing
     @Input
-    @Attribute(key = SharedAttributesDescriptor.Keys.QUERY)
+    @Attribute(key = CommonAttributesDescriptor.Keys.QUERY)
     public String query;
 
     @Processing
     @Input
-    @Attribute(key = SharedAttributesDescriptor.Keys.RESULTS)
+    @Attribute(key = CommonAttributesDescriptor.Keys.RESULTS)
     @IntRange(min = 1, max = 1000)
     public int results = 20;
 
     /**
      * Documents produced by this document source. The documents are returned in an output
-     * attribute with key equal to {@link SharedAttributesDescriptor.Keys#DOCUMENTS},
+     * attribute with key equal to {@link CommonAttributesDescriptor.Keys#DOCUMENTS},
      */
     @Processing
     @Output
-    @Attribute(key = SharedAttributesDescriptor.Keys.DOCUMENTS)
+    @Attribute(key = CommonAttributesDescriptor.Keys.DOCUMENTS)
     @Internal
     public List<Document> documents;
 

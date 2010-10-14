@@ -24,7 +24,7 @@ import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.Document;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.SharedAttributesDescriptor;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.source.boss.BossDocumentSource;
 import org.carrot2.source.boss.BossSearchService;
@@ -103,8 +103,8 @@ public class ClusteringDataFromDocumentSources
             attributes.put("BossSearchService.appid", BossSearchService.CARROTSEARCH_APPID);
     
             /* Query an the required number of results */
-            attributes.put(SharedAttributesDescriptor.Keys.QUERY, "clustering");
-            attributes.put(SharedAttributesDescriptor.Keys.RESULTS, 50);
+            attributes.put(CommonAttributesDescriptor.Keys.QUERY, "clustering");
+            attributes.put(CommonAttributesDescriptor.Keys.RESULTS, 50);
     
             /* Perform processing */
             final ProcessingResult result = controller.process(attributes, 

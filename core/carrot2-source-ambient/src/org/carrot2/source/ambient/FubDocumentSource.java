@@ -23,7 +23,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
 /**
  * A base document source for test collections developed at Fondazione Ugo Bordoni. 
  */
-@Bindable(prefix = "FubDocumentSource", inherit = SharedAttributes.class)
+@Bindable(prefix = "FubDocumentSource", inherit = CommonAttributes.class)
 public class FubDocumentSource extends ProcessingComponentBase implements IDocumentSource
 {
     @Processing

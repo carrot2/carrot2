@@ -23,7 +23,7 @@ import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.SharedAttributesDescriptor;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.source.boss.BossSearchService;
@@ -67,8 +67,8 @@ public class UsingAttributes
             final Map<String, Object> attributes = new HashMap<String, Object>();
 
             /* Put values using attribute builders */
-            attributes.put(SharedAttributesDescriptor.Keys.QUERY, "data mining");
-            attributes.put(SharedAttributesDescriptor.Keys.RESULTS, 100);
+            attributes.put(CommonAttributesDescriptor.Keys.QUERY, "data mining");
+            attributes.put(CommonAttributesDescriptor.Keys.RESULTS, 100);
             attributes.put("BossSearchService.sites", "wikipedia.org");
             attributes.put("BossSearchService.appid", 
                 BossSearchService.CARROTSEARCH_APPID); // user your own ID here
@@ -128,7 +128,7 @@ public class UsingAttributes
             final Map<String, Object> attributes = new HashMap<String, Object>();
 
             /* Put values using attribute builders */
-            SharedAttributesDescriptor
+            CommonAttributesDescriptor
                 .attributeBuilder(attributes)
                     .query("data mining")
                     .results(100);
@@ -178,7 +178,7 @@ public class UsingAttributes
             
             /* Prepare attribute map */
             final Map<String, Object> attributes = new HashMap<String, Object>();
-            SharedAttributesDescriptor
+            CommonAttributesDescriptor
                 .attributeBuilder(attributes)
                     .documents(SampleDocumentData.DOCUMENTS_DATA_MINING);
             LingoClusteringAlgorithmDescriptor

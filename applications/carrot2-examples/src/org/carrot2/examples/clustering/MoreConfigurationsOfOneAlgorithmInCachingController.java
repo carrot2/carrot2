@@ -18,7 +18,7 @@ import java.util.Map;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.SharedAttributesDescriptor;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
 import org.carrot2.source.microsoft.BingDocumentSource;
@@ -113,7 +113,7 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
          * source class name rather than the class itself.
          */
         final Map<String, Object> attributes = new HashMap<String, Object>();
-        SharedAttributesDescriptor.attributeBuilder(attributes)
+        CommonAttributesDescriptor.attributeBuilder(attributes)
             .query("data mining");
 
         final ProcessingResult fastResult = controller.process(attributes,

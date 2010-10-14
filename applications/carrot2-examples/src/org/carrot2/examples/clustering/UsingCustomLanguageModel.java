@@ -23,7 +23,7 @@ import org.carrot2.core.IClusteringAlgorithm;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.SharedAttributesDescriptor;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
@@ -71,7 +71,7 @@ public class UsingCustomLanguageModel
     {
         final Map<String, Object> processingAttributes = Maps.newHashMap();
 
-        SharedAttributesDescriptor.attributeBuilder(processingAttributes)
+        CommonAttributesDescriptor.attributeBuilder(processingAttributes)
             .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
             .query("data mining");
 
