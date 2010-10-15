@@ -26,7 +26,7 @@ import com.google.common.collect.ImmutableList;
  */
 public final class SampleDocumentData
 {
-    public final static Collection<Document> DOCUMENTS_DATA_MINING;
+    public final static List<Document> DOCUMENTS_DATA_MINING;
     static
     {
         final String [][] data = new String [] []
@@ -637,7 +637,7 @@ public final class SampleDocumentData
         DOCUMENTS_DATA_MINING = Collections.unmodifiableList(documents);
     }
 
-    public final static Collection<Document> DOCUMENTS_DAWID;
+    public final static List<Document> DOCUMENTS_DAWID;
     static
     {
         final String [][] data = new String [] []
@@ -1243,7 +1243,7 @@ public final class SampleDocumentData
         DOCUMENTS_DAWID = Collections.unmodifiableList(documents);
     }
 
-    public final static Collection<Document> DOCUMENTS_SALSA_MULTILINGUAL;
+    public final static List<Document> DOCUMENTS_SALSA_MULTILINGUAL;
     static
     {
         DOCUMENTS_SALSA_MULTILINGUAL = ImmutableList.of(
@@ -3241,6 +3241,6 @@ public final class SampleDocumentData
         );
     }
     
-    public final static List<Collection<Document>> ALL = ImmutableList.of(
+    public final static List<List<Document>> ALL = ImmutableList.of(
         DOCUMENTS_DATA_MINING, DOCUMENTS_DAWID, DOCUMENTS_SALSA_MULTILINGUAL);
 }

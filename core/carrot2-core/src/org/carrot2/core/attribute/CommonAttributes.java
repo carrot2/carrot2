@@ -94,6 +94,7 @@ public final class CommonAttributes
      * 
      * @label Clusters
      * @group Clusters
+     * @level Basic
      */
     @Output
     @Attribute(key = "clusters")

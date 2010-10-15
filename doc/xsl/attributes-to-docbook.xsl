@@ -340,9 +340,28 @@
         <db:link xlink:href="{$carrot2.javadoc.url}/{translate($value, '.$', '/.')}{$suffix}.html{$anchor}"><xsl:choose><xsl:when test="string-length($text) > 0"><xsl:value-of select="$text" /></xsl:when><xsl:otherwise><xsl:value-of select="$value" /></xsl:otherwise></xsl:choose></db:link>
       </xsl:when>
       
+      <xsl:otherwise>
+        <xsl:call-template name="javadoc-link-alternate">
+          <xsl:with-param name="value" select="$value" />
+          <xsl:with-param name="suffix" select="$suffix" />
+          <xsl:with-param name="anchor" select="$anchor" />
+          <xsl:with-param name="text" select="$text" />
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="javadoc-link-alternate">
+    <xsl:param name="value" />
+    <xsl:param name="suffix" />
+    <xsl:param name="anchor" />
+    <xsl:param name="text" />
+
+    <xsl:choose>
+      <xsl:when test="string-length($text) > 0"><xsl:value-of select="$text" /></xsl:when>
       <xsl:otherwise><xsl:value-of select="$value" /></xsl:otherwise>
     </xsl:choose>
-  </xsl:template>  
+  </xsl:template>
   
   <xsl:template match="allowed-values/value">
     <db:listitem>
