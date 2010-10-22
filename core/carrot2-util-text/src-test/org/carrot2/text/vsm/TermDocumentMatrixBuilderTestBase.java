@@ -38,6 +38,7 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
         preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
         matrixBuilder = new TermDocumentMatrixBuilder();
         matrixBuilder.termWeighting = new TfTermWeighting();
+        matrixBuilder.maxWordDf = 1.0;
     }
 
     protected void buildTermDocumentMatrix()
