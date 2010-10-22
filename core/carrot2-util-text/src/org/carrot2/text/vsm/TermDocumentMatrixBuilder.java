@@ -100,7 +100,7 @@ public class TermDocumentMatrixBuilder
     @Processing
     @Attribute
     @DoubleRange(min = 0.00, max = 1.0)
-    public double maxWordDf = 1.0;
+    public double maxWordDf = 0.9;
 
     /**
      * Term weighting. The method for calculating weight of words in the term-document
