@@ -431,8 +431,8 @@ public final class BindableProcessor extends AbstractProcessor
         }
         finally
         {
-            if (w != null) closeQuietly(w);
             Thread.currentThread().setContextClassLoader(ccl);
+            if (w != null) closeQuietly(w);
         }
     }
 
@@ -506,7 +506,7 @@ public final class BindableProcessor extends AbstractProcessor
         {
             os.close();
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             // Ignore.
         }
