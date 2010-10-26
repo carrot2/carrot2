@@ -1,3 +1,9 @@
+applications/carrot2-webapp/src/jawr.properties
+applications/carrot2-webapp/web/WEB-INF/webapp-config.xml
+applications/carrot2-webapp/web/skins/fancy-compact/sprite/
+applications/carrot2-webapp/web/skins/fancy-large/sprite/
+applications/carrot2-webapp/web/skins/simple/sprite/
+applications/carrot2-webapp/webtest/dtd/
 applications/carrot2-webapp/web/WEB-INF/web.xml
 applications/carrot2-webapp/web/skins/common/variables.xsl
 local.properties
