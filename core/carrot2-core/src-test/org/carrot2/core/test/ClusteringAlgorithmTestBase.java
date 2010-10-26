@@ -31,6 +31,7 @@ import java.util.concurrent.Future;
 
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.Document;
 import org.carrot2.core.IClusteringAlgorithm;
 import org.carrot2.core.Platform;
@@ -134,6 +135,12 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     @Test
     public void testStress() throws InterruptedException, ExecutionException
     {
+        for (int i = 0; i < 20; i++)
+            testStress0();
+    }
+
+    public void testStress0() throws InterruptedException, ExecutionException
+    {
         final int numberOfThreads = 4;
         final int queriesPerThread = 25;
 
@@ -141,7 +148,10 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
          * This yields a pooling controller effectively, because no cache interfaces
          * are passed.
          */
-        final Controller controller = getCachingController(initAttributes);
+        Controller cachingController = ControllerFactory.createCachingPooling();
+        cachingController.init(initAttributes);
+
+        final Controller controller = cachingController;
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         List<Callable<ProcessingResult>> callables = Lists.newArrayList();
