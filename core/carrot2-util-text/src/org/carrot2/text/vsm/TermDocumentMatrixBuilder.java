@@ -77,7 +77,7 @@ public class TermDocumentMatrixBuilder
      * as a fraction of all documents. Words with document frequency larger than
      * <code>maxWordDf</code> will be ignored. For example, when <code>maxWordDf</code> is
      * <code>0.4</code>, words appearing in more than 40% of documents will be be ignored.
-     * The default value of <code>1.0</code> means that all words will be taken into
+     * A value of <code>1.0</code> means that all words will be taken into
      * account, no matter in how many documents they appear.
      * <p>
      * This attribute may be useful when certain words appear in most of the input
