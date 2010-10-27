@@ -63,7 +63,12 @@
         <xsl:with-param name="substring" select="'.'" />
       </xsl:call-template>
     </xsl:variable>
-    <a href="{$carrot2.javadoc.url}/{translate(@linkend, '.$', '/.')}.html"><xsl:value-of select="$class-name" /></a>
+    <xsl:variable name="suffix">
+      <xsl:choose>
+        <xsl:when test="contains(@linkend, '#')">#<xsl:value-of select="substring-after(@linkend, '#')" /></xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <a href="{$carrot2.javadoc.url}/{translate(substring-before(@linkend, '#'), '.$', '/.')}.html{$suffix}"><xsl:value-of select="$class-name" /></a>
   </xsl:template>
   
   <xsl:template name="from-last-substring">
