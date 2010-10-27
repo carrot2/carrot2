@@ -28,8 +28,8 @@ into thematic categories, <a href="#overview_description">see below for more</a>
 
 <a name="clustering-documents"></a>
 <h2>Clustering text documents</h2>
-
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/clustering-document-list-intro" parse="xml" />
+
 
 <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/clustering-document-list" parse="text" /></pre>
 <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/ClusteringDocumentList.java?r=trunk">Full source code: ClusteringDocumentList.java</a>
@@ -38,12 +38,16 @@ into thematic categories, <a href="#overview_description">see below for more</a>
 <a name="clustering-from-document-sources"></a>
 <h2>Clustering documents from document sources</h2>
 
+<a name="clustering-from-document-sources-with-default-settings"></a>
+<h3>With default settings</h3>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/clustering-data-from-document-sources-simple-intro" parse="xml" />
 
 <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/clustering-data-from-document-sources-simple" parse="text" /></pre>
 <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/ClusteringDataFromDocumentSources.java?r=trunk">Full source code: ClusteringDataFromDocumentSources.java</a>
 
 
+<a name="clustering-from-document-sources-with-custom-settings"></a>
+<h3>With custom settings</h3>
 <p>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/clustering-data-from-document-sources-advanced-intro" parse="text" />
 </p>
@@ -56,18 +60,24 @@ into thematic categories, <a href="#overview_description">see below for more</a>
 <h2>Setting attributes of clustering algorithms and document sources</h2>
 
 
+<a name="setting-attributes-by-attribute-key"></a>
+<h3>By attribute keys</h3>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-raw-map-intro" parse="xml" />
 
 <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-raw-map" parse="text" /></pre>
 <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/UsingAttributes.java?r=trunk">Full source code: UsingAttributes.java</a>
 
 
+<a name="setting-attributes-using-attribute-builders"></a>
+<h3>Using attribute builders</h3>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-builders-intro" parse="xml" />
 
 <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-builders" parse="text" /></pre>
 <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/UsingAttributes.java?r=trunk">Full source code: UsingAttributes.java</a>
 
 
+<a name="collecting-output-attributes"></a>
+<h3>Collecting output attributes</h3>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-output-intro" parse="xml" />
 
 <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-output" parse="text" /></pre>
