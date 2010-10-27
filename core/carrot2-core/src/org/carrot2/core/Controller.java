@@ -330,7 +330,8 @@ public final class Controller
                 // component may be instantiated, a pooled one may be returned or we may
                 // get some wrapper that performs some extra actions.
                 components[i] = componentManager.prepare(
-                    configurations[i].componentClass, configurations[i].componentId,
+                    configurations[i].componentClass, 
+                    configurations[i].componentId,
                     inputAttributes, resultAttributes);
 
                 final long componentStart = System.currentTimeMillis();
@@ -380,13 +381,14 @@ public final class Controller
         {
             statistics.update(processingResult);
 
-            for (IProcessingComponent component : components)
+            for (int i = 0; i < components.length; i++)
             {
+                final IProcessingComponent component = components[i];
                 if (component != null)
                 {
                     // Recycle a component. A component manager may want to e.g. return
                     // the component to its internal pool.
-                    componentManager.recycle(component);
+                    componentManager.recycle(component, configurations[i].componentId);
                 }
             }
         }
@@ -416,8 +418,9 @@ public final class Controller
         if (classOrId instanceof String)
         {
             // Check if there's a matching configuration
-            final ProcessingComponentConfiguration configuration = componentIdToConfiguration
-                .get(classOrId);
+            final ProcessingComponentConfiguration configuration = 
+                componentIdToConfiguration.get(classOrId);
+
             if (configuration != null)
             {
                 return configuration;

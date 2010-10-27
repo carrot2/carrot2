@@ -154,12 +154,13 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
         return delegate.prepare(clazz, id, inputAttributes, outputAttributes);
     }
 
-    public void recycle(IProcessingComponent component)
+    @Override
+    public void recycle(IProcessingComponent component, String id)
     {
         // If not our wrapper, recycle.
         if (!(component instanceof CachedProcessingComponent))
         {
-            delegate.recycle(component);
+            delegate.recycle(component, id);
         }
 
         // The wrapped actual components are recycled in CachedDataFactory when
@@ -309,7 +310,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
                     {
                         if (component != null)
                         {
-                            delegate.recycle(component);
+                            delegate.recycle(component, componentId);
                         }
                     }
                 }
@@ -446,7 +447,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
             {
                 if (component != null)
                 {
-                    delegate.recycle(component);
+                    delegate.recycle(component, componentId);
                 }
             }
         }

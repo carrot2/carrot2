@@ -1,0 +1,38 @@
+package org.carrot2.core;
+
+
+/**
+ * A wrapper around another {@link Object} that implements {@link Object#hashCode()}
+ * and {@link Object#equals(Object)} based on reference equality of the delegate
+ * object.
+ * 
+ * <p>{@link #equals(Object)} is implemented assuming only objects of this class
+ * are compared against each other (there is a cast to {@link ReferenceEquality} inside).
+ * It makes little sense to compare this class with other types anyway.</p>
+ */
+final class ReferenceEquality
+{
+    private final Object delegate;
+    private final int identityHashCode;
+
+    public ReferenceEquality(Object delegate)
+    {
+        if (delegate == null)
+            throw new IllegalArgumentException("Delegate must not be null.");
+
+        this.delegate = delegate;
+        this.identityHashCode = System.identityHashCode(delegate);
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return identityHashCode;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        return ((ReferenceEquality) other).delegate == this.delegate;
+    }
+}

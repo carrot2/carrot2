@@ -45,14 +45,6 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
     private Map<String, ProcessingComponentConfiguration> componentIdToConfiguration;
 
     /**
-     * For each processing component instance, we need to know the component configuration
-     * identifier for which it was created. In theory, we could add this as a parameter to
-     * the {@link #recycle(IProcessingComponent)} method, but that doesn't make sense
-     * API-wise. It's much better to keep the mapping internally.
-     */
-    private ConcurrentHashMap<Integer, String> componentHashToId = new ConcurrentHashMap<Integer, String>();
-
-    /**
      * Values of {@link Init} {@link Output} attributes collected during initialization.
      * As the {@link #prepare(Class, String, Map, Map)} method is expected to return these
      * and we are borrowing instances from the pool, we need to keep track of
@@ -86,6 +78,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
             componentResetListener, ComponentDisposalListener.INSTANCE);
     }
 
+    @Override
     public void init(IControllerContext context, Map<String, Object> attributes,
         ProcessingComponentConfiguration... configurations)
     {
@@ -103,6 +96,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
             .indexByComponentId(configurations);
     }
 
+    @Override
     public IProcessingComponent prepare(Class<? extends IProcessingComponent> clazz,
         String id, Map<String, Object> inputAttributes,
         Map<String, Object> outputAttributes)
@@ -110,16 +104,6 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         try
         {
             final IProcessingComponent component = componentPool.borrowObject(clazz, id);
-
-            // Save the id of the component instance, we'll need it when returning
-            // the instance back to the pool. This requirement is actually imposed by the
-            // SoftUnboundedPool API. Ideally, we'd move this mapping to SoftUnboundedPool,
-            // but Apache Commons Pool (which is likely to be used as an alternative)
-            // also requires the id when returning the component.
-            if (id != null)
-            {
-                componentHashToId.put(System.identityHashCode(component), id);
-            }
 
             // Pass @Init @Output attributes back to the caller.
             final Map<String, Object> initOutputAttrs = initOutputAttributes
@@ -144,12 +128,13 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         }
     }
 
-    public void recycle(IProcessingComponent component)
+    @Override
+    public void recycle(IProcessingComponent component, String id)
     {
-        componentPool.returnObject(component, componentHashToId.remove(System
-            .identityHashCode(component)));
+        componentPool.returnObject(component, id);
     }
 
+    @Override
     public void dispose()
     {
         componentPool.dispose();
@@ -248,7 +233,8 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         /**
          * Stores values of {@link Processing} attributes for the duration of processing.
          */
-        private ConcurrentHashMap<Integer, Map<String, Object>> resetValues = new ConcurrentHashMap<Integer, Map<String, Object>>();
+        private ConcurrentHashMap<ReferenceEquality, Map<String, Object>> resetValues = 
+            new ConcurrentHashMap<ReferenceEquality, Map<String, Object>>();
 
         @SuppressWarnings("unchecked")
         public void activate(IProcessingComponent processingComponent, String parameter)
@@ -257,10 +243,11 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
             final Map<String, Object> originalValues = Maps.newHashMap();
             try
             {
-                AttributeBinder.unbind(processingComponent, originalValues, Input.class,
-                    Processing.class);
-                resetValues.put(System.identityHashCode(processingComponent),
-                    originalValues);
+                AttributeBinder.unbind(processingComponent, originalValues, 
+                    Input.class, Processing.class);
+
+                resetValues.put(new ReferenceEquality(processingComponent),
+                                originalValues);
             }
             catch (Exception e)
             {
@@ -277,9 +264,9 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
                 // Here's a little hack: we need to disable checking
                 // for required attributes, otherwise, we won't be able
                 // to reset @Required input attributes to null
-                AttributeBinder.bind(processingComponent, resetValues.get(System
-                    .identityHashCode(processingComponent)), false, Input.class,
-                    Processing.class);
+                AttributeBinder.bind(processingComponent, 
+                    resetValues.get(new ReferenceEquality(processingComponent)),
+                    false, Input.class, Processing.class);
             }
             catch (Exception e)
             {
