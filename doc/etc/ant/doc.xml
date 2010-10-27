@@ -189,6 +189,10 @@
             tofile="@{doc.build.dir}/xsl/components-metadata.xml" 
             overwrite="true" />
 
+      <!-- Validate if the HTML in JavaDocs was indeed a vaild XML -->
+      <xmlvalidate file="@{doc.build.dir}/xsl/components-metadata.xml" 
+                   failonerror="true" lenient="true" />
+
       <xslt in="@{doc.build.dir}/docbook/components.template.xml"
             style="@{doc.build.dir}/xsl/attributes-to-docbook.xsl"
             out="@{doc.build.dir}/docbook/components.xml">
