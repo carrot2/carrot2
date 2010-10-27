@@ -135,7 +135,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     @Test
     public void testStress() throws InterruptedException, ExecutionException
     {
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 100; i++)
             testStress0();
     }
 

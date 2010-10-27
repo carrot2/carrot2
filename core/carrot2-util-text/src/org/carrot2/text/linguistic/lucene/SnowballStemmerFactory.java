@@ -12,6 +12,8 @@
 
 package org.carrot2.text.linguistic.lucene;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.linguistic.IStemmerFactory;
 import org.tartarus.snowball.SnowballProgram;
@@ -23,13 +25,14 @@ public class SnowballStemmerFactory implements IStemmerFactory
 {
     private final Class<? extends SnowballProgram> clazz;
     private final String stemmerClazz;
-
+    
     /**
      * An adapter converting Snowball programs into {@link IStemmer} interface.
      */
     private static class SnowballStemmerAdapter implements IStemmer
     {
         private final SnowballProgram snowballStemmer;
+        AtomicReference<Thread> t = new AtomicReference<Thread>();
 
         public SnowballStemmerAdapter(SnowballProgram snowballStemmer)
         {
@@ -38,14 +41,26 @@ public class SnowballStemmerFactory implements IStemmerFactory
 
         public CharSequence stem(CharSequence word)
         {
-            snowballStemmer.setCurrent(word.toString());
-            if (snowballStemmer.stem())
+            Thread current = Thread.currentThread();
+            if (!t.compareAndSet(null, current))
+                throw new RuntimeException();
+
+            try
             {
-                return snowballStemmer.getCurrent();
+                snowballStemmer.setCurrent(word.toString());
+                if (snowballStemmer.stem())
+                {
+                    return snowballStemmer.getCurrent();
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            finally
             {
-                return null;
+                if (!t.compareAndSet(current, null))
+                    throw new RuntimeException();
             }
         }
     }
