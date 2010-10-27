@@ -85,7 +85,7 @@
       </lib>
       <lib dir="${webapp.lib.dir}" />
 
-      <classes dir="${webapp.classes.dir}" />
+      <classes dir="${webapp.classes.dir}" excludes="**/*.java" />
     </war>
   </target>
 

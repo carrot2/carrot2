@@ -13,14 +13,19 @@
 package org.carrot2.examples.core;
 
 import java.io.PrintWriter;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.Document;
+import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.examples.clustering.ClusteringDataFromDocumentSources;
+
+import com.google.common.collect.Maps;
 
 /**
  * This example shows how to save clustering results as JSON.
@@ -35,10 +40,10 @@ public class SavingResultsToJson
     {
         // Let's fetch some results from MSN first
         final Controller controller = ControllerFactory.createSimple();
-        final Map<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put(AttributeNames.DOCUMENTS, SampleDocumentData.DOCUMENTS_DATA_MINING);
-        attributes.put(AttributeNames.QUERY, "data mining");
-        attributes.put(AttributeNames.QUERY, "data mining");
+        final Map<String, Object> attributes = Maps.newHashMap();
+        CommonAttributesDescriptor.attributeBuilder(attributes)
+            .documents(new ArrayList<Document>(SampleDocumentData.DOCUMENTS_DATA_MINING))
+            .query("data mining");
 
         final ProcessingResult result = controller.process(attributes,
             LingoClusteringAlgorithm.class);
@@ -48,8 +53,11 @@ public class SavingResultsToJson
         System.out.println();
 
         // Optionally, we can provide a callback for JSON-P-style calls
-        result.serializeJson(new PrintWriter(System.out), "loadResults",
-            true /* indent */, false /* save documents */, true /* save clusters */);
+        result.serializeJson(
+            new PrintWriter(System.out), "loadResults",
+            true /* indent */, 
+            false /* save documents */, 
+            true /* save clusters */);
 
     }
 }

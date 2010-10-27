@@ -12,8 +12,13 @@
 
 package org.carrot2.examples.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
+import org.carrot2.text.vsm.TermDocumentMatrixBuilderDescriptor;
 import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.util.attribute.AttributeValueSets;
 
@@ -33,17 +38,22 @@ public class SavingAttributeValuesToXml
 
         // Add all the attributes you want to change to a non-default value.
         // You can use attribute keys from Workbench Attribute Info view or the manuals.
-        attributeValueSet.setAttributeValue(
-            "LingoClusteringAlgorithm.desiredClusterCountBase", 20);
-        attributeValueSet.setAttributeValue(
-            "TermDocumentMatrixBuilder.titleWordsBoost", 2.5);
-        attributeValueSet.setAttributeValue("DocumentAssigner.exactPhraseAssignment",
-            true);
-        attributeValueSet.setAttributeValue(
-            "LingoClusteringAlgorithm.factorizationFactory",
-            LocalNonnegativeMatrixFactorizationFactory.class);
-        attributeValueSet.setAttributeValue(
-            "LingoClusteringAlgorithm.factorizationQuality", FactorizationQuality.MEDIUM);
+        Map<String, Object> attributes = new HashMap<String, Object>();
+
+        LingoClusteringAlgorithmDescriptor
+            .attributeBuilder(attributes)
+            .matrixReducer()
+                .desiredClusterCountBase(20)
+                .factorizationQuality(FactorizationQuality.MEDIUM)
+                .factorizationFactory(LocalNonnegativeMatrixFactorizationFactory.class);
+
+        LingoClusteringAlgorithmDescriptor
+            .attributeBuilder(attributes)
+            .preprocessingPipeline().documentAssigner().exactPhraseAssignment(true);
+
+        TermDocumentMatrixBuilderDescriptor
+            .attributeBuilder(attributes)
+            .titleWordsBoost(2.5);
 
         // We'll need to wrap the exported attribute values in a AttributeValueSets,
         // even if we want to export just one set. 

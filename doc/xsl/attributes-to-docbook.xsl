@@ -295,6 +295,35 @@
             </xsl:if>
             
             <xsl:apply-templates select="constraints/constraint" />
+            
+            <db:row>
+              <xsl:variable name="simple-class-name">
+                <xsl:call-template name="substring-after-last">
+                  <xsl:with-param name="string"><xsl:value-of select="@declaring-class" /></xsl:with-param>
+                  <xsl:with-param name="substring">.</xsl:with-param>
+                </xsl:call-template>
+              </xsl:variable>
+              <xsl:variable name="parameter">
+                <xsl:choose>
+                  <xsl:when test="annotations/annotation[string(.) = 'Output']"></xsl:when>
+                  <xsl:when test="@type = 'java.lang.Boolean'">boolean</xsl:when>
+                  <xsl:when test="@type = 'java.lang.Double'">double</xsl:when>
+                  <xsl:when test="@type = 'java.lang.Integer'">int</xsl:when>
+                  <xsl:when test="@type = 'java.lang.Long'">long</xsl:when>
+                  <xsl:when test="contains(@type, '$')"><xsl:value-of select="translate(@type, '$', '.')" /></xsl:when>
+                  <xsl:otherwise><xsl:value-of select="@type" /></xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>              
+              <db:entry role="rowhead">Attribute builder</db:entry>
+              <db:entry>
+                <db:constant><xsl:call-template name="javadoc-link">
+                  <xsl:with-param name="value" select="concat(@declaring-class, 'Descriptor')" />
+                  <xsl:with-param name="suffix" select="'.AttributeBuilder'" />
+                  <xsl:with-param name="anchor" select="concat('#', @field, '(', $parameter, ')')" />
+                  <xsl:with-param name="text" select="concat($simple-class-name, 'Descriptor.&#8203;AttributeBuilder#', @field, '()')" />
+                </xsl:call-template></db:constant>
+              </db:entry>
+            </db:row>
           </db:tbody>
         </db:tgroup>
       </db:informaltable>
@@ -303,15 +332,36 @@
 
   <xsl:template name="javadoc-link">
     <xsl:param name="value" />
+    <xsl:param name="suffix" />
+    <xsl:param name="anchor" />
+    <xsl:param name="text" />
     <xsl:choose>
       <xsl:when test="starts-with($value, 'org.carrot2') and string-length($carrot2.javadoc.url) > 0">
-        <db:link xlink:href="{$carrot2.javadoc.url}/{translate($value, '.$', '/.')}.html"><xsl:value-of select="$value" /></db:link>
+        <db:link xlink:href="{$carrot2.javadoc.url}/{translate($value, '.$', '/.')}{$suffix}.html{$anchor}"><xsl:choose><xsl:when test="string-length($text) > 0"><xsl:value-of select="$text" /></xsl:when><xsl:otherwise><xsl:value-of select="$value" /></xsl:otherwise></xsl:choose></db:link>
       </xsl:when>
       
+      <xsl:otherwise>
+        <xsl:call-template name="javadoc-link-alternate">
+          <xsl:with-param name="value" select="$value" />
+          <xsl:with-param name="suffix" select="$suffix" />
+          <xsl:with-param name="anchor" select="$anchor" />
+          <xsl:with-param name="text" select="$text" />
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="javadoc-link-alternate">
+    <xsl:param name="value" />
+    <xsl:param name="suffix" />
+    <xsl:param name="anchor" />
+    <xsl:param name="text" />
+
+    <xsl:choose>
+      <xsl:when test="string-length($text) > 0"><xsl:value-of select="$text" /></xsl:when>
       <xsl:otherwise><xsl:value-of select="$value" /></xsl:otherwise>
     </xsl:choose>
-    
-  </xsl:template>  
+  </xsl:template>
   
   <xsl:template match="allowed-values/value">
     <db:listitem>
@@ -478,4 +528,19 @@
     </xsl:copy>
   </xsl:template>
 
+  <xsl:template name="substring-after-last">
+    <xsl:param name="string" />
+    <xsl:param name="substring" />
+    
+    <xsl:choose>
+      <xsl:when test="contains($string, $substring)">
+        <xsl:call-template name="substring-after-last">
+          <xsl:with-param name="string"><xsl:value-of select="substring-after($string, $substring)" /></xsl:with-param>
+          <xsl:with-param name="substring"><xsl:value-of select="$substring" /></xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      
+      <xsl:otherwise><xsl:value-of select="$string" /></xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 </xsl:stylesheet>

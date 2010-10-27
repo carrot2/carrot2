@@ -12,18 +12,11 @@
 
 package org.carrot2.util.attribute.metadata;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.*;
 import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Persister;
 
 /**
  * Human-readable metadata for a {@link Bindable} type.
@@ -67,83 +60,26 @@ public class BindableMetadata extends CommonMetadata
      */
     public static BindableMetadata forClassWithParents(final Class<?> clazz)
     {
-        final BindableMetadata bindable = getBindableMetadata(clazz);
-
-        for (final Class<?> bindableClass : 
-            getClassesFromBindableHerarchy(clazz.getSuperclass()))
-        {
-            final BindableMetadata moreMetadata = getBindableMetadata(bindableClass);
-            bindable.attributeMetadataInternal.putAll(
-                moreMetadata.getAttributeMetadata());
-        }
-
+        IBindableDescriptor descriptor = BindableDescriptorUtils.getDescriptor(clazz); 
+    
+        final BindableMetadata bindable = new BindableMetadata();
+        bindable.setDescription(descriptor.getDescription());
+        bindable.setLabel(descriptor.getLabel());
+        bindable.setTitle(descriptor.getTitle());
+        bindable.setAttributeMetadata(
+            asAttributeMetadata(descriptor.getAttributes()));
         return bindable;
     }
 
-    /**
-     * Returns all {@link Bindable} from the hierarchy of the provided <code>clazz</code>,
-     * including <code>clazz</code>.
-     */
-    static Collection<Class<?>> getClassesFromBindableHerarchy(Class<?> clazz)
+    private static Map<String, AttributeMetadata> asAttributeMetadata(Set<AttributeInfo> attributes)
     {
-        final Collection<Class<?>> classes = new ArrayList<Class<?>>();
-
-        while (clazz != null)
+        final Map<String, AttributeMetadata> map = new HashMap<String, AttributeMetadata>();
+        for (AttributeInfo attr : attributes)
         {
-            if (clazz.getAnnotation(Bindable.class) != null)
-            {
-                classes.add(clazz);
-            }
-
-            clazz = clazz.getSuperclass();
+            map.put(attr.fieldName, 
+                new AttributeMetadata(
+                    attr.title, attr.label, attr.description, attr.group, attr.level));
         }
-
-        return classes;
-    }
-
-    /**
-     * Deserializes metadata for a {@link Bindable} class.
-     */
-    private static BindableMetadata getBindableMetadata(final Class<?> clazz)
-    {
-        BindableMetadata bindableMetadata = null;
-        InputStream inputStream = null;
-        try
-        {
-            final String name = clazz.getName() + ".xml";
-            inputStream = clazz.getClassLoader().getResourceAsStream(
-                name);
-            if (inputStream == null)
-                throw new IOException("No such resource: " + name);
-
-            bindableMetadata = new Persister().read(BindableMetadata.class,
-                inputStream);
-            
-            // Quickfix for a bug in SimpleXML: https://sourceforge.net/tracker/?func=detail&atid=661526&aid=3043930&group_id=112203
-            for (Map.Entry<String, AttributeMetadata> e 
-                : bindableMetadata.attributeMetadataInternal.entrySet())
-            {
-                if (e.getValue() == null)
-                    e.setValue(new AttributeMetadata());
-            }
-        }
-        catch (final Exception e)
-        {
-            throw new RuntimeException("Could not load attribute metadata for: "
-                + clazz, e);
-        }
-        finally
-        {
-            try
-            {
-                if (inputStream != null) inputStream.close();
-            }
-            catch (IOException e)
-            {
-                // ignore.
-            }
-        }
-
-        return bindableMetadata;
+        return map;
     }
 }

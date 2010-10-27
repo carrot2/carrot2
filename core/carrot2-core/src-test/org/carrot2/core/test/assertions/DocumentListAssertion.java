@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -38,9 +37,9 @@ public class DocumentListAssertion implements AssertExtension
     }
 
     /**
-     * Asserts that the document cluster list is equivalent to the provided document list.
-     * Two document lists are equivalent if they have the same size and if the documents
-     * on the corresponding positions are equivalent (see
+     * Asserts that the document list is equivalent to the provided document list. Two
+     * document lists are equivalent if they have the same size and if the documents on
+     * the corresponding positions are equivalent (see
      * {@link DocumentAssertion#isEquivalentTo(Document)}.
      * 
      * @param expectedDocumentList the expected document list
@@ -51,8 +50,26 @@ public class DocumentListAssertion implements AssertExtension
         assertThat(actualDocumentList).hasSize(expectedDocumentList.size());
         for (int i = 0; i < actualDocumentList.size(); i++)
         {
-            assertThat(actualDocumentList.get(i)).as(description + ", document: " + i).isEquivalentTo(
-                expectedDocumentList.get(i));
+            assertThat(actualDocumentList.get(i)).as(description + ", document: " + i)
+                .isEquivalentTo(expectedDocumentList.get(i));
+        }
+        return this;
+    }
+
+    /**
+     * Asserts that the document list contains all the provided documents. Containment is
+     * defined as in {@link List#contains(Object)}.
+     * 
+     * @param documents the documents that the tested document list is to contain
+     * @return this assertion for convenience
+     */
+    public DocumentListAssertion contains(List<Document> documents)
+    {
+        for (int i = 0; i < documents.size(); i++)
+        {
+            assertThat(actualDocumentList.contains(documents.get(i))).as(
+                description + ", contains document: " + i + ", title: "
+                    + documents.get(i).getTitle()).isTrue();
         }
         return this;
     }

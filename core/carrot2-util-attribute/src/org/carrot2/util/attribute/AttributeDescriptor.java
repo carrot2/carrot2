@@ -99,6 +99,13 @@ public class AttributeDescriptor
     private String attributeFieldString;
 
     /**
+     * Name of the class declaring the attribute, for serialization.
+     */
+    @org.simpleframework.xml.Attribute(name = "declaring-class")
+    @SuppressWarnings("unused")
+    private String attributeDeclaringClassString;
+    
+    /**
      * Default value as string, for serialization.
      */
     @org.simpleframework.xml.Attribute(name = "default", required = false)
@@ -130,6 +137,7 @@ public class AttributeDescriptor
         AttributeMetadata metadata)
     {
         this.attributeField = field;
+        this.attributeDeclaringClassString = field.getDeclaringClass().getName();
 
         this.key = BindableUtils.getKey(field);
         this.type = ClassUtils.primitiveToWrapper(field.getType());

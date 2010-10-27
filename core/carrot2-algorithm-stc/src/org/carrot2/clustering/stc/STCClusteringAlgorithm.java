@@ -26,9 +26,7 @@ import org.carrot2.core.IClusteringAlgorithm;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingComponentBase;
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.Internal;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.attribute.*;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
@@ -43,6 +41,8 @@ import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
 import org.carrot2.util.attribute.Required;
+import org.carrot2.util.attribute.constraint.DoubleRange;
+import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.*;
 import com.google.common.base.Predicate;
@@ -57,7 +57,7 @@ import com.google.common.collect.Lists;
  * 
  * @label STC Clustering
  */
-@Bindable(prefix = "STCClusteringAlgorithm", inherit = AttributeNames.class)
+@Bindable(prefix = "STCClusteringAlgorithm", inherit = CommonAttributes.class)
 public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
@@ -91,19 +91,202 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     public List<Cluster> clusters = null;
 
     /**
-     * Common preprocessing tasks handler.
+     * Minimum word-document recurrences.
+     * 
+     * @group Word filtering
+     * @level Medium
      */
-    public BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
+    @Processing
+    @Input
+    @Attribute
+    @IntRange(min = 2)
+    public int ignoreWordIfInFewerDocs = 2;
 
     /**
-     * Parameters and thresholds of the algorithm.
+     * Maximum word-document ratio. A number between 0 and 1, if a word exists in more
+     * snippets than this ratio, it is ignored.
+     * 
+     * @group Word filtering
+     * @level Medium
      */
-    public STCClusteringParameters params = new STCClusteringParameters();
+    @Processing
+    @Input
+    @Attribute
+    @DoubleRange(min = 0, max = 1)
+    public double ignoreWordIfInHigherDocsPercent = 0.9d;
+
+    /**
+     * Minimum base cluster score.
+     * 
+     * @group Base clusters
+     * @level Advanced
+     */
+    @Processing
+    @Input
+    @Attribute
+    @DoubleRange(min = 0, max = 10)
+    public double minBaseClusterScore = 2.0d;
+
+    /**
+     * Maximum base clusters count. Trims the base cluster array after N-th position for
+     * the merging phase.
+     * 
+     * @group Base clusters
+     * @level Advanced
+     */
+    @Processing
+    @Input
+    @Attribute
+    @IntRange(min = 2)
+    public int maxBaseClusters = 300;
+
+    /**
+     * Minimum documents per base cluster.
+     * 
+     * @group Base clusters
+     * @level Advanced
+     */
+    @Processing
+    @Input
+    @Attribute
+    @IntRange(min = 2, max = 20)
+    public int minBaseClusterSize = 2;
+
+    /**
+     * Maximum final clusters.
+     * 
+     * @group Merging and output
+     * @level Basic
+     */
+    @Processing
+    @Input
+    @Attribute
+    @IntRange(min = 1)
+    public int maxClusters = 15;
+
+    /**
+     * Base cluster merge threshold.
+     * 
+     * @group Merging and output
+     * @level Advanced
+     */
+    @Processing
+    @Input
+    @Attribute
+    @DoubleRange(min = 0, max = 1)
+    public double mergeThreshold = 0.6d;
+
+    /**
+     * Maximum cluster phrase overlap.
+     * 
+     * @group Label creation
+     * @level Advanced
+     */
+    @Processing
+    @Input
+    @Attribute
+    @DoubleRange(min = 0, max = 1)
+    public double maxPhraseOverlap = 0.6d;
+
+    /**
+     * Minimum general phrase coverage. Minimum phrase coverage to appear in cluster
+     * description.
+     * 
+     * @group Label creation
+     * @level Advanced
+     */
+    @Processing
+    @Input
+    @Attribute
+    @DoubleRange(min = 0, max = 1)
+    public double mostGeneralPhraseCoverage = 0.5d;
+
+    /**
+     * Maximum words per label. Base clusters formed by phrases with more words than this
+     * ratio are trimmed.
+     * 
+     * @group Label creation
+     * @level Basic
+     */
+    @Processing
+    @Input
+    @Attribute
+    @IntRange(min = 1)
+    public int maxDescPhraseLength = 4;
+
+    /**
+     * Maximum phrases per label. Maximum number of phrases from base clusters promoted
+     * to the cluster's label.
+     *  
+     * @group Label creation
+     * @level Basic
+     */
+    @Processing
+    @Input
+    @Attribute
+    @IntRange(min = 1)
+    public int maxPhrases = 3;
+
+    /**
+     * Single term boost. A factor in calculation of the base cluster score. If greater
+     * then zero, single-term base clusters are assigned this value regardless of the
+     * penalty function.
+     * 
+     * @group Base cluster boosts
+     * @level Medium
+     */
+    @Processing
+    @Input
+    @Attribute
+    @DoubleRange(min = 0)
+    public double singleTermBoost = 0.5d;
+
+    /**
+     * Optimal label length. A factor in calculation of the base cluster score.
+     * 
+     * @group Base cluster boosts
+     * @level Basic
+     */
+    @Processing
+    @Input
+    @Attribute
+    @IntRange(min = 1)
+    public int optimalPhraseLength = 3;
+
+    /**
+     * Phrase length tolerance. A factor in calculation of the base cluster score.
+     * 
+     * @group Base cluster boosts
+     * @level Medium
+     */
+    @Processing
+    @Input
+    @Attribute
+    @DoubleRange(min = 0.5)
+    public double optimalPhraseLengthDev = 2.0d;
+
+    /**
+     * Document count boost. A factor in calculation of the base cluster score, boosting
+     * the score depending on the number of documents found in the base cluster.
+     * 
+     * @group Base cluster boosts
+     * @level Medium
+     */
+    @Processing
+    @Input
+    @Attribute
+    @DoubleRange(min = 0)
+    public double documentCountBoost = 1.0d;
+    
+    /**
+     * Common preprocessing tasks handler.
+     */
+    public final BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
     /**
      * A helper for performing multilingual clustering.
      */
-    public MultilingualClustering multilingualClustering = new MultilingualClustering();
+    public final MultilingualClustering multilingualClustering = new MultilingualClustering();
 
     /**
      * Stores the preprocessing context during {@link #process()}.
@@ -311,15 +494,15 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
          * We limit the number of base clusters to the one requested by the user. A priority
          * queue speeds up computations here.
          */
-        final BaseClusterQueue pq = new BaseClusterQueue(params.maxBaseClusters);
+        final BaseClusterQueue pq = new BaseClusterQueue(maxBaseClusters);
 
         // Walk the internal nodes of the suffix tree.
-        new GeneralizedSuffixTree.Visitor(sb, params.minBaseClusterSize) {
+        new GeneralizedSuffixTree.Visitor(sb, minBaseClusterSize) {
             protected void visit(int state, int cardinality, 
                 BitSet documents, IntStack path)
             {
                 // Check minimum base cluster cardinality.
-                assert cardinality >= params.minBaseClusterSize;
+                assert cardinality >= minBaseClusterSize;
 
                 /*
                  * Consider certain special cases of internal suffix tree nodes.  
@@ -342,7 +525,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                  * phrases (which usually correspond to duplicated snippets anyway). 
                  */
                 final float score = baseClusterScore(effectivePhraseLen, cardinality);
-                if (score > params.minBaseClusterScore && pq.willInsert(score))
+                if (score > minBaseClusterScore && pq.willInsert(score))
                 {
                     pq.insertWithOverflow(
                         new ClusterCandidate(path.toArray(), 
@@ -381,7 +564,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         final IntStack neighborList = new IntStack();
         neighborList.push(END);
         final int [] neighbors = new int [baseClusters.size()];
-        final float m = (float) params.mergeThreshold;
+        final float m = (float) mergeThreshold;
         for (int i = 0; i < baseClusters.size(); i++)
         {
             for (int j = i + 1; j < baseClusters.size(); j++)
@@ -470,9 +653,9 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             };
         });
         
-        if (mergedClusters.size() > params.maxClusters)
+        if (mergedClusters.size() > maxClusters)
         {
-            mergedClusters.subList(params.maxClusters, mergedClusters.size()).clear();
+            mergedClusters.subList(maxClusters, mergedClusters.size()).clear();
         }
 
         return mergedClusters;
@@ -524,7 +707,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             };
         });
 
-        int max = params.maxPhrases;
+        int max = maxPhrases;
         for (PhraseCandidate p : phrases)
         {
             if (max-- <= 0) break;
@@ -544,7 +727,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
 
         // A list of all words for each candidate phrase.
         final IntStack words = new IntStack(
-            params.maxDescPhraseLength * phrases.size());
+            maxDescPhraseLength * phrases.size());
 
         // Offset pairs in the words list -- a pair [start, length].
         final IntStack offsets = new IntStack(phrases.size() * 2);
@@ -595,7 +778,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                     words.buffer, offsets.get(2 * i), offsets.get(2 * i + 1));
                 if (index >= 0)
                 {
-                    if (a.coverage - b.coverage < params.mostGeneralPhraseCoverage)
+                    if (a.coverage - b.coverage < mostGeneralPhraseCoverage)
                     {
                         a.selected = false;
                         j = max;
@@ -618,8 +801,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
 
     /**
      * Mark those phrases that overlap with other phrases by more than
-     * {@link STCClusteringParameters#maxPhraseOverlap} and have 
-     * lower coverage.
+     * {@link #maxPhraseOverlap} and have lower coverage.
      */
     private void markOverlappingPhrases(ArrayList<PhraseCandidate> phrases)
     {
@@ -627,7 +809,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
 
         // A list of all unique words for each candidate phrase.
         final IntStack words = new IntStack(
-            params.maxDescPhraseLength * phrases.size());
+            maxDescPhraseLength * phrases.size());
 
         // Offset pairs in the words list -- a pair [start, length].
         final IntStack offsets = new IntStack(phrases.size() * 2);
@@ -651,13 +833,13 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                     words.buffer, offsets.get(2 * i), a_words,
                     words.buffer, offsets.get(2 * j), b_words);
 
-                if ((intersection / b_words) > params.maxPhraseOverlap 
+                if ((intersection / b_words) > maxPhraseOverlap 
                     && b.coverage < a.coverage)
                 {
                     b.selected = false;
                 }
 
-                if ((intersection / a_words) > params.maxPhraseOverlap
+                if ((intersection / a_words) > maxPhraseOverlap
                     && a.coverage < b.coverage) 
                 {
                     a.selected = false;
@@ -943,7 +1125,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             termsCount += path.get(j + 1) - path.get(j) + 1;
         }
 
-        if (termsCount >  params.maxDescPhraseLength)
+        if (termsCount >  maxDescPhraseLength)
         {
             return false;
         }
@@ -958,8 +1140,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     final int effectivePhraseLength(IntStack path)
     {
         final int [] terms = sb.input.buffer;
-        final int lower = params.ignoreWordIfInFewerDocs;
-        final int upper = (int) (params.ignoreWordIfInHigherDocsPercent * documents.size());
+        final int lower = ignoreWordIfInFewerDocs;
+        final int upper = (int) (ignoreWordIfInHigherDocsPercent * documents.size());
 
         int effectivePhraseLen = 0;
         for (int i = 0; i < path.size(); i += 2)
@@ -1029,7 +1211,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      * pause -1
      * </pre>
      * One word-phrases can be given a fixed boost, if 
-     * {@link STCClusteringParameters#singleTermBoost} is greater than zero. 
+     * {@link #singleTermBoost} is greater than zero. 
      * 
      * @param phraseLength Effective phrase length (number of non-stopwords).
      * @param documentCount Number of documents this phrase occurred in.
@@ -1039,11 +1221,6 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      */
     final float baseClusterScore(final int phraseLength, final int documentCount)
     {
-        final double singleTermBoost = params.singleTermBoost;
-        final int phraseLengthOptimum = params.optimalPhraseLength;
-        final double phraseLengthTolerance = params.optimalPhraseLengthDev;
-        final double documentCountBoost = params.documentCountBoost;
-
         final double boost;
         if (phraseLength == 1 && singleTermBoost > 0)
         {
@@ -1051,9 +1228,9 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         }
         else
         {
-            final int tmp = phraseLength - phraseLengthOptimum;
+            final int tmp = phraseLength - optimalPhraseLength;
             boost = Math.exp((-tmp * tmp) 
-                / (2 * phraseLengthTolerance * phraseLengthTolerance));
+                / (2 * optimalPhraseLengthDev * optimalPhraseLengthDev));
         }
 
         return (float) (boost * (documentCount * documentCountBoost));

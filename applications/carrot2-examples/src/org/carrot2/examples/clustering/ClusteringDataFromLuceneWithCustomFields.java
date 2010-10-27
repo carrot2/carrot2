@@ -24,10 +24,12 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.CreateLuceneIndex;
 import org.carrot2.source.lucene.*;
+
+import com.google.common.collect.Maps;
 
 /**
  * This example shows how to apply custom processing to documents returned by the
@@ -78,8 +80,9 @@ public class ClusteringDataFromLuceneWithCustomFields
             indexPath = args[0];
         }
 
-        luceneGlobalAttributes.put("LuceneDocumentSource.directory", FSDirectory
-            .open(new File(indexPath)));
+        LuceneDocumentSourceDescriptor
+            .attributeBuilder(luceneGlobalAttributes)
+            .directory(FSDirectory.open(new File(indexPath)));
 
         /*
          * In ClusteringDataFromLucene we used a simple configuration of
@@ -98,13 +101,17 @@ public class ClusteringDataFromLuceneWithCustomFields
          * > Instance: The provided instance will be shared across processing threads,
          *   which means the implementation MUST be thread-safe.
          */
-        luceneGlobalAttributes.put("LuceneDocumentSource.fieldMapper", CustomFieldMapper.class);
+        LuceneDocumentSourceDescriptor
+            .attributeBuilder(luceneGlobalAttributes)
+            .fieldMapper(new CustomFieldMapper());
 
         /*
-         * The Analyzer used by Lucene while searching can also be provided. Here again
-         * it's better to provide the analyzer class rather than an instance.
+         * The Analyzer used by Lucene while searching can also be provided. We provide
+         * a class reference here to make sure instances are used in a thread safe manner.
          */
-        luceneGlobalAttributes.put("LuceneDocumentSource.analyzer", StandardAnalyzerWrapper.class);
+        LuceneDocumentSourceDescriptor
+            .attributeBuilder(luceneGlobalAttributes)
+            .analyzer(StandardAnalyzerWrapper.class);
 
         /*
          * Initialize the controller passing the above attributes as component-specific
@@ -112,25 +119,26 @@ public class ClusteringDataFromLuceneWithCustomFields
          * an identifier for our specially-configured Lucene component, we'll need to use
          * this identifier when performing processing.
          */
-        controller.init(new HashMap<String, Object>(),
-            new ProcessingComponentConfiguration(LuceneDocumentSource.class, "lucene",
-                luceneGlobalAttributes));
+        controller.init(
+            new HashMap<String, Object>(),
+            new ProcessingComponentConfiguration(
+                LuceneDocumentSource.class, "lucene", luceneGlobalAttributes));
 
         /*
          * Perform processing.
          */
-        final Map<String, Object> processingAttributes = new HashMap<String, Object>();
-
         final String query = "mining";
-        processingAttributes.put(AttributeNames.QUERY, query);
+        final Map<String, Object> processingAttributes = Maps.newHashMap();
+        CommonAttributesDescriptor.attributeBuilder(processingAttributes)
+            .query(query);
 
         /*
          * We need to refer to the Lucene component by its identifier we set during
          * initialization. As we've not assigned any identifier to the
          * LingoClusteringAlgorithm we want to use, we can its fully qualified class name.
          */
-        ProcessingResult process = controller.process(processingAttributes, "lucene",
-            LingoClusteringAlgorithm.class.getName());
+        ProcessingResult process = controller.process(
+            processingAttributes, "lucene", LingoClusteringAlgorithm.class.getName());
 
         ConsoleFormatter.displayResults(process);
     }

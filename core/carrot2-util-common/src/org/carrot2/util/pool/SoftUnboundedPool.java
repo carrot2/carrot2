@@ -92,7 +92,6 @@ public final class SoftUnboundedPool<T, P> implements IParameterizedPool<T, P>
         return instance;
     }
 
-    @SuppressWarnings("unchecked")
     public void returnObject(T object, P parameter)
     {
         if (object == null)
@@ -112,6 +111,9 @@ public final class SoftUnboundedPool<T, P> implements IParameterizedPool<T, P>
                 return;
             }
 
+            @SuppressWarnings({
+                "rawtypes", "unchecked"
+            })
             final Pair key = new Pair(object.getClass(), parameter);
             final List<SoftReference<T>> list = instances.get(key);
             if (list == null)
@@ -120,6 +122,17 @@ public final class SoftUnboundedPool<T, P> implements IParameterizedPool<T, P>
                     "Returning an object that was never borrowed: " + object);
             }
 
+            // The object must not be on the list at this point. The pool won't be large
+            // enough for the linear scan to be a problem.
+            for (SoftReference<T> reference : list)
+            {
+                final T o = reference.get();
+                if (o != null && o == object)
+                {
+                    throw new IllegalStateException("Object has not been borrowed");
+                }
+            }
+            
             list.add(new SoftReference<T>(object));
         }
     }

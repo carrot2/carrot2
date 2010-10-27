@@ -13,21 +13,29 @@
 package org.carrot2.examples.clustering;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.clustering.stc.STCClusteringAlgorithm;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.Document;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
-import org.carrot2.source.boss.*;
+import org.carrot2.source.boss.BossDocumentSource;
+import org.carrot2.source.boss.BossSearchService;
 import org.carrot2.source.microsoft.BingDocumentSource;
-import org.carrot2.util.attribute.AttributeUtils;
 
 /**
  * This example shows how to cluster {@link Document}s retrieved from
  * {@link IDocumentSource}s. There are a number of implementations of this interface in the
  * Carrot2 project, in this example we will cluster results from Microsoft Live (Web
- * search) and Yahoo Boss (news search).
+ * search) and Yahoo Boss.
+ * 
  * <p>
  * It is assumed that you are familiar with {@link ClusteringDocumentList} example.
  * </p>
@@ -37,58 +45,77 @@ import org.carrot2.util.attribute.AttributeUtils;
  */
 public class ClusteringDataFromDocumentSources
 {
+    @SuppressWarnings("unused")
     public static void main(String [] args)
     {
-        /*
-         * EXAMPLE 1: fetching documents from Microsoft Live, clustering with Lingo.
-         * Attributes for the first query: query, number of results to fetch from the
-         * source. Note that the API key defaults to the one assigned for the Carrot2
-         * project. Please use your own key for production use.
+        /* [[[start:clustering-data-from-document-sources-simple-intro]]]
+         * 
+         * <div>
+         * One common way to use Carrot2 Java API is to fetch a number of documents 
+         * from some {@link org.carrot2.core.IDocumentSource} and cluster them using some 
+         * {@link org.carrot2.core.IClusteringAlgorithm}. The simplest yet least flexible
+         * way to do it is to use the {@link org.carrot2.core.Controller#process(String, Integer, Class...)} 
+         * method from the {@link org.carrot2.core.Controller}. The code shown below retrieves 
+         * 100 search results for query <em>data mining</em> from 
+         * {@link org.carrot2.source.microsoft.BingDocumentSource} and clusters them using 
+         * the {@link org.carrot2.clustering.lingo.LingoClusteringAlgorithm}.
+         * </div>
+         * 
+         * [[[end:clustering-data-from-document-sources-simple-intro]]]
          */
-        final Controller controller = ControllerFactory.createSimple();
-
-        /*
-         * As the simple controller discards component instances after processing, the
-         * @Init attributes can be provided at the same time as the @Processing ones. For
-         * the same reason, you don't need to initialize the simple controller. Please
-         * check CachingController for more advanced handling of component life cycle.
+        {
+            /// [[[start:clustering-data-from-document-sources-simple]]]
+            /* A controller to manage the processing pipeline. */
+            final Controller controller = ControllerFactory.createSimple();
+            
+            /* Perform processing */
+            final ProcessingResult result = controller.process("data mining", 100,
+                BingDocumentSource.class, LingoClusteringAlgorithm.class);
+    
+            /* Documents fetched from the document source, clusters created by Carrot2. */
+            final List<Document> documents = result.getDocuments();
+            final List<Cluster> clusters = result.getClusters();
+            /// [[[end:clustering-data-from-document-sources-simple]]] 
+            
+            ConsoleFormatter.displayResults(result);
+        }
+        
+        /* [[[start:clustering-data-from-document-sources-advanced-intro]]]
+         * 
+         * If your production code needs to fetch documents from popular search engines, 
+         * it is very important that you generate and use your own API key rather than Carrot2's 
+         * default one. You can pass the API key along with the query and the requested
+         * number of results in an attribute map. Carrot2 manual lists all supported attributes
+         * along with their keys, types and allowed values. The code shown below, fetches and clusters
+         * 50 results from {@link org.carrot2.source.boss.BossDocumentSource}. 
+         * 
+         * [[[end:clustering-data-from-document-sources-advanced-intro]]]
          */
-        Map<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put(AttributeUtils.getKey(BingDocumentSource.class, "appid"),
-            BingDocumentSource.CARROTSEARCH_APPID);
-        attributes.put(AttributeNames.QUERY, "data mining");
-        attributes.put(AttributeNames.RESULTS, 100);
+        {
+            /// [[[start:clustering-data-from-document-sources-advanced]]]
+            /* A controller to manage the processing pipeline. */
+            final Controller controller = ControllerFactory.createSimple();
+    
+            /* Prepare attributes */
+            final Map<String, Object> attributes = new HashMap<String, Object>();
+            
+            /* Put your own API key here */
+            attributes.put("BossSearchService.appid", BossSearchService.CARROTSEARCH_APPID);
+    
+            /* Query an the required number of results */
+            attributes.put(CommonAttributesDescriptor.Keys.QUERY, "clustering");
+            attributes.put(CommonAttributesDescriptor.Keys.RESULTS, 50);
+    
+            /* Perform processing */
+            final ProcessingResult result = controller.process(attributes, 
+                BossDocumentSource.class, STCClusteringAlgorithm.class);
 
-        ProcessingResult result = controller.process(attributes,
-            BingDocumentSource.class, LingoClusteringAlgorithm.class);
-
-        ConsoleFormatter.displayResults(result);
-
-        /*
-         * EXAMPLE 2: fetching from Yahoo BOSS (news search), clustering with Lingo.
-         * Attributes for the first query: query, number of results to fetch from the
-         * source. Again, note the API key. Please use your own key for production use.
-         */
-        attributes = new HashMap<String, Object>();
-
-        /*
-         * Boss document source is generic and can retrieve Web search, news and image
-         * results. Pick the service to use by passing the right service implementation.
-         */
-        attributes.put(AttributeUtils.getKey(BossDocumentSource.class, "service"),
-            BossNewsSearchService.class);
-
-        /*
-         * Other attributes.
-         */
-        attributes.put(AttributeUtils.getKey(BossSearchService.class, "appid"),
-            BossSearchService.CARROTSEARCH_APPID);
-        attributes.put(AttributeNames.QUERY, "war");
-        attributes.put(AttributeNames.RESULTS, 50);
-
-        result = controller.process(attributes, BossDocumentSource.class,
-            LingoClusteringAlgorithm.class);
-
-        ConsoleFormatter.displayResults(result);
+            /* Documents fetched from the document source, clusters created by Carrot2. */
+            final List<Document> documents = result.getDocuments();
+            final List<Cluster> clusters = result.getClusters();
+            /// [[[end:clustering-data-from-document-sources-advanced]]]
+    
+            ConsoleFormatter.displayResults(result);
+        }
     }
 }

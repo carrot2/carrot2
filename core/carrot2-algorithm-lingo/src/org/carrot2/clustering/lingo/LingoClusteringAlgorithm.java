@@ -18,8 +18,7 @@ import java.util.List;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.matrix.NNIInterface;
-import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
-import org.carrot2.text.clustering.MultilingualClustering;
+import org.carrot2.text.clustering.*;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -36,11 +35,11 @@ import com.google.common.collect.Ordering;
 
 /**
  * Lingo clustering algorithm. Implementation as described in: <i>
- * Stanisław Osiński, Dawid Weiss: A Concept-Driven Algorithm for Clustering 
+ * "Stanisław Osiński, Dawid Weiss: A Concept-Driven Algorithm for Clustering 
  * Search Results. IEEE Intelligent Systems, May/June, 3 (vol. 20), 2005, 
- * pp. 48—54.</i>.
+ * pp. 48—54."</i>.
  */
-@Bindable(prefix = "LingoClusteringAlgorithm", inherit = AttributeNames.class)
+@Bindable(prefix = "LingoClusteringAlgorithm", inherit = CommonAttributes.class)
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
@@ -80,8 +79,8 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
 
     /**
      * Indicates whether Lingo used fast native matrix computation routines. Value of this
-     * attribute is equal to {@link NNIInterface#isNativeBlasAvailable()} at the time of
-     * running the algorithm.
+     * attribute is equal to {@link org.carrot2.matrix.NNIInterface#isNativeBlasAvailable()} 
+     * at the time of running the algorithm.
      * 
      * @group Matrix model
      * @label Native matrix operations used
@@ -107,34 +106,34 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     public double scoreWeight = 0.0;
 
     /**
-     * Common preprocessing tasks handler.
+     * Common preprocessing tasks handler, contains bindable attributes.
      */
-    public CompletePreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
+    public final CompletePreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
 
     /**
      * Term-document matrix builder for the algorithm, contains bindable attributes.
      */
-    public TermDocumentMatrixBuilder matrixBuilder = new TermDocumentMatrixBuilder();
+    public final TermDocumentMatrixBuilder matrixBuilder = new TermDocumentMatrixBuilder();
 
     /**
      * Term-document matrix reducer for the algorithm, contains bindable attributes.
      */
-    public TermDocumentMatrixReducer matrixReducer = new TermDocumentMatrixReducer();
+    public final TermDocumentMatrixReducer matrixReducer = new TermDocumentMatrixReducer();
 
     /**
      * Cluster label builder, contains bindable attributes.
      */
-    public ClusterBuilder clusterBuilder = new ClusterBuilder();
+    public final ClusterBuilder clusterBuilder = new ClusterBuilder();
 
     /**
      * Cluster label formatter, contains bindable attributes.
      */
-    public LabelFormatter labelFormatter = new LabelFormatter();
+    public final LabelFormatter labelFormatter = new LabelFormatter();
 
     /**
      * A helper for performing multilingual clustering.
      */
-    public MultilingualClustering multilingualClustering = new MultilingualClustering();
+    public final MultilingualClustering multilingualClustering = new MultilingualClustering();
 
     @Override
     public void init(IControllerContext context)

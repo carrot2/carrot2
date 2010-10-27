@@ -38,7 +38,7 @@ public interface IProcessingComponentManager
      * delegate manager etc.
      * 
      * @param clazz class of the component to prepare
-     * @param id identifier of the component to prepare. May be <code>null</code>.
+     * @param id Identifier of the component to prepare. May be <code>null</code>.
      * @param inputAttributes input attributes for all components requested to perform
      *            processing. Both {@link Init}- and {@link Processing}-time attributes
      *            will be provided. Managers must not modify this map.
@@ -51,8 +51,12 @@ public interface IProcessingComponentManager
     /**
      * Called after processing completed. This method is called regardless of whether the
      * processing completed successfully or with an error.
+     *
+     * @param component Component instance returned from {@link #prepare}.
+     * @param id The same identifier of the component as used in the call to 
+     *           {@link #prepare}. May be <code>null</code>.
      */
-    public void recycle(IProcessingComponent component);
+    public void recycle(IProcessingComponent component, String id);
 
     /**
      * Called upon disposal of the controller.

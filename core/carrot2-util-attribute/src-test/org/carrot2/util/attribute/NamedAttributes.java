@@ -12,12 +12,13 @@
 
 package org.carrot2.util.attribute;
 
+import org.carrot2.util.attribute.test.metadata.TestAncestorAttributes;
 import org.carrot2.util.attribute.test.metadata.TestAttributeNames;
 
 /**
  * Test named attribute container.
  */
-@Bindable(inherit = TestAttributeNames.class)
+@Bindable(inherit = TestAncestorAttributes.class)
 @SuppressWarnings("unused")
 public class NamedAttributes
 {

@@ -39,18 +39,19 @@ class DcsConfig
     @Attribute(name = "cache-clusters", required = false)
     boolean cacheClusters = false;
 
+    @Attribute(name = "xslt", required = false)
+    String xslt = null;
+    
     /**
      * Name of the component suite file with XML data about components and algorithms.
      */
     @Attribute(name = "component-suite-resource", required = true)
     String componentSuiteResource;
 
-    final Logger logger;
-
-    DcsConfig()
-    {
-        logger = org.slf4j.LoggerFactory.getLogger(DCS_APP_NAME);
-    }
+    /**
+     * Console-only logger.
+     */
+    final Logger logger = org.slf4j.LoggerFactory.getLogger(DCS_APP_NAME);
 
     static DcsConfig deserialize(IResource configResource) throws Exception
     {

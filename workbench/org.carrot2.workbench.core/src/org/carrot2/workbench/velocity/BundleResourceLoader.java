@@ -116,7 +116,6 @@ public final class BundleResourceLoader extends ResourceLoader
     {
         return 0L;
     }
-    
 
     /*
      * 

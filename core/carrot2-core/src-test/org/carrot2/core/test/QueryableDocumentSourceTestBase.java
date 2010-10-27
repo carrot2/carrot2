@@ -142,9 +142,13 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
             final List<Document> documentsLocal = (List<Document>) processingResult
                 .getAttributes().get(AttributeNames.DOCUMENTS);
             assertThat(documentsLocal).as("documents at " + index).isNotNull();
+            if (!canReturnMoreResultsThanRequested())
+            {
+                assertThat(documentsLocal.size()).as("documents.size() at " + index)
+                    .isLessThanOrEqualTo(getSmallQuerySize());
+            }
             assertThat(documentsLocal.size()).as("documents.size() at " + index)
-                .isLessThanOrEqualTo(getSmallQuerySize()).isGreaterThanOrEqualTo(
-                    getSmallQuerySize() / 2);
+                .isGreaterThanOrEqualTo(getSmallQuerySize() / 2);
 
             // Should have same documents (from the cache)
             if (documents != null)
@@ -193,6 +197,14 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         return 300;
     }
 
+    /**
+     * Return <code>true</code> if the source can return more results than requested.
+     */
+    protected boolean canReturnMoreResultsThanRequested()
+    {
+        return false;
+    }
+    
     /**
      * Override to customize large query text.
      */

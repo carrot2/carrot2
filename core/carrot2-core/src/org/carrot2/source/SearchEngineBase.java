@@ -32,7 +32,7 @@ import org.carrot2.util.attribute.constraint.NotBlank;
  * @see SimpleSearchEngine
  * @see MultipageSearchEngine
  */
-@Bindable(prefix = "SearchEngineBase", inherit = AttributeNames.class)
+@Bindable(prefix = "SearchEngineBase", inherit = CommonAttributes.class)
 public abstract class SearchEngineBase extends ProcessingComponentBase implements
     IDocumentSource
 {

@@ -207,7 +207,7 @@ public final class BenchmarkView extends PageBookViewBase
     private Control createSettingsPanel(Composite parent)
     {
         final BindableDescriptor descriptor = 
-            BindableDescriptorBuilder.buildDescriptor(benchmarkSettings, true);
+            BindableDescriptorBuilder.buildDescriptor(benchmarkSettings);
 
         attributeGroups = new AttributeGroups(
             parent, descriptor, GroupingMethod.GROUP, null, descriptor.getDefaultValues());

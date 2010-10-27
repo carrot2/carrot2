@@ -147,12 +147,20 @@ h1, h2 {
   margin-top: 1em;
 }
 
-p {
-  margin-top: 0;
-}
-
 a.source-link {
   float:right;
   position:relative;
   top:-1em;
+  padding-left: 20px;
+  background-image: url(java.png);
+  background-repeat: no-repeat;
+  background-position: 0 1px;
+  margin-top: 1px;
+}
+a.source-link + * {
+  clear: both;
+}
+a.source-link + a + h2,
+a.source-link + a + h3 {
+  padding-top: 1em;
 }

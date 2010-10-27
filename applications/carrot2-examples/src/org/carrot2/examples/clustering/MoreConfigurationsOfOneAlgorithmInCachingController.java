@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
 import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
 import org.carrot2.source.microsoft.BingDocumentSource;
@@ -55,7 +56,11 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
          * overrides the global attributes.
          */
         final Map<String, Object> globalAttributes = new HashMap<String, Object>();
-        globalAttributes.put("DocumentAssigner.exactPhraseAssignment", false);
+
+        LingoClusteringAlgorithmDescriptor.attributeBuilder(globalAttributes)
+            .preprocessingPipeline()
+                .documentAssigner()
+                    .exactPhraseAssignment(false);
 
         /*
          * Now we will define two different configurations of the Lingo algorithm. One
@@ -63,15 +68,31 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
          * quality of clusters.
          */
         final Map<String, Object> fastAttributes = Maps.newHashMap();
-        fastAttributes.put("LingoClusteringAlgorithm.desiredClusterCountBase", 20);
-        fastAttributes.put("LingoClusteringAlgorithm.factorizationQuality", FactorizationQuality.LOW);
-        fastAttributes.put("CaseNormalizer.dfThreshold", 2);
+        LingoClusteringAlgorithmDescriptor.attributeBuilder(fastAttributes)
+            .matrixReducer()
+                .desiredClusterCountBase(20)
+                .factorizationQuality(FactorizationQuality.LOW);
+
+        LingoClusteringAlgorithmDescriptor.attributeBuilder(fastAttributes)
+            .preprocessingPipeline()
+                .caseNormalizer()
+                    .dfThreshold(2);
 
         final Map<String, Object> accurateAttributes = Maps.newHashMap();
-        accurateAttributes.put("LingoClusteringAlgorithm.desiredClusterCountBase", 40);
-        accurateAttributes.put("LingoClusteringAlgorithm.factorizationQuality", FactorizationQuality.HIGH);
-        accurateAttributes.put("CaseNormalizer.dfThreshold", 1);
-        globalAttributes.put("DocumentAssigner.exactPhraseAssignment", true);
+        LingoClusteringAlgorithmDescriptor.attributeBuilder(accurateAttributes)
+            .matrixReducer()
+                .desiredClusterCountBase(40)
+                .factorizationQuality(FactorizationQuality.HIGH);
+
+        LingoClusteringAlgorithmDescriptor.attributeBuilder(accurateAttributes)
+            .preprocessingPipeline()
+                .documentAssigner()
+                    .exactPhraseAssignment(true);
+
+        LingoClusteringAlgorithmDescriptor.attributeBuilder(fastAttributes)
+            .preprocessingPipeline()
+                .caseNormalizer()
+                    .dfThreshold(1);
 
         /*
          * We initialize the controller passing the global attributes and the two 
@@ -92,7 +113,8 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
          * source class name rather than the class itself.
          */
         final Map<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put(AttributeNames.QUERY, "data mining");
+        CommonAttributesDescriptor.attributeBuilder(attributes)
+            .query("data mining");
 
         final ProcessingResult fastResult = controller.process(attributes,
             BingDocumentSource.class.getName(), "lingo-fast");

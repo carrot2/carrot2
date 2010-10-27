@@ -45,7 +45,7 @@ public class TermDocumentMatrixBuilder
 {
     /**
      * Title word boost. Gives more weight to words that appeared in
-     * {@link Document#TITLE} fields.
+     * {@link org.carrot2.core.Document#TITLE} fields.
      * 
      * @level Medium
      * @group Labels
@@ -77,7 +77,7 @@ public class TermDocumentMatrixBuilder
      * as a fraction of all documents. Words with document frequency larger than
      * <code>maxWordDf</code> will be ignored. For example, when <code>maxWordDf</code> is
      * <code>0.4</code>, words appearing in more than 40% of documents will be be ignored.
-     * The default value of <code>1.0</code> means that all words will be taken into
+     * A value of <code>1.0</code> means that all words will be taken into
      * account, no matter in how many documents they appear.
      * <p>
      * This attribute may be useful when certain words appear in most of the input
@@ -100,7 +100,7 @@ public class TermDocumentMatrixBuilder
     @Processing
     @Attribute
     @DoubleRange(min = 0.00, max = 1.0)
-    public double maxWordDf = 1.0;
+    public double maxWordDf = 0.9;
 
     /**
      * Term weighting. The method for calculating weight of words in the term-document

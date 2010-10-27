@@ -45,24 +45,14 @@ public class BindableDescriptorBuilder
      */
     public static BindableDescriptor buildDescriptor(Object initializedInstance)
     {
-        return buildDescriptor(initializedInstance, new HashSet<Object>(), true);
-    }
-
-    /**
-     * A variant of {@link #buildDescriptor(Object)} that allows to skip loading metadata
-     * for the descriptors.
-     */
-    public static BindableDescriptor buildDescriptor(Object initializedInstance,
-        boolean loadMetadata)
-    {
-        return buildDescriptor(initializedInstance, new HashSet<Object>(), loadMetadata);
+        return buildDescriptor(initializedInstance, new HashSet<Object>());
     }
 
     /**
      * Internal implementation of descriptor building.
      */
-    private static BindableDescriptor buildDescriptor(Object initializedInstance,
-        Set<Object> processedInstances, boolean loadMetadata)
+    private static BindableDescriptor buildDescriptor(
+        Object initializedInstance, Set<Object> processedInstances)
     {
         final Class<?> clazz = initializedInstance.getClass();
         if (clazz.getAnnotation(Bindable.class) == null)
@@ -77,8 +67,7 @@ public class BindableDescriptorBuilder
         }
 
         // Load metadata
-        final BindableMetadata bindableMetadata =
-            loadMetadata ? BindableMetadata.forClassWithParents(clazz) : null;
+        final BindableMetadata bindableMetadata = BindableMetadata.forClassWithParents(clazz);
 
         // Build descriptors for direct attributes
         final Map<String, AttributeDescriptor> attributeDescriptors = buildAttributeDescriptors(
@@ -109,8 +98,7 @@ public class BindableDescriptorBuilder
             if (fieldValue != null
                 && fieldValue.getClass().getAnnotation(Bindable.class) != null)
             {
-                bindableDescriptors.put(field, buildDescriptor(fieldValue,
-                    processedInstances, loadMetadata));
+                bindableDescriptors.put(field, buildDescriptor(fieldValue, processedInstances));
             }
         }
 

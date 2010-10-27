@@ -47,8 +47,8 @@ public class DcsAppTest
     @BeforeClass
     public static void startDcs() throws Exception
     {
-        appenderProp = System.getProperty(RestProcessorServlet.ENABLE_CUSTOM_APPENDER);
-        System.setProperty(RestProcessorServlet.ENABLE_CUSTOM_APPENDER, "false");
+        appenderProp = System.getProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER);
+        System.setProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER, "true");
 
         dcs = new DcsApp("dcs");
         dcs.port = 57913;
@@ -85,9 +85,9 @@ public class DcsAppTest
         dcs.stop();
         
         if (appenderProp != null)
-            System.setProperty(RestProcessorServlet.ENABLE_CUSTOM_APPENDER, appenderProp);
+            System.setProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER, appenderProp);
         else
-            System.clearProperty(RestProcessorServlet.ENABLE_CUSTOM_APPENDER);
+            System.clearProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER);
     }
 
     @Test

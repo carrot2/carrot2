@@ -53,10 +53,16 @@ public class BindableDescriptorBuilderTest
 
         assertThat(bindableDescriptor).contains(
             AttributeUtils.getKey(SingleClass.class, "initInputInt"),
-            new AttributeDescriptor(clazz.getDeclaredField("initInputInt"), 10, Lists
-                .<Annotation> newArrayList(), new AttributeMetadata(
-                "Init input int attribute", "Init Input Int", null, "Group A",
-                AttributeLevel.BASIC)));
+            new AttributeDescriptor(
+                clazz.getDeclaredField("initInputInt"), 
+                10, 
+                Lists.<Annotation> newArrayList(), 
+                new AttributeMetadata(
+                    "Init input int attribute", 
+                    "Init Input Int", 
+                    null, 
+                    "Group A",
+                    AttributeLevel.BASIC)));
 
         assertThat(bindableDescriptor).contains(
             AttributeUtils.getKey(SingleClass.class, "processingInputString"),

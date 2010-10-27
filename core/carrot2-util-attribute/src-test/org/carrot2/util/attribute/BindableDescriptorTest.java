@@ -54,7 +54,7 @@ public class BindableDescriptorTest
     {
         HashMap<String, Object> values = 
             BindableDescriptorBuilder
-                .buildDescriptor(new DefaultValuesTestClass(), false)
+                .buildDescriptor(new DefaultValuesTestClass())
                 .getDefaultValues();
         assertFalse(values.containsKey("optionalNullValue"));
         assertFalse(values.containsKey("output"));

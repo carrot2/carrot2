@@ -7,7 +7,6 @@ import java.util.*;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.AttributeValueSets;
 import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.util.attribute.BindableDescriptorBuilder;
 import org.carrot2.util.resource.ResourceUtilsFactory;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;

@@ -65,7 +65,7 @@ public class BasicPreprocessingPipeline
     public final StopListMarker stopListMarker = new StopListMarker();
 
     /**
-     * Language model factory. Creates language the language model to be used by the
+     * Language model factory. Creates the language model to be used by the
      * clustering algorithm. The language models provides the lexical resources required
      * to perform clustering, including stop words and a word stemming algorithm.
      * 

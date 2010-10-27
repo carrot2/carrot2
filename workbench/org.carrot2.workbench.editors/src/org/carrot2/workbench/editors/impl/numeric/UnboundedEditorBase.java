@@ -75,7 +75,7 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
             return;
         }
 
-        if (!(object instanceof Number))
+        if (object != null && !(object instanceof Number))
         {
             return;
         }

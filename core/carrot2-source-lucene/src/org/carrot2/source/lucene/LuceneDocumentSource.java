@@ -40,7 +40,7 @@ import com.google.common.collect.Maps;
  * The index should be binary-compatible with the Lucene version actually imported by this
  * plugin.
  */
-@Bindable(prefix = "LuceneDocumentSource", inherit = AttributeNames.class)
+@Bindable(prefix = "LuceneDocumentSource", inherit = CommonAttributes.class)
 public final class LuceneDocumentSource extends ProcessingComponentBase implements
     IDocumentSource
 {
@@ -74,7 +74,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public Collection<Document> documents;
 
     /**
-     * Search index {@link Directory}. Must be unlocked for reading.
+     * Search index {@link org.apache.lucene.store.Directory}. Must be unlocked for reading.
      * 
      * @label Index directory
      * @group Index properties
@@ -93,7 +93,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public Directory directory;
 
     /**
-     * {@link Analyzer} used at indexing time. The same analyzer should be used for
+     * {@link org.apache.lucene.analysis.Analyzer} used at indexing time. The same analyzer should be used for
      * querying.
      * 
      * @label Analyzer
@@ -112,7 +112,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
 
     /**
-     * {@link IFieldMapper} provides the link between Carrot2 {@link Document} fields and
+     * {@link IFieldMapper} provides the link between Carrot2 {@link org.carrot2.core.Document} fields and
      * Lucene index fields.
      * 
      * @label Field mapper
@@ -132,8 +132,8 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public IFieldMapper fieldMapper = new SimpleFieldMapper();
 
     /**
-     * A pre-parsed {@link Query} object or a {@link String} parsed using the built-in
-     * {@link QueryParser} over a set of search fields returned from the
+     * A pre-parsed {@link org.apache.lucene.search.Query} object or a {@link String} parsed using the built-in
+     * {@link org.apache.lucene.queryParser.QueryParser} over a set of search fields returned from the
      * {@link #fieldMapper}.
      *
      * @label Query
@@ -152,8 +152,8 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public Object query;
 
     /**
-     * A context-shared map between {@link Directory} objects and any opened
-     * {@link IndexSearcher}s.
+     * A context-shared map between {@link org.apache.lucene.store.Directory} objects and any opened
+     * {@link org.apache.lucene.search.IndexSearcher}s.
      */
     private IdentityHashMap<Directory, IndexSearcher> openIndexes;
 

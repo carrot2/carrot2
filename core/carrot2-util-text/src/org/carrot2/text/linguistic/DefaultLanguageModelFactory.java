@@ -92,7 +92,7 @@ public class DefaultLanguageModelFactory implements ILanguageModelFactory
     /**
      * Merges stop words and stop labels from all known languages. If set to
      * <code>false</code>, only stop words and stop labels of the active language will be
-     * used. If set to <code>true</code>, stop words from all {@link LanguageCode}s will
+     * used. If set to <code>true</code>, stop words from all {@link org.carrot2.core.LanguageCode}s will
      * be used together and stop labels from all languages will be used together, no
      * matter the active language. Lexical resource merging is useful when clustering data
      * in a mix of different languages and should increase clustering quality in such

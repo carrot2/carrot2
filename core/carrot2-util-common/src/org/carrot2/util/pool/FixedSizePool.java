@@ -11,6 +11,7 @@
 
 package org.carrot2.util.pool;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -118,7 +119,6 @@ public final class FixedSizePool<T, P> implements IParameterizedPool<T, P>
     /*
      * 
      */
-    @SuppressWarnings("unchecked")
     public void returnObject(T object, P parameter)
     {
         if (object == null) throw new IllegalArgumentException(
@@ -137,12 +137,25 @@ public final class FixedSizePool<T, P> implements IParameterizedPool<T, P>
                 return;
             }
 
+            @SuppressWarnings({
+                "unchecked", "rawtypes"
+            })
             final Pair<T, P> key = new Pair(object.getClass(), parameter);
             final ArrayList<T> list = instances.get(key);
             if (list == null)
             {
                 throw new IllegalStateException(
                     "Returning an object that was never borrowed: " + object);
+            }
+
+            // The object must not be on the list at this point. The pool won't be large
+            // enough for the linear scan to be a problem.
+            for (T reference : list)
+            {
+                if (reference != null && reference == object)
+                {
+                    throw new IllegalStateException("Object has not been borrowed");
+                }
             }
 
             list.add(object);

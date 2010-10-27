@@ -12,7 +12,9 @@
 
 package org.carrot2.examples;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.carrot2.core.Document;
 
@@ -21,7 +23,7 @@ import org.carrot2.core.Document;
  */
 public final class SampleDocumentData
 {
-    public final static Collection<Document> DOCUMENTS_DATA_MINING;
+    public final static List<Document> DOCUMENTS_DATA_MINING;
     static
     {
         final String [][] data = new String [] []

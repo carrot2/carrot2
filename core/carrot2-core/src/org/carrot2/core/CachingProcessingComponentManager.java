@@ -154,12 +154,13 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
         return delegate.prepare(clazz, id, inputAttributes, outputAttributes);
     }
 
-    public void recycle(IProcessingComponent component)
+    @Override
+    public void recycle(IProcessingComponent component, String id)
     {
         // If not our wrapper, recycle.
         if (!(component instanceof CachedProcessingComponent))
         {
-            delegate.recycle(component);
+            delegate.recycle(component, id);
         }
 
         // The wrapped actual components are recycled in CachedDataFactory when
@@ -209,7 +210,6 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
      * A stub component that fetches the data from the cache and adds the results to the
      * attribute map.
      */
-    @Bindable
     private final class CachedProcessingComponent extends ProcessingComponentBase
     {
         private final Class<? extends IProcessingComponent> componentClass;
@@ -297,9 +297,9 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
 
                         // Build and store descriptors
                         descriptors = new InputOutputAttributeDescriptors(
-                            BindableDescriptorBuilder.buildDescriptor(component, false)
+                            BindableDescriptorBuilder.buildDescriptor(component)
                                 .only(Input.class, Processing.class).flatten().attributeDescriptors,
-                            BindableDescriptorBuilder.buildDescriptor(component, false)
+                            BindableDescriptorBuilder.buildDescriptor(component)
                                 .only(Output.class).flatten().attributeDescriptors);
 
                         cachedComponentAttributeDescriptors.put(
@@ -310,7 +310,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
                     {
                         if (component != null)
                         {
-                            delegate.recycle(component);
+                            delegate.recycle(component, componentId);
                         }
                     }
                 }
@@ -447,7 +447,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
             {
                 if (component != null)
                 {
-                    delegate.recycle(component);
+                    delegate.recycle(component, componentId);
                 }
             }
         }

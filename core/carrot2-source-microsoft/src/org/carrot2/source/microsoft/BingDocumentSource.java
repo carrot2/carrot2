@@ -39,7 +39,7 @@ import com.google.common.collect.Lists;
  * @see "http://www.bing.com/developers"
  * @see "http://msdn.microsoft.com/en-us/library/dd251056.aspx"
  */
-@Bindable(prefix = "BingDocumentSource", inherit = AttributeNames.class)
+@Bindable(prefix = "BingDocumentSource", inherit = CommonAttributes.class)
 public final class BingDocumentSource extends MultipageSearchEngine
 {
     /** Application ID assigned to Carrot Search s.c. */

@@ -12,7 +12,6 @@
 
 package org.carrot2.examples.clustering;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,24 +22,29 @@ import org.carrot2.core.Document;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.source.google.GoogleDocumentSource;
+import org.carrot2.source.google.GoogleDocumentSourceDescriptor;
 import org.carrot2.source.microsoft.BingDocumentSource;
+import org.carrot2.source.microsoft.BingDocumentSourceDescriptor;
 import org.carrot2.source.microsoft.MarketOption;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
-import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.text.clustering.MultilingualClusteringDescriptor;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
+ * [[[start:clustering-non-english-content-intro]]]
+ * <div>
+ * <p>
  * This example shows how to cluster non-English content. By default Carrot2 assumes that
  * the documents provided for clustering are written in English. When clustering content
  * written in some different language, it is important to indicate the language to
  * Carrot2, so that it can use the lexical resources (stop words, tokenizer, stemmer)
  * appropriate for that language.
+ * </p>
  * <p>
  * There are two ways to indicate the desired clustering language to Carrot2:
  * </p>
@@ -55,28 +59,31 @@ import com.google.common.collect.Lists;
  * {@link org.carrot2.core.Document#LANGUAGE} field, Carrot2 will assume the some fallback
  * language, which is English by default. You can change the fallback language by setting
  * the {@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage}
- * attribute.
+ * attribute.</li>
  * </ol>
  * Additionally, a number of document sources automatically set the
  * {@link org.carrot2.core.Document#LANGUAGE} of documents they produce based on their
  * specific language-related attributes. Currently, three documents support this scenario:
  * <ol>
  * <li>{@link org.carrot2.source.microsoft.BingDocumentSource} through the
- * {@link org.carrot2.source.microsoft.BingDocumentSource#market} attribute</li>
+ * {@link org.carrot2.source.microsoft.BingDocumentSource#market} attribute,</li>
  * <li>{@link org.carrot2.source.boss.BossDocumentSource} through the
- * {@link org.carrot2.source.boss.BossSearchService#languageAndRegion} attribute</li>
+ * {@link org.carrot2.source.boss.BossSearchService#languageAndRegion} attribute,</li>
  * <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the
- * {@link org.carrot2.source.etools.EToolsDocumentSource#language} attribute</li>
+ * {@link org.carrot2.source.etools.EToolsDocumentSource#language} attribute.</li>
  * </ol>
  * For the document sources that do not set the documents' language automatically, the
  * easiest way to set the clustering language is through the
  * {@link org.carrot2.text.clustering.MultilingualClustering#defaultLanguage} attribute.
+ * </div>
+ * [[[end:clustering-non-english-content-intro]]]
  */
 public class ClusteringNonEnglishContent
 {
     @SuppressWarnings("unchecked")
     public static void main(String [] args)
     {
+        // [[[start:clustering-non-english-content]]]
         /*
          * We use a Controller that reuse instances of Carrot2 processing components 
          * and caches results produced by document sources.
@@ -94,10 +101,11 @@ public class ClusteringNonEnglishContent
                 document.getContentUrl(), LanguageCode.ENGLISH));
         }
 
-        final Map<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put(AttributeNames.DOCUMENTS, documents);
-        final ProcessingResult englishResult = controller.process(attributes,
-            LingoClusteringAlgorithm.class);
+        final Map<String, Object> attributes = Maps.newHashMap();
+        CommonAttributesDescriptor.attributeBuilder(attributes)
+            .documents(documents);
+        final ProcessingResult englishResult = controller.process(
+            attributes, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(englishResult);
 
         /*
@@ -107,10 +115,17 @@ public class ClusteringNonEnglishContent
          * document.
          */
         attributes.clear();
-        attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
-        attributes.put(AttributeUtils.getKey(BingDocumentSource.class, "market"), 
-            MarketOption.CHINESE_CHINA);
-        attributes.put(AttributeNames.RESULTS, 100);
+        
+        CommonAttributesDescriptor.attributeBuilder(attributes)
+            .query("聚类" /* clustering? */)
+            .results(100);
+
+        BingDocumentSourceDescriptor.attributeBuilder(attributes)
+            .market(MarketOption.CHINESE_CHINA);
+        BingDocumentSourceDescriptor
+            .attributeBuilder(attributes)
+                .appid(BingDocumentSource.CARROTSEARCH_APPID); // use your own ID here
+
         final ProcessingResult chineseResult = controller.process(attributes,
             BingDocumentSource.class, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(chineseResult);
@@ -123,12 +138,20 @@ public class ClusteringNonEnglishContent
          * MultilingualClustering.defaultLanguage attribute to Chinese on our own.
          */
         attributes.clear();
-        attributes.put(AttributeNames.QUERY, "聚类"); // clustering?
-        attributes.put("MultilingualClustering.defaultLanguage",
-            LanguageCode.CHINESE_SIMPLIFIED);
-        attributes.put(AttributeNames.RESULTS, 100);
+        
+        CommonAttributesDescriptor.attributeBuilder(attributes)
+            .query("聚类" /* clustering? */)
+            .results(100);
+
+        MultilingualClusteringDescriptor.attributeBuilder(attributes)
+            .defaultLanguage(LanguageCode.CHINESE_SIMPLIFIED);
+        GoogleDocumentSourceDescriptor
+            .attributeBuilder(attributes)
+                .apiKey(GoogleDocumentSource.CARROTSEARCH_API_KEY); // use your own key here
+
         final ProcessingResult chineseResult2 = controller.process(attributes,
             GoogleDocumentSource.class, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(chineseResult2);
+        // [[[end:clustering-non-english-content]]]
     }
 }

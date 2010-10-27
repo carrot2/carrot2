@@ -39,7 +39,6 @@ import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.AttributeBinder.IAttributeTransformer;
@@ -63,7 +62,6 @@ import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 import org.slf4j.Logger;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
