@@ -138,8 +138,8 @@
       <!-- Build attribute dumper first -->
       <javac destdir="@{doc.build.dir}/classes"
              compiler="modern"
-             source="1.5"
-             target="1.5"
+             source="1.6"
+             target="1.6"
              encoding="UTF-8"
              debug="true"
              debuglevel="lines">
@@ -150,8 +150,7 @@
       </javac>
 
       <mkdir dir="@{doc.build.dir}/xsl" />
-      <java classname="org.carrot2.core.ProcessingComponentDumper"
-            outputproperty="dev.null">
+      <java classname="org.carrot2.core.ProcessingComponentDumper" failonerror="true" fork="true">
         <classpath>
           <attributes.classpath.entries />
           <path path="@{doc.build.dir}/classes" />

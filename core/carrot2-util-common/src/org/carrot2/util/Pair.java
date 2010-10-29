@@ -29,7 +29,6 @@ public class Pair<I, J>
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public boolean equals(Object obj)
     {
         if (!(obj instanceof Pair))
@@ -37,7 +36,7 @@ public class Pair<I, J>
             return false;
         }
 
-        final Pair other = (Pair) obj;
+        final Pair<?, ?> other = (Pair<?, ?>) obj;
 
         return ObjectUtils.equals(other.objectA, objectA)
             && ObjectUtils.equals(other.objectB, objectB);

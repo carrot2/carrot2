@@ -72,7 +72,7 @@ public class WebApp
     public static void main(String [] args) throws Exception
     {
         /*
-         * This enables LOG4J logging in Jetty (specify on command-line, if possible).
+         * This enables log4j logging in Jetty (specify on command-line, if possible).
          */
         System.setProperty("org.mortbay.log.LogFactory.noDiscovery", "false");
 
@@ -80,6 +80,11 @@ public class WebApp
          * Specify URI decoding codepage.
          */
         System.setProperty("org.mortbay.util.URI.charset", "UTF-8");
+        
+        /*
+         * Allow context classloader resource loading.
+         */
+        System.setProperty(QueryProcessorServlet.ENABLE_CLASSPATH_LOCATOR, "true");
 
         new WebApp().start(8080);
     }

@@ -16,15 +16,8 @@ package org.carrot2.text.linguistic;
  * An implementation of {@link IStemmer} that always returns <code>null</code> from
  * {@link #stem(CharSequence)}.
  */
-public final class IdentityStemmer implements IStemmer
+final class IdentityStemmer implements IStemmer
 {
-    public final static IdentityStemmer INSTANCE = new IdentityStemmer(); 
-
-    private IdentityStemmer()
-    {
-        // Hide from the public.
-    }
-
     public CharSequence stem(CharSequence word)
     {
         return null;

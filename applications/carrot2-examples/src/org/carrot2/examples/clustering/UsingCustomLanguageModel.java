@@ -30,8 +30,10 @@ import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.ILanguageModel;
 import org.carrot2.text.linguistic.ILanguageModelFactory;
+import org.carrot2.text.linguistic.ILexicalData;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipelineDescriptor;
+import org.carrot2.text.util.MutableCharArray;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
@@ -85,6 +87,9 @@ public class UsingCustomLanguageModel
      */
     public static class CustomLanguageModelFactory implements ILanguageModelFactory
     {
+        private static final Set<? extends CharSequence> STOP_WORDS = 
+            ImmutableSet.of("text");
+
         public ILanguageModel getLanguageModel(LanguageCode language)
         {
             // Here we always return the same language model, regardless of the requested
@@ -99,19 +104,6 @@ public class UsingCustomLanguageModel
          */
         private static final class CustomLanguageModel implements ILanguageModel
         {
-            private static final Set<? extends CharSequence> STOP_WORDS = 
-                ImmutableSet.of("text");
-
-            public boolean isStopLabel(CharSequence formattedLabel)
-            {
-                return formattedLabel.length() <= 4;
-            }
-
-            public boolean isCommonWord(CharSequence word)
-            {
-                return STOP_WORDS.contains(word.toString());
-            }
-
             public IStemmer getStemmer()
             {
                 return new IStemmer()
@@ -134,6 +126,25 @@ public class UsingCustomLanguageModel
             public LanguageCode getLanguageCode()
             {
                 return null;
+            }
+
+            @Override
+            public ILexicalData getLexicalData()
+            {
+                return new ILexicalData()
+                {
+                    @Override
+                    public boolean isStopLabel(CharSequence formattedLabel)
+                    {
+                        return formattedLabel.length() <= 4;
+                    }
+
+                    @Override
+                    public boolean isCommonWord(MutableCharArray word)
+                    {
+                        return STOP_WORDS.contains(word.toString());
+                    }
+                };
             }
         }
     }

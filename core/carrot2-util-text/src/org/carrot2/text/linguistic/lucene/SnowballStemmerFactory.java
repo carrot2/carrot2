@@ -13,13 +13,13 @@
 package org.carrot2.text.linguistic.lucene;
 
 import org.carrot2.text.linguistic.IStemmer;
-import org.carrot2.text.linguistic.IStemmerFactory;
+import org.carrot2.util.factory.IFactory;
 import org.tartarus.snowball.SnowballProgram;
 
 /**
  * A factory of Snowball-based stemmers.
  */
-public class SnowballStemmerFactory implements IStemmerFactory
+public class SnowballStemmerFactory implements IFactory<IStemmer>
 {
     private final Class<? extends SnowballProgram> clazz;
     private final String stemmerClazz;

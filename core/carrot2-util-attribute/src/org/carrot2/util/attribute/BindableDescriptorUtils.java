@@ -79,7 +79,6 @@ public final class BindableDescriptorUtils
     {
         try
         {
-            // TODO: add a singleton field to the generated class?
             return getDescriptorClass(clazz).newInstance();
         }
         catch (InstantiationException e)

@@ -15,7 +15,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -46,16 +45,21 @@ import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.dcs.DcsRequestModel.OutputFormat;
+import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeBinder;
+import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.resource.ClassResource;
 import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.IResourceLocator;
 import org.carrot2.util.resource.PrefixDecoratorLocator;
-import org.carrot2.util.resource.ResourceUtils;
-import org.carrot2.util.resource.ResourceUtilsFactory;
+import org.carrot2.util.resource.ResourceLookup;
+import org.carrot2.util.resource.ResourceLookup.Location;
+import org.carrot2.util.resource.ServletContextLocator;
 import org.carrot2.util.xslt.NopURIResolver;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -67,6 +71,9 @@ public final class RestProcessorServlet extends HttpServlet
 {
     /** System property to disable log file appender. */
     final static String DISABLE_LOGFILE_APPENDER = "disable.logfile";
+
+    /** System property to enable class path search for resources in tests. */
+    final static String ENABLE_CLASSPATH_LOCATOR = "enable.classpath.locator";
 
     /** Response constants */
     private final static String UTF8 = "UTF-8";
@@ -99,29 +106,43 @@ public final class RestProcessorServlet extends HttpServlet
     @SuppressWarnings("unchecked")
     public void init() throws ServletException
     {
-        /*
-         * Prepend webapp-specific resource locator reading from the web application
-         * context's WEB-INF folder.
-         */
-        ResourceUtilsFactory.addFirst(new PrefixDecoratorLocator(
-            new WebAppResourceLocator(getServletContext()), "/WEB-INF/"));
-        ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
+        // Run in servlet container, load config from config.xml.
+        ResourceLookup webInfLookup = new ResourceLookup(
+            new PrefixDecoratorLocator(
+                new ServletContextLocator(getServletContext()), "/WEB-INF/")
+        );
 
-        // Run in servlet container, load config from config.xml
         try
         {
-            config = DcsConfig.deserialize(resUtils.getFirst("config.xml"));
+            config = DcsConfig.deserialize(webInfLookup.getFirst("dcs-config.xml"));
         }
         catch (Exception e)
         {
             throw new ServletException("Could not read 'config.xml' resource.", e);
         }
 
-        // Load component suite
+        // Initialize XSLT
+        initXslt(config, webInfLookup);
+
+        // Load component suite. Use classpath too (for JUnit tests).
         try
         {
-            componentSuite = ProcessingComponentSuite.deserialize(resUtils
-                .getFirst(config.componentSuiteResource));
+            List<IResourceLocator> resourceLocators = Lists.newArrayList();
+            resourceLocators.add(new PrefixDecoratorLocator(
+                new ServletContextLocator(getServletContext()), "/WEB-INF/suites/"));
+
+            if (Boolean.getBoolean(ENABLE_CLASSPATH_LOCATOR))
+                resourceLocators.add(Location.CONTEXT_CLASS_LOADER.locator);
+
+            ResourceLookup suitesLookup = new ResourceLookup(resourceLocators);
+
+            IResource suiteResource = suitesLookup.getFirst(config.componentSuiteResource);
+            if (suiteResource == null)
+            {
+                throw new Exception("Suite file not found in servlet context's /WEB-INF/suites: " 
+                    + config.componentSuiteResource);
+            }
+            componentSuite = ProcessingComponentSuite.deserialize(suiteResource, suitesLookup);
         }
         catch (Exception e)
         {
@@ -134,9 +155,6 @@ public final class RestProcessorServlet extends HttpServlet
             throw new ServletException("Component suite has no algorithms.");
         }
         defaultAlgorithmId = componentSuite.getAlgorithms().get(0).getId();
-
-        // Initialize XSLT
-        initXslt(config, resUtils);
 
         // Initialize controller
         final List<Class<? extends IProcessingComponent>> cachedComponentClasses = Lists
@@ -152,7 +170,18 @@ public final class RestProcessorServlet extends HttpServlet
 
         controller = ControllerFactory.createCachingPooling(cachedComponentClasses
             .toArray(new Class [cachedComponentClasses.size()]));
-        controller.init(Collections.<String, Object> emptyMap(),
+
+        List<IResourceLocator> locators = Lists.newArrayList();
+        locators.add(new PrefixDecoratorLocator(
+            new ServletContextLocator(getServletContext()), "/WEB-INF/resources/"));
+
+        if (Boolean.getBoolean(ENABLE_CLASSPATH_LOCATOR))
+            locators.add(Location.CONTEXT_CLASS_LOADER.locator);
+
+        controller.init(
+            ImmutableMap.<String, Object> of(
+                AttributeUtils.getKey(DefaultLexicalDataFactory.class, "resourceLookup"),
+                new ResourceLookup(locators)),
             componentSuite.getComponentConfigurations());
     }
 
@@ -168,7 +197,10 @@ public final class RestProcessorServlet extends HttpServlet
         super.destroy();
     }
 
-    private void initXslt(DcsConfig config, ResourceUtils resourceUtils)
+    /**
+     * 
+     */
+    private void initXslt(DcsConfig config, ResourceLookup resourceLookup)
     {
         final TransformerFactory tFactory = TransformerFactory.newInstance();
         tFactory.setURIResolver(new NopURIResolver());
@@ -177,7 +209,7 @@ public final class RestProcessorServlet extends HttpServlet
 
         if (StringUtils.isNotBlank(config.xslt))
         {
-            IResource resource = resourceUtils.getFirst(config.xslt, RestProcessorServlet.class);
+            IResource resource = resourceLookup.getFirst(config.xslt);
             if (resource == null)
             {
                 config.logger.warn("XSLT stylesheet " + config.xslt
@@ -546,6 +578,7 @@ public final class RestProcessorServlet extends HttpServlet
         {
             contextPath = "root";
         }
+
         contextPath = contextPath.replaceAll("[^a-zA-Z0-9\\-]", "");
         final String catalinaHome = System.getProperty("catalina.home");
         final String logPrefix = (catalinaHome != null ? catalinaHome + "/logs" : "logs");
@@ -553,8 +586,10 @@ public final class RestProcessorServlet extends HttpServlet
         final FileAppender appender = new FileAppender(new PatternLayout(
             "%d{ISO8601} [%-5p] [%c] %m%n"), logPrefix + "/c2-dcs-" + contextPath
             + "-full.log", true);
+
         appender.setEncoding(UTF8);
         appender.setImmediateFlush(true);
+
         return appender;
     }
 

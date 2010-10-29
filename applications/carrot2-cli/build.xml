@@ -43,7 +43,17 @@
         <include name="seattle.xml" />
       </fileset>
     </copy>
-  
+
+    <mkdir dir="${cli.dir}/suites" />
+    <copy todir="${cli.dir}/suites">
+      <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites" />
+    </copy>
+
+    <mkdir dir="${cli.dir}/resources" />
+    <copy todir="${cli.dir}/resources">
+      <fileset dir="${carrot2.master.basedir}/core/carrot2-util-text/src-resources" />
+    </copy>
+
     <delete dir="${cli.dir}/classes" />
   </target>
 

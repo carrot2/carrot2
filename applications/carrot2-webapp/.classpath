@@ -14,5 +14,10 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-xsltfilter"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-log4j"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.log4j"/>
+	<classpathentry kind="src" path=".apt_generated">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

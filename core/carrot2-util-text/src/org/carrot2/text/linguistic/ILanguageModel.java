@@ -16,42 +16,31 @@ import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ITokenizer;
 
 /**
- * Linguistic resources and tools dedicated to a given language. Instances of this
- * interface (and their derived resources) are not thread safe.
+ * Linguistic resources and tools dedicated to a given language. 
+ * 
+ * <p>A single instance a language model may return <b>the same</b> stemmer, tokenizer
+ * and lexical resource instance. These instances are not thread safe and should
+ * not be shared.</p>
  */
 public interface ILanguageModel
 {
     /**
-     * @return Returns <code>true</code> if <code>word</code> is common (meaningless) in
-     *         this language. Such words are referred to as "stop words" and are usually
-     *         ignored in information retrieval tasks. Depending on the implementation,
-     *         <code>word</code> may be lower-cased internally.
-     */
-    public boolean isCommonWord(CharSequence word);
-
-    /**
-     * @return Returns <code>true</code> if the <code>formattedLabel</code> has been
-     *         declared a stop label (meaningless) in this language. This is a very
-     *         low-level tuning method.
-     */
-    public boolean isStopLabel(CharSequence formattedLabel);
-
-    /**
-     * @return Returns an engine for conflating inflected forms to their dictionary head
-     *         form. Stemming is usually a heuristic and is different from lemmatisation.
-     *         An empty (identity) stemmer is returned if stemming is not available for
-     *         this language.
+     * Returns the stemmer associated with this language model.
      */
     public IStemmer getStemmer();
 
     /**
-     * @return Return an engine for splitting the input text into individual words
-     *         (tokens).
+     * Returns the tokenizer associated with this language model.
      */
     public ITokenizer getTokenizer();
 
     /**
-     * @return Returns {@link LanguageCode} for this model.
+     * Returns auxiliary lexical data associated with this language model.
+     */
+    public ILexicalData getLexicalData();
+
+    /**
+     * The language code of this model.
      */
     public LanguageCode getLanguageCode();
 }

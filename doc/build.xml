@@ -22,7 +22,7 @@
   <target name="carrot2.doc.build" depends="jar, carrot2.doc.common.docbook.check">
     <carrot2.doc.build doc.base.dir="${carrot2.doc.basedir}"
                        doc.main.docbook.filename="carrot2-manual.xml" 
-                       doc.suite.path="suites/suite-doc.xml"
+                       doc.suite.path="suite-doc.xml"
                        doc.output.dir="${doc.output.dir}"
                        doc.build.dir="${doc.output.dir}/build">
 
@@ -31,6 +31,7 @@
         <path refid="lib.classpath" />
         <path path="${carrot2.master.basedir}/core/carrot2-component-suites/suites" />
         <path path="${carrot2.master.basedir}/core/carrot2-source-ambient/src" />
+      	<path path="${carrot2.master.basedir}/core/carrot2-util-log4j/src" />
       </attribute.dumper.classpath.entries>
 
       <xslt.param.entries>

@@ -11,19 +11,29 @@
 
 package org.carrot2.core;
 
-import java.io.*;
-import java.util.*;
+import static com.google.common.collect.Lists.newArrayList;
 
-import org.carrot2.core.ProcessingComponentDescriptor.Position;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.carrot2.util.CloseableUtils;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.ResourceLookup;
+import org.carrot2.util.simplexml.PersisterHelpers;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.TreeStrategy;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.*;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 
 /**
  * A set of {@link IProcessingComponent}s used in Carrot2 applications.
@@ -45,7 +55,7 @@ public class ProcessingComponentSuite
     }
 
     public ProcessingComponentSuite(ArrayList<DocumentSourceDescriptor> sources,
-        ArrayList<ProcessingComponentDescriptor> algorithms)
+                                    ArrayList<ProcessingComponentDescriptor> algorithms)
     {
         this.algorithms = algorithms;
         this.sources = sources;
@@ -81,173 +91,86 @@ public class ProcessingComponentSuite
     /**
      * Replace missing attributes with empty lists.
      */
-    @Commit
     @SuppressWarnings("unused")
-    private void postDeserialize() throws Exception
+    @Commit
+    private void postDeserialize(Map<Object, Object> session) throws Exception
     {
-        if (sources == null)
-        {
-            sources = Lists.newArrayList();
-        }
-        if (algorithms == null)
-        {
-            algorithms = Lists.newArrayList();
-        }
-        if (includes == null)
-        {
-            includes = Lists.newArrayList();
-        }
+        if (sources == null) sources = newArrayList();
+        if (algorithms == null) algorithms = newArrayList();
+        if (includes == null) includes = newArrayList();
 
-        final ArrayList<DocumentSourceDescriptor> mergedSources = Lists.newArrayList();
-        final ArrayList<ProcessingComponentDescriptor> mergedAlgorithms = Lists
-            .newArrayList();
+        final ArrayList<DocumentSourceDescriptor> mergedSources = newArrayList();
+        final ArrayList<ProcessingComponentDescriptor> mergedAlgorithms = newArrayList();
+
+        // Acquire contextual resource lookup from the session.
+        final ResourceLookup resourceLookup = PersisterHelpers.getResourceLookup(session);
 
         // Load included suites. Currently, we don't check for cycles.
         final List<ProcessingComponentSuite> suites = Lists.newArrayList();
-        final ResourceUtils ru = ResourceUtilsFactory.getDefaultResourceUtils();
+
         for (ProcessingComponentSuiteInclude include : includes)
         {
-            final IResource resource = ru.getFirst(include.suite);
+            final IResource resource = resourceLookup.getFirst(include.suite);
             if (resource == null)
             {
                 throw new Exception("Could not locate resource: " + include.suite);
             }
-            suites.add(deserialize(resource, false));
+            suites.add(deserialize(resource, resourceLookup));
         }
 
         // Merge sources
-        mergedSources.addAll(Collections2.filter(sources, PositionPredicate.BEGINNING));
+        mergedSources.addAll(sources);
         for (ProcessingComponentSuite suite : suites)
         {
-            mergedSources.addAll(Collections2.filter(suite.getSources(),
-                PositionPredicate.BEGINNING));
+            mergedSources.addAll(suite.getSources());
         }
-        mergedSources.addAll(Collections2.filter(sources, PositionPredicate.MIDDLE));
-        for (ProcessingComponentSuite suite : suites)
-        {
-            mergedSources.addAll(Collections2.filter(suite.getSources(),
-                PositionPredicate.MIDDLE));
-        }
-        for (ProcessingComponentSuite suite : suites)
-        {
-            mergedSources.addAll(Collections2.filter(suite.getSources(),
-                PositionPredicate.END));
-        }
-        mergedSources.addAll(Collections2.filter(sources, PositionPredicate.END));
 
         // Merge algorithms
-        mergedAlgorithms.addAll(Collections2.filter(algorithms,
-            PositionPredicate.BEGINNING));
+        mergedAlgorithms.addAll(algorithms);
         for (ProcessingComponentSuite suite : suites)
         {
-            mergedAlgorithms.addAll(Collections2.filter(suite.getAlgorithms(),
-                PositionPredicate.BEGINNING));
+            mergedAlgorithms.addAll(suite.getAlgorithms());
         }
-        mergedAlgorithms
-            .addAll(Collections2.filter(algorithms, PositionPredicate.MIDDLE));
-        for (ProcessingComponentSuite suite : suites)
-        {
-            mergedAlgorithms.addAll(Collections2.filter(suite.getAlgorithms(),
-                PositionPredicate.MIDDLE));
-        }
-        for (ProcessingComponentSuite suite : suites)
-        {
-            mergedAlgorithms.addAll(Collections2.filter(suite.getAlgorithms(),
-                PositionPredicate.END));
-        }
-        mergedAlgorithms.addAll(Collections2.filter(algorithms, PositionPredicate.END));
 
         sources = mergedSources;
         algorithms = mergedAlgorithms;
     }
 
     /**
-     * A predicate for filtering {@link ProcessingComponentDescriptor}s by
-     * {@link Position}.
-     */
-    private static class PositionPredicate implements
-        Predicate<ProcessingComponentDescriptor>
-    {
-        public static final PositionPredicate BEGINNING = new PositionPredicate(
-            Position.BEGINNING);
-        public static final PositionPredicate MIDDLE = new PositionPredicate(
-            Position.MIDDLE);
-        public static final PositionPredicate END = new PositionPredicate(Position.END);
-
-        private final Position requiredPosition;
-
-        private PositionPredicate(Position requiredPosition)
-        {
-            this.requiredPosition = requiredPosition;
-        }
-
-        public boolean apply(ProcessingComponentDescriptor descriptor)
-        {
-            return descriptor.position.equals(requiredPosition);
-        }
-    }
-
-    /**
      * Deserializes component suite information from an XML stream.
+     * 
+     * @param resource The resource to be deserialized (must not be null).
+     * @param resourceLookup Resource lookup utilities for potential included resources. 
      */
-    public static ProcessingComponentSuite deserialize(IResource resource)
+    public static ProcessingComponentSuite deserialize(IResource resource,
+                                                        ResourceLookup resourceLookup) 
         throws Exception
     {
-        return deserialize(resource, true);
-    }
-
-    /**
-     * Deserializes component suite information from an XML stream.
-     */
-    public static ProcessingComponentSuite deserialize(InputStream inputStream)
-        throws Exception
-    {
-        return deserialize(inputStream, true);
-    }
-
-    /**
-     * Deserializes component suite information from an XML stream and optionally clears
-     * the internal implementation information that should not be exposed to the caller.
-     */
-    private static ProcessingComponentSuite deserialize(IResource resource,
-        boolean clearInternals) throws Exception
-    {
-        if (resource == null) throw new IOException("Resource not found.");
+        if (resource == null)
+        {
+            throw new IOException("Resource must not be null.");
+        }
 
         final InputStream inputStream = resource.open();
         try
         {
-            return deserialize(inputStream, clearInternals);
+            if (inputStream == null)
+            {
+                throw new IOException("Input stream must not be null.");
+            }
+            
+            final Persister persister = PersisterHelpers.createPersister(
+                resourceLookup, new TreeStrategy());
+            final ProcessingComponentSuite suite = persister.read(ProcessingComponentSuite.class, inputStream);
+            
+            // Clear internals related do deserialization
+            suite.includes = null;
+            return suite;
         }
         finally
         {
             CloseableUtils.close(inputStream);
         }
-    }
-
-    /**
-     * Deserializes component suite information from an XML stream and optionally clears
-     * the internal implementation information that should not be exposed to the caller.
-     * The provided {@link InputStream} will not be closed.
-     */
-    private static ProcessingComponentSuite deserialize(final InputStream inputStream,
-        boolean clearInternals) throws Exception
-    {
-        final ProcessingComponentSuite suite = new Persister().read(
-            ProcessingComponentSuite.class, inputStream);
-        if (clearInternals)
-        {
-            suite.includes = null;
-            for (ProcessingComponentDescriptor processingComponentDescriptor : suite.algorithms)
-            {
-                processingComponentDescriptor.position = null;
-            }
-            for (DocumentSourceDescriptor documentSourceDescriptor : suite.sources)
-            {
-                documentSourceDescriptor.position = null;
-            }
-        }
-        return suite;
     }
 
     /**

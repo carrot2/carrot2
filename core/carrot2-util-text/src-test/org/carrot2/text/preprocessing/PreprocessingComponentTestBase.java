@@ -53,15 +53,7 @@ public class PreprocessingComponentTestBase
      */
     protected void createPreprocessingContext(String query)
     {
-        final ILanguageModelFactory languageModelFactory = createLanguageModelFactory();
-        if (languageModelFactory != null)
-        {
-            languageFactory = languageModelFactory;
-        }
-        else
-        {
-            languageFactory = new DefaultLanguageModelFactory();
-        }
+        languageFactory = createLanguageModelFactory();
 
         context = new PreprocessingContext(languageFactory
             .getLanguageModel(LanguageCode.ENGLISH), documents, query);
@@ -73,7 +65,8 @@ public class PreprocessingComponentTestBase
      */
     protected ILanguageModelFactory createLanguageModelFactory()
     {
-        return null;
+        DefaultLanguageModelFactory factory = new DefaultLanguageModelFactory();
+        return factory;
     }
 
     /**

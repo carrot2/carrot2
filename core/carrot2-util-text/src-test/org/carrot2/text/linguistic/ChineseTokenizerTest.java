@@ -27,7 +27,8 @@ public class ChineseTokenizerTest extends TokenizerTestBase
     @Override
     protected ITokenizer createTokenStream() throws IOException
     {
-        return new DefaultLanguageModelFactory().createTokenizer(LanguageCode.CHINESE_SIMPLIFIED);
+        return new DefaultLanguageModelFactory()
+            .getLanguageModel(LanguageCode.CHINESE_SIMPLIFIED).getTokenizer();
     }
 
     @Test

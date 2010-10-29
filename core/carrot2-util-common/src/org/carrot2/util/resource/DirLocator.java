@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,9 +13,10 @@ package org.carrot2.util.resource;
 
 import java.io.File;
 
+import org.apache.commons.lang.ObjectUtils;
 
 /**
- * Looks up resources in a filesystem folder.
+ * Looks up resources in a folder.
  */
 public final class DirLocator implements IResourceLocator
 {
@@ -24,26 +24,31 @@ public final class DirLocator implements IResourceLocator
     private File dir;
 
     /**
-     * Initializes the locator using the given path. If the
-     * argument is null or a non-existent folder, the locator
-     * will return an empty set of resources.
+     * Initializes the locator using the given directory. If the argument is null or a
+     * non-existent folder, the locator will return an empty set of resources.
+     */
+    public DirLocator(File dir)
+    {
+        this.dir = dir;
+    }
+
+    /**
+     * Initializes the locator using the given path. If the argument is null or a
+     * non-existent folder, the locator will return an empty set of resources.
      */
     public DirLocator(String dirPath)
     {
-        if (dirPath != null) {
-            final File f = new File(dirPath);
-            if (f.isDirectory() && f.canRead()) {
-                dir = f;
-            }
-        }
+        this(dirPath == null ? null : new File(dirPath));
     }
 
     /**
      *
      */
-    public IResource [] getAll(String resource, Class<?> clazz)
+    @Override
+    public IResource [] getAll(String resource)
     {
-        if (dir != null) {
+        if (dir != null && dir.isDirectory() && dir.canRead())
+        {
             resource = resource.replace('/', File.separatorChar);
             while (resource.startsWith(File.separator))
             {
@@ -53,11 +58,38 @@ public final class DirLocator implements IResourceLocator
             final File resourceFile = new File(dir, resource);
             if (resourceFile.isFile() && resourceFile.canRead())
             {
-                return new IResource [] {
+                return new IResource []
+                {
                     new FileResource(resourceFile)
                 };
             }
         }
         return new IResource [0];
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return ObjectUtils.hashCode(dir);
+    }
+
+    @Override
+    public boolean equals(Object target)
+    {
+        if (target == this) return true;
+
+        if (target != null && target instanceof DirLocator)
+        {
+            return ObjectUtils.equals(this.dir, ((DirLocator) target).dir);
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.getClass().getName() + " [dir: "
+            + (dir == null ? "null" : dir.getAbsolutePath()) + "]";
     }
 }

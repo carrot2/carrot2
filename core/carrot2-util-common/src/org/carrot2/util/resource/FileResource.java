@@ -14,6 +14,7 @@ package org.carrot2.util.resource;
 
 import java.io.*;
 
+import org.carrot2.util.StreamUtils;
 import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -49,7 +50,7 @@ public final class FileResource implements IResource
 
     public InputStream open() throws IOException
     {
-        return ResourceUtils.prefetch(new FileInputStream(file));
+        return StreamUtils.prefetch(new FileInputStream(file));
     }
 
 

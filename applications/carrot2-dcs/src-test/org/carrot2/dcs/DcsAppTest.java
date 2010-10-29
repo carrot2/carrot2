@@ -16,22 +16,39 @@ import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsE
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assume.assumeTrue;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
 import org.apache.commons.io.FileUtils;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.log4j.BufferingAppender;
 import org.carrot2.util.StreamUtils;
-import org.carrot2.util.resource.*;
-import org.junit.*;
+import org.carrot2.util.SystemPropertyStack;
+import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.ResourceLookup;
+import org.carrot2.util.resource.ResourceLookup.Location;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlOption;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import com.google.common.collect.Maps;
+
+import static org.carrot2.dcs.RestProcessorServlet.*;
 
 /**
  * Test cases for the {@link DcsApp}.
@@ -40,19 +57,47 @@ public class DcsAppTest
 {
     private static DcsApp dcs;
 
-    private static String appenderProp;
+    private static SystemPropertyStack appenderProperty;
+    private static SystemPropertyStack classpathLocatorProperty;
+
     private static String KEY_KACZYNSKI = "/xml/carrot2-kaczynski.utf8.xml";
     private static HashMap<String, File> testFiles = Maps.newHashMap();
 
+    /**
+     * Buffered log stream.
+     */
+    private static BufferingAppender logStream;
+
+    /**
+     * DCS startup log.
+     */
+    private static String startupLog;
+
     @BeforeClass
-    public static void startDcs() throws Exception
+    public static void startDcs() throws Throwable
     {
-        appenderProp = System.getProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER);
-        System.setProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER, "true");
+        appenderProperty = new SystemPropertyStack(DISABLE_LOGFILE_APPENDER);
+        appenderProperty.push("true");
+
+        classpathLocatorProperty = new SystemPropertyStack(ENABLE_CLASSPATH_LOCATOR);
+        classpathLocatorProperty.push("true");
+
+        // Tests run with slf4j-log4j, so attach to the logger directly.
+        logStream = BufferingAppender.attachToRootLogger();
 
         dcs = new DcsApp("dcs");
         dcs.port = 57913;
-        dcs.start(System.getProperty("dcs.test.web.dir.prefix"));
+        try
+        {
+            dcs.start(System.getProperty("dcs.test.web.dir.prefix"));
+        } 
+        catch (Throwable e)
+        {
+            dcs = null;
+            throw e;
+        }
+        
+        startupLog = logStream.getBuffer();
     }
 
     @BeforeClass
@@ -64,10 +109,12 @@ public class DcsAppTest
             "/xml/carrot2-kaczynski.utf16.xml"
         };
 
-        final ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
+        final ResourceLookup resourceLookup = 
+            new ResourceLookup(Location.CONTEXT_CLASS_LOADER);
+
         for (String resource : resources)
         {
-            final IResource res = resUtils.getFirst(resource, DcsAppTest.class);
+            final IResource res = resourceLookup.getFirst(resource);
             assertThat(res).isNotNull();
 
             final File tmp = File.createTempFile("dcs-xml-data", ".xml");
@@ -83,11 +130,31 @@ public class DcsAppTest
     public static void stopDcs() throws Exception
     {
         dcs.stop();
-        
-        if (appenderProp != null)
-            System.setProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER, appenderProp);
-        else
-            System.clearProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER);
+
+        BufferingAppender.detachFromRootLogger(logStream);
+        logStream = null;
+
+        appenderProperty.pop();
+        classpathLocatorProperty.pop();
+    }
+    
+    @Before
+    public void clearLogStream() 
+    {
+        logStream.clear();
+    }
+
+    @Before
+    public void checkDcsStarted() 
+    {
+        if (dcs == null)
+            Assert.fail("DCS not started.");
+    }
+    
+    @Test
+    public void testDcsConfigLocation()
+    {
+        assertThat(startupLog).as("Startup log").contains("[webapp: /WEB-INF/dcs-config.xml]");
     }
 
     @Test

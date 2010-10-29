@@ -43,7 +43,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     /**
      * The resource to load XML data from. You can either create instances of
      * {@link org.carrot2.util.resource.IResource} implementations directly or use 
-     * {@link org.carrot2.util.resource.ResourceUtils} to look up
+     * {@link org.carrot2.util.resource.ResourceLookup} to look up
      * {@link org.carrot2.util.resource.IResource} instances from a variety of locations.
      * <p>
      * One special {@link org.carrot2.util.resource.IResource} implementation you can use is

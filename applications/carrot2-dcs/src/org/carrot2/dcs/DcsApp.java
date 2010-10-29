@@ -22,11 +22,14 @@ import org.mortbay.thread.QueuedThreadPool;
 import org.slf4j.Logger;
 
 /**
- * Bootstraps the Document Clustering Server.
+ * Bootstraps the Document Clustering Server using an embedded Jetty server.
  */
 public class DcsApp
 {
-    private final Logger log = org.slf4j.LoggerFactory.getLogger("dcs");
+    /**
+     * DCS logger. Tests attach to this logger's LOG4J appender.
+     */
+    final Logger log = org.slf4j.LoggerFactory.getLogger("dcs");
 
     @Option(name = "-port", usage = "Port number to bind to")
     int port = 8080;
@@ -88,7 +91,7 @@ public class DcsApp
         {
             throw new IllegalArgumentException("Max number of threads must be greater than 1.");
         }
-            
+
         final QueuedThreadPool tp = new QueuedThreadPool(maxThreads);
         server.setThreadPool(tp);
 
@@ -107,7 +110,7 @@ public class DcsApp
                 log.error("DCS startup failure.");
                 stop();
             }
-
+            
             public void lifeCycleStopped(LifeCycle lc)
             {
                 log.info("DCS stopped.");

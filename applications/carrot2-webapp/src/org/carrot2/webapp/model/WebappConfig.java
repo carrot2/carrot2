@@ -14,12 +14,16 @@ package org.carrot2.webapp.model;
 import java.io.InputStream;
 import java.util.*;
 
+import javax.servlet.ServletContext;
+
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.InternalAttributePredicate;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.ResourceLookup.Location;
+import org.carrot2.webapp.QueryProcessorServlet;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.core.Persister;
@@ -109,20 +113,22 @@ public class WebappConfig
     @Attribute(name = "skin-param", required = false)
     public final static String SKIN_PARAM = "skin";
 
-    /*
-     * TODO: can we move all these assertions to a method in @Commit or inside deserialize
-     * and then move the entire initialization code to QueryProcessorServlet?
-     */
     /**
      * @return Initialize the global configuration and return it.
      */
-    public final static WebappConfig getSingleton()
+    public final static WebappConfig getSingleton(ServletContext context)
     {
         try
         {
-            // Load configuration
-            final ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
-            final WebappConfig conf = deserialize(resUtils.getFirst("config.xml"));
+            // Load web application configuration.
+            final IResource webappConfig = new ResourceLookup(
+                    new PrefixDecoratorLocator(new ServletContextLocator(context), "/WEB-INF/"))
+                .getFirst("webapp-config.xml");
+
+            if (webappConfig == null)
+                throw new RuntimeException("Could not find WEB-INF/webapp-config.xml.");
+
+            final WebappConfig conf = deserialize(webappConfig);
 
             if (conf.skins.size() == 0)
             {
@@ -140,9 +146,24 @@ public class WebappConfig
                     "Configuration must contain at least one result list size");
             }
 
-            // Load component suite
-            conf.components = ProcessingComponentSuite.deserialize(resUtils
-                .getFirst(conf.componentSuite));
+            // Load component suite.
+            List<IResourceLocator> resourceLocators = Lists.newArrayList();
+            resourceLocators.add(new PrefixDecoratorLocator(
+                new ServletContextLocator(context), "/WEB-INF/suites/"));
+
+            if (Boolean.getBoolean(QueryProcessorServlet.ENABLE_CLASSPATH_LOCATOR))
+                resourceLocators.add(Location.CONTEXT_CLASS_LOADER.locator);
+
+            ResourceLookup suitesLookup = new ResourceLookup(resourceLocators);
+            IResource suite = suitesLookup.getFirst(conf.componentSuite);
+
+            if (suite == null)
+            {
+                throw new Exception("Suite file not found in servlet context's /WEB-INF/suites: " 
+                    + conf.componentSuite);
+            }
+
+            conf.components = ProcessingComponentSuite.deserialize(suite, suitesLookup);
 
             log.info("Loaded " + conf.components.getSources().size() + " sources and "
                 + conf.components.getAlgorithms().size() + " algorithms");

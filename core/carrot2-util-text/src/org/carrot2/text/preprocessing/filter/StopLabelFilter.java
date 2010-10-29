@@ -13,6 +13,7 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.linguistic.ILexicalData;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.*;
@@ -38,21 +39,38 @@ public class StopLabelFilter extends SingleLabelFilterBase
     @Attribute
     public boolean enabled = true;
 
+    /*
+     * 
+     */
     private final LabelFormatter labelFormatter = new LabelFormatter();
 
+    /*
+     * 
+     */
+    private ILexicalData lexicalData;
+
+    @Override
+    public void filter(PreprocessingContext context, boolean [] acceptedStems,
+        boolean [] acceptedPhrases)
+    {
+        lexicalData = context.language.getLexicalData();
+
+        super.filter(context, acceptedStems, acceptedPhrases);
+    }
+    
     @Override
     public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
     {
         final String formatedLabel = labelFormatter.format(context, phraseIndex
             + context.allWords.image.length);
-        return !context.language.isStopLabel(formatedLabel);
+        return !lexicalData.isStopLabel(formatedLabel);
     }
 
     @Override
     public boolean acceptWord(PreprocessingContext context, int wordIndex)
     {
         final String formattedLabel = labelFormatter.format(context, wordIndex);
-        return !context.language.isStopLabel(formattedLabel);
+        return !lexicalData.isStopLabel(formattedLabel);
     }
 
     public boolean isEnabled()

@@ -16,6 +16,7 @@ import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.*;
+import org.carrot2.text.util.MutableCharArray;
 
 public final class TestLanguageModelFactory implements ILanguageModelFactory
 {
@@ -28,11 +29,13 @@ public final class TestLanguageModelFactory implements ILanguageModelFactory
 
     private final static class TestLanguageModel implements ILanguageModel
     {
+        @Override
         public LanguageCode getLanguageCode()
         {
             return null;
         }
 
+        @Override
         public IStemmer getStemmer()
         {
             return new IStemmer()
@@ -51,19 +54,27 @@ public final class TestLanguageModelFactory implements ILanguageModelFactory
             };
         }
 
-        public boolean isCommonWord(CharSequence word)
-        {
-            return word.toString().contains("stop");
-        }
-
-        public boolean isStopLabel(CharSequence formattedLabel)
-        {
-            return formattedLabel.toString().startsWith("stoplabel");
-        }
-
+        @Override
         public ITokenizer getTokenizer()
         {
             return new ExtendedWhitespaceTokenizer();
+        }
+        
+        @Override
+        public ILexicalData getLexicalData()
+        {
+            return new ILexicalData()
+            {
+                public boolean isCommonWord(MutableCharArray word)
+                {
+                    return word.toString().contains("stop");
+                }
+
+                public boolean isStopLabel(CharSequence formattedLabel)
+                {
+                    return formattedLabel.toString().startsWith("stoplabel");
+                }
+            };
         }
     }
 }

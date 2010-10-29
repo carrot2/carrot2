@@ -12,10 +12,9 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
-import org.carrot2.text.preprocessing.LabelFilterProcessor;
-import org.carrot2.text.preprocessing.LabelFilterTestBase;
+import org.carrot2.text.linguistic.ILanguageModelFactory;
+import org.carrot2.text.preprocessing.*;
 import org.junit.Test;
 
 /**
@@ -76,13 +75,10 @@ public class StopWordLabelFilterMergedTest extends LabelFilterTestBase
 
         check(expectedLabelsFeatureIndex, 0);
     }
-
+    
     @Override
     protected ILanguageModelFactory createLanguageModelFactory()
     {
-        final DefaultLanguageModelFactory snowballLanguageModelFactory = new DefaultLanguageModelFactory();
-        snowballLanguageModelFactory.mergeResources = true;
-        snowballLanguageModelFactory.reloadResources = true;
-        return snowballLanguageModelFactory;
+        return new DefaultLanguageModelFactory();
     }
 }

@@ -72,3 +72,4 @@ Export-Package: org.apache.commons.codec,
  org.apache.commons.lang.time
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.commons.logging
+Require-Bundle: org.slf4j;bundle-version="1.5.8";resolution:=optional;visibility:=reexport

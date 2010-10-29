@@ -266,15 +266,11 @@
       <fileset dir="${core.dir}">
         <include name="**/src/**" />
         <include name="**/src-resources/**" />
-        <include name="**/suites/**" />
         <exclude name="**/*.java" />
         <exclude name="**/*.clover" />
         <exclude name="**/carrot2-util-log4j/**" />
       </fileset>
       <regexpmapper from="^.*src(-resources)?(.*)$$" to="\2" />
-    </copy>
-    <copy todir="${build.dir}" includeemptydirs="false">
-      <fileset dir="${core.dir}/carrot2-component-suites/suites" />
     </copy>
   </target>
 
@@ -694,6 +690,7 @@
     <mkdir dir="${api.dir}" />
     <mkdir dir="${api.dir}/lib" />
     <mkdir dir="${api.dir}/examples" />
+    <mkdir dir="${api.dir}/resources" />
     
     <copy todir="${api.dir}/lib">
       <fileset dir="${lib.flattened}" />
@@ -703,6 +700,7 @@
       </fileset>
       <mapper type="flatten" />
     </copy>
+
     <copy todir="${api.dir}">
       <fileset dir="${jar.dir}">
         <include name="carrot2-core-${carrot2.version}.jar" />
@@ -711,16 +709,22 @@
         <include name="carrot2.LICENSE" />
         <include name="carrot2.CONTRIBUTORS" />
       </fileset>
-    </copy>
-    <copy todir="${api.dir}/examples">
-      <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/src" />
-      <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
+      <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites">
         <include name="suites/suite-examples.xml" />
-        <include name="suites/source-microsoft-live*.xml" />
+        <include name="suites/source-bing*.xml" />
         <include name="suites/algorithm-lingo*.xml" />
         <include name="suites/algorithm-stc*.xml" />
       </fileset>
     </copy>
+
+    <copy todir="${api.dir}/resources">
+      <fileset dir="${carrot2.master.basedir}/core/carrot2-util-text/src-resources" />
+    </copy>
+
+    <copy todir="${api.dir}/examples">
+      <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/src" />
+    </copy>
+
     <copy todir="${api.dir}" file="${carrot2.master.basedir}/applications/carrot2-examples/build.xml" />
     <carrot2.readme readme.src="${carrot2.master.basedir}/applications/carrot2-examples/etc/readme.txt"
                     readme.dest="${api.dir}/readme.txt" />

@@ -27,16 +27,14 @@
   <property name="jawr.properties.template.path"
             location="${carrot2.webapp.basedir}/src/jawr.template.properties" />
   <property name="config.xml.template.path"
-            location="${carrot2.webapp.basedir}/src/config.template.xml" />
+            location="${carrot2.webapp.basedir}/web/WEB-INF/webapp-config.template.xml" />
   <property name="war.name.base" value="${carrot2.webapp.base}" />
   
 
   <!-- Webapp build dirs -->
   <property name="webapp.dir" location="tmp/webapp" />
-  <property name="webapp.classes.dir" location="${webapp.dir}/classes" />
-  <property name="webapp.lib.dir" location="${webapp.dir}/lib" />
-  <property name="webapp.skins.dir"
-            location="${webapp.dir}/skins${build.number}" />
+  <property name="webapp.context.dir" location="${webapp.dir}/context" />
+  <property name="webapp.skins.dir" location="${webapp.context.dir}/skins${build.number}" />
 
   <!-- Webtest parameters -->
   <property name="cargo.dir" location="${carrot2.webapp.basedir}/tmp/cargo" />
@@ -62,20 +60,19 @@
        Assembles the web applications WAR file.
     -->
   <target name="carrot2.webapp.war" depends="basedir.check, lib.flattened">
-    <copy todir="${webapp.lib.dir}">
+    <copy todir="${webapp.context.dir}/WEB-INF/lib">
       <fileset dir="${carrot2.master.basedir}">
         <patternset refid="lib.webapp" />
       </fileset>
       <mapper type="flatten"/>
     </copy>
-      
+
     <war destfile="${webapp.dir}/${war.name.base}.war"
          webxml="${carrot2.webapp.basedir}/web/WEB-INF/web.xml">
+
+      <fileset dir="${webapp.context.dir}" />
       <fileset dir="${carrot2.webapp.basedir}/web">
         <include name="index.html" />
-      </fileset>
-      <fileset dir="${webapp.skins.dir}/..">
-        <include name="skins${build.number}/**" />
       </fileset>
 
       <lib dir="${lib.flattened}">
@@ -83,9 +80,6 @@
       	<exclude name="**/carrot2-mini*.jar" />
       	<exclude name="**/carrot2-core-sources*.jar" />
       </lib>
-      <lib dir="${webapp.lib.dir}" />
-
-      <classes dir="${webapp.classes.dir}" excludes="**/*.java" />
     </war>
   </target>
 
@@ -94,7 +88,8 @@
        to the output directory, not sure it if makes sense to wrap it with an extra ZIP file.
     -->
   <target name="carrot2.webapp.dist" depends="basedir.check, carrot2.webapp.webtest.war">
-    <move file="${webapp.dir}/${war.name.base}.war" tofile="${webapp.dir}/../${war.name.base}-${carrot2.version}.war" />
+    <move file="${webapp.dir}/${war.name.base}.war" 
+    	tofile="${webapp.dir}/../${war.name.base}-${carrot2.version}.war" />
     <delete dir="${webapp.dir}" failonerror="false" />
   </target>
 
@@ -122,20 +117,21 @@
        before they let this script assemble the complete WAR file.
     -->
   <target name="carrot2.webapp.prepare"
-          depends="basedir.check, carrot2.webapp.templates.war, carrot2.webapp.classes, carrot2.webapp.attributes.war, carrot2.webapp.suites, carrot2.webapp.skins, carrot2.webapp.sprites.war" />
+          depends="basedir.check, carrot2.webapp.templates.war, carrot2.webapp.classes, carrot2.webapp.attributes.war, carrot2.webapp.suites, carrot2.webapp.resources, carrot2.webapp.skins, carrot2.webapp.sprites.war" />
 
   <!--
        Compiles the main web application classes and copies log4j configuration.
     -->
   <target name="carrot2.webapp.classes" depends="basedir.check, jar">
-    <mkdir dir="${webapp.classes.dir}" />
+    <mkdir dir="${webapp.context.dir}/WEB-INF/classes" />
 
-    <javac srcdir="${carrot2.webapp.basedir}/src" destdir="${webapp.classes.dir}">
+    <javac srcdir="${carrot2.webapp.basedir}/src" 
+    	  destdir="${webapp.context.dir}/WEB-INF/classes">
       <classpath refid="lib.classpath" />
       <classpath path="${jar.dir}/carrot2-core-${carrot2.version}.jar" />
     </javac>
 
-    <copy todir="${webapp.classes.dir}">
+    <copy todir="${webapp.context.dir}/WEB-INF/classes">
         <fileset dir="${carrot2.webapp.basedir}/src">
             <exclude name="**/*.java" />
             <exclude name="*.properties" />
@@ -144,9 +140,10 @@
     </copy>
 
     <!-- Log4j specific config -->
-    <copy tofile="${webapp.dir}/classes/log4j.xml"
+    <copy tofile="${webapp.context.dir}/WEB-INF/classes/log4j.xml"
           file="${carrot2.master.basedir}/core/carrot2-util-log4j/src/log4j-webapp.xml" />
-    <copy todir="${webapp.classes.dir}">
+
+    <copy todir="${webapp.context.dir}/WEB-INF/classes">
       <fileset dir="${carrot2.master.basedir}/core/carrot2-util-log4j/src">
         <include name="appender-*" />
         <include name="filters-*" />
@@ -158,11 +155,25 @@
        Copies the default component suites. Can be disabled by "extending" build scripts.
     -->
   <target name="carrot2.webapp.suites" unless="carrot2.webapp.no-default-suites" depends="basedir.check">
-    <copy todir="${webapp.classes.dir}">
+  	<mkdir dir="${webapp.context.dir}/WEB-INF/suites" />
+    <copy todir="${webapp.context.dir}/WEB-INF/suites">
       <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
-        <include name="suites/algorithm-*.xml" />
-        <include name="suites/source-*.xml" />
-        <include name="suites/suite-webapp.xml" />
+        <include name="algorithm-*.xml" />
+        <include name="source-*.xml" />
+        <include name="suite-webapp.xml" />
+      </fileset>
+    </copy>
+  </target>
+
+  <!--
+       Copies the default linguistic resources. Can be disabled by "extending" build scripts.
+    -->
+  <target name="carrot2.webapp.resources" unless="carrot2.webapp.no-default-resources" depends="basedir.check">
+    <mkdir dir="${webapp.context.dir}/WEB-INF/resources" />
+    <copy todir="${webapp.context.dir}/WEB-INF/resources">
+      <fileset dir="${carrot2.master.basedir}/core/carrot2-util-text/src-resources">
+        <include name="stopwords.*" />
+    	<include name="stoplabels.*" />
       </fileset>
     </copy>
   </target>
@@ -201,15 +212,16 @@
        Substitutes variables in config.xml, jawr.properties and web.xml files.
     -->
   <macrodef name="carrot2.webapp.templates">
-    <attribute name="target.dir" />
+    <attribute name="context.dir" />
+  	<attribute name="jawr.dir" default="@{context.dir}/WEB-INF/classes" />
     <attribute name="template.caching" default="true" />
     <sequential>
       <carrot2.webapp.templates.config config.xml.template.path="${config.xml.template.path}"
-                                       target.dir="@{target.dir}" />
+                                       target.dir="@{context.dir}/WEB-INF" />
       
       <carrot2.webapp.templates.jawr jawr.properties.template.path="${jawr.properties.template.path}"
-                                     target.dir="@{target.dir}" />
-        
+                                     target.dir="@{jawr.dir}" />
+
       <copy file="${carrot2.webapp.basedir}/web/WEB-INF/web.template.xml"
             tofile="${carrot2.webapp.basedir}/web/WEB-INF/web.xml"
             overwrite="true">
@@ -238,7 +250,7 @@
        the results to the classes working dir.
     -->
   <target name="carrot2.webapp.templates.war" depends="basedir.check">
-    <carrot2.webapp.templates target.dir="${webapp.classes.dir}" />
+    <carrot2.webapp.templates context.dir="${webapp.context.dir}" />
   </target>
 
   <!--
@@ -246,8 +258,10 @@
        the results to the source dirs.
     -->
   <target name="carrot2.webapp.templates.eclipse" depends="basedir.check">
-    <carrot2.webapp.templates target.dir="${carrot2.webapp.basedir}/src"
-               template.caching="false" />
+    <carrot2.webapp.templates 
+    	context.dir="${carrot2.webapp.basedir}/web"
+    	   jawr.dir="${carrot2.webapp.basedir}/src"
+        template.caching="false" />
   </target>
 
   <!--
@@ -266,9 +280,8 @@
        Removes temporary files left after building the web application.
     -->
   <target name="carrot2.webapp.cleanup" depends="basedir.check">
-  	<delete dir="${webapp.lib.dir}" />
-    <delete dir="${webapp.classes.dir}" />
     <delete dir="${webapp.skins.dir}" />
+  	<delete dir="${webapp.context.dir}" />
   </target>
 
   <!--

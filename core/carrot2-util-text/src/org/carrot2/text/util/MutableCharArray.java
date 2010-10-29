@@ -54,7 +54,8 @@ public final class MutableCharArray implements CharSequence, Cloneable
     }
 
     /**
-     * Creates a {@link MutableCharArray} from another {@link CharSequence}.
+     * Creates a {@link MutableCharArray} from another {@link CharSequence},
+     * creates a new buffer to store characters.
      */
     public MutableCharArray(CharSequence seq)
     {
@@ -62,7 +63,9 @@ public final class MutableCharArray implements CharSequence, Cloneable
     }
 
     /**
+     * Resets the internal buffer to use the provided argument.
      * 
+     * @see #reset(char[])
      */
     public MutableCharArray(char [] buffer)
     {
@@ -70,7 +73,9 @@ public final class MutableCharArray implements CharSequence, Cloneable
     }
     
     /**
+     * Resets the internal buffer to use the provided argument.
      * 
+     * @see #reset(char[])
      */
     public MutableCharArray(char [] buffer, int start, int length)
     {

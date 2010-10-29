@@ -21,6 +21,7 @@ import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
+import org.carrot2.util.simplexml.PersisterHelpers;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.core.Commit;
@@ -69,28 +70,10 @@ public class ProcessingComponentDescriptor
     @Attribute(name = "attribute-set-id", required = false)
     private String attributeSetId;
 
-    @Attribute(required = false)
-    Position position = Position.MIDDLE;
-    
     /**
      * Cached bindable descriptor for this component.
      */
     private BindableDescriptor bindableDescriptor;
-
-    /**
-     * The relative positioning of the component within the suite.
-     */
-    static enum Position
-    {
-        /** Component appended at the beginning */
-        BEGINNING,
-
-        /** Component appended after those at the beginning but before those at the end */
-        MIDDLE,
-
-        /** Component appended at the end */
-        END;
-    }
 
     ProcessingComponentDescriptor()
     {
@@ -280,42 +263,23 @@ public class ProcessingComponentDescriptor
     }
 
     /**
-     * Invoked by the XML loading framework when the object is deserialized.
+     * Invoked by the XML loading framework when the object is deserialized. 
      */
-    private void loadAttributeSets() throws Exception
+    private void loadAttributeSets(ResourceLookup resourceLookup) throws Exception
     {
         attributeSets = new AttributeValueSets();
 
-        final ResourceUtils resourceUtils = ResourceUtilsFactory
-            .getDefaultResourceUtils();
-
-        final Class<?> clazz = getComponentClass();
         IResource resource = null;
-
         if (!StringUtils.isBlank(attributeSetsResource))
         {
-            // Try to load from the directly provided location
-            resource = resourceUtils.getFirst(attributeSetsResource, clazz);
+            // Try to load from the directly provided resource name
+            resource = resourceLookup.getFirst(attributeSetsResource);
 
             if (resource == null)
             {
                 throw new IOException("Attribute set resource not found: "
                     + attributeSetsResource);
             }
-        }
-
-        if (resource == null)
-        {
-            // Try className.id.attributes.xml
-            resource = resourceUtils.getFirst(getComponentClass().getName() + "."
-                + getId() + ".attributes.xml", clazz);
-        }
-
-        if (resource == null)
-        {
-            // Try className.attributes.xml
-            resource = resourceUtils.getFirst(getComponentClass().getName()
-                + ".attributes.xml", clazz);
         }
 
         if (resource != null)
@@ -341,13 +305,14 @@ public class ProcessingComponentDescriptor
      * On commit, attempt to verify component class and instance availability.
      */
     @Commit
-    @SuppressWarnings("unused")
-    private void onCommit()
+    @SuppressWarnings({"unused"})
+    private void onCommit(Map<Object, Object> session)
     {
         this.initializationException = null;
         try
         {
-            loadAttributeSets();
+            ResourceLookup resourceLookup = PersisterHelpers.getResourceLookup(session);
+            loadAttributeSets(resourceLookup);
             bindableDescriptor = 
                 BindableDescriptorBuilder.buildDescriptor(newInitializedInstance());
         }

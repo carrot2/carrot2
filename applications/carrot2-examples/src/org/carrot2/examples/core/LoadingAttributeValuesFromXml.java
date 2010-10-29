@@ -42,7 +42,7 @@ public class LoadingAttributeValuesFromXml
         try
         {
             xmlStream = LoadingAttributeValuesFromXml.class
-                .getResourceAsStream("/org/carrot2/examples/core/algorithm-lingo-attributes.xml");
+                .getResourceAsStream("algorithm-lingo-attributes.xml");
 
             // Load attribute value sets from the XML stream
             final AttributeValueSets attributeValueSets = AttributeValueSets

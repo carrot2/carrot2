@@ -47,6 +47,14 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         labelFormatter = new LabelFormatter();
     }
 
+    @Override
+    protected ILanguageModelFactory createLanguageModelFactory()
+    {
+        DefaultLanguageModelFactory factory = new DefaultLanguageModelFactory();
+        ((DefaultLexicalDataFactory) factory.lexicalDataFactory).mergeResources = false;
+        return factory;
+    }
+
     @Test
     public void testSingleWordNotCapitalized()
     {
@@ -201,13 +209,5 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
             assertThat(labelFormatter.format(context, labelsFeatureIndex[i])).as(
                 "featureIndex[" + i + "]").isEqualTo(expectedFormattedLabels[i]);
         }
-    }
-
-    @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
-    {
-        final DefaultLanguageModelFactory snowballLanguageModelFactory = new DefaultLanguageModelFactory();
-        snowballLanguageModelFactory.mergeResources = false;
-        return snowballLanguageModelFactory;
     }
 }

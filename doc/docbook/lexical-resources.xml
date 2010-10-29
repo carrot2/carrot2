@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<chapter xml:id="chapter.lexical-resources" xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <title>Language resources</title>
+  <subtitle>Stemming, tuning common words and filtering cluster labels</subtitle>
+
+  <para>
+    &C2; will attempt to perform clustering of any textual content, regardless
+    of the actual language the content is written in. However, certain level of
+    shallow linguistic preprocessing usually helps in achieving better clustering
+    and high-quality cluster labels (this is especially true when clustering
+    smaller content, such as search results). Linguistic preprocessing includes
+    the following components and resources:
+  </para>
+  
+  <variablelist>
+    <varlistentry>
+      <term>stemmer</term>
+      <listitem><para>Stemming is the act of folding grammatical variations
+      of words into their <quote>base</quote> forms. In English, for example,
+      stemming transforms plural word forms into singular ones. For highly
+      inflectional languages, such as Central European languages, 
+      stemming may be the key to achieve good clustering results. &C2;
+      uses a built-in set of stemmers from the Snowball, Lucene and
+      Morfologik projects.</para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term>stop words</term>
+      <listitem><para>Stop words (or common words) include terms that
+      are meaningless in the language. They are typically function
+      words (<quote>is</quote>, <quote>that</quote>, in English) or
+      words that are common in the analyzed body of text and should
+      be marked as ignored. A good set of stop words helps the clustering
+      algorithm in identifying <quote>gaps</quote> between other 
+      phrases that can become valuable cluster labels.</para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term>stop labels</term>
+      <listitem><para>When clustering domain-specific texts, it is often
+      desirable to filter out certain frequently occurring expressions
+      that should not be considered clusters (<quote>home page</quote>
+      for example). This resource provides means of avoiding such cluster labels.
+      </para></listitem>
+    </varlistentry>
+  </variablelist>
+
+  <para>
+    &C2; comes with a set of default lexical resources which may be used
+    as a starting point for further tuning. It is recommended to gradually
+    build a set of customized lexical resources that matches the specific content
+    being clustered (for example legal documents will have a different set of stop
+    labels than a corpus of e-mails).
+  </para>
+  
+
+  <section xml:id="section.resources-location">
+    <title>Location of lexical resources</title>
+
+    <para>
+      Default lexical resources in &C2; are part of the core application JAR file and (in an
+      explicit, unpacked form) in a resource folder distributed with 
+      each of the demo applications. The exact location of this folder
+      is given below.
+    </para>
+    
+    <variablelist>
+      <varlistentry>
+        <term>&CLIBP;</term>
+        <listitem><para>Lexical resources are placed in the <filename>resources</filename>
+        folder under the application folder.</para></listitem>
+      </varlistentry>
+      
+      <varlistentry>
+        <term>&JA;</term>
+        <listitem><para>Lexical resources are placed in the <filename>resources</filename>
+        folder under the distribution folder. There is an example called
+        <filename>UsingCustomLexicalResources</filename> which shows how to
+        configure controllers to use a given path for loading lexical resources.</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>&WA;</term>
+        <listitem><para>Lexical resources are placed in the <filename>WEB-INF/resources</filename>
+        folder in the web application context. In the distribution, the web application
+        is stored as a web archive (WAR) file, which is a ZIP-packed folder with the application
+        context. The resources are inside this archive.</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>&DCS;</term>
+        <listitem><para>Lexical resources are placed in the <filename>WEB-INF/resources</filename>
+        folder in the web application context. In the distribution, the web application
+        is stored as a web archive (WAR) file, which is a ZIP-packed folder with the application
+        context. The resources are inside this archive.</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>&DCW;</term>
+        <listitem><para>Lexical resources are extracted to the workspace folder on first launch.
+        The workspace folder is typically under the Workbench's distribution directory, unless
+        <varname>-data</varname> option is passed to the workbench launcher at startup.</para></listitem>
+      </varlistentry>
+      
+      <varlistentry>
+        <term>&C2; core JAR file</term>
+        <listitem><para>Lexical resources are placed at the root of the JAR file. The default lookup
+        location for the lexical resource factory is to scan context class loader's resources
+        and typically (if no other class loader or location that precedes the core JAR contains such resources)
+        these resources will be used by the implementation. &JA; contains
+        an example called <filename>UsingCustomLexicalResources</filename>
+        that demonstrates ways of overriding the default location.</para></listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+
+  <section xml:id="section.lexical-resources.in-workbench">
+    <title>Lexical resources in &DCW;</title>
+  
+    <para>
+      The easiest way to tune the lexical resources is to use the &DCW; which will allow
+      observing the effect of the changes in real time. To tune the lexical resources in &DCW;:
+    </para>
+
+    <orderedlist>
+      <listitem>
+        <para>
+          Start &DCW; and run some query on which you'll be observing the results
+          of your changes.
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Go to the <filename>workspace/</filename> directory which is located in
+          the directory to which you extracted &DCW;. Modify lexical resource files as
+          needed and save the changes.
+        </para>
+      </listitem>
+      
+      <listitem>
+        <para>
+          Open the <guilabel>Attributes</guilabel> view and use the view toolbar's
+          <guiicon><inlinemediaobject><imageobject role="html"><imagedata format="PNG" fileref="img/icon-attribute-grouping.png" /></imageobject></inlinemediaobject></guiicon>
+          button to group the attributes by semantics. In the <guilabel>Preprocessing</guilabel>
+          section, make sure the <guilabel>Processing language</guilabel> is correctly set and
+          check the <guilabel>Reload resources</guilabel> checkbox. Doing the latter
+          will let you to see the updated clustering results without restarting &DCW;
+          every time you save the changed lexical resource files.
+        </para>
+    
+        <figure xml:id="figure.debug-attributes">
+          <title>Debug attributes section</title>
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata format="PNG" fileref="img/workbench-debug-attributes.png" />
+            </imageobject>
+          </mediaobject>  
+        </figure>
+      </listitem>
+      
+      <listitem>
+        <para>
+          To re-run clustering after
+          you've saved changes to the lexical resource files, choose the
+          <guilabel>Restart Processing</guilabel> option from the <guilabel>Search</guilabel>
+          menu, or press <guilabel>Ctrl+F11</guilabel>.
+        </para>
+        
+        <figure xml:id="figure.workbench-restart-clustering">
+          <title>&DCW; restart clustering button</title>
+          <mediaobject>
+            <imageobject role="html">
+              <imagedata format="PNG" fileref="img/workbench-restart-clustering.png" />
+            </imageobject>
+          </mediaobject>  
+        </figure>
+      </listitem>
+    </orderedlist>
+  </section>
+
+  <section xml:id="section.stopword-files">
+    <title>Stop word files</title>
+
+    <para>
+      Stop word files are UTF-8 encoded plain text files with a single word 
+      in each line. Lines starting with <literal>#</literal> are omitted
+      (considered to be comments). Files must follow a naming convention and be
+      named <filename>stopwords.lang</filename>, where <varname>lang</varname>
+      is a two-letter language suffix defined in <classname>LanguageCode</classname>
+      class.
+    </para>
+
+    <example xml:id="example.sample-stopword-file">
+      <title>A sample stop word file for English: <filename>stopwords.en</filename></title>
+      <programlisting><![CDATA[# stop word file for English
+ain't
+thanks
+need
+needs
+needed
+vs
+hit]]></programlisting>
+    </example>
+
+    <important>
+      <para>
+        Note that although words provided in the stop word file will be
+        handled in a case-insensitive manner, they will otherwise be
+        taken literally, that is no further processing, such as stemming will be
+        applied. As a result, in order to declare that all
+        <emphasis>have</emphasis>, <emphasis>has</emphasis> and
+        <emphasis>having</emphasis> are function words, three entries
+        corresponding to these words are required.
+      </para>
+    </important>
+  </section>
+
+  <section xml:id="section.stoplabel-files">
+    <title>Label filtering files</title>
+
+    <para>
+      Label filtering files are UTF-8 encoded plain text files with a single 
+      regular expression pattern in each line. Lines starting with <literal>#</literal> are omitted
+      (considered to be comments). Files must follow a naming convention and be
+      named <filename>stoplabels.lang</filename>, where <varname>lang</varname>
+      is a two-letter language suffix defined in <classname>LanguageCode</classname>
+      class.
+    </para>
+    
+    <para>
+      Regular expressions inside the stop label files must be compatible
+      with the syntax declared by Java's standard library 
+      <classname>java.util.regex.Pattern</classname> class.
+    </para>
+
+    <example xml:id="example.sample-stoplabel-file">
+      <title>A sample stop label file for English: <filename>stoplabels.en</filename></title>
+      <programlisting><![CDATA[# stop label patterns for English
+(?i)(new|information|list|skip|join|cheap|access(es)?|corp(oration)?s?)
+(?i)information (about|on).*
+(?i)(index|list) of.*
+(?i).*(page|part|copyright) \d+.*
+(?i)(official|offer(ing)?s?|lists|uses?).*
+(?i).*(known|information|offer(ing)?s?|a range)]]></programlisting>
+    </example>
+  </section>
+</chapter>

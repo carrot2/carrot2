@@ -18,6 +18,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.carrot2.core.LanguageCode;
+import org.carrot2.text.util.MutableCharArray;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -91,7 +92,8 @@ public abstract class LanguageModelTestBase
         final String [] testData = getCommonWordsTestData();
         for (String word : testData)
         {
-            assertTrue(languageModel.isCommonWord(word));
+            assertTrue(languageModel.getLexicalData().isCommonWord(
+                new MutableCharArray(word)));
         }
     }
 
@@ -120,7 +122,7 @@ public abstract class LanguageModelTestBase
 
     /**
      * Override and provide words for testing against
-     * {@link ILanguageModel#isCommonWord(CharSequence)}).
+     * {@link ILexicalData#isCommonWord(MutableCharArray)}).
      */
     protected String [] getCommonWordsTestData()
     {

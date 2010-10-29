@@ -25,8 +25,7 @@
 
     <copy todir="tmp/classes">
       <fileset dir="examples/">
-        <include name="suites/**" />
-        <include name="org/carrot2/examples/core/algorithm-lingo-attributes.xml" />
+      	<exclude name="*.java" />
       </fileset>
     </copy>
   </target>
@@ -38,6 +37,7 @@
     <run.example classname="org.carrot2.examples.clustering.UsingCachingController" />
     <run.example classname="org.carrot2.examples.clustering.UsingComponentSuites" />
     <run.example classname="org.carrot2.examples.clustering.UsingCustomLanguageModel" />
+    <run.example classname="org.carrot2.examples.clustering.UsingCustomLexicalResources" />
     <run.example classname="org.carrot2.examples.core.LoadingAttributeValuesFromXml" />
     <run.example classname="org.carrot2.examples.core.SavingAttributeValuesToXml" />
 
@@ -66,8 +66,9 @@
 
     <sequential>
       <echo>Running: @{classname}</echo>
-      <java classname="@{classname}" logError="true"
-            failonerror="true" outputproperty="dev.null">
+      <java fork="true"
+            classname="@{classname}" logError="true"
+            failonerror="true" output="tmp/@{classname}.log">
         <classpath>
           <fileset dir=".">
             <include name="**/*.jar" />

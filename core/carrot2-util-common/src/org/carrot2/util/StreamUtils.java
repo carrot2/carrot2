@@ -108,6 +108,22 @@ public final class StreamUtils
     }
 
     /**
+     * Prefetch the entire content of <code>stream</code>, close it and return
+     * an {@link InputStream} to an in-memory {@link ByteArrayInputStream}. If
+     * <code>stream</code> is already a {@link ByteArrayInputStream}, it is
+     * returned immediately.
+     */
+    public static InputStream prefetch(InputStream stream) throws IOException
+    {
+        if (stream instanceof ByteArrayInputStream)
+        {
+            return stream;
+        }
+
+        return new ByteArrayInputStream(readFullyAndClose(stream));
+    }
+
+    /**
      * Copies all available data from the input stream to the output stream. Data is
      * internally buffered. Neither of the streams will be closed.
      */

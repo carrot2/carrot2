@@ -1,0 +1,16 @@
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.lucene.LuceneDocumentSource" id="lucene"
+            attribute-sets-resource="source-lucene-attributes.xml">
+      <label>Lucene</label>
+      <title>Lucene Document Source</title>
+      <mnemonic>L</mnemonic>
+      <description>
+        Retrieves documents from the Apache Lucene index. The index directory must be 
+        available in the local file system.
+      </description>
+      <icon-path>icons/lucene.png</icon-path>
+      <example-queries></example-queries>
+    </source>
+  </sources>
+</component-suite>

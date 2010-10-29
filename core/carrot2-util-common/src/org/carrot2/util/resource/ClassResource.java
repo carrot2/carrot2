@@ -15,6 +15,8 @@ package org.carrot2.util.resource;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.carrot2.util.StreamUtils;
+
 /**
  * A resource relative to a class. This resource provider caches the content of returned
  * resources and closes the stream handle in {@link #open()}.
@@ -32,9 +34,12 @@ public final class ClassResource extends URLResource
         this.resource = resource;
     }
 
+    /**
+     * Override the default open-from-URL method so that we don't lock the source JAR.
+     */
     @Override
     public InputStream open() throws IOException
     {
-        return ResourceUtils.prefetch(clazz.getResourceAsStream(resource));
+        return StreamUtils.prefetch(clazz.getResourceAsStream(resource));
     }
 }

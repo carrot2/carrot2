@@ -1,0 +1,23 @@
+<component-suite>
+    <!-- Search engines. -->
+    <include suite="source-etools.xml" />
+    <include suite="source-bing.xml" />
+    <include suite="source-yahoo-boss.xml" />
+
+    <!-- Local sources. -->
+    <include suite="source-xml.xml" />
+    <include suite="source-google-desktop.xml" />
+    <include suite="source-solr.xml" />
+    <include suite="source-lucene.xml" />
+    <include suite="source-ambient.xml" />
+    
+    <!-- PubMed, Indeed job search. -->
+    <include suite="source-pubmed.xml" />
+    <include suite="source-indeed.xml" />
+    <include suite="source-opensearch.xml" />
+
+    <!-- Algorithms -->
+    <include suite="algorithm-lingo.xml" />
+    <include suite="algorithm-stc.xml" />
+    <include suite="algorithm-synthetic.xml" />
+</component-suite>

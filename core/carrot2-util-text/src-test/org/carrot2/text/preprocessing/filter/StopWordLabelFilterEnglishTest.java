@@ -12,8 +12,7 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
+import org.carrot2.text.linguistic.*;
 import org.carrot2.text.preprocessing.LabelFilterProcessor;
 import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.junit.Test;
@@ -28,6 +27,14 @@ public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
     {
         filterProcessor.completeLabelFilter.enabled = true;
         filterProcessor.stopWordLabelFilter.enabled = true;
+    }
+    
+    @Override
+    protected ILanguageModelFactory createLanguageModelFactory()
+    {
+        DefaultLanguageModelFactory factory = new DefaultLanguageModelFactory();
+        ((DefaultLexicalDataFactory) factory.lexicalDataFactory).mergeResources = false;
+        return factory;
     }
 
     @Test
@@ -75,13 +82,5 @@ public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
         };
 
         check(expectedLabelsFeatureIndex, 0);
-    }
-
-    @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
-    {
-        final DefaultLanguageModelFactory snowballLanguageModelFactory = new DefaultLanguageModelFactory();
-        snowballLanguageModelFactory.mergeResources = false;
-        return snowballLanguageModelFactory;
     }
 }

@@ -13,6 +13,7 @@
 package org.carrot2.util.resource;
 
 
+
 /**
  * Prefixes all resource names with a given prefix at lookup time and
  * delegates to another resource locator.
@@ -24,18 +25,53 @@ public final class PrefixDecoratorLocator implements IResourceLocator
 
     public PrefixDecoratorLocator(IResourceLocator locator, String prefix)
     {
+        if (locator == null)
+            throw new IllegalArgumentException("Delegate locator must not be null.");
+        
+        if (prefix == null)
+            throw new IllegalArgumentException("Prefix must not be null.");
+
         this.delegate = locator;
         this.prefix = prefix;
     }
 
-    public IResource [] getAll(String resource, Class<?> clazz)
+    @Override
+    public IResource [] getAll(String resource)
     {
         while (resource.startsWith("/"))
         {
             resource = resource.substring(1);
         }
 
-        return delegate.getAll(prefix + resource, clazz);
+        return delegate.getAll(prefix + resource);
     }
 
+    @Override
+    public int hashCode()
+    {
+        return this.prefix.hashCode() ^ delegate.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object target)
+    {
+        if (target == this) return true;
+
+        if (target != null && target instanceof PrefixDecoratorLocator)
+        {
+            PrefixDecoratorLocator other = (PrefixDecoratorLocator) target;
+            return this.delegate.equals(other.delegate) &&
+                   this.prefix.equals(other.prefix);
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.getClass().getName() + " [prefix: "
+            + prefix + ", delegate: " 
+            + delegate + "]";
+    }    
 }

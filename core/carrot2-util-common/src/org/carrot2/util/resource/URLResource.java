@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.jar.JarFile;
 
+import org.carrot2.util.StreamUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
@@ -58,7 +59,7 @@ public class URLResource implements IResource
 
     public InputStream open() throws IOException
     {
-        return ResourceUtils.prefetch(url.openStream());
+        return StreamUtils.prefetch(url.openStream());
     }
 
     @Override

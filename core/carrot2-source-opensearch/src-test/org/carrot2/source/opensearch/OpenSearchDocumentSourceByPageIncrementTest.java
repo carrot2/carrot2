@@ -13,8 +13,8 @@ package org.carrot2.source.opensearch;
 
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.util.ExceptionUtils;
+import org.carrot2.util.StreamUtils;
 import org.carrot2.util.attribute.AttributeValueSets;
-import org.carrot2.util.resource.ResourceUtils;
 
 /**
  * Test cases for {@link OpenSearchDocumentSource} with feeds where start result index is
@@ -56,7 +56,7 @@ public class OpenSearchDocumentSourceByPageIncrementTest extends
         {
             initAttributes.putAll(AttributeValueSets
                 .deserialize(
-                    ResourceUtils.prefetch(OpenSearchDocumentSourceByPageIncrementTest.class
+                    StreamUtils.prefetch(OpenSearchDocumentSourceByPageIncrementTest.class
                         .getResourceAsStream("/" + OpenSearchDocumentSource.class.getName()
                             + ".icerocket.attributes.xml"))).getDefaultAttributeValueSet()
                 .getAttributeValues());

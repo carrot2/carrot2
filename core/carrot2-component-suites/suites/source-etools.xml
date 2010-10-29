@@ -1,0 +1,17 @@
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.etools.EToolsDocumentSource" id="etools"
+            attribute-sets-resource="source-etools-attributes.xml">
+      <label>eTools Web Search</label>
+      <title>eTools Metasearch Engine</title>
+      <icon-path>icons/etools.gif</icon-path>
+      <mnemonic>w</mnemonic>
+      <description>eTools document source searches the web using etools.ch metasearch engine</description>
+      <example-queries>
+        <example-query>data mining</example-query>
+        <example-query>london</example-query>
+        <example-query>clustering</example-query>
+      </example-queries>
+    </source>
+  </sources>
+</component-suite>

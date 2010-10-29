@@ -21,7 +21,7 @@
 
     <!-- Root logger config. -->
     <root>
-        <priority value="info" />
+        <priority value="debug" />
 
         <appender-ref ref="appender-console" />
     </root>

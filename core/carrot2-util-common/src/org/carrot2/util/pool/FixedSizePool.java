@@ -11,7 +11,6 @@
 
 package org.carrot2.util.pool;
 
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;

@@ -12,7 +12,7 @@
 
 package org.carrot2.core;
 
-import org.carrot2.core.attribute.AspectModified;
+import org.carrot2.util.annotations.AspectModified;
 
 /**
  * Provides the runtime execution platform environment information. 
