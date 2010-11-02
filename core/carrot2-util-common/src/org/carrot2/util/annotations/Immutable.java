@@ -16,12 +16,16 @@ import java.lang.annotation.*;
 import static java.lang.annotation.ElementType.*;
 
 /**
- * Marker interface for applying to code elements that are modified using
- * aspects to facilitate tracking.
+ * Marker interface for classes that are immutable (once created, never change their state.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({FIELD, CONSTRUCTOR, METHOD, TYPE})
-public @interface AspectModified
+@Target(TYPE)
+public @interface Immutable
 {
-    String value() default "";
+    /**
+     * Indicates if objects of this class can be safely published (used by other threads
+     * without explicit synchronization). Safe publication usually involves initialization of
+     * <code>final</code> fields in the constructor. 
+     */
+    boolean safePublication() default false;
 }
