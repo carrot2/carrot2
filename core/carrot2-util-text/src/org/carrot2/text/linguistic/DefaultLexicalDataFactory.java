@@ -6,11 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -25,12 +21,12 @@ import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.resource.IResource;
-import org.carrot2.util.resource.ResourceLookup;
+import org.carrot2.util.resource.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.carrotsearch.hppc.ObjectOpenHashSet;
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -47,11 +43,24 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     /** */
     final static Logger logger = LoggerFactory.getLogger(DefaultLexicalDataFactory.class);
 
+    private final static Function<ResourceLookup, HashMap<LanguageCode, ILexicalData>> resourceLoader =
+        new Function<ResourceLookup, HashMap<LanguageCode, ILexicalData>>()
+    {
+        public java.util.HashMap<LanguageCode, ILexicalData> apply(ResourceLookup resourceLookup) {
+            return reloadResources(resourceLookup);
+        }
+
+        public boolean equals(Object other) {
+            throw new UnsupportedOperationException();
+        }
+    };
+    
     /**
      * Static shared cache of lexical resources, keyed by a {@link ResourceLookup} 
      * used to search for resources. 
      */
-    private final static Map<ResourceLookup, Map<LanguageCode, ILexicalData>> cache = Maps.newHashMap();
+    private final static ResourceCache<HashMap<LanguageCode, ILexicalData>> cache 
+        = new ResourceCache<HashMap<LanguageCode, ILexicalData>>(resourceLoader);
 
     /**
      * Reloads cached stop words and stop labels on every processing request. For best
@@ -120,38 +129,24 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
         }
 
         // Prepare cache key.
-        final ResourceLookup cacheKey = resourceLookup;
+        ILexicalData lexicalData = cache.get(resourceLookup, reloadResources).get(languageCode);
 
-        // If no hit or refreshing takes place, reload everything under that key.
-        synchronized (cache)
-        {
-            if (reloadResources || !cache.containsKey(cacheKey))
-            {
-                // Reload all resources for the current configuration. 
-                cache.put(cacheKey, reloadResources(cacheKey));
-                logger.debug("{} lexical resources, locations: {}", new Object [] {
-                    reloadResources ? "Reloaded" : "Loaded",
-                    Arrays.toString(resourceLookup.getLocators())});
-
-                // Reset resource reloading to the default value.
-                reloadResources = false;
-            }
-    
-            // Must return non-null.
-            return cache.get(cacheKey).get(languageCode);
-        }
+        // Reset reload resources trigger.
+        reloadResources = false;
+        
+        return lexicalData;
     }
 
     /**
      * Reload all lexical resources associated with the given key.
      */
-    private Map<LanguageCode, ILexicalData> reloadResources(ResourceLookup resourceLookup)
+    private static HashMap<LanguageCode, ILexicalData> reloadResources(ResourceLookup resourceLookup)
     {
         // Load lexical resources.
         ObjectOpenHashSet<MutableCharArray> mergedStopwords = ObjectOpenHashSet.from();
         ArrayList<Pattern> mergedStoplabels = Lists.newArrayList();
 
-        Map<LanguageCode, ILexicalData> resourceMap = Maps.newHashMap();
+        HashMap<LanguageCode, ILexicalData> resourceMap = Maps.newHashMap();
         for (LanguageCode languageCode : LanguageCode.values())
         {
             final String isoCode = languageCode.getIsoCode();
@@ -174,7 +169,7 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     /**
      * All entries to lowercase.
      */
-    private ObjectOpenHashSet<MutableCharArray> toLower(Set<String> input)
+    private static ObjectOpenHashSet<MutableCharArray> toLower(Set<String> input)
     {
         ObjectOpenHashSet<MutableCharArray> cloned = 
             new ObjectOpenHashSet<MutableCharArray>(input.size());
@@ -192,7 +187,7 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     /**
      * Compile patterns. 
      */
-    private ArrayList<Pattern> compile(HashSet<String> patterns)
+    private static ArrayList<Pattern> compile(HashSet<String> patterns)
     {
         ArrayList<Pattern> compiled = new ArrayList<Pattern>(patterns.size());
         for (String pattern : patterns)
@@ -213,7 +208,7 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     /**
      * Attempts to load <code>resourceName</code> from the provided {@link ResourceLookup}.
      */
-    private HashSet<String> load(ResourceLookup resourceLookup, String resourceName)
+    private static HashSet<String> load(ResourceLookup resourceLookup, String resourceName)
     {
         final IResource resource = resourceLookup.getFirst(resourceName);
         if (resource == null)
