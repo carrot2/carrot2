@@ -52,6 +52,7 @@
             <include name="javadoc/**" />
             <include name="manual/**" />
             <include name="*.zip" />
+            <include name="*.war" />
           </fileset>
         </copy>
     </target>
