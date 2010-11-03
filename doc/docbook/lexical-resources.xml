@@ -7,7 +7,7 @@
   %custom;
 ]>
 <chapter xml:id="chapter.lexical-resources" xmlns="http://docbook.org/ns/docbook" version="5.0">
-  <title>Language resources</title>
+  <title>Lexical resources</title>
   <subtitle>Stemming, tuning common words and filtering cluster labels</subtitle>
 
   <para>
