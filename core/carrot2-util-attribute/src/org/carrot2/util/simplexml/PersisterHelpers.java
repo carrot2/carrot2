@@ -1,8 +1,12 @@
 package org.carrot2.util.simplexml;
 
+import java.io.*;
 import java.util.Map;
 
+import org.carrot2.util.CloseableUtils;
+import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceLookup;
+import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
 
@@ -42,6 +46,50 @@ public final class PersisterHelpers
             strategy);
     }
 
+    /**
+     * Read and deserialize an XML resource of class <code>clazz</code>.
+     * 
+     * @param <T> Class to be deserialized.
+     * @param required If <code>true</code>, missing resources will throw an IOException.
+     * 
+     * @return Returns the deserialized resource or <code>null</code> if <code>required</code>
+     * is <code>false</code>.
+     */
+    public static <T> T read(ResourceLookup resourceLookup, 
+        String resource, Class<T> clazz, boolean required)
+        throws IOException
+    {
+        IResource res = resourceLookup.getFirst(resource);
+        if (res == null)
+        {
+            if (required) throw new IOException("Required resource not found: " + resource);
+            return null;
+        }
+
+        InputStream inputStream = null;
+        try
+        {
+            inputStream = new BufferedInputStream(res.open());
+            try
+            {
+                return PersisterHelpers.createPersister(resourceLookup, 
+                    new AnnotationStrategy()).read(clazz, inputStream);
+            }
+            catch (IOException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw new IOException(e);
+            }
+        }
+        finally
+        {
+            CloseableUtils.close(inputStream);
+        }
+    }
+    
     /**
      * Create a persister with an arbitrary session map and deserialization strategy.
      */
