@@ -122,7 +122,7 @@
   </section>
 
   <section xml:id="section.lexical-resources.in-workbench">
-    <title>Lexical resources in &DCW;</title>
+    <title>Tuning lexical resources in &DCW;</title>
   
     <para>
       The easiest way to tune the lexical resources is to use the &DCW; which will allow
@@ -156,11 +156,11 @@
           every time you save the changed lexical resource files.
         </para>
     
-        <figure xml:id="figure.debug-attributes">
-          <title>Debug attributes section</title>
+        <figure xml:id="figure.preprocessing-attributes">
+          <title>Preprocessing attributes section</title>
           <mediaobject>
             <imageobject role="html">
-              <imagedata format="PNG" fileref="img/workbench-debug-attributes.png" />
+              <imagedata format="PNG" fileref="img/workbench-preprocessing-attributes.png" />
             </imageobject>
           </mediaobject>  
         </figure>
@@ -186,7 +186,7 @@
     </orderedlist>
   </section>
 
-  <section xml:id="section.stopword-files">
+  <section xml:id="section.lexical-resources.stopword-files">
     <title>Stop word files</title>
 
     <para>
@@ -223,8 +223,16 @@ hit]]></programlisting>
     </important>
   </section>
 
-  <section xml:id="section.stoplabel-files">
+  <section xml:id="section.lexical-resources.stoplabel-files">
     <title>Label filtering files</title>
+
+    <para>
+      The Lingo clustering algorithm, in addition to <link linkend="section.lexical-resources.stopword-files">stop 
+      words editing</link>, offers more precise control over cluster labels by means of "stop
+      label" regular expressions. If a cluster's label matches one of the
+      stop labels, the label will not appear on the list of clusters
+      produced by Lingo.    
+    </para>
 
     <para>
       Label filtering files are UTF-8 encoded plain text files with a single 
@@ -236,20 +244,32 @@ hit]]></programlisting>
     </para>
     
     <para>
-      Regular expressions inside the stop label files must be compatible
-      with the syntax declared by Java's standard library 
-      <classname>java.util.regex.Pattern</classname> class.
+      Each line of a stop labels file corresponds to one stop label and is a 
+      <link xlink:href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html">Java regular
+      expression</link>. Please note that in order to be removed, a label 
+      <emphasis>as a whole</emphasis> must match at least one of the stop label 
+      expressions. A number of example stop label expressions are shown below.
     </para>
 
     <example xml:id="example.sample-stoplabel-file">
       <title>A sample stop label file for English: <filename>stoplabels.en</filename></title>
       <programlisting><![CDATA[# stop label patterns for English
-(?i)(new|information|list|skip|join|cheap|access(es)?|corp(oration)?s?)
+(?i)new
 (?i)information (about|on).*
 (?i)(index|list) of.*
+(?i)(information|list|skip|join|cheap|access(es)?|corp(oration)?s?)
 (?i).*(page|part|copyright) \d+.*
 (?i)(official|offer(ing)?s?|lists|uses?).*
 (?i).*(known|information|offer(ing)?s?|a range)]]></programlisting>
     </example>
+
+    <para>
+      All stop labels shown above start with the <tag>(?i)</tag> prefix, which enables 
+      case-insensitive matching for them. The stop label in the first line suppresses 
+      labels consisting solely of the word <emphasis>new</emphasis>. 
+      The stop label in the second line removes labels that start in <emphasis>information about</emphasis>
+      or <emphasis>information on</emphasis>, and the stop label in the third line removes
+      labels that start with <emphasis>index of</emphasis> or <emphasis>list of</emphasis>. 
+    </para>
   </section>
 </chapter>
