@@ -60,66 +60,7 @@
     labels than a corpus of e-mails).
   </para>
   
-
-  <section xml:id="section.resources-location">
-    <title>Location of lexical resources</title>
-
-    <para>
-      Default lexical resources in &C2; are part of the core application JAR file and (in an
-      explicit, unpacked form) in a resource folder distributed with 
-      each of the demo applications. The exact location of this folder
-      is given below.
-    </para>
-    
-    <variablelist>
-      <varlistentry>
-        <term>&CLIBP;</term>
-        <listitem><para>Lexical resources are placed in the <filename>resources</filename>
-        folder under the application folder.</para></listitem>
-      </varlistentry>
-      
-      <varlistentry>
-        <term>&JA;</term>
-        <listitem><para>Lexical resources are placed in the <filename>resources</filename>
-        folder under the distribution folder. There is an example called
-        <filename>UsingCustomLexicalResources</filename> which shows how to
-        configure controllers to use a given path for loading lexical resources.</para></listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term>&WA;</term>
-        <listitem><para>Lexical resources are placed in the <filename>WEB-INF/resources</filename>
-        folder in the web application context. In the distribution, the web application
-        is stored as a web archive (WAR) file, which is a ZIP-packed folder with the application
-        context. The resources are inside this archive.</para></listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term>&DCS;</term>
-        <listitem><para>Lexical resources are placed in the <filename>WEB-INF/resources</filename>
-        folder in the web application context. In the distribution, the web application
-        is stored as a web archive (WAR) file, which is a ZIP-packed folder with the application
-        context. The resources are inside this archive.</para></listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term>&DCW;</term>
-        <listitem><para>Lexical resources are extracted to the workspace folder on first launch.
-        The workspace folder is typically under the Workbench's distribution directory, unless
-        <varname>-data</varname> option is passed to the workbench launcher at startup.</para></listitem>
-      </varlistentry>
-      
-      <varlistentry>
-        <term>&C2; core JAR file</term>
-        <listitem><para>Lexical resources are placed at the root of the JAR file. The default lookup
-        location for the lexical resource factory is to scan context class loader's resources
-        and typically (if no other class loader or location that precedes the core JAR contains such resources)
-        these resources will be used by the implementation. &JA; contains
-        an example called <filename>UsingCustomLexicalResources</filename>
-        that demonstrates ways of overriding the default location.</para></listitem>
-      </varlistentry>
-    </variablelist>
-  </section>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="lexical-resources-location.xml" /> 
 
   <section xml:id="section.lexical-resources.in-workbench">
     <title>Tuning lexical resources in &DCW;</title>
