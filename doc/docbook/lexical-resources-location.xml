@@ -48,7 +48,7 @@
       its location is modified by the <varname>-data</varname> option is passed to 
       the workbench launcher at startup.</para></listitem>
     </varlistentry>
-    
+
     <varlistentry>
       <term>&PROD; core JAR file</term>
       <listitem><para>Lexical resources are placed at the root of the JAR file. The default lookup
@@ -58,5 +58,14 @@
       an example called <filename>UsingCustomLexicalResources</filename>
       that demonstrates ways of overriding the default location.</para></listitem>
     </varlistentry>
+
+    <varlistentry>
+      <term>&CSA;</term>
+      <listitem><para>Lexical resources are embedded in the core assembly. At runtime,
+      <emphasis>all assemblies</emphasis> present in the stack trace of the thread initializing
+      the clustering controller (and thus a certain clustering algorithm) 
+      are scanned for resources (the defaults are always scanned last).</para></listitem>
+    </varlistentry>
+
   </variablelist>
 </section>
