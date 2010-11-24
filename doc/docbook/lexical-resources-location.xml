@@ -64,8 +64,10 @@
       <listitem><para>Lexical resources are embedded in the core assembly. At runtime,
       <emphasis>all assemblies</emphasis> present in the stack trace of the thread initializing
       the clustering controller (and thus a certain clustering algorithm) 
-      are scanned for resources (the defaults are always scanned last).</para></listitem>
+      are scanned for resources (the defaults are always scanned last). An
+      example class named <filename>UsingCustomLexicalResources</filename>, that 
+      is provided as part of &CSA; distribution, demonstrates ways of overriding
+      the default lexical resource search locations from .NET.</para></listitem>
     </varlistentry>
-
   </variablelist>
 </section>
