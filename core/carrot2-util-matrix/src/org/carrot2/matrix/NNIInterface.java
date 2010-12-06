@@ -111,8 +111,8 @@ public class NNIInterface
         catch (Throwable t)
         {
             LoggerFactory.getLogger(NNIInterface.class).info(
-                "Failed to instantiate native LAPACK: " + 
-                StringUtils.defaultIfEmpty(t.getMessage(), "(no message)"));
+                "Native LAPACK not available: " + 
+                StringUtils.defaultIfEmpty(t.getMessage(), "(no message). Java matrix routines will be used."));
         }
         return null;
     }
@@ -130,8 +130,8 @@ public class NNIInterface
         catch (Throwable t)
         {
             LoggerFactory.getLogger(NNIInterface.class).info(
-                "Failed to instantiate native BLAS: " +
-                StringUtils.defaultIfEmpty(t.getMessage(), "(no message)"));                
+                "Native BLAS not available: " +
+                StringUtils.defaultIfEmpty(t.getMessage(), "(no message). Java matrix routines will be used."));                
         }
         return null;
     }
