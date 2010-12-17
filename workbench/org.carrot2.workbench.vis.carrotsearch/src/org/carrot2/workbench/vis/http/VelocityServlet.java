@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.workbench.vis.circles;
+package org.carrot2.workbench.vis.http;
 
 import java.io.IOException;
 import java.io.Writer;

@@ -14,6 +14,18 @@
    </extension>
 
    <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            category="org.carrot2.workbench.core.workbench.category"
+            class="org.carrot2.workbench.vis.foamtree.FoamTreeView"
+            icon="icons/view_foamtree.gif"
+            id="org.carrot2.workbench.views.foamtree"
+            name="FoamTree Visualization">
+      </view>
+   </extension>
+
+   <extension
          point="org.eclipse.equinox.http.registry.httpcontexts">
       <httpcontext
             id="org.carrot2.workbench.vis.circles.http-service">
@@ -22,6 +34,7 @@
          </resource-mapping>
       </httpcontext>
    </extension>
+
    <extension
          point="org.eclipse.equinox.http.registry.resources">
       <resource
@@ -30,20 +43,22 @@
             httpcontextId="org.carrot2.workbench.vis.circles.http-service">
       </resource>
    </extension>
+
    <extension
          point="org.eclipse.equinox.http.registry.servlets">
       <servlet
             alias="/servlets/pull"
-            class="org.carrot2.workbench.vis.circles.PullDataServlet"
+            class="org.carrot2.workbench.vis.http.PullDataServlet"
             httpcontextId="org.carrot2.workbench.vis.circles.http-service"
             load-on-startup="true">
       </servlet>
    </extension>
+
    <extension
          point="org.eclipse.equinox.http.registry.servlets">
       <servlet
             alias="/*.vm"
-            class="org.carrot2.workbench.vis.circles.VelocityServlet"
+            class="org.carrot2.workbench.vis.http.VelocityServlet"
             httpcontextId="org.carrot2.workbench.vis.circles.http-service"
             load-on-startup="true">
          <init-param
@@ -85,6 +100,37 @@
 
          <view
                id="org.carrot2.workbench.views.circles"
+               relationship="stack"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.clusters">
+         </view>
+      </perspectiveExtension>      
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.carrot2.workbench.core.perspective.search">
+         <viewShortcut
+               id="org.carrot2.workbench.views.foamtree">
+         </viewShortcut>
+
+         <view
+               id="org.carrot2.workbench.views.foamtree"
+               relationship="stack"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.clusters">
+         </view>
+      </perspectiveExtension>
+
+      <perspectiveExtension
+            targetID="org.carrot2.workbench.core.perspective.tuning">
+         <viewShortcut
+               id="org.carrot2.workbench.views.foamtree">
+         </viewShortcut>
+
+         <view
+               id="org.carrot2.workbench.views.foamtree"
                relationship="stack"
                visible="true"
                relative="org.carrot2.workbench.core.views.clusters">

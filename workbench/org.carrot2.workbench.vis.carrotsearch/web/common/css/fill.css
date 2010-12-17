@@ -18,8 +18,18 @@ html, body, div {
 
 #swfcontainer {
     position: absolute;
+}
+
+.smallpadding {
     top:    5px;
     bottom: 5px;
     left:   5px;
     right:  5px;
+}
+
+.nopadding {
+    top:    0px;
+    bottom: 0px;
+    left:   0px;
+    right:  0px;
 }

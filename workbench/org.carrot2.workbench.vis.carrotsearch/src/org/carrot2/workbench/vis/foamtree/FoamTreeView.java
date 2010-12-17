@@ -10,21 +10,26 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.workbench.vis.circles;
+package org.carrot2.workbench.vis.foamtree;
 
 import org.carrot2.workbench.core.ui.PageBookViewBase;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.eclipse.ui.IWorkbenchPart;
 
 /**
- * {@link CirclesView} displays clusters using browser-embedded Flash application.
+ * {@link FoamTreeView} displays clusters using browser-embedded Flash application.
  */
-public final class CirclesView extends PageBookViewBase
+public final class FoamTreeView extends PageBookViewBase
 {
+    /**
+     * Entry page for the view.
+     */
+    protected static final String ENTRY_PAGE = "/foamtree/index.vm";
+
     /**
      * Public identifier of this view.
      */
-    public static final String ID = "org.carrot2.workbench.views.circles";
+    public static final String ID = "org.carrot2.workbench.views.foamtree";
 
     /**
      * Create a document list for the given part.
@@ -33,7 +38,7 @@ public final class CirclesView extends PageBookViewBase
     protected PageRec doCreatePage(IWorkbenchPart part)
     {
         final SearchEditor editor = (SearchEditor) part;
-        final CirclesViewPage page = new CirclesViewPage(editor);
+        final FoamTreeViewPage page = new FoamTreeViewPage(editor);
         initPage(page);
         page.createControl(getPageBook());
 

@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.workbench.vis.circles;
+package org.carrot2.workbench.vis.http;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,6 +21,9 @@ import javax.servlet.http.*;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.ui.SearchEditor;
+import org.carrot2.workbench.vis.Activator;
+import org.carrot2.workbench.vis.circles.CirclesView;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -81,11 +84,11 @@ public class PullDataServlet extends HttpServlet
         {
             public void run()
             {
-                final CirclesViewPage viewPage = CirclesView.getActiveCirclesViewPage(page);
-                if (viewPage != null)
+                Activator activator = Activator.getInstance();
+                SearchEditor editor = activator.getEditor(page); 
+                if (editor != null)
                 {
-                    result[0] = viewPage.editor
-                        .getSearchResult().getProcessingResult();
+                    result[0] = editor.getSearchResult().getProcessingResult();
                 }
             }
         });

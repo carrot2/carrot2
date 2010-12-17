@@ -2,11 +2,11 @@
 
 #set ( $page = ${request.getParameter("page")} )
 #set ( $source = "/servlets/pull?page=" + $page )
-#set ( $version = "1.2.2" )
+#set ( $version = "1.0.0" )
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>Carrot Search Circles - Interactive visualization of hierarchical data structures</title>
+    <title>Carrot Search FoamTree - Interactive visualization of hierarchical data structures</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <link rel="stylesheet" type="text/css" href="/common/css/fill.css" />
@@ -15,11 +15,11 @@
   <body>
     <!-- Required JavaScripts -->
     <script type="text/javascript" src="assets/$version/required/js/swfobject.js"></script>
-    <script type="text/javascript" src="assets/$version/required/js/carrotsearch.circles.min.js"></script>
+    <script type="text/javascript" src="assets/$version/required/js/carrotsearch.foamtree.min.js"></script>
     <script type="text/javascript" src="/common/js/swt-to-visualization.js"></script>
 
     <div id="main">
-      <div id="swfcontainer" class="smallpadding">
+      <div id="swfcontainer" class="nopadding">
         <div id="swf">
           <!-- Alternative content to show when Flash Player is missing, optional -->
           <div>To use Carrot Search Circles, <a href="http://get.adobe.com/flashplayer/">install Adobe Flash Player</a></div>
@@ -28,16 +28,16 @@
 
       <!-- Alternative content if JavaScript is disabled, optional -->
       <noscript>
-        To use Carrot Search Circles, enable JavaScript.
+        To use Carrot Search FoamTree, enable JavaScript.
       </noscript>
     </div>
 
     <!-- Embed the visualization. -->
     <script type="text/javascript">//<![CDATA[
-      var vis = new CarrotSearchCircles({
-        // Location of the Circles Flash binary
-        visualizationSwfLocation: "assets/$version/required/swf/com.carrotsearch.visualizations.circles.swf",
-        
+      var vis = new CarrotSearchFoamTree({
+        // Location of the Flash binary
+        visualizationSwfLocation: "assets/$version/required/swf/com.carrotsearch.visualizations.foamtree.swf",
+
         // Location of the Flash Player installer
         flashPlayerInstallerSwfLocation: "assets/$version/required/swf/playerProductInstall.swf",
 
@@ -48,6 +48,9 @@
         onGroupSelection: proxy_groupClicked,
         onDocumentSelection: proxy_documentClicked,
         onModelChange: proxy_onModelChanged,
+        
+        // Customize relaxation.
+        maxRelaxationSteps: 20,
 
         // URL of the XML with documents and clusters to display in the visualization.
         // The XML must be in Carrot2 format: http://download.carrot2.org/head/manual/#section.architecture.output-xml

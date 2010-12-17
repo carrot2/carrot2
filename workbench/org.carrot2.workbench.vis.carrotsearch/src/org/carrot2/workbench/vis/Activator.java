@@ -1,7 +1,10 @@
 package org.carrot2.workbench.vis;
 
 import java.net.URL;
+import java.util.Map;
+import java.util.WeakHashMap;
 
+import org.carrot2.workbench.core.ui.SearchEditor;
 import org.eclipse.core.runtime.*;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -30,6 +33,16 @@ public class Activator extends AbstractUIPlugin
      * 
      */
     private static Activator instance;
+
+    /**
+     * Editor ID assignments.
+     */
+    private WeakHashMap<SearchEditor, Integer> editors = new WeakHashMap<SearchEditor, Integer>();
+
+    /**
+     * ID sequencer.
+     */
+    private int sequencer;
 
     /*
      * 
@@ -98,5 +111,39 @@ public class Activator extends AbstractUIPlugin
     public static Activator getInstance()
     {
         return instance;
+    }
+
+    /**
+     * Retrieve the editor associated with the given ID.
+     */
+    public SearchEditor getEditor(int id)
+    {
+        synchronized (this)
+        {
+            for (Map.Entry<SearchEditor, Integer> e : editors.entrySet()) {
+                if (e.getValue().intValue() == id) {
+                    return e.getKey();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Register an editor or retrieve its unique ID for communicating with 
+     * web pages.
+     */
+    public int registerEditor(SearchEditor editor)
+    {
+        synchronized (this)
+        {
+            Integer id = editors.get(editor);
+            if (id != null)
+                return id;
+
+            editors.put(editor, ++sequencer);
+            return sequencer;
+        }
     }
 }
