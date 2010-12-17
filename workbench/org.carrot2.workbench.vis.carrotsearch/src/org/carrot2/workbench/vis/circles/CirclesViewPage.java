@@ -137,10 +137,10 @@ final class CirclesViewPage extends Page
                 return Status.OK_STATUS;
             }
 
-            browser.execute("javascript:clearSelection(false);");
+            browser.execute("javascript:clearSelection();");
             for (Cluster cluster : selected)
             {
-                browser.execute("javascript:selectGroupById(" + cluster.getId() + ", true, false);");
+                browser.execute("javascript:selectGroupById(" + cluster.getId() + ", true);");
             }
 
             return Status.OK_STATUS;

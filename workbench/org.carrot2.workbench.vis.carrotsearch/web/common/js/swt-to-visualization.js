@@ -1,11 +1,11 @@
 /** SWT-JS-SWF link (clear selection). */
-function clearSelection(notifyListeners)
+function clearSelection()
 {
     vis.set("selection", null);
 }
 
 /** SWT-JS-SWF link (select group by ID). */ 
-function selectGroupById(id, selected, fireEvent)
+function selectGroupById(id, selected)
 {
     vis.set("selection", {
         groups: [id],
