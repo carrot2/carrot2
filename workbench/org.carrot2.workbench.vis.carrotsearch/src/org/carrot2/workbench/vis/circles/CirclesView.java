@@ -31,6 +31,11 @@ import org.eclipse.ui.PlatformUI;
 public final class CirclesView extends PageBookViewBase
 {
     /**
+     * Entry page for the view.
+     */
+    protected static final String CIRCLES_ENTRY_PAGE = "/circles/index.vm";
+
+    /**
      * Public identifier of this view.
      */
     public static final String ID = "org.carrot2.workbench.views.circles";

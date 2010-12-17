@@ -372,7 +372,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.carrot2.workbench.vis.circles"
+         id="org.carrot2.workbench.vis.carrotsearch"
          download-size="0"
          install-size="0"
          version="0.0.0"

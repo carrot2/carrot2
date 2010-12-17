@@ -1,0 +1,25 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+html, body, div {
+    padding: 0;
+    margin: 0;
+}
+
+#main {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#swfcontainer {
+    position: absolute;
+    top:    5px;
+    bottom: 5px;
+    left:   5px;
+    right:  5px;
+}

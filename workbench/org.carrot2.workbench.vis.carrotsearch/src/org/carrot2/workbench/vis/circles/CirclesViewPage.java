@@ -22,6 +22,7 @@ import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.*;
+import org.carrot2.workbench.vis.Activator;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.*;
@@ -89,8 +90,9 @@ final class CirclesViewPage extends Page
 			// TODO: Workaround for http://issues.carrot2.org/browse/CARROT-546
             // Instead of calling external interface's reload function, reload the entire URL.
 
-            final CirclesActivator plugin = CirclesActivator.getInstance();
-            final String refreshURL = plugin.getStartupURL() + "?page=" + getId();
+            final Activator plugin = Activator.getInstance();
+            final String refreshURL = plugin.getFullURL(
+                CirclesView.CIRCLES_ENTRY_PAGE) + "?page=" + getId();
             browserInitialized = false;
             browser.setUrl(refreshURL);
 
@@ -334,6 +336,9 @@ final class CirclesViewPage extends Page
         prov.toggleSelected(groupId, selected, selectionListener);
     }
 
+    /*
+     * 
+     */
     private void doDocumentSelection(int documentId)
     {
         final ProcessingResult pr = getProcessingResult();
@@ -352,6 +357,9 @@ final class CirclesViewPage extends Page
         }
     }
     
+    /*
+     * 
+     */
     private static void openURL(String location)
     {
         try

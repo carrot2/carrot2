@@ -56,7 +56,7 @@
          </init-param>
          <init-param
                name="bundleID"
-               value="org.carrot2.workbench.vis.circles">
+               value="org.carrot2.workbench.vis.carrotsearch">
          </init-param>
       </servlet>
    </extension>

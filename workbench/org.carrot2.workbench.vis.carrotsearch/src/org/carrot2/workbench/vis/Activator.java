@@ -1,16 +1,4 @@
-
-/*
- * Carrot2 project.
- *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
- * All rights reserved.
- *
- * Refer to the full license file "carrot2.LICENSE"
- * in the root folder of the repository checkout or at:
- * http://www.carrot2.org/carrot2.LICENSE
- */
-
-package org.carrot2.workbench.vis.circles;
+package org.carrot2.workbench.vis;
 
 import java.net.URL;
 
@@ -18,16 +6,15 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-
 /**
- * Bundle activator class.
+ * Bundle activator.
  */
-public final class CirclesActivator extends AbstractUIPlugin
+public class Activator extends AbstractUIPlugin
 {
     /**
-     * Plug identifier.
+     * Bundle identifier.
      */
-    public final static String ID = "org.carrot2.workbench.vis.circles";
+    public final static String ID = "org.carrot2.workbench.vis.carrotsearch";
     
     /**
      * HTTP service name.
@@ -35,17 +22,14 @@ public final class CirclesActivator extends AbstractUIPlugin
     public final static String HTTP_SERVICE_NAME = ID + ".http-service";
 
     /**
-     * Startup page.
-     */
-    private static final String STARTUP_RELATIVE_URL = "/index.vm";
-
-    /** The shared instance. */
-    private static CirclesActivator instance;
-
-    /**
      * Built-in HTTP service.
      */
     private WebServiceManager webService;
+
+    /**
+     * 
+     */
+    private static Activator instance;
 
     /*
      * 
@@ -54,8 +38,7 @@ public final class CirclesActivator extends AbstractUIPlugin
     public void start(BundleContext context) throws Exception
     {
         super.start(context);
-        instance = this;
-        
+
         this.webService = new WebServiceManager(ID, "circles.");
         this.webService.start(HTTP_SERVICE_NAME, context);
 
@@ -65,6 +48,8 @@ public final class CirclesActivator extends AbstractUIPlugin
         logInfo("Web service started: http://" + webService.getHost() + ":" + webService.getPort()
             + ", static resources at: "
             + fileURL.toExternalForm());
+        
+        instance = this;
     }
 
     /*
@@ -73,27 +58,19 @@ public final class CirclesActivator extends AbstractUIPlugin
     @Override
     public void stop(BundleContext context) throws Exception
     {
+        instance = null;
+
         this.webService.stop();
         this.webService = null;
 
-        instance = null;
         super.stop(context);
-    }
-
-    /**
-     * @return Returns the startup URL to the built-in HTTP server with 
-     * visualization code.
-     */
-    public String getStartupURL()
-    {
-        return getFullURL(STARTUP_RELATIVE_URL);
     }
 
     /**
      * Returns a full URL to the internal built-in HTTP server, based on the
      * relative URI to a resource.
      */
-    String getFullURL(String relativeURL)
+    public String getFullURL(String relativeURL)
     {
         final String base = "http://" + webService.getHost() + ":" + webService.getPort();
         
@@ -107,20 +84,19 @@ public final class CirclesActivator extends AbstractUIPlugin
         }
     }
 
-    /**
-     * Return the shared plugin instance.
-     */
-    public static CirclesActivator getInstance()
-    {
-        return instance;
-    }
-
-    
     /*
      * 
      */
     final void logInfo(String message)
     {
         getLog().log(new Status(Status.INFO, ID, message));
+    }
+
+    /*
+     * 
+     */
+    public static Activator getInstance()
+    {
+        return instance;
     }
 }
