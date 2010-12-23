@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,6 +11,7 @@
 
 package org.carrot2.examples;
 
+import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Map;
 
@@ -81,11 +81,19 @@ public class ConsoleFormatter
     public static void displayClusters(final Collection<Cluster> clusters,
         int maxNumberOfDocumentsToShow)
     {
+        displayClusters(clusters, maxNumberOfDocumentsToShow,
+            ClusterDetailsFormatter.INSTANCE);
+    }
+
+    public static void displayClusters(final Collection<Cluster> clusters,
+        int maxNumberOfDocumentsToShow, ClusterDetailsFormatter clusterDetailsFormatter)
+    {
         System.out.println("\n\nCreated " + clusters.size() + " clusters\n");
         int clusterNumber = 1;
         for (final Cluster cluster : clusters)
         {
-            displayCluster(0, "" + clusterNumber++, cluster, maxNumberOfDocumentsToShow);
+            displayCluster(0, "" + clusterNumber++, cluster, maxNumberOfDocumentsToShow,
+                clusterDetailsFormatter);
         }
     }
 
@@ -104,7 +112,7 @@ public class ConsoleFormatter
     }
 
     private static void displayCluster(final int level, String tag, Cluster cluster,
-        int maxNumberOfDocumentsToShow)
+        int maxNumberOfDocumentsToShow, ClusterDetailsFormatter clusterDetailsFormatter)
     {
         final String label = cluster.getLabel();
 
@@ -113,8 +121,8 @@ public class ConsoleFormatter
         {
             System.out.print("  ");
         }
-        System.out.println(label + " (" + cluster.getAllDocuments().size()
-            + " documents, score: " + cluster.getScore() + ")");
+        System.out.println(label + "  "
+            + clusterDetailsFormatter.formatClusterDetails(cluster));
 
         // if this cluster has documents, display three topmost documents.
         int documentsShown = 0;
@@ -139,7 +147,7 @@ public class ConsoleFormatter
         for (final Cluster subcluster : cluster.getSubclusters())
         {
             displayCluster(level + 1, tag + "." + num, subcluster,
-                maxNumberOfDocumentsToShow);
+                maxNumberOfDocumentsToShow, clusterDetailsFormatter);
         }
     }
 
@@ -152,5 +160,25 @@ public class ConsoleFormatter
         }
 
         return indent.toString();
+    }
+
+    public static class ClusterDetailsFormatter
+    {
+        public final static ClusterDetailsFormatter INSTANCE = new ClusterDetailsFormatter();
+
+        protected NumberFormat numberFormat;
+
+        public ClusterDetailsFormatter()
+        {
+            numberFormat = NumberFormat.getInstance();
+            numberFormat.setMaximumFractionDigits(2);
+        }
+
+        public String formatClusterDetails(Cluster cluster)
+        {
+
+            return "(" + cluster.getAllDocuments().size() + " docs, score: "
+                + numberFormat.format(cluster.getScore()) + ")";
+        }
     }
 }
