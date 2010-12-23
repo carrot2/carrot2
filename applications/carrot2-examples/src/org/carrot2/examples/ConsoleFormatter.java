@@ -176,9 +176,9 @@ public class ConsoleFormatter
 
         public String formatClusterDetails(Cluster cluster)
         {
-
-            return "(" + cluster.getAllDocuments().size() + " docs, score: "
-                + numberFormat.format(cluster.getScore()) + ")";
+            final Double score = cluster.getScore();
+            return "(" + cluster.getAllDocuments().size() + " docs"
+                + (score != null ? ", score: " + numberFormat.format(score) : "") + ")";
         }
     }
 }
