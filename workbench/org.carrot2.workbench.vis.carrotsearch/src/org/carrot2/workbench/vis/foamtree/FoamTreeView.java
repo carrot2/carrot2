@@ -39,6 +39,7 @@ public final class FoamTreeView extends PageBookViewBase
 
         IToolBarManager toolbar = site.getActionBars().getToolBarManager();
         toolbar.add(new ToggleRelaxationAction());
+        toolbar.add(new LayoutAlgorithmAction());
     }
 
     /**

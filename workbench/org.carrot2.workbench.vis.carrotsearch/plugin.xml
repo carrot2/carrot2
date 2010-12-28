@@ -137,4 +137,10 @@
          </view>
       </perspectiveExtension>      
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.carrot2.workbench.vis.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>

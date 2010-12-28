@@ -52,6 +52,7 @@
 
         // Customize relaxation.
         performRelaxation: ${request.getParameter("performRelaxation")},
+        mapLayoutAlgorithm: "${request.getParameter("mapLayoutAlgorithm")}",
         maxRelaxationSteps: 20,
 
         // URL of the XML with documents and clusters to display in the visualization.

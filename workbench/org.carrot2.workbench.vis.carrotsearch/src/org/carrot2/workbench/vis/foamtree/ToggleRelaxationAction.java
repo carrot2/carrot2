@@ -13,9 +13,9 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 /**
  * Enable automatic relaxation toolbar button. 
  */
-class ToggleRelaxationAction extends Action
+public class ToggleRelaxationAction extends Action
 {
-    final static String RELAXATION_ENABLED_KEY = "relaxation-enabled";
+    public final static String RELAXATION_ENABLED_KEY = "relaxation-enabled";
 
     private IPropertyChangeListener listener = new PropertyChangeListenerAdapter(RELAXATION_ENABLED_KEY)
     {

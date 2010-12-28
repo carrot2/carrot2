@@ -42,7 +42,8 @@ final class FoamTreeViewPage extends FlashViewPage
         public void propertyChange(PropertyChangeEvent event)
         {
             String property = event.getProperty();
-            if (property.equals(ToggleRelaxationAction.RELAXATION_ENABLED_KEY))
+            if (property.equals(ToggleRelaxationAction.RELAXATION_ENABLED_KEY) ||
+                property.equals(LayoutAlgorithmAction.LAYOUT_ALGORITHM_KEY))
             {
                 doRefresh();
             }
@@ -68,18 +69,22 @@ final class FoamTreeViewPage extends FlashViewPage
         IPreferenceStore store = Activator.getInstance().getPreferenceStore();
         store.addPropertyChangeListener(listener);
     }
-    
+
     @Override
     public void dispose()
     {
         super.dispose();
+
+        IPreferenceStore store = Activator.getInstance().getPreferenceStore();
+        store.removePropertyChangeListener(listener);
     }
-    
+
     @Override
     protected Map<String, Object> contributeCustomParams()
     {
         Map<String, Object> params = super.contributeCustomParams();
         params.put("performRelaxation", !ToggleRelaxationAction.getCurrent());
+        params.put("mapLayoutAlgorithm", LayoutAlgorithmAction.getCurrent().id);
         return params;
     }
 }
