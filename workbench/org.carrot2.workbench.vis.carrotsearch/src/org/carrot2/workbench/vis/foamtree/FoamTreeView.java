@@ -14,7 +14,8 @@ package org.carrot2.workbench.vis.foamtree;
 
 import org.carrot2.workbench.core.ui.PageBookViewBase;
 import org.carrot2.workbench.core.ui.SearchEditor;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.ui.*;
 
 /**
  * {@link FoamTreeView} displays clusters using browser-embedded Flash application.
@@ -30,6 +31,15 @@ public final class FoamTreeView extends PageBookViewBase
      * Public identifier of this view.
      */
     public static final String ID = "org.carrot2.workbench.views.foamtree";
+
+    @Override
+    public void init(IViewSite site, IMemento memento) throws PartInitException
+    {
+        super.init(site, memento);
+
+        IToolBarManager toolbar = site.getActionBars().getToolBarManager();
+        toolbar.add(new ToggleRelaxationAction());
+    }
 
     /**
      * Create a document list for the given part.

@@ -1,9 +1,11 @@
 package org.carrot2.workbench.vis;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
@@ -38,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public abstract class FlashViewPage extends Page
 {
@@ -203,7 +206,10 @@ public abstract class FlashViewPage extends Page
         // Instead of calling external interface's reload function, reload the entire URL.
 
         final Activator plugin = Activator.getInstance();
-        final String refreshURL = plugin.getFullURL(entryPageUri) + "?page=" + getId();
+        final Map<String, Object> customParams = contributeCustomParams();
+        customParams.put("page", getId());
+
+        final String refreshURL = createGetURI(plugin.getFullURL(entryPageUri), customParams);
         browserInitialized = false;
         browser.setUrl(refreshURL);
 
@@ -231,6 +237,42 @@ public abstract class FlashViewPage extends Page
         return Status.OK_STATUS;
     }
 
+    /**
+     * Contribute custom parameters to the page URI. 
+     */
+    protected Map<String, Object> contributeCustomParams()
+    {
+        return Maps.newHashMap();
+    }
+
+    /**
+     * Construct a HTTP GET. 
+     */
+    private String createGetURI(String uri, Map<String, Object> customParams)
+    {
+        GetMethod m = new GetMethod(uri);
+        NameValuePair [] pairs = new NameValuePair [customParams.size()];
+        
+        int i = 0;
+        for (Map.Entry<String, Object> e : customParams.entrySet())
+        {
+            pairs[i++] = new NameValuePair(e.getKey(), e.getValue().toString());
+        }
+        m.setQueryString(pairs);
+
+        try
+        {
+            return m.getURI().toString();
+        }
+        catch (URIException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 
+     */
     private static void openURL(String location)
     {
         try
@@ -250,6 +292,9 @@ public abstract class FlashViewPage extends Page
         }
     }
 
+    /**
+     * 
+     */
     @Override
     public void createControl(Composite parent)
     {

@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 #set ( $page = ${request.getParameter("page")} )
+#set ( $page = ${request.getParameter("page")} )
 #set ( $source = "/servlets/pull?page=" + $page )
 #set ( $version = "1.0.0" )
 
@@ -48,8 +49,9 @@
         onGroupSelection: proxy_groupClicked,
         onDocumentSelection: proxy_documentClicked,
         onModelChange: proxy_onModelChanged,
-        
+
         // Customize relaxation.
+        performRelaxation: ${request.getParameter("performRelaxation")},
         maxRelaxationSteps: 20,
 
         // URL of the XML with documents and clusters to display in the visualization.
