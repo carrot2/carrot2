@@ -133,8 +133,21 @@ public final class PreprocessingContext
          * separators.
          * <p>
          * This array is produced by {@link Tokenizer}.
-         * 
+         * </p>
+         * <p>
          * TODO: is this always needed? Seems awfully repetitive, esp. for long docs.
+         * <p>
+         * This array is accessed in in {@link CaseNormalizer} and {@link PhraseExtractor}
+         * to compute by-document statistics, e.g. tf-by document, which are then needed
+         * to build a VSM or assign documents to labels. An alternative to this representation
+         * would be creating an <code>AllDocuments</code> holder and keep there an array
+         * of start token indexes for each document and then refactor the model building code
+         * to do a binary search to determine the document index given token index. This is
+         * likely to be a significant performance hit because model building code accesses 
+         * the documentIndex array pretty much randomly (in the suffix order), so we'd be
+         * doing twice-the-number-of-tokens binary searches. Unless there's some other
+         * data structure that can help us here.
+         * </p>
          */
         public int [] documentIndex;
 
