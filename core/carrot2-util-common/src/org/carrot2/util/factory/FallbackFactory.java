@@ -1,6 +1,5 @@
-package org.carrot2.text.linguistic;
+package org.carrot2.util.factory;
 
-import org.carrot2.util.factory.IFactory;
 import org.slf4j.Logger;
 
 import com.google.common.base.Predicate;
@@ -9,7 +8,7 @@ import com.google.common.base.Throwables;
 /**
  * Fallback to the first factory that returns a value.
  */
-final class FallbackFactory<T> implements IFactory<T>
+public final class FallbackFactory<T> implements IFactory<T>
 {
     private final IFactory<T> defaultFactory;
     private final IFactory<T> fallbackFactory;
@@ -20,7 +19,7 @@ final class FallbackFactory<T> implements IFactory<T>
     /** Verifies if T instances are functional or if fallback should be used. */
     private final Predicate<T> verifier;
 
-    FallbackFactory(
+    public FallbackFactory(
         IFactory<T> defaultFactory, IFactory<T> fallbackFactory, Predicate<T> verifier,
         Logger logger, String failureMessage)
     {

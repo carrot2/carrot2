@@ -30,6 +30,7 @@ import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.factory.CachedInstanceFactoryDecorator;
+import org.carrot2.util.factory.FallbackFactory;
 import org.carrot2.util.factory.IFactory;
 import org.carrot2.util.factory.NewClassInstanceFactory;
 import org.carrot2.util.factory.SingletonFactory;
