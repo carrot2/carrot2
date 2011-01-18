@@ -422,8 +422,7 @@ public final class RestProcessorServlet extends HttpServlet
         final DcsRequestModel requestModel = new DcsRequestModel();
 
         final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = new AttributeBinder.AttributeBinderActionBind(
-            Input.class, parameters, true,
-            AttributeBinder.AttributeTransformerFromString.INSTANCE);
+            parameters, true, AttributeBinder.AttributeTransformerFromString.INSTANCE);
         try
         {
             AttributeBinder.bind(requestModel,

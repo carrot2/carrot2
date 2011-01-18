@@ -15,7 +15,6 @@ package org.carrot2.webapp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Collection;
@@ -242,7 +241,6 @@ public class QueryProcessorServlet extends HttpServlet
             
             final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = 
                 new AttributeBinder.AttributeBinderActionBind(
-                    Input.class,
                     requestParameters,
                     true,
                     AttributeBinder.AttributeTransformerFromString.INSTANCE,
@@ -599,8 +597,7 @@ public class QueryProcessorServlet extends HttpServlet
 
         }
 
-        public Object transform(Object value, String key, Field field,
-            Class<? extends Annotation> bindingDirectionAnnotation)
+        public Object transform(Object value, String key, Field field)
         {
             final Object defaultValue = defaultValues.get(key);
 

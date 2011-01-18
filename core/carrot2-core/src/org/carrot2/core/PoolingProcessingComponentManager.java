@@ -176,13 +176,14 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
                 // @Init attributes have already been bound above.
                 try
                 {
-                    AttributeBinder.bind(component, initAttrs, false, Input.class,
+                    AttributeBinder.set(component, initAttrs, false,
                         new Predicate<Field>()
                         {
                             public boolean apply(Field field)
                             {
-                                return field.getAnnotation(Processing.class) != null
-                                    && field.getAnnotation(Init.class) == null;
+                                return field.getAnnotation(Input.class) != null
+                                    && (field.getAnnotation(Processing.class) != null && field
+                                        .getAnnotation(Init.class) == null);
                             }
                         });
                 }
@@ -243,7 +244,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
             final Map<String, Object> originalValues = Maps.newHashMap();
             try
             {
-                AttributeBinder.unbind(processingComponent, originalValues, 
+                AttributeBinder.get(processingComponent, originalValues, 
                     Input.class, Processing.class);
 
                 resetValues.put(new ReferenceEquality(processingComponent),
@@ -264,7 +265,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
                 // Here's a little hack: we need to disable checking
                 // for required attributes, otherwise, we won't be able
                 // to reset @Required input attributes to null
-                AttributeBinder.bind(processingComponent, 
+                AttributeBinder.set(processingComponent, 
                     resetValues.get(new ReferenceEquality(processingComponent)),
                     false, Input.class, Processing.class);
             }

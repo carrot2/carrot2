@@ -14,7 +14,7 @@ package org.carrot2.util.attribute;
 
 /**
  * An exception thrown when problems occur in
- * {@link AttributeBinder#bind(Object, java.util.Map, Class, Class...)}.
+ * {@link AttributeBinder#set(Object, java.util.Map, Class, Class...)}.
  */
 @SuppressWarnings("serial")
 public class AttributeBindingException extends RuntimeException
@@ -27,7 +27,7 @@ public class AttributeBindingException extends RuntimeException
     /**
      *
      */
-    public AttributeBindingException(String attributeKey)
+    AttributeBindingException(String attributeKey)
     {
         this.attributeKey = attributeKey;
     }
@@ -35,7 +35,7 @@ public class AttributeBindingException extends RuntimeException
     /**
      *
      */
-    public AttributeBindingException(String attributeKey, String message, Throwable cause)
+    AttributeBindingException(String attributeKey, String message, Throwable cause)
     {
         super(message, cause);
         this.attributeKey = attributeKey;
@@ -44,7 +44,7 @@ public class AttributeBindingException extends RuntimeException
     /**
      *
      */
-    public AttributeBindingException(String attributeKey, String message)
+    AttributeBindingException(String attributeKey, String message)
     {
         super(message);
         this.attributeKey = attributeKey;
@@ -53,9 +53,19 @@ public class AttributeBindingException extends RuntimeException
     /**
      *
      */
-    public AttributeBindingException(String attributeKey, Throwable cause)
+    AttributeBindingException(String attributeKey, Throwable cause)
     {
         super(cause);
         this.attributeKey = attributeKey;
+    }
+    
+    static AttributeBindingException createWithNoKey(String message)
+    {
+        return new AttributeBindingException(null, message);
+    }
+    
+    static AttributeBindingException createWithNoKey(String message, Throwable cause)
+    {
+        return new AttributeBindingException(null, message, cause);
     }
 }

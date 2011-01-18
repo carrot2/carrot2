@@ -72,7 +72,7 @@ public class AttributeTransformerFromStringTest
         final Integer integer = Integer.valueOf(10);
 
         assertThat(
-            AttributeTransformerFromString.INSTANCE.transform(integer, null, null, null))
+            AttributeTransformerFromString.INSTANCE.transform(integer, null, null))
             .isSameAs(integer);
     }
 
@@ -154,7 +154,6 @@ public class AttributeTransformerFromStringTest
         final Field field = AttributeTransformerFromStringTest.class
             .getDeclaredField(fieldName);
         assertThat(
-            AttributeTransformerFromString.INSTANCE.transform(stringValue, null, field,
-                null)).isEqualTo(expectedTransformedValue);
+            AttributeTransformerFromString.INSTANCE.transform(stringValue, null, field)).isEqualTo(expectedTransformedValue);
     }
 }

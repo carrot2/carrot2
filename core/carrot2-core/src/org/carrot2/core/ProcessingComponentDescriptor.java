@@ -207,7 +207,7 @@ public class ProcessingComponentDescriptor
         try
         {
             AttributeBinder
-                .bind(instance, initAttributes, false, Input.class);
+                .set(instance, initAttributes, false, Input.class);
 
             try
             {
@@ -218,7 +218,7 @@ public class ProcessingComponentDescriptor
                 // Ignore if failed to initialize.
             }
 
-            AttributeBinder.bind(instance, initAttributes, false, Output.class,
+            AttributeBinder.get(instance, initAttributes, Output.class,
                 Init.class);
         }
         finally

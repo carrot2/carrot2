@@ -216,7 +216,7 @@ public class BindableDescriptorBuilderTest
         final Map<String, Object> attributes = Maps.newHashMap();
         attributes.put(AttributeUtils.getKey(BindableReferenceContainer.class,
             "bindableAttribute"), BindableReferenceImpl2.class);
-        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
+        AttributeBinder.set(instance, attributes, Input.class, TestInit.class);
 
         final BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
             .buildDescriptor(instance);

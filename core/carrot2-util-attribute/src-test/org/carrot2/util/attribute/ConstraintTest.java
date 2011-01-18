@@ -86,7 +86,7 @@ public class ConstraintTest
         {
             attributes.put(AttributeUtils.getKey(instance.getClass(), fieldName),
                 values[i]);
-            AttributeBinder.bind(instance, attributes, Input.class);
+            AttributeBinder.set(instance, attributes, Input.class);
             attributes.clear();
         }
     }

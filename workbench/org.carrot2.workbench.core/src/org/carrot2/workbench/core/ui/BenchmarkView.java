@@ -191,7 +191,7 @@ public final class BenchmarkView extends PageBookViewBase
         try
         {
             final HashMap<String, Object> attrs = Maps.newHashMap(); 
-            AttributeBinder.unbind(restoreState.settings, attrs, Input.class);
+            AttributeBinder.get(restoreState.settings, attrs, Input.class);
             this.attributeGroups.setAttributes(attrs);
             this.attributeGroups.setExpanded(restoreState.sectionsExpansionState);
         }
@@ -222,7 +222,7 @@ public final class BenchmarkView extends PageBookViewBase
                 {
                     final HashMap<String, Object> attrs = Maps.newHashMap();
                     attrs.put(event.key, event.value);
-                    AttributeBinder.bind(benchmarkSettings, attrs, Input.class);
+                    AttributeBinder.set(benchmarkSettings, attrs, Input.class);
                 }
                 catch (InstantiationException e)
                 {
@@ -254,8 +254,8 @@ public final class BenchmarkView extends PageBookViewBase
         try
         {
             HashMap<String, Object> attrs = Maps.newHashMap();
-            AttributeBinder.unbind(benchmarkSettings, attrs, Input.class);
-            AttributeBinder.bind(cloned, attrs, Input.class);
+            AttributeBinder.get(benchmarkSettings, attrs, Input.class);
+            AttributeBinder.set(cloned, attrs, Input.class);
         }
         catch (Exception e)
         {
