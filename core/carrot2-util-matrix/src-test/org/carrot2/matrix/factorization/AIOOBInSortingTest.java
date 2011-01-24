@@ -12,19 +12,19 @@
 
 package org.carrot2.matrix.factorization;
 
-import junit.framework.TestCase;
-
-import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.apache.mahout.math.matrix.doublealgo.Sorting;
 import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
+import org.junit.Test;
 
 /**
  * Test AIOOB in Mahout's math/ sorting routine. 
  */
 @SuppressWarnings("deprecation")
-public class AIOOBInSortingTest extends TestCase
+public class AIOOBInSortingTest
 {
-    public void testAIOOB()
+    @Test
+    public void AIOOB()
     {
         long [] aggregatesRaw = new long [] {
             -4653677303358023929L, -4652521593406282998L, -4651888464814509066L,

@@ -12,7 +12,8 @@
 
 package org.carrot2.core.test.assertions;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatDocuments;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.core.Cluster;
@@ -30,6 +31,9 @@ public class ClusterAssertion implements AssertExtension
     {
         this.actualCluster = actual;
     }
+
+    /** Description of the assertion */
+    private String description;
 
     /**
      * Asserts that the cluster is equivalent to the provided cluster. Two clusters are
@@ -63,7 +67,7 @@ public class ClusterAssertion implements AssertExtension
         assertThat(actualCluster.getPhrases()).isEqualTo(expectedCluster.getPhrases());
         if (checkDocuments)
         {
-            assertThatDocuments(actualCluster.getDocuments()).as(
+            assertThatDocuments(actualCluster.getDocuments()).as(description + ": " +
                 "cluster: " + actualCluster.getLabel()).isEquivalentTo(
                 expectedCluster.getDocuments());
         }
@@ -98,5 +102,20 @@ public class ClusterAssertion implements AssertExtension
     public ClusterAssertion isOtherTopics(boolean isOtherTopics)
     {
         return isOtherTopics(isOtherTopics, "Other Topics");
+    }
+
+    /**
+     * Asserts that the cluster is not <code>null</code>.
+     */
+    public ClusterAssertion isNotNull()
+    {
+        assertThat(actualCluster).isNotNull();
+        return this;
+    }
+    
+    public ClusterAssertion as(String description)
+    {
+        this.description = description;
+        return this;
     }
 }
