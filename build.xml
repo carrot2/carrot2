@@ -656,7 +656,7 @@
           <patternset refid="lib.core.mini" />
           <exclude name="**/*.LICENSE" />
           <!-- 
-               We add SimpleXML only to stop compiler from complainig about missing
+               We add SimpleXML only to stop compiler from complaining about missing
                annotation definitions. SimpleXML is not required to run basic clustering. 
             -->
           <include name="**/simple-xml*.jar" />
