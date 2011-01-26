@@ -39,27 +39,7 @@
     <url>http://issues.carrot2.org/</url>
   </issueManagement>
 
-  <repositories>
-      <repository>
-          <id>carrotsearch.labs.releases</id>
-          <name>Carrot Search Labs Releases Repository</name>
-          <url>http://repository.carrotsearch.com/labs/releases</url>
-      </repository>
-  </repositories>
-
   <dependencies>
-    <dependency>
-      <groupId>net.java.dev.rome</groupId>
-      <artifactId>rome</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>net.java.dev.rome</groupId>
-      <artifactId>rome-fetcher</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-core-asl</artifactId>
@@ -76,6 +56,60 @@
       <groupId>net.sf.ehcache</groupId>
       <artifactId>ehcache-core</artifactId>
       <version>1.7.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.4</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>r05</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.5.8</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-snowball</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.mahout</groupId>
+      <artifactId>mahout-math</artifactId>
+      <version>0.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.mahout</groupId>
+      <artifactId>mahout-collections</artifactId>
+      <version>0.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.carrotsearch</groupId>
+      <artifactId>hppc</artifactId>
+      <version>0.3.2</version>
+    </dependency>    
+
+    <dependency>
+      <groupId>net.java.dev.rome</groupId>
+      <artifactId>rome</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.java.dev.rome</groupId>
+      <artifactId>rome-fetcher</artifactId>
+      <version>1.0.0</version>
     </dependency>
 
     <dependency>
@@ -109,33 +143,15 @@
     </dependency>
 
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.4</version>
-    </dependency>
-
-    <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.1.1</version>
     </dependency>
 
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>r05</version>
-    </dependency>
-
-    <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom</artifactId>
       <version>1.1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.5.8</version>
     </dependency>
 
     <dependency>
@@ -155,13 +171,7 @@
       <artifactId>lucene-highlighter</artifactId>
       <version>3.0.1</version>
     </dependency>
-        
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-snowball</artifactId>
-      <version>3.0.1</version>
-    </dependency>
-        
+
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-smartcn</artifactId>
@@ -206,30 +216,10 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.mahout</groupId>
-      <artifactId>mahout-math</artifactId>
-      <version>0.3</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.mahout</groupId>
-      <artifactId>mahout-collections</artifactId>
-      <version>0.3</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.carrotsearch</groupId>
       <artifactId>nni</artifactId>
       <version>1.0.0</version>
       <optional>true</optional>
     </dependency>
-
-    <dependency>
-      <groupId>com.carrotsearch</groupId>
-      <artifactId>hppc</artifactId>
-      <version>0.3.2</version>
-    </dependency>    
   </dependencies>
 </project>
-
-

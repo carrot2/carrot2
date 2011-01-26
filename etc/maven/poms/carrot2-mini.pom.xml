@@ -6,7 +6,8 @@
   <version>@carrot2.version@</version>
   <name>Carrot2</name>
   <description>
-    Carrot2 search results clustering framework
+    Carrot2 search results clustering framework. Minimal functional subset
+    (core algorithms and infrastructure, no document sources).
   </description>
   <packaging>jar</packaging>
 
@@ -37,14 +38,6 @@
     <system>Jira</system>
     <url>http://issues.carrot2.org/</url>
   </issueManagement>
-
-  <repositories>
-      <repository>
-          <id>carrotsearch.labs.releases</id>
-          <name>Carrot Search Labs Releases Repository</name>
-          <url>http://repository.carrotsearch.com/labs/releases</url>
-      </repository>
-  </repositories>
 
   <dependencies>
     <dependency>
