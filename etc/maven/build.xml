@@ -76,7 +76,7 @@
 
         <echo>Building archetype...</echo>
         <exec executable="mvn" dir="${carrot2.maven.basedir}/tmp/archetype" failonerror="true" vmlauncher="false">
-            <arg value="archetype:create-from-project" />
+            <arg value="org.apache.maven.plugins:maven-archetype-plugin:2.0:create-from-project" />
             <arg value="-q" />
 
             <!-- Do not filter Java sources. The spelling pretty much reflects the quality of the entire archetype plugin. -->
