@@ -66,6 +66,7 @@
             <artifact:remoteRepository url="${maven.repository.url}" />
         </artifact:deploy>
 
+        <!-- Archetype handling. -->
         <copy todir="${carrot2.maven.basedir}/tmp/archetype">
             <fileset dir="${carrot2.maven.basedir}/archetype" />
         </copy>
