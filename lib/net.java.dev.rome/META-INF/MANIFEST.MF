@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ROME library
-Bundle-SymbolicName: com.sun.syndication
+Bundle-SymbolicName: net.java.dev.rome
 Bundle-Version: 1.0.0
-Bundle-ClassPath: rome-1.0.jar,
- rome-fetcher-1.0.jar,
+Bundle-ClassPath: rome-1.0.0.jar,
+ rome-fetcher-1.0.0.jar,
  META-INF/
 Bundle-Vendor: rome.dev.java.net
 Export-Package: 

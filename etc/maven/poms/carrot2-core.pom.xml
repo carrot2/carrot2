@@ -49,15 +49,15 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.carrot2</groupId>
+      <groupId>net.java.dev.rome</groupId>
       <artifactId>rome</artifactId>
-      <version>1.0.RC1</version>
+      <version>1.0.0</version>
     </dependency>
 
     <dependency>
-      <groupId>org.carrot2</groupId>
+      <groupId>net.java.dev.rome</groupId>
       <artifactId>rome-fetcher</artifactId>
-      <version>0.7</version>
+      <version>1.0.0</version>
     </dependency>
 
     <dependency>
