@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -27,8 +26,8 @@ public class ChineseTokenizerTest extends TokenizerTestBase
     @Override
     protected ITokenizer createTokenStream() throws IOException
     {
-        return new DefaultLanguageModelFactory()
-            .getLanguageModel(LanguageCode.CHINESE_SIMPLIFIED).getTokenizer();
+        return new DefaultTokenizerFactory()
+            .getTokenizer(LanguageCode.CHINESE_SIMPLIFIED);
     }
 
     @Test

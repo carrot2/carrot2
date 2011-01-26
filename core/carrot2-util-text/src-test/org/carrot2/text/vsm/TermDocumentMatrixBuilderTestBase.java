@@ -12,8 +12,11 @@
 
 package org.carrot2.text.vsm;
 
-import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.preprocessing.*;
+import org.carrot2.text.linguistic.ILexicalDataFactory;
+import org.carrot2.text.linguistic.IStemmerFactory;
+import org.carrot2.text.preprocessing.PreprocessingComponentTestBase;
+import org.carrot2.text.preprocessing.TestLexicalDataFactory;
+import org.carrot2.text.preprocessing.TestStemmerFactory;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
 import org.junit.Before;
 
@@ -51,8 +54,14 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     }
 
     @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
+    protected IStemmerFactory createStemmerFactory()
     {
-        return new TestLanguageModelFactory();
+        return new TestStemmerFactory();
+    }
+
+    @Override
+    protected ILexicalDataFactory createLexicalDataFactory()
+    {
+        return new TestLexicalDataFactory();
     }
 }

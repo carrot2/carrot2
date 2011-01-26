@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -28,10 +27,11 @@ import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
 import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.text.linguistic.ILanguageModel;
-import org.carrot2.text.linguistic.ILanguageModelFactory;
 import org.carrot2.text.linguistic.ILexicalData;
+import org.carrot2.text.linguistic.ILexicalDataFactory;
 import org.carrot2.text.linguistic.IStemmer;
+import org.carrot2.text.linguistic.IStemmerFactory;
+import org.carrot2.text.linguistic.ITokenizerFactory;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipelineDescriptor;
 import org.carrot2.text.util.MutableCharArray;
 
@@ -48,15 +48,18 @@ public class UsingCustomLanguageModel
     public static void main(String [] args)
     {
         @SuppressWarnings("unchecked")
-        final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
+        final Controller controller = ControllerFactory
+            .createCachingPooling(IDocumentSource.class);
 
-        // We will pass our custom language model factory class as a initialization-time
-        // attribute. It is preferred to passing it as a processing-time attribute
-        // because it the instance created at initialization time is reused for all
-        // further requests.
+        // We will pass our custom language model element factories classes as a
+        // initialization-time attributes. It is preferred to passing them as
+        // processing-time attributes because the instances created at initialization
+        // time will be reused for all further requests.
         Map<String, Object> attrs = Maps.newHashMap();
         BasicPreprocessingPipelineDescriptor.attributeBuilder(attrs)
-            .languageModelFactory(CustomLanguageModelFactory.class);
+            .stemmerFactory(CustomStemmerFactory.class)
+            .tokenizerFactory(CustomTokenizerFactory.class)
+            .lexicalDataFactory(CustomLexicalDataFactory.class);
         controller.init(attrs);
 
         // Cluster some data with Lingo and STC. Notice how the cluster quality degrades
@@ -77,75 +80,75 @@ public class UsingCustomLanguageModel
             .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
             .query("data mining");
 
-        final ProcessingResult result = controller.process(processingAttributes, 
+        final ProcessingResult result = controller.process(processingAttributes,
             clusteringAlgorithm);
         ConsoleFormatter.displayClusters(result.getClusters(), 0);
     }
 
-    /**
-     * A custom language model factory.
-     */
-    public static class CustomLanguageModelFactory implements ILanguageModelFactory
+    public static class CustomStemmerFactory implements IStemmerFactory
     {
-        private static final Set<? extends CharSequence> STOP_WORDS = 
-            ImmutableSet.of("text");
-
-        public ILanguageModel getLanguageModel(LanguageCode language)
-        {
-            // Here we always return the same language model, regardless of the requested
-            // language. In your implementation you may want to return different models
-            // based on the language, if needed.
-            return new CustomLanguageModel();
-        }
-
         /**
          * Custom language model implementation. This one uses some contrived algorithms
          * and stop words just to demonstrate how they work.
          */
-        private static final class CustomLanguageModel implements ILanguageModel
+        @Override
+        public IStemmer getStemmer(LanguageCode languageCode)
         {
-            public IStemmer getStemmer()
+            // Here we always return the same language model, regardless of the requested
+            // language. In your implementation you may want to return different models
+            // based on the language, if needed.
+            System.out.println("stemmer");
+            return new IStemmer()
             {
-                return new IStemmer()
+                public CharSequence stem(CharSequence word)
                 {
-                    public CharSequence stem(CharSequence word)
-                    {
-                        // Some contrived stemming algorithm
-                        return word.length() > 3 ? word.subSequence(0, word.length() - 2)
-                            : null;
-                    }
-                };
-            }
-            
+                    // Some contrived stemming algorithm
+                    return word.length() > 3 ? word.subSequence(0, word.length() - 2)
+                        : null;
+                }
+            };
+        }
+    }
 
-            public ITokenizer getTokenizer()
-            {
-                return new ExtendedWhitespaceTokenizer();
-            }
+    public static class CustomTokenizerFactory implements ITokenizerFactory
+    {
+        @Override
+        public ITokenizer getTokenizer(LanguageCode languageCode)
+        {
+            // Here we always return the same language model, regardless of the requested
+            // language. In your implementation you may want to return different models
+            // based on the language, if needed.
+            System.out.println("tokenizer");
+            return new ExtendedWhitespaceTokenizer();
+        }
+    }
 
-            public LanguageCode getLanguageCode()
-            {
-                return null;
-            }
+    public static class CustomLexicalDataFactory implements ILexicalDataFactory
+    {
+        private static final Set<? extends CharSequence> STOP_WORDS = ImmutableSet
+            .of("text");
 
-            @Override
-            public ILexicalData getLexicalData()
+        @Override
+        public ILexicalData getLexicalData(LanguageCode languageCode)
+        {
+            // Here we always return the same language model, regardless of the requested
+            // language. In your implementation you may want to return different models
+            // based on the language, if needed.
+            System.out.println("lexical data");
+            return new ILexicalData()
             {
-                return new ILexicalData()
+                @Override
+                public boolean isStopLabel(CharSequence formattedLabel)
                 {
-                    @Override
-                    public boolean isStopLabel(CharSequence formattedLabel)
-                    {
-                        return formattedLabel.length() <= 4;
-                    }
+                    return formattedLabel.length() <= 4;
+                }
 
-                    @Override
-                    public boolean isCommonWord(MutableCharArray word)
-                    {
-                        return STOP_WORDS.contains(word.toString());
-                    }
-                };
-            }
+                @Override
+                public boolean isCommonWord(MutableCharArray word)
+                {
+                    return STOP_WORDS.contains(word.toString());
+                }
+            };
         }
     }
 }

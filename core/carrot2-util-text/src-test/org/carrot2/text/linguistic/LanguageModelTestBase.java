@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,8 +11,8 @@
 
 package org.carrot2.text.linguistic;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -30,7 +29,7 @@ public abstract class LanguageModelTestBase
     /**
      * 
      */
-    protected ILanguageModel languageModel;
+    protected LanguageModel languageModel;
 
     /**
      * @return Returns language code for this test.
@@ -43,7 +42,9 @@ public abstract class LanguageModelTestBase
     @Before
     public void setupLanguage()
     {
-        this.languageModel = new DefaultLanguageModelFactory().getLanguageModel(getLanguageCode());
+        this.languageModel = LanguageModel.create(getLanguageCode(),
+            new DefaultStemmerFactory(), new DefaultTokenizerFactory(),
+            new DefaultLexicalDataFactory());
     }
 
     /**
@@ -53,7 +54,8 @@ public abstract class LanguageModelTestBase
     public void testStemmerAvailable()
     {
         assertNotNull(languageModel.getStemmer());
-        assertFalse(languageModel.getStemmer() instanceof IdentityStemmer);
+        assertThat(languageModel.getStemmer().getClass()).as("English stemmer class")
+            .isNotEqualTo(IdentityStemmer.class);
     }
 
     /**
@@ -78,8 +80,8 @@ public abstract class LanguageModelTestBase
         {
             CharSequence stemmed = stemmer.stem(pair[0]);
             assertEquals("Stemming difference: " + pair[0] + " should become " + pair[1]
-                + " but was transformed into " 
-                + stemmed, pair[1], stemmed == null ? null : stemmed.toString());
+                + " but was transformed into " + stemmed, pair[1], stemmed == null ? null
+                : stemmed.toString());
         }
     }
 

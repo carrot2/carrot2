@@ -13,7 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.text.linguistic.ILanguageModelFactory;
+import org.carrot2.text.linguistic.IStemmerFactory;
 import org.junit.Test;
 
 /**
@@ -330,9 +330,11 @@ public class StemmerSyntheticTest extends StemmerTestBase
         check("que04", expectedFordsFlag);
     }
 
+    
+    
     @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
+    protected IStemmerFactory createStemmerFactory()
     {
-        return new TestLanguageModelFactory();
+        return new TestStemmerFactory();
     }
 }

@@ -12,9 +12,10 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
-import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.preprocessing.*;
+import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
+import org.carrot2.text.linguistic.ILexicalDataFactory;
+import org.carrot2.text.preprocessing.LabelFilterProcessor;
+import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.junit.Test;
 
 /**
@@ -75,10 +76,10 @@ public class StopWordLabelFilterMergedTest extends LabelFilterTestBase
 
         check(expectedLabelsFeatureIndex, 0);
     }
-    
+
     @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
+    protected ILexicalDataFactory createLexicalDataFactory()
     {
-        return new DefaultLanguageModelFactory();
+        return new DefaultLexicalDataFactory();
     }
 }

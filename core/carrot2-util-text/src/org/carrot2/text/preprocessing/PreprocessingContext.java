@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.carrot2.core.Document;
 import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.text.linguistic.ILanguageModel;
 import org.carrot2.text.linguistic.IStemmer;
+import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.util.MutableCharArray;
 
 import com.carrotsearch.hppc.BitSet;
@@ -71,7 +71,7 @@ public final class PreprocessingContext
     public final List<Document> documents;
 
     /** Language model to be used */
-    public final ILanguageModel language;
+    public final LanguageModel language;
 
     /**
      * Token interning cache. Token images are interned to save memory and allow reference
@@ -83,7 +83,7 @@ public final class PreprocessingContext
      * Creates a preprocessing context for the provided <code>documents</code> and with
      * the provided <code>languageModel</code>.
      */
-    public PreprocessingContext(ILanguageModel languageModel, List<Document> documents,
+    public PreprocessingContext(LanguageModel languageModel, List<Document> documents,
         String query)
     {
         this.query = query;

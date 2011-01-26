@@ -48,10 +48,10 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
     }
 
     @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
+    protected ILexicalDataFactory createLexicalDataFactory()
     {
-        DefaultLanguageModelFactory factory = new DefaultLanguageModelFactory();
-        ((DefaultLexicalDataFactory) factory.lexicalDataFactory).mergeResources = false;
+        final ILexicalDataFactory factory = super.createLexicalDataFactory();
+        ((DefaultLexicalDataFactory) factory).mergeResources = false;
         return factory;
     }
 

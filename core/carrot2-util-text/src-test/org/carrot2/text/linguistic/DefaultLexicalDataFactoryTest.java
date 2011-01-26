@@ -12,23 +12,33 @@
 
 package org.carrot2.text.linguistic;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 
 import org.apache.commons.io.FileUtils;
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.LanguageCode;
+import org.carrot2.core.ProcessingComponentBase;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.carrot2.text.util.MutableCharArray;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Output;
 import org.carrot2.util.resource.DirLocator;
 import org.carrot2.util.resource.IResourceLocator;
 import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.resource.ResourceLookup.Location;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
@@ -36,82 +46,8 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Tests {@link DefaultLanguageModelFactory}.
  */
-public class DefaultLanguageModelFactoryTest
+public class DefaultLexicalDataFactoryTest
 {
-    private DefaultLanguageModelFactory factory;
-
-    @Before
-    public void createFactory()
-    {
-        factory = new DefaultLanguageModelFactory();
-    }
-
-    /**
-     * Check if English stemmer from snowball is returned. 
-     */
-    @Test
-    public void testEnglishHasSnowballStemmer()
-    {
-        ILanguageModel model1 = factory.getLanguageModel(LanguageCode.ENGLISH);
-        assertTrue(model1.getStemmer().getClass().getName().toLowerCase().indexOf("snowball") >= 0);
-    }
-
-    /**
-     * Check if Polish stemmer is an adapter to Morfologik. 
-     */
-    @Test
-    public void testPolishHasMorfologikStemmer()
-    {
-        ILanguageModel model1 = factory.getLanguageModel(LanguageCode.POLISH);
-        String name = model1.getStemmer().getClass().getName();
-        assertTrue(name, name.toLowerCase().indexOf("morfologik") >= 0);
-    }
-
-    /**
-     * Check if English stemmer from snowball is returned. 
-     */
-    @Test
-    public void testChineseHasSmartChineseTokenizer()
-    {
-        ILanguageModel model1 = factory.getLanguageModel(LanguageCode.CHINESE_SIMPLIFIED);
-        String name = model1.getTokenizer().getClass().getName();
-        assertTrue(name, name.toLowerCase().indexOf("chinese") >= 0);
-    }
-
-    /**
-     * {@link ILanguageModelFactory} should return {@link ILanguageModel}s that
-     * return the same stemmer and tokenizer instance for reuse within the same 
-     * thread (we assume no two streams are tokenized at the same time using
-     * the same factory). 
-     */
-    @Test
-    public void testLanguageModelReturnsCachedStemmer()
-    {
-        ILanguageModel model1 = factory.getLanguageModel(LanguageCode.ENGLISH);
-        assertSame(model1.getStemmer(), model1.getStemmer());
-
-        ILanguageModel model2 = factory.getLanguageModel(LanguageCode.ENGLISH);
-        assertSame(model2.getStemmer(), model2.getStemmer());
-        assertNotSame(model1.getStemmer(), model2.getStemmer());
-    }
-
-    /**
-     * {@link ILanguageModelFactory} should return {@link ILanguageModel}s that
-     * return the same stemmer and tokenizer instance for reuse within the same 
-     * thread (we assume no two streams are tokenized at the same time using
-     * the same factory). 
-     */
-    @Test
-    public void testLanguageModelReturnsCachedTokenizer()
-    {
-        ILanguageModel model1 = factory.getLanguageModel(LanguageCode.ENGLISH);
-        assertSame(model1.getTokenizer(), model1.getTokenizer());
-
-        ILanguageModel model2 = factory.getLanguageModel(LanguageCode.ENGLISH);
-        assertSame(model2.getTokenizer(), model2.getTokenizer());
-        assertNotSame(model1.getTokenizer(), model2.getTokenizer());
-    }
-
     /**
      * Binds basic preprocessing pipeline.
      */
@@ -134,8 +70,7 @@ public class DefaultLanguageModelFactoryTest
         @Override
         public void process() throws ProcessingException
         {
-            ILanguageModelFactory languageModelFactory = preprocessingPipeline.languageModelFactory;
-            english = languageModelFactory.getLanguageModel(LanguageCode.ENGLISH).getLexicalData();
+            english = preprocessingPipeline.lexicalDataFactory.getLexicalData(LanguageCode.ENGLISH);
         }
     }
 

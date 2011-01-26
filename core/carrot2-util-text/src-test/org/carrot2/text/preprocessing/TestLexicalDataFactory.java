@@ -12,43 +12,12 @@
 package org.carrot2.text.preprocessing;
 
 import org.carrot2.core.LanguageCode;
-import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
-import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.ILexicalData;
 import org.carrot2.text.linguistic.ILexicalDataFactory;
-import org.carrot2.text.linguistic.IStemmer;
-import org.carrot2.text.linguistic.IStemmerFactory;
-import org.carrot2.text.linguistic.ITokenizerFactory;
 import org.carrot2.text.util.MutableCharArray;
 
-public final class TestLanguageModelFactory implements IStemmerFactory,
-    ITokenizerFactory, ILexicalDataFactory
+public final class TestLexicalDataFactory implements ILexicalDataFactory
 {
-    @Override
-    public IStemmer getStemmer(LanguageCode language)
-    {
-        return new IStemmer()
-        {
-            public CharSequence stem(CharSequence word)
-            {
-                if (word.length() > 2)
-                {
-                    return word.subSequence(0, word.length() - 2);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        };
-    }
-
-    @Override
-    public ITokenizer getTokenizer(LanguageCode language)
-    {
-        return new ExtendedWhitespaceTokenizer();
-    }
-
     @Override
     public ILexicalData getLexicalData(LanguageCode language)
     {

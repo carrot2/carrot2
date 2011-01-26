@@ -15,12 +15,12 @@ package org.carrot2.text.linguistic;
 import org.carrot2.core.LanguageCode;
 
 /**
- * A factory for components specific to a given language.
+ * Provides instances of {@link IStemmer} for each language.
  */
-public interface ILanguageModelFactory
+public interface IStemmerFactory
 {
     /**
-     * Returns a {@link ILanguageModel} for a given language.
+     * Provide {@link IStemmer} for a given language.
      */
-    ILanguageModel getLanguageModel(LanguageCode language);
+    public IStemmer getStemmer(LanguageCode languageCode);
 }

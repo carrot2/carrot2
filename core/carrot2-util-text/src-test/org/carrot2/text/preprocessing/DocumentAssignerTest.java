@@ -14,8 +14,10 @@ package org.carrot2.text.preprocessing;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
+import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
+import org.carrot2.text.linguistic.DefaultStemmerFactory;
+import org.carrot2.text.linguistic.ILexicalDataFactory;
+import org.carrot2.text.linguistic.IStemmerFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -245,8 +247,14 @@ public class DocumentAssignerTest extends LabelFilterTestBase
     }
 
     @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
+    protected ILexicalDataFactory createLexicalDataFactory()
     {
-        return new DefaultLanguageModelFactory();
+        return new DefaultLexicalDataFactory();
+    }
+
+    @Override
+    protected IStemmerFactory createStemmerFactory()
+    {
+        return new DefaultStemmerFactory();
     }
 }

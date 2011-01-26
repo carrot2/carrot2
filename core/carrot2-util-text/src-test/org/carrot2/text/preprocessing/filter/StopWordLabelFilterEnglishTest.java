@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -28,12 +27,12 @@ public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
         filterProcessor.completeLabelFilter.enabled = true;
         filterProcessor.stopWordLabelFilter.enabled = true;
     }
-    
+
     @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
+    protected ILexicalDataFactory createLexicalDataFactory()
     {
-        DefaultLanguageModelFactory factory = new DefaultLanguageModelFactory();
-        ((DefaultLexicalDataFactory) factory.lexicalDataFactory).mergeResources = false;
+        final DefaultLexicalDataFactory factory = new DefaultLexicalDataFactory();
+        factory.mergeResources = false;
         return factory;
     }
 

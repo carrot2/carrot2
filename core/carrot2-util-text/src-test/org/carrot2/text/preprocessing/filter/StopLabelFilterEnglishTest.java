@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -30,10 +29,10 @@ public class StopLabelFilterEnglishTest extends LabelFilterTestBase
     }
 
     @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
+    protected ILexicalDataFactory createLexicalDataFactory()
     {
-        DefaultLanguageModelFactory factory = new DefaultLanguageModelFactory();
-        ((DefaultLexicalDataFactory) factory.lexicalDataFactory).mergeResources = false;
+        final DefaultLexicalDataFactory factory = new DefaultLexicalDataFactory();
+        factory.mergeResources = false;
         return factory;
     }
 
