@@ -39,7 +39,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
     private volatile IParameterizedPool<IProcessingComponent, String> componentPool;
 
     /** A copy of init attributes */
-    private ImmutableMap<String, Object> initAttributes;
+    private Map<String, Object> initAttributes;
 
     /** Component configurations, may be empty. */
     private Map<String, ProcessingComponentConfiguration> componentIdToConfiguration;
@@ -91,7 +91,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         }
 
         this.context = context;
-        this.initAttributes = ImmutableMap.copyOf(attributes);
+        this.initAttributes = Maps.newHashMap(attributes);
         this.componentIdToConfiguration = ProcessingComponentConfiguration
             .indexByComponentId(configurations);
     }

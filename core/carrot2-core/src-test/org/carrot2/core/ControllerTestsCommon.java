@@ -654,6 +654,23 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         }
     }
 
+    @Test
+    public void settingInitAttributeToNull()
+    {
+        invokeInitForCache(component1Mock);
+        invokeProcessingWithInit(component1Mock);
+        invokeDisposal(component1Mock);
+
+        mocksControl.replay();
+
+        initAttributes.put("data", null);
+        processingAttributes.put("runtimeAttribute", "r");
+        processingAttributes.put("data", "d");
+
+        performProcessingDisposeAndVerifyMocks(Component1.class);
+        assertEquals("dir", resultAttributes.get("data"));
+    }
+
     /**
      * The tests invoking this method are almost the same for all controllers. The only
      * exception is a caching non-pooling controller, which does extra component
