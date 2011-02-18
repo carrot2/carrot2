@@ -18,12 +18,12 @@ import org.carrot2.core.LanguageCode;
 import org.junit.Test;
 
 /**
- * Tests {@link DefaultLanguageModelFactory}.
+ * 
  */
 public class LanguageModelTest
 {
     /**
-     * {@link ILanguageModelFactory} should return {@link ILanguageModel}s that return the
+     * {@link LanguageModel} should return {@link LanguageModel}s that return the
      * same stemmer and tokenizer instance for reuse within the same thread (we assume no
      * two streams are tokenized at the same time using the same factory).
      */
@@ -46,7 +46,7 @@ public class LanguageModelTest
     }
 
     /**
-     * {@link ILanguageModelFactory} should return {@link ILanguageModel}s that return the
+     * {@link LanguageModel} should return {@link LanguageModel}s that return the
      * same stemmer and tokenizer instance for reuse within the same thread (we assume no
      * two streams are tokenized at the same time using the same factory).
      */
