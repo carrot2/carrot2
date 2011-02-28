@@ -49,7 +49,6 @@
   <property name="coverage.report.dir" location="${tmp.dir}/coverage-report" />
   <property name="duplication.report.dir" location="${tmp.dir}/duplication-report" />
   <property name="findbugs.report.dir" location="${tmp.dir}/findbugs-report" />
-  <property name="maven.repository.dir" location="${tmp.dir}/maven" />
 
   <!-- Java API distribution -->
   <property name="api.dist.base" value="${carrot2.java-api.base}" />
@@ -774,7 +773,13 @@
   <!--
       Maven artefacts.
     -->
-  <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini, carrot2.maven.deploy, carrot2.maven.verify" description="Deploy Maven artifacts">
+  <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini, carrot2.maven.install" description="Install Maven artifacts">
+  </target>
+
+  <!--
+      Deploy Maven artefacts to SonaType (requires proper sonatype server config in ~/.m2/settings.xml!).
+    -->
+  <target name="maven.deploy" depends="maven, carrot2.maven.deploy" description="Deploy Maven artifacts to SonaType">
   </target>
 
   <!-- 

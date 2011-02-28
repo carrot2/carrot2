@@ -2,14 +2,12 @@
 <project name="carrot2.maven" default="default" xmlns:artifact="urn:maven-artifact-ant">
 
     <target name="check.properties">
-        <dirname property="carrot2.maven.basedir" file="${ant.file.carrot2.maven}" />
+        <dirname property="carrot2.maven.basedir"  file="${ant.file.carrot2.maven}" />
 
         <fail unless="carrot2.master.basedir">Required property missing: carrot2.master.basedir</fail>
-        <fail unless="maven.repository.dir">Required property missing: maven.repository.dir</fail>
-        <fail unless="carrot2.version">Required property missing: carrot2.version</fail>
-        
-        <mkdir dir="${maven.repository.dir}" />
-        <fileurl property="maven.repository.url" file="${maven.repository.dir}" />        
+        <fail unless="carrot2.version.maven">Required property missing: carrot2.version.maven</fail>
+   	
+        <property name="poms.dir" location="${carrot2.master.basedir}/tmp/maven" />
     </target>
 
     <target name="check.maven">
@@ -21,162 +19,36 @@
             </or>
         </condition>
 
-        <fail unless="mvn.available">mvn (Maven2) not available in path.</fail>
+        <fail unless="mvn.available">mvn (Maven) not available in path.</fail>
     </target>
 
     <target name="filter.poms" depends="check.properties">
-        <delete dir="${carrot2.maven.basedir}/tmp" />
-
-        <property name="poms.dir" location="${carrot2.maven.basedir}/tmp/poms" />
+        <delete dir="${poms.dir}" />
         <mkdir dir="${poms.dir}" />
+
         <copy todir="${poms.dir}" encoding="UTF-8" overwrite="true">
-            <fileset dir="${carrot2.maven.basedir}/poms">
-                <include name="*pom.xml" />
-            </fileset>
+            <fileset dir="${carrot2.maven.basedir}/poms" />
 
             <filterset begintoken="@" endtoken="@">
-                <filter token="carrot2.version" value="${carrot2.version}" />
+            	<filter token="carrot2.version" value="${carrot2.version}" />
+                <filter token="carrot2.version.maven" value="${carrot2.version.maven}" />
             </filterset>
         </copy>
     </target>
 
-    <target name="deploy" depends="check.maven, filter.poms">
-        <path id="maven-ant-tasks.classpath">
-            <fileset dir="${carrot2.maven.basedir}">
-                <include name="maven-ant-tasks-*.jar" />
-            </fileset>
-        </path>
-
-        <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
-            uri="urn:maven-artifact-ant"
-            classpathref="maven-ant-tasks.classpath" />
-
-        <echo>Maven2 deployment location: ${maven.repository.url}</echo>
-        
-        <artifact:deploy file="${jar.dir}/carrot2-core-${carrot2.version}.jar">
-            <artifact:pom file="${poms.dir}/carrot2-core.pom.xml" />
-            <artifact:remoteRepository url="${maven.repository.url}" />
-
-            <attach classifier="sources" file="${jar.dir}/carrot2-core-sources-${carrot2.version}.jar" type="jar" />
-            <attach classifier="javadoc" file="${jar.dir}/carrot2-core-javadoc-${carrot2.version}.jar" type="jar" />
-        </artifact:deploy>
-        
-        <artifact:deploy file="${jar.dir}/carrot2-mini-${carrot2.version}.jar">
-            <artifact:pom file="${poms.dir}/carrot2-mini.pom.xml" />
-            <artifact:remoteRepository url="${maven.repository.url}" />
-        </artifact:deploy>
-
-        <!-- Archetype handling. -->
-        <copy todir="${carrot2.maven.basedir}/tmp/archetype">
-            <fileset dir="${carrot2.maven.basedir}/archetype" />
-        </copy>
-        <copy todir="${carrot2.maven.basedir}/tmp/archetype/src/main/java">
-            <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/src" />            
-        </copy>
-        <copy tofile="${carrot2.maven.basedir}/tmp/archetype/pom.xml" file="${poms.dir}/carrot2-archetype.pom.xml" />
-
-        <echo>Building archetype...</echo>
-        <exec executable="mvn" dir="${carrot2.maven.basedir}/tmp/archetype" failonerror="true" vmlauncher="false">
-            <arg value="org.apache.maven.plugins:maven-archetype-plugin:2.0:create-from-project" />
-            <arg value="-q" />
-
-            <!-- Do not filter Java sources. The spelling pretty much reflects the quality of the entire archetype plugin. -->
-            <arg value="-Darchetype.languages=fake" />
-            <arg value="-Darchetype.filteredExtentions=fake" />
-        </exec>
-
-        <echo>Deploying archetype...</echo>
-        <!--
-            We install the archetype locally because archetype:jar does not work at the moment.
-        -->
-        <exec executable="mvn" dir="${carrot2.maven.basedir}/tmp/archetype/target/generated-sources/archetype" failonerror="true" vmlauncher="false">
-            <arg value="install" />
-            <arg value="-q" />
-        </exec>
-
-        <artifact:deploy file="${carrot2.maven.basedir}/tmp/archetype/target/generated-sources/archetype/target/carrot2-example-archetype-${carrot2.version}.jar">
-            <artifact:pom file="${poms.dir}/carrot2-archetype-deployed.pom.xml" />
-            <artifact:remoteRepository url="${maven.repository.url}" />
-        </artifact:deploy>
+    <target name="install" depends="check.maven, filter.poms">
+    	<exec executable="mvn" failonerror="true" vmlauncher="false" dir="${poms.dir}">
+    	    <arg line="clean install" />
+    	</exec>
     </target>
 
-    <target name="verify" depends="check.properties">
-      <!-- Verify the archetype works as in http://download.carrot2.org/head/manual/#section.integration.setting-up-maven-project -->
-      
-      <delete dir="${carrot2.master.basedir}/tmp/maven-test" />
-      <exec executable="mvn" dir="${carrot2.master.basedir}/tmp" 
-            vmlauncher="false" searchpath="true"
-            failonerror="true">
-          <arg value="archetype:generate" />
-          <arg value="-DarchetypeRepository=${maven.repository.url}" />
-          <arg value="-DarchetypeGroupId=org.carrot2" />
-          <arg value="-DarchetypeArtifactId=carrot2-example-archetype" />
-          <arg value="-DarchetypeVersion=${carrot2.version}" />
-          <arg value="-DgroupId=org.carrot2" />
-          <arg value="-DartifactId=maven-test" />
-          <arg value="-DinteractiveMode=false" />
-      </exec>
-
-      <!-- Modify the POM's repository URL to point to the local repository. -->
-      <replace file="${carrot2.master.basedir}/tmp/maven-test/pom.xml" 
-        token="http://download.carrot2.org/maven2"
-        value="${maven.repository.url}" />
-
-      <!--
-      to purge dependencies, call
-      mvn -DreResolve=false dependency:purge-local-repository
-      -->
-
-      <exec executable="mvn" dir="${carrot2.master.basedir}/tmp/maven-test" 
-            vmlauncher="false" searchpath="true"
-            failonerror="true">
-          <arg value="-Dmaven.artifact.threads=5" />
-          <arg value="-q" />
-          <arg value="eclipse:eclipse" />
-      </exec>
-
-      <exec executable="mvn" dir="${carrot2.master.basedir}/tmp/maven-test" 
-            vmlauncher="false" searchpath="true"
-            failonerror="true">
-          <arg value="assembly:directory" />
-      </exec>
-
-      <java jar="${carrot2.master.basedir}/tmp/maven-test/target/maven-test-jar/maven-test-1.0-SNAPSHOT.jar"
-            failonerror="true" fork="true">
-      </java>
+    <target name="deploy" depends="check.maven, filter.poms">
+        <exec executable="mvn" failonerror="true" vmlauncher="false" dir="${poms.dir}">
+            <arg line="clean install deploy" />
+        </exec>
     </target>
 
     <target name="default">
         <echo>This build file is part of the master build file. Do not run separately.</echo>
-    </target>
-
-    <!--
-    We could use maven directly from command line, if ant tasks are too heavy. 
-    
-    <macrodef name="mvn-deploy-jar">
-        <attribute name="url" default="${maven.repository.url}" />
-        <attribute name="repositoryId" default="carrot2" />
-        <attribute name="packaging" default="jar" />
-        <attribute name="groupId" default="org.carrot2" />
-        <attribute name="file" />
-        <attribute name="artifactId" />
-        <attribute name="version" />
-
-        <sequential>
-            <echo>m2-deploy: @{file}</echo>
-            <exec executable="mvn" failonerror="true" vmlauncher="false" output="maven.out" error="maven.err">
-                <arg value="deploy:deploy-file" />
-                <arg value="-Durl=@{url}" />
-                <arg value="-DrepositoryId=@{repositoryId}" />
-                <arg value="-DrepositoryLayout=default" />
-                <arg value="-Dpackaging=@{packaging}" />
-    
-                <arg value="-Dfile=@{file}" />
-                <arg value="-DgroupId=@{groupId}" />
-                <arg value="-DartifactId=@{artifactId}" />
-                <arg value="-Dversion=@{version}" />
-            </exec>
-        </sequential>
-    </macrodef>
-    -->    
+    </target>   
 </project>

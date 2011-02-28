@@ -1,15 +1,24 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>5</version>
+  </parent>
+
   <groupId>org.carrot2</groupId>
-  <artifactId>carrot2-mini</artifactId>
-  <version>@carrot2.version@</version>
+  <artifactId>carrot2</artifactId>
+  <version>@carrot2.version.maven@</version>
+
   <name>Carrot2</name>
+
   <description>
-    Carrot2 search results clustering framework. Minimal functional subset
-    (core algorithms and infrastructure, no document sources).
+    Parent POM for Carrot2 artefacts.
   </description>
-  <packaging>jar</packaging>
+
+  <packaging>pom</packaging>
 
   <licenses>
     <license>
@@ -38,6 +47,16 @@
     <system>Jira</system>
     <url>http://issues.carrot2.org/</url>
   </issueManagement>
+
+  <modules>
+    <module>core</module>
+    <module>mini</module>
+  </modules>
+
+  <properties>
+    <carrot2.master.basedir>${basedir}/../../../</carrot2.master.basedir>
+    <carrot2.version>@carrot2.version@</carrot2.version>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -75,7 +94,7 @@
       <artifactId>slf4j-api</artifactId>
       <version>1.5.8</version>
     </dependency>
-        
+
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-snowball</artifactId>
@@ -98,6 +117,43 @@
       <groupId>com.carrotsearch</groupId>
       <artifactId>hppc</artifactId>
       <version>0.3.2</version>
-    </dependency>        
+    </dependency>
   </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.6</version>
+          <inherited>false</inherited>
+
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.ant</groupId>
+              <artifactId>ant-nodeps</artifactId>
+              <version>1.8.0</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.ant</groupId>
+              <artifactId>ant-trax</artifactId>
+              <version>1.8.0</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.ant</groupId>
+              <artifactId>ant-junit</artifactId>
+              <version>1.8.0</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.5</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
