@@ -496,69 +496,49 @@
             Add the following fragment to the <tag>dependencies</tag> section of your
             <filename>pom.xml</filename>:
           </para>
-          
+
 <programlisting><![CDATA[<dependency>
   <groupId>org.carrot2</groupId>
   <artifactId>carrot2-core</artifactId>
-  <version>3.0-rc1</version>
+  <version>]]><product:version /><![CDATA[</version>
 </dependency>]]></programlisting>
 
           <para>
-            Optionally, to enable Polish language support, add the following
-            fragment to the <tag>dependencies</tag> section of your
-            <filename>pom.xml</filename>: 
+            You should peek at the POM file above and enable optional
+            dependencies if required. For example, to enable Polish stemming,
+            Morfologik should be added to the <tag>dependencies</tag> section of your
+            <filename>pom.xml</filename> (version argument should match
+            &PROD;'s POM information): 
           </para> 
 
 <programlisting><![CDATA[<dependency>
   <groupId>org.carrot2</groupId>
-  <artifactId>morfologik</artifactId>
-  <version>1.1.2</version>
+  <artifactId>morfologik-stemming</artifactId>
+  <version>...</version>
 </dependency>]]></programlisting>
         </listitem>
-        
+
         <listitem>
           <para>
-            Add the following fragment to the <tag>repositories</tag> section of your
+            To support snapshot builds, add the following fragment to the 
+            <tag>repositories</tag> section of your
             <filename>pom.xml</filename>: 
           </para>
 
 <programlisting><![CDATA[<repository>
-  <id>carrot2.org</id>
-  <name>Carrot2 Maven2 repository</name>
-  <url>http://download.carrot2.org/maven2/</url>
+    <id>sonatype-nexus-public</id>
+    <name>SonaType public snapshots and releases repository</name>
+    <url>https://oss.sonatype.org/content/groups/public</url>
+    <releases> 
+        <!-- set to true if you wish to fetch releases from this repo too. -->
+        <enabled>false</enabled>
+    </releases> 
+    <snapshots>
+        <enabled>true</enabled>
+    </snapshots>
 </repository>]]></programlisting>
         </listitem>
       </orderedlist>
-    </section>
-    
-    <section xml:id="section.integration.setting-up-maven-project" role="maven">
-      <title>Setting up a Maven2 project with &PROD; dependency</title>
-      
-      <para>
-        &PROD; provides Maven2 artifacts and an archetype project with examples of use.
-        To create a template &PROD; project, use the following command (line breaks for clarity): 
-      </para>
-      
-<programlisting><![CDATA[mvn archetype:generate 
- -DarchetypeRepository=http://download.carrot2.org/maven2/ 
- -DarchetypeGroupId=org.carrot2 
- -DarchetypeArtifactId=carrot2-example-archetype 
- -DarchetypeVersion=]]><emphasis role="bold"><product:version /></emphasis><![CDATA[ 
- -DgroupId=com.mycompany 
- -DartifactId=myproject 
- -DinteractiveMode=false]]></programlisting>
-  
-      <para>
-        Marked in bold is the &PROD; release that will be used, please see 
-        <link xlink:href="http://download.carrot2.org/maven2/org/carrot2/carrot2-example-archetype/">our Maven2 repository</link> 
-        for available version numbers.
-      </para>
-      
-      <para>
-        After the example project gets created, you can use standard Maven2 goals e.g. to
-        generate Eclipse IDE project files:
-      </para>
-<programlisting><![CDATA[mvn eclipse:eclipse]]></programlisting> 
     </section>
     
     <section xml:id="section.integration.seting-up-c2-project-in-eclipse">
