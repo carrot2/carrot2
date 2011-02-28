@@ -622,22 +622,16 @@
   <target name="jar.mini" depends="jar.mini.test" />
     
   <target name="jar.mini.build" depends="jar">
-    <property name="jar.mini.dir" location="${tmp.dir}/jar-mini" />
-    <mkdir dir="${jar.mini.dir}" />
-    <unzip src="${jar.dir}/carrot2-core-${carrot2.version}.jar" dest="${jar.mini.dir}" />
-
-    <delete includeEmptyDirs="true">
-      <fileset dir="${jar.mini.dir}">
-        <include name="org/carrot2/source/**" />
-        <exclude name="org/carrot2/source/xml/**" />
-        <include name="org/carrot2/output/**" />
-        <include name="com/**" />
-        <exclude name="**/doc-files/**" />
-      </fileset>
-    </delete>
-
     <jar destfile="${jar.dir}/carrot2-mini-${carrot2.version}.jar">
-      <fileset dir="${jar.mini.dir}" />
+      <!-- selectors don't seem to work with zipfileset -->
+      <zipfileset src="${jar.dir}/carrot2-core-${carrot2.version}.jar">
+          <exclude name="org/carrot2/source/**" />
+          <exclude name="com/**" />
+          <exclude name="org/carrot2/output/**" />
+      </zipfileset>
+      <zipfileset src="${jar.dir}/carrot2-core-${carrot2.version}.jar">
+          <include name="org/carrot2/source/xml/**" />
+      </zipfileset>
     </jar>
     <delete dir="${jar.mini.dir}" />
   </target>
