@@ -607,15 +607,36 @@
             <mapper type="regexp" from="^(.+)/src/(.+)" to="\2"/>
         </chainedmapper> 
     </copy>
+
     <jar destfile="${jar.dir}/carrot2-core-sources-${carrot2.version}.jar">
       <fileset dir="${jar.dir}/sources" />
       <fileset dir="${build.dir}">
         <include name="**/*.java" />
       </fileset>
     </jar>
-    <delete dir="${jar.dir}/sources" />
+
+    <jar destfile="${jar.dir}/carrot2-mini-sources-${carrot2.version}.jar">
+      <fileset dir="${jar.dir}/sources">
+        <selector id="mini.sources">
+          <and>
+            <filename name="**/*.java" />
+            <or>
+              <none>
+                <filename name="org/carrot2/source/**"/>
+                <filename name="com/**" />
+                <filename name="org/carrot2/output/**" />
+              </none>
+              <filename name="org/carrot2/source/xml/**"/>
+            </or>
+          </and>
+        </selector>
+      </fileset>
+      <fileset dir="${build.dir}">
+        <selector refid="mini.sources" />
+      </fileset>
+    </jar>
   </target>
-  
+
   <!--
         Carrot2 mini JAR, just core and algorithms. No extended support for Chinese and Arabic.
     -->
