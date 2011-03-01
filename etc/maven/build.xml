@@ -32,6 +32,7 @@
             <filterset begintoken="@" endtoken="@">
             	<filter token="carrot2.version" value="${carrot2.version}" />
                 <filter token="carrot2.version.maven" value="${carrot2.version.maven}" />
+		<filter token="carrot2.master.basedir" value="${carrot2.master.basedir}" />
             </filterset>
         </copy>
     </target>
