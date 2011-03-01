@@ -44,7 +44,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * Tests {@link DefaultLanguageModelFactory}.
+ * Tests {@link ILexicalData}.
  */
 public class DefaultLexicalDataFactoryTest
 {

@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests {@link DefaultLanguageModelFactory}.
+ * Tests {@link IStemmer}s.
  */
 public class DefaultStemmerFactoryTest
 {

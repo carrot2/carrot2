@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Superclass for testing {@link ILanguageModel}s.
+ * Superclass for testing {@link LanguageModel}s.
  */
 public abstract class LanguageModelTestBase
 {
@@ -100,7 +100,7 @@ public abstract class LanguageModelTestBase
     }
 
     /**
-     * Override and provide word pairs for {@link ILanguageModel#getStemmer()} tests.
+     * Override and provide word pairs for {@link LanguageModel#getStemmer()} tests.
      * Sample data should follow this format:
      * 
      * <pre>

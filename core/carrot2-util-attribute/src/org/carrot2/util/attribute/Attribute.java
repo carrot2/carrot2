@@ -26,7 +26,7 @@ import java.lang.reflect.Field;
  * {@link Input} or {@link Output}, which define the direction of binding. Attribute
  * fields can also be marked with some extra domain-specific annotations that can then be
  * used to selectively bind only some of a {@link Bindable}'s attributes (see
- * {@link AttributeBinder#set(Object, java.util.Map, Class, Class...)} for more details).
+ * {@link AttributeBinder} for more details).
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -35,7 +35,7 @@ public @interface Attribute
     /**
      * The unique identifier of this attribute. The identifier is used as the key when
      * providing and collecting attribute values though the
-     * {@link AttributeBinder#set(Object, java.util.Map, Class, Class...)} method. If the
+     * {@link AttributeBinder#set(Object, java.util.Map, Class...)} method. If the
      * key is not provided, the attribute will have its key composed of the prefix defined
      * by the {@link Bindable} annotation on the enclosing class (see
      * {@link Bindable#prefix()})  followed by a dot (<code>.</code>) and the name of

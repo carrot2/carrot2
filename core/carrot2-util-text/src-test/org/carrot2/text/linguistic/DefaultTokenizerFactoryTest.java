@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests {@link DefaultLanguageModelFactory}.
+ * Tests default tokenizer for {@link LanguageCode#CHINESE_SIMPLIFIED}.
  */
 public class DefaultTokenizerFactoryTest
 {

@@ -8,7 +8,7 @@ import org.carrot2.core.Cluster;
 /**
  * Checks pairwise assertions on clusters.
  * 
- * @see ClusterListAssert#correspondsTo(java.util.List, ClusterPairAssert...)
+ * @see ClusterListAssertion#correspondsTo(java.util.List, ClusterPairAssert...)
  */
 public interface ClusterPairAssert
 {

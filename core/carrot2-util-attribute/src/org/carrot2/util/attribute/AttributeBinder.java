@@ -75,7 +75,7 @@ public class AttributeBinder
      * is not {@link String}, the {@link AttributeTransformerFromString} will be applied
      * to the value prior to transferring it to the attribute field. If you want to bypass
      * this conversion, use
-     * {@link #bind(Object, IAttributeBinderAction[], Class, Class...)}.</li>
+     * {@link #bind(Object, IAttributeBinderAction[], Class...)}.</li>
      * <li>If the type of the attribute field is not {@link Class} and the corresponding
      * value in the <code>values</code> map is of type {@link Class}, an attempt will be
      * made to coerce the class to a corresponding instance by calling its parameterless

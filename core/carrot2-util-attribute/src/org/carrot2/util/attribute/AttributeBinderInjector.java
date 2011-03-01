@@ -40,8 +40,8 @@ public class AttributeBinderInjector
      *            values are allowed and will be transferred to the object's fields. If
      *            the map does not contain a key equal an object field's type, the field's
      *            value will not be changed.
-     * @param object the object whose fields to set. The object must be marked with the
-     *            <code>injectableMarker</code> annotation. All object's fields whose
+     * @param objects All objects whose fields should be set. Objects must be marked with the
+     *            <code>injectableMarker</code> annotation. All objects' fields whose
      *            types are marked with the <code>injectableMarker</code> will also
      *            recursively receive value injection.
      */

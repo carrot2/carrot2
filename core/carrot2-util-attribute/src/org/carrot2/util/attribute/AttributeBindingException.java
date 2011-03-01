@@ -14,7 +14,7 @@ package org.carrot2.util.attribute;
 
 /**
  * An exception thrown when problems occur in
- * {@link AttributeBinder#set(Object, java.util.Map, Class, Class...)}.
+ * {@link AttributeBinder#set(Object, java.util.Map, Class...)}.
  */
 @SuppressWarnings("serial")
 public class AttributeBindingException extends RuntimeException
