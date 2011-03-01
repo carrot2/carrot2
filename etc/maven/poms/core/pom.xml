@@ -1,81 +1,37 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.carrot2</groupId>
+    <artifactId>carrot2</artifactId>
+    <version>@carrot2.version.maven@</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
   <groupId>org.carrot2</groupId>
   <artifactId>carrot2-core</artifactId>
-  <version>@carrot2.version@</version>
-  <name>Carrot2</name>
+  <version>@carrot2.version.maven@</version>
+
+  <name>Carrot2 Core (algorithms and data sources)</name>
+
   <description>
     Carrot2 search results clustering framework core, document
     sources and clustering algorithms.
   </description>
+
   <packaging>jar</packaging>
-
-  <licenses>
-    <license>
-      <name>BSD license</name>
-      <url>http://www.carrot2.org/carrot2.LICENSE</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-
-  <organization>
-    <name>Carrot2.org</name>
-    <url>http://www.carrot2.org/</url>
-  </organization>
-
-  <mailingLists>
-    <mailingList>
-      <name>Developers List</name>
-      <subscribe>carrot2-developers-subscribe@lists.sourceforge.net</subscribe>
-      <unsubscribe>carrot2-developers-leave@lists.sourceforge.net</unsubscribe>
-      <post>carrot2-developers@lists.sourceforge.net</post>
-      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=carrot2-developers</archive>
-    </mailingList>
-  </mailingLists>
-
-  <issueManagement>
-    <system>Jira</system>
-    <url>http://issues.carrot2.org/</url>
-  </issueManagement>
-
-  <repositories>
-      <repository>
-          <id>carrotsearch.labs.releases</id>
-          <name>Carrot Search Labs Releases Repository</name>
-          <url>http://repository.carrotsearch.com/labs/releases</url>
-      </repository>
-  </repositories>
 
   <dependencies>
     <dependency>
-      <groupId>org.carrot2</groupId>
+      <groupId>net.java.dev.rome</groupId>
       <artifactId>rome</artifactId>
-      <version>1.0.RC1</version>
+      <version>1.0.0</version>
     </dependency>
 
     <dependency>
-      <groupId>org.carrot2</groupId>
+      <groupId>net.java.dev.rome</groupId>
       <artifactId>rome-fetcher</artifactId>
-      <version>0.7</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-core-asl</artifactId>
-      <version>1.5.2</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
-      <version>1.5.2</version>
-    </dependency>
-        
-    <dependency>
-      <groupId>net.sf.ehcache</groupId>
-      <artifactId>ehcache-core</artifactId>
-      <version>1.7.1</version>
+      <version>1.0.0</version>
     </dependency>
 
     <dependency>
@@ -109,21 +65,9 @@
     </dependency>
 
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.4</version>
-    </dependency>
-
-    <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.1.1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>r05</version>
     </dependency>
 
     <dependency>
@@ -133,17 +77,11 @@
     </dependency>
 
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.5.8</version>
-    </dependency>
-
-    <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-core</artifactId>
       <version>3.0.1</version>
     </dependency>
-        
+
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-analyzers</artifactId>
@@ -155,13 +93,7 @@
       <artifactId>lucene-highlighter</artifactId>
       <version>3.0.1</version>
     </dependency>
-        
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-snowball</artifactId>
-      <version>3.0.1</version>
-    </dependency>
-        
+
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-smartcn</artifactId>
@@ -206,30 +138,66 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.mahout</groupId>
-      <artifactId>mahout-math</artifactId>
-      <version>0.3</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.mahout</groupId>
-      <artifactId>mahout-collections</artifactId>
-      <version>0.3</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.carrotsearch</groupId>
       <artifactId>nni</artifactId>
       <version>1.0.0</version>
       <optional>true</optional>
     </dependency>
-
-    <dependency>
-      <groupId>com.carrotsearch</groupId>
-      <artifactId>hppc</artifactId>
-      <version>0.3.1</version>
-    </dependency>    
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <inherited>true</inherited>
+
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>verify</phase>
+            <configuration>
+              <target>
+                <copy   file="${carrot2.master.basedir}/tmp/jar/carrot2-core-${carrot2.version}.jar" 
+                      tofile="${project.build.directory}/${project.build.finalName}.jar" 
+                      overwrite="true" filtering="false" />
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <inherited>true</inherited>
+        <executions>
+          <execution>
+            <id>attach-extras</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attach-artifact</goal>
+            </goals>
+            <configuration>
+              <artifacts>
+                <artifact>
+                  <file>${carrot2.master.basedir}/tmp/jar/carrot2-core-javadoc-${carrot2.version}.jar</file>
+                  <type>jar</type>
+                  <classifier>javadoc</classifier>
+                </artifact>
+                <artifact>
+                  <file>${carrot2.master.basedir}/tmp/jar/carrot2-core-sources-${carrot2.version}.jar</file>
+                  <type>jar</type>
+                  <classifier>sources</classifier>
+                </artifact>
+              </artifacts>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>  
+  </build>
 </project>
-
-

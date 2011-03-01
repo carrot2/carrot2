@@ -49,6 +49,7 @@
   <property name="coverage.report.dir" location="${tmp.dir}/coverage-report" />
   <property name="duplication.report.dir" location="${tmp.dir}/duplication-report" />
   <property name="findbugs.report.dir" location="${tmp.dir}/findbugs-report" />
+  <property name="maven.repository.dir" location="${tmp.dir}/maven" />
 
   <!-- Java API distribution -->
   <property name="api.dist.base" value="${carrot2.java-api.base}" />
@@ -616,45 +617,31 @@
         <include name="**/*.java" />
       </fileset>
     </jar>
-
-    <jar destfile="${jar.dir}/carrot2-mini-sources-${carrot2.version}.jar">
-      <fileset dir="${jar.dir}/sources">
-        <selector id="mini.sources">
-          <and>
-            <filename name="**/*.java" />
-            <or>
-              <none>
-                <filename name="org/carrot2/source/**"/>
-                <filename name="com/**" />
-                <filename name="org/carrot2/output/**" />
-              </none>
-              <filename name="org/carrot2/source/xml/**"/>
-            </or>
-          </and>
-        </selector>
-      </fileset>
-      <fileset dir="${build.dir}">
-        <selector refid="mini.sources" />
-      </fileset>
-    </jar>
+    <delete dir="${jar.dir}/sources" />
   </target>
-
+  
   <!--
         Carrot2 mini JAR, just core and algorithms. No extended support for Chinese and Arabic.
     -->
   <target name="jar.mini" depends="jar.mini.test" />
     
   <target name="jar.mini.build" depends="jar">
+    <property name="jar.mini.dir" location="${tmp.dir}/jar-mini" />
+    <mkdir dir="${jar.mini.dir}" />
+    <unzip src="${jar.dir}/carrot2-core-${carrot2.version}.jar" dest="${jar.mini.dir}" />
+
+    <delete includeEmptyDirs="true">
+      <fileset dir="${jar.mini.dir}">
+        <include name="org/carrot2/source/**" />
+        <exclude name="org/carrot2/source/xml/**" />
+        <include name="org/carrot2/output/**" />
+        <include name="com/**" />
+        <exclude name="**/doc-files/**" />
+      </fileset>
+    </delete>
+
     <jar destfile="${jar.dir}/carrot2-mini-${carrot2.version}.jar">
-      <!-- selectors don't seem to work with zipfileset -->
-      <zipfileset src="${jar.dir}/carrot2-core-${carrot2.version}.jar">
-          <exclude name="org/carrot2/source/**" />
-          <exclude name="com/**" />
-          <exclude name="org/carrot2/output/**" />
-      </zipfileset>
-      <zipfileset src="${jar.dir}/carrot2-core-${carrot2.version}.jar">
-          <include name="org/carrot2/source/xml/**" />
-      </zipfileset>
+      <fileset dir="${jar.mini.dir}" />
     </jar>
     <delete dir="${jar.mini.dir}" />
   </target>
@@ -673,7 +660,7 @@
           <patternset refid="lib.core.mini" />
           <exclude name="**/*.LICENSE" />
           <!-- 
-               We add SimpleXML only to stop compiler from complaining about missing
+               We add SimpleXML only to stop compiler from complainig about missing
                annotation definitions. SimpleXML is not required to run basic clustering. 
             -->
           <include name="**/simple-xml*.jar" />
@@ -768,13 +755,7 @@
   <!--
       Maven artefacts.
     -->
-  <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini, carrot2.maven.install" description="Install Maven artifacts">
-  </target>
-
-  <!--
-      Deploy Maven artefacts to SonaType (requires proper sonatype server config in ~/.m2/settings.xml!).
-    -->
-  <target name="maven.deploy" depends="maven, carrot2.maven.deploy" description="Deploy Maven artifacts to SonaType">
+  <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini, carrot2.maven.deploy, carrot2.maven.verify" description="Deploy Maven artifacts">
   </target>
 
   <!-- 

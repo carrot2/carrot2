@@ -12,3 +12,4 @@ tmp
 .apt_generated
 .clover
 junit*.properties
+*.patch
