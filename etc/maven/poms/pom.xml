@@ -54,7 +54,8 @@
   </modules>
 
   <properties>
-    <carrot2.master.basedir>${basedir}/../../../</carrot2.master.basedir>
+    <!-- This must be an absolute path, otherwise gpg plugin will fail on linux machines. -->
+    <carrot2.master.basedir>@carrot2.master.basedir@</carrot2.master.basedir>
     <carrot2.version>@carrot2.version@</carrot2.version>
   </properties>
 
