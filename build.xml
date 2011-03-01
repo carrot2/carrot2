@@ -1124,30 +1124,32 @@
   </target>  
 
   <target name="fix-line-endings">
+    <patternset id="fix-line-endings-text-files">
+      <include name="**/*.js" />
+      <include name="**/*.css" />
+      <include name="**/*.java" />
+      <include name="**/*.xml" />
+    </patternset>
+
     <patternset id="fix-line-endings-excludes">
-      <exclude name="**/*.jar" />
-      <exclude name="**/*.png" />
-      <exclude name="**/*.gif" />
-      <exclude name="**/*.jpg" />
-      <exclude name="**/*.swf" />
-      <exclude name="**/*.bmp" />
-      <exclude name="**/*.dll" />
-      <exclude name="**/*.jpeg" />
-      <exclude name="**/*.psd" />
-      <exclude name="**/*.odg" />
-      <exclude name="**/*.pdf" />
-      <exclude name="**/*.ico" />
-      <exclude name="**/*.swp" />
       <exclude name="**/*.utf16.xml" />
       <exclude name="**/tmp/**" />
+      <exclude name="**/.git/**" />
+      <exclude name="**/.svn/**" />
+    </patternset>
+
+    <patternset id="fix-line-endings-unix">
+      <exclude name="**/*.cmd" />
+      <exclude name="**/*.bat" />
+      <exclude name="**/csharp/**" />
     </patternset>
 
     <fixcrlf srcdir="." eol="unix" encoding="UTF-8">
       <patternset refid="fix-line-endings-excludes" />
-      <exclude name="**/*.cmd" />
-      <exclude name="**/*.bat" />
-      <exclude name="**/csharp/**" />
+      <patternset refid="fix-line-endings-text-files" />
+      <patternset refid="fix-line-endings-unix" />
     </fixcrlf>
+
     <fixcrlf srcdir="." eol="dos" encoding="UTF-8">
       <patternset refid="fix-line-endings-excludes" />
       <include name="**/*.cmd" />
