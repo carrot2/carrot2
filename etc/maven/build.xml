@@ -44,7 +44,7 @@
 
     <target name="deploy" depends="check.maven, filter.poms">
         <exec executable="mvn" failonerror="true" vmlauncher="false" dir="${poms.dir}">
-            <arg line="clean install deploy" />
+            <arg line="-Psonatype -Dgpg.passphrase= clean install deploy" />
         </exec>
     </target>
 
