@@ -105,6 +105,25 @@ public class ClusterAssertion implements AssertExtension
     }
 
     /**
+     * Assert that the cluster's label is equal to <code>expectedLabel</code>.
+     */
+    public ClusterAssertion hasLabel(String expectedLabel)
+    {
+        assertThat(actualCluster.getLabel()).isEqualTo(expectedLabel);
+        return this;
+    }
+    
+    /**
+     * Assert that the number of unique documents in the cluster and its subclusters
+     * is equal to <code>expectedClusterSize</code>.
+     */
+    public ClusterAssertion hasSize(int expectedClusterSize)
+    {
+        assertThat(actualCluster.getAllDocuments().size()).isEqualTo(expectedClusterSize);
+        return this;
+    }
+    
+    /**
      * Asserts that the cluster is not <code>null</code>.
      */
     public ClusterAssertion isNotNull()
