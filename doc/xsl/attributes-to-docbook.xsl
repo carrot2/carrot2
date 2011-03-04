@@ -468,7 +468,7 @@
     </db:para>
   </xsl:template>
   
-  <xsl:template match="i">
+  <xsl:template match="i|em">
     <db:emphasis>
       <xsl:apply-templates />
     </db:emphasis>

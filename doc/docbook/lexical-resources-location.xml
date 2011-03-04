@@ -10,7 +10,7 @@
   <title>Location of lexical resources</title>
 
   <para>
-    &PROD; lexical resources are placed at the following application-specific locations:
+    The user-define &PROD; lexical resources are placed at the following application-specific locations:
   </para>
   
   <variablelist>
