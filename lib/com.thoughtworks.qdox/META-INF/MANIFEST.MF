@@ -2,8 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Qdox Plug-in
 Bundle-SymbolicName: com.thoughtworks.qdox
-Bundle-Version: 1.10.0
-Bundle-ClassPath: qdox-1.10.0-snapshot.jar
+Bundle-Version: 1.12.0
 Export-Package: com.thoughtworks.qdox,
  com.thoughtworks.qdox.ant,
  com.thoughtworks.qdox.directorywalker,
@@ -18,3 +17,4 @@ Export-Package: com.thoughtworks.qdox,
 Require-Bundle: org.apache.ant
 Bundle-Vendor: com.thoughtworks.qdox
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: qdox-1.12.jar

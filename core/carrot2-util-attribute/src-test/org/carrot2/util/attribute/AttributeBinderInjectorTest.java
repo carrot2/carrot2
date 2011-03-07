@@ -28,7 +28,7 @@ import com.google.common.collect.Maps;
 /**
  * Test cases for {@link AttributeBinderInjector}.
  */
-public class AttribtueBinderInjectorTest
+public class AttributeBinderInjectorTest
 {
     static class A
     {

@@ -68,7 +68,7 @@ final class MetadataExtractorUtils
         {
             return null;
         }
-        return string.replaceAll("[\\t\\r\\n]+", " ");
+        return string.replaceAll("[\\s]+", " ");
     }
 
     /**

@@ -53,11 +53,6 @@ class BuilderBase implements Builder
     }
 
     @Override
-    public void addMethod(MethodDef arg0)
-    {
-    }
-
-    @Override
     public void addPackage(PackageDef arg0)
     {
     }
@@ -78,9 +73,24 @@ class BuilderBase implements Builder
     {
         throw new UnsupportedOperationException();
     }
+    
+    @Override
+    public void addParameter(FieldDef arg0)
+    {
+    }
 
     @Override
     public void endClass()
+    {
+    }
+
+    @Override
+    public void beginMethod()
+    {
+    }
+
+    @Override
+    public void endMethod(MethodDef arg0)
     {
     }
 }
