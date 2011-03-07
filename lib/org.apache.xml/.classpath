@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry exported="true" kind="lib" path="xercesImpl-2.11.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="xalan-2.7.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="xml-apis.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
