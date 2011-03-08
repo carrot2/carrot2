@@ -84,35 +84,41 @@ public class WebappConfig
     public String componentSuite = "suites/suite-webapp.xml";
 
     @Attribute(name = "search-url", required = false)
-    public final String searchUrl = "search";
+    public String searchUrl = "search";
 
     @Attribute(name = "xml-url", required = false)
-    public final String xmlUrl = "xml";
+    public String xmlUrl = "xml";
 
     @Attribute(name = "max-carrot2-results", required = false)
     public Integer maxCarrot2Results = null;
 
     @Attribute(name = "query-param", required = false)
-    public final static String QUERY_PARAM = AttributeNames.QUERY;
+    public static String QUERY_PARAM = AttributeNames.QUERY;
     public final static String QUERY_PARAM_ALIAS = "q";
 
+    public static final String DEFAULT_SKIN_PARAM = "skin";
+    public static final String DEFAULT_SOURCE_PARAM = "source";
+    public static final String DEFAULT_ALGORITHM_PARAM = "algorithm";
+    public static final String DEFAULT_TYPE_PARAM = "type";
+    public static final String DEFAULT_VIEW_PARAM = "view";
+
     @Attribute(name = "results-param", required = false)
-    public final static String RESULTS_PARAM = AttributeNames.RESULTS;
+    public static String RESULTS_PARAM = AttributeNames.RESULTS;
 
     @Attribute(name = "source-param", required = false)
-    public final static String SOURCE_PARAM = "source";
+    public static String SOURCE_PARAM = DEFAULT_SOURCE_PARAM;
 
     @Attribute(name = "algorithm-param", required = false)
-    public final static String ALGORITHM_PARAM = "algorithm";
+    public static String ALGORITHM_PARAM = DEFAULT_ALGORITHM_PARAM;
 
     @Attribute(name = "type-param", required = false)
-    public final static String TYPE_PARAM = "type";
+    public static String TYPE_PARAM = DEFAULT_TYPE_PARAM;
 
     @Attribute(name = "view-param", required = false)
-    public final static String VIEW_PARAM = "view";
+    public static String VIEW_PARAM = DEFAULT_VIEW_PARAM;
 
     @Attribute(name = "skin-param", required = false)
-    public final static String SKIN_PARAM = "skin";
+    public static String SKIN_PARAM = DEFAULT_SKIN_PARAM;
 
     /**
      * @return Initialize the global configuration and return it.

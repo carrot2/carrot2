@@ -12,9 +12,9 @@
 
 package org.carrot2.webapp;
 
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 public class WebApp
 {
@@ -42,6 +42,7 @@ public class WebApp
         try
         {
             server.start();
+            server.join();
         }
         catch (Exception e)
         {
@@ -71,16 +72,6 @@ public class WebApp
      */
     public static void main(String [] args) throws Exception
     {
-        /*
-         * This enables log4j logging in Jetty (specify on command-line, if possible).
-         */
-        System.setProperty("org.mortbay.log.LogFactory.noDiscovery", "false");
-
-        /*
-         * Specify URI decoding codepage.
-         */
-        System.setProperty("org.mortbay.util.URI.charset", "UTF-8");
-        
         /*
          * Allow context classloader resource loading.
          */
