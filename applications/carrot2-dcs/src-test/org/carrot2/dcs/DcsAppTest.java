@@ -179,7 +179,7 @@ public class DcsAppTest
         final String sourceID = "boss-web";
         for (HtmlOption option : source.getOptions())
         {
-            if (sourceID.equals(option.getAttributeValue("value")))
+            if (sourceID.equals(option.getAttribute("value")))
             {
                 source.setSelectedAttribute(option, true);
                 checkXmlOutput(query, form);
@@ -205,7 +205,7 @@ public class DcsAppTest
             final HtmlForm form = getSearchForm();
 
             // Click on the appropriate radio option to enable fields
-            ((HtmlRadioButtonInput) form.getHtmlElementById("source-from-file")).click();
+            ((HtmlRadioButtonInput) form.getElementById("source-from-file")).click();
             final File dataFile = testFiles.get(resource);
             form.getInputByName("dcs.c2stream").setValueAttribute(dataFile.getAbsolutePath());
 
@@ -228,11 +228,10 @@ public class DcsAppTest
         final HtmlForm form = getSourceFromStringForm();
 
         // Click on the appropriate radio option to get JSON output
-        ((HtmlRadioButtonInput) form.getHtmlElementById("output-format-json")).click();
+        ((HtmlRadioButtonInput) form.getElementById("output-format-json")).click();
 
         final Page dcsResponse = form.getButtonByName("submit").click();
-        final String jsonResponse = new String(dcsResponse.getWebResponse()
-            .getResponseBody(), "UTF-8");
+        final String jsonResponse = dcsResponse.getWebResponse().getContentAsString("UTF-8");
 
         // Just simple assertions, more JSON tests are in ProcessingResultTest
         assertThat(jsonResponse).startsWith("{").endsWith("}").contains("kaczyński");
@@ -245,12 +244,11 @@ public class DcsAppTest
         final HtmlForm form = getSourceFromStringForm();
 
         // Click on the appropriate radio option to get JSON output
-        ((HtmlRadioButtonInput) form.getHtmlElementById("output-format-json")).click();
+        ((HtmlRadioButtonInput) form.getElementById("output-format-json")).click();
 
         form.getInputByName("dcs.json.callback").setValueAttribute(callback);
         final Page dcsResponse = form.getButtonByName("submit").click();
-        final String jsonResponse = new String(dcsResponse.getWebResponse()
-            .getResponseBody(), "UTF-8");
+        final String jsonResponse = dcsResponse.getWebResponse().getContentAsString("UTF-8");
 
         // Just simple assertions, more JSON tests are in ProcessingResultTest
         assertThat(jsonResponse).startsWith(callback + "(").endsWith(");").contains(
@@ -292,7 +290,7 @@ public class DcsAppTest
         final HtmlForm form = getSearchForm();
 
         // Click on the appropriate radio option to enable fields
-        ((HtmlRadioButtonInput) form.getHtmlElementById("source-from-string")).click();
+        ((HtmlRadioButtonInput) form.getElementById("source-from-string")).click();
         form.getTextAreaByName("dcs.c2stream").setText(
             FileUtils.readFileToString(testFiles.get(KEY_KACZYNSKI), "UTF-8"));
         return form;
@@ -336,8 +334,7 @@ public class DcsAppTest
             + dcs.port + "/" + url);
 
         // Wait for AJAX calls to complete
-        startPage.getEnclosingWindow().getThreadManager().joinAll(10000);
-
+        startPage.getEnclosingWindow().getJobManager().waitForJobs(10000);
         return startPage;
     }
 
