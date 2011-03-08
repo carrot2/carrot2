@@ -323,7 +323,7 @@
       <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
       <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
 
-      <batchtest todir="${tests.report.dir}">
+      <batchtest todir="${tests.report.dir}" unless="testcase">
         <fileset dir="${build.dir.tests}">
           <include name="**/*Test.class" />
           <exclude name="**/OpenSearchDocumentSourceByPageIncrementTest.class" 
@@ -331,6 +331,10 @@
           <exclude name="org/carrot2/source/yahoo/*Test.class" 
             unless="yahooapi.tests.enabled" />
         </fileset>
+      </batchtest>
+
+      <batchtest todir="${tests.report.dir}" if="testcase">
+        <fileset dir="${build.dir.tests}" includes="**/${testcase}.java"/>
       </batchtest>
     </junit>
 
