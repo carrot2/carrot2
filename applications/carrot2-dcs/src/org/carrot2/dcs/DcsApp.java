@@ -146,7 +146,6 @@ public class DcsApp
         try
         {
             server.start();
-            server.join();
         }
         catch (Exception e)
         {

@@ -42,7 +42,6 @@ public class WebApp
         try
         {
             server.start();
-            server.join();
         }
         catch (Exception e)
         {
