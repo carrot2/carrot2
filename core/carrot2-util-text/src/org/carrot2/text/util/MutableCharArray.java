@@ -169,7 +169,7 @@ public final class MutableCharArray implements CharSequence, Cloneable
     /**
      * 
      */
-    public CharSequence subSequence(int start, int end)
+    public MutableCharArray subSequence(int start, int end)
     {
         return new MutableCharArray(buffer, start, end - start);
     }

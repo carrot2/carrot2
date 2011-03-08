@@ -71,4 +71,32 @@ public class CharArrayUtilsTest
         assertFalse(CharArrayUtils.toLowerCase(input2, buffer));
         assertArrayEquals(input2, Arrays.copyOf(buffer, input2.length));
     }
+    
+    @Test
+    public void testToLowerCaseBufferStartLength()
+    {
+        char [] input1 = "xyz ABC efg".toCharArray();
+        char [] buffer = new char [3];
+        
+        assertTrue(CharArrayUtils.toLowerCase(input1, buffer, 4, 3));
+        assertArrayEquals("abc".toCharArray(), buffer);
+    }
+    
+    @Test(expected = AssertionError.class)
+    public void bufferTooSmall()
+    {
+        char [] input1 = "xyz ABC efg".toCharArray();
+        char [] buffer = new char [3];
+        
+        CharArrayUtils.toLowerCase(input1, buffer);
+    }
+    
+    @Test(expected = AssertionError.class)
+    public void wordTooShort()
+    {
+        char [] input1 = "xyz".toCharArray();
+        char [] buffer = new char [3];
+        
+        CharArrayUtils.toLowerCase(input1, buffer, 0, 5);
+    }
 }
