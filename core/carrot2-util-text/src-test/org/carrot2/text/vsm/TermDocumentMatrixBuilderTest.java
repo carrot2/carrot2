@@ -204,6 +204,6 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
             expectedStemToRowIndex.put(expectedTdMatrixStemIndices[i], i);
         }
 
-        assertThat(vsmContext.stemToRowIndex).isEqualTo(expectedStemToRowIndex);
+        assertThat((Object) vsmContext.stemToRowIndex).isEqualTo(expectedStemToRowIndex);
     }
 }
