@@ -2,8 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry exported="true" kind="lib" path="stax-api-1.0.1.jar" sourcepath="org.codehaus.woodstoxsrc.zip"/>
-	<classpathentry exported="true" kind="lib" path="stax2-api-3.0.1.jar" sourcepath="org.codehaus.woodstoxsrc.zip"/>
-	<classpathentry exported="true" kind="lib" path="woodstox-core-asl-4.0.1.jar" sourcepath="org.codehaus.woodstoxsrc.zip"/>
+	<classpathentry exported="true" kind="lib" path="stax2-api-3.1.1.jar" sourcepath="org.codehaus.woodstoxsrc.zip"/>
+	<classpathentry exported="true" kind="lib" path="woodstox-core-asl-4.1.1.jar" sourcepath="org.codehaus.woodstoxsrc.zip"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>
