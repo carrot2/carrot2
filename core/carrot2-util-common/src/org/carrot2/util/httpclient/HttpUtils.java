@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,14 +11,29 @@
 
 package org.carrot2.util.httpclient;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.commons.httpclient.*;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.NameValuePair;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.CoreProtocolPNames;
 import org.carrot2.util.StreamUtils;
+
+import com.google.common.collect.Lists;
 
 /**
  * Various utilities for working with HTTP data streams.
@@ -77,7 +91,7 @@ public class HttpUtils
      *         method.
      */
     public static Response doGET(String url, Collection<NameValuePair> params,
-        Collection<Header> headers) throws HttpException, IOException
+        Collection<Header> headers) throws IOException
     {
         return doGET(url, params, headers, null, null);
     }
@@ -99,12 +113,12 @@ public class HttpUtils
      *         method.
      */
     public static Response doGET(String url, Collection<NameValuePair> params,
-        Collection<Header> headers, String user, String password) throws HttpException,
-        IOException
+        Collection<Header> headers, String user, String password) throws IOException
     {
-        return doGET(url, params, headers, user, password, HttpClientFactory.DEFAULT_TIMEOUT);
+        return doGET(url, params, headers, user, password,
+            HttpClientFactory.DEFAULT_TIMEOUT);
     }
-    
+
     /**
      * Opens a HTTP/1.1 connection to the given URL using the GET method, decompresses
      * compressed response streams, if supported by the server.
@@ -122,48 +136,58 @@ public class HttpUtils
      *         method.
      */
     public static Response doGET(String url, Collection<NameValuePair> params,
-        Collection<Header> headers, String user, String password, int timeout) throws HttpException,
-        IOException
-        {
-        final HttpClient client = HttpClientFactory.getTimeoutingClient(timeout);
-        client.getParams().setVersion(HttpVersion.HTTP_1_1);
+        Collection<Header> headers, String user, String password, int timeout)
+        throws IOException
+    {
+        // TODO: add request/response handlers to process compressed content.
+        // TODO: resign from a custom Response class and return HttpResponse?
 
-        final GetMethod request = new GetMethod();
+        final DefaultHttpClient client = HttpClientFactory.getTimeoutingClient(timeout);
+        client.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
+            HttpVersion.HTTP_1_1);
+
+        final HttpGet request = new HttpGet();
 
         if (user != null && password != null)
         {
-            client.getState().setCredentials(
-                new AuthScope(null, 80, null),
+            client.getCredentialsProvider().setCredentials(new AuthScope(null, 80, null),
                 new UsernamePasswordCredentials(user, password));
-            request.setDoAuthentication(true);
         }
 
         final Response response = new Response();
         try
         {
-            request.setURI(new URI(url, true));
+            if (params == null) 
+                params = Lists.newArrayList();
+            else
+                params = Lists.newArrayList(params);
 
-            if (params != null)
-            {
-                request.setQueryString(params.toArray(new NameValuePair [params.size()]));
-            }
+            URI uri = new URI(url);
+            params.addAll(URLEncodedUtils.parse(uri, "UTF-8"));
 
-            request.setRequestHeader(HttpHeaders.URL_ENCODED);
-            request.setRequestHeader(HttpHeaders.GZIP_ENCODING);
+            uri = URIUtils.createURI(uri.getScheme(), uri.getHost(), uri.getPort(),
+                uri.getPath(),
+                URLEncodedUtils.format(Lists.newArrayList(params), "UTF-8"), null);
+
+            request.setURI(uri);
+
+            request.setHeader(HttpHeaders.URL_ENCODED);
+            request.setHeader(HttpHeaders.GZIP_ENCODING);
             if (headers != null)
             {
                 for (Header header : headers)
-                    request.setRequestHeader(header);
+                    request.setHeader(header);
             }
 
             org.slf4j.LoggerFactory.getLogger(HttpUtils.class).debug(
                 "GET: " + request.getURI());
 
-            final int statusCode = client.executeMethod(request);
-            response.status = statusCode;
+            final HttpResponse httpResponse = client.execute(request);
+            response.status = httpResponse.getStatusLine().getStatusCode();
 
-            InputStream stream = request.getResponseBodyAsStream();
-            final Header encoded = request.getResponseHeader("Content-Encoding");
+            HttpEntity entity = httpResponse.getEntity();
+            InputStream stream = entity.getContent();
+            final Header encoded = entity.getContentEncoding();
             if (encoded != null && "gzip".equalsIgnoreCase(encoded.getValue()))
             {
                 stream = new GZIPInputStream(stream);
@@ -174,7 +198,7 @@ public class HttpUtils
                 response.compression = COMPRESSION_NONE;
             }
 
-            final Header [] respHeaders = request.getResponseHeaders();
+            final Header [] respHeaders = httpResponse.getAllHeaders();
             response.headers = new String [respHeaders.length] [];
             for (int i = 0; i < respHeaders.length; i++)
             {
@@ -187,9 +211,13 @@ public class HttpUtils
             response.payload = StreamUtils.readFullyAndClose(stream);
             return response;
         }
+        catch (URISyntaxException e)
+        {
+            throw new IOException(e);
+        }
         finally
         {
-            request.releaseConnection();
+            client.getConnectionManager().shutdown();
         }
     }
 }

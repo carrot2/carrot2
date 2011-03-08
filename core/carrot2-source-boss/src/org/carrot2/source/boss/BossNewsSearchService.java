@@ -14,7 +14,8 @@ package org.carrot2.source.boss;
 
 import java.util.ArrayList;
 
-import org.apache.commons.httpclient.NameValuePair;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
@@ -71,7 +72,7 @@ public final class BossNewsSearchService extends BossSearchService
 
         if (age > 0)
         {
-            params.add(new NameValuePair("age", age + "d"));
+            params.add(new BasicNameValuePair("age", age + "d"));
         }
 
         return params;

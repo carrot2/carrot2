@@ -2,11 +2,17 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="src" path="examples/java/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.kohsuke.args4j"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.mortbay.jetty"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-component-suites"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.1.jar"/>
+	<classpathentry kind="lib" path="examples/java/lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="examples/java/lib/jersey-client-1.0.2.jar"/>
+	<classpathentry kind="lib" path="examples/java/lib/jersey-core-1.0.2.jar"/>
+	<classpathentry kind="lib" path="examples/java/lib/jersey-multipart-1.0.2.jar"/>
+	<classpathentry kind="lib" path="examples/java/lib/jsr311-api-1.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/javax.servlet"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.simpleframework.xml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.gargoylesoftware.htmlunit"/>

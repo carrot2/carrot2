@@ -14,7 +14,8 @@ package org.carrot2.source.yahoo;
 
 import java.util.ArrayList;
 
-import org.apache.commons.httpclient.NameValuePair;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
@@ -101,27 +102,27 @@ public final class YahooWebSearchService extends YahooSearchService
     {
         final ArrayList<NameValuePair> params = new ArrayList<NameValuePair>(10);
 
-        params.add(new NameValuePair("query", query));
-        params.add(new NameValuePair("start", Integer.toString(start)));
-        params.add(new NameValuePair("results", Integer.toString(results)));
+        params.add(new BasicNameValuePair("query", query));
+        params.add(new BasicNameValuePair("start", Integer.toString(start)));
+        params.add(new BasicNameValuePair("results", Integer.toString(results)));
 
-        params.add(new NameValuePair("appid", appid));
+        params.add(new BasicNameValuePair("appid", appid));
 
         if (country != null)
         {
-            params.add(new NameValuePair("country", country));
+            params.add(new BasicNameValuePair("country", country));
         }
         if (site != null)
         {
-            params.add(new NameValuePair("site", site));
+            params.add(new BasicNameValuePair("site", site));
         }
         if (region != null)
         {
-            params.add(new NameValuePair("region", region));
+            params.add(new BasicNameValuePair("region", region));
         }
         if (type != null)
         {
-            params.add(new NameValuePair("type", type.getApiOption()));
+            params.add(new BasicNameValuePair("type", type.getApiOption()));
         }
 
         return params;

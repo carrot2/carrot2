@@ -18,8 +18,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.NameValuePair;
+import org.apache.http.Header;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
@@ -130,13 +132,15 @@ public class GoogleDocumentSource extends MultipageSearchEngine
                 final SearchEngineResponse response = new SearchEngineResponse();
                 final NameValuePair [] queryParams = new NameValuePair []
                 {
-                    new NameValuePair("v", "1.0"), new NameValuePair("rsz", "large"),
-                    new NameValuePair("start", Integer.toString(bucket.start)),
-                    new NameValuePair("key", apiKey), new NameValuePair("q", query),
+                    new BasicNameValuePair("v", "1.0"), 
+                    new BasicNameValuePair("rsz", "large"),
+                    new BasicNameValuePair("start", Integer.toString(bucket.start)),
+                    new BasicNameValuePair("key", apiKey), 
+                    new BasicNameValuePair("q", query),
                 };
                 final Header [] headers = new Header []
                 {
-                    new Header("Referer", referer),
+                    new BasicHeader("Referer", referer),
                 };
 
                 final HttpUtils.Response httpResp = HttpUtils.doGET(serviceUrl, Arrays

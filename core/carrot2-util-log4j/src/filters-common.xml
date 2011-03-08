@@ -13,8 +13,11 @@
 <!-- Apache commons -->
 <logger name="org.apache.commons"><level value="warn"/></logger>
 
-<!-- Apache HTTP client -->
+<!-- Apache HTTPClient -->
 <logger name="httpclient"><level value="warn"/></logger>
+
+<!-- Apache HTTP components' client -->
+<logger name="org.apache.http"><level value="warn"/></logger>
 
 <!-- JETTY -->
 <logger name="org.mortbay"><level value="warn"/></logger>

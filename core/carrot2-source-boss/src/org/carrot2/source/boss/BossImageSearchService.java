@@ -14,7 +14,8 @@ package org.carrot2.source.boss;
 
 import java.util.ArrayList;
 
-import org.apache.commons.httpclient.NameValuePair;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
@@ -94,11 +95,11 @@ public final class BossImageSearchService extends BossSearchService
     {
         final ArrayList<NameValuePair> params = new ArrayList<NameValuePair>(10);
 
-        params.add(new NameValuePair("filter", filter ? "yes" : "no"));
+        params.add(new BasicNameValuePair("filter", filter ? "yes" : "no"));
 
         if (dimensions != null)
         {
-            params.add(new NameValuePair("dimensions", dimensions.parameterValue));
+            params.add(new BasicNameValuePair("dimensions", dimensions.parameterValue));
         }
 
         return params;

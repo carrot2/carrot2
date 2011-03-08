@@ -17,7 +17,7 @@ import java.util.List;
 
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.httpclient.HttpStatus;
+import org.apache.http.HttpStatus;
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.source.SearchEngineResponse;

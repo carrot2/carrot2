@@ -12,48 +12,60 @@
 
 package org.carrot2.dcs;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
-import java.util.*;
+import java.nio.charset.Charset;
+import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.multipart.*;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 /**
  * HTTP POST provider using Apache HTTP client.
  */
 public class HttpClientPostProvider implements IHttpMultipartPostProvider
 {
+    private final static Charset UTF8 = Charset.forName("UTF-8");
+
     public InputStream post(URI dcsURI, Map<String, String> attributes)
         throws IOException
     {
-        final HttpClient client = new HttpClient();
-        final PostMethod post = new PostMethod(dcsURI.toString());
-        final List<Part> parts = new ArrayList<Part>();
+        final HttpClient client = new DefaultHttpClient();
+        final HttpPost post = new HttpPost(dcsURI);
+
+        final MultipartEntity body = new MultipartEntity(
+            HttpMultipartMode.STRICT, null, UTF8);
+
         for (Map.Entry<String, String> entry : attributes.entrySet())
         {
-            parts.add(new StringPart(entry.getKey(), entry.getValue()));
+            body.addPart(entry.getKey(), new StringBody(entry.getValue(), UTF8));
         }
-        post.setRequestEntity(new MultipartRequestEntity(parts.toArray(new Part [parts
-            .size()]), post.getParams()));
+        post.setEntity(body);
 
         try
         {
-            if (client.executeMethod(post) != HttpStatus.SC_OK)
+            HttpResponse response = client.execute(post);
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
             {
-                throw new IOException("Unexpected DCS response: " + post.getStatusCode()
-                    + ": " + post.getStatusText());
+                throw new IOException("Unexpected DCS response: " 
+                    + response.getStatusLine());
             }
-            
-            final byte [] body = StreamUtils.readFullyAndClose(
-                post.getResponseBodyAsStream());
-            return new ByteArrayInputStream(body);
+
+            final byte [] responseBody = StreamUtils.readFullyAndClose(
+                response.getEntity().getContent());
+            return new ByteArrayInputStream(responseBody);
         }
         finally
         {
-            post.releaseConnection();
+            client.getConnectionManager().shutdown();
         }
     }
 

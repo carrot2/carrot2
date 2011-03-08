@@ -12,8 +12,13 @@
 
 package org.carrot2.util.httpclient;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpHost;
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.impl.NoConnectionReuseStrategy;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.CoreConnectionPNames;
 
 /**
  * Prepare instances of {@link HttpClient} with desired socket configuration settings.
@@ -49,18 +54,18 @@ public final class HttpClientFactory
      * @return Returns a client with sockets configured to timeout after some sensible
      *         time.
      */
-    public static HttpClient getTimeoutingClient(int timeout)
+    public static DefaultHttpClient getTimeoutingClient(int timeout)
     {
-        final HttpClient httpClient = new HttpClient(new SingleHttpConnectionManager());
+        final DefaultHttpClient httpClient = new DefaultHttpClient();
 
         configureProxy(httpClient);
 
-        // Setup default timeouts.
-        httpClient.getParams().setSoTimeout(timeout);
-        httpClient.getParams().setIntParameter("http.connection.timeout", timeout);
+        // Setup defaults.
+        httpClient.setReuseStrategy(new NoConnectionReuseStrategy());
 
-        // Not important (single http connection manager), but anyway.
-        httpClient.getParams().setConnectionManagerTimeout(timeout);
+        httpClient.getParams().setIntParameter(CoreConnectionPNames.SO_TIMEOUT, timeout);
+        httpClient.getParams().setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, timeout);
+        httpClient.getParams().setIntParameter(CoreConnectionPNames.SO_LINGER, 0);
 
         return httpClient;
     }
@@ -78,7 +83,8 @@ public final class HttpClientFactory
             try
             {
                 final int port = Integer.parseInt(proxyPort);
-                httpClient.getHostConfiguration().setProxy(proxyHost, port);
+                httpClient.getParams().setParameter(
+                    ConnRoutePNames.DEFAULT_PROXY, new HttpHost(proxyHost, port));
             }
             catch (NumberFormatException e)
             {

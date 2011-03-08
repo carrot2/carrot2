@@ -188,7 +188,7 @@ final class Examples
     /**
      * Display a single cluster and its sub-clusters.
      */
-    @SuppressWarnings({"unused", "unchecked"})
+    @SuppressWarnings({"unchecked"})
     private static void display(Element group, int level)
     {
         final int recursiveDocumentCount = Integer.parseInt(group.attribute("size").getValue());

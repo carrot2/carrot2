@@ -12,13 +12,18 @@
 
 package org.carrot2.workbench.vis;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
@@ -260,23 +265,24 @@ public abstract class FlashViewPage extends Page
     /**
      * Construct a HTTP GET. 
      */
-    private String createGetURI(String uri, Map<String, Object> customParams)
+    private String createGetURI(String uriString, Map<String, Object> customParams)
     {
-        GetMethod m = new GetMethod(uri);
-        NameValuePair [] pairs = new NameValuePair [customParams.size()];
-        
-        int i = 0;
-        for (Map.Entry<String, Object> e : customParams.entrySet())
-        {
-            pairs[i++] = new NameValuePair(e.getKey(), e.getValue().toString());
-        }
-        m.setQueryString(pairs);
-
         try
         {
-            return m.getURI().toString();
+            List<NameValuePair> pairs = Lists.newArrayList();
+            for (Map.Entry<String, Object> e : customParams.entrySet())
+            {
+                pairs.add(new BasicNameValuePair(e.getKey(), e.getValue().toString()));
+            }
+
+            URI uri = new URI(uriString);
+            uri = URIUtils.createURI(uri.getScheme(), uri.getHost(), uri.getPort(),
+                uri.getPath(),
+                URLEncodedUtils.format(pairs, "UTF-8"), null);
+
+            return uri.toString();
         }
-        catch (URIException e)
+        catch (URISyntaxException e)
         {
             throw new RuntimeException(e);
         }

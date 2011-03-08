@@ -11,6 +11,7 @@ Export-Package: org.carrot2.util,
  org.carrot2.util.resource,
  org.carrot2.util.xslt
 Require-Bundle: org.apache.commons;visibility:=reexport,
+ org.apache.http;bundle-version="4.1.0";visibility:=reexport,
  com.google.guava;visibility:=reexport,
  org.simpleframework.xml;visibility:=reexport,
  org.fest;resolution:=optional;visibility:=reexport,

@@ -18,7 +18,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.apache.commons.httpclient.*;
+import org.apache.http.Header;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.attribute.*;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
@@ -392,18 +395,18 @@ public abstract class BossSearchService
         results = Math.min(results, metadata.resultsPerPage);
 
         final ArrayList<NameValuePair> params = createRequestParams(query, start, results);
-        params.add(new NameValuePair("appid", appid));
-        params.add(new NameValuePair("start", Integer.toString(start)));
-        params.add(new NameValuePair("count", Integer.toString(results)));
-        params.add(new NameValuePair("format", "xml"));
-        params.add(new NameValuePair("sites", sites));
+        params.add(new BasicNameValuePair("appid", appid));
+        params.add(new BasicNameValuePair("start", Integer.toString(start)));
+        params.add(new BasicNameValuePair("count", Integer.toString(results)));
+        params.add(new BasicNameValuePair("format", "xml"));
+        params.add(new BasicNameValuePair("sites", sites));
 
         if (languageAndRegion != null)
         {
             try
             {
-                params.add(new NameValuePair("lang", languageAndRegion.langCode));
-                params.add(new NameValuePair("region", languageAndRegion.regionCode));
+                params.add(new BasicNameValuePair("lang", languageAndRegion.langCode));
+                params.add(new BasicNameValuePair("region", languageAndRegion.regionCode));
             }
             catch (IllegalArgumentException e)
             {
@@ -412,7 +415,7 @@ public abstract class BossSearchService
         }
 
         final String serviceURI = substituteAttributes(
-            getServiceURI(), new NameValuePair("query", query));
+            getServiceURI(), new BasicNameValuePair("query", query));
 
         final HttpUtils.Response response = HttpUtils.doGET(serviceURI, params, Arrays
             .asList(new Header []
