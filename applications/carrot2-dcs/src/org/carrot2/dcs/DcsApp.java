@@ -13,12 +13,14 @@
 package org.carrot2.dcs;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.kohsuke.args4j.*;
-import org.mortbay.component.LifeCycle;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.webapp.WebAppContext;
-import org.mortbay.thread.QueuedThreadPool;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.util.component.LifeCycle;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 
 /**
@@ -26,6 +28,11 @@ import org.slf4j.Logger;
  */
 public class DcsApp
 {
+    /**
+     * Is this the absolute minimum required for Jetty to run? 
+     */
+    private final static int MIN_THREADS = 8;
+
     /**
      * DCS logger. Tests attach to this logger's LOG4J appender.
      */
@@ -45,8 +52,8 @@ public class DcsApp
     int acceptQueue = 20;
 
     @Option(name = "--threads", required = false, 
-        usage = "Maximum number of processing threads (default 4).")
-    int maxThreads = 4;
+        usage = "Maximum number of processing threads (default " + MIN_THREADS + ").")
+    int maxThreads = MIN_THREADS;
 
     String appName;
     Server server;
@@ -75,25 +82,22 @@ public class DcsApp
 
     void start(String webPathPrefix) throws Exception
     {
-        System.setProperty("org.mortbay.log.class", Log4jJettyLog.class.getName());
-
         log.info("Starting DCS...");
+
+        // http://issues.carrot2.org/browse/CARROT-581
+        if (maxThreads < MIN_THREADS)
+        {
+            throw new IllegalArgumentException("Max number of threads must be greater than "
+                + MIN_THREADS);
+        }
 
         server = new Server();
         SelectChannelConnector connector = new SelectChannelConnector();
         connector.setPort(port);
         connector.setReuseAddress(false);
         connector.setAcceptQueueSize(acceptQueue);
+        connector.setThreadPool(new QueuedThreadPool(maxThreads));
         server.addConnector(connector);
-
-        // http://issues.carrot2.org/browse/CARROT-581
-        if (maxThreads < 2)
-        {
-            throw new IllegalArgumentException("Max number of threads must be greater than 1.");
-        }
-
-        final QueuedThreadPool tp = new QueuedThreadPool(maxThreads);
-        server.setThreadPool(tp);
 
         WebAppContext wac = new WebAppContext();
         wac.setContextPath("/");
@@ -143,6 +147,7 @@ public class DcsApp
         try
         {
             server.start();
+            server.join();
         }
         catch (Exception e)
         {
