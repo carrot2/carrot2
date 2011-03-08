@@ -12,7 +12,6 @@
 
 package org.carrot2.dcs;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.util.component.LifeCycle;
@@ -199,7 +198,8 @@ public class DcsApp
         }
         catch (Exception e)
         {
-            dcs.log.error("Startup failure: " + ExceptionUtils.getMessage(e));
+            dcs.log.error("Startup failure: " + 
+                e.getClass().getSimpleName() + ": " + e.getMessage());
         }
     }
 }
