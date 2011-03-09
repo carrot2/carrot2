@@ -305,5 +305,11 @@
 
   <target name="basedir.check">
     <basedir-check main-basedir="${basedir}" internal-basedir="${carrot2.webapp.basedir}" />
+    <fail>
+        Webtests won't work with ANT >= 1.8.
+        <condition>
+            <antversion atleast="1.8" />
+        </condition>
+    </fail>
   </target>
 </project>
