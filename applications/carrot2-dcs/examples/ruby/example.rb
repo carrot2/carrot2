@@ -7,6 +7,7 @@
 #  gem install httpclient
 #
 
+require 'rubygems'
 require 'httpclient'
 require 'json'
 
