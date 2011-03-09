@@ -903,7 +903,7 @@
   </target>
 
   <target name="workbench.dist" depends="workbench.plugins.gather" description="Compile Workbench (ZIPs).">
-    <fail unless="dist.dir">Define: dist.dir property.</fail>
+    <property name="dist.dir" location="${tmp.dir}" />
 
     <pde.build
         build.dir="${workbench.build.dir}/build" 
