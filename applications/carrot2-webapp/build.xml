@@ -96,7 +96,7 @@
   <!--
        Performs a quick smoketest of the webapp WAR.
     -->
-  <target name="carrot2.webapp.webtest.war" depends="basedir.check, carrot2.webapp.build, carrot2.common.webtest.war.prepare"
+  <target name="carrot2.webapp.webtest.war" depends="basedir.check, carrot2.webapp.build, carrot2.common.webtest.war.prepare, antversion.check"
           if="webtest.war.resources.available">
     <webtest-war cargo.tmp.dir="tmp/cargo"
                  war.path="${webapp.dir}/${war.name.base}.war"
@@ -105,7 +105,7 @@
                  webtest.report.dir="${webtest.report.dir}" />
   </target>
 
-  <target name="carrot2.webapp.webtest.localhost" depends="basedir.check, carrot2.common.webtest.deployed.check"> 
+  <target name="carrot2.webapp.webtest.localhost" depends="basedir.check, carrot2.common.webtest.deployed.check, antversion.check"> 
     <webtest-deployed webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
                       webtest.report.dir="${webtest.report.dir}" 
                       webtest.basepath="/" />
@@ -303,13 +303,16 @@
           out="tmp/startup.html" />
   </target>
 
-  <target name="basedir.check">
-    <basedir-check main-basedir="${basedir}" internal-basedir="${carrot2.webapp.basedir}" />
+  <target name="antversion.check">
     <fail>
         Webtests won't work with ANT >= 1.8.
         <condition>
             <antversion atleast="1.8" />
         </condition>
-    </fail>
+    </fail>   
+  </target>
+
+  <target name="basedir.check">
+    <basedir-check main-basedir="${basedir}" internal-basedir="${carrot2.webapp.basedir}" />
   </target>
 </project>
