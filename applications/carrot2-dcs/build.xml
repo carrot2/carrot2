@@ -95,16 +95,6 @@
       </fileset>
     </copy>
 
-    <copy todir="${dcs.dir}/examples/java/lib" flatten="true">
-      <fileset dir="${carrot2.master.basedir}/lib">
-        <include name="**/jcl-over-slf4j-*.jar" />
-      	<include name="**/slf4j-api-*.jar" />
-      	<include name="**/slf4j-nop-*.jar" />
-        <include name="**/commons-codec*.*" />
-        <include name="**/commons-httpclient*.*" />
-      </fileset>
-    </copy>
-      
     <delete dir="${dcs.dir}/classes" />
   </target>
 
