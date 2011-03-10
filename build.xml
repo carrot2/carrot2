@@ -785,7 +785,13 @@
   <!--
       Deploy Maven artefacts to SonaType (requires proper sonatype server config in ~/.m2/settings.xml!).
     -->
-  <target name="maven.deploy" depends="maven, carrot2.maven.deploy" description="Deploy Maven artifacts to SonaType">
+  <target name="maven.deploy" depends="maven, carrot2.maven.deploy" description="Stages Maven release (SonaType)">
+  </target>
+
+  <!--
+      Deploy Maven artefacts to SonaType (requires proper sonatype server config in ~/.m2/settings.xml!).
+    -->
+  <target name="maven.snapshot" depends="maven, carrot2.maven.snapshot" description="Pushes Maven snapshot (SonaType)">
   </target>
 
   <!-- 

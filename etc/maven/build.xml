@@ -49,6 +49,12 @@
         </exec>
     </target>
 
+    <target name="snapshot" depends="check.maven, filter.poms">
+        <exec executable="mvn" failonerror="true" vmlauncher="false" dir="${poms.dir}">
+            <arg line="clean deploy" />
+        </exec>
+    </target>
+
     <target name="default">
         <echo>This build file is part of the master build file. Do not run separately.</echo>
     </target>   
