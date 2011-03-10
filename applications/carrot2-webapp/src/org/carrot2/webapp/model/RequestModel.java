@@ -31,7 +31,7 @@ import org.simpleframework.xml.ElementMap;
 public class RequestModel
 {
     @Input
-    @Attribute(key = WebappConfig.DEFAULT_SKIN_PARAM)
+    @Attribute(key = WebappConfig.SKIN_PARAM)
     @org.simpleframework.xml.Attribute
     public String skin;
 
@@ -56,21 +56,21 @@ public class RequestModel
     public int results;
 
     @Input
-    @Attribute(key = WebappConfig.DEFAULT_SOURCE_PARAM)
+    @Attribute(key = WebappConfig.SOURCE_PARAM)
     @org.simpleframework.xml.Attribute
     public String source;
 
     @Input
-    @Attribute(key = WebappConfig.DEFAULT_ALGORITHM_PARAM)
+    @Attribute(key = WebappConfig.ALGORITHM_PARAM)
     @org.simpleframework.xml.Attribute
     public String algorithm;
 
     @Input
-    @Attribute(key = WebappConfig.DEFAULT_TYPE_PARAM)
+    @Attribute(key = WebappConfig.TYPE_PARAM)
     public RequestType type;
 
     @Input
-    @Attribute(key = WebappConfig.DEFAULT_VIEW_PARAM)
+    @Attribute(key = WebappConfig.VIEW_PARAM)
     @org.simpleframework.xml.Attribute
     public String view;
 
