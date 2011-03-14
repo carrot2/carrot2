@@ -397,8 +397,10 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             Collections.sort(clusters, new Comparator<Cluster>() {
                 public int compare(Cluster c1, Cluster c2)
                 {
-                    if (c1.isOtherTopics()) return 1;
-                    if (c2.isOtherTopics()) return -1;
+                    if (c1.isOtherTopics() != c2.isOtherTopics())
+                    {
+                        return c1.isOtherTopics() ? 1 : -1;
+                    }
                     if (c1.getScore() < c2.getScore()) return 1;
                     if (c1.getScore() > c2.getScore()) return -1;
                     if (c1.size() < c2.size()) return 1;
