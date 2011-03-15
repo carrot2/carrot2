@@ -82,6 +82,12 @@ public class BatchApp
         "--output-documents"
     }, required = false, usage = "Copies input documents on output")
     boolean outputDocuments = false;
+    
+    @Option(name = "-t", aliases =
+    {
+        "--output-attributes"
+    }, required = false, usage = "Copies attribute values on ouput")
+    boolean outputAttributes = false;
 
     @Option(name = "-a", aliases =
     {
@@ -299,12 +305,12 @@ public class BatchApp
                 if (Format.JSON.equals(outputFormat))
                 {
                     Writer w = new OutputStreamWriter(stream, "UTF-8");
-                    result.serializeJson(w, null, outputDocuments, true);
+                    result.serializeJson(w, null, outputDocuments, true, outputAttributes);
                     w.flush();
                 }
                 else
                 {
-                    result.serialize(stream, outputDocuments, true);
+                    result.serialize(stream, outputDocuments, true, outputAttributes);
                 }
             }
             finally
