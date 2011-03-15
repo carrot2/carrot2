@@ -303,12 +303,14 @@ class Carrot2Result
    private $documents;
    private $clusters;
    private $attributes;
+   private $xml;
 
-   public function __construct($documents = array(), $clusters = array(), $attributes = array())
+   public function __construct($documents = array(), $clusters = array(), $attributes = array(), $xml = null)
    {
       $this->documents = $documents;
       $this->clusters = $clusters;
       $this->attributes = $attributes;
+      $this->xml = $xml;
    }
 
    /**
@@ -336,6 +338,14 @@ class Carrot2Result
    public function getAttributes()
    {
       return $this->attributes;
+   }
+
+   /**
+    * Returns the raw XML response received from the DCS.
+    */
+   public function getXml()
+   {
+      return $this->xml;
    }
 }
 
@@ -430,15 +440,13 @@ class Carrot2Processor
   /**
    * Extracts Carrot2Results from the XML response.
    */
-  private function extractResponse($xml)
+  private function extractResponse($rawXml)
   {
-    if (!($xml instanceof SimpleXMLElement)) {
-      $xml = new SimpleXMLElement($xml);
-    }
-
+    $xml = new SimpleXMLElement($rawXml);
     return new Carrot2Result($this->extractDocuments($xml), 
                              $this->extractClusters($xml->xpath('/searchresult/group')),
-                             $this->extractAttributes($xml->xpath('/searchresult/attribute')));
+                             $this->extractAttributes($xml->xpath('/searchresult/attribute')),
+                             $rawXml);
   }
 
   private function extractDocuments($xml)

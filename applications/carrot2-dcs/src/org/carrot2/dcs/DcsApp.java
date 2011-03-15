@@ -132,6 +132,11 @@ public class DcsApp
             // Run from the provided web dir
             wac.setWar(webPathPrefix != null ? webPathPrefix + "/web" : "web");
             wac.setClassLoader(Thread.currentThread().getContextClassLoader());
+            
+            /*
+             * Allow context classloader resource loading.
+             */
+            System.setProperty(RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR, "true");
         }
 
         if (System.getProperty("dcs.development.mode") != null)
