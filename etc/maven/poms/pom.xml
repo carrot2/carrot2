@@ -154,10 +154,61 @@
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>1.5</version>
         </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.6</version>
+          <configuration>
+            <target>
+              <taskdef name="retrotranslator"
+                classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
+                classpathref="maven.plugin.classpath" />
+
+              <retrotranslator verbose="false" verify="false"
+                failonwarning="true" target="1.5" embed="org.carrot2.backport"
+                destjar="${project.build.directory}/${project.build.finalName}-jdk15.jar">
+
+                <jarfileset dir="${project.build.directory}"
+                  includes="${project.build.finalName}.jar" />
+
+                <classpath>
+                  <pathelement location="${basedir}/../backport" />
+                </classpath>
+                <classpath refid="maven.plugin.classpath" />
+                <classpath>
+                  <fileset dir="${java.home}/lib" includes="rt.jar" />
+                </classpath>
+              </retrotranslator>
+
+              <attachartifact
+                file="${project.build.directory}/${project.build.finalName}-jdk15.jar"
+                classifier="jdk15" type="jar" />
+            </target>
+          </configuration>
+
+          <dependencies>
+            <dependency>
+              <groupId>net.sf.retrotranslator</groupId>
+              <artifactId>retrotranslator-transformer</artifactId>
+              <version>1.2.9</version>
+            </dependency>
+            <dependency>
+              <groupId>net.sf.retrotranslator</groupId>
+              <artifactId>retrotranslator-runtime</artifactId>
+              <version>1.2.9</version>
+            </dependency>
+            <dependency>
+              <groupId>backport-util-concurrent</groupId>
+              <artifactId>backport-util-concurrent</artifactId>
+              <version>3.1</version>
+            </dependency>
+          </dependencies>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
-  
+
   <profiles>
     <profile>
       <id>sonatype</id>
