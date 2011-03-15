@@ -1,8 +1,15 @@
-# we need the same value in a property with a unique name for website build
-carrot2.version.stable=3.4.3
-carrot2.version=${carrot2.version.stable}
-carrot2.version.maven=3.4.3
-carrot2.net.version=3.4.3.0
 
-# workbench plugin/ feature versions.
-carrot2.version.workbench=3.4.3
+# Used in the website only, assign when a stable release is made.
+# carrot2.version.stable=x.y.z
+
+# Main release version number. -dev for work-in-progress.
+carrot2.version           = 3.4.4-dev
+
+# Maven release number. -SNAPSHOT for work in progress.
+carrot2.version.maven     = 3.4.4-SNAPSHOT
+
+# C#/.NET release. No work-in-progress indicator.
+carrot2.net.version       = 3.4.4.0
+
+# Workbench (OSGI) plugins/ features. No work-in-progress indicator.
+carrot2.version.workbench = 3.4.4
