@@ -45,14 +45,13 @@ class SubstringComparator implements Comparator<Substring>, Serializable
 
         final int s2Length = s2To - s2From;
         final int s1Length = s1To - s1From;
-        final int n = (s2Length < s1Length ? s2Length : s1Length);
-
         if (s1Length != s2Length)
         {
             return s1Length - s2Length;
         }
 
-        for (int i = 0; i < n; i++)
+        assert s1Length == s2Length;
+        for (int i = 0; i < s1Length; i++)
         {
             final int stemIndex1 = wordsStemIndex[tokensWordIndex[s1From + i]];
             final int stemIndex2 = wordsStemIndex[tokensWordIndex[s2From + i]];
@@ -62,7 +61,7 @@ class SubstringComparator implements Comparator<Substring>, Serializable
             }
         }
 
-        // If the substrings are equal in the inflection-insensitive way, return anything.
-        return -1;
+        // If the substrings are equal in the inflection-insensitive way, return 0 (equivalence class).
+        return 0;
     }
 }
