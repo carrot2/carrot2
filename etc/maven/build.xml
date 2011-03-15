@@ -38,17 +38,13 @@
     </target>
 
     <target name="install" depends="check.maven, filter.poms">
-        <fail unless="java15.home">You must specify java15.home to produce 1.5-compatible JARs.</fail>
     	<exec executable="mvn" failonerror="true" vmlauncher="false" dir="${poms.dir}">
-	    <arg value="-Djava15.home=${java15.home}" />
     	    <arg line="clean install" />
     	</exec>
     </target>
 
     <target name="deploy" depends="check.maven, filter.poms">
-        <fail unless="java15.home">You must specify java15.home to produce 1.5-compatible JARs.</fail>
         <exec executable="mvn" failonerror="true" vmlauncher="false" dir="${poms.dir}">
-	    <arg value="-Djava15.home=${java15.home}" />
             <arg line="-Psonatype -Dgpg.passphrase= clean install deploy" />
         </exec>
     </target>

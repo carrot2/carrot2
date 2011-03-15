@@ -161,13 +161,11 @@
           <version>1.6</version>
           <configuration>
             <target>
-              <fail unless="java15.home">You must define java15.home property for backporting Carrot2 JAR.</fail>
               <taskdef name="retrotranslator"
                 classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
                 classpathref="maven.plugin.classpath" />
 
-	      <mkdir dir="${project.build.directory}/classes" />
-              <retrotranslator verbose="false" verify="true"
+              <retrotranslator verbose="false" verify="false"
                 failonwarning="true" target="1.5" embed="org.carrot2.backport"
                 destjar="${project.build.directory}/${project.build.finalName}-jdk15.jar">
 
@@ -178,9 +176,8 @@
                   <pathelement location="${basedir}/../backport" />
                 </classpath>
                 <classpath refid="maven.plugin.classpath" />
-                <classpath refid="maven.runtime.classpath" />
                 <classpath>
-                  <fileset dir="${java15.home}/lib" includes="rt.jar" />
+                  <fileset dir="${java.home}/lib" includes="rt.jar" />
                 </classpath>
               </retrotranslator>
 
@@ -206,18 +203,6 @@
               <artifactId>backport-util-concurrent</artifactId>
               <version>3.1</version>
             </dependency>
-	    
-	    <!-- Required for backport verification. -->
-            <dependency>
-              <groupId>javax.servlet</groupId>
-              <artifactId>servlet-api</artifactId>
-              <version>2.5</version>
-            </dependency>	    
-	    <dependency>
-		<groupId>javax.xml.parsers</groupId>
-		<artifactId>jaxp-api</artifactId>
-		<version>1.4.2</version>
-	    </dependency>
           </dependencies>
         </plugin>
       </plugins>
