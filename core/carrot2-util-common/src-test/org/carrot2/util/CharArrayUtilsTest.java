@@ -17,6 +17,7 @@ import static org.carrot2.util.CharArrayUtils.*;
 
 import java.util.Arrays;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class CharArrayUtilsTest
@@ -82,6 +83,7 @@ public class CharArrayUtilsTest
         assertArrayEquals("abc".toCharArray(), buffer);
     }
     
+    @Ignore // We don't compile with assertions on .NET.
     @Test(expected = AssertionError.class)
     public void bufferTooSmall()
     {
@@ -91,6 +93,7 @@ public class CharArrayUtilsTest
         CharArrayUtils.toLowerCase(input1, buffer);
     }
     
+    @Ignore // We don't compile with assertions on .NET.
     @Test(expected = AssertionError.class)
     public void wordTooShort()
     {
