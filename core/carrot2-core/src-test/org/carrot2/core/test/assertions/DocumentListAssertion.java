@@ -18,23 +18,15 @@ import static org.fest.assertions.Assertions.assertThat;
 import java.util.List;
 
 import org.carrot2.core.Document;
-import org.fest.assertions.AssertExtension;
-import org.fest.assertions.Assertions;
 
 /**
  * Assertions on lists of {@link Document}s.
  */
-public class DocumentListAssertion implements AssertExtension
+public class DocumentListAssertion extends GenericListAssertion<DocumentListAssertion, Document>
 {
-    /** The actual list of documents */
-    private final List<Document> actualDocumentList;
-
-    /** Description for this assertion */
-    private String description;
-
     DocumentListAssertion(List<Document> actualDocumentList)
     {
-        this.actualDocumentList = actualDocumentList;
+        super(DocumentListAssertion.class, actualDocumentList);
     }
 
     /**
@@ -48,10 +40,10 @@ public class DocumentListAssertion implements AssertExtension
      */
     public DocumentListAssertion isEquivalentTo(List<Document> expectedDocumentList)
     {
-        assertThat(actualDocumentList).hasSize(expectedDocumentList.size());
-        for (int i = 0; i < actualDocumentList.size(); i++)
+        assertThat(actual).hasSize(expectedDocumentList.size());
+        for (int i = 0; i < actual.size(); i++)
         {
-            assertThat(actualDocumentList.get(i)).as(description + ", document: " + i)
+            assertThat(actual.get(i)).as(description() + ", document: " + i)
                 .isEquivalentTo(expectedDocumentList.get(i));
         }
         return this;
@@ -68,31 +60,10 @@ public class DocumentListAssertion implements AssertExtension
     {
         for (int i = 0; i < documents.size(); i++)
         {
-            assertThat(actualDocumentList.contains(documents.get(i))).as(
-                description + ", contains document: " + i + ", title: "
+            assertThat(actual.contains(documents.get(i))).as(
+                description() + ", contains document: " + i + ", title: "
                     + documents.get(i).getTitle()).isTrue();
         }
-        return this;
-    }
-
-    /**
-     * Asserts that the document list has the provided size.
-     * 
-     * @param expectedSize the expected list size
-     * @return this assertion for convenience
-     */
-    public DocumentListAssertion hasSize(int expectedSize)
-    {
-        Assertions.assertThat(actualDocumentList).as(description).hasSize(expectedSize);
-        return this;
-    }
-
-    /**
-     * Provides description for this assertion.
-     */
-    public DocumentListAssertion as(String description)
-    {
-        this.description = description;
         return this;
     }
 }

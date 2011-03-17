@@ -52,7 +52,7 @@ public final class Cluster
     /**
      * Default label for the <i>Other Topics</i> cluster.
      */
-    static final String OTHER_TOPICS_LABEL = "Other Topics";
+    public static final String OTHER_TOPICS_LABEL = "Other Topics";
 
     /**
      * Score of this cluster that indicates the clustering algorithm's beliefs on the
