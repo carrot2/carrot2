@@ -126,7 +126,6 @@
     <exclude name="lib/org.junit4*/**" />
     <exclude name="lib/org.carrot2*/**" />
     <exclude name="lib/org.gargoylesoftware.htmlunit/**" />
-    <exclude name="lib/org.codehaus.woodstox/**" />
     <exclude name="lib/com.thoughtworks.qdox/**" />
     <exclude name="lib/org.apache.velocity/**" />
     <exclude name="lib/com.planetj.compression/**" />

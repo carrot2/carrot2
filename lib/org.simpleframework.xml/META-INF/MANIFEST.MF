@@ -13,7 +13,6 @@ Export-Package: org.simpleframework.xml,
  org.simpleframework.xml.stream,
  org.simpleframework.xml.transform,
  org.simpleframework.xml.util
-Require-Bundle: org.eclipse.core.runtime,
- org.codehaus.woodstox;visibility:=reexport
+Require-Bundle: org.eclipse.core.runtime
 Eclipse-BuddyPolicy: dependent
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
