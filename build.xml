@@ -122,13 +122,15 @@
     <exclude name="lib/**/easymock*" />
     <exclude name="lib/**/fest-*" />
     <exclude name="lib/**/servlet-api-*.jar" />
+    <exclude name="lib/**/jsr305*" />
     <exclude name="lib/org.junit4*/**" />
     <exclude name="lib/org.carrot2*/**" />
     <exclude name="lib/org.gargoylesoftware.htmlunit/**" />
+    <exclude name="lib/org.codehaus.woodstox/**" />
     <exclude name="lib/com.thoughtworks.qdox/**" />
     <exclude name="lib/org.apache.velocity/**" />
     <exclude name="lib/com.planetj.compression/**" />
-    <exclude name="lib/org.mortbay.jetty/**" />
+    <exclude name="lib/org.eclipse.jetty/**" />
     <exclude name="lib/org.kohsuke.args4j/**" />
     <exclude name="lib/org.apache.xml/**" />
     <exclude name="lib/com.google.guava/ri*" />
@@ -150,7 +152,6 @@
     <include name="lib/**/ehcache*" />
     <include name="lib/**/guava*" />
     <include name="lib/**/jackson*" />
-    <include name="lib/**/lucene-core*" />
     <include name="lib/**/lucene-snowball*" />
     <include name="lib/**/lucene.LICENSE" />
     <include name="lib/**/hppc-*.jar" />
@@ -713,10 +714,9 @@
     <mkdir dir="${api.dir}/resources" />
     
     <copy todir="${api.dir}/lib">
-      <fileset dir="${lib.flattened}" />
-      <fileset dir="${carrot2.master.basedir}">
-        <include name="lib/org.apache.xml/*.jar" />
-        <include name="lib/org.apache.xml/*.LICENSE" />
+      <fileset dir="${lib.flattened}">
+        <exclude name="**/commons-io*" />
+        <exclude name="**/commons-collections*" />
       </fileset>
       <mapper type="flatten" />
     </copy>

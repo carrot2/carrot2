@@ -79,6 +79,8 @@
       	<exclude name="**/slf4j-nop-*.jar" />
       	<exclude name="**/carrot2-mini*.jar" />
       	<exclude name="**/carrot2-core-sources*.jar" />
+        <exclude name="**/commons-collections*" />
+        <exclude name="**/commons-io*" />
       </lib>
     </war>
   </target>

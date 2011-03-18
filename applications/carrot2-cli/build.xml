@@ -100,8 +100,6 @@
         <patternset refid="lib.core.mini" />
         <exclude name="lib/**/slf4j-nop*.jar" />
         <include name="lib/**/slf4j-log4j*.jar" />
-        <include name="lib/org.apache.commons/commons-io*.jar" />
-        <include name="lib/org.apache.commons/commons-io*.LICENSE" />
         <include name="lib/org.kohsuke.args4j/args4j*.jar" />
         <include name="lib/org.kohsuke.args4j/args4j*.LICENSE" />
         <include name="lib/org.simpleframework.xml/simple-xml*.jar" />
@@ -110,8 +108,6 @@
         <include name="lib/org.apache.log4j/log4j*.LICENSE" />
         <include name="lib/org.apache.lucene/lucene-smartcn-*.jar" />
         <include name="lib/org.apache.lucene/lucene-analyzers-*.jar" />
-        <include name="lib/org.codehaus.woodstox/*.jar" />
-        <include name="lib/org.codehaus.woodstox/*.LICENSE" />
         <include name="lib/morfologik/*.jar" />
         <include name="lib/morfologik/*.LICENSE" />
       </fileset>
