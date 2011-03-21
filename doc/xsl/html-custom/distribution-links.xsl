@@ -56,7 +56,14 @@
   
   <xsl:template match="product:version"><xsl:value-of select="$product.version" /></xsl:template>
   
+  <xsl:template match="product:version-maven"><xsl:choose>
+      <xsl:when test="contains($product.version, '-dev')"><xsl:value-of select="concat(substring-before($product.version, '-dev'), '-SNAPSHOT')" /></xsl:when>
+      <xsl:otherwise><xsl:value-of select="$product.version" /></xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
   <xsl:template match="d:link[@role = 'javadoc']">
+    <xsl:variable name="linkend-with-hash"><xsl:value-of select="@linkend" /><xsl:if test="not(contains(@linkend, '#'))">#</xsl:if></xsl:variable>
     <xsl:variable name="class-name">
       <xsl:call-template name="from-last-substring">
         <xsl:with-param name="string" select="@linkend" />
@@ -68,7 +75,7 @@
         <xsl:when test="contains(@linkend, '#')">#<xsl:value-of select="substring-after(@linkend, '#')" /></xsl:when>
       </xsl:choose>
     </xsl:variable>
-    <a href="{$carrot2.javadoc.url}/{translate(substring-before(@linkend, '#'), '.$', '/.')}.html{$suffix}"><xsl:value-of select="$class-name" /></a>
+    <a href="{$carrot2.javadoc.url}/{translate(substring-before($linkend-with-hash, '#'), '.$', '/.')}.html{$suffix}"><xsl:value-of select="$class-name" /></a>
   </xsl:template>
   
   <xsl:template name="from-last-substring">

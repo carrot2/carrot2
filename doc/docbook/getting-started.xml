@@ -482,7 +482,7 @@
         </listitem>
       </orderedlist>
     </section>
-    
+
     <section xml:id="section.integration.adding-to-maven-project" role="maven">
       <title>Adding &PROD; dependency to a Maven2 project</title>
       
@@ -500,12 +500,12 @@
 <programlisting><![CDATA[<dependency>
   <groupId>org.carrot2</groupId>
   <artifactId>carrot2-core</artifactId>
-  <version>]]><product:version /><![CDATA[</version>
+  <version>]]><product:version-maven /><![CDATA[</version>
 </dependency>]]></programlisting>
 
           <para>
-            You should peek at the POM file above and enable optional
-            dependencies if required. For example, to enable Polish stemming,
+            You should peek at the POM file above and enable <link linkend="section.getting-started.dependencies">optional
+            dependencies</link> if required. For example, to enable Polish stemming,
             Morfologik should be added to the <tag>dependencies</tag> section of your
             <filename>pom.xml</filename> (version argument should match
             &PROD;'s POM information): 
@@ -736,6 +736,7 @@ C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild ]]>&PROD;<![CDATA[.Example
         example code in PHP, C# and Ruby.
       </para>
     </section>
-
+ 
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="getting-started-dependencies.xml" /> 
   </section>
 </chapter>

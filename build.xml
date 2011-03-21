@@ -128,6 +128,7 @@
     <exclude name="lib/org.gargoylesoftware.htmlunit/**" />
     <exclude name="lib/com.thoughtworks.qdox/**" />
     <exclude name="lib/org.apache.velocity/**" />
+    <exclude name="lib/org.apache.oro/**" />
     <exclude name="lib/com.planetj.compression/**" />
     <exclude name="lib/org.eclipse.jetty/**" />
     <exclude name="lib/org.kohsuke.args4j/**" />
@@ -720,24 +721,23 @@
       <include name="**/jackson*" />
       <include name="**/log4j*" />
       <include name="**/lucene-snowball*" />
-      <include name="**/morfologik-stemming*" />
       <include name="**/simple-xml*" />
       <include name="**/slf4j*" />
       <exclude name="**/slf4j-nop*" />
-      <include name="**/com.carrotsearch.nni/nni*" />
       <include name="**/mahout*" />
       <include name="**/colt.LICENSE" />
     </patternset>
       
     <patternset id="carrot2.optional">
+      <include name="**/morfologik-stemming*" />
       <include name="**/commons-codec*" />
       <include name="org.apache.http/http*" />
       <include name="**/jcl-over-slf4j*" />
       <include name="**/jdom*" />
       <include name="**/lucene*" />
       <exclude name="**/lucene-snowball*" />
-      <include name="**/oro*" />
       <include name="**/rome*" />
+      <include name="**/com.carrotsearch.nni/nni*" />
     </patternset>
     
     <copy todir="${api.dir}/lib/required">
