@@ -209,7 +209,8 @@ body, input, select, label, button {
   -height: expression(document.documentElement.clientHeight - 130);
 }
 
-.visu #documents {
+.circles #documents,
+.foamtree #documents {
   width: expression(document.documentElement.clientWidth - 20 - 675 - 7);
 }
 
@@ -233,6 +234,7 @@ body, input, select, label, button {
 
 
 /** Different panel split for visualization */
-.visu #documents-panel {
+.circles #documents-panel,
+.foamtree #documents-panel {
   -width: expression(document.documentElement.clientWidth - 20 - 677 - 7);
 }

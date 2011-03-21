@@ -454,20 +454,24 @@ input[type=checkbox] {
 }
 
 /** Different panel split for visualization */
-.visu #clusters-panel {
+.circles #clusters-panel,
+.foamtree #clusters-panel {
   width: 658px;
   overflow-y: hidden;
 }
 
-.visu #documents-panel {
+.circles #documents-panel,
+.foamtree #documents-panel {
   left: 675px;
 }
 
-.visu #split-panel {
+.circles #split-panel,
+.foamtree #split-panel {
   left: 668px;
 }
 
-.visu #loading-documents {
+.circles #loading-documents,
+.foamtree #loading-documents {
   left: 671px;
 }
 

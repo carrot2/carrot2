@@ -15,14 +15,26 @@
 
           documentsPanel: "AUTO",
           maxVisibleDocuments: 400,
+          disableLogging: true,
 
           logo: jQuery.visualization.logo
         };
+      if ($.visualization.visualization == 'foamtree') {
+        flashvars["gui_hsv_start"] = "0.8, 0, 0.9, 0.95";
+        flashvars["gui_hsv_end"] = "0.8, 0.83, 0.9, 0.95";
+        flashvars["gui_hsv_text_dark"] = 0xff202020;
+        flashvars["gui_hsv_text_light"] = 0xffe0e0e0;
+      }
+      if ($.visualization.visualization == 'circles') {
+        flashvars["gui_hsv_text_dark"] = 0xd0000000;
+        flashvars["gui_hsv_text_light"] = 0xd0ffffff;
+      }
 
       var params = {};
       var attributes = {};
 
-      swfobject.embedSWF($.visualization.skinPath + "/common-dynamic/swf/com.carrotsearch.visualizations.circles.swf",
+      swfobject.embedSWF($.visualization.skinPath + "/common-dynamic/swf/com.carrotsearch.visualizations." +
+          $.visualization.visualization + ".swf",
           "clusters-visu", "100%", "100%", "10.0.0", $.visualization.skinPath + "/common/swf/expressInstall.swf",
           flashvars, params, attributes);
     }
@@ -77,12 +89,4 @@ function onGroupSelection(clusterId, isSelected, docList) {
 // selection has been cleared
 function selectionCleared() {
   $("#clusters-panel").trigger("carrot2-clusters-selected-top");
-}
-
-// Callback function invoked by the visualization
-function onDocumentSelection(documentId) {
-  // Ignore the click feedback, using flash directly to open a new
-  // browser window (see openDocumentsOnClick above).
-  //
-  // window.open($("#d" + documentId + " a.title").attr("href"));
 }
