@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- Console appender -->
+    <appender name="appender-console" class="org.apache.log4j.ConsoleAppender">
+        <param name="follow" value="true" />
+    
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p %c\: %m%n"/>
+        </layout>
+    </appender>
+
+    <!-- Root logger -->
+    <root>
+        <priority value="warn" />
+        <appender-ref ref="appender-console" />
+    </root>
+</log4j:configuration>

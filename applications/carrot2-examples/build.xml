@@ -4,6 +4,22 @@
   -->
 <project name="carrot2.api" default="carrot2.api.test">
   <!--
+       Dependencies (JARs) required for clustering directly fed documents.
+    -->
+  <path id="libs.required">
+    <fileset dir="lib/required" includes="**/*.jar" />
+    <fileset dir="." includes="carrot2-core*.jar" />
+  </path>
+  
+  <!--
+       Dependencies (JARs) required for both fetching documents using
+       document sources and clustering them using one of Carrot2 algorithms.
+    -->
+  <path id="libs.all">
+    <fileset dir="." includes="**/*.jar" />
+  </path>
+
+  <!--
        Builds the examples.
     -->
   <target name="carrot2.api.build">
@@ -25,7 +41,7 @@
 
     <copy todir="tmp/classes">
       <fileset dir="examples/">
-      	<exclude name="*.java" />
+        <exclude name="*.java" />
       </fileset>
     </copy>
   </target>
@@ -33,23 +49,23 @@
   <!-- Runs selected classes -->
   <target name="carrot2.api.test" depends="carrot2.api.build">
     <!-- Run some example classes -->
-    <run.example classname="org.carrot2.examples.clustering.ClusteringDocumentList" />
-    <run.example classname="org.carrot2.examples.clustering.UsingCachingController" />
-    <run.example classname="org.carrot2.examples.clustering.UsingComponentSuites" />
-    <run.example classname="org.carrot2.examples.clustering.UsingCustomLanguageModel" />
-    <run.example classname="org.carrot2.examples.clustering.UsingCustomLexicalResources" />
-    <run.example classname="org.carrot2.examples.core.LoadingAttributeValuesFromXml" />
-    <run.example classname="org.carrot2.examples.core.SavingAttributeValuesToXml" />
+    <run.example classname="org.carrot2.examples.clustering.ClusteringDocumentList" dependencies="libs.required" />
+    <run.example classname="org.carrot2.examples.clustering.UsingCachingController" dependencies="libs.all" />
+    <run.example classname="org.carrot2.examples.clustering.UsingComponentSuites" dependencies="libs.all" />
+    <run.example classname="org.carrot2.examples.clustering.UsingCustomLanguageModel" dependencies="libs.required" />
+    <run.example classname="org.carrot2.examples.clustering.UsingCustomLexicalResources"  dependencies="libs.required"/>
+    <run.example classname="org.carrot2.examples.core.LoadingAttributeValuesFromXml" dependencies="libs.required" />
+    <run.example classname="org.carrot2.examples.core.SavingAttributeValuesToXml" dependencies="libs.required" />
 
     <!-- Create a simple Lucene index and run Lucene examples. -->
     <delete dir="index" failonerror="true" includeemptydirs="true" />
-    <run.example classname="org.carrot2.examples.CreateLuceneIndex">
+    <run.example classname="org.carrot2.examples.CreateLuceneIndex" dependencies="libs.all">
       <arg file="index" />
     </run.example>
-    <run.example classname="org.carrot2.examples.clustering.ClusteringDataFromLucene">
+    <run.example classname="org.carrot2.examples.clustering.ClusteringDataFromLucene" dependencies="libs.all">
       <arg file="index" />
     </run.example>
-    <run.example classname="org.carrot2.examples.clustering.ClusteringDataFromLuceneWithCustomFields">
+    <run.example classname="org.carrot2.examples.clustering.ClusteringDataFromLuceneWithCustomFields" dependencies="libs.all">
       <arg file="index" />
     </run.example>
   </target>
@@ -62,6 +78,7 @@
   <!-- A macro that runs the specified class. -->
   <macrodef name="run.example">
     <attribute name="classname" />
+    <attribute name="dependencies" />
     <element name="args" implicit="true" optional="true" />
 
     <sequential>
@@ -70,10 +87,8 @@
             classname="@{classname}" logError="true"
             failonerror="true" output="tmp/@{classname}.log">
         <classpath>
-          <fileset dir=".">
-            <include name="**/*.jar" />
-          </fileset>
           <pathelement location="tmp/classes"/>
+          <path refid="@{dependencies}" />
         </classpath>
         <args />
       </java>

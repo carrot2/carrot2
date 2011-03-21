@@ -712,10 +712,44 @@
     <mkdir dir="${api.dir}/examples" />
     <mkdir dir="${api.dir}/resources" />
     
-    <copy todir="${api.dir}/lib">
-      <fileset dir="${lib.flattened}">
-        <exclude name="**/commons-io*" />
-        <exclude name="**/commons-collections*" />
+    <patternset id="carrot2.required">
+      <include name="**/commons-lang*" />
+      <include name="**/ehcache*" />
+      <include name="**/guava*" />
+      <include name="**/hppc*" />
+      <include name="**/jackson*" />
+      <include name="**/log4j*" />
+      <include name="**/lucene-snowball*" />
+      <include name="**/morfologik-stemming*" />
+      <include name="**/simple-xml*" />
+      <include name="**/slf4j*" />
+      <exclude name="**/slf4j-nop*" />
+      <include name="**/com.carrotsearch.nni/nni*" />
+      <include name="**/mahout*" />
+      <include name="**/colt.LICENSE" />
+    </patternset>
+      
+    <patternset id="carrot2.optional">
+      <include name="**/commons-codec*" />
+      <include name="org.apache.http/http*" />
+      <include name="**/jcl-over-slf4j*" />
+      <include name="**/jdom*" />
+      <include name="**/lucene*" />
+      <exclude name="**/lucene-snowball*" />
+      <include name="**/oro*" />
+      <include name="**/rome*" />
+    </patternset>
+    
+    <copy todir="${api.dir}/lib/required">
+      <fileset dir="${lib.dir}">
+        <patternset refid="carrot2.required" />
+      </fileset>
+      <mapper type="flatten" />
+    </copy>
+    
+    <copy todir="${api.dir}/lib/optional">
+      <fileset dir="${lib.dir}">
+        <patternset refid="carrot2.optional" />
       </fileset>
       <mapper type="flatten" />
     </copy>
