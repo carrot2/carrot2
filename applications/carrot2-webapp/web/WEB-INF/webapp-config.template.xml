@@ -12,11 +12,14 @@
     <size size="200" />
   </sizes>
   <views>
-    <view id="tree" default="true">
-      <label>Tree</label>
+    <view id="folders" default="true">
+      <label>Folders</label>
     </view>
-    <view id="visu">
-      <label>Visualization</label>
+    <view id="circles">
+      <label>Circles</label>
+    </view>
+    <view id="foamtree">
+      <label>FoamTree</label>
     </view>
   </views>
   <caches>
