@@ -23,7 +23,7 @@
       <div id="swfcontainer" class="nopadding">
         <div id="swf">
           <!-- Alternative content to show when Flash Player is missing, optional -->
-          <div>To use Carrot Search Circles, <a href="http://get.adobe.com/flashplayer/">install Adobe Flash Player</a></div>
+          <div id="alt">To see the visualization, <a href="http://get.adobe.com/flashplayer/">install Adobe Flash Player</a></div>
         </div>
       </div>
 
@@ -45,6 +45,9 @@
         // Identifier of the DOM element into which to embed Circles
         id: "swf",
 
+        // Show a tip if embedding fails        
+        onLoad: showTip,
+
         // Attach Flash-SWT event hooks.
         onGroupSelection: proxy_groupClicked,
         onDocumentSelection: proxy_documentClicked,
@@ -59,6 +62,7 @@
         // The XML must be in Carrot2 format: http://download.carrot2.org/head/manual/#section.architecture.output-xml
         dataUrl: "$source"
       });
+      ie64Notice();
     //]]></script>
   </body>
 </html>
