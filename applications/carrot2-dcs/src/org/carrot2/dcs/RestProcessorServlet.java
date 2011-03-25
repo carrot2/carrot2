@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -96,10 +95,8 @@ public final class RestProcessorServlet extends HttpServlet
     private transient Templates xsltTemplates;
 
     /**
-     * Disable log file appender configured in
-     * {@link #getLogAppender(HttpServletRequest)}. 
-     * The appender is enabled by default, but disabled
-     * for tests.
+     * Disable log file appender configured in {@link #getLogAppender(HttpServletRequest)}
+     * . The appender is enabled by default, but disabled for tests.
      */
     private boolean disableLogFileAppender = Boolean.getBoolean(DISABLE_LOGFILE_APPENDER);
 
@@ -108,10 +105,8 @@ public final class RestProcessorServlet extends HttpServlet
     public void init() throws ServletException
     {
         // Run in servlet container, load config from config.xml.
-        ResourceLookup webInfLookup = new ResourceLookup(
-            new PrefixDecoratorLocator(
-                new ServletContextLocator(getServletContext()), "/WEB-INF/")
-        );
+        ResourceLookup webInfLookup = new ResourceLookup(new PrefixDecoratorLocator(
+            new ServletContextLocator(getServletContext()), "/WEB-INF/"));
 
         try
         {
@@ -129,21 +124,24 @@ public final class RestProcessorServlet extends HttpServlet
         try
         {
             List<IResourceLocator> resourceLocators = Lists.newArrayList();
-            resourceLocators.add(new PrefixDecoratorLocator(
-                new ServletContextLocator(getServletContext()), "/WEB-INF/suites/"));
+            resourceLocators.add(new PrefixDecoratorLocator(new ServletContextLocator(
+                getServletContext()), "/WEB-INF/suites/"));
 
-            if (Boolean.getBoolean(ENABLE_CLASSPATH_LOCATOR))
-                resourceLocators.add(Location.CONTEXT_CLASS_LOADER.locator);
+            if (Boolean.getBoolean(ENABLE_CLASSPATH_LOCATOR)) resourceLocators
+                .add(Location.CONTEXT_CLASS_LOADER.locator);
 
             ResourceLookup suitesLookup = new ResourceLookup(resourceLocators);
 
-            IResource suiteResource = suitesLookup.getFirst(config.componentSuiteResource);
+            IResource suiteResource = suitesLookup
+                .getFirst(config.componentSuiteResource);
             if (suiteResource == null)
             {
-                throw new Exception("Suite file not found in servlet context's /WEB-INF/suites: " 
-                    + config.componentSuiteResource);
+                throw new Exception(
+                    "Suite file not found in servlet context's /WEB-INF/suites: "
+                        + config.componentSuiteResource);
             }
-            componentSuite = ProcessingComponentSuite.deserialize(suiteResource, suitesLookup);
+            componentSuite = ProcessingComponentSuite.deserialize(suiteResource,
+                suitesLookup);
         }
         catch (Exception e)
         {
@@ -173,17 +171,15 @@ public final class RestProcessorServlet extends HttpServlet
             .toArray(new Class [cachedComponentClasses.size()]));
 
         List<IResourceLocator> locators = Lists.newArrayList();
-        locators.add(new PrefixDecoratorLocator(
-            new ServletContextLocator(getServletContext()), "/WEB-INF/resources/"));
+        locators.add(new PrefixDecoratorLocator(new ServletContextLocator(
+            getServletContext()), "/WEB-INF/resources/"));
 
-        if (Boolean.getBoolean(ENABLE_CLASSPATH_LOCATOR))
-            locators.add(Location.CONTEXT_CLASS_LOADER.locator);
+        if (Boolean.getBoolean(ENABLE_CLASSPATH_LOCATOR)) locators
+            .add(Location.CONTEXT_CLASS_LOADER.locator);
 
-        controller.init(
-            ImmutableMap.<String, Object> of(
-                AttributeUtils.getKey(DefaultLexicalDataFactory.class, "resourceLookup"),
-                new ResourceLookup(locators)),
-            componentSuite.getComponentConfigurations());
+        controller.init(ImmutableMap.<String, Object> of(
+            AttributeUtils.getKey(DefaultLexicalDataFactory.class, "resourceLookup"),
+            new ResourceLookup(locators)), componentSuite.getComponentConfigurations());
     }
 
     @Override
@@ -438,14 +434,18 @@ public final class RestProcessorServlet extends HttpServlet
                 bindingException);
         }
 
-        // Pass the remaining request attributes directly to the controller
-        final Map<String, Object> processingAttributes = attributeBinderActionBind.remainingValues;
+        // Build the attributes used for processing. Use the ones defined in the input
+        // XML, if any, and override with the ones provided in POST parameters.
+        final Map<String, Object> processingAttributes = Maps.newHashMap();
 
-        // Also add the attributes (e.g. query) from the input processing result
+        // Attributes from the XML stream
         if (input != null)
         {
             processingAttributes.putAll(input.getAttributes());
         }
+        
+        // Attributes provided in the POST parameters
+        processingAttributes.putAll(attributeBinderActionBind.remainingValues);
 
         if (StringUtils.isEmpty(requestModel.algorithm))
         {
@@ -489,7 +489,8 @@ public final class RestProcessorServlet extends HttpServlet
         {
             if (OutputFormat.XML.equals(requestModel.outputFormat))
             {
-                transformAndSerializeOutputXml(response, result, !requestModel.clustersOnly, true);
+                transformAndSerializeOutputXml(response, result,
+                    !requestModel.clustersOnly, true);
             }
             else if (OutputFormat.JSON.equals(requestModel.outputFormat))
             {
