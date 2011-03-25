@@ -74,6 +74,18 @@
             </label>
           </li>
           
+          <li id="results" class="hide">
+            <label>
+              <span class="label">Results to fetch</span>
+              <select name="results">
+                <option>50</option>
+                <option selected="selected">100</option>
+                <option>200</option>
+                <option>400</option>
+              </select>
+            </label>
+          </li>
+          
           <li id="xml-file" class="hide">
             <label>
               <span class="label">XML File</span>
@@ -173,18 +185,18 @@
         if ($("#source-from-string").is(":checked"))
         {
           $("#xml-string").disabled(false);
-          $("#xml-file, #document-source, #query").disabled(true);
+          $("#xml-file, #document-source, #query, #results").disabled(true);
         }
         
         if ($("#source-from-file").is(":checked"))
         {
           $("#xml-file").disabled(false);
-          $("#xml-string, #document-source, #query").disabled(true);
+          $("#xml-string, #document-source, #query, #results").disabled(true);
         }
         
         if ($("#source-external").is(":checked"))
         {
-          $("#document-source, #query").disabled(false);
+          $("#document-source, #query, #results").disabled(false);
           $("#xml-string, #xml-file").disabled(true);
         }
         
