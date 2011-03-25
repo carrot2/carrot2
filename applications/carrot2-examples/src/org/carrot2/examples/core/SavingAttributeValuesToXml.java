@@ -55,6 +55,8 @@ public class SavingAttributeValuesToXml
             .attributeBuilder(attributes)
             .titleWordsBoost(2.5);
 
+        attributeValueSet.setAttributeValues(attributes);
+        
         // We'll need to wrap the exported attribute values in a AttributeValueSets,
         // even if we want to export just one set. 
         final AttributeValueSets attributeValueSets = new AttributeValueSets();
