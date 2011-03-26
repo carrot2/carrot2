@@ -3,13 +3,20 @@
 /* Define colors, fonts and other style attributes here to override the defaults  */
 
 /* Page background color */
-body { 	font-family: Trebuchet MS, Arial;
-	background-color: white;
-	font-size: 10pt;
- }
-td { 	font-family: Trebuchet MS,Arial;
-	font-size: 10pt;
- }
+body, td { 	
+  color: #333;
+  margin: 20px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+body, td, table code { 	
+  font-family: Arial, sans-serif;
+}
+
+font[size] {
+  font-size: 100%;
+}
 
 table {
   border-collapse: collapse;
@@ -32,12 +39,14 @@ table .TableHeadingColor th,
 table .TableSubHeadingColor td,
 table .TableSubHeadingColor th,
 table .TableRowColor td,
+table .TableRowColor,
 table .TableRowColor th
 {
-  border: 1px solid #cccccc;
+  border: 1px solid #e8e8e8;
+  padding: 5px 7px;
 }
 /* Table colors */
-.TableHeadingColor     { background: #e8e8e8 }
+.TableHeadingColor     { background: #e8e8e8; }
 .TableSubHeadingColor  { background: #e8e8e8 }
 .TableRowColor         { background: #FFFFFF }
 
@@ -59,42 +68,60 @@ table .TableRowColor th
 .NavBarCell2    {  background-color:#FFFFFF;}
 .NavBarCell3    {  background-color:#FFFFFF;}
 
-A {
-    color: #003399;
+a[href='#skip-navbar_bottom'] + table td,
+a[href='#skip-navbar_top'] + table td {
+  font-size: 12px;
 }
 
-A:active {
-    color: #003399;
+.TableRowColor table td {
+  border: none;
+}
+
+.TableRowColor code b {
+  padding-right: 0.35em;
+}
+
+.TableRowColor td > br {
+  display: block;
+  margin-bottom: 0.5ex;
+}
+
+a[name='constructor_summary'] + table td,
+a[name='method_summary'] + table td {
+  padding-bottom: 1em !important;
+  vertical-align: top;
+}
+
+A {
+    color: #146eb3;
+    text-decoration: none;
+}
+
+A:hover {
+    text-decoration: underline;
 }
 
 A:visited {
-    color: #888888;
+    color: #1a4489;
 }
 
 P, OL, UL, LI, DL, DT, DD, BLOCKQUOTE {
-    color: #000000;
 }
 
 TD, TH, SPAN {
-    color: #000000;
 }
 
 BLOCKQUOTE {
     margin-right: 0px;
 }
 
-TT {
-font-size: 90%;
-    font-family: "Courier New", Courier, monospace;
-    color: #000000;
+TT, code, pre {
+    font-family: "Consolas","Bitstream Vera Sans Mono","Courier New",Courier,monospace;
 }
 
 PRE {
-font-size: 90%;
-    padding: 5px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #CCCCCC;
+    padding: 5px 10px;
+    border-style: none;
     background-color: #F4F4F4;
 }
 
