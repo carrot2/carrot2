@@ -26,7 +26,7 @@ import com.google.common.collect.Maps;
 /**
  * A set of utility methods for working with {@link Bindable} types.
  */
-final class BindableUtils
+public final class BindableUtils
 {
     /**
      * Caches the sets of declared fields determined for class hierarchies by the
@@ -80,7 +80,7 @@ final class BindableUtils
     /**
      * Computes the attribute key according to the definition in {@link Attribute#key()}.
      */
-    static String getKey(Field field)
+    public static String getKey(Field field)
     {
         final Attribute attributeAnnotation = field.getAnnotation(Attribute.class);
         if (attributeAnnotation == null)

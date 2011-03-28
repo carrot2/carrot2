@@ -18,14 +18,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.carrot2.util.annotations.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
 /**
- * Resource loading utility scanning one or more {@link IResourceLocator} locations.
+ * Resource loading utility scanning one or more {@link IResourceLocator} locations. If
+ * all locators provided to this class are thread-safe, this class is also thread-safe.
  */
+@ThreadSafe
 public final class ResourceLookup
 {
     /** Logger for lookup events. */

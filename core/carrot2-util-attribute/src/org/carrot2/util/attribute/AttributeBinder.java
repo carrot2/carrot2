@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -74,8 +73,7 @@ public class AttributeBinder
      * <li>If the type of the value is {@link String} and the type of the attribute field
      * is not {@link String}, the {@link AttributeTransformerFromString} will be applied
      * to the value prior to transferring it to the attribute field. If you want to bypass
-     * this conversion, use
-     * {@link #bind(Object, IAttributeBinderAction[], Class...)}.</li>
+     * this conversion, use {@link #bind(Object, IAttributeBinderAction[], Class...)}.</li>
      * <li>If the type of the attribute field is not {@link Class} and the corresponding
      * value in the <code>values</code> map is of type {@link Class}, an attempt will be
      * made to coerce the class to a corresponding instance by calling its parameterless
@@ -232,7 +230,7 @@ public class AttributeBinder
         private final Class<? extends Annotation> [] filteringAnnotations;
 
         public AllAnnotationsPresentPredicate(
-            Class<? extends Annotation> [] filteringAnnotations)
+            Class<? extends Annotation>... filteringAnnotations)
         {
             this.filteringAnnotations = filteringAnnotations;
         }
@@ -691,26 +689,9 @@ public class AttributeBinder
     }
 
     /**
-     * Checks individual attribute definitions for consistency, e.g. whether they have all
-     * required annotations.
-     */
-    static abstract class ConsistencyCheck
-    {
-        /**
-         * Checks an attribute's annotations.
-         * 
-         * @return <code>true</code> if the attribute passed the check and can be bound,
-         *         <code>false</code> if the attribute did not pass the check and cannot
-         *         be bound.
-         * @throws IllegalArgumentException when attribute's annotations are inconsistent
-         */
-        abstract boolean check(Field field);
-    }
-
-    /**
      * Checks if all required attribute annotations are provided.
      */
-    static class ConsistencyCheckRequiredAnnotations implements Predicate<Field>
+    static final class ConsistencyCheckRequiredAnnotations implements Predicate<Field>
     {
         @Override
         public boolean apply(Field field)
@@ -749,10 +730,9 @@ public class AttributeBinder
      * Checks whether attributes of non-primitive types have the
      * {@link ImplementingClasses} constraint.
      */
-    static class ConsistencyCheckImplementingClasses implements Predicate<Field>
+    static final class ConsistencyCheckImplementingClasses implements Predicate<Field>
     {
-        static Set<Class<?>> ALLOWED_PLAIN_TYPES = ImmutableSet.<Class<?>> of(
-            IResource.class, Collection.class, Map.class, File.class);
+        static Set<Class<?>> ALLOWED_PLAIN_TYPES = ImmutableSet.<Class<?>> of(File.class);
 
         static Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = ImmutableSet.<Class<?>> of(
             Enum.class, IResource.class, Collection.class, Map.class);
@@ -802,7 +782,7 @@ public class AttributeBinder
      * Tracks which attributes have already been collected and prevents overwriting of
      * collected values.
      */
-    static class BindingTracker
+    public static final class BindingTracker
     {
         /**
          * The lowest nesting level from which the attribute has been collected.

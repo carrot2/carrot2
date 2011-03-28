@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,19 +11,42 @@
 
 package org.carrot2.core;
 
+import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Proxy;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.Pair;
-import org.carrot2.util.attribute.*;
-import org.carrot2.util.pool.*;
+import org.carrot2.util.annotations.ThreadSafe;
+import org.carrot2.util.attribute.AttributeBinder;
+import org.carrot2.util.attribute.AttributeBinder.AllAnnotationsPresentPredicate;
+import org.carrot2.util.attribute.AttributeBinder.BindingTracker;
+import org.carrot2.util.attribute.AttributeBinder.IAttributeBinderAction;
+import org.carrot2.util.attribute.AttributeBindingException;
+import org.carrot2.util.attribute.BindableUtils;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
+import org.carrot2.util.pool.IActivationListener;
+import org.carrot2.util.pool.IDisposalListener;
+import org.carrot2.util.pool.IInstantiationListener;
+import org.carrot2.util.pool.IParameterizedPool;
+import org.carrot2.util.pool.IPassivationListener;
+import org.carrot2.util.pool.SoftUnboundedPool;
+import org.carrot2.util.resource.IResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
 /**
@@ -83,7 +105,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         ProcessingComponentConfiguration... configurations)
     {
         assert context != null;
-        
+
         // This will ensure that one manager is used with only one controller
         if (this.context != null)
         {
@@ -147,6 +169,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
     private final class ComponentInstantiationListener implements
         IInstantiationListener<IProcessingComponent, String>
     {
+        @SuppressWarnings("unchecked")
         public void objectInstantiated(IProcessingComponent component, String parameter)
         {
             try
@@ -160,6 +183,9 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
                 }
 
                 final Map<String, Object> initOutputAttrs = Maps.newHashMap();
+
+                checkNonPrimitiveInstances(component, initAttrs,
+                    new AllAnnotationsPresentPredicate(Input.class, Init.class));
                 ControllerUtils.init(component, initAttrs, initOutputAttrs, false,
                     context);
 
@@ -176,16 +202,17 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
                 // @Init attributes have already been bound above.
                 try
                 {
-                    AttributeBinder.set(component, initAttrs, false,
-                        new Predicate<Field>()
+                    final Predicate<Field> predicate = new Predicate<Field>()
+                    {
+                        public boolean apply(Field field)
                         {
-                            public boolean apply(Field field)
-                            {
-                                return field.getAnnotation(Input.class) != null
-                                    && (field.getAnnotation(Processing.class) != null && field
-                                        .getAnnotation(Init.class) == null);
-                            }
-                        });
+                            return field.getAnnotation(Input.class) != null
+                                && (field.getAnnotation(Processing.class) != null && field
+                                    .getAnnotation(Init.class) == null);
+                        }
+                    };
+                    checkNonPrimitiveInstances(component, initAttrs, predicate);
+                    AttributeBinder.set(component, initAttrs, false, predicate);
                 }
                 catch (AttributeBindingException e)
                 {
@@ -206,6 +233,107 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
 
                 throw ExceptionUtils.wrapAs(ComponentInitializationException.class, e);
             }
+        }
+
+        /**
+         * Performs safety checks aimed at reporting attempts to set non-primitive
+         * non-thread-safe primitive instances during initialization. These may lead to
+         * hard-to-trace bugs.
+         * 
+         * @see https://issues.apache.org/jira/browse/SOLR-2282
+         */
+        void checkNonPrimitiveInstances(IProcessingComponent processingComponent,
+            Map<String, Object> inputAttributes, Predicate<Field> predicate)
+            throws InstantiationException
+        {
+            AttributeBinder.bind(processingComponent, new IAttributeBinderAction []
+            {
+                new NonPrimitiveInputAttributesCheck(inputAttributes)
+            }, predicate);
+        }
+    }
+
+    /**
+     * An {@link IAttributeBinderAction} that checks for non-primitive instances passed
+     * for binding at init time. If they are not declared {@link ThreadSafe}, an info is
+     * logged.
+     */
+    static final class NonPrimitiveInputAttributesCheck implements IAttributeBinderAction
+    {
+        static boolean makeAssertion = false;
+
+        private static final Logger log = LoggerFactory
+            .getLogger(NonPrimitiveInputAttributesCheck.class);
+
+        static final Set<Class<?>> ALLOWED_PLAIN_TYPES = ImmutableSet.<Class<?>> of(
+            Boolean.class, Byte.class, Short.class, Integer.class, Long.class,
+            Float.class, Double.class, Character.class, File.class, String.class,
+            Calendar.class, Date.class);
+
+        static final Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = ImmutableSet.<Class<?>> of(
+            Enum.class, IResource.class, Collection.class, Map.class);
+
+        // A number of safe typically used classes
+        static final Set<String> ALLOWED_PLAIN_TYPES_BY_NAME = ImmutableSet.of(
+            "org.apache.lucene.store.FSDirectory",
+            "org.apache.lucene.store.RAMDirectory",
+            "org.apache.lucene.store.MMapDirectory",
+            "org.apache.lucene.store.SimpleFSDirectory",
+            "org.apache.lucene.store.SimpleFSDirectory");
+
+        private final Map<String, Object> values;
+
+        NonPrimitiveInputAttributesCheck(Map<String, Object> values)
+        {
+            this.values = values;
+        }
+
+        @Override
+        public void performAction(BindingTracker bindingTracker, int level,
+            Object object, Field field, Object fieldValue, Predicate<Field> predicate)
+            throws InstantiationException
+        {
+            final String key = BindableUtils.getKey(field);
+            final Object value = values.get(key);
+            if (value == null || Class.class.isInstance(value)
+                || Proxy.isProxyClass(value.getClass())
+                || value.getClass().getAnnotation(ThreadSafe.class) != null)
+            {
+                return;
+            }
+
+            // If there's an @Init @Input non-primitive attribute whose type
+            // is not declared as @ThreadSafe, log a warning.
+            final Class<?> valueType = value.getClass();
+
+            if (!ALLOWED_PLAIN_TYPES.contains(valueType)
+                && !ALLOWED_PLAIN_TYPES_BY_NAME.contains(valueType.getName())
+                && !isAllowedAssignableType(valueType))
+            {
+                log.info("An object of a non-@ThreadSafe class " + valueType.getName()
+                    + " bound at initialization-time to attribute " + key
+                    + ". Make sure this intended.");
+                if (makeAssertion)
+                {
+                    assert false : "An object of a non-@ThreadSafe class "
+                        + valueType.getName()
+                        + " bound at initialization-time to attribute " + key
+                        + ". Make sure this intended.";
+                }
+            }
+        }
+
+        private static boolean isAllowedAssignableType(Class<?> attributeType)
+        {
+            for (Class<?> clazz : ALLOWED_ASSIGNABLE_TYPES)
+            {
+                if (clazz.isAssignableFrom(attributeType))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
@@ -234,8 +362,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         /**
          * Stores values of {@link Processing} attributes for the duration of processing.
          */
-        private ConcurrentHashMap<ReferenceEquality, Map<String, Object>> resetValues = 
-            new ConcurrentHashMap<ReferenceEquality, Map<String, Object>>();
+        private ConcurrentHashMap<ReferenceEquality, Map<String, Object>> resetValues = new ConcurrentHashMap<ReferenceEquality, Map<String, Object>>();
 
         @SuppressWarnings("unchecked")
         public void activate(IProcessingComponent processingComponent, String parameter)
@@ -244,11 +371,11 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
             final Map<String, Object> originalValues = Maps.newHashMap();
             try
             {
-                AttributeBinder.get(processingComponent, originalValues, 
-                    Input.class, Processing.class);
+                AttributeBinder.get(processingComponent, originalValues, Input.class,
+                    Processing.class);
 
                 resetValues.put(new ReferenceEquality(processingComponent),
-                                originalValues);
+                    originalValues);
             }
             catch (Exception e)
             {
@@ -265,9 +392,9 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
                 // Here's a little hack: we need to disable checking
                 // for required attributes, otherwise, we won't be able
                 // to reset @Required input attributes to null
-                AttributeBinder.set(processingComponent, 
-                    resetValues.get(new ReferenceEquality(processingComponent)),
-                    false, Input.class, Processing.class);
+                AttributeBinder.set(processingComponent,
+                    resetValues.get(new ReferenceEquality(processingComponent)), false,
+                    Input.class, Processing.class);
             }
             catch (Exception e)
             {
