@@ -303,6 +303,11 @@
     <xslt in="${compatibility.report.dir}/api-compatibility.xml" 
           out="${compatibility.report.dir}/api-compatibility.html"
           style="${etc.dir}/clirr/clirr2html.xsl">
+      <classpath>
+        <fileset dir="${lib.dir}/org.apache.xml">
+          <include name="*.jar" />
+        </fileset>
+      </classpath>
       <param name="current" expression="${carrot2.version}" />
       <param name="baseline" expression="${versioning.latest}" />
     </xslt>
