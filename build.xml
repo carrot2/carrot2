@@ -49,6 +49,7 @@
   <property name="coverage.report.dir" location="${tmp.dir}/coverage-report" />
   <property name="duplication.report.dir" location="${tmp.dir}/duplication-report" />
   <property name="findbugs.report.dir" location="${tmp.dir}/findbugs-report" />
+  <property name="compatibility.report.dir" location="${tmp.dir}/compatibility-report" />
 
   <!-- Java API distribution -->
   <property name="api.dist.base" value="${carrot2.java-api.base}" />
@@ -256,6 +257,55 @@
       <classpath location="${build.dir.findbugs}" />
       <classpath refid="lib.classpath" />
     </javac>
+  </target>
+
+  <target name="compatibility" depends="core">
+    <mkdir dir="tmp/compatibility" />
+    <get src="http://repo1.maven.org/maven2/org/carrot2/carrot2-core/maven-metadata.xml" dest="tmp/compatibility/maven-metadata.xml" />
+    <xmlproperty file="tmp/compatibility/maven-metadata.xml" collapseAttributes="true" keepRoot="false" />
+    <get src="http://download.carrot2.org/stable/carrot2-java-api-${versioning.latest}.zip" 
+         dest="tmp/compatibility/carrot2-java-api-${versioning.latest}.zip" />
+
+    <unzip src="tmp/compatibility/carrot2-java-api-${versioning.latest}.zip" dest="tmp/compatibility">
+      <patternset>
+        <include name="**/*.jar" />
+      </patternset>
+    </unzip>
+
+    <taskdef classpath="${etc.dir}/clirr/clirr-core-0.6-uber.jar" resource="clirrtask.properties"/>
+
+    <mkdir dir="${compatibility.report.dir}" />
+    <clirr failOnBinError="false" failOnSrcError="false">
+      <origfiles dir="tmp/compatibility/carrot2-java-api-${versioning.latest}" includes="carrot2-core-${versioning.latest}.jar" />
+      <origClassPath>
+        <fileset dir="tmp/compatibility/carrot2-java-api-${versioning.latest}/lib" />
+      </origClassPath>
+      <newfiles dir="tmp/api" includes="carrot2-core-${carrot2.version}.jar" />
+      <newClassPath>
+        <fileset dir="tmp/api/lib" />
+      </newClassPath>
+
+      <apiclasses>
+        <exclude name="**/org/carrot2/util/xsltfilter/**" />
+        <exclude name="**/*Descriptor$*/**" />
+        <exclude name="**/*Descriptor*/**" />
+        <exclude name="**/org/carrot2/util/attribute/AttributeBinder**" />
+        <exclude name="**/org/carrot2/util/httpclient/**" />
+        <exclude name="**/org/carrot2/util/log4j/**" />
+        <exclude name="**/org/carrot2/util/simplexml/**" />
+        <exclude name="**/org/carrot2/util/factory/**" />
+      </apiclasses>
+
+      <formatter type="plain" outfile="${compatibility.report.dir}/api-compatibility.txt" />
+      <formatter type="xml" outfile="${compatibility.report.dir}/api-compatibility.xml" />
+    </clirr>
+   
+    <xslt in="${compatibility.report.dir}/api-compatibility.xml" 
+          out="${compatibility.report.dir}/api-compatibility.html"
+          style="${etc.dir}/clirr/clirr2html.xsl">
+      <param name="current" expression="${carrot2.version}" />
+      <param name="baseline" expression="${versioning.latest}" />
+    </xslt>
   </target>
 
   <!--
@@ -803,7 +853,7 @@
     -->
   <target name="all" depends="clean, webapp, dcs, javadoc, doc" description="Builds all Carrot2 applications and documentation" />
   <target name="dist" depends="carrot2.core.dist, carrot2.cli.dist, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, maven, doc" description="Builds Carrot2 distribution files" />
-  <target name="reports" depends="test, coverage, duplication, findbugs" description="Builds all Carrot2 test and code quality reports" />
+  <target name="reports" depends="test, coverage, duplication, findbugs, compatibility" description="Builds all Carrot2 test and code quality reports" />
 
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
