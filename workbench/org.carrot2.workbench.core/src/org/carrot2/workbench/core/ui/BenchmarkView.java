@@ -184,6 +184,7 @@ public final class BenchmarkView extends PageBookViewBase
      * Restore GUI state. We can't do it in {@link #init(IViewSite, IMemento)}
      * because GUI elements are not available then.
      */
+    @SuppressWarnings("unchecked")
     private void restoreState()
     {
         if (this.restoreState == null) return;
@@ -204,6 +205,7 @@ public final class BenchmarkView extends PageBookViewBase
     /**
      * Create settings panel.
      */
+    @SuppressWarnings("unchecked")
     private Control createSettingsPanel(Composite parent)
     {
         final BindableDescriptor descriptor = 
@@ -248,6 +250,7 @@ public final class BenchmarkView extends PageBookViewBase
     /**
      * @return Return a clone of the current settings.
      */
+    @SuppressWarnings("unchecked")
     BenchmarkSettings getCurrentSettings()
     {
         final BenchmarkSettings cloned = new BenchmarkSettings();

@@ -77,6 +77,7 @@ public class ConstraintTest
         bindInputValues(instance, "object", "string", 10, Boolean.TRUE);
     }
 
+    @SuppressWarnings("unchecked")
     private void bindInputValues(Object instance, String fieldName, Object... values)
         throws AttributeBindingException, InstantiationException
     {

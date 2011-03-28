@@ -34,7 +34,7 @@ import com.google.common.base.Predicate;
 public abstract class MultipageSearchEngine extends SearchEngineBase
 {
     /**
-     * Search mode defines how fetchers returned from {@link #createFetcher(SearchRange)}
+     * Search mode defines how fetchers returned from {@link #createFetcher}
      * are called.
      * 
      * @label Search Mode

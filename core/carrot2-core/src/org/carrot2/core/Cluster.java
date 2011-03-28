@@ -19,6 +19,7 @@ import org.carrot2.util.StringUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.codehaus.jackson.annotate.*;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persist;
@@ -34,7 +35,7 @@ import com.google.common.collect.*;
  */
 @Root(name = "group", strict = false)
 @JsonAutoDetect(JsonMethod.NONE)
-@JsonWriteNullProperties(false)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public final class Cluster
 {
     /**

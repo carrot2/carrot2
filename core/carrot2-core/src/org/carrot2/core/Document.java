@@ -19,6 +19,7 @@ import org.carrot2.util.MapUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.codehaus.jackson.annotate.*;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persist;
@@ -33,7 +34,7 @@ import com.google.common.collect.*;
  */
 @Root(name = "document")
 @JsonAutoDetect(JsonMethod.NONE)
-@JsonWriteNullProperties(false)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public final class Document
 {
     /** Field name for the title of the document. */

@@ -84,7 +84,6 @@ final class AdunaClusterMapViewPage extends Page
     {
         private IStructuredSelection lastSelection = null;
 
-        @SuppressWarnings("unchecked")
         @Override
         public IStatus runInUIThread(IProgressMonitor monitor)
         {
@@ -115,6 +114,7 @@ final class AdunaClusterMapViewPage extends Page
 
                 if (!currentSelection.equals(lastSelection))
                 {
+                    @SuppressWarnings("rawtypes")
                     final java.util.List selected = 
                         selectionToClassification(currentSelection);
                     logger.debug("Applying selection: " + selected);

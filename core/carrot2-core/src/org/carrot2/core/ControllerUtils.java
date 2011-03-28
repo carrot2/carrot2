@@ -12,7 +12,6 @@
 
 package org.carrot2.core;
 
-import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import org.carrot2.core.attribute.*;

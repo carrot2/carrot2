@@ -55,7 +55,7 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
     /**
      * Custom selection for a set of clusters.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     public final class ClusterSelection implements IStructuredSelection
     {
         private final ArrayList<Cluster> selected;

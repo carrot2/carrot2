@@ -47,7 +47,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     public String query = null;
 
     /**
-     * {@link Document}s to highlight query words in.
+     * {@link org.carrot2.core.Document}s to highlight query words in.
      */
     @Processing
     @Input
@@ -58,7 +58,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     public List<Document> documents;
 
     /**
-     * Fields of the {@link Document} that should have the query words highlighted.
+     * Fields of the {@link org.carrot2.core.Document} that should have the query words highlighted.
      */
     @Init
     @Input

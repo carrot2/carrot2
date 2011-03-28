@@ -179,7 +179,7 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
     /*
      * 
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     public Object getAdapter(Class adapter)
     {
         if (adapter.isInstance(this))

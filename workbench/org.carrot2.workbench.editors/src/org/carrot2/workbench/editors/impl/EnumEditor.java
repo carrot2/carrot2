@@ -32,7 +32,7 @@ public final class EnumEditor extends MappedValueComboEditor
     @Override
     public AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
-        Class<? extends Enum<?>> clazz = (Class) descriptor.type;
+        Class<? extends Enum<?>> clazz = (Class<? extends Enum<?>>) descriptor.type;
         if (clazz.isEnum())
         {
             valueRequired = (descriptor.getAnnotation(Required.class) != null);
