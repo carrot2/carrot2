@@ -20,6 +20,7 @@ import org.carrot2.workbench.vis.FlashViewPage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.IPageSite;
 
 
@@ -45,7 +46,12 @@ final class FoamTreeViewPage extends FlashViewPage
             if (property.equals(ToggleRelaxationAction.RELAXATION_ENABLED_KEY) ||
                 property.equals(LayoutAlgorithmAction.LAYOUT_ALGORITHM_KEY))
             {
-                doRefresh();
+                if (Display.getCurrent() == null)
+                    throw new IllegalStateException();
+
+                getBrowser().execute("javascript:vis.set({"
+                    + "performRelaxation: " + !ToggleRelaxationAction.getCurrent() + ","
+                    + "mapLayoutAlgorithm: '" + LayoutAlgorithmAction.getCurrent().id + "'})");
             }
         }
     };

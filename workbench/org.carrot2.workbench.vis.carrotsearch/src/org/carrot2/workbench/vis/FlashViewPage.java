@@ -99,14 +99,14 @@ public abstract class FlashViewPage extends Page
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
-     * Browser refresh job. Postponed a bit to make the user interface more responsive.
+     * Reload data XML job. Postponed a bit to make the user interface more responsive.
      */
-    private PostponableJob refreshJob = new PostponableJob(new UIJob(
+    private PostponableJob reloadDataXmlJob = new PostponableJob(new UIJob(
         "Browser (refresh)...")
     {
         public IStatus runInUIThread(IProgressMonitor monitor)
         {
-            return doRefresh();
+            return reloadDataXml();
         }
     });
 
@@ -129,7 +129,7 @@ public abstract class FlashViewPage extends Page
     {
         public void processingResultUpdated(ProcessingResult result)
         {
-            refreshJob.reschedule(BROWSER_REFRESH_DELAY);
+            reloadDataXmlJob.reschedule(BROWSER_REFRESH_DELAY);
         }
     };
 
@@ -198,9 +198,9 @@ public abstract class FlashViewPage extends Page
     }
 
     /**
-     * @see #refreshJob
+     * @see #reloadDataXmlJob
      */
-    protected IStatus doRefresh()
+    private IStatus reloadDataXml()
     {
         // If there is no search result, quit. Search result listener will reschedule.
         if (getProcessingResult() == null)
@@ -218,7 +218,7 @@ public abstract class FlashViewPage extends Page
         // If the page has not finished loading, reschedule.
         if (!browserInitialized)
         {
-            refreshJob.reschedule(BROWSER_REFRESH_DELAY);
+            reloadDataXmlJob.reschedule(BROWSER_REFRESH_DELAY);
             return Status.OK_STATUS;
         }
 
@@ -230,8 +230,7 @@ public abstract class FlashViewPage extends Page
             os.close();
             
             String xml = new String(os.toByteArray(), "UTF-8");
-
-            browser.evaluate("javascript:vis.set('dataXml', " +
+            browser.execute("javascript:vis.set('dataXml', " +
             		"'" + StringEscapeUtils.escapeJavaScript(xml) + "')");
         }
         catch (Exception e)
@@ -314,7 +313,7 @@ public abstract class FlashViewPage extends Page
             {
                 // When the page loads, try to load the cluster model immediately.
                 browserInitialized = true;
-                refreshJob.reschedule(0);
+                reloadDataXmlJob.reschedule(0);
             }
         });
 
@@ -439,5 +438,13 @@ public abstract class FlashViewPage extends Page
         if (pr == null || pr.getClusters() == null) return null;
 
         return pr;
+    }
+    
+    /**
+     * Make the browser available.
+     */
+    protected Browser getBrowser()
+    {
+        return browser;
     }
 }
