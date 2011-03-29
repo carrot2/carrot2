@@ -40,7 +40,8 @@ function CarrotSearchCircles(settings) {
       forceRenderEvent: true,
   
       backgroundColor: "00ffffff",
-      
+	    backgroundColorForImageExport: "ffffffff",
+
       groupColorModel: "gradient",
       
       gradientStartColor: "0.7, 0, 1, 1",
@@ -85,17 +86,24 @@ function CarrotSearchCircles(settings) {
   
       onLoad: null,
       onInitialize: null,
-      onModelChange: null,
-      onGroupSelection: null,
+      onModelChanged: null,
+      onModelChanging: null,
+      onGroupSelectionChanging: null,
+      onGroupSelectionChanged: null,
       onDocumentSelection: null,
       onGroupHover: null,
-      onGroupOpenOrClose: null
+      onGroupOpenOrClose: null,
+      
+      echoServiceUrl: null,
+      useEchoServiceForSaveAsMenu: true
     },
     
     aliases: {
       "1.3.0": {
         circlesSwfLocation: "visualizationSwfLocation",
-        onSliceSelection: "onGroupSelection",
+        onModelChange: "onModelChanged",
+        onSliceSelection: "onGroupSelectionChanging",
+        onGroupSelection: "onGroupSelectionChanging",
         sliceColorModel: "groupColorModel",
         paletteSliceColors: "paletteGroupColors",
         sliceOutlineColor: "groupOutlineColor",
@@ -116,6 +124,7 @@ function CarrotSearchCircles(settings) {
     
     transformers: {
       backgroundColor: visualization.toHexString,
+	    backgroundColorForImageExport: visualization.toHexString,
       groupOutlineColor: visualization.toHexString,
       groupHoverColor: visualization.toHexString,
       groupSelectionColor: visualization.toHexString,
@@ -134,8 +143,10 @@ function CarrotSearchCircles(settings) {
       logging: visualization.negate,
       groupColorModel: visualization.toFlashGroupColorModel,
       onInitialize: visualization.toCallbackOnThisVisualization,
-      onModelChange: visualization.toCallbackOnThisVisualization,
-      onGroupSelection: visualization.toCallbackOnThisVisualization,
+      onModelChanged: visualization.toCallbackOnThisVisualization,
+      onModelChanging: visualization.toCallbackOnThisVisualization,
+      onGroupSelectionChanging: visualization.toCallbackOnThisVisualization,
+      onGroupSelectionChanged: visualization.toCallbackOnThisVisualization,
       onDocumentSelection: visualization.toCallbackOnThisVisualization,
       onGroupHover: visualization.toCallbackOnThisVisualization,
       onGroupOpenOrClose: visualization.toCallbackOnThisVisualization
@@ -147,8 +158,10 @@ function CarrotSearchCircles(settings) {
       forceRenderEvent: "forceRenderEvent",
       
       onInitialize: "callback_onInitialized",
-      onModelChange: "callback_onModelChanged",
-      onGroupSelection: "callback_onGroupSelection",
+      onModelChanged: "callback_onModelChanged",
+      onModelChanging: "callback_onModelChanging",
+      onGroupSelectionChanging: "callback_onGroupSelection",
+      onGroupSelectionChanged: "callback_onSelectionChanged",
       onDocumentSelection: "callback_onDocumentSelection",
       onGroupHover: "callback_onGroupHover",
       onGroupOpenOrClose: "callback_onGroupOpenOrClosed",
@@ -197,7 +210,19 @@ function CarrotSearchCircles(settings) {
       maxOutsideFontSize: "maxOutsideFontSize",
       
       groupSizeWeighting: "weightFunction",
-      maxZeroScoreGroupSize: "maxNegativeSizeRatio"
+      maxZeroScoreGroupSize: "maxNegativeSizeRatio",
+
+	    backgroundColorForImageExport: "backgroundColorForImageExport",
+	    
+	    echoServiceUrl: "echoServiceURL",
+	    useEchoServiceForSaveAsMenu: "useEchoServiceForSaveAsMenu"
+    },
+
+    getOptionMethods: {
+      "selection": function() {
+        var result = this.getSelection();
+        return [visualization.toStringArray(result[0]), visualization.toStringArray(result[1])];
+      }
     }
   });
   
@@ -209,10 +234,20 @@ function CarrotSearchCircles(settings) {
     return visualization.get.apply(visualization, arguments);
   }
 
+  function print() {
+    return visualization.print();
+  }
+  
+  function saveAsImage(format) {
+    return visualization.saveAsImage(format);
+  }
+  
   // Expose public methods
   this.get = get;
   this.set = set;
+  this.print = print;
+  this.saveAsImage = saveAsImage;
   
   // Perform initial embedding
-  visualization.set(settings);
+  visualization.embed(true);
 };

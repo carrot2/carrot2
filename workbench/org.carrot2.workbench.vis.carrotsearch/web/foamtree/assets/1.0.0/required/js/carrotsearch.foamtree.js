@@ -39,6 +39,7 @@ function CarrotSearchFoamTree(settings) {
       forceRenderEvent: true,
 
       backgroundColor: "ff000000",
+	    backgroundColorForImageExport: "ff000000",
 
       groupColorModel: "gradient",
       
@@ -86,15 +87,26 @@ function CarrotSearchFoamTree(settings) {
   
       onLoad: null,
       onInitialize: null,
-      onModelChange: null,
-      onGroupSelection: null,
+      onModelChanged: null,
+      onModelChanging: null,
+      onGroupSelectionChanging: null,
+      onGroupSelectionChanged: null,
       onGroupHover: null,
       onGroupOpenOrClose: null,
 
-      wallSqueezeThreshold: 0.33
+      wallSqueezeThreshold: 0.33,
+      
+      echoServiceUrl: null,
+      useEchoServiceForSaveAsMenu: true
     },
     
-    // TODO: are these supported and indeed reembeddingless?
+    aliases: {
+      "1.1.0": {
+        onGroupSelection: "onGroupSelectionChanging",
+        onModelChange: "onModelChanged"
+      }
+    },
+    
     reembedinglessSettings: {
       dataUrl: true, 
       dataXml: true,
@@ -103,7 +115,7 @@ function CarrotSearchFoamTree(settings) {
     
     transformers: {
       backgroundColor: visualization.toHexString,
-      
+      backgroundColorForImageExport: visualization.toHexString,
       groupColorModel: visualization.toFlashGroupColorModel,
       gradientLabelDarkColor: visualization.toHexString,
       gradientLabelLightColor: visualization.toHexString,
@@ -120,8 +132,10 @@ function CarrotSearchFoamTree(settings) {
 
       logging: visualization.negate,
       onInitialize: visualization.toCallbackOnThisVisualization,
-      onModelChange: visualization.toCallbackOnThisVisualization,
-      onGroupSelection: visualization.toCallbackOnThisVisualization,
+      onModelChanged: visualization.toCallbackOnThisVisualization,
+      onModelChanging: visualization.toCallbackOnThisVisualization,
+      onGroupSelectionChanging: visualization.toCallbackOnThisVisualization,
+      onGroupSelectionChanged: visualization.toCallbackOnThisVisualization,
       onGroupHover: visualization.toCallbackOnThisVisualization,
       onGroupOpenOrClose: visualization.toCallbackOnThisVisualization
     },
@@ -133,8 +147,10 @@ function CarrotSearchFoamTree(settings) {
       backgroundColor: "gui_backgroundColor",
       
       onInitialize: "callback_onInitialized",
-      onModelChange: "callback_onModelChanged",
-      onGroupSelection: "callback_onGroupSelection",
+      onModelChanged: "callback_onModelChanged",
+      onModelChanging: "callback_onModelChanging",
+      onGroupSelectionChanging: "callback_onGroupSelection",
+      onGroupSelectionChanged: "callback_onSelectionChanged",
       onGroupHover: "callback_onGroupHover",
       onGroupOpenOrClose: "callback_onGroupOpenOrClosed",
   
@@ -185,7 +201,19 @@ function CarrotSearchFoamTree(settings) {
       maxRelaxationSteps: "maxRelaxationSteps",
       mapLayoutAlgorithm: "mapLayoutAlgorithm",
 
-      wallSqueezeThreshold: "wallSqueezeThreshold"
+      wallSqueezeThreshold: "wallSqueezeThreshold",
+	  
+      backgroundColorForImageExport: "backgroundColorForImageExport",
+      
+      echoServiceUrl: "echoServiceURL",
+      useEchoServiceForSaveAsMenu: "useEchoServiceForSaveAsMenu"
+    },
+    
+    getOptionMethods: {
+      "selection": function() {
+        var result = this.getSelection();
+        return [visualization.toStringArray(result[0]), visualization.toStringArray(result[1])];
+      }
     }
   });
   
@@ -197,10 +225,20 @@ function CarrotSearchFoamTree(settings) {
     return visualization.get.apply(visualization, arguments);
   }
 
+  function print() {
+    return visualization.print();
+  }
+  
+  function saveAsImage(format) {
+    return visualization.saveAsImage(format);
+  }
+  
   // Expose public methods
   this.get = get;
   this.set = set;
+  this.print = print;
+  this.saveAsImage = saveAsImage;
   
   // Perform initial embedding
-  visualization.embed();
+  visualization.embed(true);
 };

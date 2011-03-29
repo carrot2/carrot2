@@ -22,6 +22,7 @@ function CarrotSearchVisualization() {
   // transformers:           option value transformers
   // jsToSwfPropertyName:    JavaScript API to Flash API property name translation
   // aliases:                mappings between old and new settings names for backward compatibility
+  // getOptionMethods:       method handling specific readable options, e.g. dataXml
   var config;
   
   // User option values provided for the specific visualization, merged with defaults
@@ -39,11 +40,14 @@ function CarrotSearchVisualization() {
   this.set = set;
   this.init = init;
   this.embed = embed;
+  this.print = print;
+  this.saveAsImage = saveAsImage;
   
   // Converters to use by specific visualizations
   this.negate = negate;
   this.toFlashGroupColorModel = toFlashGroupColorModel;
   this.toHexString = toHexString;
+  this.toStringArray = toStringArray;
   this.colorArrayToString = colorArrayToString;
   this.toCallbackWithTransformedResult = toCallbackWithTransformedResult;
   this.toCallbackOnThisVisualization = toCallbackOnThisVisualization; 
@@ -58,6 +62,8 @@ function CarrotSearchVisualization() {
   {
     config = visualizationConfig;
     
+    extend(getOptionMethods, config.getOptionMethods);
+    
     // Merge user options with defaults
     options = extend({}, config.defaults, config.settings);
   }
@@ -65,7 +71,14 @@ function CarrotSearchVisualization() {
   /**
    * Embeds the Flash visualization according to the internal options.
    */
-  function embed() {
+  function embed(initial) {
+    if (initial) {
+      if (canLog()) {
+        window.console.group(config.visualizationName + ": initial embedding");
+      }
+      validateOptions(options, config.reembedinglessSettings, null);
+    }
+    
     // Map JS to SWF parameter names
     var flashvars = prepareFlashVars();
     for (var name in flashvars) {
@@ -78,7 +91,6 @@ function CarrotSearchVisualization() {
     };
 
     if (canLog()) {
-      window.console.group(config.visualizationName + ": embedding");
       window.console.info("flashvars: ", flashvars);
     }
 
@@ -104,6 +116,10 @@ function CarrotSearchVisualization() {
         }
       }
     );
+    
+    if (initial && canLog()) {
+      window.console.groupEnd();
+    }
   };
 
   /**
@@ -150,37 +166,18 @@ function CarrotSearchVisualization() {
     extend(options, opts);
     if (has(opts, "dataUrl")) {
       delete options.dataXml;
-    }
-    if (has(opts, "dataXml")) {
+    } else if (has(opts, "dataXml")) {
       delete options.dataUrl;
+    }
+
+    // Open debug group
+    if (canLog()) {
+      window.console.group(config.visualizationName + ": setting options");
     }
     
     // Apply deprecation aliases
-    if (config.aliases) {
-      var allAliases = config.aliases;
-      for (var removedInVersion in allAliases) {
-        var aliases = allAliases[removedInVersion];
-        for (var oldSetting in aliases) {
-          var newSetting = aliases[oldSetting];
-          var groupOpen = false;
-          if (has(opts, oldSetting) && !has(opts, newSetting)) {
-            opts[newSetting] = opts[oldSetting];
-            if (canLog()) {
-              if (!groupOpen) {
-                window.console.group(config.visualizationName + ": deprecated option names used");
-                groupOpen = true;
-              }
-              window.console.warn("Use \"" + newSetting + "\" instead of \"" + oldSetting + "\". The old option name will stop working in version " + removedInVersion + ".");
-            }
-            delete opts[oldSetting];
-          }
-          if (groupOpen) {
-            window.console.groupEnd();
-          }
-        }
-      }
-    }
-
+    validateOptions(opts, config.reembedinglessSettings, null);
+    
     // Determine if a reload is necessary
     var needsReload = false;
     for (var name in opts) {
@@ -190,29 +187,25 @@ function CarrotSearchVisualization() {
       }
     }
 
-    // Check for unknown options, log debug information
+    // Log debug information
     if (canLog()) {
-      window.console.group(config.visualizationName + ": setting options");
       window.console.info("reload required: ", needsReload);
       window.console.info("options: ", opts);
-
-      // Check for unknown options
-      for (var o in opts) {
-        if (typeof config.defaults[o] == 'undefined') {
-          window.console.warn("Ignoring unknown option: ", o);
-        }
-      }
     }
     
     if (needsReload) {
       if (element && has(element, "reload")) {
         var vars = prepareFlashVars();
         if (canLog()) {
-          window.console.info("flashvars: ", opts);
+          window.console.info("flashvars: ", vars);
+        }
+        if ((has(opts, "dataUrl") || has(opts, "dataXml")) && 
+            (options.dataXml == null || options.dataUrl == null)) {
+          element.loadDataFromXML(null);
         }
         element.reload(vars);
       } else {
-        embed();
+        embed(false);
       }
     } else {
       if (has(opts, "dataUrl") || has(opts, "dataXml")) {
@@ -251,17 +244,24 @@ function CarrotSearchVisualization() {
       return options;
     } else {
       var name = arguments[0];
-      if (getOptionMethods[name]) {
-        return getOptionMethods[name].call(thisVisualization, arguments[1]);
-      } else if (typeof config.defaults[arguments[0]] !== 'undefined') {
-        return options[arguments[0]];
-      } else if (name == null) {
+      
+      if (name == null) {
         // Undocumented in public API, useful for UI code, no cloning at the moment.
         return config.defaults; 
-      } else {
-        if (canLog()) {
-          window.console.group(config.visualizationName + ": getting options");
-          window.console.warn("Ignoring unknown option: ", arguments[0]);
+      }
+      
+      var opts = { };
+      opts[name] = true;
+      validateOptions(opts, getOptionMethods, function() {
+        window.console.group(config.visualizationName + ": getting options");
+      });
+      
+      // If option is invalid, it will be removed
+      if (has(opts, name)) {
+        if (getOptionMethods[name]) {
+          return getOptionMethods[name].call(element, arguments[1]);
+        } else if (typeof config.defaults[arguments[0]] !== 'undefined') {
+          return options[arguments[0]];
         }
       }
     }
@@ -278,15 +278,8 @@ function CarrotSearchVisualization() {
     // the current/aggregated selection.
     delete options.selection; 
     if (selection !== null) {
-      if (typeof selection == "number") {
-        groups = [ selection ];
-      } else if (isArray(selection)) {
-        groups = selection;
-      } else if (typeof selection.groups == "number") {
-        groups = [ selection.groups ];
-      } else if (isArray(selection.groups)) {
-        groups = selection.groups;
-      }
+      var g = isObject(selection) ? selection.groups : selection;
+      groups = isArray(g) ? g : [ g ];
     }
     
     if (groups !== null) {
@@ -300,6 +293,55 @@ function CarrotSearchVisualization() {
   };
   
   /**
+   * Checks the provided options object for deprecated option names,
+   * corrects old names to the new ones if necessary and emits deprecation warnings.
+   * Removes unknown options and emits unknown option warnings.
+   */
+  function validateOptions(opts, extraOpts, openGroupCallback) {
+    if (config.aliases) {
+      var groupOpen = false;
+      var allAliases = config.aliases;
+      for (var removedInVersion in allAliases) {
+        var aliases = allAliases[removedInVersion];
+        for (var oldSetting in aliases) {
+          var newSetting = aliases[oldSetting];
+          if (has(opts, oldSetting) && !has(opts, newSetting)) {
+            opts[newSetting] = opts[oldSetting];
+            if (canLog()) {
+              if (!groupOpen) {
+                if (openGroupCallback) {
+                  openGroupCallback.apply(this);
+                }
+                window.console.group(config.visualizationName + ": deprecated option names used");
+                groupOpen = true;
+              }
+              window.console.warn("Use \"" + newSetting + "\" instead of \"" + oldSetting + "\". The old option name will stop working in version " + removedInVersion + ".");
+            }
+            delete opts[oldSetting];
+          }
+        }
+      }
+      if (canLog()) {
+        if (groupOpen) {
+          window.console.groupEnd();
+        }
+        if (openGroupCallback) {
+          window.console.groupEnd();
+        }
+      }
+    }
+    
+    for (var o in opts) {
+      if (!has(config.defaults, o) && !has(extraOpts, o)) {
+        if (canLog()) {
+          window.console.warn("Ignoring unknown option: ", o);
+        }
+        delete opts[o];
+      }
+    }
+  }
+  
+  /**
    * A simpler version of jQuery.extend, loosely based on jQuery original implementation.
    */
   function extend(var_args) {
@@ -311,9 +353,7 @@ function CarrotSearchVisualization() {
       if (values != null) {
         for (var name in values) {
           var value = values[name];
-          if (value != null || (has(target, name) && target[name] != value)) {
-            target[name] = value;
-          }
+          target[name] = value;
         }
       }
     }
@@ -383,34 +423,27 @@ function CarrotSearchVisualization() {
   }
   
   /**
+   * Transforms a comma-separated string into an array of strings.
+   * If there is no comma on input, the result will be on-element array
+   * containing the input string.
+   */
+  function toStringArray(string) {
+    if (string == null || typeof string !== "string") {
+      return string;
+    }
+    return string.split(/,/);
+  }
+  
+  /**
    * Wraps the provided function in such a way that this points to the visualization instance
-   * in the returned function. Additionally, it converts strings looking like integers
-   * and arrays of integers into proper numbers and arrays.
+   * in the returned function.
    */
   function toCallbackOnThisVisualization(val, prop) {
     return asGlobalCallback(function () {
-      var args = [];
-      for (var i = 0; i < arguments.length; i++) {
-        var v = arguments[i];
-        if (typeof v == "string" && /^\d+(,\d+)*$/.test(v)) {
-          var strings = v.split(",");
-          var numbers = [];
-          for (var j = 0; j < strings.length; j++) {
-            numbers.push(parseInt(strings[j], 10));
-          }
-          if (numbers.length > 1) {
-            args.push(numbers);
-          } else {
-            args.push(numbers[0]);
-          }
-        } else {
-          args.push(v);
-        }
-      }
-      val.apply(thisVisualization, args);
+      return val.apply(thisVisualization, arguments);
     }, prop);
   }
-  
+
   /**
    * Creates a transformer that runs the results of a callback through
    * the specified transformer.
@@ -443,6 +476,10 @@ function CarrotSearchVisualization() {
     return Object.prototype.toString.call(a) == "[object Array]";
   }
 
+  function isObject(a) {
+    return Object.prototype.toString.call(a) == "[object Object]";
+  }
+  
   function canLog() {
     return options.logging && typeof window.console != "undefined" && has(window.console, "group") && has(window.console, "groupEnd");
   }
@@ -450,8 +487,21 @@ function CarrotSearchVisualization() {
   //
   // Flash method proxy functions
   //
-  function groupInfo(group) { return element.groupInfo(group); }
+  function groupInfo(group) { 
+    var result = element.groupInfo(group);
+    result[1] = toStringArray(result[1]); // convert comma-delimited ids to an array
+    return result; 
+  }
   function documentInfo(document) { return element.documentInfo(document); }
   function modelAsXML() { return element.modelAsXML(); }
   function documentsPanel() { return element.documentsPanel(options.documentPanelPosition); }
+  function print() { return element.print(); }
+  
+  function saveAsImage(format) { 
+    if (!options.echoServiceUrl && canLog()) {
+      window.console.warn("To use saveAsImage() method, set the echoServiceUrl option first.");
+      return;
+    }
+    return element.saveAsImage(format); 
+  }
 };
