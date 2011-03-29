@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIUtils;
@@ -43,7 +45,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.browser.ProgressAdapter;
@@ -91,11 +92,6 @@ public abstract class FlashViewPage extends Page
      * Visualization entry page URI.
      */
     private final String entryPageUri;
-
-    /**
-     * Unique ID associated with this page's editor.
-     */
-    private final int id;
 
     /**
      * This visualization's logger.
@@ -174,7 +170,6 @@ public abstract class FlashViewPage extends Page
     {
         this.entryPageUri = entryPageUri;
         this.editor = editor;
-        this.id = Activator.getInstance().registerEditor(editor);
     }
 
     /*
@@ -227,14 +222,19 @@ public abstract class FlashViewPage extends Page
             return Status.OK_STATUS;
         }
 
-        final Activator plugin = Activator.getInstance();
-        final String refreshURL = plugin.getFullURL("/servlets/pull?page=" + getId()); 
-        org.slf4j.LoggerFactory.getLogger("browser").info("Refreshing: " + refreshURL);
+        org.slf4j.LoggerFactory.getLogger("browser").info("Refreshing.");
         try
         {
-            browser.evaluate("javascript:vis.set('dataUrl', '" + refreshURL + "')");
+            final ByteArrayOutputStream os = new ByteArrayOutputStream();
+            this.editor.getSearchResult().getProcessingResult().serialize(os, true, true);
+            os.close();
+            
+            String xml = new String(os.toByteArray(), "UTF-8");
+
+            browser.evaluate("javascript:vis.set('dataXml', " +
+            		"'" + StringEscapeUtils.escapeJavaScript(xml) + "')");
         }
-        catch (SWTException e)
+        catch (Exception e)
         {
             org.slf4j.LoggerFactory.getLogger("browser").warn("Embedded browser error: ", e);
         }
@@ -398,11 +398,6 @@ public abstract class FlashViewPage extends Page
         browser.dispose();
 
         super.dispose();
-    }
-
-    public int getId()
-    {
-        return id;
     }
 
     private void doGroupSelection(int groupId, boolean selected)
