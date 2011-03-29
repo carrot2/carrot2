@@ -106,13 +106,17 @@ final class AdunaClusterMapViewPage extends Page
                         throw new RuntimeException("Unhanded case: " + mode);
                 }
 
-                if (!toBeDisplayed.equals(currentlyDisplayed))
-                {
-                    mapMediator.visualize(selectionToClassification(toBeDisplayed));
-                    this.currentlyDisplayed = toBeDisplayed;
-                }
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        if (!toBeDisplayed.equals(currentlyDisplayed))
+                        {
+                            mapMediator.visualize(selectionToClassification(toBeDisplayed));
+                            currentlyDisplayed = toBeDisplayed;
+                        }
 
-                mapMediator.select(selectionToClassification(currentSelection));
+                        mapMediator.select(selectionToClassification(currentSelection));
+                    }
+                });
             }
 
             return Status.OK_STATUS;
@@ -218,8 +222,11 @@ final class AdunaClusterMapViewPage extends Page
                 clusterMap = Maps.newHashMap();
                 documentMap = Maps.newHashMap();
                 toClassification(root, result.getClusters());
-
-                mapMediator.setClassificationTree(root);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        mapMediator.setClassificationTree(root);
+                    }
+                });
                 selectionJob.reschedule(0);
             }
 
