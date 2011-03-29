@@ -43,6 +43,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.browser.ProgressAdapter;
@@ -219,37 +220,24 @@ public abstract class FlashViewPage extends Page
             return Status.OK_STATUS;
         }
 
-        // TODO: Workaround for http://issues.carrot2.org/browse/CARROT-546
-        // Instead of calling external interface's reload function, reload the entire URL.
-
-        final Activator plugin = Activator.getInstance();
-        final Map<String, Object> customParams = contributeCustomParams();
-        customParams.put("page", getId());
-
-        final String refreshURL = createGetURI(plugin.getFullURL(entryPageUri), customParams);
-        browserInitialized = false;
-        browser.setUrl(refreshURL);
-
-        /*
         // If the page has not finished loading, reschedule.
         if (!browserInitialized)
         {
-            this.schedule(BROWSER_REFRESH_DELAY);
+            refreshJob.reschedule(BROWSER_REFRESH_DELAY);
             return Status.OK_STATUS;
         }
 
+        final Activator plugin = Activator.getInstance();
         final String refreshURL = plugin.getFullURL("/servlets/pull?page=" + getId()); 
         org.slf4j.LoggerFactory.getLogger("browser").info("Refreshing: " + refreshURL);
         try
         {
-            Object out = browser.evaluate("javascript:loadDataFromURL('" + refreshURL + "')");
-            org.slf4j.LoggerFactory.getLogger("browser").info("Out: " + out);
+            browser.evaluate("javascript:vis.set('dataUrl', '" + refreshURL + "')");
         }
         catch (SWTException e)
         {
-            org.slf4j.LoggerFactory.getLogger("browser").info("Err: ", e);
+            org.slf4j.LoggerFactory.getLogger("browser").warn("Embedded browser error: ", e);
         }
-        */
 
         return Status.OK_STATUS;
     }
@@ -324,20 +312,17 @@ public abstract class FlashViewPage extends Page
         {
             public void completed(ProgressEvent event)
             {
-                // When the page loads, try to refresh clusters immediately.
+                // When the page loads, try to load the cluster model immediately.
                 browserInitialized = true;
-
-                // TODO: Uncomment when fixed: http://issues.carrot2.org/browse/CARROT-546
-                // refreshJob.reschedule(0);
+                refreshJob.reschedule(0);
             }
         });
-    
-        // TODO: Workaround for: http://issues.carrot2.org/browse/CARROT-546
-        // browser.setUrl(refreshURL);
-        if (getProcessingResult() != null)
-        {
-            refreshJob.reschedule(BROWSER_REFRESH_DELAY);
-        }
+
+        final Activator plugin = Activator.getInstance();
+        final Map<String, Object> customParams = contributeCustomParams();
+        final String refreshURL = createGetURI(plugin.getFullURL(entryPageUri), customParams);
+        browserInitialized = false;
+        browser.setUrl(refreshURL);
 
         /*
          * Register custom callback functions.

@@ -52,9 +52,11 @@
         onDocumentSelection: proxy_documentClicked,
         onModelChange: proxy_onModelChanged,
 
+        #if ($page)
         // URL of the XML with documents and clusters to display in the visualization.
         // The XML must be in Carrot2 format: http://download.carrot2.org/head/manual/#section.architecture.output-xml
         dataUrl: "$source"
+        #end
       });
       ie64Notice();
     //]]></script>
