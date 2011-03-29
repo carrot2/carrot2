@@ -39,7 +39,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
-import org.slf4j.Logger;
 
 import biz.aduna.map.cluster.*;
 
@@ -54,9 +53,6 @@ final class AdunaClusterMapViewPage extends Page
 {
     /** */
     private final int REFRESH_DELAY = 500;
-
-    /** */
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(AdunaClusterMapViewPage.class);
 
     /**
      * Classification root.
@@ -79,7 +75,7 @@ final class AdunaClusterMapViewPage extends Page
     private PostponableJob selectionJob = new PostponableJob(new UIJob(
         "Aduna ClusterMap (selection)...")
     {
-        private IStructuredSelection lastSelection = null;
+        private IStructuredSelection currentlyDisplayed = null;
 
         @Override
         public IStatus runInUIThread(IProgressMonitor monitor)
@@ -90,35 +86,33 @@ final class AdunaClusterMapViewPage extends Page
 
             if (root != null)
             {
-                final IStructuredSelection currentSelection;
+                final IStructuredSelection toBeDisplayed;
+                final IStructuredSelection currentSelection = getSelected();
                 switch (mode)
                 {
                     case SHOW_ALL_CLUSTERS:
-                        currentSelection = getAll();
+                        toBeDisplayed = getAll();
                         break;
 
                     case SHOW_FIRST_LEVEL_CLUSTERS:
-                        currentSelection = getFirstLevel();
+                        toBeDisplayed = getFirstLevel();
                         break;
 
                     case SHOW_SELECTED_CLUSTERS:
-                        currentSelection = getSelected();
+                        toBeDisplayed = currentSelection;
                         break;
 
                     default:
                         throw new RuntimeException("Unhanded case: " + mode);
                 }
 
-                if (!currentSelection.equals(lastSelection))
+                if (!toBeDisplayed.equals(currentlyDisplayed))
                 {
-                    @SuppressWarnings("rawtypes")
-                    final java.util.List selected = 
-                        selectionToClassification(currentSelection);
-                    logger.debug("Applying selection: " + selected);
-                    mapMediator.visualize(selected);
-
-                    this.lastSelection = currentSelection;
+                    mapMediator.visualize(selectionToClassification(toBeDisplayed));
+                    this.currentlyDisplayed = toBeDisplayed;
                 }
+
+                mapMediator.select(selectionToClassification(currentSelection));
             }
 
             return Status.OK_STATUS;
@@ -284,12 +278,7 @@ final class AdunaClusterMapViewPage extends Page
         /* */
         public void selectionChanged(SelectionChangedEvent event)
         {
-            if (VisualizationMode.SHOW_SELECTED_CLUSTERS.name().equals(
-                AdunaActivator.plugin.getPreferenceStore().getString(
-                    PreferenceConstants.VISUALIZATION_MODE)))
-            {
-                selectionJob.reschedule(REFRESH_DELAY);
-            }
+            selectionJob.reschedule(REFRESH_DELAY);
         }
     };
 

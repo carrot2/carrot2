@@ -154,6 +154,31 @@ public class AdunaTest
         c0.addChild(c2 = new DefaultClassification("c2", Arrays.asList(o1, o2)));
         mapMediator.setClassificationTree(c0);
         mapMediator.visualize(Arrays.asList(c0, c1, c2));
+        mapMediator.select(Arrays.asList(c0, c1));
+        
+        mapMediator.getClusterMap().addClusterMapListener(new ClusterMapListener()
+        {
+            @Override
+            public void selectionChanged(ClusterMap clustermap)
+            {
+                System.out.println(clustermap.getSelection());
+            }
+            
+            @Override
+            public void propertyChanged(String s, Object obj, ClusterMap clustermap)
+            {
+            }
+            
+            @Override
+            public void clusterModelChanged(ClusterMap clustermap)
+            {
+            }
+            
+            @Override
+            public void clusterGraphChanged(ClusterMap clustermap)
+            {
+            }
+        });
         
         return scrollable;
     }
