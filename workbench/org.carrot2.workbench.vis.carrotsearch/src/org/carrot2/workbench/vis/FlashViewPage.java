@@ -163,6 +163,12 @@ public abstract class FlashViewPage extends Page
         }
     };
 
+    /**
+     * Most recently serialized processing result. Avoid re-rendering of visualization
+     * in case there are delayed update events after the browser has started (race cond.).
+     */
+    private ProcessingResult lastProcessingResult;
+
     /*
      * 
      */
@@ -222,13 +228,18 @@ public abstract class FlashViewPage extends Page
             return Status.OK_STATUS;
         }
 
+        ProcessingResult pr = getProcessingResult(); 
+        if (pr == lastProcessingResult)
+            return Status.OK_STATUS;
+        lastProcessingResult = pr;
+        
         org.slf4j.LoggerFactory.getLogger("browser").info("Refreshing.");
         try
         {
             final ByteArrayOutputStream os = new ByteArrayOutputStream();
-            this.editor.getSearchResult().getProcessingResult().serialize(os, true, true);
+            pr.serialize(os, true, true);
             os.close();
-            
+
             String xml = new String(os.toByteArray(), "UTF-8");
             browser.execute("javascript:vis.set('dataXml', " +
             		"'" + StringEscapeUtils.escapeJavaScript(xml) + "')");
@@ -409,6 +420,9 @@ public abstract class FlashViewPage extends Page
         prov.toggleSelected(groupId, selected, selectionListener);
     }
 
+    /**
+     * 
+     */
     private void doDocumentSelection(int documentId)
     {
         final ProcessingResult pr = getProcessingResult();
@@ -435,8 +449,8 @@ public abstract class FlashViewPage extends Page
         assert Display.getCurrent() != null;
 
         final ProcessingResult pr = editor.getSearchResult().getProcessingResult();
-        if (pr == null || pr.getClusters() == null) return null;
-
+        if (pr == null || pr.getClusters() == null) 
+            return null;
         return pr;
     }
     
