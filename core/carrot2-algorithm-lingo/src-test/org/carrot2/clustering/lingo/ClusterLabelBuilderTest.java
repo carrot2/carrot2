@@ -14,6 +14,7 @@ package org.carrot2.clustering.lingo;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.TfTermWeighting;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,9 +24,6 @@ import org.junit.Test;
  */
 public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
 {
-    /** Matrix reducer needed for test */
-    private TermDocumentMatrixReducer reducer;
-
     /** Label builder under tests */
     private ClusterBuilder clusterBuilder;
 
@@ -52,7 +50,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
             0, 1, 2
         };
 
-        reducer.desiredClusterCountBase = 30;
+        desiredClusterCountBase  = 30;
         buildModelAndCheck(expectedFeatureIndex);
     }
 
@@ -66,7 +64,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
             2
         };
 
-        reducer.desiredClusterCountBase = 10;
+        desiredClusterCountBase  = 10;
         buildModelAndCheck(expectedFeatureIndex);
     }
 
@@ -81,7 +79,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
             2, 3
         };
 
-        reducer.desiredClusterCountBase = 15;
+        desiredClusterCountBase  = 15;
         buildModelAndCheck(expectedFeatureIndex);
     }
 
@@ -97,7 +95,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
             0
         };
 
-        reducer.desiredClusterCountBase = 10;
+        desiredClusterCountBase = 10;
         createPreprocessingContext("query word");
         buildModelAndCheck(expectedFeatureIndex);
     }
@@ -108,7 +106,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
         createDocuments("aa bb", "aa bb", "cc", "cc", "cc", "cc", "aa bb", "aa bb", "dd",
             "dd", "dd", "dd", "ee ff", "ee ff", "ee ff", "ee ff");
         clusterBuilder.phraseLabelBoost = 0.5;
-        reducer.desiredClusterCountBase = 15;
+        desiredClusterCountBase  = 15;
 
         final int [] expectedFeatureIndex = new int []
         {
@@ -150,8 +148,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
 
     private void buildModelAndCheck(int [] expectedFeatureIndex)
     {
-        buildTermDocumentMatrix();
-        reducer.reduce(lingoContext);
+        buildLingoModel();
         check(expectedFeatureIndex);
     }
 

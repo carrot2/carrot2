@@ -46,4 +46,12 @@ public final class TokenTypeUtils
     {
         return (flag & ITokenizer.TF_COMMON_WORD) != 0;
     }    
+    
+    /**
+     * Return <code>true</code> if {@link ITokenizer#TF_QUERY_WORD} is set.
+     */
+    public static boolean isInQuery(int flag)
+    {
+        return (flag & ITokenizer.TF_QUERY_WORD) != 0;
+    }    
 }

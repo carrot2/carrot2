@@ -1,3 +1,4 @@
+
 /*
  * Carrot2 project.
  *
@@ -9,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.clustering.lingo;
+package org.carrot2.algorithm.kmeans;
 
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
@@ -19,9 +20,9 @@ import org.carrot2.text.vsm.VectorSpaceModelContext;
 import com.carrotsearch.hppc.BitSet;
 
 /**
- * Stores intermediate data required during Lingo clustering.
+ * 
  */
-public class LingoProcessingContext
+public class BisectingKMeansProcessingContext
 {
     /** Preprocessing context */
     public final PreprocessingContext preprocessingContext;
@@ -29,7 +30,7 @@ public class LingoProcessingContext
     /** Vector space model context */
     public final VectorSpaceModelContext vsmContext;
 
-    /** Vector space model context */
+    /** Dimensionality-reduced vector space model */
     public final ReducedVectorSpaceModelContext reducedVsmContext;
 
     /** Feature indices (like in {@link AllLabels#featureIndex}) that should form clusters */
@@ -41,7 +42,7 @@ public class LingoProcessingContext
     /** Documents assigned to clusters */
     BitSet [] clusterDocuments;
 
-    LingoProcessingContext(ReducedVectorSpaceModelContext reducedVsmContext)
+    BisectingKMeansProcessingContext(ReducedVectorSpaceModelContext reducedVsmContext)
     {
         this.reducedVsmContext = reducedVsmContext;
         this.vsmContext = reducedVsmContext.vsmContext;

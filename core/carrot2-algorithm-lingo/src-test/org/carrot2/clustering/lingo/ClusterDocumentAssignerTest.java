@@ -24,9 +24,6 @@ import org.junit.Test;
  */
 public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBase
 {
-    /** Matrix reducer needed for test */
-    private TermDocumentMatrixReducer reducer;
-
     /** Label builder under tests */
     private ClusterBuilder clusterBuilder;
 
@@ -35,9 +32,7 @@ public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBas
     {
         clusterBuilder = new ClusterBuilder();
         clusterBuilder.labelAssigner = new SimpleLabelAssigner();
-        reducer = new TermDocumentMatrixReducer();
         reducer.factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
-        reducer.desiredClusterCountBase = 25;
     }
 
     @Test
@@ -49,7 +44,7 @@ public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBas
     @Test
     public void testNoPhrases()
     {
-        reducer.desiredClusterCountBase = 30;
+        desiredClusterCountBase = 30;
         createDocuments("", "aa . bb", "", "cc . bb", "", "cc . aa");
 
         final int [][] expectedDocumentIndices = new int [] []
@@ -77,7 +72,7 @@ public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBas
     public void testSinglePhraseNoSingleWords()
     {
         createDocuments("aa bb", "aa bb", "aa bb", "aa bb");
-        reducer.desiredClusterCountBase = 10;
+        desiredClusterCountBase = 10;
 
         final int [][] expectedDocumentIndices = new int [] []
         {
@@ -94,7 +89,7 @@ public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBas
     public void testSinglePhraseSingleWords()
     {
         createDocuments("aa bb", "aa bb", "cc", "cc", "aa bb", "aa bb . cc");
-        reducer.desiredClusterCountBase = 15;
+        desiredClusterCountBase = 15;
         clusterBuilder.phraseLabelBoost = 0.3;
 
         final int [][] expectedDocumentIndices = new int [] []
@@ -116,9 +111,7 @@ public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBas
 
     private void check(int [][] expectedDocumentIndices)
     {
-        buildTermDocumentMatrix();
-
-        reducer.reduce(lingoContext);
+        buildLingoModel();
 
         final TfTermWeighting termWeighting = new TfTermWeighting();
         clusterBuilder.buildLabels(lingoContext, termWeighting);

@@ -69,8 +69,8 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
          */
         final Map<String, Object> fastAttributes = Maps.newHashMap();
         LingoClusteringAlgorithmDescriptor.attributeBuilder(fastAttributes)
+            .desiredClusterCountBase(20)
             .matrixReducer()
-                .desiredClusterCountBase(20)
                 .factorizationQuality(FactorizationQuality.LOW);
 
         LingoClusteringAlgorithmDescriptor.attributeBuilder(fastAttributes)
@@ -80,8 +80,8 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
 
         final Map<String, Object> accurateAttributes = Maps.newHashMap();
         LingoClusteringAlgorithmDescriptor.attributeBuilder(accurateAttributes)
+            .desiredClusterCountBase(40)
             .matrixReducer()
-                .desiredClusterCountBase(40)
                 .factorizationQuality(FactorizationQuality.HIGH);
 
         LingoClusteringAlgorithmDescriptor.attributeBuilder(accurateAttributes)

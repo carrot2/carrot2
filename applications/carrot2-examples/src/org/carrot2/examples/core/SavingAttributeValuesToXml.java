@@ -42,8 +42,8 @@ public class SavingAttributeValuesToXml
 
         LingoClusteringAlgorithmDescriptor
             .attributeBuilder(attributes)
+            .desiredClusterCountBase(20)
             .matrixReducer()
-                .desiredClusterCountBase(20)
                 .factorizationQuality(FactorizationQuality.MEDIUM)
                 .factorizationFactory(LocalNonnegativeMatrixFactorizationFactory.class);
 

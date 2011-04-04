@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -10,25 +9,34 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.clustering.lingo;
-
-import org.carrot2.core.attribute.Processing;
-import org.carrot2.matrix.MatrixUtils;
-import org.carrot2.matrix.factorization.*;
-import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
-import org.carrot2.text.vsm.VectorSpaceModelContext;
-import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.attribute.constraint.IntRange;
+package org.carrot2.text.vsm;
 
 import org.apache.mahout.math.matrix.DoubleFactory2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.matrix.MatrixUtils;
+import org.carrot2.matrix.factorization.IMatrixFactorization;
+import org.carrot2.matrix.factorization.IMatrixFactorizationFactory;
+import org.carrot2.matrix.factorization.IterationNumberGuesser;
+import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
+import org.carrot2.matrix.factorization.IterativeMatrixFactorizationFactory;
+import org.carrot2.matrix.factorization.KMeansMatrixFactorizationFactory;
+import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
+import org.carrot2.matrix.factorization.NonnegativeMatrixFactorizationEDFactory;
+import org.carrot2.matrix.factorization.NonnegativeMatrixFactorizationKLFactory;
+import org.carrot2.matrix.factorization.PartialSingularValueDecompositionFactory;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Required;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
  * Reduces the dimensionality of a term-document matrix using a matrix factorization
  * algorithm.
  */
 @SuppressWarnings("deprecation")
-@Bindable(prefix = "LingoClusteringAlgorithm")
+@Bindable(prefix = "TermDocumentMatrixReducer")
 public class TermDocumentMatrixReducer
 {
     /**
@@ -68,61 +76,48 @@ public class TermDocumentMatrixReducer
     public FactorizationQuality factorizationQuality = FactorizationQuality.HIGH;
 
     /**
-     * Desired cluster count base. Base factor used to calculate the number of clusters
-     * based on the number of documents on input. The larger the value, the more clusters
-     * will be created. The number of clusters created by the algorithm will be
-     * proportional to the cluster count base, but not in a linear way.
-     * 
-     * @level Basic
-     * @group Clusters
-     * @label Cluster count base
-     */
-    @Input
-    @Processing
-    @Attribute
-    @IntRange(min = 2, max = 100)
-    public int desiredClusterCountBase = 30;
-
-    /**
      * Performs the reduction.
      */
-    void reduce(LingoProcessingContext context)
+    public void reduce(ReducedVectorSpaceModelContext context, int dimensions)
     {
         final VectorSpaceModelContext vsmContext = context.vsmContext;
-        if (vsmContext.termDocumentMatrix.columns() == 0 || vsmContext.termDocumentMatrix.rows() == 0)
+        if (vsmContext.termDocumentMatrix.columns() == 0
+            || vsmContext.termDocumentMatrix.rows() == 0)
         {
-            context.baseMatrix = DoubleFactory2D.dense.make(vsmContext.termDocumentMatrix.rows(),
+            context.baseMatrix = DoubleFactory2D.dense.make(
+                vsmContext.termDocumentMatrix.rows(),
                 vsmContext.termDocumentMatrix.columns());
             return;
         }
 
         if (factorizationFactory instanceof IterativeMatrixFactorizationFactory)
         {
-            ((IterativeMatrixFactorizationFactory) factorizationFactory)
-                .setK(getDesiredClusterCount(context));
+            ((IterativeMatrixFactorizationFactory) factorizationFactory).setK(dimensions);
             IterationNumberGuesser.setEstimatedIterationsNumber(
                 (IterativeMatrixFactorizationFactory) factorizationFactory,
                 vsmContext.termDocumentMatrix, factorizationQuality);
         }
 
         MatrixUtils.normalizeColumnL2(vsmContext.termDocumentMatrix, null);
-        context.baseMatrix = factorizationFactory.factorize(vsmContext.termDocumentMatrix).getU();
+        final IMatrixFactorization factorization = factorizationFactory
+            .factorize(vsmContext.termDocumentMatrix);
+        context.baseMatrix = factorization.getU();
+        context.coefficientMatrix = factorization.getV();
 
-        if (!(factorizationFactory instanceof IterativeMatrixFactorizationFactory)
-            && context.baseMatrix.columns() > desiredClusterCountBase)
-        {
-            context.baseMatrix = context.baseMatrix.viewPart(0, 0, context.baseMatrix
-                .rows(), desiredClusterCountBase);
-        }
+        context.baseMatrix = trim(factorization.getU(), dimensions);
+        context.coefficientMatrix = trim(factorization.getV(), dimensions);
     }
 
-    /**
-     * Calculates the desired cluster count using a very simple model.
-     */
-    private int getDesiredClusterCount(LingoProcessingContext context)
+    private final DoubleMatrix2D trim(DoubleMatrix2D matrix, int dimensions)
     {
-        final int documentCount = context.preprocessingContext.documents.size();
-        return Math.min((int) ((desiredClusterCountBase / 10.0) * Math
-            .sqrt(documentCount)), documentCount);
+        if (!(factorizationFactory instanceof IterativeMatrixFactorizationFactory)
+            && matrix.columns() > dimensions)
+        {
+            return matrix.viewPart(0, 0, matrix.rows(), dimensions);
+        }
+        else
+        {
+            return matrix;
+        }
     }
 }

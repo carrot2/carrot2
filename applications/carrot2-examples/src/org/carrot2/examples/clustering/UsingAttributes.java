@@ -26,6 +26,7 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
+import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
 import org.carrot2.source.boss.BossSearchService;
 import org.carrot2.source.microsoft.BingDocumentSource;
 import org.carrot2.source.microsoft.BingDocumentSourceDescriptor;
@@ -134,8 +135,10 @@ public class UsingAttributes
                     .results(100);
             LingoClusteringAlgorithmDescriptor
                 .attributeBuilder(attributes)
+                    .desiredClusterCountBase(15)
                     .matrixReducer()
-                        .desiredClusterCountBase(15);
+                        .factorizationQuality(FactorizationQuality.HIGH);
+                        
             BingDocumentSourceDescriptor
                 .attributeBuilder(attributes)
                     .appid(BingDocumentSource.CARROTSEARCH_APPID); // use your own key here
@@ -183,8 +186,9 @@ public class UsingAttributes
                     .documents(SampleDocumentData.DOCUMENTS_DATA_MINING);
             LingoClusteringAlgorithmDescriptor
                 .attributeBuilder(attributes)
+                    .desiredClusterCountBase(15)
                     .matrixReducer()
-                        .desiredClusterCountBase(15);
+                        .factorizationQuality(FactorizationQuality.HIGH);
 
             /* Perform processing */
             final ProcessingResult result = controller.process(attributes,
