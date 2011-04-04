@@ -26,7 +26,9 @@ import org.simpleframework.xml.core.Commit;
 /**
  * This class opens a connection to a resource pointed to by an URI. Note that JAR
  * resources <b>should not</b> be accessed this way because the default handler caches
- * {@link JarFile} instances and thus locks the file.
+ * {@link JarFile} instances and thus locks the file. This resource provider caches the
+ * content of returned resources and closes the underlying stream handle in
+ * {@link #open()}.
  * 
  * @see <a href="http://issues.carrot2.org/browse/CARROT-143">Issue CARROT-143</a>
  */

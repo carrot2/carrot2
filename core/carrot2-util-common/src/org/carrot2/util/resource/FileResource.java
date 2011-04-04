@@ -21,7 +21,8 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
 
 /**
- * A local filesystem resource.
+ * A local filesystem resource. This loader provides cached content of
+ * returned resources and closes the underlying stream handle in {@link #open()}.
  */
 @Root(name = "file-resource")
 @JsonAutoDetect(JsonMethod.NONE)
