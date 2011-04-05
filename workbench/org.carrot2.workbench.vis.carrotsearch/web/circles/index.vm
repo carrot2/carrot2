@@ -1,7 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-#set ( $page = ${request.getParameter("page")} )
-#set ( $source = "/servlets/pull?page=" + $page )
 #set ( $version = "1.2.2" )
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -37,7 +35,7 @@
       var vis = new CarrotSearchCircles({
         // Location of the Circles Flash binary
         visualizationSwfLocation: "assets/$version/required/swf/com.carrotsearch.visualizations.circles.swf",
-        
+
         // Location of the Flash Player installer
         flashPlayerInstallerSwfLocation: "assets/$version/required/swf/playerProductInstall.swf",
 
@@ -48,15 +46,10 @@
         onLoad: showTip,
 
         // Attach Flash-SWT event hooks.
+        onInitialize: onInitialized,
         onGroupSelection: proxy_groupClicked,
         onDocumentSelection: proxy_documentClicked,
         onModelChange: proxy_onModelChanged
-
-        #if ($page),
-        // URL of the XML with documents and clusters to display in the visualization.
-        // The XML must be in Carrot2 format: http://download.carrot2.org/head/manual/#section.architecture.output-xml
-        dataUrl: "$source"
-        #end
       });
       ie64Notice();
     //]]></script>

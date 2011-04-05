@@ -99,16 +99,20 @@ public abstract class FlashViewPage extends Page
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
-     * Reload data XML job. Postponed a bit to make the user interface more responsive.
+     * Reloading XML data (with cause).
      */
-    private PostponableJob reloadDataXmlJob = new PostponableJob(new UIJob(
-        "Browser (refresh)...")
-    {
-        public IStatus runInUIThread(IProgressMonitor monitor)
+    private class ReloadXMLJob extends PostponableJob {
+        public ReloadXMLJob(final String origin)
         {
-            return reloadDataXml();
+            super(new UIJob("Browser refresh [" + origin + "]...") {
+                public IStatus runInUIThread(IProgressMonitor monitor)
+                {
+                    logger.debug("Browser refresh [" + origin + "]");
+                    return reloadDataXml();
+                }
+            });
         }
-    });
+    };
 
     /**
      * Selection refresh job.
@@ -129,7 +133,7 @@ public abstract class FlashViewPage extends Page
     {
         public void processingResultUpdated(ProcessingResult result)
         {
-            reloadDataXmlJob.reschedule(BROWSER_REFRESH_DELAY);
+            new ReloadXMLJob("updated result").reschedule(BROWSER_REFRESH_DELAY);
         }
     };
 
@@ -204,13 +208,14 @@ public abstract class FlashViewPage extends Page
     }
 
     /**
-     * @see #reloadDataXmlJob
+     * Reloads XML data in the browser. Use {@link ReloadXMLJob} for invoking this.
      */
     private IStatus reloadDataXml()
     {
         // If there is no search result, quit. Search result listener will reschedule.
         if (getProcessingResult() == null)
         {
+            logger.debug("Reloading XML aborted: no processing result.");
             // No search result yet.
             return Status.OK_STATUS;
         }
@@ -218,22 +223,25 @@ public abstract class FlashViewPage extends Page
         // If browser disposed, quit.
         if (browser.isDisposed())
         {
+            logger.debug("Reloading XML aborted: browser disposed.");
             return Status.OK_STATUS;
         }
 
         // If the page has not finished loading, reschedule.
         if (!browserInitialized)
         {
-            reloadDataXmlJob.reschedule(BROWSER_REFRESH_DELAY);
+            logger.debug("Reloading XML rescheduled: browser not ready.");
+            new ReloadXMLJob("delaying").reschedule(BROWSER_REFRESH_DELAY);
             return Status.OK_STATUS;
         }
 
         ProcessingResult pr = getProcessingResult(); 
         if (pr == lastProcessingResult)
+        {
+            logger.debug("Reloading XML aborted: identical processing result.");
             return Status.OK_STATUS;
-        lastProcessingResult = pr;
-        
-        org.slf4j.LoggerFactory.getLogger("browser").info("Refreshing.");
+        }
+
         try
         {
             final ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -241,12 +249,22 @@ public abstract class FlashViewPage extends Page
             os.close();
 
             String xml = new String(os.toByteArray(), "UTF-8");
-            browser.execute("javascript:vis.set('dataXml', " +
-            		"'" + StringEscapeUtils.escapeJavaScript(xml) + "')");
+            logger.info("Updating view XML: " + StringEscapeUtils.escapeJava(StringUtils.abbreviate(xml, 120)));
+
+            if (!browser.execute("javascript:updateDataXml('" 
+                + StringEscapeUtils.escapeJavaScript(xml) + "')"))
+            {
+                logger.warn("Failed to update the XML (reason unknown): "
+                    + StringUtils.abbreviate(xml, 200));
+            }
+            else
+            {
+                lastProcessingResult = pr;
+            }
         }
         catch (Exception e)
         {
-            org.slf4j.LoggerFactory.getLogger("browser").warn("Embedded browser error: ", e);
+            logger.warn("Embedded browser error: ", e);
         }
 
         return Status.OK_STATUS;
@@ -323,16 +341,15 @@ public abstract class FlashViewPage extends Page
             public void completed(ProgressEvent event)
             {
                 // When the page loads, try to load the cluster model immediately.
+                logger.debug("Browser loaded and initialized.");
                 browserInitialized = true;
-                reloadDataXmlJob.reschedule(0);
+                new ReloadXMLJob("browser loaded").reschedule(0);
             }
         });
 
         final Activator plugin = Activator.getInstance();
         final Map<String, Object> customParams = contributeCustomParams();
         final String refreshURL = createGetURI(plugin.getFullURL(entryPageUri), customParams);
-        browserInitialized = false;
-        browser.setUrl(refreshURL);
 
         /*
          * Register custom callback functions.
@@ -381,7 +398,10 @@ public abstract class FlashViewPage extends Page
                 return null;
             }
         };
-    
+
+        browserInitialized = false;
+        browser.setUrl(refreshURL);
+
         editor.getSearchResult().addListener(editorSyncListener);
         editor.getSite().getSelectionProvider().addSelectionChangedListener(
             selectionListener);

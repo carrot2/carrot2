@@ -76,3 +76,38 @@ function ie64Notice() {
     document.write('</div>');
   }
 }
+
+// Make sure the SWF has loaded or delay the update.
+// See: http://issues.carrot2.org/browse/CARROT-792
+var swfLoaded = false;
+var lastXml = null;
+
+/** Invoked by the workbench when updating XML. Defers the update until
+ *  the visualization is initialized. */
+function updateDataXml(xml) {
+  try {
+      if (swfLoaded) {
+          vis.set('dataXml', xml);
+      } else {
+          lastXml = xml;
+      }
+  } catch (e) {
+      // alert("Error: " + e.message);
+	  throw e;
+  }
+}
+
+/** Visualization callback (on initialized) */
+function onInitialized() {
+  try {
+      swfLoaded = true;
+      if (lastXml != null) {
+          vis.set('dataXml', lastXml);
+          lastXml = null;
+      }
+  } catch (e) {
+      // alert("Error: " + e.message);
+	  throw e;
+  }
+}
+
