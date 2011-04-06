@@ -16,7 +16,7 @@ import org.apache.mahout.math.matrix.DoubleMatrix2D;
 /**
  * Stores data related a Vector Space Model with reduced dimensionality.
  * 
- * @See {@link TermDocumentMatrixReducer}
+ * @see {@link TermDocumentMatrixReducer}
  */
 @SuppressWarnings("deprecation")
 public class ReducedVectorSpaceModelContext
