@@ -822,6 +822,7 @@
         <include name="suites/source-bing*.xml" />
         <include name="suites/algorithm-lingo*.xml" />
         <include name="suites/algorithm-stc*.xml" />
+	<include name="suites/algorithm-kmeans*.xml" />
       </fileset>
     </copy>
 
