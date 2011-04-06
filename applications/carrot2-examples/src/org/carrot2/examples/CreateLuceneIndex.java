@@ -20,7 +20,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriter.MaxFieldLength;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.carrot2.core.Document;
@@ -49,8 +49,9 @@ public class CreateLuceneIndex
             System.exit(-2);
         }
 
-        Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
-        IndexWriter writer = new IndexWriter(FSDirectory.open(indexDir), analyzer, true, MaxFieldLength.UNLIMITED);
+        Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_31);
+        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_31, analyzer);
+        IndexWriter writer = new IndexWriter(FSDirectory.open(indexDir), config);
         
         for (Document d : SampleDocumentData.DOCUMENTS_DATA_MINING)
         {

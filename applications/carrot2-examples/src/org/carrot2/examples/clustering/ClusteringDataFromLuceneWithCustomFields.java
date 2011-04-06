@@ -12,12 +12,12 @@
 
 package org.carrot2.examples.clustering;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
@@ -178,14 +178,22 @@ public class ClusteringDataFromLuceneWithCustomFields
     }
 
     /**
-     * Carrot2 attribute classes require parameterless constructor, so we wrap StandardAnalyzer
-     * here.
+     * Carrot2 attribute classes require parameterless constructor, so we delegate to
+     * standard analyzer from here.
      */
-    public static final class StandardAnalyzerWrapper extends StandardAnalyzer
+    public static final class StandardAnalyzerWrapper extends Analyzer
     {
+        private final StandardAnalyzer target;
+
         public StandardAnalyzerWrapper()
         {
-            super(Version.LUCENE_30);
+            this.target = new StandardAnalyzer(Version.LUCENE_31);
+        }
+
+        @Override
+        public TokenStream tokenStream(String s, Reader reader)
+        {
+            return target.tokenStream(s, reader);
         }
     }
 }
