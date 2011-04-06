@@ -19,7 +19,9 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.Field.TermVector;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.util.Version;
 import org.carrot2.core.Document;
 
 /**
@@ -30,8 +32,10 @@ class LuceneIndexUtils
     static void createAndPopulateIndex(Directory directory, Analyzer analyzer)
         throws Exception
     {
-        final IndexWriter w = new IndexWriter(directory, analyzer, true,
-            IndexWriter.MaxFieldLength.UNLIMITED);
+        @SuppressWarnings("deprecation")
+        final IndexWriterConfig config = new IndexWriterConfig(
+            Version.LUCENE_CURRENT, analyzer);
+        final IndexWriter w = new IndexWriter(directory, config);
         for (Document d : DOCUMENTS_DATA_MINING)
         {
             org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document();

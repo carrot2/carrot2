@@ -125,7 +125,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
 
         if (this.current != null && current instanceof FSDirectory)
         {
-            dialog.setFilterPath(((FSDirectory) current).getFile().getAbsolutePath());
+            dialog.setFilterPath(((FSDirectory) current).getDirectory().getAbsolutePath());
         }
         else
         {
@@ -178,7 +178,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
         }
         else if (current instanceof FSDirectory)
         {
-            representation = ((FSDirectory) current).getFile().getAbsolutePath();
+            representation = ((FSDirectory) current).getDirectory().getAbsolutePath();
         }
         else representation = current.getClass().getSimpleName();
 

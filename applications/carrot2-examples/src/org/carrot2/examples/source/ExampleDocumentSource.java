@@ -110,6 +110,7 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
         // will take care of the rest.
     }
 
+    @SuppressWarnings("deprecation")
     public static void main(String [] args)
     {
         final Controller controller = ControllerFactory.createSimple();
@@ -124,8 +125,8 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
 
         params.put(
             AttributeUtils.getKey(ExampleDocumentSource.class, "analyzer"), 
-            new WhitespaceAnalyzer());
-        
+            new WhitespaceAnalyzer(Version.LUCENE_CURRENT));
+
         /*
          * An alternative is to generate additional descriptor classes for bindables.
          * These classes provide type-safe attribute builders. Unfortunately due to

@@ -33,7 +33,7 @@ import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.Field.TermVector;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriter.MaxFieldLength;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
@@ -269,8 +269,9 @@ public class MemTimeBenchmark
         try
         {
             Directory dir = new RAMDirectory();
-            IndexWriter w = new IndexWriter(dir, new StandardAnalyzer(Version.LUCENE_30),
-                MaxFieldLength.UNLIMITED);
+            @SuppressWarnings("deprecation")
+            IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_CURRENT, new StandardAnalyzer(Version.LUCENE_CURRENT));
+            IndexWriter w = new IndexWriter(dir, config);
 
             for (Document d : inputList)
             {

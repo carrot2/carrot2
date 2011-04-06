@@ -20,7 +20,7 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.cn.smart.SentenceTokenizer;
 import org.apache.lucene.analysis.cn.smart.WordTokenFilter;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.ExceptionUtils;
@@ -35,7 +35,7 @@ public final class ChineseTokenizerAdapter implements ITokenizer
 
     private Tokenizer sentenceTokenizer;
     private TokenStream wordTokenFilter;
-    private TermAttribute term = null;
+    private CharTermAttribute term = null;
 
     private final MutableCharArray tempCharSequence;
 
@@ -51,8 +51,8 @@ public final class ChineseTokenizerAdapter implements ITokenizer
         if (hasNextToken)
         {
             short flags = 0;
-            final char [] image = term.termBuffer();
-            final int length = term.termLength();
+            final char [] image = term.buffer();
+            final int length = term.length();
             tempCharSequence.reset(image, 0, length);
             if (length == 1 && image[0] == ',')
             {
@@ -76,7 +76,7 @@ public final class ChineseTokenizerAdapter implements ITokenizer
 
     public void setTermBuffer(MutableCharArray array)
     {
-        array.reset(term.termBuffer(), 0, term.termLength());
+        array.reset(term.buffer(), 0, term.length());
     }
 
     public void reset(Reader input) throws IOException
@@ -85,7 +85,7 @@ public final class ChineseTokenizerAdapter implements ITokenizer
         {
             sentenceTokenizer.reset(input);
             wordTokenFilter = new WordTokenFilter(sentenceTokenizer);
-            this.term = wordTokenFilter.addAttribute(TermAttribute.class);
+            this.term = wordTokenFilter.addAttribute(CharTermAttribute.class);
         }
         catch (Exception e)
         {

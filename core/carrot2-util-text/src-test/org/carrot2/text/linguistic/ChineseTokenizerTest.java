@@ -13,13 +13,13 @@ package org.carrot2.text.linguistic;
 
 import java.io.IOException;
 
-import org.apache.lucene.analysis.cn.ChineseTokenizer;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.text.linguistic.lucene.ChineseTokenizerAdapter;
 import org.junit.Test;
 
 /**
- * Test cases for {@link ChineseTokenizer}.
+ * Test cases for {@link ChineseTokenizerAdapter}.
  */
 public class ChineseTokenizerTest extends TokenizerTestBase
 {

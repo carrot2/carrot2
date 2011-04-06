@@ -42,11 +42,11 @@ public final class FSDirectoryWrapper implements ISimpleXmlWrapper<FSDirectory>
     {
         this.value = value;
     }
-    
+
     @Persist
     void beforeSerialization()
     {
-        indexPath = value.getFile().getAbsolutePath();
+        indexPath = value.getDirectory().getAbsolutePath();
     }
 
     @Commit
