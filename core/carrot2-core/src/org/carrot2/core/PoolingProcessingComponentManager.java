@@ -240,7 +240,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
          * non-thread-safe primitive instances during initialization. These may lead to
          * hard-to-trace bugs.
          * 
-         * @see https://issues.apache.org/jira/browse/SOLR-2282
+         * @see "https://issues.apache.org/jira/browse/SOLR-2282"
          */
         void checkNonPrimitiveInstances(IProcessingComponent processingComponent,
             Map<String, Object> inputAttributes, Predicate<Field> predicate)
