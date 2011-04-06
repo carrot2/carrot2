@@ -12,7 +12,10 @@
 
 package org.carrot2.text.linguistic.lucene;
 
+import java.util.Arrays;
+
 import org.carrot2.text.linguistic.IStemmer;
+import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.factory.IFactory;
 import org.tartarus.snowball.SnowballProgram;
 
@@ -38,10 +41,19 @@ public class SnowballStemmerFactory implements IFactory<IStemmer>
 
         public CharSequence stem(CharSequence word)
         {
-            snowballStemmer.setCurrent(word.toString());
+            final int len = word.length();
+            char [] buffer = snowballStemmer.getCurrentBuffer();
+            if (buffer.length < len)
+                buffer = new char [len];
+
+            for (int i = word.length(); --i >= 0;)
+                buffer[i] = word.charAt(i);
+            snowballStemmer.setCurrent(buffer, len);
+
             if (snowballStemmer.stem())
             {
-                return snowballStemmer.getCurrent();
+                return new MutableCharArray(Arrays.copyOf(
+                    snowballStemmer.getCurrentBuffer(), snowballStemmer.getCurrentBufferLength()));
             }
             else
             {
