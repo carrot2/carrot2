@@ -1,4 +1,4 @@
-package org.carrot2.algorithm.kmeans;
+package org.carrot2.clustering.kmeans;
 
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;

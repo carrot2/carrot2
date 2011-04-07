@@ -1,4 +1,4 @@
-package org.carrot2.algorithm.kmeans;
+package org.carrot2.clustering.kmeans;
 
 import java.util.Collections;
 import java.util.Iterator;

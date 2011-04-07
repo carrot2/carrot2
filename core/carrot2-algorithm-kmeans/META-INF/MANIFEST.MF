@@ -12,4 +12,4 @@ Require-Bundle: org.carrot2.core,
 Bundle-ClassPath: META-INF/,
  .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.carrot2.algorithm.kmeans
+Export-Package: org.carrot2.clustering.kmeans

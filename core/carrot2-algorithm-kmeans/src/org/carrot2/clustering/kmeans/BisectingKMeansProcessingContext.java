@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.algorithm.kmeans;
+package org.carrot2.clustering.kmeans;
 
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
