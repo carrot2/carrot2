@@ -33,6 +33,7 @@
 
       <ant dir="@{solr.checkout}/contrib/clustering" inheritall="false">
         <target name="clean" />
+        <target name="test" />
         <target name="dist" />
       </ant>
       
