@@ -303,7 +303,7 @@
       <orderedlist>
         <listitem>
           <para>
-            Change the <link linkend="LingoClusteringAlgorithm.factorizationFactory" role="attribute" /> attribute
+            Change the <link linkend="lingo.TermDocumentMatrixReducer.factorizationFactory" role="attribute" /> attribute
             to <classname>LocalNonnegativeMatrixFactorizationFactory</classname>.
           </para>
         </listitem>
@@ -354,19 +354,19 @@
       <itemizedlist>
         <listitem>
           <para>
-            Lower <link role="attribute" linkend="LingoClusteringAlgorithm.factorizationQuality" />,
+            Lower <link role="attribute" linkend="lingo.TermDocumentMatrixReducer.factorizationQuality" />,
             which will cause the matrix factorization algorithm to perform fewer iterations
-            and hence complete quicker. Alternatively, you can set <link role="attribute" linkend="LingoClusteringAlgorithm.factorizationFactory" />
+            and hence complete quicker. Alternatively, you can set <link role="attribute" linkend="lingo.TermDocumentMatrixReducer.factorizationFactory" />
             to <code>org.carrot2.matrix.factorization.PartialSingularValueDecompositionFactory</code>, 
             which is slightly faster than the other factorizations. In the latter case
-            <link role="attribute" linkend="LingoClusteringAlgorithm.factorizationQuality" /> 
+            <link role="attribute" linkend="lingo.TermDocumentMatrixReducer.factorizationQuality" /> 
             becomes irrelevant. 
           </para>
         </listitem>
         
         <listitem>
           <para>
-            Lower <link role="attribute" linkend="TermDocumentMatrixBuilder.maximumMatrixSize" />,
+            Lower <link role="attribute" linkend="lingo.TermDocumentMatrixBuilder.maximumMatrixSize" />,
             which would cause the matrix factorization algorithm to complete quicker and
             use less memory. With small matrix sizes, Lingo may not be able to discover
             smaller clusters.

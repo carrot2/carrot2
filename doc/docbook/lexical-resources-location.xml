@@ -69,5 +69,17 @@
       is provided as part of &CSA; distribution, demonstrates ways of overriding
       the default lexical resource search locations from .NET.</para></listitem>
     </varlistentry>
+
+    <varlistentry>
+      <term>Apache Solr clustering plugin</term>
+      <listitem>
+        <para>
+          The plugin tries to load the lexical resources from the 
+          <filename>{solr.home}/conf/clustering/carrot2</filename>
+          directory. If a resource is not found in the directory, 
+          the default version of the resource is loaded from &PROD; JAR.
+        </para>
+      </listitem>
+    </varlistentry>
   </variablelist>
 </section>

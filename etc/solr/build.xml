@@ -1,0 +1,72 @@
+<!--
+  Internal build script for Carrot2 Solr compatibility package.
+  Please use the 'solr' target from the main build script to build the package.
+  -->
+<project name="carrot2.solr" default="fail">
+  <!--
+       Builds Carrot2 compatibility package for Apache Solr.
+    -->
+  <target name="carrot2.solr.dist" depends="carrot2.solr.1.4.x, carrot2.solr.3.1.x" />
+
+  <target name="carrot2.solr.1.4.x" depends="core" if="solr.checkout.1.4.x">
+    <carrot2.solr.compat solr.version="1.4.x" solr.checkout="${solr.checkout.1.4.x}" />
+  </target>
+
+  <target name="carrot2.solr.3.1.x" depends="core" if="solr.checkout.3.1.x">
+    <carrot2.solr.compat solr.version="3.1.x" solr.checkout="${solr.checkout.3.1.x}" />
+  </target>
+
+  <!--
+      Assembles the compatibility package. The solr.checkout attribute must
+      point to a Solr SVN checkout, patched (if needed) for use with the
+      current Carrot2 checkout.
+    -->
+  <macrodef name="carrot2.solr.compat">
+    <attribute name="solr.version" />
+    <attribute name="solr.checkout" />
+
+    <sequential>
+      <echo>@{solr.checkout}</echo>
+      <condition property="@{solr.version}.is-1.4.x">
+        <matches pattern="1\.4" string="@{solr.version}"/>
+      </condition>
+
+      <ant dir="@{solr.checkout}/contrib/clustering" inheritall="false">
+        <target name="clean" />
+        <target name="dist" />
+      </ant>
+      
+      <mkdir dir="${carrot2.master.basedir}/tmp/solr" />
+
+      <carrot2.readme readme.src="${carrot2.master.basedir}/etc/solr/readme.txt"
+                      readme.dest="${carrot2.master.basedir}/tmp/solr/readme.txt">
+        <carrot2.filters>
+          <filter token="carrot2.version" value="${carrot2.version}" />
+          <filter token="solr.version" value="@{solr.version}" />
+        </carrot2.filters>
+      </carrot2.readme>
+
+      <property name="@{solr.version}.solr.dist.name" value="${carrot2.solr-compat.base}-@{solr.version}-compatibility-${carrot2.version}" />
+      <zip zipfile="${carrot2.master.basedir}/tmp/${@{solr.version}.solr.dist.name}.zip">
+        <zipfileset dir="${api.dir}/lib/required" prefix="${@{solr.version}.solr.dist.name}/contrib/clustering/lib">
+          <exclude name="*guava*" unless="@{solr.version}.is-1.4.x" />
+          <exclude name="*log4j*" />
+          <exclude name="*ehcache*" />
+          <exclude name="*commons-lang*" unless="@{solr.version}.is-1.4.x" />
+          <exclude name="*slf4j*" />
+        </zipfileset>
+        <zipfileset dir="${api.dir}" prefix="${@{solr.version}.solr.dist.name}/contrib/clustering/lib">
+          <include name="*.jar" />
+        </zipfileset>
+        <zipfileset dir="@{solr.checkout}/dist" includes="apache-solr-clustering-*.jar" 
+                    fullpath="${@{solr.version}.solr.dist.name}/dist/apache-solr-clustering-@{solr.version}.jar" />
+        <zipfileset dir="${carrot2.master.basedir}/tmp/solr" prefix="${@{solr.version}.solr.dist.name}" />
+      </zip>
+    </sequential>
+  </macrodef>
+  
+  <target name="fail">
+    <fail>Please use the 'solr' target from the main build script to build the compatibility package.</fail>
+  </target>
+</project>
+

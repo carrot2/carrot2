@@ -44,6 +44,7 @@
         <param name="product.webapp.base" expression="${carrot2.webapp.base}" />
         <param name="product.manual.base" expression="${carrot2.manual.base}" />
         <param name="product.workbench.base" expression="${carrot2.workbench.base}" />
+        <param name="product.solr-compat.base" expression="${carrot2.solr-compat.base}" />
         
         <param name="product.demo.url" expression="http://search.carrot2.org" />
         <param name="product.version" expression="${carrot2.version}" />
