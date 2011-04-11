@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -39,13 +39,14 @@ import org.slf4j.Logger;
 import com.google.common.collect.Maps;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.fetcher.FeedFetcher;
+import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
 
 /**
  * A {@link IDocumentSource} fetching {@link Document}s (search results) from an
  * OpenSearch feed.
  * <p>
  * Based on code donated by Julien Nioche.
- * Basic authentication support contributed by Vittal Aithal.
  * 
  * @see <a href="http://www.opensearch.org">OpenSearch.org</a>
  */
@@ -155,42 +156,12 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     public String userAgent = null;
 
     /**
-     * Basic Auth Username. The username to use then connecting to a 
-     * protected feed URL. If empty or <code>null</code> value is provided,
-     * no authentication is used.
-     * 
-     * @label Basic Auth Username
-     * @level Advanced
-     * @group Service
-     */
-    @Input
-    @Init
-    @Processing
-    @Attribute
-    public String basicAuthUsername = null;
-
-    /**
-     * Basic Auth Password. The password to use then connecting to a 
-     * protected feed URL. If empty or <code>null</code> value is provided,
-     * no authentication is used.
-     * 
-     * @label Basic Auth Password
-     * @level Advanced
-     * @group Service
-     */
-    @Input
-    @Init
-    @Processing
-    @Attribute
-    public String basicAuthPassword = null;
-
-    /**
      * Search engine metadata create upon initialization.
      */
     private MultipageSearchEngineMetadata metadata;
 
     /** Fetcher for OpenSearch feed. */
-    private OpenSearchHttpClientFeedFetcher feedFetcher;
+    private FeedFetcher feedFetcher;
 
     /** searchTerms variable */
     private static final String SEARCH_TERMS_VARIABLE_NAME = "searchTerms";
@@ -242,18 +213,11 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
 
         this.metadata = new MultipageSearchEngineMetadata(resultsPerPage, maximumResults,
             hasStartPage);
-        this.feedFetcher = new OpenSearchHttpClientFeedFetcher();
+        this.feedFetcher = new HttpURLFeedFetcher();
         if (org.apache.commons.lang.StringUtils.isNotBlank(this.userAgent))
         {
             this.feedFetcher.setUserAgent(this.userAgent);
         }
-        
-        if (org.apache.commons.lang.StringUtils.isNotBlank(this.basicAuthUsername) &&
-            org.apache.commons.lang.StringUtils.isNotBlank(this.basicAuthPassword))
-        {
-        	feedFetcher.setBasicCredentials(this.basicAuthUsername, this.basicAuthPassword);
-        }
-        
     }
 
     @Override
