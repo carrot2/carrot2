@@ -426,3 +426,10 @@ div[title="Feed URL template"] dl > dd > p > code {
 	width: 26em;
 	word-wrap: break-word;
 }
+
+/** Compact lists */
+ul[compact] > li > p, 
+ol[compact] > li > p {
+  margin-bottom: 1mm;
+  margin-top: 1mm;
+}
