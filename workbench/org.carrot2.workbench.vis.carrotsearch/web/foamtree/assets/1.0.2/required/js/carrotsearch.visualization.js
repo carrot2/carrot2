@@ -80,7 +80,7 @@ function CarrotSearchVisualization() {
     }
     
     // Map JS to SWF parameter names
-    var flashvars = prepareFlashVars();
+    var flashvars = prepareFlashVars(initial);
     for (var name in flashvars) {
       flashvars[name] = escape(flashvars[name]);
     }
@@ -125,12 +125,15 @@ function CarrotSearchVisualization() {
   /**
    * Converts JS API options to Flash API options. 
    */
-  function prepareFlashVars() {
+  function prepareFlashVars(skipNulls) {
     var flashvars = { };
     for (var name in options) {
       var key = config.jsToSwfPropertyName[name];
       if (key) {
-        flashvars[key] = config.transformers[name] ? config.transformers[name].call(this, options[name], name) : options[name];
+        var value = config.transformers[name] ? config.transformers[name].call(this, options[name], name) : options[name];
+        if (!skipNulls || value !== null) {
+          flashvars[key] = value;
+        }
       }
     }
     
@@ -195,7 +198,7 @@ function CarrotSearchVisualization() {
     
     if (needsReload) {
       if (element && has(element, "reload")) {
-        var vars = prepareFlashVars();
+        var vars = prepareFlashVars(false);
         if (canLog()) {
           window.console.info("flashvars: ", vars);
         }
