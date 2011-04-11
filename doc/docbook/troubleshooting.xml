@@ -24,7 +24,7 @@
         To increase Java heap size for &DCW;, use the following command line parameters:
       </para>
 
-<programlisting><![CDATA[&PRODID;-workbench -vmargs -Xmx256m]]></programlisting>
+<programlisting>&PRODID;<![CDATA[-workbench -vmargs -Xmx256m]]></programlisting>
 
       <tip>
         <para>

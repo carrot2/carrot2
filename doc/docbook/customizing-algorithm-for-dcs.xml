@@ -24,7 +24,7 @@
     <listitem>
       <para>
         Replace the contents of <filename>algorithm-lingo-attributes.xml</filename>, located in
-        the <filename>WEB-INF/classes/suites</filename> directory of the DCS
+        the <filename>WEB-INF/suites</filename> directory of the DCS
         WAR file, located in the <filename>war/</filename> directory of the DCS distribution, 
         with the XML file saved in the previous step.
       </para>

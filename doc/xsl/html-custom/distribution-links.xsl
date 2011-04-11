@@ -66,8 +66,12 @@
       <xsl:otherwise><xsl:value-of select="$product.version" /></xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+  <xsl:template match="d:link[@role = 'javadoc'][@direct = 'true']">
+    <a href="{$carrot2.javadoc.url}/{@linkend}"><xsl:apply-templates /></a>
+  </xsl:template>
   
-  <xsl:template match="d:link[@role = 'javadoc']">
+  <xsl:template match="d:link[@role = 'javadoc'][not(@direct)]">
     <xsl:variable name="linkend-with-hash"><xsl:value-of select="@linkend" /><xsl:if test="not(contains(@linkend, '#'))">#</xsl:if></xsl:variable>
     <xsl:variable name="class-name">
       <xsl:call-template name="from-last-substring">
