@@ -312,7 +312,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
             {
                 log.info("An object of a non-@ThreadSafe class " + valueType.getName()
                     + " bound at initialization-time to attribute " + key
-                    + ". Make sure this intended.");
+                    + ". Make sure this is intended.");
                 if (makeAssertion)
                 {
                     assert false : "An object of a non-@ThreadSafe class "

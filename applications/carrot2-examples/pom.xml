@@ -24,6 +24,18 @@
       <artifactId>carrot2-core</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <!-- SLF4J, simple console logging -->
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>jcl-over-slf4j</artifactId>
+    	<version>1.6.1</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>slf4j-simple</artifactId>
+    	<version>1.6.1</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -55,4 +67,36 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>run</id>
+
+      <build>
+        <defaultGoal>integration-test</defaultGoal>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>run</id>
+                <phase>integration-test</phase>
+                <configuration>
+                  <target>
+                    <ant target="carrot2.api.test.maven" antfile="build.xml"
+                      inheritrefs="false" inheritall="false" />
+                  </target>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

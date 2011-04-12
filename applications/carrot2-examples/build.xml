@@ -4,24 +4,24 @@
   -->
 <project name="carrot2.api" default="carrot2.api.test">
   <!--
-       Dependencies (JARs) required for clustering directly fed documents.
-    -->
-  <path id="libs.required">
-    <fileset dir="lib/required" includes="**/*.jar" />
-  </path>
-  
-  <!--
-       Dependencies (JARs) required for both fetching documents using
-       document sources and clustering them using one of Carrot2 algorithms.
-    -->
-  <path id="libs.all">
-    <fileset dir="lib" includes="**/*.jar" />
-  </path>
-
-  <!--
        Builds the examples.
     -->
   <target name="carrot2.api.build">
+    <!--
+         Dependencies (JARs) required for clustering directly fed documents.
+      -->
+    <path id="libs.required">
+      <fileset dir="lib/required" includes="**/*.jar" />
+    </path>
+      
+    <!--
+         Dependencies (JARs) required for both fetching documents using
+         document sources and clustering them using one of Carrot2 algorithms.
+      -->
+    <path id="libs.all">
+      <fileset dir="lib" includes="**/*.jar" />
+    </path>
+
     <mkdir dir="tmp" />
     <mkdir dir="tmp/classes" />
 
@@ -46,7 +46,23 @@
   </target>
 
   <!-- Runs selected classes -->
-  <target name="carrot2.api.test" depends="carrot2.api.build">
+  <target name="carrot2.api.test" depends="carrot2.api.build, carrot2.api.test.only">
+  </target>
+
+  <target name="carrot2.api.test.maven">
+      <path id="libs.all">
+        <fileset dir="${basedir}/target">
+          <include name="carrot2*.jar" />
+          <include name="dependency/*.jar" />
+        </fileset>
+      </path>
+      <path id="libs.required" refid="libs.all" />
+
+      <antcall target="carrot2.api.test.only" inheritrefs="true" />
+  </target>
+
+  <!-- Runs selected classes (invoked from Maven too). -->
+  <target name="carrot2.api.test.only">
     <!-- Run some example classes -->
     <run.example classname="org.carrot2.examples.clustering.ClusteringDocumentList" dependencies="libs.required" />
     <run.example classname="org.carrot2.examples.clustering.UsingCachingController" dependencies="libs.all" />
