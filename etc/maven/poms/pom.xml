@@ -112,6 +112,12 @@
       <groupId>org.apache.mahout</groupId>
       <artifactId>mahout-collections</artifactId>
       <version>0.3</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>mahout-collection-codegen-plugin</artifactId>
+          <groupId>org.apache.mahout</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>

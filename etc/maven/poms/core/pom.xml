@@ -26,12 +26,24 @@
       <groupId>net.java.dev.rome</groupId>
       <artifactId>rome</artifactId>
       <version>1.0.0</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>jdom</artifactId>
+          <groupId>jdom</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>net.java.dev.rome</groupId>
       <artifactId>rome-fetcher</artifactId>
       <version>1.0.0</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>jdom</artifactId>
+          <groupId>jdom</groupId>
+        </exclusion>
+      </exclusions>      
     </dependency>
 
     <dependency>
