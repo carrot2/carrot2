@@ -6,6 +6,9 @@
 #  gem install json_pure
 #  gem install httpclient
 #
+# Invoke with (if gems are not configured globally):
+#  ruby -rubygems ./example.rb
+#
 
 require 'rubygems'
 require 'httpclient'
