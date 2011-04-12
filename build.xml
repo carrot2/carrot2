@@ -776,7 +776,7 @@
       <include name="**/hppc*" />
       <include name="**/jackson*" />
       <include name="**/log4j*" />
-      <include name="**/lucene-snowball*" />
+      <include name="**/lucene-analyzers*" />
       <include name="**/simple-xml*" />
       <include name="**/slf4j*" />
       <exclude name="**/slf4j-nop*" />
@@ -791,7 +791,7 @@
       <include name="**/jcl-over-slf4j*" />
       <include name="**/jdom*" />
       <include name="**/lucene*" />
-      <exclude name="**/lucene-snowball*" />
+      <exclude name="**/lucene-analyzers*" />
       <include name="**/rome*" />
       <include name="**/com.carrotsearch.nni/nni*" />
     </patternset>
