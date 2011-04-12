@@ -8,7 +8,6 @@
     -->
   <path id="libs.required">
     <fileset dir="lib/required" includes="**/*.jar" />
-    <fileset dir="." includes="carrot2-core*.jar" />
   </path>
   
   <!--
@@ -16,7 +15,7 @@
        document sources and clustering them using one of Carrot2 algorithms.
     -->
   <path id="libs.all">
-    <fileset dir="." includes="**/*.jar" />
+    <fileset dir="lib" includes="**/*.jar" />
   </path>
 
   <!--
@@ -68,6 +67,7 @@
     <run.example classname="org.carrot2.examples.clustering.ClusteringDataFromLuceneWithCustomFields" dependencies="libs.all">
       <arg file="index" />
     </run.example>
+    <delete dir="index" failonerror="true" includeemptydirs="true" />
   </target>
 
   <!-- Removes all compiled binaries -->

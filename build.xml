@@ -627,7 +627,7 @@
     </taskdef>
 
     <extractor outputdir="${overview.dir}/snippets">
-      <fileset dir="${applications.dir}/carrot2-examples/src">
+      <fileset dir="${applications.dir}/carrot2-examples/examples">
         <include name="**/*.java" />
       </fileset>
     </extractor>
@@ -723,7 +723,7 @@
   <target name="jar.mini.test" depends="jar.mini.build">
     <property name="jar.mini.test.classes.dir" location="${tmp.dir}/jar-mini-classes" />
     <mkdir dir="${jar.mini.test.classes.dir}" />
-    <javac srcdir="${carrot2.master.basedir}/applications/carrot2-examples/src"
+    <javac srcdir="${carrot2.master.basedir}/applications/carrot2-examples/examples"
            destdir="${jar.mini.test.classes.dir}"
            compiler="modern">
       <include name="**/ClusteringDocumentList.java" />
@@ -800,6 +800,9 @@
       <fileset dir="${lib.dir}">
         <patternset refid="carrot2.required" />
       </fileset>
+      <fileset dir="${jar.dir}">
+        <include name="carrot2-core-${carrot2.version}.jar" />
+      </fileset>
       <mapper type="flatten" />
     </copy>
     
@@ -810,10 +813,7 @@
       <mapper type="flatten" />
     </copy>
 
-    <copy todir="${api.dir}">
-      <fileset dir="${jar.dir}">
-        <include name="carrot2-core-${carrot2.version}.jar" />
-      </fileset>
+    <copy todir="${api.dir}" filtering="true" encoding="UTF-8">
       <fileset dir="${carrot2.master.basedir}">
         <include name="carrot2.LICENSE" />
         <include name="carrot2.CONTRIBUTORS" />
@@ -825,6 +825,12 @@
         <include name="suites/algorithm-stc*.xml" />
 	<include name="suites/algorithm-kmeans*.xml" />
       </fileset>
+      <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/">
+	<include name="pom.xml" />
+      </fileset>
+      <filterchain>
+        <replacestring from="@carrot2.version.maven@" to="${carrot2.version.maven}" />
+      </filterchain>
     </copy>
 
     <copy todir="${api.dir}/resources">
@@ -832,7 +838,7 @@
     </copy>
 
     <copy todir="${api.dir}/examples">
-      <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/src" />
+      <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/examples" />
     </copy>
 
     <copy todir="${api.dir}" file="${carrot2.master.basedir}/applications/carrot2-examples/build.xml" />
@@ -869,7 +875,11 @@
   <!--
       Maven artefacts.
     -->
-  <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini, carrot2.maven.install" description="Install Maven artifacts">
+  <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini, core.test, carrot2.maven.install" description="Install Maven artifacts">
+    <!-- Try to compile the examples using maven. -->
+    <exec executable="mvn" failonerror="true" vmlauncher="false" dir="${api.dir}">
+	<arg line="clean package" />
+    </exec>    
   </target>
 
   <!--
