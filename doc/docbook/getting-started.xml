@@ -22,9 +22,8 @@
     
     <para>
       All &PROD; applications require <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link>
-      version 1.6.0. The &DCW; is distributed for Windows,
-      Linux 32-bit and 64-bit versions and Mac OS x86. All other &PROD; applications
-      will run on any platform supporting Java Runtime Environment version 1.5.0 or higher.
+      version 1.6.0 or later. The &DCW; is distributed for Windows,
+      Linux 32-bit and 64-bit versions and Mac OS x86.
     </para>
     
     <para>
