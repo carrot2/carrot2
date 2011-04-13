@@ -281,7 +281,7 @@
       <origClassPath>
         <fileset dir="tmp/compatibility/carrot2-java-api-${versioning.latest}/lib" />
       </origClassPath>
-      <newfiles dir="tmp/api" includes="carrot2-core-${carrot2.version}.jar" />
+      <newfiles dir="tmp/api" includes="**/carrot2-core-${carrot2.version}.jar" />
       <newClassPath>
         <fileset dir="tmp/api/lib" />
       </newClassPath>
