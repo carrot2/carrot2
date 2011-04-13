@@ -56,9 +56,6 @@
           <exclude name="*commons-lang*" unless="@{solr.version}.is-1.4.x" />
           <exclude name="*slf4j*" />
         </zipfileset>
-        <zipfileset dir="${api.dir}" prefix="${@{solr.version}.solr.dist.name}/contrib/clustering/lib">
-          <include name="*.jar" />
-        </zipfileset>
         <zipfileset dir="@{solr.checkout}/dist" includes="apache-solr-clustering-*.jar" 
                     fullpath="${@{solr.version}.solr.dist.name}/dist/apache-solr-clustering-@{solr.version}.jar" />
         <zipfileset dir="${carrot2.master.basedir}/tmp/solr" prefix="${@{solr.version}.solr.dist.name}" />
