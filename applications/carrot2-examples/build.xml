@@ -22,14 +22,11 @@
       <fileset dir="lib" includes="**/*.jar" />
     </path>
 
-    <mkdir dir="tmp" />
     <mkdir dir="tmp/classes" />
 
     <javac srcdir="examples"
            destdir="tmp/classes"
-           compiler="modern"
-           source="1.5"
-           target="1.5"
+           source="1.6" target="1.6"
            encoding="UTF-8">
       <classpath>
         <fileset dir=".">
@@ -99,6 +96,7 @@
 
     <sequential>
       <echo>Running: @{classname}</echo>
+      <mkdir dir="tmp" />
       <java fork="true"
             classname="@{classname}" logError="true"
             failonerror="true" output="tmp/@{classname}.log">
