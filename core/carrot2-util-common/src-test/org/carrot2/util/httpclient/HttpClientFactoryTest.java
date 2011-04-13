@@ -12,9 +12,7 @@ import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.carrot2.util.CloseableUtils;
 import org.fest.assertions.Assertions;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import com.google.common.collect.Lists;
 
@@ -83,6 +81,7 @@ public class HttpClientFactoryTest
         try
         {
             client.execute(request);
+            Assert.fail();
         }
         catch (ConnectTimeoutException e)
         {
