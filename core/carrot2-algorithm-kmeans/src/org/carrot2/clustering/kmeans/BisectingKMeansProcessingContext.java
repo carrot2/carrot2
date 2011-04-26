@@ -20,7 +20,7 @@ import org.carrot2.text.vsm.VectorSpaceModelContext;
 import com.carrotsearch.hppc.BitSet;
 
 /**
- * 
+ * Intermediate data structures required during k-means clustering.
  */
 public class BisectingKMeansProcessingContext
 {
