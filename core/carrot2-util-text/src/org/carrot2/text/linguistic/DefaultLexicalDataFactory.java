@@ -65,6 +65,11 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
         public boolean equals(Object other) {
             throw new UnsupportedOperationException();
         }
+
+        public int hashCode()
+        {
+            throw new UnsupportedOperationException();
+        }
     };
     
     /**
@@ -257,10 +262,11 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
         if (is == null)
             throw new IOException("Resource returned null stream: " + resource);
 
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(is,
+            "UTF-8"));
+        
         try
         {
-            final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(is, "UTF-8"));
     
             String line;
             while ((line = reader.readLine()) != null)
@@ -276,7 +282,7 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
         }
         finally
         {
-            is.close();
+            reader.close();
         }
 
         return words;

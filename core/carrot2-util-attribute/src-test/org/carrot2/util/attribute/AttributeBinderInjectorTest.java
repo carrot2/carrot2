@@ -130,6 +130,7 @@ public class AttributeBinderInjectorTest
     public void testCompositeInjectionReceiver() throws Exception
     {
         final CompositeInjectionReceiver object = new CompositeInjectionReceiver();
+        object.a = null;
         final A a = new A();
 
         AttributeBinderInjector.injectByType(TestInjectionMarker.class,
@@ -143,6 +144,7 @@ public class AttributeBinderInjectorTest
     public void staticFieldsInInjectionReceiverNotBound() throws Exception
     {
         final InjectionReceiverWithStaticFields object = new InjectionReceiverWithStaticFields();
+        object.string = "z";
         final A oldA = InjectionReceiverWithStaticFields.a;
         final A newA = new A();
 

@@ -247,10 +247,16 @@ public class DefaultLexicalDataFactoryTest
         try
         {
             File tempFile = File.createTempFile("tempdir", null);
-            tempFile.delete();
-            if (!tempFile.mkdir())
+            if (tempFile.exists() && !tempFile.delete()) 
+            {
+                throw new RuntimeException("Could not delete temp. folder: " 
+                    + tempFile.getAbsolutePath());
+            }
+            if (!tempFile.mkdir()) 
+            {
                 throw new RuntimeException("Could not create temp. folder: " 
                     + tempFile.getAbsolutePath());
+            }
 
             tempFile.deleteOnExit();
 

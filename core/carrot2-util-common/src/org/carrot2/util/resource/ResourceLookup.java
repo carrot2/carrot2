@@ -151,13 +151,14 @@ public final class ResourceLookup
             {
                 final IResource [] hits = locator.getAll(resource);
                 
+                final int hitsLength = hits != null ? hits.length : 0;
                 logEntry.append("\n\t- ")
-                        .append(hits.length + " " + pluralize("hit", hits.length) + " from: ")
+                        .append(hitsLength + " " + pluralize("hit", hitsLength) + " from: ")
                         .append(locator);
 
-                if (hits != null && hits.length > 0)
+                if (hits != null && hitsLength > 0)
                 {
-                    for (int i = 0; i < hits.length; i++)
+                    for (int i = 0; i < hitsLength; i++)
                     {
                         logEntry.append("\n\t\t- ")
                                 .append(hits[0]);
