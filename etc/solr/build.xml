@@ -39,12 +39,10 @@
       </delete>
       <copy file="${jar.dir}/carrot2-core-${carrot2.version}.jar" todir="@{solr.checkout}/contrib/clustering/lib" />
 
-      <ant dir="@{solr.checkout}/contrib/clustering" inheritall="false">
-        <target name="clean" />
-        <target name="test" />
-        <target name="dist" />
-      </ant>
-      
+      <exec executable="ant" failonerror="true" vmlauncher="false" dir="@{solr.checkout}/contrib/clustering">
+        <arg line="clean test dist" />
+      </exec>    
+
       <mkdir dir="${carrot2.master.basedir}/tmp/solr" />
 
       <carrot2.readme readme.src="${carrot2.master.basedir}/etc/solr/readme.txt"
