@@ -854,7 +854,6 @@
       </zipfileset>
       <zipfileset dir="${javadoc.dir}" prefix="${api.dist.base}-${carrot2.version}/javadoc" />
     </zip>
-    <delete dir="${api.dir}" failonerror="false" />
   </target>
 
   <target name="core.test" depends="core">
