@@ -31,6 +31,14 @@
         <matches pattern="1\.4" string="@{solr.version}"/>
       </condition>
 
+      <!-- Update just the Carrot2 JAR -->
+      <delete>
+        <fileset dir="@{solr.checkout}/contrib/clustering/lib">
+          <include name="carrot2*.jar" />
+        </fileset>
+      </delete>
+      <copy file="${jar.dir}/carrot2-core-${carrot2.version}.jar" todir="@{solr.checkout}/contrib/clustering/lib" />
+
       <ant dir="@{solr.checkout}/contrib/clustering" inheritall="false">
         <target name="clean" />
         <target name="test" />
