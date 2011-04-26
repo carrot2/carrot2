@@ -6,7 +6,9 @@
   %local;
   %custom;
 ]>
-<section xml:id="section.solr">
+<section xml:id="section.solr"
+         xmlns="http://docbook.org/ns/docbook" version="5.0"
+         xmlns:product="http://www.carrot2.org">
   <title>&PROD; clustering in Apache Solr</title>
   
   <para>
@@ -17,23 +19,31 @@
   </para>
   
   <para id="section.solr.compatibility">  
-    The 1.4.x line of Apache Solr ships with version 3.1.0 of &C2; clustering algorithms.
+    Apache Solr 1.4.x and 3.1.x ship with versions 3.1.0 and 3.4.2 of &C2;, respectively.
     If you would like to take advantage of the newer releases of &C2; algorithms, you need 
     to apply a compatibility package as shown below.
   </para>
   
   <para>
-    To upgrade &C2; algorithms in Solr 1.4.x to the newest version:
+    To upgrade &C2; algorithms in Solr 1.4.x or 3.1.x to the newest version:
   </para>
     
   <orderedlist>
     <listitem>
-        Download  <link xlink:href="http://download.carrot2.org/stable/carrot2-solr-1.4.x-compatibility-3.4.1.zip">&C2; Solr 1.4.x compatibility package</link>.
+      <para>
+        Download the compatibility package appropriate for your version of Solr:
+        <itemizedlist>
+          <listitem><simpara><product:solr-compat-download-link solr.version="1.4.x">Solr 1.4.x compatibility package</product:solr-compat-download-link></simpara></listitem>
+        </itemizedlist>
+        <itemizedlist>
+          <listitem><simpara><product:solr-compat-download-link solr.version="3.1.x">Solr 3.1.x compatibility package</product:solr-compat-download-link></simpara></listitem>
+        </itemizedlist>
+      </para>
     </listitem>
     
     <listitem>
       <para>
-        Remove the following files from your Solr 1.4.x installation:
+        Remove the following files from your Solr installation:
       </para>
 
       <orderedlist spacing="compact">
@@ -42,11 +52,7 @@
         </listitem>
         
         <listitem>
-          <simpara>dist/apache-solr-clustering-1.4.1.jar (Solr 1.4.1) or</simpara>
-        </listitem>
-        
-        <listitem>
-          <simpara>dist/apache-solr-clustering-1.4.0.jar (Solr 1.4.0)</simpara>
+          <simpara>dist/apache-solr-clustering-*.jar (Solr clustering plugin JAR)</simpara>
         </listitem>
       </orderedlist>
     </listitem>

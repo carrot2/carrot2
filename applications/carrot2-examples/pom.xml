@@ -1,0 +1,109 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.carrot2</groupId>
+  <artifactId>carrot2-examples</artifactId>
+  <version>@carrot2.version.maven@</version>
+  <packaging>jar</packaging>
+
+  <name>Carrot2 Java API Examples</name>
+  <description>
+    Carrot2 Java API Examples
+  </description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.carrot2</groupId>
+      <artifactId>carrot2-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- SLF4J, simple console logging -->
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>jcl-over-slf4j</artifactId>
+    	<version>1.6.1</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>slf4j-simple</artifactId>
+    	<version>1.6.1</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <defaultGoal>package</defaultGoal>
+
+    <sourceDirectory>${basedir}/examples</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}/examples</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+      </plugin>
+        
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.2</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>run</id>
+
+      <build>
+        <defaultGoal>integration-test</defaultGoal>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>run</id>
+                <phase>integration-test</phase>
+                <configuration>
+                  <target>
+                    <ant target="carrot2.api.test.maven" antfile="build.xml"
+                      inheritrefs="false" inheritall="false" />
+                  </target>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,10 +12,12 @@
 
 package org.carrot2.matrix;
 
+import org.apache.commons.lang.StringUtils;
 import org.carrot2.matrix.nni.BlasImpl;
 import org.carrot2.matrix.nni.IBlasOperations;
 import org.carrot2.matrix.nni.ILapackOperations;
 import org.carrot2.matrix.nni.LapackImpl;
+import org.carrot2.util.annotations.AspectModified;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -99,7 +101,7 @@ public class NNIInterface
     /**
      * Instantiate Lapack (native).
      */
-    // @AspectModified()
+    @AspectModified
     private final static ILapackOperations instantiateLapack()
     {
         try
@@ -108,8 +110,9 @@ public class NNIInterface
         }
         catch (Throwable t)
         {
-            LoggerFactory.getLogger(NNIInterface.class).debug(
-                "Failed to instantiate native LAPACK.", t);
+            LoggerFactory.getLogger(NNIInterface.class).info(
+                "Native LAPACK not available: " + 
+                StringUtils.defaultIfEmpty(t.getMessage(), "(no message). Java matrix routines will be used."));
         }
         return null;
     }
@@ -117,7 +120,7 @@ public class NNIInterface
     /**
      * Instantiate blas (native).
      */
-    // @AspectModified()
+    @AspectModified
     private final static IBlasOperations instantiateBlas()
     {
         try
@@ -126,8 +129,9 @@ public class NNIInterface
         }
         catch (Throwable t)
         {
-            LoggerFactory.getLogger(NNIInterface.class).debug(
-                "Failed to instantiate native BLAS.", t);
+            LoggerFactory.getLogger(NNIInterface.class).info(
+                "Native BLAS not available: " +
+                StringUtils.defaultIfEmpty(t.getMessage(), "(no message). Java matrix routines will be used."));                
         }
         return null;
     }

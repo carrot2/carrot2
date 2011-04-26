@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -68,6 +68,13 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
     private int maxSpinnerWidth;
 
     /**
+     * A copy of the current value of this editor. Added because it turns out 
+     * spinner widgets emit delayed events (and cause extra events to be fired because
+     * they don't update their state immediately).
+     */
+    private int currentValue;
+
+    /**
      * @param precisionDigits Number of digits after decimal separator.
      */
     public NumericRangeEditorBase(int precisionDigits)
@@ -112,7 +119,7 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
     @Override
     public Object getValue()
     {
-        return spinner.getSelection();
+        return currentValue;
     }
 
     /*
@@ -171,7 +178,8 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
         {
             public void widgetSelected(SelectionEvent e)
             {
-                propagateNewValue(scale.getSelection());
+                if (scale.getSelection() != currentValue)
+                    propagateNewValue(scale.getSelection());
             }
         });
 
@@ -179,7 +187,8 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
         {
             public void mouseScrolled(MouseEvent e)
             {
-                propagateNewValue(scale.getSelection());
+                if (scale.getSelection() != currentValue)
+                    propagateNewValue(scale.getSelection());
             }
         });
     }
@@ -204,8 +213,9 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
          * Now proceed with setting the actual values.
          */
         
-        spinner.setMinimum(min);
         spinner.setMaximum(max);
+        spinner.setMinimum(min);
+        spinner.setSelection(min);
         spinner.setDigits(precisionDigits);
         spinner.setToolTipText(tooltip);
 
@@ -219,7 +229,8 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
         {
             public void widgetSelected(SelectionEvent e)
             {
-                propagateNewValue(spinner.getSelection());
+                if (currentValue != spinner.getSelection())
+                    propagateNewValue(spinner.getSelection());
             }
         });
     }
@@ -233,6 +244,7 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
         if (!this.duringSelection)
         {
             this.duringSelection = true;
+            this.currentValue = value;
 
             if (spinner != null && spinner.getSelection() != value)
             {

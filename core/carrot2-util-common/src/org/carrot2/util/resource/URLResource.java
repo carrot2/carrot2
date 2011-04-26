@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.jar.JarFile;
 
+import org.carrot2.util.StreamUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
@@ -25,7 +26,9 @@ import org.simpleframework.xml.core.Commit;
 /**
  * This class opens a connection to a resource pointed to by an URI. Note that JAR
  * resources <b>should not</b> be accessed this way because the default handler caches
- * {@link JarFile} instances and thus locks the file.
+ * {@link JarFile} instances and thus locks the file. This resource provider caches the
+ * content of returned resources and closes the underlying stream handle in
+ * {@link #open()}.
  * 
  * @see <a href="http://issues.carrot2.org/browse/CARROT-143">Issue CARROT-143</a>
  */
@@ -58,7 +61,7 @@ public class URLResource implements IResource
 
     public InputStream open() throws IOException
     {
-        return ResourceUtils.prefetch(url.openStream());
+        return StreamUtils.prefetch(url.openStream());
     }
 
     @Override

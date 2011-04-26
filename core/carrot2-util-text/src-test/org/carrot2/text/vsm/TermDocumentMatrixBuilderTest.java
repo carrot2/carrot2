@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -204,6 +204,6 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
             expectedStemToRowIndex.put(expectedTdMatrixStemIndices[i], i);
         }
 
-        assertThat(vsmContext.stemToRowIndex).isEqualTo(expectedStemToRowIndex);
+        assertThat((Object) vsmContext.stemToRowIndex).isEqualTo(expectedStemToRowIndex);
     }
 }

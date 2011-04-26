@@ -1,0 +1,89 @@
+<attribute-sets default="overridden-attributes">
+  <attribute-set id="overridden-attributes">
+    <value-set>
+      <label>overridden-attributes</label>
+
+      <!--
+      
+      Below are some attributes of this component you can change. Please see
+
+        http://download.carrot2.org/head/manual/#section.customizing.component-suites-and-attributes.component-attributes
+
+      for tools that will help you to edit this file.
+
+
+      <attribute key="BisectingKMeansClusteringAlgorithm.clusterCount">
+        <value type="java.lang.Integer" value="25"/>
+      </attribute>
+      <attribute key="BisectingKMeansClusteringAlgorithm.labelCount">
+        <value type="java.lang.Integer" value="3"/>
+      </attribute>
+      <attribute key="BisectingKMeansClusteringAlgorithm.maxIterations">
+        <value type="java.lang.Integer" value="15"/>
+      </attribute>
+      <attribute key="BisectingKMeansClusteringAlgorithm.partitionCount">
+        <value type="java.lang.Integer" value="2"/>
+      </attribute>
+      <attribute key="BisectingKMeansClusteringAlgorithm.useDimensionalityReduction">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="CaseNormalizer.dfThreshold">
+        <value type="java.lang.Integer" value="1"/>
+      </attribute>
+      <attribute key="merge-resources">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="PreprocessingPipeline.lexicalDataFactory">
+        <value>
+          <wrapper class="org.carrot2.text.linguistic.DefaultLexicalDataFactory"/>
+        </value>
+      </attribute>
+      <attribute key="PreprocessingPipeline.stemmerFactory">
+        <value>
+          <wrapper class="org.carrot2.text.linguistic.DefaultStemmerFactory"/>
+        </value>
+      </attribute>
+      <attribute key="PreprocessingPipeline.tokenizerFactory">
+        <value>
+          <wrapper class="org.carrot2.text.linguistic.DefaultTokenizerFactory"/>
+        </value>
+      </attribute>
+      <attribute key="reload-resources">
+        <value type="java.lang.Boolean" value="false"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.maximumMatrixSize">
+        <value type="java.lang.Integer" value="37500"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.maxWordDf">
+        <value type="java.lang.Double" value="0.9"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.termWeighting">
+        <value>
+          <wrapper class="org.carrot2.text.vsm.LogTfIdfTermWeighting"/>
+        </value>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.titleWordsBoost">
+        <value type="java.lang.Double" value="2.0"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixReducer.factorizationFactory">
+        <value>
+          <wrapper class="org.carrot2.matrix.factorization.NonnegativeMatrixFactorizationEDFactory"/>
+        </value>
+      </attribute>
+      <attribute key="TermDocumentMatrixReducer.factorizationQuality">
+        <value type="org.carrot2.matrix.factorization.IterationNumberGuesser$FactorizationQuality" value="HIGH"/>
+      </attribute>
+      <attribute key="Tokenizer.documentFields">
+        <value>
+          <wrapper class="org.carrot2.util.simplexml.ListSimpleXmlWrapper">
+            <list>
+              <value value="title"/>
+              <value value="snippet"/>
+            </list>
+          </wrapper>
+        </value>
+      </attribute> 
+      -->
+    </value-set>
+  </attribute-set>
+</attribute-sets>

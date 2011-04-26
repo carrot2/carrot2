@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -19,7 +19,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.httpclient.HttpStatus;
+import org.apache.http.HttpStatus;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.Processing;

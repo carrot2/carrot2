@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -21,7 +22,7 @@ import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.impl.DefaultPrettyPrinter;
+import org.codehaus.jackson.util.DefaultPrettyPrinter;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.*;

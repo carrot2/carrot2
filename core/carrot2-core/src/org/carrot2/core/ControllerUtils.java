@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -11,7 +12,6 @@
 
 package org.carrot2.core;
 
-import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import org.carrot2.core.attribute.*;
@@ -47,13 +47,13 @@ final class ControllerUtils
     {
         try
         {
-            AttributeBinder.bind(processingComponent, inputAttributes,
+            AttributeBinder.set(processingComponent, inputAttributes,
                 checkRequiredAttributes, Input.class, Init.class);
 
             processingComponent.init(context);
 
-            AttributeBinder.bind(processingComponent, outputAttributes,
-                checkRequiredAttributes, Output.class, Init.class);
+            AttributeBinder.get(processingComponent, outputAttributes, Output.class,
+                Init.class);
         }
         catch (final InstantiationException e)
         {
@@ -70,8 +70,12 @@ final class ControllerUtils
     {
         try
         {
-            bind(processingComponent, attributes, Input.class,
-                Processing.class);
+            // Check if we need to do binding.
+            if (processingComponent.getClass().getAnnotation(Bindable.class) != null)
+            {
+                AttributeBinder.set(processingComponent, attributes, Input.class,
+                    Processing.class);
+            }
 
             processingComponent.beforeProcessing();
         }
@@ -90,8 +94,8 @@ final class ControllerUtils
     /**
      * Performs processing with the provided {@link IProcessingComponent}, including
      * {@link IProcessingComponent#beforeProcessing()} and
-     * {@link IProcessingComponent#afterProcessing()} hooks. Please note that outputAttributes
-     * <strong>will not</strong> be copied back to the inputAttributes. 
+     * {@link IProcessingComponent#afterProcessing()} hooks. Please note that
+     * outputAttributes <strong>will not</strong> be copied back to the inputAttributes.
      */
     public static void performProcessing(IProcessingComponent processingComponent,
         Map<String, Object> inputAttributes, Map<String, Object> outputAttributes)
@@ -119,27 +123,18 @@ final class ControllerUtils
             processingComponent.afterProcessing();
 
             final Map<String, Object> outputAttributesWithNulls = Maps.newHashMap();
-            bind(processingComponent, outputAttributesWithNulls,
-                Output.class, Processing.class);
-            attributes.putAll(Maps.filterValues(outputAttributesWithNulls, Predicates
-                .notNull()));
+            // Check if we need to do binding.
+            if (processingComponent.getClass().getAnnotation(Bindable.class) != null)
+            {
+                AttributeBinder.get(processingComponent, outputAttributesWithNulls,
+                    Output.class, Processing.class);
+            }
+            attributes.putAll(Maps.filterValues(outputAttributesWithNulls,
+                Predicates.notNull()));
         }
         catch (final InstantiationException e)
         {
             throw new ProcessingException("Attribute binding failed", e);
-        }
-    }
-    
-    private static <T> void bind(T object, Map<String, Object> values,
-        Class<? extends Annotation> bindingDirectionAnnotation,
-        Class<? extends Annotation>... filteringAnnotations)
-        throws AttributeBindingException, InstantiationException
-    {
-        // Check if we need to do binding.
-        if (object.getClass().getAnnotation(Bindable.class) != null)
-        {
-            AttributeBinder.bind(object, values, bindingDirectionAnnotation,
-                filteringAnnotations);
         }
     }
 }

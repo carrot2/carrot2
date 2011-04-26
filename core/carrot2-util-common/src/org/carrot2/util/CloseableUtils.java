@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,6 +14,7 @@ package org.carrot2.util;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.Socket;
 import java.sql.*;
 
 /**
@@ -87,5 +88,23 @@ public final class CloseableUtils
      */
     public static void close(Statement... statements) {
         for (Statement s : statements) close(s);
+    }
+
+    /**
+     * Close all {@link Socket}s, ignoring exceptions.
+     */
+    public static void close(Socket... sockets)
+    {
+        for (Socket s : sockets)
+        {
+            try
+            {
+                if (s != null && !s.isClosed()) s.close();
+            }
+            catch (Exception e)
+            {
+                // ignore
+            }
+        }
     }
 }

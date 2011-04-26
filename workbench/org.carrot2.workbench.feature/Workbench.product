@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?pde version="3.4"?>
+<?pde version="3.5"?>
 
-<product name="Carrot2 Workbench" id="org.carrot2.workbench.core.product" application="org.carrot2.workbench.core.application" useFeatures="true">
+<product name="Carrot2 Workbench" id="org.carrot2.workbench.core.product" application="org.carrot2.workbench.core.application" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.carrot2.workbench.core/icons/product_logo.png"/>
@@ -23,7 +23,8 @@ Apache Software Foundation http://www.apache.org/.
       <programArgs>-data workspace</programArgs>
       <vmArgs>-Xms256m
 -Xmx512m
--Dorg.eclipse.update.reconcile=false</vmArgs>
+-Dorg.eclipse.update.reconcile=false
+-Dlog4j.configuration=log4j-workbench.xml</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
@@ -45,7 +46,6 @@ Apache Software Foundation http://www.apache.org/.
       </win>
    </launcher>
 
-
    <vm>
    </vm>
 
@@ -53,8 +53,9 @@ Apache Software Foundation http://www.apache.org/.
    </plugins>
 
    <features>
-      <feature id="org.carrot2.workbench.feature" version="0.0.0"/>
-      <feature id="org.eclipse.rcp" version="0.0.0"/>
+      <feature id="org.carrot2.workbench.feature"/>
+      <feature id="org.eclipse.rcp"/>
    </features>
+
 
 </product>

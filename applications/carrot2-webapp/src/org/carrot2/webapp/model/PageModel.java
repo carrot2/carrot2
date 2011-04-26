@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -89,11 +89,11 @@ public class PageModel
         this.assetUrls = new AssetUrlsModel(webappConfig.getSkinById(requestModel.skin),
             request, urlGenerator);
 
-        this.requestUrl = buildSearchUrlBase(requestModel, webappConfig.searchUrl)
+        this.requestUrl = buildSearchUrlBase(requestModel, WebappConfig.SEARCH_URL)
             .toString();
 
         // XML stream url base
-        StringBuilder xmlUrl = buildSearchUrlBase(requestModel, webappConfig.xmlUrl);
+        StringBuilder xmlUrl = buildSearchUrlBase(requestModel, WebappConfig.XML_URL);
         appendParameter(xmlUrl, WebappConfig.TYPE_PARAM, RequestType.CARROT2.name());
         this.xmlUrlEncoded = StringUtils.urlEncodeWrapException(xmlUrl.toString(),
             "UTF-8");

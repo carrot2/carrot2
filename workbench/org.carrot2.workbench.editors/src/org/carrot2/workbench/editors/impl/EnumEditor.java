@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -32,7 +32,7 @@ public final class EnumEditor extends MappedValueComboEditor
     @Override
     public AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
-        Class<? extends Enum<?>> clazz = (Class) descriptor.type;
+        Class<? extends Enum<?>> clazz = (Class<? extends Enum<?>>) descriptor.type;
         if (clazz.isEnum())
         {
             valueRequired = (descriptor.getAnnotation(Required.class) != null);

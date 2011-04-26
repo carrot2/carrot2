@@ -24,8 +24,7 @@
     <listitem>
       <para>
         Replace the contents of <filename>algorithm-lingo-attributes.xml</filename>, located in
-        the <filename>/suites</filename> directory of the <filename>carrot2-mini.jar</filename>
-        file, located in the <filename>lib/</filename> directory of the CLI distribution, 
+        the <filename>/suites</filename> directory of the CLI distribution, 
         with the XML file saved in the previous step.
       </para>
     </listitem>

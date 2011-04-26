@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,6 +15,7 @@ package org.carrot2.clustering.lingo;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
+import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.TfTermWeighting;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,9 +25,6 @@ import org.junit.Test;
  */
 public class ClusterMergerTest extends LingoProcessingComponentTestBase
 {
-    /** Matrix reducer needed for test */
-    private TermDocumentMatrixReducer reducer;
-
     /** Label builder under tests */
     private ClusterBuilder clusterBuilder;
 
@@ -37,7 +35,7 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase
         clusterBuilder.labelAssigner = new SimpleLabelAssigner();
         reducer = new TermDocumentMatrixReducer();
         reducer.factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
-        reducer.desiredClusterCountBase = 25;
+        desiredClusterCountBase = 25;
     }
 
     @Test
@@ -49,7 +47,7 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase
     @Test
     public void testNoMerge()
     {
-        reducer.desiredClusterCountBase = 30;
+        desiredClusterCountBase = 30;
         createDocuments("", "aa . bb", "", "bb . cc", "", "cc . aa");
 
         final int [][] expectedDocumentIndices = new int [] []
@@ -77,7 +75,7 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase
     public void testSimpleMerge()
     {
         createDocuments("aa", "aa", "aa bb", "aa bb");
-        reducer.desiredClusterCountBase = 20;
+        desiredClusterCountBase = 20;
         clusterBuilder.phraseLabelBoost = 0.08;
         clusterBuilder.clusterMergingThreshold = 0.4;
         preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
@@ -101,7 +99,7 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase
         createDocuments("aa", "aa", "aa bb", "aa bb", "aa bb cc", "aa bb cc", "dd dd",
             "dd dd", "dd dd", "dd dd");
         preprocessingPipeline.documentAssigner.minClusterSize = 2;
-        reducer.desiredClusterCountBase = 20;
+        desiredClusterCountBase = 20;
         clusterBuilder.phraseLabelBoost = 0.05;
         clusterBuilder.clusterMergingThreshold = 0.2;
         preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
@@ -129,8 +127,7 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase
 
     private void check(int [][] expectedDocumentIndices)
     {
-        buildTermDocumentMatrix();
-        reducer.reduce(lingoContext);
+        buildLingoModel();
         final TfTermWeighting termWeighting = new TfTermWeighting();
         clusterBuilder.buildLabels(lingoContext, termWeighting);
         clusterBuilder.assignDocuments(lingoContext);

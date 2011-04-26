@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,19 +13,17 @@
 package org.carrot2.matrix;
 
 import static org.fest.assertions.Assertions.assertThat;
-import junit.framework.TestCase;
-
-import org.fest.assertions.Delta;
-import org.junit.Test;
 
 import org.apache.mahout.math.matrix.DoubleFactory2D;
-import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.fest.assertions.Delta;
+import org.junit.Test;
 
 /**
  * Test cases for {@link MatrixUtils}.
  */
 @SuppressWarnings("deprecation")
-public class MatrixUtilsTest extends TestCase
+public class MatrixUtilsTest
 {
     @Test
     public void testComputeOrthogonalityOrthogonal()

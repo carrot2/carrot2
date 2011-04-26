@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,9 +11,9 @@
 
 package org.carrot2.clustering.lingo;
 
-import org.apache.mahout.math.matrix.*;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
+import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
 
 import com.carrotsearch.hppc.BitSet;
@@ -22,7 +21,6 @@ import com.carrotsearch.hppc.BitSet;
 /**
  * Stores intermediate data required during Lingo clustering.
  */
-@SuppressWarnings("deprecation")
 public class LingoProcessingContext
 {
     /** Preprocessing context */
@@ -30,9 +28,9 @@ public class LingoProcessingContext
 
     /** Vector space model context */
     public final VectorSpaceModelContext vsmContext;
-    
-    /** Base vectors for the tdMatrix */
-    DoubleMatrix2D baseMatrix;
+
+    /** Vector space model context */
+    public final ReducedVectorSpaceModelContext reducedVsmContext;
 
     /** Feature indices (like in {@link AllLabels#featureIndex}) that should form clusters */
     int [] clusterLabelFeatureIndex;
@@ -43,9 +41,10 @@ public class LingoProcessingContext
     /** Documents assigned to clusters */
     BitSet [] clusterDocuments;
 
-    LingoProcessingContext(VectorSpaceModelContext vsmContext)
+    LingoProcessingContext(ReducedVectorSpaceModelContext reducedVsmContext)
     {
+        this.reducedVsmContext = reducedVsmContext;
+        this.vsmContext = reducedVsmContext.vsmContext;
         this.preprocessingContext = vsmContext.preprocessingContext;
-        this.vsmContext = vsmContext;
     }
 }

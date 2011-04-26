@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,24 +11,27 @@
 
 package org.carrot2.core.test.assertions;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatDocuments;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.core.Cluster;
 import org.fest.assertions.AssertExtension;
+import org.fest.assertions.GenericAssert;
 
 /**
  * Assertions on {@link Cluster}s.
  */
-public class ClusterAssertion implements AssertExtension
+public class ClusterAssertion extends GenericAssert<ClusterAssertion, Cluster> implements
+    AssertExtension
 {
-    /** The actual cluster */
-    private final Cluster actualCluster;
-
     ClusterAssertion(Cluster actual)
     {
-        this.actualCluster = actual;
+        super(ClusterAssertion.class, actual);
     }
+
+    /** Description of the assertion */
+    private String description;
 
     /**
      * Asserts that the cluster is equivalent to the provided cluster. Two clusters are
@@ -60,43 +62,61 @@ public class ClusterAssertion implements AssertExtension
      */
     public ClusterAssertion isEquivalentTo(Cluster expectedCluster, boolean checkDocuments)
     {
-        assertThat(actualCluster.getPhrases()).isEqualTo(expectedCluster.getPhrases());
+        assertThat(actual.getPhrases()).isEqualTo(expectedCluster.getPhrases());
         if (checkDocuments)
         {
-            assertThatDocuments(actualCluster.getDocuments()).as(
-                "cluster: " + actualCluster.getLabel()).isEquivalentTo(
+            assertThatDocuments(actual.getDocuments()).as(
+                description + ": " + "cluster: " + actual.getLabel()).isEquivalentTo(
                 expectedCluster.getDocuments());
         }
-        assertThat(actualCluster.getAttributes()).isEqualTo(
-            expectedCluster.getAttributes());
-        assertThatClusters(actualCluster.getSubclusters()).isEquivalentTo(
+        assertThat(actual.getAttributes()).isEqualTo(expectedCluster.getAttributes());
+        assertThatClusters(actual.getSubclusters()).isEquivalentTo(
             expectedCluster.getSubclusters(), checkDocuments);
 
         return this;
     }
 
     /**
-     * Asserts that the cluster's Other Topics flag is set to the required state. 
+     * Asserts that the cluster's Other Topics flag is set to the required state.
      */
     public ClusterAssertion isOtherTopics(boolean isOtherTopics, String otherTopicsLabel)
     {
-        assertThat(actualCluster.isOtherTopics()).isEqualTo(isOtherTopics);
+        assertThat(actual.isOtherTopics()).isEqualTo(isOtherTopics);
         if (isOtherTopics)
         {
-            assertThat(actualCluster.getPhrases()).contains(otherTopicsLabel);
+            assertThat(actual.getPhrases()).contains(otherTopicsLabel);
         }
         else
         {
-            assertThat(actualCluster.getPhrases()).excludes(otherTopicsLabel);
+            assertThat(actual.getPhrases()).excludes(otherTopicsLabel);
         }
         return this;
     }
-    
+
     /**
-     * Asserts that the cluster's Other Topics flag is set to the required state. 
+     * Asserts that the cluster's Other Topics flag is set to the required state.
      */
     public ClusterAssertion isOtherTopics(boolean isOtherTopics)
     {
         return isOtherTopics(isOtherTopics, "Other Topics");
+    }
+
+    /**
+     * Assert that the cluster's label is equal to <code>expectedLabel</code>.
+     */
+    public ClusterAssertion hasLabel(String expectedLabel)
+    {
+        assertThat(actual.getLabel()).isEqualTo(expectedLabel);
+        return this;
+    }
+
+    /**
+     * Assert that the number of unique documents in the cluster and its subclusters is
+     * equal to <code>expectedClusterSize</code>.
+     */
+    public ClusterAssertion hasSize(int expectedClusterSize)
+    {
+        assertThat(actual.getAllDocuments().size()).isEqualTo(expectedClusterSize);
+        return this;
     }
 }

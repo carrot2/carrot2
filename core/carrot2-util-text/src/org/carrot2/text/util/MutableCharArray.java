@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -54,7 +54,8 @@ public final class MutableCharArray implements CharSequence, Cloneable
     }
 
     /**
-     * Creates a {@link MutableCharArray} from another {@link CharSequence}.
+     * Creates a {@link MutableCharArray} from another {@link CharSequence},
+     * creates a new buffer to store characters.
      */
     public MutableCharArray(CharSequence seq)
     {
@@ -62,7 +63,9 @@ public final class MutableCharArray implements CharSequence, Cloneable
     }
 
     /**
+     * Resets the internal buffer to use the provided argument.
      * 
+     * @see #reset(char[])
      */
     public MutableCharArray(char [] buffer)
     {
@@ -70,7 +73,9 @@ public final class MutableCharArray implements CharSequence, Cloneable
     }
     
     /**
+     * Resets the internal buffer to use the provided argument.
      * 
+     * @see #reset(char[])
      */
     public MutableCharArray(char [] buffer, int start, int length)
     {
@@ -164,7 +169,7 @@ public final class MutableCharArray implements CharSequence, Cloneable
     /**
      * 
      */
-    public CharSequence subSequence(int start, int end)
+    public MutableCharArray subSequence(int start, int end)
     {
         return new MutableCharArray(buffer, start, end - start);
     }

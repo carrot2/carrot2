@@ -74,6 +74,18 @@
             </label>
           </li>
           
+          <li id="results" class="hide">
+            <label>
+              <span class="label">Results to fetch</span>
+              <select name="results">
+                <option>50</option>
+                <option selected="selected">100</option>
+                <option>200</option>
+                <option>400</option>
+              </select>
+            </label>
+          </li>
+          
           <li id="xml-file" class="hide">
             <label>
               <span class="label">XML File</span>
@@ -131,6 +143,8 @@
     <script type="text/javascript">//<![CDATA[
       $(document).ready(function() {
         $("#source-from-string, #source-from-file, #source-external, #output-format-xml, #output-format-json").click(update).change(update);
+        $("input[name = 'query'], textarea[name = 'dcs.c2stream']").keyup(updateButton).change(updateButton);
+        $("input[name = 'dcs.c2stream']").change(updateButton);
         update();
 
         $("#sources").loadOptions("source");
@@ -173,19 +187,22 @@
         if ($("#source-from-string").is(":checked"))
         {
           $("#xml-string").disabled(false);
-          $("#xml-file, #document-source, #query").disabled(true);
+          $("#xml-file, #document-source, #query, #results").disabled(true);
+          $("textarea[name = 'dcs.c2stream']").focus();
         }
         
         if ($("#source-from-file").is(":checked"))
         {
           $("#xml-file").disabled(false);
-          $("#xml-string, #document-source, #query").disabled(true);
+          $("#xml-string, #document-source, #query, #results").disabled(true);
+          $("input[name = 'dcs.c2stream']").focus();
         }
         
         if ($("#source-external").is(":checked"))
         {
-          $("#document-source, #query").disabled(false);
+          $("#document-source, #query, #results").disabled(false);
           $("#xml-string, #xml-file").disabled(true);
+          $("input[name = 'query']").focus();
         }
         
         if ($("#output-format-xml").is(":checked"))
@@ -197,6 +214,26 @@
         {
           $("#json-callback").disabled(false);
         }
+        
+        updateButton();
+      }
+      
+      function updateButton() 
+      {
+        var sel;
+        if ($("#source-external").is(":checked"))
+        {
+          sel = "input[name = 'query']";
+        }
+        else if ($("#source-from-string").is(":checked"))
+        {
+          sel = "textarea[name = 'dcs.c2stream']";
+        }
+        else if ($("#source-from-file").is(":checked"))
+        {
+          sel = "input[name = 'dcs.c2stream']";
+        }
+        $("button[name = 'submit']").attr("disabled", $.trim($(sel).val()).length == 0);
       }
     //]]></script>
   </body>

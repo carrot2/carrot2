@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,18 +14,37 @@ package org.carrot2.source.microsoft;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 
-import org.apache.commons.httpclient.*;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
-import org.carrot2.source.*;
-import org.carrot2.util.attribute.*;
+import org.apache.http.Header;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.carrot2.core.Document;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.LanguageCode;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.attribute.CommonAttributes;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.source.MultipageSearchEngine;
+import org.carrot2.source.MultipageSearchEngineMetadata;
+import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Required;
 import org.carrot2.util.httpclient.HttpHeaders;
 import org.carrot2.util.httpclient.HttpUtils;
-import org.simpleframework.xml.*;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.NamespaceList;
+import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -196,26 +215,26 @@ public final class BingDocumentSource extends MultipageSearchEngine
          * see the manual.
          */
 
-        params.add(new NameValuePair("AppId", appid));
-        params.add(new NameValuePair("Query", query));
-        params.add(new NameValuePair("Sources", "Web"));
-        params.add(new NameValuePair("JsonType", "raw"));
+        params.add(new BasicNameValuePair("AppId", appid));
+        params.add(new BasicNameValuePair("Query", query));
+        params.add(new BasicNameValuePair("Sources", "Web"));
+        params.add(new BasicNameValuePair("JsonType", "raw"));
 
         /*
          * Modify options.
          */
-        if (options != null) params.add(new NameValuePair("Options", options));
-        if (webOptions != null) params.add(new NameValuePair("Web.Options", webOptions));
-        if (fileTypes != null) params.add(new NameValuePair("Web.FileType", fileTypes));
+        if (options != null) params.add(new BasicNameValuePair("Options", options));
+        if (webOptions != null) params.add(new BasicNameValuePair("Web.Options", webOptions));
+        if (fileTypes != null) params.add(new BasicNameValuePair("Web.FileType", fileTypes));
 
         /*
          * Optional parameters. 
          */
-        params.add(new NameValuePair("Web.Offset", Integer.toString(startAt)));
-        params.add(new NameValuePair("Web.Count", Integer.toString(totalResultsRequested)));
-        params.add(new NameValuePair("Market", market.marketCode));
+        params.add(new BasicNameValuePair("Web.Offset", Integer.toString(startAt)));
+        params.add(new BasicNameValuePair("Web.Count", Integer.toString(totalResultsRequested)));
+        params.add(new BasicNameValuePair("Market", market.marketCode));
 
-        if (adult != null) params.add(new NameValuePair("Adult", adult.toString()));
+        if (adult != null) params.add(new BasicNameValuePair("Adult", adult.toString()));
 
         final String serviceURI = "http://api.bing.net/xml.aspx";
         final HttpUtils.Response response = HttpUtils.doGET(serviceURI, params, HTTP_HEADERS);

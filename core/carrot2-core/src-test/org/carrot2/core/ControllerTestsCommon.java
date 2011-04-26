@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -651,6 +652,23 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
             controller.dispose();
             controller = null;
         }
+    }
+
+    @Test
+    public void settingInitAttributeToNull()
+    {
+        invokeInitForCache(component1Mock);
+        invokeProcessingWithInit(component1Mock);
+        invokeDisposal(component1Mock);
+
+        mocksControl.replay();
+
+        initAttributes.put("data", null);
+        processingAttributes.put("runtimeAttribute", "r");
+        processingAttributes.put("data", "d");
+
+        performProcessingDisposeAndVerifyMocks(Component1.class);
+        assertEquals("dir", resultAttributes.get("data"));
     }
 
     /**

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,9 +12,9 @@
 
 package org.carrot2.webapp;
 
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 public class WebApp
 {
@@ -72,14 +72,9 @@ public class WebApp
     public static void main(String [] args) throws Exception
     {
         /*
-         * This enables LOG4J logging in Jetty (specify on command-line, if possible).
+         * Allow context classloader resource loading.
          */
-        System.setProperty("org.mortbay.log.LogFactory.noDiscovery", "false");
-
-        /*
-         * Specify URI decoding codepage.
-         */
-        System.setProperty("org.mortbay.util.URI.charset", "UTF-8");
+        System.setProperty(QueryProcessorServlet.ENABLE_CLASSPATH_LOCATOR, "true");
 
         new WebApp().start(8080);
     }

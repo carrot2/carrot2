@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -77,6 +77,7 @@ public class ConstraintTest
         bindInputValues(instance, "object", "string", 10, Boolean.TRUE);
     }
 
+    @SuppressWarnings("unchecked")
     private void bindInputValues(Object instance, String fieldName, Object... values)
         throws AttributeBindingException, InstantiationException
     {
@@ -86,7 +87,7 @@ public class ConstraintTest
         {
             attributes.put(AttributeUtils.getKey(instance.getClass(), fieldName),
                 values[i]);
-            AttributeBinder.bind(instance, attributes, Input.class);
+            AttributeBinder.set(instance, attributes, Input.class);
             attributes.clear();
         }
     }

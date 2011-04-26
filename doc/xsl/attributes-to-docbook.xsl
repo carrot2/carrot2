@@ -372,7 +372,7 @@
     </db:listitem>
   </xsl:template>
   
-  <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.ImplementingClassesConstraint']">
+  <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.ImplementingClassesConstraint' and count(classes/class) &gt; 0]">
     <db:row>
       <db:entry role="rowhead">Allowed value types</db:entry>
       <db:entry>
@@ -394,6 +394,9 @@
         </xsl:choose>
       </db:entry>
     </db:row>
+  </xsl:template>
+
+  <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.ImplementingClassesConstraint' and not(count(classes/class))]">
   </xsl:template>
 
   <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.IntRangeConstraint' or @class = 'org.carrot2.util.attribute.constraint.DoubleRangeConstraint']">
@@ -465,7 +468,7 @@
     </db:para>
   </xsl:template>
   
-  <xsl:template match="i">
+  <xsl:template match="i|em">
     <db:emphasis>
       <xsl:apply-templates />
     </db:emphasis>

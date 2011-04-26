@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -138,7 +138,7 @@ public class ClusterBuilder
     {
         final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final VectorSpaceModelContext vsmContext = context.vsmContext;
-        final DoubleMatrix2D reducedTdMatrix = context.baseMatrix;
+        final DoubleMatrix2D reducedTdMatrix = context.reducedVsmContext.baseMatrix;
         final int [] wordsStemIndex = preprocessingContext.allWords.stemIndex;
         final int [] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
         final int [] mostFrequentOriginalWordIndex = preprocessingContext.allStems.mostFrequentOriginalWordIndex;

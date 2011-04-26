@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -95,7 +95,7 @@ public enum MarketOption
         
         map.put(ARABIC_ARABIA, LanguageCode.ARABIC);
         map.put(CHINESE_CHINA, LanguageCode.CHINESE_SIMPLIFIED);
-        // TODO: Hong kong uses traditional Chinese I believe.
+        // TODO: Hong Kong uses traditional Chinese I believe.
         map.put(CHINESE_HONG_KONG_SAR, LanguageCode.CHINESE_SIMPLIFIED);
         map.put(CHINESE_TAIWAN, LanguageCode.CHINESE_SIMPLIFIED);
         map.put(DANISH_DENMARK, LanguageCode.DANISH);

@@ -15,7 +15,7 @@
     <!-- JavaScripts -->
     <xsl:apply-templates select="/page/asset-urls/js-urls/js-url" />
   
-    <xsl:if test="/page/request/@view = 'visu'">
+    <xsl:if test="contains('circles foamtree', /page/request/@view)">
       <script type="text/javascript" src="{$skin-path}/common-dynamic/js/swfobject.js"><xsl:comment></xsl:comment></script>
     </xsl:if>
     
@@ -27,14 +27,15 @@
         jQuery.documents.source = "<xsl:value-of select="/page/request/@source" />";
         jQuery.documents.query = "<xsl:value-of select="/page/request/@query-escaped" disable-output-escaping="yes" />";
         
-        <xsl:if test="/page/request/@view != 'visu'">
+        <xsl:if test="not(contains('circles foamtree', /page/request/@view))">
           jQuery.clusters.url = "<xsl:value-of select="$clusters-url" disable-output-escaping="no" />"; 
         </xsl:if>  
 
-        <xsl:if test="/page/request/@view = 'visu'">
+        <xsl:if test="contains('circles foamtree', /page/request/@view)">
           jQuery.visualization.dataUrl = "<xsl:value-of select="$xml-url-encoded" />";
           jQuery.visualization.skinPath = "<xsl:value-of select="$skin-path" />";
           jQuery.visualization.logo = "<xsl:value-of select="$circles-logo" />";
+          jQuery.visualization.visualization = "<xsl:value-of select="/page/request/@view" />";
         </xsl:if>
       </xsl:if>
 
@@ -53,7 +54,7 @@ $(document).ready(function() {
   
   <xsl:template match="page" mode="results.area">
     <div id="results-area" class="{/page/request/@view}">
-      <xsl:if test="/page/request/@view != 'visu'">
+      <xsl:if test="not(contains('circles foamtree', /page/request/@view))">
         <div id="loading-clusters">Loading...</div>
       </xsl:if>
       <div id="loading-documents">Loading...</div>
@@ -74,7 +75,7 @@ $(document).ready(function() {
           <xsl:attribute name="class">single-view</xsl:attribute>
         </xsl:if>
         <xsl:comment></xsl:comment>
-        <xsl:if test="/page/request/@view = 'visu'">
+        <xsl:if test="contains('circles foamtree', /page/request/@view)">
           <div id="clusters-visu"><xsl:comment></xsl:comment></div>
         </xsl:if>
       </div>

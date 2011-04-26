@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -19,8 +18,13 @@ import org.carrot2.core.LanguageCode;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
-import org.carrot2.text.linguistic.ILanguageModelFactory;
+import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
+import org.carrot2.text.linguistic.DefaultStemmerFactory;
+import org.carrot2.text.linguistic.DefaultTokenizerFactory;
+import org.carrot2.text.linguistic.ILexicalDataFactory;
+import org.carrot2.text.linguistic.IStemmerFactory;
+import org.carrot2.text.linguistic.ITokenizerFactory;
+import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.text.preprocessing.LanguageModelStemmer;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -32,8 +36,8 @@ import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
- * Performs basic preprocessing steps on the provided documents. The
- * preprocessing consists of the following steps:
+ * Performs basic preprocessing steps on the provided documents. The preprocessing
+ * consists of the following steps:
  * <ol>
  * <li>{@link Tokenizer#tokenize(PreprocessingContext)}</li>
  * <li>{@link CaseNormalizer#normalize(PreprocessingContext)}</li>
@@ -65,9 +69,7 @@ public class BasicPreprocessingPipeline
     public final StopListMarker stopListMarker = new StopListMarker();
 
     /**
-     * Language model factory. Creates the language model to be used by the
-     * clustering algorithm. The language models provides the lexical resources required
-     * to perform clustering, including stop words and a word stemming algorithm.
+     * Tokenizer factory. Creates the tokenizers to be used by the clustering algorithm.
      * 
      * @group Preprocessing
      * @level Advanced
@@ -78,7 +80,36 @@ public class BasicPreprocessingPipeline
     @Internal
     @Attribute
     @ImplementingClasses(classes = {}, strict = false)
-    public ILanguageModelFactory languageModelFactory = new DefaultLanguageModelFactory();
+    public ITokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
+
+    /**
+     * Stemmer factory. Creates the stemmers to be used by the clustering algorithm.
+     * 
+     * @group Preprocessing
+     * @level Advanced
+     */
+    @Input
+    @Init
+    @Processing
+    @Internal
+    @Attribute
+    @ImplementingClasses(classes = {}, strict = false)
+    public IStemmerFactory stemmerFactory = new DefaultStemmerFactory();
+
+    /**
+     * Lexical data factory. Creates the lexical data to be used by the clustering
+     * algorithm, including stop word and stop label dictionaries.
+     * 
+     * @group Preprocessing
+     * @level Advanced
+     */
+    @Input
+    @Init
+    @Processing
+    @Internal
+    @Attribute
+    @ImplementingClasses(classes = {}, strict = false)
+    public ILexicalDataFactory lexicalDataFactory = new DefaultLexicalDataFactory();
 
     /**
      * Performs preprocessing on the provided list of documents. Results can be obtained
@@ -88,7 +119,8 @@ public class BasicPreprocessingPipeline
         LanguageCode language)
     {
         final PreprocessingContext context = new PreprocessingContext(
-            languageModelFactory.getLanguageModel(language), documents, query);
+            LanguageModel.create(language, stemmerFactory, tokenizerFactory,
+                lexicalDataFactory), documents, query);
         preprocess(context);
         return context;
     }

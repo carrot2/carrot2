@@ -1,0 +1,74 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: Tahoma, sans-serif;
+    font-size: 12px;
+}
+
+html, body, div {
+    padding: 0;
+    margin: 0;
+}
+
+#main {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#swfcontainer {
+    position: absolute;
+}
+
+.smallpadding {
+    top:    5px;
+    bottom: 5px;
+    left:   5px;
+    right:  5px;
+}
+
+.nopadding {
+    top:    0px;
+    bottom: 0px;
+    left:   0px;
+    right:  0px;
+}
+
+#alt, #ie64 {
+	display: none;
+	margin: 10px;
+	padding: 5px 8px;
+  border: 1px solid #dc9e27;
+  background-color: #fff3b7;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+#ie64 p {
+	margin: 0;
+	margin-top: 1ex;
+}
+
+#ie64 p:first-child {
+	margin-top: 0;
+}
+
+#ie64 small {
+	color: #4a3e26;
+}
+
+li {
+	padding-bottom: 0.5ex;
+}
+
+ol {
+	margin-top: 1ex;
+	margin-bottom: 1ex;
+}
+
+pre {
+	margin: 1ex 0;
+}

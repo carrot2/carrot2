@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,7 +13,7 @@ package org.carrot2.text.preprocessing;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.carrot2.text.linguistic.ILanguageModelFactory;
+import org.carrot2.text.linguistic.IStemmerFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -778,8 +777,8 @@ public class PhraseExtractorTest extends PreprocessingComponentTestBase
     }
 
     @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
+    protected IStemmerFactory createStemmerFactory()
     {
-        return new TestLanguageModelFactory();
+        return new TestStemmerFactory();
     }
 }

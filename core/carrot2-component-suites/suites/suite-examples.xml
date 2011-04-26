@@ -1,0 +1,18 @@
+<component-suite>
+    <sources>
+      <source component-class="org.carrot2.source.google.GoogleDocumentSource" id="google">
+        <label>Google</label>
+        <title>Google Web Search</title>
+        <mnemonic>G</mnemonic>
+        <description>Searches the web using Google API</description>
+      </source>
+    </sources>
+
+    <!-- Additional search engines. -->
+    <include suite="source-bing.xml" />
+
+    <!-- Algorithms. -->
+    <include suite="algorithm-lingo.xml" />
+    <include suite="algorithm-stc.xml" />
+    <include suite="algorithm-kmeans.xml" />
+</component-suite>

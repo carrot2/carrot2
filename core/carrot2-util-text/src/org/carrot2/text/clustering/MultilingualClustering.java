@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -17,6 +17,8 @@ import java.util.*;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -70,6 +72,11 @@ public class MultilingualClustering
             return label;
         }
     }
+
+    /**
+     * Logger for this class.
+     */
+    private final static Logger logger = LoggerFactory.getLogger(MultilingualClustering.class);
 
     /**
      * Language aggregation strategy. Determines how clusters generated for individual
@@ -207,7 +214,7 @@ public class MultilingualClustering
             });
 
         // For each language, perform clustering. Please note that implementations of 
-        // IMonolingualClusteringAlgorithm.cluster() are not guaranteed to be thread-save
+        // IMonolingualClusteringAlgorithm.cluster() are not guaranteed to be thread-safe
         // and hence the method must NOT be called concurrently.
         final Map<LanguageCode, Cluster> clusters = Maps.newHashMap();
         for (String language : documentsByLanguage.keySet())
@@ -220,8 +227,10 @@ public class MultilingualClustering
                 languageCode != null ? languageCode.toString() : "Unknown Language");
 
             // Perform clustering
+            final LanguageCode currentLanguage = languageCode != null ? languageCode : defaultLanguage;
+            logger.debug("Performing monolingual clustering in: " + currentLanguage);
             final List<Cluster> clustersForLanguage = algorithm.process(
-                languageDocuments, languageCode != null ? languageCode : defaultLanguage);
+                languageDocuments, currentLanguage);
 
             if (clustersForLanguage.size() == 0 || clustersForLanguage.size() == 1
                 && clustersForLanguage.get(0).isOtherTopics())

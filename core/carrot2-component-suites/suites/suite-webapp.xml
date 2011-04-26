@@ -1,0 +1,33 @@
+<component-suite>
+    <sources>
+        <!-- Webapp-specific document source (prefetching from Google) -->
+        <source component-class="org.carrot2.webapp.source.WebDocumentSource" id="web">
+            <label>Web</label>
+            <title>Search the Web with etools.ch</title>
+            <description>Searches the web using the etools.ch meta search
+                engine</description>
+            <mnemonic>W</mnemonic>
+            <example-queries>
+                <example-query>data mining</example-query>
+                <example-query>london</example-query>
+                <example-query>clustering</example-query>
+            </example-queries>
+        </source>
+    </sources>
+
+    <!-- Search engines. -->
+    <include suite="source-bing.xml" />
+    <include suite="source-yahoo-boss.xml" />
+    
+    <!-- PubMed, Indeed job search. -->
+    <include suite="source-indeed.xml" />
+    <include suite="source-pubmed.xml" />
+    <include suite="source-put.xml" />
+    <include suite="source-icerocket.xml" />
+
+    <!-- Algorithms -->
+    <include suite="algorithm-lingo.xml" />
+    <include suite="algorithm-stc.xml" />
+    <include suite="algorithm-kmeans.xml" />
+    <include suite="algorithm-synthetic.xml" />
+</component-suite>

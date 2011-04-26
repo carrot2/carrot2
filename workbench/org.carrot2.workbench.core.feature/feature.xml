@@ -128,14 +128,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.resources.compatibility"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.core.filesystem"
          download-size="0"
          install-size="0"
@@ -300,7 +292,7 @@
          unpack="false"/>
 
    <plugin
-         id="com.sun.syndication"
+         id="net.java.dev.rome"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -315,13 +307,6 @@
 
    <plugin
          id="org.carrot2.workbench.vis.aduna"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.codehaus.woodstox"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -372,7 +357,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.carrot2.workbench.vis.circles"
+         id="org.carrot2.workbench.vis.carrotsearch"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -422,6 +407,20 @@
 
    <plugin
          id="com.carrotsearch.nni"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.http"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="morfologik"
          download-size="0"
          install-size="0"
          version="0.0.0"

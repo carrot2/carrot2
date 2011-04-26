@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -17,6 +17,7 @@ import static org.carrot2.util.CharArrayUtils.*;
 
 import java.util.Arrays;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class CharArrayUtilsTest
@@ -70,5 +71,35 @@ public class CharArrayUtilsTest
 
         assertFalse(CharArrayUtils.toLowerCase(input2, buffer));
         assertArrayEquals(input2, Arrays.copyOf(buffer, input2.length));
+    }
+    
+    @Test
+    public void testToLowerCaseBufferStartLength()
+    {
+        char [] input1 = "xyz ABC efg".toCharArray();
+        char [] buffer = new char [3];
+        
+        assertTrue(CharArrayUtils.toLowerCase(input1, buffer, 4, 3));
+        assertArrayEquals("abc".toCharArray(), buffer);
+    }
+    
+    @Ignore // We don't compile with assertions on .NET.
+    @Test(expected = AssertionError.class)
+    public void bufferTooSmall()
+    {
+        char [] input1 = "xyz ABC efg".toCharArray();
+        char [] buffer = new char [3];
+        
+        CharArrayUtils.toLowerCase(input1, buffer);
+    }
+    
+    @Ignore // We don't compile with assertions on .NET.
+    @Test(expected = AssertionError.class)
+    public void wordTooShort()
+    {
+        char [] input1 = "xyz".toCharArray();
+        char [] buffer = new char [3];
+        
+        CharArrayUtils.toLowerCase(input1, buffer, 0, 5);
     }
 }

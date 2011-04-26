@@ -319,7 +319,7 @@
       <listitem>
         <para>
           Open for editing the <filename>suite-webapp.xml</filename> file, located in the 
-          <filename>WEB-INF/classes/suites</filename> directory of the 
+          <filename>WEB-INF/suites</filename> directory of the 
           WAR file.
         </para>
       </listitem>
@@ -342,7 +342,7 @@
           (e.g. index location for the Lucene document source), 
           <link linkend="section.customizing.component-suites-and-attributes.component-attributes">use 
           the &DCW; to generate the attribute set XML file</link>. Place the generated
-          XML file in <filename>WEB-INF/classes/suites</filename> and make
+          XML file in <filename>WEB-INF/suites</filename> and make
           sure it is appropriately referenced by the <tag>attribute-sets-resource</tag>
           attribute of the descriptor added in the previous step. 
         </para>
@@ -376,7 +376,7 @@
       <listitem>
         <para>
           Open for editing the <filename>suite-dcs.xml</filename> file, located in the 
-          <filename>WEB-INF/classes/suites</filename> directory of the 
+          <filename>WEB-INF/suites</filename> directory of the 
           DCS WAR file located in the <filename>war/</filename> of the DCS distribution.
         </para>
       </listitem>
@@ -398,7 +398,7 @@
           (e.g. index location for the Lucene document source), 
           <link linkend="section.customizing.component-suites-and-attributes.component-attributes">use 
           the &DCW; to generate the attribute set XML file</link>. Place the generated
-          XML file in <filename>WEB-INF/classes/suites</filename> 
+          XML file in <filename>WEB-INF/suites</filename> 
           and make sure it is appropriately referenced by the <tag>attribute-sets-resource</tag>
           attribute of the descriptor added in the previous step. 
         </para>
@@ -430,7 +430,7 @@
       <listitem>
         <para>
           Replace the contents of <filename>lingo.attributes.xml</filename>, located in
-          the <filename>WEB-INF/classes/suites</filename> directory of the web application
+          the <filename>WEB-INF/suites</filename> directory of the web application
           WAR file, with the XML file saved in the previous step.
         </para>
       </listitem>
@@ -453,6 +453,9 @@
   
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" 
               href="customizing-algorithm-for-cli.xml" />
+              
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" 
+              href="customizing-algorithm-in-java-api.xml" />
   
   <section role="carrot2">
     <title>Adding document sources to &DCW;</title>

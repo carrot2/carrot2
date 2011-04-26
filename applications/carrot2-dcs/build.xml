@@ -95,16 +95,6 @@
       </fileset>
     </copy>
 
-    <copy todir="${dcs.dir}/examples/java/lib" flatten="true">
-      <fileset dir="${carrot2.master.basedir}/lib">
-        <include name="**/jcl-over-slf4j-*.jar" />
-      	<include name="**/slf4j-api-*.jar" />
-      	<include name="**/slf4j-nop-*.jar" />
-        <include name="**/commons-codec*.*" />
-        <include name="**/commons-httpclient*.*" />
-      </fileset>
-    </copy>
-      
     <delete dir="${dcs.dir}/classes" />
   </target>
 
@@ -175,12 +165,24 @@
       <fileset dir="${carrot2.dcs.basedir}/web">
         <exclude name="WEB-INF" />
       </fileset>
+
+      <zipfileset prefix="WEB-INF/suites" dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
+        <include name="algorithm-*.xml" />
+        <include name="source-*.xml" />
+        <include name="suite-dcs.xml" />
+      </zipfileset>
+      <zipfileset prefix="WEB-INF/resources" 
+      	          dir="${carrot2.master.basedir}/core/carrot2-util-text/src-resources" />
+
       <lib dir="${lib.flattened}">
       	<exclude name="**/slf4j-*" />
       	<exclude name="**/carrot2-mini*.jar" />
       	<exclude name="**/carrot2-core-sources*.jar" />
+      	<exclude name="**/commons-collections*" />
+      	<exclude name="**/commons-io*" />
       </lib>
       <lib dir="${dcs.lib.dir}" />
+
       <classes dir="${dcs.dir}/classes">
         <exclude name="**/*.java" />
       </classes>
@@ -192,16 +194,8 @@
         <include name="appender-*" />
         <include name="filters-*" />
       </classes>
-      <classes dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
-        <include name="suites/algorithm-*.xml" />
-        <include name="suites/source-*.xml" />
-        <include name="suites/suite-dcs.xml" />
-      </classes>
-      <manifest>
-        <attribute name="Main-Class" value="org.carrot2.dcs.DcsApp" />
-      </manifest>
     </war>
-  	
+
   	<delete dir="${dcs.lib.dir}" />
   </target>
 

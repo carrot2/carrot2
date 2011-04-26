@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -105,6 +105,22 @@ public final class StreamUtils
         }
 
         return baos.toCharArray();
+    }
+
+    /**
+     * Prefetch the entire content of <code>stream</code>, close it and return
+     * an {@link InputStream} to an in-memory {@link ByteArrayInputStream}. If
+     * <code>stream</code> is already a {@link ByteArrayInputStream}, it is
+     * returned immediately.
+     */
+    public static InputStream prefetch(InputStream stream) throws IOException
+    {
+        if (stream instanceof ByteArrayInputStream)
+        {
+            return stream;
+        }
+
+        return new ByteArrayInputStream(readFullyAndClose(stream));
     }
 
     /**

@@ -15,6 +15,7 @@
   <xsl:param name="product.cli.base" />
   <xsl:param name="product.workbench.base" />
   <xsl:param name="product.manual.base" />
+  <xsl:param name="product.solr-compat.base" />
   <xsl:param name="carrot2.javadoc.url" />
   
   <xsl:template match="product:java-api-download-link">
@@ -41,6 +42,10 @@
     <a href="{$dist.url}/{$product.workbench.base}-{@os}.{@wm}.x86-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>
   
+  <xsl:template match="product:solr-compat-download-link">
+    <a href="{$dist.url}/{$product.solr-compat.base}-{@solr.version}-compatibility-{$product.version}.zip"><xsl:apply-templates /></a>
+  </xsl:template>
+  
   <xsl:template match="product:online-demo-link">
     <xsl:variable name="content">
       <xsl:choose>
@@ -56,14 +61,30 @@
   
   <xsl:template match="product:version"><xsl:value-of select="$product.version" /></xsl:template>
   
-  <xsl:template match="d:link[@role = 'javadoc']">
+  <xsl:template match="product:version-maven"><xsl:choose>
+      <xsl:when test="contains($product.version, '-dev')"><xsl:value-of select="concat(substring-before($product.version, '-dev'), '-SNAPSHOT')" /></xsl:when>
+      <xsl:otherwise><xsl:value-of select="$product.version" /></xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="d:link[@role = 'javadoc'][@direct = 'true']">
+    <a href="{$carrot2.javadoc.url}/{@linkend}"><xsl:apply-templates /></a>
+  </xsl:template>
+  
+  <xsl:template match="d:link[@role = 'javadoc'][not(@direct)]">
+    <xsl:variable name="linkend-with-hash"><xsl:value-of select="@linkend" /><xsl:if test="not(contains(@linkend, '#'))">#</xsl:if></xsl:variable>
     <xsl:variable name="class-name">
       <xsl:call-template name="from-last-substring">
         <xsl:with-param name="string" select="@linkend" />
         <xsl:with-param name="substring" select="'.'" />
       </xsl:call-template>
     </xsl:variable>
-    <a href="{$carrot2.javadoc.url}/{translate(@linkend, '.$', '/.')}.html"><xsl:value-of select="$class-name" /></a>
+    <xsl:variable name="suffix">
+      <xsl:choose>
+        <xsl:when test="contains(@linkend, '#')">#<xsl:value-of select="substring-after(@linkend, '#')" /></xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <a href="{$carrot2.javadoc.url}/{translate(substring-before($linkend-with-hash, '#'), '.$', '/.')}.html{$suffix}"><xsl:value-of select="$class-name" /></a>
   </xsl:template>
   
   <xsl:template name="from-last-substring">

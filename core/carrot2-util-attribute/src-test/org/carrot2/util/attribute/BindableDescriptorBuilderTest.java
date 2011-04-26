@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -216,7 +216,7 @@ public class BindableDescriptorBuilderTest
         final Map<String, Object> attributes = Maps.newHashMap();
         attributes.put(AttributeUtils.getKey(BindableReferenceContainer.class,
             "bindableAttribute"), BindableReferenceImpl2.class);
-        AttributeBinder.bind(instance, attributes, Input.class, TestInit.class);
+        AttributeBinder.set(instance, attributes, Input.class, TestInit.class);
 
         final BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
             .buildDescriptor(instance);

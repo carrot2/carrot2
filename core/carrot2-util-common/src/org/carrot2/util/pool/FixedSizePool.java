@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -11,7 +12,6 @@
 
 package org.carrot2.util.pool;
 
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;

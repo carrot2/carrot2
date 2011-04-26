@@ -4,11 +4,14 @@ Bundle-Name: Common utilities
 Bundle-SymbolicName: org.carrot2.util.common
 Bundle-Version: 0.0.0.QUALIFIER
 Export-Package: org.carrot2.util,
+ org.carrot2.util.annotations,
+ org.carrot2.util.factory,
  org.carrot2.util.httpclient,
  org.carrot2.util.pool,
  org.carrot2.util.resource,
  org.carrot2.util.xslt
 Require-Bundle: org.apache.commons;visibility:=reexport,
+ org.apache.http;bundle-version="4.1.0";visibility:=reexport,
  com.google.guava;visibility:=reexport,
  org.simpleframework.xml;visibility:=reexport,
  org.fest;resolution:=optional;visibility:=reexport,
@@ -17,7 +20,8 @@ Require-Bundle: org.apache.commons;visibility:=reexport,
  org.slf4j;bundle-version="1.5.8";visibility:=reexport,
  org.codehaus.jackson;bundle-version="0.9.2";visibility:=reexport,
  org.apache.mahout;bundle-version="0.3.0";visibility:=reexport,
- com.carrotsearch.hppc;bundle-version="0.3.0";visibility:=reexport
+ com.carrotsearch.hppc;bundle-version="0.3.0";visibility:=reexport,
+ javax.servlet;bundle-version="2.5.0";resolution:=optional
 Bundle-ClassPath: .
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: dependent,registered

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -46,18 +46,18 @@ final class Substring
         this.frequency = frequency;
     }
 
-    public boolean isEquivalentTo(Substring substring, int [] tokensWordIndex,
-        int [] wordsStemIndex)
+    public boolean isEquivalentTo(Substring other, 
+        int [] tokensWordIndex, int [] wordsStemIndex)
     {
-        if ((substring.to - substring.from) != (to - from))
+        if ((other.to - other.from) != (to - from))
         {
             return false;
         }
 
         for (int i = 0; i < (to - from); i++)
         {
-            if (wordsStemIndex[tokensWordIndex[substring.from + i]] != wordsStemIndex[tokensWordIndex[from
-                + i]])
+            if (wordsStemIndex[tokensWordIndex[other.from + i]] != 
+                wordsStemIndex[tokensWordIndex[from + i]])
             {
                 return false;
             }

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,33 +14,69 @@ package org.carrot2.core;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.carrot2.core.ProcessingComponentDescriptor.Position;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.ClassLocator;
+import org.carrot2.util.resource.ContextClassLoaderLocator;
+import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.ResourceLookup;
 import org.junit.Test;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 /**
- * A very rough test case for the component suites defined in this project.
+ * A very rough test case for the deserialization of component suites.
  */
 public class ComponentSuitesTest
 {
-    private ResourceUtils resourceUtils = ResourceUtilsFactory.getDefaultResourceUtils();
-
     @Test
     public void testCarrot2DefaultComponentSuite() throws Exception
     {
-        checkSuite("/suites/suite-dcs.xml");
-        checkSuite("/suites/suite-doc.xml");
-        checkSuite("/suites/suite-workbench.xml");
+        // Default suites should be reachable via context class loader.
+        ResourceLookup resourceLookup = new ResourceLookup(
+            new ContextClassLoaderLocator());
+
+        checkSuite("suite-dcs.xml", resourceLookup);
+        checkSuite("suite-doc.xml", resourceLookup);
+        checkSuite("suite-workbench.xml", resourceLookup);
     }
 
-    private void checkSuite(final String suitePath) throws Exception
+    @Test
+    public void testIncludes() throws Exception
     {
-        IResource resource = resourceUtils.getFirst(suitePath, ComponentSuitesTest.class);
+        // Test suite should be reachable via this class's class loader.
+        ResourceLookup resourceLookup = new ResourceLookup(
+            new ClassLocator(this.getClass()));
+
+        IResource resource = resourceLookup.getFirst("suite-including.xml");
         assertThat(resource).isNotNull();
-        ProcessingComponentSuite suite = ProcessingComponentSuite.deserialize(resource);
+        ProcessingComponentSuite suite = ProcessingComponentSuite.deserialize(resource,
+            resourceLookup);
+
+        assertThat(suite).isNotNull();
+
+        final Function<ProcessingComponentDescriptor, String> toIdTransformer = new Function<ProcessingComponentDescriptor, String>()
+        {
+            public String apply(ProcessingComponentDescriptor descriptor)
+            {
+                return descriptor.getId();
+            }
+        };
+        assertThat(Lists.transform(suite.getSources(), toIdTransformer)).containsOnly(
+            "including-beginning", "included-beginning", "including-middle",
+            "included-middle", "included-end", "including-end");
+        assertThat(Lists.transform(suite.getAlgorithms(), toIdTransformer)).containsOnly(
+            "included-beginning", "included-beginning-2", "including-middle",
+            "including-middle-2", "included-end", "including-end");
+        assertThat(suite.includes).isNull();
+    }
+
+    private void checkSuite(final String suitePath, ResourceLookup resourceLookup)
+        throws Exception
+    {
+        IResource resource = resourceLookup.getFirst(suitePath);
+        assertThat(resource).isNotNull();
+        ProcessingComponentSuite suite = ProcessingComponentSuite.deserialize(resource,
+            resourceLookup);
 
         assertThat(suite).isNotNull();
         assertThat(suite.getAlgorithms()).isNotEmpty();
@@ -59,42 +95,5 @@ public class ComponentSuitesTest
             assertThat(algorithm.getId()).isNotEmpty();
             assertThat(algorithm.getAttributeSets()).isNotNull();
         }
-    }
-
-    @Test
-    public void testIncludes() throws Exception
-    {
-        IResource resource = resourceUtils.getFirst("/suite-including.xml",
-            ComponentSuitesTest.class);
-        assertThat(resource).isNotNull();
-        ProcessingComponentSuite suite = ProcessingComponentSuite.deserialize(resource);
-
-        assertThat(suite).isNotNull();
-
-        final Function<ProcessingComponentDescriptor, String> toIdTransformer = new Function<ProcessingComponentDescriptor, String>()
-        {
-            public String apply(ProcessingComponentDescriptor descriptor)
-            {
-                return descriptor.getId();
-            }
-        };
-        final Function<ProcessingComponentDescriptor, Position> toPositionTransformer = new Function<ProcessingComponentDescriptor, Position>()
-        {
-            public Position apply(ProcessingComponentDescriptor descriptor)
-            {
-                return descriptor.position;
-            }
-        };
-        assertThat(Lists.transform(suite.getSources(), toIdTransformer)).containsOnly(
-            "including-beginning", "included-beginning", "including-middle",
-            "included-middle", "included-end", "including-end");
-        assertThat(Lists.transform(suite.getAlgorithms(), toIdTransformer)).containsOnly(
-            "included-beginning", "included-beginning-2", "including-middle",
-            "including-middle-2", "included-end", "including-end");
-        assertThat(Lists.transform(suite.getSources(), toPositionTransformer))
-            .containsOnly(null, null, null, null, null, null);
-        assertThat(Lists.transform(suite.getAlgorithms(), toPositionTransformer))
-            .containsOnly(null, null, null, null, null, null);
-        assertThat(suite.includes).isNull();
     }
 }

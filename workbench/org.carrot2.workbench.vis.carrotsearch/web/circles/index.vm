@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+#set ( $version = "1.2.4" )
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Carrot Search Circles - Interactive visualization of hierarchical data structures</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet" type="text/css" href="/common/css/fill.css" />
+  </head>
+
+  <body>
+    <!-- Required JavaScripts -->
+    <script type="text/javascript" src="assets/$version/required/js/swfobject.js"></script>
+    <script type="text/javascript" src="assets/$version/required/js/carrotsearch.circles.min.js"></script>
+    <script type="text/javascript" src="/common/js/swt-to-visualization.js"></script>
+
+    <div id="main">
+      <div id="swfcontainer" class="smallpadding">
+        <div id="swf">
+          <!-- Alternative content to show when Flash Player is missing, optional -->
+          <div id="alt">To see the visualization, <a href="http://get.adobe.com/flashplayer/">install Adobe Flash Player</a></div>
+        </div>
+      </div>
+
+      <!-- Alternative content if JavaScript is disabled, optional -->
+      <noscript>
+        To use Carrot Search Circles, enable JavaScript.
+      </noscript>
+    </div>
+
+    <!-- Embed the visualization. -->
+    <script type="text/javascript">//<![CDATA[
+      var vis = new CarrotSearchCircles({
+        // Location of the Circles Flash binary
+        visualizationSwfLocation: "assets/$version/required/swf/com.carrotsearch.visualizations.circles.swf",
+
+        // Location of the Flash Player installer
+        flashPlayerInstallerSwfLocation: "assets/$version/required/swf/playerProductInstall.swf",
+
+        // Identifier of the DOM element into which to embed Circles
+        id: "swf",
+
+        // Show a tip if embedding fails        
+        onLoad: showTip,
+
+        // Attach Flash-SWT event hooks.
+        onInitialize: onInitialized,
+        onGroupSelection: proxy_groupClicked,
+        onDocumentSelection: proxy_documentClicked,
+        onModelChange: proxy_onModelChanged
+      });
+      ie64Notice();
+    //]]></script>
+  </body>
+</html>

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -125,7 +125,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
 
         if (this.current != null && current instanceof FSDirectory)
         {
-            dialog.setFilterPath(((FSDirectory) current).getFile().getAbsolutePath());
+            dialog.setFilterPath(((FSDirectory) current).getDirectory().getAbsolutePath());
         }
         else
         {
@@ -178,7 +178,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
         }
         else if (current instanceof FSDirectory)
         {
-            representation = ((FSDirectory) current).getFile().getAbsolutePath();
+            representation = ((FSDirectory) current).getDirectory().getAbsolutePath();
         }
         else representation = current.getClass().getSimpleName();
 

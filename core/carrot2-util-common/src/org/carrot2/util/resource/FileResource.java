@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,13 +14,15 @@ package org.carrot2.util.resource;
 
 import java.io.*;
 
+import org.carrot2.util.StreamUtils;
 import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
 
 /**
- * A local filesystem resource.
+ * A local filesystem resource. This loader provides cached content of
+ * returned resources and closes the underlying stream handle in {@link #open()}.
  */
 @Root(name = "file-resource")
 @JsonAutoDetect(JsonMethod.NONE)
@@ -49,7 +51,7 @@ public final class FileResource implements IResource
 
     public InputStream open() throws IOException
     {
-        return ResourceUtils.prefetch(new FileInputStream(file));
+        return StreamUtils.prefetch(new FileInputStream(file));
     }
 
 

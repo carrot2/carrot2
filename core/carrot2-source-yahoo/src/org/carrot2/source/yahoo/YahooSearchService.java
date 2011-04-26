@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -20,7 +20,10 @@ import java.util.Arrays;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.httpclient.*;
+import org.apache.http.Header;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
@@ -176,7 +179,7 @@ public abstract class YahooSearchService
         results = Math.min(results, metadata.resultsPerPage);
 
         final ArrayList<NameValuePair> params = createRequestParams(query, start, results);
-        params.add(new NameValuePair("output", "xml"));
+        params.add(new BasicNameValuePair("output", "xml"));
 
         final HttpUtils.Response response = HttpUtils.doGET(getServiceURI(), params,
             Arrays.asList(new Header []

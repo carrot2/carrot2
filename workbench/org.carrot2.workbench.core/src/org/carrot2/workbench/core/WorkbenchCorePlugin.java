@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,9 +15,9 @@ package org.carrot2.workbench.core;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.Controller;
@@ -27,11 +27,14 @@ import org.carrot2.core.IClusteringAlgorithm;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.core.ProcessingComponentSuite;
+import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
+import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.resource.DirLocator;
 import org.carrot2.util.resource.IResourceLocator;
 import org.carrot2.util.resource.PrefixDecoratorLocator;
-import org.carrot2.util.resource.ResourceUtilsFactory;
+import org.carrot2.util.resource.ResourceLookup;
+import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.resource.URLResource;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -98,9 +101,9 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
      * List of failed components.
      */
     private List<ProcessingComponentDescriptor> failed = Lists.newArrayList();
-    
-    /*
-     * 
+
+    /**
+     * Starts the bundle: scan suites and initialize the controller.
      */
     @SuppressWarnings("unchecked")
     public void start(BundleContext context) throws Exception
@@ -108,17 +111,24 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         super.start(context);
         plugin = this;
 
-        /*
-         * Add workspace to the list of resource locations.
-         */
-        installWorkbenchResourceLocator();
-
         // Scan the list of suite extension points.
         scanSuites();
 
+        ArrayList<IResourceLocator> locators = Lists.newArrayList();
+        IResourceLocator workspaceLocator = getWorkspaceResourceLocator();
+        if (workspaceLocator != null)
+        {
+            locators.add(workspaceLocator);
+        }
+        locators.add(Location.CONTEXT_CLASS_LOADER.locator);
+
+        Map<String, Object> initAttributes = Maps.newHashMap();
+        initAttributes.put(
+            AttributeUtils.getKey(DefaultLexicalDataFactory.class, "resourceLookup"),
+            new ResourceLookup(locators));
+
         controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
-        controller.init(Collections.<String, Object> emptyMap(), 
-            componentSuite.getComponentConfigurations());        
+        controller.init(initAttributes, componentSuite.getComponentConfigurations());        
     }
 
     /*
@@ -273,47 +283,34 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                  * with a strategy substituting the context class loader with the given
                  * Bundle's loadClass() call. I leave it for now.
                  * 
-                 * Second, the suite inclusion mechanism uses resource lookup, but the suite
-                 * plugin does not export suites as part of the classpath (it
-                 * contains plugin resources, but they are not on the classpath). We temporarily
-                 * add a custom resource locator that searches the contributing
+                 * We use a custom resource locator that searches the contributing
                  * plugin for resources matching the included resource.
                  */
                 try
                 {
+                    final ResourceLookup resourceLookup = new ResourceLookup(
+                        new PrefixDecoratorLocator(new BundleResourceLocator(b), suiteRoot));
+
+                    final ProcessingComponentSuite suite = ProcessingComponentSuite
+                        .deserialize(new URLResource(bundleURL), resourceLookup);
+
                     /*
-                     * Add temporary resource locator.
+                     * Remove invalid descriptors, cache icons.
                      */
-                    final IResourceLocator bundleLocator = 
-                        new PrefixDecoratorLocator(new BundleResourceLocator(b), suiteRoot);
-                    ResourceUtilsFactory.addFirst(bundleLocator);
-                    try
+                    failed.addAll(suite.removeUnavailableComponents());
+                    for (ProcessingComponentDescriptor d : suite.getComponents())
                     {
-                        final ProcessingComponentSuite suite = ProcessingComponentSuite
-                            .deserialize(new URLResource(bundleURL));
-
-                        /*
-                         * Remove invalid descriptors, cache icons.
-                         */
-                        failed.addAll(suite.removeUnavailableComponents());
-                        for (ProcessingComponentDescriptor d : suite.getComponents())
+                        final String iconPath = d.getIconPath();
+                        if (StringUtils.isEmpty(iconPath))
                         {
-                            final String iconPath = d.getIconPath();
-                            if (StringUtils.isEmpty(iconPath))
-                            {
-                                continue;
-                            }
-
-                            componentImages.put(d.getId(), 
-                                imageDescriptorFromPlugin(bundleId, iconPath));
+                            continue;
                         }
-    
-                        suites.add(suite);
+
+                        componentImages.put(d.getId(), 
+                            imageDescriptorFromPlugin(bundleId, iconPath));
                     }
-                    finally
-                    {
-                        ResourceUtilsFactory.remove(bundleLocator);
-                    }
+
+                    suites.add(suite);
                 }
                 catch (Exception e)
                 {
@@ -378,16 +375,17 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     }
 
     /**
-     * Adds workspace to the list of resource locations.
+     * Return a resource locator pointing to the user's workspace or
+     * <code>null</code> if not available.
      */
-    private void installWorkbenchResourceLocator()
+    private IResourceLocator getWorkspaceResourceLocator()
     {
         final IPath instanceLocation = Platform.getLocation();
         if (instanceLocation == null)
         {
             // Issue a warning about read-only location.
             Utils.logError("Instance location not available.", false);
-            return;
+            return null;
         }
 
         /*
@@ -404,13 +402,10 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         {
             // Issue a warning about read-only location.
             Utils.logError("Instance location does not exist: " + workspacePath, false);
-            return;
+            return null;
         }
 
-        /*
-         * Install a resource locator pointing to the workspace.
-         */
-        ResourceUtilsFactory.addFirst(new DirLocator(workspacePath.getAbsolutePath()));
+        return new DirLocator(workspacePath.getAbsoluteFile());
     }
 
     /**

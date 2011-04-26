@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -38,7 +38,11 @@ import com.google.common.collect.Maps;
  */
 public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSource>
 {
-    private ResourceUtils resourceUtils = ResourceUtilsFactory.getDefaultResourceUtils();
+    /**
+     * Resource locator for test resources, use context class loader.
+     */
+    private ResourceLookup resourceLocator = new ResourceLookup(
+        new ContextClassLoaderLocator());
 
     @Override
     public Class<XmlDocumentSource> getComponentClass()
@@ -49,8 +53,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testLegacyXml()
     {
-        IResource xml = resourceUtils.getFirst("/xml/carrot2-apple-computer.xml",
-            XmlDocumentSourceTest.class);
+        IResource xml = resourceLocator.getFirst("/xml/carrot2-apple-computer.xml");
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
             xml);
@@ -64,8 +67,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testResultsTruncation()
     {
-        IResource xml = resourceUtils.getFirst("/xml/carrot2-apple-computer.xml",
-            XmlDocumentSourceTest.class);
+        IResource xml = resourceLocator.getFirst("/xml/carrot2-apple-computer.xml");
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
             xml);
@@ -80,10 +82,8 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testXsltNoParameters()
     {
-        IResource xml = resourceUtils.getFirst("/xml/custom-parameters-not-required.xml",
-            XmlDocumentSourceTest.class);
-        IResource xslt = resourceUtils.getFirst("/xsl/custom-xslt.xsl",
-            XmlDocumentSourceTest.class);
+        IResource xml = resourceLocator.getFirst("/xml/custom-parameters-not-required.xml");
+        IResource xslt = resourceLocator.getFirst("/xsl/custom-xslt.xsl");
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
             xml);
@@ -96,10 +96,8 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testXsltWithParameters()
     {
-        IResource xml = resourceUtils.getFirst("/xml/custom-parameters-required.xml",
-            XmlDocumentSourceTest.class);
-        IResource xslt = resourceUtils.getFirst("/xsl/custom-xslt.xsl",
-            XmlDocumentSourceTest.class);
+        IResource xml = resourceLocator.getFirst("/xml/custom-parameters-required.xml");
+        IResource xslt = resourceLocator.getFirst("/xsl/custom-xslt.xsl");
 
         Map<String, String> xsltParameters = Maps.newHashMap();
         xsltParameters.put("id-field", "number");
@@ -120,8 +118,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testNoIdsInSourceXml()
     {
-        IResource xml = resourceUtils.getFirst("/xml/carrot2-no-ids.xml",
-            XmlDocumentSourceTest.class);
+        IResource xml = resourceLocator.getFirst("/xml/carrot2-no-ids.xml");
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
             xml);
@@ -134,8 +131,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testGappedIdsInSourceXml()
     {
-        IResource xml = resourceUtils.getFirst("/xml/carrot2-gapped-ids.xml",
-            XmlDocumentSourceTest.class);
+        IResource xml = resourceLocator.getFirst("/xml/carrot2-gapped-ids.xml");
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
             xml);
@@ -148,8 +144,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testDuplicatedIdsInSourceXml()
     {
-        IResource xml = resourceUtils.getFirst("/xml/carrot2-duplicated-ids.xml",
-            XmlDocumentSourceTest.class);
+        IResource xml = resourceLocator.getFirst("/xml/carrot2-duplicated-ids.xml");
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
             xml);
@@ -162,12 +157,10 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testInitializationTimeXslt()
     {
-        IResource xslt = resourceUtils.getFirst("/xsl/custom-xslt.xsl",
-            XmlDocumentSourceTest.class);
+        IResource xslt = resourceLocator.getFirst("/xsl/custom-xslt.xsl");
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"), xslt);
 
-        IResource xml = resourceUtils.getFirst("/xml/custom-parameters-not-required.xml",
-            XmlDocumentSourceTest.class);
+        IResource xml = resourceLocator.getFirst("/xml/custom-parameters-not-required.xml");
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
             xml);
 
@@ -178,8 +171,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testOverridingInitializationTimeXslt()
     {
-        IResource initXslt = resourceUtils.getFirst("/xsl/carrot2-identity.xsl",
-            XmlDocumentSourceTest.class);
+        IResource initXslt = resourceLocator.getFirst("/xsl/carrot2-identity.xsl");
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
             initXslt);
         
@@ -187,8 +179,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
 
         // Run with identity XSLT
         {
-            IResource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
-                XmlDocumentSourceTest.class);
+            IResource xml = resourceLocator.getFirst("/xml/carrot2-test.xml");
             processingAttributes.put(AttributeUtils
                 .getKey(XmlDocumentSource.class, "xml"), xml);
 
@@ -202,10 +193,8 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
 
         // Run with swapping XSLT
         {
-            IResource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
-                XmlDocumentSourceTest.class);
-            IResource xslt = resourceUtils.getFirst(
-                "/xsl/carrot2-title-snippet-switch.xsl", XmlDocumentSourceTest.class);
+            IResource xml = resourceLocator.getFirst("/xml/carrot2-test.xml");
+            IResource xslt = resourceLocator.getFirst("/xsl/carrot2-title-snippet-switch.xsl");
             processingAttributes.put(AttributeUtils
                 .getKey(XmlDocumentSource.class, "xml"), xml);
             processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class,
@@ -223,8 +212,8 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testDisablingInitializationTimeXslt()
     {
-        IResource initXslt = resourceUtils.getFirst(
-            "/xsl/carrot2-title-snippet-switch.xsl", XmlDocumentSourceTest.class);
+        IResource initXslt = resourceLocator.getFirst(
+            "/xsl/carrot2-title-snippet-switch.xsl");
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
             initXslt);
 
@@ -232,8 +221,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         
         // Run with swapping XSLT
         {
-            IResource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
-                XmlDocumentSourceTest.class);
+            IResource xml = resourceLocator.getFirst("/xml/carrot2-test.xml");
             processingAttributes.put(AttributeUtils
                 .getKey(XmlDocumentSource.class, "xml"), xml);
 
@@ -247,8 +235,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
 
         // Run without XSLT
         {
-            IResource xml = resourceUtils.getFirst("/xml/carrot2-test.xml",
-                XmlDocumentSourceTest.class);
+            IResource xml = resourceLocator.getFirst("/xml/carrot2-test.xml");
             processingAttributes.put(AttributeUtils
                 .getKey(XmlDocumentSource.class, "xml"), xml);
             processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class,

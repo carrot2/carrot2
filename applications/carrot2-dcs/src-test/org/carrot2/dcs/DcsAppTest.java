@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,24 +12,53 @@
 package org.carrot2.dcs;
 
 import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
+import static org.carrot2.dcs.RestProcessorServlet.DISABLE_LOGFILE_APPENDER;
+import static org.carrot2.dcs.RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assume.assumeTrue;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.log4j.BufferingAppender;
 import org.carrot2.util.StreamUtils;
-import org.carrot2.util.resource.*;
-import org.junit.*;
+import org.carrot2.util.SystemPropertyStack;
+import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.ResourceLookup;
+import org.carrot2.util.resource.ResourceLookup.Location;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlOption;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 /**
@@ -40,19 +68,47 @@ public class DcsAppTest
 {
     private static DcsApp dcs;
 
-    private static String appenderProp;
+    private static SystemPropertyStack appenderProperty;
+    private static SystemPropertyStack classpathLocatorProperty;
+
     private static String KEY_KACZYNSKI = "/xml/carrot2-kaczynski.utf8.xml";
     private static HashMap<String, File> testFiles = Maps.newHashMap();
 
+    /**
+     * Buffered log stream.
+     */
+    private static BufferingAppender logStream;
+
+    /**
+     * DCS startup log.
+     */
+    private static String startupLog;
+
     @BeforeClass
-    public static void startDcs() throws Exception
+    public static void startDcs() throws Throwable
     {
-        appenderProp = System.getProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER);
-        System.setProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER, "true");
+        appenderProperty = new SystemPropertyStack(DISABLE_LOGFILE_APPENDER);
+        appenderProperty.push("true");
+
+        classpathLocatorProperty = new SystemPropertyStack(ENABLE_CLASSPATH_LOCATOR);
+        classpathLocatorProperty.push("true");
+
+        // Tests run with slf4j-log4j, so attach to the logger directly.
+        logStream = BufferingAppender.attachToRootLogger();
 
         dcs = new DcsApp("dcs");
         dcs.port = 57913;
-        dcs.start(System.getProperty("dcs.test.web.dir.prefix"));
+        try
+        {
+            dcs.start(System.getProperty("dcs.test.web.dir.prefix"));
+        }
+        catch (Throwable e)
+        {
+            dcs = null;
+            throw e;
+        }
+
+        startupLog = logStream.getBuffer();
     }
 
     @BeforeClass
@@ -60,19 +116,19 @@ public class DcsAppTest
     {
         String [] resources =
         {
-            "/xml/carrot2-kaczynski.utf8.xml",
-            "/xml/carrot2-kaczynski.utf16.xml"
+            "/xml/carrot2-kaczynski.utf8.xml", "/xml/carrot2-kaczynski.utf16.xml"
         };
 
-        final ResourceUtils resUtils = ResourceUtilsFactory.getDefaultResourceUtils();
+        final ResourceLookup resourceLookup = new ResourceLookup(
+            Location.CONTEXT_CLASS_LOADER);
+
         for (String resource : resources)
         {
-            final IResource res = resUtils.getFirst(resource, DcsAppTest.class);
+            final IResource res = resourceLookup.getFirst(resource);
             assertThat(res).isNotNull();
 
             final File tmp = File.createTempFile("dcs-xml-data", ".xml");
-            StreamUtils.copyAndClose(
-                res.open(), new FileOutputStream(tmp), 8192);
+            StreamUtils.copyAndClose(res.open(), new FileOutputStream(tmp), 8192);
             tmp.deleteOnExit();
 
             testFiles.put(resource, tmp);
@@ -83,11 +139,31 @@ public class DcsAppTest
     public static void stopDcs() throws Exception
     {
         dcs.stop();
-        
-        if (appenderProp != null)
-            System.setProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER, appenderProp);
-        else
-            System.clearProperty(RestProcessorServlet.DISABLE_LOGFILE_APPENDER);
+
+        BufferingAppender.detachFromRootLogger(logStream);
+        logStream = null;
+
+        appenderProperty.pop();
+        classpathLocatorProperty.pop();
+    }
+
+    @Before
+    public void clearLogStream()
+    {
+        logStream.clear();
+    }
+
+    @Before
+    public void checkDcsStarted()
+    {
+        if (dcs == null) Assert.fail("DCS not started.");
+    }
+
+    @Test
+    public void testDcsConfigLocation()
+    {
+        assertThat(startupLog).as("Startup log").contains(
+            "[webapp: /WEB-INF/dcs-config.xml]");
     }
 
     @Test
@@ -112,7 +188,7 @@ public class DcsAppTest
         final String sourceID = "boss-web";
         for (HtmlOption option : source.getOptions())
         {
-            if (sourceID.equals(option.getAttributeValue("value")))
+            if (sourceID.equals(option.getAttribute("value")))
             {
                 source.setSelectedAttribute(option, true);
                 checkXmlOutput(query, form);
@@ -138,9 +214,10 @@ public class DcsAppTest
             final HtmlForm form = getSearchForm();
 
             // Click on the appropriate radio option to enable fields
-            ((HtmlRadioButtonInput) form.getHtmlElementById("source-from-file")).click();
+            ((HtmlRadioButtonInput) form.getElementById("source-from-file")).click();
             final File dataFile = testFiles.get(resource);
-            form.getInputByName("dcs.c2stream").setValueAttribute(dataFile.getAbsolutePath());
+            form.getInputByName("dcs.c2stream").setValueAttribute(
+                dataFile.getAbsolutePath());
 
             checkXmlOutput("kaczyński", form);
         }
@@ -161,11 +238,11 @@ public class DcsAppTest
         final HtmlForm form = getSourceFromStringForm();
 
         // Click on the appropriate radio option to get JSON output
-        ((HtmlRadioButtonInput) form.getHtmlElementById("output-format-json")).click();
+        ((HtmlRadioButtonInput) form.getElementById("output-format-json")).click();
 
         final Page dcsResponse = form.getButtonByName("submit").click();
-        final String jsonResponse = new String(dcsResponse.getWebResponse()
-            .getResponseBody(), "UTF-8");
+        final String jsonResponse = dcsResponse.getWebResponse().getContentAsString(
+            "UTF-8");
 
         // Just simple assertions, more JSON tests are in ProcessingResultTest
         assertThat(jsonResponse).startsWith("{").endsWith("}").contains("kaczyński");
@@ -178,16 +255,16 @@ public class DcsAppTest
         final HtmlForm form = getSourceFromStringForm();
 
         // Click on the appropriate radio option to get JSON output
-        ((HtmlRadioButtonInput) form.getHtmlElementById("output-format-json")).click();
+        ((HtmlRadioButtonInput) form.getElementById("output-format-json")).click();
 
         form.getInputByName("dcs.json.callback").setValueAttribute(callback);
         final Page dcsResponse = form.getButtonByName("submit").click();
-        final String jsonResponse = new String(dcsResponse.getWebResponse()
-            .getResponseBody(), "UTF-8");
+        final String jsonResponse = dcsResponse.getWebResponse().getContentAsString(
+            "UTF-8");
 
         // Just simple assertions, more JSON tests are in ProcessingResultTest
-        assertThat(jsonResponse).startsWith(callback + "(").endsWith(");").contains(
-            "kaczyński");
+        assertThat(jsonResponse).startsWith(callback + "(").endsWith(");")
+            .contains("kaczyński");
     }
 
     @Test
@@ -220,12 +297,50 @@ public class DcsAppTest
             "Loading\\.\\.\\.");
     }
 
+    @Test
+    public void directFeedAttributeOverriding() throws Exception
+    {
+        // Check the original query and attribute values contained in the XML
+        final ProcessingResult result = post(KEY_KACZYNSKI,
+            ImmutableMap.<String, String> of());
+        assertThatClusters(result.getClusters()).isNotEmpty();
+        assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
+        assertThat(result.getAttribute("DocumentAssigner.exactPhraseAssignment"))
+            .isEqualTo(true);
+        final int initialClusterCount = result.getClusters().size();
+
+        // Override query
+        final String otherQuery = "other query";
+        final ProcessingResult overriddenQueryResult = post(KEY_KACZYNSKI,
+            ImmutableMap.<String, String> of(AttributeNames.QUERY, otherQuery));
+        assertThat(overriddenQueryResult.getAttribute(AttributeNames.QUERY)).isEqualTo(
+            otherQuery);
+
+        // Override some attributes
+        final ProcessingResult overriddenAttributesResult = post(KEY_KACZYNSKI,
+            ImmutableMap.<String, String> of("DocumentAssigner.exactPhraseAssignment",
+                "false"));
+        assertThat(overriddenAttributesResult.getClusters().size()).isNotEqualTo(
+            initialClusterCount);
+
+        // Note the string instead of a boolean here. The reason for this is that the
+        // attributes get passed as a string POST parameters and the controller echoes
+        // input attributes to output exactly in the form they were provided, from string
+        // type conversion is performed only for the purposes of binding to the
+        // component's fields.
+        assertThat(
+            overriddenAttributesResult
+                .getAttribute("DocumentAssigner.exactPhraseAssignment")).isEqualTo(
+            "false");
+
+    }
+
     private HtmlForm getSourceFromStringForm() throws IOException, MalformedURLException
     {
         final HtmlForm form = getSearchForm();
 
         // Click on the appropriate radio option to enable fields
-        ((HtmlRadioButtonInput) form.getHtmlElementById("source-from-string")).click();
+        ((HtmlRadioButtonInput) form.getElementById("source-from-string")).click();
         form.getTextAreaByName("dcs.c2stream").setText(
             FileUtils.readFileToString(testFiles.get(KEY_KACZYNSKI), "UTF-8"));
         return form;
@@ -243,8 +358,8 @@ public class DcsAppTest
         final XmlPage dcsResponse = (XmlPage) form.getButtonByName("submit").click();
         final String responseXml = dcsResponse.asXml();
 
-        final ProcessingResult dcsResult = ProcessingResult.deserialize(
-            new ByteArrayInputStream(responseXml.getBytes("UTF-8")));
+        final ProcessingResult dcsResult = ProcessingResult
+            .deserialize(new ByteArrayInputStream(responseXml.getBytes("UTF-8")));
         assertThat(dcsResult.getAttributes().get(AttributeNames.QUERY)).isEqualTo(query);
         if (onlyClusters)
         {
@@ -265,13 +380,16 @@ public class DcsAppTest
     private HtmlPage getPage(final String url) throws IOException, MalformedURLException
     {
         final WebClient webClient = new WebClient();
-        final HtmlPage startPage = (HtmlPage) webClient.getPage("http://localhost:"
-            + dcs.port + "/" + url);
+        final HtmlPage startPage = (HtmlPage) webClient.getPage(getDcsUrl(url));
 
         // Wait for AJAX calls to complete
-        startPage.getEnclosingWindow().getThreadManager().joinAll(10000);
-
+        startPage.getEnclosingWindow().getJobManager().waitForJobs(10000);
         return startPage;
+    }
+
+    private String getDcsUrl(final String url)
+    {
+        return "http://localhost:" + dcs.port + "/" + url;
     }
 
     private HtmlForm getSearchForm() throws IOException, MalformedURLException
@@ -279,5 +397,47 @@ public class DcsAppTest
         final HtmlPage startPage = getStartPage();
         final HtmlForm form = startPage.getFormByName("dcs");
         return form;
+    }
+
+    private final static Charset UTF8 = Charset.forName("UTF-8");
+
+    /**
+     * Makes a direct document feed POST request.
+     */
+    private ProcessingResult post(String inputDataKey, Map<String, String> otherAttributes)
+        throws IllegalStateException, Exception
+    {
+        final Map<String, String> attributes = Maps.newHashMap(otherAttributes);
+
+        attributes.put("dcs.c2stream",
+            FileUtils.readFileToString(testFiles.get(inputDataKey), "UTF-8"));
+
+        final HttpClient client = new DefaultHttpClient();
+        final HttpPost post = new HttpPost(getDcsUrl("dcs/post"));
+
+        final MultipartEntity body = new MultipartEntity(HttpMultipartMode.STRICT, null,
+            UTF8);
+
+        for (Map.Entry<String, String> entry : attributes.entrySet())
+        {
+            body.addPart(entry.getKey(), new StringBody(entry.getValue(), UTF8));
+        }
+        post.setEntity(body);
+
+        try
+        {
+            HttpResponse response = client.execute(post);
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
+            {
+                throw new IOException("Unexpected DCS response: "
+                    + response.getStatusLine());
+            }
+
+            return ProcessingResult.deserialize(response.getEntity().getContent());
+        }
+        finally
+        {
+            client.getConnectionManager().shutdown();
+        }
     }
 }

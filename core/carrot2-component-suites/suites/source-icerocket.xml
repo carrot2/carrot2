@@ -1,0 +1,18 @@
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.opensearch.OpenSearchDocumentSource" 
+            id="icerocket"
+            attribute-sets-resource="source-icerocket-attributes.xml">
+        <label>Blogs</label>
+        <title>Blogs from icerocket.com</title>
+        <description>Searches blog content using the icerocket.com
+            search engine</description>
+        <mnemonic>B</mnemonic>
+        <example-queries>
+            <example-query>olympics</example-query>
+            <example-query>music</example-query>
+            <example-query>election</example-query>
+        </example-queries>
+    </source>
+  </sources>
+</component-suite>

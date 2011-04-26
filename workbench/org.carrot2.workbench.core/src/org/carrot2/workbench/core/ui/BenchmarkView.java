@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -184,6 +184,7 @@ public final class BenchmarkView extends PageBookViewBase
      * Restore GUI state. We can't do it in {@link #init(IViewSite, IMemento)}
      * because GUI elements are not available then.
      */
+    @SuppressWarnings("unchecked")
     private void restoreState()
     {
         if (this.restoreState == null) return;
@@ -191,7 +192,7 @@ public final class BenchmarkView extends PageBookViewBase
         try
         {
             final HashMap<String, Object> attrs = Maps.newHashMap(); 
-            AttributeBinder.unbind(restoreState.settings, attrs, Input.class);
+            AttributeBinder.get(restoreState.settings, attrs, Input.class);
             this.attributeGroups.setAttributes(attrs);
             this.attributeGroups.setExpanded(restoreState.sectionsExpansionState);
         }
@@ -204,6 +205,7 @@ public final class BenchmarkView extends PageBookViewBase
     /**
      * Create settings panel.
      */
+    @SuppressWarnings("unchecked")
     private Control createSettingsPanel(Composite parent)
     {
         final BindableDescriptor descriptor = 
@@ -222,7 +224,7 @@ public final class BenchmarkView extends PageBookViewBase
                 {
                     final HashMap<String, Object> attrs = Maps.newHashMap();
                     attrs.put(event.key, event.value);
-                    AttributeBinder.bind(benchmarkSettings, attrs, Input.class);
+                    AttributeBinder.set(benchmarkSettings, attrs, Input.class);
                 }
                 catch (InstantiationException e)
                 {
@@ -248,14 +250,15 @@ public final class BenchmarkView extends PageBookViewBase
     /**
      * @return Return a clone of the current settings.
      */
+    @SuppressWarnings("unchecked")
     BenchmarkSettings getCurrentSettings()
     {
         final BenchmarkSettings cloned = new BenchmarkSettings();
         try
         {
             HashMap<String, Object> attrs = Maps.newHashMap();
-            AttributeBinder.unbind(benchmarkSettings, attrs, Input.class);
-            AttributeBinder.bind(cloned, attrs, Input.class);
+            AttributeBinder.get(benchmarkSettings, attrs, Input.class);
+            AttributeBinder.set(cloned, attrs, Input.class);
         }
         catch (Exception e)
         {

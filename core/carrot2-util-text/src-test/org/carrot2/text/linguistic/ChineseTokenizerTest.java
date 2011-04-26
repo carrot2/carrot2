@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,20 +13,21 @@ package org.carrot2.text.linguistic;
 
 import java.io.IOException;
 
-import org.apache.lucene.analysis.cn.ChineseTokenizer;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.text.linguistic.lucene.ChineseTokenizerAdapter;
 import org.junit.Test;
 
 /**
- * Test cases for {@link ChineseTokenizer}.
+ * Test cases for {@link ChineseTokenizerAdapter}.
  */
 public class ChineseTokenizerTest extends TokenizerTestBase
 {
     @Override
     protected ITokenizer createTokenStream() throws IOException
     {
-        return new DefaultLanguageModelFactory().createTokenizer(LanguageCode.CHINESE_SIMPLIFIED);
+        return new DefaultTokenizerFactory()
+            .getTokenizer(LanguageCode.CHINESE_SIMPLIFIED);
     }
 
     @Test

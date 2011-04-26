@@ -115,9 +115,10 @@
           </question>
           <answer>
             <para>
-              Yes. Currently, Carrot2 can cluster content in 17 languages:
+              Yes. Currently, Carrot2 can cluster content in 19 languages:
               
               <itemizedlist>
+                <listitem><simpara>Arabic (experimental)</simpara></listitem>
                 <listitem><simpara>Chinese Simplified (experimental)</simpara></listitem>
                 <listitem><simpara>Danish</simpara></listitem>
                 <listitem><simpara>Dutch</simpara></listitem>
@@ -127,6 +128,7 @@
                 <listitem><simpara>German</simpara></listitem>
                 <listitem><simpara>Hungarian</simpara></listitem>
                 <listitem><simpara>Italian</simpara></listitem>
+                <listitem><simpara>Korean</simpara></listitem>
                 <listitem><simpara>Norwegian</simpara></listitem>
                 <listitem><simpara>Polish</simpara></listitem>
                 <listitem><simpara>Portuguese</simpara></listitem>

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,7 +14,8 @@ package org.carrot2.text.preprocessing;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.carrot2.text.linguistic.ILanguageModelFactory;
+import org.carrot2.text.linguistic.ILexicalDataFactory;
+import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.preprocessing.filter.CompleteLabelFilter;
 import org.junit.Before;
 
@@ -81,10 +82,16 @@ public class LabelFilterTestBase extends PreprocessingComponentTestBase
         stopListMarker.mark(context);
         labelFilterProcessor.process(context);
     }
+    
+    @Override
+    protected ILexicalDataFactory createLexicalDataFactory()
+    {
+        return new TestLexicalDataFactory();
+    }
 
     @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
+    protected IStemmerFactory createStemmerFactory()
     {
-        return new TestLanguageModelFactory();
+        return new TestStemmerFactory();
     }
 }

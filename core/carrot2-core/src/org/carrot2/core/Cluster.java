@@ -1,7 +1,8 @@
+
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -18,6 +19,7 @@ import org.carrot2.util.StringUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.codehaus.jackson.annotate.*;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persist;
@@ -33,7 +35,7 @@ import com.google.common.collect.*;
  */
 @Root(name = "group", strict = false)
 @JsonAutoDetect(JsonMethod.NONE)
-@JsonWriteNullProperties(false)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public final class Cluster
 {
     /**
@@ -51,7 +53,7 @@ public final class Cluster
     /**
      * Default label for the <i>Other Topics</i> cluster.
      */
-    static final String OTHER_TOPICS_LABEL = "Other Topics";
+    public static final String OTHER_TOPICS_LABEL = "Other Topics";
 
     /**
      * Score of this cluster that indicates the clustering algorithm's beliefs on the

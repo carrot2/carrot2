@@ -6,11 +6,13 @@
 
 package ${packageName};
 
+#if ($packageName != "org.carrot2.util.attribute")
+//Imported for JavaDoc references mostly.
+import org.carrot2.util.attribute.*;
+#end
+
 import java.util.*;
 import javax.annotation.*;
-
-// Imported for JavaDoc references mostly.
-import org.carrot2.util.attribute.*;
 
 /**
  * Metadata and attributes of the {@link ${sourceType.qualifiedName}} component. You can use 
@@ -224,6 +226,7 @@ public final class ${sourceType.simpleName}Descriptor implements IBindableDescri
          * 
          * @see ${i.declaringClass}#${i.field.simpleName} 
          */
+        #if ($i.hasGenericSignature())@SuppressWarnings("unchecked")#end
         public $i.type ${i.field.simpleName}()
         {
             return ($i.boxedType) map.get("$i.key");

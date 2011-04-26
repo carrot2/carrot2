@@ -55,6 +55,7 @@
   <macrodef name="carrot2.readme">
     <attribute name="readme.dest" />
     <attribute name="readme.src" />
+    <element name="carrot2.filters" optional="true" />
 
     <sequential>
       <carrot2.common.readme.process readme.dest="@{readme.dest}" readme.src="@{readme.src}" 
@@ -66,6 +67,7 @@
         <filters>
           <filter token="carrot2.version" value="${carrot2.version}" />
           <filter token="carrot2.rev" value="${carrot2.svn.info.rev}" />
+          <carrot2.filters />
         </filters>
       </carrot2.common.readme.process>
     </sequential>

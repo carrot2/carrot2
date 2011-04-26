@@ -57,67 +57,79 @@
     <!-- This must be an absolute path, otherwise gpg plugin will fail on linux machines. -->
     <carrot2.master.basedir>@carrot2.master.basedir@</carrot2.master.basedir>
     <carrot2.version>@carrot2.version@</carrot2.version>
+
+    <!-- Dependencies that have multiple artefacts. -->
+    <lucene.version>3.1.0</lucene.version>
+    <jackson.version>1.7.4</jackson.version>
+    <slf4j.version>1.6.1</slf4j.version>
+    <httpcomponents.version>4.1</httpcomponents.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-core-asl</artifactId>
-      <version>1.5.2</version>
+      <version>${jackson.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-mapper-asl</artifactId>
-      <version>1.5.2</version>
+      <version>${jackson.version}</version>
     </dependency>
 
     <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>ehcache-core</artifactId>
-      <version>1.7.1</version>
+      <version>1.7.2</version>
     </dependency>
 
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
-      <version>2.4</version>
+      <version>2.6</version>
     </dependency>
 
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>r05</version>
+      <version>r08</version>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.5.8</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-snowball</artifactId>
-      <version>3.0.1</version>
+      <version>${slf4j.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.mahout</groupId>
       <artifactId>mahout-math</artifactId>
       <version>0.3</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.apache.mahout</groupId>
       <artifactId>mahout-collections</artifactId>
       <version>0.3</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.mahout</groupId>
+          <artifactId>mahout-collection-codegen-plugin</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>com.carrotsearch</groupId>
       <artifactId>hppc</artifactId>
-      <version>0.3.2</version>
+      <version>0.3.3</version>
     </dependency>
   </dependencies>
 

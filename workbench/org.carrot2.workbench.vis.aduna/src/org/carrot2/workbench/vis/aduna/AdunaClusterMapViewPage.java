@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,7 +12,8 @@
 
 package org.carrot2.workbench.vis.aduna;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Map;
@@ -32,16 +33,12 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.events.*;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
-import org.slf4j.Logger;
 
 import biz.aduna.map.cluster.*;
 
@@ -54,12 +51,8 @@ import com.google.common.collect.Maps;
  */
 final class AdunaClusterMapViewPage extends Page
 {
-    /*
-     * 
-     */
+    /** */
     private final int REFRESH_DELAY = 500;
-
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(AdunaClusterMapViewPage.class);
 
     /**
      * Classification root.
@@ -82,9 +75,8 @@ final class AdunaClusterMapViewPage extends Page
     private PostponableJob selectionJob = new PostponableJob(new UIJob(
         "Aduna ClusterMap (selection)...")
     {
-        private IStructuredSelection lastSelection = null;
+        private IStructuredSelection currentlyDisplayed = null;
 
-        @SuppressWarnings("unchecked")
         @Override
         public IStatus runInUIThread(IProgressMonitor monitor)
         {
@@ -94,34 +86,37 @@ final class AdunaClusterMapViewPage extends Page
 
             if (root != null)
             {
-                final IStructuredSelection currentSelection;
+                final IStructuredSelection toBeDisplayed;
+                final IStructuredSelection currentSelection = getSelected();
                 switch (mode)
                 {
                     case SHOW_ALL_CLUSTERS:
-                        currentSelection = getAll();
+                        toBeDisplayed = getAll();
                         break;
 
                     case SHOW_FIRST_LEVEL_CLUSTERS:
-                        currentSelection = getFirstLevel();
+                        toBeDisplayed = getFirstLevel();
                         break;
 
                     case SHOW_SELECTED_CLUSTERS:
-                        currentSelection = getSelected();
+                        toBeDisplayed = currentSelection;
                         break;
 
                     default:
                         throw new RuntimeException("Unhanded case: " + mode);
                 }
 
-                if (!currentSelection.equals(lastSelection))
-                {
-                    final java.util.List selected = 
-                        selectionToClassification(currentSelection);
-                    logger.debug("Applying selection: " + selected);
-                    mapMediator.visualize(selected);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        if (!toBeDisplayed.equals(currentlyDisplayed))
+                        {
+                            mapMediator.visualize(selectionToClassification(toBeDisplayed));
+                            currentlyDisplayed = toBeDisplayed;
+                        }
 
-                    this.lastSelection = currentSelection;
-                }
+                        mapMediator.select(selectionToClassification(currentSelection));
+                    }
+                });
             }
 
             return Status.OK_STATUS;
@@ -227,8 +222,11 @@ final class AdunaClusterMapViewPage extends Page
                 clusterMap = Maps.newHashMap();
                 documentMap = Maps.newHashMap();
                 toClassification(root, result.getClusters());
-
-                mapMediator.setClassificationTree(root);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        mapMediator.setClassificationTree(root);
+                    }
+                });
                 selectionJob.reschedule(0);
             }
 
@@ -287,12 +285,7 @@ final class AdunaClusterMapViewPage extends Page
         /* */
         public void selectionChanged(SelectionChangedEvent event)
         {
-            if (VisualizationMode.SHOW_SELECTED_CLUSTERS.name().equals(
-                AdunaActivator.plugin.getPreferenceStore().getString(
-                    PreferenceConstants.VISUALIZATION_MODE)))
-            {
-                selectionJob.reschedule(REFRESH_DELAY);
-            }
+            selectionJob.reschedule(REFRESH_DELAY);
         }
     };
 
@@ -304,7 +297,7 @@ final class AdunaClusterMapViewPage extends Page
     /**
      * SWT's composite inside which Aduna is embedded (AWT/Swing).
      */
-    private Composite embedder;
+    private Composite scrollable;
 
     /**
      * Resource disposal.
@@ -342,8 +335,8 @@ final class AdunaClusterMapViewPage extends Page
     @Override
     public void createControl(Composite parent)
     {
-        embedder = createAdunaControl(parent);
-        disposeBin.add(embedder);
+        createAdunaControl(parent);
+        disposeBin.add(scrollable);
 
         /*
          * Add listeners.
@@ -368,8 +361,7 @@ final class AdunaClusterMapViewPage extends Page
     /*
      * 
      */
-    @SuppressWarnings("serial")
-    private Composite createAdunaControl(Composite parent)
+    private void createAdunaControl(Composite parent)
     {
         /*
          * If <code>true</code>, try some dirty hacks to avoid flicker on Windows.
@@ -380,92 +372,134 @@ final class AdunaClusterMapViewPage extends Page
             System.setProperty("sun.awt.noerasebackground", "true");
         }
 
-        final ScrolledComposite scroll = new ScrolledComposite(parent, SWT.H_SCROLL
-            | SWT.V_SCROLL);
-        scroll.setAlwaysShowScrollBars(true);
-
-        final Composite embedded = new Composite(scroll, SWT.EMBEDDED);
-        scroll.setContent(embedded);
-
-        final Color swtBackground = parent.getDisplay().getSystemColor(SWT.COLOR_GRAY);
-        final java.awt.Color awtBackground = new java.awt.Color(swtBackground.getRed(),
-            swtBackground.getGreen(), swtBackground.getBlue());
-        scroll.setBackground(swtBackground);
+        this.scrollable = new Composite(parent, 
+            SWT.H_SCROLL | SWT.V_SCROLL);
+        scrollable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        final GridLayout layout = new GridLayout();
+        layout.marginBottom = 0;
+        layout.marginLeft = 0;
+        layout.marginRight= 0;
+        layout.marginTop = 0;
+        layout.horizontalSpacing = 0;
+        layout.verticalSpacing = 0;
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
+        scrollable.setLayout(layout);
+        
+        final Composite embedded = new Composite(scrollable, SWT.NO_BACKGROUND | SWT.EMBEDDED);
+        embedded.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
         final Frame frame = SWT_AWT.new_Frame(embedded);
-        frame.setLayout(new BorderLayout());
+        frame.setLayout(new java.awt.BorderLayout());
 
-        final Panel frameRootPanel = new Panel(new BorderLayout())
-        {
-            public void update(java.awt.Graphics g)
-            {
-                if (windowsFlickerHack)
-                {
-                    paint(g);
-                }
-                else
-                {
-                    super.update(g);
-                }
-            }
-        };
-        frame.add(frameRootPanel);
-
-        final JRootPane rootPane = new JRootPane();
-        frameRootPanel.add(rootPane);
-
-        /*
-         * We embed ClusterMap inside a JScrollPane that never shows scrollbars because we
-         * want our scrollbars to be drawn by SWT components.
-         */
         final JScrollPane scrollPanel = new JScrollPane(
             JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPanel.setBackground(awtBackground);
-        scrollPanel.setBorder(BorderFactory.createLineBorder(awtBackground));
-        rootPane.getContentPane().add(scrollPanel, BorderLayout.CENTER);
+        scrollPanel.setDoubleBuffered(true);
+
+        scrollPanel.setBorder(BorderFactory.createEmptyBorder());
+        frame.add(scrollPanel, java.awt.BorderLayout.CENTER);
 
         final ClusterMapFactory factory = ClusterMapFactory.createFactory();
         final ClusterMap clusterMap = factory.createClusterMap();
         final ClusterMapMediator mapMediator = factory.createMediator(clusterMap);
-
         this.mapMediator = mapMediator;
 
         final ClusterGraphPanel graphPanel = mapMediator.getGraphPanel();
         scrollPanel.setViewportView(graphPanel);
 
-        graphPanel.addComponentListener(new ComponentAdapter()
+        scrollable.addControlListener(new ControlAdapter()
         {
-            public void componentResized(final ComponentEvent e)
+            @Override
+            public void controlResized(ControlEvent e)
             {
-                embedded.getDisplay().asyncExec(new Runnable()
-                {
+                updateScrollBars();
+            }
+        });
+
+        final SelectionAdapter adapter = new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                ScrollBar hbar = scrollable.getHorizontalBar();
+                ScrollBar vbar = scrollable.getVerticalBar();
+                final java.awt.Rectangle viewport = new java.awt.Rectangle(
+                    hbar.getSelection(),
+                    vbar.getSelection(),
+                    hbar.getThumb(), 
+                    vbar.getThumb());
+                SwingUtilities.invokeLater(new Runnable() {
                     public void run()
                     {
-                        final Dimension preferredSize = e.getComponent()
-                            .getPreferredSize();
-                        final Rectangle clientArea = scroll.getClientArea();
-
-                        embedded.setSize(Math.max(preferredSize.width, clientArea.width),
-                            Math.max(preferredSize.height, clientArea.height));
+                        graphPanel.scrollRectToVisible(viewport);
                     }
                 });
             }
-        });
+        };
+        scrollable.getVerticalBar().addSelectionListener(adapter);
+        scrollable.getHorizontalBar().addSelectionListener(adapter);
 
-        scroll.addControlListener(new ControlAdapter()
+        final Runnable updateScrollBarsAsync = new Runnable() {
+            public void run() {
+                updateScrollBars();
+            }
+        };
+        
+        graphPanel.addComponentListener(new ComponentAdapter()
         {
-            public void controlResized(ControlEvent e)
+            @Override
+            public void componentShown(ComponentEvent e)
             {
-                // This is not thread-safe here, is it?
-                final Dimension preferredSize = graphPanel.getPreferredSize();
-                final Rectangle clientArea = scroll.getClientArea();
+                graphPanelSize = graphPanel.getPreferredSize();
+                Display.getDefault().asyncExec(updateScrollBarsAsync);
+            }
 
-                embedded.setSize(Math.max(preferredSize.width, clientArea.width), Math
-                    .max(preferredSize.height, clientArea.height));
+            @Override
+            public void componentResized(ComponentEvent e)
+            {
+                graphPanelSize = graphPanel.getPreferredSize();
+                Display.getDefault().asyncExec(updateScrollBarsAsync);
             }
         });
+    }
 
-        return scroll;
+    /**
+     * The latest size of Aduna's graph panel. Passed between Swing and SWT, so volatile.
+     */
+    private volatile Dimension graphPanelSize;
+
+    /*
+     * 
+     */
+    protected void updateScrollBars()
+    {
+        if (Display.findDisplay(Thread.currentThread()) == null)
+            throw new IllegalStateException("Not an SWT thread: " + Thread.currentThread());
+
+        if (graphPanelSize == null) 
+            return;
+
+        org.eclipse.swt.graphics.Rectangle swtScrollableArea = scrollable.getClientArea();
+
+        int width = Math.max(graphPanelSize.width, 0);
+        int viewportWidth = Math.max(swtScrollableArea.width, 0);
+        updateScrollBar(scrollable.getHorizontalBar(), width, viewportWidth);
+
+        int height = Math.max(graphPanelSize.height, 0);
+        int viewportHeight = Math.max(swtScrollableArea.height, 0);
+        updateScrollBar(scrollable.getVerticalBar(), height, viewportHeight);
+    }
+
+    private static void updateScrollBar(ScrollBar sbar, int value, int viewportValue)
+    {
+        int selection = sbar.getSelection();
+        int minimum = 0;
+        int maximum = value;
+        int thumb = Math.min(viewportValue, value);
+        int increment = /* SharedScrolledComposite.V_SCROLL_INCREMENT */ 64;
+        int pageIncrement = Math.max(thumb - 5 * thumb / 100, 5);
+
+        sbar.setValues(selection, minimum, maximum, thumb, increment, pageIncrement);
     }
 
     /*
@@ -474,7 +508,7 @@ final class AdunaClusterMapViewPage extends Page
     @Override
     public Control getControl()
     {
-        return embedder;
+        return scrollable;
     }
 
     /*

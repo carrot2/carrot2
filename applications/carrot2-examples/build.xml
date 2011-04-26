@@ -7,14 +7,26 @@
        Builds the examples.
     -->
   <target name="carrot2.api.build">
-    <mkdir dir="tmp" />
+    <!--
+         Dependencies (JARs) required for clustering directly fed documents.
+      -->
+    <path id="libs.required">
+      <fileset dir="lib/required" includes="**/*.jar" />
+    </path>
+      
+    <!--
+         Dependencies (JARs) required for both fetching documents using
+         document sources and clustering them using one of Carrot2 algorithms.
+      -->
+    <path id="libs.all">
+      <fileset dir="lib" includes="**/*.jar" />
+    </path>
+
     <mkdir dir="tmp/classes" />
 
     <javac srcdir="examples"
            destdir="tmp/classes"
-           compiler="modern"
-           source="1.5"
-           target="1.5"
+           source="1.6" target="1.6"
            encoding="UTF-8">
       <classpath>
         <fileset dir=".">
@@ -25,33 +37,50 @@
 
     <copy todir="tmp/classes">
       <fileset dir="examples/">
-        <include name="suites/**" />
-        <include name="org/carrot2/examples/core/algorithm-lingo-attributes.xml" />
+        <exclude name="*.java" />
       </fileset>
     </copy>
   </target>
 
   <!-- Runs selected classes -->
-  <target name="carrot2.api.test" depends="carrot2.api.build">
+  <target name="carrot2.api.test" depends="carrot2.api.build, carrot2.api.test.only">
+  </target>
+
+  <target name="carrot2.api.test.maven">
+      <path id="libs.all">
+        <fileset dir="${basedir}/target">
+          <include name="carrot2*.jar" />
+          <include name="dependency/*.jar" />
+        </fileset>
+      </path>
+      <path id="libs.required" refid="libs.all" />
+
+      <antcall target="carrot2.api.test.only" inheritrefs="true" />
+  </target>
+
+  <!-- Runs selected classes (invoked from Maven too). -->
+  <target name="carrot2.api.test.only">
     <!-- Run some example classes -->
-    <run.example classname="org.carrot2.examples.clustering.ClusteringDocumentList" />
-    <run.example classname="org.carrot2.examples.clustering.UsingCachingController" />
-    <run.example classname="org.carrot2.examples.clustering.UsingComponentSuites" />
-    <run.example classname="org.carrot2.examples.clustering.UsingCustomLanguageModel" />
-    <run.example classname="org.carrot2.examples.core.LoadingAttributeValuesFromXml" />
-    <run.example classname="org.carrot2.examples.core.SavingAttributeValuesToXml" />
+    <run.example classname="org.carrot2.examples.clustering.ClusteringDocumentList" dependencies="libs.required" />
+    <run.example classname="org.carrot2.examples.clustering.UsingCachingController" dependencies="libs.all" />
+    <run.example classname="org.carrot2.examples.clustering.UsingComponentSuites" dependencies="libs.all" />
+    <run.example classname="org.carrot2.examples.clustering.UsingCustomLanguageModel" dependencies="libs.required" />
+    <run.example classname="org.carrot2.examples.clustering.UsingCustomLexicalResources"  dependencies="libs.required"/>
+    <run.example classname="org.carrot2.examples.core.LoadingAttributeValuesFromXml" dependencies="libs.required" />
+    <run.example classname="org.carrot2.examples.core.SavingAttributeValuesToXml" dependencies="libs.required" />
 
     <!-- Create a simple Lucene index and run Lucene examples. -->
     <delete dir="index" failonerror="true" includeemptydirs="true" />
-    <run.example classname="org.carrot2.examples.CreateLuceneIndex">
+    <run.example classname="org.carrot2.examples.CreateLuceneIndex" dependencies="libs.all">
       <arg file="index" />
     </run.example>
-    <run.example classname="org.carrot2.examples.clustering.ClusteringDataFromLucene">
+    <run.example classname="org.carrot2.examples.clustering.ClusteringDataFromLucene" dependencies="libs.all">
       <arg file="index" />
     </run.example>
-    <run.example classname="org.carrot2.examples.clustering.ClusteringDataFromLuceneWithCustomFields">
+    <run.example classname="org.carrot2.examples.clustering.ClusteringDataFromLuceneWithCustomFields" dependencies="libs.all">
       <arg file="index" />
     </run.example>
+    <delete dir="index" failonerror="true" includeemptydirs="true" />
   </target>
 
   <!-- Removes all compiled binaries -->
@@ -62,17 +91,18 @@
   <!-- A macro that runs the specified class. -->
   <macrodef name="run.example">
     <attribute name="classname" />
+    <attribute name="dependencies" />
     <element name="args" implicit="true" optional="true" />
 
     <sequential>
       <echo>Running: @{classname}</echo>
-      <java classname="@{classname}" logError="true"
-            failonerror="true" outputproperty="dev.null">
+      <mkdir dir="tmp" />
+      <java fork="true"
+            classname="@{classname}" logError="true"
+            failonerror="true" output="tmp/@{classname}.log">
         <classpath>
-          <fileset dir=".">
-            <include name="**/*.jar" />
-          </fileset>
           <pathelement location="tmp/classes"/>
+          <path refid="@{dependencies}" />
         </classpath>
         <args />
       </java>

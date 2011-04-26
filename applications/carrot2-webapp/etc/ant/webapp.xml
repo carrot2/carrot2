@@ -75,7 +75,7 @@
     
     <sequential>
       <copy file="@{config.xml.template.path}"
-            tofile="@{target.dir}/config.xml"
+            tofile="@{target.dir}/webapp-config.xml"
             overwrite="true">
         <filterset refid="version.filterset" />
       </copy>

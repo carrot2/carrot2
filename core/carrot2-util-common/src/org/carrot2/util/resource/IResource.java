@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -22,7 +21,9 @@ import java.io.InputStream;
 public interface IResource
 {
     /**
-     * Open an input stream to the resource.
+     * Open an input stream to the resource. Specific implementations may cache and close
+     * the underlying stream, but such behavior is not required by this interface. Please
+     * refer to the documentation of specific implementations for details.
      */
     public InputStream open() throws IOException;
 }

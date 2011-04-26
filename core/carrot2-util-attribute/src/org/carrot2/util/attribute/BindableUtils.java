@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,24 +12,28 @@
 
 package org.carrot2.util.attribute;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
+import org.carrot2.util.Pair;
+
 import com.google.common.collect.Maps;
 
 /**
  * A set of utility methods for working with {@link Bindable} types.
  */
-final class BindableUtils
+public final class BindableUtils
 {
     /**
      * Caches the sets of declared fields determined for class hierarchies by the
      * {@link #getFieldsFromBindableHierarchy(Class)} method.
      */
-    private static final HashMap<Class<?>, Collection<Field>> FIELD_CACHE = Maps.newHashMap();
+    private static final HashMap<Pair<Class<? extends Annotation>, Class<?>>, Collection<Field>> FIELD_CACHE = Maps
+        .newHashMap();
 
     /**
      * Returns all fields from all {@link Bindable} types in the hierarchy of the provided
@@ -37,14 +41,26 @@ final class BindableUtils
      */
     static Collection<Field> getFieldsFromBindableHierarchy(Class<?> clazz)
     {
+        return getFieldsFromHierarchy(clazz, Bindable.class);
+    }
+
+    /**
+     * Returns all fields from all {@link Bindable} types in the hierarchy of the provided
+     * <code>clazz</code>. The collected fields gets cached.
+     */
+    static Collection<Field> getFieldsFromHierarchy(Class<?> clazz,
+        Class<? extends Annotation> marker)
+    {
         synchronized (FIELD_CACHE)
         {
-            Collection<Field> fields = FIELD_CACHE.get(clazz);
+            final Pair<Class<? extends Annotation>, Class<?>> key = new Pair<Class<? extends Annotation>, Class<?>>(
+                marker, clazz);
+            Collection<Field> fields = FIELD_CACHE.get(key);
             if (fields == null)
             {
                 fields = new LinkedHashSet<Field>();
 
-                if (clazz.getAnnotation(Bindable.class) != null)
+                if (clazz.getAnnotation(marker) != null)
                 {
                     fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
                 }
@@ -52,10 +68,10 @@ final class BindableUtils
                 final Class<?> superClass = clazz.getSuperclass();
                 if (superClass != null)
                 {
-                    fields.addAll(getFieldsFromBindableHierarchy(superClass));
+                    fields.addAll(getFieldsFromHierarchy(superClass, marker));
                 }
 
-                FIELD_CACHE.put(clazz, fields);
+                FIELD_CACHE.put(key, fields);
             }
             return fields;
         }
@@ -64,11 +80,15 @@ final class BindableUtils
     /**
      * Computes the attribute key according to the definition in {@link Attribute#key()}.
      */
-    static String getKey(Field field)
+    public static String getKey(Field field)
     {
         final Attribute attributeAnnotation = field.getAnnotation(Attribute.class);
+        if (attributeAnnotation == null)
+        {
+            return null;
+        }
 
-        if (attributeAnnotation == null || "".equals(attributeAnnotation.key()))
+        if ("".equals(attributeAnnotation.key()))
         {
             return getPrefix(field.getDeclaringClass()) + "." + field.getName();
         }

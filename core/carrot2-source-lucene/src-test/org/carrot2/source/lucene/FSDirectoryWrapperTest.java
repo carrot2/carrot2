@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -20,6 +20,7 @@ import java.util.Random;
 import org.apache.commons.io.FileUtils;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
@@ -41,13 +42,15 @@ public class FSDirectoryWrapperTest
         ReflectionUtils.classForName(LuceneDocumentSource.class.getName());
     }
 
+    @SuppressWarnings("deprecation")
     @BeforeClass
     public static void prepareIndex() throws Exception
     {
         indexDir = new File(new File(System.getProperty("java.io.tmpdir"))
             .getCanonicalPath(), "index" + Math.abs(new Random().nextInt(Integer.MAX_VALUE)));
         directory = FSDirectory.open(indexDir);
-        LuceneIndexUtils.createAndPopulateIndex(directory, new SimpleAnalyzer());
+        LuceneIndexUtils.createAndPopulateIndex(directory, 
+            new SimpleAnalyzer(Version.LUCENE_CURRENT));
     }
 
     @AfterClass
@@ -86,7 +89,7 @@ public class FSDirectoryWrapperTest
             unserializedDir = SimpleXmlWrappers.unwrap(wrapper);
 
             assertThat(unserializedDir).isNotNull();
-            assertThat(unserializedDir.getFile()).isEqualTo(file);
+            assertThat(unserializedDir.getDirectory()).isEqualTo(file);
         }
         finally
         {

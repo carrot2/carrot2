@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -23,10 +22,13 @@ import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStr
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
+import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
+import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.DoubleRange;
+import org.carrot2.util.attribute.constraint.IntRange;
 import org.slf4j.Logger;
 
 import com.carrotsearch.hppc.BitSet;
@@ -34,10 +36,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 /**
- * Lingo clustering algorithm. Implementation as described in: <i>
- * "Stanisław Osiński, Dawid Weiss: A Concept-Driven Algorithm for Clustering 
- * Search Results. IEEE Intelligent Systems, May/June, 3 (vol. 20), 2005, 
- * pp. 48—54."</i>.
+ * Lingo clustering algorithm. Implementation as described in: <i> "Stanisław Osiński,
+ * Dawid Weiss: A Concept-Driven Algorithm for Clustering Search Results. IEEE Intelligent
+ * Systems, May/June, 3 (vol. 20), 2005, pp. 48—54."</i>.
  */
 @Bindable(prefix = "LingoClusteringAlgorithm", inherit = CommonAttributes.class)
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
@@ -79,8 +80,9 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
 
     /**
      * Indicates whether Lingo used fast native matrix computation routines. Value of this
-     * attribute is equal to {@link org.carrot2.matrix.NNIInterface#isNativeBlasAvailable()} 
-     * at the time of running the algorithm.
+     * attribute is equal to
+     * {@link org.carrot2.matrix.NNIInterface#isNativeBlasAvailable()} at the time of
+     * running the algorithm.
      * 
      * @group Matrix model
      * @label Native matrix operations used
@@ -104,6 +106,22 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Attribute
     @DoubleRange(min = 0.0, max = 1.0)
     public double scoreWeight = 0.0;
+
+    /**
+     * Desired cluster count base. Base factor used to calculate the number of clusters
+     * based on the number of documents on input. The larger the value, the more clusters
+     * will be created. The number of clusters created by the algorithm will be
+     * proportional to the cluster count base, but not in a linear way.
+     * 
+     * @level Basic
+     * @group Clusters
+     * @label Cluster count base
+     */
+    @Input
+    @Processing
+    @Attribute
+    @IntRange(min = 2, max = 100)
+    public int desiredClusterCountBase = 30;
 
     /**
      * Common preprocessing tasks handler, contains bindable attributes.
@@ -183,8 +201,8 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
         if (multilingualClustering.languageAggregationStrategy == LanguageAggregationStrategy.FLATTEN_ALL)
         {
             Collections.sort(clusters, Ordering.compound(Lists.newArrayList(
-                Cluster.OTHER_TOPICS_AT_THE_END, Cluster
-                    .byReversedWeightedScoreAndSizeComparator(scoreWeight))));
+                Cluster.OTHER_TOPICS_AT_THE_END,
+                Cluster.byReversedWeightedScoreAndSizeComparator(scoreWeight))));
         }
     }
 
@@ -205,11 +223,16 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
             // Term-document matrix building and reduction
             final VectorSpaceModelContext vsmContext = new VectorSpaceModelContext(
                 context);
+            final ReducedVectorSpaceModelContext reducedVsmContext = new ReducedVectorSpaceModelContext(
+                vsmContext);
+            LingoProcessingContext lingoContext = new LingoProcessingContext(
+                reducedVsmContext);
+
             matrixBuilder.buildTermDocumentMatrix(vsmContext);
             matrixBuilder.buildTermPhraseMatrix(vsmContext);
 
-            LingoProcessingContext lingoContext = new LingoProcessingContext(vsmContext);
-            matrixReducer.reduce(lingoContext);
+            matrixReducer.reduce(reducedVsmContext,
+                computeClusterCount(desiredClusterCountBase, documents.size()));
 
             // Cluster label building
             clusterBuilder.buildLabels(lingoContext, matrixBuilder.termWeighting);
@@ -250,10 +273,21 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                 clusters.add(cluster);
             }
 
-            Collections.sort(clusters, Cluster
-                .byReversedWeightedScoreAndSizeComparator(scoreWeight));
+            Collections.sort(clusters,
+                Cluster.byReversedWeightedScoreAndSizeComparator(scoreWeight));
         }
 
         Cluster.appendOtherTopics(documents, clusters);
+    }
+
+    /**
+     * Computes the number of clusters to create based on a very simple heuristic based on
+     * the number of documents on input.
+     */
+    static int computeClusterCount(int desiredClusterCountBase, int documentCount)
+    {
+        return Math.min(
+            (int) ((desiredClusterCountBase / 10.0) * Math.sqrt(documentCount)),
+            documentCount);
     }
 }

@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -17,8 +16,13 @@ import java.util.Map;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
-import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
+import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
+import org.carrot2.text.linguistic.DefaultStemmerFactory;
+import org.carrot2.text.linguistic.DefaultTokenizerFactory;
+import org.carrot2.text.linguistic.ILexicalDataFactory;
+import org.carrot2.text.linguistic.IStemmerFactory;
+import org.carrot2.text.linguistic.ITokenizerFactory;
+import org.carrot2.text.linguistic.LanguageModel;
 import org.junit.Before;
 
 import com.google.common.collect.Lists;
@@ -29,9 +33,6 @@ import com.google.common.collect.Maps;
  */
 public class PreprocessingComponentTestBase
 {
-    /** Language model factory for preprocessing components being tested */
-    protected ILanguageModelFactory languageFactory;
-
     /** Preprocessing context for the component being tested */
     protected PreprocessingContext context;
 
@@ -53,27 +54,45 @@ public class PreprocessingComponentTestBase
      */
     protected void createPreprocessingContext(String query)
     {
-        final ILanguageModelFactory languageModelFactory = createLanguageModelFactory();
-        if (languageModelFactory != null)
-        {
-            languageFactory = languageModelFactory;
-        }
-        else
-        {
-            languageFactory = new DefaultLanguageModelFactory();
-        }
+        context = createPreprocessingContext(query, documents);
+    }
 
-        context = new PreprocessingContext(languageFactory
-            .getLanguageModel(LanguageCode.ENGLISH), documents, query);
+    private PreprocessingContext createPreprocessingContext(String query,
+        final List<Document> documents)
+    {
+        return new PreprocessingContext(
+            LanguageModel.create(LanguageCode.ENGLISH, createStemmerFactory(),
+                createTokenizerFactory(), createLexicalDataFactory()), documents, query);
     }
 
     /**
-     * Creates the {@link ILanguageModelFactory} to be used in tests. Override to use a
-     * factory that's different from the default.
+     * Creates the {@link ITokenizerFactory} to be used in tests. This implementation
+     * returns a new instance of {@link DefaultTokenizerFactory}, override to use a
+     * different factory.
      */
-    protected ILanguageModelFactory createLanguageModelFactory()
+    protected ITokenizerFactory createTokenizerFactory()
     {
-        return null;
+        return new DefaultTokenizerFactory();
+    }
+
+    /**
+     * Creates the {@link IStemmerFactory} to be used in tests. This implementation
+     * returns a new instance of {@link DefaultStemmerFactory}, override to use a
+     * different factory.
+     */
+    protected IStemmerFactory createStemmerFactory()
+    {
+        return new DefaultStemmerFactory();
+    }
+
+    /**
+     * Creates the {@link ILexicalDataFactory} to be used in tests. This implementation
+     * returns a new instance of {@link DefaultLexicalDataFactory}, override to use a
+     * different factory.
+     */
+    protected ILexicalDataFactory createLexicalDataFactory()
+    {
+        return new DefaultLexicalDataFactory();
     }
 
     /**
@@ -129,8 +148,8 @@ public class PreprocessingComponentTestBase
     {
         final Tokenizer temporaryTokenizer = new Tokenizer();
         final CaseNormalizer temporaryCaseNormalizer = new CaseNormalizer();
-        final PreprocessingContext temporaryContext = new PreprocessingContext(
-            languageFactory.getLanguageModel(LanguageCode.ENGLISH), documents, null);
+        final PreprocessingContext temporaryContext = createPreprocessingContext(null,
+            documents);
         beforePrepareWordIndices(temporaryTokenizer, temporaryCaseNormalizer);
 
         temporaryTokenizer.tokenize(temporaryContext);

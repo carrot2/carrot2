@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -13,6 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.text.linguistic.ILexicalData;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
@@ -41,6 +42,7 @@ public final class StopListMarker
 
         final MutableCharArray mutableCharArray = new MutableCharArray("");
         char [] buffer = new char [128];
+        final ILexicalData lexData = context.language.getLexicalData();
 
         for (int i = 0; i < wordImages.length; i++)
         {
@@ -49,7 +51,7 @@ public final class StopListMarker
 
             CharArrayUtils.toLowerCase(word, buffer);
             mutableCharArray.reset(buffer, 0, word.length);
-            if (context.language.isCommonWord(mutableCharArray))
+            if (lexData.isCommonWord(mutableCharArray))
             {
                 types[i] |= ITokenizer.TF_COMMON_WORD;
             }

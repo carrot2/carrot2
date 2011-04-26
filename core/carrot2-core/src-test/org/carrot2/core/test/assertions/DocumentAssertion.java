@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -17,22 +16,16 @@ import static org.fest.assertions.Assertions.assertThat;
 import java.util.Map;
 
 import org.carrot2.core.Document;
-import org.fest.assertions.AssertExtension;
+import org.fest.assertions.GenericAssert;
 
 /**
  * Assertions on {@link Document}s.
  */
-public class DocumentAssertion implements AssertExtension
+public class DocumentAssertion extends GenericAssert<DocumentAssertion, Document>
 {
-    /** The actual documents */
-    private final Document actualDocument;
-
-    /** Assert description */
-    private String description;
-
     DocumentAssertion(Document actualDocument)
     {
-        this.actualDocument = actualDocument;
+        super(DocumentAssertion.class, actualDocument);
     }
 
     /**
@@ -45,33 +38,24 @@ public class DocumentAssertion implements AssertExtension
      */
     public DocumentAssertion isEquivalentTo(Document expectedDocument)
     {
-        assertThat((Object) actualDocument.getId()).as(description + ", id").isEqualTo(
+        assertThat((Object) actual.getId()).as(description() + ", id").isEqualTo(
             expectedDocument.getId());
-        assertThat(actualDocument.getFields()).as(description).isEqualTo(
+        assertThat(actual.getFields()).as(description()).isEqualTo(
             expectedDocument.getFields());
         return this;
     }
 
-    /**
-     * Provides description for this assertion.
-     */
-    public DocumentAssertion as(String description)
-    {
-        this.description = description;
-        return this;
-    }
-    
     public void stringFieldsDoNotMatchPattern(String pattern)
     {
-        final Map<String, Object> fields = actualDocument.getFields();
+        final Map<String, Object> fields = actual.getFields();
         for (Map.Entry<String, Object> entry : fields.entrySet())
         {
             final Object field = entry.getValue();
-            if (field instanceof String) 
+            if (field instanceof String)
             {
                 assertThat((String) field).as(
-                    description + "[field: " + entry.getKey() + "]")
-                    .doesNotMatch(pattern);
+                    description() + "[field: " + entry.getKey() + "]").doesNotMatch(
+                    pattern);
             }
         }
     }

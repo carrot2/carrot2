@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -45,6 +45,14 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         stopListMarker = new StopListMarker();
         labelFilterProcessor = new LabelFilterProcessor();
         labelFormatter = new LabelFormatter();
+    }
+
+    @Override
+    protected ILexicalDataFactory createLexicalDataFactory()
+    {
+        final ILexicalDataFactory factory = super.createLexicalDataFactory();
+        ((DefaultLexicalDataFactory) factory).mergeResources = false;
+        return factory;
     }
 
     @Test
@@ -201,13 +209,5 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
             assertThat(labelFormatter.format(context, labelsFeatureIndex[i])).as(
                 "featureIndex[" + i + "]").isEqualTo(expectedFormattedLabels[i]);
         }
-    }
-
-    @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
-    {
-        final DefaultLanguageModelFactory snowballLanguageModelFactory = new DefaultLanguageModelFactory();
-        snowballLanguageModelFactory.mergeResources = false;
-        return snowballLanguageModelFactory;
     }
 }

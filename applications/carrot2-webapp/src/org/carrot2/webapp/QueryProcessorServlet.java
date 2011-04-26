@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,11 +15,10 @@ package org.carrot2.webapp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,10 +38,17 @@ import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.AttributeBinder.IAttributeTransformer;
+import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.resource.IResourceLocator;
+import org.carrot2.util.resource.PrefixDecoratorLocator;
+import org.carrot2.util.resource.ResourceLookup;
+import org.carrot2.util.resource.ResourceLookup.Location;
+import org.carrot2.util.resource.ServletContextLocator;
 import org.carrot2.webapp.filter.QueryWordHighlighter;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.carrot2.webapp.model.AttributeMetadataModel;
@@ -62,6 +68,7 @@ import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 import org.slf4j.Logger;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -72,6 +79,9 @@ import com.google.common.collect.Sets;
 @SuppressWarnings("serial")
 public class QueryProcessorServlet extends HttpServlet
 {
+    /** System property to enable class path search for resources in tests. */
+    public final static String ENABLE_CLASSPATH_LOCATOR = "enable.classpath.locator";
+    
     /** Controller that performs all searches */
     private transient Controller controller;
 
@@ -130,16 +140,27 @@ public class QueryProcessorServlet extends HttpServlet
         /*
          * Initialize global configuration and publish it.
          */
-        this.webappConfig = WebappConfig.getSingleton();
+        this.webappConfig = WebappConfig.getSingleton(servletContext);
         this.unknownToDefaultTransformer = new UnknownToDefaultTransformer(webappConfig, false);
         this.unknownToDefaultTransformerWithMaxResults = new UnknownToDefaultTransformer(webappConfig, true);
 
         /*
          * Initialize the controller.
          */
-        controller = ControllerFactory.createCachingPooling(ResultsCacheModel.toClassArray(webappConfig.caches));
-        controller.init(Collections.<String, Object> emptyMap(), 
-            webappConfig.components.getComponentConfigurations());        
+        List<IResourceLocator> locators = Lists.newArrayList();
+        locators.add(new PrefixDecoratorLocator(
+            new ServletContextLocator(getServletContext()), "/WEB-INF/resources/"));
+
+        if (Boolean.getBoolean(ENABLE_CLASSPATH_LOCATOR))
+            locators.add(Location.CONTEXT_CLASS_LOADER.locator);
+
+        controller = ControllerFactory.createCachingPooling(
+            ResultsCacheModel.toClassArray(webappConfig.caches));
+        controller.init(
+            ImmutableMap.<String, Object> of(
+                AttributeUtils.getKey(DefaultLexicalDataFactory.class, "resourceLookup"),
+                new ResourceLookup(locators)),
+            webappConfig.components.getComponentConfigurations());
 
         jawrUrlGenerator = new JawrUrlGenerator(servletContext);
     }
@@ -165,6 +186,7 @@ public class QueryProcessorServlet extends HttpServlet
     /*
      * Perform GET request.
      */
+    @SuppressWarnings("unchecked")
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
@@ -220,7 +242,6 @@ public class QueryProcessorServlet extends HttpServlet
             
             final AttributeBinder.AttributeBinderActionBind attributeBinderActionBind = 
                 new AttributeBinder.AttributeBinderActionBind(
-                    Input.class,
                     requestParameters,
                     true,
                     AttributeBinder.AttributeTransformerFromString.INSTANCE,
@@ -577,8 +598,7 @@ public class QueryProcessorServlet extends HttpServlet
 
         }
 
-        public Object transform(Object value, String key, Field field,
-            Class<? extends Annotation> bindingDirectionAnnotation)
+        public Object transform(Object value, String key, Field field)
         {
             final Object defaultValue = defaultValues.get(key);
 

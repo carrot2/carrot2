@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,8 +11,7 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.text.linguistic.ILanguageModelFactory;
-import org.carrot2.text.linguistic.DefaultLanguageModelFactory;
+import org.carrot2.text.linguistic.*;
 import org.carrot2.text.preprocessing.LabelFilterProcessor;
 import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.junit.Test;
@@ -28,6 +26,14 @@ public class StopLabelFilterEnglishTest extends LabelFilterTestBase
     {
         filterProcessor.stopWordLabelFilter.enabled = true;
         filterProcessor.stopLabelFilter.enabled = true;
+    }
+
+    @Override
+    protected ILexicalDataFactory createLexicalDataFactory()
+    {
+        final DefaultLexicalDataFactory factory = new DefaultLexicalDataFactory();
+        factory.mergeResources = false;
+        return factory;
     }
 
     @Test
@@ -75,13 +81,5 @@ public class StopLabelFilterEnglishTest extends LabelFilterTestBase
         };
 
         check(expectedLabelsFeatureIndex);
-    }
-
-    @Override
-    protected ILanguageModelFactory createLanguageModelFactory()
-    {
-        final DefaultLanguageModelFactory snowballLanguageModelFactory = new DefaultLanguageModelFactory();
-        snowballLanguageModelFactory.mergeResources = false;
-        return snowballLanguageModelFactory;
     }
 }

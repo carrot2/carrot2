@@ -59,8 +59,8 @@
             Review and fix reasonably-looking flaws from the following reports:
             
             <orderedlist>
-              <listitem><para><link xlink:href="http://builds.carrot2.org/download/C2HEAD-SOURCES/artifacts/latest/FindBugs-Report/index.html">FindBugs</link></para></listitem>
-              <listitem><para><link xlink:href="http://builds.carrot2.org/download/C2HEAD-SOURCES/artifacts/latest/Duplication-Report/index.html">Code Duplication</link></para></listitem>
+              <listitem><para><link xlink:href="http://builds.carrot2.org/browse/C2HEAD-SOURCES/latest/artifact/JOB1/FindBugs-Report/index.html">FindBugs</link></para></listitem>
+              <listitem><para><link xlink:href="http://builds.carrot2.org/browse/C2HEAD-SOURCES/latest/artifact/JOB1/Duplication-Report/index.html">Code Duplication</link></para></listitem>
             </orderedlist>
           </para>
         </formalpara>
@@ -306,6 +306,79 @@ carrot2.version.workbench=3.3.0.dev-snapshot]]></programlisting>
     </orderedlist>
   </section>
   
+  <section xml:id="section.versioning">
+    <title>Versioning scheme</title>
+
+    <para>
+      &C2; uses version identifiers consisting of three, dot-separated numbers: 
+      <varname>product-line</varname>.<varname>major</varname>.<varname>minor</varname>. 
+      These numbers have the following interpretation:
+    </para>
+
+    <variablelist>
+      <varlistentry>
+        <term>product-line</term>
+        <listitem><para>Indicates long-term product line identifier. This number
+        will not change frequently as it reflects major changes in the internal
+        architecture or shipped software components. Reading release notes is 
+        a must, the internal programming interfaces very likely changed significantly.</para></listitem>
+      </varlistentry>
+  
+      <varlistentry>
+        <term>major</term>
+        <listitem><para>Major revision number changes indicate addition of significant new 
+        features, performance optimizations or new front-end software components added to &C2;.
+        Reading release notes is highly recommended because programming interfaces may change
+        slightly from major to major revision.</para></listitem>
+      </varlistentry>
+      
+      <varlistentry>
+        <term>minor</term>
+        <listitem><para>Minor revision numbers are reserved for shipped product updates and
+        bug fixes. These may include critical bug fixes as well as patches
+        increasing performance, but not changing the programming interfaces. Reading
+        release notes is recommended, but a drop-in upgrade should work without
+        any extra work.</para></listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>
+      The SVN repository is organized so that the <varname>trunk</varname> tracks the development
+      of the next <emphasis>major revision</emphasis>, with branches tracking minor revisions
+      of already shipped versions. A constant tag is created for each shipped version. Branch
+      and tag names follow the naming conventions below.
+    </para>
+
+    <variablelist>
+      <varlistentry>
+        <term>branches/X.Y.Z</term>
+        <listitem><para>A branch named <varname>X.Y.Z</varname> tracks the product shipped as
+        <varname>X.Y.?</varname>, where the <varname>Z</varname> component is the next 
+        minor release to be shipped from this branch. Once shipped, a tag should
+        be created, the branch should be removed and a new branch (with an increased number) 
+        should be created. This should prevent proliferation of branches and accidental commits
+        on already shipped branches.
+        </para></listitem>
+      </varlistentry>
+  
+      <varlistentry>
+        <term>tags/X.Y.Z</term>
+        <listitem><para>A tag named <varname>X.Y.Z</varname> should be created for
+        exactly that development branch at the time of shipment. No changes to tags
+        should be allowed.</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>trunk</term>
+        <listitem><para>The trunk is equivalent to the next major software revision
+        being developed and is not numbered explicitly, but corresponds to
+        branch <varname>vX.Y.0</varname>, where <varname>Y</varname> is
+        the next major revision to be shipped. It is possible to create a minor release
+        off the trunk directly if the commit log only includes bug fixes.</para></listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+
   <section xml:id="section.qa">
     <title>QA check list</title>
     

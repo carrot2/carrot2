@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -103,13 +103,35 @@ public class CharArrayUtils
      */
     public static boolean toLowerCase(char [] word, char [] buffer)
     {
-        assert buffer.length >= word.length : "Buffer too small.";
-
+        return toLowerCase(word, buffer, 0, word.length);
+    }
+    
+    /**
+     * Convert to lower case (character-by-character) and save the result
+     * into <code>buffer</code>. The buffer must have at least <code>length</code>
+     * characters.
+     * 
+     * @param word The word to be converted to lower case.
+     * @param buffer The buffer where the result should be saved.
+     * @param start the index in the <code>word</code> at which to start
+     * @param length the number of characters from <code>word</code> to process
+     * @return Returns <code>true</code> if at least one character was changed
+     * between <code>word</code> and <code>buffer</code>. <code>false</code> indicates
+     * an identical copy.
+     * @throws AssertionError If <code>buffer</code> is smaller than <code>length</code>.
+     * @throws AssertionError If <code>start + length</code> is smaller than the length <code>word</code>.
+     */
+    public static boolean toLowerCase(char [] word, char [] buffer, int start, int length)
+    {
+        assert buffer.length >= length: "Buffer too small.";
+        assert start + length <= word.length : "Word too short.";
+        assert start >= 0 : "Start must be >= 0";
+        
         boolean different = false;
         char in, out;
-        for (int i = word.length; --i >= 0;)
+        for (int i = length; --i >= 0;)
         {
-            buffer[i] = out = Character.toLowerCase(in = word[i]);
+            buffer[i] = out = Character.toLowerCase(in = word[i + start]);
             different |= (in != out);
         }
         return different;

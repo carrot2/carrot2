@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -34,7 +34,7 @@ import com.google.common.base.Predicate;
 public abstract class MultipageSearchEngine extends SearchEngineBase
 {
     /**
-     * Search mode defines how fetchers returned from {@link #createFetcher(SearchRange)}
+     * Search mode defines how fetchers returned from {@link #createFetcher}
      * are called.
      * 
      * @label Search Mode

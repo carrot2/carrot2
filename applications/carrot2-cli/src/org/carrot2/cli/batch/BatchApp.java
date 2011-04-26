@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -17,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -30,16 +29,21 @@ import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.source.xml.XmlDocumentSource;
+import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.ReflectionUtils;
+import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.util.resource.DirLocator;
 import org.carrot2.util.resource.FileResource;
-import org.carrot2.util.resource.ResourceUtilsFactory;
+import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.ResourceLookup;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -78,6 +82,12 @@ public class BatchApp
         "--output-documents"
     }, required = false, usage = "Copies input documents on output")
     boolean outputDocuments = false;
+    
+    @Option(name = "-t", aliases =
+    {
+        "--output-attributes"
+    }, required = false, usage = "Copies attribute values on ouput")
+    boolean outputAttributes = false;
 
     @Option(name = "-a", aliases =
     {
@@ -99,8 +109,18 @@ public class BatchApp
      */
     private BatchApp() throws Exception
     {
-        componentSuite = ProcessingComponentSuite.deserialize(ResourceUtilsFactory
-            .getDefaultResourceUtils().getFirst("suites/suite-batch.xml"));
+        final File suitesDir = new File("suites");
+        ResourceLookup suiteLookup = new ResourceLookup(
+            new DirLocator(suitesDir));
+
+        IResource suite = suiteLookup.getFirst("suite-batch.xml");
+        if (suite == null)
+            throw new RuntimeException(
+                "Could not find suite-batch.xml in "
+                    + suitesDir.getAbsolutePath());
+
+        componentSuite = ProcessingComponentSuite.deserialize(suite, suiteLookup);
+
         algorithms = componentSuite.getAlgorithms();
         if (algorithms.isEmpty())
         {
@@ -115,7 +135,12 @@ public class BatchApp
     private int process() throws Exception
     {
         final Controller controller = ControllerFactory.createPooling();
-        controller.init(Collections.<String, Object> emptyMap(), 
+        final Map<String, Object> initAttributes = ImmutableMap.<String, Object> of(
+            AttributeUtils.getKey(DefaultLexicalDataFactory.class, "resourceLookup"), 
+            new ResourceLookup(new DirLocator("resources")));
+
+        controller.init(
+            initAttributes, 
             componentSuite.getComponentConfigurations());        
 
         // Prepare the algorithm
@@ -280,12 +305,12 @@ public class BatchApp
                 if (Format.JSON.equals(outputFormat))
                 {
                     Writer w = new OutputStreamWriter(stream, "UTF-8");
-                    result.serializeJson(w, null, outputDocuments, true);
+                    result.serializeJson(w, null, outputDocuments, true, outputAttributes);
                     w.flush();
                 }
                 else
                 {
-                    result.serialize(stream, outputDocuments, true);
+                    result.serialize(stream, outputDocuments, true, outputAttributes);
                 }
             }
             finally

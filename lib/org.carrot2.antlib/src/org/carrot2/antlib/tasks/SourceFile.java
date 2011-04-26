@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -60,7 +60,11 @@ final class SourceFile
         }
 
         // Simple footer detection. Again, we assume a reasonable input format
-        final int footerEnd = fullFile.lastIndexOf('}');
+        int footerEnd = fullFile.lastIndexOf('}');
+        if (file.getName().equals("package-info.java")) {
+           footerEnd = fullFile.length() - 1;
+        }
+
         if (footerEnd < 0)
         {
             // No footer end marker? Complain.

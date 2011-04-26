@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Native Matrix bindings (LAPACK/ BLAS)
 Bundle-SymbolicName: com.carrotsearch.nni
 Bundle-Version: 1.0.0
-Bundle-ClassPath: nni.jar
+Bundle-ClassPath: nni-1.0.0.jar
 Export-Package: nni
 Bundle-Vendor: BLAS/LAPACK
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

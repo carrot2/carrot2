@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Velocity
 Bundle-SymbolicName: org.apache.velocity
-Bundle-Version: 1.6.4
-Bundle-ClassPath: velocity-1.6.4.jar,
+Bundle-Version: 1.7
+Bundle-ClassPath: velocity-1.7.jar,
  velocity-tools-generic-2.0.jar
 Bundle-Vendor: Apache Foundation
 Export-Package: org.apache.velocity,

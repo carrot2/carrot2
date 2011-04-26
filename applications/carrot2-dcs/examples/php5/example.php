@@ -8,6 +8,7 @@
       img { float: left; margin: 0.5ex 1ex 2ex 0; }
       p { clear: both; margin-bottom: 2ex; width: 40em }
       h1 { margin-top: 2ex; border-bottom: 1px solid #a0a0a0; width: 50%}
+      .xml { height: 15em; width: 80em; overflow-x: hidden; overflow-y: auto; border: 1px solid #ddd; padding: 2px 5px; }
     </style>
   </head>
 
@@ -87,6 +88,10 @@
     displayDocument($document);
   }
 
+  // Display raw XML response from DCS
+  echo "<h2>Response as XML</h2>";
+  displayRawXml($result->getXml());
+
   //
   //
   // The DCS can also cluster documents provided directly by the caller.
@@ -123,6 +128,10 @@
     echo "<strong>" . $key . ":</strong> " . $value . "<br />";
   }
 
+  // Display raw XML response from DCS
+  echo "<h2>Response as XML</h2>";
+  displayRawXml($result->getXml());
+
   //
   // Examples end here, below are utility functions.
   //
@@ -155,15 +164,15 @@
     echo ($document->getId() + 1) . '. ';
     echo '<strong>' . $document->getTitle() . '</strong><br />';
     if ($thumbnailUrl) {
-      echo '<img src="' . htmlentities($thumbnailUrl) . '" alt="' . $document->getTitle() . '" />';
+      echo '<img src="' . htmlspecialchars($thumbnailUrl) . '" alt="' . $document->getTitle() . '" />';
     }
     echo $document->getContent();
-    echo '<br /><a href="' . htmlentities($document->getUrl()) . '">' . htmlentities($document->getUrl()) . '</a>';
+    echo '<br /><a href="' . htmlspecialchars($document->getUrl()) . '">' . htmlspecialchars($document->getUrl()) . '</a>';
     echo '</p>';
   }
 
   /**
-   * Returns some example hard coded data for clustering
+   * Returns some example hard coded data for clustering.
    */
   function addExampleDocuments(Carrot2Job $job)
   {
@@ -213,6 +222,16 @@
     foreach ($docs as $doc) {
       $job->addDocument($doc[0], '', $doc[1]);
     }
+  }
+
+  /**
+   * Displays the raw XML received from the DCS.
+   */
+  function displayRawXml($xml)
+  {
+    echo "<pre class='xml'>";
+    echo htmlspecialchars($xml);
+    echo "</pre>";
   }
 ?>
   </body>

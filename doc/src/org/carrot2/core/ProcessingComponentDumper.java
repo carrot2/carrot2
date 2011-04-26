@@ -2,17 +2,28 @@ package org.carrot2.core;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.AttributeValueSets;
 import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.util.resource.ResourceUtilsFactory;
-import org.simpleframework.xml.*;
+import org.carrot2.util.resource.ContextClassLoaderLocator;
+import org.carrot2.util.resource.ResourceLookup;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementMap;
+import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 
-import com.google.common.collect.*;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * Dumps information on processing components from the provided suite into one XML file.
@@ -30,9 +41,14 @@ public class ProcessingComponentDumper
 
         ProcessingComponentDocs(String suitePath) throws Exception
         {
-            final ProcessingComponentSuite suite = ProcessingComponentSuite
-                .deserialize(ResourceUtilsFactory.getDefaultResourceUtils().getFirst(
-                    suitePath));
+            // I assume only classpath is scanned for the suite. We could add another
+            // argument to specify the lookup path explicitly.
+            final ResourceLookup resourceLookup = new ResourceLookup(
+                new ContextClassLoaderLocator());
+
+            final ProcessingComponentSuite suite = 
+                ProcessingComponentSuite.deserialize(
+                    resourceLookup.getFirst(suitePath), resourceLookup);
 
             final List<DocumentSourceDescriptor> sourceDescriptors = suite.getSources();
             this.sources = Lists.newArrayList();
@@ -103,27 +119,29 @@ public class ProcessingComponentDumper
 
     public static void main(String [] args) throws Exception
     {
-        String suite = "suites/suite-doc.xml";
-        String output = null;
-
-        if (args.length == 2)
+        if (args.length != 2)
         {
-            suite = args[0];
-            output = args[1];
+            System.err.println("Args: suite-path output");
+            System.exit(-1);
         }
 
-        final ProcessingComponentDocs components = new ProcessingComponentDocs(suite);
+        String suite = args[0];
+        String output = args[1];
 
-        final Format format = new Format(2,
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        if (output == null)
+        try
         {
-            new Persister(format).write(components, System.out);
-        }
-        else
-        {
+            final ProcessingComponentDocs components = new ProcessingComponentDocs(suite);
+    
+            final Format format = new Format(2,
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    
             new Persister(format).write(components,
                 new FileOutputStream(new File(output)), "UTF-8");
+        }
+        catch (Exception e)
+        {
+            System.err.println(e);
+            System.exit(-1);
         }
     }
 }

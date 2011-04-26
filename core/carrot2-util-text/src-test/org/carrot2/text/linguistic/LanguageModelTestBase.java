@@ -1,8 +1,7 @@
-
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,24 +11,25 @@
 
 package org.carrot2.text.linguistic;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.carrot2.core.LanguageCode;
+import org.carrot2.text.util.MutableCharArray;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Superclass for testing {@link ILanguageModel}s.
+ * Superclass for testing {@link LanguageModel}s.
  */
 public abstract class LanguageModelTestBase
 {
     /**
      * 
      */
-    protected ILanguageModel languageModel;
+    protected LanguageModel languageModel;
 
     /**
      * @return Returns language code for this test.
@@ -42,7 +42,9 @@ public abstract class LanguageModelTestBase
     @Before
     public void setupLanguage()
     {
-        this.languageModel = new DefaultLanguageModelFactory().getLanguageModel(getLanguageCode());
+        this.languageModel = LanguageModel.create(getLanguageCode(),
+            new DefaultStemmerFactory(), new DefaultTokenizerFactory(),
+            new DefaultLexicalDataFactory());
     }
 
     /**
@@ -52,7 +54,8 @@ public abstract class LanguageModelTestBase
     public void testStemmerAvailable()
     {
         assertNotNull(languageModel.getStemmer());
-        assertFalse(languageModel.getStemmer() instanceof IdentityStemmer);
+        assertThat(languageModel.getStemmer().getClass()).as("English stemmer class")
+            .isNotEqualTo(IdentityStemmer.class);
     }
 
     /**
@@ -77,8 +80,8 @@ public abstract class LanguageModelTestBase
         {
             CharSequence stemmed = stemmer.stem(pair[0]);
             assertEquals("Stemming difference: " + pair[0] + " should become " + pair[1]
-                + " but was transformed into " 
-                + stemmed, pair[1], stemmed == null ? null : stemmed.toString());
+                + " but was transformed into " + stemmed, pair[1], stemmed == null ? null
+                : stemmed.toString());
         }
     }
 
@@ -91,12 +94,13 @@ public abstract class LanguageModelTestBase
         final String [] testData = getCommonWordsTestData();
         for (String word : testData)
         {
-            assertTrue(languageModel.isCommonWord(word));
+            assertTrue(languageModel.getLexicalData().isCommonWord(
+                new MutableCharArray(word)));
         }
     }
 
     /**
-     * Override and provide word pairs for {@link ILanguageModel#getStemmer()} tests.
+     * Override and provide word pairs for {@link LanguageModel#getStemmer()} tests.
      * Sample data should follow this format:
      * 
      * <pre>
@@ -120,7 +124,7 @@ public abstract class LanguageModelTestBase
 
     /**
      * Override and provide words for testing against
-     * {@link ILanguageModel#isCommonWord(CharSequence)}).
+     * {@link ILexicalData#isCommonWord(MutableCharArray)}).
      */
     protected String [] getCommonWordsTestData()
     {

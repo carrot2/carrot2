@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,7 +14,8 @@ package org.carrot2.source.boss;
 
 import java.util.ArrayList;
 
-import org.apache.commons.httpclient.NameValuePair;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
@@ -166,12 +167,12 @@ public final class BossWebSearchService extends BossSearchService
 
         if (filter != null)
         {
-            params.add(new NameValuePair("filter", filter.getApiOption()));
+            params.add(new BasicNameValuePair("filter", filter.getApiOption()));
         }
 
         if (type != null)
         {
-            params.add(new NameValuePair("type", type));
+            params.add(new BasicNameValuePair("type", type));
         }
 
         return params;

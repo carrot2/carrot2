@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,7 +14,7 @@ package org.carrot2.text.linguistic;
 
 /**
  * Simple lemmatization engine transforming an inflected form of a word to its base form
- * or some unique token.
+ * or some other unique token.
  */
 public interface IStemmer
 {

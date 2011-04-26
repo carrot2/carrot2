@@ -1,7 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,24 +12,23 @@
 package org.carrot2.core.test.assertions;
 
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.fest.assertions.Assertions.assertThat;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.carrot2.core.Cluster;
-import org.fest.assertions.Assertions;
 
 /**
  * Assertions on lists of {@link Cluster}s.
  */
-public class ClusterListAssertion
+public class ClusterListAssertion extends
+    GenericListAssertion<ClusterListAssertion, Cluster>
 {
-    /** The actual list of clusters */
-    private final List<Cluster> actualClusterList;
-
     ClusterListAssertion(List<Cluster> actualClusterList)
     {
-        this.actualClusterList = actualClusterList;
+        super(ClusterListAssertion.class, actualClusterList);
     }
 
     /**
@@ -60,24 +59,12 @@ public class ClusterListAssertion
     public ClusterListAssertion isEquivalentTo(List<Cluster> expectedClusterList,
         boolean checkDocuments)
     {
-        assertThat(actualClusterList).hasSize(expectedClusterList.size());
-        for (int i = 0; i < actualClusterList.size(); i++)
+        assertThat(actual).hasSize(expectedClusterList.size());
+        for (int i = 0; i < actual.size(); i++)
         {
-            assertThat(actualClusterList.get(i)).isEquivalentTo(
-                expectedClusterList.get(i), checkDocuments);
+            assertThat(actual.get(i)).isEquivalentTo(expectedClusterList.get(i),
+                checkDocuments);
         }
-        return this;
-    }
-
-    /**
-     * Asserts that the cluster list has the provided size.
-     * 
-     * @param expectedSize the expected list size
-     * @return this assertion for convenience
-     */
-    public ClusterListAssertion hasSize(int expectedSize)
-    {
-        Assertions.assertThat(actualClusterList).hasSize(expectedSize);
         return this;
     }
 
@@ -88,9 +75,64 @@ public class ClusterListAssertion
      */
     public ClusterListAssertion doesNotContainOtherTopicsClusters()
     {
-        for (int i = 0; i < actualClusterList.size(); i++)
+        for (int i = 0; i < actual.size(); i++)
         {
-            assertThat(actualClusterList.get(i)).isOtherTopics(false);
+            assertThat(actual.get(i)).isOtherTopics(false);
+        }
+        return this;
+    }
+
+    /**
+     * Recursively runs pairwise cluster checks on the actual clusters vs the provided
+     * expected clusters hierarchy.
+     */
+    public ClusterListAssertion passRecursively(List<Cluster> expected,
+        ClusterPairCheck... clusterAsserts)
+    {
+        if (expected == null)
+        {
+            assertThat(actual).isNull();
+        }
+        else
+        {
+            assertThat(actual).isNotNull();
+        }
+
+        assertThat(actual.size()).as(description() + ": list size").isEqualTo(
+            expected.size());
+
+        Iterator<Cluster> expectedIt = expected.iterator();
+        Iterator<Cluster> actualIt = actual.iterator();
+        while (expectedIt.hasNext() && actualIt.hasNext())
+        {
+            final Cluster actualCluster = actualIt.next();
+            final Cluster expectedCluster = expectedIt.next();
+            for (ClusterPairCheck clusterPairAssert : clusterAsserts)
+            {
+                clusterPairAssert.check(actualCluster, expectedCluster);
+            }
+
+            assertThatClusters(actualCluster.getSubclusters()).as(
+                description() + ": subclusters of \"" + actualCluster.getLabel() + "\"")
+                .passRecursively(expectedCluster.getSubclusters(), clusterAsserts);
+        }
+
+        return this;
+    }
+
+    /**
+     * Asserts that the provided checks pass for all clusters on the list, including their
+     * subclusters.
+     */
+    public ClusterListAssertion passRecursively(ClusterCheck... checks)
+    {
+        for (Cluster cluster : actual)
+        {
+            for (ClusterCheck clusterCheck : checks)
+            {
+                clusterCheck.check(cluster);
+                assertThatClusters(cluster.getSubclusters()).passRecursively(checks);
+            }
         }
         return this;
     }

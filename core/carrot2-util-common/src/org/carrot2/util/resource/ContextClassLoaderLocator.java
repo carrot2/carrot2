@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -12,7 +12,7 @@
 
 package org.carrot2.util.resource;
 
-import java.net.URL;
+
 
 /**
  * Looks up resources in the thread's context class loader.
@@ -22,18 +22,42 @@ public final class ContextClassLoaderLocator implements IResourceLocator
     /**
      *
      */
-    public IResource [] getAll(String resource, Class<?> clazz)
+    @Override
+    public IResource [] getAll(String resource)
     {
         final ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        final URL resourceURL = cl.getResource(resource);
-        if (resourceURL != null)
+        if (cl != null)
         {
-            return new IResource []
-            {
-                new ClassLoaderResource(cl, resource)
-            };
+            return ClassLoaderLocator.getAll(cl, resource);
         }
 
         return new IResource [0];
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        return 0xbebe;
+    }
+
+    @Override
+    public boolean equals(Object target)
+    {
+        if (target == this) return true;
+
+        if (target != null && target instanceof ContextClassLoaderLocator)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.getClass().getName() + " [current: "
+            + Thread.currentThread().getContextClassLoader() + "]";
     }
 }

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -24,7 +24,6 @@ import org.osgi.framework.BundleException;
  */
 final class BundleResourceLocator implements IResourceLocator
 {
-    private final static IResource [] EMPTY = new IResource [0];
     private final Bundle bundle;
 
     public BundleResourceLocator(Bundle bundle)
@@ -32,7 +31,8 @@ final class BundleResourceLocator implements IResourceLocator
         this.bundle = bundle;
     }
 
-    public IResource [] getAll(String resource, Class<?> clazz)
+    @Override
+    public IResource [] getAll(String resource)
     {
         if (bundle.getState() != Bundle.ACTIVE)
         {
@@ -42,7 +42,7 @@ final class BundleResourceLocator implements IResourceLocator
             }
             catch (BundleException e)
             {
-                return EMPTY;
+                return new IResource [0];
             }
         }
 
@@ -55,6 +55,33 @@ final class BundleResourceLocator implements IResourceLocator
             };
         }
 
-        return EMPTY;
+        return new IResource [0];
+    }
+
+    @Override
+    public boolean equals(Object target)
+    {
+        if (target == this) return true;
+
+        if (target != null && target instanceof BundleResourceLocator)
+        {
+            BundleResourceLocator other = (BundleResourceLocator) target;
+            return this.bundle.equals(other.bundle);
+        }
+
+        return false;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return this.bundle.hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.getClass().getName() + " [bundle: "
+            + bundle + "]";
     }
 }

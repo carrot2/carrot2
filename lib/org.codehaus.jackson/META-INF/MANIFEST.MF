@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jackson JSON Processor
 Bundle-SymbolicName: org.codehaus.jackson;singleton:=true
-Bundle-Version: 1.5.2
-Bundle-ClassPath: jackson-core-asl-1.5.2.jar,
- jackson-mapper-asl-1.5.2.jar
+Bundle-Version: 1.7.4
+Bundle-ClassPath: jackson-core-asl-1.7.4.jar,
+ jackson-mapper-asl-1.7.4.jar
 Bundle-Vendor: jackson.codehaus.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.codehaus.jackson,

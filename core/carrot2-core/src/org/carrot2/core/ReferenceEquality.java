@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -45,6 +45,10 @@ final class ReferenceEquality
     @Override
     public boolean equals(Object other)
     {
+        if (other == null)
+        {
+            return false;
+        }
         return ((ReferenceEquality) other).delegate == this.delegate;
     }
 }

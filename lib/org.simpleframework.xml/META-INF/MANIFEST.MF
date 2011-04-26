@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Simple XML Serialization
 Bundle-SymbolicName: org.simpleframework.xml
-Bundle-Version: 2.3.5
-Bundle-ClassPath: simple-xml-2.3.5.jar
+Bundle-Version: 2.4.1
+Bundle-ClassPath: simple-xml-2.4.1.jar
 Bundle-Vendor: simple.sourceforge.net
 Export-Package: org.simpleframework.xml,
  org.simpleframework.xml.convert,
@@ -13,7 +13,6 @@ Export-Package: org.simpleframework.xml,
  org.simpleframework.xml.stream,
  org.simpleframework.xml.transform,
  org.simpleframework.xml.util
-Require-Bundle: org.eclipse.core.runtime,
- org.codehaus.woodstox;visibility:=reexport
+Require-Bundle: org.eclipse.core.runtime
 Eclipse-BuddyPolicy: dependent
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

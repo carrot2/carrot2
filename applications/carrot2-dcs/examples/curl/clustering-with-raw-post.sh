@@ -3,8 +3,7 @@ DCS_HOST=http://localhost:8080/dcs/rest
 RESULT=clusters-from-raw-post.xml
 
 curl $DCS_HOST -# \
-     --data-binary @clustering-with-raw-post-data.txt \
-     -H "Content-Type: multipart/form-data; boundary=---------------------------191691572411478" \
-     -H "Content-Length: 44389" \
+     --data-binary @clustering-with-raw-post-data.bin \
+     -H "Content-Type: multipart/form-data; boundary=----------------------------f223859fc094" \
      -o $RESULT
 echo Results saved to $RESULT

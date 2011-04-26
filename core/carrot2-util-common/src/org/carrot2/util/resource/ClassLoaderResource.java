@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -16,11 +16,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.carrot2.util.StreamUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 /**
- * A resource loaded using a class loader. This resource provider caches the content of
+ * A resource loaded using a class loader. This loader provides cached content of
  * returned resources and closes the stream handle in {@link #open()}.
  */
 @Root(name = "class-loader-resource")
@@ -53,7 +54,7 @@ public final class ClassLoaderResource implements IResource
 
     public InputStream open() throws IOException
     {
-        return ResourceUtils.prefetch(clazzLoader.getResourceAsStream(resource));
+        return StreamUtils.prefetch(clazzLoader.getResourceAsStream(resource));
     }
 
     @Override
@@ -61,10 +62,8 @@ public final class ClassLoaderResource implements IResource
     {
         if (obj instanceof ClassLoaderResource)
         {
-            return ObjectUtils
-                .equals(((ClassLoaderResource) obj).resource, this.resource)
-                && ObjectUtils.equals(((ClassLoaderResource) obj).clazzLoader,
-                    this.clazzLoader);
+            return ObjectUtils.equals(((ClassLoaderResource) obj).resource, resource)
+                && ObjectUtils.equals(((ClassLoaderResource) obj).clazzLoader, clazzLoader);
         }
         else
         {

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,6 +14,8 @@ package org.carrot2.util.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.carrot2.util.StreamUtils;
 
 /**
  * A resource relative to a class. This resource provider caches the content of returned
@@ -32,9 +34,12 @@ public final class ClassResource extends URLResource
         this.resource = resource;
     }
 
+    /**
+     * Override the default open-from-URL method so that we don't lock the source JAR.
+     */
     @Override
     public InputStream open() throws IOException
     {
-        return ResourceUtils.prefetch(clazz.getResourceAsStream(resource));
+        return StreamUtils.prefetch(clazz.getResourceAsStream(resource));
     }
 }

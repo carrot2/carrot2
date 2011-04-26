@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -45,5 +45,13 @@ public final class TokenTypeUtils
     public static boolean isCommon(int flag)
     {
         return (flag & ITokenizer.TF_COMMON_WORD) != 0;
+    }    
+    
+    /**
+     * Return <code>true</code> if {@link ITokenizer#TF_QUERY_WORD} is set.
+     */
+    public static boolean isInQuery(int flag)
+    {
+        return (flag & ITokenizer.TF_QUERY_WORD) != 0;
     }    
 }

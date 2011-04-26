@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2010, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2011, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,7 +15,15 @@ package org.carrot2.core;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.annotations.ThreadSafe;
+import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -34,6 +42,18 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
         return false;
     }
 
+    @BeforeClass
+    public static void enableAssertions()
+    {
+        PoolingProcessingComponentManager.NonPrimitiveInputAttributesCheck.makeAssertion = true;
+    }
+    
+    @AfterClass
+    public static void disableAssertions()
+    {
+        PoolingProcessingComponentManager.NonPrimitiveInputAttributesCheck.makeAssertion = false;
+    }
+    
     @Override
     public Controller prepareController()
     {
@@ -196,5 +216,71 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
         {
             instanceCount = 0;
         }
+    }
+
+    @Bindable
+    @ThreadSafe
+    public static class ComponentWithNonPrimitiveAttributes extends ProcessingComponentBase
+    {
+        @Init
+        @Processing
+        @Input
+        @Attribute(key = "threadSafe")
+        @ImplementingClasses(classes = {}, strict = false)
+        ThreadSafeClass threadSafe = new ThreadSafeClass();
+
+        @Init
+        @Input
+        @Attribute(key = "nonThreadSafeInit")
+        @ImplementingClasses(classes = {}, strict = false)
+        NonThreadSafeClass nonThreadSafeInit = new NonThreadSafeClass();
+        
+        @Processing
+        @Input
+        @Attribute(key = "nonThreadSafeProcessing")
+        @ImplementingClasses(classes = {}, strict = false)
+        NonThreadSafeClass nonThreadSafeProcessing = new NonThreadSafeClass();
+    }
+    
+    @ThreadSafe
+    public static class ThreadSafeClass 
+    {
+        
+    }
+    
+    public static class NonThreadSafeClass
+    {
+        
+    }
+
+    @Test(expected = AssertionError.class)
+    public void warningOnNonThreadSafeInitInputInstanceAttributeProvidedOnInit()
+    {
+        initAttributes.put("threadSafe", new ThreadSafeClass());
+        initAttributes.put("nonThreadSafeInit", new NonThreadSafeClass());
+        performProcessingAndDispose(ComponentWithNonPrimitiveAttributes.class);
+    }
+    
+    @Test(expected = AssertionError.class)
+    public void warningOnNonThreadSafeProcessingInputInstanceAttributeProvidedOnInit()
+    {
+        initAttributes.put("threadSafe", new ThreadSafeClass());
+        initAttributes.put("nonThreadSafeProcessing", new NonThreadSafeClass());
+        performProcessingAndDispose(ComponentWithNonPrimitiveAttributes.class);
+    }
+    
+    @Test
+    public void noWarningOnNonThreadSafeInputClassAttributeProvidedOnInit()
+    {
+        initAttributes.put("threadSafe", ThreadSafeClass.class);
+        initAttributes.put("nonThreadSafeInit", NonThreadSafeClass.class);
+        initAttributes.put("nonThreadSafeProcessing", NonThreadSafeClass.class);
+        performProcessingAndDispose(ComponentWithNonPrimitiveAttributes.class);
+    }
+    
+    @Test
+    public void noWarningOnNonThreadSafeInputInstanceFieldDefault()
+    {
+        performProcessingAndDispose(ComponentWithNonPrimitiveAttributes.class);
     }
 }
