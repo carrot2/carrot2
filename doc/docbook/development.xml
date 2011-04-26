@@ -59,8 +59,8 @@
             Review and fix reasonably-looking flaws from the following reports:
             
             <orderedlist>
-              <listitem><para><link xlink:href="http://builds.carrot2.org/download/C2HEAD-SOURCES/artifacts/latest/FindBugs-Report/index.html">FindBugs</link></para></listitem>
-              <listitem><para><link xlink:href="http://builds.carrot2.org/download/C2HEAD-SOURCES/artifacts/latest/Duplication-Report/index.html">Code Duplication</link></para></listitem>
+              <listitem><para><link xlink:href="http://builds.carrot2.org/browse/C2HEAD-SOURCES/latest/artifact/JOB1/FindBugs-Report/index.html">FindBugs</link></para></listitem>
+              <listitem><para><link xlink:href="http://builds.carrot2.org/browse/C2HEAD-SOURCES/latest/artifact/JOB1/Duplication-Report/index.html">Code Duplication</link></para></listitem>
             </orderedlist>
           </para>
         </formalpara>
