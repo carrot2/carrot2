@@ -15,9 +15,7 @@ package org.carrot2.workbench.vis;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -360,12 +358,15 @@ public abstract class FlashViewPage extends Page
             {
                 if (!browserInitialized) return null;
 
-                // clusterId, isSelected, docList
-                if (arguments.length == 3)
+                // selected groups, [selected documents]
+                if (arguments.length > 1)
                 {
-                    final int groupId = (int) Double.parseDouble(arguments[0].toString());
-                    doGroupSelection(groupId,
-                        Boolean.parseBoolean(arguments[1].toString()));
+                    Object [] ids = (Object[]) arguments[0];
+                    int [] groupIds = new int [ids.length];
+                    
+                    for (int i = 0; i < groupIds.length; i++)
+                      groupIds[i] = (int) Double.parseDouble(ids[i].toString());
+                    doGroupSelection(groupIds);
                 }
 
                 return null;
@@ -430,14 +431,14 @@ public abstract class FlashViewPage extends Page
         super.dispose();
     }
 
-    private void doGroupSelection(int groupId, boolean selected)
+    private void doGroupSelection(int [] selectedGroups)
     {
-        logger.debug("Selection visualization->editor: " + groupId + " " + selected);
+        logger.debug("Selection visualization->editor: " + Arrays.toString(selectedGroups));
 
-        SearchEditorSelectionProvider prov = (SearchEditorSelectionProvider) editor
-            .getSite().getSelectionProvider();
+        SearchEditorSelectionProvider prov = 
+          (SearchEditorSelectionProvider) editor.getSite().getSelectionProvider();
 
-        prov.toggleSelected(groupId, selected, selectionListener);
+        prov.setSelected(selectedGroups, selectionListener);
     }
 
     /**

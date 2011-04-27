@@ -47,7 +47,7 @@
 
         // Attach Flash-SWT event hooks.
         onInitialize: onInitialized,
-        onGroupSelection: proxy_groupClicked,
+        onGroupSelectionChanged: proxy_groupClicked,
         onDocumentSelection: proxy_documentClicked,
         onModelChange: proxy_onModelChanged
       });
