@@ -30,7 +30,7 @@ public class DcsApp
     /**
      * Is this the absolute minimum required for Jetty to run? 
      */
-    private final static int MIN_THREADS = 8;
+    private final static int MIN_THREADS = 10;
 
     /**
      * DCS logger. Tests attach to this logger's LOG4J appender.
