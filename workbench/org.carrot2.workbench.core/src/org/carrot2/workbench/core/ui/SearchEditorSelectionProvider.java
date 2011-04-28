@@ -241,6 +241,21 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
     }
 
     /**
+     * Replace the current selection with the given set of selected groups.
+     */
+    public void setSelected(int [] selectedGroups,
+                            ISelectionChangedListener skipListeners)
+    {
+        assert Display.getCurrent() != null;
+
+        this.selectedClusters.clear();
+        for (int i : selectedGroups)
+            selectedClusters.set(i);
+
+        fireSelectionChanged(skipListeners);
+    }
+
+    /**
      * Fire selection changed event.
      */
     private void fireSelectionChanged(ISelectionChangedListener... skipListeners)

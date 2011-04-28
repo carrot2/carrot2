@@ -69,6 +69,12 @@
     <section xml:id="section.getting-started.plain-text-ms-word-pdf">
       <title>Clustering plain text, HTML and MS Word documents</title>
       
+      <important>
+        <para>
+          This option is available only on Microsoft Windows systems.
+        </para>
+      </important>
+      
       <para>
         To try &PROD; clustering on a collection of plain text, HTML or MS Word documents, you will
         need to install Google Desktop:
@@ -125,21 +131,6 @@
           for other useful query modifiers. 
         </para>
       </tip>
-      
-      <note>
-        <para>
-          &DCW; can automatically determine the Google Desktop Query URL only when it 
-          is run on Windows with Administrator's privileges. For other setups, please
-          refer to <link xlink:href="http://code.google.com/apis/desktop/docs/queryapi.html#httpxml">Google Desktop API Documentation</link>
-          for instructions about obtaining the Query URL. You can set the <guilabel>Query URL</guilabel>
-          attribute in the advanced attributes section. 
-        </para>
-        
-        <para>
-          Please also note that Query URLs are different for different users, using a 
-          Query URL not belonging to the currently logged in-user will result in errors.
-        </para>
-      </note>
     </section>
     
     <section xml:id="section.getting-started.xml-files">
