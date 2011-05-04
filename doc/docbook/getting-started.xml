@@ -8,7 +8,8 @@
 ]>
 <chapter xml:id="chapter.getting-started" 
          xmlns="http://docbook.org/ns/docbook" version="5.0"
-         xmlns:product="http://www.carrot2.org">
+         xmlns:product="http://www.carrot2.org"
+         xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Getting started</title>
   <subtitle>Trying &PROD; clustering with your own data</subtitle>
 
@@ -433,12 +434,16 @@
       </para>
       
       <orderedlist>
-        <listitem>
+        <listitem role="private">
           <para>
             <product:java-api-download-link>Download &JA;</product:java-api-download-link>
             and unpack it to some local directory.
           </para>
         </listitem>
+
+        <xi:include href="getting-started-java-api-download.xml">
+          <xi:fallback />
+        </xi:include>
         
         <listitem>
           <para>
@@ -540,12 +545,16 @@
       </para>
       
       <orderedlist>
-        <listitem>
+        <listitem role="private">
           <para>
             <product:java-api-download-link>Download &JA;</product:java-api-download-link>
             and unpack it to some local directory.
           </para>
         </listitem>
+
+        <xi:include href="getting-started-java-api-download.xml">
+          <xi:fallback />
+        </xi:include>
         
         <listitem>
           <para>
@@ -682,12 +691,16 @@
           </para>
         </listitem>
         
-        <listitem>
+        <listitem role="private">
           <para>
             <product:csharp-api-download-link>Download &CSA;</product:csharp-api-download-link>
             and unpack it to some local directory.
           </para>
         </listitem>
+
+        <xi:include href="getting-started-csharp-api-download.xml">
+          <xi:fallback />
+        </xi:include>
         
         <listitem>
           <para>
