@@ -8,7 +8,8 @@
 ]>
 <chapter xml:id="chapter.getting-started" 
          xmlns="http://docbook.org/ns/docbook" version="5.0"
-         xmlns:product="http://www.carrot2.org">
+         xmlns:product="http://www.carrot2.org"
+         xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Getting started</title>
   <subtitle>Trying &PROD; clustering with your own data</subtitle>
 
