@@ -433,12 +433,16 @@
       </para>
       
       <orderedlist>
-        <listitem>
+        <listitem role="private">
           <para>
             <product:java-api-download-link>Download &JA;</product:java-api-download-link>
             and unpack it to some local directory.
           </para>
         </listitem>
+
+        <xi:include href="getting-started-java-api-download.xml">
+          <xi:fallback />
+        </xi:include>
         
         <listitem>
           <para>
@@ -540,12 +544,16 @@
       </para>
       
       <orderedlist>
-        <listitem>
+        <listitem role="private">
           <para>
             <product:java-api-download-link>Download &JA;</product:java-api-download-link>
             and unpack it to some local directory.
           </para>
         </listitem>
+
+        <xi:include href="getting-started-java-api-download.xml">
+          <xi:fallback />
+        </xi:include>
         
         <listitem>
           <para>
@@ -682,12 +690,16 @@
           </para>
         </listitem>
         
-        <listitem>
+        <listitem role="private">
           <para>
             <product:csharp-api-download-link>Download &CSA;</product:csharp-api-download-link>
             and unpack it to some local directory.
           </para>
         </listitem>
+
+        <xi:include href="getting-started-csharp-api-download.xml">
+          <xi:fallback />
+        </xi:include>
         
         <listitem>
           <para>
