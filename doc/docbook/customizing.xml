@@ -312,12 +312,6 @@
     <orderedlist>
       <listitem>
         <para>
-          Download <product:webapp-download-link>&WA; WAR file</product:webapp-download-link>.
-        </para>
-      </listitem>
-    
-      <listitem>
-        <para>
           Open for editing the <filename>suite-webapp.xml</filename> file, located in the 
           <filename>WEB-INF/suites</filename> directory of the 
           WAR file.
@@ -366,13 +360,6 @@
     </para>
     
     <orderedlist>
-      <listitem>
-        <para>
-          Download <product:dcs-download-link>&DCS; distribution archive</product:dcs-download-link> 
-          and extract it to some local folder.
-        </para>
-      </listitem>
-    
       <listitem>
         <para>
           Open for editing the <filename>suite-dcs.xml</filename> file, located in the 
