@@ -60,6 +60,9 @@
       <xsl:with-param name="level">INFO</xsl:with-param>
       <xsl:with-param name="title">Compatible changes</xsl:with-param>
     </xsl:apply-templates>
+    <xsl:if test="not(difference)">
+      <strong>No incompatibilities.</strong>
+    </xsl:if>
   </body>
 </html>
   </xsl:template>

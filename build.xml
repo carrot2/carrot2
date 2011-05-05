@@ -277,7 +277,7 @@
 
     <mkdir dir="${compatibility.report.dir}" />
     <clirr failOnBinError="false" failOnSrcError="false">
-      <origfiles dir="tmp/compatibility/carrot2-java-api-${versioning.latest}" includes="carrot2-core-${versioning.latest}.jar" />
+      <origfiles dir="tmp/compatibility/carrot2-java-api-${versioning.latest}/lib/required" includes="carrot2-core-${versioning.latest}.jar" />
       <origClassPath>
         <fileset dir="tmp/compatibility/carrot2-java-api-${versioning.latest}/lib" />
       </origClassPath>
