@@ -55,6 +55,6 @@ function onGroupSelection(clusterIds, documentIds) {
     $("#clusters-panel").trigger("carrot2-clusters-selected-top");
   } else {
     // For the time being, we're showing only the first selected cluster.
-    $("#clusters-panel").trigger("carrot2-clusters-selected", [ clusterIds[0], documentIds[0] ]);
+    $("#clusters-panel").trigger("carrot2-clusters-selected", [ clusterIds[0], documentIds[0].sort() ]);
   }
 }
