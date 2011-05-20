@@ -45,8 +45,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.BrowserFunction;
-import org.eclipse.swt.browser.ProgressAdapter;
-import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -334,16 +332,6 @@ public abstract class FlashViewPage extends Page
          * Open the browser and redirect it to the internal HTTP server.
          */
         browser = new Browser(parent, SWT.NONE);
-        browser.addProgressListener(new ProgressAdapter()
-        {
-            public void completed(ProgressEvent event)
-            {
-                // When the page loads, try to load the cluster model immediately.
-                logger.debug("Browser loaded and initialized.");
-                browserInitialized = true;
-                new ReloadXMLJob("browser loaded").reschedule(0);
-            }
-        });
 
         final Activator plugin = Activator.getInstance();
         final Map<String, Object> customParams = contributeCustomParams();
@@ -396,6 +384,17 @@ public abstract class FlashViewPage extends Page
             {
                 if (!browserInitialized) return null;
                 selectionJob.reschedule(BROWSER_SELECTION_DELAY);
+                return null;
+            }
+        };
+        
+        new BrowserFunction(browser, "swt_onVisualizationLoaded")
+        {
+            public Object function(Object [] arguments)
+            {
+                browserInitialized = true;
+                new ReloadXMLJob("browser loaded").reschedule(0);
+                selectionJob.reschedule(0);
                 return null;
             }
         };
