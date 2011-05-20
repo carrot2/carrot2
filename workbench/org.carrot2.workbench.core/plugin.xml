@@ -20,6 +20,12 @@
             name="Search">
       </perspective>
       <perspective
+            class="org.carrot2.workbench.core.ui.perspectives.VisualizationPerspective"
+            icon="icons/perspective_visualization.gif"
+            id="org.carrot2.workbench.core.perspective.visualization"
+            name="Visualization">
+      </perspective>
+      <perspective
             class="org.carrot2.workbench.core.ui.perspectives.TuningPerspective"
             icon="icons/perspective_tuning.gif"
             id="org.carrot2.workbench.core.perspective.tuning"
@@ -154,13 +160,13 @@
             class="org.carrot2.workbench.core.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
             targetID="org.carrot2.workbench.core.perspective.search">
-         <perspectiveShortcut
-               id="org.carrot2.workbench.core.perspective.tuning">
-         </perspectiveShortcut>
+         <perspectiveShortcut id="org.carrot2.workbench.core.perspective.visualization" />
+         <perspectiveShortcut id="org.carrot2.workbench.core.perspective.tuning" />
          <viewShortcut
                id="org.carrot2.workbench.core.views.documents">
          </viewShortcut>
@@ -209,10 +215,29 @@
       </perspectiveExtension>
 
       <perspectiveExtension
+            targetID="org.carrot2.workbench.core.perspective.visualization">
+         <perspectiveShortcut id="org.carrot2.workbench.core.perspective.search" />
+         <perspectiveShortcut id="org.carrot2.workbench.core.perspective.tuning" />
+
+         <view
+               id="org.carrot2.workbench.core.views.documents"
+               ratio="0.30"
+               relationship="right"
+               visible="false"
+               relative="org.eclipse.ui.editorss"/>
+
+         <view
+               id="org.carrot2.workbench.core.views.search"
+               ratio="0.30"
+               relationship="top"
+               visible="true"
+               relative="org.eclipse.ui.editorss" />
+      </perspectiveExtension>
+
+      <perspectiveExtension
             targetID="org.carrot2.workbench.core.perspective.tuning">
-         <perspectiveShortcut
-               id="org.carrot2.workbench.core.perspective.search">
-         </perspectiveShortcut>
+         <perspectiveShortcut id="org.carrot2.workbench.core.perspective.search" />
+         <perspectiveShortcut id="org.carrot2.workbench.core.perspective.visualization" />
          <viewShortcut
                id="org.carrot2.workbench.core.views.documents">
          </viewShortcut>
@@ -243,9 +268,7 @@
                visible="true"
                relative="org.carrot2.workbench.core.views.attributeInfo"/>
 
-		<!-- Open the properties view. -->
-
-        <view
+         <view
                id="org.eclipse.ui.views.PropertySheet"
                ratio="0.33"
                relationship="bottom"
@@ -264,7 +287,6 @@
                visible="false"
                relative="org.carrot2.workbench.core.views.clusters"/>
 
-		<!-- Open the PDE errors and progress view for debugging. -->
          <view
                id="org.eclipse.ui.views.ProgressView"
                ratio="0.70"
@@ -285,6 +307,7 @@
                relative="org.eclipse.ui.views.ProgressView" />               
       </perspectiveExtension>
    </extension>
+
    <extension
          point="org.eclipse.ui.editorActions">
       <editorContribution
@@ -292,6 +315,7 @@
             targetID="org.carrot2.workbench.core.editors.searchEditor">
       </editorContribution>
    </extension>
+
    <extension
          id="org.carrot2.workbench.core.ui.bindings"
          point="org.eclipse.ui.bindings">

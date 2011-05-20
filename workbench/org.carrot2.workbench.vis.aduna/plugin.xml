@@ -28,18 +28,25 @@
                relative="org.carrot2.workbench.core.views.clusters">
          </view>
       </perspectiveExtension>
-      
+
       <perspectiveExtension
             targetID="org.carrot2.workbench.core.perspective.tuning">
          <viewShortcut
 		      id="org.carrot2.workbench.views.aduna">
          </viewShortcut>
+      </perspectiveExtension>
+      
+      <perspectiveExtension
+            targetID="org.carrot2.workbench.core.perspective.visualization">
+         <viewShortcut
+              id="org.carrot2.workbench.views.aduna">
+         </viewShortcut>
 
          <view
-	      id="org.carrot2.workbench.views.aduna"
+           id="org.carrot2.workbench.views.aduna"
                relationship="stack"
                visible="true"
-               relative="org.carrot2.workbench.core.views.clusters">
+               relative="org.carrot2.workbench.core.views.documents">
          </view>
       </perspectiveExtension>
    </extension>
