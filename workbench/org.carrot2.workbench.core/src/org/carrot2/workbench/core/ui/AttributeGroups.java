@@ -31,6 +31,7 @@ import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.carrot2.workbench.editors.factory.EditorNotFoundException;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
@@ -279,8 +280,20 @@ public final class AttributeGroups extends Composite implements IAttributeEventP
         {
             descriptor = descriptor.only(filterPredicate);
         }
-        descriptor = descriptor.group(grouping);
 
+        /*
+         * CARROT-818: Check if there is anything for display. 
+         */
+        if (descriptor.attributeDescriptors.isEmpty())
+        {
+            createMessage(mainControl, this, "No attributes.");
+        }
+
+        /*
+         * Group attributes.
+         */
+        descriptor = descriptor.group(grouping);
+        
         /*
          * Create sections for attribute groups.
          */
@@ -329,6 +342,24 @@ public final class AttributeGroups extends Composite implements IAttributeEventP
                     descriptor.attributeDescriptors, this);
             }
         }
+    }
+
+    /**
+     * Creates a message control showing a given message.
+     */
+    private void createMessage(Composite parent, AttributeGroups attributeGroups, String message)
+    {
+        final GridData gd = new GridData();
+        gd.horizontalAlignment = GridData.FILL;
+        gd.verticalAlignment = GridData.FILL;
+        gd.grabExcessHorizontalSpace = true;
+        gd.grabExcessVerticalSpace = false;
+
+        final CLabel label = new CLabel(parent, SWT.NONE);
+        label.setLayoutData(gd);
+
+        label.setText(message);
+        label.setAlignment(SWT.LEFT);
     }
 
     /**
@@ -519,8 +550,6 @@ public final class AttributeGroups extends Composite implements IAttributeEventP
      */
     private void disposeEditors()
     {
-        if (this.attributeEditors.isEmpty()) return;
-
         /*
          * Unsubscribe from attribute editors (unique).
          */
