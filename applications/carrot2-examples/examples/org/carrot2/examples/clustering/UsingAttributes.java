@@ -192,7 +192,7 @@ public class UsingAttributes
 
             /* Perform processing */
             final ProcessingResult result = controller.process(attributes,
-                BingDocumentSource.class, LingoClusteringAlgorithm.class);
+                LingoClusteringAlgorithm.class);
             
             /* Clusters created by Carrot2, native matrix computation flag */
             final List<Cluster> clusters = result.getClusters();

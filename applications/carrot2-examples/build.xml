@@ -63,6 +63,7 @@
     <!-- Run some example classes -->
     <run.example classname="org.carrot2.examples.clustering.ClusteringDocumentList" dependencies="libs.required" />
     <run.example classname="org.carrot2.examples.clustering.UsingCachingController" dependencies="libs.all" />
+    <run.example classname="org.carrot2.examples.clustering.UsingAttributes" dependencies="libs.all" />
     <run.example classname="org.carrot2.examples.clustering.UsingComponentSuites" dependencies="libs.all" />
     <run.example classname="org.carrot2.examples.clustering.UsingCustomLanguageModel" dependencies="libs.required" />
     <run.example classname="org.carrot2.examples.clustering.UsingCustomLexicalResources"  dependencies="libs.required"/>
