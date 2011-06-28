@@ -12,10 +12,8 @@
 
 package org.carrot2.workbench.core;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
-import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -33,14 +31,6 @@ public final class Application implements IApplication
     public Object start(IApplicationContext context) throws Exception
     {
         display = PlatformUI.createDisplay();
-
-        Location userData = Platform.getUserLocation();
-        if (!userData.isSet()) {
-            Location instanceDir = Platform.getInstallLocation();
-            if (instanceDir.isSet()) {
-                userData.set(instanceDir.getDataArea("workspace"), true);
-            }
-        }
 
         final int returnCode = PlatformUI.createAndRunWorkbench(display,
             new ApplicationWorkbenchAdvisor());
