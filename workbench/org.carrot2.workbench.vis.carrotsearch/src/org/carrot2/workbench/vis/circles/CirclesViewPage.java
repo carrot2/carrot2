@@ -13,7 +13,11 @@
 package org.carrot2.workbench.vis.circles;
 
 import org.carrot2.workbench.core.ui.SearchEditor;
+import org.carrot2.workbench.core.ui.actions.ExportImageAction;
+import org.carrot2.workbench.core.ui.actions.IControlProvider;
 import org.carrot2.workbench.vis.FlashViewPage;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.part.IPageSite;
 
 
 /**
@@ -33,5 +37,21 @@ final class CirclesViewPage extends FlashViewPage
     public CirclesViewPage(SearchEditor editor)
     {
         super(editor, ENTRY_PAGE);
+    }
+    
+    @Override
+    public void init(IPageSite pageSite)
+    {
+        super.init(pageSite);
+
+        pageSite.getActionBars().getToolBarManager().add(
+            new ExportImageAction(new IControlProvider()
+            {
+                @Override
+                public Control getControl()
+                {
+                    return CirclesViewPage.this.getControl();
+                }
+            }));
     }
 }
