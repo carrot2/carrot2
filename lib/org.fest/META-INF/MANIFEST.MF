@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: FEST libraries (Carrot2)
 Bundle-SymbolicName: org.fest
 Bundle-Version: 0.0.0.QUALIFIER
-Require-Bundle: org.eclipse.core.runtime
 Bundle-ClassPath: fest-assert-1.4.jar,
  fest-mocks-1.0.jar,
  fest-util-1.1.6.jar

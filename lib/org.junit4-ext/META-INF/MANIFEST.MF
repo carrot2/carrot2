@@ -4,7 +4,6 @@ Bundle-Name: org.junit4-ext
 Bundle-SymbolicName: org.junit4.ext
 Bundle-Version: 4.6.0
 Bundle-Vendor: JUnit.org
-Require-Bundle: org.eclipse.core.runtime
 Bundle-ClassPath: junit-4.8.1.jar
 Export-Package: junit.extensions,
  junit.framework,

@@ -25,5 +25,4 @@ Export-Package: org.apache.log4j,
  org.apache.log4j.spi,
  org.apache.log4j.varia,
  org.apache.log4j.xml
-Require-Bundle: org.eclipse.core.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
