@@ -149,13 +149,12 @@ public class LuceneDocumentSourceTest extends
             "Number of results").isEqualTo(99);
     }
     
-    @SuppressWarnings("unchecked")
     @Test
     public void testMultiEntryField() throws Exception
     {
         runQuery("\"termb\"", getLargeQuerySize());
 
-        final List<Document> list = (List<Document>) super.resultAttributes.get(AttributeNames.DOCUMENTS);
+        final List<Document> list = getDocuments();
         assertThat(list.size()).isEqualTo(1);
         assertThat(list.get(0).getSummary()).contains("terma");
         assertThat(list.get(0).getSummary()).contains("termb");
