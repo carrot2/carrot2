@@ -19,9 +19,9 @@ import java.util.List;
 
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
@@ -159,5 +159,20 @@ public class LuceneDocumentSourceTest extends
         assertThat(list.size()).isEqualTo(1);
         assertThat(list.get(0).getSummary()).contains("terma");
         assertThat(list.get(0).getSummary()).contains("termb");
+    }
+    
+    /**
+     * Test case for CARROT-820.
+     */
+    @Test
+    public void testCatchAllQueryWithHighlighting() throws Exception
+    {
+        SimpleFieldMapperDescriptor.attributeBuilder(processingAttributes).formatter(PlainTextFormatter.class);
+        runQuery("*:*", 2);
+        
+        final List<Document> list = getDocuments();
+        assertThat(list.size()).isEqualTo(2);
+        assertThat(list.get(0).getSummary()).isNotEmpty();
+        assertThat(list.get(0).getSummary()).isNotEmpty();
     }
 }
