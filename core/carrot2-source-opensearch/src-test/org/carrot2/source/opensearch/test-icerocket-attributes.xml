@@ -1,0 +1,19 @@
+<attribute-sets>
+  <attribute-set id="blogs">
+    <value-set>
+      <label>Blogs</label>
+      <attribute key="OpenSearchDocumentSource.feedUrlTemplate">
+        <value type="java.lang.String" value="http://blogs.icerocket.com/search?q=${searchTerms}&amp;rss=1&amp;os=1&amp;p=${startPage}&amp;n=${count}&amp;tab=blog"/>
+      </attribute>
+      <attribute key="OpenSearchDocumentSource.resultsPerPage">
+        <value type="java.lang.Integer" value="50" />
+      </attribute>
+      <attribute key="OpenSearchDocumentSource.maximumResults">
+        <value type="java.lang.Integer" value="200" />
+      </attribute>
+      <attribute key="OpenSearchDocumentSource.userAgent">
+        <value type="java.lang.String" value="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.8) Gecko/20100721  Firefox/3.6.8" />
+      </attribute>
+    </value-set>
+  </attribute-set>
+</attribute-sets>

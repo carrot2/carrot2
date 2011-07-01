@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -57,10 +56,10 @@ public class OpenSearchDocumentSourceByPageIncrementTest extends
         {
             initAttributes.putAll(AttributeValueSets
                 .deserialize(
-                    StreamUtils.prefetch(OpenSearchDocumentSourceByPageIncrementTest.class
-                        .getResourceAsStream("/" + OpenSearchDocumentSource.class.getName()
-                            + ".icerocket.attributes.xml"))).getDefaultAttributeValueSet()
-                .getAttributeValues());
+                    StreamUtils
+                        .prefetch(OpenSearchDocumentSourceByPageIncrementTest.class
+                            .getResourceAsStream("test-icerocket-attributes.xml")))
+                .getDefaultAttributeValueSet().getAttributeValues());
         }
         catch (Exception e)
         {
