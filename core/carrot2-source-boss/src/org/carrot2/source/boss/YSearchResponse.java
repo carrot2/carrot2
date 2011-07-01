@@ -110,7 +110,7 @@ final class YSearchResponse
                     {
                         try
                         {
-                            document.setLanguage(LanguageCode.valueOf(result.language));
+                            document.setLanguage(LanguageCode.valueOf(result.language.toUpperCase()));
                         }
                         catch (IllegalArgumentException ignored)
                         {
