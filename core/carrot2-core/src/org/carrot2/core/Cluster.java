@@ -414,10 +414,17 @@ public final class Cluster
      */
     public <T> Cluster setAttribute(String key, T value)
     {
-        synchronized (attributes)
-        {
-            attributes.put(key, value);
-        }
+        attributes.put(key, value);
+        return this;
+    }
+    
+    /**
+     * Unconditionally remove an attribute from this cluster, if it exists. If there
+     * is no such attribute, nothing happens.
+     */
+    public <T> Cluster removeAttribute(String key)
+    {
+        attributes.remove(key);
         return this;
     }
 
@@ -494,7 +501,12 @@ public final class Cluster
      */
     public Cluster setOtherTopics(boolean isOtherTopics)
     {
-        return setAttribute(OTHER_TOPICS, isOtherTopics).setScore(0.0);
+        if (isOtherTopics) {
+            setAttribute(OTHER_TOPICS, Boolean.TRUE).setScore(0.0);
+        } else {
+            removeAttribute(OTHER_TOPICS);
+        }
+        return this;
     }
 
     /**
