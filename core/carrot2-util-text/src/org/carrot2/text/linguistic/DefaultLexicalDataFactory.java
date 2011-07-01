@@ -49,7 +49,7 @@ import com.google.common.collect.Sets;
  * and merging: {@link #resourceLookup}, {@link #reloadResources}, 
  * {@link #mergeResources}.
  */
-@Bindable
+@Bindable(inherit = LexicalDataLoader.class)
 public class DefaultLexicalDataFactory implements ILexicalDataFactory
 {
     /** */
@@ -79,20 +79,9 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     private final static ResourceCache<HashMap<LanguageCode, ILexicalData>> cache 
         = new ResourceCache<HashMap<LanguageCode, ILexicalData>>(resourceLoader);
 
-    /**
-     * Reloads cached stop words and stop labels on every processing request. For best
-     * performance, lexical resource reloading should be disabled in production.
-     * 
-     * <p>This flag is reset to <code>false</code> after successful resource reload to prevent
-     * multiple resource reloads during the same processing cycle.</p> 
-     * 
-     * @level Medium
-     * @group Preprocessing
-     * @label Reload lexical resources
-     */
     @Processing
     @Input
-    @Attribute(key = "reload-resources")
+    @Attribute(key = "reload-resources", inherit = true)
     public boolean reloadResources = false;
 
     /**
@@ -114,20 +103,11 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     @Attribute(key = "merge-resources")
     public boolean mergeResources = true;
 
-    /**
-     * Lexical resource lookup facade. By default, resources are sought in the current
-     * thread's context class loader. An override of this attribute is possible both at
-     * the initialization time and at processing time.
-     * 
-     * @level Advanced
-     * @group Preprocessing
-     * @label Resource lookup facade
-     */
     @Init
     @Processing
     @Input 
     @Internal
-    @Attribute(key = "resource-lookup")
+    @Attribute(key = "resource-lookup", inherit = true)
     @ImplementingClasses(classes = {}, strict = false)
     @AspectModified("Substituted with an assembly lookup in .NET release")
     public ResourceLookup resourceLookup = new ResourceLookup(CONTEXT_CLASS_LOADER);

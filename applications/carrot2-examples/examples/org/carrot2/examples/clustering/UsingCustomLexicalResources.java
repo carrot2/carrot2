@@ -26,6 +26,7 @@ import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactoryDescriptor;
+import org.carrot2.text.linguistic.LexicalDataLoaderDescriptor;
 import org.carrot2.util.resource.DirLocator;
 import org.carrot2.util.resource.ResourceLookup;
 
@@ -55,7 +56,8 @@ public class UsingCustomLexicalResources
         // Note that we tell the linguistic component to merge all lexical resources,
         // this is the default setting and it usually helps with multi-lingual content.
         DefaultLexicalDataFactoryDescriptor.attributeBuilder(attrs)
-            .mergeResources(true)
+            .mergeResources(true);
+        LexicalDataLoaderDescriptor.attributeBuilder(attrs)
             .resourceLookup(resourceLookup);
 
         controller.init(attrs);
