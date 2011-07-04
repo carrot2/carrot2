@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,21 +14,48 @@ package org.carrot2.source.lucene;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.IdentityHashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.*;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.SimpleAnalyzer;
+import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.*;
-import org.apache.lucene.store.*;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.Document;
+import org.carrot2.core.IControllerContext;
+import org.carrot2.core.IControllerContextListener;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.ProcessingComponentBase;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.Document.IDocumentSerializationListener;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.CommonAttributes;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.ExceptionUtils;
-import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.*;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
+import org.carrot2.util.attribute.Required;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.util.attribute.constraint.NotBlank;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.slf4j.Logger;
 
@@ -45,7 +71,8 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     IDocumentSource
 {
     /** Logger for this class. */
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(LuceneDocumentSource.class);
+    private final static Logger logger = org.slf4j.LoggerFactory
+        .getLogger(LuceneDocumentSource.class);
 
     /*
      * Register selected SimpleXML wrappers for Lucene data types.
@@ -53,7 +80,8 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     static
     {
         SimpleXmlWrappers.addWrapper(FSDirectory.class, FSDirectoryWrapper.class, false);
-        SimpleXmlWrappers.addWrapper(StandardAnalyzer.class, StandardAnalyzerWrapper.class, true);
+        SimpleXmlWrappers.addWrapper(StandardAnalyzer.class,
+            StandardAnalyzerWrapper.class, true);
     }
 
     @Processing
@@ -74,7 +102,8 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public Collection<Document> documents;
 
     /**
-     * Search index {@link org.apache.lucene.store.Directory}. Must be unlocked for reading.
+     * Search index {@link org.apache.lucene.store.Directory}. Must be unlocked for
+     * reading.
      * 
      * @label Index directory
      * @group Index properties
@@ -93,8 +122,8 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public Directory directory;
 
     /**
-     * {@link org.apache.lucene.analysis.Analyzer} used at indexing time. The same analyzer should be used for
-     * querying.
+     * {@link org.apache.lucene.analysis.Analyzer} used at indexing time. The same
+     * analyzer should be used for querying.
      * 
      * @label Analyzer
      * @group Index properties
@@ -112,8 +141,8 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
 
     /**
-     * {@link IFieldMapper} provides the link between Carrot2 {@link org.carrot2.core.Document} fields and
-     * Lucene index fields.
+     * {@link IFieldMapper} provides the link between Carrot2
+     * {@link org.carrot2.core.Document} fields and Lucene index fields.
      * 
      * @label Field mapper
      * @group Index field mapping
@@ -132,17 +161,18 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public IFieldMapper fieldMapper = new SimpleFieldMapper();
 
     /**
-     * A pre-parsed {@link org.apache.lucene.search.Query} object or a {@link String} parsed using the built-in
-     * {@link org.apache.lucene.queryParser.QueryParser} over a set of search fields returned from the
-     * {@link #fieldMapper}.
-     *
+     * A pre-parsed {@link org.apache.lucene.search.Query} object or a {@link String}
+     * parsed using the built-in {@link org.apache.lucene.queryParser.QueryParser} over a
+     * set of search fields returned from the {@link #fieldMapper}.
+     * 
      * @label Query
      * @group Search query
      * @level Basic
      */
     @Input
     @Processing
-    @Attribute(key = AttributeNames.QUERY, inherit = false) /* false intentional! */
+    @Attribute(key = AttributeNames.QUERY, inherit = false)
+    /* false intentional! */
     @Required
     @ImplementingClasses(classes =
     {
@@ -152,8 +182,39 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     public Object query;
 
     /**
-     * A context-shared map between {@link org.apache.lucene.store.Directory} objects and any opened
-     * {@link org.apache.lucene.search.IndexSearcher}s.
+     * Keeps references to Lucene document instances in Carrot2 documents. Please bear in
+     * mind two limitations:
+     * <ul>
+     * <li><strong>Lucene documents will not be serialized to XML/JSON.</strong>
+     * Therefore, they can only be accessed when invoking clustering through Carrot2 Java
+     * API. To pass some of the fields of Lucene documents to Carrot2 XML/JSON output,
+     * implement a custom {@link IFieldMapper} that will store those fields as regular
+     * Carrot2 fields.</li>
+     * <li><strong>Increased memory usage</strong> when using a {@link Controller}
+     * {@link ControllerFactory#createCachingPooling(Class...) configured to cache} the
+     * output from {@link LuceneDocumentSource}.</li>
+     * </ul>
+     * 
+     * @label Keep Lucene documents
+     * @group Results
+     * @level Advanced
+     */
+    @Input
+    @Processing
+    @Attribute
+    @Internal
+    public boolean keepLuceneDocuments = false;
+
+    /**
+     * Carrot2 {@link Document} field that stores the original Lucene document instance.
+     * Keeping of Lucene document instances is disabled by default. Enable it using the
+     * {@link #keepLuceneDocuments} attribute.
+     */
+    public final static String LUCENE_DOCUMENT_FIELD = "luceneDocument";
+
+    /**
+     * A context-shared map between {@link org.apache.lucene.store.Directory} objects and
+     * any opened {@link org.apache.lucene.search.IndexSearcher}s.
      */
     private IdentityHashMap<Directory, IndexSearcher> openIndexes;
 
@@ -161,6 +222,20 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
      * Controller context serving as the synchronization monitor when opening indices.
      */
     private IControllerContext context;
+
+    /**
+     * A serialization listener that prevents Lucene documents from appearing in the
+     * Carrot2 documents serialized to XML/JSON.
+     */
+    private static final IDocumentSerializationListener removeLuceneDocument = new IDocumentSerializationListener()
+    {
+        @Override
+        public void beforeSerialization(Document document,
+            Map<String, ?> otherFieldsForSerialization)
+        {
+            otherFieldsForSerialization.remove(LUCENE_DOCUMENT_FIELD);
+        }
+    };
 
     /*
      * 
@@ -239,14 +314,13 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
 
             if (searchFields.length == 1)
             {
-                query = new QueryParser(
-                    Version.LUCENE_30, searchFields[0], analyzer).parse(textQuery);
+                query = new QueryParser(Version.LUCENE_30, searchFields[0], analyzer)
+                    .parse(textQuery);
             }
             else
             {
-                query = new MultiFieldQueryParser(
-                    Version.LUCENE_30, searchFields, analyzer)
-                    .parse(textQuery);
+                query = new MultiFieldQueryParser(Version.LUCENE_30, searchFields,
+                    analyzer).parse(textQuery);
             }
         }
 
@@ -261,6 +335,15 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             final Document doc = new Document();
             final org.apache.lucene.document.Document luceneDoc = searcher
                 .doc(scoreDoc.doc);
+
+            // Set score before mapping to give the mapper a chance to override it
+            doc.setScore((double) scoreDoc.score);
+
+            if (keepLuceneDocuments)
+            {
+                doc.setField(LUCENE_DOCUMENT_FIELD, luceneDoc);
+                doc.addSerializationListener(removeLuceneDocument);
+            }
 
             this.fieldMapper.map((Query) query, analyzer, luceneDoc, doc);
             response.results.add(doc);
