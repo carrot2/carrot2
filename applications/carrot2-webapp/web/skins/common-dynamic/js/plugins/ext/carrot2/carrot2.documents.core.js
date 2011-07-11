@@ -64,14 +64,16 @@
    */
   function select(documentIndexes) {
     withDocumentsDetached(function ($documents) {
-      var documentsIndex = 0;
+      var selected = { };
+      for (var i = 0; i < documentIndexes.length; i++) {
+        selected["d" + documentIndexes[i]] = true;
+      }
+      
       $documents.children().each(function(i) {
-        if (documentsIndex >= documentIndexes.length || documentIndexes[documentsIndex] > i) {
-          $(this).hide();
-        }
-        else {
-          $(this).show();
-          documentsIndex++;
+        if (selected[this.id]) {
+          $(this).removeClass("hide");
+        } else {
+          $(this).addClass("hide");
         }
       });
     });
@@ -82,7 +84,7 @@
    */
   function selectAll() {
     withDocumentsDetached(function ($documents) {
-      $documents.children().show();
+      $documents.children().removeClass("hide");
     });
   }
   

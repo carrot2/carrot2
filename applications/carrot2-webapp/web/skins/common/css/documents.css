@@ -80,3 +80,7 @@ a.show-preview {
 #status-query {
   font-weight: bold;
 }
+
+.hide {
+	display: none;
+}
