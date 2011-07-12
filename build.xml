@@ -385,8 +385,6 @@
       <batchtest todir="${tests.report.dir}" unless="testcase">
         <fileset dir="${build.dir.tests}">
           <include name="**/*Test.class" />
-          <exclude name="**/OpenSearchDocumentSourceByPageIncrementTest.class" 
-            unless="icerocket.tests.enabled" />
           <exclude name="org/carrot2/source/yahoo/*Test.class" 
             unless="yahooapi.tests.enabled" />
         </fileset>

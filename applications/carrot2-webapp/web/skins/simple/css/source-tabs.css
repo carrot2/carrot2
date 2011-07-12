@@ -89,11 +89,6 @@ ul.tabs li.tab .pubmed {
   background-image: url('../img/sources/pubmed.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
-ul.tabs li.tab .icerocket {
-  background-image: url('../img/sources/icerocket.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 1px; sprite-margin-right: 1px */
-  padding-left: 18px;
-}
-
 ul.tabs li.tab .put {
   background-image: url('../img/sources/put.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 1px */
 }

@@ -129,10 +129,6 @@ ul.tabs li.tab .pubmed {
   background-image: url('../img/sources/pubmed.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px; sprite-margin-top: 1px; */
 }
 
-ul.tabs li.tab .icerocket {
-  background-image: url('../img/sources/icerocket.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px; sprite-margin-top: 2px; */
-}
-
 ul.tabs li.tab .indeed {
   background-image: url('../img/sources/jobs.gif'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-left: 2px */
   padding-left: 18px;
