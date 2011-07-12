@@ -266,7 +266,11 @@
     var clusterDocuments = $.clusters.documents(clusterId);
 
     // Notify listeners
-    $("#clusters-panel").trigger("carrot2-clusters-selected", [ clusterId, clusterDocuments ]);
+    $("#clusters-panel").trigger("carrot2-clusters-selected", [ 
+       clusterId, 
+       clusterDocuments, 
+       $("#" + clusterId + " > a > .label").text() 
+    ]);
 
     return this;
   };

@@ -24,8 +24,8 @@
       }
     });
     
-    $("#clusters-panel").bind("carrot2-clusters-selected", function(target, clusterId, documents) {
-      $("#status-cluster-label").html($("#" + clusterId + " > a > .label").text());
+    $("#clusters-panel").bind("carrot2-clusters-selected", function(target, clusterId, documents, clusterLabel) {
+      $("#status-cluster-label").html(clusterLabel);
       $("#status-cluster-size").html(documents.length);
       
       $("#documents-status-overall").hide();

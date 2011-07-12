@@ -6,13 +6,7 @@
    * Binds a handler for an event called when documents finish loading.
    */
   $(document).ready(function() {
-    $("#clusters-panel").bind("carrot2-clusters-selected", function(target, clusterId, documents) {
-      // More like this currently works only with the tree view
-      // See: http://issues.carrot2.org/browse/CARROT-435
-      if ($("#clusters-visu").size() > 0) {
-        return;
-      }
-      
+    $("#clusters-panel").bind("carrot2-clusters-selected", function(target, clusterId, documents, clusterLabel) {
       $("#more-like-this").remove();
       if ($("#" + clusterId).is(".other")) {
         return;
@@ -33,7 +27,7 @@
       
       $("<span id='more-like-this'>(<a href='#'>" + label + "</a>)</span>")
         .click(function() {
-          $("#query").val(prefix + $("#" + clusterId + " > a > span.label").text()).get(0).form.submit();
+          $("#query").val(prefix + clusterLabel).get(0).form.submit();
           return false;
         }).appendTo("#documents-status");
     });
