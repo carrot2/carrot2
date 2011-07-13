@@ -1,0 +1,42 @@
+<attribute-sets>
+	<attribute-set id="idolsearch">
+		<value-set>
+			<label>IDOL</label>
+      <!-- 
+			   <attribute key="IdolDocumentSource.idolServerName">
+			      <value value="servername" />
+			   </attribute>
+			   <attribute key="IdolDocumentSource.idolServerPort">
+			      <value type="java.lang.Integer" value="9000" />
+			   </attribute>
+			   <attribute key="IdolDocumentSource.xslTemplateName">
+			      <value value="RSS"/>
+			   </attribute>
+			   <attribute key="IdolDocumentSource.otherSearchAttributes">
+			      <value value="summary=context&amp;combine=simple" />
+			   </attribute>v			   
+			   <attribute key="IdolDocumentSource.resultsPerPage">
+			      <value type="java.lang.Integer" value="50" />
+			   </attribute>
+			   <attribute key="IdolDocumentSource.minScore">
+			      <value type="java.lang.Integer" value="80"/>
+			   </attribute>
+			   <attribute key="LingoClusteringAlgorithm.nativeMatrixUsed">
+			      <value type="java.lang.Boolean" value="true" />
+			   </attribute>
+			   <attribute key="search-mode">
+			      <value value="SPECULATIVE" />
+			   </attribute>
+			   <attribute key="results">
+			      <value type="java.lang.Integer" value="100" />
+			   </attribute>
+			   <attribute key="start">
+			      <value type="java.lang.Integer" value="0"/>
+			   </attribute>
+			   <attribute key="IdolDocumentSource.maximumResults">
+			      <value type="java.lang.Integer" value="500" />
+			   </attribute>
+       -->
+		</value-set>
+	</attribute-set>
+</attribute-sets>

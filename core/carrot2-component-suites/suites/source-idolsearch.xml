@@ -1,0 +1,13 @@
+<component-suite>
+  <sources>
+    <!-- Generic (uninitialized) instance of OpenSearchDocumentSource -->
+    <source component-class="org.carrot2.source.idol.IdolDocumentSource" id="idolSearch" attribute-sets-resource="source-idol-attributes.xml">>
+      <label>IDOL Search</label>
+      <title>IDOL Search</title>
+      <description>
+        IDOL document source retrieves search results from Autonomy IDOL search engines supporting
+        the OpenSearch standard.
+      </description>
+    </source>
+  </sources>
+</component-suite>
