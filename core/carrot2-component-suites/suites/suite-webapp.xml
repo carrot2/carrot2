@@ -23,7 +23,6 @@
     <include suite="source-indeed.xml" />
     <include suite="source-pubmed.xml" />
     <include suite="source-put.xml" />
-    <include suite="source-icerocket.xml" />
 
     <!-- Algorithms -->
     <include suite="algorithm-lingo.xml" />

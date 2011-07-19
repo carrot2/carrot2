@@ -12,13 +12,9 @@
 
 package org.carrot2.source.opensearch;
 
-import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.carrot2.core.Document;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingException;
@@ -37,8 +33,6 @@ import org.carrot2.util.resource.URLResourceWithParams;
 import org.slf4j.Logger;
 
 import com.google.common.collect.Maps;
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.fetcher.FeedFetcher;
 import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
 
@@ -232,7 +226,6 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     {
         return new SearchEngineResponseCallable()
         {
-            @SuppressWarnings("rawtypes")
             public SearchEngineResponse search() throws Exception
             {
                 // Replace variables in the URL
@@ -259,44 +252,8 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
                 final String url = urlExtension.toString();
                 logger.debug("Fetching URL: " + url);
 
-                /*
-                 * TODO: Rome fetcher uses SUN's HttpClient and opens a persistent HTTP
-                 * connection (background thread that keeps reference to the class
-                 * loader). This causes minor memory leaks when reloading Web
-                 * applications. Consider: 1) patching rome fetcher sources and adding
-                 * Connection: close to request headers, 2) using Apache HttpClient, 3)
-                 * using manual fetch of the syndication feed.
-                 */
-                final SyndFeed feed = feedFetcher.retrieveFeed(new URL(url));
-                final SearchEngineResponse response = new SearchEngineResponse();
-
-                // The documentation does not mention that null value can be returned
-                // but we've seen a NPE here:
-                // http://builds.carrot2.org/browse/C2HEAD-SOURCES-4.
-                if (feed != null)
-                {
-                    final List entries = feed.getEntries();
-                    for (Iterator it = entries.iterator(); it.hasNext();)
-                    {
-                        final SyndEntry entry = (SyndEntry) it.next();
-                        final Document document = new Document();
-
-                        document.setField(Document.TITLE, clean(entry.getTitle()));
-                        document.setField(Document.SUMMARY, clean(entry.getDescription()
-                            .getValue()));
-                        document.setField(Document.CONTENT_URL, entry.getLink());
-
-                        response.results.add(document);
-                    }
-                }
-
-                return response;
+                return RomeFetcherUtils.fetchUrl(url, feedFetcher);
             }
         };
-    }
-
-    private String clean(String string)
-    {
-        return StringUtils.removeHtmlTags(StringEscapeUtils.unescapeHtml(string));
     }
 }

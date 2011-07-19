@@ -15,12 +15,13 @@ package org.carrot2.workbench.vis.foamtree;
 import java.util.Map;
 
 import org.carrot2.workbench.core.ui.SearchEditor;
-import org.carrot2.workbench.vis.Activator;
-import org.carrot2.workbench.vis.FlashViewPage;
+import org.carrot2.workbench.core.ui.actions.ExportImageAction;
+import org.carrot2.workbench.core.ui.actions.IControlProvider;
+import org.carrot2.workbench.vis.*;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.part.IPageSite;
 
 
@@ -74,6 +75,15 @@ final class FoamTreeViewPage extends FlashViewPage
 
         IPreferenceStore store = Activator.getInstance().getPreferenceStore();
         store.addPropertyChangeListener(listener);
+
+        pageSite.getActionBars().getToolBarManager().add(
+            new ExportImageAction(new IControlProvider()
+            {
+                public Control getControl()
+                {
+                    return FoamTreeViewPage.this.getControl();
+                }
+            }));
     }
 
     @Override

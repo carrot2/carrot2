@@ -271,6 +271,20 @@ public final class ProcessingResult
     }
 
     /**
+     * Serializes this {@link ProcessingResult} to an XML string.
+     */
+    public String serialize()
+    {
+        try {
+            StringWriter sw = new StringWriter();
+            new Persister().write(this, sw);
+            return sw.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
      * Serializes this {@link ProcessingResult} to an XML stream. The output includes all
      * documents, clusters and other attributes.
      * <p>
@@ -338,6 +352,14 @@ public final class ProcessingResult
         new Persister().write(this, stream);
 
         attributes = backupAttributes;
+    }
+    
+    /**
+     * Deserialize from an input stream of characters.
+     */
+    public static ProcessingResult deserialize(CharSequence input) throws Exception
+    {
+        return new Persister().read(ProcessingResult.class, input.toString());
     }
 
     /**

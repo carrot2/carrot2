@@ -70,12 +70,18 @@
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
             targetID="org.carrot2.workbench.core.perspective.search">
-         <viewShortcut
-               id="org.carrot2.workbench.views.circles">
-         </viewShortcut>
+         <viewShortcut id="org.carrot2.workbench.views.circles" />
+         <viewShortcut id="org.carrot2.workbench.views.foamtree" />
 
          <view
                id="org.carrot2.workbench.views.circles"
+               relationship="stack"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.clusters">
+         </view>
+
+         <view
+               id="org.carrot2.workbench.views.foamtree"
                relationship="stack"
                visible="true"
                relative="org.carrot2.workbench.core.views.clusters">
@@ -84,9 +90,8 @@
       
       <perspectiveExtension
             targetID="org.carrot2.workbench.core.perspective.tuning">
-         <viewShortcut
-               id="org.carrot2.workbench.views.circles">
-         </viewShortcut>
+         <viewShortcut id="org.carrot2.workbench.views.circles" />
+         <viewShortcut id="org.carrot2.workbench.views.foamtree" />
 
          <view
                id="org.carrot2.workbench.views.circles"
@@ -94,16 +99,6 @@
                visible="true"
                relative="org.carrot2.workbench.core.views.clusters">
          </view>
-      </perspectiveExtension>      
-   </extension>
-   
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.carrot2.workbench.core.perspective.search">
-         <viewShortcut
-               id="org.carrot2.workbench.views.foamtree">
-         </viewShortcut>
 
          <view
                id="org.carrot2.workbench.views.foamtree"
@@ -112,21 +107,31 @@
                relative="org.carrot2.workbench.core.views.clusters">
          </view>
       </perspectiveExtension>
-
+      
       <perspectiveExtension
-            targetID="org.carrot2.workbench.core.perspective.tuning">
-         <viewShortcut
-               id="org.carrot2.workbench.views.foamtree">
-         </viewShortcut>
+            targetID="org.carrot2.workbench.core.perspective.visualization">
+         <viewShortcut id="org.carrot2.workbench.views.circles" />
+         <viewShortcut id="org.carrot2.workbench.views.foamtree" />
+
+         <view
+               id="org.carrot2.workbench.views.circles"
+               ratio="0.5"
+               relationship="bottom"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.documents">
+         </view>
 
          <view
                id="org.carrot2.workbench.views.foamtree"
-               relationship="stack"
+               relationship="right"
+               ratio="0.5"
                visible="true"
-               relative="org.carrot2.workbench.core.views.clusters">
+               relative="org.carrot2.workbench.views.circles">
          </view>
       </perspectiveExtension>      
+
    </extension>
+   
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer

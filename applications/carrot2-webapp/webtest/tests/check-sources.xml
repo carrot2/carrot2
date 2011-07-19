@@ -2,7 +2,6 @@
   <import file="../includes/webapp.xml" />
 
   <target name="webtest">
-    <property name="webtest.skip.source.icerocket" value="true" />
     <property name="webtest.skip.source.pubmed" value="true" />
     <property name="webtest.skip.source.wiki" value="true" />
     <property name="webtest.skip.source.boss-images" value="true" />

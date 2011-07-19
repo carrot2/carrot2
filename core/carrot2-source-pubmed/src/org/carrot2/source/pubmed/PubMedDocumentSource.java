@@ -20,10 +20,16 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.http.HttpStatus;
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
 import org.carrot2.util.StringUtils;
+import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.util.httpclient.HttpClientFactory;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -41,6 +47,24 @@ public class PubMedDocumentSource extends SimpleSearchEngine
     /** PubMed fetch service URL */
     public static final String E_FETCH_URL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi";
 
+    /** HTTP timeout for pubmed services.*/
+    public static final int PUBMED_TIMEOUT = HttpClientFactory.DEFAULT_TIMEOUT * 3;
+
+    /**
+     * Maximum results to fetch. No more than the specified number of results
+     * will be fetched from PubMed, regardless of the requested number of results. 
+     * 
+     * @label Maximum results
+     * @group Search query
+     * @level ADVANCED
+     */
+    @Processing
+    @Input
+    @Attribute
+    @IntRange(min = 1)
+    @Internal(configuration = true)
+    public int maxResults = 150;
+    
     @Override
     protected SearchEngineResponse fetchSearchResponse() throws Exception
     {
@@ -72,9 +96,10 @@ public class PubMedDocumentSource extends SimpleSearchEngine
 
         final String url = E_SEARCH_URL + "?db=pubmed&usehistory=n&term="
             + StringUtils.urlEncodeWrapException(query, "UTF-8") + "&retmax="
-            + Integer.toString(requestedResults);
+            + Integer.toString(Math.min(requestedResults, maxResults));
 
-        final HttpUtils.Response response = HttpUtils.doGET(url, null, null);
+        final HttpUtils.Response response = HttpUtils.doGET(url, null, null,
+            null, null, PUBMED_TIMEOUT);
 
         // Get document IDs
         if (response.status == HttpStatus.SC_OK)
@@ -111,7 +136,8 @@ public class PubMedDocumentSource extends SimpleSearchEngine
         final String url = E_FETCH_URL + "?db=pubmed&retmode=xml&rettype=abstract&id="
             + getIdsString(ids);
 
-        final HttpUtils.Response response = HttpUtils.doGET(url, null, null);
+        final HttpUtils.Response response = HttpUtils.doGET(url, null, null,
+            null, null, PUBMED_TIMEOUT);
 
         // Get document contents
         // No URL logging here, as the url can get really long

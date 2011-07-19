@@ -20,7 +20,7 @@ Apache Software Foundation http://www.apache.org/.
    </configIni>
 
    <launcherArgs>
-      <programArgs>-data workspace</programArgs>
+      <programArgs>-data @noDefault</programArgs>
       <vmArgs>-Xms256m
 -Xmx512m
 -Dorg.eclipse.update.reconcile=false

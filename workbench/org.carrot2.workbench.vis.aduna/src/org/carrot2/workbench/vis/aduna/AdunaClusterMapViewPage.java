@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.*;
 import java.util.Map;
 
 import javax.swing.*;
@@ -26,6 +27,7 @@ import org.carrot2.core.Cluster;
 import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.ui.*;
+import org.carrot2.workbench.core.ui.actions.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -37,6 +39,7 @@ import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
 
@@ -321,12 +324,32 @@ final class AdunaClusterMapViewPage extends Page
         }
     };
 
+    /**
+     * A composite with embedded AWT stuff. 
+     */
+    private Composite embedded;
+
     /*
      *
      */
     public AdunaClusterMapViewPage(SearchEditor editor)
     {
         this.editor = editor;
+    }
+
+    @Override
+    public void init(IPageSite pageSite)
+    {
+        super.init(pageSite);
+
+        pageSite.getActionBars().getToolBarManager().add(
+            new ExportImageAction(new IImageStreamProvider()
+            {
+                public void save(OutputStream os) throws IOException
+                {
+                    mapMediator.getClusterMap().exportPngImage(os);
+                }
+            }));
     }
 
     /*
@@ -386,7 +409,7 @@ final class AdunaClusterMapViewPage extends Page
         layout.marginWidth = 0;
         scrollable.setLayout(layout);
         
-        final Composite embedded = new Composite(scrollable, SWT.NO_BACKGROUND | SWT.EMBEDDED);
+        embedded = new Composite(scrollable, SWT.NO_BACKGROUND | SWT.EMBEDDED);
         embedded.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
         final Frame frame = SWT_AWT.new_Frame(embedded);

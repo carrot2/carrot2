@@ -16,6 +16,7 @@ import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatD
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.core.Cluster;
+import org.fest.assertions.Delta;
 
 /**
  * Checks pairwise assertions on clusters.
@@ -66,7 +67,7 @@ public interface ClusterPairCheck
         public void check(Cluster actual, Cluster expected)
         {
             assertThat(actual.getScore()).as("cluster score").isEqualTo(
-                expected.getScore());
+                expected.getScore(), Delta.delta(0.001));
         }
     }
 

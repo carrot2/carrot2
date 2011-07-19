@@ -24,9 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.io.output.NullOutputStream;
 import org.carrot2.core.attribute.AttributeNames;
@@ -296,6 +294,30 @@ public class ProcessingResultTest
         Assertions.assertThat(root.get("results")).isNotNull();
     }
     
+    @Test
+    public void testNoFalseJunkGroupAttribute() throws Exception
+    {
+        Cluster a, b, c;
+        final HashMap<String, Object> attrs = Maps.newHashMap();
+        attrs.put(AttributeNames.CLUSTERS, Arrays.asList(
+            a = new Cluster("a"),
+            b = new Cluster("b"),
+            c = new Cluster("c")));
+
+        b.setOtherTopics(false);
+        c.setOtherTopics(true);
+
+        ProcessingResult pr = new ProcessingResult(attrs);
+        pr = ProcessingResult.deserialize(pr.serialize());
+        
+        assertEquals("a", (a = pr.getClusters().get(0)).getLabel());
+        assertEquals("b", (b = pr.getClusters().get(1)).getLabel());
+        assertEquals("c", (c = pr.getClusters().get(2)).getLabel());
+        assertThat(a.getAttribute(Cluster.OTHER_TOPICS)).isNull();
+        assertThat(b.getAttribute(Cluster.OTHER_TOPICS)).isNull();
+        assertThat(c.getAttribute(Cluster.OTHER_TOPICS)).isEqualTo(Boolean.TRUE);
+    }
+
     private void checkJsonQuery(final JsonNode root)
     {
         Assertions.assertThat(root.get("query").getTextValue()).isEqualTo("query");

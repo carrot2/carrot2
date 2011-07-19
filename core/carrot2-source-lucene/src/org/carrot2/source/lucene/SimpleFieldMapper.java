@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -29,8 +28,8 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 /**
- * A simple {@link IFieldMapper} with one-to-one mapping between the default title, url and
- * summary fields.
+ * A simple {@link IFieldMapper} with one-to-one mapping between the default title, url
+ * and summary fields.
  */
 @Bindable
 public class SimpleFieldMapper implements IFieldMapper
@@ -92,7 +91,8 @@ public class SimpleFieldMapper implements IFieldMapper
     public List<String> searchFields;
 
     /**
-     * Snippet formatter for the highlighter. Highlighter is not used if <code>null</code>.
+     * Snippet formatter for the highlighter. Highlighter is not used if <code>null</code>
+     * .
      * 
      * @label Formatter
      * @group Highlighter
@@ -210,7 +210,14 @@ public class SimpleFieldMapper implements IFieldMapper
                     final String [] fragments = highlighter.getBestFragments(analyzer,
                         contentField, value, contextFragments);
 
-                    summary = StringUtils.join(fragments, fragmentJoin);
+                    if (fragments.length > 0)
+                    {
+                        summary = StringUtils.join(fragments, fragmentJoin);
+                    }
+                    else
+                    {
+                        summary = value;
+                    }
                 }
                 else
                 {
@@ -244,10 +251,8 @@ public class SimpleFieldMapper implements IFieldMapper
         {
             if (field.name().equals(fieldName) && (!field.isBinary()))
             {
-                if (builder == null) 
-                    builder = new StringBuilder();
-                if (builder.length() > 0) 
-                    builder.append(" ");
+                if (builder == null) builder = new StringBuilder();
+                if (builder.length() > 0) builder.append(" ");
 
                 builder.append(field.stringValue());
             }

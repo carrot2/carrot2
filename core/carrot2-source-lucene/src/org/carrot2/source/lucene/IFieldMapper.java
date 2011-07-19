@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -17,7 +16,9 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 
 /**
- * Maps Lucene index's fields onto Carrot2 {@link Document} fields.
+ * Maps Lucene index's fields onto Carrot2 {@link Document} fields. You can provide your
+ * own field mapper to {@link LuceneDocumentSource} using the
+ * {@link LuceneDocumentSource#fieldMapper} attribute.
  */
 public interface IFieldMapper
 {
@@ -39,5 +40,6 @@ public interface IFieldMapper
      * @param luceneDoc Lucene hit.
      * @param doc Target Carrot2 document.
      */
-    void map(Query luceneQuery, Analyzer analyzer, Document luceneDoc, org.carrot2.core.Document doc);
+    void map(Query luceneQuery, Analyzer analyzer, Document luceneDoc,
+        org.carrot2.core.Document doc);
 }

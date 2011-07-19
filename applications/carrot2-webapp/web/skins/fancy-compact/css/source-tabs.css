@@ -123,11 +123,6 @@ ul.tabs li.tab .wiki {
   background-image: url('../img/sources/wiki.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 1px */
 }
 
-ul.tabs li.tab .icerocket {
-  background-image: url('../img/sources/icerocket.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 1px; sprite-margin-right: 1px */
-  padding-left: 18px;
-}
-
 ul.tabs li.tab .indeed {
   background-image: url('../img/sources/indeed.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
   padding-left: 13px;

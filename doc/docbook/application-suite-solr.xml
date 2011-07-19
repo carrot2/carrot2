@@ -74,7 +74,7 @@
   
   <note>
     <para>
-      Solr nightly builds (trunk, branch_3x) already ship with the newest version of &C2;
+      Solr 3.2, 3.3 and nightly builds (trunk, branch_3x) already ship with the newest version of &C2;
       and do not require the compatibility package.       
     </para>
   </note>

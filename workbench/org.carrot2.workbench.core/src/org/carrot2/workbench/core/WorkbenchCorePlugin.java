@@ -13,6 +13,8 @@
 package org.carrot2.workbench.core;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,9 +42,9 @@ import org.carrot2.workbench.core.helpers.Utils;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -50,6 +52,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -110,6 +114,9 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     {
         super.start(context);
         plugin = this;
+        
+        // Fix instance location first.
+        fixInstanceLocation();
 
         // Scan the list of suite extension points.
         scanSuites();
@@ -129,6 +136,44 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
 
         controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
         controller.init(initAttributes, componentSuite.getComponentConfigurations());        
+    }
+
+    private void fixInstanceLocation()
+    {
+        Logger logger = LoggerFactory.getLogger(WorkbenchCorePlugin.class);
+
+        org.eclipse.osgi.service.datalocation.Location instanceLocation = 
+            Platform.getInstanceLocation();
+        if (!instanceLocation.isSet())
+        {
+            org.eclipse.osgi.service.datalocation.Location installLocation = 
+                Platform.getInstallLocation();
+            if (installLocation.isSet())
+            {
+                try
+                {
+                    instanceLocation.set(installLocation.getDataArea("workspace"), true);
+                    logger.info("Changed instanceLocation to: " + instanceLocation.getURL());
+                }
+                catch (Exception e)
+                {
+                    logger.error("Unable to set instanceLocation to: " + instanceLocation.getURL());
+                }
+            }
+            else
+            {
+                logger.error("Could not determine install location.");
+            }
+        }
+        else
+        {
+            logger.info("Instance location already set to: " + instanceLocation.getURL());
+        }
+        logger.debug("User location: " + Platform.getUserLocation().getURL());
+        logger.debug("Install location: " + Platform.getInstallLocation().getURL());
+        logger.debug("Instance location: " + Platform.getInstanceLocation().getURL());
+        logger.debug("Platform working location: " + Platform.getLocation());
+        logger.debug("Configuration location: " + Platform.getConfigurationLocation().getURL());        
     }
 
     /*
@@ -380,7 +425,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
      */
     private IResourceLocator getWorkspaceResourceLocator()
     {
-        final IPath instanceLocation = Platform.getLocation();
+        final URL instanceLocation = Platform.getInstanceLocation().getURL();
         if (instanceLocation == null)
         {
             // Issue a warning about read-only location.
@@ -388,11 +433,32 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             return null;
         }
 
+        final URI uri;
+        try
+        {
+            uri = instanceLocation.toURI();
+        }
+        catch (URISyntaxException e)
+        {
+            // Issue a warning about read-only location.
+            Utils.logError("Instance location not parseable to URI: "
+                + instanceLocation, false);
+            return null;
+        }
+        
         /*
          * Check if the workspace directory exists. It may happen the workspace has just
          * been created.
          */
-        final File workspacePath = instanceLocation.toFile().getAbsoluteFile();
+        if (!URIUtil.isFileURI(uri))
+        {
+            // Issue a warning about read-only location.
+            Utils.logError("Instance location not a file URI: "
+                + instanceLocation, false);
+            return null;
+        }
+
+        final File workspacePath = URIUtil.toFile(uri).getAbsoluteFile();
         if (!workspacePath.exists())
         {
             workspacePath.mkdirs();

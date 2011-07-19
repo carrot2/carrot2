@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Autonomy IDOL API Document Source
+Bundle-SymbolicName: org.carrot2.source.idol;singleton:=true
+Bundle-Version: 0.0.0.QUALIFIER
+Export-Package: org.carrot2.source.idol
+Require-Bundle: org.carrot2.core,
+ org.carrot2.util.common,
+ org.carrot2.source.opensearch;bundle-version="0.0.0"
+Bundle-ClassPath: META-INF/,
+ .
+Bundle-Vendor: Carrot2.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
