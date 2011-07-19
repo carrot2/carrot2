@@ -272,7 +272,7 @@ public class IdolDocumentSource extends MultipageSearchEngine
     }
 
     // get the security token using the username
-    protected String getSecurityToken()
+    private String getSecurityToken()
     {
         String rtn = "";
         try
@@ -283,7 +283,7 @@ public class IdolDocumentSource extends MultipageSearchEngine
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             org.w3c.dom.Document doc = db.parse(new URL(url).openStream());
-            rtn = URLEncoder.encode(GettingText(doc), "UTF-8");
+            rtn = URLEncoder.encode(getSecurityInfo(doc), "UTF-8");
         }
         catch (Exception e)
         {
@@ -293,20 +293,18 @@ public class IdolDocumentSource extends MultipageSearchEngine
     }
 
     // extract the token from the XML document
-    public String GettingText(org.w3c.dom.Document document)
+    private String getSecurityInfo(org.w3c.dom.Document document)
     {
         String rtn = "";
         Element e = document.getDocumentElement();
         NodeList nodeList = e.getElementsByTagName("responsedata");
         for (int temp = 0; temp < nodeList.getLength(); temp++)
         {
-
             Node nNode = nodeList.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE)
             {
                 Element eElement = (Element) nNode;
                 rtn = getTagValue("autn:securityinfo", eElement);
-
             }
         }
         return rtn;
