@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,10 +14,7 @@ package org.carrot2.workbench.core.ui;
 import java.util.Map;
 
 import org.carrot2.core.IClusteringAlgorithm;
-import org.carrot2.util.attribute.AttributeValueSet;
-import org.carrot2.util.attribute.AttributeValueSets;
 import org.eclipse.core.runtime.IPath;
-
 
 /**
  * Save/load attribute values of the current {@link SearchInput}'s
@@ -37,54 +33,36 @@ final class SaveAlgorithmAttributesAction extends SaveAttributesAction
         this.searchInput = searchInput;
     }
 
-    /**
+    /*
      * 
      */
     @Override
-    protected void applyAttributes(AttributeValueSets attrs)
+    protected void applyAttributes(Map<String, Object> attrs)
     {
-        for (Map.Entry<String, Object> e : attrs.getDefaultAttributeValueSet()
-            .getAttributeValues().entrySet())
+        for (Map.Entry<String, Object> e : attrs.entrySet())
         {
             searchInput.setAttribute(e.getKey(), e.getValue());
-        }        
+        }
     }
 
-    /**
+    /*
      * 
      */
     @Override
-    protected AttributeValueSets collectAttributes()
+    protected Map<String, Object> collectAttributes()
     {
-        /*
-         * Extract all @Input defaults for a given algorithm.
-         */
-        final AttributeValueSet defaults = getDefaultAttributeValueSet(searchInput
-            .getAlgorithmId());
-
-        /*
-         * Create an AVS for the default values and a based-on AVS with overridden
-         * values.
-         */
-        final AttributeValueSet avs = searchInput.getAttributeValueSet();
-        final Map<String, Object> overrides = avs.getAttributeValues();
-        removeSpecialKeys(overrides);
-        removeKeysWithDefaultValues(overrides, defaults);
-        overrides.keySet().retainAll(defaults.getAttributeValues().keySet());
-
-        final AttributeValueSet overridenAvs = new AttributeValueSet(
-            "overridden-attributes", defaults);
-        overridenAvs.setAttributeValues(overrides);
-
-        // Flatten and save.
-        final AttributeValueSets merged = new AttributeValueSets();
-        merged.addAttributeValueSet(overridenAvs.label, overridenAvs);
-        merged.addAttributeValueSet(defaults.label, defaults);
-        merged.setDefaultAttributeValueSetId(overridenAvs.label);
-
-        return merged;
+        return searchInput.getAttributeValueSet().getAttributeValues();
     }
-    
+
+    /*
+     * 
+     */
+    @Override
+    protected String getComponentId()
+    {
+        return searchInput.getAlgorithmId();
+    }
+
     @Override
     protected IPath getFileNameHint()
     {

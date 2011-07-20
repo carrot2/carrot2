@@ -13,45 +13,25 @@
 package org.carrot2.workbench.core;
 
 import java.io.File;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.Controller;
-import org.carrot2.core.ControllerFactory;
-import org.carrot2.core.DocumentSourceDescriptor;
-import org.carrot2.core.IClusteringAlgorithm;
-import org.carrot2.core.IDocumentSource;
-import org.carrot2.core.ProcessingComponentDescriptor;
-import org.carrot2.core.ProcessingComponentSuite;
+import org.carrot2.core.*;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.util.resource.DirLocator;
-import org.carrot2.util.resource.IResourceLocator;
-import org.carrot2.util.resource.PrefixDecoratorLocator;
-import org.carrot2.util.resource.ResourceLookup;
+import org.carrot2.util.resource.*;
 import org.carrot2.util.resource.ResourceLookup.Location;
-import org.carrot2.util.resource.URLResource;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IContributor;
-import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
+import org.osgi.framework.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -433,32 +413,23 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             return null;
         }
 
-        final URI uri;
-        try
-        {
-            uri = instanceLocation.toURI();
-        }
-        catch (URISyntaxException e)
+        if (!"file".equalsIgnoreCase(instanceLocation.getProtocol()))
         {
             // Issue a warning about read-only location.
-            Utils.logError("Instance location not parseable to URI: "
+            Utils.logError("Instance location not a file URL: "
                 + instanceLocation, false);
             return null;
         }
         
-        /*
-         * Check if the workspace directory exists. It may happen the workspace has just
-         * been created.
-         */
-        if (!URIUtil.isFileURI(uri))
-        {
-            // Issue a warning about read-only location.
-            Utils.logError("Instance location not a file URI: "
-                + instanceLocation, false);
-            return null;
+        // Invalid URLs may fail when converting to an URI. If so, try brute-force approach.
+        File workspacePath;
+        try {
+            workspacePath = URIUtil.toFile(instanceLocation.toURI());
+        } catch (URISyntaxException e) {
+            workspacePath = new File(instanceLocation.getFile());
         }
-
-        final File workspacePath = URIUtil.toFile(uri).getAbsoluteFile();
+        
+        workspacePath = workspacePath.getAbsoluteFile();
         if (!workspacePath.exists())
         {
             workspacePath.mkdirs();

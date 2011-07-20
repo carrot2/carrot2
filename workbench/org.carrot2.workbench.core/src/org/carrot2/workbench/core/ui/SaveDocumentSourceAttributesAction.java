@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,8 +14,6 @@ package org.carrot2.workbench.core.ui;
 import java.util.Map;
 
 import org.carrot2.core.IDocumentSource;
-import org.carrot2.util.attribute.AttributeValueSet;
-import org.carrot2.util.attribute.AttributeValueSets;
 import org.eclipse.core.runtime.IPath;
 
 /**
@@ -43,48 +40,32 @@ final class SaveDocumentSourceAttributesAction extends SaveAttributesAction
      * 
      */
     @Override
-    protected AttributeValueSets collectAttributes()
+    protected Map<String, Object> collectAttributes()
     {
-        /*
-         * Extract default attributes.
-         */
-        final String sourceId = searchInputView.getSourceId();
-        assert sourceId != null;
-
-        final AttributeValueSet defaults = getDefaultAttributeValueSet(sourceId);
-
-        /*
-         * Create an AVS for the default values and a based-on AVS with overridden values.
-         */
-        final AttributeValueSet overridenAvs = new AttributeValueSet(
-            "overridden-attributes", defaults);
-        final Map<String, Object> overrides = searchInputView
-            .filterAttributesOf(sourceId);
-        removeSpecialKeys(overrides);
-        removeKeysWithDefaultValues(overrides, defaults);
-        overridenAvs.setAttributeValues(overrides);
-
-        // Flatten and save.
-        final AttributeValueSets merged = new AttributeValueSets();
-        merged.addAttributeValueSet(overridenAvs.label, overridenAvs);
-        merged.addAttributeValueSet(defaults.label, defaults);
-        merged.setDefaultAttributeValueSetId(overridenAvs.label);
-        return merged;
+        return searchInputView.filterAttributesOf(getComponentId());
+    }
+    
+    /*
+     * 
+     */
+    @Override
+    protected String getComponentId()
+    {
+        return searchInputView.getSourceId();
     }
 
     /*
      * 
      */
     @Override
-    protected void applyAttributes(AttributeValueSets attrs)
+    protected void applyAttributes(Map<String, Object> attrs)
     {
-        for (Map.Entry<String, Object> e : attrs.getDefaultAttributeValueSet()
-            .getAttributeValues().entrySet())
+        for (Map.Entry<String, Object> e : attrs.entrySet())
         {
             this.searchInputView.setAttribute(e.getKey(), e.getValue());
         }
     }
-    
+
     /*
      * 
      */
