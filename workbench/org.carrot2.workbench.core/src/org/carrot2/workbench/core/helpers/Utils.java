@@ -19,6 +19,7 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.slf4j.LoggerFactory;
 
 /*
  * 
@@ -73,6 +74,8 @@ public final class Utils
      */
     public static void logError(String message, Throwable exception, boolean showError)
     {
+        LoggerFactory.getLogger(Utils.class).error(message, exception);
+
         IStatus status = new Status(IStatus.ERROR,
             WorkbenchCorePlugin.PLUGIN_ID, -1, message, exception);
         WorkbenchCorePlugin.getDefault().getLog().log(status);
@@ -87,13 +90,7 @@ public final class Utils
      */
     public static void logError(String message, boolean showError)
     {
-        final IStatus status = new Status(IStatus.ERROR, 
-            WorkbenchCorePlugin.PLUGIN_ID, message);
-        WorkbenchCorePlugin.getDefault().getLog().log(status);
-        if (showError)
-        {
-            showError(status);
-        }
+        logError(message, null, showError);
     }
 
     /*
