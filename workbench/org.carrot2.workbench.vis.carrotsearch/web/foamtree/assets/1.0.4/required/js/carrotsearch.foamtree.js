@@ -83,6 +83,7 @@ function CarrotSearchFoamTree(settings) {
       maxZeroScoreGroupSize: 0.1,
   
       performRelaxation: true,
+      relaxationAfterResize: true,
       showLabelsDuringRelaxation: false,
       maxRelaxationSteps: 30,
       mapLayoutAlgorithm: "strip",
@@ -202,6 +203,7 @@ function CarrotSearchFoamTree(settings) {
       
       performRelaxation: "autostartRelaxation",
       showLabelsDuringRelaxation: "labelsDuringRelaxation",
+      relaxationAfterResize: "relaxationAfterResize",
       maxRelaxationSteps: "maxRelaxationSteps",
       mapLayoutAlgorithm: "mapLayoutAlgorithm",
 
