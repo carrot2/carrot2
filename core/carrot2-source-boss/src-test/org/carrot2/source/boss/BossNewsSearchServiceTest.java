@@ -44,10 +44,10 @@ public class BossNewsSearchServiceTest
     }
 
     @Test
-    public void testPresidentQuery() throws Exception
+    public void testBusinessQuery() throws Exception
     {
         final int needed = service.metadata.resultsPerPage / 2;
-        final SearchEngineResponse response = service.query("president", 0, needed);
+        final SearchEngineResponse response = service.query("business", 0, needed);
         assertEquals(needed, response.results.size());
     }
 }
