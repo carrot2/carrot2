@@ -27,6 +27,6 @@
     </algorithm>
   </algorithms>
   
-  <include suite="source-yahoo-boss.xml" />
+  <include suite="source-bing.xml" />
   <include suite="algorithm-stc.xml" />
 </component-suite>
