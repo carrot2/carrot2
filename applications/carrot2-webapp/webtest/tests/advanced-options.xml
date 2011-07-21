@@ -20,11 +20,6 @@
       <verifySelectField name="EToolsDocumentSource.language" value="ITALIAN" />
       <verifyCheckbox htmlid="EToolsDocumentSource.safeSearch" checked="true" />
       <verifyInputField name="EToolsDocumentSource.safeSearch" value="true" />
-      
-      <!-- Verify that safe search on images is turned on by default -->
-      <clickElement htmlid="boss-images" />
-      <verifyCheckbox htmlid="BossImageSearchService.filter" checked="true" />
-      <verifyInputField name="BossImageSearchService.filter" value="true" />
     </webtest>
   </target>
 </project>
