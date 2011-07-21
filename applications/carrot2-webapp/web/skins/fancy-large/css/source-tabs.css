@@ -102,7 +102,7 @@ ul.tabs li.tab .news {
   padding-left: 20px;
 }
 
-ul.tabs li.tab .boss-images {
+ul.tabs li.tab .images {
   background-position: 1px 1px;
   background-image: url('../img/sources/images.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 1px; sprite-margin-left: 1px */
 }

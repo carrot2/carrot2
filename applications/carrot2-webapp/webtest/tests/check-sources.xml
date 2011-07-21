@@ -4,8 +4,6 @@
   <target name="webtest">
     <property name="webtest.skip.source.pubmed" value="true" />
     <property name="webtest.skip.source.wiki" value="true" />
-    <property name="webtest.skip.source.boss-images" value="true" />
-    <property name="webtest.skip.source.boss-news" value="true" />
     <property name="webtest.skip.source.put" value="true" />
     <property name="webtest.skip.source.indeed" value="true" />
 
