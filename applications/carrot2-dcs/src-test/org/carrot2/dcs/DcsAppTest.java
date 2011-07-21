@@ -185,7 +185,7 @@ public class DcsAppTest
         final HtmlSelect source = form.getSelectByName("dcs.source");
 
         assertThat(source.getOptions().size()).isGreaterThan(0);
-        final String sourceID = "boss-web";
+        final String sourceID = "bing-web";
         for (HtmlOption option : source.getOptions())
         {
             if (sourceID.equals(option.getAttribute("value")))

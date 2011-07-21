@@ -58,7 +58,7 @@ ul.tabs li.tab .news {
   background-image: url('../img/sources/bulb.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px */
 }
 
-ul.tabs li.tab .boss-images {
+ul.tabs li.tab .images {
   background-image: url('../img/sources/images.png'); /** sprite-ref: vert; sprite-margin-bottom: 10px; sprite-margin-top: 2px; sprite-margin-left: 1px */
 }
 

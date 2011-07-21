@@ -67,8 +67,6 @@ import com.google.common.collect.Maps;
  * <ol>
  * <li>{@link org.carrot2.source.microsoft.BingDocumentSource} through the
  * {@link org.carrot2.source.microsoft.BingDocumentSource#market} attribute,</li>
- * <li>{@link org.carrot2.source.boss.BossDocumentSource} through the
- * {@link org.carrot2.source.boss.BossSearchService#languageAndRegion} attribute,</li>
  * <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the
  * {@link org.carrot2.source.etools.EToolsDocumentSource#language} attribute.</li>
  * </ol>
