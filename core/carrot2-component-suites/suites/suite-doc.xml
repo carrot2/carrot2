@@ -20,19 +20,6 @@
   <include suite="algorithm-synthetic.xml" />
 
   <sources>
-    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="boss-web">
-      <label>Yahoo</label>
-      <title>Yahoo Web Search</title>
-      <mnemonic>Y</mnemonic>
-      <description>Searches the web using Yahoo Boss Web Search API</description>
-      <icon-path>icons/yahoo.png</icon-path>
-      <example-queries>
-        <example-query>data mining</example-query>
-        <example-query>olympics</example-query>
-        <example-query>London</example-query>
-      </example-queries>
-    </source>
-
     <source component-class="org.carrot2.source.google.GoogleDocumentSource" id="google">
       <label>Google Web Search</label>
       <title>Google Web Search</title>

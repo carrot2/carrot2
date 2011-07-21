@@ -164,7 +164,7 @@
             <para>
               As &C2; is not a search engine on its own, there is no common
               query syntax in &C2;. The syntax depends on the underlying search
-              engine you set &C2; to use, e.g. Yahoo!, Solr, Lucene or any other. 
+              engine you set &C2; to use, e.g. Bing, Solr, Lucene or any other. 
               &C2; passes your query without any modifications to the search engine
               and clusters the results it returns. For this reason, any syntax
               supported by the search engine is automatically supported in &C2;.

@@ -61,8 +61,7 @@
           
           <para>
             Used by document sources that fetch results from remote search engines,
-            such as <link role="javadoc" linkend="org.carrot2.source.yahoo.YahooDocumentSource" />
-            or <link role="javadoc" linkend="org.carrot2.source.yahoo.YahooDocumentSource" />.
+            such as <link role="javadoc" linkend="org.carrot2.source.microsoft.BingDocumentSource" />.
           </para>
         </formalpara>
       </listitem>

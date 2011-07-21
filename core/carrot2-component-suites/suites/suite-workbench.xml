@@ -2,7 +2,6 @@
     <!-- Search engines. -->
     <include suite="source-etools.xml" />
     <include suite="source-bing.xml" />
-    <include suite="source-yahoo-boss.xml" />
 
     <!-- Local sources. -->
     <include suite="source-xml.xml" />

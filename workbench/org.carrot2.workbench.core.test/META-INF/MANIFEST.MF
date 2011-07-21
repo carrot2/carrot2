@@ -14,7 +14,6 @@ Require-Bundle: org.carrot2.util.attribute,
  org.carrot2.workbench.core,
  org.eclipse.ui,
  org.carrot2.core,
- org.carrot2.source.yahoo,
  org.apache.lucene.v2;bundle-version="3.0.0",
  org.carrot2.util.matrix;bundle-version="0.0.0",
  org.junit;bundle-version="3.8.2"
