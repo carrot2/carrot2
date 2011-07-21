@@ -45,11 +45,10 @@ public class ProcessingJobTest extends TestCase
 
     /**
      * Sources excluded from automatic Workbench tests, e.g. sources requiring some
-     * specific software installed locally. We also exclude Yahoo APIs as they tend to 
-     * fail often and we don't want them to cause the whole Workbench build to fail.
+     * specific software installed locally. 
      */
     private final static Set<String> EXCLUDED_SOURCES = ImmutableSet.of("solr", "lucene",
-        "wiki", "boss-images", "boss-web", "boss-news", "yahoo-news", "pubmed", "opensearch");
+        "pubmed", "opensearch");
 
     @Override
     protected void setUp() throws Exception

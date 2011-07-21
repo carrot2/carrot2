@@ -2,7 +2,6 @@
     <!-- Search engines. -->
     <include suite="source-etools.xml" />
     <include suite="source-bing.xml" />
-    <include suite="source-yahoo-boss.xml" />
 
     <!-- PubMed, Indeed job search. -->
     <include suite="source-pubmed.xml" />

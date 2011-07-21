@@ -34,13 +34,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.carrot2.source.yahoo"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.carrot2.source.xml"
          download-size="0"
          install-size="0"
@@ -84,13 +77,6 @@
 
    <plugin
          id="org.carrot2.source.pubmed"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.carrot2.source.boss"
          download-size="0"
          install-size="0"
          version="0.0.0"

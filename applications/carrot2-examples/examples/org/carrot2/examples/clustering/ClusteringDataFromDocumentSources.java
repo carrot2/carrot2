@@ -26,15 +26,13 @@ import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
-import org.carrot2.source.boss.BossDocumentSource;
-import org.carrot2.source.boss.BossSearchService;
 import org.carrot2.source.microsoft.BingDocumentSource;
 
 /**
  * This example shows how to cluster {@link Document}s retrieved from
  * {@link IDocumentSource}s. There are a number of implementations of this interface in the
  * Carrot2 project, in this example we will cluster results from Microsoft Live (Web
- * search) and Yahoo Boss.
+ * search).
  * 
  * <p>
  * It is assumed that you are familiar with {@link ClusteringDocumentList} example.
@@ -87,7 +85,7 @@ public class ClusteringDataFromDocumentSources
          * default one. You can pass the API key along with the query and the requested
          * number of results in an attribute map. Carrot2 manual lists all supported attributes
          * along with their keys, types and allowed values. The code shown below, fetches and clusters
-         * 50 results from {@link org.carrot2.source.boss.BossDocumentSource}. 
+         * 50 results from {@link org.carrot2.source.microsoft.BingDocumentSource}. 
          * 
          * [[[end:clustering-data-from-document-sources-advanced-intro]]]
          */
@@ -100,7 +98,7 @@ public class ClusteringDataFromDocumentSources
             final Map<String, Object> attributes = new HashMap<String, Object>();
             
             /* Put your own API key here */
-            attributes.put("BossSearchService.appid", BossSearchService.CARROTSEARCH_APPID);
+            attributes.put("BingDocumentSource.appid", BingDocumentSource.CARROTSEARCH_APPID);
     
             /* Query an the required number of results */
             attributes.put(CommonAttributesDescriptor.Keys.QUERY, "clustering");
@@ -108,7 +106,7 @@ public class ClusteringDataFromDocumentSources
     
             /* Perform processing */
             final ProcessingResult result = controller.process(attributes, 
-                BossDocumentSource.class, STCClusteringAlgorithm.class);
+                BingDocumentSource.class, STCClusteringAlgorithm.class);
 
             /* Documents fetched from the document source, clusters created by Carrot2. */
             final List<Document> documents = result.getDocuments();

@@ -27,7 +27,6 @@ import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
-import org.carrot2.source.boss.BossSearchService;
 import org.carrot2.source.microsoft.BingDocumentSource;
 import org.carrot2.source.microsoft.BingDocumentSourceDescriptor;
 
@@ -52,7 +51,7 @@ public class UsingAttributes
          * <p>
          * To pass attributes to Carrot2, put them into a {@link java.util.Map},
          * along with query or documents being clustered. The code shown below searches the
-         * <em>wikipedia.org</em> domain using {@link org.carrot2.source.boss.BossDocumentSource} 
+         * web using {@link org.carrot2.source.microsoft.BingDocumentSource} 
          * and clusters the results using {@link org.carrot2.clustering.lingo.LingoClusteringAlgorithm}
          * customized to create fewer clusters than by default.
          * </p> 
@@ -70,9 +69,8 @@ public class UsingAttributes
             /* Put values using attribute builders */
             attributes.put(CommonAttributesDescriptor.Keys.QUERY, "data mining");
             attributes.put(CommonAttributesDescriptor.Keys.RESULTS, 100);
-            attributes.put("BossSearchService.sites", "wikipedia.org");
-            attributes.put("BossSearchService.appid", 
-                BossSearchService.CARROTSEARCH_APPID); // user your own ID here
+            attributes.put("BingDocumentSource.appid", 
+                BingDocumentSource.CARROTSEARCH_APPID); // user your own ID here
             attributes.put("LingoClusteringAlgorithm.desiredClusterCountBase", 15);
             
             /* Perform processing */

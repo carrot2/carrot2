@@ -101,8 +101,6 @@
     <exclude name="**/carrot2-examples/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-etools/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-google/**/*.java" if="external.api.tests.disabled" />
-    <exclude name="**/carrot2-source-yahoo/**/*.java" unless="yahooapi.tests.enabled" />
-    <exclude name="**/carrot2-source-boss/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-microsoft/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-opensearch/**/*.java" if="external.api.tests.disabled" />
     <exclude name="**/carrot2-source-microsoft/src/com/microsoft/msnsearch/**/*.java" />
@@ -385,8 +383,6 @@
       <batchtest todir="${tests.report.dir}" unless="testcase">
         <fileset dir="${build.dir.tests}">
           <include name="**/*Test.class" />
-          <exclude name="org/carrot2/source/yahoo/*Test.class" 
-            unless="yahooapi.tests.enabled" />
         </fileset>
       </batchtest>
 
