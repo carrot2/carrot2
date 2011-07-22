@@ -15,13 +15,12 @@ package org.carrot2.text.vsm;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.mahout.math.GenericPermuting;
 import org.apache.mahout.math.matrix.DoubleFactory2D;
-import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.apache.mahout.math.matrix.impl.SparseDoubleMatrix2D;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.matrix.MatrixUtils;
-import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.Attribute;
@@ -137,7 +136,7 @@ public class TermDocumentMatrixBuilder
 
         if (documentCount == 0)
         {
-            vsmContext.termDocumentMatrix = NNIDoubleFactory2D.nni.make(0, 0);
+            vsmContext.termDocumentMatrix = DoubleFactory2D.dense.make(0, 0);
             vsmContext.stemToRowIndex = new IntIntOpenHashMap();
             return;
         }
@@ -172,7 +171,7 @@ public class TermDocumentMatrixBuilder
 
         // Calculate the number of terms we can include to fulfill the max matrix size
         final int maxRows = maximumMatrixSize / documentCount;
-        final DoubleMatrix2D tdMatrix = NNIDoubleFactory2D.nni.make(Math.min(maxRows,
+        final DoubleMatrix2D tdMatrix = DoubleFactory2D.dense.make(Math.min(maxRows,
             stemsToInclude.length), documentCount);
 
         for (int i = 0; i < stemWeightOrder.length && i < maxRows; i++)

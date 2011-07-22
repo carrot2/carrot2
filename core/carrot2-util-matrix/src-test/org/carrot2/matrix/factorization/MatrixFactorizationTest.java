@@ -13,14 +13,12 @@
 package org.carrot2.matrix.factorization;
 
 import static org.carrot2.matrix.MatrixAssertions.assertThat;
-import static org.junit.Assume.assumeTrue;
 
-import org.carrot2.matrix.*;
+import org.apache.mahout.math.matrix.DoubleFactory2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
 import org.junit.Test;
-
-import org.apache.mahout.math.matrix.*;
 
 /**
  * Test cases for matrix factorizations.
@@ -37,7 +35,7 @@ public class MatrixFactorizationTest
     private double DELTA = 1e-4;
 
     /** The test input matrix */
-    private DoubleMatrix2D A = NNIDoubleFactory2D.nni.make(new double [] []
+    private DoubleMatrix2D A = DoubleFactory2D.dense.make(new double [] []
     {
         {
             0.00, 0.00, 0.56, 0.56, 0.00, 0.00, 1.00
@@ -57,58 +55,55 @@ public class MatrixFactorizationTest
     });
 
     @Test
-    public void testNativeSVD()
+    public void testSVD()
     {
-        assumeTrue(NNIInterface.isNativeLapackAvailable());
-
-        NNIInterface.suppressNNI(false);
         PartialSingularValueDecompositionFactory factory = new PartialSingularValueDecompositionFactory();
         factory.setK(2);
 
         PartialSingularValueDecomposition factorization = (PartialSingularValueDecomposition) factory
             .factorize(A);
 
-        DoubleMatrix2D expectedU = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
         {
             {
-                0, -0.752646
+                0, 0.752646
             },
             {
-                0.651927, 0
+                -0.651927, 0
             },
             {
-                0.651927, 0
+                -0.651927, 0
             },
             {
-                0.387277, 0
+                -0.387277, 0
             },
             {
-                0, -0.658425
+                0, 0.658425
             }
         });
 
-        DoubleMatrix2D expectedV = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
         {
             {
-                0.557873, 0
+                -0.557873, 0
             },
             {
-                0.562741, 0
+                -0.562741, 0
             },
             {
-                2.775558E-017, -0.619628
+                -2.775558E-017, 0.619628
             },
             {
-                -8.326673E-017, -0.619628
+                8.326673E-017, 0.619628
             },
             {
-                0.23542, 0
+                -0.23542, 0
             },
             {
-                0.562741, 0
+                -0.562741, 0
             },
             {
-                -2.220446E-016, -0.48179
+                2.220446E-016, 0.48179
             }
         });
 
@@ -124,7 +119,7 @@ public class MatrixFactorizationTest
     @Test
     public void testUnorderedNMFED()
     {
-        DoubleMatrix2D expectedU = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
         {
             {
                 6.1201e-011, 0.99592
@@ -143,7 +138,7 @@ public class MatrixFactorizationTest
             }
         });
 
-        DoubleMatrix2D expectedV = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
         {
             {
                 0.43087, 1.0265e-069
@@ -176,7 +171,7 @@ public class MatrixFactorizationTest
     @Test
     public void testKMeans()
     {
-        DoubleMatrix2D expectedU = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
         {
             {
                 0.7380, 0
@@ -195,7 +190,7 @@ public class MatrixFactorizationTest
             }
         });
 
-        DoubleMatrix2D expectedV = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
         {
             {
                 0, 1
@@ -226,7 +221,7 @@ public class MatrixFactorizationTest
     @Test
     public void testOrderedNMFED()
     {
-        DoubleMatrix2D expectedU = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
         {
             {
                 0.99592, 6.1201e-011
@@ -245,7 +240,7 @@ public class MatrixFactorizationTest
             }
         });
 
-        DoubleMatrix2D expectedV = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
         {
             {
                 1.0265e-069, 0.43087
@@ -278,7 +273,7 @@ public class MatrixFactorizationTest
     @Test
     public void testNMFKL()
     {
-        DoubleMatrix2D expectedU = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
         {
             {
                 1.31E-11, 0.56085
@@ -297,7 +292,7 @@ public class MatrixFactorizationTest
             }
         });
 
-        DoubleMatrix2D expectedV = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
         {
             {
                 1.7, 3.18E-12
@@ -329,7 +324,7 @@ public class MatrixFactorizationTest
     @Test
     public void testLNMF()
     {
-        DoubleMatrix2D expectedU = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
         {
             {
                 1.06E-193, 0.56085
@@ -348,7 +343,7 @@ public class MatrixFactorizationTest
             }
         });
 
-        DoubleMatrix2D expectedV = NNIDoubleFactory2D.nni.make(new double [] []
+        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
         {
             {
                 1.3038, 4.47E-05

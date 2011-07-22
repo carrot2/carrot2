@@ -12,7 +12,6 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.matrix.factorization.seeding.*;
 
 import org.apache.mahout.math.matrix.DoubleFactory2D;
@@ -53,7 +52,7 @@ public abstract class IterativeMatrixFactorizationFactory implements
     protected DoubleFactory2D doubleFactory2D;
 
     /** The default MatrixFactory to be used */
-    protected final static DoubleFactory2D DEFAULT_DOUBLE_FACTORY_2D = NNIDoubleFactory2D.nni;
+    protected final static DoubleFactory2D DEFAULT_DOUBLE_FACTORY_2D = DoubleFactory2D.dense;
 
     /** Order base vectors according to their 'activity' */
     protected boolean ordered;

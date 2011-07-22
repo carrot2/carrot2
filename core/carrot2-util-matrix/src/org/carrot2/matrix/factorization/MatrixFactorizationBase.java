@@ -12,9 +12,8 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.carrot2.matrix.NNIDoubleFactory2D;
-
-import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.matrix.DoubleFactory2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Abstract implementation of the {@link IMatrixFactorization} interface.
@@ -26,7 +25,7 @@ abstract class MatrixFactorizationBase implements IMatrixFactorization
     protected DoubleFactory2D doubleFactory2D;
 
     /** Default matrix factory */
-    protected static DoubleFactory2D DEFAULT_DOUBLE_FACTORY_2D = NNIDoubleFactory2D.nni;
+    protected static DoubleFactory2D DEFAULT_DOUBLE_FACTORY_2D = DoubleFactory2D.dense;
 
     /** Input matrix */
     protected DoubleMatrix2D A;

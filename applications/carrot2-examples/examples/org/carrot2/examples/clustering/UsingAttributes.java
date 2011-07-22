@@ -192,11 +192,10 @@ public class UsingAttributes
             final ProcessingResult result = controller.process(attributes,
                 LingoClusteringAlgorithm.class);
             
-            /* Clusters created by Carrot2, native matrix computation flag */
+            /* Clusters created by Carrot2, read processing time */
             final List<Cluster> clusters = result.getClusters();
-            final boolean nativeMatrixUsed = LingoClusteringAlgorithmDescriptor
-                .attributeBuilder(result.getAttributes())
-                    .nativeMatrixUsed();
+            final Long clusteringTime = CommonAttributesDescriptor.attributeBuilder(
+                result.getAttributes()).processingTimeAlgorithm();
             /// [[[end:using-attributes-output]]]
             
             ConsoleFormatter.displayResults(result);

@@ -14,10 +14,18 @@ package org.carrot2.clustering.lingo;
 import java.util.Collections;
 import java.util.List;
 
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
-import org.carrot2.matrix.NNIInterface;
-import org.carrot2.text.clustering.*;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.Document;
+import org.carrot2.core.IClusteringAlgorithm;
+import org.carrot2.core.LanguageCode;
+import org.carrot2.core.ProcessingComponentBase;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.CommonAttributes;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
+import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -26,10 +34,13 @@ import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
+import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.DoubleRange;
 import org.carrot2.util.attribute.constraint.IntRange;
-import org.slf4j.Logger;
 
 import com.carrotsearch.hppc.BitSet;
 import com.google.common.collect.Lists;
@@ -44,14 +55,6 @@ import com.google.common.collect.Ordering;
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
-    private static final Logger log = org.slf4j.LoggerFactory
-        .getLogger(LingoClusteringAlgorithm.class);
-
-    /**
-     * Report the warning about native libraries only once.
-     */
-    private static boolean nativeLibrariesReported;
-
     /**
      * Query that produced the documents. The query will help the algorithm to create
      * better clusters. Therefore, providing the query is optional but desirable.
@@ -77,20 +80,6 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Internal
     @Attribute(key = AttributeNames.CLUSTERS, inherit = true)
     public List<Cluster> clusters = null;
-
-    /**
-     * Indicates whether Lingo used fast native matrix computation routines. Value of this
-     * attribute is equal to
-     * {@link org.carrot2.matrix.NNIInterface#isNativeBlasAvailable()} at the time of
-     * running the algorithm.
-     * 
-     * @group Matrix model
-     * @label Native matrix operations used
-     */
-    @Processing
-    @Output
-    @Attribute
-    public boolean nativeMatrixUsed;
 
     /**
      * Balance between cluster score and size during cluster sorting. Value equal to 0.0
@@ -153,22 +142,6 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      */
     public final MultilingualClustering multilingualClustering = new MultilingualClustering();
 
-    @Override
-    public void init(IControllerContext context)
-    {
-        synchronized (LingoClusteringAlgorithm.class)
-        {
-            if (!nativeLibrariesReported)
-            {
-                if (NNIInterface.isNativeBlasAvailable())
-                {
-                    log.info("Native BLAS routines available");
-                }
-                nativeLibrariesReported = true;
-            }
-        }
-    }
-
     /**
      * Performs Lingo clustering of {@link #documents}.
      */
@@ -176,8 +149,6 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @SuppressWarnings("unchecked")
     public void process() throws ProcessingException
     {
-        nativeMatrixUsed = NNIInterface.isNativeBlasAvailable();
-
         // There is a tiny trick here to support multilingual clustering without
         // refactoring the whole component: we remember the original list of documents
         // and invoke clustering for each language separately within the
