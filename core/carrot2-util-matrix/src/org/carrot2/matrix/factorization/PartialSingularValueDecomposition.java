@@ -11,6 +11,8 @@
 
 package org.carrot2.matrix.factorization;
 
+import java.util.Arrays;
+
 import org.apache.mahout.math.DenseMatrix;
 import org.apache.mahout.math.Matrix;
 import org.apache.mahout.math.SingularValueDecomposition;
@@ -69,7 +71,7 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
         {
             U = U.viewPart(0, 0, U.rows(), k);
             V = V.viewPart(0, 0, V.rows(), k);
-            S = org.apache.mahout.math.Arrays.trimToCapacity(S, k);
+            S = Arrays.copyOf(S, k);
         }
     }
 
