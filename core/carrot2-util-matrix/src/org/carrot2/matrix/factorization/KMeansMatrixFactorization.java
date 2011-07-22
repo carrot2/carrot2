@@ -12,11 +12,11 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.carrot2.matrix.MatrixUtils;
-
-import org.apache.mahout.math.matrix.*;
 import org.apache.mahout.math.function.Functions;
 import org.apache.mahout.math.function.Mult;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
+import org.carrot2.matrix.MatrixUtils;
 
 /**
  * Performs matrix factorization using the K-means clustering algorithm. This kind of
@@ -42,13 +42,13 @@ public class KMeansMatrixFactorization extends IterativeMatrixFactorizationBase
         int n = A.columns();
 
         // Distances to centroids
-        DoubleMatrix2D D = doubleFactory2D.make(k, n);
+        DoubleMatrix2D D = new DenseDoubleMatrix2D(k, n);
 
         // Object-cluster assignments
-        V = doubleFactory2D.make(n, k);
+        V = new DenseDoubleMatrix2D(n, k);
 
         // Initialize the centroids with some document vectors
-        U = doubleFactory2D.make(A.rows(), k);
+        U = new DenseDoubleMatrix2D(A.rows(), k);
         U.assign(A.viewPart(0, 0, A.rows(), k));
 
         int [] minIndices = new int [D.columns()];
@@ -79,7 +79,7 @@ public class KMeansMatrixFactorization extends IterativeMatrixFactorizationBase
                     if (V.getQuick(d, c) != 0)
                     {
                         count++;
-                        U.viewColumn(c).assign(A.viewColumn(d), Functions.plus);
+                        U.viewColumn(c).assign(A.viewColumn(d), Functions.PLUS);
                     }
                 }
 

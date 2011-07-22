@@ -12,9 +12,10 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.apache.mahout.math.function.UnaryFunction;
-import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.function.DoubleFunction;
 import org.apache.mahout.math.function.Functions;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 /**
  * Performs matrix factorization using the Non-negative Matrix Factorization algorithm
@@ -56,17 +57,17 @@ public class NonnegativeMatrixFactorizationED extends IterativeMatrixFactorizati
         double eps = 1e-9;
 
         // Seed U and V with initial values
-        U = doubleFactory2D.make(A.rows(), k);
-        V = doubleFactory2D.make(A.columns(), k);
+        U = new DenseDoubleMatrix2D(A.rows(), k);
+        V = new DenseDoubleMatrix2D(A.columns(), k);
         seedingStrategy.seed(A, U, V);
 
         // Temporary matrices
-        DoubleMatrix2D T = doubleFactory2D.make(k, k);
-        DoubleMatrix2D UT1 = doubleFactory2D.make(A.rows(), k);
-        DoubleMatrix2D UT2 = doubleFactory2D.make(A.rows(), k);
-        DoubleMatrix2D VT1 = doubleFactory2D.make(A.columns(), k);
-        DoubleMatrix2D VT2 = doubleFactory2D.make(A.columns(), k);
-        UnaryFunction plusEps = Functions.plus(eps);
+        DoubleMatrix2D T = new DenseDoubleMatrix2D(k, k);
+        DoubleMatrix2D UT1 = new DenseDoubleMatrix2D(A.rows(), k);
+        DoubleMatrix2D UT2 = new DenseDoubleMatrix2D(A.rows(), k);
+        DoubleMatrix2D VT1 = new DenseDoubleMatrix2D(A.columns(), k);
+        DoubleMatrix2D VT2 = new DenseDoubleMatrix2D(A.columns(), k);
+        DoubleFunction plusEps = Functions.plus(eps);
 
         if (stopThreshold >= 0)
         {
@@ -78,20 +79,20 @@ public class NonnegativeMatrixFactorizationED extends IterativeMatrixFactorizati
             // Update V
             U.zMult(U, T, 1, 0, true, false); // T <- U'U
             A.zMult(U, VT1, 1, 0, true, false); // VT1 <- A'U
-            V.zMult(T, VT2); // VT2 <- VT
+            V.zMult(T, VT2, 1, 0, false, false); // VT2 <- VT
             VT1.assign(plusEps); // TODO: shift this to the dividing function?
             VT2.assign(plusEps);
-            VT1.assign(VT2, Functions.div); // VT1 <- VT1 ./ VT2
-            V.assign(VT1, Functions.mult); // V <- V .* VT1
+            VT1.assign(VT2, Functions.DIV); // VT1 <- VT1 ./ VT2
+            V.assign(VT1, Functions.MULT); // V <- V .* VT1
 
             // Update U
             V.zMult(V, T, 1, 0, true, false); // T <- V'V
-            A.zMult(V, UT1); // UT1 <- AV
-            U.zMult(T, UT2); // UT2 <- UT
+            A.zMult(V, UT1, 1, 0, false, false); // UT1 <- AV
+            U.zMult(T, UT2, 1, 0, false, false); // UT2 <- UT
             UT1.assign(plusEps);
             UT2.assign(plusEps);
-            UT1.assign(UT2, Functions.div); // UT1 <- UT1 ./ UT2
-            U.assign(UT1, Functions.mult); // U <- U .* UT1
+            UT1.assign(UT2, Functions.DIV); // UT1 <- UT1 ./ UT2
+            U.assign(UT1, Functions.MULT); // U <- U .* UT1
 
             iterationsCompleted++;
             if (stopThreshold >= 0)

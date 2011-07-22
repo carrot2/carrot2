@@ -11,8 +11,11 @@
 
 package org.carrot2.matrix.factorization;
 
+import org.apache.mahout.math.DenseMatrix;
+import org.apache.mahout.math.Matrix;
+import org.apache.mahout.math.SingularValueDecomposition;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.matrix.linalg.SingularValueDecomposition;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 /**
  * Performs matrix factorization using the Singular Value Decomposition algorithm.
@@ -49,15 +52,15 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
         SingularValueDecomposition svd;
         if (A.columns() > A.rows())
         {
-            svd = new SingularValueDecomposition(A.viewDice());
-            V = svd.getU();
-            U = svd.getV();
+            svd = new SingularValueDecomposition(new DenseMatrix(A.viewDice().toArray()));
+            V = toColtMatrix(svd.getU());
+            U = toColtMatrix(svd.getV());
         }
         else
         {
-            svd = new SingularValueDecomposition(A);
-            U = svd.getU();
-            V = svd.getV();
+            svd = new SingularValueDecomposition(new DenseMatrix(A.toArray()));
+            U = toColtMatrix(svd.getU());
+            V = toColtMatrix(svd.getV());
         }
 
         S = svd.getSingularValues();
@@ -70,6 +73,19 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
         }
     }
 
+    private static DenseDoubleMatrix2D toColtMatrix(Matrix m)
+    {
+        DenseDoubleMatrix2D result = new DenseDoubleMatrix2D(m.rowSize(), m.columnSize());
+        for (int r = 0; r < result.rows(); r++)
+        {
+            for (int c = 0; c < result.columns(); c++)
+            {
+                result.setQuick(r, c, m.getQuick(r, c));
+            }            
+        }
+        return result;
+    }
+    
     public String toString()
     {
         return "SVD";

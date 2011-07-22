@@ -14,8 +14,8 @@ package org.carrot2.matrix.factorization.seeding;
 
 import java.util.Random;
 
-import org.apache.mahout.math.function.UnaryFunction;
-import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.function.DoubleFunction;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Random matrix factorization seeding.
@@ -24,7 +24,7 @@ import org.apache.mahout.math.matrix.*;
 public class RandomSeedingStrategy implements ISeedingStrategy
 {
     /** Colt's random number generator */
-    private UnaryFunction random;
+    private DoubleFunction random;
 
     /**
      * Creates RandomSeedingStrategy with seed based on current time.
@@ -58,7 +58,7 @@ public class RandomSeedingStrategy implements ISeedingStrategy
     /**
      * Internal Colt function for generating random values.
      */
-    static class RandomDoubleFunction implements UnaryFunction
+    static class RandomDoubleFunction implements DoubleFunction
     {
         final Random random;
 

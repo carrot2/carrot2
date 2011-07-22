@@ -6,8 +6,8 @@ Bundle-Version: 0.3.0
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.slf4j;bundle-version="1.5.8"
-Bundle-ClassPath: mahout-collections-0.3.jar,
- mahout-math-0.3.jar
+Bundle-ClassPath: mahout-collections-1.0.jar,
+ mahout-math-0.5.jar
 Export-Package: org.apache.mahout.collections,
  org.apache.mahout.math,
  org.apache.mahout.math.bitvector,
@@ -21,12 +21,10 @@ Export-Package: org.apache.mahout.collections,
  org.apache.mahout.math.jet.random.engine,
  org.apache.mahout.math.jet.random.sampling,
  org.apache.mahout.math.jet.stat,
- org.apache.mahout.math.jet.stat.quantile,
  org.apache.mahout.math.list,
  org.apache.mahout.math.list.adapter,
  org.apache.mahout.math.map,
  org.apache.mahout.math.matrix,
- org.apache.mahout.math.matrix.doublealgo,
  org.apache.mahout.math.matrix.impl,
  org.apache.mahout.math.matrix.linalg,
  org.apache.mahout.math.set,

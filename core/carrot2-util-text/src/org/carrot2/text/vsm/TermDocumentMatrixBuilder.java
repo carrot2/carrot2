@@ -12,10 +12,8 @@
 
 package org.carrot2.text.vsm;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.mahout.math.GenericPermuting;
-import org.apache.mahout.math.matrix.DoubleFactory2D;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.apache.mahout.math.matrix.impl.SparseDoubleMatrix2D;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Internal;
@@ -136,7 +134,7 @@ public class TermDocumentMatrixBuilder
 
         if (documentCount == 0)
         {
-            vsmContext.termDocumentMatrix = DoubleFactory2D.dense.make(0, 0);
+            vsmContext.termDocumentMatrix = new DenseDoubleMatrix2D(0, 0);
             vsmContext.stemToRowIndex = new IntIntOpenHashMap();
             return;
         }
@@ -171,7 +169,7 @@ public class TermDocumentMatrixBuilder
 
         // Calculate the number of terms we can include to fulfill the max matrix size
         final int maxRows = maximumMatrixSize / documentCount;
-        final DoubleMatrix2D tdMatrix = DoubleFactory2D.dense.make(Math.min(maxRows,
+        final DoubleMatrix2D tdMatrix = new DenseDoubleMatrix2D(Math.min(maxRows,
             stemsToInclude.length), documentCount);
 
         for (int i = 0; i < stemWeightOrder.length && i < maxRows; i++)
@@ -199,13 +197,10 @@ public class TermDocumentMatrixBuilder
         }
 
         // Convert stemsToInclude into tdMatrixStemIndices
-        GenericPermuting.permute(stemsToInclude, stemWeightOrder);
-        stemsToInclude = ArrayUtils.subarray(stemsToInclude, 0, tdMatrix.rows());
-
         final IntIntOpenHashMap stemToRowIndex = new IntIntOpenHashMap();
-        for (int i = 0; i < stemsToInclude.length; i++)
+        for (int i = 0; i < stemWeightOrder.length && i < tdMatrix.rows(); i++)
         {
-            stemToRowIndex.put(stemsToInclude[i], i);
+            stemToRowIndex.put(stemsToInclude[stemWeightOrder[i]], i);
         }
 
         // Store the results
@@ -323,7 +318,7 @@ public class TermDocumentMatrixBuilder
         final IntIntOpenHashMap stemToRowIndex = vsmContext.stemToRowIndex;
         if (featureIndex.length == 0)
         {
-            return DoubleFactory2D.dense.make(stemToRowIndex.size(), 0);
+            return new DenseDoubleMatrix2D(stemToRowIndex.size(), 0);
         }
 
         final DoubleMatrix2D phraseMatrix = new SparseDoubleMatrix2D(stemToRowIndex

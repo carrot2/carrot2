@@ -12,11 +12,12 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.carrot2.matrix.MatrixUtils;
-
-import org.apache.mahout.math.function.*;
-import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.function.DoubleDoubleFunction;
+import org.apache.mahout.math.function.DoubleFunction;
 import org.apache.mahout.math.function.Functions;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
+import org.carrot2.matrix.MatrixUtils;
 
 /**
  * Performs matrix factorization using the Non-negative Matrix Factorization by
@@ -63,20 +64,21 @@ public class NonnegativeMatrixFactorizationKL extends IterativeMatrixFactorizati
         double eps = 1e-9;
 
         // Seed U and V with initial values
-        U = doubleFactory2D.make(m, k);
-        V = doubleFactory2D.make(n, k);
+        U = new DenseDoubleMatrix2D(m, k);
+        V = new DenseDoubleMatrix2D(n, k);
         seedingStrategy.seed(A, U, V);
 
         // Temporary matrices
-        DoubleMatrix2D Aeps = A.copy().assign(Functions.plus(eps));
-        DoubleMatrix2D UV = doubleFactory2D.make(m, n);
-        DoubleMatrix2D VT = doubleFactory2D.make(n, k);
-        DoubleMatrix2D UT = doubleFactory2D.make(m, k);
+        DoubleMatrix2D Aeps = A.copy();
+        Aeps.assign(Functions.plus(eps));
+        DoubleMatrix2D UV = new DenseDoubleMatrix2D(m, n);
+        DoubleMatrix2D VT = new DenseDoubleMatrix2D(n, k);
+        DoubleMatrix2D UT = new DenseDoubleMatrix2D(m, k);
         double [] work = new double [U.columns()];
 
         // Colt functions
-        BinaryFunction invDiv = Functions.swapArgs(Functions.div);
-        UnaryFunction plusEps = Functions.plus(eps);
+        DoubleDoubleFunction invDiv = Functions.swapArgs(Functions.DIV);
+        DoubleFunction plusEps = Functions.plus(eps);
 
         if (stopThreshold >= 0)
         {
@@ -90,14 +92,14 @@ public class NonnegativeMatrixFactorizationKL extends IterativeMatrixFactorizati
             UV.assign(plusEps); // UV <- UV + eps
             UV.assign(Aeps, invDiv); // UV <- Aeps ./ UV
             UV.zMult(U, VT, 1, 0, true, false); // VT <- UV' * U
-            V.assign(VT, Functions.mult); // V <- V .* VT
+            V.assign(VT, Functions.MULT); // V <- V .* VT
 
             // Update U
             U.zMult(V, UV, 1, 0, false, true); // UV <- U*V'
             UV.assign(plusEps); // UV <- UV + eps
             UV.assign(Aeps, invDiv); // UV <- Aeps ./ UV
             UV.zMult(V, UT, 1, 0, false, false); // UT <- UV * V
-            U.assign(UT, Functions.mult); // U <- U .* UT
+            U.assign(UT, Functions.MULT); // U <- U .* UT
 
             MatrixUtils.normalizeColumnL1(U, work);
 

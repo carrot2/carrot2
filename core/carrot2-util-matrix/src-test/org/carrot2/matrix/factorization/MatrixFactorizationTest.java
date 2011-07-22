@@ -14,8 +14,8 @@ package org.carrot2.matrix.factorization;
 
 import static org.carrot2.matrix.MatrixAssertions.assertThat;
 
-import org.apache.mahout.math.matrix.DoubleFactory2D;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class MatrixFactorizationTest
     private double DELTA = 1e-4;
 
     /** The test input matrix */
-    private DoubleMatrix2D A = DoubleFactory2D.dense.make(new double [] []
+    private DoubleMatrix2D A = new DenseDoubleMatrix2D(new double [] []
     {
         {
             0.00, 0.00, 0.56, 0.56, 0.00, 0.00, 1.00
@@ -63,7 +63,7 @@ public class MatrixFactorizationTest
         PartialSingularValueDecomposition factorization = (PartialSingularValueDecomposition) factory
             .factorize(A);
 
-        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedU = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 0, 0.752646
@@ -82,7 +82,7 @@ public class MatrixFactorizationTest
             }
         });
 
-        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedV = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 -0.557873, 0
@@ -119,7 +119,7 @@ public class MatrixFactorizationTest
     @Test
     public void testUnorderedNMFED()
     {
-        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedU = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 6.1201e-011, 0.99592
@@ -138,7 +138,7 @@ public class MatrixFactorizationTest
             }
         });
 
-        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedV = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 0.43087, 1.0265e-069
@@ -171,7 +171,7 @@ public class MatrixFactorizationTest
     @Test
     public void testKMeans()
     {
-        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedU = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 0.7380, 0
@@ -190,7 +190,7 @@ public class MatrixFactorizationTest
             }
         });
 
-        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedV = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 0, 1
@@ -221,7 +221,7 @@ public class MatrixFactorizationTest
     @Test
     public void testOrderedNMFED()
     {
-        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedU = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 0.99592, 6.1201e-011
@@ -240,7 +240,7 @@ public class MatrixFactorizationTest
             }
         });
 
-        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedV = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 1.0265e-069, 0.43087
@@ -273,7 +273,7 @@ public class MatrixFactorizationTest
     @Test
     public void testNMFKL()
     {
-        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedU = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 1.31E-11, 0.56085
@@ -292,7 +292,7 @@ public class MatrixFactorizationTest
             }
         });
 
-        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedV = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 1.7, 3.18E-12
@@ -324,7 +324,7 @@ public class MatrixFactorizationTest
     @Test
     public void testLNMF()
     {
-        DoubleMatrix2D expectedU = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedU = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 1.06E-193, 0.56085
@@ -343,7 +343,7 @@ public class MatrixFactorizationTest
             }
         });
 
-        DoubleMatrix2D expectedV = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D expectedV = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 1.3038, 4.47E-05
