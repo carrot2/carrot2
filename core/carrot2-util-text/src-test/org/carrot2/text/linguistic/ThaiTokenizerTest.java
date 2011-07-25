@@ -11,6 +11,8 @@
 
 package org.carrot2.text.linguistic;
 
+import static org.junit.Assume.assumeTrue;
+
 import java.io.IOException;
 
 import org.carrot2.core.LanguageCode;
@@ -33,6 +35,7 @@ public class ThaiTokenizerTest extends TokenizerTestBase
     @Test
     public void testThaiTermTokens()
     {
+        assumeTrue(DefaultTokenizerFactory.THAI_TOKENIZATION_SUPPORTED);
         assertEqualTokens(
             "การที่ได้ต้องแสดงว่างานดี",
             tokens(ITokenizer.TT_TERM, "การ", "ที่", "ได้", "ต้อง", "แสดง", "ว่า", "งาน",
@@ -42,6 +45,7 @@ public class ThaiTokenizerTest extends TokenizerTestBase
     @Test
     public void testThaiEnglishTermTokens()
     {
+        assumeTrue(DefaultTokenizerFactory.THAI_TOKENIZATION_SUPPORTED);
         assertEqualTokens("ประโยคว่า The quick brown",
             tokens(ITokenizer.TT_TERM, "ประโยค", "ว่า", "The", "quick", "brown"));
     }
@@ -49,6 +53,7 @@ public class ThaiTokenizerTest extends TokenizerTestBase
     @Test
     public void testNumericTokens()
     {
+        assumeTrue(DefaultTokenizerFactory.THAI_TOKENIZATION_SUPPORTED);
         assertEqualTokens("๑๒๓", tokens(ITokenizer.TT_NUMERIC, "๑๒๓"));
     }
 }

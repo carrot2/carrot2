@@ -138,6 +138,7 @@ public enum MarketOption
         map.put(SPANISH_UNITED_STATES, LanguageCode.SPANISH);
         map.put(SWEDISH_SWEDEN, LanguageCode.SWEDISH);
         map.put(TURKISH_TURKEY, LanguageCode.TURKISH);
+        map.put(THAI_THAILAND, LanguageCode.THAI);
         
         TO_LANGUAGE_CODE = Collections.unmodifiableMap(map);
     }
