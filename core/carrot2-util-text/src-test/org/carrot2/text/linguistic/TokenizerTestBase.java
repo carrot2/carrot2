@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -109,5 +108,17 @@ abstract class TokenizerTestBase
     protected TokenImage numeric(String image)
     {
         return new TokenImage(image, ITokenizer.TT_NUMERIC);
+    }
+
+    protected TokenImage [] tokens(int type, String... images)
+    {
+        final TokenImage [] result = new TokenImage [images.length];
+
+        for (int i = 0; i < images.length; i++)
+        {
+            result[i] = new TokenImage(images[i], type);
+        }
+
+        return result;
     }
 }
