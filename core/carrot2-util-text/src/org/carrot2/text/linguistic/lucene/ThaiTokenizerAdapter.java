@@ -13,6 +13,8 @@ package org.carrot2.text.linguistic.lucene;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.text.BreakIterator;
+import java.util.Locale;
 
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
@@ -38,6 +40,9 @@ public final class ThaiTokenizerAdapter implements ITokenizer
     public ThaiTokenizerAdapter()
     {
         this.tempCharSequence = new MutableCharArray(new char [0]);
+        if (!platformSupportsThai()) {
+            throw new RuntimeException("Thai segmentation not supported on this platform.");
+        }
     }
 
     public short nextToken() throws IOException
@@ -88,4 +93,19 @@ public final class ThaiTokenizerAdapter implements ITokenizer
             throw ExceptionUtils.wrapAsRuntimeException(e);
         }
     }
+    
+    /**
+     * Check support for Thai.
+     */
+    public static boolean platformSupportsThai()
+    {
+        try {
+            // Check if Thai break iteration is supported, code taken from Lucene's ThaiWordFilter. 
+            final BreakIterator proto = BreakIterator.getWordInstance(new Locale("th"));
+            proto.setText("ภาษาไทย");
+            return proto.isBoundary(4);
+        } catch (Throwable e) {
+            return false;
+        }
+    }    
 }

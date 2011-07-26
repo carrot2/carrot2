@@ -14,9 +14,7 @@ package org.carrot2.text.linguistic;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.text.BreakIterator;
 import java.util.EnumMap;
-import java.util.Locale;
 
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
@@ -41,8 +39,6 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
 
     private final static EnumMap<LanguageCode, IFactory<ITokenizer>> tokenizerFactories;
 
-    final static boolean THAI_TOKENIZATION_SUPPORTED;
-    
     /**
      * Functional verification for {@link ITokenizer}.
      */
@@ -71,15 +67,6 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
      */
     static
     {
-        // Check if Thai break iteration is supported, code taken from Lucene's ThaiWordFilter. 
-        final BreakIterator proto = BreakIterator.getWordInstance(new Locale("th"));
-        proto.setText("ภาษาไทย");
-        THAI_TOKENIZATION_SUPPORTED = proto.isBoundary(4);
-        if (!THAI_TOKENIZATION_SUPPORTED)
-        {
-            logger.warn("This JRE does not support Thai segmentation.");
-        }
-
         tokenizerFactories = createDefaultTokenizers();
     }
 
@@ -107,13 +94,11 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
         }
 
         // Chinese and Thai are exceptions, we use adapters around tokenizers from Lucene.
-        map.put(LanguageCode.CHINESE_SIMPLIFIED, new NewClassInstanceFactory<ITokenizer>(
-            ChineseTokenizerAdapter.class));
-        if (THAI_TOKENIZATION_SUPPORTED)
-        {
-            map.put(LanguageCode.THAI, new NewClassInstanceFactory<ITokenizer>(
-                ThaiTokenizerAdapter.class));
-        }
+        map.put(LanguageCode.CHINESE_SIMPLIFIED, 
+            new NewClassInstanceFactory<ITokenizer>(ChineseTokenizerAdapter.class));
+
+        map.put(LanguageCode.THAI, new NewClassInstanceFactory<ITokenizer>(
+            ThaiTokenizerAdapter.class));
 
         // Decorate everything with a fallback tokenizer.
         for (LanguageCode lc : LanguageCode.values())
