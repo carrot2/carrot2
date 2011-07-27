@@ -76,7 +76,10 @@ public abstract class Constraint
             return s.toString();
         }
     }
-    
+
+    /**
+     * TODO: document me?
+     */
     public final void populate(Annotation annotation)
     {
         this.annotation = annotation;

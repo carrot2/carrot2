@@ -142,10 +142,15 @@ public class StringEditor extends AttributeEditorAdapter
     private void checkContentChange()
     {
         final String textBoxValue = this.textBox.getText();
-        if (!ObjectUtils.equals(textBoxValue, content))
+        if (!ObjectUtils.equals(textBoxValue, content) && isValid(textBoxValue))
         {
             this.content = textBoxValue;
             fireAttributeChanged(new AttributeEvent(this));
         }
+    }
+
+    protected boolean isValid(String newValue)
+    {
+        return true;
     }
 }

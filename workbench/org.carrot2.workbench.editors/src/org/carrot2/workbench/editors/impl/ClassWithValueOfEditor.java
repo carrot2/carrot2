@@ -15,6 +15,8 @@ import org.carrot2.workbench.editors.AttributeEditorInfo;
  */
 public class ClassWithValueOfEditor extends StringEditor
 {
+    private Method valueOf;
+
     @Override
     protected AttributeEditorInfo init(Map<String, Object> defaultValues)
     {
@@ -29,6 +31,7 @@ public class ClassWithValueOfEditor extends StringEditor
                 throw new NoSuchMethodException();
             if (!Modifier.isPublic(valueOf.getModifiers()))
                 throw new NoSuchMechanismException();
+            this.valueOf = valueOf;
         }
         catch (NoSuchMethodException e)
         {
@@ -37,5 +40,16 @@ public class ClassWithValueOfEditor extends StringEditor
         }
 
         return super.init(defaultValues);
+    }
+
+    @Override
+    protected boolean isValid(String newValue)
+    {
+        try {
+            valueOf.invoke(null, newValue);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }
