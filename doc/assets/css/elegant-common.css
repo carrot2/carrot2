@@ -427,6 +427,17 @@ div[title="Feed URL template"] dl > dd > p > code {
 	word-wrap: break-word;
 }
 
+div[title*="Attribute reference"] * {
+  text-align: left;
+}
+
+span.h3 {
+  margin-top: 5mm;
+  display: block;
+  font-weight: bold;
+  font-size: 14pt;
+}
+
 /** Compact lists */
 ul[compact] > li > p, 
 ol[compact] > li > p {
