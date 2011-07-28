@@ -462,6 +462,23 @@
     </db:code>
   </xsl:template>
 
+  <xsl:template match="pre">
+    <db:programlisting>
+      <xsl:apply-templates />
+    </db:programlisting>
+  </xsl:template>
+
+  <xsl:template match="pre/br">
+    <xsl:text>
+</xsl:text>
+  </xsl:template>
+  
+  <xsl:template match="h1|h2|h3|h4">
+    <db:emphasis role="{local-name()}">
+      <xsl:apply-templates />
+    </db:emphasis>
+  </xsl:template>
+
   <xsl:template match="p">
     <db:para>
       <xsl:apply-templates />

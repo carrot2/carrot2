@@ -36,7 +36,7 @@ final class MetadataExtractorUtils
      * Matching of '#' characters in links.
      */
     private static final Pattern SPACE_HASH_PATTERN = Pattern.compile(">#");
-    private static final Pattern TYPE_HASH_PATTERN = Pattern.compile("([^>])#");
+    private static final Pattern TYPE_HASH_PATTERN = Pattern.compile("([^>&])#");
 
     private MetadataExtractorUtils()
     {
