@@ -1,7 +1,7 @@
 <!-- Components included in all applications -->
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.microsoft.BingDocumentSource" id="bing-web"
+    <source component-class="org.carrot2.source.microsoft.Bing2WebDocumentSource" id="bing-web"
             attribute-sets-resource="source-bing-attributes.xml">
       <label>Bing</label>
       <title>Bing Search</title>

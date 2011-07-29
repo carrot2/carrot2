@@ -13,13 +13,13 @@
 
 
 
-      <attribute key="BingDocumentSource.appid">
+      <attribute key="Bing2WebDocumentSource.appid">
         <value type="java.lang.String" value="EFABBE1342FC43467F3CD65B1B83F450093B16B4"/>
       </attribute>
-      <attribute key="BingDocumentSource.market">
+      <attribute key="Bing2WebDocumentSource.market">
         <value type="java.lang.String" value="FRENCH_FRANCE"/>
       </attribute>
-      <attribute key="BingDocumentSource.adult">
+      <attribute key="Bing2WebDocumentSource.adult">
         <value type="java.lang.String" value="Strict"/>
       </attribute>
       <attribute key="search-mode">

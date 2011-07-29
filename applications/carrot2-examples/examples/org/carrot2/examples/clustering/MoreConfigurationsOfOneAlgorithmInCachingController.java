@@ -21,7 +21,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
-import org.carrot2.source.microsoft.BingDocumentSource;
+import org.carrot2.source.microsoft.Bing2WebDocumentSource;
 
 import com.google.common.collect.Maps;
 
@@ -117,11 +117,11 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
             .query("data mining");
 
         final ProcessingResult fastResult = controller.process(attributes,
-            BingDocumentSource.class.getName(), "lingo-fast");
+            Bing2WebDocumentSource.class.getName(), "lingo-fast");
         ConsoleFormatter.displayClusters(fastResult.getClusters());
         
         final ProcessingResult accurateResult = controller.process(attributes,
-            BingDocumentSource.class.getName(), "lingo-accurate");
+            Bing2WebDocumentSource.class.getName(), "lingo-accurate");
         ConsoleFormatter.displayClusters(accurateResult.getClusters());
     }
 }

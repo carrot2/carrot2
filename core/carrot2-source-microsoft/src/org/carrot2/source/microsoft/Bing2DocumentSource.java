@@ -12,39 +12,23 @@
 
 package org.carrot2.source.microsoft;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Callable;
 
-import org.apache.http.Header;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
+import org.apache.http.*;
 import org.apache.http.message.BasicNameValuePair;
-import org.carrot2.core.Document;
-import org.carrot2.core.IDocumentSource;
-import org.carrot2.core.LanguageCode;
-import org.carrot2.core.ProcessingException;
-import org.carrot2.core.attribute.CommonAttributes;
-import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Internal;
-import org.carrot2.core.attribute.Processing;
+import org.carrot2.core.*;
+import org.carrot2.core.attribute.*;
 import org.carrot2.source.MultipageSearchEngine;
-import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
+import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.Input;
-import org.carrot2.util.attribute.Required;
-import org.carrot2.util.httpclient.HttpHeaders;
 import org.carrot2.util.httpclient.HttpUtils;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Namespace;
-import org.simpleframework.xml.NamespaceList;
-import org.simpleframework.xml.Root;
+import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,33 +36,43 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 
 /**
- * A {@link IDocumentSource} fetching {@link Document}s (search results) from Microsoft
- * Bing API.
+ * A base {@link IDocumentSource} serving requests to Microsoft Bing API, version 2. We model
+ * this into separate subclasses, specific to a particular request type (web, image, news). In
+ * theory one could request web and news results at once, but in practice this is difficult
+ * when paging is also needed (because they have different limits).
  * 
- * @see "http://www.bing.com/developers"
  * @see "http://msdn.microsoft.com/en-us/library/dd251056.aspx"
  */
-@Bindable(prefix = "BingDocumentSource", inherit = CommonAttributes.class)
-public final class BingDocumentSource extends MultipageSearchEngine
+@Bindable(prefix = "Bing2DocumentSource", inherit = CommonAttributes.class)
+public abstract class Bing2DocumentSource extends MultipageSearchEngine
 {
-    /** Application ID assigned to Carrot Search s.c. */
-    public final static String CARROTSEARCH_APPID = "EFABBE1342FC43467F3CD65B1B83F450093B16B4";
+    /** 
+     * Application ID assigned to Carrot Search s.c.
+     * 
+     * <b>Please use your own if you plan to use Bing with Carrot2.</b>  
+     */
+    public final static String CARROTSEARCH_APPID = "2679A5C568DC48B57628500D4024F83AD859633C";
+
+    /**
+     * Bing2 service URI.
+     */
+    private final static String SERVICE_URI = "http://api.bing.net/xml.aspx";
 
     /** Logger for this class. */
-    private final static Logger logger = LoggerFactory.getLogger(BingDocumentSource.class);
+    private final static Logger logger = LoggerFactory.getLogger(Bing2DocumentSource.class);
 
     /**
      * HTTP headers used for the request.
      */
     private List<Header> HTTP_HEADERS = Arrays.asList(new Header []
     {
-        HttpHeaders.USER_AGENT_HEADER_MOZILLA
     });
 
     /**
-     * Maximum concurrent threads from all instances of this component.
+     * Maximum concurrent threads from all instances of this subcomponents
+     * sending requests to Bing.
      */
-    private static final int MAX_CONCURRENT_THREADS = 10;
+    protected static final int MAX_CONCURRENT_THREADS = 10;
 
     /**
      * Microsoft-assigned application ID for querying the API. Please <strong>generate
@@ -140,53 +134,15 @@ public final class BingDocumentSource extends MultipageSearchEngine
     public String options = "DisableLocationDetection";
 
     /**
-     * Miscellaneous Web-request specific options. Bing provides the following options:
-     * <ul>
-     * <li>DisableHostCollapsing</li>
-     * <li>DisableQueryAlterations</li>
-     * </ul>
-     * 
-     * <p>Options should be space-separated.</p>
-     * 
-     * @label Web Request Options
-     * @group Miscellaneous
-     * @level Advanced
+     * Data source type.
      */
     @Processing
     @Input
     @Attribute
     @Internal
-    public String webOptions;
+    @Required
+    public SourceType sourceType;
 
-    /**
-     * Specify the allowed file types. Space-separated list of file extensions (upper-case). 
-     * See <a href="http://msdn.microsoft.com/en-us/library/dd250876%28v=MSDN.10%29.aspx">Bing documentation</a>.
-     * 
-     * @label File Types
-     * @group Results filtering
-     * @level Advanced
-     */
-    @Processing
-    @Input
-    @Attribute
-    @Internal
-    public String fileTypes;
-
-    /**
-     * Microsoft Live! metadata.
-     */
-    static final MultipageSearchEngineMetadata metadata 
-        = new MultipageSearchEngineMetadata(50, 1000);
-
-    /**
-     * Run a single query.
-     */
-    @Override
-    public void process() throws ProcessingException
-    {
-        super.process(metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()));
-    }
-    
     /**
      * Create a single page fetcher for the search range.
      */
@@ -203,7 +159,7 @@ public final class BingDocumentSource extends MultipageSearchEngine
     }
 
     /**
-     * Run the actual single-page search against MSN.
+     * Run the actual single-page search against Bing2 API.
      */
     private final SearchEngineResponse doSearch(String query, int startAt, int totalResultsRequested)
         throws Exception
@@ -214,31 +170,32 @@ public final class BingDocumentSource extends MultipageSearchEngine
          * Required parameters. Bing API has a very weird syntax for identifying arrays of types,
          * see the manual.
          */
+        final String sourceType = this.sourceType.toString();
 
         params.add(new BasicNameValuePair("AppId", appid));
+        params.add(new BasicNameValuePair("Sources", sourceType));
+        params.add(new BasicNameValuePair("Version", "2.2"));
         params.add(new BasicNameValuePair("Query", query));
-        params.add(new BasicNameValuePair("Sources", "Web"));
-        params.add(new BasicNameValuePair("JsonType", "raw"));
+
+        addIfNotEmpty(params, "Adult", adult);
+        addIfNotEmpty(params, "Options", options);
+        addIfNotEmpty(params, "Market", market.marketCode);
 
         /*
-         * Modify options.
+         * Append source-specific limits.
          */
-        if (options != null) params.add(new BasicNameValuePair("Options", options));
-        if (webOptions != null) params.add(new BasicNameValuePair("Web.Options", webOptions));
-        if (fileTypes != null) params.add(new BasicNameValuePair("Web.FileType", fileTypes));
+        params.add(new BasicNameValuePair(sourceType + ".Offset", Integer.toString(startAt)));
+        params.add(new BasicNameValuePair(sourceType + ".Count", Integer.toString(totalResultsRequested)));
 
         /*
-         * Optional parameters. 
+         * Append source-specific options
          */
-        params.add(new BasicNameValuePair("Web.Offset", Integer.toString(startAt)));
-        params.add(new BasicNameValuePair("Web.Count", Integer.toString(totalResultsRequested)));
-        params.add(new BasicNameValuePair("Market", market.marketCode));
-
-        if (adult != null) params.add(new BasicNameValuePair("Adult", adult.toString()));
-
-        final String serviceURI = "http://api.bing.net/xml.aspx";
-        final HttpUtils.Response response = HttpUtils.doGET(serviceURI, params, HTTP_HEADERS);
-
+        appendSourceParams(params);
+        
+        /*
+         * Perform the request.
+         */
+        final HttpUtils.Response response = HttpUtils.doGET(SERVICE_URI, params, HTTP_HEADERS);
         if (response.status == HttpStatus.SC_OK)
         {
             // Parse the data stream.
@@ -262,6 +219,40 @@ public final class BingDocumentSource extends MultipageSearchEngine
             throw new IOException(m);
         }
     }
+
+    /**
+     * Add a parameter if argument is not an empty string.
+     */
+    protected void addIfNotEmpty(ArrayList<NameValuePair> params, String paramName,
+        Object value)
+    {
+        if (value != null)
+        {
+            String stringValue = value.toString();
+            if (!isNullOrEmpty(stringValue))
+            {
+                params.add(new BasicNameValuePair(paramName, stringValue));
+            }
+        }
+    }
+
+    /**
+     * Make this abstract so that subclasses override.
+     */
+    @Override
+    public abstract void process() throws ProcessingException;
+    
+    /**
+     * Append any source-specific parameters. 
+     */
+    protected void appendSourceParams(ArrayList<NameValuePair> params)
+    {
+        // Do nothing.
+    }
+
+    /*
+     * Output model for deserialization using simple-xml.
+     */
 
     @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/web")
     @Root(name = "WebResult", strict = false)
