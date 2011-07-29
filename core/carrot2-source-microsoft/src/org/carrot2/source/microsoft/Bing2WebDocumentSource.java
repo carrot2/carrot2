@@ -30,7 +30,7 @@ public class Bing2WebDocumentSource extends Bing2DocumentSource
      * 
      * <p>Options should be space-separated.</p>
      * 
-     * @label Web Request Options
+     * @label Web request options
      * @group Miscellaneous
      * @level Advanced
      */
@@ -44,7 +44,7 @@ public class Bing2WebDocumentSource extends Bing2DocumentSource
      * Specify the allowed file types. Space-separated list of file extensions (upper-case). 
      * See <a href="http://msdn.microsoft.com/en-us/library/dd250876%28v=MSDN.10%29.aspx">Bing documentation</a>.
      * 
-     * @label File Types
+     * @label File types
      * @group Results filtering
      * @level Advanced
      */
@@ -72,7 +72,7 @@ public class Bing2WebDocumentSource extends Bing2DocumentSource
      */
     public Bing2WebDocumentSource()
     {
-        super.sourceType = SourceType.WEB;
+        super(SourceType.WEB);
     }
     
     /**

@@ -136,13 +136,16 @@ public abstract class Bing2DocumentSource extends MultipageSearchEngine
     /**
      * Data source type.
      */
-    @Processing
-    @Input
-    @Attribute
-    @Internal
-    @Required
-    public SourceType sourceType;
+    private final SourceType sourceType;
 
+    /**
+     * Initialize with a fixed source type.
+     */
+    public Bing2DocumentSource(SourceType sourceType)
+    {
+        this.sourceType = sourceType;
+    }
+    
     /**
      * Create a single page fetcher for the search range.
      */
@@ -253,10 +256,14 @@ public abstract class Bing2DocumentSource extends MultipageSearchEngine
     /*
      * Output model for deserialization using simple-xml.
      */
+    interface IAdaptableToDocument
+    {
+        Document toDocument();
+    }
 
     @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/web")
     @Root(name = "WebResult", strict = false)
-    public static class WebResult
+    public static class WebResult implements IAdaptableToDocument
     {
         @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/web")
         @Element(name = "Title", required = false)
@@ -285,16 +292,16 @@ public abstract class Bing2DocumentSource extends MultipageSearchEngine
         /**
          * Convert to Carrot2 {@link Document}.
          */
-        Document toDocument()
+        public Document toDocument()
         {
             final Document doc = new Document(title, description, url);
             doc.setField(Document.CLICK_URL, displayUrl);
             return doc;
         }
     }
-
+    
     @Root(name = "Web", strict = false)
-    public static class WebResponse 
+    public static class WebResponse
     {
         @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/web")
         @Element(name = "Total", required = false)
@@ -309,6 +316,57 @@ public abstract class Bing2DocumentSource extends MultipageSearchEngine
         public List<WebResult> results;
     }
 
+    @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news")
+    @Root(name = "NewsResult", strict = false)
+    public static class NewsResult implements IAdaptableToDocument
+    {
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news")
+        @Element(name = "Title", required = false)
+        public String title;
+        
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news")
+        @Element(name = "Source", required = false)
+        public String source;
+
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news")
+        @Element(name = "Url", required = false)
+        public String url;
+
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news")
+        @Element(name = "Snippet", required = false)
+        public String description;
+
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news")
+        @Element(name = "Date", required = false)
+        public String dateTime;
+
+        /**
+         * Convert to Carrot2 {@link Document}.
+         */
+        public Document toDocument()
+        {
+            final Document doc = new Document(title, description, url);
+            if (source != null) doc.setField(Document.SOURCES, Arrays.asList(source));
+            return doc;
+        }
+    }
+
+    @Root(name = "News", strict = false)
+    public static class NewsResponse
+    {
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news")
+        @Element(name = "Total", required = false)
+        public long total;
+
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news")
+        @Element(name = "Offset", required = false)
+        public long offset;
+
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news")
+        @ElementList(type = NewsResult.class, name = "Results", required = false)
+        public List<NewsResult> results;
+    }
+    
     @Root(name = "SearchResponse", strict = false)
     @NamespaceList({
         @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/element"),
@@ -325,6 +383,10 @@ public abstract class Bing2DocumentSource extends MultipageSearchEngine
         @Element(name = "Web", required = false)
         @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/web")
         public WebResponse web;
+        
+        @Element(name = "News", required = false)
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news")
+        public NewsResponse news;
     }
 
     /**
@@ -341,14 +403,27 @@ public abstract class Bing2DocumentSource extends MultipageSearchEngine
         {
             ser.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, response.web.total);
             final LanguageCode langCode = market.toLanguageCode();
-            for (WebResult wr : response.web.results)
-            {
-                final Document doc = wr.toDocument();
-                doc.setLanguage(langCode);
-                ser.results.add(doc);
-            }
+            pushAsDocuments(ser, langCode, response.web.results);
+        }
+
+        if (response.news != null && response.news.results != null)
+        {
+            ser.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, response.news.total);
+            final LanguageCode langCode = market.toLanguageCode();
+            pushAsDocuments(ser, langCode, response.news.results);
         }
 
         return ser;
+    }
+
+    private void pushAsDocuments(SearchEngineResponse ser, final LanguageCode langCode,
+        List<? extends IAdaptableToDocument> results)
+    {
+        for (IAdaptableToDocument wr : results)
+        {
+            final Document doc = wr.toDocument();
+            doc.setLanguage(langCode);
+            ser.results.add(doc);
+        }
     }
 }
