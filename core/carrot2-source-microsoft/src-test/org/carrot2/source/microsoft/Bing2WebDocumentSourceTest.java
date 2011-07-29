@@ -46,6 +46,22 @@ public class Bing2WebDocumentSourceTest extends
     }
 
     @Test
+    public void testSiteOption() throws Exception
+    {
+        assumeTrue(externalApiTestsEnabled());
+
+        super.processingAttributes.put(
+            AttributeUtils.getKey(Bing2WebDocumentSource.class, "site"), 
+            "www.cs.put.poznan.pl");
+
+        final int documentsReturned = runQuery("weiss", 10);
+        assertThat(documentsReturned).isGreaterThan(0);
+        for (Document doc : getDocuments()) {
+            assertThat(doc.getContentUrl()).contains("www.cs.put.poznan.pl");
+        }
+    }
+
+    @Test
     public void testFileTypeOption() throws Exception
     {
         assumeTrue(externalApiTestsEnabled());

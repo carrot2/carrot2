@@ -9,6 +9,8 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.attribute.*;
 
+import com.google.common.base.Strings;
+
 /**
  * Web search specific document source fetching from Bing using Bing2 API. 
  */
@@ -53,6 +55,18 @@ public class Bing2WebDocumentSource extends Bing2DocumentSource
     public String fileTypes;
 
     /**
+     * Add a site restriction to search within a given URL.
+     * 
+     * @label Site restriction
+     * @group Results filtering
+     * @level Advanced
+     */
+    @Processing
+    @Input
+    @Attribute
+    public String site;
+    
+    /**
      * Initialize source type properly.
      */
     public Bing2WebDocumentSource()
@@ -75,5 +89,26 @@ public class Bing2WebDocumentSource extends Bing2DocumentSource
         super.appendSourceParams(params);
         addIfNotEmpty(params, "Web.Options", webOptions);
         addIfNotEmpty(params, "Web.FileType", fileTypes);
+
+        if (!Strings.isNullOrEmpty(site))
+        {
+            addToQuery(params, " site:" + site);
+        }
+    }
+
+    private void addToQuery(ArrayList<NameValuePair> params, String value)
+    {
+        String query = null;
+        for (NameValuePair nv : params)
+        {
+            if (nv.getName().equals("Query"))
+            {
+                params.remove(nv);
+                query = nv.getValue();
+                break;
+            }
+        }
+
+        addIfNotEmpty(params, "Query", Strings.nullToEmpty(query) + value);        
     }
 }
