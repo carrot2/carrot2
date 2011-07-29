@@ -3,10 +3,10 @@
   <sources>
     <source component-class="org.carrot2.source.microsoft.Bing2WebDocumentSource" id="bing-web"
             attribute-sets-resource="source-bing-attributes.xml">
-      <label>Bing</label>
-      <title>Bing Search</title>
+      <label>Bing Web</label>
+      <title>Bing Web Search</title>
       <mnemonic>B</mnemonic>
-      <description>Searches the web using Bing Search</description>
+      <description>Searches the Web using Bing Search</description>
       <icon-path>icons/bing.png</icon-path>
       <example-queries>
         <example-query>data mining</example-query>
