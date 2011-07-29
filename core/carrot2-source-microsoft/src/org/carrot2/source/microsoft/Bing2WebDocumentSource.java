@@ -55,7 +55,8 @@ public class Bing2WebDocumentSource extends Bing2DocumentSource
     public String fileTypes;
 
     /**
-     * Add a site restriction to search within a given URL.
+     * Site restriction to return results under a given URL. 
+     * Example: <tt>http://www.wikipedia.com</tt> or simply <tt>wikipedia.com</tt>.
      * 
      * @label Site restriction
      * @group Results filtering
