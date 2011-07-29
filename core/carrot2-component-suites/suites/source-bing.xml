@@ -14,7 +14,7 @@
         <example-query>java</example-query>
       </example-queries>
     </source>
-    
+
     <source component-class="org.carrot2.source.microsoft.Bing2NewsDocumentSource" id="bing-news"
             attribute-sets-resource="source-bing-attributes.xml">
       <label>Bing News</label>
@@ -26,6 +26,20 @@
         <example-query>crisis</example-query>
         <example-query>market</example-query>
         <example-query>war</example-query>
+      </example-queries>
+    </source>
+    
+    <source component-class="org.carrot2.source.microsoft.Bing2ImageDocumentSource" id="bing-image"
+            attribute-sets-resource="source-bing-attributes.xml">
+      <label>Bing Images</label>
+      <title>Bing Image Search</title>
+      <mnemonic>I</mnemonic>
+      <description>Searches images using Bing Search</description>
+      <icon-path>icons/bing.png</icon-path>
+      <example-queries>
+        <example-query>cats</example-query>
+        <example-query>dogs</example-query>
+        <example-query>dark side of the moon</example-query>
       </example-queries>
     </source>    
   </sources>

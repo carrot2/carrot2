@@ -366,11 +366,85 @@ public abstract class Bing2DocumentSource extends MultipageSearchEngine
         @ElementList(type = NewsResult.class, name = "Results", required = false)
         public List<NewsResult> results;
     }
-    
+
+    @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+    @Root(name = "Thumbnail", strict = false)
+    public static class Thumbnail
+    {
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @Element(name = "Url", required = false)
+        public String url;
+        
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @Element(name = "Width", required = false)
+        public int width;
+        
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @Element(name = "Height", required = false)
+        public int height;
+        
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @Element(name = "ContentType", required = false)
+        public String contentType;
+        
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @Element(name = "FileSize", required = false)
+        public long fileSize;        
+    }
+
+    @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+    @Root(name = "ImageResult", strict = false)
+    public static class ImageResult implements IAdaptableToDocument
+    {
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @Element(name = "Title", required = false)
+        public String title;
+        
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @Element(name = "MediaUrl", required = false)
+        public String mediaUrl;
+
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @Element(name = "DisplayUrl", required = false)
+        public String displayUrl;
+
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @Element(name = "Thumbnail", required = false)
+        public Thumbnail thumbnail;
+
+        /**
+         * Convert to Carrot2 {@link Document}.
+         */
+        public Document toDocument()
+        {
+            final Document doc = new Document(title, null, displayUrl);
+            if (thumbnail != null) doc.setField(Document.THUMBNAIL_URL, thumbnail.url);
+            return doc;
+        }
+    }
+
+    @Root(name = "Image", strict = false)
+    public static class ImageResponse
+    {
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @Element(name = "Total", required = false)
+        public long total;
+
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @Element(name = "Offset", required = false)
+        public long offset;
+        
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        @ElementList(type = ImageResult.class, name = "Results", required = false)
+        public List<ImageResult> results;
+    }
+
     @Root(name = "SearchResponse", strict = false)
     @NamespaceList({
         @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/element"),
-        @Namespace(prefix="web", reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/web")
+        @Namespace(prefix="web", reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/web"),
+        @Namespace(prefix="news", reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news"),
+        @Namespace(prefix="mms", reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
     })
     public static class BingResponse 
     {
@@ -383,10 +457,14 @@ public abstract class Bing2DocumentSource extends MultipageSearchEngine
         @Element(name = "Web", required = false)
         @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/web")
         public WebResponse web;
-        
+
         @Element(name = "News", required = false)
         @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/news")
         public NewsResponse news;
+        
+        @Element(name = "Image", required = false)
+        @Namespace(reference = "http://schemas.microsoft.com/LiveSearch/2008/04/XML/multimedia")
+        public ImageResponse images;
     }
 
     /**
@@ -413,6 +491,13 @@ public abstract class Bing2DocumentSource extends MultipageSearchEngine
             pushAsDocuments(ser, langCode, response.news.results);
         }
 
+        if (response.images != null && response.images.results != null)
+        {
+            ser.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, response.images.total);
+            final LanguageCode langCode = market.toLanguageCode();
+            pushAsDocuments(ser, langCode, response.images.results);
+        }
+
         return ser;
     }
 
@@ -423,6 +508,7 @@ public abstract class Bing2DocumentSource extends MultipageSearchEngine
         {
             final Document doc = wr.toDocument();
             doc.setLanguage(langCode);
+            doc.setField("bing-response-fragment", wr);
             ser.results.add(doc);
         }
     }
