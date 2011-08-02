@@ -164,7 +164,7 @@ public class TermDocumentMatrixBuilder
                 stemsTfByDocument[stemIndex].length / 2, documentCount)
                 * getWeightBoost(titleFieldIndex, stemsFieldIndices[stemIndex]);
         }
-        final int [] stemWeightOrder = IndirectSort.sort(0, stemsWeight.length,
+        final int [] stemWeightOrder = IndirectSort.mergesort(0, stemsWeight.length,
             new IndirectComparator.DescendingDoubleComparator(stemsWeight));
 
         // Calculate the number of terms we can include to fulfill the max matrix size

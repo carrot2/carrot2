@@ -363,7 +363,7 @@ public class IndirectSorterTest
     private void check(int start, int length, IndirectComparator comparator,
         int [] expectedOrder)
     {
-        int [] order = IndirectSort.sort(start, length, comparator);
+        int [] order = IndirectSort.mergesort(start, length, comparator);
         assertThat(order).isEqualTo(expectedOrder);
     }
 
@@ -375,7 +375,7 @@ public class IndirectSorterTest
     private <T> void check(T [] input, int start, int length, Comparator<T> comparator,
         int [] expectedOrder)
     {
-        int [] order = IndirectSort.sort(input, start, length, comparator);
+        int [] order = IndirectSort.mergesort(input, start, length, comparator);
         assertThat(order).isEqualTo(expectedOrder);
     }
 
