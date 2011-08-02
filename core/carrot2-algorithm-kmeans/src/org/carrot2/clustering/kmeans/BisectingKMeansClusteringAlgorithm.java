@@ -314,7 +314,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
 
         final List<String> labels = Lists.newArrayListWithCapacity(labelCount);
 
-        final int [] order = IndirectSort.mergesort(0, centroid.size(),
+        final int [] order = IndirectSort.sort(0, centroid.size(),
             new IndirectComparator()
             {
                 @Override

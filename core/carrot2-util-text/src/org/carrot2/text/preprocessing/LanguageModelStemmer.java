@@ -95,7 +95,7 @@ public final class LanguageModelStemmer
     private void addStemStatistics(PreprocessingContext context,
         char [][] wordStemImages, Set<MutableCharArray> queryStems)
     {
-        final int [] stemImagesOrder = IndirectSort.mergesort(wordStemImages, 0, wordStemImages.length,
+        final int [] stemImagesOrder = IndirectSort.sort(wordStemImages, 0, wordStemImages.length,
             CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR);
 
         // Local array references

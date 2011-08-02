@@ -81,7 +81,7 @@ public final class CaseNormalizer
         final int tokenCount = tokenImages.length;
 
         // Sort token images
-        final int [] tokenImagesOrder = IndirectSort.mergesort(tokenImages, 0,
+        final int [] tokenImagesOrder = IndirectSort.sort(tokenImages, 0,
             tokenImages.length, CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR);
 
         // Create holders for new arrays
