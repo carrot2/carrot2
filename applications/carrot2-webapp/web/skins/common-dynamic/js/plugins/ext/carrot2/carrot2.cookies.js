@@ -20,7 +20,7 @@
    * Current application version. It needs to be incremented e.g. when we add, remove
    * or change id of a document source.
    */
-  var CURRENT_VERSION = 3005;
+  var CURRENT_VERSION = 3006;
   
   /** "Forever" (10 years) storage period for cookie */
   var NEVER_EXPIRE = 30 * 12 * 10;
