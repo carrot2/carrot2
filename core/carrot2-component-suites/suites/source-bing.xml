@@ -1,9 +1,23 @@
 <!-- Components included in all applications -->
 <component-suite>
   <sources>
+    <source component-class="org.carrot2.source.microsoft.Bing2WebDocumentSource" id="wiki"
+            attribute-sets-resource="source-bing-attributes-wiki.xml">
+      <label>Wiki</label>
+      <title>Wikipedia search with Bing</title>
+      <mnemonic>k</mnemonic>
+      <description>Searches the Wikipedia using Bing Search</description>
+      <icon-path>icons/wiki.png</icon-path>
+      <example-queries>
+        <example-query>photography</example-query>
+        <example-query>physics</example-query>
+        <example-query>clustering</example-query>
+      </example-queries>
+    </source>
+
     <source component-class="org.carrot2.source.microsoft.Bing2WebDocumentSource" id="bing-web"
             attribute-sets-resource="source-bing-attributes.xml">
-      <label>Bing Web</label>
+      <label>Bing</label>
       <title>Bing Web Search</title>
       <mnemonic>B</mnemonic>
       <description>Searches the Web using Bing Search</description>
@@ -15,9 +29,9 @@
       </example-queries>
     </source>
 
-    <source component-class="org.carrot2.source.microsoft.Bing2NewsDocumentSource" id="bing-news"
+    <source component-class="org.carrot2.source.microsoft.Bing2NewsDocumentSource" id="news"
             attribute-sets-resource="source-bing-attributes.xml">
-      <label>Bing News</label>
+      <label>News</label>
       <title>Bing News Search</title>
       <mnemonic>N</mnemonic>
       <description>Searches news stories using Bing Search</description>
@@ -29,16 +43,16 @@
       </example-queries>
     </source>
     
-    <source component-class="org.carrot2.source.microsoft.Bing2ImageDocumentSource" id="bing-image"
+    <source component-class="org.carrot2.source.microsoft.Bing2ImageDocumentSource" id="images"
             attribute-sets-resource="source-bing-attributes.xml">
-      <label>Bing Images</label>
+      <label>Images</label>
       <title>Bing Image Search</title>
       <mnemonic>I</mnemonic>
       <description>Searches images using Bing Search</description>
       <icon-path>icons/bing.png</icon-path>
       <example-queries>
         <example-query>cats</example-query>
-        <example-query>dogs</example-query>
+        <example-query>apple</example-query>
         <example-query>dark side of the moon</example-query>
       </example-queries>
     </source>    

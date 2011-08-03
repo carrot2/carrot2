@@ -4,7 +4,7 @@
       <label>overridden-attributes</label>
 
       <attribute key="Bing2WebDocumentSource.site">
-        <value value="put.poznan.pl"/>
+        <value value="wikipedia.org"/>
       </attribute>
       
       <!--
