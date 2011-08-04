@@ -23,14 +23,16 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.util.*;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
+import org.apache.http.*;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.*;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.*;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
@@ -45,8 +47,7 @@ import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 import com.google.common.io.Files;
 
 /**
@@ -72,6 +73,12 @@ public class DcsAppTest
      * DCS startup log.
      */
     private static String startupLog;
+
+    private static enum RequestType {
+        GET,
+        POST_WWW_URL_ENCODING,
+        POST_MULTIPART
+    }
 
     @BeforeClass
     public static void startDcs() throws Throwable
@@ -286,6 +293,32 @@ public class DcsAppTest
     }
 
     @Test
+    public void testGetWithExternalSource() throws Exception
+    {
+        final ProcessingResult result = getOrPost(RequestType.GET, ImmutableMap.<String, Object> of(
+            "query", "kaczyński",
+            "dcs.source", "bing-web",
+            "results", "50",
+            "dcs.algorithm", "url"
+        ));
+        assertThatClusters(result.getClusters()).isNotEmpty();
+        assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
+    }
+
+    @Test
+    public void testPostUrlEncodedWithExternalSource() throws Exception
+    {
+        final ProcessingResult result = getOrPost(RequestType.POST_WWW_URL_ENCODING, ImmutableMap.<String, Object> of(
+            "query", "kaczyński",
+            "dcs.source", "bing-web",
+            "results", "50",
+            "dcs.algorithm", "url"
+        ));
+        assertThatClusters(result.getClusters()).isNotEmpty();
+        assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
+    }
+
+    @Test
     public void testPostWithVariousC2StreamXmlEncoding() throws Exception
     {
         final ProcessingResult result16 = post(KEY_KACZYNSKI_UTF16,
@@ -414,28 +447,47 @@ public class DcsAppTest
         throws IllegalStateException, Exception
     {
         final Map<String, Object> attributes = Maps.newHashMap(otherAttributes);
-
         attributes.put("dcs.c2stream",
             new ByteArrayBody(Files.toByteArray(testFiles.get(inputDataKey)), "testfile.xml"));
 
-        final HttpClient client = new DefaultHttpClient();
-        final HttpPost post = new HttpPost(getDcsUrl("dcs/post"));
+        return getOrPost(RequestType.POST_MULTIPART, attributes);
+    }
 
-        final MultipartEntity body = new MultipartEntity(HttpMultipartMode.STRICT, null, UTF_8);
-        
-        for (Map.Entry<String, Object> entry : attributes.entrySet())
+    /**
+     * Makes a GET request.
+     */
+    private ProcessingResult getOrPost(RequestType requestType, Map<String, Object> otherAttributes)
+        throws IllegalStateException, Exception
+    {
+        final HttpClient client = new DefaultHttpClient();
+        final HttpRequestBase request;
+        switch (requestType)
         {
-            if (entry.getValue() instanceof ContentBody) {
-                body.addPart(entry.getKey(), (ContentBody) entry.getValue());
-            } else {
-                body.addPart(entry.getKey(), new StringBody(entry.getValue().toString(), UTF_8));
-            }
+            case POST_MULTIPART:
+                HttpPost post = new HttpPost(getDcsUrl("dcs/rest"));
+                post.setEntity(multipartParams(otherAttributes));
+                request = post;
+                break;
+
+            case POST_WWW_URL_ENCODING:
+                post = new HttpPost(getDcsUrl("dcs/rest"));
+                post.setEntity(new UrlEncodedFormEntity(formParams(otherAttributes), "UTF-8"));
+                request = post;
+                break;
+
+            case GET:
+                request = new HttpGet(
+                    getDcsUrl("dcs/rest") + "?" 
+                        + URLEncodedUtils.format(formParams(otherAttributes), "UTF-8"));
+                break;
+
+            default:
+                throw new RuntimeException();
         }
-        post.setEntity(body);
 
         try
         {
-            HttpResponse response = client.execute(post);
+            HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
             {
                 throw new IOException("Unexpected DCS response: "
@@ -448,5 +500,33 @@ public class DcsAppTest
         {
             client.getConnectionManager().shutdown();
         }
+    }
+
+    private HttpEntity multipartParams(Map<String, Object> attributes) throws UnsupportedEncodingException
+    {
+        final MultipartEntity body = new MultipartEntity(HttpMultipartMode.STRICT, null, UTF_8);
+        for (Map.Entry<String, Object> entry : attributes.entrySet())
+        {
+            if (entry.getValue() instanceof ContentBody) {
+                body.addPart(entry.getKey(), (ContentBody) entry.getValue());
+            } else {
+                body.addPart(entry.getKey(), new StringBody(entry.getValue().toString(), UTF_8));
+            }
+        }
+        return body;
+    }
+
+    private List<? extends NameValuePair> formParams(Map<String, Object> otherAttributes)
+    {
+        final Map<String, Object> attributes = Maps.newHashMap(otherAttributes);
+        Assert.assertFalse(attributes.containsKey("dcs.c2stream"));
+
+        final List<NameValuePair> params = Lists.newArrayList();
+        for (Map.Entry<String, Object> entry : attributes.entrySet())
+        {
+            params.add(new BasicNameValuePair(entry.getKey(), entry.getValue().toString()));
+        }
+        
+        return params;
     }
 }

@@ -96,6 +96,7 @@ public class DcsApp
         connector.setReuseAddress(false);
         connector.setAcceptQueueSize(acceptQueue);
         connector.setThreadPool(new QueuedThreadPool(maxThreads));
+        connector.setSoLingerTime(0);
         server.addConnector(connector);
 
         WebAppContext wac = new WebAppContext();
