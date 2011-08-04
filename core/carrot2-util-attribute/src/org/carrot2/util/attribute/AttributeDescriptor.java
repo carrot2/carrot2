@@ -193,7 +193,7 @@ public class AttributeDescriptor
     public static final class AttributeDescriptorToKey implements
         Function<AttributeDescriptor, String>
     {
-        public static final AttributeDescriptorToKey INSANCE = new AttributeDescriptorToKey();
+        public static final AttributeDescriptorToKey INSTANCE = new AttributeDescriptorToKey();
 
         private AttributeDescriptorToKey()
         {
