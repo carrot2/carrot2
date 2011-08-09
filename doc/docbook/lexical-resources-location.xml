@@ -79,6 +79,12 @@
           directory. If a resource is not found in the directory, 
           the default version of the resource is loaded from &PROD; JAR.
         </para>
+        <para>
+          A different location of lexical resources can be provided
+          using the <link xlink:href="http://wiki.apache.org/solr/ClusteringComponent#carrot.lexicalResourcesDir">carrot.lexicalResourceDir</link>
+          Solr parameter. In particular, an absolute path can be provided
+          to share the same lexical resources between multiple Solr cores.
+        </para>
       </listitem>
     </varlistentry>
   </variablelist>
