@@ -323,7 +323,7 @@
             commandId="org.carrot2.workbench.core.ui.actions.ReprocessCommand"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+F11">
+            sequence="M1+R">
       </key>
    </extension>
    <extension
