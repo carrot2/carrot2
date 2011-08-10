@@ -255,7 +255,7 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
     private int calculateInitialSize(int fullScreenSize, int minSize)
     {
         int size;
-        final double ratio = 0.8;
+        final double ratio = 0.9;
         if ((int) (fullScreenSize * ratio) >= minSize)
         {
             size = (int) (fullScreenSize * ratio);

@@ -40,7 +40,7 @@ public final class SearchPerspective implements IPerspectiveFactory
         layout.setEditorAreaVisible(true);
 
         final IFolderLayout leftFolder = layout.createFolder("leftViews",
-            IPageLayout.LEFT, .3f, layout.getEditorArea());
+            IPageLayout.LEFT, .35f, layout.getEditorArea());
         leftFolder.addView(SearchInputView.ID);        
     }
 }

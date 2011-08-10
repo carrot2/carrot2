@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-	<extension-point id="attributeEditor" name="Attribute Editor" schema="schema/attributeEditor.exsd"/>
+   <extension-point id="attributeEditor" name="Attribute Editor" schema="schema/attributeEditor.exsd"/>
    <extension
          id="application"
          point="org.eclipse.core.runtime.applications">
@@ -196,7 +196,7 @@
 
          <view
                id="org.carrot2.workbench.core.views.clusters"
-               ratio="0.5"
+               ratio="0.50"
                relationship="bottom"
                visible="false"
                relative="org.carrot2.workbench.core.views.search"/>
