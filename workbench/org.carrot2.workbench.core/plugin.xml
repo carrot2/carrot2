@@ -44,6 +44,10 @@
                value="Carrot2 Workbench">
          </property>
          <property
+               name="windowImages"
+               value="icons/icons/16x16x32.png,icons/icons/32x32x32.png,icons/icons/128x128x32.png,icons/icons/256x256x32.png">
+         </property>
+         <property
                name="aboutText"
                value="Carrot2 Workbench&#x0A;&#x0A;(c) Carrot2 developers.  All rights reserved.&#x0A;Visit http://carrot2.org for more information.&#x0A;&#x0A;This product includes software developed by the&#x0A;Apache Software Foundation http://www.apache.org/.">
          </property>
