@@ -31,7 +31,7 @@ final class ClusterTreeExpanderAction extends ActionDelegate
     {
         this.tree = tree;
 
-        searchResult.addListener(new ISearchResultListener() {
+        searchResult.addListener(new SearchResultListenerAdapter() {
             public void processingResultUpdated(ProcessingResult result)
             {
                 boolean hasStructure = false;

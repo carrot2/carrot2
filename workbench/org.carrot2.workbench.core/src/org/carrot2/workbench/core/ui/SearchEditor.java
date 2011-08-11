@@ -12,28 +12,53 @@
 
 package org.carrot2.workbench.core.ui;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
-import org.carrot2.util.attribute.*;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.ProcessingComponentDescriptor;
+import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.InternalAttributePredicate;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
+import org.carrot2.util.attribute.Input;
 import org.carrot2.workbench.core.WorkbenchActionFactory;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
-import org.carrot2.workbench.core.helpers.*;
+import org.carrot2.workbench.core.helpers.ActionDelegateProxy;
+import org.carrot2.workbench.core.helpers.DisposeBin;
+import org.carrot2.workbench.core.helpers.GUIFactory;
+import org.carrot2.workbench.core.helpers.PartListenerAdapter;
+import org.carrot2.workbench.core.helpers.PostponableJob;
+import org.carrot2.workbench.core.helpers.SimpleXmlMemento;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.carrot2.workbench.core.ui.actions.GroupingMethodAction;
 import org.carrot2.workbench.core.ui.actions.SaveAsXMLActionDelegate;
 import org.carrot2.workbench.core.ui.sash.SashForm;
 import org.carrot2.workbench.core.ui.widgets.CScrolledComposite;
-import org.carrot2.workbench.editors.*;
-import org.eclipse.core.runtime.*;
-import org.eclipse.core.runtime.jobs.*;
-import org.eclipse.jface.action.*;
+import org.carrot2.workbench.editors.AttributeEvent;
+import org.carrot2.workbench.editors.AttributeListenerAdapter;
+import org.carrot2.workbench.editors.IAttributeListener;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -41,7 +66,6 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -50,9 +74,23 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
-import org.eclipse.ui.forms.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IPersistableEditor;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.progress.UIJob;
 import org.simpleframework.xml.Element;
@@ -389,15 +427,13 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         /*
          * Hook to post-update events.
          */
-        final ISearchResultListener rootFormTitleUpdater = new SearchResultListenerAdapter()
+        this.searchResult.addListener(new SearchResultListenerAdapter()
         {
             public void processingResultUpdated(ProcessingResult result)
             {
                 updatePartHeaders();
-                selectionProvider.setSelection(StructuredSelection.EMPTY);
             }
-        };
-        this.searchResult.addListener(rootFormTitleUpdater);
+        });
 
         /*
          * Create jobs and schedule initial processing after the editor is shown.

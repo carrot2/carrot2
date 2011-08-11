@@ -19,8 +19,21 @@ import org.carrot2.core.ProcessingResult;
  */
 public class SearchResultListenerAdapter implements ISearchResultListener
 {
+    @Override
+    public void beforeProcessingResultUpdated()
+    {
+        // Empty
+    }
+
+    @Override
     public void processingResultUpdated(ProcessingResult result)
     {
         // Empty.
+    }
+    
+    @Override
+    public void afterProcessingResultUpdated()
+    {
+        // Empty
     }
 }

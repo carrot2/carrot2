@@ -30,7 +30,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -43,7 +42,8 @@ public final class ClusterTree
     implements IPostSelectionProvider
 {
     private TreeViewer treeViewer;
-
+    private List<Cluster> previousClusters;
+    
     /**
      * Content provider for the tree.
      */
@@ -136,33 +136,26 @@ public final class ClusterTree
         }
         else
         {
-            List<String> expanded = getExpandedLabels();
+            ClusterLabelPaths clp = null;
+            if (previousClusters != null)
+                clp = ClusterLabelPaths.from(previousClusters, getExpandedClusters());
+
             treeViewer.setInput(clusters);
-            treeViewer.setExpandedElements(toExpandedLabels(clusters, expanded));
+
+            if (clp != null)
+                treeViewer.setExpandedElements(clp.filterMatching(clusters).toArray());
+
+            previousClusters = clusters;
         }
     }
 
-    /**
-     * Return an array of clusters which have corresponding cluster labels. 
-     */
-    private Object [] toExpandedLabels(List<Cluster> clusters, List<String> expandedLabels)
+    /** Return a list of expanded clusters in the current tree. */
+    private List<Cluster> getExpandedClusters()
     {
-        ArrayListMultimap<String, Cluster> labelToCluster = ArrayListMultimap.create();
-        for (Cluster c : Cluster.flatten(clusters))
-        {
-            labelToCluster.put(c.getLabel(), c);
-        }
-        labelToCluster.keySet().retainAll(expandedLabels);
-        return labelToCluster.values().toArray();
-    }
-
-    /** Return a list of expanded labels in the current tree. */
-    private List<String> getExpandedLabels()
-    {
-        List<String> expanded = Lists.newArrayList(); 
+        List<Cluster> expanded = Lists.newArrayList(); 
         for (Object o : this.treeViewer.getExpandedElements())
         {
-            expanded.add(((Cluster) o).getLabel());
+            expanded.add((Cluster) o);
         }
         return expanded;
     }
@@ -181,6 +174,7 @@ public final class ClusterTree
      */
     public void clear()
     {
+        previousClusters = null;
         treeViewer.setInput(Collections.emptyList());
     }
 
