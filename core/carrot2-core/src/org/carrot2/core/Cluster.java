@@ -639,11 +639,7 @@ public final class Cluster
      */
     public static void assignClusterIds(Collection<Cluster> clusters)
     {
-        final ArrayList<Cluster> flattened = Lists.newArrayListWithExpectedSize(clusters
-            .size());
-
-        flatten(flattened, clusters);
-
+        final List<Cluster> flattened = flatten(clusters);
         synchronized (clusters)
         {
             final HashSet<Integer> ids = Sets.newHashSet();
@@ -678,20 +674,25 @@ public final class Cluster
         }
     }
 
+    /**
+     * Flattens a hierarchy of clusters into a flat list.
+     */
+    public static List<Cluster> flatten(Collection<Cluster> hierarchical)
+    {
+        return flatten(hierarchical, Lists.<Cluster> newArrayList());
+    }
+
     /*
      * Recursive descent into subclusters.
      */
-    private static void flatten(ArrayList<Cluster> flattened, Collection<Cluster> clusters)
+    private static List<Cluster> flatten(Collection<Cluster> hierarchical, List<Cluster> flat)
     {
-        for (Cluster c : clusters)
+        for (Cluster c : hierarchical)
         {
-            flattened.add(c);
-            final List<Cluster> subclusters = c.getSubclusters();
-            if (!subclusters.isEmpty())
-            {
-                flatten(flattened, subclusters);
-            }
+            flat.add(c);
+            flatten(c.getSubclusters(), flat);
         }
+        return flat;
     }
 
     /**
