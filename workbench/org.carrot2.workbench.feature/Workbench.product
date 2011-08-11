@@ -33,16 +33,11 @@ Apache Software Foundation http://www.apache.org/.
    <splash
       location="org.carrot2.workbench.core" />
    <launcher name="carrot2-workbench">
-      <linux icon="/org.carrot2.workbench.core/icons/carrot2-32x32.xpm"/>
+      <linux icon="/org.carrot2.workbench.feature/icons/icon-linux.xpm"/>
+      <macosx icon="/org.carrot2.workbench.feature/icons/icon-mac.icns"/>
       <solaris/>
-      <win useIco="false">
-         <bmp
-            winSmallHigh="/org.carrot2.workbench.core/icons/ico/carrot2-16x16x32.bmp"
-            winSmallLow="/org.carrot2.workbench.core/icons/ico/carrot2-16x16x8.bmp"
-            winMediumHigh="/org.carrot2.workbench.core/icons/ico/carrot2-32x32x32.bmp"
-            winMediumLow="/org.carrot2.workbench.core/icons/ico/carrot2-32x32x8.bmp"
-            winLargeHigh="/org.carrot2.workbench.core/icons/ico/carrot2-48x48x32.bmp"
-            winLargeLow="/org.carrot2.workbench.core/icons/ico/carrot2-48x48x8.bmp"/>
+      <win useIco="true">
+         <ico path="/org.carrot2.workbench.feature/icons/icon-windows.ico"/>
       </win>
    </launcher>
 
