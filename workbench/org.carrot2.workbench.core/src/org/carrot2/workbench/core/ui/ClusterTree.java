@@ -12,15 +12,26 @@
 
 package org.carrot2.workbench.core.ui;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingResult;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.viewers.IPostSelectionProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -125,12 +136,39 @@ public final class ClusterTree
         }
         else
         {
+            List<String> expanded = getExpandedLabels();
             treeViewer.setInput(clusters);
+            treeViewer.setExpandedElements(toExpandedLabels(clusters, expanded));
         }
     }
 
     /**
-     * Resets the display all clusters from a {@link ProcessingResult}. 
+     * Return an array of clusters which have corresponding cluster labels. 
+     */
+    private Object [] toExpandedLabels(List<Cluster> clusters, List<String> expandedLabels)
+    {
+        ArrayListMultimap<String, Cluster> labelToCluster = ArrayListMultimap.create();
+        for (Cluster c : Cluster.flatten(clusters))
+        {
+            labelToCluster.put(c.getLabel(), c);
+        }
+        labelToCluster.keySet().retainAll(expandedLabels);
+        return labelToCluster.values().toArray();
+    }
+
+    /** Return a list of expanded labels in the current tree. */
+    private List<String> getExpandedLabels()
+    {
+        List<String> expanded = Lists.newArrayList(); 
+        for (Object o : this.treeViewer.getExpandedElements())
+        {
+            expanded.add(((Cluster) o).getLabel());
+        }
+        return expanded;
+    }
+
+    /**
+     * Resets the display to show all clusters from a {@link ProcessingResult}. 
      */
     public void show(final ProcessingResult result)
     {
@@ -154,7 +192,6 @@ public final class ClusterTree
         this.setLayout(new FillLayout());
 
         treeViewer = new TreeViewer(this, SWT.MULTI);
-
         treeViewer.setLabelProvider(new ClusterLabelProvider());
         treeViewer.setContentProvider(contentProvider);
         treeViewer.setInput(Collections.emptyList());
