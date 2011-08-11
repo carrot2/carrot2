@@ -48,10 +48,6 @@
                value="Carrot2 Workbench&#x0A;&#x0A;(c) Carrot2 developers.  All rights reserved.&#x0A;Visit http://carrot2.org for more information.&#x0A;&#x0A;This product includes software developed by the&#x0A;Apache Software Foundation http://www.apache.org/.">
          </property>
          <property
-               name="windowImages"
-               value="icons/carrot2-16x16.gif,icons/carrot2-32x32.gif">
-         </property>
-         <property
                name="aboutImage"
                value="icons/product_logo.png">
          </property>

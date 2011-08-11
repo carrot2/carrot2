@@ -28,7 +28,7 @@ Apache Software Foundation http://www.apache.org/.
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.carrot2.workbench.core/icons/carrot2-16x16.gif" i32="/org.carrot2.workbench.core/icons/carrot2-32x32.gif"/>
+   <windowImages/>
 
    <splash
       location="org.carrot2.workbench.core" />
@@ -38,8 +38,10 @@ Apache Software Foundation http://www.apache.org/.
       <solaris/>
       <win useIco="true">
          <ico path="/org.carrot2.workbench.feature/icons/icon-windows.ico"/>
+         <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>
