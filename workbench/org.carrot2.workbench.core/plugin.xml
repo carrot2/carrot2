@@ -45,7 +45,7 @@
          </property>
          <property
                name="windowImages"
-               value="icons/icons/16x16x32.png,icons/icons/32x32x32.png,icons/icons/128x128x32.png,icons/icons/256x256x32.png">
+               value="icons/logotype/16x16x32.png,icons/logotype/32x32x32.png,icons/logotype/128x128x32.png,icons/logotype/256x256x32.png">
          </property>
          <property
                name="aboutText"
@@ -53,7 +53,7 @@
          </property>
          <property
                name="aboutImage"
-               value="icons/product_logo.png">
+	       value="icons/logotype/128x128x32.png">
          </property>
          <property
                name="preferenceCustomization"
