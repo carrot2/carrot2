@@ -4,7 +4,7 @@
 <product name="Carrot2 Workbench" id="org.carrot2.workbench.core.product" application="org.carrot2.workbench.core.application" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/org.carrot2.workbench.core/icons/product_logo.png"/>
+      <image path="/org.carrot2.workbench.core/icons/logotype/128x128x32.png"/>
       <text>
          Carrot2 Workbench
 
@@ -34,8 +34,7 @@ Apache Software Foundation http://www.apache.org/.
 		  i64="/org.carrot2.workbench.core/icons/logotype/64x64x32.png" 
 		 i128="/org.carrot2.workbench.core/icons/logotype/128x128x32.png" />
 
-   <splash
-      location="org.carrot2.workbench.core" />
+   <splash location="org.carrot2.workbench.core" />
    <launcher name="carrot2-workbench">
       <linux icon="/org.carrot2.workbench.feature/icons/icon-linux.xpm"/>
       <macosx icon="/org.carrot2.workbench.feature/icons/icon-mac.icns"/>
