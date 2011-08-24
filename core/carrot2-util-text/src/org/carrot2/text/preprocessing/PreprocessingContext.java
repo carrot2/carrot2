@@ -19,6 +19,7 @@ import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.text.util.Tabular;
 
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.ObjectOpenHashSet;
@@ -135,8 +136,6 @@ public final class PreprocessingContext
          * This array is produced by {@link Tokenizer}.
          * </p>
          * <p>
-         * TODO: is this always needed? Seems awfully repetitive, esp. for long docs.
-         * <p>
          * This array is accessed in in {@link CaseNormalizer} and {@link PhraseExtractor}
          * to compute by-document statistics, e.g. tf-by document, which are then needed
          * to build a VSM or assign documents to labels. An alternative to this representation
@@ -179,23 +178,30 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < image.length; i++)
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("term image")
+                .addColumn("type")
+                .addColumn("fieldIndex")
+                .addColumn("documentIndex")
+                .addColumn("wordIndex")
+                .addColumn("=>word");
+
+            for (int i = 0; i < image.length; i++, t.nextRow())
             {
-                sb.append(i).append(": ");
-                sb.append("type:").append(type[i]);
-                sb.append(",fieldIndex:").append(fieldIndex[i]);
-                sb.append(",documentIndex:").append(documentIndex[i]);
-                if (allWords != null)
-                {
-                    sb.append(",wordIndex:").append(wordIndex[i]);
-                    if (wordIndex[i] >= 0)
-                        sb.append("=>").append(allWords.image[wordIndex[i]]);
-                }
-                sb.append(",term:").append(image[i] == null ? "<null>" : new String(image[i]));
-                sb.append("\n");
+                t.rowData(
+                    i,
+                    image[i] == null ? "<null>" : new String(image[i]),
+                    type[i],
+                    fieldIndex[i],
+                    documentIndex[i],
+                    wordIndex[i]);
+
+                if (allWords != null && wordIndex[i] >= 0)
+                    t.rowData(allWords.image[wordIndex[i]]);
             }
-            return sb.toString();
+
+            return t.toString();
         }
     }
 
