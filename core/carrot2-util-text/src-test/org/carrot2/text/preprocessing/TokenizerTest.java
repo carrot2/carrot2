@@ -181,7 +181,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
         {
             "title", "snippet", "body"
         };
-        createDocuments(fieldNames, "data mining", "", "web site");
+        createDocumentsWithFields(fieldNames, "data mining", "", "web site");
 
         final char [][] expectedTokensImages = new char [] []
         {
