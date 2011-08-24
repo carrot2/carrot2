@@ -100,7 +100,7 @@ public final class PreprocessingContext
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public static class AllTokens
+    public class AllTokens
     {
         /**
          * Token image as it appears in the input. On positions where {@link #type} is
@@ -174,6 +174,29 @@ public final class PreprocessingContext
          * This array is produced by {@link PhraseExtractor}.
          */
         public int [] lcp;
+
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < image.length; i++)
+            {
+                sb.append(i).append(": ");
+                sb.append("type:").append(type[i]);
+                sb.append(",fieldIndex:").append(fieldIndex[i]);
+                sb.append(",documentIndex:").append(documentIndex[i]);
+                if (allWords != null)
+                {
+                    sb.append(",wordIndex:").append(wordIndex[i]);
+                    if (wordIndex[i] >= 0)
+                        sb.append("=>").append(allWords.image[wordIndex[i]]);
+                }
+                sb.append(",term:").append(image[i] == null ? "<null>" : new String(image[i]));
+                sb.append("\n");
+            }
+            return sb.toString();
+        }
     }
 
     /**
@@ -362,15 +385,16 @@ public final class PreprocessingContext
         public int [][] wordIndices;
 
         /**
-         * Term frequency of the word sequence.
+         * Term frequency of the phrase.
          * <p>
          * This array is produced by {@link PhraseExtractor}.
          */
         public int [] tf;
 
         /**
-         * Term frequency of the word sequence for each document. For the encoding of this
-         * array, see {@link AllWords#tfByDocument}.
+         * Term frequency of the phrase for each document. The encoding of this
+         * array is similar to {@link AllWords#tfByDocument}: consecutive pairs of:
+         * document index, frequency.
          * <p>
          * This array is produced by {@link PhraseExtractor}.
          */
