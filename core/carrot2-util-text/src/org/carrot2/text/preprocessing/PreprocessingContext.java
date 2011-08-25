@@ -23,7 +23,6 @@ import org.carrot2.text.util.Tabular;
 
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.ObjectOpenHashSet;
-import com.carrotsearch.hppc.predicates.ShortPredicate;
 
 /**
  * Document preprocessing context provides low-level (usually integer-coded) data
@@ -34,37 +33,6 @@ import com.carrotsearch.hppc.predicates.ShortPredicate;
  */
 public final class PreprocessingContext
 {
-    /** Predicate for splitting on document separator. */
-    public static final ShortPredicate ON_DOCUMENT_SEPARATOR = 
-        equalTo(ITokenizer.TF_SEPARATOR_DOCUMENT);
-
-    /** Predicate for splitting on field separator. */
-    public static final ShortPredicate ON_FIELD_SEPARATOR = 
-        equalTo(ITokenizer.TF_SEPARATOR_FIELD);
-
-    /** Predicate for splitting on sentence separator. */
-    public static final ShortPredicate ON_SENTENCE_SEPARATOR = new ShortPredicate()
-    {
-        public boolean apply(short tokenType)
-        {
-            return (tokenType & ITokenizer.TF_SEPARATOR_SENTENCE) != 0;
-        }
-    };
-
-    /** 
-     * Return a new {@link ShortPredicate} returning <code>true</code>
-     * if the argument equals a given value. 
-     */
-    public static final ShortPredicate equalTo(final short t)
-    {
-        return new ShortPredicate() {
-            public boolean apply(short value)
-            {
-                return value == t; 
-            }
-        };
-    }
-
     /** Query used to perform processing, may be <code>null</code> */
     public final String query;
 
@@ -78,7 +46,7 @@ public final class PreprocessingContext
      * Token interning cache. Token images are interned to save memory and allow reference
      * comparisons.
      */
-    public ObjectOpenHashSet<MutableCharArray> tokenCache = new ObjectOpenHashSet<MutableCharArray>();
+    private ObjectOpenHashSet<MutableCharArray> tokenCache = new ObjectOpenHashSet<MutableCharArray>();
 
     /**
      * Creates a preprocessing context for the provided <code>documents</code> and with
@@ -180,12 +148,16 @@ public final class PreprocessingContext
         {
             Tabular t = new Tabular()
                 .addColumn("#")
-                .addColumn("term image")
+                .addColumn("term")
                 .addColumn("type")
                 .addColumn("fieldIndex")
-                .addColumn("documentIndex")
-                .addColumn("wordIndex")
+                .addColumn("=>field")
+                .addColumn("docIdx")
+                .addColumn("wordIdx")
                 .addColumn("=>word");
+
+            if (suffixOrder != null) t.addColumn("suffixOrder");
+            if (lcp != null) t.addColumn("lcp");
 
             for (int i = 0; i < image.length; i++, t.nextRow())
             {
@@ -194,11 +166,13 @@ public final class PreprocessingContext
                     image[i] == null ? "<null>" : new String(image[i]),
                     type[i],
                     fieldIndex[i],
+                    fieldIndex[i] >= 0 ? allFields.name[fieldIndex[i]] : null,
                     documentIndex[i],
-                    wordIndex[i]);
+                    wordIndex[i],
+                    wordIndex[i] >= 0 ? allWords.image[wordIndex[i]] : null);
 
-                if (allWords != null && wordIndex[i] >= 0)
-                    t.rowData(allWords.image[wordIndex[i]]);
+                if (suffixOrder != null) t.rowData(suffixOrder[i]);
+                if (lcp != null) t.rowData(lcp[i]);
             }
 
             return t.toString();

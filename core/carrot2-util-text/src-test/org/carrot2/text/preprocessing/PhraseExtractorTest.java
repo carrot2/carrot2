@@ -753,6 +753,8 @@ public class PhraseExtractorTest extends PreprocessingComponentTestBase
         languageModelStemmer.stem(context);
         phraseExtractor.extractPhrases(context);
 
+        System.out.println(context.allTokens);
+        
         assertThat(context.allPhrases.wordIndices).as("allPhrases.wordIndices")
             .isEqualTo(expectedPhraseWordIndexes);
         assertThat(context.allPhrases.tf).as("allPhrases.tf").isEqualTo(expectedPhraseTf);

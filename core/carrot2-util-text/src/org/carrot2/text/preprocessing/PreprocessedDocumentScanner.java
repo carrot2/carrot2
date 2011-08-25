@@ -12,13 +12,47 @@
 
 package org.carrot2.text.preprocessing;
 
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.util.IntArrayPredicateIterator;
+
+import com.carrotsearch.hppc.predicates.ShortPredicate;
 
 /**
  * Iterates over tokenized documents in {@link PreprocessingContext}.
  */
 public class PreprocessedDocumentScanner
 {
+    /** Predicate for splitting on document separator. */
+    public static final ShortPredicate ON_DOCUMENT_SEPARATOR = 
+        equalTo(ITokenizer.TF_SEPARATOR_DOCUMENT);
+
+    /** Predicate for splitting on field separator. */
+    public static final ShortPredicate ON_FIELD_SEPARATOR = 
+        equalTo(ITokenizer.TF_SEPARATOR_FIELD);
+
+    /** Predicate for splitting on sentence separator. */
+    public static final ShortPredicate ON_SENTENCE_SEPARATOR = new ShortPredicate()
+    {
+        public boolean apply(short tokenType)
+        {
+            return (tokenType & ITokenizer.TF_SEPARATOR_SENTENCE) != 0;
+        }
+    };
+
+    /** 
+     * Return a new {@link ShortPredicate} returning <code>true</code>
+     * if the argument equals a given value. 
+     */
+    public static final ShortPredicate equalTo(final short t)
+    {
+        return new ShortPredicate() {
+            public boolean apply(short value)
+            {
+                return value == t; 
+            }
+        };
+    }
+
     /**
      * Iterate over all documents, fields and sentences in {@link PreprocessingContext#allTokens}.
      */
@@ -31,7 +65,7 @@ public class PreprocessedDocumentScanner
          */
         final IntArrayPredicateIterator docIterator = new IntArrayPredicateIterator(
             context.allTokens.type, 0, context.allTokens.type.length - 1,
-            PreprocessingContext.ON_DOCUMENT_SEPARATOR);
+            ON_DOCUMENT_SEPARATOR);
 
         while (docIterator.hasNext())
         {
@@ -49,7 +83,7 @@ public class PreprocessedDocumentScanner
     {
         final IntArrayPredicateIterator fieldIterator = new IntArrayPredicateIterator(
             context.allTokens.type, start, length,
-            PreprocessingContext.ON_FIELD_SEPARATOR);
+            ON_FIELD_SEPARATOR);
 
         while (fieldIterator.hasNext())
         {
@@ -67,7 +101,7 @@ public class PreprocessedDocumentScanner
     {
         final IntArrayPredicateIterator sentenceIterator = new IntArrayPredicateIterator(
             context.allTokens.type, start, length,
-            PreprocessingContext.ON_SENTENCE_SEPARATOR);
+            ON_SENTENCE_SEPARATOR);
 
         while (sentenceIterator.hasNext())
         {
