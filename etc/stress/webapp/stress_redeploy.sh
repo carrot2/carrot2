@@ -50,7 +50,7 @@ do
     #
     # Issue 40 queries at random, then quit
     #
-    cat queries | ./stress.rb -t 5 -m 5 -u $TEST_URI --queries 40 2> /dev/null
+    head -n 500 queries | jruby ./stress.rb -t 5 -m 5 -u $TEST_URI --queries 40 2> /dev/null
 done
 
 
