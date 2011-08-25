@@ -528,7 +528,9 @@ public class PhraseExtractorTest extends PreprocessingComponentTestBase
     @Test
     public void testComposition()
     {
-        createDocuments("abc bcd cde", "abc bcd cdf", "abc bcd cdg", "abc bcd cdh");
+        createDocuments(
+            "abc bcd cde", "abc bcd cdf", 
+            "abc bcd cdg", "abc bcd cdh");
 
         int [][] expectedPhraseWordIndexes = new int [] []
         {
@@ -753,8 +755,6 @@ public class PhraseExtractorTest extends PreprocessingComponentTestBase
         languageModelStemmer.stem(context);
         phraseExtractor.extractPhrases(context);
 
-        System.out.println(context.allTokens);
-        
         assertThat(context.allPhrases.wordIndices).as("allPhrases.wordIndices")
             .isEqualTo(expectedPhraseWordIndexes);
         assertThat(context.allPhrases.tf).as("allPhrases.tf").isEqualTo(expectedPhraseTf);

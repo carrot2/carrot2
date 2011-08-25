@@ -12,6 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.carrot2.core.Document;
@@ -21,8 +22,7 @@ import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.text.util.Tabular;
 
-import com.carrotsearch.hppc.BitSet;
-import com.carrotsearch.hppc.ObjectOpenHashSet;
+import com.carrotsearch.hppc.*;
 
 /**
  * Document preprocessing context provides low-level (usually integer-coded) data
@@ -33,6 +33,9 @@ import com.carrotsearch.hppc.ObjectOpenHashSet;
  */
 public final class PreprocessingContext
 {
+    /** Uninitialized structure constant. */
+    private static final String UNINITIALIZED = "[uninitialized]";
+
     /** Query used to perform processing, may be <code>null</code> */
     public final String query;
 
@@ -146,18 +149,16 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
+            StringBuilder b = new StringBuilder();
             Tabular t = new Tabular()
                 .addColumn("#")
-                .addColumn("term")
+                .addColumn("term").flushLeft()
                 .addColumn("type")
                 .addColumn("fieldIndex")
-                .addColumn("=>field")
+                .addColumn("=>field").flushLeft()
                 .addColumn("docIdx")
                 .addColumn("wordIdx")
-                .addColumn("=>word");
-
-            if (suffixOrder != null) t.addColumn("suffixOrder");
-            if (lcp != null) t.addColumn("lcp");
+                .addColumn("=>word").flushLeft();
 
             for (int i = 0; i < image.length; i++, t.nextRow())
             {
@@ -170,12 +171,42 @@ public final class PreprocessingContext
                     documentIndex[i],
                     wordIndex[i],
                     wordIndex[i] >= 0 ? allWords.image[wordIndex[i]] : null);
-
-                if (suffixOrder != null) t.rowData(suffixOrder[i]);
-                if (lcp != null) t.rowData(lcp[i]);
             }
 
-            return t.toString();
+            t.toString(b);
+
+            if (suffixOrder != null)
+            {
+                t = new Tabular()
+                    .addColumn("#")
+                    .addColumn("sa")
+                    .addColumn("lcp")
+                    .addColumn("=>words").flushLeft();
+
+                final StringBuilder suffixImage = new StringBuilder();
+                for (int i = 0; i < suffixOrder.length; i++, t.nextRow())
+                {
+                    t.rowData(
+                        i,
+                        suffixOrder[i],
+                        lcp[i]);
+
+                    int windowLength = 5;
+                    for (int j = suffixOrder[i], max = Math.min(suffixOrder[i] + windowLength, wordIndex.length); j < max;)
+                    {
+                        suffixImage.append(
+                            wordIndex[j] >= 0 ? new String(allWords.image[wordIndex[j]]) : "|").append(" ");
+                        if (++j == max && j != wordIndex.length)
+                            suffixImage.append(" [...]");
+                    }
+                    t.rowData(suffixImage.toString());
+                    suffixImage.setLength(0);
+                }
+                b.append("\n");
+                t.toString(b);
+            }
+
+            return b.toString();
         }
     }
 
@@ -197,6 +228,21 @@ public final class PreprocessingContext
          * This array is produced by {@link Tokenizer}.
          */
         public String [] name;
+        
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("name").flushLeft();
+
+            int i = 0;
+            for (String n : name)
+                t.rowData(i++, n).nextRow();
+
+            return t.toString();
+        }        
     }
 
     /**
@@ -207,16 +253,16 @@ public final class PreprocessingContext
 
     /**
      * Information about all unique words found in the input
-     * {@link PreprocessingContext#documents}. Each entry in each array corresponds to one
-     * unique word with respect to case, e.g. <em>data</em> and <em>DATA</em> will be
-     * conflated to one entry in the arrays. Different grammatical forms of one word, e.g.
-     * e.g <em>computer</em> and <em>computers</em>, will have different entries in the
-     * arrays (see {@link AllStems} for inflection-conflated versions).
+     * {@link PreprocessingContext#documents}. An entry in each parallel array corresponds to one
+     * conflated form of a word. For example, <em>data</em> and <em>DATA</em> will most likely become
+     * a single entry in the words table. However, different grammatical forms of a single lemma
+     * (like <em>computer</em> and <em>computers</em>) will have different entries in the
+     * words table. See {@link AllStems} for inflection-conflated versions.
      * <p>
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public static class AllWords
+    public class AllWords
     {
         /**
          * The most frequently appearing variant of the word with respect to case. E.g. if
@@ -277,6 +323,45 @@ public final class PreprocessingContext
          * This array is produced by {@link CaseNormalizer}.
          */
         public byte [] fieldIndices;
+
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("image").flushLeft()
+                .addColumn("type")
+                .addColumn("tf")
+                .addColumn("tfByDocument").flushLeft()
+                .addColumn("fieldIndices");
+
+            if (stemIndex != null)
+            {
+                t.addColumn("stemIndex")
+                 .addColumn("=>stem").flushLeft();
+            }
+
+            for (int i = 0; i < image.length; i++, t.nextRow())
+            {
+                t.rowData(
+                    i,
+                    image[i] == null ? "<null>" : new String(image[i]),
+                    type[i],
+                    tf[i],
+                    intIntArrayToString(tfByDocument[i]).toString());
+
+                t.rowData(Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
+
+                if (stemIndex != null)
+                {
+                    t.rowData(stemIndex[i]);
+                    t.rowData(allStems.image[stemIndex[i]]);
+                }
+            }
+
+            return t.toString();
+        }
     }
 
     /**
@@ -296,7 +381,7 @@ public final class PreprocessingContext
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public static class AllStems
+    public class AllStems
     {
         /**
          * Stem image as produced by the {@link IStemmer}, may not correspond to any
@@ -339,6 +424,34 @@ public final class PreprocessingContext
          * This array is produced by {@link LanguageModelStemmer}
          */
         public byte [] fieldIndices;
+
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("stem")
+                .addColumn("mostFrqWord")
+                .addColumn("=>mostFrqWord").flushLeft()
+                .addColumn("tf")
+                .addColumn("tfByDocument").flushLeft()
+                .addColumn("fieldIndices");
+
+            for (int i = 0; i < image.length; i++, t.nextRow())
+            {
+                t.rowData(
+                    i,
+                    image[i] == null ? "<null>" : new String(image[i]),
+                    mostFrequentOriginalWordIndex[i],
+                    allWords.image[mostFrequentOriginalWordIndex[i]],
+                    tf[i],
+                    intIntArrayToString(tfByDocument[i]).toString(),
+                    Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
+            }
+
+            return t.toString();
+        }
     }
 
     /**
@@ -355,7 +468,7 @@ public final class PreprocessingContext
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public static class AllPhrases
+    public class AllPhrases
     {
         /**
          * Pointers to {@link AllWords} for each word in the phrase sequence.
@@ -379,6 +492,38 @@ public final class PreprocessingContext
          * This array is produced by {@link PhraseExtractor}.
          */
         public int [][] tfByDocument;
+
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("wordIndices")
+                .addColumn("=>words").flushLeft()
+                .addColumn("tf")
+                .addColumn("tfByDocument").flushLeft();
+
+            for (int i = 0; i < wordIndices.length; i++, t.nextRow())
+            {
+                t.rowData(
+                    i,
+                    Arrays.toString(wordIndices[i]).replace(" ", ""),
+                    getPhrase(i),
+                    tf[i],
+                    intIntArrayToString(tfByDocument[i]).toString());
+            }
+
+            return t.toString();
+        }
+
+        public CharSequence getPhrase(int i)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int wi : wordIndices[i])
+                sb.append(new String(allWords.image[wi])).append(" ");
+            return sb;
+        }        
     }
 
     /**
@@ -394,7 +539,7 @@ public final class PreprocessingContext
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public static class AllLabels
+    public class AllLabels
     {
         /**
          * Feature index of the label candidate. Features whose values are less than the
@@ -424,6 +569,40 @@ public final class PreprocessingContext
          * @see #featureIndex
          */
         public int firstPhraseIndex;
+        
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            if (featureIndex == null)
+                return UNINITIALIZED;
+
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("featureIdx")
+                .addColumn("=>feature").flushLeft()
+                .addColumn("documentIdx").flushLeft();
+
+            for (int i = 0; i < featureIndex.length; i++, t.nextRow())
+            {
+                t.rowData(
+                    i,
+                    featureIndex[i],
+                    getLabel(i),
+                    documentIndices != null ? documentIndices[i].toString().replace(" ", "") : "");
+            }
+
+            return t.toString();
+        }
+
+        private CharSequence getLabel(int index)
+        {
+            final int wordsSize = allWords.image.length;
+            if (featureIndex[index] < wordsSize)
+                return new String(allWords.image[featureIndex[index]]);
+            else
+                return allPhrases.getPhrase(featureIndex[index] - wordsSize);
+        }        
     }
 
     /**
@@ -503,5 +682,19 @@ public final class PreprocessingContext
             tokenCache.add(new MutableCharArray(tokenImage));
             return tokenImage;
         }
+    }
+
+    private static StringBuilder intIntArrayToString(int [] intIntArray)
+    {
+        StringBuilder b = new StringBuilder();
+        int windowSize = 5 * 2;
+        for (int j = 0, max = Math.min(windowSize, intIntArray.length); j < max; j += 2)
+        {
+            b.append(intIntArray[j]).append("=>").append(intIntArray[j + 1]);
+            b.append(",");
+        }
+        if (intIntArray.length > windowSize)
+            b.append("...");
+        return b;
     }
 }
