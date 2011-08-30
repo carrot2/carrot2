@@ -13,479 +13,153 @@ package org.carrot2.text.preprocessing;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.carrot2.text.linguistic.IStemmerFactory;
+import java.util.*;
+
+import org.carrot2.util.attribute.*;
 import org.junit.Before;
 import org.junit.Test;
+
 
 /**
  * Test cases for {@link PhraseExtractor}.
  */
-public class PhraseExtractorTest extends PreprocessingComponentTestBase
+public class PhraseExtractorTest
 {
-    /** Phrase extractor under tests */
-    private PhraseExtractor phraseExtractor;
-
-    /** Other preprocessing components required for the test */
-    private Tokenizer tokenizer;
-    private CaseNormalizer caseNormalizer;
-    private LanguageModelStemmer languageModelStemmer;
+    PreprocessingContextBuilder contextBuilder;
 
     @Before
-    public void setUpPreprocessingComponents()
+    public void prepareContextBuilder()
     {
-        tokenizer = new Tokenizer();
-        caseNormalizer = new CaseNormalizer();
-        languageModelStemmer = new LanguageModelStemmer();
-        phraseExtractor = new PhraseExtractor();
+        contextBuilder = new PreprocessingContextBuilder();
+        contextBuilder.withStemmerFactory(new TestStemmerFactory());
     }
 
     @Test
     public void testEmpty()
     {
-        int [][] expectedPhraseWordIndexes = new int [] [] {};
-
-        int [] expectedPhraseTf = new int [] {};
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+        assertThat(contextBuilder.buildContextAssert().phraseImages()).isEmpty();
     }
 
     @Test
-    public void testEmptySnippet()
+    public void testNullTitleSnippet()
     {
-        createDocuments((String) null);
-
-        int [][] expectedPhraseWordIndexes = new int [] [] {};
-
-        int [] expectedPhraseTf = new int [] {};
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc(null, null)
+            .buildContextAssert();
+        assertThat(a.phraseImages()).isEmpty();
     }
 
     @Test
     public void testSinglePhrase()
     {
-        createDocuments("a a", "a a");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("a a", "a a")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] []
-        {
-            new int []
-            {
-                0, 0
-            },
-        };
-
-        int [] expectedPhraseTf = new int []
-        {
-            2
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+        a.containsPhrase("a", "a").withTf(2).withDocumentTf(0, 2);
+        assertThat(a.wordImages()).containsOnly("a");
     }
 
     @Test
-    public void testTwoPhrases()
+    public void testTwoPhrasesOneDocument()
     {
-        createDocuments("a b", "a b");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("a b", "a b")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] []
-        {
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b")
-            },
-        };
-
-        int [] expectedPhraseTf = new int []
-        {
-            2
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+        a.containsPhrase("a", "b").withTf(2).withDocumentTf(0, 2);
     }
 
     @Test
-    public void testSubphrases()
+    public void testSubphrasesAcrossFields()
     {
-        createDocuments("a b . a b", "a b c d . a b c d");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("a b . a b", "a b c d . a b c d")
+            .buildContextAssert();
 
-        int [] expectedPhraseTf = new int []
-        {
-            4, 2, 2, 2, 2, 2
-        };
-
-        check(get4TokenSubphrases(), expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+        a.containsPhrase("a", "b").withTf(4);
+        a.containsPhrase("b", "c").withTf(2);
+        a.containsPhrase("c", "d").withTf(2);
+        a.containsPhrase("a", "b", "c").withTf(2);
+        a.containsPhrase("b", "c", "d").withTf(2);
+        a.containsPhrase("a", "b", "c", "d").withTf(2);
+        assertThat(a.phraseImages().size()).isEqualTo(6);
     }
 
     @Test
-    public void testSubphrasesOnly()
+    public void testSubphrasesOneField()
     {
-        createDocuments(null, "a b c d . a b c d");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("a b c d . a b c d")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = get4TokenSubphrases();
-
-        int [] expectedPhraseTf = new int []
-        {
-            2, 2, 2, 2, 2, 2
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+        a.containsPhrase("a", "b").withTf(2);
+        a.containsPhrase("b", "c").withTf(2);
+        a.containsPhrase("c", "d").withTf(2);
+        a.containsPhrase("a", "b", "c").withTf(2);
+        a.containsPhrase("b", "c", "d").withTf(2);
+        a.containsPhrase("a", "b", "c", "d").withTf(2);
+        assertThat(a.phraseImages().size()).isEqualTo(6);
     }
-
-    private int [][] get4TokenSubphrases()
-    {
-        return new int [] []
-        {
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c")
-            },
-
-            new int []
-            {
-                wordIndices.get("c"), wordIndices.get("d")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c"), wordIndices.get("d")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c"),
-                wordIndices.get("d")
-            },
-        };
-    }
-
+    
     @Test
     public void testNestedPhrases()
     {
-        createDocuments("a b c d . a b c d", "a b d . a b d");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("a b c d . a b c d", "a b d . a b d")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] []
-        {
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("d")
-            },
-
-            new int []
-            {
-                wordIndices.get("c"), wordIndices.get("d")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("d")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c"), wordIndices.get("d")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c"),
-                wordIndices.get("d")
-            },
-
-        };
-
-        int [] expectedPhraseTf = new int []
-        {
-            4, 2, 2, 2, 2, 2, 2, 2
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+        a.containsPhrase("a", "b").withTf(4);
+        a.containsPhrase("b", "c").withTf(2);
+        a.containsPhrase("c", "d").withTf(2);
+        a.containsPhrase("b", "d").withTf(2);
+        a.containsPhrase("a", "b", "c").withTf(2);
+        a.containsPhrase("a", "b", "d").withTf(2);
+        a.containsPhrase("b", "c", "d").withTf(2);
+        a.containsPhrase("a", "b", "c", "d").withTf(2);
+        assertThat(a.phraseImages().size()).isEqualTo(8);
     }
 
     @Test
     public void testMaxPhraseLength()
     {
-        createDocuments("a b c d e f g h i", "a b c d e f g h i");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("a b c d e f g h i", "a b c d e f g h i")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] []
+        // All subsequences sized 2..MAX_PHRASE_LENGTH.
+        List<String> sequence = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i");
+        int all = 0;
+        for (int len = 2; len <= PhraseExtractor.MAX_PHRASE_LENGTH; len++)
         {
-            new int []
+            for (int pos = 0; pos + len <= sequence.size(); pos++, all++)
             {
-                wordIndices.get("a"), wordIndices.get("b")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c")
-            },
-
-            new int []
-            {
-                wordIndices.get("c"), wordIndices.get("d")
-            },
-
-            new int []
-            {
-                wordIndices.get("d"), wordIndices.get("e")
-            },
-
-            new int []
-            {
-                wordIndices.get("e"), wordIndices.get("f")
-            },
-
-            new int []
-            {
-                wordIndices.get("f"), wordIndices.get("g")
-            },
-
-            new int []
-            {
-                wordIndices.get("g"), wordIndices.get("h")
-            },
-
-            new int []
-            {
-                wordIndices.get("h"), wordIndices.get("i")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c"), wordIndices.get("d")
-            },
-
-            new int []
-            {
-                wordIndices.get("c"), wordIndices.get("d"), wordIndices.get("e")
-            },
-
-            new int []
-            {
-                wordIndices.get("d"), wordIndices.get("e"), wordIndices.get("f")
-            },
-
-            new int []
-            {
-                wordIndices.get("e"), wordIndices.get("f"), wordIndices.get("g")
-            },
-
-            new int []
-            {
-                wordIndices.get("f"), wordIndices.get("g"), wordIndices.get("h"),
-            },
-
-            new int []
-            {
-                wordIndices.get("g"), wordIndices.get("h"), wordIndices.get("i")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c"),
-                wordIndices.get("d")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c"), wordIndices.get("d"),
-                wordIndices.get("e")
-            },
-
-            new int []
-            {
-                wordIndices.get("c"), wordIndices.get("d"), wordIndices.get("e"),
-                wordIndices.get("f")
-            },
-
-            new int []
-            {
-                wordIndices.get("d"), wordIndices.get("e"), wordIndices.get("f"),
-                wordIndices.get("g")
-            },
-
-            new int []
-            {
-                wordIndices.get("e"), wordIndices.get("f"), wordIndices.get("g"),
-                wordIndices.get("h")
-            },
-
-            new int []
-            {
-                wordIndices.get("f"), wordIndices.get("g"), wordIndices.get("h"),
-                wordIndices.get("i")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c"),
-                wordIndices.get("d"), wordIndices.get("e")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c"), wordIndices.get("d"),
-                wordIndices.get("e"), wordIndices.get("f")
-            },
-
-            new int []
-            {
-                wordIndices.get("c"), wordIndices.get("d"), wordIndices.get("e"),
-                wordIndices.get("f"), wordIndices.get("g")
-            },
-
-            new int []
-            {
-                wordIndices.get("d"), wordIndices.get("e"), wordIndices.get("f"),
-                wordIndices.get("g"), wordIndices.get("h")
-            },
-
-            new int []
-            {
-                wordIndices.get("e"), wordIndices.get("f"), wordIndices.get("g"),
-                wordIndices.get("h"), wordIndices.get("i")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c"),
-                wordIndices.get("d"), wordIndices.get("e"), wordIndices.get("f")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c"), wordIndices.get("d"),
-                wordIndices.get("e"), wordIndices.get("f"), wordIndices.get("g")
-            },
-
-            new int []
-            {
-                wordIndices.get("c"), wordIndices.get("d"), wordIndices.get("e"),
-                wordIndices.get("f"), wordIndices.get("g"), wordIndices.get("h")
-            },
-
-            new int []
-            {
-                wordIndices.get("d"), wordIndices.get("e"), wordIndices.get("f"),
-                wordIndices.get("g"), wordIndices.get("h"), wordIndices.get("i")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c"),
-                wordIndices.get("d"), wordIndices.get("e"), wordIndices.get("f"),
-                wordIndices.get("g")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c"), wordIndices.get("d"),
-                wordIndices.get("e"), wordIndices.get("f"), wordIndices.get("g"),
-                wordIndices.get("h")
-            },
-
-            new int []
-            {
-                wordIndices.get("c"), wordIndices.get("d"), wordIndices.get("e"),
-                wordIndices.get("f"), wordIndices.get("g"), wordIndices.get("h"),
-                wordIndices.get("i")
-            },
-
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b"), wordIndices.get("c"),
-                wordIndices.get("d"), wordIndices.get("e"), wordIndices.get("f"),
-                wordIndices.get("g"), wordIndices.get("h")
-            },
-
-            new int []
-            {
-                wordIndices.get("b"), wordIndices.get("c"), wordIndices.get("d"),
-                wordIndices.get("e"), wordIndices.get("f"), wordIndices.get("g"),
-                wordIndices.get("h"), wordIndices.get("i")
-            },
-        };
-
-        int [] expectedPhraseTf = new int []
-        {
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+                a.containsPhrase(sequence.subList(pos, pos + len)).withTf(2);
+            }
+        }
+        assertThat(a.phraseImages().size()).isEqualTo(all);
     }
-
+    
     @Test
     public void testTwoExtendedPhrases()
     {
-        createDocuments("a b c", "a b d");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("a b c", "a b d")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] []
-        {
-            new int []
-            {
-                wordIndices.get("a"), wordIndices.get("b")
-            },
-        };
-
-        int [] expectedPhraseTf = new int []
-        {
-            2
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+        a.containsPhrase("a", "b").withTf(2);
+        assertThat(a.phraseImages().size()).isEqualTo(1);
     }
-
+    
     @Test
     public void testNoFrequentPhrases()
     {
-        createDocuments("a b c", "d e f");
-
-        int [][] expectedPhraseWordIndexes = new int [] [] {};
-
-        int [] expectedPhraseTf = new int [] {};
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("a b c", "d e f")
+            .buildContextAssert();
+        assertThat(a.phraseImages()).isEmpty();
     }
-
+    
     /**
      * For efficiency reasons we don't care about phrases that ARE frequent in general,
      * but do not have at least two occurrences of one specific variant.
@@ -493,294 +167,132 @@ public class PhraseExtractorTest extends PreprocessingComponentTestBase
     @Test
     public void testGeneralizedPhraseWithSingleOriginals()
     {
-        createDocuments("abc bcd", "abd bce", "abe bcf", "abf bcg");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("abc bcd", "abd bce")
+            .newDoc("abe bcf", "abf bcg")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] [] {};
-
-        int [] expectedPhraseTf = new int [] {};
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+        assertThat(a.phraseImages()).isEmpty();
     }
 
     /**
-     * For efficiency reasons we don't care about phrases that ARE frequent in general,
-     * but do not have at least two occurrences of one specific variant.
+     * Same as {@link #testGeneralizedPhraseWithSingleOriginals()}?
      */
     @Test
     public void testGeneralizedPhrasesWithSingleOriginals()
     {
-        createDocuments("abc bcd", "abd bce", "abe bcf", "abf bcg", "efg fgh", "efh fgi",
-            "efi fgj", "efj fgk");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("abc bcd", "abd bce")
+            .newDoc("abe bcf", "abf bcg")
+            .newDoc("efg fgh", "efh fgi")
+            .newDoc("efi fgj", "efj fgk")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] [] {};
-
-        int [] expectedPhraseTf = new int [] {};
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf,
-            createTrivialTfByDocument(expectedPhraseTf));
+        assertThat(a.phraseImages()).isEmpty();
     }
 
-    /**
-     * For efficiency reasons we don't care about phrases that ARE frequent in general,
-     * but do not have at least two occurrences of one specific variant.
-     */
     @Test
     public void testComposition()
     {
-        createDocuments(
-            "abc bcd cde", "abc bcd cdf", 
-            "abc bcd cdg", "abc bcd cdh");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("abc bcd cde", "abc bcd cdf")
+            .newDoc("abc bcd cdg", "abc bcd cdh")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] []
-        {
-            new int []
-            {
-                wordIndices.get("abc"), wordIndices.get("bcd")
-            },
-
-        };
-
-        int [] expectedPhraseTf = new int []
-        {
-            4
-        };
-
-        int [][] expectedPhraseTfByDocument = new int [] []
-        {
-            {
-                1, 2, 0, 2
-            }
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf, expectedPhraseTfByDocument);
+        a.containsPhraseStemmedAs("a__", "b__")
+            .withTf(4)
+            .withExactDocumentTfs(new int [][] {{0, 2}, {1, 2}});
+        assertThat(a.phraseImages().size()).isEqualTo(1);
     }
 
     @Test
     public void testGeneralizedPhraseWithMultipleOriginals()
     {
-        createDocuments("abd bce", "abe bcf", "abd bce", "abe bcf . abe bcf",
-            "abc bcd . abc bcd . abc bcd . abc bcd");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("abd bce", "abe bcf")
+            .newDoc("abd bce", "abe bcf . abe bcf")
+            .newDoc("abc bcd . abc bcd . abc bcd . abc bcd")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] []
-        {
-            new int []
-            {
-                wordIndices.get("abc"), wordIndices.get("bcd")
-            }
-        };
-
-        int [] expectedPhraseTf = new int []
-        {
-            9
-        };
-
-        int [][] expectedPhraseTfByDocument = new int [] []
-        {
-            {
-                1, 3, 0, 2, 2, 4
-            }
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf, expectedPhraseTfByDocument);
+        a.containsPhraseStemmedAs("a__", "b__")
+            .withTf(9)
+            .withExactDocumentTfs(new int [][] {{0, 2}, {1, 3}, {2, 4}});
+        assertThat(a.phraseImages().size()).isEqualTo(1);
     }
 
     @Test
     public void testGeneralizedPhraseFrequencyAggregation()
     {
-        createDocuments("abc bcd", "abc bcd", "abd cde",
-            "abd cde . abe bcd . abe bcd . abe bcd");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("abc bcd", "abc bcd")
+            .newDoc("abd cde", "abd cde . abe bcd . abe bcd . abe bcd")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] []
-        {
-            new int []
-            {
-                wordIndices.get("abe"), wordIndices.get("bcd")
-            },
-
-            new int []
-            {
-                wordIndices.get("abd"), wordIndices.get("cde")
-            }
-        };
-
-        int [] expectedPhraseTf = new int []
-        {
-            5, 2
-        };
-
-        int [][] expectedPhraseTfByDocument = new int [] []
-        {
-            {
-                1, 3, 0, 2
-            },
-
-            {
-                1, 2
-            }
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf, expectedPhraseTfByDocument);
+        a.containsPhraseStemmedAs("a__", "b__")
+            .withTf(5)
+            .withExactDocumentTfs(new int [][] {{0, 2}, {1, 3}});
+        a.containsPhraseStemmedAs("a__", "c__")
+            .withTf(2)
+            .withExactDocumentTfs(new int [][] {{1, 2}});
+        assertThat(a.phraseImages().size()).isEqualTo(2);
     }
 
     @Test
-    public void testTf2Phrase()
+    public void testTermFrequencyAcrossDocuments()
     {
-        createDocuments("abc bcd", "", "abc bcd cde", "", "abc bcd cde", "",
-            "abc bcd cde", "");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("abc bcd") 
+            .newDoc("abc bcd cde") 
+            .newDoc("abc bcd cde")
+            .newDoc("abc bcd cde")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] []
-        {
-            new int []
-            {
-                wordIndices.get("abc"), wordIndices.get("bcd")
-            },
-
-            new int []
-            {
-                wordIndices.get("bcd"), wordIndices.get("cde")
-            },
-
-            new int []
-            {
-                wordIndices.get("abc"), wordIndices.get("bcd"), wordIndices.get("cde")
-            }
-
-        };
-
-        int [] expectedPhraseTf = new int []
-        {
-            4, 3, 3
-        };
-
-        int [][] expectedPhraseTfByDocument = new int [] []
-        {
-            {
-                3, 1, 1, 1, 0, 1, 2, 1
-            },
-
-            {
-                3, 1, 1, 1, 2, 1
-            },
-
-            {
-                3, 1, 1, 1, 2, 1
-            }
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf, expectedPhraseTfByDocument);
+        a.containsPhraseStemmedAs("a__", "b__")
+            .withTf(4)
+            .withExactDocumentTfs(new int [][] {{0, 1}, {1, 1}, {2, 1}, {3, 1}});
+        a.containsPhraseStemmedAs("b__", "c__")
+            .withTf(3)
+            .withExactDocumentTfs(new int [][] {        {1, 1}, {2, 1}, {3, 1}});
+        a.containsPhraseStemmedAs("a__", "b__", "c__")
+            .withTf(3)
+            .withExactDocumentTfs(new int [][] {        {1, 1}, {2, 1}, {3, 1}});
     }
-
+    
     @Test
     public void testOverlappingGeneralizedPhrase()
     {
-        createDocuments("abc bcd cde def", "abd bce", "abd bce cde deg",
-            "cdf deg efg . abc fgh cde def");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("abc bcd cde def", "abd bce") 
+            .newDoc("abd bce cde deg", "cdf deg efg . abc fgh cde def") 
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] []
-        {
-            new int []
-            {
-                wordIndices.get("abd"), wordIndices.get("bce")
-            },
-
-            new int []
-            {
-                wordIndices.get("cde"), wordIndices.get("def")
-            }
-        };
-
-        int [] expectedPhraseTf = new int []
-        {
-            2, 2
-        };
-
-        int [][] expectedPhraseTfByDocument = new int [] []
-        {
-            {
-                1, 1, 0, 1
-            },
-
-            {
-                1, 1, 0, 1
-            }
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf, expectedPhraseTfByDocument);
+        a.containsPhraseStemmedAs("a__", "b__")
+            .withTf(2)
+            .withExactDocumentTfs(new int [][] {{0, 1}, {1, 1}});
+        a.containsPhraseStemmedAs("c__", "d__")
+            .withTf(2)
+            .withExactDocumentTfs(new int [][] {{0, 1}, {1, 1}});
     }
 
     @Test
     public void testDfThreshold()
     {
-        phraseExtractor.dfThreshold = 2;
-        createDocuments("a a", "a a", "a a . b b . c c", "a a . b b", "a a", "a a . c c");
+        PreprocessingContextAssert a = contextBuilder
+            .setAttribute(AttributeUtils.getKey(PhraseExtractor.class, "dfThreshold"), 2)
+            .newDoc("a a", "a a") 
+            .newDoc("a a . b b . c c", "a a . b b") 
+            .newDoc("a a", "a a . c c")
+            .buildContextAssert();
 
-        int [][] expectedPhraseWordIndexes = new int [] []
-        {
-            new int []
-            {
-                0, 0
-            },
-
-            new int []
-            {
-                2, 2
-            },
-        };
-
-        int [] expectedPhraseTf = new int []
-        {
-            6, 2
-        };
-
-        int [][] expectedPhraseTfByDocument = new int [] []
-        {
-            {
-                1, 2, 0, 2, 2, 2
-            },
-
-            {
-                1, 1, 2, 1
-            }
-        };
-
-        check(expectedPhraseWordIndexes, expectedPhraseTf, expectedPhraseTfByDocument);
-    }
-
-    private void check(int [][] expectedPhraseWordIndexes, int [] expectedPhraseTf,
-        int [][] expectedPhraseTfByDocument)
-    {
-        tokenizer.tokenize(context);
-        caseNormalizer.normalize(context);
-        languageModelStemmer.stem(context);
-        phraseExtractor.extractPhrases(context);
-
-        assertThat(context.allPhrases.wordIndices).as("allPhrases.wordIndices")
-            .isEqualTo(expectedPhraseWordIndexes);
-        assertThat(context.allPhrases.tf).as("allPhrases.tf").isEqualTo(expectedPhraseTf);
-        assertThat(context.allPhrases.tfByDocument).as("allPhrases.tfByDocument")
-            .isEqualTo(expectedPhraseTfByDocument);
-
-    }
-
-    private int [][] createTrivialTfByDocument(int [] phraseTf)
-    {
-        int [][] result = new int [phraseTf.length] [];
-
-        for (int i = 0; i < result.length; i++)
-        {
-            result[i] = new int []
-            {
-                0, phraseTf[i]
-            };
-        }
-
-        return result;
-    }
-
-    @Override
-    protected IStemmerFactory createStemmerFactory()
-    {
-        return new TestStemmerFactory();
+        // a a
+        // b b -> removed due to dfThreshold
+        // c c
+        a.containsPhrase("a", "a")
+            .withTf(6)
+            .withExactDocumentTfs(new int [][] {{0, 2}, {1, 2}, {2, 2}});
+        a.containsPhrase("c", "c")
+            .withTf(2)
+            .withExactDocumentTfs(new int [][] {{1, 1}, {2, 1}});
+        assertThat(a.phraseImages().size()).isEqualTo(2);
     }
 }

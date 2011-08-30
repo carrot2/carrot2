@@ -54,7 +54,7 @@ public class PhraseExtractor
     private static final int MIN_PHRASE_LENGTH = 2;
 
     /** Internal maximum phrase length, we may want to make it an attribute at some point */
-    private static final int MAX_PHRASE_LENGTH = 8;
+    static final int MAX_PHRASE_LENGTH = 8;
 
     /**
      * Phrase Document Frequency threshold. Phrases appearing in fewer than
