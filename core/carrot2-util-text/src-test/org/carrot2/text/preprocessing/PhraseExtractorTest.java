@@ -19,7 +19,6 @@ import org.carrot2.util.attribute.*;
 import org.junit.Before;
 import org.junit.Test;
 
-
 /**
  * Test cases for {@link PhraseExtractor}.
  */
@@ -34,6 +33,8 @@ public class PhraseExtractorTest
         contextBuilder.withStemmerFactory(new TestStemmerFactory());
     }
 
+    // @formatter:off
+    
     @Test
     public void testEmpty()
     {
@@ -295,4 +296,6 @@ public class PhraseExtractorTest
             .withExactDocumentTfs(new int [][] {{1, 1}, {2, 1}});
         assertThat(a.phraseImages().size()).isEqualTo(2);
     }
+    
+    // @formatter:on
 }
