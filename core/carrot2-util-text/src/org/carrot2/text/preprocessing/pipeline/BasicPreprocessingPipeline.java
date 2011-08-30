@@ -46,7 +46,7 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
  * </ol>
  */
 @Bindable(prefix = "PreprocessingPipeline")
-public class BasicPreprocessingPipeline
+public class BasicPreprocessingPipeline implements IPreprocessingPipeline
 {
     /**
      * Tokenizer used by the algorithm, contains bindable attributes.
@@ -115,6 +115,7 @@ public class BasicPreprocessingPipeline
      * Performs preprocessing on the provided list of documents. Results can be obtained
      * from the returned {@link PreprocessingContext}.
      */
+    @Override
     public PreprocessingContext preprocess(List<Document> documents, String query,
         LanguageCode language)
     {
@@ -128,6 +129,7 @@ public class BasicPreprocessingPipeline
     /**
      * Performs preprocessing on the provided {@link PreprocessingContext}.
      */
+    @Override
     public void preprocess(PreprocessingContext context)
     {
         tokenizer.tokenize(context);
