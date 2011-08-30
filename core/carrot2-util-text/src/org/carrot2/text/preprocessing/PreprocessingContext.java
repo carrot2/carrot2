@@ -517,11 +517,15 @@ public final class PreprocessingContext
             return t.toString();
         }
 
-        public CharSequence getPhrase(int i)
+        /** Returns space-separated words that constitute this phrase. */
+        public CharSequence getPhrase(int index)
         {
             StringBuilder sb = new StringBuilder();
-            for (int wi : wordIndices[i])
-                sb.append(new String(allWords.image[wi])).append(" ");
+            for (int i = 0; i < wordIndices[index].length; i++)
+            {
+                if (i > 0) sb.append(" ");
+                sb.append(new String(allWords.image[wordIndices[index][i]]));
+            }
             return sb;
         }        
     }
@@ -626,6 +630,18 @@ public final class PreprocessingContext
         return allLabels.featureIndex != null && allLabels.featureIndex.length > 0;
     }
 
+    @Override
+    public String toString()
+    {
+        return "PreprocessingContext 0x" + Integer.toHexString(this.hashCode()) + "\n"
+            + "Fields:\n" + this.allFields.toString()
+            + "Tokens:\n" + this.allTokens.toString()
+            + "Words:\n" + this.allWords.toString()
+            + "Stems:\n" + this.allStems.toString()
+            + "Phrases:\n" + this.allPhrases.toString()
+            + "Labels:\n" + this.allLabels.toString();
+    }
+    
     /**
      * Static conversion between selected bits and an array of indexes of these bits. 
      */
@@ -684,6 +700,9 @@ public final class PreprocessingContext
         }
     }
 
+    /**
+     * Convert an int-int compact mapping array to a string.
+     */
     private static StringBuilder intIntArrayToString(int [] intIntArray)
     {
         StringBuilder b = new StringBuilder();
