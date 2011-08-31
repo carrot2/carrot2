@@ -25,15 +25,16 @@ public class StemmerSyntheticTest
 {
     PreprocessingContextBuilder contextBuilder;
 
+    // @formatter:off
+
     @Before
     public void prepareContextBuilder()
     {
-        contextBuilder = new PreprocessingContextBuilder();
-        contextBuilder.withStemmerFactory(new TestStemmerFactory());
+        contextBuilder = new PreprocessingContextBuilder()
+            .withStemmerFactory(new TestStemmerFactory())
+            .withLexicalDataFactory(new TestLexicalDataFactory());
     }
-    
-    // @formatter:off
-    
+
     @Test
     public void testEmpty()
     {
@@ -204,11 +205,9 @@ public class StemmerSyntheticTest
             .withQuery("que04")
             .buildContextAssert();
 
-        // TODO: this is correct assuming english lexical data is used (stopwords). It should be
-        // changed to use an empty lexical data factory instead.
         assertThat(a.tokens()).onProperty("wordType")
             .containsExactly(TT_TERM | TF_QUERY_WORD, TT_TERM | TF_QUERY_WORD, null, 
-                             TT_TERM, TT_TERM | TF_COMMON_WORD, null);
+                             TT_TERM, TT_TERM, null);
     }
 
     // @formatter:on
