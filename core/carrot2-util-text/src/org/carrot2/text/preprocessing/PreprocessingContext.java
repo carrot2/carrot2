@@ -663,7 +663,7 @@ public final class PreprocessingContext
     /**
      * Convert the selected bits in a byte to an array of indexes.
      */
-    public int [] toFieldIndexes(byte b)
+    public static int [] toFieldIndexes(byte b)
     {
         return bitsCache[b & 0xff];
     }

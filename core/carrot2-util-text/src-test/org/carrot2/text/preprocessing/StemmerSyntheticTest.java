@@ -12,329 +12,204 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.text.linguistic.IStemmerFactory;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.carrot2.text.analysis.ITokenizer.*;
+
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Language-independent test cases for {@link LanguageModelStemmer}.
  */
-public class StemmerSyntheticTest extends StemmerTestBase
+public class StemmerSyntheticTest
 {
+    PreprocessingContextBuilder contextBuilder;
+
+    @Before
+    public void prepareContextBuilder()
+    {
+        contextBuilder = new PreprocessingContextBuilder();
+        contextBuilder.withStemmerFactory(new TestStemmerFactory());
+    }
+    
+    // @formatter:off
+    
     @Test
     public void testEmpty()
     {
-        createDocuments();
-
-        char [][] expectedStemImages = new char [] [] {};
-        int [] expectedStemTf = new int [] {};
-        int [] expectedStemIndices = new int [] {};
-        int [][] expectedStemTfByDocument = new int [] [] {};
-        byte [][] expectedFieldIndices = new byte [] [] {};
-
-        check(expectedStemImages, expectedStemTf, expectedStemIndices,
-            expectedStemTfByDocument, expectedFieldIndices);
+        assertThat(contextBuilder.buildContext().allStems.image.length).isEqualTo(0);
     }
 
     @Test
     public void testSingleStems()
     {
-        createDocuments("abc", "bcd");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("abc", "bcd")
+            .buildContextAssert();
+           
+        a.constainsStem("a").withTf(1).withDocumentTf(0, 1).withFieldIndices(0);
+        a.constainsStem("b").withTf(1).withDocumentTf(0, 1).withFieldIndices(1);
+        assertThat(a.context.allStems.image.length).isEqualTo(2);
 
-        char [][] expectedStemImages = new char [] []
-        {
-            "a".toCharArray(), "b".toCharArray()
-        };
-
-        int [] expectedStemTf = new int []
-        {
-            1, 1
-        };
-
-        int [] expectedStemIndices = new int [2];
-        expectedStemIndices[wordIndices.get("abc")] = 0;
-        expectedStemIndices[wordIndices.get("bcd")] = 1;
-
-        int [][] expectedStemTfByDocument = new int [] []
-        {
-            {
-                0, 1
-            },
-
-            {
-                0, 1
-            }
-        };
-        byte [][] expectedFieldIndices = new byte [] []
-        {
-            {
-                0
-            },
-            {
-                1
-            }
-        };
-
-        check(expectedStemImages, expectedStemTf, expectedStemIndices,
-            expectedStemTfByDocument, expectedFieldIndices);
+        // Account for field-separator markers (nulls) below.
+        assertThat(a.tokens()).onProperty("stemImage")
+            .containsExactly("a", null, "b", null);
     }
 
     @Test
     public void testFrequentSingleStems()
     {
-        createDocuments("abc abc", "bcd bcd bcd");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("abc abc", "bcd bcd bcd")
+            .buildContextAssert();
 
-        char [][] expectedStemImages = new char [] []
-        {
-            "a".toCharArray(), "b".toCharArray()
-        };
+        a.constainsStem("a").withTf(2).withDocumentTf(0, 2).withFieldIndices(0);
+        a.constainsStem("b").withTf(3).withDocumentTf(0, 3).withFieldIndices(1);
+        assertThat(a.context.allStems.image.length).isEqualTo(2);
 
-        int [] expectedStemTf = new int []
-        {
-            2, 3
-        };
-
-        int [] expectedStemIndices = new int [2];
-        expectedStemIndices[wordIndices.get("abc")] = 0;
-        expectedStemIndices[wordIndices.get("bcd")] = 1;
-
-        int [][] expectedStemTfByDocument = new int [] []
-        {
-            {
-                0, 2
-            },
-
-            {
-                0, 3
-            }
-        };
-        byte [][] expectedFieldIndices = new byte [] []
-        {
-            {
-                0
-            },
-            {
-                1
-            }
-        };
-
-        check(expectedStemImages, expectedStemTf, expectedStemIndices,
-            expectedStemTfByDocument, expectedFieldIndices);
+        // Account for field-separator markers (nulls) below.
+        assertThat(a.tokens()).onProperty("stemImage")
+            .containsExactly("a", "a", null, "b", "b", "b", null);
     }
 
     @Test
     public void testOriginalFrequencyAggregation()
     {
-        createDocuments("abc acd bcd", "ade bof");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("abc acd bcd", "ade bof")
+            .buildContextAssert();
 
-        char [][] expectedStemImages = new char [] []
-        {
-            "a".toCharArray(), "b".toCharArray()
-        };
-
-        int [] expectedStemTf = new int []
-        {
-            3, 2
-        };
-
-        int [] expectedStemIndices = new int [5];
-        expectedStemIndices[wordIndices.get("abc")] = 0;
-        expectedStemIndices[wordIndices.get("acd")] = 0;
-        expectedStemIndices[wordIndices.get("ade")] = 0;
-        expectedStemIndices[wordIndices.get("bcd")] = 1;
-        expectedStemIndices[wordIndices.get("bof")] = 1;
-
-        int [][] expectedStemTfByDocument = new int [] []
-        {
-            {
-                0, 3
-            },
-
-            {
-                0, 2
-            }
-        };
-        byte [][] expectedFieldIndices = new byte [] []
-        {
-            {
-                0, 1
-            },
-            {
-                0, 1
-            }
-        };
-
-        check(expectedStemImages, expectedStemTf, expectedStemIndices,
-            expectedStemTfByDocument, expectedFieldIndices);
-    }
-
-    @Test
-    public void testWordTfByDocumentAggregation()
-    {
-        createDocuments("abc acd ade", "", "ade", "bcd bof", "", "bcd", "ade", "bof");
-
-        char [][] expectedStemImages = new char [] []
-        {
-            "a".toCharArray(), "b".toCharArray()
-        };
-
-        int [] expectedStemTf = new int []
-        {
-            5, 4
-        };
-
-        int [] expectedStemIndices = new int [5];
-        expectedStemIndices[wordIndices.get("abc")] = 0;
-        expectedStemIndices[wordIndices.get("acd")] = 0;
-        expectedStemIndices[wordIndices.get("ade")] = 0;
-        expectedStemIndices[wordIndices.get("bcd")] = 1;
-        expectedStemIndices[wordIndices.get("bof")] = 1;
-
-        int [][] expectedStemTfByDocument = new int [] []
-        {
-            {
-                // HASHMAP-order dependent.
-                3, 1, 1, 1, 0, 3,
-            },
-
-            {
-                // HASHMAP-order dependent.    
-                3, 1, 1, 2, 2, 1,
-            }
-        };
-        byte [][] expectedFieldIndices = new byte [] []
-        {
-            {
-                0
-            },
-            {
-                1
-            }
-        };
-
-        check(expectedStemImages, expectedStemTf, expectedStemIndices,
-            expectedStemTfByDocument, expectedFieldIndices);
+        a.constainsStem("a").withTf(3).withDocumentTf(0, 3).withFieldIndices(0, 1);
+        a.constainsStem("b").withTf(2).withDocumentTf(0, 2).withFieldIndices(0, 1);
+        assertThat(a.context.allStems.image.length).isEqualTo(2);
+        
+        // Account for field-separator markers (nulls) below.
+        assertThat(a.tokens()).onProperty("stemImage")
+            .containsExactly("a", "a", "b", null, "a", "b", null);
     }
 
     @Test
     public void testNullStems()
     {
-        createDocuments("aa ab", "aa bc");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("aa ab", "aa bc")
+            .buildContextAssert();
 
-        char [][] expectedStemImages = new char [] []
-        {
-            "aa".toCharArray(), "ab".toCharArray(), "bc".toCharArray()
-        };
+        a.constainsStem("aa").withTf(2).withDocumentTf(0, 2).withFieldIndices(0, 1);
+        a.constainsStem("ab").withTf(1).withDocumentTf(0, 1).withFieldIndices(0);
+        a.constainsStem("bc").withTf(1).withDocumentTf(0, 1).withFieldIndices(1);
+        assertThat(a.context.allStems.image.length).isEqualTo(3);
 
-        int [] expectedStemTf = new int []
-        {
-            2, 1, 1
-        };
+        // Account for field-separator markers (nulls) below.
+        assertThat(a.tokens()).onProperty("stemImage")
+            .containsExactly("aa", "ab", null, "aa", "bc", null);
+    }
 
-        int [] expectedStemIndices = new int [3];
-        expectedStemIndices[wordIndices.get("aa")] = 0;
-        expectedStemIndices[wordIndices.get("ab")] = 1;
-        expectedStemIndices[wordIndices.get("bc")] = 2;
+    @Test
+    public void testWordTfByDocumentAggregation()
+    {
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("abc acd ade")
+            .newDoc("ade", "bcd bof")
+            .newDoc(null, "bcd")
+            .newDoc("ade", "bof")
+            .buildContextAssert();
 
-        int [][] expectedStemTfByDocument = new int [] []
-        {
-            {
-                0, 2
-            },
+        a.constainsStem("a").withTf(5)
+            .withExactDocumentTfs(new int [][] {{0, 3}, {1, 1}, {3, 1}})
+            .withFieldIndices(0);
+        a.constainsStem("b").withTf(4)
+            .withExactDocumentTfs(new int [][] {{1, 2}, {2, 1}, {3, 1}})
+            .withFieldIndices(1);
+        assertThat(a.context.allStems.image.length).isEqualTo(2);
 
-            {
-                0, 1
-            },
-
-            {
-                0, 1
-            }
-        };
-        byte [][] expectedFieldIndices = new byte [] []
-        {
-            {
-                0, 1
-            },
-            {
-                0
-            },
-            {
-                1
-            }
-        };
-
-        check(expectedStemImages, expectedStemTf, expectedStemIndices,
-            expectedStemTfByDocument, expectedFieldIndices);
+        // Account for field-separator markers (nulls) below.
+        assertThat(a.tokens()).onProperty("stemImage")
+            .containsExactly("a", "a", "a", null, 
+                             "a", null, "b", "b", null,
+                             "b", null,
+                             "a", null, "b", null);
     }
 
     @Test
     public void testAllQueryWords()
     {
-        createDocuments("q1 q2", "q3");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("q1 q2", "q3")
+            .withQuery("q1 q2 q3")
+            .buildContextAssert();
 
-        short [] expectedFordsFlag = new short [3];
-        expectedFordsFlag[wordIndices.get("q1")] = ITokenizer.TF_QUERY_WORD;
-        expectedFordsFlag[wordIndices.get("q2")] = ITokenizer.TF_QUERY_WORD;
-        expectedFordsFlag[wordIndices.get("q3")] = ITokenizer.TF_QUERY_WORD;
-
-        check("q1 q2 q3", expectedFordsFlag);
+        assertThat(a.tokens()).onProperty("wordType")
+            .containsExactly(TF_QUERY_WORD | TT_TERM, TF_QUERY_WORD | TT_TERM, null,
+                             TF_QUERY_WORD | TT_TERM, null);
     }
 
     @Test
     public void testSomeQueryWords()
     {
-        createDocuments("test q2", "aa q1");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("test q2", "aa q1")
+            .withQuery("q1 q2 q3")
+            .buildContextAssert();
 
-        short [] expectedFordsFlag = new short [4];
-        expectedFordsFlag[wordIndices.get("q1")] = ITokenizer.TF_QUERY_WORD;
-        expectedFordsFlag[wordIndices.get("q2")] = ITokenizer.TF_QUERY_WORD;
-
-        check("q1 q2 q3", expectedFordsFlag);
+        assertThat(a.tokens()).onProperty("wordType")
+            .containsExactly(TT_TERM, TF_QUERY_WORD | TT_TERM, null, 
+                             TT_TERM, TF_QUERY_WORD | TT_TERM, null);
     }
-
+    
     @Test
     public void testNoQueryWords()
     {
-        createDocuments("q2", "aa q1");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("q2", "aa q1")
+            .withQuery("q3")
+            .buildContextAssert();
 
-        short [] expectedFordsFlag = new short [3];
-        check("q3", expectedFordsFlag);
+        assertThat(a.tokens()).onProperty("wordType")
+            .containsExactly(TT_TERM, null, 
+                             TT_TERM, TT_TERM, null);
     }
 
     @Test
     public void testBlankQuery()
     {
-        createDocuments("q2", "aa q1");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("q2", "aa q1")
+            .withQuery("")
+            .buildContextAssert();
 
-        short [] expectedFordsFlag = new short [3];
-        check("", expectedFordsFlag);
+        assertThat(a.tokens()).onProperty("wordType")
+            .containsExactly(TT_TERM, null, 
+                             TT_TERM, TT_TERM, null);
     }
 
     @Test
     public void testNullQuery()
     {
-        createDocuments("q2", "aa q1");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("q2", "aa q1")
+            .withQuery(null)
+            .buildContextAssert();
 
-        short [] expectedFordsFlag = new short [3];
-        check(null, expectedFordsFlag);
+        assertThat(a.tokens()).onProperty("wordType")
+            .containsExactly(TT_TERM, null, 
+                             TT_TERM, TT_TERM, null);
     }
 
     @Test
     public void testDifferentStemsInQuery()
     {
-        createDocuments("que01 que02", "test word");
+        PreprocessingContextAssert a = contextBuilder
+            .newDoc("que01 que02", "test word")
+            .withQuery("que04")
+            .buildContextAssert();
 
-        short [] expectedFordsFlag = new short [4];
-        expectedFordsFlag[wordIndices.get("que01")] = ITokenizer.TF_QUERY_WORD;
-        expectedFordsFlag[wordIndices.get("que02")] = ITokenizer.TF_QUERY_WORD;
-        check("que04", expectedFordsFlag);
+        // TODO: this is correct assuming english lexical data is used (stopwords). It should be
+        // changed to use an empty lexical data factory instead.
+        assertThat(a.tokens()).onProperty("wordType")
+            .containsExactly(TT_TERM | TF_QUERY_WORD, TT_TERM | TF_QUERY_WORD, null, 
+                             TT_TERM, TT_TERM | TF_COMMON_WORD, null);
     }
 
-    
-    
-    @Override
-    protected IStemmerFactory createStemmerFactory()
-    {
-        return new TestStemmerFactory();
-    }
+    // @formatter:on
 }

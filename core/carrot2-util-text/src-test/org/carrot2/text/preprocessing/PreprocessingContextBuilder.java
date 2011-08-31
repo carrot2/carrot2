@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.preprocessing.pipeline.*;
 import org.carrot2.util.attribute.*;
@@ -43,6 +44,12 @@ class PreprocessingContextBuilder
         return setAttribute(
             AttributeUtils.getKey(BasicPreprocessingPipeline.class, "stemmerFactory"),
             stemmerFactory);
+    }
+
+    public PreprocessingContextBuilder withQuery(String query)
+    {
+        this.query = query;
+        return setAttribute(AttributeNames.QUERY, query);
     }
 
     public PreprocessingContextBuilder setAttribute(String key, Object value)

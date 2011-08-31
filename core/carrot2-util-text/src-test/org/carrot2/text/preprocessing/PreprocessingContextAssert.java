@@ -191,4 +191,132 @@ nextPhrase:
     {
         return new PreprocessingContextAssert(context);
     }
+
+    final class StemAssert
+    {
+        private final int stemIndex;
+        private final String stemImage;
+
+        public StemAssert(int stemIndex)
+        {
+            this.stemIndex = stemIndex;
+            this.stemImage = new String(context.allStems.image[stemIndex]);
+        }
+
+        public StemAssert withTf(int expectedTf)
+        {
+            assertThat(context.allStems.tf[stemIndex])
+                .describedAs("tf different for stem " + stemImage)
+                    .isEqualTo(expectedTf);
+            return this;
+        }
+
+        public StemAssert withDocumentTf(int documentIndex, int expectedTf)
+        {
+            int [] byDocTf = context.allStems.tfByDocument[stemIndex];
+            for (int i = 0; i < byDocTf.length; i += 2)
+            {
+                if (byDocTf[i] == documentIndex) {
+                    assertThat(expectedTf).isEqualTo(byDocTf[i + 1]);
+                    return this;
+                }
+            }
+
+            org.junit.Assert.fail("No document " + documentIndex + " for this stem: "
+                + stemImage + "\n" + context.allPhrases);
+            return this;
+        }
+
+        public StemAssert withExactDocumentTfs(int [][] docTfPairs)
+        {
+            for (int [] docTf : docTfPairs)
+            {
+                assertThat(docTf.length).isEqualTo(2);
+                withDocumentTf(docTf[0], docTf[1]);
+            }
+
+            assertThat(context.allStems.tfByDocument[stemIndex].length / 2)
+                .describedAs("tfByDocument array size for stem: '" + stemImage + "'")
+                .isEqualTo(docTfPairs.length);
+
+            return this;
+        }
+
+        public StemAssert withFieldIndices(int... expectedIndices)
+        {
+            int [] indices = PreprocessingContext.toFieldIndexes(context.allStems.fieldIndices[stemIndex]);
+            assertThat(expectedIndices).as("field indices of stem '" + stemImage + "'")
+                .isEqualTo(indices);
+            return this;
+        }
+    }
+    
+    StemAssert constainsStem(String stemImage)
+    {
+        assertThat(stemImage).isNotEmpty();
+        assertThat(context.allStems.image)
+            .describedAs("the context's allSems is not properly initialized.").isNotNull();
+
+        Comparator<char[]> comp = CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR;
+        int found = -1;
+        for (int i = 0; i < context.allStems.image.length; i++)
+        {
+            if (comp.compare(context.allStems.image[i], stemImage.toCharArray()) == 0)
+            {
+                if (found >= 0)
+                    org.junit.Assert.fail("Duplicate stem with image '" + stemImage + "' in stems:\n"
+                        + context.allStems);
+                found = i;
+            }
+        }
+        
+        if (found == -1) 
+            org.junit.Assert.fail("No stem with image '" + stemImage + "' in stems:\n"
+                + context.allStems);
+        
+        return new StemAssert(found);
+    }
+
+    public final class TokenEntry
+    {
+        final int tokenIndex;
+        
+        TokenEntry(int tokenIndex)
+        {
+            this.tokenIndex = tokenIndex;
+        }
+        
+        public String getTokenImage() 
+        { 
+            if (context.allTokens.image[tokenIndex] == null)
+                return null;
+            return new String(context.allTokens.image[tokenIndex]);
+        }
+
+        public String getStemImage() 
+        {
+            if (getTokenImage() == null)
+                return null;
+
+            int wordIndex = context.allTokens.wordIndex[tokenIndex];
+            int stemIndex = context.allWords.stemIndex[wordIndex];
+            return new String(context.allStems.image[stemIndex]);
+        }
+
+        public Integer getWordType()
+        {
+            if (getTokenImage() == null)
+                return null;
+
+            return (int) context.allWords.type[context.allTokens.wordIndex[tokenIndex]];
+        }
+    }
+    
+    public List<TokenEntry> tokens()
+    {
+        List<TokenEntry> result = Lists.newArrayList();
+        for (int i = 0; i < context.allTokens.image.length; i++)
+            result.add(new TokenEntry(i));
+        return result;
+    }
 }
