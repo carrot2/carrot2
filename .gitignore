@@ -16,3 +16,4 @@ tmp
 .clover
 junit*.properties
 *.patch
+/*.log
