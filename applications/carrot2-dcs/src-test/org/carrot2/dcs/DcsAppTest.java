@@ -359,20 +359,18 @@ public class DcsAppTest
 
         // Override some attributes
         final ProcessingResult overriddenAttributesResult = post(KEY_KACZYNSKI,
-            ImmutableMap.<String, Object> of("DocumentAssigner.exactPhraseAssignment",
-                "false"));
+            ImmutableMap.<String, Object> of("LingoClusteringAlgorithm.desiredClusterCountBase", "5"));
         assertThat(overriddenAttributesResult.getClusters().size()).isNotEqualTo(
             initialClusterCount);
 
-        // Note the string instead of a boolean here. The reason for this is that the
+        // Note the string instead of an integer here. The reason for this is that the
         // attributes get passed as a string POST parameters and the controller echoes
         // input attributes to output exactly in the form they were provided, from string
         // type conversion is performed only for the purposes of binding to the
         // component's fields.
         assertThat(
             overriddenAttributesResult
-                .getAttribute("DocumentAssigner.exactPhraseAssignment")).isEqualTo(
-            "false");
+                .getAttribute("LingoClusteringAlgorithm.desiredClusterCountBase")).isEqualTo("5");
 
     }
 
