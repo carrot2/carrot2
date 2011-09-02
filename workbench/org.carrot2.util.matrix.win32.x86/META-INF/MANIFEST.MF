@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Carrot2 native matrix code (win32.x86)
-Bundle-SymbolicName: org.carrot2.util.matrix.win32.x86
-Bundle-Version: 0.0.0.QUALIFIER
-Bundle-Vendor: Carrot2.org
-Fragment-Host: com.carrotsearch.nni;bundle-version="0.0.0"
-Eclipse-PlatformFilter: (& (osgi.os=win32) (osgi.arch=x86))
