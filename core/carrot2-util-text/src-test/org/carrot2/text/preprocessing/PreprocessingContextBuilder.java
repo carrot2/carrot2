@@ -26,6 +26,23 @@ class PreprocessingContextBuilder
     private Map<String, Object> attributes = Maps.newHashMap();
     private IPreprocessingPipeline pipeline = new CompletePreprocessingPipeline();
 
+    public final static class FieldValue
+    {
+        String field;
+        String value;
+        
+        public FieldValue(String field, String value)
+        {
+            this.field = field;
+            this.value = value;
+        }
+
+        public static FieldValue fv(String fieldName, String value)
+        {
+            return new FieldValue(fieldName, value);
+        }        
+    }
+
     public PreprocessingContextBuilder newDoc(String title) {
         return newDoc(title, null, null);
     }
@@ -37,6 +54,15 @@ class PreprocessingContextBuilder
     public PreprocessingContextBuilder newDoc(String title, String summary, String contentUrl)
     {
         documents.add(new Document(title, summary, contentUrl));
+        return this;
+    }
+
+    public PreprocessingContextBuilder newDoc(FieldValue... fields)
+    {
+        Document doc = new Document();
+        for (FieldValue fv : fields)
+            doc.setField(fv.field, fv.value);
+        documents.add(doc);
         return this;
     }
 

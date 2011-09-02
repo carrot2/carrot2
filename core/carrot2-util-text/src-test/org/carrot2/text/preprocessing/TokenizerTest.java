@@ -12,244 +12,191 @@
 
 package org.carrot2.text.preprocessing;
 
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.assertThat;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.tokens;
+import static org.carrot2.text.preprocessing.PreprocessingContextBuilder.FieldValue.*;
 import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.Arrays;
 
 import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
+import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test cases for {@link Tokenizer}.
  */
-public class TokenizerTest extends PreprocessingComponentTestBase
+public class TokenizerTest
 {
-    /** The tokenizer under tests */
-    private Tokenizer tokenizer;
-    
+    PreprocessingContextBuilder contextBuilder;
+
     @Before
-    public void setUpPreprocessingComponents()
+    public void prepareContextBuilder()
     {
-        tokenizer = new Tokenizer();
+        contextBuilder = new PreprocessingContextBuilder()
+            .withPreprocessingPipeline(new BasicPreprocessingPipeline());
     }
+
+    // @formatter:off
 
     @Test
     public void testNoDocuments()
     {
-        createDocuments();
+        PreprocessingContext ctx = contextBuilder
+            .buildContext();
 
-        final char [][] expectedTokensImages = new char [] []
-        {
-            null
-        };
-        final int [] expectedTokensDocumentIndices = new int []
-        {
-            -1
-        };
-        final short [] expectedTokensTypes = new short []
-        {
-            ITokenizer.TF_TERMINATOR
-        };
-        final byte [] expectedTokensFieldIndices = new byte []
-        {
-            -1
-        };
-
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
-            expectedTokensFieldIndices, DEFAULT_DOCUMENT_FIELD_NAMES);
+        assertThat(ctx).tokenAt(0)
+            .hasImage(null).hasDocIndex(-1).hasFieldIndex(-1)
+            .hasExactTokenType(ITokenizer.TF_TERMINATOR);
     }
 
     @Test
     public void testEmptyDocuments()
     {
-        createDocuments("", "", null, null);
+        PreprocessingContext ctx = contextBuilder
+            .newDoc(null, null)
+            .newDoc("", "")
+            .buildContext();
 
-        final char [][] expectedTokensImages = new char [] []
-        {
-            null, null
-        };
-        final int [] expectedTokensDocumentIndices = new int []
-        {
-            -1, -1
-        };
-        final short [] expectedTokensTypes = new short []
-        {
-            ITokenizer.TF_SEPARATOR_DOCUMENT, ITokenizer.TF_TERMINATOR
-        };
-        final byte [] expectedTokensFieldIndices = new byte []
-        {
-            -1, -1
-        };
-
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
-            expectedTokensFieldIndices, DEFAULT_DOCUMENT_FIELD_NAMES);
+        assertThat(ctx).tokenAt(0)
+            .hasImage(null).hasDocIndex(-1).hasFieldIndex(-1)
+            .hasExactTokenType(ITokenizer.TF_SEPARATOR_DOCUMENT);
+        assertThat(ctx).tokenAt(1)
+            .hasImage(null).hasDocIndex(-1).hasFieldIndex(-1)
+            .hasExactTokenType(ITokenizer.TF_TERMINATOR);
     }
 
     @Test
     public void testEmptyFirstField()
     {
-        createDocuments(null, "a");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc(null, "a")
+            .buildContext();
 
-        final char [][] expectedTokensImages = new char [] []
-        {
-            "a".toCharArray(), null
-        };
-        final int [] expectedTokensDocumentIndices = new int []
-        {
-            0, -1
-        };
-        final short [] expectedTokensTypes = new short []
-        {
-            ITokenizer.TT_TERM, ITokenizer.TF_TERMINATOR
-        };
-        final byte [] expectedTokensFieldIndices = new byte []
-        {
-            1, -1
-        };
-
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
-            expectedTokensFieldIndices, DEFAULT_DOCUMENT_FIELD_NAMES);
-    }
-
-    @Test
-    public void testOneDocument()
-    {
-        createDocuments("data mining", "web site");
-
-        final char [][] expectedTokensImages = new char [] []
-        {
-            "data".toCharArray(), "mining".toCharArray(), null, "web".toCharArray(),
-            "site".toCharArray(), null
-        };
-        final int [] expectedTokensDocumentIndices = new int []
-        {
-            0, 0, 0, 0, 0, -1
-        };
-        final short [] expectedTokensTypes = new short []
-        {
-            ITokenizer.TT_TERM, ITokenizer.TT_TERM, ITokenizer.TF_SEPARATOR_FIELD,
-            ITokenizer.TT_TERM, ITokenizer.TT_TERM, ITokenizer.TF_TERMINATOR
-        };
-        final byte [] expectedTokensFieldIndices = new byte []
-        {
-            0, 0, -1, 1, 1, -1
-        };
-
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
-            expectedTokensFieldIndices, DEFAULT_DOCUMENT_FIELD_NAMES);
-    }
-
-    @Test
-    public void testMoreDocuments()
-    {
-        createDocuments("data mining", "web site", "artificial intelligence", "ai",
-            "test", "test");
-
-        final char [][] expectedTokensImages = new char [] []
-        {
-            "data".toCharArray(), "mining".toCharArray(), null, "web".toCharArray(),
-            "site".toCharArray(), null, "artificial".toCharArray(),
-            "intelligence".toCharArray(), null, "ai".toCharArray(), null,
-            "test".toCharArray(), null, "test".toCharArray(), null
-        };
-        final int [] expectedTokensDocumentIndices = new int []
-        {
-            0, 0, 0, 0, 0, -1, 1, 1, 1, 1, -1, 2, 2, 2, -1
-        };
-        final short [] expectedTokensTypes = new short []
-        {
-            ITokenizer.TT_TERM, ITokenizer.TT_TERM, ITokenizer.TF_SEPARATOR_FIELD,
-            ITokenizer.TT_TERM, ITokenizer.TT_TERM, ITokenizer.TF_SEPARATOR_DOCUMENT,
-            ITokenizer.TT_TERM, ITokenizer.TT_TERM, ITokenizer.TF_SEPARATOR_FIELD,
-            ITokenizer.TT_TERM, ITokenizer.TF_SEPARATOR_DOCUMENT, ITokenizer.TT_TERM,
-            ITokenizer.TF_SEPARATOR_FIELD, ITokenizer.TT_TERM, ITokenizer.TF_TERMINATOR
-        };
-        final byte [] expectedTokensFieldIndices = new byte []
-        {
-            0, 0, -1, 1, 1, -1, 0, 0, -1, 1, -1, 0, -1, 1, -1
-        };
-
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
-            expectedTokensFieldIndices, DEFAULT_DOCUMENT_FIELD_NAMES);
+        assertThat(ctx).tokenAt(0)
+            .hasImage("a").hasDocIndex(0).hasFieldIndex(1)
+            .hasExactTokenType(ITokenizer.TT_TERM);
+        assertThat(ctx).tokenAt(1)
+            .hasImage(null).hasDocIndex(-1).hasFieldIndex(-1)
+            .hasExactTokenType(ITokenizer.TF_TERMINATOR);
     }
 
     @Test
     public void testEmptyField()
     {
-        final String [] fieldNames = new String []
-        {
-            "title", "snippet", "body"
-        };
-        createDocumentsWithFields(fieldNames, "data mining", "", "web site");
+        PreprocessingContext ctx = contextBuilder
+            .setAttribute(AttributeUtils.getKey(Tokenizer.class, "documentFields"), Arrays.asList("field1", "field2", "field3"))
+            .newDoc(
+                fv("field1", "data mining"),
+                fv("field2", ""),
+                fv("field3", "web site"))
+            .buildContext();
 
-        final char [][] expectedTokensImages = new char [] []
-        {
-            "data".toCharArray(), "mining".toCharArray(), null, "web".toCharArray(),
-            "site".toCharArray(), null
-        };
-        final int [] expectedTokensDocumentIndices = new int []
-        {
-            0, 0, 0, 0, 0, -1
-        };
-        final short [] expectedTokensTypes = new short []
-        {
-            ITokenizer.TT_TERM, ITokenizer.TT_TERM, ITokenizer.TF_SEPARATOR_FIELD,
-            ITokenizer.TT_TERM, ITokenizer.TT_TERM, ITokenizer.TF_TERMINATOR
-        };
-        final byte [] expectedTokensFieldIndices = new byte []
-        {
-            0, 0, -1, 2, 2, -1
-        };
+        assertThat(ctx.allFields.name).isEqualTo(new String [] {"field1", "field2", "field3"});
 
-        tokenizer.documentFields = Arrays.asList(fieldNames);
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
-            expectedTokensFieldIndices, fieldNames);
+        assertThat(ctx).tokenAt(0)
+            .hasImage("data").hasDocIndex(0).hasFieldIndex(0)
+            .hasExactTokenType(ITokenizer.TT_TERM);
+        assertThat(ctx).tokenAt(1)
+            .hasImage("mining").hasDocIndex(0).hasFieldIndex(0)
+            .hasExactTokenType(ITokenizer.TT_TERM);
+        assertThat(ctx).tokenAt(2)
+            .hasImage(null).hasDocIndex(0).hasFieldIndex(-1)
+            .hasExactTokenType(ITokenizer.TF_SEPARATOR_FIELD);
+        assertThat(ctx).tokenAt(3)
+            .hasImage("web").hasDocIndex(0).hasFieldIndex(2)
+            .hasExactTokenType(ITokenizer.TT_TERM);
+        assertThat(ctx).tokenAt(4)
+            .hasImage("site").hasDocIndex(0).hasFieldIndex(2)
+            .hasExactTokenType(ITokenizer.TT_TERM);
+        assertThat(ctx).tokenAt(5)
+            .hasImage(null).hasDocIndex(-1).hasFieldIndex(-1)
+            .hasExactTokenType(ITokenizer.TF_TERMINATOR);
     }
 
     @Test
+    public void testOneDocument()
+    {
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("data mining", "web site")
+            .buildContext();
+        
+        assertThat(ctx).tokenAt(0)
+            .hasImage("data").hasDocIndex(0).hasFieldIndex(0)
+            .hasExactTokenType(ITokenizer.TT_TERM);
+        assertThat(ctx).tokenAt(1)
+            .hasImage("mining").hasDocIndex(0).hasFieldIndex(0)
+            .hasExactTokenType(ITokenizer.TT_TERM);
+        assertThat(ctx).tokenAt(2)
+            .hasImage(null).hasDocIndex(0).hasFieldIndex(-1)
+            .hasExactTokenType(ITokenizer.TF_SEPARATOR_FIELD);
+        assertThat(ctx).tokenAt(3)
+            .hasImage("web").hasDocIndex(0).hasFieldIndex(1)
+            .hasExactTokenType(ITokenizer.TT_TERM);
+        assertThat(ctx).tokenAt(4)
+            .hasImage("site").hasDocIndex(0).hasFieldIndex(1)
+            .hasExactTokenType(ITokenizer.TT_TERM);
+        assertThat(ctx).tokenAt(5)
+            .hasImage(null).hasDocIndex(-1).hasFieldIndex(-1)
+            .hasExactTokenType(ITokenizer.TF_TERMINATOR);
+    }
+    
+    @Test
     public void testSentenceSeparator()
     {
-        createDocuments("data . mining", "");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("data . mining", "")
+            .buildContext();
+        
+        assertThat(ctx).tokenAt(0)
+            .hasImage("data").hasDocIndex(0).hasFieldIndex(0)
+            .hasExactTokenType(ITokenizer.TT_TERM);
 
-        final char [][] expectedTokensImages = new char [] []
-        {
-            "data".toCharArray(), ".".toCharArray(), "mining".toCharArray(), null
-        };
-        final int [] expectedTokensDocumentIndices = new int []
-        {
-            0, 0, 0, -1
-        };
-        final short [] expectedTokensTypes = new short []
-        {
-            ITokenizer.TT_TERM,
-            ITokenizer.TF_SEPARATOR_SENTENCE | ITokenizer.TT_PUNCTUATION,
-            ITokenizer.TT_TERM, ITokenizer.TF_TERMINATOR
-        };
-        final byte [] expectedTokensFieldIndices = new byte []
-        {
-            0, 0, 0, -1
-        };
+        assertThat(ctx).tokenAt(1)
+            .hasImage(".").hasDocIndex(0).hasFieldIndex(0)
+            .hasExactTokenType(ITokenizer.TF_SEPARATOR_SENTENCE | ITokenizer.TT_PUNCTUATION);
 
-        check(expectedTokensImages, expectedTokensDocumentIndices, expectedTokensTypes,
-            expectedTokensFieldIndices, DEFAULT_DOCUMENT_FIELD_NAMES);
+        assertThat(ctx).tokenAt(2)
+            .hasImage("mining").hasDocIndex(0).hasFieldIndex(0)
+            .hasExactTokenType(ITokenizer.TT_TERM);
+
+        assertThat(ctx).tokenAt(3)
+            .hasImage(null).hasDocIndex(-1).hasFieldIndex(-1)
+            .hasExactTokenType(ITokenizer.TF_TERMINATOR);
     }
 
-    private void check(char [][] expectedTokensImages,
-        final int [] expectedTokensDocumentIndices, final short [] expectedTokensTypes,
-        final byte [] expectedTokensFieldIndices, String [] expectedFieldNames)
+    @Test
+    public void testMoreDocuments()
     {
-        tokenizer.tokenize(context);
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("data mining", "web site")
+            .newDoc("artificial intelligence", "ai")
+            .newDoc("test", "test")
+            .buildContext();
 
-        assertThat(context.allFields.name).as("allFields.names").isEqualTo(
-            expectedFieldNames);
-        assertThat(context.allTokens.image).as("allTokens.images").isEqualTo(
-            expectedTokensImages);
-        assertThat(context.allTokens.documentIndex).as("allTokens.documentIndices")
-            .isEqualTo(expectedTokensDocumentIndices);
-        assertThat(context.allTokens.fieldIndex).as("allTokens.fieldIndices").isEqualTo(
-            expectedTokensFieldIndices);
-        assertThat(context.allTokens.type).as("allTokens.types").isEqualTo(
-            expectedTokensTypes);
+        assertThat(tokens(ctx)).onProperty("tokenImage").isEqualTo(Arrays.asList(
+            "data", "mining", null, "web", "site", null,
+            "artificial", "intelligence", null, "ai", null,
+            "test", null, "test", null));
+        
+        assertThat(ctx.allTokens.documentIndex).isEqualTo(new int [] {
+            0, 0, 0, 0, 0, -1, 1, 1, 1, 1, -1, 2, 2, 2, -1
+        });
+
+        assertThat(ctx.allTokens.type).isEqualTo(new short [] {
+            ITokenizer.TT_TERM, ITokenizer.TT_TERM, ITokenizer.TF_SEPARATOR_FIELD,
+            ITokenizer.TT_TERM, ITokenizer.TT_TERM, ITokenizer.TF_SEPARATOR_DOCUMENT,
+            ITokenizer.TT_TERM, ITokenizer.TT_TERM, ITokenizer.TF_SEPARATOR_FIELD,
+            ITokenizer.TT_TERM, ITokenizer.TF_SEPARATOR_DOCUMENT, ITokenizer.TT_TERM,
+            ITokenizer.TF_SEPARATOR_FIELD, ITokenizer.TT_TERM, ITokenizer.TF_TERMINATOR
+        });
+        
+        assertThat(ctx.allTokens.fieldIndex).isEqualTo(new byte [] {
+            0, 0, -1, 1, 1, -1, 0, 0, -1, 1, -1, 0, -1, 1, -1
+        });
     }
+
+    // @formatter:on
 }

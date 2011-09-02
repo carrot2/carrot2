@@ -12,73 +12,59 @@
 
 package org.carrot2.text.preprocessing;
 
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test cases for {@link StopListMarker}.
  */
-public class WordMarkerTest extends PreprocessingComponentTestBase
+public class WordMarkerTest
 {
-    /** Marker under tests */
-    private StopListMarker stopListMarker;
-
-    /** Other preprocessing components required for the test */
-    private Tokenizer tokenizer;
-    private CaseNormalizer caseNormalizer;
-    private LanguageModelStemmer languageModelStemmer;
+    PreprocessingContextBuilder contextBuilder;
 
     @Before
-    public void setUpPreprocessingComponents()
+    public void prepareContextBuilder()
     {
-        tokenizer = new Tokenizer();
-        caseNormalizer = new CaseNormalizer();
-        languageModelStemmer = new LanguageModelStemmer();
-        stopListMarker = new StopListMarker();
+        contextBuilder = new PreprocessingContextBuilder()
+            .withPreprocessingPipeline(new BasicPreprocessingPipeline());
     }
+
+    // @formatter:off
 
     @Test
     public void testNonStopWords()
     {
-        createDocuments("data mining", "data mining");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("data mining", "data mining")
+            .buildContext();
 
-        final boolean [] expectedCommonTermFlag = new boolean []
-        {
-            false, false
-        };
-
-        check(expectedCommonTermFlag);
+        assertThat(ctx).containsWord("data")
+            .withExactTokenType(ITokenizer.TT_TERM);
+        assertThat(ctx).containsWord("mining")
+            .withExactTokenType(ITokenizer.TT_TERM);
     }
 
     @Test
     public void testStopWords()
     {
-        createDocuments("this you", "have are");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("this you", "have are")
+            .buildContext();
 
-        final boolean [] expectedCommonTermFlag = new boolean []
-        {
-            true, true, true, true
-        };
-
-        check(expectedCommonTermFlag);
+        assertThat(ctx).containsWord("this")
+            .withExactTokenType(ITokenizer.TT_TERM | ITokenizer.TF_COMMON_WORD);
+        assertThat(ctx).containsWord("you")
+            .withExactTokenType(ITokenizer.TT_TERM | ITokenizer.TF_COMMON_WORD);
+        assertThat(ctx).containsWord("have")
+            .withExactTokenType(ITokenizer.TT_TERM | ITokenizer.TF_COMMON_WORD);
+        assertThat(ctx).containsWord("are")
+            .withExactTokenType(ITokenizer.TT_TERM | ITokenizer.TF_COMMON_WORD);
     }
-
-    private void check(boolean [] expectedCommonTermFlag)
-    {
-        tokenizer.tokenize(context);
-        caseNormalizer.normalize(context);
-        languageModelStemmer.stem(context);
-        stopListMarker.mark(context);
-
-        boolean [] actual = new boolean [context.allWords.type.length];
-        for (int i = 0; i < actual.length; i++)
-        {
-            actual[i] = ((context.allWords.type[i] & ITokenizer.TF_COMMON_WORD) != 0);
-        }
-
-        assertThat(actual).isEqualTo(expectedCommonTermFlag);
-    }
+    
+    // @formatter:on
 }

@@ -8,6 +8,7 @@ import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.util.CharArrayComparators;
 import org.fest.util.Strings;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 /**
@@ -350,11 +351,20 @@ nextPhrase:
             return this;
         }
 
+        /** type masked to token type only. */
         public void withTokenType(int tokenType)
         {
             Assertions.assertThat(tokenType)
-                .as("token type of word '" + wordImage + "'")
+                .as("token type (masked) of word '" + wordImage + "'")
                 .isEqualTo(TokenTypeUtils.maskType(context.allWords.type[wordIndex]));
+        }
+
+        /** raw value of token type field. */
+        public void withExactTokenType(int tokenType)
+        {
+            Assertions.assertThat(tokenType)
+                .as("token type of word '" + wordImage + "'")
+                .isEqualTo(context.allWords.type[wordIndex]);
         }
     }
 
@@ -443,5 +453,69 @@ nextPhrase:
         for (int i = 0; i < context.allTokens.image.length; i++)
             result.add(new TokenEntry(i));
         return result;
+    }
+
+    final class TokenAssert
+    {
+        private final int tokenIndex;
+        private final String tokenImage;
+
+        public TokenAssert(int tokenIndex)
+        {
+            this.tokenIndex = tokenIndex;
+            this.tokenImage = tokenIndex + ":"
+                + (context.allTokens.image[tokenIndex] != null ? new String(context.allTokens.image[tokenIndex]) : "<null>");
+        }
+
+        /** type masked to token type only. */
+        public TokenAssert hasTokenType(int tokenType)
+        {
+            Assertions.assertThat(tokenType)
+                .as("token type (masked) of token '" + tokenImage + "'")
+                .isEqualTo(TokenTypeUtils.maskType(context.allTokens.type[tokenIndex]));
+            return this;
+        }
+
+        /** raw value of token type field. */
+        public TokenAssert hasExactTokenType(int tokenType)
+        {
+            Assertions.assertThat(tokenType)
+                .as("token type of token '" + tokenImage + "'")
+                .isEqualTo(context.allTokens.type[tokenIndex]);
+            return this;
+        }
+
+        public TokenAssert hasImage(String image)
+        {
+            Assertions.assertThat(
+                CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR.compare(
+                    image != null ? image.toCharArray() : null,
+                    context.allTokens.image[tokenIndex]) == 0)
+                    .as("token image equality: " + image + " vs. " + 
+                    new String(Objects.firstNonNull(context.allTokens.image[tokenIndex], "<null>".toCharArray())))
+                    .isTrue();
+            return this;
+        }
+
+        public TokenAssert hasDocIndex(int expectedDocIndex)
+        {
+            Assertions.assertThat(context.allTokens.documentIndex[tokenIndex])
+                .as("documentIndex")
+                .isEqualTo(expectedDocIndex);
+            return this;
+        }
+
+        public TokenAssert hasFieldIndex(int expectedFieldIndex)
+        {
+            Assertions.assertThat(context.allTokens.fieldIndex[tokenIndex])
+                .as("fieldIndex")
+                .isEqualTo((byte) expectedFieldIndex);
+            return this;
+        }
+    }
+    
+    public TokenAssert tokenAt(int tokenIndex)
+    {
+        return new TokenAssert(tokenIndex);
     }
 }
