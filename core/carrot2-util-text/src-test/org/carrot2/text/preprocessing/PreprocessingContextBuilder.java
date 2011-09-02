@@ -40,6 +40,12 @@ class PreprocessingContextBuilder
         return this;
     }
 
+    public PreprocessingContextBuilder withPreprocessingPipeline(IPreprocessingPipeline pipeline)
+    {
+        this.pipeline = pipeline;
+        return this;
+    }
+
     public PreprocessingContextBuilder withStemmerFactory(IStemmerFactory stemmerFactory)
     {
         return setAttribute(

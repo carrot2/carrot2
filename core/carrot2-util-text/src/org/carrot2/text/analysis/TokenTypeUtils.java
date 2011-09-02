@@ -38,7 +38,23 @@ public final class TokenTypeUtils
     {
         return (type & ITokenizer.TF_SEPARATOR_DOCUMENT) != 0;
     }
-    
+
+    /**
+     * Returns <code>true</code> if the given type has {@link ITokenizer#TF_SEPARATOR_FIELD} set.
+     */
+    public static boolean isFieldSeparator(int type)
+    {
+        return (type & ITokenizer.TF_SEPARATOR_FIELD) != 0;
+    }
+
+    /**
+     * Returns <code>true</code> if the given type has {@link ITokenizer#TF_TERMINATOR} set.
+     */
+    public static boolean isTerminator(int type)
+    {
+        return (type & ITokenizer.TF_TERMINATOR) != 0;
+    }
+
     /**
      * Return <code>true</code> if {@link ITokenizer#TF_COMMON_WORD} is set.
      */
