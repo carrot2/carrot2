@@ -12,6 +12,12 @@ import com.google.common.collect.Lists;
  */
 public class Tabular
 {
+    /** Emit header every n-th line. */
+    private final int HEADER_EVERY_NTH = 50;
+
+    /** Column separator. */
+    private final String COLUMN_SEPARATOR = " ";
+
     public static enum Alignment
     {
         LEFT,
@@ -132,20 +138,25 @@ public class Tabular
             }
         }
 
+        final StringBuilder headerLine = new StringBuilder();
         for (int i = 0; i < columns.size(); i++)
         {
-            sb.append(columns.get(i).alignment.align(columns.get(i).name, widths[i]));
-            sb.append(' ');
+            headerLine.append(columns.get(i).alignment.align(columns.get(i).name, widths[i]));
+            headerLine.append(COLUMN_SEPARATOR);
         }
-        sb.append("\n");
+        headerLine.append("\n");
+        final String header = headerLine.toString();
 
+        int emittedLines = 0;
+        sb.append(header);
         for (List<Object> row : data)
         {
+            if ((++emittedLines % HEADER_EVERY_NTH) == 0)
+                sb.append(header);
             for (int i = 0; i < row.size(); i++)
             {
-                sb.append(
-                    columns.get(i).alignment.align((String) row.get(i), widths[i]));
-                sb.append(' ');
+                sb.append(columns.get(i).alignment.align((String) row.get(i), widths[i]));
+                sb.append(COLUMN_SEPARATOR);
             }
             sb.append("\n");
         }
@@ -160,7 +171,7 @@ public class Tabular
             return new String((char[]) object);
         return object.toString();
     }
-    
+
     private void checkNoDataAdded()
     {
         if (currentRow.size() != 0 || data.size() != 0) 

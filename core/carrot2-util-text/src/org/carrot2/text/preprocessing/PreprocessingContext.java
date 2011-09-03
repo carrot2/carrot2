@@ -152,7 +152,7 @@ public final class PreprocessingContext
             StringBuilder b = new StringBuilder();
             Tabular t = new Tabular()
                 .addColumn("#")
-                .addColumn("term").flushLeft()
+                .addColumn("token").flushLeft()
                 .addColumn("type")
                 .addColumn("fieldIndex")
                 .addColumn("=>field").flushLeft()
@@ -349,7 +349,7 @@ public final class PreprocessingContext
                     image[i] == null ? "<null>" : new String(image[i]),
                     type[i],
                     tf[i],
-                    intIntArrayToString(tfByDocument[i]).toString());
+                    SparseArray.sparseToString(tfByDocument[i]).toString());
 
                 t.rowData(Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
 
@@ -446,7 +446,7 @@ public final class PreprocessingContext
                     mostFrequentOriginalWordIndex[i],
                     allWords.image[mostFrequentOriginalWordIndex[i]],
                     tf[i],
-                    intIntArrayToString(tfByDocument[i]).toString(),
+                    SparseArray.sparseToString(tfByDocument[i]).toString(),
                     Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
             }
 
@@ -511,7 +511,7 @@ public final class PreprocessingContext
                     Arrays.toString(wordIndices[i]).replace(" ", ""),
                     getPhrase(i),
                     tf[i],
-                    intIntArrayToString(tfByDocument[i]).toString());
+                    SparseArray.sparseToString(tfByDocument[i]).toString());
             }
 
             return t.toString();
@@ -698,22 +698,5 @@ public final class PreprocessingContext
             tokenCache.add(new MutableCharArray(tokenImage));
             return tokenImage;
         }
-    }
-
-    /**
-     * Convert an int-int compact mapping array to a string.
-     */
-    private static StringBuilder intIntArrayToString(int [] intIntArray)
-    {
-        StringBuilder b = new StringBuilder();
-        int windowSize = 5 * 2;
-        for (int j = 0, max = Math.min(windowSize, intIntArray.length); j < max; j += 2)
-        {
-            b.append(intIntArray[j]).append("=>").append(intIntArray[j + 1]);
-            b.append(",");
-        }
-        if (intIntArray.length > windowSize)
-            b.append("...");
-        return b;
     }
 }
