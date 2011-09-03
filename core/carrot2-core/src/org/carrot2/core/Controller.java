@@ -12,6 +12,7 @@
 
 package org.carrot2.core;
 
+import java.io.Closeable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +51,11 @@ import com.google.common.collect.Maps;
  * 
  * @see ControllerFactory
  */
-public final class Controller
+public final class Controller implements Closeable
 {
+    /** If <code>true</code>, the controller has been closed and is no longer usable. */
+    private volatile boolean closed = false;
+    
     /** Place holder for controller-level shared data */
     private ControllerContextImpl context = new ControllerContextImpl();
 
@@ -146,6 +150,8 @@ public final class Controller
         ProcessingComponentConfiguration... configurations)
         throws ComponentInitializationException
     {
+        checkClosed();
+
         if (componentIdToConfiguration != null)
         {
             throw new IllegalStateException("This controller is already initialized.");
@@ -282,6 +288,8 @@ public final class Controller
     public ProcessingResult process(Map<String, Object> attributes,
         Object... processingComponentClassesOrIds) throws ProcessingException
     {
+        checkClosed();
+
         // Automatically initialize the controller if the caller has not done that
         // explicitly. The extra synchronization overhead does exist, but it's very
         // small compared to the API simplification benefits.
@@ -402,12 +410,36 @@ public final class Controller
      */
     public void dispose()
     {
-        if (this.context != null)
+        if (closed) return;
+        try
         {
-            componentManager.dispose();
-            this.context.dispose();
-            this.context = null;
+            if (this.context != null)
+            {
+                componentManager.dispose();
+                this.context.dispose();
+                this.context = null;
+            }
         }
+        finally
+        {
+            this.closed = true;
+        }
+    }
+
+    /** Implement closeable so that controller can be closed with Java 1.7 resource block. */
+    @Override
+    public void close()
+    {
+        dispose();
+    }
+
+    /**
+     * Throws an exception if this controller has been closed.
+     */
+    private void checkClosed()
+    {
+        if (closed)
+            throw new IllegalStateException("Controller closed.");
     }
 
     /**
