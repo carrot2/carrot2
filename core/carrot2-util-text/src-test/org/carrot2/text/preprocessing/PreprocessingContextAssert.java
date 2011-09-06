@@ -57,7 +57,7 @@ class PreprocessingContextAssert
          * Asserts exact mapping of document-tf (the number of mappings and their value, regardless
          * of their order). 
          */
-        public void withExactDocumentTfs(int [][] docTfPairs)
+        public PreprocessingContextPhraseAssert withExactDocumentTfs(int [][] docTfPairs)
         {
             for (int [] docTf : docTfPairs)
             {
@@ -68,6 +68,8 @@ class PreprocessingContextAssert
             Assertions.assertThat(context.allPhrases.tfByDocument[phraseIndex].length / 2)
                 .describedAs("tfByDocument array size for phrase: '" + context.allPhrases.getPhrase(phraseIndex) + "'")
                 .isEqualTo(docTfPairs.length);
+
+            return this;
         }
 
         public PreprocessingContextPhraseAssert withTf(int expectedTf)
