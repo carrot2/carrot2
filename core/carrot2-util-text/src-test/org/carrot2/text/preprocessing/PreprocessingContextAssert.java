@@ -21,7 +21,7 @@ class PreprocessingContextAssert
     /** document separator constant. */
     public final static String DS = "<DS>";
     /** field separator constant. */
-    public final static String FS = "<MW>";
+    public final static String FS = "<FS>";
     /** end of stream constant. */
     public final static String EOS = "<EOS>";
 
@@ -354,9 +354,9 @@ nextPhrase:
         /** type masked to token type only. */
         public void withTokenType(int tokenType)
         {
-            Assertions.assertThat(tokenType)
+            Assertions.assertThat(TokenTypeUtils.maskType(context.allWords.type[wordIndex]))
                 .as("token type (masked) of word '" + wordImage + "'")
-                .isEqualTo(TokenTypeUtils.maskType(context.allWords.type[wordIndex]));
+                .isEqualTo(tokenType);
         }
 
         /** raw value of token type field. */
