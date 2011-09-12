@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: High Performance Primitive Collections
 Bundle-SymbolicName: com.carrotsearch.hppc
-Bundle-Version: 0.3.3
-Bundle-ClassPath: hppc-0.3.3.jar
+Bundle-Version: 0.4.1
+Bundle-ClassPath: hppc-0.4.1.jar
 Export-Package: com.carrotsearch.hppc,
  com.carrotsearch.hppc.cursors,
  com.carrotsearch.hppc.hash,

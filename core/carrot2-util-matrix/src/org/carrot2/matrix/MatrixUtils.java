@@ -447,6 +447,6 @@ public class MatrixUtils
         IndirectComparator comparator)
     {
         return matrix
-            .viewSelection(IndirectSort.sort(0, matrix.rows(), comparator), null);
+            .viewSelection(IndirectSort.mergesort(0, matrix.rows(), comparator), null);
     }
 }
