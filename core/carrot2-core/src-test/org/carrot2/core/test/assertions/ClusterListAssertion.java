@@ -140,18 +140,9 @@ public class ClusterListAssertion extends
         for (String s : l1) 
             maxL1Width = Math.max(maxL1Width, s.length());
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < Math.max(l1.size(), l2.size()); i++)
-        {
-            sb.append(i < l1.size() ? Strings.padEnd(l1.get(i), maxL1Width, ' ') : "");
-            sb.append(" | ");
-            sb.append(i < l2.size() ? l2.get(i) : "");
-            sb.append("\n");
-        }
-
-        sb.append("\n");
-        Set<String> l1s = Sets.newTreeSet(l1);
-        Set<String> l2s = Sets.newTreeSet(l2);
+        final StringBuilder sb = new StringBuilder();
+        final Set<String> l1s = Sets.newTreeSet(l1);
+        final Set<String> l2s = Sets.newTreeSet(l2);
 
         if (l1s.equals(l2s))
         {
@@ -165,9 +156,23 @@ public class ClusterListAssertion extends
             l2s.removeAll(common);
 
             sb.append("Clusters in the previous set only:\n");
-            for (String s : l1s) sb.append("  " + s + "\n");
+            for (String s : l1s) sb.append("  '" + s + "'\n");
             sb.append("Clusters in the actual set only:\n");
-            for (String s : l2s) sb.append("  " + s + "\n");            
+            for (String s : l2s) sb.append("  '" + s + "'\n");            
+        }
+
+        sb.append("Clusters side-by-side (order changes not shown):\n");
+        for (int i = 0; i < Math.max(l1.size(), l2.size()); i++)
+        {
+            String lbl = (i < l1.size() ? l1.get(i) : "--");
+            sb.append(l1s.contains(lbl) ? "* " : "  ");
+            sb.append(Strings.padEnd(lbl, maxL1Width, ' '));
+            sb.append(" | ");
+
+            lbl = (i < l2.size() ? l2.get(i) : "--");
+            sb.append(l2s.contains(lbl) ? "* " : "  ");
+            sb.append(lbl);
+            sb.append("\n");
         }
 
         logger.error("Failed cluster list comparison (previous | now):\n" 
