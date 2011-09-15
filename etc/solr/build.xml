@@ -41,7 +41,7 @@
       <copy file="${jar.dir}/carrot2-core-${carrot2.version}.jar" todir="@{solr.checkout}/contrib/clustering/lib" />
       <copy todir="@{solr.checkout}/contrib/clustering/lib">
         <fileset dir="${api.dir}/lib/required">
-          <include name="mahout*" />
+          <include name="mahout*.jar" />
         </fileset>
       </copy>
 
