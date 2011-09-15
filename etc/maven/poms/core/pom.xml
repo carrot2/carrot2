@@ -161,7 +161,7 @@
         <executions>
           <execution>
             <id>default-jar</id>
-            <phase>verify</phase>
+            <phase>package</phase>
             <configuration>
               <target>
                 <copy   file="${carrot2.master.basedir}/tmp/jar/carrot2-core-${carrot2.version}.jar" 
@@ -212,7 +212,7 @@
         <executions>
           <execution>
             <id>antrun-retrotranslate-jdk15</id>
-            <phase>verify</phase>
+            <phase>package</phase>
             <goals>
               <goal>run</goal>
             </goals>
