@@ -3,10 +3,10 @@
 # carrot2.version.stable=x.y.z
 
 # Main release version number. -dev for work-in-progress.
-carrot2.version           = 3.4.4-dev
+carrot2.version           = 3.4.4
 
 # Maven release number. -SNAPSHOT for work in progress.
-carrot2.version.maven     = 3.4.4-SNAPSHOT
+carrot2.version.maven     = 3.4.4
 
 # C#/.NET release. No work-in-progress indicator.
 carrot2.net.version       = 3.4.4.0
