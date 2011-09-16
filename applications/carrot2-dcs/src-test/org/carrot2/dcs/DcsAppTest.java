@@ -319,6 +319,19 @@ public class DcsAppTest
     }
 
     @Test
+    public void testPostUrlEncodedWithC2Stream() throws Exception
+    {
+        final ProcessingResult result = getOrPost(RequestType.POST_WWW_URL_ENCODING, ImmutableMap.<String, Object> of(
+            "query", "kaczyński",
+            "results", "50",
+            "dcs.algorithm", "url",
+            "dcs.c2stream", new String(Files.toByteArray(testFiles.get(KEY_KACZYNSKI)), "UTF-8")
+        ));
+        assertThatClusters(result.getClusters()).isNotEmpty();
+        assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
+    }
+
+    @Test
     public void testPostWithVariousC2StreamXmlEncoding() throws Exception
     {
         final ProcessingResult result16 = post(KEY_KACZYNSKI_UTF16,
@@ -517,7 +530,6 @@ public class DcsAppTest
     private List<? extends NameValuePair> formParams(Map<String, Object> otherAttributes)
     {
         final Map<String, Object> attributes = Maps.newHashMap(otherAttributes);
-        Assert.assertFalse(attributes.containsKey("dcs.c2stream"));
 
         final List<NameValuePair> params = Lists.newArrayList();
         for (Map.Entry<String, Object> entry : attributes.entrySet())

@@ -345,7 +345,24 @@ public final class RestProcessorServlet extends HttpServlet
             sendBadRequest("dcs.c2stream only supported in POST requests.", response, null);
             return;
         }
-        
+
+        // Check for c2stream in a POST/www-url-encoded and decode it... or try to.
+        ProcessingResult input = null;
+        if (request.getMethod().equalsIgnoreCase("POST") &&
+            request.getParameter("dcs.c2stream") != null)
+        {
+            // Deserialize documents from the stream
+            try
+            {
+                input = ProcessingResult.deserialize(request.getParameter("dcs.c2stream"));
+            }
+            catch (Exception e)
+            {
+                sendBadRequest("Could not parse Carrot2 XML stream", response, e);
+                return;
+            }
+        }
+
         // Everything else is identical for POST and GET.
         final Map<String, Object> parameters = Maps.newHashMap();
         @SuppressWarnings("unchecked")
@@ -354,7 +371,7 @@ public final class RestProcessorServlet extends HttpServlet
             String key = parameterNames.nextElement();
             parameters.put(key, request.getParameter(key));
         }
-        processRequest(response, null, parameters);
+        processRequest(response, input, parameters);
     }
 
     /**
