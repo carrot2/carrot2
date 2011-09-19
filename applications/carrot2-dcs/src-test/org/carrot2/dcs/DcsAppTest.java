@@ -209,7 +209,8 @@ public class DcsAppTest
             final HtmlForm form = getSearchForm();
 
             // Click on the appropriate radio option to enable fields
-            ((HtmlRadioButtonInput) form.getElementById("source-from-file")).click();
+            ((HtmlRadioButtonInput) (form.getPage().getByXPath(
+                "//input[@value = 'from-file']").get(0))).click();
             final File dataFile = testFiles.get(resource);
             form.getInputByName("dcs.c2stream").setValueAttribute(
                 dataFile.getAbsolutePath());
@@ -233,9 +234,9 @@ public class DcsAppTest
         final HtmlForm form = getSourceFromStringForm();
 
         // Click on the appropriate radio option to get JSON output
-        ((HtmlRadioButtonInput) form.getElementById("output-format-json")).click();
+        ((HtmlRadioButtonInput) form.getInputByValue("JSON")).click();
 
-        final Page dcsResponse = form.getButtonByName("submit").click();
+        final Page dcsResponse = clickSubmit(form);
         final String jsonResponse = dcsResponse.getWebResponse().getContentAsString(
             "UTF-8");
 
@@ -250,10 +251,10 @@ public class DcsAppTest
         final HtmlForm form = getSourceFromStringForm();
 
         // Click on the appropriate radio option to get JSON output
-        ((HtmlRadioButtonInput) form.getElementById("output-format-json")).click();
+        ((HtmlRadioButtonInput) form.getInputByValue("JSON")).click();
 
         form.getInputByName("dcs.json.callback").setValueAttribute(callback);
-        final Page dcsResponse = form.getButtonByName("submit").click();
+        final Page dcsResponse = clickSubmit(form);
         final String jsonResponse = dcsResponse.getWebResponse().getContentAsString(
             "UTF-8");
 
@@ -392,7 +393,7 @@ public class DcsAppTest
         final HtmlForm form = getSearchForm();
 
         // Click on the appropriate radio option to enable fields
-        ((HtmlRadioButtonInput) form.getElementById("source-from-string")).click();
+        ((HtmlRadioButtonInput) (form.getPage().getByXPath("//input[@value = 'from-string']").get(0))).click();
         form.getTextAreaByName("dcs.c2stream").setText(
             Files.toString(testFiles.get(KEY_KACZYNSKI), UTF_8));
         return form;
@@ -407,7 +408,7 @@ public class DcsAppTest
     private void checkXmlOutput(final String query, final HtmlForm form,
         boolean onlyClusters) throws IOException, Exception
     {
-        final XmlPage dcsResponse = (XmlPage) form.getButtonByName("submit").click();
+        final XmlPage dcsResponse = (XmlPage) clickSubmit(form);
         final String responseXml = dcsResponse.asXml();
 
         final ProcessingResult dcsResult = ProcessingResult
@@ -422,6 +423,12 @@ public class DcsAppTest
             assertThat(dcsResult.getDocuments().size()).isGreaterThan(0);
         }
         assertThat(dcsResult.getClusters().size()).isGreaterThan(0);
+    }
+
+    private Page clickSubmit(final HtmlForm form) throws IOException
+    {
+        return ((HtmlButton) form.getPage().getByXPath("//button[@name = 'submit']")
+            .get(0)).click();
     }
 
     private HtmlPage getStartPage() throws IOException, MalformedURLException

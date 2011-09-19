@@ -20,7 +20,7 @@
 
     <sequential>
       <invoke url="/" description="Get quick start page" />
-      <setRadioButton htmlId="source-from-file" />
+      <setRadioButton xpath="//input[@value = 'from-file']" />
       <setFileField name="dcs.c2stream" fileName="@{fileName}" />
       
       <!-- Wait for AJAX stuff to load -->
