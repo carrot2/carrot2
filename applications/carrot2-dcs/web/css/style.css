@@ -63,7 +63,6 @@ dt {
 }
 
 form {
-  margin: 4ex 0 0 0;
   position: relative;
 }
 
@@ -78,21 +77,25 @@ label span.label {
   text-align: right;
 }
 
-form ul {
+#content > ul, form > ul {
+  position: relative;
   list-style: none;
   margin: 0;
   padding: 0;
   padding-top: 2ex;
-  border-top: 1px solid #e0e0e0;
-  border-bottom: 1px solid #e0e0e0;
   width: 46em;
 }
 
-form ul.submit {
+form > ul {
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+ul.submit {
   border: none;
 }
 
-form ul li {
+#content > ul > li, form > ul > li {
   margin: 0;
   padding: 0;
   padding-bottom: 2ex;
