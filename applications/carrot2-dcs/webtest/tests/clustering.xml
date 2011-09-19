@@ -25,7 +25,7 @@
       
       <!-- Wait for AJAX stuff to load -->
       <sleep seconds="5" />
-      <clickButton name="submit" />
+      <clickButton xpath="//button[@type = 'submit']" />
       <!-- As long as we get 200 code, it's fine. We have more coverage in unit tests. -->
     </sequential>
   </macrodef>

@@ -17,7 +17,7 @@
   <target name="webtest.empty-string-xml">
     <webtest name="Empty XML as string">
       <invoke url="/" description="Get quick start page" />
-      <setRadioButton xpath="//input[@value = 'source-from-string']" />
+      <setRadioButton xpath="//input[@value = 'from-string']" />
       <sleep milliseconds="300" />
       <verifyXPath xpath="//button[@name = 'submit' and @disabled]" />
       <setInputField xpath="//textarea[@name = 'dcs.c2stream']">test</setInputField>
