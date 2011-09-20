@@ -183,7 +183,7 @@
         $("input[name = 'dcs.c2stream']").change(updateButton);
         
         $("input[name = 'method']").change(function() {
-          var s = this.split("|");
+          var s = this.value.split("|");
           $form.attr("enctype", s[1]).attr("method", s[0]);
         });
         
