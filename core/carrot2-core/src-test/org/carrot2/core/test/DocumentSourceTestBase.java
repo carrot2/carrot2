@@ -67,6 +67,7 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
      * @return Returns the number of fetched documents. Access
      *         {@link #resultAttributes} map to get hold of the actual documents.
      */
+    @SuppressWarnings("unchecked")
     protected int runQueryInCachingController()
     {
         return runQuery(getCachingController(initAttributes));

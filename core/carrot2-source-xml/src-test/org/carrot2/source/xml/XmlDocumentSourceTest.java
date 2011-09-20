@@ -175,6 +175,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
             initXslt);
         
+        @SuppressWarnings("unchecked")
         Controller controller = getCachingController(initAttributes);
 
         // Run with identity XSLT
@@ -217,6 +218,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         initAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xslt"),
             initXslt);
 
+        @SuppressWarnings("unchecked")
         Controller controller = getCachingController(initAttributes);
         
         // Run with swapping XSLT

@@ -26,6 +26,7 @@ import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.core.attribute.CommonAttributesDescriptor.Keys;
 
 /**
  * This example shows how to implement a simple Carrot2 {@link IDocumentSource}.
@@ -47,7 +48,7 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
 
     /**
      * Documents produced by this document source. The documents are returned in an output
-     * attribute with key equal to {@link CommonAttributesDescriptor.Keys#DOCUMENTS},
+     * attribute with key equal to {@link Keys#DOCUMENTS},
      */
     @Processing
     @Output

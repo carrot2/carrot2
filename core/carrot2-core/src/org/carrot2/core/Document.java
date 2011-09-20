@@ -391,8 +391,8 @@ public final class Document
         return otherFields.isEmpty() ? null : otherFields;
     }
 
-    /**
-     * @return
+    /*
+     * 
      */
     @ElementMap(entry = "field", key = "key", attribute = true, inline = true, required = false)
     @SuppressWarnings("unused")
@@ -414,8 +414,8 @@ public final class Document
         return otherFieldsForSerialization.isEmpty() ? null : otherFieldsForSerialization;
     }
 
-    /**
-     * @param otherFieldsForSerialization
+    /*
+     * 
      */
     @ElementMap(entry = "field", key = "key", attribute = true, inline = true, required = false)
     @SuppressWarnings("unused")

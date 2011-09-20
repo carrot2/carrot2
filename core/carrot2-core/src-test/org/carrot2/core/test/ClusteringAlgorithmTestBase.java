@@ -142,6 +142,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
          * This yields a pooling controller effectively, because no cache interfaces
          * are passed.
          */
+        @SuppressWarnings("unchecked")
         final Controller controller = getCachingController(initAttributes);
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
