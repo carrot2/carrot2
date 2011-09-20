@@ -78,7 +78,8 @@ public abstract class Constraint
     }
 
     /**
-     * TODO: document me?
+     * TODO: remove this method and replace with a constructor accepting Annotation this
+     * constraint is bound to.
      */
     public final void populate(Annotation annotation)
     {
