@@ -12,15 +12,14 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.carrot2.matrix.NNIDoubleFactory2D;
-import org.carrot2.matrix.factorization.seeding.*;
-
-import org.apache.mahout.math.matrix.DoubleFactory2D;
+import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
+import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
+import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategy;
+import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategyFactory;
 
 /**
  * A factory for {@link IMatrixFactorization}s.
  */
-@SuppressWarnings("deprecation")
 public abstract class IterativeMatrixFactorizationFactory implements
     IMatrixFactorizationFactory
 {
@@ -49,12 +48,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
     protected final static ISeedingStrategyFactory DEFAULT_SEEDING_FACTORY = new RandomSeedingStrategyFactory(
         0);
 
-    /** MatrixFactory to be used */
-    protected DoubleFactory2D doubleFactory2D;
-
-    /** The default MatrixFactory to be used */
-    protected final static DoubleFactory2D DEFAULT_DOUBLE_FACTORY_2D = NNIDoubleFactory2D.nni;
-
     /** Order base vectors according to their 'activity' */
     protected boolean ordered;
     protected static final boolean DEFAULT_ORDERED = true;
@@ -65,7 +58,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
         this.maxIterations = DEFAULT_MAX_ITERATIONS;
         this.stopThreshold = DEFAULT_STOP_THRESHOLD;
         this.seedingFactory = DEFAULT_SEEDING_FACTORY;
-        this.doubleFactory2D = DEFAULT_DOUBLE_FACTORY_2D;
         this.ordered = DEFAULT_ORDERED;
     }
 
@@ -143,24 +135,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
     public void setSeedingFactory(ISeedingStrategyFactory seedingFactory)
     {
         this.seedingFactory = seedingFactory;
-    }
-
-    /**
-     * Sets the <code>DoubleFactory2D</code> to be used to construct result matrices.
-     */
-    public DoubleFactory2D getDoubleFactory2D()
-    {
-        return doubleFactory2D;
-    }
-
-    /**
-     * Sets the <code>doubleFactory2D</code> to be used by this factory.
-     * 
-     * @param doubleFactory2D
-     */
-    public void setDoubleFactory2D(DoubleFactory2D doubleFactory2D)
-    {
-        this.doubleFactory2D = doubleFactory2D;
     }
 
     /**

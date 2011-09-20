@@ -256,7 +256,7 @@
     
     <para>
       Two sources that currently do not support the above properties are: 
-      BingDocumentSource and OpenSearchDocumentSource.
+      Bing2WebDocumentSource and OpenSearchDocumentSource.
     </para>
     
     <note>
@@ -264,62 +264,5 @@
       You can alter the source code to change this 
       in the <filename>HttpUtils</filename> class.</para>
     </note>
-  </section>
-  
-  <section xml:id="section.advanced-topics.native-matrix-computations">
-    <title>Enabling native matrix computations</title>
-    
-    <para>
-      To speed up clustering performed by the Lingo algorithm, you can
-      configure &C2; to use a native platform-specific matrix computation
-      library. Depending on the platform, you may see up to a 400% speed-up
-      compared to the Java-only mode.
-    </para>
-    
-    <para>
-      To enable native matrix computations for &C2;:
-    </para>
-
-    <orderedlist>
-      <listitem>
-        <para>
-          <link xlink:href="http://download.carrot2.org/nni/">Download</link> precompiled 
-          libraries for your platform and extract the archive to some local directory. 
-        </para>
-        
-        <note>
-          <para>
-            If no distribution matches your platform, and you would like to
-            compile your own version, please ask on the mailing list for
-            instructions. You can also try the PIII (Pentium III) versions, which
-            seem to work quite well on modern processors as well (e.g. Core2 Duo).
-          </para>
-        </note>
-      </listitem>
-
-      <listitem>
-        <para>
-          Add an additional option to your JVM command line invocation providing the 
-          path to the <emphasis role="bold">directory</emphasis> to which you extracted the native library:
-        </para>
-        <programlisting><![CDATA[java -Djava.library.path=[native-lib-dir] ...]]></programlisting>
-        
-        <para>
-          To enable native computations in web applications deployed to Apache Tomcat,
-          pass the above directive in the <varname>JAVA_OPTS</varname> environment 
-          variable, e.g.:
-        </para>
-        <programlisting><![CDATA[export JAVA_OPTS="-Djava.library.path=[native-lib-dir]"]]></programlisting>
-      </listitem>
-
-      <listitem>
-        <para>
-          When &C2; correctly loads the native library, upon initialization of the Lingo
-          clustering algorithm, the following entry should appear in application logs:
-        </para>
-        <programlisting><![CDATA[INFO org.carrot2.clustering.lingo.LingoClustering
-Algorithm: Native BLAS routines available]]></programlisting>
-      </listitem>
-    </orderedlist>
   </section>
 </chapter>

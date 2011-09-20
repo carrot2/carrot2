@@ -23,7 +23,17 @@ import org.carrot2.core.ProcessingResult;
 public interface ISearchResultListener
 {
     /**
+     * Invoked before all the handlers processed {@link #processingResultUpdated}.
+     */
+    void beforeProcessingResultUpdated();
+
+    /**
      * New processing result is available.
      */
     void processingResultUpdated(ProcessingResult result);
+    
+    /**
+     * Invoked after all the handlers processed {@link #processingResultUpdated}.
+     */
+    void afterProcessingResultUpdated();
 }

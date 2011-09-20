@@ -54,7 +54,7 @@ public final class GUIFactory
      */
     public static Composite createSpacer(Composite parent)
     {
-        final Composite spacer = new Composite(parent, SWT.NONE);
+        final Composite spacer = new Composite(parent, SWT.NONE | SWT.WRAP);
         spacer.setLayout(GridLayoutFactory.fillDefaults().margins(5, 3).create());
         return spacer;
     }

@@ -6,7 +6,7 @@
   <target name="webtest.empty-query">
     <webtest name="Empty query">
       <invoke url="/" description="Get quick start page" />
-      <setRadioButton htmlId="source-external" />
+      <setRadioButton xpath="//input[@value = 'external']" />
       <setInputField name="query" value="" />
       <verifyXPath xpath="//button[@name = 'submit' and @disabled]" />
       <setInputField name="query" value="test" />
@@ -17,7 +17,7 @@
   <target name="webtest.empty-string-xml">
     <webtest name="Empty XML as string">
       <invoke url="/" description="Get quick start page" />
-      <setRadioButton htmlId="source-from-string" />
+      <setRadioButton xpath="//input[@value = 'from-string']" />
       <sleep milliseconds="300" />
       <verifyXPath xpath="//button[@name = 'submit' and @disabled]" />
       <setInputField xpath="//textarea[@name = 'dcs.c2stream']">test</setInputField>
@@ -29,7 +29,7 @@
   <target name="webtest.empty-file">
     <webtest name="No XML file selected">
       <invoke url="/" description="Get quick start page" />
-      <setRadioButton htmlId="source-from-file" />
+      <setRadioButton xpath="//input[@value = 'from-file']" />
       <verifyXPath xpath="//button[@name = 'submit' and @disabled]" />
       <setFileField name="dcs.c2stream" fileName="../src-test/xml/carrot2-kaczynski.utf16.xml" />
       <verifyXPath xpath="//button[@name = 'submit' and not(@disabled)]" />

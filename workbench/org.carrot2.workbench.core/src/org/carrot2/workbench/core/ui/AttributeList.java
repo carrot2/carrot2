@@ -319,11 +319,11 @@ public final class AttributeList extends Composite implements IAttributeEventPro
             SWT.LEFT | SWT.BOTTOM);
         decoration.hide();
 
-        final FieldDecoration requiredDecoration = FieldDecorationRegistry
+        final FieldDecoration fieldDecoration = FieldDecorationRegistry
             .getDefault().getFieldDecoration(
                 FieldDecorationRegistry.DEC_ERROR);
 
-        decoration.setImage(requiredDecoration.getImage());
+        decoration.setImage(fieldDecoration.getImage());
         decoration.setDescriptionText("Invalid value");
 
         final IAttributeListener validationListener = 

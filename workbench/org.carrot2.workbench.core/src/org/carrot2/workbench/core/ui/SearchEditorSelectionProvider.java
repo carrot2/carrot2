@@ -53,6 +53,11 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
     private final Map<Integer, TreePath> clusterTreePathsById = Maps.newHashMap();
 
     /**
+     * Last processing result to which this selection applies.
+     */
+    private ProcessingResult processingResult;
+
+    /**
      * Custom selection for a set of clusters.
      */
     @SuppressWarnings("rawtypes")
@@ -95,7 +100,7 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
             return selected.toArray(new Cluster [selected.size()]);
         }
 
-        public List toList()
+        public List<Cluster> toList()
         {
             return Lists.newArrayList(selected);
         }
@@ -111,7 +116,6 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
         private TreeSelection createTreeSelection()
         {
             final TreePath [] paths = new TreePath [selected.size()];
-            
             for (int i = 0; i < selected.size(); i++)
             {
                 paths[i] = clusterTreePathsById.get(selected.get(i).getId());
@@ -138,9 +142,34 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
         else
         {
             editor.getSearchResult().addListener(new SearchResultListenerAdapter() {
+                ClusterLabelPaths paths; 
+
+                @Override
+                public void beforeProcessingResultUpdated()
+                {
+                    paths = null;
+                    if (SearchEditorSelectionProvider.this.processingResult != null)
+                    {
+                        paths = ClusterLabelPaths.from(
+                            SearchEditorSelectionProvider.this.processingResult.getClusters(),
+                            getSelection().toList());
+                    }
+                }
+
+                @Override
                 public void processingResultUpdated(ProcessingResult result)
                 {
                     buildRepresentation(result);
+                }
+
+                @Override
+                public void afterProcessingResultUpdated()
+                {
+                    if (paths != null)
+                    {
+                        setSelected(paths.filterMatching(
+                            SearchEditorSelectionProvider.this.processingResult.getClusters()));
+                    }
                 }
             });
         }
@@ -161,7 +190,7 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
     }
 
     /* */
-    public ISelection getSelection()
+    public ClusterSelection getSelection()
     {
         return new ClusterSelection(this);
     }
@@ -229,7 +258,7 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
      * Toggle cluster's <code>groupId</code> selection to <code>selected</code>. 
      */
     public void toggleSelected(
-        int groupId, boolean selected, ISelectionChangedListener skipListeners)
+        int groupId, boolean selected, ISelectionChangedListener... skipListeners)
     {
         assert Display.getCurrent() != null;
 
@@ -244,7 +273,7 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
      * Replace the current selection with the given set of selected groups.
      */
     public void setSelected(int [] selectedGroups,
-                            ISelectionChangedListener skipListeners)
+                            ISelectionChangedListener... skipListeners)
     {
         assert Display.getCurrent() != null;
 
@@ -253,6 +282,19 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
             selectedClusters.set(i);
 
         fireSelectionChanged(skipListeners);
+    }
+
+    /**
+     * Replace the current selection with the given set of selected groups.
+     */
+    public void setSelected(List<Cluster> clusters,
+                            ISelectionChangedListener... skipListeners)
+    {
+        assert Display.getCurrent() != null;
+        int [] ids = new int [clusters.size()];
+        for (int i = 0; i < clusters.size(); i++)
+            ids[i] = clusters.get(i).getId();
+        setSelected(ids, skipListeners);
     }
 
     /**
@@ -282,6 +324,7 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
         this.selectedClusters.clear();
         this.clustersById.clear();
         this.clusterTreePathsById.clear();
+        this.processingResult = processingResult;
 
         // Build mappings.
         final ArrayList<Cluster> path = new ArrayList<Cluster>();

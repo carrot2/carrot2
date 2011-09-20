@@ -103,7 +103,7 @@ public class PreprocessingComponentTestBase
      * @param fieldValues values for fields, for each <code>fields.length</code> values,
      *            one document will be created.
      */
-    protected void createDocuments(String [] fields, String... fieldValues)
+    protected void createDocumentsWithFields(String [] fields, String... fieldValues)
     {
         int fieldValuesIndex = 0;
         while (fieldValuesIndex < fieldValues.length)
@@ -130,7 +130,7 @@ public class PreprocessingComponentTestBase
      */
     protected void createDocuments(String... fieldValues)
     {
-        createDocuments(DEFAULT_DOCUMENT_FIELD_NAMES, fieldValues);
+        createDocumentsWithFields(DEFAULT_DOCUMENT_FIELD_NAMES, fieldValues);
     }
 
     /**

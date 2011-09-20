@@ -224,7 +224,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         ImageDescriptor d = componentImages.get(componentID);
         if (d == null)
         {
-            d = getImageDescriptor("icons/carrot2-16x16.png");
+            d = getImageDescriptor("icons/missing-component.png");
         }
         return d;
     }

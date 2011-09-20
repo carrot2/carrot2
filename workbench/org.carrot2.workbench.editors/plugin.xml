@@ -75,5 +75,11 @@
             attribute-class="java.lang.String"
             class="org.carrot2.workbench.editors.impl.StringEditor">
       </type-editor>
+
+      <dedicated-editor
+            attribute-id="query"
+            class="org.carrot2.workbench.editors.impl.QueryStringEditor"
+            component-class="org.carrot2.core.IDocumentSource">
+      </dedicated-editor>
    </extension>
 </plugin>

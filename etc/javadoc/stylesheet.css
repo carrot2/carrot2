@@ -147,7 +147,7 @@ HR  {
 .itemizedlist, UL { 
     padding-top: 0; 
     padding-bottom:0; 
-    margin:0; 
+    margin:0 0 1em 0; 
 }
 
 .term { 
@@ -190,4 +190,8 @@ a.source-link + * {
 a.source-link + a + h2,
 a.source-link + a + h3 {
   padding-top: 1em;
+}
+
+pre > br {
+  display: none;
 }

@@ -23,19 +23,34 @@ import org.eclipse.ui.actions.ActionDelegate;
  */
 final class ClusterTreeExpanderAction extends ActionDelegate
 {
+    public enum CollapseAction {
+        COLLAPSE("icons/collapseall.png", "Collapse all clusters."),
+        EXPAND("icons/expandall.png", "Expand all clusters.");
+        
+        final String iconPath;
+        final String hint;
+        
+        private CollapseAction(String iconPath, String hint)
+        {
+            this.iconPath = iconPath;
+            this.hint = hint;
+        }
+    }
+
+    private final CollapseAction collapseAction;
     private ClusterTree tree;
-    private boolean expand = true;
     private volatile IAction action;
 
-    public ClusterTreeExpanderAction(ClusterTree tree, SearchResult searchResult)
+    public ClusterTreeExpanderAction(CollapseAction collapseAction, ClusterTree tree, SearchResult searchResult)
     {
         this.tree = tree;
+        this.collapseAction = collapseAction;
 
-        searchResult.addListener(new ISearchResultListener() {
+        searchResult.addListener(new SearchResultListenerAdapter() {
             public void processingResultUpdated(ProcessingResult result)
             {
                 boolean hasStructure = false;
-                for (Cluster c : result.getClusters())
+                for (Cluster c : Cluster.flatten(result.getClusters()))
                 {
                     if (!c.getSubclusters().isEmpty())
                     {
@@ -55,26 +70,15 @@ final class ClusterTreeExpanderAction extends ActionDelegate
     public void init(IAction action)
     {
         this.action = action;
-        update(action);
-    }
-
-    private void update(IAction action)
-    {
-        action
-            .setImageDescriptor(WorkbenchCorePlugin
-                .getImageDescriptor(
-                    expand 
-                    ? "icons/expandall.png"
-                    : "icons/collapseall.png"));
-        action.setToolTipText("Toggle expand/collapse clusters");
+        action.setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor(collapseAction.iconPath));
+        action.setToolTipText(collapseAction.hint);
     }
 
     public void run(IAction action)
     {
-        if (expand) tree.expandAll();
-        else tree.collapseAll();
-
-        expand = !expand;
-        update(action);
+        if (collapseAction == CollapseAction.EXPAND)
+            tree.expandAll();
+        else
+            tree.collapseAll();
     }
 }

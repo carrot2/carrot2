@@ -97,8 +97,12 @@ public class StringEditor extends AttributeEditorAdapter
     protected Text createTextBox(Composite parent, int gridColumns)
     {
         Text textBox = new Text(parent, BORDER);
-        textBox.setLayoutData(GUIFactory.editorGridData().grab(true, false).hint(200,
-            SWT.DEFAULT).align(SWT.FILL, SWT.CENTER).span(gridColumns, 1).create());
+        textBox.setLayoutData(
+            GUIFactory.editorGridData()
+                .grab(true, false)
+                .hint(200, SWT.DEFAULT)
+                .align(SWT.FILL, SWT.CENTER)
+                .span(gridColumns, 1).create());
         return textBox;
     }
 
@@ -142,10 +146,15 @@ public class StringEditor extends AttributeEditorAdapter
     private void checkContentChange()
     {
         final String textBoxValue = this.textBox.getText();
-        if (!ObjectUtils.equals(textBoxValue, content))
+        if (!ObjectUtils.equals(textBoxValue, content) && isValid(textBoxValue))
         {
             this.content = textBoxValue;
             fireAttributeChanged(new AttributeEvent(this));
         }
+    }
+
+    protected boolean isValid(String newValue)
+    {
+        return true;
     }
 }

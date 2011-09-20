@@ -112,7 +112,7 @@
           To re-run clustering after
           you've saved changes to the lexical resource files, choose the
           <guilabel>Restart Processing</guilabel> option from the <guilabel>Search</guilabel>
-          menu, or press <guilabel>Ctrl+F11</guilabel>.
+          menu, or press <guilabel>Ctrl+R</guilabel> (<guilabel>Command+R</guilabel> on Mac OS).
         </para>
         
         <figure xml:id="figure.workbench-restart-clustering">

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,14 +13,13 @@ package org.carrot2.matrix;
 
 import java.util.Arrays;
 
-import org.apache.mahout.math.function.DoubleComparator;
 import org.apache.mahout.math.function.DoubleFunction;
 import org.apache.mahout.math.function.Functions;
-import org.apache.mahout.math.list.DoubleArrayList;
-import org.apache.mahout.math.list.IntArrayList;
-import org.apache.mahout.math.matrix.DoubleMatrix1D;
-import org.apache.mahout.math.matrix.*;
-import org.carrot2.util.DoubleComparators;
+import org.apache.mahout.math.function.IntIntDoubleFunction;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+
+import com.carrotsearch.hppc.sorting.IndirectComparator;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 
 /**
  * A set of <code>DoubleMatrix2D</code> shorthands and utility methods.
@@ -78,32 +76,37 @@ public class MatrixUtils
      *            allocated every time this method is called.
      * @return A with length-normalized columns (for convenience only)
      */
-    public static DoubleMatrix2D normalizeSparseColumnL2(DoubleMatrix2D A, double [] work)
+    public static DoubleMatrix2D normalizeSparseColumnL2(final DoubleMatrix2D A,
+        final double [] work)
     {
-        IntArrayList rows = new IntArrayList(A.cardinality());
-        IntArrayList columns = new IntArrayList(A.cardinality());
-        DoubleArrayList values = new DoubleArrayList(A.cardinality());
-        A.getNonZeros(rows, columns, values);
+        final double [] w = prepareWork(A, work);
 
-        work = prepareWork(A, work);
-
-        // Calculate columns' length
-        for (int i = 0; i < values.size(); i++)
+        A.forEachNonZero(new IntIntDoubleFunction()
         {
-            work[columns.get(i)] += values.get(i) * values.get(i);
-        }
+            @Override
+            public double apply(int row, int column, double value)
+            {
+                w[column] += value * value;
+                return value;
+            }
+        });
 
         // Take the square root
         for (int c = 0; c < A.columns(); c++)
         {
-            work[c] = Math.sqrt(work[c]);
+            w[c] = Math.sqrt(w[c]);
         }
 
         // Normalize
-        for (int i = 0; i < values.size(); i++)
+        A.forEachNonZero(new IntIntDoubleFunction()
         {
-            A.setQuick(rows.get(i), columns.get(i), values.get(i) / work[columns.get(i)]);
-        }
+            @Override
+            public double apply(int row, int column, double value)
+            {
+                A.setQuick(row, column, value / w[column]);
+                return 0;
+            }
+        });
 
         return A;
     }
@@ -244,7 +247,7 @@ public class MatrixUtils
         double [] minValues)
     {
         return inColumns(A, indices, minValues, DoubleComparators.REVERSED_ORDER,
-            Functions.identity);
+            Functions.IDENTITY);
     }
 
     /**
@@ -265,7 +268,7 @@ public class MatrixUtils
     public static int [] maxInColumns(DoubleMatrix2D A, int [] indices,
         double [] maxValues)
     {
-        return maxInColumns(A, indices, maxValues, Functions.identity);
+        return maxInColumns(A, indices, maxValues, Functions.IDENTITY);
     }
 
     public static int [] maxInColumns(DoubleMatrix2D A, int [] indices,
@@ -278,7 +281,7 @@ public class MatrixUtils
     /**
      * Common implementation of finding extreme elements in columns.
      */
-    static int [] inColumns(DoubleMatrix2D A, int [] indices, double [] extValues,
+    private static int [] inColumns(DoubleMatrix2D A, int [] indices, double [] extValues,
         DoubleComparator doubleComparator, DoubleFunction transform)
     {
         if (indices == null)
@@ -317,6 +320,54 @@ public class MatrixUtils
 
         return indices;
     }
+    
+    private static interface DoubleComparator
+    {
+        public int compare(double a, double b);
+    }
+    
+    private static final class DoubleComparators
+    {
+        /**
+         * Compares <code>int</code> in their natural order.
+         */
+        public static final DoubleComparator NATURAL_ORDER = new NaturalOrderDoubleComparator();
+
+        /**
+         * Compares <code>int</code> in their reversed order.
+         */
+        public static final DoubleComparator REVERSED_ORDER = new ReversedOrderDoubleComparator();
+
+        /**
+         * Natural order.
+         */
+        private static class NaturalOrderDoubleComparator implements DoubleComparator
+        {
+            public int compare(double v1, double v2)
+            {
+                return Double.compare(v1, v2);
+            }
+        }
+
+        /**
+         * Reversed order.
+         */
+        private static class ReversedOrderDoubleComparator implements DoubleComparator
+        {
+            public int compare(double v1, double v2)
+            {
+                return -Double.compare(v1, v2);
+            }
+        }
+
+        /**
+         * No instantiation.
+         */
+        private DoubleComparators()
+        {
+        }
+    }
+
 
     /**
      * Finds the index of the first maximum element in given row of <code>A</code>.
@@ -371,15 +422,31 @@ public class MatrixUtils
 
         return sums;
     }
-    
-    public static double l1Norm(DoubleMatrix1D vector)
+
+    /**
+     * Calculates the Frobenius norm of a matrix.
+     * 
+     * @see <a href="http://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm">Frobenius
+     *      norm</a>
+     */
+    public static double frobeniusNorm(DoubleMatrix2D matrix)
     {
-        return vector.aggregate(Functions.plus, Functions.identity);
+        return Math.sqrt(matrix.aggregate(Functions.PLUS, Functions.SQUARE));
     }
-    
-    
-    public static DoubleMatrix1D columnCentroid(DoubleMatrix2D matrix)
+
+    /**
+     * Returns view of the provided matrix with rows permuted according to the order
+     * defined by the provided comparator.
+     * 
+     * @param matrix to permute
+     * @param comparator to use
+     * @return view of the provided matrix with rows permuted according to the order
+     *         defined by the provided comparator.
+     */
+    public static DoubleMatrix2D sortedRowsView(DoubleMatrix2D matrix,
+        IndirectComparator comparator)
     {
-        return null;
+        return matrix
+            .viewSelection(IndirectSort.mergesort(0, matrix.rows(), comparator), null);
     }
 }

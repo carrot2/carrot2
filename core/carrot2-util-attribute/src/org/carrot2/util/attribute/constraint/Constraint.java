@@ -76,7 +76,11 @@ public abstract class Constraint
             return s.toString();
         }
     }
-    
+
+    /**
+     * TODO: remove this method and replace with a constructor accepting Annotation this
+     * constraint is bound to.
+     */
     public final void populate(Annotation annotation)
     {
         this.annotation = annotation;

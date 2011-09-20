@@ -96,9 +96,13 @@ public final class SearchResult
     private void fireProcessingResultUpdated()
     {
         for (ISearchResultListener listener : listeners)
-        {
+            listener.beforeProcessingResultUpdated();
+
+        for (ISearchResultListener listener : listeners)
             listener.processingResultUpdated(result);
-        }
+
+        for (ISearchResultListener listener : listeners)
+            listener.afterProcessingResultUpdated();
     }
 
     /**

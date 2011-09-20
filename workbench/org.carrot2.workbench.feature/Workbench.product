@@ -4,7 +4,7 @@
 <product name="Carrot2 Workbench" id="org.carrot2.workbench.core.product" application="org.carrot2.workbench.core.application" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/org.carrot2.workbench.core/icons/product_logo.png"/>
+      <image path="/org.carrot2.workbench.core/icons/logotype/128x128x32.png"/>
       <text>
          Carrot2 Workbench
 
@@ -28,21 +28,19 @@ Apache Software Foundation http://www.apache.org/.
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.carrot2.workbench.core/icons/carrot2-16x16.gif" i32="/org.carrot2.workbench.core/icons/carrot2-32x32.gif"/>
+   <windowImages  i16="/org.carrot2.workbench.core/icons/logotype/16x16x32.png" 
+                  i32="/org.carrot2.workbench.core/icons/logotype/32x32x32.png" 
+		  i48="/org.carrot2.workbench.core/icons/logotype/48x48x32.png" 
+		  i64="/org.carrot2.workbench.core/icons/logotype/64x64x32.png" 
+		 i128="/org.carrot2.workbench.core/icons/logotype/128x128x32.png" />
 
-   <splash
-      location="org.carrot2.workbench.core" />
+   <splash location="org.carrot2.workbench.core" />
    <launcher name="carrot2-workbench">
-      <linux icon="/org.carrot2.workbench.core/icons/carrot2-32x32.xpm"/>
+      <linux icon="/org.carrot2.workbench.feature/icons/icon-linux.xpm"/>
+      <macosx icon="/org.carrot2.workbench.feature/icons/icon-mac.icns"/>
       <solaris/>
-      <win useIco="false">
-         <bmp
-            winSmallHigh="/org.carrot2.workbench.core/icons/ico/carrot2-16x16x32.bmp"
-            winSmallLow="/org.carrot2.workbench.core/icons/ico/carrot2-16x16x8.bmp"
-            winMediumHigh="/org.carrot2.workbench.core/icons/ico/carrot2-32x32x32.bmp"
-            winMediumLow="/org.carrot2.workbench.core/icons/ico/carrot2-32x32x8.bmp"
-            winLargeHigh="/org.carrot2.workbench.core/icons/ico/carrot2-48x48x32.bmp"
-            winLargeLow="/org.carrot2.workbench.core/icons/ico/carrot2-48x48x8.bmp"/>
+      <win useIco="true">
+         <ico path="/org.carrot2.workbench.feature/icons/icon-windows.ico"/>
       </win>
    </launcher>
 

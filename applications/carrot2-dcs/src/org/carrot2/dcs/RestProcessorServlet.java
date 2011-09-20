@@ -15,8 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -59,14 +58,13 @@ import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.resource.ServletContextLocator;
 import org.carrot2.util.xslt.NopURIResolver;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 
 /**
  * A servlet that parses HTTP POST input in Carrot<sup>2</sup> XML format, clusters it and
  * returns clusters.
  */
+@SuppressWarnings("serial")
 public final class RestProcessorServlet extends HttpServlet
 {
     /** System property to disable log file appender. */
@@ -80,7 +78,33 @@ public final class RestProcessorServlet extends HttpServlet
     private final static String MIME_XML_UTF8 = "text/xml; charset=" + UTF8;
     private final static String MIME_JSON_UTF8 = "text/json; charset=" + UTF8;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * {@link ProcessingResult} served as input/output example.
+     */
+    private final static ProcessingResult EXAMPLE_INPUT;
+    private final static ProcessingResult EXAMPLE_OUTPUT;
+    static
+    {
+        InputStream streamInput = null;
+        InputStream streamOutput = null;
+        try
+        {
+            streamInput = new ClassResource(RestProcessorServlet.class,
+                "example-input.xml").open();
+            EXAMPLE_INPUT = ProcessingResult.deserialize(streamInput);
+            streamOutput = new ClassResource(RestProcessorServlet.class,
+                "example-output.xml").open();
+            EXAMPLE_OUTPUT = ProcessingResult.deserialize(streamOutput);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Could not load example data", e);
+        }
+        finally
+        {
+            CloseableUtils.close(streamInput, streamOutput);
+        }
+    }
 
     private transient DcsConfig config;
 
@@ -99,6 +123,66 @@ public final class RestProcessorServlet extends HttpServlet
      * . The appender is enabled by default, but disabled for tests.
      */
     private boolean disableLogFileAppender = Boolean.getBoolean(DISABLE_LOGFILE_APPENDER);
+
+    /**
+     * Handle a GET command.
+     */
+    private abstract class CommandAction
+    {
+        public abstract void handle(HttpServletRequest request, HttpServletResponse response)
+            throws Exception;
+    };
+
+    private transient HashMap<String, CommandAction> commandActions = new HashMap<String, CommandAction>() {{
+        put("components", new CommandAction() {
+            public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
+            {
+                response.setContentType(MIME_XML_UTF8);
+                componentSuite.serialize(response.getOutputStream());
+            }
+        });
+        put("input-example", new CommandAction() {
+            public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
+            {
+                response.setContentType(MIME_XML_UTF8);
+                EXAMPLE_INPUT.serialize(response.getOutputStream(), true, false);
+            }
+        });
+        put("output-example-xml", new CommandAction() {
+            public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
+            {
+                transformAndSerializeOutputXml(response, EXAMPLE_OUTPUT, true, true);
+            }
+        });
+        put("output-example-json", new CommandAction() {
+            public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
+            {
+                response.setContentType(MIME_JSON_UTF8);
+                EXAMPLE_OUTPUT.serializeJson(response.getWriter(), null, true, true, true);
+            }
+        });
+        put("status", new CommandAction() {
+            public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
+            {
+                response.setContentType(MIME_XML_UTF8);
+                controller.getStatistics().serialize(response.getOutputStream());
+            }
+        });
+
+        // Aliases for clustering commands.
+        put("rest", new CommandAction() {
+            public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
+            {
+                handleWwwUrlEncoded(request, response);
+            }
+        });
+        put("cluster", new CommandAction() {
+            public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
+            {
+                handleWwwUrlEncoded(request, response);
+            }
+        });
+    }};
 
     @Override
     @SuppressWarnings("unchecked")
@@ -183,62 +267,6 @@ public final class RestProcessorServlet extends HttpServlet
     }
 
     @Override
-    public void destroy()
-    {
-        if (this.controller != null)
-        {
-            this.controller.dispose();
-            this.controller = null;
-        }
-
-        super.destroy();
-    }
-
-    /**
-     * 
-     */
-    private void initXslt(DcsConfig config, ResourceLookup resourceLookup)
-    {
-        final TransformerFactory tFactory = TransformerFactory.newInstance();
-        tFactory.setURIResolver(new NopURIResolver());
-
-        InputStream xsltStream = null;
-
-        if (StringUtils.isNotBlank(config.xslt))
-        {
-            IResource resource = resourceLookup.getFirst(config.xslt);
-            if (resource == null)
-            {
-                config.logger.warn("XSLT stylesheet " + config.xslt
-                    + " not found. No XSLT transformation will be applied.");
-                return;
-            }
-
-            try
-            {
-                xsltStream = resource.open();
-                xsltTemplates = tFactory.newTemplates(new StreamSource(xsltStream));
-                config.logger.info("XSL stylesheet loaded successfully from: "
-                    + config.xslt);
-            }
-            catch (IOException e)
-            {
-                config.logger.warn(
-                    "Could not load stylesheet, no XSLT transform will be applied.", e);
-            }
-            catch (TransformerConfigurationException e)
-            {
-                config.logger.warn(
-                    "Could not load stylesheet, no XSLT transform will be applied", e);
-            }
-            finally
-            {
-                CloseableUtils.close(xsltStream);
-            }
-        }
-    }
-
-    @Override
     protected void service(HttpServletRequest request, HttpServletResponse arg1)
         throws ServletException, IOException
     {
@@ -261,105 +289,102 @@ public final class RestProcessorServlet extends HttpServlet
         throws ServletException, IOException
     {
         final String command = getCommandName(request);
-        if ("components".equals(command))
+        if (!StringUtils.isEmpty(command))
         {
-            try
+            if (!commandActions.containsKey(command))
             {
-                response.setContentType(MIME_XML_UTF8);
-                componentSuite.serialize(response.getOutputStream());
-            }
-            catch (Exception e)
-            {
-                sendInternalServerError("Could not serialize component information",
-                    response, e);
+                sendBadRequest("No such command: " + command, response, null);
                 return;
             }
-        }
-        else if ("input-example".equals(command))
-        {
+
             try
             {
-                response.setContentType(MIME_XML_UTF8);
-                EXAMPLE_INPUT.serialize(response.getOutputStream(), true, false);
-            }
+                commandActions.get(command).handle(request, response);
+            } 
             catch (Exception e)
             {
-                sendInternalServerError("Could not serialize input format example",
-                    response, e);
-                return;
-            }
-        }
-        else if ("output-example-xml".equals(command))
-        {
-            try
-            {
-                transformAndSerializeOutputXml(response, EXAMPLE_OUTPUT, true, true);
-            }
-            catch (Exception e)
-            {
-                sendInternalServerError("Could not serialize output format XML example",
-                    response, e);
-                return;
-            }
-        }
-        else if ("output-example-json".equals(command))
-        {
-            try
-            {
-                response.setContentType(MIME_JSON_UTF8);
-                EXAMPLE_OUTPUT
-                    .serializeJson(response.getWriter(), null, true, true, true);
-            }
-            catch (Exception e)
-            {
-                sendInternalServerError("Could not serialize output format JSON example",
-                    response, e);
-                return;
-            }
-        }
-        else if ("status".equals(command))
-        {
-            try
-            {
-                response.setContentType(MIME_XML_UTF8);
-                controller.getStatistics().serialize(response.getOutputStream());
-            }
-            catch (Exception e)
-            {
-                sendInternalServerError("Could not serialize status information",
-                    response, e);
+                sendInternalServerError("Internal error when processing command: "
+                    + command, response, e);
                 return;
             }
         }
         else
         {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown command: '"
-                + command + "'");
+            // If no command given, assume a clustering request.
+            handleWwwUrlEncoded(request, response);
         }
     }
 
     /**
      * Handle REST requests (HTTP POST with multipart/form-data content).
      */
-    @SuppressWarnings("unchecked")
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        if (ServletFileUpload.isMultipartContent(request) == false)
+        if (ServletFileUpload.isMultipartContent(request))
         {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                "Only requests with type multipart/form-data are supported.");
+            handleMultiPart(request, response);
+        }
+        else
+        {
+            handleWwwUrlEncoded(request, response);
+        }
+    }
+
+    /**
+     * Handle <tt>www-url-encoded</tt> parameters from GET or POST requests. GET will not support
+     * <tt>dcs.c2stream</tt> parameter.
+     */
+    private void handleWwwUrlEncoded(HttpServletRequest request, HttpServletResponse response)
+        throws IOException
+    {
+        // Don't allow GET/dcs.c2stream combination.
+        if (request.getMethod().equalsIgnoreCase("GET") &&
+            request.getParameter("dcs.c2stream") != null)
+        {
+            sendBadRequest("dcs.c2stream only supported in POST requests.", response, null);
             return;
         }
 
-        // Documents will remain null if they were not provided. In that
-        // case most probably a query to an external document source was requested
-        List<Document> documents = null;
+        // Check for c2stream in a POST/www-url-encoded and decode it... or try to.
+        ProcessingResult input = null;
+        if (request.getMethod().equalsIgnoreCase("POST") &&
+            request.getParameter("dcs.c2stream") != null)
+        {
+            // Deserialize documents from the stream
+            try
+            {
+                input = ProcessingResult.deserialize(request.getParameter("dcs.c2stream"));
+            }
+            catch (Exception e)
+            {
+                sendBadRequest("Could not parse Carrot2 XML stream", response, e);
+                return;
+            }
+        }
+
+        // Everything else is identical for POST and GET.
+        final Map<String, Object> parameters = Maps.newHashMap();
+        @SuppressWarnings("unchecked")
+        final Enumeration<String> parameterNames = (Enumeration<String>) request.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String key = parameterNames.nextElement();
+            parameters.put(key, request.getParameter(key));
+        }
+        processRequest(response, input, parameters);
+    }
+
+    /**
+     * Handle multipart request, possibly including dcs.c2stream. 
+     */
+    @SuppressWarnings("unchecked")
+    private void handleMultiPart(HttpServletRequest request, HttpServletResponse response)
+        throws IOException
+    {
+        final Map<String, Object> parameters = Maps.newHashMap();
         ProcessingResult input = null;
 
-        // Parse uploaded file
-        final ServletFileUpload upload = new ServletFileUpload(
-            new MemoryFileItemFactory());
+        final ServletFileUpload upload = new ServletFileUpload(new MemoryFileItemFactory());
         final List<FileItem> items;
         try
         {
@@ -372,7 +397,6 @@ public final class RestProcessorServlet extends HttpServlet
         }
 
         // Extract uploaded data and other parameters
-        final Map<String, Object> parameters = Maps.newHashMap();
         for (FileItem fileItem : items)
         {
             final String fieldName = fileItem.getFieldName();
@@ -402,15 +426,28 @@ public final class RestProcessorServlet extends HttpServlet
                 {
                     CloseableUtils.close(uploadInputStream);
                 }
-                documents = input.getDocuments();
             }
             else if (fileItem.isFormField())
             {
                 parameters.put(fieldName, fileItem.getString());
             }
-
         }
 
+        processRequest(response, input, parameters);
+    }
+
+    /**
+     * Process the clustering request.
+     * 
+     * @param input {@link ProcessingResult}, if any available in the request.
+     * @param parameters
+     * @throws IOException
+     */
+    @SuppressWarnings("unchecked")
+    private void processRequest(HttpServletResponse response, 
+        ProcessingResult input, final Map<String, Object> parameters) 
+        throws IOException
+    {
         // Remove useless parameters, we don't want them to get to the attributes map
         parameters.remove("input-type");
         parameters.remove("submit");
@@ -423,15 +460,14 @@ public final class RestProcessorServlet extends HttpServlet
         try
         {
             AttributeBinder.bind(requestModel,
-                new AttributeBinder.IAttributeBinderAction []
-                {
-                    attributeBinderActionBind
-                }, Input.class);
+                new AttributeBinder.IAttributeBinderAction [] { attributeBinderActionBind }, 
+                Input.class);
         }
         catch (Exception bindingException)
         {
             sendInternalServerError("Could not bind request parameters", response,
                 bindingException);
+            return;
         }
 
         // Build the attributes used for processing. Use the ones defined in the input
@@ -453,10 +489,11 @@ public final class RestProcessorServlet extends HttpServlet
         }
 
         // We need either sourceId or direct document feed
+        List<Document> documents = (input != null ? input.getDocuments() : null);
         if (requestModel.source == null && documents == null)
         {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                "Either dcs.source or dcs.c2stream must be provided");
+                "Either dcs.source or a non-empty document list in dcs.c2stream must be provided");
             return;
         }
 
@@ -537,7 +574,7 @@ public final class RestProcessorServlet extends HttpServlet
     }
 
     /**
-     * A very simplistic calculation of command name from the request URI.
+     * Command name is the last component of the request URI.
      */
     private String getCommandName(HttpServletRequest request)
     {
@@ -567,7 +604,8 @@ public final class RestProcessorServlet extends HttpServlet
     private void sendBadRequest(String message, HttpServletResponse response, Throwable e)
         throws IOException
     {
-        final String finalMessage = message + ": " + e.getMessage();
+        final String finalMessage = message + 
+            (e != null ? ": " + e.getMessage() : "");
         config.logger.error(finalMessage);
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, finalMessage);
     }
@@ -595,30 +633,58 @@ public final class RestProcessorServlet extends HttpServlet
     }
 
     /**
-     * {@link ProcessingResult} served as input/output example.
+     * 
      */
-    private final static ProcessingResult EXAMPLE_INPUT;
-    private final static ProcessingResult EXAMPLE_OUTPUT;
-    static
+    private void initXslt(DcsConfig config, ResourceLookup resourceLookup)
     {
-        InputStream streamInput = null;
-        InputStream streamOutput = null;
-        try
+        final TransformerFactory tFactory = TransformerFactory.newInstance();
+        tFactory.setURIResolver(new NopURIResolver());
+    
+        InputStream xsltStream = null;
+    
+        if (StringUtils.isNotBlank(config.xslt))
         {
-            streamInput = new ClassResource(RestProcessorServlet.class,
-                "example-input.xml").open();
-            EXAMPLE_INPUT = ProcessingResult.deserialize(streamInput);
-            streamOutput = new ClassResource(RestProcessorServlet.class,
-                "example-output.xml").open();
-            EXAMPLE_OUTPUT = ProcessingResult.deserialize(streamOutput);
+            IResource resource = resourceLookup.getFirst(config.xslt);
+            if (resource == null)
+            {
+                config.logger.warn("XSLT stylesheet " + config.xslt
+                    + " not found. No XSLT transformation will be applied.");
+                return;
+            }
+    
+            try
+            {
+                xsltStream = resource.open();
+                xsltTemplates = tFactory.newTemplates(new StreamSource(xsltStream));
+                config.logger.info("XSL stylesheet loaded successfully from: "
+                    + config.xslt);
+            }
+            catch (IOException e)
+            {
+                config.logger.warn(
+                    "Could not load stylesheet, no XSLT transform will be applied.", e);
+            }
+            catch (TransformerConfigurationException e)
+            {
+                config.logger.warn(
+                    "Could not load stylesheet, no XSLT transform will be applied", e);
+            }
+            finally
+            {
+                CloseableUtils.close(xsltStream);
+            }
         }
-        catch (Exception e)
+    }
+
+    @Override
+    public void destroy()
+    {
+        if (this.controller != null)
         {
-            throw new RuntimeException("Could not load example data", e);
+            this.controller.dispose();
+            this.controller = null;
         }
-        finally
-        {
-            CloseableUtils.close(streamInput, streamOutput);
-        }
+    
+        super.destroy();
     }
 }

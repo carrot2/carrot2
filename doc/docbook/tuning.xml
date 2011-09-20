@@ -176,9 +176,7 @@
           <row>
             <entry>Scalability</entry>
             <entry>
-              Low. For more than about 1000 documents, Lingo clustering will take a long time and large memory<footnote><para>Performance of the  
-              pure Java version of Lingo can be improved by <link linkend="section.advanced-topics.native-matrix-computations">installing 
-              native matrix computation libraries</link>.</para></footnote>. 
+              Low. For more than about 1000 documents, Lingo clustering will take a long time and large memory<footnote></footnote>. 
              </entry>
             <entry>High</entry>
             <entry>Low, based on similar data structures as Lingo.</entry>

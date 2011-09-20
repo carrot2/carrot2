@@ -12,16 +12,13 @@
 
 package org.carrot2.text.vsm;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.mahout.math.GenericPermuting;
-import org.apache.mahout.math.matrix.DoubleFactory2D;
-import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.apache.mahout.math.matrix.impl.SparseDoubleMatrix2D;
 import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.matrix.MatrixUtils;
-import org.carrot2.matrix.NNIDoubleFactory2D;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.Attribute;
@@ -137,7 +134,7 @@ public class TermDocumentMatrixBuilder
 
         if (documentCount == 0)
         {
-            vsmContext.termDocumentMatrix = NNIDoubleFactory2D.nni.make(0, 0);
+            vsmContext.termDocumentMatrix = new DenseDoubleMatrix2D(0, 0);
             vsmContext.stemToRowIndex = new IntIntOpenHashMap();
             return;
         }
@@ -167,12 +164,12 @@ public class TermDocumentMatrixBuilder
                 stemsTfByDocument[stemIndex].length / 2, documentCount)
                 * getWeightBoost(titleFieldIndex, stemsFieldIndices[stemIndex]);
         }
-        final int [] stemWeightOrder = IndirectSort.sort(0, stemsWeight.length,
+        final int [] stemWeightOrder = IndirectSort.mergesort(0, stemsWeight.length,
             new IndirectComparator.DescendingDoubleComparator(stemsWeight));
 
         // Calculate the number of terms we can include to fulfill the max matrix size
         final int maxRows = maximumMatrixSize / documentCount;
-        final DoubleMatrix2D tdMatrix = NNIDoubleFactory2D.nni.make(Math.min(maxRows,
+        final DoubleMatrix2D tdMatrix = new DenseDoubleMatrix2D(Math.min(maxRows,
             stemsToInclude.length), documentCount);
 
         for (int i = 0; i < stemWeightOrder.length && i < maxRows; i++)
@@ -200,13 +197,10 @@ public class TermDocumentMatrixBuilder
         }
 
         // Convert stemsToInclude into tdMatrixStemIndices
-        GenericPermuting.permute(stemsToInclude, stemWeightOrder);
-        stemsToInclude = ArrayUtils.subarray(stemsToInclude, 0, tdMatrix.rows());
-
         final IntIntOpenHashMap stemToRowIndex = new IntIntOpenHashMap();
-        for (int i = 0; i < stemsToInclude.length; i++)
+        for (int i = 0; i < stemWeightOrder.length && i < tdMatrix.rows(); i++)
         {
-            stemToRowIndex.put(stemsToInclude[i], i);
+            stemToRowIndex.put(stemsToInclude[stemWeightOrder[i]], i);
         }
 
         // Store the results
@@ -324,7 +318,7 @@ public class TermDocumentMatrixBuilder
         final IntIntOpenHashMap stemToRowIndex = vsmContext.stemToRowIndex;
         if (featureIndex.length == 0)
         {
-            return DoubleFactory2D.dense.make(stemToRowIndex.size(), 0);
+            return new DenseDoubleMatrix2D(stemToRowIndex.size(), 0);
         }
 
         final DoubleMatrix2D phraseMatrix = new SparseDoubleMatrix2D(stemToRowIndex

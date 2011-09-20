@@ -20,6 +20,7 @@ import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.lucene.ChineseTokenizerAdapter;
+import org.carrot2.text.linguistic.lucene.ThaiTokenizerAdapter;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.factory.FallbackFactory;
 import org.carrot2.util.factory.IFactory;
@@ -92,9 +93,12 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
             map.put(lc, whitespaceTokenizerFactory);
         }
 
-        // Chinese is an exception, we use an adapter around a tokenizer from Lucene.
-        map.put(LanguageCode.CHINESE_SIMPLIFIED, new NewClassInstanceFactory<ITokenizer>(
-            ChineseTokenizerAdapter.class));
+        // Chinese and Thai are exceptions, we use adapters around tokenizers from Lucene.
+        map.put(LanguageCode.CHINESE_SIMPLIFIED, 
+            new NewClassInstanceFactory<ITokenizer>(ChineseTokenizerAdapter.class));
+
+        map.put(LanguageCode.THAI, new NewClassInstanceFactory<ITokenizer>(
+            ThaiTokenizerAdapter.class));
 
         // Decorate everything with a fallback tokenizer.
         for (LanguageCode lc : LanguageCode.values())

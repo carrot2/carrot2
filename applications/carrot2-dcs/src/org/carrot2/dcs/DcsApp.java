@@ -21,6 +21,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
+import org.eclipse.jetty.util.component.LifeCycle.Listener;
 
 /**
  * Bootstraps the Document Clustering Server using an embedded Jetty server.
@@ -58,7 +59,7 @@ public class DcsApp
     Server server;
 
     /** 
-     * Empty implementation of {@link LifeCycle.Listener}.
+     * Empty implementation of {@link Listener}.
      */
     private static class ListenerAdapter implements LifeCycle.Listener
     {
@@ -96,6 +97,7 @@ public class DcsApp
         connector.setReuseAddress(false);
         connector.setAcceptQueueSize(acceptQueue);
         connector.setThreadPool(new QueuedThreadPool(maxThreads));
+        connector.setSoLingerTime(0);
         server.addConnector(connector);
 
         WebAppContext wac = new WebAppContext();

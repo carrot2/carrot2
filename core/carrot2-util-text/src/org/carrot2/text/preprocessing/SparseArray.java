@@ -158,4 +158,21 @@ public final class SparseArray
 
         return hashToKeyValuePairs(m);
     }
+
+    /**
+     * Convert an int-int compact mapping array to a string.
+     */
+    public static String sparseToString(int [] intIntArray)
+    {
+        StringBuilder b = new StringBuilder();
+        int windowSize = 5 * 2;
+        for (int j = 0, max = Math.min(windowSize, intIntArray.length); j < max; j += 2)
+        {
+            b.append(intIntArray[j]).append("=>").append(intIntArray[j + 1]);
+            b.append(",");
+        }
+        if (intIntArray.length > windowSize)
+            b.append("...");
+        return b.toString();
+    }
 }

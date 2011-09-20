@@ -11,15 +11,13 @@
 
       for tools that will help you to edit this file.
 
-
-
-      <attribute key="BingDocumentSource.appid">
-        <value type="java.lang.String" value="EFABBE1342FC43467F3CD65B1B83F450093B16B4"/>
+      <attribute key="Bing2DocumentSource.appid">
+        <value type="java.lang.String" value="EFABBE1342...."/>
       </attribute>
-      <attribute key="BingDocumentSource.market">
+      <attribute key="Bing2DocumentSource.market">
         <value type="java.lang.String" value="FRENCH_FRANCE"/>
       </attribute>
-      <attribute key="BingDocumentSource.adult">
+      <attribute key="Bing2DocumentSource.adult">
         <value type="java.lang.String" value="Strict"/>
       </attribute>
       <attribute key="search-mode">

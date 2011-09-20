@@ -11,6 +11,7 @@
 
 package org.carrot2.dcs;
 
+import static com.google.common.base.Charsets.UTF_8;
 import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.carrot2.dcs.RestProcessorServlet.DISABLE_LOGFILE_APPENDER;
@@ -18,48 +19,36 @@ import static org.carrot2.dcs.RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assume.assumeTrue;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
+import org.apache.http.*;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.*;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.entity.mime.content.*;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.log4j.BufferingAppender;
 import org.carrot2.util.StreamUtils;
 import org.carrot2.util.SystemPropertyStack;
-import org.carrot2.util.resource.IResource;
-import org.carrot2.util.resource.ResourceLookup;
+import org.carrot2.util.resource.*;
 import org.carrot2.util.resource.ResourceLookup.Location;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlOption;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import com.gargoylesoftware.htmlunit.html.*;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
+import com.google.common.io.Files;
 
 /**
  * Test cases for the {@link DcsApp}.
@@ -72,6 +61,7 @@ public class DcsAppTest
     private static SystemPropertyStack classpathLocatorProperty;
 
     private static String KEY_KACZYNSKI = "/xml/carrot2-kaczynski.utf8.xml";
+    private static String KEY_KACZYNSKI_UTF16 = "/xml/carrot2-kaczynski.utf16.xml";
     private static HashMap<String, File> testFiles = Maps.newHashMap();
 
     /**
@@ -83,6 +73,12 @@ public class DcsAppTest
      * DCS startup log.
      */
     private static String startupLog;
+
+    private static enum RequestType {
+        GET,
+        POST_WWW_URL_ENCODING,
+        POST_MULTIPART
+    }
 
     @BeforeClass
     public static void startDcs() throws Throwable
@@ -202,7 +198,6 @@ public class DcsAppTest
     public void testTextarea() throws Exception
     {
         final HtmlForm form = getSourceFromStringForm();
-
         checkXmlOutput("kaczyński", form);
     }
 
@@ -214,7 +209,8 @@ public class DcsAppTest
             final HtmlForm form = getSearchForm();
 
             // Click on the appropriate radio option to enable fields
-            ((HtmlRadioButtonInput) form.getElementById("source-from-file")).click();
+            ((HtmlRadioButtonInput) (form.getPage().getByXPath(
+                "//input[@value = 'from-file']").get(0))).click();
             final File dataFile = testFiles.get(resource);
             form.getInputByName("dcs.c2stream").setValueAttribute(
                 dataFile.getAbsolutePath());
@@ -238,9 +234,9 @@ public class DcsAppTest
         final HtmlForm form = getSourceFromStringForm();
 
         // Click on the appropriate radio option to get JSON output
-        ((HtmlRadioButtonInput) form.getElementById("output-format-json")).click();
+        ((HtmlRadioButtonInput) form.getInputByValue("JSON")).click();
 
-        final Page dcsResponse = form.getButtonByName("submit").click();
+        final Page dcsResponse = clickSubmit(form);
         final String jsonResponse = dcsResponse.getWebResponse().getContentAsString(
             "UTF-8");
 
@@ -255,10 +251,10 @@ public class DcsAppTest
         final HtmlForm form = getSourceFromStringForm();
 
         // Click on the appropriate radio option to get JSON output
-        ((HtmlRadioButtonInput) form.getElementById("output-format-json")).click();
+        ((HtmlRadioButtonInput) form.getInputByValue("JSON")).click();
 
         form.getInputByName("dcs.json.callback").setValueAttribute(callback);
-        final Page dcsResponse = form.getButtonByName("submit").click();
+        final Page dcsResponse = clickSubmit(form);
         final String jsonResponse = dcsResponse.getWebResponse().getContentAsString(
             "UTF-8");
 
@@ -298,11 +294,70 @@ public class DcsAppTest
     }
 
     @Test
+    public void testGetWithExternalSource() throws Exception
+    {
+        final ProcessingResult result = getOrPost(RequestType.GET, ImmutableMap.<String, Object> of(
+            "query", "kaczyński",
+            "dcs.source", "bing-web",
+            "results", "50",
+            "dcs.algorithm", "url"
+        ));
+        assertThatClusters(result.getClusters()).isNotEmpty();
+        assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
+    }
+
+    @Test
+    public void testPostUrlEncodedWithExternalSource() throws Exception
+    {
+        final ProcessingResult result = getOrPost(RequestType.POST_WWW_URL_ENCODING, ImmutableMap.<String, Object> of(
+            "query", "kaczyński",
+            "dcs.source", "bing-web",
+            "results", "50",
+            "dcs.algorithm", "url"
+        ));
+        assertThatClusters(result.getClusters()).isNotEmpty();
+        assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
+    }
+
+    @Test
+    public void testPostUrlEncodedWithC2Stream() throws Exception
+    {
+        final ProcessingResult result = getOrPost(RequestType.POST_WWW_URL_ENCODING, ImmutableMap.<String, Object> of(
+            "query", "kaczyński",
+            "results", "50",
+            "dcs.algorithm", "url",
+            "dcs.c2stream", new String(Files.toByteArray(testFiles.get(KEY_KACZYNSKI)), "UTF-8")
+        ));
+        assertThatClusters(result.getClusters()).isNotEmpty();
+        assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
+    }
+
+    @Test
+    public void testPostWithVariousC2StreamXmlEncoding() throws Exception
+    {
+        final ProcessingResult result16 = post(KEY_KACZYNSKI_UTF16,
+            ImmutableMap.<String, Object> of());
+        final ProcessingResult result8 = post(KEY_KACZYNSKI,
+            ImmutableMap.<String, Object> of());
+        
+        List<Document> doc16 = result16.getDocuments();
+        List<Document> doc8 = result8.getDocuments();
+        assertThat(doc16.size()).isEqualTo(doc8.size());
+        for (int i = 0; i < Math.min(doc16.size(), doc8.size()); i++)
+        {
+            Document d1 = doc16.get(i);
+            Document d2 = doc8.get(i);
+            assertThat(d1.getTitle()).isEqualTo(d2.getTitle());
+            assertThat(d1.getSummary()).isEqualTo(d2.getSummary());
+        }
+    }
+
+    @Test
     public void directFeedAttributeOverriding() throws Exception
     {
         // Check the original query and attribute values contained in the XML
         final ProcessingResult result = post(KEY_KACZYNSKI,
-            ImmutableMap.<String, String> of());
+            ImmutableMap.<String, Object> of());
         assertThatClusters(result.getClusters()).isNotEmpty();
         assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
         assertThat(result.getAttribute("DocumentAssigner.exactPhraseAssignment"))
@@ -312,26 +367,24 @@ public class DcsAppTest
         // Override query
         final String otherQuery = "other query";
         final ProcessingResult overriddenQueryResult = post(KEY_KACZYNSKI,
-            ImmutableMap.<String, String> of(AttributeNames.QUERY, otherQuery));
+            ImmutableMap.<String, Object> of(AttributeNames.QUERY, otherQuery));
         assertThat(overriddenQueryResult.getAttribute(AttributeNames.QUERY)).isEqualTo(
             otherQuery);
 
         // Override some attributes
         final ProcessingResult overriddenAttributesResult = post(KEY_KACZYNSKI,
-            ImmutableMap.<String, String> of("DocumentAssigner.exactPhraseAssignment",
-                "false"));
+            ImmutableMap.<String, Object> of("LingoClusteringAlgorithm.desiredClusterCountBase", "5"));
         assertThat(overriddenAttributesResult.getClusters().size()).isNotEqualTo(
             initialClusterCount);
 
-        // Note the string instead of a boolean here. The reason for this is that the
+        // Note the string instead of an integer here. The reason for this is that the
         // attributes get passed as a string POST parameters and the controller echoes
         // input attributes to output exactly in the form they were provided, from string
         // type conversion is performed only for the purposes of binding to the
         // component's fields.
         assertThat(
             overriddenAttributesResult
-                .getAttribute("DocumentAssigner.exactPhraseAssignment")).isEqualTo(
-            "false");
+                .getAttribute("LingoClusteringAlgorithm.desiredClusterCountBase")).isEqualTo("5");
 
     }
 
@@ -340,9 +393,9 @@ public class DcsAppTest
         final HtmlForm form = getSearchForm();
 
         // Click on the appropriate radio option to enable fields
-        ((HtmlRadioButtonInput) form.getElementById("source-from-string")).click();
+        ((HtmlRadioButtonInput) (form.getPage().getByXPath("//input[@value = 'from-string']").get(0))).click();
         form.getTextAreaByName("dcs.c2stream").setText(
-            FileUtils.readFileToString(testFiles.get(KEY_KACZYNSKI), "UTF-8"));
+            Files.toString(testFiles.get(KEY_KACZYNSKI), UTF_8));
         return form;
     }
 
@@ -355,11 +408,11 @@ public class DcsAppTest
     private void checkXmlOutput(final String query, final HtmlForm form,
         boolean onlyClusters) throws IOException, Exception
     {
-        final XmlPage dcsResponse = (XmlPage) form.getButtonByName("submit").click();
+        final XmlPage dcsResponse = (XmlPage) clickSubmit(form);
         final String responseXml = dcsResponse.asXml();
 
         final ProcessingResult dcsResult = ProcessingResult
-            .deserialize(new ByteArrayInputStream(responseXml.getBytes("UTF-8")));
+            .deserialize(new ByteArrayInputStream(responseXml.getBytes(UTF_8)));
         assertThat(dcsResult.getAttributes().get(AttributeNames.QUERY)).isEqualTo(query);
         if (onlyClusters)
         {
@@ -370,6 +423,12 @@ public class DcsAppTest
             assertThat(dcsResult.getDocuments().size()).isGreaterThan(0);
         }
         assertThat(dcsResult.getClusters().size()).isGreaterThan(0);
+    }
+
+    private Page clickSubmit(final HtmlForm form) throws IOException
+    {
+        return ((HtmlButton) form.getPage().getByXPath("//button[@name = 'submit']")
+            .get(0)).click();
     }
 
     private HtmlPage getStartPage() throws IOException, MalformedURLException
@@ -399,34 +458,54 @@ public class DcsAppTest
         return form;
     }
 
-    private final static Charset UTF8 = Charset.forName("UTF-8");
-
     /**
      * Makes a direct document feed POST request.
      */
-    private ProcessingResult post(String inputDataKey, Map<String, String> otherAttributes)
+    private ProcessingResult post(String inputDataKey, Map<String, Object> otherAttributes)
         throws IllegalStateException, Exception
     {
-        final Map<String, String> attributes = Maps.newHashMap(otherAttributes);
-
+        final Map<String, Object> attributes = Maps.newHashMap(otherAttributes);
         attributes.put("dcs.c2stream",
-            FileUtils.readFileToString(testFiles.get(inputDataKey), "UTF-8"));
+            new ByteArrayBody(Files.toByteArray(testFiles.get(inputDataKey)), "testfile.xml"));
 
+        return getOrPost(RequestType.POST_MULTIPART, attributes);
+    }
+
+    /**
+     * Makes a GET request.
+     */
+    private ProcessingResult getOrPost(RequestType requestType, Map<String, Object> otherAttributes)
+        throws IllegalStateException, Exception
+    {
         final HttpClient client = new DefaultHttpClient();
-        final HttpPost post = new HttpPost(getDcsUrl("dcs/post"));
-
-        final MultipartEntity body = new MultipartEntity(HttpMultipartMode.STRICT, null,
-            UTF8);
-
-        for (Map.Entry<String, String> entry : attributes.entrySet())
+        final HttpRequestBase request;
+        switch (requestType)
         {
-            body.addPart(entry.getKey(), new StringBody(entry.getValue(), UTF8));
+            case POST_MULTIPART:
+                HttpPost post = new HttpPost(getDcsUrl("dcs/rest"));
+                post.setEntity(multipartParams(otherAttributes));
+                request = post;
+                break;
+
+            case POST_WWW_URL_ENCODING:
+                post = new HttpPost(getDcsUrl("dcs/rest"));
+                post.setEntity(new UrlEncodedFormEntity(formParams(otherAttributes), "UTF-8"));
+                request = post;
+                break;
+
+            case GET:
+                request = new HttpGet(
+                    getDcsUrl("dcs/rest") + "?" 
+                        + URLEncodedUtils.format(formParams(otherAttributes), "UTF-8"));
+                break;
+
+            default:
+                throw new RuntimeException();
         }
-        post.setEntity(body);
 
         try
         {
-            HttpResponse response = client.execute(post);
+            HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
             {
                 throw new IOException("Unexpected DCS response: "
@@ -439,5 +518,32 @@ public class DcsAppTest
         {
             client.getConnectionManager().shutdown();
         }
+    }
+
+    private HttpEntity multipartParams(Map<String, Object> attributes) throws UnsupportedEncodingException
+    {
+        final MultipartEntity body = new MultipartEntity(HttpMultipartMode.STRICT, null, UTF_8);
+        for (Map.Entry<String, Object> entry : attributes.entrySet())
+        {
+            if (entry.getValue() instanceof ContentBody) {
+                body.addPart(entry.getKey(), (ContentBody) entry.getValue());
+            } else {
+                body.addPart(entry.getKey(), new StringBody(entry.getValue().toString(), UTF_8));
+            }
+        }
+        return body;
+    }
+
+    private List<? extends NameValuePair> formParams(Map<String, Object> otherAttributes)
+    {
+        final Map<String, Object> attributes = Maps.newHashMap(otherAttributes);
+
+        final List<NameValuePair> params = Lists.newArrayList();
+        for (Map.Entry<String, Object> entry : attributes.entrySet())
+        {
+            params.add(new BasicNameValuePair(entry.getKey(), entry.getValue().toString()));
+        }
+        
+        return params;
     }
 }

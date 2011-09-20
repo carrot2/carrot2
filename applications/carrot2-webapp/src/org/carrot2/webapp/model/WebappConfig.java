@@ -312,7 +312,7 @@ public class WebappConfig
             internalAttributeKeys.addAll(Lists.transform(Lists
                 .newArrayList(descriptor.getBindableDescriptor().only(
                     new InternalAttributePredicate()).attributeDescriptors.values()),
-                AttributeDescriptor.AttributeDescriptorToKey.INSANCE));
+                AttributeDescriptor.AttributeDescriptorToKey.INSTANCE));
         }
 
         internalAttributeKeys.remove(AttributeNames.QUERY);

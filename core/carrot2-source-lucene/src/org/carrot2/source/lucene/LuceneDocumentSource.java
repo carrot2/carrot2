@@ -31,8 +31,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-import org.carrot2.core.Controller;
-import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.Document;
 import org.carrot2.core.IControllerContext;
 import org.carrot2.core.IControllerContextListener;
@@ -190,8 +188,8 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
      * API. To pass some of the fields of Lucene documents to Carrot2 XML/JSON output,
      * implement a custom {@link IFieldMapper} that will store those fields as regular
      * Carrot2 fields.</li>
-     * <li><strong>Increased memory usage</strong> when using a {@link Controller}
-     * {@link ControllerFactory#createCachingPooling(Class...) configured to cache} the
+     * <li><strong>Increased memory usage</strong> when using a {@link org.carrot2.core.Controller}
+     * {@link org.carrot2.core.ControllerFactory#createCachingPooling(Class...) configured to cache} the
      * output from {@link LuceneDocumentSource}.</li>
      * </ul>
      * 

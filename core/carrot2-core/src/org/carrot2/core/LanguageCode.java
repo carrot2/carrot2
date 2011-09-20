@@ -62,6 +62,7 @@ public enum LanguageCode
     SLOVENE ("sl"),
     SPANISH ("es"),
     SWEDISH ("sv"),
+    THAI ("th"),
     TURKISH ("tr");
 
     /**

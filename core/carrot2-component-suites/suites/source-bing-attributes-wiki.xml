@@ -1,0 +1,33 @@
+<attribute-sets default="overridden-attributes">
+  <attribute-set id="overridden-attributes">
+    <value-set>
+      <label>overridden-attributes</label>
+
+      <attribute key="Bing2WebDocumentSource.site">
+        <value value="wikipedia.org"/>
+      </attribute>
+      
+      <!--
+      
+      Below are some attributes of this component you can change. Please see
+
+        http://download.carrot2.org/head/manual/#section.customizing.component-suites-and-attributes.component-attributes
+
+      for tools that will help you to edit this file.
+
+      <attribute key="Bing2DocumentSource.appid">
+        <value type="java.lang.String" value="EFABBE1342...."/>
+      </attribute>
+      <attribute key="Bing2DocumentSource.market">
+        <value type="java.lang.String" value="FRENCH_FRANCE"/>
+      </attribute>
+      <attribute key="Bing2DocumentSource.adult">
+        <value type="java.lang.String" value="Strict"/>
+      </attribute>
+      <attribute key="search-mode">
+        <value type="java.lang.String" value="SPECULATIVE"/>
+      </attribute>
+      -->
+    </value-set>
+  </attribute-set>
+</attribute-sets>

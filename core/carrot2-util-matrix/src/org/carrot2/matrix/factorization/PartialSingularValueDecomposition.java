@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,11 +13,11 @@ package org.carrot2.matrix.factorization;
 
 import java.util.Arrays;
 
-import org.carrot2.matrix.*;
-
-import org.apache.mahout.math.matrix.*;
-import org.apache.mahout.math.matrix.impl.*;
-import org.apache.mahout.math.matrix.linalg.SingularValueDecomposition;
+import org.apache.mahout.math.DenseMatrix;
+import org.apache.mahout.math.Matrix;
+import org.apache.mahout.math.SingularValueDecomposition;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 /**
  * Performs matrix factorization using the Singular Value Decomposition algorithm.
@@ -32,16 +31,6 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
 
     /** The default number of desired base vectors */
     protected static final int DEFAULT_K = -1;
-
-    /**
-     * Work array
-     */
-    private double [] work;
-
-    /**
-     * Work array
-     */
-    private int [] iwork;
 
     /** Singular values */
     private double [] S;
@@ -61,143 +50,47 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
 
     public void compute()
     {
-        // Need native LAPACK, dense matrices and no views to operate
-        // Default to Colt's implementation otherwise
-        if (!NNIInterface.isNativeLapackAvailable()
-            || (!(A instanceof NNIDenseDoubleMatrix2D))
-            || ((NNIDenseDoubleMatrix2D) A).isView())
+        // Use Colt's SVD
+        SingularValueDecomposition svd;
+        if (A.columns() > A.rows())
         {
-            // Use (slow) Colt's SVD
-            SingularValueDecomposition svd;
-            if (A.columns() > A.rows())
-            {
-                svd = new SingularValueDecomposition(A.viewDice());
-                V = svd.getU();
-                U = svd.getV();
-            }
-            else
-            {
-                svd = new SingularValueDecomposition(A);
-                U = svd.getU();
-                V = svd.getV();
-            }
-
-            S = svd.getSingularValues();
-
-            if (k > 0 && k < S.length)
-            {
-                U = U.viewPart(0, 0, U.rows(), k);
-                V = V.viewPart(0, 0, V.rows(), k);
-                S = org.apache.mahout.math.Arrays.trimToCapacity(S, k);
-            }
+            svd = new SingularValueDecomposition(new DenseMatrix(A.viewDice().toArray()));
+            V = toColtMatrix(svd.getU());
+            U = toColtMatrix(svd.getV());
         }
         else
         {
-            // Use (faster) native LAPACK
-            int n = A.rows();
-            int m = A.columns();
+            svd = new SingularValueDecomposition(new DenseMatrix(A.toArray()));
+            U = toColtMatrix(svd.getU());
+            V = toColtMatrix(svd.getV());
+        }
 
-            // Not sure if can do that. The original version has (m, m), but
-            // the remaining columns are zero anyway
-            V = NNIDoubleFactory2D.nni.make(n, m);
-            U = NNIDoubleFactory2D.nni.make(n, n);
-            S = new double [Math.min(m, n)];
+        S = svd.getSingularValues();
 
-            init(m, n);
-
-            // Copy the data array of the A matrix (LAPACK will overwrite the
-            // input data)
-            final double [] data = ((NNIDenseDoubleMatrix2D) A).getData();
-            double [] dataA = Arrays.copyOf(data, data.length);
-
-            int [] info = new int [1];
-
-            NNIInterface.getLapack().gesdd(
-                new char [] {'S'}, 
-                new int [] {m}, 
-                new int [] {n}, 
-                dataA, 
-                new int [] {Math.max(1, m)}, 
-                S, 
-                ((NNIDenseDoubleMatrix2D) V).getData(), 
-                new int [] {Math.max(1, m)}, 
-                ((NNIDenseDoubleMatrix2D) U).getData(), 
-                new int []{Math.max(1, n)}, 
-                work, 
-                new int []{ work.length}, 
-                iwork, info);
-
-            // LAPACK calculates V' instead of V so need to do a deep transpose
-            ((NNIDenseDoubleMatrix2D) V).transpose();
-
-            if (k > 0 && k < S.length)
-            {
-                // Return an NNI dense matrix so that native operations are
-                // possible
-                DenseDoubleMatrix2D Uk = (DenseDoubleMatrix2D) NNIDoubleFactory2D.nni
-                    .make(U.rows(), k);
-                DenseDoubleMatrix2D Vk = (DenseDoubleMatrix2D) NNIDoubleFactory2D.nni
-                    .make(V.rows(), k);
-                Uk.assign(U.viewPart(0, 0, U.rows(), k));
-                Vk.assign(V.viewPart(0, 0, V.rows(), k));
-
-                U = Uk;
-                V = Vk;
-                S = org.apache.mahout.math.Arrays.trimToCapacity(S, k);
-            }
+        if (k > 0 && k < S.length)
+        {
+            U = U.viewPart(0, 0, U.rows(), k);
+            V = V.viewPart(0, 0, V.rows(), k);
+            S = Arrays.copyOf(S, k);
         }
     }
 
-    /**
-     * Initialization for LAPACK-based calculations.
-     */
-    private void init(int m, int n)
+    private static DenseDoubleMatrix2D toColtMatrix(Matrix m)
     {
-        // Find workspace requirements
-        iwork = new int [8 * Math.min(m, n)];
-
-        // Query optimal workspace
-        work = new double [1];
-        int [] info = new int [1];
-
-        NNIInterface.getLapack().gesdd(
-            new char [] { 'S' }, 
-            new int [] { m }, 
-            new int [] { n }, 
-            new double [0], 
-            new int [] {Math.max(1, m)}, 
-            new double [0], 
-            new double [0], 
-            new int [] {Math.max(1, m)}, 
-            new double [0], 
-            new int [] {Math.max(1, n)}, 
-            work, 
-            new int [] {-1}, 
-            iwork, 
-            info);
-
-        // Allocate workspace
-        int lwork = -1;
-        if (info[0] != 0)
+        DenseDoubleMatrix2D result = new DenseDoubleMatrix2D(m.rowSize(), m.columnSize());
+        for (int r = 0; r < result.rows(); r++)
         {
-            lwork = 3
-                * Math.min(m, n)
-                * Math.min(m, n)
-                + Math.max(Math.max(m, n), 4 * Math.min(m, n) * Math.min(m, n) + 4
-                    * Math.min(m, n));
+            for (int c = 0; c < result.columns(); c++)
+            {
+                result.setQuick(r, c, m.getQuick(r, c));
+            }            
         }
-        else
-        {
-            lwork = (int) work[0];
-        }
-
-        lwork = Math.max(lwork, 1);
-        work = new double [lwork];
+        return result;
     }
-
+    
     public String toString()
     {
-        return "nni-SVD";
+        return "SVD";
     }
 
     /**

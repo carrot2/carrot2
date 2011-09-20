@@ -20,12 +20,12 @@
 
     <sequential>
       <invoke url="/" description="Get quick start page" />
-      <setRadioButton htmlId="source-from-file" />
+      <setRadioButton xpath="//input[@value = 'from-file']" />
       <setFileField name="dcs.c2stream" fileName="@{fileName}" />
       
       <!-- Wait for AJAX stuff to load -->
       <sleep seconds="5" />
-      <clickButton name="submit" />
+      <clickButton xpath="//button[@type = 'submit']" />
       <!-- As long as we get 200 code, it's fine. We have more coverage in unit tests. -->
     </sequential>
   </macrodef>

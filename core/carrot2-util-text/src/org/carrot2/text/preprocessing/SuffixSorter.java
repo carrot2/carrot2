@@ -78,9 +78,9 @@ final class SuffixSorter
         }
 
         // Create suffix order
-        int [] suffixOrder = IndirectSort.sort(0, intCodes.length, new SuffixComparator(intCodes));
+        int [] suffixOrder = IndirectSort.mergesort(0, intCodes.length, new SuffixComparator(intCodes));
         context.allTokens.suffixOrder = suffixOrder;
-
+        
         // Add LCPs
         context.allTokens.lcp = calculateLcp(intCodes, suffixOrder);
     }

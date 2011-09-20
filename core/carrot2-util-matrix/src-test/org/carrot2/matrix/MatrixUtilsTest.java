@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,10 +13,12 @@ package org.carrot2.matrix;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.apache.mahout.math.matrix.DoubleFactory2D;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.fest.assertions.Delta;
 import org.junit.Test;
+
+import com.carrotsearch.hppc.sorting.IndirectComparator;
 
 /**
  * Test cases for {@link MatrixUtils}.
@@ -29,7 +30,7 @@ public class MatrixUtilsTest
     public void testComputeOrthogonalityOrthogonal()
     {
         /** An orthogonal matrix */
-        DoubleMatrix2D orthogonal = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D orthogonal = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 1.00, 0.00, 0.00, 0.00, 0.00
@@ -56,7 +57,7 @@ public class MatrixUtilsTest
     public void testComputeOrthogonalityIdenticalColumns()
     {
         /** A matrix with identical columns */
-        DoubleMatrix2D identical = DoubleFactory2D.dense.make(new double [] []
+        DoubleMatrix2D identical = new DenseDoubleMatrix2D(new double [] []
         {
             {
                 0.00, 0.00, 0.00
@@ -200,15 +201,68 @@ public class MatrixUtilsTest
     @Test
     public void testMinSparseness()
     {
-        final DoubleMatrix2D sparse = DoubleFactory2D.dense.make(2, 2);
+        final DoubleMatrix2D sparse = new DenseDoubleMatrix2D(2, 2);
         assertThat(MatrixUtils.computeSparseness(sparse)).isEqualTo(0);
     }
 
     @Test
     public void testMaxSparseness()
     {
-        final DoubleMatrix2D sparse = DoubleFactory2D.dense.make(2, 2, 3);
+        final DoubleMatrix2D sparse = new DenseDoubleMatrix2D(2, 2);
+        sparse.assign(3);
         assertThat(MatrixUtils.computeSparseness(sparse)).isEqualTo(1);
+    }
+
+    @Test
+    public void frobeniusNorm()
+    {
+        assertThat(MatrixUtils.frobeniusNorm(new DenseDoubleMatrix2D(new double [] []
+        {
+            {
+                1, -1
+            },
+            {
+                2, 0
+            }
+        }))).isEqualTo(Math.sqrt(1 * 1 + (-1) * (-1) + 2 * 2));
+    }
+
+    @Test
+    public void sortedRowsView()
+    {
+        final DenseDoubleMatrix2D input = new DenseDoubleMatrix2D(new double [] []
+        {
+            {
+                1, -1
+            },
+            {
+                2, -2
+            },
+            {
+                3, -3
+            }
+        });
+
+        final int [] order = new int []
+        {
+            2, 1, 0
+        };
+
+        MatrixAssertions.assertThat(
+            MatrixUtils.sortedRowsView(input,
+                new IndirectComparator.AscendingIntComparator(order))).isEquivalentTo(
+            new double [] []
+            {
+                {
+                    3, -3
+                },
+                {
+                    2, -2
+                },
+                {
+                    1, -1
+                }
+            });
     }
 
     /**
@@ -216,7 +270,7 @@ public class MatrixUtilsTest
      */
     private DoubleMatrix2D nonZeroColumnMatrix()
     {
-        return DoubleFactory2D.dense.make(new double [] []
+        return new DenseDoubleMatrix2D(new double [] []
         {
             {
                 -1.00, 0.00, 2.00, 10.00
@@ -235,7 +289,7 @@ public class MatrixUtilsTest
      */
     private DoubleMatrix2D zeroColumnMatrix()
     {
-        return DoubleFactory2D.dense.make(new double [] []
+        return new DenseDoubleMatrix2D(new double [] []
         {
             {
                 0.00, 0.00, 0.00, -7.00

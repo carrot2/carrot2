@@ -392,9 +392,12 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
                 // Here's a little hack: we need to disable checking
                 // for required attributes, otherwise, we won't be able
                 // to reset @Required input attributes to null
-                AttributeBinder.set(processingComponent,
-                    resetValues.get(new ReferenceEquality(processingComponent)), false,
-                    Input.class, Processing.class);
+                final Map<String, Object> originalAttributes = resetValues
+                    .get(new ReferenceEquality(processingComponent));
+                if (originalAttributes != null) {
+                    AttributeBinder.set(processingComponent, originalAttributes, false,
+                        Input.class, Processing.class);
+                }
             }
             catch (Exception e)
             {

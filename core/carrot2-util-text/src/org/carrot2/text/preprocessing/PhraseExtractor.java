@@ -54,7 +54,7 @@ public class PhraseExtractor
     private static final int MIN_PHRASE_LENGTH = 2;
 
     /** Internal maximum phrase length, we may want to make it an attribute at some point */
-    private static final int MAX_PHRASE_LENGTH = 8;
+    static final int MAX_PHRASE_LENGTH = 8;
 
     /**
      * Phrase Document Frequency threshold. Phrases appearing in fewer than
@@ -185,35 +185,42 @@ public class PhraseExtractor
         {
             final int currentSuffixIndex = suffixArray[i];
             final int currentDocumentIndex = documentIndexArray[currentSuffixIndex];
-            final int currentLcp = lcpArray[i];
+            final int currentLcp = Math.min(MAX_PHRASE_LENGTH, lcpArray[i]);
 
             if (sp < 0)
             {
                 if (currentLcp >= MIN_PHRASE_LENGTH)
                 {
+                    // Push to the stack phrases of length 2..currentLcp. Only the 
+                    // topmost phrase will get its frequencies incremented, the other
+                    // ones will "inherit" the counts when the topmost phrase is 
+                    // popped off the stack.
                     final int length = currentLcp;
-                    final int lower = (currentLcp <= MAX_PHRASE_LENGTH ? 0 : currentLcp
-                        - MAX_PHRASE_LENGTH);
-                    for (int j = length - 1; j >= lower; j--)
+                    for (int j = length - 2; j >= 0; j--)
                     {
-                        if (currentLcp - j >= MIN_PHRASE_LENGTH)
-                        {
-                            sp++;
-                            rcsStack[sp] = new Substring(i, currentSuffixIndex,
-                                currentSuffixIndex + currentLcp - j, (j == lower ? 2 : 1));
+                        sp++;
 
-                            rcsStack[sp].tfByDocument = new IntIntOpenHashMap();
-                            rcsStack[sp].tfByDocument.put(
-                                documentIndexArray[suffixArray[i - 1]], 1);
-                            if (j == lower)
-                            {
-                                addValue(rcsStack[sp].tfByDocument, currentDocumentIndex,
-                                    1);
-                            }
-                            else
-                            {
-                                rcsStack[sp].documentIndexToOffset = documentIndexArray[suffixArray[i - 1]];
-                            }
+                        // Set initial tf = 2 for the topmost phrase. For the other phrases,
+                        // set tf = 1. During popping of the topmost phrase, the phrase lying
+                        // "below" on the stack, will get its tf increased by the tf of 
+                        // the phrase being popped, minus 1.
+                        rcsStack[sp] = new Substring(i, currentSuffixIndex,
+                            currentSuffixIndex + currentLcp - j, (j == 0 ? 2 : 1));
+
+                        // By document tf. Again, topmost phrase gets tf = 2, the other
+                        // ones get tf = 1. This time, we need to track from which document's
+                        // tf we need to set off the "minus 1", hence the documentIndexToOffset field.
+                        rcsStack[sp].tfByDocument = new IntIntOpenHashMap();
+                        rcsStack[sp].tfByDocument.put(
+                            documentIndexArray[suffixArray[i - 1]], 1);
+                        if (j == 0)
+                        {
+                            rcsStack[sp].tfByDocument.putOrAdd(currentDocumentIndex,
+                                1, 1);
+                        }
+                        else
+                        {
+                            rcsStack[sp].documentIndexToOffset = documentIndexArray[suffixArray[i - 1]];
                         }
                     }
                 }
@@ -225,28 +232,32 @@ public class PhraseExtractor
                 Substring r = rcsStack[sp];
                 if ((r.to - r.from) < currentLcp)
                 {
+                    Substring r1 = rcsStack[sp];
+
+                    // The phrase we're about to add is an extension of the topmost
+                    // phrase on the stack. The new phrase will contribute to the 
+                    // topmost phrase's tf, so we need to track the document index
+                    // from which we'd set off the "minus 1".
+                    r1.documentIndexToOffset = documentIndexArray[suffixArray[i - 1]];
+
                     // Add the intermediate phrases too (which makes
                     // the algorithm no longer linear btw)
-                    Substring r1 = rcsStack[sp];
                     int length = currentLcp - (r1.to - r1.from);
-                    int lower = (currentLcp <= MAX_PHRASE_LENGTH ? 0 : currentLcp
-                        - MAX_PHRASE_LENGTH);
                     for (int j = length - 1; j >= 0; j--)
                     {
-                        if (currentLcp - j >= MIN_PHRASE_LENGTH
-                            && currentLcp - j <= MAX_PHRASE_LENGTH)
+                        if (currentLcp - j >= MIN_PHRASE_LENGTH)
                         {
                             sp++;
                             rcsStack[sp] = new Substring(i, currentSuffixIndex,
-                                currentSuffixIndex + currentLcp - j, (j == lower ? 2 : 1));
+                                currentSuffixIndex + currentLcp - j, (j == 0 ? 2 : 1));
 
                             rcsStack[sp].tfByDocument = new IntIntOpenHashMap();
                             rcsStack[sp].tfByDocument.put(
                                 documentIndexArray[suffixArray[i - 1]], 1);
-                            if (j == lower)
+                            if (j == 0)
                             {
-                                addValue(rcsStack[sp].tfByDocument, currentDocumentIndex,
-                                    1);
+                                rcsStack[sp].tfByDocument.putOrAdd(currentDocumentIndex,
+                                    1, 1);
                             }
                             else
                             {
@@ -264,8 +275,7 @@ public class PhraseExtractor
                     {
                         // Increase the frequency of the generalized phrase
                         rcsStack[sp].frequency += 1;
-
-                        addValue(rcsStack[sp].tfByDocument, currentDocumentIndex, 1);
+                        rcsStack[sp].tfByDocument.putOrAdd(currentDocumentIndex, 1, 1);
 
                         i++;
                     }
@@ -291,8 +301,8 @@ public class PhraseExtractor
                             // substrings
                             if (sp >= 0)
                             {
+                                // The "minus 1" mentioned above.
                                 rcsStack[sp].frequency += s.frequency - 1;
-
                                 addAllWithOffset(rcsStack[sp].tfByDocument,
                                     s.tfByDocument, rcsStack[sp].documentIndexToOffset);
                             }
@@ -313,21 +323,8 @@ public class PhraseExtractor
         for (IntIntCursor c : src)
         {
             final int key = c.key;
-            final int value = c.value;
-
-            if (key != documentIndexToOffset)
-            {
-                addValue(dest, key, value);
-            }
-            else
-            {
-                addValue(dest, key, value - 1);
-            }
+            final int value = c.value + (key != documentIndexToOffset ? 0 : -1);
+            dest.putOrAdd(key, value, value);
         }
-    }
-
-    private static void addValue(IntIntOpenHashMap map, int key, int value)
-    {
-        map.put(key, map.get(key) + value);
     }
 }

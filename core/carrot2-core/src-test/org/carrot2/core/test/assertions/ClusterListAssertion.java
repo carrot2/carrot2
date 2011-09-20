@@ -17,8 +17,15 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.carrot2.core.Cluster;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Assertions on lists of {@link Cluster}s.
@@ -98,8 +105,13 @@ public class ClusterListAssertion extends
             assertThat(actual).isNotNull();
         }
 
-        assertThat(actual.size()).as(description() + ": list size").isEqualTo(
-            expected.size());
+        List<String> expectedLabels = labelList(Lists.<String>newArrayList(), 0, expected);
+        List<String> actualLabels = labelList(Lists.<String>newArrayList(), 0, actual);
+        if (!actualLabels.equals(expectedLabels))
+        {
+            tabularizedReport(expectedLabels, actualLabels);
+        }
+        assertThat(actualLabels).describedAs("Cluster labels").isEqualTo(expectedLabels);
 
         Iterator<Cluster> expectedIt = expected.iterator();
         Iterator<Cluster> actualIt = actual.iterator();
@@ -118,6 +130,63 @@ public class ClusterListAssertion extends
         }
 
         return this;
+    }
+
+    private void tabularizedReport(List<String> l1, List<String> l2)
+    {
+        Logger logger = LoggerFactory.getLogger(ClusterListAssertion.class);
+
+        int maxL1Width = 0;
+        for (String s : l1) 
+            maxL1Width = Math.max(maxL1Width, s.length());
+
+        final StringBuilder sb = new StringBuilder();
+        final Set<String> l1s = Sets.newTreeSet(l1);
+        final Set<String> l2s = Sets.newTreeSet(l2);
+
+        if (l1s.equals(l2s))
+        {
+            sb.append("PROBLEM: Same sets different order or hierarchy.\n");
+        }
+        else
+        {
+            Set<String> common = Sets.newTreeSet(l1s);
+            common.retainAll(l2s);
+            l1s.removeAll(common);
+            l2s.removeAll(common);
+
+            sb.append("Clusters in the previous set only:\n");
+            for (String s : l1s) sb.append("  '" + s + "'\n");
+            sb.append("Clusters in the actual set only:\n");
+            for (String s : l2s) sb.append("  '" + s + "'\n");            
+        }
+
+        sb.append("Clusters side-by-side (order changes not shown):\n");
+        for (int i = 0; i < Math.max(l1.size(), l2.size()); i++)
+        {
+            String lbl = (i < l1.size() ? l1.get(i) : "--");
+            sb.append(l1s.contains(lbl) ? "* " : "  ");
+            sb.append(Strings.padEnd(lbl, maxL1Width, ' '));
+            sb.append(" | ");
+
+            lbl = (i < l2.size() ? l2.get(i) : "--");
+            sb.append(l2s.contains(lbl) ? "* " : "  ");
+            sb.append(lbl);
+            sb.append("\n");
+        }
+
+        logger.error("Failed cluster list comparison (previous | now):\n" 
+            + sb.toString());        
+    }
+
+    private List<String> labelList(List<String> list, int indent, List<Cluster> clusters)
+    {
+        for (Cluster c : clusters)
+        {
+            list.add(Strings.repeat("   ", indent) + c.getLabel());
+            labelList(list, indent + 1, c.getSubclusters());
+        }
+        return list;
     }
 
     /**

@@ -21,8 +21,8 @@ import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
-import org.carrot2.source.microsoft.BingDocumentSource;
-import org.carrot2.source.microsoft.BingDocumentSourceDescriptor;
+import org.carrot2.source.microsoft.Bing2WebDocumentSource;
+import org.carrot2.source.microsoft.Bing2WebDocumentSourceDescriptor;
 
 /**
  * This example shows how to set up and use a {@link Controller} that reuses instances of
@@ -57,9 +57,9 @@ public class UsingCachingController
         CommonAttributesDescriptor
             .attributeBuilder(globalAttributes)
                 .results(50);
-        BingDocumentSourceDescriptor
+        Bing2WebDocumentSourceDescriptor
             .attributeBuilder(globalAttributes)
-                .appid(BingDocumentSource.CARROTSEARCH_APPID); // use your own ID here
+                .appid(Bing2WebDocumentSource.CARROTSEARCH_APPID); // use your own ID here
         controller.init(globalAttributes);
 
         /*
@@ -75,13 +75,13 @@ public class UsingCachingController
         CommonAttributesDescriptor.attributeBuilder(attributes).query("data mining");
 
         start = System.currentTimeMillis();
-        result = controller.process(attributes, BingDocumentSource.class,
+        result = controller.process(attributes, Bing2WebDocumentSource.class,
             LingoClusteringAlgorithm.class);
         duration = System.currentTimeMillis() - start;
         System.out.println(duration + " ms (empty cache)");
 
         start = System.currentTimeMillis();
-        result = controller.process(attributes, BingDocumentSource.class,
+        result = controller.process(attributes, Bing2WebDocumentSource.class,
             LingoClusteringAlgorithm.class);
         duration = System.currentTimeMillis() - start;
         System.out.println(duration + " ms (documents and clusters from cache)");

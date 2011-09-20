@@ -12,15 +12,25 @@
 
 package org.carrot2.workbench.core.ui;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingResult;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.viewers.IPostSelectionProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -32,7 +42,8 @@ public final class ClusterTree
     implements IPostSelectionProvider
 {
     private TreeViewer treeViewer;
-
+    private List<Cluster> previousClusters;
+    
     /**
      * Content provider for the tree.
      */
@@ -125,12 +136,32 @@ public final class ClusterTree
         }
         else
         {
+            ClusterLabelPaths clp = null;
+            if (previousClusters != null)
+                clp = ClusterLabelPaths.from(previousClusters, getExpandedClusters());
+
             treeViewer.setInput(clusters);
+
+            if (clp != null)
+                treeViewer.setExpandedElements(clp.filterMatching(clusters).toArray());
+
+            previousClusters = clusters;
         }
     }
 
+    /** Return a list of expanded clusters in the current tree. */
+    private List<Cluster> getExpandedClusters()
+    {
+        List<Cluster> expanded = Lists.newArrayList(); 
+        for (Object o : this.treeViewer.getExpandedElements())
+        {
+            expanded.add((Cluster) o);
+        }
+        return expanded;
+    }
+
     /**
-     * Resets the display all clusters from a {@link ProcessingResult}. 
+     * Resets the display to show all clusters from a {@link ProcessingResult}. 
      */
     public void show(final ProcessingResult result)
     {
@@ -143,6 +174,7 @@ public final class ClusterTree
      */
     public void clear()
     {
+        previousClusters = null;
         treeViewer.setInput(Collections.emptyList());
     }
 
@@ -154,7 +186,6 @@ public final class ClusterTree
         this.setLayout(new FillLayout());
 
         treeViewer = new TreeViewer(this, SWT.MULTI);
-
         treeViewer.setLabelProvider(new ClusterLabelProvider());
         treeViewer.setContentProvider(contentProvider);
         treeViewer.setInput(Collections.emptyList());

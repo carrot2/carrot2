@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,12 +12,12 @@
 package org.carrot2.matrix.factorization;
 
 import org.apache.mahout.math.function.Functions;
-import org.apache.mahout.math.matrix.*;
-import org.apache.mahout.math.matrix.doublealgo.Sorting;
-import org.apache.mahout.math.matrix.linalg.Algebra;
-import org.carrot2.matrix.NNIDoubleFactory2D;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategy;
+
+import com.carrotsearch.hppc.sorting.IndirectComparator;
 
 /**
  * Base functionality for {@link IIterativeMatrixFactorization}s.
@@ -113,8 +112,8 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
         }
 
         // Approximation error
-        double newApproximationError = Algebra.normF(U.zMult(V, null, 1, 0,
-            false, true).assign(A, Functions.minus));
+        double newApproximationError = MatrixUtils.frobeniusNorm(U.zMult(V, null, 1, 0,
+            false, true).assign(A, Functions.MINUS));
         approximationErrors[iterationsCompleted] = newApproximationError;
 
         if ((approximationError - newApproximationError) / approximationError < stopThreshold)
@@ -139,23 +138,13 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
 
         for (int i = 0; i < aggregates.length; i++)
         {
-            // we take -aggregate to do descending sorting
-            aggregates[i] = -VT.viewRow(i).aggregate(Functions.plus, Functions.square);
+            aggregates[i] = VT.viewRow(i).aggregate(Functions.PLUS, Functions.SQUARE);
         }
 
-        // Need to make a copy of aggregates because they get sorted as well
-        double [] aggregatesCopy = aggregates.clone();
-
-        V = NNIDoubleFactory2D.asNNIMatrix(
-            Sorting.quickSort.sort(VT, aggregates).viewDice());
-        U = NNIDoubleFactory2D.asNNIMatrix(
-            Sorting.quickSort.sort(U.viewDice(), aggregatesCopy).viewDice());
-
-        // Revert back to positive values of aggregates
-        for (int i = 0; i < aggregates.length; i++)
-        {
-            aggregates[i] = -aggregates[i];
-        }
+        final IndirectComparator.DescendingDoubleComparator comparator = new IndirectComparator.DescendingDoubleComparator(
+            aggregates);
+        V = MatrixUtils.sortedRowsView(VT, comparator).viewDice();
+        U = MatrixUtils.sortedRowsView(U.viewDice(), comparator).viewDice();
     }
 
     /**

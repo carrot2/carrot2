@@ -15,6 +15,8 @@ package org.carrot2.workbench.core.preferences;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.SearchInputView;
 
+import org.carrot2.workbench.core.ui.SearchEditor.PanelName;
+
 /**
  * Constant definitions for plug-in preferences
  */
@@ -41,7 +43,7 @@ public final class PreferenceConstants
     public static final String GROUPING_INPUT_VIEW = "search-input-view.layout"; 
 
     /**
-     * Attribute grouping layout for {@link SearchEditor.PanelName#ATTRIBUTES} panel
+     * Attribute grouping layout for {@link PanelName#ATTRIBUTES} panel
      * of {@link SearchEditor}.
      */
     public static final String GROUPING_EDITOR_PANEL = "search-editor.layout";

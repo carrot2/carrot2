@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-	<extension-point id="attributeEditor" name="Attribute Editor" schema="schema/attributeEditor.exsd"/>
+   <extension-point id="attributeEditor" name="Attribute Editor" schema="schema/attributeEditor.exsd"/>
    <extension
          id="application"
          point="org.eclipse.core.runtime.applications">
@@ -44,16 +44,16 @@
                value="Carrot2 Workbench">
          </property>
          <property
+               name="windowImages"
+               value="icons/logotype/16x16x32.png,icons/logotype/32x32x32.png,icons/logotype/128x128x32.png,icons/logotype/256x256x32.png">
+         </property>
+         <property
                name="aboutText"
                value="Carrot2 Workbench&#x0A;&#x0A;(c) Carrot2 developers.  All rights reserved.&#x0A;Visit http://carrot2.org for more information.&#x0A;&#x0A;This product includes software developed by the&#x0A;Apache Software Foundation http://www.apache.org/.">
          </property>
          <property
-               name="windowImages"
-               value="icons/carrot2-16x16.gif,icons/carrot2-32x32.gif">
-         </property>
-         <property
                name="aboutImage"
-               value="icons/product_logo.png">
+	       value="icons/logotype/128x128x32.png">
          </property>
          <property
                name="preferenceCustomization"
@@ -196,7 +196,7 @@
 
          <view
                id="org.carrot2.workbench.core.views.clusters"
-               ratio="0.5"
+               ratio="0.50"
                relationship="bottom"
                visible="false"
                relative="org.carrot2.workbench.core.views.search"/>
@@ -323,7 +323,7 @@
             commandId="org.carrot2.workbench.core.ui.actions.ReprocessCommand"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+F11">
+            sequence="M1+R">
       </key>
    </extension>
    <extension

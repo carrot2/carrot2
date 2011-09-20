@@ -9,7 +9,7 @@
     <include suite="source-solr.xml" />
     <include suite="source-lucene.xml" />
     <include suite="source-ambient.xml" />
-    
+
     <!-- PubMed, Indeed job search. -->
     <include suite="source-pubmed.xml" />
     <include suite="source-indeed.xml" />

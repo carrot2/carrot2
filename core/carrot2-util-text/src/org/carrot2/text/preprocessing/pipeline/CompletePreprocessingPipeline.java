@@ -49,6 +49,7 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
     /**
      * Performs preprocessing on the provided {@link PreprocessingContext}.
      */
+    @Override
     public void preprocess(PreprocessingContext context)
     {
         tokenizer.tokenize(context);

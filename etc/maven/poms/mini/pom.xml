@@ -32,7 +32,7 @@
         <executions>
           <execution>
             <id>default-jar</id>
-            <phase>verify</phase>
+            <phase>package</phase>
             <configuration>
               <target>
                 <copy

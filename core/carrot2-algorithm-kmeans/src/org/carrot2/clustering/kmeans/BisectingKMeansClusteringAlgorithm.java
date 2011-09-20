@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -18,10 +17,10 @@ import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.mahout.math.function.Functions;
-import org.apache.mahout.math.matrix.DoubleFactory1D;
-import org.apache.mahout.math.matrix.DoubleFactory2D;
 import org.apache.mahout.math.matrix.DoubleMatrix1D;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix1D;
+import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.IClusteringAlgorithm;
@@ -52,6 +51,8 @@ import com.carrotsearch.hppc.IntIntMap;
 import com.carrotsearch.hppc.IntIntOpenHashMap;
 import com.carrotsearch.hppc.cursors.IntCursor;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
+import com.carrotsearch.hppc.sorting.IndirectComparator;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 import com.google.common.collect.Lists;
 
 /**
@@ -305,16 +306,27 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         // the centroid from k-means will not be based on real terms,
         // so we need to calculate the centroid here once again based
         // on the cluster's documents.
-        final DoubleMatrix1D centroid = DoubleFactory1D.dense.make(termDocumentMatrix
-            .rows());
+        final DoubleMatrix1D centroid = new DenseDoubleMatrix1D(termDocumentMatrix.rows());
         for (IntCursor d : documents)
         {
-            centroid.assign(termDocumentMatrix.viewColumn(d.value), Functions.plus);
+            centroid.assign(termDocumentMatrix.viewColumn(d.value), Functions.PLUS);
         }
 
         final List<String> labels = Lists.newArrayListWithCapacity(labelCount);
-        final double minValueForLabel = centroid.viewSorted().get(
-            centroid.size() - Math.min(labelCount, centroid.size()));
+
+        final int [] order = IndirectSort.mergesort(0, centroid.size(),
+            new IndirectComparator()
+            {
+                @Override
+                public int compare(int a, int b)
+                {
+                    final double valueA = centroid.get(a);
+                    final double valueB = centroid.get(b);
+                    return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+                }
+            });
+        final double minValueForLabel = centroid.get(order[order.length
+            - Math.min(labelCount, order.length)]);
 
         for (int i = 0; i < centroid.size(); i++)
         {
@@ -357,9 +369,9 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         }
 
         // Matrices for centroids and document-centroid similarities
-        final DoubleMatrix2D centroids = DoubleFactory2D.dense.make(selected.rows(),
+        final DoubleMatrix2D centroids = new DenseDoubleMatrix2D(selected.rows(),
             partitions).assign(selected.viewPart(0, 0, selected.rows(), partitions));
-        final DoubleMatrix2D similarities = DoubleFactory2D.dense.make(partitions,
+        final DoubleMatrix2D similarities = new DenseDoubleMatrix2D(partitions,
             selected.columns());
 
         // Run a fixed number of K-means iterations

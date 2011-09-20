@@ -12,6 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.carrot2.core.Document;
@@ -19,10 +20,9 @@ import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.text.util.Tabular;
 
-import com.carrotsearch.hppc.BitSet;
-import com.carrotsearch.hppc.ObjectOpenHashSet;
-import com.carrotsearch.hppc.predicates.ShortPredicate;
+import com.carrotsearch.hppc.*;
 
 /**
  * Document preprocessing context provides low-level (usually integer-coded) data
@@ -33,36 +33,8 @@ import com.carrotsearch.hppc.predicates.ShortPredicate;
  */
 public final class PreprocessingContext
 {
-    /** Predicate for splitting on document separator. */
-    public static final ShortPredicate ON_DOCUMENT_SEPARATOR = 
-        equalTo(ITokenizer.TF_SEPARATOR_DOCUMENT);
-
-    /** Predicate for splitting on field separator. */
-    public static final ShortPredicate ON_FIELD_SEPARATOR = 
-        equalTo(ITokenizer.TF_SEPARATOR_FIELD);
-
-    /** Predicate for splitting on sentence separator. */
-    public static final ShortPredicate ON_SENTENCE_SEPARATOR = new ShortPredicate()
-    {
-        public boolean apply(short tokenType)
-        {
-            return (tokenType & ITokenizer.TF_SEPARATOR_SENTENCE) != 0;
-        }
-    };
-
-    /** 
-     * Return a new {@link ShortPredicate} returning <code>true</code>
-     * if the argument equals a given value. 
-     */
-    public static final ShortPredicate equalTo(final short t)
-    {
-        return new ShortPredicate() {
-            public boolean apply(short value)
-            {
-                return value == t; 
-            }
-        };
-    }
+    /** Uninitialized structure constant. */
+    private static final String UNINITIALIZED = "[uninitialized]";
 
     /** Query used to perform processing, may be <code>null</code> */
     public final String query;
@@ -77,7 +49,7 @@ public final class PreprocessingContext
      * Token interning cache. Token images are interned to save memory and allow reference
      * comparisons.
      */
-    public ObjectOpenHashSet<MutableCharArray> tokenCache = new ObjectOpenHashSet<MutableCharArray>();
+    private ObjectOpenHashSet<MutableCharArray> tokenCache = ObjectOpenHashSet.newInstance();
 
     /**
      * Creates a preprocessing context for the provided <code>documents</code> and with
@@ -100,7 +72,7 @@ public final class PreprocessingContext
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public static class AllTokens
+    public class AllTokens
     {
         /**
          * Token image as it appears in the input. On positions where {@link #type} is
@@ -134,8 +106,6 @@ public final class PreprocessingContext
          * <p>
          * This array is produced by {@link Tokenizer}.
          * </p>
-         * <p>
-         * TODO: is this always needed? Seems awfully repetitive, esp. for long docs.
          * <p>
          * This array is accessed in in {@link CaseNormalizer} and {@link PhraseExtractor}
          * to compute by-document statistics, e.g. tf-by document, which are then needed
@@ -174,6 +144,70 @@ public final class PreprocessingContext
          * This array is produced by {@link PhraseExtractor}.
          */
         public int [] lcp;
+
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            StringBuilder b = new StringBuilder();
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("token").flushLeft()
+                .addColumn("type")
+                .addColumn("fieldIndex")
+                .addColumn("=>field").flushLeft()
+                .addColumn("docIdx")
+                .addColumn("wordIdx")
+                .addColumn("=>word").flushLeft();
+
+            for (int i = 0; i < image.length; i++, t.nextRow())
+            {
+                t.rowData(
+                    i,
+                    image[i] == null ? "<null>" : new String(image[i]),
+                    type[i],
+                    fieldIndex[i],
+                    fieldIndex[i] >= 0 ? allFields.name[fieldIndex[i]] : null,
+                    documentIndex[i],
+                    wordIndex[i],
+                    wordIndex[i] >= 0 ? allWords.image[wordIndex[i]] : null);
+            }
+
+            t.toString(b);
+
+            if (suffixOrder != null)
+            {
+                t = new Tabular()
+                    .addColumn("#")
+                    .addColumn("sa")
+                    .addColumn("lcp")
+                    .addColumn("=>words").flushLeft();
+
+                final StringBuilder suffixImage = new StringBuilder();
+                for (int i = 0; i < suffixOrder.length; i++, t.nextRow())
+                {
+                    t.rowData(
+                        i,
+                        suffixOrder[i],
+                        lcp[i]);
+
+                    int windowLength = 5;
+                    for (int j = suffixOrder[i], max = Math.min(suffixOrder[i] + windowLength, wordIndex.length); j < max;)
+                    {
+                        suffixImage.append(
+                            wordIndex[j] >= 0 ? new String(allWords.image[wordIndex[j]]) : "|").append(" ");
+                        if (++j == max && j != wordIndex.length)
+                            suffixImage.append(" [...]");
+                    }
+                    t.rowData(suffixImage.toString());
+                    suffixImage.setLength(0);
+                }
+                b.append("\n");
+                t.toString(b);
+            }
+
+            return b.toString();
+        }
     }
 
     /**
@@ -194,6 +228,21 @@ public final class PreprocessingContext
          * This array is produced by {@link Tokenizer}.
          */
         public String [] name;
+        
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("name").flushLeft();
+
+            int i = 0;
+            for (String n : name)
+                t.rowData(i++, n).nextRow();
+
+            return t.toString();
+        }        
     }
 
     /**
@@ -204,16 +253,16 @@ public final class PreprocessingContext
 
     /**
      * Information about all unique words found in the input
-     * {@link PreprocessingContext#documents}. Each entry in each array corresponds to one
-     * unique word with respect to case, e.g. <em>data</em> and <em>DATA</em> will be
-     * conflated to one entry in the arrays. Different grammatical forms of one word, e.g.
-     * e.g <em>computer</em> and <em>computers</em>, will have different entries in the
-     * arrays (see {@link AllStems} for inflection-conflated versions).
+     * {@link PreprocessingContext#documents}. An entry in each parallel array corresponds to one
+     * conflated form of a word. For example, <em>data</em> and <em>DATA</em> will most likely become
+     * a single entry in the words table. However, different grammatical forms of a single lemma
+     * (like <em>computer</em> and <em>computers</em>) will have different entries in the
+     * words table. See {@link AllStems} for inflection-conflated versions.
      * <p>
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public static class AllWords
+    public class AllWords
     {
         /**
          * The most frequently appearing variant of the word with respect to case. E.g. if
@@ -274,6 +323,45 @@ public final class PreprocessingContext
          * This array is produced by {@link CaseNormalizer}.
          */
         public byte [] fieldIndices;
+
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("image").flushLeft()
+                .addColumn("type")
+                .addColumn("tf")
+                .addColumn("tfByDocument").flushLeft()
+                .addColumn("fieldIndices");
+
+            if (stemIndex != null)
+            {
+                t.addColumn("stemIndex")
+                 .addColumn("=>stem").flushLeft();
+            }
+
+            for (int i = 0; i < image.length; i++, t.nextRow())
+            {
+                t.rowData(
+                    i,
+                    image[i] == null ? "<null>" : new String(image[i]),
+                    type[i],
+                    tf[i],
+                    SparseArray.sparseToString(tfByDocument[i]));
+
+                t.rowData(Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
+
+                if (stemIndex != null)
+                {
+                    t.rowData(stemIndex[i]);
+                    t.rowData(allStems.image[stemIndex[i]]);
+                }
+            }
+
+            return t.toString();
+        }
     }
 
     /**
@@ -293,7 +381,7 @@ public final class PreprocessingContext
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public static class AllStems
+    public class AllStems
     {
         /**
          * Stem image as produced by the {@link IStemmer}, may not correspond to any
@@ -336,6 +424,34 @@ public final class PreprocessingContext
          * This array is produced by {@link LanguageModelStemmer}
          */
         public byte [] fieldIndices;
+
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("stem")
+                .addColumn("mostFrqWord")
+                .addColumn("=>mostFrqWord").flushLeft()
+                .addColumn("tf")
+                .addColumn("tfByDocument").flushLeft()
+                .addColumn("fieldIndices");
+
+            for (int i = 0; i < image.length; i++, t.nextRow())
+            {
+                t.rowData(
+                    i,
+                    image[i] == null ? "<null>" : new String(image[i]),
+                    mostFrequentOriginalWordIndex[i],
+                    allWords.image[mostFrequentOriginalWordIndex[i]],
+                    tf[i],
+                    SparseArray.sparseToString(tfByDocument[i]),
+                    Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
+            }
+
+            return t.toString();
+        }
     }
 
     /**
@@ -352,7 +468,7 @@ public final class PreprocessingContext
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public static class AllPhrases
+    public class AllPhrases
     {
         /**
          * Pointers to {@link AllWords} for each word in the phrase sequence.
@@ -362,19 +478,64 @@ public final class PreprocessingContext
         public int [][] wordIndices;
 
         /**
-         * Term frequency of the word sequence.
+         * Term frequency of the phrase.
          * <p>
          * This array is produced by {@link PhraseExtractor}.
          */
         public int [] tf;
 
         /**
-         * Term frequency of the word sequence for each document. For the encoding of this
-         * array, see {@link AllWords#tfByDocument}.
+         * Term frequency of the phrase for each document. The encoding of this
+         * array is similar to {@link AllWords#tfByDocument}: consecutive pairs of:
+         * document index, frequency.
          * <p>
          * This array is produced by {@link PhraseExtractor}.
          */
         public int [][] tfByDocument;
+
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("wordIndices")
+                .addColumn("=>words").flushLeft()
+                .addColumn("tf")
+                .addColumn("tfByDocument").flushLeft();
+
+            for (int i = 0; i < wordIndices.length; i++, t.nextRow())
+            {
+                t.rowData(
+                    i,
+                    Arrays.toString(wordIndices[i]).replace(" ", ""),
+                    getPhrase(i),
+                    tf[i],
+                    SparseArray.sparseToString(tfByDocument[i]));
+            }
+
+            return t.toString();
+        }
+
+        /** Returns space-separated words that constitute this phrase. */
+        public CharSequence getPhrase(int index)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < wordIndices[index].length; i++)
+            {
+                if (i > 0) sb.append(" ");
+                sb.append(new String(allWords.image[wordIndices[index][i]]));
+            }
+            return sb;
+        }
+        
+        /**
+         * Returns length of all arrays in this {@link AllPhrases}.
+         */
+        public int size()
+        {
+            return wordIndices.length;
+        }
     }
 
     /**
@@ -390,7 +551,7 @@ public final class PreprocessingContext
      * All arrays in this class have the same length and values across different arrays
      * correspond to each other for the same index.
      */
-    public static class AllLabels
+    public class AllLabels
     {
         /**
          * Feature index of the label candidate. Features whose values are less than the
@@ -420,6 +581,40 @@ public final class PreprocessingContext
          * @see #featureIndex
          */
         public int firstPhraseIndex;
+        
+        /** For debugging purposes. */
+        @Override
+        public String toString()
+        {
+            if (featureIndex == null)
+                return UNINITIALIZED;
+
+            Tabular t = new Tabular()
+                .addColumn("#")
+                .addColumn("featureIdx")
+                .addColumn("=>feature").flushLeft()
+                .addColumn("documentIdx").flushLeft();
+
+            for (int i = 0; i < featureIndex.length; i++, t.nextRow())
+            {
+                t.rowData(
+                    i,
+                    featureIndex[i],
+                    getLabel(i),
+                    documentIndices != null ? documentIndices[i].toString().replace(" ", "") : "");
+            }
+
+            return t.toString();
+        }
+
+        private CharSequence getLabel(int index)
+        {
+            final int wordsSize = allWords.image.length;
+            if (featureIndex[index] < wordsSize)
+                return new String(allWords.image[featureIndex[index]]);
+            else
+                return allPhrases.getPhrase(featureIndex[index] - wordsSize);
+        }        
     }
 
     /**
@@ -443,6 +638,18 @@ public final class PreprocessingContext
         return allLabels.featureIndex != null && allLabels.featureIndex.length > 0;
     }
 
+    @Override
+    public String toString()
+    {
+        return "PreprocessingContext 0x" + Integer.toHexString(this.hashCode()) + "\n"
+            + "Fields:\n" + this.allFields.toString()
+            + "Tokens:\n" + this.allTokens.toString()
+            + "Words:\n" + this.allWords.toString()
+            + "Stems:\n" + this.allStems.toString()
+            + "Phrases:\n" + this.allPhrases.toString()
+            + "Labels:\n" + this.allLabels.toString();
+    }
+    
     /**
      * Static conversion between selected bits and an array of indexes of these bits. 
      */
@@ -464,7 +671,7 @@ public final class PreprocessingContext
     /**
      * Convert the selected bits in a byte to an array of indexes.
      */
-    public int [] toFieldIndexes(byte b)
+    public static int [] toFieldIndexes(byte b)
     {
         return bitsCache[b & 0xff];
     }

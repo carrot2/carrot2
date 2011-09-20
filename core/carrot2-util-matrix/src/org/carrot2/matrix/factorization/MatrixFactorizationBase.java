@@ -12,9 +12,7 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.carrot2.matrix.NNIDoubleFactory2D;
-
-import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Abstract implementation of the {@link IMatrixFactorization} interface.
@@ -22,12 +20,6 @@ import org.apache.mahout.math.matrix.*;
 @SuppressWarnings("deprecation")
 abstract class MatrixFactorizationBase implements IMatrixFactorization
 {
-    /** The matrix factory to be used when creating the result matrices */
-    protected DoubleFactory2D doubleFactory2D;
-
-    /** Default matrix factory */
-    protected static DoubleFactory2D DEFAULT_DOUBLE_FACTORY_2D = NNIDoubleFactory2D.nni;
-
     /** Input matrix */
     protected DoubleMatrix2D A;
 
@@ -47,25 +39,6 @@ abstract class MatrixFactorizationBase implements IMatrixFactorization
     public MatrixFactorizationBase(DoubleMatrix2D A)
     {
         this.A = A;
-        this.doubleFactory2D = DEFAULT_DOUBLE_FACTORY_2D;
-    }
-
-    /**
-     * Returns the matrix factory used when creating the result matrices.
-     */
-    public DoubleFactory2D getDoubleFactory2D()
-    {
-        return doubleFactory2D;
-    }
-
-    /**
-     * Sets the matrix factory to be used when creating the result matrices.
-     * 
-     * @param doubleFactory2D
-     */
-    public void setDoubleFactory2D(DoubleFactory2D doubleFactory2D)
-    {
-        this.doubleFactory2D = doubleFactory2D;
     }
 
     public DoubleMatrix2D getU()

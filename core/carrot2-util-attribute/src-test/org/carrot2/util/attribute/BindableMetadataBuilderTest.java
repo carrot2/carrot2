@@ -173,11 +173,20 @@ public class BindableMetadataBuilderTest
 
         // Note that this scenario is not supported
         checkTitle(AttributeTitles.class, "descriptionWithLinks", "Title");
-        System.out.println(getDescription(AttributeTitles.class, "descriptionWithLinks"));
         checkDescription(AttributeTitles.class, "descriptionWithLinks",
             "Description with <code>" +
             AttributeTitles.class.getName() + 
             ".titleAtTheBottom</code> and <code>String</code> links.");
+    }
+    
+    @Test
+    public void testDescriptionWithNumericEntities()
+    {
+        
+        // Note that this scenario is not supported
+        checkTitle(AttributeTitles.class, "descriptionWithNumericEntities", "Title");
+        checkDescription(AttributeTitles.class, "descriptionWithNumericEntities",
+            "Description with &#160;.");
     }
 
     @Test

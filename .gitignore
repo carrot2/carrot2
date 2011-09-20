@@ -1,3 +1,4 @@
+.DS_Store
 hotspot.log
 applications/carrot2-webapp/src/jawr.properties
 applications/carrot2-webapp/web/WEB-INF/webapp-config.xml
@@ -15,3 +16,4 @@ tmp
 .clover
 junit*.properties
 *.patch
+/*.log

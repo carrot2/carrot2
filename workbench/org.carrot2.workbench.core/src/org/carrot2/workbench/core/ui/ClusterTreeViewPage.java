@@ -15,6 +15,7 @@ package org.carrot2.workbench.core.ui;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.workbench.core.helpers.ActionDelegateProxy;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -63,11 +64,18 @@ final class ClusterTreeViewPage extends Page
 
         // Create toolbar.
         final IActionBars bars = getSite().getActionBars();
-        final IAction expanderAction = new ActionDelegateProxy(
-            new ClusterTreeExpanderAction(clusterTree, editor.getSearchResult()),
-            IAction.AS_PUSH_BUTTON);
 
-        bars.getToolBarManager().add(expanderAction);        
+        final IToolBarManager toolBarManager = bars.getToolBarManager();
+        toolBarManager.add(new ActionDelegateProxy(
+            new ClusterTreeExpanderAction(
+                ClusterTreeExpanderAction.CollapseAction.EXPAND,
+                clusterTree, editor.getSearchResult()),
+            IAction.AS_PUSH_BUTTON));
+        toolBarManager.add(new ActionDelegateProxy(
+            new ClusterTreeExpanderAction(
+                ClusterTreeExpanderAction.CollapseAction.COLLAPSE,
+                clusterTree, editor.getSearchResult()),
+            IAction.AS_PUSH_BUTTON));
         bars.updateActionBars();
         
         // Register listeners

@@ -26,7 +26,6 @@ public class KMeansMatrixFactorizationFactory extends IterativeMatrixFactorizati
         factorization.setK(k);
         factorization.setMaxIterations(maxIterations);
         factorization.setStopThreshold(stopThreshold);
-        factorization.setDoubleFactory2D(getDoubleFactory2D());
 
         factorization.compute();
 

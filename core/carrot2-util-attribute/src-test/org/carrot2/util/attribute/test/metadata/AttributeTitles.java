@@ -99,6 +99,14 @@ public class AttributeTitles
     private int descriptionWithLinks;
     
     /**
+     * Title. Description with &#160;.
+     */
+    @TestInit
+    @Input
+    @Attribute
+    private int descriptionWithNumericEntities;
+    
+    /**
      * Title with description. Description follows.
      */
     @TestInit

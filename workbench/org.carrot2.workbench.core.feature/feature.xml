@@ -327,15 +327,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.carrot2.util.matrix.win32.x86"
-         os="win32"
-         arch="x86"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"/>
-
-   <plugin
          id="org.eclipse.core.filebuffers"
          download-size="0"
          install-size="0"
@@ -400,13 +391,6 @@
 
    <plugin
          id="com.carrotsearch.hppc"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.carrotsearch.nni"
          download-size="0"
          install-size="0"
          version="0.0.0"

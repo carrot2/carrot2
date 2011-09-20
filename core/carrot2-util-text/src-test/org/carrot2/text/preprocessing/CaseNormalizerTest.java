@@ -1,4 +1,5 @@
 
+
 /*
  * Carrot2 project.
  *
@@ -12,739 +13,271 @@
 
 package org.carrot2.text.preprocessing;
 
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.assertThat;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.tokens;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.MW;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.DS;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.FS;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.EOS;
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.util.Arrays;
-
 import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
+import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test cases for {@link CaseNormalizer}.
  */
-public class CaseNormalizerTest extends PreprocessingComponentTestBase
+public class CaseNormalizerTest
 {
-    /** Case normalizer under tests */
-    private CaseNormalizer caseNormalizer;
-
-    /** Other preprocessing components required for the test */
-    private Tokenizer tokenizer;
+    PreprocessingContextBuilder contextBuilder;
 
     @Before
-    public void setUpPreprocessingComponents()
+    public void prepareContextBuilder()
     {
-        tokenizer = new Tokenizer();
-        caseNormalizer = new CaseNormalizer();
+        contextBuilder = new PreprocessingContextBuilder()
+            .withPreprocessingPipeline(new BasicPreprocessingPipeline());
     }
 
+    // @formatter:off
+    
     @Test
     public void testEmpty()
     {
-        createDocuments();
+        PreprocessingContext ctx = contextBuilder.buildContext();
 
-        char [][] expectedWordImages = new char [] [] {};
-        int [] expectedWordTf = new int [] {};
-        int [] expectedWordIndices = new int []
-        {
-            -1
-        };
-        int [][] expectedWordTfByDocument = new int [] [] {};
-        byte [][] expectedFieldIndex = new byte [] [] {};
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(ctx).tokens().isEmpty();
+        assertThat(ctx.allTokens.wordIndex).isEqualTo(new int [] {-1});
     }
 
     @Test
     public void testOneToken()
     {
-        createDocuments("test");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("test")
+            .buildContext();
 
-        char [][] expectedWordImages = new char [] []
-        {
-            "test".toCharArray()
-        };
-
-        int [] expectedWordTf = new int []
-        {
-            1
-        };
-
-        int [] expectedWordIndices = new int []
-        {
-            0, -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [] []
-        {
-            {
-                0, 1
-            }
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(ctx).containsWord("test").withTf(1).withDocumentTf(0, 1).withFieldIndices(0);
+        assertThat(tokens(ctx)).onProperty("wordImage")
+            .containsExactly("test", EOS);
     }
 
     @Test
     public void testMoreSingleDifferentTokens()
     {
-        createDocuments("a simple testsymbol");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("a simple testsymbol")
+            .buildContext();
 
-        char [][] expectedWordImages = createExpectedWordImages(new String []
-        {
-            "a", "testsymbol", "simple"
-        });
-
-        int [] expectedWordTf = new int []
-        {
-            1, 1, 1
-        };
-
-        int [] expectedWordIndices = new int []
-        {
-            0, 1, 2, -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [] []
-        {
-            {
-                0, 1
-            },
-
-            {
-                0, 1
-            },
-
-            {
-                0, 1
-            }
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0
-            },
-            {
-                0
-            },
-            {
-                0
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(ctx).containsWord("a").withTf(1).withDocumentTf(0, 1).withFieldIndices(0);
+        assertThat(ctx).containsWord("simple").withTf(1).withDocumentTf(0, 1).withFieldIndices(0);
+        assertThat(ctx).containsWord("testsymbol").withTf(1).withDocumentTf(0, 1).withFieldIndices(0);
+        assertThat(tokens(ctx)).onProperty("wordImage")
+            .containsExactly("a", "simple", "testsymbol", EOS);
     }
 
     @Test
     public void testTokenTypes()
     {
-        createDocuments("12.2 email@email.com IEEE www.test.com file_name");
+        String input = "12.2 email@email.com IEEE www.test.com file_name";
+        PreprocessingContext ctx = contextBuilder
+            .newDoc(input)
+            .buildContext();
 
-        char [][] expectedWordImages = createExpectedWordImages(new String []
-        {
-            "12.2", "IEEE", "file_name", "www.test.com", "email@email.com"
-        });
+        for (String term : input.split("\\s"))
+            assertThat(ctx).containsWord(term).withTf(1).withDocumentTf(0, 1).withFieldIndices(0);
 
-        int [] expectedWordTf = new int []
-        {
-            1, 1, 1, 1, 1
-        };
-
-        int [] expectedWordIndices = new int []
-        {
-            0, 4, 1, 3, 2, -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [] []
-        {
-            {
-                0, 1
-            },
-
-            {
-                0, 1
-            },
-
-            {
-                0, 1
-            },
-
-            {
-                0, 1
-            },
-
-            {
-                0, 1
-            }
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0
-            },
-            {
-                0
-            },
-            {
-                0
-            },
-            {
-                0
-            },
-            {
-                0
-            }
-        };
-        short [] expectedType = new short []
-        {
-            ITokenizer.TT_NUMERIC, ITokenizer.TT_TERM, ITokenizer.TT_FILE,
-            ITokenizer.TT_BARE_URL, ITokenizer.TT_EMAIL
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex, expectedType);
+        assertThat(ctx).containsWord("12.2").withTokenType(ITokenizer.TT_NUMERIC);
+        assertThat(ctx).containsWord("email@email.com").withTokenType(ITokenizer.TT_EMAIL);
+        assertThat(ctx).containsWord("IEEE").withTokenType(ITokenizer.TT_TERM);
+        assertThat(ctx).containsWord("www.test.com").withTokenType(ITokenizer.TT_BARE_URL);
+        assertThat(ctx).containsWord("file_name").withTokenType(ITokenizer.TT_FILE);
     }
 
     @Test
     public void testMoreRepeatedDifferentTokens()
     {
-        createDocuments("a simple test", "a test a");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("a simple test", "a test a")
+            .buildContext();
 
-        char [][] expectedWordImages = createExpectedWordImages(new String []
-        {
-            "a", "test", "simple"
-        });
-
-        int [] expectedWordTf = new int [3];
-        expectedWordTf[0] = 3;
-        expectedWordTf[1] = 2;
-        expectedWordTf[2] = 1;
-
-        int [] expectedWordIndices = new int []
-        {
-            wordIndices.get("a"), wordIndices.get("simple"), wordIndices.get("test"), -1,
-            wordIndices.get("a"), wordIndices.get("test"), wordIndices.get("a"), -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [3] [];
-        expectedWordTfByDocument[wordIndices.get("a")] = new int []
-        {
-            0, 3
-        };
-        expectedWordTfByDocument[wordIndices.get("test")] = new int []
-        {
-            0, 2
-        };
-        expectedWordTfByDocument[wordIndices.get("simple")] = new int []
-        {
-            0, 1
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0, 1
-            },
-            {
-                0, 1
-            },
-            {
-                0
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(ctx).containsWord("a").withTf(3).withFieldIndices(0, 1).withDocumentTf(0, 3);
+        assertThat(ctx).containsWord("simple").withTf(1).withFieldIndices(0).withDocumentTf(0, 1);
+        assertThat(ctx).containsWord("test").withTf(2).withFieldIndices(0, 1).withDocumentTf(0, 2);
+        assertThat(ctx.allWords.image.length).isEqualTo(3);
     }
 
     @Test
     public void testOneTokenVariantEqualFrequencies()
     {
-        createDocuments("abc abc ABC aBc");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("abc abc ABC aBc")
+            .buildContext();
 
-        char [][] expectedWordImages = new char [] []
-        {
-            "abc".toCharArray()
-        };
-
-        int [] expectedWordTf = new int []
-        {
-            4
-        };
-
-        int [] expectedWordIndices = new int []
-        {
-            0, 0, 0, 0, -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [] []
-        {
-            {
-                0, 4
-            }
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(ctx).containsWord("abc").withTf(4).withFieldIndices(0).withDocumentTf(0, 4);
+        assertThat(ctx.allWords.image.length).isEqualTo(1);
+        
+        assertThat(tokens(ctx)).onProperty("wordImage").containsExactly(
+            "abc", "abc", "abc", "abc", EOS);
     }
 
     @Test
     public void testDemos()
     {
-        createDocuments("demo demo demos demos DEMO DEMOs Demo Demos");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("demo demo demos demos DEMO DEMOs Demo Demos")
+            .buildContext();
 
-        char [][] expectedWordImages = createExpectedWordImages(new String []
-        {
-            "demo", "demos"
-        });
+        assertThat(ctx).containsWord("demo")
+            .withTf(4).withFieldIndices(0).withDocumentTf(0, 4);
+        assertThat(ctx).containsWord("demos")
+            .withTf(4).withFieldIndices(0).withDocumentTf(0, 4);
 
-        int [] expectedWordTf = new int []
-        {
-            4, 4
-        };
+        assertThat(ctx.allWords.image.length).isEqualTo(2);
 
-        int [] expectedWordIndices = new int []
-        {
-            wordIndices.get("demo"), wordIndices.get("demo"), wordIndices.get("demos"),
-            wordIndices.get("demos"), wordIndices.get("demo"), wordIndices.get("demos"),
-            wordIndices.get("demo"), wordIndices.get("demos"), -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [] []
-        {
-            {
-                0, 4
-            },
-
-            {
-                0, 4
-            }
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0
-            },
-            {
-                0
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(tokens(ctx)).onProperty("wordImage").containsExactly(
+            "demo", "demo", "demos", "demos", "demo", "demos", "demo", "demos", EOS);
     }
 
     @Test
     public void testOneTokenVariantNonequalFrequencies()
     {
-        createDocuments("abc ABC ABC aBc aBc ABC");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("abc ABC ABC aBc aBc ABC")
+            .buildContext();
 
-        char [][] expectedWordImages = new char [] []
-        {
-            "ABC".toCharArray()
-        };
-
-        int [] expectedWordTf = new int []
-        {
-            6
-        };
-
-        int [] expectedWordIndices = new int []
-        {
-            0, 0, 0, 0, 0, 0, -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [] []
-        {
-            {
-                0, 6
-            }
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(ctx).containsWord("ABC")
+            .withTf(6).withFieldIndices(0).withDocumentTf(0, 6);
     }
 
     @Test
     public void testMoreTokenVariants()
     {
-        createDocuments("abc bcd ABC bcD ABC efg", "aBc aBc ABC BCD bcd bcd");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("abc bcd ABC bcD ABC efg", "aBc aBc ABC BCD bcd bcd")
+            .buildContext();
 
-        char [][] expectedWordImages = createExpectedWordImages(new String []
-        {
-            "ABC", "bcd", "efg"
-        });
+        assertThat(ctx).containsWord("ABC")
+            .withTf(6).withFieldIndices(0, 1).withDocumentTf(0, 6);
+        assertThat(ctx).containsWord("bcd")
+            .withTf(5).withFieldIndices(0, 1).withDocumentTf(0, 5);
+        assertThat(ctx).containsWord("efg")
+            .withTf(1).withFieldIndices(0).withDocumentTf(0, 1);
 
-        int [] expectedWordTf = new int [3];
-        expectedWordTf[wordIndices.get("ABC")] = 6;
-        expectedWordTf[wordIndices.get("bcd")] = 5;
-        expectedWordTf[wordIndices.get("efg")] = 1;
-
-        int [] expectedWordIndices = new int []
-        {
-            wordIndices.get("ABC"), wordIndices.get("bcd"), wordIndices.get("ABC"),
-            wordIndices.get("bcd"), wordIndices.get("ABC"), wordIndices.get("efg"), -1,
-            wordIndices.get("ABC"), wordIndices.get("ABC"), wordIndices.get("ABC"),
-            wordIndices.get("bcd"), wordIndices.get("bcd"), wordIndices.get("bcd"), -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [3] [];
-        expectedWordTfByDocument[wordIndices.get("ABC")] = new int []
-        {
-            0, 6
-        };
-        expectedWordTfByDocument[wordIndices.get("bcd")] = new int []
-        {
-            0, 5
-        };
-        expectedWordTfByDocument[wordIndices.get("efg")] = new int []
-        {
-            0, 1
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0, 1
-            },
-            {
-                0, 1
-            },
-            {
-                0
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(tokens(ctx)).onProperty("wordImage").containsExactly(
+            "ABC", "bcd", "ABC", "bcd", "ABC", "efg", FS,
+            "ABC", "ABC", "ABC", "bcd", "bcd", "bcd", EOS);
     }
 
     @Test
     public void testDfThresholding()
     {
-        caseNormalizer.dfThreshold = 2;
-        createDocuments("a b c", "d e f", "a c", "a");
+        PreprocessingContext ctx = contextBuilder
+            .setAttribute(AttributeUtils.getKey(CaseNormalizer.class, "dfThreshold"), 2)
+            .newDoc("a b c", "d e f")
+            .newDoc("a c", "a")
+            .buildContext();
 
-        char [][] expectedWordImages = createExpectedWordImages(new String []
-        {
-            "a", "c"
-        });
+        assertThat(ctx).containsWord("a")
+            .withTf(3).withFieldIndices(0, 1)
+            .withExactDocumentTfs(new int [][] {{0, 1}, {1, 2}});
+        assertThat(ctx).containsWord("c")
+            .withTf(2).withFieldIndices(0)
+            .withExactDocumentTfs(new int [][] {{0, 1}, {1, 1}});
 
-        int [] expectedWordTf = new int [2];
-        expectedWordTf[wordIndices.get("a")] = 3;
-        expectedWordTf[wordIndices.get("c")] = 2;
+        assertThat(ctx.allWords.image.length).isEqualTo(2);
 
-        int [] expectedWordIndices = new int []
-        {
-            wordIndices.get("a"), -1, wordIndices.get("c"), -1, -1, -1, -1, -1,
-            wordIndices.get("a"), wordIndices.get("c"), -1, wordIndices.get("a"), -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [2] [];
-        expectedWordTfByDocument[wordIndices.get("a")] = new int []
-        {
-            0, 1, 1, 2
-        };
-        expectedWordTfByDocument[wordIndices.get("c")] = new int []
-        {
-            0, 1, 1, 1
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0, 1
-            },
-            {
-                0
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(tokens(ctx)).onProperty("wordImage").containsExactly(
+            "a", MW, "c", FS, MW, MW, MW, DS,
+            "a", "c", FS, "a", EOS);
     }
-
+    
     @Test
     public void testTokenFiltering()
     {
-        createDocuments("a . b ,", "a . b ,");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("a . b ,", "a . b ,")
+            .buildContext();
 
-        char [][] expectedWordImages = createExpectedWordImages(new String []
-        {
-            "a", "b"
-        });
+        assertThat(ctx).containsWord("a")
+            .withTf(2).withFieldIndices(0, 1).withDocumentTf(0, 2);
+        assertThat(ctx).containsWord("b")
+            .withTf(2).withFieldIndices(0, 1).withDocumentTf(0, 2);
 
-        int [] expectedWordTf = new int []
-        {
-            2, 2
-        };
+        assertThat(ctx.allWords.image.length).isEqualTo(2);
 
-        int [] expectedWordIndices = new int []
-        {
-            wordIndices.get("a"), -1, wordIndices.get("b"), -1, -1, wordIndices.get("a"),
-            -1, wordIndices.get("b"), -1, -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [] []
-        {
-            {
-                0, 2
-            },
-
-            {
-                0, 2
-            }
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0, 1
-            },
-            {
-                0, 1
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(tokens(ctx)).onProperty("wordImage").containsExactly(
+            "a", MW, "b", MW, FS, 
+            "a", MW, "b", MW, EOS);
     }
 
     @Test
     public void testPunctuation()
     {
-        createDocuments("aba . , aba", ", .");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("aba . , aba", ", .")
+            .buildContext();
 
-        char [][] expectedWordImages = new char [] []
-        {
-            "aba".toCharArray()
-        };
+        assertThat(ctx).containsWord("aba")
+            .withTf(2).withFieldIndices(0).withDocumentTf(0, 2);
+        assertThat(ctx.allWords.image.length).isEqualTo(1);
 
-        int [] expectedWordTf = new int []
-        {
-            2
-        };
-
-        int [] expectedWordIndices = new int []
-        {
-            0, -1, -1, 0, -1, -1, -1, -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [] []
-        {
-            {
-                0, 2
-            }
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(tokens(ctx)).onProperty("wordImage").containsExactly(
+            "aba", MW, MW, "aba", FS, 
+            MW, MW, EOS);
     }
 
     @Test
     public void testMoreDocuments()
     {
-        createDocuments(null, "ABC abc", "bcd", "BCD", "ABC", "BCD", "def DEF DEF", "DEF");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc(null, "ABC abc")
+            .newDoc("bcd", "BCD")
+            .newDoc("ABC", "BCD")
+            .newDoc("def DEF DEF", "DEF")
+            .buildContext();
 
-        char [][] expectedWordImages = createExpectedWordImages(new String []
-        {
-            "DEF", "ABC", "BCD"
-        });
+        assertThat(ctx).containsWord("ABC")
+            .withTf(3).withFieldIndices(0, 1)
+            .withExactDocumentTfs(new int [][] {{0, 2}, {2, 1}});
+        assertThat(ctx).containsWord("BCD")
+            .withTf(3).withFieldIndices(0, 1)
+            .withExactDocumentTfs(new int [][] {{1, 2}, {2, 1}});
+        assertThat(ctx).containsWord("DEF")
+            .withTf(4).withFieldIndices(0, 1)
+            .withDocumentTf(3, 4);
+        assertThat(ctx.allWords.image.length).isEqualTo(3);
 
-        int [] expectedWordTf = new int [3];
-        expectedWordTf[wordIndices.get("DEF")] = 4;
-        expectedWordTf[wordIndices.get("ABC")] = 3;
-        expectedWordTf[wordIndices.get("BCD")] = 3;
-
-        int [] expectedWordIndices = new int []
-        {
-            wordIndices.get("ABC"), wordIndices.get("ABC"), -1,
-
-            wordIndices.get("BCD"), -1, wordIndices.get("BCD"), -1,
-
-            wordIndices.get("ABC"), -1, wordIndices.get("BCD"), -1,
-
-            wordIndices.get("DEF"), wordIndices.get("DEF"), wordIndices.get("DEF"), -1,
-            wordIndices.get("DEF"), -1,
-        };
-
-        int [][] expectedWordTfByDocument = new int [3] [];
-        expectedWordTfByDocument[wordIndices.get("ABC")] = new int []
-        {
-            0, 2, 2, 1
-        };
-        expectedWordTfByDocument[wordIndices.get("BCD")] = new int []
-        {
-            1, 2, 2, 1
-        };
-        expectedWordTfByDocument[wordIndices.get("DEF")] = new int []
-        {
-            3, 4
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0, 1
-            },
-            {
-                0, 1
-            },
-            {
-                0, 1
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(tokens(ctx)).onProperty("wordImage").containsExactly(
+            "ABC", "ABC", DS,
+            "BCD", FS, "BCD", DS,
+            "ABC", FS, "BCD", DS,
+            "DEF", "DEF", "DEF", FS, "DEF", EOS);
     }
 
     @Test
     public void testPunctuationTokenFirst()
     {
-        createDocuments("aa", "bb", "", "bb . cc", "", "aa . cc . cc");
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("aa", "bb")
+            .newDoc("", "bb . cc")
+            .newDoc("", "aa . cc . cc")
+            .buildContext();
 
-        char [][] expectedWordImages = createExpectedWordImages(new String []
-        {
-            "aa", "bb", "cc"
-        });
-
-        int [] expectedWordTf = new int [3];
-        expectedWordTf[wordIndices.get("aa")] = 2;
-        expectedWordTf[wordIndices.get("bb")] = 2;
-        expectedWordTf[wordIndices.get("cc")] = 3;
-
-        int [] expectedWordIndices = new int []
-        {
-            wordIndices.get("aa"), -1, wordIndices.get("bb"), -1,
-
-            wordIndices.get("bb"), -1, wordIndices.get("cc"), -1,
-
-            wordIndices.get("aa"), -1, wordIndices.get("cc"), -1, wordIndices.get("cc"),
-            -1
-        };
-
-        int [][] expectedWordTfByDocument = new int [3] [];
-        expectedWordTfByDocument[wordIndices.get("aa")] = new int []
-        {
-            0, 1, 2, 1
-        };
-        expectedWordTfByDocument[wordIndices.get("bb")] = new int []
-        {
-            0, 1, 1, 1
-        };
-        expectedWordTfByDocument[wordIndices.get("cc")] = new int []
-        {
-            1, 1, 2, 2
-        };
-        byte [][] expectedFieldIndex = new byte [] []
-        {
-            {
-                0, 1
-            },
-            {
-                1
-            },
-            {
-                1
-            }
-        };
-
-        check(expectedWordImages, expectedWordTf, expectedWordIndices,
-            expectedWordTfByDocument, expectedFieldIndex,
-            createTermTokenTypes(expectedWordImages.length));
+        assertThat(ctx).containsWord("aa")
+            .withTf(2).withFieldIndices(0, 1)
+            .withExactDocumentTfs(new int [][] {{0, 1}, {2, 1}});
+        assertThat(ctx).containsWord("bb")
+            .withTf(2).withFieldIndices(1)
+            .withExactDocumentTfs(new int [][] {{0, 1}, {1, 1}});
+        assertThat(ctx).containsWord("cc")
+            .withTf(3).withFieldIndices(1)
+            .withExactDocumentTfs(new int [][] {{1, 1}, {2, 2}});
+        assertThat(ctx.allWords.image.length).isEqualTo(3);
     }
 
-    protected char [][] createExpectedWordImages(String [] wordImages)
-    {
-        char [][] expectedWordImages = new char [wordImages.length] [];
-        for (int i = 0; i < wordImages.length; i++)
-        {
-            expectedWordImages[wordIndices.get(wordImages[i])] = wordImages[i]
-                .toCharArray();
-        }
-        return expectedWordImages;
-    }
-
-    private void check(char [][] expectedWordImages, int [] expectedWordTf,
-        int [] expectedWordIndices, int [][] expectedWordTfByDocument,
-        byte [][] expectedFieldIndex, short [] expectedType)
-    {
-        tokenizer.tokenize(context);
-        caseNormalizer.normalize(context);
-
-        assertThat(context.allTokens.wordIndex).as("allTokens.wordIndices").isEqualTo(
-            expectedWordIndices);
-        assertThat(context.allWords.image).as("allWords.images").isEqualTo(
-            expectedWordImages);
-        assertThat(context.allWords.tf).as("allWords.tf").isEqualTo(expectedWordTf);
-        assertThat(context.allWords.tfByDocument).as("allWords.tfByDocument").isEqualTo(
-            expectedWordTfByDocument);
-        assertThat(context.allWords.fieldIndices).as("allWords.fieldIndex").isEqualTo(
-            flattenToBits(expectedFieldIndex));
-        assertThat(context.allWords.type).as("allWords.type").isEqualTo(expectedType);
-    }
-
-    public static byte [] flattenToBits(byte [][] expectedFieldIndex)
-    {
-        byte [] result = new byte [expectedFieldIndex.length];
-        for (int i = 0; i < result.length; i++)
-        {
-            byte b = 0;
-            for (byte v : expectedFieldIndex[i])
-            {
-                b |= (1 << v);
-            }
-            result[i] = b;
-        }
-        return result;
-    }
-
-    @Override
-    protected void beforePrepareWordIndices(Tokenizer temporaryTokenizer,
-        CaseNormalizer temporaryCaseNormalizer)
-    {
-        temporaryCaseNormalizer.dfThreshold = caseNormalizer.dfThreshold;
-    }
-
-    private short [] createTermTokenTypes(int count)
-    {
-        final short [] result = new short [count];
-        Arrays.fill(result, (short) ITokenizer.TT_TERM);
-        return result;
-    }
+    // @formatter:on
 }
+

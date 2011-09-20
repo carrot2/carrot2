@@ -51,12 +51,12 @@ public class SimpleLabelAssigner implements ILabelAssigner
         double [] candidatePhraseScores = new double [desiredClusterCount];
 
         MatrixUtils.maxInColumns(stemCos, candidateStemIndices, candidateStemScores,
-            Functions.abs);
+            Functions.ABS);
 
         if (phraseCos != null)
         {
             MatrixUtils.maxInColumns(phraseCos, candidatePhraseIndices,
-                candidatePhraseScores, Functions.abs);
+                candidatePhraseScores, Functions.ABS);
         }
 
         // Choose between single words and phrases for each base vector

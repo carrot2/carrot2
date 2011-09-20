@@ -218,7 +218,7 @@ public class ClusterBuilder
         if (phraseMatrix != null)
         {
             // Build raw cosine similarities
-            phraseCos = phraseMatrix.zMult(reducedTdMatrix, null);
+            phraseCos = phraseMatrix.zMult(reducedTdMatrix, null, 1, 0, false, false);
 
             // Apply phrase weighting
             if (phraseLengthPenaltyStop < phraseLengthPenaltyStart)
