@@ -349,7 +349,7 @@ public final class PreprocessingContext
                     image[i] == null ? "<null>" : new String(image[i]),
                     type[i],
                     tf[i],
-                    SparseArray.sparseToString(tfByDocument[i]).toString());
+                    SparseArray.sparseToString(tfByDocument[i]));
 
                 t.rowData(Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
 
@@ -446,7 +446,7 @@ public final class PreprocessingContext
                     mostFrequentOriginalWordIndex[i],
                     allWords.image[mostFrequentOriginalWordIndex[i]],
                     tf[i],
-                    SparseArray.sparseToString(tfByDocument[i]).toString(),
+                    SparseArray.sparseToString(tfByDocument[i]),
                     Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
             }
 
@@ -511,7 +511,7 @@ public final class PreprocessingContext
                     Arrays.toString(wordIndices[i]).replace(" ", ""),
                     getPhrase(i),
                     tf[i],
-                    SparseArray.sparseToString(tfByDocument[i]).toString());
+                    SparseArray.sparseToString(tfByDocument[i]));
             }
 
             return t.toString();
@@ -527,7 +527,15 @@ public final class PreprocessingContext
                 sb.append(new String(allWords.image[wordIndices[index][i]]));
             }
             return sb;
-        }        
+        }
+        
+        /**
+         * Returns length of all arrays in this {@link AllPhrases}.
+         */
+        public int size()
+        {
+            return wordIndices.length;
+        }
     }
 
     /**

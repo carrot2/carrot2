@@ -1,13 +1,20 @@
 package org.carrot2.text.preprocessing;
 
-import org.fest.assertions.Assertions;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.carrot2.text.analysis.TokenTypeUtils;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllPhrases;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.util.CharArrayComparators;
+import org.carrot2.util.IntMapUtils;
+import org.fest.assertions.Assertions;
 import org.fest.util.Strings;
 
+import com.carrotsearch.hppc.IntIntOpenHashMap;
+import com.carrotsearch.hppc.procedures.IntIntProcedure;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -519,5 +526,61 @@ nextPhrase:
     public TokenAssert tokenAt(int tokenIndex)
     {
         return new TokenAssert(tokenIndex);
+    }
+
+
+    /**
+     * Make sure term frequencies and 
+     */
+    public void phraseTfsCorrect()
+    {
+        // for each discovered phrase, do manual count and verify if tf and tfByDocument are correct.
+        AllPhrases allPhrases = context.allPhrases;
+        for (int index = 0; index < allPhrases.size(); index++)
+        {
+            IntIntOpenHashMap realTfByDocuments = countManually(context, allPhrases.wordIndices[index]);
+            final int realTf = realTfByDocuments.forEach(new IntIntProcedure()
+            {
+                int tf;
+                public void apply(int key, int value)
+                {
+                    tf += value;
+                }
+            }).tf;
+
+            Assertions.assertThat(allPhrases.tf[index]).as("Phrase: " + allPhrases.getPhrase(index))
+                .isEqualTo(realTf);
+            
+            // Phrase extractor does not sort the byDocumentTf, so we need to addAllFromFlattened
+            // to a map and then flatten with sorting.
+            Assertions
+                .assertThat(
+                    IntMapUtils.flattenSortedByKey(IntMapUtils.addAllFromFlattened(
+                        new IntIntOpenHashMap(), allPhrases.tfByDocument[index])))
+                .as("Phrase: " + allPhrases.getPhrase(index))
+                .isEqualTo(IntMapUtils.flattenSortedByKey(realTfByDocuments));
+        }
+    }
+
+    /**
+     * Manually and naively count doc->tf for the given word sequence.
+     */
+    private IntIntOpenHashMap countManually(PreprocessingContext context, int [] phraseWordIndices)
+    {
+        IntIntOpenHashMap tfByDoc = new IntIntOpenHashMap();
+        AllTokens allTokens = context.allTokens;
+outer:
+        for (int i = allTokens.wordIndex.length - phraseWordIndices.length; --i >=0 ;)
+        {
+            for (int j = 0; j < phraseWordIndices.length; j++)
+            {
+                int wordInPhrase = phraseWordIndices[j];
+                int wordInTokens = allTokens.wordIndex[i + j];
+                if (wordInPhrase != wordInTokens)
+                    continue outer;
+            }
+            tfByDoc.putOrAdd(allTokens.documentIndex[i], 1, 1);
+        }
+        return tfByDoc;
     }
 }
