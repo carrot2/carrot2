@@ -66,7 +66,7 @@ public class MemTimeBenchmark
     public static class ResponseWrapper
     {
         @ElementList(inline = true, required = false)
-        private List<Document> documents;
+        public List<Document> documents;
     }
 
     /**
