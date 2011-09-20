@@ -31,17 +31,19 @@
         <matches pattern="1\.4" string="@{solr.version}"/>
       </condition>
 
-      <!-- Update Carrot2 JAR and Mahout -->
+      <!-- Update Carrot2 JAR, HPPC, Mahout -->
       <delete>
         <fileset dir="@{solr.checkout}/contrib/clustering/lib">
           <include name="carrot2*.jar" />
           <include name="mahout*.jar" />
+          <include name="hppc*.jar" />
         </fileset>
       </delete>
       <copy file="${jar.dir}/carrot2-core-${carrot2.version}.jar" todir="@{solr.checkout}/contrib/clustering/lib" />
       <copy todir="@{solr.checkout}/contrib/clustering/lib">
         <fileset dir="${api.dir}/lib/required">
           <include name="mahout*.jar" />
+          <include name="hppc*.jar" />
         </fileset>
       </copy>
 
