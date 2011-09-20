@@ -49,7 +49,7 @@ public final class PreprocessingContext
      * Token interning cache. Token images are interned to save memory and allow reference
      * comparisons.
      */
-    private ObjectOpenHashSet<MutableCharArray> tokenCache = new ObjectOpenHashSet<MutableCharArray>();
+    private ObjectOpenHashSet<MutableCharArray> tokenCache = ObjectOpenHashSet.newInstance();
 
     /**
      * Creates a preprocessing context for the provided <code>documents</code> and with

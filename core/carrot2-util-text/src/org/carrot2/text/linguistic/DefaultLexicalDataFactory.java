@@ -140,7 +140,7 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     private static HashMap<LanguageCode, ILexicalData> reloadResources(ResourceLookup resourceLookup)
     {
         // Load lexical resources.
-        ObjectOpenHashSet<MutableCharArray> mergedStopwords = ObjectOpenHashSet.from();
+        ObjectOpenHashSet<MutableCharArray> mergedStopwords = ObjectOpenHashSet.newInstance();
         ArrayList<Pattern> mergedStoplabels = Lists.newArrayList();
 
         HashMap<LanguageCode, ILexicalData> resourceMap = Maps.newHashMap();
