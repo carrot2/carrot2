@@ -18,6 +18,14 @@
     <title>Stable release procedure</title>
     
     <para>
+      <important>
+        <para>
+        The release procedure needs to be revised for git!
+        </para>
+      </important>
+    </para>
+    
+    <para>
       Each &C2; release should be performed according to the following procedure:
     </para>
     
@@ -343,38 +351,42 @@ carrot2.version.workbench=3.3.0.dev-snapshot]]></programlisting>
     </variablelist>
 
     <para>
-      The SVN repository is organized so that the <varname>trunk</varname> tracks the development
-      of the next <emphasis>major revision</emphasis>, with branches tracking minor revisions
+      The git repository is organized so that the <varname>master</varname> branch tracks the development
+      of the next <emphasis>major revision</emphasis>. Bugfix branches track minor revisions
       of already shipped versions. A constant tag is created for each shipped version. Branch
       and tag names follow the naming conventions below.
     </para>
 
     <variablelist>
       <varlistentry>
-        <term>branches/X.Y.Z</term>
-        <listitem><para>A branch named <varname>X.Y.Z</varname> tracks the product shipped as
-        <varname>X.Y.?</varname>, where the <varname>Z</varname> component is the next 
-        minor release to be shipped from this branch. Once shipped, a tag should
-        be created, the branch should be removed and a new branch (with an increased number) 
-        should be created. This should prevent proliferation of branches and accidental commits
-        on already shipped branches.
-        </para></listitem>
-      </varlistentry>
-  
-      <varlistentry>
-        <term>tags/X.Y.Z</term>
-        <listitem><para>A tag named <varname>X.Y.Z</varname> should be created for
-        exactly that development branch at the time of shipment. No changes to tags
-        should be allowed.</para></listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term>trunk</term>
-        <listitem><para>The trunk is equivalent to the next major software revision
+        <term>master</term>
+        <listitem><para>The master branch is equivalent to the next major software revision
         being developed and is not numbered explicitly, but corresponds to
         branch <varname>vX.Y.0</varname>, where <varname>Y</varname> is
         the next major revision to be shipped. It is possible to create a minor release
         off the trunk directly if the commit log only includes bug fixes.</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>stable</term>
+        <listitem><para>Stable branch tracks the latest stable release. It is a moving branch that
+        shifts over all released versions.</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>bugfix/X.Y.Z</term>
+        <listitem><para>A branch named <varname>bugfix/X.Y.z</varname> tracks the product shipped as
+        <varname>X.Y.z</varname>, where the <varname>z</varname> component is the next 
+        minor release to be shipped from this branch. Once shipped, a tag should
+        be created.
+        </para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>release/X.Y.Z</term>
+        <listitem><para>A tag named <varname>release/X.Y.Z</varname> should be created for
+        exactly that development branch at the time of shipment. No changes to tags
+        should be allowed.</para></listitem>
       </varlistentry>
     </variablelist>
   </section>

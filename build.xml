@@ -932,7 +932,6 @@
   -->
   <target name="workbench.plugins.gather" depends="carrot2.common.antlib.tasks, pde.build.prepare">
     <patternset id="temporary.files">
-      <exclude name="**/.svn/**" />
       <exclude name="**/tmp/**" />
       <exclude name="**/.clover/**" />
       <exclude name="**/build-conf/**" />
@@ -1240,7 +1239,6 @@
       <exclude name="**/*.utf16.xml" />
       <exclude name="**/tmp/**" />
       <exclude name="**/.git/**" />
-      <exclude name="**/.svn/**" />
     </patternset>
 
     <patternset id="fix-line-endings-unix">

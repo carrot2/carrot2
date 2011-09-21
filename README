@@ -1,0 +1,23 @@
+
+Carrot2 is an Open Source Search Results Clustering Engine. It can automatically organize small collections of documents, e.g. search results, into thematic categories.
+
+More info
+---------
+
+http://project.carrot2.org
+
+Code
+---------
+
+We host the source code at github now.
+  https://github.com/carrot2/carrot2
+or
+  git clone git://github.com/carrot2/carrot2.git
+
+
+Mailing list
+---------
+
+carrot2-developers@lists.sourceforge.net
+
+[mailing test]
