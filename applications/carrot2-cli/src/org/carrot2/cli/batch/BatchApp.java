@@ -146,7 +146,7 @@ public class BatchApp
         // Prepare the algorithm
         if (StringUtils.isBlank(algorithm))
         {
-            // Set some default for the algorithm
+            // Set the first algorithm as the default.
             algorithm = algorithms.get(0).getId();
         }
         else
@@ -154,7 +154,7 @@ public class BatchApp
             // Check if the provided algorithm is valid
             try
             {
-                ReflectionUtils.classForName(algorithm);
+                ReflectionUtils.classForName(algorithm, false);
             }
             catch (ClassNotFoundException ignored)
             {
