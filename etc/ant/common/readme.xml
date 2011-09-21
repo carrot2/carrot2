@@ -7,20 +7,9 @@
     <attribute name="readme.dest" />
     <attribute name="readme.src" />
     <attribute name="buildinfo.src" />
-    <element name="svninfos" />
     <element name="filters" />
 
     <sequential>
-      <typedef resource="org/tigris/subversion/svnant/svnantlib.xml">
-        <classpath>
-          <fileset dir="${carrot2.master.basedir}/etc/svnant" includes="*.jar" />
-        </classpath>
-      </typedef> 
-     
-      <svn javahl="false" failonerror="false">
-        <svninfos />
-      </svn>
-
       <mkdir dir="${carrot2.master.basedir}/tmp/readme" />
       <concat destfile="${carrot2.master.basedir}/tmp/readme/readme.txt">
         <fileset file="@{readme.src}" />
@@ -31,7 +20,22 @@
         <format property="build.date" pattern="yyyy-MM-dd HH:mm:ss" />
         <format property="current.year" pattern="yyyy" />
       </tstamp>
+      
+      <exec executable="git" dir="${carrot2.master.basedir}" 
+            outputproperty="git.verhash"
+            failonerror="false"
+            failifexecutionfails="false"
+            vmlauncher="false">
+            <arg line="log -1 --pretty=format:%H" />
+      </exec>
 
+      <property name="git.verhash" value="[unset]" />
+      <property name="build.key" value="[unset]" />
+      <property name="build.number" value="[unset]" />
+      <property name="build.date" value="[unset]" />
+      <property name="user.name" value="[unset]" />
+      <property name="current.year" value="[unset]" />
+      
       <copy file="${carrot2.master.basedir}/tmp/readme/readme.txt" tofile="@{readme.dest}" 
             filtering="yes" overwrite="true">
         <filterset>
@@ -50,7 +54,7 @@
 
   <!--
        Custom invocation of carrot2.common.readme.process 
-       with Carrot2-specific SVN paths.
+       with Carrot2-specific paths.
     -->
   <macrodef name="carrot2.readme">
     <attribute name="readme.dest" />
@@ -60,13 +64,9 @@
     <sequential>
       <carrot2.common.readme.process readme.dest="@{readme.dest}" readme.src="@{readme.src}" 
                                      buildinfo.src="${carrot2.master.basedir}/etc/buildinfo/build.info">
-        <svninfos>
-          <info propPrefix="carrot2.svn.info" target="${carrot2.master.basedir}" />
-        </svninfos>
-
         <filters>
           <filter token="carrot2.version" value="${carrot2.version}" />
-          <filter token="carrot2.rev" value="${carrot2.svn.info.rev}" />
+          <filter token="carrot2.rev" value="${git.verhash}" />
           <carrot2.filters />
         </filters>
       </carrot2.common.readme.process>
