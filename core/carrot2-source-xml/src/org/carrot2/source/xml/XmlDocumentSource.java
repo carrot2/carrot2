@@ -24,8 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.util.resource.*;
 
 import com.google.common.collect.*;
@@ -77,6 +76,10 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     {
         FileResource.class, URLResourceWithParams.class, URLResource.class
     }, strict = false)
+    @ResourceNameFilters(filters = {
+        @ResourceNameFilter(pattern = "*.xml;*.XML", description = "XML files"),
+        @ResourceNameFilter(pattern = "*.*", description = "All files")
+    })
     public IResource xml;
 
     /**
@@ -108,6 +111,10 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     {
         FileResource.class, URLResourceWithParams.class, URLResource.class
     }, strict = false)
+    @ResourceNameFilters(filters = {
+        @ResourceNameFilter(pattern = "*.xsl;*.xslt;*.XSL;*.XSLT", description = "XML stylesheets"),
+        @ResourceNameFilter(pattern = "*.*", description = "All files")
+    })
     public IResource xslt;
 
     /**

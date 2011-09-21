@@ -15,9 +15,12 @@ package org.carrot2.workbench.editors.impl;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.carrot2.util.attribute.constraint.ResourceNameFilter;
+import org.carrot2.util.attribute.constraint.ResourceNameFilters;
 import org.carrot2.util.resource.*;
 import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.GUIFactory;
@@ -31,6 +34,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
+
+import com.google.common.collect.Lists;
 
 /**
  * Editor for attributes that are of {@link IResource} type.
@@ -51,6 +56,11 @@ public class ResourceEditor extends AttributeEditorAdapter
      * The actual resource (most recent valid value or <code>null</code>).
      */
     private IResource resource = null;
+
+    /**
+     * Resource name filters.
+     */
+    private ResourceNameFilter [] filters;
 
     /*
      * Validator for URIs.
@@ -83,6 +93,10 @@ public class ResourceEditor extends AttributeEditorAdapter
     @Override
     protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
+        if (descriptor.getAnnotation(ResourceNameFilters.class) != null)
+        {
+            filters = descriptor.getAnnotation(ResourceNameFilters.class).filters();
+        }
         return new AttributeEditorInfo(1, false);
     }
 
@@ -172,14 +186,26 @@ public class ResourceEditor extends AttributeEditorAdapter
     private void openFileResourceDialog()
     {
         final FileDialog dialog = new FileDialog(this.resourceInfo.getShell());
-        dialog.setFilterExtensions(new String []
+        
+        java.util.List<String> patterns = Lists.newArrayList();
+        java.util.List<String> names = Lists.newArrayList();
+        if (filters != null)
         {
-            "*.xml;*.XML", "*.*"
-        });
-        dialog.setFilterNames(new String []
+            for (ResourceNameFilter f : filters)
+            {
+                patterns.add(f.pattern());
+                names.add(f.description());
+            }
+        }
+        else
         {
-            "XML files", "All"
-        });
+            // Backwards compatibility.
+            patterns.addAll(Arrays.asList("*.xml;*.XML", "*.*"));
+            names.addAll(Arrays.asList("XML files", "All"));
+        }
+
+        dialog.setFilterExtensions(patterns.toArray(new String [patterns.size()]));
+        dialog.setFilterNames(names.toArray(new String [names.size()]));
 
         if (this.resource != null && resource instanceof FileResource)
         {
