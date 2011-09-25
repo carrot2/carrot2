@@ -1,7 +1,6 @@
 # we need the same value in a property with a unique name for website build
-carrot2.version.head=3.6.0-dev
+carrot2.version=3.6.0-dev
 carrot2.version.maven=3.6.0-SNAPSHOT
-carrot2.version=${carrot2.version.head}
 carrot2.net.version=3.6.0.0
 
 # workbench plugin/ feature versions.
