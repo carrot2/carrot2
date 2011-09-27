@@ -977,7 +977,6 @@
 
       <filterchain id="workbench.version.filterchain">
         <replacestring from="0.0.0.QUALIFIER"   to="${carrot2.version.workbench}"/>
-        <!-- Should we keep all these token values in one place somewhere? -->
         <replacestring from="@carrot2.version@" to="${carrot2.version}" />
       </filterchain>
     </copy>
