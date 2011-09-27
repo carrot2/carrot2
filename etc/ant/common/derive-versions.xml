@@ -10,6 +10,8 @@
   <macrodef name="derive-versions">
     <attribute name="prefix" />
       <sequential>
+        <fail message="Property not set: build.tstamp" unless="build.tstamp" />
+
         <fail message="Invalid @{prefix}.version format: ${@{prefix}.version}">
           <condition>
             <not>

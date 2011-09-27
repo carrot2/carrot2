@@ -43,7 +43,6 @@
   <!-- Derive version numbers for other components. -->
   <import file="${carrot2.master.basedir}/etc/ant/common/derive-versions.xml" />
   <derive-versions prefix="carrot2" />
-  <print-versions  prefix="carrot2" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />
@@ -653,6 +652,9 @@
           force="true" />
   </target>
 
+  <target name="version" description="Prints version number.">
+    <print-versions  prefix="carrot2" />
+  </target>
   
   <!-- 
        Build core JAR.
