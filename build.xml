@@ -6,16 +6,27 @@
 
   <!-- Basedir relative to this build file -->
   <dirname property="carrot2.master.basedir" file="${ant.file.carrot2.master}"/>
-  
+
+  <tstamp>
+    <format property="build.tstamp" pattern="yyyyMMddHHmmss" />
+  </tstamp>
+
   <!-- Tmp dir -->
   <property name="tmp.dir" location="tmp" />
   
   <!-- Directory with flattened lib files, to be visible in imported scripts -->
   <property name="lib.flattened" location="${tmp.dir}/lib" />
 
+  <!-- ant contrib -->
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath>
+      <fileset dir="${carrot2.master.basedir}/etc/ant/" includes="ant-contrib-*.jar" />
+    </classpath>
+  </taskdef>
+  
   <!-- Import local properties and version -->
   <property file="${carrot2.master.basedir}/local.properties" />
-  <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
+  <property file="${carrot2.master.basedir}/carrot2.version" />
   <property file="${carrot2.master.basedir}/etc/version/carrot2.basenames" />
 
   <!-- Import other build scripts. -->
@@ -28,6 +39,11 @@
   <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/readme.xml" />
   <import file="${carrot2.master.basedir}/workbench/build-conf/build.xml" />
+  
+  <!-- Derive version numbers for other components. -->
+  <import file="${carrot2.master.basedir}/etc/ant/common/derive-versions.xml" />
+  <derive-versions prefix="carrot2" />
+  <print-versions  prefix="carrot2" />
 
   <!-- Source code and lib dirs -->
   <property name="core.dir" location="${carrot2.master.basedir}/core" />
