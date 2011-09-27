@@ -27,11 +27,11 @@
         <if>
           <contains string="${@{prefix}.version}" substring="-SNAPSHOT" />
           <then>
-            <propertyregex property="@{prefix}.version.net" input="${@{prefix}.version}" regexp="([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?" select="\1.${build.tstamp}" />          
+            <propertyregex property="@{prefix}.version.net" input="${@{prefix}.version}" regexp="([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?" select="\1.0" />
             <propertyregex property="@{prefix}.version.workbench" input="${@{prefix}.version}" regexp="([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?" select="\1.S${build.tstamp}" />
           </then>
           <else>
-            <propertyregex property="@{prefix}.version.net" input="${@{prefix}.version}" regexp="([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?" select="\1.0" />          
+            <propertyregex property="@{prefix}.version.net" input="${@{prefix}.version}" regexp="([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?" select="\1.0" />
             <propertyregex property="@{prefix}.version.workbench" input="${@{prefix}.version}" regexp="([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?" select="\1.0" />
           </else>
         </if>
