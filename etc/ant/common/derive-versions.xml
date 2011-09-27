@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="carrot2.common.derive-versions">
+  <macrodef name="print-versions">
+    <attribute name="prefix" />
+      <sequential>
+        <echo>Version: ${@{prefix}.version}, .NET: ${@{prefix}.version.net}, Workbench: ${@{prefix}.version.workbench}</echo>        
+    </sequential>
+  </macrodef>
+
+  <macrodef name="derive-versions">
+    <attribute name="prefix" />
+      <sequential>
+        <fail message="Property not set: build.tstamp" unless="build.tstamp" />
+
+        <fail message="Invalid @{prefix}.version format: ${@{prefix}.version}">
+          <condition>
+            <not>
+              <and>
+                <isset property="@{prefix}.version" />
+                <matches pattern="([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?" string="${@{prefix}.version}" />
+              </and>
+            </not>
+          </condition>
+        </fail>
+
+        <property name="@{prefix}.version.maven"     value="${@{prefix}.version}" />
+        <if>
+          <contains string="${@{prefix}.version}" substring="-SNAPSHOT" />
+          <then>
+            <propertyregex property="@{prefix}.version.net" input="${@{prefix}.version}" regexp="([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?" select="\1.0" />
+            <propertyregex property="@{prefix}.version.workbench" input="${@{prefix}.version}" regexp="([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?" select="\1.S${build.tstamp}" />
+          </then>
+          <else>
+            <propertyregex property="@{prefix}.version.net" input="${@{prefix}.version}" regexp="([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?" select="\1.0" />
+            <propertyregex property="@{prefix}.version.workbench" input="${@{prefix}.version}" regexp="([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?" select="\1.0" />
+          </else>
+        </if>
+    </sequential>
+  </macrodef>
+</project>

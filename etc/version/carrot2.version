@@ -1,7 +1,0 @@
-# we need the same value in a property with a unique name for website build
-carrot2.version=3.5.3-dev
-carrot2.version.maven=3.5.3-SNAPSHOT
-carrot2.net.version=3.5.3.0
-
-# workbench plugin/ feature versions.
-carrot2.version.workbench=3.5.3.dev-snapshot
