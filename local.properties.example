@@ -39,5 +39,5 @@
 #webtest.home=
 #tomcat.home=
 
-# To see a GUI progress inticator when running webtests, uncomment the property below
+# To see a GUI progress indicator when running webtests, uncomment the property below
 #wt.headless=false
