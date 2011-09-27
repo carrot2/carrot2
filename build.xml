@@ -875,7 +875,8 @@
   <!--
        Build all apps.
     -->
-  <target name="all" depends="clean, webapp, dcs, javadoc, doc" description="Builds all Carrot2 applications and documentation" />
+  <target name="release" depends="clean, workbench.test, workbench.dist, dist, reports, doc, carrot2.solr.dist" description="Release build (requires external tools)." />
+
   <target name="dist" depends="carrot2.core.dist, carrot2.cli.dist, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, maven, doc" description="Builds Carrot2 distribution files" />
   <target name="reports" depends="test, coverage, duplication, findbugs, compatibility" description="Builds all Carrot2 test and code quality reports" />
 

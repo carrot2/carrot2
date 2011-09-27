@@ -13,7 +13,7 @@
 
   <!-- Build number, provided by Bamboo -->
   <property name="build.number" value="" />
-  <property file="${carrot2.master.basedir}/etc/version/carrot2.version" />
+  <property file="${carrot2.master.basedir}/carrot2.version" />
 
   <!-- Import common macros -->
   <import file="${carrot2.master.basedir}/etc/ant/common/basedir.xml" />
@@ -100,17 +100,27 @@
     -->
   <target name="carrot2.webapp.webtest.war" depends="basedir.check, carrot2.webapp.build, carrot2.common.webtest.war.prepare, antversion.check"
           if="webtest.war.resources.available">
-    <webtest-war cargo.tmp.dir="tmp/cargo"
-                 war.path="${webapp.dir}/${war.name.base}.war"
-                 war.base.name="${war.name.base}"
-                 webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
-                 webtest.report.dir="${webtest.report.dir}" />
+    <if>
+      <isset property="run.webtests" />
+      <then>
+        <webtest-war cargo.tmp.dir="tmp/cargo"
+                     war.path="${webapp.dir}/${war.name.base}.war"
+                     war.base.name="${war.name.base}"
+                     webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
+                     webtest.report.dir="${webtest.report.dir}" />
+      </then>
+    </if>
   </target>
 
   <target name="carrot2.webapp.webtest.localhost" depends="basedir.check, carrot2.common.webtest.deployed.check, antversion.check"> 
-    <webtest-deployed webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
-                      webtest.report.dir="${webtest.report.dir}" 
-                      webtest.basepath="/" />
+    <if>
+      <isset property="run.webtests" />
+      <then>
+        <webtest-deployed webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
+                          webtest.report.dir="${webtest.report.dir}" 
+                          webtest.basepath="/" />
+      </then>
+    </if>
   </target>
     
   <!--
@@ -306,12 +316,17 @@
   </target>
 
   <target name="antversion.check">
-    <fail>
-        Webtests won't work with ANT >= 1.8.
-        <condition>
-            <antversion atleast="1.8" />
-        </condition>
-    </fail>   
+    <condition property="run.webtests">
+        <not><antversion atleast="1.8" /></not>
+    </condition>
+    <if>
+      <isset property="run.webtests" />
+      <then>
+        <echo level="warning">
+            Webtests won't work with ANT >= 1.8, running: ${ant.version}.
+        </echo>      
+      </then>
+    </if>
   </target>
 
   <target name="basedir.check">
