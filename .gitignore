@@ -10,10 +10,10 @@ applications/carrot2-webapp/web/WEB-INF/web.xml
 applications/carrot2-webapp/web/skins/common/variables.xsl
 applications/carrot2-webapp/webtest/dtd/
 local.properties
-workbench.properties
 tmp
 .apt_generated
 .clover
 junit*.properties
 *.patch
 /*.log
+/.tools

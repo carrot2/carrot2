@@ -129,12 +129,12 @@
         
         <listitem>
           <para>
-            Copy <filename>workbench.properties.example</filename> from &C2; checkout folder 
-            to <filename>workbench.properties</filename> in the same folder. In
-            <filename>workbench.properties</filename> edit the <tag>target.platform</tag>
+            Copy <filename>local.properties.example</filename> from &C2; checkout folder 
+            to <filename>local.properties</filename> in the same folder. In
+            <filename>local.properties</filename> edit the <tag>target.platform</tag>
             property to point to the Eclipse Target Platform you have downloaded.
           </para>
-          
+
           <important>
             <para>
               The folder pointed to by <tag>target.platform</tag> must have the <filename>eclipse/</filename>
@@ -143,17 +143,17 @@
           </important>
           
           <para>
-            You may also need to change the <tag>configs</tag> property to
-            match the platform you want to build &DCW; for. 
+            You may also change the <tag>configs</tag> property to
+            match the platform you want to build &DCW; for or rely on auto-detection.
           </para>
         </listitem>
         
         <listitem>
           <para>
             Run:
-            
-            <programlisting><![CDATA[ant -f build-workbench.xml build]]></programlisting>
-            
+
+            <programlisting><![CDATA[ant workbench]]></programlisting>
+
             to build &DCW; binaries.
           </para>
         </listitem>
@@ -166,7 +166,7 @@
         </listitem>
       </orderedlist>
       </section>
-    
+
     <section xml:id="section.advanced-topics.building-from-source-code.webapp">
       <title>Building &WA;</title>
       
