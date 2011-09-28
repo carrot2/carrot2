@@ -28,7 +28,7 @@
     </macrodef>
 
     <target name="pde.build.prepare" depends="tasks">
-        <fail unless="target.platform" />
+        <fail unless="target.platform" message="Define property 'target.platform', see local.properties.example." />
 
         <property file="${carrot2.master.basedir}/workbench/build-conf/build.properties" />
         <property name="eclipse.home" location="${target.platform}/eclipse" />

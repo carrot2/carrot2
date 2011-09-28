@@ -12,7 +12,7 @@
 # reports or are needed for tests.
 
 # Base path to the compilation/ QA tools.
-tools.dir=${basedir}/.tools
+tools.dir=${carrot2.master.basedir}/.tools
 
 # Clover for Ant. Generate test coverage reports (license required).
 clover.home=${tools.dir}/clover-ant-2.6.3
