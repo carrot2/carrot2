@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="carrot2.common.rcp-defaults">
+  <macrodef name="rcp-defaults">
+    <sequential>
+        <if><os family="windows" /><then><property name="rcp.os" value="win32" /></then></if>
+        <if><os family="mac"     /><then><property name="rcp.os" value="macosx" /></then></if>
+        <if><os family="unix"    /><then><property name="rcp.os" value="linux" /></then></if>
+    
+        <if><os family="windows" /><then><property name="rcp.ws" value="win32" /></then></if>
+        <if><os family="mac"     /><then><property name="rcp.ws" value="cocoa" /></then></if>
+        <if><os family="unix"    /><then><property name="rcp.ws" value="gtk" /></then></if>
+    
+        <if><os arch="x86"       /><then><property name="rcp.arch" value="x86" /></then></if>
+        <if><os arch="x86_64"    /><then><property name="rcp.arch" value="x86_64" /></then></if>
+        <if><os arch="amd"       /><then><property name="rcp.arch" value="x86" /></then></if>
+        <if><os arch="amd64"     /><then><property name="rcp.arch" value="x86_64" /></then></if>
+        
+        <fail unless="rcp.os">Could not auto-detect operating system for: ${os.name}</fail>
+        <fail unless="rcp.ws">Could not auto-detect windowing toolkit for: ${os.name}</fail>
+        <fail unless="rcp.arch">Could not detect CPU architecture: ${os.arch}</fail>
+    
+        <property name="configs" value="${rcp.os}, ${rcp.ws}, ${rcp.arch}" />
+        <property name="archivesFormat" value="${rcp.os}, ${rcp.ws}, ${rcp.arch} - folder" />
+
+        <echo>RCP config (auto): ${rcp.os}, ${rcp.ws}, ${rcp.arch}; configs: ${configs}</echo>
+    </sequential>
+  </macrodef>
+</project>
