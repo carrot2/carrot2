@@ -320,7 +320,7 @@
         <not><antversion atleast="1.8" /></not>
     </condition>
     <if>
-      <isset property="run.webtests" />
+      <not><isset property="run.webtests" /></not>
       <then>
         <echo level="warning">
             Webtests won't work with ANT >= 1.8, running: ${ant.version}.

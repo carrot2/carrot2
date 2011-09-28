@@ -69,7 +69,7 @@
     <attribute name="webtest.basepath" default="/" />
 
     <sequential>
-      <ant antfile="@{webtest.tests.dir}/webtest.xml"
+      <ant antfile="webtest.xml"
            inheritall="true"
            dir="@{webtest.tests.dir}">
         <property name="wt.config.resultfile" value="@{webtest.report.dir}/webtest-results.xml" />
