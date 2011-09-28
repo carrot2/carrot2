@@ -8,10 +8,8 @@
 #######################################################################################
 # QA and other tools.
 #
-# Not all tools are required for compilation. Most of them provide QA
+# None of these tools are required for code compilation. Most of them provide QA
 # reports or are needed for tests.
-#
-# The defaults point under a single folder named tools.
 
 # Base path to the compilation/ QA tools.
 tools.dir=${basedir}/.tools

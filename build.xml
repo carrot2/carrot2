@@ -25,7 +25,8 @@
   </taskdef>
   
   <!-- Import local properties and version -->
-  <property file="${carrot2.master.basedir}/local.properties" />
+  <property name="local.properties" location="${carrot2.master.basedir}/local.properties" />
+  <property file="${local.properties}" />
   <property file="${carrot2.master.basedir}/carrot2.version" />
   <property file="${carrot2.master.basedir}/etc/version/carrot2.basenames" />
 
