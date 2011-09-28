@@ -1,43 +1,80 @@
+
 #
 # An example properties file for Carrot2 3.0
-# Copy this file to local.properties and modify to suit your environment
+# Copy this file to local.properties and modify to suit your environment.
 #
 
-# Path to Clover for Ant binaries, required to generate coverage reports
-#clover.home=D:/dev/java/clover/ant
 
-# Path to PMD, required to generate code duplication reports
-#pmd.home=D:/dev/java/pmd
+#######################################################################################
+# QA and other tools.
+#
+# Not all tools are required for compilation. Most of them provide QA
+# reports or are needed for tests.
+#
+# The defaults point under a single folder named tools.
 
-# Path to FindBugs, required for static code analysis
-#findbugs.home=D:/dev/java/findbugs
+# Base path to the compilation/ QA tools.
+tools.dir=${basedir}/.tools
 
-# Set this property to true to disable tests depending on the correct
-# functioning of external APIs, e.g. search engine APIs.
-#external.api.tests.disabled=true
-#icerocket.tests.enabled=true
+# Clover for Ant. Generate test coverage reports (license required).
+clover.home=${tools.dir}/clover-ant-2.6.3
 
-# To run tests requiring Carrot2 XML feed URLs, set the base URL here
-#carrot2.xml.feed.url.base=
+# PMD. Required to generate code duplication reports.
+pmd.home=${tools.dir}/pmd-4.2.5
 
-# To build DocBook documentation, please specify locations of DocBook XSL
+# FindBugs. Required for static code analysis.
+findbugs.home=${tools.dir}/findbugs-1.3.9
+
+# DocBook documentation resources. Specify the location of DocBook XSL
 # (the xsl-ns variant) and DocBook DTD 5.0.
-#docbook.xsl.dir=
-#docbook.dtd.dir=
+docbook.xsl.dir=${tools.dir}/docbook/stylesheet/docbook-xsl-ns
+docbook.dtd.dir=${tools.dir}/docbook/schema/dtd/5.0
 
-# Distribution url for links in the DocBook documentation
-#dist.url=
+# Webapp web-tests: Canoo webtest home directory.
+cargo.home=${tools.dir}/cargo-0.9
 
-# JavaDoc url for links in the DocBook documentation
-#javadoc.url=
+# Webapp web-tests: Canoo webtest home directory.
+webtest.home=${tools.dir}/webtest-3.0
 
-# To run webtests of the webapp, define paths to:
-#   * Canoo Webtest home directory
-#   * Cargo libraries directory that should contain: cargo-core-uberjar and cargo-ant
-#   * Tomcat home directory
-#cargo.home=
-#webtest.home=
-#tomcat.home=
+# Webapp web-tests: Apache Tomcat home.
+tomcat.home=${tools.dir}/apache-tomcat-6.0.32
 
-# To see a GUI progress indicator when running webtests, uncomment the property below
-#wt.headless=false
+# To see a GUI progress indicator when running webtests, uncomment the property below.
+wt.headless=true
+
+
+#######################################################################################
+# Workbench (Eclipse RCP)
+
+# Workbench PDE Build and tests. Note the unusual layout of folders below -- 
+# they have the distribution version name and an /eclipse *subfolder*.
+target.platform=${tools.dir}/rcp/3.6.2
+eclipse.home=${target.platform}/eclipse
+
+# Workbench distribution (locally built). Your local platform by default, but can
+# be overriden. Possible values: [win32|linux|macosx], [win32|gtk|cocoa], [x86_64|x86]
+# configs=macosx,cocoa,x86_64
+# archivesFormat=macosx,cocoa,x86_64 - dir
+
+
+#######################################################################################
+# Properties controlling test execution.
+
+# Control tests that require external APIs. Some of these may not be 
+# enabled from public IPs.
+# external.api.tests.disabled=true
+# icerocket.tests.enabled=false
+
+# To run tests requiring Carrot2 XML feed URLs, set the base URL here.
+# Leave undefined to skip these tests.
+# carrot2.xml.feed.url.base=
+
+
+#######################################################################################
+# Miscellaneous
+
+# Distribution url for links in the DocBook documentation.
+# dist.url=
+
+# JavaDoc url for links in the DocBook documentation.
+# javadoc.url=

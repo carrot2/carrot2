@@ -10,7 +10,6 @@
       <attribute name="buildfile" default="${eclipse.home}/plugins/${pde.build.plugin}/scripts/productBuild/productBuild.xml" />
       <attribute name="builder"   default="${carrot2.master.basedir}/workbench/build-conf/" />
       <attribute name="build.dir" />
-      <attribute name="props.file" />
       <attribute name="extra.args" default="" />
       <sequential>
         <fail unless="eclipse.home" />
@@ -22,22 +21,16 @@
           <arg line="-Dbuilder=@{builder}" />
           <arg line="-DbuildDirectory=@{build.dir}" />
           <arg line="-Dtarget.platform=${target.platform}" />
-
           <arg line="-Dcarrot2.master.basedir=${carrot2.master.basedir}" />
-
           <arg line="@{extra.args}" />
-          <arg line="-propertyfile @{props.file}" />
         </java>
       </sequential>
     </macrodef>
 
     <target name="pde.build.prepare" depends="tasks">
-        <property name="workbench.properties" location="${carrot2.master.basedir}/workbench.properties" />
-        <property file="${workbench.properties}" />
-        <property file="${carrot2.master.basedir}/workbench/build-conf/build.properties" />
-
         <fail unless="target.platform" />
 
+        <property file="${carrot2.master.basedir}/workbench/build-conf/build.properties" />
         <property name="eclipse.home" location="${target.platform}/eclipse" />
 
         <findVersion property="equinox.launcher.plugin.jar"
