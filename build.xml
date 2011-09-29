@@ -284,7 +284,7 @@
       </patternset>
     </unzip>
 
-    <taskdef classpath="${etc.dir}/clirr/clirr-core-0.6-uber.jar" resource="clirrtask.properties"/>
+    <taskdef classpath="${etc.dir}/clirr/clirr-core-0.6-fixed.jar" resource="clirrtask.properties"/>
 
     <mkdir dir="${compatibility.report.dir}" />
     <clirr failOnBinError="false" failOnSrcError="false">
