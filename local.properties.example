@@ -16,6 +16,7 @@ tools.dir=${carrot2.master.basedir}/.tools
 
 # Clover for Ant. Generate test coverage reports (license required).
 clover.home=${tools.dir}/clover-ant-2.6.3
+clover.enabled=false
 
 # PMD. Required to generate code duplication reports.
 pmd.home=${tools.dir}/pmd-4.2.5

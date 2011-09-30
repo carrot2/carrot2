@@ -73,6 +73,12 @@
   <property name="api.dist.base" value="${carrot2.java-api.base}" />
   
   <!-- Extra tools the build can use if available -->
+  <condition property="clover.runwith" value="true">
+    <and>
+      <istrue value="${clover.enabled}" />
+      <available file="${clover.home}" type="dir" />
+    </and>
+  </condition>
   <property name="clover.jar" location="${clover.home}/lib/clover.jar" />
   <property name="pmd.jar" location="${pmd.home}/lib/" />
   <property name="smartsprites.home" location="${carrot2.master.basedir}/etc/smartsprites" />
@@ -498,15 +504,15 @@
   <!-- 
        Code coverage calculation.
     -->
-  <target name="clover.tasks" if="clover.home">
+  <target name="clover.tasks" if="clover.runwith">
     <taskdef resource="cloverlib.xml" classpath="${clover.jar}" />
   </target>
 
-  <target name="coverage.clean" depends="clover.tasks" if="clover.home">
+  <target name="coverage.clean" depends="clover.tasks" if="clover.runwith">
     <clover-clean />
   </target>
 
-  <target name="coverage" if="clover.home" depends="clover.tasks">
+  <target name="coverage" if="clover.runwith" depends="clover.tasks">
     <clover-report>
       <current outfile="${coverage.report.dir}" title="Carrot2 ${carrot2.version}">
         <format type="html" />
@@ -519,7 +525,7 @@
     </clover-report>
   </target>
 
-  <target name="compile.coverage" depends="clover.tasks" if="clover.home">
+  <target name="compile.coverage" depends="clover.tasks" if="clover.runwith">
     <clover-setup enabled="true">
         <fileset refid="src.coverage" />
     </clover-setup>
