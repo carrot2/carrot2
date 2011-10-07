@@ -83,8 +83,8 @@ public final class ThaiTokenizerAdapter implements ITokenizer
     {
         try
         {
-            this.wordTokenFilter = new ThaiWordFilter(Version.LUCENE_31,
-                new StandardTokenizer(Version.LUCENE_31, input));
+            this.wordTokenFilter = new ThaiWordFilter(Version.LUCENE_CURRENT,
+                new StandardTokenizer(Version.LUCENE_CURRENT, input));
             this.term = wordTokenFilter.addAttribute(CharTermAttribute.class);
             this.type = wordTokenFilter.addAttribute(TypeAttribute.class);
         }

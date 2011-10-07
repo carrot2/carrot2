@@ -127,6 +127,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
      * @group Index properties
      * @level Medium
      */
+    @SuppressWarnings("deprecation")
     @Input
     @Init
     @Processing
@@ -136,7 +137,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     {
         SimpleAnalyzer.class, StandardAnalyzer.class, WhitespaceAnalyzer.class
     }, strict = false)
-    public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
+    public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
 
     /**
      * {@link IFieldMapper} provides the link between Carrot2
@@ -310,14 +311,17 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
                         + "plain text query is required.");
             }
 
+            @SuppressWarnings("deprecation")
+            Version luceneVersion = Version.LUCENE_CURRENT;
+
             if (searchFields.length == 1)
             {
-                query = new QueryParser(Version.LUCENE_30, searchFields[0], analyzer)
+                query = new QueryParser(luceneVersion, searchFields[0], analyzer)
                     .parse(textQuery);
             }
             else
             {
-                query = new MultiFieldQueryParser(Version.LUCENE_30, searchFields,
+                query = new MultiFieldQueryParser(luceneVersion, searchFields,
                     analyzer).parse(textQuery);
             }
         }

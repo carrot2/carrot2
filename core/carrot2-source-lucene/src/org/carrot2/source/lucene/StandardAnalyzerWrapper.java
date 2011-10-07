@@ -22,7 +22,7 @@ import org.simpleframework.xml.core.Persist;
 /**
  * Lucene's {@link org.apache.lucene.analysis.standard.StandardAnalyzer} with
  * a parameterless constructor defining the compatibility flag
- * to the version ({@link Version#LUCENE_30}). 
+ * to the version ({@link Version#LUCENE_CURRENT}). 
  */
 @Root(name = "analyzer")
 public final class StandardAnalyzerWrapper 
@@ -53,6 +53,6 @@ public final class StandardAnalyzerWrapper
     @Commit
     void afterDeserialization()
     {
-        analyzer = new StandardAnalyzer(Version.LUCENE_30);
+        analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
     }    
 }

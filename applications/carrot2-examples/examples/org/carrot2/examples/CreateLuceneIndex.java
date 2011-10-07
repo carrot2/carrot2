@@ -49,8 +49,11 @@ public class CreateLuceneIndex
             System.exit(-2);
         }
 
-        Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_31);
-        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_31, analyzer);
+        @SuppressWarnings("deprecation")
+        Version luceneVersion = Version.LUCENE_CURRENT;
+
+        Analyzer analyzer = new StandardAnalyzer(luceneVersion);
+        IndexWriterConfig config = new IndexWriterConfig(luceneVersion, analyzer);
         IndexWriter writer = new IndexWriter(FSDirectory.open(indexDir), config);
         
         for (Document d : SampleDocumentData.DOCUMENTS_DATA_MINING)

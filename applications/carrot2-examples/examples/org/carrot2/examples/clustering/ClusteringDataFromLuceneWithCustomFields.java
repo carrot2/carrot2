@@ -187,7 +187,9 @@ public class ClusteringDataFromLuceneWithCustomFields
 
         public StandardAnalyzerWrapper()
         {
-            this.target = new StandardAnalyzer(Version.LUCENE_31);
+            @SuppressWarnings("deprecation")
+            Version luceneVersion = Version.LUCENE_CURRENT;            
+            this.target = new StandardAnalyzer(luceneVersion);
         }
 
         @Override

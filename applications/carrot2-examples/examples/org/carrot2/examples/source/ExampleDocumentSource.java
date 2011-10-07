@@ -72,11 +72,12 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
      * assignable values, specify empty {@link ImplementingClasses#classes()} and
      * {@link ImplementingClasses#strict()} equal to <code>false</code>.
      */
+    @SuppressWarnings("deprecation")
     @Processing
     @Input
     @Attribute
     @ImplementingClasses(classes = {}, strict = false)
-    public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
+    public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
 
     @Override
     public void process() throws ProcessingException
