@@ -49,6 +49,25 @@ public class GenericListAssertion<S, E> extends ItemGroupAssert<S, List<E>>
         });
     }
 
+    public S anySatisfies(final Condition<E> condition)
+    {
+        return this.satisfies(new Condition<List<E>>()
+        {
+            @Override
+            public boolean matches(List<E> list)
+            {
+                for (E element : list)
+                {
+                    if (condition.matches(element))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
     @Override
     protected List<Object> actualAsList()
     {

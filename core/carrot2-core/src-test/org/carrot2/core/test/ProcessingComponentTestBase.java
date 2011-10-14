@@ -78,11 +78,6 @@ public abstract class ProcessingComponentTestBase<T extends IProcessingComponent
      */
     protected final Controller getSimpleController(Map<String, Object> initAttributes)
     {
-        if (this.simpleController != null)
-        {
-            throw new RuntimeException("One simple controller per test case, please.");
-        }
-
         simpleController = ControllerFactory.createSimple();
         simpleController.init(initAttributes);
 
