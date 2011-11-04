@@ -12,9 +12,6 @@
 
 package org.carrot2.text.preprocessing;
 
-import static org.carrot2.text.preprocessing.PreprocessingContextAssert.assertThat;
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.junit.Before;
@@ -23,7 +20,7 @@ import org.junit.Test;
 /**
  * Test cases for {@link StopListMarker}.
  */
-public class WordMarkerTest
+public class WordMarkerTest extends PreprocessingContextTestBase
 {
     PreprocessingContextBuilder contextBuilder;
 
@@ -35,7 +32,7 @@ public class WordMarkerTest
     }
 
     // @formatter:off
-
+    
     @Test
     public void testNonStopWords()
     {

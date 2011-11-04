@@ -12,11 +12,8 @@
 
 package org.carrot2.core;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatDocuments;
-import static org.fest.assertions.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,6 +27,7 @@ import org.apache.commons.io.output.NullOutputStream;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.CollectionUtils;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
@@ -44,7 +42,7 @@ import com.google.common.collect.Maps;
 /**
  * Test cases for {@link ProcessingResult}.
  */
-public class ProcessingResultTest
+public class ProcessingResultTest extends CarrotTestCase
 {
     @Test
     public void testSerializationDeserializationAll() throws Exception

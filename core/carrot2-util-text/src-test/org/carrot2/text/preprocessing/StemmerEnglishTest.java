@@ -12,15 +12,14 @@
 
 package org.carrot2.text.preprocessing;
 
-import static org.fest.assertions.Assertions.assertThat;
-
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Language-independent test cases for {@link LanguageModelStemmer}.
  */
-public class StemmerEnglishTest
+public class StemmerEnglishTest extends CarrotTestCase
 {
     PreprocessingContextBuilder contextBuilder;
 

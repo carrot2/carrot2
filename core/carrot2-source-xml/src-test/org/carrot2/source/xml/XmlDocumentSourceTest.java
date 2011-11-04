@@ -13,10 +13,6 @@
 package org.carrot2.source.xml;
 
 import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assume.assumeTrue;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;

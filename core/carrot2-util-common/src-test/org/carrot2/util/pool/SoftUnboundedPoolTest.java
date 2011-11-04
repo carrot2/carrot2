@@ -25,6 +25,6 @@ public class SoftUnboundedPoolTest extends ParameterizedPoolTestBase
 
     protected int getPoolSize()
     {
-        return 4;
+        return randomIntBetween(4, 10);
     }
 }

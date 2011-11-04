@@ -13,16 +13,22 @@
 package org.carrot2.core.test;
 
 import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.Document;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.test.assertions.Carrot2CoreAssertions;
 import org.carrot2.util.StringUtils;
 import org.junit.Test;
 
@@ -98,8 +104,8 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         int i = 0;
         for (Document document : documents)
         {
-            assertThat(document).as("doc[" + i++ + "]").stringFieldsDoNotMatchPattern(
-                ".*&lt;.*");
+            Carrot2CoreAssertions.assertThat(document)
+                .as("doc[" + i++ + "]").stringFieldsDoNotMatchPattern(".*&lt;.*");
         }
     }
 

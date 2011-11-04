@@ -14,6 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import java.util.*;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ import com.google.common.collect.Lists;
 /**
  * Test cases for {@link SubstringComparator}.
  */
-public class SubstringComparatorTest
+public class SubstringComparatorTest extends CarrotTestCase
 {
     /**
      * @see "http://issues.carrot2.org/browse/CARROT-778"
@@ -30,13 +31,11 @@ public class SubstringComparatorTest
     @Test
     public void testCarrot778()
     {
-        Random rnd = new Random(0xdeadbeef);  
-
         int [] tokensWordIndex = new int [1000];
         int [] wordsStemIndex = new int [2];
         
         for (int i = 0; i < tokensWordIndex.length; i++)
-            tokensWordIndex[i] = rnd.nextInt(wordsStemIndex.length);
+            tokensWordIndex[i] = randomIntBetween(0, wordsStemIndex.length - 1);
 
         for (int i = 0; i < wordsStemIndex.length; i++)
             wordsStemIndex[i] = i;
@@ -44,7 +43,7 @@ public class SubstringComparatorTest
         final int substrLength = 3;
         final int maxFrom = tokensWordIndex.length - substrLength;
         List<Substring> substrings = Lists.newArrayList();
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < iterations(500, 2000); i++)
             substrings.add(new Substring(i, 
                 i % maxFrom, (i + substrLength) % maxFrom, 1));
 

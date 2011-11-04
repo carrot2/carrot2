@@ -12,14 +12,13 @@
 
 package org.carrot2.util;
 
-import static junit.framework.Assert.assertEquals;
-
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 /**
  * Test cases for {@link LinearApproximation}.
  */
-public class LinearApproximationTest
+public class LinearApproximationTest extends CarrotTestCase
 {
     @Test
     public void testOnePoint()

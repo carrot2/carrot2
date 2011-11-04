@@ -12,15 +12,13 @@
 
 package org.carrot2.util.resource;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-
 import java.io.File;
 
 import org.carrot2.util.resource.ResourceLookup.Location;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
-public class ResourceLookupTest
+public class ResourceLookupTest extends CarrotTestCase
 {
     @Test
     public void testHashCodeEqualsResourceLookup() 

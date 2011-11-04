@@ -12,16 +12,16 @@
 
 package org.carrot2.text.preprocessing;
 
-import static org.fest.assertions.Assertions.assertThat;
 import static org.carrot2.text.analysis.ITokenizer.*;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Language-independent test cases for {@link LanguageModelStemmer}.
  */
-public class StemmerSyntheticTest
+public class StemmerSyntheticTest extends CarrotTestCase
 {
     PreprocessingContextBuilder contextBuilder;
 

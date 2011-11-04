@@ -12,10 +12,7 @@
 
 package org.carrot2.source.etools;
 
-import static junit.framework.Assert.assertEquals;
 import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assume.assumeTrue;
 
 import java.util.List;
 import java.util.Set;

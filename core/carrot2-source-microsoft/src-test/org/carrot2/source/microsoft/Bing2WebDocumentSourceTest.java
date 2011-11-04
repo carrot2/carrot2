@@ -13,9 +13,6 @@
 package org.carrot2.source.microsoft;
 
 import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assume.assumeTrue;
-
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.test.MultipageDocumentSourceTestBase;

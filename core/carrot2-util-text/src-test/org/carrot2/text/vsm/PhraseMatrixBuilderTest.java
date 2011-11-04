@@ -12,12 +12,11 @@
 
 package org.carrot2.text.vsm;
 
-import static org.carrot2.matrix.MatrixAssertions.assertThat;
-
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
 import org.apache.mahout.math.matrix.*;
+import org.carrot2.matrix.MatrixAssertions;
 
 /**
  * Test cases for phrase matrix building.
@@ -114,7 +113,7 @@ public class PhraseMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase
         }
         else
         {
-            assertThat(phraseMatrix).isEquivalentTo(expectedPhraseMatrixElements, 0.01);
+            MatrixAssertions.assertThat(phraseMatrix).isEquivalentTo(expectedPhraseMatrixElements, 0.01);
         }
     }
 }

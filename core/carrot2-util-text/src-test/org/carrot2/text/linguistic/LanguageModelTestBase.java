@@ -11,20 +11,16 @@
 
 package org.carrot2.text.linguistic;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Superclass for testing {@link LanguageModel}s.
  */
-public abstract class LanguageModelTestBase
+public abstract class LanguageModelTestBase extends CarrotTestCase
 {
     /**
      * 

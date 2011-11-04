@@ -13,14 +13,23 @@
 package org.carrot2.core;
 
 import static org.easymock.EasyMock.isA;
-import static org.junit.Assert.assertEquals;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-import org.carrot2.core.attribute.*;
-import org.carrot2.util.attribute.*;
-import org.junit.*;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Required;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import com.google.common.collect.Maps;
 
@@ -99,15 +108,10 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
         }
     }
 
-    public boolean hasPooling()
-    {
-        return false;
-    }
-
     @Before
     public void disableOrderChecking()
     {
-        if (!hasPooling())
+        if (!isPooling())
         {
             mocksControl.checkOrder(false);
         }
@@ -191,7 +195,6 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
     public void testCachingReuseResultsInDifferentComponentPipeline()
     {
         invokeInitForCache(component1Mock, component2Mock);
-        
         invokeProcessingWithInit(component1Mock);
 
         // Next Component1 results come from the cache
@@ -219,7 +222,6 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
     public void testCachingInitAttributesIgnoredInCacheKey()
     {
         invokeInitForCache(component1Mock);
-
         invokeProcessingWithInit(component1Mock);
         // second query runs entirely from cache
         invokeDisposal(component1Mock);
@@ -267,7 +269,7 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
     
     private void invokeProcessingWithInitForNoPool(IProcessingComponent... components)
     {
-        if (hasPooling())
+        if (isPooling())
         {
             invokeProcessing(components);
         }
@@ -279,7 +281,7 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
 
     private void invokeDisposalForNoPool(IProcessingComponent... components)
     {
-        if (!hasPooling())
+        if (!isPooling())
         {
             invokeDisposal(components);
         }
@@ -293,7 +295,7 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
      */
     private void invokeInitForCache(final IProcessingComponent... components)
     {
-        if (!hasPooling())
+        if (!isPooling())
         {
             for (IProcessingComponent component : components)
             {

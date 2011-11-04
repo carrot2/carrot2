@@ -14,6 +14,7 @@ package org.carrot2.core;
 
 import org.carrot2.core.ControllerTestsBase.ComponentWithInitParameter;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -42,7 +43,7 @@ import com.google.common.collect.ImmutableMap;
 @SuppressWarnings("unchecked")
 public class ControllerTest
 {
-    public static class ComponentManagerIndependentTests
+    public static class ComponentManagerIndependentTests extends CarrotTestCase
     {
         @Test
         public void testAutomaticInitialization()
@@ -195,12 +196,6 @@ public class ControllerTest
         }
 
         @Override
-        public boolean hasPooling()
-        {
-            return true;
-        }
-
-        @Override
         public int eagerlyInitializedInstances()
         {
             return EAGERLY_INITIALIZED_INSTANCES;
@@ -231,12 +226,6 @@ public class ControllerTest
         {
             return ControllerFactory.createPooling();
         }
-
-        @Override
-        public boolean hasPooling()
-        {
-            return true;
-        }
     }
 
     public static class PoolingControllerPoolingTests extends ControllerTestsPooling
@@ -255,12 +244,6 @@ public class ControllerTest
         public Controller getSimpleController()
         {
             return ControllerFactory.createCachingPooling();
-        }
-
-        @Override
-        public boolean hasPooling()
-        {
-            return true;
         }
     }
 
@@ -282,18 +265,6 @@ public class ControllerTest
         {
             return ControllerFactory.createCachingPooling(IProcessingComponent.class);
         }
-
-        @Override
-        public boolean hasCaching()
-        {
-            return true;
-        }
-
-        @Override
-        public boolean hasPooling()
-        {
-            return true;
-        }
     }
 
     public static class CachingPoolingControllerCachingOnPoolingTests extends
@@ -303,12 +274,6 @@ public class ControllerTest
         public Controller getPoolingController()
         {
             return ControllerFactory.createCachingPooling(IProcessingComponent.class);
-        }
-
-        @Override
-        public boolean hasCaching()
-        {
-            return true;
         }
     }
 
@@ -321,16 +286,9 @@ public class ControllerTest
         {
             return ControllerFactory.createCachingPooling(cachedComponentClasses);
         }
-
-        @Override
-        public boolean hasPooling()
-        {
-            return true;
-        }
     }
 
-    public static class CachingControllerCachingOffCommonTests extends
-        ControllerTestsCommon
+    public static class CachingControllerCachingOffCommonTests extends ControllerTestsCommon
     {
         @Override
         public Controller getSimpleController()
@@ -339,24 +297,16 @@ public class ControllerTest
         }
     }
 
-    public static class CachingControllerCachingOnCommonTests extends
-        ControllerTestsCommon
+    public static class CachingControllerCachingOnCommonTests extends ControllerTestsCommon
     {
         @Override
         public Controller getSimpleController()
         {
             return ControllerFactory.createCaching(IProcessingComponent.class);
         }
-
-        @Override
-        public boolean hasCaching()
-        {
-            return true;
-        }
     }
 
-    public static class CachingControllerCachingOnCachingTests extends
-        ControllerTestsCaching
+    public static class CachingControllerCachingOnCachingTests extends ControllerTestsCaching
     {
         @Override
         public Controller getCachingController(

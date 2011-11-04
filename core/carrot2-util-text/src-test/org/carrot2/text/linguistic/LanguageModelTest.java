@@ -11,16 +11,14 @@
 
 package org.carrot2.text.linguistic;
 
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-
 import org.carrot2.core.LanguageCode;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 /**
  * 
  */
-public class LanguageModelTest
+public class LanguageModelTest extends CarrotTestCase
 {
     /**
      * {@link LanguageModel} should return {@link LanguageModel}s that return the

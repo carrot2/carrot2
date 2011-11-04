@@ -11,16 +11,15 @@
 
 package org.carrot2.text.linguistic;
 
-import static org.junit.Assert.assertTrue;
-
 import org.carrot2.core.LanguageCode;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests default tokenizer for {@link LanguageCode#CHINESE_SIMPLIFIED}.
+ * Tests {@link DefaultTokenizerFactory}.
  */
-public class DefaultTokenizerFactoryTest
+public class DefaultTokenizerFactoryTest extends CarrotTestCase
 {
     private DefaultTokenizerFactory factory;
 
@@ -36,8 +35,8 @@ public class DefaultTokenizerFactoryTest
     @Test
     public void testChineseHasSmartChineseTokenizer()
     {
-        String name = factory.getTokenizer(LanguageCode.CHINESE_SIMPLIFIED).getClass()
-            .getName();
+        String name = 
+            factory.getTokenizer(LanguageCode.CHINESE_SIMPLIFIED).getClass().getName();
         assertTrue(name, name.toLowerCase().indexOf("chinese") >= 0);
     }
 }

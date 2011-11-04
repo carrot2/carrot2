@@ -12,15 +12,14 @@
 
 package org.carrot2.util;
 
-import static org.junit.Assert.assertEquals;
-
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Tests {@link RollingWindowAverage}.
  */
-public class RollingWindowAverageTest
+public class RollingWindowAverageTest extends CarrotTestCase
 {
     long now;
 

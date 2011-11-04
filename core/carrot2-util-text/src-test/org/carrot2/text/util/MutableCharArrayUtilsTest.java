@@ -12,14 +12,13 @@
 
 package org.carrot2.text.util;
 
-import static org.fest.assertions.Assertions.assertThat;
-
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 /**
  * Test cases for {@link MutableCharArrayUtils}.
  */
-public class MutableCharArrayUtilsTest
+public class MutableCharArrayUtilsTest extends CarrotTestCase
 {
     @Test
     public void toLowerCaseNoReallocation()

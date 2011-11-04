@@ -12,57 +12,53 @@
 
 package org.carrot2.util;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
+import static org.carrot2.util.StringUtils.*;
 
-public class StringUtilsTest
+public class StringUtilsTest extends CarrotTestCase
 {
     @Test
     public void testSplitCamelCase()
     {
-        assertEquals("Camel Case Split", StringUtils.splitCamelCase("CamelCaseSplit"));
-        assertEquals("String Utils Test", StringUtils.splitCamelCase("StringUtilsTest"));
+        assertEquals("Camel Case Split", splitCamelCase("CamelCaseSplit"));
+        assertEquals("String Utils Test", splitCamelCase("StringUtilsTest"));
     }
 
     @Test
     public void testSplitCamelCaseWithCapitals()
     {
-        assertEquals("HTML Editor Test", StringUtils.splitCamelCase("HTMLEditorTest"));
-        assertEquals("Simple HTML Formatter", StringUtils.splitCamelCase("SimpleHTMLFormatter"));
+        assertEquals("HTML Editor Test", splitCamelCase("HTMLEditorTest"));
+        assertEquals("Simple HTML Formatter", splitCamelCase("SimpleHTMLFormatter"));
     }
 
     @Test
     public void testSplitCamelCaseWithDigits()
     {
-        assertEquals("HTML 123 Test", StringUtils.splitCamelCase("HTML123Test"));
+        assertEquals("HTML 123 Test", splitCamelCase("HTML123Test"));
     }
 
     @Test
     public void testRemoveHtmlNoTags()
     {
-        assertThat(StringUtils.removeHtmlTags(">test <string"))
-            .isEqualTo(">test <string");
+        assertThat(removeHtmlTags(">test <string")).isEqualTo(">test <string");
     }
 
     @Test
     public void testRemoveHtmlSimpleTag()
     {
-        assertThat(StringUtils.removeHtmlTags("<div> test </div>")).isEqualTo(" test ");
+        assertThat(removeHtmlTags("<div> test </div>")).isEqualTo(" test ");
     }
 
     @Test
     public void testRemoveHtmlTagWithAttributes()
     {
-        assertThat(StringUtils.removeHtmlTags("<a href='x'> test </a>")).isEqualTo(
-            " test ");
+        assertThat(removeHtmlTags("<a href='x'> test </a>")).isEqualTo(" test ");
     }
 
     @Test
     public void testRemoveHtmlNestedTags()
     {
-        assertThat(StringUtils.removeHtmlTags("<a href='x'> test <span>x</span> g</a>"))
-            .isEqualTo(" test x g");
+        assertThat(removeHtmlTags("<a href='x'> test <span>x</span> g</a>")).isEqualTo(" test x g");
     }
 }

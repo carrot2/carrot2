@@ -22,8 +22,9 @@ import org.fest.assertions.GenericAssert;
 /**
  * Assertions on {@link Cluster}s.
  */
-public class ClusterAssertion extends GenericAssert<ClusterAssertion, Cluster> implements
-    AssertExtension
+public class ClusterAssertion 
+    extends GenericAssert<ClusterAssertion, Cluster> 
+    implements AssertExtension
 {
     ClusterAssertion(Cluster actual)
     {

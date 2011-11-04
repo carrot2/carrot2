@@ -14,25 +14,36 @@ package org.carrot2.core;
 
 import static org.easymock.EasyMock.createStrictControl;
 import static org.easymock.EasyMock.isA;
-import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.Collections;
 import java.util.Map;
 
 import org.carrot2.core.ControllerTestsPooling.ComponentWithInstanceCounter;
-import org.carrot2.core.attribute.*;
-import org.carrot2.util.attribute.*;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
+import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.easymock.IAnswer;
 import org.easymock.IMocksControl;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
 import com.google.common.collect.Maps;
 
 /**
  * Base class for {@link Controller} tests.
  */
-public abstract class ControllerTestsBase
+@ThreadLeaks(linger = 5000)
+public abstract class ControllerTestsBase extends CarrotTestCase
 {
     protected IMocksControl mocksControl;
 
@@ -50,6 +61,34 @@ public abstract class ControllerTestsBase
     protected ProcessingResult result;
 
     public abstract Controller prepareController();
+
+    /** A caching controller is used.*/
+    boolean caching;
+    /** A pooling controller is used. */
+    boolean pooling;
+
+    public ControllerTestsBase()
+    {
+        Controller c = prepareController();
+
+        /*
+         * Determine caching/ pooling setup.
+         */
+        IProcessingComponentManager p = c.componentManager;
+        if (p instanceof CachingProcessingComponentManager) {
+            caching = !((CachingProcessingComponentManager) c.componentManager).cachedComponentClasses.isEmpty();
+            p = ((CachingProcessingComponentManager) c.componentManager).delegate;
+        }
+
+        if (p instanceof PoolingProcessingComponentManager) {
+            pooling = true;
+        }
+
+        c.dispose();
+    }
+    
+    public final boolean isCaching() { return caching; }
+    public final boolean isPooling() { return pooling; }
 
     @Before
     public void prepareMocks()
@@ -72,8 +111,11 @@ public abstract class ControllerTestsBase
     @After
     public void controllerDisposalCheck()
     {
-        if (controller != null)
+        final boolean cleanedUp = (controller == null);
+        if (!cleanedUp)
         {
+            controller.dispose();
+            controller = null;
             Assert.fail("Each test must dispose the controller.");
         }
     }

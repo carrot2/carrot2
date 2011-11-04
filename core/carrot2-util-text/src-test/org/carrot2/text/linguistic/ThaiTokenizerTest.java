@@ -11,13 +11,12 @@
 
 package org.carrot2.text.linguistic;
 
-import static org.junit.Assume.assumeTrue;
-
 import java.io.IOException;
 
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.lucene.ThaiTokenizerAdapter;
+import org.junit.Assume;
 import org.junit.Test;
 
 /**
@@ -35,17 +34,16 @@ public class ThaiTokenizerTest extends TokenizerTestBase
     @Test
     public void testThaiTermTokens()
     {
-        assumeTrue(ThaiTokenizerAdapter.platformSupportsThai());
+        Assume.assumeTrue(ThaiTokenizerAdapter.platformSupportsThai());
         assertEqualTokens(
             "การที่ได้ต้องแสดงว่างานดี",
-            tokens(ITokenizer.TT_TERM, "การ", "ที่", "ได้", "ต้อง", "แสดง", "ว่า", "งาน",
-                "ดี"));
+            tokens(ITokenizer.TT_TERM, "การ", "ที่", "ได้", "ต้อง", "แสดง", "ว่า", "งาน", "ดี"));
     }
 
     @Test
     public void testThaiEnglishTermTokens()
     {
-        assumeTrue(ThaiTokenizerAdapter.platformSupportsThai());
+        Assume.assumeTrue(ThaiTokenizerAdapter.platformSupportsThai());
         assertEqualTokens("ประโยคว่า The quick brown",
             tokens(ITokenizer.TT_TERM, "ประโยค", "ว่า", "The", "quick", "brown"));
     }
@@ -53,7 +51,7 @@ public class ThaiTokenizerTest extends TokenizerTestBase
     @Test
     public void testNumericTokens()
     {
-        assumeTrue(ThaiTokenizerAdapter.platformSupportsThai());
+        Assume.assumeTrue(ThaiTokenizerAdapter.platformSupportsThai());
         assertEqualTokens("๑๒๓", tokens(ITokenizer.TT_NUMERIC, "๑๒๓"));
     }
 }

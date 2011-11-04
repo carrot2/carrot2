@@ -13,13 +13,12 @@
 package org.carrot2.core.test;
 
 import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assume.assumeTrue;
 
 import org.carrot2.core.IDocumentSource;
-import org.carrot2.source.*;
+import org.carrot2.source.MultipageSearchEngine;
 import org.carrot2.source.MultipageSearchEngine.SearchMode;
+import org.carrot2.source.MultipageSearchEngineMetadata;
+import org.carrot2.source.SearchEngineStats;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Test;
 

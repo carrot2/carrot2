@@ -12,6 +12,7 @@
 
 package org.carrot2.util;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ import org.junit.Test;
  * Test cases for {@link ExceptionUtils}.
  */
 @SuppressWarnings("serial")
-public class ExceptionUtilsTest
+public class ExceptionUtilsTest extends CarrotTestCase
 {
     public static class ExceptionA extends Throwable
     {
@@ -77,7 +78,6 @@ public class ExceptionUtilsTest
         Assert.assertTrue(w instanceof ExceptionC);
         Assert.assertEquals(t, w.getCause());
     }
-
     @Test
     public void testWrappedWithStingConstructor()
     {

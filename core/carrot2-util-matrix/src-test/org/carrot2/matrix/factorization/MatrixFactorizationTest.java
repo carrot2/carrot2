@@ -12,19 +12,19 @@
 
 package org.carrot2.matrix.factorization;
 
-import static org.carrot2.matrix.MatrixAssertions.assertThat;
-
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
+import org.carrot2.matrix.MatrixAssertions;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 /**
  * Test cases for matrix factorizations.
  */
 @SuppressWarnings("deprecation")
-public class MatrixFactorizationTest
+public class MatrixFactorizationTest extends CarrotTestCase
 {
     /** Factorization parameters */
     private static final int K = 2;
@@ -390,8 +390,8 @@ public class MatrixFactorizationTest
         IMatrixFactorization factorization)
     {
         final DoubleMatrix2D u = factorization.getU();
-        assertThat(u).as("U").isEquivalentTo(expectedU, DELTA);
-        assertThat(factorization.getV()).as("V").isEquivalentTo(expectedV, DELTA);
+        MatrixAssertions.assertThat(u).as("U").isEquivalentTo(expectedU, DELTA);
+        MatrixAssertions.assertThat(factorization.getV()).as("V").isEquivalentTo(expectedV, DELTA);
     }
 
     /** Returns constant matrices of fixed size */

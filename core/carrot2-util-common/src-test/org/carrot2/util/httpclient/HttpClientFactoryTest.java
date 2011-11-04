@@ -23,7 +23,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.carrot2.util.CloseableUtils;
-import org.fest.assertions.Assertions;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.*;
 
 import com.google.common.collect.Lists;
@@ -31,7 +31,7 @@ import com.google.common.collect.Lists;
 /**
  * 
  */
-public class HttpClientFactoryTest
+public class HttpClientFactoryTest extends CarrotTestCase
 {
     private static Thread pseudoServer;
 
@@ -111,6 +111,6 @@ public class HttpClientFactoryTest
         }
         long end = System.currentTimeMillis();
         
-        Assertions.assertThat(end - start).as("Timeout").isGreaterThanOrEqualTo(500);
+        assertThat(end - start).as("Timeout").isGreaterThanOrEqualTo(500);
     }
 }

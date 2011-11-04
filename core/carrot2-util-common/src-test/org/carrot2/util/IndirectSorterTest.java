@@ -12,10 +12,9 @@
 
 package org.carrot2.util;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.util.Comparator;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.carrotsearch.hppc.sorting.IndirectComparator;
@@ -26,7 +25,7 @@ import com.google.common.collect.Ordering;
  * Test cases for the legacy (removed) <code>IndirectSorter<code>. The replacement class
  * {@link IndirectSort} from HPPC should provide the same functionality.
  */
-public class IndirectSorterTest
+public class IndirectSorterTest extends CarrotTestCase
 {
     /** Test comparator */
     private static final Comparator<String> REVERSED_STRING_COMPARATOR = Ordering

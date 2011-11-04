@@ -12,8 +12,6 @@
 
 package org.carrot2.clustering.lingo;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.TfTermWeighting;
 import org.junit.Before;

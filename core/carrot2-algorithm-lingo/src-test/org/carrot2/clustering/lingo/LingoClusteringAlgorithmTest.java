@@ -12,9 +12,6 @@
 
 package org.carrot2.clustering.lingo;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.*;
-
 import java.util.Collection;
 import java.util.List;
 

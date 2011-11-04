@@ -12,8 +12,7 @@
 
 package org.carrot2.core;
 
-import static org.fest.assertions.Assertions.assertThat;
-
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -21,9 +20,9 @@ import com.google.common.collect.Lists;
 /**
  * Test cases for {@link Document}.
  */
-public class DocumentTest
+public class DocumentTest extends CarrotTestCase
 {
-    @Test()
+    @Test
     public void testNoIdentifiers()
     {
         final Document d1 = new Document();
@@ -36,7 +35,7 @@ public class DocumentTest
         assertThat(d3.id).isEqualTo(2);
     }
 
-    @Test()
+    @Test
     public void testSomeIdentifiers()
     {
         final Document d1 = new Document();
@@ -54,7 +53,7 @@ public class DocumentTest
         assertThat(d4.id).isEqualTo(5);
         assertThat(d5.id).isEqualTo(8);
     }
-    
+
     @Test
     public void testNonUniqueIdentifiers()
     {

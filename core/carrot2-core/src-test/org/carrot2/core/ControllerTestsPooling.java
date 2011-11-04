@@ -12,9 +12,6 @@
 
 package org.carrot2.core;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.annotations.ThreadSafe;
@@ -36,11 +33,6 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
      * pooling functionality.
      */
     public abstract Controller getPoolingController();
-
-    public boolean hasCaching()
-    {
-        return false;
-    }
 
     @BeforeClass
     public static void enableAssertions()
@@ -176,13 +168,13 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
         performProcessing(ComponentWithInitProcessingInputReferenceAttribute.class);
         performProcessing(ComponentWithInitProcessingInputReferenceAttribute.class);
         assertThat(BindableInstanceCounter.createdInstances).isEqualTo(
-            hasCaching() ? 2 : eagerlyInitializedInstances());
+            isCaching() ? 2 : eagerlyInitializedInstances());
 
         processingAttributes.put("initProcessing", BindableInstanceCounter.class);
         performProcessing(ComponentWithInitProcessingInputReferenceAttribute.class);
         performProcessingAndDispose(ComponentWithInitProcessingInputReferenceAttribute.class);
         assertThat(BindableInstanceCounter.createdInstances).isEqualTo(
-            hasCaching() ? 2 : eagerlyInitializedInstances() + 3 - 1);
+            isCaching() ? 2 : eagerlyInitializedInstances() + 3 - 1);
     }
 
     @Test

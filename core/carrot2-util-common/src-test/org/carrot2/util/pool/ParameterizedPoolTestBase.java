@@ -12,23 +12,26 @@
 
 package org.carrot2.util.pool;
 
-import static junit.framework.Assert.assertNotSame;
-import static junit.framework.Assert.assertSame;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createStrictControl;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.isNull;
 
+import java.util.concurrent.CountDownLatch;
+
+import org.carrot2.util.tests.CarrotTestCase;
 import org.easymock.IMocksControl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.carrotsearch.randomizedtesting.Rethrow;
+
 /**
  * Test cases for {@link FixedSizePool}.
  */
-public abstract class ParameterizedPoolTestBase
+public abstract class ParameterizedPoolTestBase extends CarrotTestCase
 {
     protected IParameterizedPool<Object, String> pool;
 
@@ -56,29 +59,24 @@ public abstract class ParameterizedPoolTestBase
             "a", "b", "c"
         };
 
+        final CountDownLatch latch = new CountDownLatch(1);
         class Worker extends Thread
         {
-            public volatile Throwable t;
-
             public void run()
             {
-                try
-                {
-                    for (int i = 0; i < 50; i++)
+                try {
+                    latch.await();
+                    for (int i = iterations(25, 100); --i >= 0;)
                     {
-                        Object o = pool.borrowObject(Object.class, params[i
-                            % params.length]);
+                        Object o = pool.borrowObject(Object.class, params[i % params.length]);
                         Thread.sleep(10);
                         pool.returnObject(o, params[i % params.length]);
                     }
-                }
-                catch (Throwable e)
-                {
-                    this.t = e;
+                } catch (Exception e) {
+                    Rethrow.rethrow(e);
                 }
             }
         }
-        ;
 
         Worker [] threads = new Worker [getPoolSize() * 5];
         for (int i = 0; i < threads.length; i++)
@@ -86,11 +84,11 @@ public abstract class ParameterizedPoolTestBase
             threads[i] = new Worker();
             threads[i].start();
         }
+        latch.countDown();
 
         for (Worker w : threads)
         {
             w.join();
-            if (w.t != null) throw new RuntimeException("Worker failed, see nested.", w.t);
         }
     }
 

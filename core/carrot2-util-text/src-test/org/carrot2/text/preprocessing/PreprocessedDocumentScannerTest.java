@@ -12,8 +12,6 @@
 
 package org.carrot2.text.preprocessing;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.util.List;
 
 import org.junit.Test;

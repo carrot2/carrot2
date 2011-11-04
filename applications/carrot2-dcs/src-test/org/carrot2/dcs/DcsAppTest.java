@@ -16,8 +16,6 @@ import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsE
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.carrot2.dcs.RestProcessorServlet.DISABLE_LOGFILE_APPENDER;
 import static org.carrot2.dcs.RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assume.assumeTrue;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -41,8 +39,11 @@ import org.carrot2.util.StreamUtils;
 import org.carrot2.util.SystemPropertyStack;
 import org.carrot2.util.resource.*;
 import org.carrot2.util.resource.ResourceLookup.Location;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.*;
 
+import com.carrotsearch.randomizedtesting.annotations.Nightly;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
@@ -53,7 +54,9 @@ import com.google.common.io.Files;
 /**
  * Test cases for the {@link DcsApp}.
  */
-public class DcsAppTest
+@Nightly
+@ThreadLeaks(linger = 1000, leakedThreadsBelongToSuite = true)
+public class DcsAppTest extends CarrotTestCase
 {
     private static DcsApp dcs;
 
@@ -439,6 +442,12 @@ public class DcsAppTest
     private HtmlPage getPage(final String url) throws IOException, MalformedURLException
     {
         final WebClient webClient = new WebClient();
+        closeAfterTest(new Closeable() {
+            public void close() throws IOException
+            {
+                webClient.closeAllWindows();
+            }
+        });
         final HtmlPage startPage = (HtmlPage) webClient.getPage(getDcsUrl(url));
 
         // Wait for AJAX calls to complete

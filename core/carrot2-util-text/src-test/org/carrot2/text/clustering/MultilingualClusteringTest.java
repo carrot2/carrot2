@@ -13,12 +13,12 @@
 package org.carrot2.text.clustering;
 
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
-import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.*;
 
 import org.carrot2.core.*;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +29,7 @@ import com.google.common.collect.*;
 /**
  *
  */
-public class MultilingualClusteringTest
+public class MultilingualClusteringTest extends CarrotTestCase
 {
     private MultilingualClustering multilingualClustering;
     private TestMultilingualClusteringAlgorithm testMultilingualClusteringAlgorithm;

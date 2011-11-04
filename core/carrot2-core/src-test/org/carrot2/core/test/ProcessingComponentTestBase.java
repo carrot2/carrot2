@@ -16,6 +16,7 @@ import java.util.*;
 
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.After;
 import org.junit.Before;
 
@@ -24,7 +25,8 @@ import org.junit.Before;
  * simple and caching controller along with maps for attributes and a method that
  * initializes them.
  */
-public abstract class ProcessingComponentTestBase<T extends IProcessingComponent>
+public abstract class ProcessingComponentTestBase<T extends IProcessingComponent> 
+    extends CarrotTestCase
 {
     /** Simple controller used for tests. */
     private Controller simpleController;

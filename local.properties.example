@@ -59,10 +59,15 @@ eclipse.home=${target.platform}/eclipse
 #######################################################################################
 # Properties controlling test execution.
 
-# Control tests that require external APIs. Some of these may not be 
-# enabled from public IPs.
-# external.api.tests.disabled=true
-# icerocket.tests.enabled=false
+# Enables tests that require external APIs. Some of these may not be enabled from public IPs.
+# TODO: make it a test group once https://github.com/carrotsearch/randomizedtesting/issues/17 is implemented
+external.api.tests.disabled=true
+
+# IceRocket API.
+icerocket.tests.enabled=false
+
+# Enables longer tests and intensifies randomized tests (more iterations, more data).
+tests.nightly=false
 
 # To run tests requiring Carrot2 XML feed URLs, set the base URL here.
 # Leave undefined to skip these tests.

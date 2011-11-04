@@ -11,14 +11,10 @@
 
 package org.carrot2.text.preprocessing;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-
-import org.carrot2.core.Document;
 import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +22,7 @@ import org.junit.Test;
 /**
  * Test cases for {@link PhraseExtractor}.
  */
-public class PhraseExtractorTest
+public class PhraseExtractorTest extends CarrotTestCase
 {
     PreprocessingContextBuilder contextBuilder;
 
@@ -340,42 +336,23 @@ public class PhraseExtractorTest
     public void tfByDocumentAndTfSanity()
     {
         String symbols = "abcd";
-        final long seed = System.currentTimeMillis();
-        Random rnd = new Random(seed);
         for (int reps = 0; reps < 100; reps++)
         {
             final PreprocessingContextBuilder builder = contextBuilder
                 .setAttribute(AttributeUtils.getKey(PhraseExtractor.class, "dfThreshold"), 1);
 
-            for (int docs = rnd.nextInt(5); docs >= 0; docs--)
+            for (int docs = 1 + iterations(1, 10); docs >= 0; docs--)
             {
-                int phraseSize = 1 + rnd.nextInt(PhraseExtractor.MAX_PHRASE_LENGTH + 2);
+                int phraseSize = randomIntBetween(1, PhraseExtractor.MAX_PHRASE_LENGTH + 2);
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < phraseSize; i++)
-                    sb.append(symbols.charAt(rnd.nextInt(symbols.length()))).append(" ");
+                    sb.append(symbols.charAt(randomInt(symbols.length() - 1))).append(" ");
 
                 builder.newDoc(sb.toString(), null);
             }
 
             PreprocessingContextAssert a = builder.buildContextAssert();
-
-            try
-            {
-                a.phraseTfsCorrect();
-            }
-            catch (AssertionError e)
-            {
-                System.out.println("Document titles:");
-                for (Document d : a.context.documents)
-                {
-                    System.out.println("  " + d.getTitle());
-                }
-                System.out.println("Context:");
-                System.out.println(a.context);
-                System.out.println("Seed: " + seed);
-                System.out.println("Iteration: " + reps);
-                throw e;
-            }
+            a.phraseTfsCorrect();
         }
     }
 

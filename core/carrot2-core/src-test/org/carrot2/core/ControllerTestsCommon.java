@@ -14,21 +14,33 @@ package org.carrot2.core;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isA;
-import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.MapAssert.entry;
-import static org.junit.Assert.assertEquals;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 import org.carrot2.util.attribute.Output;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-import com.google.common.collect.*;
+import com.carrotsearch.randomizedtesting.annotations.Nightly;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * Tests common functionality of a {@link Controller}. The fact that we need to resort to
- * having {@link #hasCaching()} and {@link #hasPooling()} methods here isn't pretty, but
+ * having {@link #isCaching()} and {@link #isPooling()} methods here isn't pretty, but
  * makes testing a lot easier.
  */
 public abstract class ControllerTestsCommon extends ControllerTestsBase
@@ -39,20 +51,10 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
      */
     public abstract Controller getSimpleController();
 
-    public boolean hasCaching()
-    {
-        return false;
-    }
-
-    public boolean hasPooling()
-    {
-        return false;
-    }
-
     @Before
     public void disableOrderChecking()
     {
-        if (hasCaching() && !hasPooling())
+        if (isCaching() && !isPooling())
         {
             mocksControl.checkOrder(false);
         }
@@ -118,22 +120,18 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
      * Also demonstrates characteristics of each controller configuration, i.e. the number
      * of created component instances and processing requests.
      */
-    @Test
+    @Test @Nightly
     public void testStress() throws InterruptedException, ExecutionException
     {
-        // Prepare random data
-        final Random random = new Random();
-
-        // When there's no caching, make fewer queries to speed up tests
-        final int numberOfQueriesBase = hasCaching() ? 1000 : 50;
-        final int numberOfQueries = numberOfQueriesBase
-            + random.nextInt(numberOfQueriesBase);
-        final int numberOfThreads = 25 + random.nextInt(10);
+        // If there's no caching, make fewer queries to speed up tests
+        final int numberOfQueriesBase = isCaching() ? 1000 : 50;
+        final int numberOfQueries = randomIntBetween(numberOfQueriesBase, 2 * numberOfQueriesBase);
+        final int numberOfThreads = randomIntBetween(5, 30);
         final String [] data = new String [numberOfQueries];
         final Set<String> uniqueQueries = Sets.newHashSet();
         for (int i = 0; i < data.length; i++)
         {
-            data[i] = Integer.toString(random.nextInt(20 + random.nextInt(10)));
+            data[i] = Integer.toString(randomIntBetween(1, 30));
             uniqueQueries.add(data[i]);
         }
         final int numberOfUniqueQueries = uniqueQueries.size();
@@ -142,18 +140,18 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         final int numberOfCreatedComponentsMin;
         final int numberOfCreatedComponentsMax;
         final int numberOfProcessingRequests;
-        if (!hasCaching() && !hasPooling())
+        if (!isCaching() && !isPooling())
         {
             numberOfCreatedComponentsMin = numberOfCreatedComponentsMax = numberOfQueries;
             numberOfProcessingRequests = numberOfQueries;
         }
-        else if (!hasCaching() && hasPooling())
+        else if (!isCaching() && isPooling())
         {
             numberOfCreatedComponentsMin = 1;
             numberOfCreatedComponentsMax = numberOfThreads;
             numberOfProcessingRequests = numberOfQueries;
         }
-        else if (hasCaching() && !hasPooling())
+        else if (isCaching() && !isPooling())
         {
             // The +1 is to cover the fact that the cache needs to create a component
             // to read its attribute descriptors. This is done once per controller per
@@ -177,22 +175,30 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         mocksControl.checkOrder(false);
 
         component1Mock.init(isA(IControllerContext.class));
-        expectLastCall()
-            .times(numberOfCreatedComponentsMin, numberOfCreatedComponentsMax);
+        expectLastCall().times(numberOfCreatedComponentsMin, numberOfCreatedComponentsMax);
         for (int i = 0; i < numberOfProcessingRequests; i++)
         {
             component1Mock.beforeProcessing();
             component1Mock.process();
-            expectLastCall().andAnswer(new DelayedAnswer<Object>(random.nextInt(100)));
+            expectLastCall().andAnswer(new DelayedAnswer<Object>(randomInt(100)));
             component1Mock.afterProcessing();
         }
         component1Mock.dispose();
-        expectLastCall()
-            .times(numberOfCreatedComponentsMin, numberOfCreatedComponentsMax);
+        expectLastCall().times(numberOfCreatedComponentsMin, numberOfCreatedComponentsMax);
         mocksControl.replay();
 
         // Perform processing
-        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+        final List<Thread> children = Collections.synchronizedList(Lists.<Thread>newArrayList());
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads, new ThreadFactory()
+        {
+            public Thread newThread(Runnable r)
+            {
+                Thread t = new Thread(r);
+                children.add(t);
+                return t;
+            }
+        });
+
         List<Callable<String>> callables = Lists.newArrayList();
         for (final String string : data)
         {
@@ -200,12 +206,10 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
             {
                 public String call() throws Exception
                 {
-                    Map<String, Object> localAttributes = Maps
-                        .newHashMap(processingAttributes);
+                    Map<String, Object> localAttributes = Maps.newHashMap(processingAttributes);
                     localAttributes.put("runtimeAttribute", string);
                     localAttributes.put("data", "d");
-                    final ProcessingResult localResult = controller.process(
-                        localAttributes, Component1.class);
+                    final ProcessingResult localResult = controller.process(localAttributes, Component1.class);
                     return localResult.getAttribute("data");
                 }
             });
@@ -218,8 +222,9 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         {
             assertEquals("di" + data[i++], future.get());
         }
-
         executorService.shutdown();
+        for (Thread t : children)
+            t.join();
 
         controller.dispose();
         controller = null;
@@ -321,7 +326,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         performProcessingDisposeAndVerifyMocks(Component1.class, Component2.class);
     }
 
-    @Test
+    @Test @Nightly
     public void testNormalExecutionTimeMeasurement()
     {
         final long c1Time = 250;
@@ -355,7 +360,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         processingAttributes.put("data", "d");
         performProcessingAndDispose(Component1.class, Component2.class, Component3.class);
 
-        if (hasCaching())
+        if (isCaching())
         {
             checkTimes(0, 0, 0, tolerance);
         }
@@ -514,18 +519,24 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
     @Test(expected = IllegalArgumentException.class)
     public void testComponentConfigurationDuplicateComponentId()
     {
-        prepareController().init(
-            ImmutableMap.<String, Object> of(),
-            new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
-                "component", ImmutableMap.of("init", (Object) "v1")),
-            new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
-                "component", ImmutableMap.of("init", (Object) "v2")));
+        Controller controller = prepareController();
+        try {
+            controller.init(
+                ImmutableMap.<String, Object> of(),
+                new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
+                    "component", ImmutableMap.of("init", (Object) "v1")),
+                new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
+                    "component", ImmutableMap.of("init", (Object) "v2")));
+        } finally {
+            controller.dispose();
+        }
     }
 
     @Test
     public void testEmptyStatsInNewController()
     {
-        final ControllerStatistics statistics = prepareController().getStatistics();
+        final Controller controller = prepareController();
+        final ControllerStatistics statistics = controller.getStatistics();
         assertThat(statistics).isNotNull();
         assertThat(statistics.totalQueries).isEqualTo(0);
         assertThat(statistics.goodQueries).isEqualTo(0);
@@ -536,7 +547,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         assertThat(statistics.totalTimeAverageInWindow).isEqualTo(0);
         assertThat(statistics.totalTimeMeasurementsInWindow).isEqualTo(0);
 
-        if (hasCaching())
+        if (isCaching())
         {
             assertThat(statistics.cacheMisses).isEqualTo(0);
             assertThat(statistics.cacheHitsTotal).isEqualTo(0);
@@ -550,20 +561,24 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
             assertThat((Object) statistics.cacheHitsMemory).isNull();
             assertThat((Object) statistics.cacheHitsDisk).isNull();
         }
+        
+        controller.dispose();
     }
 
     @Test
     public void testStatsOneGoodQuery()
     {
+        final int delay = 100;
+        final int halfDelay = delay / 2;
         processingAttributes.put("data", "d");
 
         mocksControl.resetToNice();
 
         component1Mock.process();
-        expectLastCall().andAnswer(new DelayedAnswer<Object>(300));
+        expectLastCall().andAnswer(new DelayedAnswer<Object>(delay));
 
         component2Mock.process();
-        expectLastCall().andAnswer(new DelayedAnswer<Object>(300));
+        expectLastCall().andAnswer(new DelayedAnswer<Object>(delay));
 
         mocksControl.replay();
 
@@ -573,13 +588,13 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         assertThat(statistics).isNotNull();
         assertThat(statistics.totalQueries).isEqualTo(1);
         assertThat(statistics.goodQueries).isEqualTo(1);
-        assertThat(statistics.algorithmTimeAverageInWindow).isGreaterThanOrEqualTo(200);
+        assertThat(statistics.algorithmTimeAverageInWindow).isGreaterThanOrEqualTo(halfDelay);
         assertThat(statistics.algorithmTimeMeasurementsInWindow).isEqualTo(1);
-        assertThat(statistics.sourceTimeAverageInWindow).isGreaterThanOrEqualTo(200);
+        assertThat(statistics.sourceTimeAverageInWindow).isGreaterThanOrEqualTo(halfDelay);
         assertThat(statistics.sourceTimeMeasurementsInWindow).isEqualTo(1);
-        assertThat(statistics.totalTimeAverageInWindow).isGreaterThanOrEqualTo(400);
+        assertThat(statistics.totalTimeAverageInWindow).isGreaterThanOrEqualTo(2 * halfDelay);
         assertThat(statistics.totalTimeMeasurementsInWindow).isEqualTo(1);
-        if (hasCaching())
+        if (isCaching())
         {
             assertThat(statistics.cacheMisses).isEqualTo(2);
             assertThat(statistics.cacheHitsTotal).isEqualTo(0);
@@ -604,7 +619,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         assertThat(statistics.totalQueries).isEqualTo(2);
         assertThat(statistics.goodQueries).isEqualTo(2);
 
-        if (hasCaching())
+        if (isCaching())
         {
             assertThat(statistics.cacheMisses).isEqualTo(1);
             assertThat(statistics.cacheHitsTotal).isEqualTo(1);
@@ -641,7 +656,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
             assertThat(statistics.totalQueries).isEqualTo(2);
             assertThat(statistics.goodQueries).isEqualTo(1);
 
-            if (hasCaching())
+            if (isCaching())
             {
                 assertThat(statistics.cacheMisses).isEqualTo(2);
                 assertThat(statistics.cacheHitsTotal).isEqualTo(0);
@@ -679,7 +694,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
      */
     private void invokeInitForCache(final IProcessingComponent... components)
     {
-        if (hasCaching() && !hasPooling())
+        if (isCaching() && !isPooling())
         {
             for (IProcessingComponent component : components)
             {

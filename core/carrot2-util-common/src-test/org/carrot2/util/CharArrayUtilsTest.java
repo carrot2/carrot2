@@ -12,15 +12,17 @@
 
 package org.carrot2.util;
 
-import static org.junit.Assert.*;
-import static org.carrot2.util.CharArrayUtils.*;
+import static org.carrot2.util.CharArrayUtils.hasCapitalizedLetters;
+import static org.carrot2.util.CharArrayUtils.toLowerCaseCopy;
+import static org.carrot2.util.CharArrayUtils.toLowerCaseInPlace;
 
 import java.util.Arrays;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class CharArrayUtilsTest
+public class CharArrayUtilsTest extends CarrotTestCase
 {
     @Test
     public void testToLowerCaseInPlace()

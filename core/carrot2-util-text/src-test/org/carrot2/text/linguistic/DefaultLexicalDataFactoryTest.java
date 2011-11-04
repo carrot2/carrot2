@@ -12,11 +12,6 @@
 
 package org.carrot2.text.linguistic;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -39,6 +34,7 @@ import org.carrot2.util.resource.DirLocator;
 import org.carrot2.util.resource.IResourceLocator;
 import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.resource.ResourceLookup.Location;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
@@ -46,7 +42,7 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Tests {@link ILexicalData}.
  */
-public class DefaultLexicalDataFactoryTest
+public class DefaultLexicalDataFactoryTest extends CarrotTestCase
 {
     /**
      * Binds basic preprocessing pipeline.

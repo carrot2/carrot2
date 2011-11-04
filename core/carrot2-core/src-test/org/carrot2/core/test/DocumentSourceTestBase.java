@@ -12,12 +12,14 @@
 
 package org.carrot2.core.test;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
-import java.util.*;
-
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.Document;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.metadata.BindableMetadata;

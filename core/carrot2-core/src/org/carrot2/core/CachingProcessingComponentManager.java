@@ -51,8 +51,9 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
             System.setProperty("net.sf.ehcache.skipUpdateCheck", "true");
         }
     }
+
     /** The delegate manager that prepares the actual processing components */
-    private final IProcessingComponentManager delegate;
+    final IProcessingComponentManager delegate;
 
     /**
      * Descriptors of {@link Input} and {@link Output} {@link Processing} attributes of
@@ -64,7 +65,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
     /**
      * A set of {@link IProcessingComponent}s whose data should be cached internally.
      */
-    private final Set<Class<? extends IProcessingComponent>> cachedComponentClasses;
+    final Set<Class<? extends IProcessingComponent>> cachedComponentClasses;
 
     /** Ehcache manager */
     private final CacheManager cacheManager;

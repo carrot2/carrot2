@@ -17,11 +17,12 @@ import java.util.ArrayList;
 
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.util.tests.CarrotTestCase;
 
 /**
  * A base class for testing Carrot2 tokenizers.
  */
-abstract class TokenizerTestBase
+abstract class TokenizerTestBase extends CarrotTestCase
 {
     /**
      * Creates the Analyzer under tests.

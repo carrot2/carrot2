@@ -12,13 +12,9 @@
 
 package org.carrot2.core;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertSame;
-
 import java.util.List;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
@@ -29,7 +25,7 @@ import com.google.common.collect.Lists;
 /**
  * Test cases for {@link ClusterWithParent}.
  */
-public class ClusterWithParentTest
+public class ClusterWithParentTest extends CarrotTestCase
 {
     @Test
     public void testNoSubclusters()

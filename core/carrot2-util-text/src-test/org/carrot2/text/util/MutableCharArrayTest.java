@@ -12,14 +12,13 @@
 
 package org.carrot2.text.util;
 
-import static org.junit.Assert.*;
-
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 /**
  * Test cases for {@link MutableCharArray}.
  */
-public class MutableCharArrayTest
+public class MutableCharArrayTest extends CarrotTestCase
 {
     @Test
     public void testCharArrayCharSequence()

@@ -386,11 +386,13 @@
 
     <junit fork="true"
            forkmode="once"
-           printsummary="on"
            errorproperty="junit.error"
-           failureproperty="junit.failure">
-      <jvmarg value="-Djava.library.path=${nni.native.library.path}" />
+           failureproperty="junit.failure"
+	   printsummary="withOutAndErr"
+	   tempdir="${tmp.dir}">
+      <jvmarg value="-Dtests.nightly=${tests.nightly}" />
       <jvmarg value="-ea" />
+
       <formatter type="xml" />
 
       <classpath refid="test.classpath" />

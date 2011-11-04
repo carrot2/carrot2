@@ -12,8 +12,6 @@
 
 package org.carrot2.text.preprocessing;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.linguistic.*;
 import org.junit.Before;

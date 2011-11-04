@@ -14,9 +14,6 @@ package org.carrot2.core.test;
 
 import static org.carrot2.core.test.SampleDocumentData.DOCUMENTS_DATA_MINING;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -43,6 +40,8 @@ import org.fest.assertions.Assertions;
 import org.junit.Assume;
 import org.junit.Test;
 
+import com.carrotsearch.randomizedtesting.annotations.Nightly;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -52,8 +51,8 @@ import com.google.common.collect.Multimap;
 /**
  * Simple baseline tests that apply to all clustering algorithms.
  */
-public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm> extends
-    ProcessingComponentTestBase<T>
+public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm> 
+    extends ProcessingComponentTestBase<T>
 {
     /**
      * Algorithms are bindable, so their metadata should always be available.
@@ -75,8 +74,8 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     @Test
     public void testNoDocuments()
     {
-        final Collection<Cluster> clusters = cluster(Collections.<Document> emptyList())
-            .getClusters();
+        final Collection<Cluster> clusters = 
+            cluster(Collections.<Document> emptyList()).getClusters();
 
         assertNotNull(clusters);
         assertEquals(0, clusters.size());
@@ -89,7 +88,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     public void testEmptyDocuments()
     {
         final List<Document> documents = Lists.newArrayList();
-        final int documentCount = 100;
+        final int documentCount = randomIntBetween(1, 100);
         for (int i = 0; i < documentCount; i++)
         {
             documents.add(new Document());
@@ -113,34 +112,36 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
 
     @SuppressWarnings("unchecked")
     @Test
+    @ThreadLeaks(linger = 5000)
     public void testRepeatedClusteringWithCache()
     {
         // Caching controller is not available for .NET at the moment.
-        Assume.assumeTrue(Platform.getPlatform() == Platform.JAVA);
+        assumeTrue("Java test only.", Platform.getPlatform() == Platform.JAVA);
 
-        final Controller controller = getCachingController(initAttributes,
-            IClusteringAlgorithm.class);
+        final Controller controller = getCachingController(initAttributes, IClusteringAlgorithm.class);
 
         final Map<String, Object> processingAttributes = ImmutableMap.of(
             AttributeNames.DOCUMENTS, (Object) DOCUMENTS_DATA_MINING);
 
         controller.process(processingAttributes, getComponentClass());
         controller.process(processingAttributes, getComponentClass());
+
+        controller.dispose();
     }
 
     /**
      * Performs a very simple stress test using a pooling {@link Controller}. The
      * test is performed with default init attributes.
      */
-    @Test
+    @Nightly @Test 
+    @ThreadLeaks(linger = 5000)
     public void testStress() throws InterruptedException, ExecutionException
     {
-        final int numberOfThreads = 4;
-        final int queriesPerThread = 25;
+        final int numberOfThreads = randomIntBetween(1, 10);
+        final int queriesPerThread = scaledRandomIntBetween(5, 25);
 
         /*
-         * This yields a pooling controller effectively, because no cache interfaces
-         * are passed.
+         * This yields a pooling controller effectively, because no cache interfaces are passed.
          */
         @SuppressWarnings("unchecked")
         final Controller controller = getCachingController(initAttributes);
@@ -172,9 +173,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
             for (Future<ProcessingResult> future : results)
             {
                 final ProcessingResult processingResult = future.get();
-                final Integer dataSetIndex = (Integer) processingResult.getAttributes()
-                    .get("dataSetIndex");
-
+                final Integer dataSetIndex = (Integer) processingResult.getAttributes().get("dataSetIndex");
                 clusterings.put(dataSetIndex, processingResult.getClusters());
             }
 
@@ -192,7 +191,6 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
                 Assertions.assertThat(firstClusterList).isNotEmpty();
                 while (iterator.hasNext())
                 {
-                    System.out.println(dataSetIndex);
                     assertThatClusters(firstClusterList).isEquivalentTo(iterator.next());
                 }
             }

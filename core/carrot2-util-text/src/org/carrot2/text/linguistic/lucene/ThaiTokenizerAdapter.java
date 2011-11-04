@@ -79,6 +79,7 @@ public final class ThaiTokenizerAdapter implements ITokenizer
         array.reset(term.buffer(), 0, term.length());
     }
 
+    @SuppressWarnings("deprecation")
     public void reset(Reader input) throws IOException
     {
         try

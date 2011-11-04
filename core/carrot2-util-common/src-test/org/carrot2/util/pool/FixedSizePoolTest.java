@@ -15,6 +15,8 @@ package org.carrot2.util.pool;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
+
 
 /**
  * Test cases for {@link FixedSizePool}.
@@ -31,6 +33,7 @@ public class FixedSizePoolTest extends ParameterizedPoolTestBase
         return 4;
     }
 
+    @ThreadLeaks(linger = 2000)
     @Test
     public void testExhaustAndReleaseOnDispose() throws Exception
     {

@@ -12,16 +12,13 @@
 
 package org.carrot2.clustering.kmeans;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.util.List;
 
 import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
+import org.carrot2.core.test.assertions.Carrot2CoreAssertions;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -52,8 +49,8 @@ public class BisectingKMeansClusteringAlgorithmTest extends
 
         assertNotNull(clusters);
         assertEquals(3, clusters.size());
-        assertThat(clusters.get(0)).hasLabel("WordA");
-        assertThat(clusters.get(1)).hasLabel("WordB");
-        assertThat(clusters.get(2)).hasLabel("WordC");
+        Carrot2CoreAssertions.assertThat(clusters.get(0)).hasLabel("WordA");
+        Carrot2CoreAssertions.assertThat(clusters.get(1)).hasLabel("WordB");
+        Carrot2CoreAssertions.assertThat(clusters.get(2)).hasLabel("WordC");
     }
 }

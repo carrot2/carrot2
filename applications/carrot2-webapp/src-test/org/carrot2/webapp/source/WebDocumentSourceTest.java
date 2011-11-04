@@ -13,9 +13,6 @@
 package org.carrot2.webapp.source;
 
 import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assume.assumeTrue;
-
 import java.util.List;
 
 import org.carrot2.core.Document;

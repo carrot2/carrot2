@@ -12,8 +12,6 @@
 
 package org.carrot2.text.vsm;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.carrot2.matrix.MatrixAssertions;
 import org.junit.Test;
 

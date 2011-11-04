@@ -11,16 +11,15 @@
 
 package org.carrot2.text.linguistic;
 
-import static org.junit.Assert.assertTrue;
-
 import org.carrot2.core.LanguageCode;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Tests {@link IStemmer}s.
  */
-public class DefaultStemmerFactoryTest
+public class DefaultStemmerFactoryTest extends CarrotTestCase
 {
     private DefaultStemmerFactory factory;
 

@@ -12,9 +12,6 @@
 
 package org.carrot2.clustering.stc;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-
 import java.util.Collection;
 
 import org.carrot2.core.Cluster;

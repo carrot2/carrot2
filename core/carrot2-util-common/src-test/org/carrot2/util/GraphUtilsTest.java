@@ -12,10 +12,9 @@
 
 package org.carrot2.util;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.*;
-
 import java.util.*;
+
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 import com.google.common.collect.Lists;
 import com.carrotsearch.hppc.IntArrayList;
@@ -23,7 +22,7 @@ import com.carrotsearch.hppc.IntArrayList;
 /**
  * Test cases for {@link GraphUtils}.
  */
-public class GraphUtilsTest
+public class GraphUtilsTest extends CarrotTestCase
 {
     @Test
     public void testEmpty()

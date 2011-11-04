@@ -23,6 +23,7 @@ import org.carrot2.text.linguistic.ILexicalDataFactory;
 import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.linguistic.ITokenizerFactory;
 import org.carrot2.text.linguistic.LanguageModel;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 
 import com.google.common.collect.Lists;
@@ -31,7 +32,7 @@ import com.google.common.collect.Maps;
 /**
  * Base class for {@link PreprocessingContext} tasks tests.
  */
-public class PreprocessingComponentTestBase
+public class PreprocessingComponentTestBase extends CarrotTestCase
 {
     /** Preprocessing context for the component being tested */
     protected PreprocessingContext context;

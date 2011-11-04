@@ -12,12 +12,14 @@
 
 package org.carrot2.core;
 
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatDocuments;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
@@ -26,7 +28,7 @@ import com.google.common.collect.Lists;
 /**
  * Test cases for {@link Cluster}.
  */
-public class ClusterTest
+public class ClusterTest extends CarrotTestCase
 {
     @Test
     public void testAllDocumentsEmptyFlat()

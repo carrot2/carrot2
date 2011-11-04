@@ -12,17 +12,16 @@
 
 package org.carrot2.text.util;
 
-import static org.carrot2.core.test.Assertions.*;
-
 import java.util.Arrays;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Test cases for {@link CharArrayComparators}. 
  */
-public class CharArrayComparatorsTest
+public class CharArrayComparatorsTest extends CarrotTestCase
 {
     @Test
     public void testNormalizingComparatorPL()

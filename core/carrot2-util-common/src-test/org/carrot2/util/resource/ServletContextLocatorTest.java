@@ -14,10 +14,11 @@ package org.carrot2.util.resource;
 
 import javax.servlet.ServletContext;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-public class ServletContextLocatorTest
+public class ServletContextLocatorTest extends CarrotTestCase
 {
     @Test
     public void testHashCodeEqualsServletContextLocator() 

@@ -12,14 +12,13 @@
 
 package org.carrot2.util;
 
-import static junit.framework.Assert.assertEquals;
-
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 /**
  * Test cases for {@link RangeUtils}.
  */
-public class RangeUtilsTest
+public class RangeUtilsTest extends CarrotTestCase
 {
     @Test
     public void testIntZeroRange()
@@ -102,11 +101,11 @@ public class RangeUtilsTest
     private void checkDoubleRange(double min, double max, double expectedMajor,
         double expectedMinor)
     {
-        assertEquals(expectedMajor, RangeUtils.getDoubleMajorTicks(min, max));
-        assertEquals(expectedMinor, RangeUtils.getDoubleMinorTicks(min, max));
+        assertEquals(expectedMajor, RangeUtils.getDoubleMajorTicks(min, max), 0.001);
+        assertEquals(expectedMinor, RangeUtils.getDoubleMinorTicks(min, max), 0.001);
 
         // Check reverse
-        assertEquals(expectedMajor, RangeUtils.getDoubleMajorTicks(max, min));
-        assertEquals(expectedMinor, RangeUtils.getDoubleMinorTicks(max, min));
+        assertEquals(expectedMajor, RangeUtils.getDoubleMajorTicks(max, min), 0.001);
+        assertEquals(expectedMinor, RangeUtils.getDoubleMinorTicks(max, min), 0.001);
     }
 }

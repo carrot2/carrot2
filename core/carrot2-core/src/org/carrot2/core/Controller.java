@@ -63,7 +63,7 @@ public final class Controller implements Closeable
      * Encapsulates different strategies of processing component management, e.g. pooling
      * of component instances or processing results caching.
      */
-    private IProcessingComponentManager componentManager;
+    IProcessingComponentManager componentManager;
 
     /**
      * Attributes provided for this controller at initialization time.

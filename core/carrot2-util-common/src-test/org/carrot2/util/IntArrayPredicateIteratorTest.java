@@ -14,6 +14,7 @@ package org.carrot2.util;
 
 import java.util.ArrayList;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ import com.carrotsearch.hppc.predicates.ShortPredicate;
 /**
  * 
  */
-public class IntArrayPredicateIteratorTest
+public class IntArrayPredicateIteratorTest extends CarrotTestCase
 {
     private final static int SEP = -1;
     private ShortPredicate equalsSep = new ShortPredicate()

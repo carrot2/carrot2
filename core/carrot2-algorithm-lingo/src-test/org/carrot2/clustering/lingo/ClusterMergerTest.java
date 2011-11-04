@@ -12,8 +12,6 @@
 
 package org.carrot2.clustering.lingo;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.TfTermWeighting;

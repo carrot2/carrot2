@@ -12,12 +12,11 @@
 
 package org.carrot2.source;
 
-import static org.junit.Assert.assertEquals;
-
 import org.carrot2.source.MultipageSearchEngine.SearchRange;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
-public class SearchRangeTest
+public class SearchRangeTest extends CarrotTestCase
 {
     @Test
     public void testEmptyRange()
