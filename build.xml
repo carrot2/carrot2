@@ -526,7 +526,7 @@
   </target>
 
   <target name="compile.coverage" depends="clover.tasks" if="clover.runwith">
-    <clover-setup enabled="true">
+    <clover-setup enabled="true" instrumentationLevel="method">
         <fileset refid="src.coverage" />
     </clover-setup>
 
