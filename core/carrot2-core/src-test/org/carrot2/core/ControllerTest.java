@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -43,6 +44,7 @@ import com.google.common.collect.ImmutableMap;
 @SuppressWarnings("unchecked")
 public class ControllerTest
 {
+    @ThreadLeaks(linger = 2000)
     public static class ComponentManagerIndependentTests extends CarrotTestCase
     {
         @Test
@@ -58,7 +60,6 @@ public class ControllerTest
             {
                 controller.dispose();
             }
-            // If we don't get an exception here, the test is passed
         }
 
         @Test(expected = IllegalStateException.class)
