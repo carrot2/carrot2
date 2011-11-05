@@ -44,7 +44,7 @@ import com.carrotsearch.randomizedtesting.annotations.Timeout;
 /**
  * Base class for Carrot2 test classes. Contains common hooks and setups.
  */
-@Timeout(millis = 60 * 1000) // Disable timeouts. We don't expect hanging builds in C2.
+@Timeout(millis = 60 * 1000) // No test should last longer than 60 seconds.
 public class CarrotTestCase extends RandomizedTest
 {
     /*
