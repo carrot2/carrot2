@@ -1,28 +1,28 @@
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="included-beginning">
+    <source component-class="org.carrot2.core.TestDocumentSource" id="included-beginning">
       <label>Yahoo!</label>
       <title>Yahoo Web Search</title>
     </source>    
-    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="included-middle">
+    <source component-class="org.carrot2.core.TestDocumentSource" id="included-middle">
       <label>Yahoo!</label>
       <title>Yahoo Web Search</title>
     </source>    
-    <source component-class="org.carrot2.source.boss.BossDocumentSource" id="included-end">
+    <source component-class="org.carrot2.core.TestDocumentSource" id="included-end">
       <label>Yahoo!</label>
       <title>Yahoo Web Search</title>
     </source>    
   </sources>
   <algorithms>
-    <algorithm component-class="org.carrot2.clustering.lingo.LingoClusteringAlgorithm" id="included-beginning">
+    <algorithm component-class="org.carrot2.core.TestAlgorithm" id="included-beginning">
       <label>Lingo</label>
       <title>Lingo Clustering</title>
     </algorithm>
-    <algorithm component-class="org.carrot2.clustering.stc.STCClusteringAlgorithm" id="included-beginning-2">
+    <algorithm component-class="org.carrot2.core.TestAlgorithm" id="included-beginning-2">
       <label>STC</label>
       <title>Suffix Tree Clustering</title>
     </algorithm>
-    <algorithm component-class="org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm" id="included-end">
+    <algorithm component-class="org.carrot2.core.TestAlgorithm" id="included-end">
       <label>By URL</label>
       <title>By URL Clustering</title>
     </algorithm>

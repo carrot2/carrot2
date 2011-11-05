@@ -12,15 +12,27 @@
 
 package org.carrot2.core;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.ReflectionUtils;
-import org.carrot2.util.attribute.*;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.attribute.AttributeBinder;
+import org.carrot2.util.attribute.AttributeValueSet;
+import org.carrot2.util.attribute.AttributeValueSets;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.BindableDescriptor;
+import org.carrot2.util.attribute.BindableDescriptorBuilder;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
+import org.carrot2.util.attribute.Required;
+import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.simplexml.PersisterHelpers;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -340,5 +352,11 @@ public class ProcessingComponentDescriptor
         {
             return descriptor.id;
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 }

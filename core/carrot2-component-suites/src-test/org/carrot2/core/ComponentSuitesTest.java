@@ -12,12 +12,11 @@
 
 package org.carrot2.core;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.carrot2.util.resource.ClassLocator;
 import org.carrot2.util.resource.ContextClassLoaderLocator;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceLookup;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.google.common.base.Function;
@@ -26,7 +25,7 @@ import com.google.common.collect.Lists;
 /**
  * A very rough test case for the deserialization of component suites.
  */
-public class ComponentSuitesTest
+public class ComponentSuitesTest extends CarrotTestCase
 {
     @Test
     public void testCarrot2DefaultComponentSuite() throws Exception
@@ -68,6 +67,8 @@ public class ComponentSuitesTest
             "included-beginning", "included-beginning-2", "including-middle",
             "including-middle-2", "included-end", "including-end");
         assertThat(suite.includes).isNull();
+        
+        assertThat(suite.removeUnavailableComponents()).isEmpty();
     }
 
     private void checkSuite(final String suitePath, ResourceLookup resourceLookup)
@@ -95,5 +96,7 @@ public class ComponentSuitesTest
             assertThat(algorithm.getId()).isNotEmpty();
             assertThat(algorithm.getAttributeSets()).isNotNull();
         }
+
+        assertThat(suite.removeUnavailableComponents()).isEmpty();        
     }
 }
