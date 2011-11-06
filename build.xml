@@ -417,8 +417,6 @@
       <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
       <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
 
-      <!-- <sysproperty key="clover.pertest.coverage" value="off" /> -->
-
       <!-- Restrict to the given test class/ name. -->
       <sysproperty key="tests.class" value="${tests.class}" />
       <sysproperty key="tests.method" value="${tests.method}" />
@@ -546,7 +544,7 @@
   </target>
 
   <target name="compile.coverage" depends="clover.tasks" if="clover.runwith">
-    <clover-setup enabled="true">
+    <clover-setup enabled="true" instrumentationLevel="method">
         <fileset refid="src.coverage" />
     </clover-setup>
 
