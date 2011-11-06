@@ -397,15 +397,19 @@
       <include name="**/*${tests.class.name}.class"     if="tests.class.defined" />
     </patternset>
 
+    <!-- defaults. -->
     <property name="tests.class" value="" />
     <property name="tests.method" value="" />
+    <property name="tests.nightly" value="false" />
 
     <junit fork="true"
            forkmode="once"
            errorproperty="junit.error"
            failureproperty="junit.failure"
-	   printsummary="withOutAndErr"
-	   tempdir="${tmp.dir}">
+	         printsummary="off"
+	         showoutput="true"
+	         logfailedtests="false"
+	         tempdir="${tmp.dir}">
       <jvmarg value="-Dtests.nightly=${tests.nightly}" />
       <jvmarg value="-ea" />
 
