@@ -19,10 +19,12 @@ import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.randomizedtesting.annotations.Seed;
 
 /**
  * Sanity and validation tests for the {@link SuffixTree} class.
  */
+@Seed("17BCE282EC5FD162")
 public class SuffixTreeTest extends CarrotTestCase
 {
     @Test
