@@ -12,19 +12,18 @@
 
 package org.carrot2.text.suffixtree;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import org.carrot2.text.suffixtree.SuffixTree.VisitorAdapter;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.carrotsearch.hppc.IntArrayList;
-import com.carrotsearch.randomizedtesting.annotations.Seed;
 
 /**
  * Sanity and validation tests for the {@link SuffixTree} class.
  */
-@Seed("17BCE282EC5FD162")
 public class SuffixTreeTest extends CarrotTestCase
 {
     @Test
@@ -62,7 +61,7 @@ public class SuffixTreeTest extends CarrotTestCase
     @Test
     public void checkRandomSymbols()
     {
-        final int [] input = new int [scaledRandomIntBetween(1, 50000)];
+        final int [] input = new int [scaledRandomIntBetween(1, 25000)];
         for (int i = 0; i < input.length; i++)
         {
             input[i] = randomInt(100);
@@ -81,7 +80,7 @@ public class SuffixTreeTest extends CarrotTestCase
             }
         }).build();
 
-        for (int i = 0; i < Math.min(10000, input.length); i++)
+        for (int i = 0; i < Math.min(5000, input.length); i++)
         {
             stree.containsSuffix(new IntegerSequence(input, i, input.length - i));
         }
