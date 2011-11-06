@@ -384,9 +384,21 @@
       <isset property="carrot2.xml.feed.url.base" />
     </condition>
 
-    <!-- Default to empty. -->
+    <!-- tests.class and tests.method filtering. -->
+    <condition property="tests.class.defined">
+      <and><isset property="tests.class" />
+           <length string="${tests.class}" trim="true" length="0" when="gt" />
+      </and>
+    </condition>
+    <propertyregex property="tests.class.name" input="${tests.class}" regexp="([^\.]+)$" select="\1" casesensitive="false" />
+
+    <patternset id="patternset.tests">
+      <include name="**/*Test.class"           unless="tests.class.defined" />
+      <include name="**/*${tests.class.name}.class"     if="tests.class.defined" />
+    </patternset>
+
     <property name="tests.class" value="" />
-    <property name="tests.method" value="" />    
+    <property name="tests.method" value="" />
 
     <junit fork="true"
            forkmode="once"
@@ -409,14 +421,10 @@
       <sysproperty key="tests.class" value="${tests.class}" />
       <sysproperty key="tests.method" value="${tests.method}" />
 
-      <batchtest todir="${tests.report.dir}" unless="testcase">
+      <batchtest todir="${tests.report.dir}">
         <fileset dir="${build.dir.tests}">
-          <include name="**/*Test.class" />
+          <patternset refid="patternset.tests" />
         </fileset>
-      </batchtest>
-
-      <batchtest todir="${tests.report.dir}" if="testcase">
-        <fileset dir="${build.dir.tests}" includes="**/${testcase}.java"/>
       </batchtest>
     </junit>
 
