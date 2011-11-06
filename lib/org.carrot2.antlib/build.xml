@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project default="jar" name="carrot2.common.antlib">
+<project default="tasks" name="carrot2.common.antlib">
     <!-- Base dir determined from the build file location -->
     <dirname property="carrot2.common.antlib.basedir"
         file="${ant.file.carrot2.common.antlib}" />
@@ -12,23 +12,5 @@
                 <pathelement location="${carrot2.common.antlib.basedir}/org.carrot2.antlib.jar" />
             </classpath>
         </taskdef>
-    </target>
-
-    <target name="clean">
-        <delete dir="${carrot2.common.antlib.basedir}/tmp/classes" />
-    </target>
-
-    <target name="jar" depends="clean">
-        <mkdir dir="${carrot2.common.antlib.basedir}/tmp/classes" />
-
-        <javac debug="true" destdir="${carrot2.common.antlib.basedir}/tmp/classes" includeantruntime="true">
-            <src path="${carrot2.common.antlib.basedir}/src" />
-        </javac>
-        <copy todir="${carrot2.common.antlib.basedir}/tmp/classes">
-            <fileset dir="${carrot2.common.antlib.basedir}/src">
-                <exclude name="**/*.java" />
-            </fileset>
-        </copy>
-        <jar jarfile="${carrot2.common.antlib.basedir}/org.carrot2.antlib.jar" basedir="${carrot2.common.antlib.basedir}/tmp/classes" />
     </target>
 </project>
