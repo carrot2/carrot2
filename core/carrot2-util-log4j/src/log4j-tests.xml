@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" [
+  <!ENTITY appender-console SYSTEM "appender-console.xml">
+  <!ENTITY filters-common SYSTEM "filters-common.xml">
+  <!ENTITY filters-silent SYSTEM "filters-silent.xml">
+]>
+
+<!-- 
+    "tests" Log4j configuration. Console appender with selected filters.
+-->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- Add appenders here. -->
+    &appender-console;
+
+    <!-- Add logger filters here. -->
+    &filters-common;
+    &filters-silent;
+
+    <logger name="org.carrot2.util.resource"><level value="info"/></logger>
+    <logger name="org.carrot2.text.clustering.MultilingualClustering"><level value="info"/></logger>
+    <logger name="org.carrot2.util.xslt.TemplatesPool"><level value="warn"/></logger>
+
+    <!-- Root logger config. -->
+    <root>
+        <priority value="debug" />
+        <appender-ref ref="appender-console" />
+    </root>
+</log4j:configuration>

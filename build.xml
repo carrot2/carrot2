@@ -420,6 +420,7 @@
       <sysproperty key="external.api.tests.disabled" value="${external.api.tests.disabled}" />
       <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
       <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
+      <sysproperty key="log4j.configuration" value="log4j-tests.xml" />
 
       <!-- Restrict to the given test class/ name. -->
       <sysproperty key="tests.class" value="${tests.class}" />
