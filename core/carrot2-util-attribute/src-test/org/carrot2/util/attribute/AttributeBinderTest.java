@@ -12,14 +12,12 @@
 
 package org.carrot2.util.attribute;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.*;
-
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.carrot2.util.attribute.constraint.*;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.fest.assertions.MapAssert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +29,7 @@ import org.junit.Test;
 {
     "unchecked", "unused"
 })
-public class AttributeBinderTest
+public class AttributeBinderTest extends CarrotTestCase
 {
     private Map<String, Object> attributes;
 

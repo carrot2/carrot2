@@ -12,9 +12,6 @@
 
 package org.carrot2.util.attribute;
 
-import static org.carrot2.util.attribute.test.assertions.AttributeAssertions.assertThat;
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.util.Map;
@@ -22,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.metadata.AttributeMetadata;
+import org.carrot2.util.attribute.test.assertions.AttributeAssertions;
 import org.carrot2.util.attribute.test.binder.BindableReferenceContainer;
 import org.carrot2.util.attribute.test.binder.BindableReferenceImpl1;
 import org.carrot2.util.attribute.test.binder.BindableReferenceImpl2;
@@ -31,6 +29,7 @@ import org.carrot2.util.attribute.test.binder.NotBindable;
 import org.carrot2.util.attribute.test.binder.SingleClass;
 import org.carrot2.util.attribute.test.binder.SubClass;
 import org.carrot2.util.attribute.test.binder.SuperClass;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 import org.simpleframework.xml.core.Persister;
@@ -38,7 +37,7 @@ import org.simpleframework.xml.core.Persister;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class BindableDescriptorBuilderTest
+public class BindableDescriptorBuilderTest extends CarrotTestCase
 {
     @Test
     public void testSimpleComponent() throws Exception
@@ -51,7 +50,7 @@ public class BindableDescriptorBuilderTest
 
         assertThat(bindableDescriptor.bindableDescriptorsInternal).isEmpty();
 
-        assertThat(bindableDescriptor).contains(
+        AttributeAssertions.assertThat(bindableDescriptor).contains(
             AttributeUtils.getKey(SingleClass.class, "initInputInt"),
             new AttributeDescriptor(
                 clazz.getDeclaredField("initInputInt"), 
@@ -64,7 +63,7 @@ public class BindableDescriptorBuilderTest
                     "Group A",
                     AttributeLevel.BASIC)));
 
-        assertThat(bindableDescriptor).contains(
+        AttributeAssertions.assertThat(bindableDescriptor).contains(
             AttributeUtils.getKey(SingleClass.class, "processingInputString"),
             new AttributeDescriptor(clazz.getDeclaredField("processingInputString"),
                 "test", Lists.<Annotation> newArrayList(), new AttributeMetadata(
@@ -84,7 +83,7 @@ public class BindableDescriptorBuilderTest
         final BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
             .buildDescriptor(instance);
 
-        assertThat(bindableDescriptor).contains(
+        AttributeAssertions.assertThat(bindableDescriptor).contains(
             AttributeUtils.getKey(clazz, "resource"),
             new AttributeDescriptor(clazz.getDeclaredField("resource"),
                 instance.resource, Lists
@@ -159,12 +158,12 @@ public class BindableDescriptorBuilderTest
             .buildDescriptor(instance);
 
         assertThat(bindableDescriptor.bindableDescriptorsInternal).isEmpty();
-        assertThat(bindableDescriptor).contains(
+        AttributeAssertions.assertThat(bindableDescriptor).contains(
             AttributeUtils.getKey(SuperClass.class, "initInputInt"),
             new AttributeDescriptor(superClass.getDeclaredField("initInputInt"), 5, Lists
                 .<Annotation> newArrayList(), new AttributeMetadata(
                 "Super class init input int", null, null)));
-        assertThat(bindableDescriptor).contains(
+        AttributeAssertions.assertThat(bindableDescriptor).contains(
             AttributeUtils.getKey(SubClass.class, "processingInputString"),
             new AttributeDescriptor(subClass.getDeclaredField("processingInputString"),
                 "input", Lists.<Annotation> newArrayList(), new AttributeMetadata(
@@ -181,7 +180,7 @@ public class BindableDescriptorBuilderTest
         final BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
             .buildDescriptor(instance);
 
-        assertThat(bindableDescriptor).contains(
+        AttributeAssertions.assertThat(bindableDescriptor).contains(
             AttributeUtils.getKey(BindableReferenceContainer.class, "bindableAttribute"),
             new AttributeDescriptor(bindableReferenceClass
                 .getDeclaredField("bindableAttribute"), null, Lists
@@ -192,10 +191,13 @@ public class BindableDescriptorBuilderTest
 
         // Referenced attributes
         assertThat(bindableDescriptor.bindableDescriptorsInternal).isNotEmpty();
-        assertThat(
-            bindableDescriptor.bindableDescriptorsInternal
-                .get(BindableReferenceContainer.class.getDeclaredField("bindableField")))
-            .isNotNull().contains(
+        AttributeAssertions
+            .assertThat(
+                bindableDescriptor.bindableDescriptorsInternal
+                    .get(BindableReferenceContainer.class
+                        .getDeclaredField("bindableField")))
+            .isNotNull()
+            .contains(
                 AttributeUtils.getKey(referenceClass, "processingInputInt"),
                 new AttributeDescriptor(referenceClass
                     .getDeclaredField("processingInputInt"), 10, Lists
@@ -221,7 +223,7 @@ public class BindableDescriptorBuilderTest
         final BindableDescriptor bindableDescriptor = BindableDescriptorBuilder
             .buildDescriptor(instance);
 
-        assertThat(bindableDescriptor).contains(
+        AttributeAssertions.assertThat(bindableDescriptor).contains(
             AttributeUtils.getKey(BindableReferenceContainer.class, "bindableAttribute"),
             new AttributeDescriptor(bindableReferenceClass
                 .getDeclaredField("bindableAttribute"), new BindableReferenceImpl2(),
@@ -232,7 +234,7 @@ public class BindableDescriptorBuilderTest
 
         // Referenced attributes -- regular field
         assertThat(bindableDescriptor.bindableDescriptorsInternal).isNotEmpty();
-        assertThat(
+        AttributeAssertions.assertThat(
             bindableDescriptor.bindableDescriptorsInternal
                 .get(BindableReferenceContainer.class.getDeclaredField("bindableField")))
             .isNotNull()
@@ -244,7 +246,7 @@ public class BindableDescriptorBuilderTest
                     "Processing input int", null, null)));
 
         // Referenced attributes -- attribute field
-        assertThat(
+        AttributeAssertions.assertThat(
             bindableDescriptor.bindableDescriptorsInternal
                 .get(BindableReferenceContainer.class
                     .getDeclaredField("bindableAttribute"))).isNotNull().contains(

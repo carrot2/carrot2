@@ -15,10 +15,10 @@ package org.carrot2.util.attribute;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-public class BindableDescriptorGeneratorTest
+public class BindableDescriptorGeneratorTest extends CarrotTestCase
 {
     @Bindable
     public static class D

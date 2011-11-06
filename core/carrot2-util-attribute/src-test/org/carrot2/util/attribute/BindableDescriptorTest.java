@@ -12,18 +12,15 @@
 
 package org.carrot2.util.attribute;
 
-import static junit.framework.Assert.*;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.util.attribute.test.filtering.*;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 @SuppressWarnings("unchecked")
-public class BindableDescriptorTest
+public class BindableDescriptorTest extends CarrotTestCase
 {
     private final BindableDescriptor descriptor = BindableDescriptorBuilder
         .buildDescriptor(new FilteringSubClass());

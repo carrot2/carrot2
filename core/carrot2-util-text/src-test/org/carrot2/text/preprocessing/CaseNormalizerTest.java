@@ -13,13 +13,11 @@
 
 package org.carrot2.text.preprocessing;
 
-import static org.carrot2.text.preprocessing.PreprocessingContextAssert.assertThat;
 import static org.carrot2.text.preprocessing.PreprocessingContextAssert.tokens;
 import static org.carrot2.text.preprocessing.PreprocessingContextAssert.MW;
 import static org.carrot2.text.preprocessing.PreprocessingContextAssert.DS;
 import static org.carrot2.text.preprocessing.PreprocessingContextAssert.FS;
 import static org.carrot2.text.preprocessing.PreprocessingContextAssert.EOS;
-import static org.fest.assertions.Assertions.assertThat;
 
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
@@ -30,7 +28,7 @@ import org.junit.Test;
 /**
  * Test cases for {@link CaseNormalizer}.
  */
-public class CaseNormalizerTest
+public class CaseNormalizerTest extends PreprocessingContextTestBase
 {
     PreprocessingContextBuilder contextBuilder;
 

@@ -12,8 +12,6 @@
 
 package org.carrot2.util.attribute;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.io.File;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -21,13 +19,14 @@ import java.net.URL;
 import org.carrot2.util.attribute.AttributeBinder.AttributeTransformerFromString;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.resource.*;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 /**
  * Test cases for {@link AttributeTransformerFromString}.
  */
 @SuppressWarnings("unused")
-public class AttributeTransformerFromStringTest
+public class AttributeTransformerFromStringTest extends CarrotTestCase
 {
     private Integer integerField;
 

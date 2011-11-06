@@ -12,9 +12,8 @@
 
 package org.carrot2.webapp.filter;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.carrot2.core.Document;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -22,7 +21,7 @@ import com.google.common.collect.Lists;
 /**
  * Test cases for {@link QueryWordHighlighter}.
  */
-public class QueryWordHighlighterTest
+public class QueryWordHighlighterTest extends CarrotTestCase
 {
     @Test
     public void testNullQuery()

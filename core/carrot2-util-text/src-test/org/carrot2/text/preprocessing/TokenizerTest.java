@@ -12,10 +12,8 @@
 
 package org.carrot2.text.preprocessing;
 
-import static org.carrot2.text.preprocessing.PreprocessingContextAssert.assertThat;
 import static org.carrot2.text.preprocessing.PreprocessingContextAssert.tokens;
 import static org.carrot2.text.preprocessing.PreprocessingContextBuilder.FieldValue.*;
-import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.Arrays;
 
@@ -28,7 +26,7 @@ import org.junit.Test;
 /**
  * Test cases for {@link Tokenizer}.
  */
-public class TokenizerTest
+public class TokenizerTest extends PreprocessingContextTestBase
 {
     PreprocessingContextBuilder contextBuilder;
 

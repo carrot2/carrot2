@@ -12,14 +12,11 @@
 
 package org.carrot2.util.attribute;
 
-import static org.junit.Assert.*;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
-public class BindableDescriptorUtilsTest
+public class BindableDescriptorUtilsTest extends CarrotTestCase
 {
-    /**
-     * 
-     */
     @Test
     public void testGetDescriptorClassName()
     {

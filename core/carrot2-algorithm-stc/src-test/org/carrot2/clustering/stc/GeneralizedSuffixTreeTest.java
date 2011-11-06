@@ -12,13 +12,12 @@
 
 package org.carrot2.clustering.stc;
 
-import static org.junit.Assert.assertArrayEquals;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.text.suffixtree.SuffixTree;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.carrotsearch.hppc.BitSet;
@@ -28,7 +27,7 @@ import com.carrotsearch.hppc.IntStack;
  * Tests running GST-functionality on top of a {@link SuffixTree}. This is for demonstration
  * purposes mostly.
  */
-public class GeneralizedSuffixTreeTest
+public class GeneralizedSuffixTreeTest extends CarrotTestCase
 {
     static class TestGST extends GeneralizedSuffixTree.Visitor
     {

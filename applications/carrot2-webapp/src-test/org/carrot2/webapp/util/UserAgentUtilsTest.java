@@ -12,14 +12,13 @@
 
 package org.carrot2.webapp.util;
 
-import static org.junit.Assert.*;
-
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 /**
  * Test cases for {@link UserAgentUtils}.
  */
-public class UserAgentUtilsTest
+public class UserAgentUtilsTest extends CarrotTestCase
 {
     @Test
     public void testNull()

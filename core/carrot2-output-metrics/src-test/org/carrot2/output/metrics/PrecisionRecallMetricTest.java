@@ -12,9 +12,6 @@
 
 package org.carrot2.output.metrics;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-
 import org.carrot2.core.Cluster;
 import org.carrot2.util.MathUtils;
 import org.fest.assertions.Delta;

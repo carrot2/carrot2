@@ -12,9 +12,6 @@
 
 package org.carrot2.util.attribute;
 
-import static junit.framework.Assert.*;
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
@@ -22,10 +19,11 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 import org.simpleframework.xml.Root;
 
-public class AttributeValueSetsTest
+public class AttributeValueSetsTest extends CarrotTestCase
 {
     @Test(expected = IllegalArgumentException.class)
     public void testAddingWithExistingId()

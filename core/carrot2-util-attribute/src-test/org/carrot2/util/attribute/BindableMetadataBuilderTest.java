@@ -12,10 +12,6 @@
 
 package org.carrot2.util.attribute;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 import java.util.Map;
 
 import org.carrot2.util.attribute.metadata.AttributeMetadata;
@@ -28,9 +24,10 @@ import org.carrot2.util.attribute.test.metadata.AttributeLevels;
 import org.carrot2.util.attribute.test.metadata.AttributeTitles;
 import org.carrot2.util.attribute.test.metadata.NoJavadoc;
 import org.carrot2.util.attribute.test.metadata.TestBindable;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
-public class BindableMetadataBuilderTest
+public class BindableMetadataBuilderTest extends CarrotTestCase
 {
     @Test
     public void testEmptyJavadoc()

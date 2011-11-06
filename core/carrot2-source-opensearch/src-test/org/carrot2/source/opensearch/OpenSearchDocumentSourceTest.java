@@ -14,12 +14,13 @@ package org.carrot2.source.opensearch;
 
 import org.carrot2.core.DummyControllerContext;
 import org.carrot2.core.ProcessingException;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 /**
  * Basic test cases for {@link OpenSearchDocumentSource}.
  */
-public class OpenSearchDocumentSourceTest
+public class OpenSearchDocumentSourceTest extends CarrotTestCase
 {
     @Test(expected = ProcessingException.class)
     public void testSearchTermsNotPresent()

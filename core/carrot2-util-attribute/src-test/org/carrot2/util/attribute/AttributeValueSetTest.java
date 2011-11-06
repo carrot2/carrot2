@@ -12,17 +12,16 @@
 
 package org.carrot2.util.attribute;
 
-import static junit.framework.Assert.assertEquals;
-import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.MapAssert.entry;
 
 import java.util.Map;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.google.common.collect.Maps;
 
-public class AttributeValueSetTest
+public class AttributeValueSetTest extends CarrotTestCase
 {
     @Test
     public void testNullBaseAttributeValueSet()

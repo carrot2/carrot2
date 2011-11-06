@@ -12,11 +12,10 @@
 
 package org.carrot2.text.suffixtree;
 
-import static org.junit.Assert.*;
-
 import java.util.*;
 
 import org.carrot2.text.suffixtree.SuffixTree.VisitorAdapter;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.carrotsearch.hppc.IntArrayList;
@@ -24,7 +23,7 @@ import com.carrotsearch.hppc.IntArrayList;
 /**
  * Sanity and validation tests for the {@link SuffixTree} class.
  */
-public class SuffixTreeTest
+public class SuffixTreeTest extends CarrotTestCase
 {
     @Test
     public void checkMississipi()
@@ -61,11 +60,10 @@ public class SuffixTreeTest
     @Test
     public void checkRandomSymbols()
     {
-        final int [] input = new int [10000];
-        final Random rnd = new Random(0x11223344);
+        final int [] input = new int [scaledRandomIntBetween(1, 50000)];
         for (int i = 0; i < input.length; i++)
         {
-            input[i] = rnd.nextInt(100);
+            input[i] = randomInt(100);
         }
         input[input.length - 1] = Integer.MAX_VALUE;
 

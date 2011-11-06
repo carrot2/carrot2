@@ -12,16 +12,15 @@
 
 package org.carrot2.util.attribute.constraint;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.lang.annotation.Annotation;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 /**
  * Base class for {@link Constraint} tests.
  */
-public abstract class ConstraintTestBase<T extends Annotation>
+public abstract class ConstraintTestBase<T extends Annotation> extends CarrotTestCase
 {
     void assertMet(final Object value) throws NoSuchFieldException
     {

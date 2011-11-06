@@ -12,25 +12,27 @@
 
 package org.carrot2.source.lucene;
 
-import static org.fest.assertions.Assertions.assertThat;
+import java.io.File;
+import java.io.StringReader;
+import java.io.StringWriter;
 
-import java.io.*;
-import java.util.Random;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
-import org.junit.*;
+import org.carrot2.util.tests.CarrotTestCase;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.simpleframework.xml.core.Persister;
+
+import com.carrotsearch.randomizedtesting.LifecycleScope;
 
 /**
  * Test cases for {@link FSDirectoryWrapper}.
  */
-public class FSDirectoryWrapperTest
+public class FSDirectoryWrapperTest extends CarrotTestCase
 {
     private static File indexDir;
     private static FSDirectory directory;
@@ -46,30 +48,10 @@ public class FSDirectoryWrapperTest
     @BeforeClass
     public static void prepareIndex() throws Exception
     {
-        indexDir = new File(new File(System.getProperty("java.io.tmpdir"))
-            .getCanonicalPath(), "index" + Math.abs(new Random().nextInt(Integer.MAX_VALUE)));
+        indexDir = newTempDir(LifecycleScope.SUITE);
         directory = FSDirectory.open(indexDir);
         LuceneIndexUtils.createAndPopulateIndex(directory, 
             new SimpleAnalyzer(Version.LUCENE_CURRENT));
-    }
-
-    @AfterClass
-    public static void removeIndex()
-    {
-        try
-        {
-            directory.close();
-        }
-        finally
-        {
-            try
-            {
-                FileUtils.deleteDirectory(indexDir);
-            }
-            catch (IOException ignored)
-            {
-            }
-        }
     }
 
     @Test

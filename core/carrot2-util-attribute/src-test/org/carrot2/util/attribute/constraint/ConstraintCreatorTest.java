@@ -12,11 +12,6 @@
 
 package org.carrot2.util.attribute.constraint;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -28,9 +23,10 @@ import org.carrot2.util.attribute.test.constraint.TestConstraint1;
 import org.carrot2.util.attribute.test.constraint.TestConstraint1Constraint;
 import org.carrot2.util.attribute.test.constraint.TestConstraint2;
 import org.carrot2.util.attribute.test.constraint.TestConstraint2Constraint;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
-public class ConstraintCreatorTest
+public class ConstraintCreatorTest extends CarrotTestCase
 {
     static class TestSample
     {

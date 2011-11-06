@@ -12,12 +12,11 @@
 
 package org.carrot2.output.metrics;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.util.*;
 
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -26,7 +25,7 @@ import com.google.common.collect.Sets;
 /**
  * Test cases for {@link IClusteringMetric}.
  */
-public class IdealPartitioningBasedMetricTest
+public class IdealPartitioningBasedMetricTest extends CarrotTestCase
 {
     @Test
     public void testNoPartitionInformation()

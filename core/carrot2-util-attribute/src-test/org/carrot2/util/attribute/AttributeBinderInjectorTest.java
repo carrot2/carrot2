@@ -12,14 +12,13 @@
 
 package org.carrot2.util.attribute;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Map;
 
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
@@ -28,7 +27,7 @@ import com.google.common.collect.Maps;
 /**
  * Test cases for {@link AttributeBinderInjector}.
  */
-public class AttributeBinderInjectorTest
+public class AttributeBinderInjectorTest extends CarrotTestCase
 {
     static class A
     {

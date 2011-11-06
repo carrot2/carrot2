@@ -15,6 +15,7 @@ package org.carrot2.util.attribute;
 import java.util.Map;
 
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.google.common.collect.Maps;
@@ -22,7 +23,7 @@ import com.google.common.collect.Maps;
 /**
  * Test cases for constraints.
  */
-public class ConstraintTest
+public class ConstraintTest extends CarrotTestCase
 {
     @Bindable
     @SuppressWarnings("unused")

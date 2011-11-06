@@ -384,6 +384,10 @@
       <isset property="carrot2.xml.feed.url.base" />
     </condition>
 
+    <!-- Default to empty. -->
+    <property name="tests.class" value="" />
+    <property name="tests.method" value="" />    
+
     <junit fork="true"
            forkmode="once"
            errorproperty="junit.error"
@@ -400,6 +404,10 @@
       <sysproperty key="external.api.tests.disabled" value="${external.api.tests.disabled}" />
       <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
       <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
+      
+      <!-- Restrict to the given test class/ name. -->
+      <sysproperty key="tests.class" value="${tests.class}" />
+      <sysproperty key="tests.method" value="${tests.method}" />
 
       <batchtest todir="${tests.report.dir}" unless="testcase">
         <fileset dir="${build.dir.tests}">

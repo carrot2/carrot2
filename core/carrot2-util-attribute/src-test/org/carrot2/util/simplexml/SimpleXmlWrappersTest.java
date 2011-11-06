@@ -12,8 +12,6 @@
 
 package org.carrot2.util.simplexml;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.io.*;
 import java.util.*;
 
@@ -21,6 +19,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.util.*;
 import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.resource.FileResource;
+import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.simpleframework.xml.*;
@@ -31,7 +30,7 @@ import com.google.common.collect.*;
 /**
  * Test cases for {@link SimpleXmlWrappers}.
  */
-public class SimpleXmlWrappersTest
+public class SimpleXmlWrappersTest extends CarrotTestCase
 {
     @Before
     public void clearWrappers()
@@ -146,8 +145,7 @@ public class SimpleXmlWrappersTest
             // We're using the default constructor to deserialize instance of this
             // class, so it doesn't make sense to try to tell the difference between
             // different instances.
-            return ObjectUtils.equals(this.getClass(), obj != null ? obj.getClass()
-                : null);
+            return ObjectUtils.equals(this.getClass(), obj != null ? obj.getClass() : null);
         }
 
         @Override
@@ -421,7 +419,7 @@ public class SimpleXmlWrappersTest
         original.put(key, value);
         final StringWriter writer = new StringWriter();
         new Persister().write(new MapContainer(original), writer);
-        System.out.println("---\n" + writer.toString());
+        // System.out.println("---\n" + writer.toString());
         final MapContainer deserialized = new Persister().read(MapContainer.class,
             new StringReader(writer.getBuffer().toString()));
         assertThat(deserialized.map).isEqualTo(original);
@@ -433,7 +431,7 @@ public class SimpleXmlWrappersTest
         original.add(value);
         final StringWriter writer = new StringWriter();
         new Persister().write(new ListContainer(original), writer);
-        System.out.println("---\n" + writer.toString());
+        // System.out.println("---\n" + writer.toString());
         final ListContainer deserialized = new Persister().read(ListContainer.class,
             new StringReader(writer.getBuffer().toString()));
         assertThat(deserialized.list).isEqualTo(original);
@@ -445,7 +443,7 @@ public class SimpleXmlWrappersTest
         original.add(value);
         final StringWriter writer = new StringWriter();
         new Persister().write(new SetContainer(original), writer);
-        System.out.println("---\n" + writer.toString());
+        // System.out.println("---\n" + writer.toString());
         final SetContainer deserialized = new Persister().read(SetContainer.class,
             new StringReader(writer.getBuffer().toString()));
         assertThat(deserialized.set).isEqualTo(original);
