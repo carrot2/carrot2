@@ -17,6 +17,7 @@ import static org.easymock.EasyMock.isA;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.carrot2.core.ControllerTestsPooling.ComponentWithInstanceCounter;
 import org.carrot2.core.attribute.AttributeNames;
@@ -331,12 +332,16 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         }, strict = false)
         protected IControllerContextListener contextListener;
 
+        static AtomicBoolean contextListenerSubscribed = new AtomicBoolean();
+        
         @Override
         public void init(IControllerContext context)
         {
             super.init(context);
 
-            context.addListener(contextListener);
+            if (contextListenerSubscribed.compareAndSet(false, true)) {
+                context.addListener(contextListener);
+            }
         }
 
         @Override

@@ -392,7 +392,11 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         processingAttributes.put("runtimeAttribute", "r");
         processingAttributes.put("data", "d");
 
-        performProcessingDisposeAndVerifyMocks(ComponentWithContextListener.class);
+        try {
+            performProcessingDisposeAndVerifyMocks(ComponentWithContextListener.class);
+        } finally {
+            ComponentWithContextListener.contextListenerSubscribed.set(false);
+        }
     }
 
     @Test
