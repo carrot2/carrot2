@@ -13,6 +13,7 @@
 package org.carrot2.source.lucene;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -23,6 +24,7 @@ import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.carrot2.util.tests.CarrotTestCase;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.simpleframework.xml.core.Persister;
@@ -50,10 +52,11 @@ public class FSDirectoryWrapperTest extends CarrotTestCase
     {
         indexDir = newTempDir(LifecycleScope.SUITE);
         directory = FSDirectory.open(indexDir);
+        closeAfterSuite(directory);
         LuceneIndexUtils.createAndPopulateIndex(directory, 
             new SimpleAnalyzer(Version.LUCENE_CURRENT));
     }
-
+    
     @Test
     public void testFSDirectorySerialization() throws Exception
     {
@@ -71,7 +74,8 @@ public class FSDirectoryWrapperTest extends CarrotTestCase
             unserializedDir = SimpleXmlWrappers.unwrap(wrapper);
 
             assertThat(unserializedDir).isNotNull();
-            assertThat(unserializedDir.getDirectory()).isEqualTo(file);
+            assertThat(unserializedDir.getDirectory().getCanonicalFile())
+                .isEqualTo(file.getCanonicalFile());
         }
         finally
         {
