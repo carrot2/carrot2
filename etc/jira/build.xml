@@ -1,0 +1,18 @@
+
+<project name="carrot2.jira" default="adjust.tests">
+  <target name="adjust.tests" description="Removes seeds from test names to preserve JIRA history.">
+    <property name="dest.dir" location="${basedir}/../../tmp/test-report-jira" />
+    <property name="src.dir"  location="${basedir}/../../tmp/test-report" />
+
+    <copy todir="${dest.dir}" encoding="UTF-8" failonerror="true" filtering="true" overwrite="true">
+      <fileset dir="${src.dir}" includes="TEST-*.xml" />
+
+      <filterchain>
+        <tokenfilter>
+          <replaceregex pattern='(&lt;testcase )(.+?)( name=\")([^\s]+)([^\"]+)' 
+                        replace='\1\2\3\4" orig="\4\5' flags="gs"/>
+        </tokenfilter>
+      </filterchain>
+    </copy>
+  </target>
+</project>
