@@ -443,6 +443,9 @@
       </fileset>
       <report format="frames" todir="${tests.report.dir}" />
     </junitreport>
+    
+    <!-- Postprocess reports for JIRA. -->
+    <ant antfile="build.xml" dir="${carrot2.master.basedir}/etc/jira" inheritall="false" />
 
     <condition property="tests.failed" value="true">
       <or>
