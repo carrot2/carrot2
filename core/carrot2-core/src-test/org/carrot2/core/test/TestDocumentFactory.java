@@ -16,6 +16,8 @@ import java.util.*;
 
 import org.carrot2.core.Document;
 
+import com.carrotsearch.randomizedtesting.RandomizedContext;
+
 /**
  *
  */
@@ -114,8 +116,6 @@ public class TestDocumentFactory
         private final int words;
         private final boolean prependSequentialNumber;
 
-        private final Random random = new Random(0);
-
         public SentenceGenerator(int words)
         {
             this(words, false);
@@ -129,6 +129,7 @@ public class TestDocumentFactory
 
         public String generate(int sequentialNumber)
         {
+            final Random rnd = RandomizedContext.current().getRandom();
             final StringBuilder builder = new StringBuilder();
 
             if (prependSequentialNumber)
@@ -138,10 +139,10 @@ public class TestDocumentFactory
 
             for (int i = 0; i < words - 1; i++)
             {
-                builder.append(WORDS[random.nextInt(WORDS.length)]);
+                builder.append(WORDS[rnd.nextInt(WORDS.length)]);
                 builder.append(" ");
             }
-            builder.append(WORDS[random.nextInt(WORDS.length)]);
+            builder.append(WORDS[rnd.nextInt(WORDS.length)]);
 
             return builder.toString();
         }
@@ -160,7 +161,6 @@ public class TestDocumentFactory
         };
 
         private final int length;
-        private final Random random = new Random(0);
 
         public UrlGenerator(int length)
         {
@@ -169,14 +169,15 @@ public class TestDocumentFactory
 
         public String generate(int sequentialNumber)
         {
+            final Random rnd = RandomizedContext.current().getRandom();
             final StringBuilder builder = new StringBuilder();
 
             for (int i = 0; i < length - 1; i++)
             {
-                builder.append(ELEMENTS[random.nextInt(ELEMENTS.length)]);
+                builder.append(ELEMENTS[rnd.nextInt(ELEMENTS.length)]);
                 builder.append(".");
             }
-            builder.append(DOMAINS[random.nextInt(DOMAINS.length)]);
+            builder.append(DOMAINS[rnd.nextInt(DOMAINS.length)]);
 
             return builder.toString();
         }

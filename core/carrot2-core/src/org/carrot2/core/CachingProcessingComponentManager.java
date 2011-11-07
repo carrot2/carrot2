@@ -14,6 +14,7 @@ package org.carrot2.core;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 import net.sf.ehcache.*;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
@@ -51,6 +52,8 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
             System.setProperty("net.sf.ehcache.skipUpdateCheck", "true");
         }
     }
+
+    private final static AtomicLong instanceCounter = new AtomicLong();
 
     /** The delegate manager that prepares the actual processing components */
     final IProcessingComponentManager delegate;
@@ -115,8 +118,8 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
         }
 
         // Create a new cache for each controller instance.
-        final String cacheName = "CachingProcessingComponentManagerCache"
-            + new Random().nextInt();
+        final String cacheName = "CachingProcessingComponentManagerCache-" 
+            + instanceCounter.addAndGet(1);
         cacheManager.addCache(cacheName);
         dataCache = new SelfPopulatingCache(cacheManager.getCache(cacheName),
             new CachedDataFactory());

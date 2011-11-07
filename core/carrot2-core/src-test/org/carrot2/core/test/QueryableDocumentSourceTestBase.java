@@ -32,6 +32,7 @@ import org.carrot2.core.test.assertions.Carrot2CoreAssertions;
 import org.carrot2.util.StringUtils;
 import org.junit.Test;
 
+import com.carrotsearch.randomizedtesting.RandomizedContext;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -259,7 +260,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
     {
         final int words = 5;
         final int chars = 8;
-        final Random random = new Random();
+        final Random random = RandomizedContext.current().getRandom();
 
         final StringBuilder query = new StringBuilder();
         for (int i = 0; i < words; i++)
