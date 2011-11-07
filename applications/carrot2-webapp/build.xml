@@ -98,29 +98,19 @@
   <!--
        Performs a quick smoketest of the webapp WAR.
     -->
-  <target name="carrot2.webapp.webtest.war" depends="basedir.check, carrot2.webapp.build, carrot2.common.webtest.war.prepare, antversion.check"
-          if="webtest.war.resources.available">
-    <if>
-      <isset property="run.webtests" />
-      <then>
-        <webtest-war cargo.tmp.dir="tmp/cargo"
-                     war.path="${webapp.dir}/${war.name.base}.war"
-                     war.base.name="${war.name.base}"
-                     webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
-                     webtest.report.dir="${webtest.report.dir}" />
-      </then>
-    </if>
+  <target name="carrot2.webapp.webtest.war" depends="basedir.check, carrot2.webapp.build, carrot2.common.webtest.war.prepare" 
+    if="webtest.war.resources.available">
+    <webtest-war cargo.tmp.dir="tmp/cargo"
+                 war.path="${webapp.dir}/${war.name.base}.war"
+                 war.base.name="${war.name.base}"
+                 webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
+                 webtest.report.dir="${webtest.report.dir}" />
   </target>
 
-  <target name="carrot2.webapp.webtest.localhost" depends="basedir.check, carrot2.common.webtest.deployed.check, antversion.check"> 
-    <if>
-      <isset property="run.webtests" />
-      <then>
-        <webtest-deployed webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
-                          webtest.report.dir="${webtest.report.dir}" 
-                          webtest.basepath="/" />
-      </then>
-    </if>
+  <target name="carrot2.webapp.webtest.localhost" depends="basedir.check, carrot2.common.webtest.deployed.check"> 
+    <webtest-deployed webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
+                      webtest.report.dir="${webtest.report.dir}" 
+                      webtest.basepath="/" />
   </target>
     
   <!--
@@ -313,20 +303,6 @@
     <xslt style="${carrot2.webapp.basedir}/web/skins/fancy-compact/page.xsl"
           in="${carrot2.webapp.basedir}/etc/xslt-debug/startup.xml" 
           out="tmp/startup.html" />
-  </target>
-
-  <target name="antversion.check">
-    <condition property="run.webtests">
-        <not><antversion atleast="1.8" /></not>
-    </condition>
-    <if>
-      <not><isset property="run.webtests" /></not>
-      <then>
-        <echo level="warning">
-            Webtests won't work with ANT >= 1.8, running: ${ant.version}.
-        </echo>      
-      </then>
-    </if>
   </target>
 
   <target name="basedir.check">
