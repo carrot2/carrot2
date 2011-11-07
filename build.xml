@@ -230,6 +230,10 @@
     <path location="${ant.home}/lib/ant.jar" />
   </path>
 
+  <antversion property="ant.version" />
+  <fail message="Use ANT 1.8.2 or later. Your ANT is: ${ant.version}">
+    <condition><not><antversion atleast="1.8.2" /></not></condition>
+  </fail>
 
   <!-- 
        Output cleanup.
