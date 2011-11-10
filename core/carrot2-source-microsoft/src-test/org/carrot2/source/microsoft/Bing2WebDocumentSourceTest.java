@@ -18,7 +18,6 @@ import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.tests.UsesExternalServices;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
