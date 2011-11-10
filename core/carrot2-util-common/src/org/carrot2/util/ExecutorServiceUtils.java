@@ -13,21 +13,16 @@
 package org.carrot2.util;
 
 import java.lang.ref.WeakReference;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.ForwardingExecutorService;
 
 /**
  * A number of utility methods for working with the {@link Executor}s framework.
@@ -73,7 +68,7 @@ public class ExecutorServiceUtils
         }
     }
 
-    final static class AccountingExecutorService implements ExecutorService {
+    final static class AccountingExecutorService extends ForwardingExecutorService {
         private ExecutorService delegate;
         private AccountingThreadFactory threadFactory;
 
@@ -83,78 +78,23 @@ public class ExecutorServiceUtils
             this.threadFactory = threadFactory;
         }
 
-        public void execute(Runnable command)
-        {
-            delegate.execute(command);
-        }
-
         public void shutdown()
         {
-            delegate.shutdown();
+            super.shutdown();
             threadFactory.join();
         }
 
         public List<Runnable> shutdownNow()
         {
-            List<Runnable> result = delegate.shutdownNow();
+            final List<Runnable> result = super.shutdownNow();
             threadFactory.join();
             return result;
         }
-
-        public boolean isShutdown()
+        
+        @Override
+        protected ExecutorService delegate()
         {
-            return delegate.isShutdown();
-        }
-
-        public boolean isTerminated()
-        {
-            return delegate.isTerminated();
-        }
-
-        public boolean awaitTermination(long timeout, TimeUnit unit)
-            throws InterruptedException
-        {
-            return delegate.awaitTermination(timeout, unit);
-        }
-
-        public <T> Future<T> submit(Callable<T> task)
-        {
-            return delegate.submit(task);
-        }
-
-        public <T> Future<T> submit(Runnable task, T result)
-        {
-            return delegate.submit(task, result);
-        }
-
-        public Future<?> submit(Runnable task)
-        {
-            return delegate.submit(task);
-        }
-
-        public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks)
-            throws InterruptedException
-        {
-            return delegate.invokeAll(tasks);
-        }
-
-        public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks,
-            long timeout, TimeUnit unit) throws InterruptedException
-        {
-            return delegate.invokeAll(tasks, timeout, unit);
-        }
-
-        public <T> T invokeAny(Collection<? extends Callable<T>> tasks)
-            throws InterruptedException, ExecutionException
-        {
-            return delegate.invokeAny(tasks);
-        }
-
-        public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout,
-            TimeUnit unit) throws InterruptedException, ExecutionException,
-            TimeoutException
-        {
-            return delegate.invokeAny(tasks, timeout, unit);
+            return delegate;
         }
     }
     
