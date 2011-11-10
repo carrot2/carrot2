@@ -108,8 +108,7 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     /**
      * Google search metadata.
      */
-    static final MultipageSearchEngineMetadata metadata = new MultipageSearchEngineMetadata(
-        8, 32);
+    static final MultipageSearchEngineMetadata metadata = new MultipageSearchEngineMetadata(8, 32);
 
     /**
      * Maximum concurrent threads from all instances of this component.

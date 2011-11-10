@@ -32,6 +32,7 @@ import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.RandomizedContext;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -110,7 +111,8 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
     }
 
     @UsesExternalServices
-    @Test
+    @Test 
+    @ThreadLeaks(linger = 2000)
     @SuppressWarnings("unchecked")
     public void testInCachingController() throws InterruptedException, ExecutionException
     {
@@ -119,56 +121,58 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         attributes.put(AttributeNames.RESULTS, getSmallQuerySize());
 
         // Cache results from all DataSources
-        final Controller controller = getCachingController(initAttributes,
-            IDocumentSource.class);
-
+        final Controller controller = 
+            getCachingController(initAttributes, IDocumentSource.class);
         int count = 3;
-        ExecutorService executorService = Executors.newFixedThreadPool(count);
-        List<Callable<ProcessingResult>> callables = Lists.newArrayList();
-        for (int i = 0; i < count; i++)
-        {
-            callables.add(new Callable<ProcessingResult>()
+        final ExecutorService executorService = Executors.newFixedThreadPool(count);
+
+        try {
+            List<Callable<ProcessingResult>> callables = Lists.newArrayList();
+            for (int i = 0; i < count; i++)
             {
-                public ProcessingResult call() throws Exception
+                callables.add(new Callable<ProcessingResult>()
                 {
-                    Map<String, Object> localAttributes = Maps.newHashMap(attributes);
-                    return controller.process(localAttributes, getComponentClass());
-                }
-            });
-        }
-
-        final List<Future<ProcessingResult>> results = executorService
-            .invokeAll(callables);
-
-        List<Document> documents = null;
-        int index = 0;
-        for (Future<ProcessingResult> future : results)
-        {
-            ProcessingResult processingResult = future.get();
-            final List<Document> documentsLocal = (List<Document>) processingResult
-                .getAttributes().get(AttributeNames.DOCUMENTS);
-            assertThat(documentsLocal).as("documents at " + index).isNotNull();
-            if (!canReturnMoreResultsThanRequested())
+                    public ProcessingResult call() throws Exception
+                    {
+                        Map<String, Object> localAttributes = Maps.newHashMap(attributes);
+                        return controller.process(localAttributes, getComponentClass());
+                    }
+                });
+            }
+    
+            final List<Future<ProcessingResult>> results = executorService.invokeAll(callables);
+    
+            List<Document> documents = null;
+            int index = 0;
+            for (Future<ProcessingResult> future : results)
             {
+                ProcessingResult processingResult = future.get();
+                final List<Document> documentsLocal = (List<Document>) processingResult
+                    .getAttributes().get(AttributeNames.DOCUMENTS);
+                assertThat(documentsLocal).as("documents at " + index).isNotNull();
+                if (!canReturnMoreResultsThanRequested())
+                {
+                    assertThat(documentsLocal.size()).as("documents.size() at " + index)
+                        .isLessThanOrEqualTo(getSmallQuerySize());
+                }
                 assertThat(documentsLocal.size()).as("documents.size() at " + index)
-                    .isLessThanOrEqualTo(getSmallQuerySize());
-            }
-            assertThat(documentsLocal.size()).as("documents.size() at " + index)
-                .isGreaterThanOrEqualTo(getSmallQuerySize() / 2);
-
-            // Should have same documents (from the cache)
-            if (documents != null)
-            {
-                for (int i = 0; i < documents.size(); i++)
+                    .isGreaterThanOrEqualTo(getSmallQuerySize() / 2);
+    
+                // Should have same documents (from the cache)
+                if (documents != null)
                 {
-                    assertSame(documents.get(i), documentsLocal.get(i));
+                    for (int i = 0; i < documents.size(); i++)
+                    {
+                        assertSame(documents.get(i), documentsLocal.get(i));
+                    }
                 }
+                documents = documentsLocal;
+                index++;
             }
-            documents = documentsLocal;
-            index++;
+        } finally {
+            controller.dispose();
+            executorService.shutdown();
         }
-
-        controller.dispose();
     }
 
     /**

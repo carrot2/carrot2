@@ -20,10 +20,13 @@ import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
 
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
+
 /**
  * Test cases for {@link GoogleDocumentSource}.
  */
 @UsesExternalServices
+@ThreadLeaks(linger = 2000)
 public class GoogleDocumentSourceTest extends
     MultipageDocumentSourceTestBase<GoogleDocumentSource>
 {

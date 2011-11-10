@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutorService;
  */
 class ExecutorServiceShutdownListener implements IControllerContextListener
 {
-    private final  String contextKey;
+    private final String contextKey;
 
     public ExecutorServiceShutdownListener(String contextKey)
     {
