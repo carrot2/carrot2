@@ -12,7 +12,6 @@
 package org.carrot2.dcs;
 
 import static com.google.common.base.Charsets.UTF_8;
-import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.carrot2.dcs.RestProcessorServlet.DISABLE_LOGFILE_APPENDER;
 import static org.carrot2.dcs.RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR;
@@ -40,6 +39,7 @@ import org.carrot2.util.SystemPropertyStack;
 import org.carrot2.util.resource.*;
 import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.tests.CarrotTestCase;
+import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.*;
 
 import com.carrotsearch.randomizedtesting.annotations.Nightly;
@@ -173,11 +173,10 @@ public class DcsAppTest extends CarrotTestCase
             "Quick start - Document Clustering Server");
     }
 
+    @UsesExternalServices
     @Test
     public void testExternalSource() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
-
         final String query = "kaczyński";
         final HtmlForm form = getSearchForm();
         form.getInputByName("query").setValueAttribute(query);

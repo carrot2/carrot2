@@ -60,11 +60,7 @@ eclipse.home=${target.platform}/eclipse
 # Properties controlling test execution.
 
 # Enables tests that require external APIs. Some of these may not be enabled from public IPs.
-# TODO: make it a test group once https://github.com/carrotsearch/randomizedtesting/issues/17 is implemented
-external.api.tests.disabled=true
-
-# IceRocket API.
-icerocket.tests.enabled=false
+tests.externalservices=false
 
 # Enables longer tests and intensifies randomized tests (more iterations, more data).
 tests.nightly=false

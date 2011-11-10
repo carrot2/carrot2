@@ -12,17 +12,18 @@
 
 package org.carrot2.source.google;
 
-import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import java.util.List;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
+import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
 
 /**
  * Test cases for {@link GoogleDocumentSource}.
  */
+@UsesExternalServices
 public class GoogleDocumentSourceTest extends
     MultipageDocumentSourceTestBase<GoogleDocumentSource>
 {
@@ -59,8 +60,6 @@ public class GoogleDocumentSourceTest extends
     @Test
     public void testHighlightsRemoved()
     {
-        assumeTrue(externalApiTestsEnabled());
-
         runQuery("test", getSmallQuerySize());
         final List<Document> documents = getDocuments();
         for (Document document : documents)
@@ -73,7 +72,6 @@ public class GoogleDocumentSourceTest extends
     @Test
     public void testNoUrlEncodingInUrls()
     {
-        assumeTrue(externalApiTestsEnabled());
         runQuery("help", getSmallQuerySize());
 
         final List<Document> documents = getDocuments();

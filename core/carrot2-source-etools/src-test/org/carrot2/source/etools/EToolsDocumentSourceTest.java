@@ -12,8 +12,6 @@
 
 package org.carrot2.source.etools;
 
-import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
-
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +19,7 @@ import org.carrot2.core.Document;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.source.SearchEngineBase;
 import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.util.tests.UsesExternalServices;
 import org.fest.assertions.MapAssert;
 import org.junit.Test;
 
@@ -29,6 +28,7 @@ import com.google.common.collect.Sets;
 /**
  * Test cases for {@link EToolsDocumentSource}.
  */
+@UsesExternalServices
 public class EToolsDocumentSourceTest extends
     QueryableDocumentSourceTestBase<EToolsDocumentSource>
 {
@@ -47,8 +47,6 @@ public class EToolsDocumentSourceTest extends
     @Test
     public void testDataSources() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
-
         runQuery("apache", 50);
 
         final Set<String> sources = Sets.newHashSet();
@@ -65,8 +63,6 @@ public class EToolsDocumentSourceTest extends
     @Test
     public void testGzipCompression() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
-
         runQuery("apache", 50);
         assertThat(resultAttributes).includes(
             MapAssert.entry(AttributeUtils.getKey(SearchEngineBase.class, "compressed"),

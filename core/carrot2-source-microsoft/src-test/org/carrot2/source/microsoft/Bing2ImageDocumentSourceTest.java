@@ -13,13 +13,13 @@
 package org.carrot2.source.microsoft;
 
 import org.carrot2.core.test.DocumentSourceTestBase;
-
-import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
+import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
 
 /**
  * Tests Microsoft Bing document source (news).
  */
+@UsesExternalServices
 public class Bing2ImageDocumentSourceTest extends DocumentSourceTestBase<Bing2ImageDocumentSource>
 {
     @Override
@@ -31,7 +31,7 @@ public class Bing2ImageDocumentSourceTest extends DocumentSourceTestBase<Bing2Im
     @Test
     public void testCatsQuery()
     {
-        assumeTrue(externalApiTestsEnabled());
+        System.out.println("baha");
         assertThat(runQuery("cats", 25)).isGreaterThan(20);
     }
 }

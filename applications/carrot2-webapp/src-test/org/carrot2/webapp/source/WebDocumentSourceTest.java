@@ -12,11 +12,11 @@
 
 package org.carrot2.webapp.source;
 
-import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import java.util.List;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
+import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
 
 /**
@@ -37,11 +37,10 @@ public class WebDocumentSourceTest extends
         return true;
     }
 
+    @UsesExternalServices
     @Test
     public void testFirstResults()
     {
-        assumeTrue(externalApiTestsEnabled());
-
         runQuery("obama", getSmallQuerySize());
         final List<Document> documents = getDocuments();
         assertThat(documents.size()).isGreaterThanOrEqualTo(8);

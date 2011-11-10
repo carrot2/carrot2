@@ -12,8 +12,6 @@
 
 package org.carrot2.core.test;
 
-import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -30,6 +28,7 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.assertions.Carrot2CoreAssertions;
 import org.carrot2.util.StringUtils;
+import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.RandomizedContext;
@@ -43,42 +42,42 @@ import com.google.common.collect.Maps;
 public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource> extends
     DocumentSourceTestBase<T>
 {
+    @UsesExternalServices
     @Test
     public void testNoResultsQuery() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
         runAndCheckNoResultsQuery();
     }
 
+    @UsesExternalServices
     @Test
     public void testSmallQuery() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
         runAndCheckMinimumResults(getSmallQueryText(), getSmallQuerySize(),
             getSmallQuerySize() / 2);
     }
 
+    @UsesExternalServices
     @Test
     public void testUtfCharacters() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
         assumeTrue(hasUtfResults());
         runAndCheckMinimumResults("kaczyński", getSmallQuerySize(),
             getSmallQuerySize() / 2);
     }
 
+    @UsesExternalServices
     @Test
     public void testLargeQuery() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
         runAndCheckMinimumResults(getLargeQueryText(), getLargeQuerySize(),
             getLargeQuerySize() / 2);
     }
 
+    @UsesExternalServices
     @Test
     public void testResultsTotal() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
         assumeTrue(hasTotalResultsEstimate());
         runQuery(getSmallQueryText(), getSmallQuerySize());
 
@@ -86,19 +85,19 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         assertTrue((Long) resultAttributes.get(AttributeNames.RESULTS_TOTAL) > 0);
     }
 
+    @UsesExternalServices
     @Test
     public void testURLsUnique() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
         assumeTrue(mustReturnUniqueUrls());
         runQuery(getLargeQueryText(), getLargeQuerySize());
         assertFieldUnique(getDocuments(), Document.CONTENT_URL);
     }
 
+    @UsesExternalServices
     @Test
     public void testHtmlUnescaping()
     {
-        assumeTrue(externalApiTestsEnabled());
         assumeTrue(canReturnEscapedHtml());
         runQuery("test", getSmallQuerySize());
         final List<Document> documents = getDocuments();
@@ -110,12 +109,11 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         }
     }
 
+    @UsesExternalServices
     @Test
     @SuppressWarnings("unchecked")
     public void testInCachingController() throws InterruptedException, ExecutionException
     {
-        assumeTrue(externalApiTestsEnabled());
-
         final Map<String, Object> attributes = Maps.newHashMap();
         attributes.put(AttributeNames.QUERY, getSmallQueryText());
         attributes.put(AttributeNames.RESULTS, getSmallQuerySize());

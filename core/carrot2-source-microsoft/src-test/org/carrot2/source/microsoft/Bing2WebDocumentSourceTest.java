@@ -12,26 +12,25 @@
 
 package org.carrot2.source.microsoft;
 
-import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Tests Microsoft Bing document source.
  */
+@UsesExternalServices
 public class Bing2WebDocumentSourceTest extends
     MultipageDocumentSourceTestBase<Bing2WebDocumentSource>
 {
     @Test
     public void testMarketOption() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
-
         super.processingAttributes.put(
             AttributeUtils.getKey(Bing2DocumentSource.class, "market"), 
             MarketOption.POLISH_POLAND);
@@ -45,8 +44,6 @@ public class Bing2WebDocumentSourceTest extends
     @Test
     public void testSiteOption() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
-
         super.processingAttributes.put(
             AttributeUtils.getKey(Bing2WebDocumentSource.class, "site"), 
             "www.cs.put.poznan.pl");
@@ -61,8 +58,6 @@ public class Bing2WebDocumentSourceTest extends
     @Test
     public void testFileTypeOption() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
-
         super.processingAttributes.put(
             AttributeUtils.getKey(Bing2WebDocumentSource.class, "fileTypes"), 
             "pdf doc");
@@ -78,7 +73,6 @@ public class Bing2WebDocumentSourceTest extends
         }
     }
 
-    
     @Override
     public Class<Bing2WebDocumentSource> getComponentClass()
     {

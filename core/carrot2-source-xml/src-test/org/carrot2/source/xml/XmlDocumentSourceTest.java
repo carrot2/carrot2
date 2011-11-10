@@ -12,20 +12,20 @@
 
 package org.carrot2.source.xml;
 
-import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.Document;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.resource.*;
 import org.junit.Test;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -251,10 +251,10 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     @Test
     public void testRemoteUrl() throws MalformedURLException
     {
-        assumeTrue(carrot2XmlFeedTestsEnabled());
+        String base = System.getProperty("carrot2.xml.feed.url.base");
+        assumeTrue("carrot2.xml.feed.url.base property undefined.", !Strings.isNullOrEmpty(base));
 
-        IResource xml = new URLResourceWithParams(new URL(getCarrot2XmlFeedUrlBase()
-            + "&q=${query}&results=${results}"));
+        IResource xml = new URLResourceWithParams(new URL(base + "&q=${query}&results=${results}"));
         final String query = "apple computer";
 
         processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
@@ -282,22 +282,5 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         assertEquals(Lists.newArrayList("http://www.research.ibm.com/security/mars.html",
             "http://www-3.ibm.com/software/wireless/wsdd/"), Lists.transform(
             getDocuments(), DOCUMENT_TO_CONTENT_URL));
-    }
-
-    /**
-     * Allows to skip running tests when details of the Carrot2 search feed are not
-     * provided.
-     */
-    private static boolean carrot2XmlFeedTestsEnabled()
-    {
-        return externalApiTestsEnabled() && StringUtils.isNotBlank(getCarrot2XmlFeedUrlBase());
-    }
-
-    /**
-     * Returns the Carrot2 XML feed URL base or <code>null</code> if not provided.
-     */
-    private static String getCarrot2XmlFeedUrlBase()
-    {
-        return System.getProperty("carrot2.xml.feed.url.base");
     }
 }

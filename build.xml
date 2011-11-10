@@ -117,11 +117,11 @@
   <fileset id="src.coverage" dir="${carrot2.master.basedir}">
     <include name="core/**/*.java" />
     <include name="applications/**/*.java" />
-    <exclude name="**/carrot2-examples/**/*.java" if="external.api.tests.disabled" />
-    <exclude name="**/carrot2-source-etools/**/*.java" if="external.api.tests.disabled" />
-    <exclude name="**/carrot2-source-google/**/*.java" if="external.api.tests.disabled" />
-    <exclude name="**/carrot2-source-microsoft/**/*.java" if="external.api.tests.disabled" />
-    <exclude name="**/carrot2-source-opensearch/**/*.java" if="external.api.tests.disabled" />
+    <exclude name="**/carrot2-examples/**/*.java" if="tests.externalservices" />
+    <exclude name="**/carrot2-source-etools/**/*.java" if="tests.externalservices" />
+    <exclude name="**/carrot2-source-google/**/*.java" if="tests.externalservices" />
+    <exclude name="**/carrot2-source-microsoft/**/*.java" if="tests.externalservices" />
+    <exclude name="**/carrot2-source-opensearch/**/*.java" if="tests.externalservices" />
     <exclude name="**/carrot2-source-microsoft/src/com/microsoft/msnsearch/**/*.java" />
     <exclude name="**/carrot2-core/src/org/carrot2/core/CachingController.java" />
     <exclude name="**/carrot2-core/src/org/carrot2/core/SimpleController.java" />
@@ -414,14 +414,15 @@
 	         showoutput="true"
 	         logfailedtests="false"
 	         tempdir="${tmp.dir}">
-      <jvmarg value="-Dtests.nightly=${tests.nightly}" />
       <jvmarg value="-ea" />
 
       <formatter type="xml" />
 
       <classpath refid="test.classpath" />
 
-      <sysproperty key="external.api.tests.disabled" value="${external.api.tests.disabled}" />
+      <sysproperty key="tests.externalservices" value="${tests.externalservices}" />
+      <sysproperty key="tests.nightly"          value="${tests.nightly}" />
+
       <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
       <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
       <sysproperty key="log4j.configuration" value="log4j-tests.xml" />

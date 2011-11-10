@@ -12,14 +12,13 @@
 
 package org.carrot2.core.test;
 
-import static org.carrot2.core.test.ExternalApiTestAssumptions.externalApiTestsEnabled;
-
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.source.MultipageSearchEngine;
 import org.carrot2.source.MultipageSearchEngine.SearchMode;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineStats;
 import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
 
 /**
@@ -34,11 +33,10 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
      */
     protected abstract MultipageSearchEngineMetadata getSearchEngineMetadata();
 
+    @UsesExternalServices
     @Test
     public void testQueryLargerThanPage() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
-
         final int needed = getSearchEngineMetadata().resultsPerPage * 2
             + getSearchEngineMetadata().resultsPerPage / 2;
 
@@ -61,10 +59,10 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
         return 1.25;
     }
     
+    @UsesExternalServices
     @Test
     public void testConservativeMode() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
         processingAttributes.put("search-mode", SearchMode.CONSERVATIVE);
 
         runAndCheckNoResultsQuery();
@@ -72,10 +70,10 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
             SearchEngineStats.class, "pageRequests")));
     }
 
+    @UsesExternalServices
     @Test
     public void testSpeculativeMode() throws Exception
     {
-        assumeTrue(externalApiTestsEnabled());
         processingAttributes.put("search-mode", SearchMode.SPECULATIVE);
 
         runAndCheckNoResultsQuery(getSearchEngineMetadata().resultsPerPage + 1);
