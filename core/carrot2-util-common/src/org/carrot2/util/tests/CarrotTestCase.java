@@ -3,50 +3,20 @@ package org.carrot2.util.tests;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.fest.assertions.AssertExtension;
-import org.fest.assertions.Assertions;
-import org.fest.assertions.BigDecimalAssert;
-import org.fest.assertions.BooleanArrayAssert;
-import org.fest.assertions.BooleanAssert;
-import org.fest.assertions.ByteArrayAssert;
-import org.fest.assertions.ByteAssert;
-import org.fest.assertions.CharArrayAssert;
-import org.fest.assertions.CharAssert;
-import org.fest.assertions.CollectionAssert;
-import org.fest.assertions.DoubleArrayAssert;
-import org.fest.assertions.DoubleAssert;
-import org.fest.assertions.FileAssert;
-import org.fest.assertions.FloatArrayAssert;
-import org.fest.assertions.FloatAssert;
-import org.fest.assertions.ImageAssert;
-import org.fest.assertions.IntArrayAssert;
-import org.fest.assertions.IntAssert;
-import org.fest.assertions.IteratorAssert;
-import org.fest.assertions.ListAssert;
-import org.fest.assertions.LongArrayAssert;
-import org.fest.assertions.LongAssert;
-import org.fest.assertions.MapAssert;
-import org.fest.assertions.ObjectArrayAssert;
-import org.fest.assertions.ObjectAssert;
-import org.fest.assertions.ShortArrayAssert;
-import org.fest.assertions.ShortAssert;
-import org.fest.assertions.StringAssert;
-import org.fest.assertions.ThrowableAssert;
+import org.fest.assertions.*;
 
 import com.carrotsearch.randomizedtesting.RandomizedTest;
 import com.carrotsearch.randomizedtesting.annotations.Listeners;
 import com.carrotsearch.randomizedtesting.annotations.Timeout;
+import com.carrotsearch.randomizedtesting.listeners.VerboseTestInfoPrinter;
 
 /**
  * Base class for Carrot2 test classes. Contains common hooks and setups.
  */
 @Timeout(millis = 60 * 1000) // No test should last longer than 60 seconds.
-@Listeners({TestInfoListener.class})
+@Listeners({VerboseTestInfoPrinter.class})
 public class CarrotTestCase extends RandomizedTest
 {
     /*
