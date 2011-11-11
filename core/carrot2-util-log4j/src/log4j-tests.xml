@@ -22,6 +22,7 @@
     <logger name="org.carrot2.util.resource"><level value="info"/></logger>
     <logger name="org.carrot2.text.clustering.MultilingualClustering"><level value="info"/></logger>
     <logger name="org.carrot2.util.xslt.TemplatesPool"><level value="warn"/></logger>
+    <logger name="org.carrot2.util.httpclient.HttpUtils"><level value="warn"/></logger>
 
     <!-- Root logger config. -->
     <root>
