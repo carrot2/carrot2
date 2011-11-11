@@ -40,6 +40,7 @@
   <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/readme.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/rcp-defaults.xml" />
+  <import file="${carrot2.master.basedir}/etc/ant/common/tests-summary.xml" />
   <import file="${carrot2.master.basedir}/workbench/build-conf/build.xml" />
   
   <!-- Derive version numbers for other components. -->
@@ -380,6 +381,7 @@
   <target name="test"
           depends="compile, resources, compile.test, compile.coverage, resources.test"
           description="Runs all unit tests.">
+    <delete dir="${tests.report.dir}" failonerror="false" />
     <mkdir dir="${tests.report.dir}" />
 
     <condition property="carrot2.xml.feed.url.base.internal"
@@ -417,6 +419,7 @@
       <jvmarg value="-ea" />
 
       <formatter type="xml" />
+      <sysproperty key="verbose.reports.dir" value="${tests.report.dir}" />
 
       <classpath refid="test.classpath" />
 
@@ -444,6 +447,10 @@
       </fileset>
       <report format="frames" todir="${tests.report.dir}" />
     </junitreport>
+
+    <!-- Get the real summary of executed, ignored and assumption-ignored tests. -->
+    <fileset id="fileset.tests.results" dir="${tests.report.dir}" includes="RESULTS-*.txt" />
+    <tests-summary fileset-refid="fileset.tests.results" />
     
     <!-- Postprocess reports for JIRA. -->
     <ant antfile="build.xml" dir="${carrot2.master.basedir}/etc/jira" inheritall="false" />

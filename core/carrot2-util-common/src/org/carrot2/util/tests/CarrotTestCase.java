@@ -16,7 +16,7 @@ import com.carrotsearch.randomizedtesting.listeners.VerboseTestInfoPrinter;
  * Base class for Carrot2 test classes. Contains common hooks and setups.
  */
 @Timeout(millis = 60 * 1000) // No test should last longer than 60 seconds.
-@Listeners({VerboseTestInfoPrinter.class})
+@Listeners({VerboseTestInfoPrinter.class, SuiteResultInfoWriter.class})
 public class CarrotTestCase extends RandomizedTest
 {
     /*
