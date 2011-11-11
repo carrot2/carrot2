@@ -29,10 +29,10 @@ public abstract class ProcessingComponentTestBase<T extends IProcessingComponent
     extends CarrotTestCase
 {
     /** Simple controller used for tests. */
-    private Controller simpleController;
+    protected Controller simpleController;
 
     /** Caching controller used for tests. */
-    private Controller cachingController;
+    protected Controller cachingController;
 
     /** A map of initialization attributes used for tests. */
     protected Map<String, Object> initAttributes;
