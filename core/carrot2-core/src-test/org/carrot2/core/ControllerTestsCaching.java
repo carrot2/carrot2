@@ -108,6 +108,33 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
         }
     }
 
+    @Test @Ignore("Demonstrates concurrent modification exceptions if documents " +
+    		"are shared between components and processing chains.")
+    public void testConcurrentDocumentModifications() throws Exception
+    {
+        final Controller c = prepareController();
+
+        final HashMap<String, Object> attrs = Maps.newHashMap();
+        attrs.put(AttributeNames.DOCUMENTS, Arrays.asList(new Document("title", "summary")));
+
+        ConcurrentComponent1.latch1 = new CountDownLatch(1);
+        ConcurrentComponent1.latch2 = new CountDownLatch(1);
+
+        Thread t = new Thread() {
+            public void run() {
+                c.process(attrs, ConcurrentComponent2.class);
+            }
+        };
+
+        try {
+            t.start();
+            c.process(attrs, ConcurrentComponent1.class);
+        } finally {
+            t.join();
+            c.dispose();
+        }
+    }    
+
     @Before
     public void disableOrderChecking()
     {
@@ -122,26 +149,6 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
     public Controller prepareController()
     {
         return getCachingController(IProcessingComponent.class);
-    }
-    
-    @Test @Ignore
-    public void testConcurrentDocumentModifications()
-    {
-        final Controller c = prepareController();
-
-        final HashMap<String, Object> attrs = Maps.newHashMap();
-        attrs.put(AttributeNames.DOCUMENTS, Arrays.asList(new Document("title", "summary")));
-
-        ConcurrentComponent1.latch1 = new CountDownLatch(1);
-        ConcurrentComponent1.latch2 = new CountDownLatch(1);
-
-        new Thread() {
-            public void run() {
-                c.process(attrs, ConcurrentComponent2.class);
-            }
-        }.start();
-
-        c.process(attrs, ConcurrentComponent1.class);
     }
 
     @Test

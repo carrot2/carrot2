@@ -19,7 +19,6 @@ import org.carrot2.core.test.ClusteringAlgorithmTestBase;
 import org.carrot2.core.test.SampleDocumentData;
 import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.util.attribute.AttributeUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -59,23 +58,6 @@ public class STCClusteringAlgorithmTest extends
         assertThat(clusters.size()).isEqualTo(9 + 1);
     }
 
-    @Test @Ignore
-    public void testSampleClustering()
-    {
-        this.processingAttributes.put(
-            AttributeUtils.getKey(STCClusteringAlgorithm.class, "maxPhraseOverlap"), 
-            0.6d);
-
-        final Collection<Cluster> clusters = 
-            cluster(SampleDocumentData.DOCUMENTS_DATA_MINING).getClusters();
-
-        for (Cluster c : clusters)
-        {
-            System.out.println("[" + c.getDocuments().size() + ", "
-                + c.getScore() + "]: " + c.getLabel());
-        }
-    }
-    
     @Test
     public void testComputeIntersection()
     {
