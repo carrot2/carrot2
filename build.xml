@@ -40,7 +40,6 @@
   <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/readme.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/rcp-defaults.xml" />
-  <import file="${carrot2.master.basedir}/etc/ant/common/tests-summary.xml" />
   <import file="${carrot2.master.basedir}/workbench/build-conf/build.xml" />
   
   <!-- Derive version numbers for other components. -->
@@ -403,43 +402,56 @@
       <include name="**/*${tests.class.name}.class"     if="tests.class.defined" />
     </patternset>
 
+    <!-- junit4 -->
+    <taskdef resource="junit4.antlib.xml" loaderref="junit4.loader">
+        <classpath>
+            <fileset dir="${carrot2.master.basedir}">
+                <include name="lib/org.junit4-ext/junit*.jar" />
+                <include name="lib/com.carrotsearch.randomizedtesting/*.jar" />
+            </fileset>
+        </classpath>
+    </taskdef>
+
     <!-- defaults. -->
     <property name="tests.class" value="" />
     <property name="tests.method" value="" />
     <property name="tests.nightly" value="false" />
 
-    <junit fork="true"
-           forkmode="once"
-           errorproperty="junit.error"
-           failureproperty="junit.failure"
-	         printsummary="off"
-	         showoutput="true"
-	         logfailedtests="false"
-	         tempdir="${tmp.dir}">
-      <jvmarg value="-ea" />
+    <junit4 haltonfailure="false"
+            failureproperty="tests.failed"
+            tempdir="${tmp.dir}"
+            parallelism="2"
+            leaveTemporary="false"
+    >
+        <listeners>
+            <report-console
+              showErrors="true"
+              showStackTraces="true"
+              showErrorStream="true"
+              showOutputStream="true" />
 
-      <formatter type="xml" />
-      <sysproperty key="verbose.reports.dir" value="${tests.report.dir}" />
+            <report-ant-xml dir="${tests.report.dir}" />
+        </listeners>
 
-      <classpath refid="test.classpath" />
+        <jvmarg value="-ea" />
+        
+        <classpath refid="test.classpath" />
 
-      <sysproperty key="tests.externalservices" value="${tests.externalservices}" />
-      <sysproperty key="tests.nightly"          value="${tests.nightly}" />
+        <sysproperty key="tests.externalservices" value="${tests.externalservices}" />
+        <sysproperty key="tests.nightly"          value="${tests.nightly}" />
 
-      <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
-      <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
-      <sysproperty key="log4j.configuration" value="log4j-tests.xml" />
-
-      <!-- Restrict to the given test class/ name. -->
-      <sysproperty key="tests.class" value="${tests.class}" />
-      <sysproperty key="tests.method" value="${tests.method}" />
-
-      <batchtest todir="${tests.report.dir}">
+        <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
+        <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
+        <sysproperty key="log4j.configuration" value="log4j-tests.xml" />
+        
+        <!-- Restrict to the given test class/ name. -->
+        <sysproperty key="tests.class" value="${tests.class}" />
+        <sysproperty key="tests.method" value="${tests.method}" />
+        
         <fileset dir="${build.dir.tests}">
           <patternset refid="patternset.tests" />
         </fileset>
-      </batchtest>
-    </junit>
+    </junit4>
 
     <junitreport todir="${tests.report.dir}">
       <fileset dir="${tests.report.dir}">
@@ -447,20 +459,10 @@
       </fileset>
       <report format="frames" todir="${tests.report.dir}" />
     </junitreport>
-
-    <!-- Get the real summary of executed, ignored and assumption-ignored tests. -->
-    <fileset id="fileset.tests.results" dir="${tests.report.dir}" includes="RESULTS-*.txt" />
-    <tests-summary fileset-refid="fileset.tests.results" />
     
     <!-- Postprocess reports for JIRA. -->
     <ant antfile="build.xml" dir="${carrot2.master.basedir}/etc/jira" inheritall="false" />
 
-    <condition property="tests.failed" value="true">
-      <or>
-        <isset property="junit.error" />
-        <isset property="junit.failure" />
-      </or>
-    </condition>
     <fail message="Tests failed. See ${tests.report.dir} for report." if="tests.failed" />
   </target>
 
