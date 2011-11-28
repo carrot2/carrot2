@@ -62,21 +62,14 @@ public class FSDirectoryWrapperTest extends CarrotTestCase
         try
         {
             final File file = indexDir;
-            System.out.println(directory);
-
             final Persister persister = new Persister();
-            System.out.println(persister);
 
             final StringWriter writer = new StringWriter();
-            SimpleXmlWrapperValue wrap = SimpleXmlWrappers.wrap(directory);
-            System.out.println(wrap);
-            persister.write(wrap, writer);
+            persister.write(SimpleXmlWrappers.wrap(directory), writer);
 
             final SimpleXmlWrapperValue wrapper = persister.read(
                 SimpleXmlWrapperValue.class, new StringReader(writer.toString()));
-            assertThat(wrapper).describedAs("Wrapper for: " + writer.toString())
-                .isNotNull();
-            System.out.println(writer.toString());
+            assertThat(wrapper).describedAs("Wrapper for: " + writer.toString()).isNotNull();
             unserializedDir = SimpleXmlWrappers.unwrap(wrapper);
 
             assertThat(unserializedDir).isNotNull();
