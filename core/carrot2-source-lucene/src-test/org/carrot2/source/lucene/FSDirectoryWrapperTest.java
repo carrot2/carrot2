@@ -63,11 +63,7 @@ public class FSDirectoryWrapperTest extends CarrotTestCase
         try
         {
             final File file = indexDir;
-            System.out.println(indexDir);
             System.out.println(directory);
-            for (File f : indexDir.listFiles()) {
-                System.out.println("> " + f);
-            }
 
             final Persister persister = new Persister();
             System.out.println(persister);
