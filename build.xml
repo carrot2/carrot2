@@ -383,6 +383,10 @@
     <delete dir="${tests.report.dir}" failonerror="false" />
     <mkdir dir="${tests.report.dir}" />
 
+    <property name="jira.report.dir" location="${tmp.dir}/test-report-jira" />
+    <delete dir="${jira.report.dir}" failonerror="false" />
+    <mkdir dir="${jira.report.dir}" />
+
     <condition property="carrot2.xml.feed.url.base.internal"
                value="${carrot2.xml.feed.url.base}"
                else="">
@@ -417,10 +421,14 @@
     <property name="tests.method" value="" />
     <property name="tests.nightly" value="false" />
 
+    <!-- Values: number of cpus to use, 'max' to use all available cores or 'auto' for sensible 
+         defaults depending on the number of cores. -->
+    <property name="tests.cpus" value="auto" />
+
     <junit4 haltonfailure="false"
             failureproperty="tests.failed"
             tempdir="${tmp.dir}"
-            parallelism="2"
+            parallelism="${tests.cpus}"
             leaveTemporary="false"
     >
         <listeners>
@@ -430,7 +438,14 @@
               showErrorStream="true"
               showOutputStream="true" />
 
-            <report-ant-xml dir="${tests.report.dir}" />
+	    <report-ant-xml dir="${tests.report.dir}" />
+
+            <report-ant-xml dir="${jira.report.dir}">
+	      <tokenfilter>
+		<replaceregex pattern='\s+\{[^\}]*\}' 
+			      replace='' flags="gs" />
+	      </tokenfilter>
+	    </report-ant-xml>
         </listeners>
 
         <jvmarg value="-ea" />
@@ -459,9 +474,6 @@
       </fileset>
       <report format="frames" todir="${tests.report.dir}" />
     </junitreport>
-    
-    <!-- Postprocess reports for JIRA. -->
-    <ant antfile="build.xml" dir="${carrot2.master.basedir}/etc/jira" inheritall="false" />
 
     <fail message="Tests failed. See ${tests.report.dir} for report." if="tests.failed" />
   </target>
