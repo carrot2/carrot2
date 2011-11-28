@@ -69,6 +69,8 @@ public class FSDirectoryWrapperTest extends CarrotTestCase
 
             final SimpleXmlWrapperValue wrapper = persister.read(
                 SimpleXmlWrapperValue.class, new StringReader(writer.toString()));
+            assertThat(wrapper).describedAs("Wrapper for: " + writer.toString())
+                .isNotNull();
             unserializedDir = SimpleXmlWrappers.unwrap(wrapper);
 
             assertThat(unserializedDir).isNotNull();
