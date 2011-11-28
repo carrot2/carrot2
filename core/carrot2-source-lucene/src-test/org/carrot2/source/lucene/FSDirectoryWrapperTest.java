@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.simpleframework.xml.core.Persister;
 
 import com.carrotsearch.randomizedtesting.LifecycleScope;
+import com.carrotsearch.randomizedtesting.annotations.Repeat;
 
 /**
  * Test cases for {@link FSDirectoryWrapper}.
@@ -55,7 +56,7 @@ public class FSDirectoryWrapperTest extends CarrotTestCase
             new SimpleAnalyzer(Version.LUCENE_CURRENT));
     }
     
-    @Test
+    @Test @Repeat(iterations = 20)
     public void testFSDirectorySerialization() throws Exception
     {
         FSDirectory unserializedDir = null;
@@ -71,6 +72,7 @@ public class FSDirectoryWrapperTest extends CarrotTestCase
                 SimpleXmlWrapperValue.class, new StringReader(writer.toString()));
             assertThat(wrapper).describedAs("Wrapper for: " + writer.toString())
                 .isNotNull();
+            System.out.println(writer.toString());
             unserializedDir = SimpleXmlWrappers.unwrap(wrapper);
 
             assertThat(unserializedDir).isNotNull();
