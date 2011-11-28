@@ -55,18 +55,27 @@ public class FSDirectoryWrapperTest extends CarrotTestCase
         LuceneIndexUtils.createAndPopulateIndex(directory, 
             new SimpleAnalyzer(Version.LUCENE_CURRENT));
     }
-    
-    @Test @Repeat(iterations = 20)
+
+    @Test @Repeat(iterations = 5)
     public void testFSDirectorySerialization() throws Exception
     {
         FSDirectory unserializedDir = null;
         try
         {
             final File file = indexDir;
+            System.out.println(indexDir);
+            System.out.println(directory);
+            for (File f : indexDir.listFiles()) {
+                System.out.println("> " + f);
+            }
+
             final Persister persister = new Persister();
+            System.out.println(persister);
 
             final StringWriter writer = new StringWriter();
-            persister.write(SimpleXmlWrappers.wrap(directory), writer);
+            SimpleXmlWrapperValue wrap = SimpleXmlWrappers.wrap(directory);
+            System.out.println(wrap);
+            persister.write(wrap, writer);
 
             final SimpleXmlWrapperValue wrapper = persister.read(
                 SimpleXmlWrapperValue.class, new StringReader(writer.toString()));
