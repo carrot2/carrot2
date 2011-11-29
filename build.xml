@@ -438,14 +438,14 @@
               showErrorStream="true"
               showOutputStream="true" />
 
-	    <report-ant-xml dir="${tests.report.dir}" />
+	          <report-ant-xml dir="${tests.report.dir}" />
 
             <report-ant-xml dir="${jira.report.dir}">
-	      <tokenfilter>
-		<replaceregex pattern='\s+\{[^\}]*\}' 
-			      replace='' flags="gs" />
-	      </tokenfilter>
-	    </report-ant-xml>
+      	      <tokenfilter>
+            		<replaceregex pattern='\s+\{[^\}]*\}' 
+      			        replace='' flags="gs" />
+      	      </tokenfilter>
+	          </report-ant-xml>
         </listeners>
 
         <jvmarg value="-ea" />
