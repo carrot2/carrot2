@@ -40,7 +40,7 @@ public class FSDirectoryWrapperTest extends CarrotTestCase
     @BeforeClass
     public static void installFSDirectoryWrapper() throws ClassNotFoundException
     {
-        // Just load LuceneDocumentSource to install the wrapper
+        // Make sure LuceneDocumentSource is loaded (this registers the wrapper).
         ReflectionUtils.classForName(LuceneDocumentSource.class.getName());
     }
 
