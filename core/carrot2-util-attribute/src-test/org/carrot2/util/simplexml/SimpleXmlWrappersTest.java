@@ -20,6 +20,7 @@ import org.carrot2.util.*;
 import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.resource.FileResource;
 import org.carrot2.util.tests.CarrotTestCase;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.simpleframework.xml.*;
@@ -32,10 +33,21 @@ import com.google.common.collect.*;
  */
 public class SimpleXmlWrappersTest extends CarrotTestCase
 {
+    Map<Class<?>, Class<? extends ISimpleXmlWrapper<?>>> wrappers;
+    Map<Class<?>, Boolean> strict;
+
     @Before
     public void clearWrappers()
     {
-        SimpleXmlWrappers.clearWrappers();
+        wrappers = SimpleXmlWrappers.wrappers;
+        strict = SimpleXmlWrappers.strict;
+    }
+
+    @After
+    public void restoreWrappers()
+    {
+        SimpleXmlWrappers.wrappers = wrappers;
+        SimpleXmlWrappers.strict = strict;
     }
 
     @Test

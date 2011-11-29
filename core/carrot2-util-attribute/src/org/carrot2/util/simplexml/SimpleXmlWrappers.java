@@ -38,13 +38,12 @@ public class SimpleXmlWrappers
     /**
      * The supported {@link ISimpleXmlWrapper}s.
      */
-    private static final Map<Class<?>, Class<? extends ISimpleXmlWrapper<?>>> wrappers = Maps
-        .newHashMap();
+    static Map<Class<?>, Class<? extends ISimpleXmlWrapper<?>>> wrappers = Maps.newHashMap();
 
     /**
      * Indicates whether the wrapper mapping is strict.
      */
-    private static final Map<Class<?>, Boolean> strict = Maps.newHashMap();
+    static Map<Class<?>, Boolean> strict = Maps.newHashMap();
 
     /**
      * Registers a new {@link ISimpleXmlWrapper}. If a wrapper for the provide
@@ -265,14 +264,5 @@ public class SimpleXmlWrappers
         }
 
         return clazz;
-    }
-
-    /**
-     * For unit tests.
-     */
-    static void clearWrappers()
-    {
-        wrappers.clear();
-        strict.clear();
     }
 }
