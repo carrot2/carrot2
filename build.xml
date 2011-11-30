@@ -393,19 +393,6 @@
       <isset property="carrot2.xml.feed.url.base" />
     </condition>
 
-    <!-- tests.class and tests.method filtering. -->
-    <condition property="tests.class.defined">
-      <and><isset property="tests.class" />
-           <length string="${tests.class}" trim="true" length="0" when="gt" />
-      </and>
-    </condition>
-    <propertyregex property="tests.class.name" input="${tests.class}" regexp="([^\.]+)$" select="\1" casesensitive="false" />
-
-    <patternset id="patternset.tests">
-      <include name="**/*Test.class"           unless="tests.class.defined" />
-      <include name="**/*${tests.class.name}.class"     if="tests.class.defined" />
-    </patternset>
-
     <!-- junit4 -->
     <taskdef resource="junit4.antlib.xml" loaderref="junit4.loader">
         <classpath>
@@ -467,12 +454,12 @@
         <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
         <sysproperty key="log4j.configuration" value="log4j-tests.xml" />
         
-        <!-- Restrict to the given test class/ name. -->
+        <!-- Restrict to the given test class/ method name (for RandomizedRunner). -->
         <sysproperty key="tests.class" value="${tests.class}" />
         <sysproperty key="tests.method" value="${tests.method}" />
         
         <fileset dir="${build.dir.tests}">
-          <patternset refid="patternset.tests" />
+          <include name="**/*Test.class" />
         </fileset>
     </junit4>
 
