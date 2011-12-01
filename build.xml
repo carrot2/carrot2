@@ -404,8 +404,6 @@
     </taskdef>
 
     <!-- defaults. -->
-    <property name="tests.class" value="" />
-    <property name="tests.method" value="" />
     <property name="tests.nightly" value="false" />
 
     <!-- Values: number of cpus to use, 'max' to use all available cores or 'auto' for sensible 
@@ -453,10 +451,6 @@
         <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
         <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
         <sysproperty key="log4j.configuration" value="log4j-tests.xml" />
-        
-        <!-- Restrict to the given test class/ method name (for RandomizedRunner). -->
-        <sysproperty key="tests.class" value="${tests.class}" />
-        <sysproperty key="tests.method" value="${tests.method}" />
         
         <fileset dir="${build.dir.tests}">
           <include name="**/*Test.class" />
