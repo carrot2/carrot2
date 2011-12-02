@@ -13,18 +13,16 @@ package org.carrot2.text.preprocessing;
 
 import java.util.Arrays;
 import java.util.List;
+
 import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.carrotsearch.randomizedtesting.annotations.Seed;
-
 /**
  * Test cases for {@link PhraseExtractor}.
  */
-@Seed("DBCF2D86DD48C281")
 public class PhraseExtractorTest extends CarrotTestCase
 {
     PreprocessingContextBuilder contextBuilder;
