@@ -1088,7 +1088,7 @@
   </target>
 
   <target name="workbench.dist" depends="workbench.plugins.gather" description="Compile Workbench (ZIPs).">
-    <property name="workbench.dist.dir" location="${dist.dir}" />
+    <property name="workbench.dist.dir" location="${tmp.dir}" />
     <property file="${carrot2.master.basedir}/etc/buildinfo/workbench-platforms.properties" />
 
     <echo>${configs}</echo>
