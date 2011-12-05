@@ -52,6 +52,7 @@
   <property name="workbench.dir" location="${carrot2.master.basedir}/workbench" />
   <property name="lib.dir" location="${carrot2.master.basedir}/lib" />
   <property name="etc.dir" location="${carrot2.master.basedir}/etc" />
+  <property name="dist.dir" location="${tmp.dir}/distribution" />
 
   <!-- Output dirs -->
   <property name="build.dir" location="${tmp.dir}/classes" />
@@ -108,6 +109,20 @@
   <path id="src.core.folders">
     <dirset dir="${core.dir}" includes="**/src" />
   </path>
+
+  <!-- We'll be using Carrot2 internal Xalan for XSLTs -->
+  <path id="classpath.xalan">
+    <fileset dir="${carrot2.master.basedir}/lib/org.apache.xml" includes="*.jar" />
+  </path>
+
+  <presetdef name="xslt.xinclude">
+    <xslt>
+        <classpath refid="classpath.xalan" />
+        <factory name="org.apache.xalan.processor.TransformerFactoryImpl" />      
+        <sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration"
+                 value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
+    </xslt>
+  </presetdef>  
 
   <!-- 
       Source files for coverage calculation. The auto-generated code is excluded from the 
@@ -282,6 +297,8 @@
   </target>
 
   <target name="compatibility" depends="core">
+    <!-- This will not work anymore if we release a bugfix off the branch. -->
+
     <mkdir dir="tmp/compatibility" />
     <get src="http://repo1.maven.org/maven2/org/carrot2/carrot2-core/maven-metadata.xml" dest="tmp/compatibility/maven-metadata.xml" />
     <xmlproperty file="tmp/compatibility/maven-metadata.xml" collapseAttributes="true" keepRoot="false" />
@@ -322,7 +339,7 @@
       <formatter type="xml" outfile="${compatibility.report.dir}/api-compatibility.xml" />
     </clirr>
    
-    <xslt in="${compatibility.report.dir}/api-compatibility.xml" 
+    <xslt.xinclude in="${compatibility.report.dir}/api-compatibility.xml" 
           out="${compatibility.report.dir}/api-compatibility.html"
           style="${etc.dir}/clirr/clirr2html.xsl">
       <classpath>
@@ -332,7 +349,7 @@
       </classpath>
       <param name="current" expression="${carrot2.version}" />
       <param name="baseline" expression="${versioning.latest}" />
-    </xslt>
+    </xslt.xinclude>
   </target>
 
   <!--
@@ -498,7 +515,7 @@
         <include name="**/*.java" />
       </fileset>
     </cpd>
-    <xslt in="${duplication.report.dir}/duplication.xml"
+    <xslt.xinclude in="${duplication.report.dir}/duplication.xml"
           style="${etc.dir}/cpd/cpd2html.xsl"
           out="${duplication.report.dir}/index.html" />
   </target>
@@ -537,7 +554,7 @@
       <class location="${build.dir.findbugs}" />
     </findbugs>
 
-    <xslt in="${findbugs.report.dir}/findbugs.xml"
+    <xslt.xinclude in="${findbugs.report.dir}/findbugs.xml"
           style="${etc.dir}/findbugs/findbugs2html.xsl"
           out="${findbugs.report.dir}/index.html" />
   </target>
@@ -668,7 +685,7 @@
     </jar>
   </target>
 
-  <target name="javadoc.overview" depends="carrot2.common.antlib.tasks">
+  <target name="javadoc.overview" depends="version,carrot2.common.antlib.tasks">
     <mkdir dir="${overview.dir}" />
     
     <taskdef name="extractor" classname="com.carrotsearch.ant.snippets.SnippetExtractorTask">
@@ -685,20 +702,32 @@
         <include name="**/*.java" />
       </fileset>
     </extractor>
-    
-    <setProperty sysproperty="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
+
     <copy file="${etc.dir}/javadoc/overview.xsl" todir="${overview.dir}" />
     <echoxml file="${overview.dir}/dummy.xml">
       <dummy />
     </echoxml>
-    <xslt style="${overview.dir}/overview.xsl" 
+    <xslt.xinclude style="${overview.dir}/overview.xsl" 
           in="${overview.dir}/dummy.xml" 
           out="${overview.dir}/overview.html" 
-          force="true" />
+          force="true">
+          <param name="git.verhash" expression="${git.verhash}" />
+    </xslt.xinclude>
   </target>
 
   <target name="version" description="Prints version number.">
+    <exec executable="git" dir="${carrot2.master.basedir}"
+          outputproperty="git.verhash"
+          failonerror="false"
+          failifexecutionfails="false"
+          vmlauncher="false">
+          <arg line="log -1 --pretty=format:%H" />
+    </exec>
+    <!-- Fallback to empty? -->
+    <property name="git.verhash" value="" />
+  
     <print-versions  prefix="carrot2" />
+    <echo>Git version: ${git.verhash}</echo>
   </target>
   
   <!-- 
@@ -918,13 +947,45 @@
   </target>
 
   <!--
-       Build all apps.
+       Distribution build.
     -->
-  <target name="release" depends="clean, workbench.test, workbench.dist, dist, reports, doc, carrot2.solr.dist" description="Release build (requires external tools)." />
+  <target name="dist" depends="
+    clean,
+    version,
+    test,
+    carrot2.core.dist, 
+    carrot2.cli.dist,
+    carrot2.webapp.dist, 
+    carrot2.dcs.dist,
+    workbench.dist,
+    maven, 
+    reports,
+    javadoc,
+    doc,
+    carrot2.solr.dist,
+    assemble.dist" description="Builds Carrot2 distribution (requires external tools)." />
 
-  <target name="dist" depends="carrot2.core.dist, carrot2.cli.dist, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, maven, doc" description="Builds Carrot2 distribution files" />
+  <target name="assemble.dist" depends="version">
+    <echo>Assemble distribution.</echo>
+    <delete dir="${dist.dir}" failonerror="false" />
+    <mkdir dir="${dist.dir}/${carrot2.version}" />
+
+    <copy todir="${dist.dir}/${carrot2.version}">
+      <fileset dir="${tmp.dir}">
+        <include name="javadoc/**" />
+        <include name="manual/**" />
+        <include name="jar/*.jar" />
+        <include name="carrot2-cli-${carrot2.version}.zip" />
+        <include name="carrot2-dcs-${carrot2.version}.zip" />
+        <include name="carrot2-java-api-${carrot2.version}.zip" />
+        <include name="carrot2-manual-${carrot2.version}.zip" />
+        <include name="carrot2-webapp-${carrot2.version}.war" />
+        <include name="carrot2-workbench-*.zip" />
+      </fileset>
+    </copy>
+  </target>
+
   <target name="reports" depends="test, coverage, duplication, findbugs, compatibility" description="Builds all Carrot2 test and code quality reports" />
-
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
   <target name="cli" depends="carrot2.cli.build" description="Builds Carrot2 Command Line Interface" />
@@ -1066,7 +1127,7 @@
   </target>
 
   <target name="workbench.dist" depends="workbench.plugins.gather" description="Compile Workbench (ZIPs).">
-    <property name="dist.dir" location="${tmp.dir}" />
+    <property name="workbench.dist.dir" location="${tmp.dir}" />
     <property file="${carrot2.master.basedir}/etc/buildinfo/workbench-platforms.properties" />
 
     <echo>${configs}</echo>
@@ -1097,8 +1158,8 @@
             -Dworkbench.build.dir=${workbench.build.dir}
         " />
 
-    <mkdir dir="${dist.dir}" />
-    <copy todir="${dist.dir}" overwrite="true">
+    <mkdir dir="${workbench.dist.dir}" />
+    <copy todir="${workbench.dist.dir}" overwrite="true">
       <fileset dir="${workbench.build.dir}/build">
         <include name="S.*/*.zip" />
       </fileset>

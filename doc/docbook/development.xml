@@ -16,16 +16,277 @@
 
   <section xml:id="section.release">
     <title>Stable release procedure</title>
-    
+
     <para>
-      <important>
-        <para>
-        The release procedure needs to be revised for git!
-        </para>
-      </important>
+      Each &C2; release should be performed according to the following procedure:
     </para>
+
+    <orderedlist>
+      <listitem>
+        <formalpara>
+          <title>Precondition: resolved issues</title>
+          <para>
+            All issues related to the software to be released scheduled (fix for) for
+            the release must be resolved.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Precondition: successful continuous integration builds</title>
+          <para>
+            The status of the <link xlink:href="http://builds.carrot2.org/browse/C2HEAD-CORE">C2HEAD-CORE</link>
+            and <link xlink:href="http://builds.carrot2.org/browse/C2HEAD-SOURCES">C2HEAD-SOURCES</link>
+            builds must be successful.
+          </para>
+
+          <para>
+            For bugfixing releases, check appropriate build on the server. 
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Update source code headers and line endings</title>
+          <para>
+            <programlisting><![CDATA[ant prerelease]]></programlisting>
+            Commit changes to trunk.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Review Maven dependencies are in sync</title>
+          <para>
+            <programlisting><![CDATA[(cd etc/maven/poms; mvn dependency:tree )]]></programlisting>
+            Review Maven POMs to ensure dependencies are in sync with the JAR versions
+            in the repository.
+          </para>
+        </formalpara>
+      </listitem>
+      
+      <listitem>
+        <formalpara>
+          <title>Run all the tests and distribution target</title>
+          <para>
+            <programlisting><![CDATA[ant clean dist]]></programlisting>
+            Everything should pass. Extra tools repo will be required.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Generate and verify JavaDocs</title>
+          <para>
+            <programlisting><![CDATA[ant javadoc # (already in dist)]]></programlisting>
+            Review JavaDoc documentation, provide missing public and protected
+            members description, provide missing package descriptions.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Generate and verify &C2; Manual</title>
+          <para>
+            <programlisting><![CDATA[ant doc # (already in dist)]]></programlisting>
+            Review &C2; Manual, modify or add content related to the features implemented
+            in the new release.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Review static code analysis reports</title>
+          <para>
+            <programlisting><![CDATA[ant reports]]></programlisting>
+            Review and fix reasonably-looking flaws.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Update version number strings</title>
+
+          <para>
+            Update <filename>carrot2.version</filename> 
+            and remove <filename>-SNAPSHOT</filename> suffix. This number will be embedded in 
+            distribution file names, JavaDoc page title and other version-sensitive places. 
+            Commit changes. Push.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Trigger stable build in Bamboo.</title>
+          <para>
+            Go to Carrot2 Bamboo (requires admin privileges) and trigger a stable build.
+            If the build is successful, all distribution files should be available 
+            in the download directory. This is the "candidate" release.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Verify the distribution files</title>
+          <para>
+            Download, unpack and run each distribution file to make sure there are no obvious
+            release blockers.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Create an annotated release tag and push changes.</title>
+          <para>
+            <programlisting><![CDATA[git tag -a release/x.y.z -m "Release x.y.z"]]></programlisting>
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Trigger stable build in Bamboo.</title>
+          <para>
+            Go to Carrot2 Bamboo (requires admin privileges) and trigger a stable build again. 
+            This is the final release.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Publish maven artefacts.</title>
+          <para>
+            First,
+            <programlisting><![CDATA[maven.deploy]]></programlisting>
+            this pushes a release to SonaType's staging area. Log in to SonaType, close the release
+            bundle and publish. This can be done later from the tagged revision.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Bump version number strings</title>
+
+          <para>
+            Bump version number to the next anticipated version and add
+            <filename>-SNAPSHOT</filename>.
+            Commit changes.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Update JIRA</title>
+          
+          <para>
+            Close issues scheduled for the release being made, release the version in JIRA, 
+            create a next version in JIRA.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Update project website</title>
+          
+          <para>
+            <orderedlist>
+              <listitem>
+                <formalpara>
+                  <title>Release notes</title>
+                  <para>
+                    Add a page named <filename>release-[version]-notes</filename> that
+                    lists new features, major bug fixes and improvements introduced in the
+                    new release.
+                  </para>
+                </formalpara>
+              </listitem>
+                
+              <listitem>
+                <formalpara>
+                  <title>Release note history</title>
+                  <para>
+                    Add release date and link to the release's JIRA issues on the
+                    <filename>release-notes</filename> page. 
+                  </para>
+                </formalpara>
+              </listitem>
+            </orderedlist>
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Upload distribution files to SourceForge</title>
+          <para>
+            Perform (from the build server):
+
+            <programlisting><![CDATA[rsync -e ssh *-x.y.z.zip \
+<sf.user>,carrot2@frs.sourceforge.net:/home/frs/project/c/ca/carrot2/carrot2/x.y.z]]></programlisting>
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Circulate release news</title>
+          <para>
+            If appropriate, circulate release news to:
+            
+            <orderedlist>
+              <listitem><para>&C2; mailing lists</para></listitem>
+              <listitem>
+                <para><link xlink:href="https://sourceforge.net/news/submit.php?group_id=85379">SourceForge</link></para>
+              </listitem>
+            </orderedlist>
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Update Wikipedia page</title>
+          <para>
+            If appropriate, update <link xlink:href="http://en.wikipedia.org/wiki/Carrot2">&C2; page on Wikipedia</link>.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Consider upgrading &C2; in dependent projects</title>
+          <para>
+            If reasonable, upgrade &C2; dependency in other known projects, such as
+            Apache Solr and Nutch.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Upload .NET release bundle to download area.</title>
+          <para>
+            After a following Lingo3G release, update corresponding .NET bundle of &C2;.
+          </para>
+        </formalpara>
+      </listitem>      
+    </orderedlist>
   </section>
-  
+
   <section xml:id="section.versioning">
     <title>Versioning scheme</title>
 
