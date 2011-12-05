@@ -5,6 +5,7 @@
               media-type="text/html" encoding="UTF-8" />
 
   <xsl:param name="git.verhash" />
+  <xsl:param name="fisheye.base" select="'http://fisheye3.atlassian.com/browse/carrot2'" />
 
   <xsl:template match="/">
 <html lang="en">
@@ -41,7 +42,7 @@
   
   
   <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/clustering-document-list" parse="text" /></pre>
-  <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/ClusteringDocumentList.java?r={$git.verhash}">Full source code: ClusteringDocumentList.java</a>
+  <a class="source-link" href="{$fisheye.base}/applications/carrot2-examples/examples/org/carrot2/examples/clustering/ClusteringDocumentList.java?r={$git.verhash}">Full source code: ClusteringDocumentList.java</a>
   
   
   <a name="clustering-from-document-sources"></a>
@@ -52,7 +53,7 @@
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/clustering-data-from-document-sources-simple-intro" parse="xml" />
   
   <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/clustering-data-from-document-sources-simple" parse="text" /></pre>
-  <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/ClusteringDataFromDocumentSources.java?r={$git.verhash}">Full source code: ClusteringDataFromDocumentSources.java</a>
+  <a class="source-link" href="{$fisheye.base}/applications/carrot2-examples/examples/org/carrot2/examples/clustering/ClusteringDataFromDocumentSources.java?r={$git.verhash}">Full source code: ClusteringDataFromDocumentSources.java</a>
   
   
   <a name="clustering-from-document-sources-with-custom-settings"></a>
@@ -62,7 +63,7 @@
   </p>
   
   <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/clustering-data-from-document-sources-advanced" parse="text" /></pre>
-  <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/ClusteringDataFromDocumentSources.java?r={$git.verhash}">Full source code: ClusteringDataFromDocumentSources.java</a>
+  <a class="source-link" href="{$fisheye.base}/applications/carrot2-examples/examples/org/carrot2/examples/clustering/ClusteringDataFromDocumentSources.java?r={$git.verhash}">Full source code: ClusteringDataFromDocumentSources.java</a>
   
   
   <a name="setting-attributes"></a>
@@ -74,7 +75,7 @@
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-raw-map-intro" parse="xml" />
   
   <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-raw-map" parse="text" /></pre>
-  <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/UsingAttributes.java?r={$git.verhash}">Full source code: UsingAttributes.java</a>
+  <a class="source-link" href="{$fisheye.base}/applications/carrot2-examples/examples/org/carrot2/examples/clustering/UsingAttributes.java?r={$git.verhash}">Full source code: UsingAttributes.java</a>
   
   
   <a name="setting-attributes-using-attribute-builders"></a>
@@ -82,7 +83,7 @@
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-builders-intro" parse="xml" />
   
   <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-builders" parse="text" /></pre>
-  <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/UsingAttributes.java?r={$git.verhash}">Full source code: UsingAttributes.java</a>
+  <a class="source-link" href="{$fisheye.base}/applications/carrot2-examples/examples/org/carrot2/examples/clustering/UsingAttributes.java?r={$git.verhash}">Full source code: UsingAttributes.java</a>
   
   
   <a name="collecting-output-attributes"></a>
@@ -90,7 +91,7 @@
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-output-intro" parse="xml" />
   
   <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-attributes-output" parse="text" /></pre>
-  <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/UsingAttributes.java?r={$git.verhash}">Full source code: UsingAttributes.java</a>
+  <a class="source-link" href="{$fisheye.base}/applications/carrot2-examples/examples/org/carrot2/examples/clustering/UsingAttributes.java?r={$git.verhash}">Full source code: UsingAttributes.java</a>
   
   
   
@@ -106,7 +107,7 @@
   </p>
   
   <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/using-caching-controller" parse="text" /></pre>
-  <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/UsingCachingController.java?r={$git.verhash}">Full source code: UsingCachingController.java</a>
+  <a class="source-link" href="{$fisheye.base}/applications/carrot2-examples/examples/org/carrot2/examples/clustering/UsingCachingController.java?r={$git.verhash}">Full source code: UsingCachingController.java</a>
   
   <a name="non-english"></a>
   <h2>Clustering non-English content</h2>
@@ -114,7 +115,7 @@
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/clustering-non-english-content-intro" parse="xml" />
   
   <pre class="brush: java"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="snippets/clustering-non-english-content" parse="text" /></pre>
-  <a class="source-link" href="http://fisheye3.atlassian.com/browse/carrot2/trunk/applications/carrot2-examples/src/org/carrot2/examples/clustering/ClusteringNonEnglishContent.java?r={$git.verhash}">Full source code: ClusteringNonEnglishContent.java</a>
+  <a class="source-link" href="{$fisheye.base}/applications/carrot2-examples/examples/org/carrot2/examples/clustering/ClusteringNonEnglishContent.java?r={$git.verhash}">Full source code: ClusteringNonEnglishContent.java</a>
   
   
   <link type="text/css" rel="stylesheet" href="{{@docRoot}}/sh/shCore.css"/>
