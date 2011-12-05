@@ -72,13 +72,17 @@ public class Bing2WebDocumentSourceTest extends
 
         final int documentsReturned = runQuery("cats", 10);
         assertThat(documentsReturned).isGreaterThan(0);
+
+        boolean hadPdfs = false;
+        boolean hadDocs = false;
         for (Document doc : getDocuments())
         {
             String url = doc.getContentUrl().toLowerCase();
-            Assert.assertTrue(
-                url.indexOf(".pdf") >= 0 ||
-                url.indexOf(".doc") >= 0);
+            hadPdfs |= url.contains(".pdf");
+            hadDocs |= url.contains(".doc");
         }
+        Assert.assertTrue(hadPdfs);
+        Assert.assertTrue(hadDocs);
     }
 
     
