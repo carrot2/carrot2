@@ -115,19 +115,9 @@
           <title>Update version number strings</title>
 
           <para>
-            <orderedlist>
-              <listitem>
-                <formalpara>
-                  <title>Version files</title>
-                  <para>
-                    Update <filename>carrot2.version</filename> 
-                    and remove <filename>-SNAPSHOT</filename> suffix. This number will be embedded in 
-                    distribution file names, JavaDoc page title and other version-sensitive places. 
-                  </para>
-                </formalpara>
-              </listitem>
-            </orderedlist>
-
+            Update <filename>carrot2.version</filename> 
+            and remove <filename>-SNAPSHOT</filename> suffix. This number will be embedded in 
+            distribution file names, JavaDoc page title and other version-sensitive places. 
             Commit changes. Push.
           </para>
         </formalpara>
