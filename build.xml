@@ -115,8 +115,8 @@
   <path id="classpath.xalan">
     <fileset dir="${carrot2.master.basedir}/lib/org.apache.xml" includes="*.jar" />
   </path>
-  
-  <presetdef name="xslt">
+
+  <presetdef name="xslt.xinclude">
     <xslt>
         <classpath refid="classpath.xalan" />
         <factory name="org.apache.xalan.processor.TransformerFactoryImpl" />      
@@ -334,7 +334,7 @@
       <formatter type="xml" outfile="${compatibility.report.dir}/api-compatibility.xml" />
     </clirr>
    
-    <xslt in="${compatibility.report.dir}/api-compatibility.xml" 
+    <xslt.xinclude in="${compatibility.report.dir}/api-compatibility.xml" 
           out="${compatibility.report.dir}/api-compatibility.html"
           style="${etc.dir}/clirr/clirr2html.xsl">
       <classpath>
@@ -344,7 +344,7 @@
       </classpath>
       <param name="current" expression="${carrot2.version}" />
       <param name="baseline" expression="${versioning.latest}" />
-    </xslt>
+    </xslt.xinclude>
   </target>
 
   <!--
@@ -473,7 +473,7 @@
         <include name="**/*.java" />
       </fileset>
     </cpd>
-    <xslt in="${duplication.report.dir}/duplication.xml"
+    <xslt.xinclude in="${duplication.report.dir}/duplication.xml"
           style="${etc.dir}/cpd/cpd2html.xsl"
           out="${duplication.report.dir}/index.html" />
   </target>
@@ -512,7 +512,7 @@
       <class location="${build.dir.findbugs}" />
     </findbugs>
 
-    <xslt in="${findbugs.report.dir}/findbugs.xml"
+    <xslt.xinclude in="${findbugs.report.dir}/findbugs.xml"
           style="${etc.dir}/findbugs/findbugs2html.xsl"
           out="${findbugs.report.dir}/index.html" />
   </target>
@@ -665,12 +665,12 @@
     <echoxml file="${overview.dir}/dummy.xml">
       <dummy />
     </echoxml>
-    <xslt style="${overview.dir}/overview.xsl" 
+    <xslt.xinclude style="${overview.dir}/overview.xsl" 
           in="${overview.dir}/dummy.xml" 
           out="${overview.dir}/overview.html" 
           force="true">
           <param name="git.verhash" expression="${git.verhash}" />
-    </xslt>
+    </xslt.xinclude>
   </target>
 
   <target name="version" description="Prints version number.">
