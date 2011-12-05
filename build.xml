@@ -294,6 +294,8 @@
   </target>
 
   <target name="compatibility" depends="core">
+    <!-- This will not work anymore if we release a bugfix off the branch. -->
+
     <mkdir dir="tmp/compatibility" />
     <get src="http://repo1.maven.org/maven2/org/carrot2/carrot2-core/maven-metadata.xml" dest="tmp/compatibility/maven-metadata.xml" />
     <xmlproperty file="tmp/compatibility/maven-metadata.xml" collapseAttributes="true" keepRoot="false" />
