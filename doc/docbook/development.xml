@@ -73,7 +73,7 @@
           <title>Run all the tests and distribution target</title>
           <para>
             <programlisting><![CDATA[ant clean dist]]></programlisting>
-            Commit changes to trunk.
+            Everything should pass. Extra tools repo will be required.
           </para>
         </formalpara>
       </listitem>
@@ -128,7 +128,7 @@
               </listitem>
             </orderedlist>
 
-            Commit changes.
+            Commit changes. Push.
           </para>
         </formalpara>
       </listitem>
@@ -137,8 +137,8 @@
         <formalpara>
           <title>Trigger stable build in Bamboo.</title>
           <para>
-            Go to Carrot2 Bamboo (requires admin privileges) and trigger a stable build. 
-            If the build is successful, all distribution files should be  available 
+            Go to Carrot2 Bamboo (requires admin privileges) and trigger a stable build.
+            If the build is successful, all distribution files should be available 
             in the download directory. This is the "candidate" release.
           </para>
         </formalpara>
@@ -175,8 +175,20 @@
 
       <listitem>
         <formalpara>
+          <title>Publish maven artefacts.</title>
+          <para>
+            First,
+            <programlisting><![CDATA[maven.deploy]]></programlisting>
+            this pushes a release to SonaType's staging area. Log in to SonaType, close the release
+            bundle and publish. This can be done later from the tagged revision.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
           <title>Bump version number strings</title>
-          
+
           <para>
             Bump version number to the next anticipated version and add
             <filename>-SNAPSHOT</filename>.
@@ -273,6 +285,15 @@
           </para>
         </formalpara>
       </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Upload .NET release bundle to download area.</title>
+          <para>
+            After a following Lingo3G release, update corresponding .NET bundle of &C2;.
+          </para>
+        </formalpara>
+      </listitem>      
     </orderedlist>
   </section>
 
