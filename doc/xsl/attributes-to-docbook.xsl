@@ -421,6 +421,14 @@
     </db:row>
   </xsl:template>
     
+  <xsl:template match="constraint[@class = 'org.carrot2.util.attribute.constraint.PassesValueOfConstraint']">
+    <!-- 
+         Ignored, not relevant in the documentation. The presence of this constraint
+         simply means that the string value must adhere to the syntax described in 
+         the documentation and enforced by the valueOf method. 
+      -->
+  </xsl:template>
+    
   <xsl:template match="constraint">
     <xsl:message>Unsupported constraint type:
     <xsl:value-of select="@class" /></xsl:message>
