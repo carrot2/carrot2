@@ -28,6 +28,7 @@
   <!-- Import local properties and version -->
   <property name="local.properties" location="${carrot2.master.basedir}/local.properties" />
   <property file="${local.properties}" />
+  <property file="${carrot2.master.basedir}/local.properties.example" />
   <property file="${carrot2.master.basedir}/carrot2.version" />
   <property file="${carrot2.master.basedir}/etc/version/carrot2.basenames" />
 
@@ -642,7 +643,7 @@
     </jar>
   </target>
 
-  <target name="javadoc.overview" depends="carrot2.common.antlib.tasks">
+  <target name="javadoc.overview" depends="version,carrot2.common.antlib.tasks">
     <mkdir dir="${overview.dir}" />
     
     <taskdef name="extractor" classname="com.carrotsearch.ant.snippets.SnippetExtractorTask">
@@ -659,8 +660,7 @@
         <include name="**/*.java" />
       </fileset>
     </extractor>
-    
-    <setProperty sysproperty="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
+
     <copy file="${etc.dir}/javadoc/overview.xsl" todir="${overview.dir}" />
     <echoxml file="${overview.dir}/dummy.xml">
       <dummy />
@@ -668,11 +668,24 @@
     <xslt style="${overview.dir}/overview.xsl" 
           in="${overview.dir}/dummy.xml" 
           out="${overview.dir}/overview.html" 
-          force="true" />
+          force="true">
+          <param name="git.verhash" expression="${git.verhash}" />
+    </xslt>
   </target>
 
   <target name="version" description="Prints version number.">
+    <exec executable="git" dir="${carrot2.master.basedir}"
+          outputproperty="git.verhash"
+          failonerror="false"
+          failifexecutionfails="false"
+          vmlauncher="false">
+          <arg line="log -1 --pretty=format:%H" />
+    </exec>
+    <!-- Fallback to empty? -->
+    <property name="git.verhash" value="" />
+  
     <print-versions  prefix="carrot2" />
+    <echo>Git version: ${git.verhash}</echo>
   </target>
   
   <!-- 
