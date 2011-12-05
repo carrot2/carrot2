@@ -11,7 +11,9 @@
   <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
 
   <!-- We'll be using Carrot2 internal Xalan -->
-  <property name="xalan.home" location="${carrot2.master.basedir}/lib/org.apache.xml" />
+  <path id="classpath.xalan">
+    <fileset dir="${carrot2.master.basedir}/lib/org.apache.xml" includes="*.jar" />
+  </path>
 
   <!-- Catalog for local copies of DocBook DTD and XSL-NS -->
   <xmlcatalog id="docbook">
@@ -20,6 +22,17 @@
     <dtd publicId="http://docbook.sourceforge.net/release/xsl-ns/current/html/docbook.xsl"
          location="${docbook.xsl.dir}/html/docbook.xsl" />
   </xmlcatalog>
+
+  <presetdef name="docbook.xslt">
+    <xslt>
+        <xmlcatalog refid="docbook" />
+	<classpath refid="classpath.xalan" />
+	<factory name="org.apache.xalan.processor.TransformerFactoryImpl" />      
+
+	<sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration"
+                 value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
+    </xslt>
+  </presetdef>  
 
   <!--
        Renders the DocBook manual into HTML.
@@ -78,37 +91,21 @@
     <sequential>
       <mkdir dir="@{doc.output.dir}" />
       
-      <xslt in="@{doc.build.dir}/docbook/@{doc.main.docbook.filename}"
+      <docbook.xslt in="@{doc.build.dir}/docbook/@{doc.main.docbook.filename}"
             style="@{doc.build.dir}/xsl/filtering.xsl"
             out="@{doc.output.dir}/filtered.xml"
             force="yes">
-        <xmlcatalog refid="docbook" />
-        
         <html.xslt.param.entries />
-      </xslt>
+      </docbook.xslt>
 
       <!-- Build the actual manual -->
-      <xslt in="@{doc.output.dir}/filtered.xml"
+      <docbook.xslt in="@{doc.output.dir}/filtered.xml"
             style="@{doc.build.dir}/xsl/html-custom/docbook.xsl"
             out="@{doc.output.dir}/index.html"
             basedir="${docbook.xsl.dir}"
             force="yes">
-        <xmlcatalog refid="docbook" />
-
-        <classpath>
-          <fileset dir="${xalan.home}">
-            <include name="*.jar" />
-          </fileset>
-        </classpath>
-      
-        <!-- 
-          <factory> enforcement will not work due to this
-          bug in ANT: https://issues.apache.org/bugzilla/show_bug.cgi?id=46172 
-        -->
-        <!-- <factory name="org.apache.xalan.processor.TransformerFactoryImpl" /> -->
-
         <html.xslt.param.entries />
-      </xslt>
+      </docbook.xslt>
 
       <delete file="@{doc.output.dir}/filtered.xml" />
       
@@ -192,12 +189,11 @@
       <xmlvalidate file="@{doc.build.dir}/xsl/components-metadata.xml" 
                    failonerror="true" lenient="true" />
 
-      <xslt in="@{doc.build.dir}/docbook/components.template.xml"
+      <docbook.xslt in="@{doc.build.dir}/docbook/components.template.xml"
             style="@{doc.build.dir}/xsl/attributes-to-docbook.xsl"
             out="@{doc.build.dir}/docbook/components.xml">
-        <xmlcatalog refid="docbook" />
         <attributes.xslt.param.entries />
-      </xslt>
+      </docbook.xslt>
 
       <delete dir="@{doc.build.dir}/classes" />
     </sequential>
@@ -237,13 +233,8 @@
     </sequential>
   </macrodef>
 
-  <target name="docbook.check" depends="enable.xincludes">
+  <target name="docbook.check">
     <fail unless="docbook.xsl.dir" message="Please specify docbook.xsl.dir" />
     <fail unless="docbook.dtd.dir" message="Please specify docbook.dtd.dir" />
-    <fail unless="xalan.home" message="Please specify xalan.home" />
-  </target>
-
-  <target name="enable.xincludes" depends="carrot2.common.antlib.tasks">
-    <setProperty sysproperty="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
   </target>
 </project>

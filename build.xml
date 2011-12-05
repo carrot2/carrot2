@@ -24,6 +24,7 @@
     </classpath>
   </taskdef>
   
+  
   <!-- Import local properties and version -->
   <property name="local.properties" location="${carrot2.master.basedir}/local.properties" />
   <property file="${local.properties}" />
@@ -108,6 +109,20 @@
   <path id="src.core.folders">
     <dirset dir="${core.dir}" includes="**/src" />
   </path>
+
+  <!-- We'll be using Carrot2 internal Xalan for XSLTs -->
+  <path id="classpath.xalan">
+    <fileset dir="${carrot2.master.basedir}/lib/org.apache.xml" includes="*.jar" />
+  </path>
+  
+  <presetdef name="xslt">
+    <xslt>
+        <classpath refid="classpath.xalan" />
+        <factory name="org.apache.xalan.processor.TransformerFactoryImpl" />      
+        <sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration"
+                 value="org.apache.xerces.parsers.XIncludeParserConfiguration" />
+    </xslt>
+  </presetdef>  
 
   <!-- 
       Source files for coverage calculation. The auto-generated code is excluded from the 
