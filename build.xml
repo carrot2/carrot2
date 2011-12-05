@@ -54,6 +54,7 @@
   <property name="workbench.dir" location="${carrot2.master.basedir}/workbench" />
   <property name="lib.dir" location="${carrot2.master.basedir}/lib" />
   <property name="etc.dir" location="${carrot2.master.basedir}/etc" />
+  <property name="dist.dir" location="${tmp.dir}/distribution" />
 
   <!-- Output dirs -->
   <property name="build.dir" location="${tmp.dir}/classes" />
@@ -907,13 +908,45 @@
   </target>
 
   <!--
-       Build all apps.
+       Distribution build.
     -->
-  <target name="release" depends="clean, workbench.test, workbench.dist, dist, reports, doc, carrot2.solr.dist" description="Release build (requires external tools)." />
+  <target name="dist" depends="
+    clean,
+    version,
+    test,
+    carrot2.core.dist, 
+    carrot2.cli.dist,
+    carrot2.webapp.dist, 
+    carrot2.dcs.dist,
+    workbench.dist,
+    maven, 
+    reports,
+    javadoc,
+    doc,
+    carrot2.solr.dist,
+    assemble.dist" description="Builds Carrot2 distribution (requires external tools)." />
 
-  <target name="dist" depends="carrot2.core.dist, carrot2.cli.dist, carrot2.webapp.dist, carrot2.dcs.dist, javadoc, maven, doc" description="Builds Carrot2 distribution files" />
+  <target name="assemble.dist" depends="version">
+    <echo>Assemble distribution.</echo>
+    <delete dir="${dist.dir}" failonerror="false" />
+    <mkdir dir="${dist.dir}/${carrot2.version}" />
+
+    <copy todir="${dist.dir}/${carrot2.version}">
+      <fileset dir="${tmp.dir}">
+        <include name="javadoc/**" />
+        <include name="manual/**" />
+        <include name="jar/*.jar" />
+        <include name="carrot2-cli-${carrot2.version}.zip" />
+        <include name="carrot2-dcs-${carrot2.version}.zip" />
+        <include name="carrot2-java-api-${carrot2.version}.zip" />
+        <include name="carrot2-manual-${carrot2.version}.zip" />
+        <include name="carrot2-webapp-${carrot2.version}.war" />
+        <include name="carrot2-workbench-*.zip" />
+      </fileset>
+    </copy>
+  </target>
+
   <target name="reports" depends="test, coverage, duplication, findbugs, compatibility" description="Builds all Carrot2 test and code quality reports" />
-
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
   <target name="cli" depends="carrot2.cli.build" description="Builds Carrot2 Command Line Interface" />
@@ -1055,7 +1088,7 @@
   </target>
 
   <target name="workbench.dist" depends="workbench.plugins.gather" description="Compile Workbench (ZIPs).">
-    <property name="dist.dir" location="${tmp.dir}" />
+    <property name="workbench.dist.dir" location="${dist.dir}" />
     <property file="${carrot2.master.basedir}/etc/buildinfo/workbench-platforms.properties" />
 
     <echo>${configs}</echo>
@@ -1086,8 +1119,8 @@
             -Dworkbench.build.dir=${workbench.build.dir}
         " />
 
-    <mkdir dir="${dist.dir}" />
-    <copy todir="${dist.dir}" overwrite="true">
+    <mkdir dir="${workbench.dist.dir}" />
+    <copy todir="${workbench.dist.dir}" overwrite="true">
       <fileset dir="${workbench.build.dir}/build">
         <include name="S.*/*.zip" />
       </fileset>
