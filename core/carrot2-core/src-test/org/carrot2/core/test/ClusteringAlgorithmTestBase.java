@@ -212,8 +212,15 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     public ProcessingResult cluster(Collection<Document> documents)
     {
         processingAttributes.put(AttributeNames.DOCUMENTS, documents);
-        return getSimpleController(initAttributes).process(processingAttributes,
-            getComponentClass());
+        Controller simpleController = getSimpleController(initAttributes);
+        try
+        {
+            return simpleController.process(processingAttributes, getComponentClass());
+        } 
+        finally 
+        {
+            simpleController.dispose();
+        }
     }
 
     /**
