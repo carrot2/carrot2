@@ -72,7 +72,8 @@
         <formalpara>
           <title>Run all the tests and distribution target</title>
           <para>
-            <programlisting><![CDATA[ant clean dist]]></programlisting>
+            <programlisting><![CDATA[git clean -xfd # removes any local files, including settings!
+ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></programlisting>
             Everything should pass. Extra tools repo will be required.
           </para>
         </formalpara>
