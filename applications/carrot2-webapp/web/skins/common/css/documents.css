@@ -2,6 +2,10 @@
  * CSS for the documents list. 
  */
 
+#documents a:visited {
+  color: #5d3ccb;
+}
+
 div.document {
   padding-left: 0.5em;
   margin-left: 2.2em;
