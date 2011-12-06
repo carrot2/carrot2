@@ -169,8 +169,10 @@ ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></p
           <title>Publish maven artefacts.</title>
           <para>
             First,
-            <programlisting><![CDATA[maven.deploy]]></programlisting>
-            this pushes a release to SonaType's staging area. Log in to SonaType, close the release
+            <programlisting><![CDATA[ant maven.deploy]]></programlisting>
+            this pushes a release to SonaType's staging area (appropriate sonatype server configuration in 
+            <filename>~/.m2/settings.xml</filename> and GPG keys in <filename>~/.gnupg/</filename> required). 
+            Log in to SonaType, close the release
             bundle and publish. This can be done later from the tagged revision.
           </para>
         </formalpara>
