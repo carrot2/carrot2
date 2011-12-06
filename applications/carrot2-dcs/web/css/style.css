@@ -227,6 +227,7 @@ ul.tabs li.drag .right {
   position: absolute;
   left: 185px;
   top: 37px;
+  width: 550px;
 }
 
 ul.tabs {
