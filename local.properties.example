@@ -78,3 +78,10 @@ tests.nightly=false
 
 # JavaDoc url for links in the DocBook documentation.
 # javadoc.url=
+
+
+#######################################################################################
+# solr checkouts for backcompat testing
+
+solr.checkout.1.4.x=${tools.dir}/solr/branch-1.4
+solr.checkout.3.1.x=${tools.dir}/solr/branch-3.x/solr

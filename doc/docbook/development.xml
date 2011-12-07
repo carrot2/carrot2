@@ -236,7 +236,7 @@ ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></p
           <para>
             Perform (from the build server):
 
-            <programlisting><![CDATA[rsync -e ssh *-x.y.z.zip \
+            <programlisting><![CDATA[rsync -e ssh *-x.y.z.zip *.war \
 <sf.user>,carrot2@frs.sourceforge.net:/home/frs/project/c/ca/carrot2/carrot2/x.y.z]]></programlisting>
           </para>
         </formalpara>
