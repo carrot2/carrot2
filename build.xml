@@ -303,7 +303,7 @@
     <mkdir dir="tmp/compatibility" />
     <get src="http://repo1.maven.org/maven2/org/carrot2/carrot2-core/maven-metadata.xml" dest="tmp/compatibility/maven-metadata.xml" />
     <xmlproperty file="tmp/compatibility/maven-metadata.xml" collapseAttributes="true" keepRoot="false" />
-    <get src="http://download.carrot2.org/stable/carrot2-java-api-${versioning.latest}.zip" 
+    <get src="http://download.carrot2.org/stable/${versioning.latest}/carrot2-java-api-${versioning.latest}.zip" 
          dest="tmp/compatibility/carrot2-java-api-${versioning.latest}.zip" />
 
     <unzip src="tmp/compatibility/carrot2-java-api-${versioning.latest}.zip" dest="tmp/compatibility">
