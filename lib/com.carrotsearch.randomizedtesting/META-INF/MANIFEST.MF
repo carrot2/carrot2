@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: RandomizedTesting
 Bundle-SymbolicName: com.carrotsearch.randomizedtesting
 Bundle-Version: 0.0.4.SNAPSHOT
-Bundle-ClassPath: randomizedtesting-runner-0.0.4-SNAPSHOT.jar
+Bundle-ClassPath: randomizedtesting-runner-0.0.4.jar
 Bundle-Vendor: Carrot Search s.c.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.carrotsearch.randomizedtesting,
