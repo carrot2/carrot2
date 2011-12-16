@@ -18,6 +18,7 @@ import org.carrot2.core.LanguageCode;
 import org.carrot2.text.linguistic.lucene.ArabicStemmerAdapter;
 import org.carrot2.text.linguistic.lucene.SnowballStemmerFactory;
 import org.carrot2.text.linguistic.morfologik.MorfologikStemmerAdapter;
+import org.carrot2.util.annotations.ThreadSafe;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.factory.FallbackFactory;
 import org.carrot2.util.factory.IFactory;
@@ -30,6 +31,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 
 @Bindable
+@ThreadSafe
 public class DefaultStemmerFactory implements IStemmerFactory
 {
     private final static Logger logger = LoggerFactory.getLogger(DefaultStemmerFactory.class);

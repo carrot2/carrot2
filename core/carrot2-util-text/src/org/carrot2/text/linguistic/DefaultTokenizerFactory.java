@@ -21,6 +21,7 @@ import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.lucene.ChineseTokenizerAdapter;
 import org.carrot2.text.linguistic.lucene.ThaiTokenizerAdapter;
+import org.carrot2.util.annotations.ThreadSafe;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.factory.FallbackFactory;
 import org.carrot2.util.factory.IFactory;
@@ -32,6 +33,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 
 @Bindable
+@ThreadSafe
 public class DefaultTokenizerFactory implements ITokenizerFactory
 {
     private final static Logger logger = LoggerFactory
