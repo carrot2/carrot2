@@ -456,6 +456,8 @@
                           replace='' flags="gs" />
                 </tokenfilter>
             </report-ant-xml>
+            
+            <report-json file="${tests.report.dir}/test-results.json" />
         </listeners>
 
         <jvmarg value="-ea" />
