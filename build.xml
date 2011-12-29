@@ -431,6 +431,7 @@
             failureproperty="tests.failed"
             tempdir="${tmp.dir}"
             parallelism="${tests.cpus}"
+            shuffleOnSlave="true"
             leaveTemporary="false"
     >
         <listeners>
@@ -448,6 +449,9 @@
               showSuiteSummary="false"
             />
 
+            <!-- Store execution times-->
+            <report-execution-times file="${tmp.dir}/execution-hints.log" historyLength="5" /> 
+
             <report-ant-xml dir="${tests.report.dir}" />
 
             <report-ant-xml dir="${jira.report.dir}">
@@ -459,6 +463,13 @@
             
             <report-json file="${tests.report.dir}/test-results.json" />
         </listeners>
+
+        <balancers>
+          <execution-times>
+            <file file="${carrot2.master.basedir}/etc/tests/carrot2-hints.log" />
+            <file file="${tmp.dir}/execution-hints.log" />
+        	</execution-times>
+        </balancers> 
 
         <jvmarg value="-ea" />
         
