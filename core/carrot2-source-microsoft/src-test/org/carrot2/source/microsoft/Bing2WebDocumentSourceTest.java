@@ -45,12 +45,12 @@ public class Bing2WebDocumentSourceTest extends
     {
         super.processingAttributes.put(
             AttributeUtils.getKey(Bing2WebDocumentSource.class, "site"), 
-            "www.cs.put.poznan.pl");
+            "put.poznan.pl");
 
-        final int documentsReturned = runQuery("weiss", 10);
+        final int documentsReturned = runQuery("politechnika", 10);
         assertThat(documentsReturned).isGreaterThan(0);
         for (Document doc : getDocuments()) {
-            assertThat(doc.getContentUrl()).contains("www.cs.put.poznan.pl");
+            assertThat(doc.getContentUrl()).contains("put.poznan.pl");
         }
     }
 
