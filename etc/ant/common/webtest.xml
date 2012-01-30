@@ -22,7 +22,7 @@
       <property name="tomcat.config.dir" location="@{cargo.tmp.dir}/config" />
       <property name="tomcat.log.dir" location="@{cargo.tmp.dir}/log" />
         
-      <delete dir="@{cargo.tmp.dir}" />
+      <delete dir="@{cargo.tmp.dir}" failonerror="false" />
       <mkdir dir="${tomcat.log.dir}"/>
       <mkdir dir="${tomcat.config.dir}"/>
       
