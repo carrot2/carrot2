@@ -628,15 +628,21 @@ public class SearchInputView extends ViewPart
         displayEditorSet();
 
         // Restore initial expansion state for groups.
-        if (state != null)
+        if (attributeGroups != null)
         {
-            this.attributeGroups.setExpanded(state.sectionsExpansionState);            
-        }
-        else
-        {
-            // Set the default expansion state.
-            this.attributeGroups.setExpanded(false);
-            this.attributeGroups.setExpanded(AttributeLevel.BASIC.toString(), true);
+	        if (state != null)
+	        {
+	        	if (state.sectionsExpansionState != null)
+	        	{
+	        		this.attributeGroups.setExpanded(state.sectionsExpansionState);
+	        	}
+	        }
+	        else
+	        {
+	            // Set the default expansion state.
+	            this.attributeGroups.setExpanded(false);
+	            this.attributeGroups.setExpanded(AttributeLevel.BASIC.toString(), true);
+	        }
         }
     }
 
@@ -984,7 +990,10 @@ public class SearchInputView extends ViewPart
         state.algorithmId = getAlgorithmId();
         state.linkWithEditor = linkWithEditor;
         state.attributes = attributes;
-        state.sectionsExpansionState = attributeGroups.getExpansionStates();
+        
+        if (attributeGroups != null) {
+        	state.sectionsExpansionState = attributeGroups.getExpansionStates();
+        }
 
         try
         {
