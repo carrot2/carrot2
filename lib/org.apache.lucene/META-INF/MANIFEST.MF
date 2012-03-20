@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Lucene
 Bundle-SymbolicName: org.apache.lucene.v2
-Bundle-Version: 3.4.0
-Bundle-ClassPath: lucene-analyzers-3.4.0.jar,
- lucene-core-3.4.0.jar,
- lucene-highlighter-3.4.0.jar,
- lucene-memory-3.4.0.jar,
- lucene-smartcn-3.4.0.jar
+Bundle-Version: 3.5.0
+Bundle-ClassPath: lucene-analyzers-3.5.0.jar,
+ lucene-core-3.5.0.jar,
+ lucene-highlighter-3.5.0.jar,
+ lucene-memory-3.5.0.jar,
+ lucene-smartcn-3.5.0.jar
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.apache.lucene,
