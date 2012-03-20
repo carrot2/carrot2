@@ -31,8 +31,10 @@
       if ($.visualization.visualization == 'circles') {
         flashvars["gui_hsv_text_dark"] = 0xd0000000;
         flashvars["gui_hsv_text_light"] = 0xd0ffffff;
-        flashvars["minOutsideFontSize"] = "2%";
-        flashvars["maxOutsideFontSize"] = "10%";
+        flashvars["expandAll"] = true;
+        // swfobject wtf... values are interpreted as URL encoded? Passing % doesn't work.
+        flashvars["minOutsideFontSize"] = '2%25';
+        flashvars["maxOutsideFontSize"] = '30%25';
       }
 
       var params = {};
