@@ -18,16 +18,21 @@
           disableLogging: true,
 
           logo: jQuery.visualization.logo
-        };
+      };
+
       if ($.visualization.visualization == 'foamtree') {
         flashvars["gui_hsv_start"] = "0.8, 0, 0.9, 0.95";
         flashvars["gui_hsv_end"] = "0.8, 0.83, 0.9, 0.95";
         flashvars["gui_hsv_text_dark"] = 0xff202020;
         flashvars["gui_hsv_text_light"] = 0xffe0e0e0;
+        flashvars["cornerRoundness"] = 0.2;
       }
+
       if ($.visualization.visualization == 'circles') {
         flashvars["gui_hsv_text_dark"] = 0xd0000000;
         flashvars["gui_hsv_text_light"] = 0xd0ffffff;
+        flashvars["minOutsideFontSize"] = "2%";
+        flashvars["maxOutsideFontSize"] = "10%";
       }
 
       var params = {};
