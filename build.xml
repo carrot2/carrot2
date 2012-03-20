@@ -452,16 +452,14 @@
             <!-- Store execution times-->
             <report-execution-times file="${tmp.dir}/execution-hints.log" historyLength="5" /> 
 
-            <report-ant-xml dir="${tests.report.dir}" />
-
             <report-ant-xml dir="${jira.report.dir}">
                 <tokenfilter>
                     <replaceregex pattern='\s+\{[^\}]*\}' 
                           replace='' flags="gs" />
                 </tokenfilter>
             </report-ant-xml>
-            
-            <report-json file="${tests.report.dir}/test-results.json" />
+
+            <report-json file="${tests.report.dir}/index.html" />
         </listeners>
 
         <balancers>
@@ -486,13 +484,6 @@
           <include name="**/*Test.class" />
         </fileset>
     </junit4>
-
-    <junitreport todir="${tests.report.dir}">
-      <fileset dir="${tests.report.dir}">
-        <include name="TEST-*.xml" />
-      </fileset>
-      <report format="frames" todir="${tests.report.dir}" />
-    </junitreport>
 
     <fail message="Tests failed. See ${tests.report.dir} for report." if="tests.failed" />
   </target>
