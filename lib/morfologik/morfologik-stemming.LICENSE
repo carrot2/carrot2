@@ -3,6 +3,9 @@ Copyright (c) 2006 Dawid Weiss
 Copyright (c) 2007-2011 Dawid Weiss, Marcin Miłkowski
 All rights reserved.
 
+IMPORTANT: JAR-embedded dictionaries are licensed on their own terms, see
+morfologik-[language].LICENSE files for more information.
+
 Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
 
@@ -27,14 +30,3 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
----
-
-LICENCE
-
-The dictionary comes from Morfologik project. Morfologik uses data from 
-Polish ispell/myspell dictionary hosted at http://www.sjp.pl/slownik/en/ and 
-is licenced on the terms of (inter alia) LGPL and Creative Commons 
-ShareAlike. The part-of-speech tags were added in Morfologik project and
-are not found in the data from sjp.pl. The tagset is similar to IPI PAN
-tagset.

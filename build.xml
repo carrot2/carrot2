@@ -875,7 +875,7 @@
     </patternset>
       
     <patternset id="carrot2.optional">
-      <include name="**/morfologik-stemming*" />
+      <include name="**/morfologik-*" />
       <include name="**/commons-codec*" />
       <include name="org.apache.http/http*" />
       <include name="**/jcl-over-slf4j*" />
@@ -883,9 +883,8 @@
       <include name="**/lucene*" />
       <exclude name="**/lucene-analyzers*" />
       <include name="**/rome*" />
-      <include name="**/com.carrotsearch.nni/nni*" />
     </patternset>
-    
+
     <copy todir="${api.dir}/lib/required">
       <fileset dir="${lib.dir}">
         <patternset refid="carrot2.required" />

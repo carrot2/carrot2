@@ -1,0 +1,8 @@
+morfologik-polish, TERMS OF LICENCE
+
+This JAR contains and makes use of data from Polish ispell/myspell 
+dictionaries hosted at http://www.sjp.pl/slownik/en/ and is 
+licenced on the terms of (inter alia) LGPL or Creative Commons ShareAlike licenses.
+
+Part-of-speech tags were added in Morfologik project and are not found 
+in the data from sjp.pl.
