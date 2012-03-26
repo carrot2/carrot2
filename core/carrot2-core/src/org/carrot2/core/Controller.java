@@ -351,8 +351,8 @@ public final class Controller implements Closeable
                     // that prevents us from doing so. inputAttributes contains also @Init
                     // attributes. If we provide them at processing time, useless
                     // instances of @Init @Processing @Input attributes may be created.
-                    // See testComponentConfigurationInitProcessingAttributeCreation() for
-                    // a test case.
+                    // See ControllerTestsPooling#testComponentConfigurationInitProcessingAttributeCreation()
+                    // for a test case.
                     ControllerUtils.performProcessing(components[i], attributesCopy,
                         resultAttributes);
 
