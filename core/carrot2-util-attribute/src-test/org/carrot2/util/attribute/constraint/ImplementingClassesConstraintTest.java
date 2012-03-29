@@ -39,19 +39,19 @@ public class ImplementingClassesConstraintTest extends
     private static final String STRICT_FIELD_NAME = "strictField";
     private static final String NON_STRICT_FIELD_NAME = "nonStrictField";
 
-    @Override
+    //@Override
     Class<?> getAnnotationContainerClass()
     {
         return AnnotationContainer.class;
     }
 
-    @Override
+    //@Override
     Class<ImplementingClasses> getAnnotationType()
     {
         return ImplementingClasses.class;
     }
 
-    @Override
+    //@Override
     boolean isInvalidTypeChecked()
     {
         return false;

@@ -18,7 +18,7 @@ import org.carrot2.text.linguistic.ITokenizerFactory;
 
 public final class TestTokenizerFactory implements ITokenizerFactory
 {
-    @Override
+    //@Override
     public ITokenizer getTokenizer(LanguageCode language)
     {
         return new ExtendedWhitespaceTokenizer();

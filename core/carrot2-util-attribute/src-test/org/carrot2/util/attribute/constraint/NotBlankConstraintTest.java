@@ -25,13 +25,13 @@ public class NotBlankConstraintTest extends ConstraintTestBase<NotBlank>
         String field;
     }
 
-    @Override
+    //@Override
     Class<?> getAnnotationContainerClass()
     {
         return AnnotationContainer.class;
     }
 
-    @Override
+    //@Override
     Class<NotBlank> getAnnotationType()
     {
         return NotBlank.class;
@@ -49,7 +49,7 @@ public class NotBlankConstraintTest extends ConstraintTestBase<NotBlank>
         assertNotMet("  \t");
     }
     
-    @Override
+    //@Override
     boolean isInvalidTypeChecked()
     {
         return false;

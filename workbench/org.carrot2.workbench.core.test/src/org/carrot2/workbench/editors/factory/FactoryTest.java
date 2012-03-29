@@ -24,7 +24,7 @@ public class FactoryTest extends TestCase
     private Class<? extends IProcessingComponent> c;
     private BindableDescriptor desc;
 
-    @Override
+    //@Override
     protected void setUp() throws Exception
     {
         c = TestComponent.class;

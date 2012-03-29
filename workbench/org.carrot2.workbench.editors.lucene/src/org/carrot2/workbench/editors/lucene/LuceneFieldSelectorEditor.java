@@ -36,7 +36,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
     /*
      * 
      */
-    @Override
+    //@Override
     public AttributeEditorInfo init(Map<String, Object> defaultValues)
     {
         valueRequired = false;
@@ -49,7 +49,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
          */
         super.eventProvider.addAttributeListener(new AttributeListenerAdapter()
         {
-            @Override
+            //@Override
             public void valueChanged(AttributeEvent event)
             {
                 if (StringUtils.equals(event.key, dirKey))
@@ -103,7 +103,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
         super.setMappedValues(valueToName, valueOrder);
     }
 
-    @Override
+    //@Override
     public void setValue(Object newValue)
     {
         super.setValue(newValue);

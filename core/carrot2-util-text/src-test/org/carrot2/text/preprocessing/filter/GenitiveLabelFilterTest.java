@@ -21,7 +21,7 @@ import org.junit.Test;
  */
 public class GenitiveLabelFilterTest extends LabelFilterTestBase
 {
-    @Override
+    //@Override
     protected void initializeFilters(LabelFilterProcessor filterProcessor)
     {
         filterProcessor.genitiveLabelFilter.enabled = true;

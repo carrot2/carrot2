@@ -154,7 +154,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
         return delegate.prepare(clazz, id, inputAttributes, outputAttributes);
     }
 
-    @Override
+    //@Override
     public void recycle(IProcessingComponent component, String id)
     {
         // If not our wrapper, recycle.
@@ -231,7 +231,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
             this.componentId = componentId;
         }
 
-        @Override
+        //@Override
         @SuppressWarnings("unchecked")
         public void process() throws ProcessingException
         {
@@ -390,7 +390,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
          * that re-querying for documents and clusters does not cause duplicated
          * processing), conflicts do not seem like a big problem.
          */
-        @Override
+        //@Override
         public boolean equals(Object obj)
         {
             if (!(obj instanceof AttributeMapCacheKey))
@@ -407,7 +407,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
             return result;
         }
 
-        @Override
+        //@Override
         public int hashCode()
         {
             return hashCode;

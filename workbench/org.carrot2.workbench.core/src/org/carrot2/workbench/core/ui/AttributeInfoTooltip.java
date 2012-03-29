@@ -96,14 +96,14 @@ public class AttributeInfoTooltip extends ToolTip
         }
     }
     
-    @Override
+    //@Override
     protected boolean shouldCreateToolTip(Event event)
     {
         boolean value = super.shouldCreateToolTip(event);
         if (value && isSynchronizedWithView())
         {
             final Job job = new UIJob("Show attribute info") {
-                @Override
+                //@Override
                 public IStatus runInUIThread(IProgressMonitor monitor)
                 {
                     showInView();
@@ -122,7 +122,7 @@ public class AttributeInfoTooltip extends ToolTip
     /*
      * 
      */
-    @Override
+    //@Override
     protected Composite createToolTipContentArea(Event event, Composite parent)
     {
         final Display display = parent.getShell().getDisplay();

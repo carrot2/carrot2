@@ -21,14 +21,14 @@ import org.junit.Test;
  */
 public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase
 {
-    @Override
+    //@Override
     protected void initializeFilters(LabelFilterProcessor filterProcessor)
     {
         filterProcessor.completeLabelFilter.enabled = true;
         filterProcessor.stopWordLabelFilter.enabled = true;
     }
 
-    @Override
+    //@Override
     protected ILexicalDataFactory createLexicalDataFactory()
     {
         final DefaultLexicalDataFactory factory = new DefaultLexicalDataFactory();

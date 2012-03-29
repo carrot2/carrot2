@@ -31,7 +31,7 @@ final class ResetToFactoryDefaultsAction extends Action
         this.input = input;
     }
 
-    @Override
+    //@Override
     public void runWithEvent(Event event)
     {
         final AttributeValueSet avs = SaveAttributesAction

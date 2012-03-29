@@ -29,7 +29,7 @@ public final class ClusterLabelProvider extends LabelProvider
     /*
      * 
      */
-    @Override
+    //@Override
     public String getText(Object element)
     {
         final String label;
@@ -52,7 +52,7 @@ public final class ClusterLabelProvider extends LabelProvider
     /*
      * 
      */
-    @Override
+    //@Override
     public Image getImage(Object element)
     {
         return folderImage;
@@ -61,7 +61,7 @@ public final class ClusterLabelProvider extends LabelProvider
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         folderImage.dispose();

@@ -68,7 +68,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
         Document.TITLE, Document.SUMMARY
     });
 
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         // No processing if query is blank

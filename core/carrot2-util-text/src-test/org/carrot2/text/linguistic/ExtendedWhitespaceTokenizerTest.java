@@ -22,7 +22,7 @@ import org.junit.Test;
  */
 public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase
 {
-    @Override
+    //@Override
     protected ITokenizer createTokenStream()
     {
         return new ExtendedWhitespaceTokenizer();

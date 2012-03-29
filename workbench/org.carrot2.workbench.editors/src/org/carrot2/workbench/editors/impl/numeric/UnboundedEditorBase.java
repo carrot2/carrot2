@@ -49,7 +49,7 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
     /*
      * 
      */
-    @Override
+    //@Override
     protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
@@ -58,7 +58,7 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
     /*
      * Return the current editor value.
      */
-    @Override
+    //@Override
     public Object getValue()
     {
         return lastValidValue;
@@ -67,7 +67,7 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
     /*
      * 
      */
-    @Override
+    //@Override
     public void setValue(Object object)
     {
         if (object != null && object.equals(getValue()))
@@ -93,7 +93,7 @@ abstract class UnboundedEditorBase<T extends Number> extends AttributeEditorAdap
     /*
      * 
      */
-    @Override
+    //@Override
     public void createEditor(Composite parent, int gridColumns)
     {
         createText(parent, gridColumns);

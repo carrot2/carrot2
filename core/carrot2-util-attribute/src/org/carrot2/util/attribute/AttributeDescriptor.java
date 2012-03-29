@@ -205,7 +205,7 @@ public class AttributeDescriptor
         }
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return key + "=" + type;

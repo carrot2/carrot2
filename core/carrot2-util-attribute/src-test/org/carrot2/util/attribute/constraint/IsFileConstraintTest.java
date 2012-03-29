@@ -31,13 +31,13 @@ public class IsFileConstraintTest extends FileConstraintTestBase<IsFile>
     private static final String MUST_EXIST_FIELD_NAME = "mustExist";
     private static final String DOES_NOT_HAVE_TO_EXIST_FIELD_NAME = "doesNotHaveToExist";
 
-    @Override
+    //@Override
     Class<?> getAnnotationContainerClass()
     {
         return AnnotationContainer.class;
     }
 
-    @Override
+    //@Override
     Class<IsFile> getAnnotationType()
     {
         return IsFile.class;

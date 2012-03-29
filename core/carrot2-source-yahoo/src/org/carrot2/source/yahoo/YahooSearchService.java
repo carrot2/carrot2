@@ -70,7 +70,7 @@ public abstract class YahooSearchService
             this.label = label;
         }
 
-        @Override
+        //@Override
         public String toString()
         {
             return label;

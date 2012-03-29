@@ -40,7 +40,7 @@ public abstract class ActiveSearchEditorActionDelegate extends ActiveEditorActio
     /**
      * Subscribe/ unsubscribe listener on editor switch.
      */
-    @Override
+    //@Override
     protected void switchingEditors(IEditorPart previous, IEditorPart activeEditor)
     {
         final SearchEditor _previous = (SearchEditor) previous;
@@ -53,7 +53,7 @@ public abstract class ActiveSearchEditorActionDelegate extends ActiveEditorActio
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         if (getEditor() != null) getEditor().removePropertyListener(listener);
@@ -63,7 +63,7 @@ public abstract class ActiveSearchEditorActionDelegate extends ActiveEditorActio
     /*
      * 
      */
-    @Override
+    //@Override
     public final void run(IAction action)
     {
         final SearchEditor editor = (SearchEditor) getEditor();

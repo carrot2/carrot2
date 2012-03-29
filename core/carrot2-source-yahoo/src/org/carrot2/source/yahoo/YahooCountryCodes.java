@@ -66,7 +66,7 @@ public enum YahooCountryCodes implements IValueHintMapping
         return friendlyName;
     }
     
-    @Override
+    //@Override
     public String toString()
     {
         return getUserFriendlyName();

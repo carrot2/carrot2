@@ -39,7 +39,7 @@ public final class ClassLoaderLocator implements IResourceLocator
         this.loader = loader;
     }
 
-    @Override
+    //@Override
     public IResource [] getAll(String resource)
     {
         return getAll(loader, resource);
@@ -76,13 +76,13 @@ public final class ClassLoaderLocator implements IResourceLocator
         return result.toArray(new IResource [result.size()]);
     }
     
-    @Override
+    //@Override
     public int hashCode()
     {
         return this.loader.hashCode();
     }
 
-    @Override
+    //@Override
     public boolean equals(Object target)
     {
         if (target == this) return true;
@@ -95,7 +95,7 @@ public final class ClassLoaderLocator implements IResourceLocator
         return false;
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return this.getClass().getName() + " [class loader: "

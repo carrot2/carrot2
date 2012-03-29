@@ -29,31 +29,31 @@ import org.junit.Test;
 public class GoogleDocumentSourceTest extends
     MultipageDocumentSourceTestBase<GoogleDocumentSource>
 {
-    @Override
+    //@Override
     public Class<GoogleDocumentSource> getComponentClass()
     {
         return GoogleDocumentSource.class;
     }
 
-    @Override
+    //@Override
     protected MultipageSearchEngineMetadata getSearchEngineMetadata()
     {
         return GoogleDocumentSource.metadata;
     }
 
-    @Override
+    //@Override
     protected int getLargeQuerySize()
     {
         return 32;
     }
 
-    @Override
+    //@Override
     protected int getSmallQuerySize()
     {
         return 16;
     }
 
-    @Override
+    //@Override
     protected boolean hasUtfResults()
     {
         return true;

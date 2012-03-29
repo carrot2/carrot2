@@ -31,13 +31,13 @@ public class IsDirectoryConstraintTest extends FileConstraintTestBase<IsDirector
     private static final String MUST_EXIST_FIELD_NAME = "mustExist";
     private static final String DOES_NOT_HAVE_TO_EXIST_FIELD_NAME = "doesNotHaveToExist";
 
-    @Override
+    //@Override
     Class<?> getAnnotationContainerClass()
     {
         return AnnotationContainer.class;
     }
 
-    @Override
+    //@Override
     Class<IsDirectory> getAnnotationType()
     {
         return IsDirectory.class;

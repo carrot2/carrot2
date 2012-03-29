@@ -49,7 +49,7 @@ public class StopLabelFilter extends SingleLabelFilterBase
      */
     private ILexicalData lexicalData;
 
-    @Override
+    //@Override
     public void filter(PreprocessingContext context, boolean [] acceptedStems,
         boolean [] acceptedPhrases)
     {
@@ -58,7 +58,7 @@ public class StopLabelFilter extends SingleLabelFilterBase
         super.filter(context, acceptedStems, acceptedPhrases);
     }
     
-    @Override
+    //@Override
     public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
     {
         final String formatedLabel = labelFormatter.format(context, phraseIndex
@@ -66,7 +66,7 @@ public class StopLabelFilter extends SingleLabelFilterBase
         return !lexicalData.isStopLabel(formatedLabel);
     }
 
-    @Override
+    //@Override
     public boolean acceptWord(PreprocessingContext context, int wordIndex)
     {
         final String formattedLabel = labelFormatter.format(context, wordIndex);

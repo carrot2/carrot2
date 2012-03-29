@@ -43,7 +43,7 @@ abstract class TokenizerTestBase
             this.image = image;
         }
 
-        @Override
+        //@Override
         public boolean equals(Object o)
         {
             if (o instanceof TokenImage)
@@ -56,7 +56,7 @@ abstract class TokenizerTestBase
             }
         }
 
-        @Override
+        //@Override
         public int hashCode()
         {
             return image != null ? image.hashCode() ^ type : type;

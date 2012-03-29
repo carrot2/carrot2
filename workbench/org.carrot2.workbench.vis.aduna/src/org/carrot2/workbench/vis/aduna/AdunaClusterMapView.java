@@ -30,7 +30,7 @@ public final class AdunaClusterMapView extends PageBookViewBase
      */
     public static final String ID = "org.carrot2.workbench.views.aduna";
 
-    @Override
+    //@Override
     public void init(IViewSite site) throws PartInitException
     {
         super.init(site);
@@ -50,7 +50,7 @@ public final class AdunaClusterMapView extends PageBookViewBase
     /**
      * Create a document list for the given part.
      */
-    @Override
+    //@Override
     protected PageRec doCreatePage(IWorkbenchPart part)
     {
         final SearchEditor editor = (SearchEditor) part;
@@ -65,7 +65,7 @@ public final class AdunaClusterMapView extends PageBookViewBase
     /**
      * Only react to {@link SearchEditor} instances.
      */
-    @Override
+    //@Override
     protected boolean isImportant(IWorkbenchPart part)
     {
         return (part instanceof SearchEditor);

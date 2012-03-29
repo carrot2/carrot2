@@ -31,7 +31,7 @@ public final class AttributeView extends PageBookViewBase
     /**
      * Create a tree view for the given part.
      */
-    @Override
+    //@Override
     protected PageRec doCreatePage(IWorkbenchPart part)
     {
         final SearchEditor editor = (SearchEditor) part;
@@ -43,7 +43,7 @@ public final class AttributeView extends PageBookViewBase
         return new PageRec(part, page);
     }
     
-    @Override
+    //@Override
     protected void showPageRec(PageRec pageRec)
     {
         if (current != pageRec.page && (pageRec.page instanceof AttributeViewPage))
@@ -56,7 +56,7 @@ public final class AttributeView extends PageBookViewBase
         super.showPageRec(pageRec);
     }
     
-    @Override
+    //@Override
     protected IPage createDefaultPage(PageBook book)
     {
         MessagePage defaultPage = new MessagePage();
@@ -66,7 +66,7 @@ public final class AttributeView extends PageBookViewBase
         return defaultPage;
     }
     
-    @Override
+    //@Override
     public void partClosed(IWorkbenchPart part)
     {
         if (current != null) current.saveGlobalState();
@@ -76,7 +76,7 @@ public final class AttributeView extends PageBookViewBase
     /**
      * Only react to {@link SearchEditor} instances.
      */
-    @Override
+    //@Override
     protected boolean isImportant(IWorkbenchPart part)
     {
         return part instanceof SearchEditor;

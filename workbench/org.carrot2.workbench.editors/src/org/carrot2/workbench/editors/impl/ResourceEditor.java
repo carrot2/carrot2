@@ -80,7 +80,7 @@ public class ResourceEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
@@ -89,7 +89,7 @@ public class ResourceEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void createEditor(Composite parent, int gridColumns)
     {
         final Composite holder = new Composite(parent, SWT.NONE);
@@ -261,7 +261,7 @@ public class ResourceEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void setValue(Object newValue)
     {
         if (ObjectUtils.equals(newValue, resource))
@@ -283,7 +283,7 @@ public class ResourceEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public Object getValue()
     {
         return resource;
@@ -292,7 +292,7 @@ public class ResourceEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         disposeBin.dispose();

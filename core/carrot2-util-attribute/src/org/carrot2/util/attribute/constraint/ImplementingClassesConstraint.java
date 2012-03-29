@@ -83,7 +83,7 @@ class ImplementingClassesConstraint extends Constraint
         return !strict;
     }
 
-    @Override
+    //@Override
     protected void populateCustom(Annotation annotation)
     {
         final ImplementingClasses implementingClasses = (ImplementingClasses) annotation;

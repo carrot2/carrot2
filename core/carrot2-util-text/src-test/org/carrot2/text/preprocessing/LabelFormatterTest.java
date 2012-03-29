@@ -47,7 +47,7 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         labelFormatter = new LabelFormatter();
     }
 
-    @Override
+    //@Override
     protected ILexicalDataFactory createLexicalDataFactory()
     {
         final ILexicalDataFactory factory = super.createLexicalDataFactory();

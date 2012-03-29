@@ -100,7 +100,7 @@ public final class RestProcessorServlet extends HttpServlet
      */
     private boolean disableLogFileAppender = Boolean.getBoolean(DISABLE_LOGFILE_APPENDER);
 
-    @Override
+    //@Override
     @SuppressWarnings("unchecked")
     public void init() throws ServletException
     {
@@ -182,7 +182,7 @@ public final class RestProcessorServlet extends HttpServlet
             new ResourceLookup(locators)), componentSuite.getComponentConfigurations());
     }
 
-    @Override
+    //@Override
     public void destroy()
     {
         if (this.controller != null)
@@ -238,7 +238,7 @@ public final class RestProcessorServlet extends HttpServlet
         }
     }
 
-    @Override
+    //@Override
     protected void service(HttpServletRequest request, HttpServletResponse arg1)
         throws ServletException, IOException
     {
@@ -256,7 +256,7 @@ public final class RestProcessorServlet extends HttpServlet
         super.service(request, arg1);
     }
 
-    @Override
+    //@Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {

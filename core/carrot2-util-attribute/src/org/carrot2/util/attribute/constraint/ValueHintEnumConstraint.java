@@ -41,7 +41,7 @@ public class ValueHintEnumConstraint extends Constraint
     /*
      * 
      */
-    @Override
+    //@Override
     public String toString()
     {
         return "value-hint";

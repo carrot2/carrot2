@@ -177,7 +177,7 @@ public final class MutableCharArray implements CharSequence, Cloneable
     /*
      * 
      */
-    @Override
+    //@Override
     public String toString()
     {
         return new String(buffer, start, length);
@@ -186,7 +186,7 @@ public final class MutableCharArray implements CharSequence, Cloneable
     /**
      * See comments in the header of this class.
      */
-    @Override
+    //@Override
     public int hashCode()
     {
         return hash;
@@ -195,7 +195,7 @@ public final class MutableCharArray implements CharSequence, Cloneable
     /**
      * See comments in the header of this class.
      */
-    @Override
+    //@Override
     public boolean equals(Object other)
     {
         if (other == this) return true;

@@ -207,13 +207,13 @@ public class AttributeValueSetsTest
             this.value2 = value2;
         }
 
-        @Override
+        //@Override
         public String toString()
         {
             return value1 + ":" + value2;
         }
 
-        @Override
+        //@Override
         public boolean equals(Object obj)
         {
             if (this == null || !(obj instanceof CustomClass))
@@ -227,7 +227,7 @@ public class AttributeValueSetsTest
                 && ObjectUtils.equals(value2, other.value2);
         }
 
-        @Override
+        //@Override
         public int hashCode()
         {
             return ObjectUtils.hashCode(value1) ^ ObjectUtils.hashCode(value2);

@@ -88,7 +88,7 @@ public final class BenchmarkStatistics
             min, max, sum, sumSquares);
     }
     
-    @Override
+    //@Override
     public String toString()
     {
         return String.format(

@@ -20,7 +20,7 @@ public class DedicatedEditorWrapperTest extends TestCase
 {
     private IConfigurationElement [] elements;
 
-    @Override
+    //@Override
     protected void setUp() throws Exception
     {
         final IExtension [] extensions =

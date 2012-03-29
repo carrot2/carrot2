@@ -69,7 +69,7 @@ public abstract class AttributeEditorAdapter implements IAttributeEditor
     }
 
     /*
-     * Re-declare methods from {@link IAttributeEditor} to avoid @Override warnings.
+     * Re-declare methods from {@link IAttributeEditor} to avoid //@Override warnings.
      */
     public abstract void createEditor(Composite parent, int gridColumns);
 

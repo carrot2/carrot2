@@ -332,7 +332,7 @@ public class StemmerSyntheticTest extends StemmerTestBase
 
     
     
-    @Override
+    //@Override
     protected IStemmerFactory createStemmerFactory()
     {
         return new TestStemmerFactory();

@@ -26,7 +26,7 @@ public final class CachedInstanceFactoryDecorator<T> implements IFactory<T>
         this.factory = factory;
     }
 
-    @Override
+    //@Override
     public T createInstance()
     {
         if (instance == null)

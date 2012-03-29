@@ -41,7 +41,7 @@ final class DefaultLexicalData implements ILexicalData
     /*
      * 
      */
-    @Override
+    //@Override
     public boolean isCommonWord(MutableCharArray word)
     {
         return stopwords.contains(word);
@@ -50,7 +50,7 @@ final class DefaultLexicalData implements ILexicalData
     /*
      * 
      */
-    @Override
+    //@Override
     public boolean isStopLabel(CharSequence label)
     {
         if (this.stoplabelPattern == null)

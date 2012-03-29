@@ -123,7 +123,7 @@ public class ContaminationMetricTest extends IdealPartitioningBasedMetricTest
         }
     }
 
-    @Override
+    //@Override
     protected String [] getClusterMetricKeys()
     {
         return new String []

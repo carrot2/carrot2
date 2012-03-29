@@ -349,7 +349,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             this.maxSize = maxSize;
         }
         
-        @Override
+        //@Override
         protected boolean lessThan(ClusterCandidate c1, ClusterCandidate c2)
         {
             return c1.score < c2.score;
@@ -368,7 +368,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Performs STC clustering of {@link #documents}.
      */
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         // There is a tiny trick here to support multilingual clustering without
@@ -476,7 +476,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Memory cleanups.
      */
-    @Override
+    //@Override
     public void afterProcessing()
     {
         super.afterProcessing();

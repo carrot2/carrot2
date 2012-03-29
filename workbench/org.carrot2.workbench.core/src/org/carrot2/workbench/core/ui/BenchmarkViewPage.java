@@ -70,7 +70,7 @@ final class BenchmarkViewPage extends Page
             this.setSystem(true);
         }
 
-        @Override
+        //@Override
         public IStatus runInUIThread(IProgressMonitor monitor)
         {
             if (benchmarkJob != null)
@@ -87,7 +87,7 @@ final class BenchmarkViewPage extends Page
      */
     private IJobChangeListener jobListener = new JobChangeAdapter()
     {
-        @Override
+        //@Override
         public void done(IJobChangeEvent ijobchangeevent)
         {
             Display.getDefault().asyncExec(new Runnable() {
@@ -210,7 +210,7 @@ final class BenchmarkViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void createControl(Composite parent)
     {
         this.mainControl = createBenchmarkPanel(parent);
@@ -312,7 +312,7 @@ final class BenchmarkViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public Control getControl()
     {
         return mainControl;
@@ -321,7 +321,7 @@ final class BenchmarkViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void setFocus()
     {
         this.startButton.setFocus();

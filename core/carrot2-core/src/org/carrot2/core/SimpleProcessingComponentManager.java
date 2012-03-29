@@ -27,7 +27,7 @@ public class SimpleProcessingComponentManager implements IProcessingComponentMan
     /** Controller context */
     private IControllerContext context;
 
-    @Override
+    //@Override
     public synchronized void init(IControllerContext context,
         Map<String, Object> attributes,
         ProcessingComponentConfiguration... configurations)
@@ -43,7 +43,7 @@ public class SimpleProcessingComponentManager implements IProcessingComponentMan
         this.context = context;
     }
 
-    @Override
+    //@Override
     @SuppressWarnings("unchecked")
     public IProcessingComponent prepare(Class<? extends IProcessingComponent> clazz,
         String id, Map<String, Object> inputAttributes,
@@ -81,14 +81,14 @@ public class SimpleProcessingComponentManager implements IProcessingComponentMan
         }
     }
 
-    @Override
+    //@Override
     public void recycle(IProcessingComponent component, String id)
     {
         // Dispose of the component right after it's been used.
         component.dispose();
     }
 
-    @Override
+    //@Override
     public void dispose()
     {
         // Do nothing

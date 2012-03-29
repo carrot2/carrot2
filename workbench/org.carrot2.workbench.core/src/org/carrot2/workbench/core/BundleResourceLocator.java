@@ -31,7 +31,7 @@ final class BundleResourceLocator implements IResourceLocator
         this.bundle = bundle;
     }
 
-    @Override
+    //@Override
     public IResource [] getAll(String resource)
     {
         if (bundle.getState() != Bundle.ACTIVE)
@@ -58,7 +58,7 @@ final class BundleResourceLocator implements IResourceLocator
         return new IResource [0];
     }
 
-    @Override
+    //@Override
     public boolean equals(Object target)
     {
         if (target == this) return true;
@@ -72,13 +72,13 @@ final class BundleResourceLocator implements IResourceLocator
         return false;
     }
     
-    @Override
+    //@Override
     public int hashCode()
     {
         return this.bundle.hashCode();
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return this.getClass().getName() + " [bundle: "

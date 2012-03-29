@@ -39,7 +39,7 @@ public final class ImplementingClassesEditor extends MappedValueComboEditor
     /*
      * 
      */
-    @Override
+    //@Override
     protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         for (Annotation ann : descriptor.constraints)
@@ -72,7 +72,7 @@ public final class ImplementingClassesEditor extends MappedValueComboEditor
     /*
      * 
      */
-    @Override
+    //@Override
     public void setValue(Object newValue)
     {
         if (newValue != null && !(newValue instanceof Class<?>))

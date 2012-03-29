@@ -31,61 +31,61 @@ public class DummyVariableElement implements VariableElement
         this.simpleName = simpleName;
     }
 
-    @Override
+    //@Override
     public TypeMirror asType()
     {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    //@Override
     public ElementKind getKind()
     {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    //@Override
     public List<? extends AnnotationMirror> getAnnotationMirrors()
     {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    //@Override
     public <A extends Annotation> A getAnnotation(Class<A> annotationType)
     {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    //@Override
     public Set<Modifier> getModifiers()
     {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    //@Override
     public Name getSimpleName()
     {
         return simpleName;
     }
 
-    @Override
+    //@Override
     public Element getEnclosingElement()
     {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    //@Override
     public List<? extends Element> getEnclosedElements()
     {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    //@Override
     public <R, P> R accept(ElementVisitor<R, P> v, P p)
     {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    //@Override
     public Object getConstantValue()
     {
         throw new UnsupportedOperationException();

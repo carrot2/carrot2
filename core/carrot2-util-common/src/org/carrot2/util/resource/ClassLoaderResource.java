@@ -57,7 +57,7 @@ public final class ClassLoaderResource implements IResource
         return StreamUtils.prefetch(clazzLoader.getResourceAsStream(resource));
     }
 
-    @Override
+    //@Override
     public boolean equals(Object obj)
     {
         if (obj instanceof ClassLoaderResource)
@@ -71,13 +71,13 @@ public final class ClassLoaderResource implements IResource
         }
     }
 
-    @Override
+    //@Override
     public int hashCode()
     {
         return ObjectUtils.hashCode(clazzLoader) ^ ObjectUtils.hashCode(resource);
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return "[CLASSPATH RESOURCE: " + resource + "@" + clazzLoader.toString() + "]";

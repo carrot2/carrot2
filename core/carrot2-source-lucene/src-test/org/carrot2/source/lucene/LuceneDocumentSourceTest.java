@@ -50,7 +50,7 @@ public class LuceneDocumentSourceTest extends
         LuceneIndexUtils.createAndPopulateIndex(directory, analyzer);
     }
 
-    @Override
+    //@Override
     public void prepareComponent()
     {
         super.prepareComponent();
@@ -74,37 +74,37 @@ public class LuceneDocumentSourceTest extends
         }));
     }
 
-    @Override
+    //@Override
     public Class<LuceneDocumentSource> getComponentClass()
     {
         return LuceneDocumentSource.class;
     }
 
-    @Override
+    //@Override
     protected boolean hasUtfResults()
     {
         return false;
     }
 
-    @Override
+    //@Override
     protected String getSmallQueryText()
     {
         return "software";
     }
 
-    @Override
+    //@Override
     protected int getSmallQuerySize()
     {
         return 13;
     }
 
-    @Override
+    //@Override
     protected String getLargeQueryText()
     {
         return "data mining";
     }
 
-    @Override
+    //@Override
     protected int getLargeQuerySize()
     {
         return 100;

@@ -190,7 +190,7 @@ public class ClusteringDataFromLuceneWithCustomFields
             this.target = new StandardAnalyzer(Version.LUCENE_31);
         }
 
-        @Override
+        //@Override
         public TokenStream tokenStream(String s, Reader reader)
         {
             return target.tokenStream(s, reader);

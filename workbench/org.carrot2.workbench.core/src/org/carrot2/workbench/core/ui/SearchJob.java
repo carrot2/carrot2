@@ -52,7 +52,7 @@ public final class SearchJob extends Job
     /**
      * Run this job
      */
-    @Override
+    //@Override
     protected IStatus run(IProgressMonitor monitor)
     {
         final SearchInput searchInput = searchResult.getInput();

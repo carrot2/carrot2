@@ -23,7 +23,7 @@ import org.junit.Test;
  */
 public class StopWordLabelFilterMergedTest extends LabelFilterTestBase
 {
-    @Override
+    //@Override
     protected void initializeFilters(LabelFilterProcessor filterProcessor)
     {
         filterProcessor.completeLabelFilter.enabled = true;
@@ -77,7 +77,7 @@ public class StopWordLabelFilterMergedTest extends LabelFilterTestBase
         check(expectedLabelsFeatureIndex, 0);
     }
 
-    @Override
+    //@Override
     protected ILexicalDataFactory createLexicalDataFactory()
     {
         return new DefaultLexicalDataFactory();

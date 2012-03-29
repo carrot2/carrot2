@@ -38,19 +38,19 @@ public class ContentLengthFilter implements Filter
     {
         private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        @Override
+        //@Override
         public void write(int b) throws IOException
         {
             baos.write(b);
         }
         
-        @Override
+        //@Override
         public void write(byte [] b) throws IOException
         {
             baos.write(b);
         }
 
-        @Override
+        //@Override
         public void write(byte [] b, int off, int len) throws IOException
         {
             baos.write(b, off, len);
@@ -79,7 +79,7 @@ public class ContentLengthFilter implements Filter
             httpResponse = response;
         }
 
-        @Override
+        //@Override
         public ServletOutputStream getOutputStream() throws IOException
         {
             if (acquired == StreamType.WRITER)
@@ -102,7 +102,7 @@ public class ContentLengthFilter implements Filter
             return outputStream;
         }
 
-        @Override
+        //@Override
         public PrintWriter getWriter() throws IOException
         {
             if (acquired == StreamType.OUTPUT_STREAM)

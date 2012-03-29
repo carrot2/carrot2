@@ -159,7 +159,7 @@ public final class BossWebSearchService extends BossSearchService
     /**
      * Assembles an array of {@link NameValuePair} with request parameters.
      */
-    @Override
+    //@Override
     protected ArrayList<NameValuePair> createRequestParams(String query, int start,
         int results)
     {
@@ -178,7 +178,7 @@ public final class BossWebSearchService extends BossSearchService
         return params;
     }
 
-    @Override
+    //@Override
     protected String getServiceURI()
     {
         return serviceURI;
@@ -203,7 +203,7 @@ public final class BossWebSearchService extends BossSearchService
             this.apiOption = apiOption;
         }
 
-        @Override
+        //@Override
         public String toString()
         {
             return "remove " + name().replace('_', ' ').toLowerCase();

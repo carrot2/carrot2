@@ -66,7 +66,7 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Attribute
     public boolean keepHighlights = false;
 
-    @Override
+    //@Override
     protected SearchEngineResponse fetchSearchResponse() throws Exception
     {
         if (org.apache.commons.lang.StringUtils.isBlank(queryUrl))
@@ -92,21 +92,21 @@ public class GoogleDesktopDocumentSource extends RemoteXmlSimpleSearchEngineBase
         }
     }
 
-    @Override
+    //@Override
     protected String buildServiceUrl()
     {
         return queryUrl + StringUtils.urlEncodeWrapException(query, "UTF-8")
             + "&format=xml&num=" + results;
     }
 
-    @Override
+    //@Override
     protected IResource getXsltResource()
     {
         return new ClassResource(GoogleDesktopDocumentSource.class,
             "google-desktop-to-c2.xsl");
     }
 
-    @Override
+    //@Override
     protected void afterFetch(SearchEngineResponse response)
     {
         clean(response, keepHighlights, Document.TITLE, Document.SUMMARY);

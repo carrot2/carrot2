@@ -48,7 +48,7 @@ public class WebDocumentSource extends SimpleSearchEngine
      */
     private static final int MAX_CONCURRENT_THREADS = 10;
 
-    @Override
+    //@Override
     public void init(IControllerContext context)
     {
         super.init(context);
@@ -57,14 +57,14 @@ public class WebDocumentSource extends SimpleSearchEngine
         etools.init(context);
     }
 
-    @Override
+    //@Override
     public void beforeProcessing() throws ProcessingException
     {
         google.beforeProcessing();
         etools.beforeProcessing();
     }
 
-    @Override
+    //@Override
     public SearchEngineResponse fetchSearchResponse() throws Exception
     {
         final List<Callable<Object>> tasks = Lists.newArrayList();
@@ -150,14 +150,14 @@ public class WebDocumentSource extends SimpleSearchEngine
         return response;
     }
 
-    @Override
+    //@Override
     public void afterProcessing()
     {
         etools.afterProcessing();
         google.afterProcessing();
     }
 
-    @Override
+    //@Override
     public void dispose()
     {
         etools.dispose();

@@ -133,7 +133,7 @@ public class WorkbenchPreferencesPage extends FieldEditorPreferencePage implemen
      * Overriden to invoke {@link FieldEditorPreferencePage#checkState()} when value of
      * any editor is changed.
      */
-    @Override
+    //@Override
     public void propertyChange(PropertyChangeEvent event)
     {
         super.propertyChange(event);
@@ -151,7 +151,7 @@ public class WorkbenchPreferencesPage extends FieldEditorPreferencePage implemen
     /*
      * 
      */
-    @Override
+    //@Override
     protected void checkState()
     {
         super.checkState();

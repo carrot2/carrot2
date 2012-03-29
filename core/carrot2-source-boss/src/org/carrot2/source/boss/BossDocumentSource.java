@@ -76,7 +76,7 @@ public final class BossDocumentSource extends MultipageSearchEngine
     /**
      * Run a single query.
      */
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         super.process(service.metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()));
@@ -85,7 +85,7 @@ public final class BossDocumentSource extends MultipageSearchEngine
     /**
      * Create a single page fetcher for the search range.
      */
-    @Override
+    //@Override
     protected final Callable<SearchEngineResponse> createFetcher(final SearchRange bucket)
     {
         return new SearchEngineResponseCallable()
@@ -99,7 +99,7 @@ public final class BossDocumentSource extends MultipageSearchEngine
 
     private static final Pattern WBR_PATTERN = Pattern.compile("<wbr>");
     
-    @Override
+    //@Override
     protected void afterFetch(SearchEngineResponse response)
     {
         final String [] fields = new String[] { Document.TITLE, Document.SUMMARY };

@@ -30,7 +30,7 @@ final class ResetToDefaultsAction extends Action
         this.input = input;
     }
 
-    @Override
+    //@Override
     public void runWithEvent(Event event)
     {
         final SearchInputView searchInput = SearchInputView.getView();

@@ -109,7 +109,7 @@ public class NormalizedMutualInformationMetricTest extends IdealPartitioningBase
         }
     }
 
-    @Override
+    //@Override
     protected String [] getClusterMetricKeys()
     {
         return new String []

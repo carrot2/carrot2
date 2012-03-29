@@ -83,13 +83,13 @@ public class LabelFilterTestBase extends PreprocessingComponentTestBase
         labelFilterProcessor.process(context);
     }
     
-    @Override
+    //@Override
     protected ILexicalDataFactory createLexicalDataFactory()
     {
         return new TestLexicalDataFactory();
     }
 
-    @Override
+    //@Override
     protected IStemmerFactory createStemmerFactory()
     {
         return new TestStemmerFactory();

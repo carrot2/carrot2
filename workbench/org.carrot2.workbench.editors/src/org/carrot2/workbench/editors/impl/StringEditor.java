@@ -46,7 +46,7 @@ public class StringEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
@@ -55,7 +55,7 @@ public class StringEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void createEditor(Composite parent, int gridColumns)
     {
         textBox = createTextBox(parent, gridColumns);
@@ -105,7 +105,7 @@ public class StringEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void setFocus()
     {
         this.textBox.setFocus();
@@ -114,7 +114,7 @@ public class StringEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public Object getValue()
     {
         return content;
@@ -123,7 +123,7 @@ public class StringEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void setValue(Object newValue)
     {
         if (ObjectUtils.equals(newValue, getValue()))

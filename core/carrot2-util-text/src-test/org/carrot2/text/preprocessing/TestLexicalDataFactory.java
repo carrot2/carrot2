@@ -18,7 +18,7 @@ import org.carrot2.text.util.MutableCharArray;
 
 public final class TestLexicalDataFactory implements ILexicalDataFactory
 {
-    @Override
+    //@Override
     public ILexicalData getLexicalData(LanguageCode language)
     {
         return new ILexicalData()

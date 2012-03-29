@@ -63,7 +63,7 @@ public final class BenchmarkView extends PageBookViewBase
      * Benchmark view is a composite of global attribute editors and editor-specific
      * part that shows the most recent benchmarking result.
      */
-    @Override
+    //@Override
     public void createPartControl(Composite parent)
     {
         final CScrolledComposite scroller = 
@@ -93,7 +93,7 @@ public final class BenchmarkView extends PageBookViewBase
     /*
      * 
      */
-    @Override
+    //@Override
     protected void showPageRec(PageRec pageRec)
     {
         super.showPageRec(pageRec);
@@ -103,7 +103,7 @@ public final class BenchmarkView extends PageBookViewBase
     /*
      * 
      */
-    @Override
+    //@Override
     protected IPage createDefaultPage(PageBook book)
     {
         MessagePage defaultPage = new MessagePage();
@@ -116,7 +116,7 @@ public final class BenchmarkView extends PageBookViewBase
     /**
      * Create the benchmarking view for a given part.
      */
-    @Override
+    //@Override
     protected PageRec doCreatePage(IWorkbenchPart part)
     {
         final SearchEditor editor = (SearchEditor) part;
@@ -131,7 +131,7 @@ public final class BenchmarkView extends PageBookViewBase
     /**
      * Only react to {@link SearchEditor} instances.
      */
-    @Override
+    //@Override
     protected boolean isImportant(IWorkbenchPart part)
     {
         return part instanceof SearchEditor;
@@ -140,7 +140,7 @@ public final class BenchmarkView extends PageBookViewBase
     /**
      * Restore state between runs.
      */
-    @Override
+    //@Override
     public void init(IViewSite site, IMemento memento) throws PartInitException
     {
         super.init(site, memento);
@@ -161,7 +161,7 @@ public final class BenchmarkView extends PageBookViewBase
     /**
      * Persist state between runs.
      */
-    @Override
+    //@Override
     public void saveState(IMemento memento)
     {
         super.saveState(memento);

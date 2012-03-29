@@ -35,7 +35,7 @@ public class DocumentAssignerTest extends LabelFilterTestBase
         documentAssigner = new DocumentAssigner();
     }
 
-    @Override
+    //@Override
     protected void initializeFilters(LabelFilterProcessor filterProcessor)
     {
         filterProcessor.stopWordLabelFilter.enabled = true;
@@ -246,13 +246,13 @@ public class DocumentAssignerTest extends LabelFilterTestBase
         }
     }
 
-    @Override
+    //@Override
     protected ILexicalDataFactory createLexicalDataFactory()
     {
         return new DefaultLexicalDataFactory();
     }
 
-    @Override
+    //@Override
     protected IStemmerFactory createStemmerFactory()
     {
         return new DefaultStemmerFactory();

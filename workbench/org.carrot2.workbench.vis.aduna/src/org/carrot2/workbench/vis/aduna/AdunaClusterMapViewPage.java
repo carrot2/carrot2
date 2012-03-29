@@ -77,7 +77,7 @@ final class AdunaClusterMapViewPage extends Page
     {
         private IStructuredSelection currentlyDisplayed = null;
 
-        @Override
+        //@Override
         public IStatus runInUIThread(IProgressMonitor monitor)
         {
             final VisualizationMode mode = VisualizationMode
@@ -332,7 +332,7 @@ final class AdunaClusterMapViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void createControl(Composite parent)
     {
         createAdunaControl(parent);
@@ -409,7 +409,7 @@ final class AdunaClusterMapViewPage extends Page
 
         scrollable.addControlListener(new ControlAdapter()
         {
-            @Override
+            //@Override
             public void controlResized(ControlEvent e)
             {
                 updateScrollBars();
@@ -418,7 +418,7 @@ final class AdunaClusterMapViewPage extends Page
 
         final SelectionAdapter adapter = new SelectionAdapter()
         {
-            @Override
+            //@Override
             public void widgetSelected(SelectionEvent e)
             {
                 ScrollBar hbar = scrollable.getHorizontalBar();
@@ -447,14 +447,14 @@ final class AdunaClusterMapViewPage extends Page
         
         graphPanel.addComponentListener(new ComponentAdapter()
         {
-            @Override
+            //@Override
             public void componentShown(ComponentEvent e)
             {
                 graphPanelSize = graphPanel.getPreferredSize();
                 Display.getDefault().asyncExec(updateScrollBarsAsync);
             }
 
-            @Override
+            //@Override
             public void componentResized(ComponentEvent e)
             {
                 graphPanelSize = graphPanel.getPreferredSize();
@@ -505,7 +505,7 @@ final class AdunaClusterMapViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public Control getControl()
     {
         return scrollable;
@@ -514,7 +514,7 @@ final class AdunaClusterMapViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         editor.getSearchResult().removeListener(editorSyncListener);
@@ -528,7 +528,7 @@ final class AdunaClusterMapViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void setFocus()
     {
         // Ignore.

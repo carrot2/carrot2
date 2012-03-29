@@ -209,7 +209,7 @@ public class ControllerOverheadBenchmark extends AbstractBenchmark
         @Attribute(key = "debug2")
         public List<String> debugAttribute = new ArrayList<String>();
 
-        @Override
+        //@Override
         public void process() throws ProcessingException
         {
             string1 += join("-", string1, int1, double1, boolean1);
@@ -259,7 +259,7 @@ public class ControllerOverheadBenchmark extends AbstractBenchmark
         @Attribute(key = "debug2")
         public List<String> debugAttribute = new ArrayList<String>();
 
-        @Override
+        //@Override
         public void process() throws ProcessingException
         {
             result = join("-", string2, int2, double2, boolean2);

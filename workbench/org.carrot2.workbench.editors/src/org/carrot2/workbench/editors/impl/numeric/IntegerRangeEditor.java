@@ -39,7 +39,7 @@ final class IntegerRangeEditor extends NumericRangeEditorBase
     /*
      * 
      */
-    @Override
+    //@Override
     public AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         constraint = NumberUtils.getIntRange(descriptor);
@@ -57,7 +57,7 @@ final class IntegerRangeEditor extends NumericRangeEditorBase
     /*
      * 
      */
-    @Override
+    //@Override
     public void setValue(Object value)
     {
         if (!(value instanceof Number))

@@ -173,13 +173,13 @@ public class NNIDenseDoubleMatrix2D extends DenseDoubleMatrix2D
     // to make equals() and hashCode() consistent at least for this subclass.
     // 
     
-    @Override
+    //@Override
     public boolean equals(Object matrix)
     {
         return this == matrix;
     }
 
-    @Override
+    //@Override
     public int hashCode()
     {
         return System.identityHashCode(this);

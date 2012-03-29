@@ -41,13 +41,13 @@ public class PubMedDocumentSource extends SimpleSearchEngine
     /** PubMed fetch service URL */
     public static final String E_FETCH_URL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi";
 
-    @Override
+    //@Override
     protected SearchEngineResponse fetchSearchResponse() throws Exception
     {
         return getPubMedAbstracts(getPubMedIds(query, results));
     }
 
-    @Override
+    //@Override
     protected void afterFetch(SearchEngineResponse response)
     {
         for (Document document : response.results)

@@ -83,7 +83,7 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
         this.multiplier = Math.pow(10, precisionDigits);
     }
     
-    @Override
+    //@Override
     protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(2, false);
@@ -116,7 +116,7 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
     /*
      * Return the current editor value.
      */
-    @Override
+    //@Override
     public Object getValue()
     {
         return currentValue;
@@ -125,7 +125,7 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void createEditor(Composite parent, int gridColumns)
     {
         final GridDataFactory factory = GUIFactory.editorGridData();

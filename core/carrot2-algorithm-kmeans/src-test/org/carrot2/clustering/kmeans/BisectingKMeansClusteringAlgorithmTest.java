@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
 public class BisectingKMeansClusteringAlgorithmTest extends
     ClusteringAlgorithmTestBase<BisectingKMeansClusteringAlgorithm>
 {
-    @Override
+    //@Override
     public Class<BisectingKMeansClusteringAlgorithm> getComponentClass()
     {
         return BisectingKMeansClusteringAlgorithm.class;

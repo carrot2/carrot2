@@ -28,13 +28,13 @@ import org.junit.Test;
 public class WebDocumentSourceTest extends
     QueryableDocumentSourceTestBase<WebDocumentSource>
 {
-    @Override
+    //@Override
     public Class<WebDocumentSource> getComponentClass()
     {
         return WebDocumentSource.class;
     }
 
-    @Override
+    //@Override
     protected boolean hasUtfResults()
     {
         return true;

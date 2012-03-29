@@ -21,7 +21,7 @@ public enum AdultOption
 {
     OFF, MODERATE, STRICT;
 
-    @Override
+    //@Override
     public String toString()
     {
         return StringUtils.identifierToHumanReadable(name());

@@ -32,7 +32,7 @@ final class SetNewDefaultsAction extends Action
         this.searchInput = searchInput;
     }
 
-    @Override
+    //@Override
     public void runWithEvent(Event event)
     {
         // Collect all default @Input attributes.

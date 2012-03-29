@@ -59,7 +59,7 @@ public final class BundleResourceLoader extends ResourceLoader
     /**
      * 
      */
-    @Override
+    //@Override
     public InputStream getResourceStream(String s) throws ResourceNotFoundException
     {
         final URL resource = FileLocator.find(bundle, new Path(prefix + s), null);
@@ -81,7 +81,7 @@ public final class BundleResourceLoader extends ResourceLoader
     /**
      * 
      */
-    @Override
+    //@Override
     public void init(ExtendedProperties props)
     {
         if (bundle != null)
@@ -102,7 +102,7 @@ public final class BundleResourceLoader extends ResourceLoader
     /**
      * 
      */
-    @Override
+    //@Override
     public boolean isSourceModified(Resource resource)
     {
         return false;
@@ -111,7 +111,7 @@ public final class BundleResourceLoader extends ResourceLoader
     /**
      * 
      */
-    @Override
+    //@Override
     public long getLastModified(Resource resource)
     {
         return 0L;

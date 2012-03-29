@@ -161,7 +161,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
     /**
      * Set the focus to the editor containing {@link AttributeNames#QUERY}, if possible.
      */
-    @Override
+    //@Override
     public boolean setFocus()
     {
         if (editors.containsKey(AttributeNames.QUERY))

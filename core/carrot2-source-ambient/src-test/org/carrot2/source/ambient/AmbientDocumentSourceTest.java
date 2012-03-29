@@ -19,7 +19,7 @@ package org.carrot2.source.ambient;
 public class AmbientDocumentSourceTest extends
     FubDocumentSourceTestBase<AmbientDocumentSource>
 {
-    @Override
+    //@Override
     public Class<AmbientDocumentSource> getComponentClass()
     {
         return AmbientDocumentSource.class;

@@ -15,3 +15,4 @@ tmp
 .clover
 junit*.properties
 *.patch
+.tools

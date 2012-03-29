@@ -55,7 +55,7 @@ public final class FileResource implements IResource
     }
 
 
-    @Override
+    //@Override
     public boolean equals(Object obj)
     {
         if (this == obj)
@@ -69,13 +69,13 @@ public final class FileResource implements IResource
         return false;
     }
 
-    @Override
+    //@Override
     public int hashCode()
     {
         return this.file.hashCode();
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return info;

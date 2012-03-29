@@ -25,7 +25,7 @@ public abstract class PageBookViewBase extends PageBookView
     /**
      * Default page is blank.
      */
-    @Override
+    //@Override
     protected IPage createDefaultPage(PageBook book)
     {
         MessagePage defaultPage = new MessagePage();
@@ -34,14 +34,14 @@ public abstract class PageBookViewBase extends PageBookView
         return defaultPage;
     }
 
-    @Override
+    //@Override
     protected void doDestroyPage(IWorkbenchPart part, PageRec pageRecord)
     {
         ((Page) pageRecord.page).dispose();
         pageRecord.dispose();
     }
 
-    @Override
+    //@Override
     protected IWorkbenchPart getBootstrapPart()
     {
         final IWorkbenchPage page = getSite().getPage();
@@ -53,7 +53,7 @@ public abstract class PageBookViewBase extends PageBookView
         return null;
     }
 
-    @Override
+    //@Override
     protected boolean isImportant(IWorkbenchPart part)
     {
         return (part instanceof IEditorPart);

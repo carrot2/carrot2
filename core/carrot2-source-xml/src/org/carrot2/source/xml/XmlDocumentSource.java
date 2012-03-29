@@ -206,7 +206,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     /** A helper class that groups common functionality for XML/XSLT based data sources. */
     private final XmlDocumentSourceHelper xmlDocumentSourceHelper = new XmlDocumentSourceHelper();
 
-    @Override
+    //@Override
     public void init(IControllerContext context)
     {
         super.init(context);
@@ -219,7 +219,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
         }
     }
 
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         try

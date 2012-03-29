@@ -327,7 +327,7 @@ public abstract class FlashViewPage extends Page
     /**
      * 
      */
-    @Override
+    //@Override
     public void createControl(Composite parent)
     {
         /*
@@ -408,19 +408,19 @@ public abstract class FlashViewPage extends Page
             selectionListener);
     }
 
-    @Override
+    //@Override
     public Control getControl()
     {
         return browser;
     }
 
-    @Override
+    //@Override
     public void setFocus()
     {
         browser.setFocus();
     }
 
-    @Override
+    //@Override
     public void dispose()
     {
         editor.getSearchResult().removeListener(editorSyncListener);

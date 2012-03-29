@@ -48,7 +48,7 @@ final class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor
     /*
      * 
      */
-    @Override
+    //@Override
     public void initialize(IWorkbenchConfigurer configurer)
     {
         super.initialize(configurer);

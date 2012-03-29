@@ -118,7 +118,7 @@ final class SearchEditorPanelsAction extends Action
     /*
      * 
      */
-    @Override
+    //@Override
     public void runWithEvent(Event event)
     {
         DropDownMenuAction.showMenu(this, event);

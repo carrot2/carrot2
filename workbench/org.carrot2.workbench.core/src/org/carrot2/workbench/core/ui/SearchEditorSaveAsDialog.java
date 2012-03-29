@@ -56,14 +56,14 @@ final class SearchEditorSaveAsDialog extends TrayDialog
         this.editorOptions = options;
     }
 
-    @Override
+    //@Override
     protected void configureShell(Shell newShell)
     {
         super.configureShell(newShell);
         newShell.setText("Save as XML");
         newShell.addShellListener(new ShellAdapter()
         {
-            @Override
+            //@Override
             public void shellActivated(ShellEvent e)
             {
                 validateInput();
@@ -71,7 +71,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
         });
     }
 
-    @Override
+    //@Override
     protected void okPressed()
     {
         final File f = new File(this.fileNameText.getText());
@@ -88,7 +88,7 @@ final class SearchEditorSaveAsDialog extends TrayDialog
     /*
      * 
      */
-    @Override
+    //@Override
     protected Control createDialogArea(Composite parent)
     {
         final Composite root = (Composite) super.createDialogArea(parent);

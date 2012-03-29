@@ -17,7 +17,7 @@ import org.carrot2.text.linguistic.IStemmerFactory;
 
 public final class TestStemmerFactory implements IStemmerFactory
 {
-    @Override
+    //@Override
     public IStemmer getStemmer(LanguageCode language)
     {
         return new IStemmer()

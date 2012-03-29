@@ -54,7 +54,7 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
         PoolingProcessingComponentManager.NonPrimitiveInputAttributesCheck.makeAssertion = false;
     }
     
-    @Override
+    //@Override
     public Controller prepareController()
     {
         return getPoolingController();

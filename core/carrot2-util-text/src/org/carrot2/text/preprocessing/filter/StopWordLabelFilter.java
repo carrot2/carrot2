@@ -36,7 +36,7 @@ public class StopWordLabelFilter extends SingleLabelFilterBase
     @Attribute
     public boolean enabled = true;
 
-    @Override
+    //@Override
     public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
     {
         final int [] wordIndices = context.allPhrases.wordIndices[phraseIndex];
@@ -46,7 +46,7 @@ public class StopWordLabelFilter extends SingleLabelFilterBase
             && !isCommon(termTypes[wordIndices[wordIndices.length - 1]]);
     }
 
-    @Override
+    //@Override
     public boolean acceptWord(PreprocessingContext context, int wordIndex)
     {
         return !isCommon(context.allWords.type[wordIndex]);

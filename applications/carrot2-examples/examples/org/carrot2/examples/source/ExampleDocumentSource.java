@@ -77,7 +77,7 @@ public class ExampleDocumentSource extends ProcessingComponentBase implements
     @ImplementingClasses(classes = {}, strict = false)
     public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
 
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         // The input attributes will have already been bound at this point

@@ -30,7 +30,7 @@ import com.google.common.collect.Lists;
 public class ByUrlClusteringAlgorithmTest extends
     ClusteringAlgorithmTestBase<ByUrlClusteringAlgorithm>
 {
-    @Override
+    //@Override
     public Class<ByUrlClusteringAlgorithm> getComponentClass()
     {
         return ByUrlClusteringAlgorithm.class;

@@ -36,7 +36,7 @@ final class ClassRelativeResourceLoader extends ResourceLoader
         this.msg = msg;
     }
 
-    @Override
+    //@Override
     public void init(ExtendedProperties props)
     {
         // ignore.
@@ -45,7 +45,7 @@ final class ClassRelativeResourceLoader extends ResourceLoader
     /**
      * 
      */
-    @Override
+    //@Override
     public InputStream getResourceStream(String name) throws ResourceNotFoundException
     {
         /*
@@ -71,7 +71,7 @@ final class ClassRelativeResourceLoader extends ResourceLoader
     /**
      * 
      */
-    @Override
+    //@Override
     public boolean isSourceModified(Resource resource)
     {
         return false;
@@ -80,7 +80,7 @@ final class ClassRelativeResourceLoader extends ResourceLoader
     /**
      * 
      */
-    @Override
+    //@Override
     public long getLastModified(Resource resource)
     {
         return 0L;

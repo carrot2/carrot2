@@ -48,7 +48,7 @@ public final class AttributeInfoSyncAction extends ActionDelegate
     /*
      * 
      */
-    @Override
+    //@Override
     public void init(IAction action)
     {
         super.init(action);
@@ -69,7 +69,7 @@ public final class AttributeInfoSyncAction extends ActionDelegate
     /*
      * 
      */
-    @Override
+    //@Override
     public void run(IAction action)
     {
         final IPreferenceStore preferenceStore = getPreferenceStore();

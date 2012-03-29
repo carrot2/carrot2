@@ -67,7 +67,7 @@ public class DefaultLexicalDataFactoryTest
         @Attribute(key = "english")
         public ILexicalData english;
 
-        @Override
+        //@Override
         public void process() throws ProcessingException
         {
             english = preprocessingPipeline.lexicalDataFactory.getLexicalData(LanguageCode.ENGLISH);

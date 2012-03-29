@@ -27,69 +27,69 @@ import com.thoughtworks.qdox.parser.structs.TypeDef;
  */
 class BuilderBase implements Builder
 {
-    @Override
+    //@Override
     public void addAnnotation(Annotation arg0)
     {
     }
 
-    @Override
+    //@Override
     public void addField(FieldDef arg0)
     {
     }
 
-    @Override
+    //@Override
     public void addImport(String arg0)
     {
     }
 
-    @Override
+    //@Override
     public void addJavaDoc(String arg0)
     {
     }
 
-    @Override
+    //@Override
     public void addJavaDocTag(TagDef arg0)
     {
     }
 
-    @Override
+    //@Override
     public void addPackage(PackageDef arg0)
     {
     }
 
-    @Override
+    //@Override
     public void beginClass(ClassDef arg0)
     {
     }
 
-    @Override
+    //@Override
     public Type createType(TypeDef arg0)
     {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    //@Override
     public Type createType(String arg0, int arg1)
     {
         throw new UnsupportedOperationException();
     }
     
-    @Override
+    //@Override
     public void addParameter(FieldDef arg0)
     {
     }
 
-    @Override
+    //@Override
     public void endClass()
     {
     }
 
-    @Override
+    //@Override
     public void beginMethod()
     {
     }
 
-    @Override
+    //@Override
     public void endMethod(MethodDef arg0)
     {
     }

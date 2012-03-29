@@ -131,7 +131,7 @@ public class SimpleXmlWrappersTest
     {
         TEST1, TEST2;
 
-        @Override
+        //@Override
         public String toString()
         {
             return name().toLowerCase();
@@ -140,7 +140,7 @@ public class SimpleXmlWrappersTest
 
     public static class Nonprimitive
     {
-        @Override
+        //@Override
         public boolean equals(Object obj)
         {
             // We're using the default constructor to deserialize instance of this
@@ -150,7 +150,7 @@ public class SimpleXmlWrappersTest
                 : null);
         }
 
-        @Override
+        //@Override
         public int hashCode()
         {
             return getClass().hashCode();
@@ -261,7 +261,7 @@ public class SimpleXmlWrappersTest
             this.string = string;
         }
 
-        @Override
+        //@Override
         public boolean equals(Object obj)
         {
             if (!(obj instanceof AnnotatedClass))
@@ -272,7 +272,7 @@ public class SimpleXmlWrappersTest
                 && ObjectUtils.equals(((AnnotatedClass) obj).integer, integer);
         }
 
-        @Override
+        //@Override
         public int hashCode()
         {
             return (string != null ? string.hashCode() : 0)
@@ -300,7 +300,7 @@ public class SimpleXmlWrappersTest
             this.string = string;
         }
 
-        @Override
+        //@Override
         public boolean equals(Object obj)
         {
             if (!(obj instanceof ClassWithWrapper))
@@ -311,7 +311,7 @@ public class SimpleXmlWrappersTest
                 && ObjectUtils.equals(((ClassWithWrapper) obj).integer, integer);
         }
 
-        @Override
+        //@Override
         public int hashCode()
         {
             return (string != null ? string.hashCode() : 0)

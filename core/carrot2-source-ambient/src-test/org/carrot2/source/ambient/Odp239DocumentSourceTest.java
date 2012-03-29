@@ -19,7 +19,7 @@ package org.carrot2.source.ambient;
 public class Odp239DocumentSourceTest extends
     FubDocumentSourceTestBase<Odp239DocumentSource>
 {
-    @Override
+    //@Override
     public Class<Odp239DocumentSource> getComponentClass()
     {
         return Odp239DocumentSource.class;

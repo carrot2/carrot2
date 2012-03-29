@@ -115,21 +115,21 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
 
         final PreprocessedDocumentScanner scanner = new PreprocessedDocumentScanner()
         {
-            @Override
+            //@Override
             protected void document(PreprocessingContext context, int start, int length)
             {
                 super.document(context, start, length);
                 actualDocumentRanges.add(Lists.newArrayList(start, length));
             }
 
-            @Override
+            //@Override
             protected void field(PreprocessingContext context, int start, int length)
             {
                 super.field(context, start, length);
                 actualFieldRanges.add(Lists.newArrayList(start, length));
             }
 
-            @Override
+            //@Override
             protected void sentence(PreprocessingContext context, int start, int length)
             {
                 super.sentence(context, start, length);

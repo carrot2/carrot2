@@ -165,7 +165,7 @@ public final class DocumentList extends Composite
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         browser.dispose();
@@ -217,7 +217,7 @@ public final class DocumentList extends Composite
          */
         browser.addLocationListener(new LocationAdapter()
         {
-            @Override
+            //@Override
             public void changing(LocationEvent event)
             {
                 // Browser was refreshed using setText() method

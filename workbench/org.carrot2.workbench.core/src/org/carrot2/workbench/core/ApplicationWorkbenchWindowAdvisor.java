@@ -98,7 +98,7 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
     /*
      * 
      */
-    @Override
+    //@Override
     public void postWindowCreate()
     {
         /*
@@ -190,7 +190,7 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
     /*
      * 
      */
-    @Override
+    //@Override
     public void postWindowOpen()
     {
         super.postWindowOpen();

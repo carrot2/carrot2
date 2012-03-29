@@ -78,7 +78,7 @@ public final class BindableProcessor extends AbstractProcessor
     /**
      * Initialize processing environment.
      */
-    @Override
+    //@Override
     public synchronized void init(ProcessingEnvironment processingEnv)
     {
         super.init(processingEnv);
@@ -94,7 +94,7 @@ public final class BindableProcessor extends AbstractProcessor
     /**
      * Process a set of roots for the current round (apt callback).
      */
-    @Override
+    //@Override
     public boolean process(Set<? extends TypeElement> ann, RoundEnvironment env)
     {
         // Check for Eclipse reconciliation phase and skip it.
@@ -571,13 +571,13 @@ public final class BindableProcessor extends AbstractProcessor
 
         final Builder builder = new BuilderBase()
         {
-            @Override
+            //@Override
             public void addJavaDoc(String arg0)
             {
                 javaDocText.append(arg0);
             }
 
-            @Override
+            //@Override
             public void addJavaDocTag(TagDef tag)
             {
                 tags.put(tag.name, tag.text);

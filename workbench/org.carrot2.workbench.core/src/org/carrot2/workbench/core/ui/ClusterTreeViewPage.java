@@ -56,7 +56,7 @@ final class ClusterTreeViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void createControl(Composite parent)
     {
         clusterTree = new ClusterTree(parent, SWT.NONE);
@@ -89,7 +89,7 @@ final class ClusterTreeViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public Control getControl()
     {
         return clusterTree;
@@ -98,7 +98,7 @@ final class ClusterTreeViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void setFocus()
     {
         clusterTree.setFocus();
@@ -107,7 +107,7 @@ final class ClusterTreeViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         unregisterListeners();

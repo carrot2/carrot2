@@ -37,7 +37,7 @@ public final class ClassResource extends URLResource
     /**
      * Override the default open-from-URL method so that we don't lock the source JAR.
      */
-    @Override
+    //@Override
     public InputStream open() throws IOException
     {
         return StreamUtils.prefetch(clazz.getResourceAsStream(resource));

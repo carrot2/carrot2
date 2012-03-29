@@ -693,7 +693,7 @@ public class AttributeBinder
      */
     static final class ConsistencyCheckRequiredAnnotations implements Predicate<Field>
     {
-        @Override
+        //@Override
         public boolean apply(Field field)
         {
             final boolean hasAttribute = field.getAnnotation(Attribute.class) != null;
@@ -737,7 +737,7 @@ public class AttributeBinder
         static Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = ImmutableSet.<Class<?>> of(
             Enum.class, IResource.class, Collection.class, Map.class);
 
-        @Override
+        //@Override
         public boolean apply(Field field)
         {
             if (field.getAnnotation(Input.class) == null)

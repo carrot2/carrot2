@@ -35,13 +35,13 @@ import com.google.common.collect.Sets;
 public class EToolsDocumentSourceTest extends
     QueryableDocumentSourceTestBase<EToolsDocumentSource>
 {
-    @Override
+    //@Override
     public Class<EToolsDocumentSource> getComponentClass()
     {
         return EToolsDocumentSource.class;
     }
 
-    @Override
+    //@Override
     protected boolean hasUtfResults()
     {
         return true;

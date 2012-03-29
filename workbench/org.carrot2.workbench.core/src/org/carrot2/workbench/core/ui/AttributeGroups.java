@@ -93,7 +93,7 @@ public final class AttributeGroups extends Composite implements IAttributeEventP
             currentValues.put(event.key, event.value);
         }
 
-        @Override
+        //@Override
         public void valueChanging(AttributeEvent event)
         {
             valueChanged(event);
@@ -549,7 +549,7 @@ public final class AttributeGroups extends Composite implements IAttributeEventP
      * Set the focus to the {@link AttributeList} containing {@link AttributeNames#QUERY},
      * if possible.
      */
-    @Override
+    //@Override
     public boolean setFocus()
     {
         if (this.attributeEditors.containsKey(AttributeNames.QUERY))
@@ -563,7 +563,7 @@ public final class AttributeGroups extends Composite implements IAttributeEventP
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         disposeEditors();

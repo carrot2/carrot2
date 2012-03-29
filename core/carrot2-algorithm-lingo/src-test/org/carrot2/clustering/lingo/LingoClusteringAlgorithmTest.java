@@ -35,7 +35,7 @@ import com.google.common.collect.Lists;
 public class LingoClusteringAlgorithmTest extends
     ClusteringAlgorithmTestBase<LingoClusteringAlgorithm>
 {
-    @Override
+    //@Override
     public Class<LingoClusteringAlgorithm> getComponentClass()
     {
         return LingoClusteringAlgorithm.class;

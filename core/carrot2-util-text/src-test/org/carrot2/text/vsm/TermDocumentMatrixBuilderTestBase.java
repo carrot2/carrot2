@@ -53,13 +53,13 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
         matrixBuilder.buildTermPhraseMatrix(vsmContext);
     }
 
-    @Override
+    //@Override
     protected IStemmerFactory createStemmerFactory()
     {
         return new TestStemmerFactory();
     }
 
-    @Override
+    //@Override
     protected ILexicalDataFactory createLexicalDataFactory()
     {
         return new TestLexicalDataFactory();

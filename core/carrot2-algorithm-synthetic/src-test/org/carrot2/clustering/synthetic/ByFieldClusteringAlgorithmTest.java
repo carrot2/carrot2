@@ -30,7 +30,7 @@ import com.google.common.collect.Lists;
 public class ByFieldClusteringAlgorithmTest extends
     ClusteringAlgorithmTestBase<ByFieldClusteringAlgorithm>
 {
-    @Override
+    //@Override
     public Class<ByFieldClusteringAlgorithm> getComponentClass()
     {
         return ByFieldClusteringAlgorithm.class;

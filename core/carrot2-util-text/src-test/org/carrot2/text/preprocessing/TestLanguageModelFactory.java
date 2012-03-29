@@ -24,7 +24,7 @@ import org.carrot2.text.util.MutableCharArray;
 public final class TestLanguageModelFactory implements IStemmerFactory,
     ITokenizerFactory, ILexicalDataFactory
 {
-    @Override
+    //@Override
     public IStemmer getStemmer(LanguageCode language)
     {
         return new IStemmer()
@@ -43,13 +43,13 @@ public final class TestLanguageModelFactory implements IStemmerFactory,
         };
     }
 
-    @Override
+    //@Override
     public ITokenizer getTokenizer(LanguageCode language)
     {
         return new ExtendedWhitespaceTokenizer();
     }
 
-    @Override
+    //@Override
     public ILexicalData getLexicalData(LanguageCode language)
     {
         return new ILexicalData()

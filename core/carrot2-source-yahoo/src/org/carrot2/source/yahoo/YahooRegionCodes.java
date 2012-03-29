@@ -67,7 +67,7 @@ public enum YahooRegionCodes implements IValueHintMapping
         return friendlyName;
     }
     
-    @Override
+    //@Override
     public String toString()
     {
         return getUserFriendlyName();

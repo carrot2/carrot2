@@ -89,7 +89,7 @@ public final class BossImageSearchService extends BossSearchService
     /**
      * Assembles an array of {@link NameValuePair} with request parameters.
      */
-    @Override
+    //@Override
     protected ArrayList<NameValuePair> createRequestParams(String query, int start,
         int results)
     {
@@ -105,7 +105,7 @@ public final class BossImageSearchService extends BossSearchService
         return params;
     }
 
-    @Override
+    //@Override
     protected String getServiceURI()
     {
         return serviceURI;

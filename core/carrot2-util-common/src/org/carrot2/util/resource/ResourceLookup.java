@@ -196,13 +196,13 @@ public final class ResourceLookup
             return string + "s";
     }
     
-    @Override
+    //@Override
     public int hashCode()
     {
         return ArrayUtils.hashCode(this.locators);
     }
 
-    @Override
+    //@Override
     public boolean equals(Object target)
     {
         if (target == this) return true;

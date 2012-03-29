@@ -37,7 +37,7 @@ public class ClusteringMetricsCalculator extends ProcessingComponentBase
      */
     public NormalizedMutualInformationMetric normalizedMutualInformation = new NormalizedMutualInformationMetric();
 
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         if (contamination.isEnabled())

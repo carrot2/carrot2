@@ -41,7 +41,7 @@ final class UnboundedIntegerEditor extends UnboundedEditorBase<Integer>
     /*
      * 
      */
-    @Override
+    //@Override
     public AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         constraint = NumberUtils.getIntRange(descriptor);
@@ -66,7 +66,7 @@ final class UnboundedIntegerEditor extends UnboundedEditorBase<Integer>
     /**
      * Parse the number and return its string representation.
      */
-    @Override
+    //@Override
     protected String to_s(Number object)
     {
         return Integer.toString(object.intValue());
@@ -75,7 +75,7 @@ final class UnboundedIntegerEditor extends UnboundedEditorBase<Integer>
     /*
      * 
      */
-    @Override
+    //@Override
     protected void doPageIncrement(boolean positive)
     {
         if (getValue() == null)
@@ -91,7 +91,7 @@ final class UnboundedIntegerEditor extends UnboundedEditorBase<Integer>
     /*
      * 
      */
-    @Override
+    //@Override
     protected Integer toRange(Integer d)
     {
         if (d <= min) d = min;
@@ -103,7 +103,7 @@ final class UnboundedIntegerEditor extends UnboundedEditorBase<Integer>
     /*
      * 
      */
-    @Override
+    //@Override
     protected boolean isValid(String value)
     {
         if (pattern.matcher(value).matches())
@@ -128,7 +128,7 @@ final class UnboundedIntegerEditor extends UnboundedEditorBase<Integer>
     /*
      * 
      */
-    @Override
+    //@Override
     protected boolean isValidForEditing(String value)
     {
         return isValid(value) || temporaryPattern.matcher(value).matches();
@@ -137,7 +137,7 @@ final class UnboundedIntegerEditor extends UnboundedEditorBase<Integer>
     /*
      * 
      */
-    @Override
+    //@Override
     protected Integer to_v(String value)
     {
         return Integer.parseInt(value);

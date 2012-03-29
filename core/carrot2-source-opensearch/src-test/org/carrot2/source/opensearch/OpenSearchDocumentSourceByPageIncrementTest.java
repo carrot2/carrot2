@@ -24,31 +24,31 @@ import org.carrot2.util.attribute.AttributeValueSets;
 public class OpenSearchDocumentSourceByPageIncrementTest extends
     QueryableDocumentSourceTestBase<OpenSearchDocumentSource>
 {
-    @Override
+    //@Override
     public Class<OpenSearchDocumentSource> getComponentClass()
     {
         return OpenSearchDocumentSource.class;
     }
 
-    @Override
+    //@Override
     protected int getLargeQuerySize()
     {
         return 120;
     }
 
-    @Override
+    //@Override
     protected int getSmallQuerySize()
     {
         return 30;
     }
 
-    @Override
+    //@Override
     protected boolean hasTotalResultsEstimate()
     {
         return false;
     }
 
-    @Override
+    //@Override
     public void prepareComponent()
     {
         super.prepareComponent();

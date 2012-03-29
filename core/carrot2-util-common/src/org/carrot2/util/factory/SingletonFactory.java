@@ -24,7 +24,7 @@ public final class SingletonFactory<T> implements IFactory<T>
         this.singleton = singleton;
     }
 
-    @Override
+    //@Override
     public T createInstance()
     {
         return singleton;

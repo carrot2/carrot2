@@ -50,7 +50,7 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
         @Attribute(key = AttributeNames.DOCUMENTS)
         public List<Document> documents;
 
-        @Override @SuppressWarnings("unused")
+        //@Override @SuppressWarnings("unused")
         public void process() throws ProcessingException
         {
             /*
@@ -80,7 +80,7 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
     @Bindable
     public static class ConcurrentComponent2 extends ConcurrentComponent1
     {
-        @Override
+        //@Override
         public void process() throws ProcessingException
         {
             try
@@ -113,7 +113,7 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
         }
     }
 
-    @Override
+    //@Override
     @SuppressWarnings("unchecked")
     public Controller prepareController()
     {

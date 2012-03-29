@@ -31,7 +31,7 @@ import org.junit.Test;
 public class STCClusteringAlgorithmTest extends
     ClusteringAlgorithmTestBase<STCClusteringAlgorithm>
 {
-    @Override
+    //@Override
     public Class<STCClusteringAlgorithm> getComponentClass()
     {
         return STCClusteringAlgorithm.class;

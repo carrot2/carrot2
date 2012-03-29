@@ -21,7 +21,7 @@ import org.junit.Test;
  */
 public class MinLengthLabelFilterTest extends LabelFilterTestBase
 {
-    @Override
+    //@Override
     protected void initializeFilters(LabelFilterProcessor filterProcessor)
     {
         filterProcessor.minLengthLabelFilter.enabled = true;

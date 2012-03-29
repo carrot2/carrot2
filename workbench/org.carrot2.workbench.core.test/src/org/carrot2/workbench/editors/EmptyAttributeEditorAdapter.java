@@ -18,24 +18,24 @@ import org.eclipse.swt.widgets.Composite;
 
 class EmptyAttributeEditorAdapter extends AttributeEditorAdapter
 {
-    @Override
+    //@Override
     protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
     }
 
-    @Override
+    //@Override
     public void createEditor(Composite parent, int gridColumns)
     {
     }
 
-    @Override
+    //@Override
     public Object getValue()
     {
         return null;
     }
 
-    @Override
+    //@Override
     public void setValue(Object object)
     {
     }

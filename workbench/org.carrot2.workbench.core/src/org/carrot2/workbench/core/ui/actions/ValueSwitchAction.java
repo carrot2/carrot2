@@ -62,7 +62,7 @@ public class ValueSwitchAction extends Action implements IPropertyChangeListener
     /*
      * 
      */
-    @Override
+    //@Override
     public void run()
     {
         propertyHost.setProperty(key, value);

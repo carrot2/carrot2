@@ -34,7 +34,7 @@ public abstract class SimpleSearchEngine extends SearchEngineBase
      */
     protected abstract SearchEngineResponse fetchSearchResponse() throws Exception;
 
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         try

@@ -21,13 +21,13 @@ import org.eclipse.ui.IEditorPart;
  */
 public class ReprocessActionDelegate extends ActiveSearchEditorActionDelegate 
 {
-    @Override
+    //@Override
     public void init(IAction action)
     {
         super.init(action);
     }
     
-    @Override
+    //@Override
     public void run(SearchEditor editor)
     {
         editor.reprocess();

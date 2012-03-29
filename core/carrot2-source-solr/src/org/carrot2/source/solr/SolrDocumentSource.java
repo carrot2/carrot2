@@ -78,20 +78,20 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Attribute
     public String solrUrlFieldName = "url";
 
-    @Override
+    //@Override
     protected String buildServiceUrl()
     {
         return serviceUrlBase + "?q=" + urlEncode(query) + "&start=" + start + "&rows="
             + results + "&indent=off";
     }
 
-    @Override
+    //@Override
     protected IResource getXsltResource()
     {
         return new ClassResource(SolrDocumentSource.class, "solr-to-c2.xsl");
     }
 
-    @Override
+    //@Override
     protected Map<String, String> getXsltParameters()
     {
         final Map<String, String> parameters = Maps.newHashMap();

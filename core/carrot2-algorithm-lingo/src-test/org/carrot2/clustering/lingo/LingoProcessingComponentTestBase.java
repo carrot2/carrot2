@@ -29,7 +29,7 @@ public class LingoProcessingComponentTestBase extends ReducedTermDocumentMatrixB
         lingoContext = new LingoProcessingContext(reducedVsmContext);
     }
 
-    @Override
+    //@Override
     protected int getDimensions()
     {
         return LingoClusteringAlgorithm.computeClusterCount(desiredClusterCountBase, context.documents.size());

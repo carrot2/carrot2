@@ -88,14 +88,14 @@ public class AmbientDocumentSource extends FubDocumentSource
             return topicId;
         }
 
-        @Override
+        //@Override
         public String toString()
         {
             return query;
         }
     }
 
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         query = topic.query;

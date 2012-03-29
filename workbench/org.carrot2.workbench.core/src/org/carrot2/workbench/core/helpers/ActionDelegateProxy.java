@@ -62,7 +62,7 @@ public final class ActionDelegateProxy extends Action implements IWorkbenchActio
     /*
      * 
      */
-    @Override
+    //@Override
     public void run()
     {
         checkState();
@@ -72,7 +72,7 @@ public final class ActionDelegateProxy extends Action implements IWorkbenchActio
     /*
      * 
      */
-    @Override
+    //@Override
     public void runWithEvent(Event event)
     {
         checkState();

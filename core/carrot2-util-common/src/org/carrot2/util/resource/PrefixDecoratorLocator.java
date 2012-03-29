@@ -35,7 +35,7 @@ public final class PrefixDecoratorLocator implements IResourceLocator
         this.prefix = prefix;
     }
 
-    @Override
+    //@Override
     public IResource [] getAll(String resource)
     {
         while (resource.startsWith("/"))
@@ -46,13 +46,13 @@ public final class PrefixDecoratorLocator implements IResourceLocator
         return delegate.getAll(prefix + resource);
     }
 
-    @Override
+    //@Override
     public int hashCode()
     {
         return this.prefix.hashCode() ^ delegate.hashCode();
     }
 
-    @Override
+    //@Override
     public boolean equals(Object target)
     {
         if (target == this) return true;
@@ -67,7 +67,7 @@ public final class PrefixDecoratorLocator implements IResourceLocator
         return false;
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return this.getClass().getName() + " [prefix: "

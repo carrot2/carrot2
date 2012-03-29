@@ -74,7 +74,7 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
      */
     public boolean anyValueAllowed = false;
 
-    @Override
+    //@Override
     protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
@@ -240,7 +240,7 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void setFocus()
     {
         this.box.setFocus();
@@ -249,7 +249,7 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public Object getValue()
     {
         return currentValue;
@@ -258,7 +258,7 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void setValue(Object newValue)
     {
         if (ObjectUtils.equals(newValue, getValue()))

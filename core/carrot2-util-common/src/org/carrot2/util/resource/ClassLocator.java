@@ -42,7 +42,7 @@ public class ClassLocator implements IResourceLocator
     /*
      *
      */
-    @Override
+    //@Override
     public IResource [] getAll(String resource)
     {
         URL resourceURL = clazz.getResource(resource);
@@ -54,13 +54,13 @@ public class ClassLocator implements IResourceLocator
         return new IResource [0];
     }
 
-    @Override
+    //@Override
     public int hashCode()
     {
         return this.clazz.hashCode();
     }
 
-    @Override
+    //@Override
     public boolean equals(Object target)
     {
         if (target == this) return true;
@@ -73,7 +73,7 @@ public class ClassLocator implements IResourceLocator
         return false;
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return this.getClass().getName() + " [class: "

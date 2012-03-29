@@ -59,7 +59,7 @@ public class Activator extends AbstractUIPlugin
     /*
      * 
      */
-    @Override
+    //@Override
     public void start(BundleContext context) throws Exception
     {
         super.start(context);
@@ -80,7 +80,7 @@ public class Activator extends AbstractUIPlugin
     /*
      * 
      */
-    @Override
+    //@Override
     public void stop(BundleContext context) throws Exception
     {
         instance = null;

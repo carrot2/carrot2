@@ -55,7 +55,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
@@ -64,7 +64,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void createEditor(Composite parent, int gridColumns)
     {
         final Composite holder = new Composite(parent, SWT.NONE);
@@ -156,7 +156,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void setValue(Object newValue)
     {
         if (newValue == current)
@@ -190,7 +190,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public Object getValue()
     {
         return current;
@@ -199,7 +199,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         disposeBin.dispose();

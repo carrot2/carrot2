@@ -72,7 +72,7 @@ public final class YahooDocumentSource extends MultipageSearchEngine
     /**
      * Run a single query.
      */
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         super.process(service.metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()));
@@ -81,7 +81,7 @@ public final class YahooDocumentSource extends MultipageSearchEngine
     /**
      * Create a single page fetcher for the search range.
      */
-    @Override
+    //@Override
     protected final Callable<SearchEngineResponse> createFetcher(final SearchRange bucket)
     {
         return new SearchEngineResponseCallable()
@@ -93,7 +93,7 @@ public final class YahooDocumentSource extends MultipageSearchEngine
         };
     }
 
-    @Override
+    //@Override
     protected void afterFetch(SearchEngineResponse response)
     {
         clean(response, keepHighlights, Document.TITLE, Document.SUMMARY);

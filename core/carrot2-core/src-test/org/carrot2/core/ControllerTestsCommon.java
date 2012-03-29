@@ -58,7 +58,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         }
     }
 
-    @Override
+    //@Override
     public Controller prepareController()
     {
         return getSimpleController();

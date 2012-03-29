@@ -36,13 +36,13 @@ final class ReferenceEquality
         this.identityHashCode = System.identityHashCode(delegate);
     }
     
-    @Override
+    //@Override
     public int hashCode()
     {
         return identityHashCode;
     }
 
-    @Override
+    //@Override
     public boolean equals(Object other)
     {
         if (other == null)

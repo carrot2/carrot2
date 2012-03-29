@@ -88,7 +88,7 @@ final class ApplicationActionBarAdvisor extends ActionBarAdvisor
     /*
      * 
      */
-    @Override
+    //@Override
     protected void fillCoolBar(ICoolBarManager coolBar)
     {
         super.fillCoolBar(coolBar);

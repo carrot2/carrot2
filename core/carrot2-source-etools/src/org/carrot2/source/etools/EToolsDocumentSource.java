@@ -71,7 +71,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
             this.code = code;
         }
 
-        @Override
+        //@Override
         public String toString()
         {
             return StringUtils.identifierToHumanReadable(name());
@@ -131,7 +131,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
             this.code = code;
         }
 
-        @Override
+        //@Override
         public String toString()
         {
             return StringUtils.identifierToHumanReadable(name());
@@ -212,7 +212,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
             this.code = code;
         }
 
-        @Override
+        //@Override
         public String toString()
         {
             return StringUtils.identifierToHumanReadable(name());
@@ -255,13 +255,13 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     private static final int FASTEST_SOURCES_COUNT = 5;
     private static final int ALL_SOURCES_COUNT = 10;
 
-    @Override
+    //@Override
     protected IResource getXsltResource()
     {
         return new ClassResource(EToolsDocumentSource.class, "etools-to-c2.xsl");
     }
 
-    @Override
+    //@Override
     protected String buildServiceUrl()
     {
         String urlBase = serviceUrlBase;
@@ -298,7 +298,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
             MAX_DATA_SOURCE_RESULTS);
     }
 
-    @Override
+    //@Override
     protected void afterFetch(SearchEngineResponse response)
     {
         // Set document's language

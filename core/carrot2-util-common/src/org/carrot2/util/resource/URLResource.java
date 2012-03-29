@@ -64,13 +64,13 @@ public class URLResource implements IResource
         return StreamUtils.prefetch(url.openStream());
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return info;
     }
 
-    @Override
+    //@Override
     public final boolean equals(Object obj)
     {
         if (this == obj)
@@ -84,7 +84,7 @@ public class URLResource implements IResource
         return false;
     }
 
-    @Override
+    //@Override
     public final int hashCode()
     {
         return this.info.hashCode();

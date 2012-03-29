@@ -175,7 +175,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     /** count variable */
     private static final String COUNT_VARIABLE_NAME = "count";
 
-    @Override
+    //@Override
     public void beforeProcessing()
     {
         // Verify that the attributes are legal
@@ -220,14 +220,14 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
         }
     }
 
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         super.process(metadata,
             getSharedExecutor(MAX_CONCURRENT_THREADS, this.getClass()));
     }
 
-    @Override
+    //@Override
     protected Callable<SearchEngineResponse> createFetcher(final SearchRange bucket)
     {
         return new SearchEngineResponseCallable()

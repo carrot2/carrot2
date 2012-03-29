@@ -44,7 +44,7 @@ public class IterationNumberGuesser
         /** High, long processing */
         HIGH;
 
-        @Override
+        //@Override
         public String toString()
         {
             return StringUtils.capitalize(name().toLowerCase());

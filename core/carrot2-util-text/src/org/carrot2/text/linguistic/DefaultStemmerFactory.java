@@ -41,7 +41,7 @@ public class DefaultStemmerFactory implements IStemmerFactory
      */
     private final static Predicate<IStemmer> stemmerVerifier = new Predicate<IStemmer>()
     {
-        @Override
+        //@Override
         public boolean apply(IStemmer stemmer)
         {
             // Assume functional if there's no exception.
@@ -59,7 +59,7 @@ public class DefaultStemmerFactory implements IStemmerFactory
     }
 
 
-    @Override
+    //@Override
     public IStemmer getStemmer(LanguageCode languageCode)
     {
         return stemmerFactories.get(languageCode).createInstance();

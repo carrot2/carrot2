@@ -121,7 +121,7 @@ public class PrecisionRecallMetricTest extends IdealPartitioningBasedMetricTest
         }
     }
 
-    @Override
+    //@Override
     protected String [] getClusterMetricKeys()
     {
         return new String []

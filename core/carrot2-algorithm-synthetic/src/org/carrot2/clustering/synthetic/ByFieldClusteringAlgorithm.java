@@ -71,7 +71,7 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
     /**
      * Performs by URL clustering.
      */
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         final Map<Object, Cluster> clusterMap = Maps.newHashMap();

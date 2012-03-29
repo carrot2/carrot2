@@ -20,13 +20,13 @@ import org.simpleframework.xml.Root;
 @Root(name = "is-directory")
 class IsDirectoryConstraint extends IsFileConstraintBase
 {
-    @Override
+    //@Override
     boolean isFileConstraintMet(File file)
     {
         return file.isDirectory();
     }
 
-    @Override
+    //@Override
     protected void populateCustom(Annotation annotation)
     {
         this.mustExist = ((IsDirectory) annotation).mustExist();

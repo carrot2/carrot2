@@ -23,7 +23,7 @@ import org.junit.Test;
  */
 public class ChineseTokenizerTest extends TokenizerTestBase
 {
-    @Override
+    //@Override
     protected ITokenizer createTokenStream() throws IOException
     {
         return new DefaultTokenizerFactory()

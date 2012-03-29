@@ -49,21 +49,21 @@ public final class LanguageModel
         // would work correctly in that case though.
         return new LanguageModel(languageCode, new IFactory<IStemmer>()
         {
-            @Override
+            //@Override
             public IStemmer createInstance()
             {
                 return stemmerFactory.getStemmer(languageCode);
             }
         }, new IFactory<ITokenizer>()
         {
-            @Override
+            //@Override
             public ITokenizer createInstance()
             {
                 return tokenizerFactory.getTokenizer(languageCode);
             }
         }, new IFactory<ILexicalData>()
         {
-            @Override
+            //@Override
             public ILexicalData createInstance()
             {
                 return lexicalDataFactory.getLexicalData(languageCode);

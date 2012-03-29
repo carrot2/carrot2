@@ -29,13 +29,13 @@ public class DoubleRangeConstraintTest extends ConstraintTestBase<DoubleRange>
         double field;
     }
 
-    @Override
+    //@Override
     Class<?> getAnnotationContainerClass()
     {
         return AnnotationContainer.class;
     }
 
-    @Override
+    //@Override
     Class<DoubleRange> getAnnotationType()
     {
         return DoubleRange.class;

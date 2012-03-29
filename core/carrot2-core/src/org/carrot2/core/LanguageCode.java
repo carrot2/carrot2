@@ -127,7 +127,7 @@ public enum LanguageCode
         return isoToLangCode.get(language);
     }
     
-    @Override
+    //@Override
     public String toString()
     {
         return StringUtils.identifierToHumanReadable(name());

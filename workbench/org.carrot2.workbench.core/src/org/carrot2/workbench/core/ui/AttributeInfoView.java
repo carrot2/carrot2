@@ -87,7 +87,7 @@ public class AttributeInfoView extends ViewPart
     /*
      * 
      */
-    @Override
+    //@Override
     public void init(IViewSite site) throws PartInitException
     {
         super.init(site);
@@ -115,7 +115,7 @@ public class AttributeInfoView extends ViewPart
     /*
      * 
      */
-    @Override
+    //@Override
     public void createPartControl(Composite parent)
     {
         this.browser = new Browser(parent, SWT.NONE);
@@ -202,7 +202,7 @@ public class AttributeInfoView extends ViewPart
     /*
      * 
      */
-    @Override
+    //@Override
     public void setFocus()
     {
         if (browser != null)
@@ -214,7 +214,7 @@ public class AttributeInfoView extends ViewPart
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         super.dispose();

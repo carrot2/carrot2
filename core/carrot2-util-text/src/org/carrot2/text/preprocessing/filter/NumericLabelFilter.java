@@ -36,7 +36,7 @@ public class NumericLabelFilter extends SingleLabelFilterBase
     @Attribute
     public boolean enabled = true;
 
-    @Override
+    //@Override
     public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
     {
         final int [] wordIndices = context.allPhrases.wordIndices[phraseIndex];
@@ -45,7 +45,7 @@ public class NumericLabelFilter extends SingleLabelFilterBase
         return !isNumeric(type[wordIndices[0]]);
     }
 
-    @Override
+    //@Override
     public boolean acceptWord(PreprocessingContext context, int wordIndex)
     {
         return !isNumeric(context.allWords.type[wordIndex]);

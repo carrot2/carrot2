@@ -51,7 +51,7 @@ public class ProcessingJobTest extends TestCase
     private final static Set<String> EXCLUDED_SOURCES = ImmutableSet.of("solr", "lucene",
         "wiki", "boss-images", "boss-web", "boss-news", "yahoo-news", "pubmed", "opensearch");
 
-    @Override
+    //@Override
     protected void setUp() throws Exception
     {
         super.setUp();

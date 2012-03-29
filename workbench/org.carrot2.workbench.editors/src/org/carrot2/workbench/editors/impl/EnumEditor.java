@@ -29,7 +29,7 @@ public final class EnumEditor extends MappedValueComboEditor
      * 
      */
     @SuppressWarnings("unchecked")
-    @Override
+    //@Override
     public AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         Class<? extends Enum<?>> clazz = (Class<? extends Enum<?>>) descriptor.type;
@@ -74,7 +74,7 @@ public final class EnumEditor extends MappedValueComboEditor
     /*
      * 
      */
-    @Override
+    //@Override
     public void setValue(Object newValue)
     {
         if (ObjectUtils.equals(newValue, getValue()))

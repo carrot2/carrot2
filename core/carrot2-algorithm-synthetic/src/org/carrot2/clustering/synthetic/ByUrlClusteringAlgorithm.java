@@ -69,7 +69,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * Performs by URL clustering.
      */
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         // Just in case we get a linked list, create an array of documents

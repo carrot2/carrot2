@@ -52,7 +52,7 @@ class DoubleRangeEditor extends NumericRangeEditorBase
     /*
      * 
      */
-    @Override
+    //@Override
     public AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         constraint = NumberUtils.getDoubleRange(descriptor);
@@ -70,7 +70,7 @@ class DoubleRangeEditor extends NumericRangeEditorBase
     /*
      * 
      */
-    @Override
+    //@Override
     public void setValue(Object value)
     {
         if (!(value instanceof Number))
@@ -84,7 +84,7 @@ class DoubleRangeEditor extends NumericRangeEditorBase
     /*
      * 
      */
-    @Override
+    //@Override
     public Object getValue()
     {
         return to_d((Integer) super.getValue());

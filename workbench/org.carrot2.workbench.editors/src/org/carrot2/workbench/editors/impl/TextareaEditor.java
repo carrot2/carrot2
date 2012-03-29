@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Text;
  */
 public class TextareaEditor extends StringEditor
 {
-    @Override
+    //@Override
     protected Text createTextBox(Composite parent, int gridColumns)
     {
         Text textBox = new Text(parent, BORDER | MULTI);

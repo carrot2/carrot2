@@ -336,7 +336,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /**
      * Create main GUI components, hook up events, schedule initial processing.
      */
-    @Override
+    //@Override
     public void createPartControl(Composite parent)
     {
         this.resources = new DisposeBin(WorkbenchCorePlugin.getDefault());
@@ -534,7 +534,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /*
      * 
      */
-    @Override
+    //@Override
     public void init(IEditorSite site, IEditorInput input) throws PartInitException
     {
         if (!(input instanceof SearchInput)) throw new PartInitException(
@@ -562,7 +562,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /*
      * 
      */
-    @Override
+    //@Override
     public Image getTitleImage()
     {
         return sourceImage;
@@ -571,7 +571,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /*
      * 
      */
-    @Override
+    //@Override
     public void setFocus()
     {
         rootForm.setFocus();
@@ -580,7 +580,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         this.resources.dispose();
@@ -805,7 +805,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         final IAction saveAction = new SaveAsXMLActionDelegate(result, options);
         final Job job = new Job("Saving search result...")
         {
-            @Override
+            //@Override
             protected IStatus run(IProgressMonitor monitor)
             {
                 saveAction.run();
@@ -827,7 +827,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /*
      * Don't require save-on-close.
      */
-    @Override
+    //@Override
     public boolean isSaveOnCloseNeeded()
     {
         return false;
@@ -836,7 +836,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /*
      * 
      */
-    @Override
+    //@Override
     public boolean isDirty()
     {
         return dirty;
@@ -855,7 +855,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      * {@link SearchEditor} adaptations.
      */
     @SuppressWarnings("rawtypes")
-    @Override
+    //@Override
     public Object getAdapter(Class adapter)
     {
         return super.getAdapter(adapter);
@@ -1245,13 +1245,13 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          */
         searchJob.addJobChangeListener(new JobChangeAdapter()
         {
-            @Override
+            //@Override
             public void aboutToRun(IJobChangeEvent event)
             {
                 setBusy(true);
             }
 
-            @Override
+            //@Override
             public void done(IJobChangeEvent event)
             {
                 setBusy(false);

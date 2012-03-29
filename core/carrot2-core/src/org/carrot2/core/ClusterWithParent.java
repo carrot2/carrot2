@@ -150,7 +150,7 @@ public final class ClusterWithParent
     /*
      * 
      */
-    @Override
+    //@Override
     public int hashCode()
     {
         return cluster == null ? 0 : cluster.hashCode();
@@ -159,7 +159,7 @@ public final class ClusterWithParent
     /*
      * 
      */
-    @Override
+    //@Override
     public boolean equals(Object obj)
     {
         if (obj == this)

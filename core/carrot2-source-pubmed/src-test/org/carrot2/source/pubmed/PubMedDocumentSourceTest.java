@@ -20,49 +20,49 @@ import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 public class PubMedDocumentSourceTest extends
     QueryableDocumentSourceTestBase<PubMedDocumentSource>
 {
-    @Override
+    //@Override
     public Class<PubMedDocumentSource> getComponentClass()
     {
         return PubMedDocumentSource.class;
     }
 
-    @Override
+    //@Override
     protected boolean canReturnEscapedHtml()
     {
         return false;
     }
 
-    @Override
+    //@Override
     protected String getLargeQueryText()
     {
         return "blood";
     }
 
-    @Override
+    //@Override
     protected String getSmallQueryText()
     {
         return "heart";
     }
 
-    @Override
+    //@Override
     protected boolean hasTotalResultsEstimate()
     {
         return false;
     }
 
-    @Override
+    //@Override
     protected boolean hasUtfResults()
     {
         return false;
     }
 
-    @Override
+    //@Override
     protected String getNoResultsQueryText()
     {
         return "chrzęszczyrzeboszyce";
     }
 
-    @Override
+    //@Override
     protected boolean mustReturnUniqueUrls()
     {
         return false;

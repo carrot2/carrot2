@@ -67,7 +67,7 @@ final class FoamTreeViewPage extends FlashViewPage
     /**
      * 
      */
-    @Override
+    //@Override
     public void init(IPageSite pageSite)
     {
         super.init(pageSite);
@@ -76,7 +76,7 @@ final class FoamTreeViewPage extends FlashViewPage
         store.addPropertyChangeListener(listener);
     }
 
-    @Override
+    //@Override
     public void dispose()
     {
         super.dispose();
@@ -85,7 +85,7 @@ final class FoamTreeViewPage extends FlashViewPage
         store.removePropertyChangeListener(listener);
     }
 
-    @Override
+    //@Override
     protected Map<String, Object> contributeCustomParams()
     {
         Map<String, Object> params = super.contributeCustomParams();

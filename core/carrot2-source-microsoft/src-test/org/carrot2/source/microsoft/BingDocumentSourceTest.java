@@ -41,19 +41,19 @@ public class BingDocumentSourceTest extends
         assertThat(getDocuments().get(0).getLanguage()).isEqualTo(LanguageCode.POLISH);
     }
 
-    @Override
+    //@Override
     public Class<BingDocumentSource> getComponentClass()
     {
         return BingDocumentSource.class;
     }
 
-    @Override
+    //@Override
     protected MultipageSearchEngineMetadata getSearchEngineMetadata()
     {
         return BingDocumentSource.metadata;
     }
 
-    @Override
+    //@Override
     protected boolean hasUtfResults()
     {
         return true;

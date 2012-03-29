@@ -34,7 +34,7 @@ public class GenericListAssertion<S, E> extends ItemGroupAssert<S, List<E>>
     {
         return this.satisfies(new Condition<List<E>>()
         {
-            @Override
+            //@Override
             public boolean matches(List<E> list)
             {
                 for (E element : list)
@@ -49,19 +49,19 @@ public class GenericListAssertion<S, E> extends ItemGroupAssert<S, List<E>>
         });
     }
 
-    @Override
+    //@Override
     protected List<Object> actualAsList()
     {
         return Lists.<Object> newArrayList(actual);
     }
 
-    @Override
+    //@Override
     protected Set<Object> actualAsSet()
     {
         return Sets.<Object> newHashSet(actual);
     }
 
-    @Override
+    //@Override
     protected int actualGroupSize()
     {
         isNotNull();

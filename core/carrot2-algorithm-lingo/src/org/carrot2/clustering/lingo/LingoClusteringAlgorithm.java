@@ -153,7 +153,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      */
     public final MultilingualClustering multilingualClustering = new MultilingualClustering();
 
-    @Override
+    //@Override
     public void init(IControllerContext context)
     {
         synchronized (LingoClusteringAlgorithm.class)
@@ -172,7 +172,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * Performs Lingo clustering of {@link #documents}.
      */
-    @Override
+    //@Override
     @SuppressWarnings("unchecked")
     public void process() throws ProcessingException
     {

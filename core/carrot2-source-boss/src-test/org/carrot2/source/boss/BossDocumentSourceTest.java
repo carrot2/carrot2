@@ -31,25 +31,25 @@ import org.junit.Test;
 public class BossDocumentSourceTest extends
     MultipageDocumentSourceTestBase<BossDocumentSource>
 {
-    @Override
+    //@Override
     public Class<BossDocumentSource> getComponentClass()
     {
         return BossDocumentSource.class;
     }
 
-    @Override
+    //@Override
     protected MultipageSearchEngineMetadata getSearchEngineMetadata()
     {
         return BossSearchService.DEFAULT_METADATA;
     }
 
-    @Override
+    //@Override
     protected boolean hasUtfResults()
     {
         return true;
     }
 
-    @Override
+    //@Override
     protected double slack()
     {
         return 1.5;

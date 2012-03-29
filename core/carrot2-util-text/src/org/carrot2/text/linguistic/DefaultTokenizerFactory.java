@@ -43,7 +43,7 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
      */
     private final static Predicate<ITokenizer> tokenizerVerifier = new Predicate<ITokenizer>()
     {
-        @Override
+        //@Override
         public boolean apply(ITokenizer tokenizer)
         {
             // Assume functional if there's no exception.
@@ -69,7 +69,7 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
         tokenizerFactories = createDefaultTokenizers();
     }
 
-    @Override
+    //@Override
     public ITokenizer getTokenizer(LanguageCode languageCode)
     {
         return tokenizerFactories.get(languageCode).createInstance();

@@ -28,7 +28,7 @@ public class WorkbenchActionFactory
      * Auto update action.
      */
     public static final ActionFactory AUTO_UPDATE_ACTION = new ActionFactory("auto-update") {
-        @Override
+        //@Override
         public IWorkbenchAction create(IWorkbenchWindow window)
         {
             final IWorkbenchAction action = new ActionDelegateProxy(

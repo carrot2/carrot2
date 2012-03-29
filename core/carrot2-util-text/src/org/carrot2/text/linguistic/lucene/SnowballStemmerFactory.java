@@ -93,7 +93,7 @@ public class SnowballStemmerFactory implements IFactory<IStemmer>
         clazz = (Class<? extends SnowballProgram>) clz;
     }
 
-    @Override
+    //@Override
     public IStemmer createInstance()
     {
         if (clazz == null)

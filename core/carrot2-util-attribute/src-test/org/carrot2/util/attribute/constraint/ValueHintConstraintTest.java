@@ -25,13 +25,13 @@ public class ValueHintConstraintTest extends ConstraintTestBase<ValueHintEnum>
         String field;
     }
 
-    @Override
+    //@Override
     Class<?> getAnnotationContainerClass()
     {
         return AnnotationContainer.class;
     }
 
-    @Override
+    //@Override
     Class<ValueHintEnum> getAnnotationType()
     {
         return ValueHintEnum.class;
@@ -55,7 +55,7 @@ public class ValueHintConstraintTest extends ConstraintTestBase<ValueHintEnum>
         assertMet(null, "field");
     }
 
-    @Override
+    //@Override
     String getConstrainedFieldName()
     {
         return "field";

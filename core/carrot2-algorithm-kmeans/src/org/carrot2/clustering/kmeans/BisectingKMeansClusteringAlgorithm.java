@@ -167,7 +167,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
      */
     public final LabelFormatter labelFormatter = new LabelFormatter();
 
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         // Preprocessing of documents

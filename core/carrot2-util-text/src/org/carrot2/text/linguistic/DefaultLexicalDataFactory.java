@@ -135,7 +135,7 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     /**
      * The main logic for acquiring a shared {@link ILexicalData} instance.
      */
-    @Override
+    //@Override
     public ILexicalData getLexicalData(LanguageCode languageCode)
     {
         // If resource merging is in place, change the language code to null

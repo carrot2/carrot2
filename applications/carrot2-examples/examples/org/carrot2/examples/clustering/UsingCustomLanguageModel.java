@@ -91,7 +91,7 @@ public class UsingCustomLanguageModel
          * Custom language model implementation. This one uses some contrived algorithms
          * and stop words just to demonstrate how they work.
          */
-        @Override
+        //@Override
         public IStemmer getStemmer(LanguageCode languageCode)
         {
             // Here we always return the same language model, regardless of the requested
@@ -112,7 +112,7 @@ public class UsingCustomLanguageModel
 
     public static class CustomTokenizerFactory implements ITokenizerFactory
     {
-        @Override
+        //@Override
         public ITokenizer getTokenizer(LanguageCode languageCode)
         {
             // Here we always return the same language model, regardless of the requested
@@ -128,7 +128,7 @@ public class UsingCustomLanguageModel
         private static final Set<? extends CharSequence> STOP_WORDS = ImmutableSet
             .of("text");
 
-        @Override
+        //@Override
         public ILexicalData getLexicalData(LanguageCode languageCode)
         {
             // Here we always return the same language model, regardless of the requested
@@ -137,13 +137,13 @@ public class UsingCustomLanguageModel
             System.out.println("lexical data");
             return new ILexicalData()
             {
-                @Override
+                //@Override
                 public boolean isStopLabel(CharSequence formattedLabel)
                 {
                     return formattedLabel.length() <= 4;
                 }
 
-                @Override
+                //@Override
                 public boolean isCommonWord(MutableCharArray word)
                 {
                     return STOP_WORDS.contains(word.toString());

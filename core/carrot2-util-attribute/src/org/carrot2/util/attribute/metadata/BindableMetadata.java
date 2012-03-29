@@ -48,7 +48,7 @@ public class BindableMetadata extends CommonMetadata
         attributeMetadataInternal = map;
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return "[" + title + ", " + label + ", " + description + "]";

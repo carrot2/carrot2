@@ -37,7 +37,7 @@ public class MinLengthLabelFilter extends SingleLabelFilterBase
 
     private final static int MIN_LENGTH = 3;
 
-    @Override
+    //@Override
     public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
     {
         final int [] wordIndices = context.allPhrases.wordIndices[phraseIndex];
@@ -54,7 +54,7 @@ public class MinLengthLabelFilter extends SingleLabelFilterBase
         return length >= MIN_LENGTH;
     }
 
-    @Override
+    //@Override
     public boolean acceptWord(PreprocessingContext context, int wordIndex)
     {
         return context.allWords.image[wordIndex].length >= MIN_LENGTH;

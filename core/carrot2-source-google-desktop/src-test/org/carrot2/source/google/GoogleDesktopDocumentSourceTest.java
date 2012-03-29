@@ -26,31 +26,31 @@ import org.junit.Test;
 public class GoogleDesktopDocumentSourceTest extends
     QueryableDocumentSourceTestBase<GoogleDesktopDocumentSource>
 {
-    @Override
+    //@Override
     public Class<GoogleDesktopDocumentSource> getComponentClass()
     {
         return GoogleDesktopDocumentSource.class;
     }
 
-    @Override
+    //@Override
     protected String getLargeQueryText()
     {
         return "test";
     }
 
-    @Override
+    //@Override
     protected String getSmallQueryText()
     {
         return "test";
     }
 
-    @Override
+    //@Override
     protected boolean hasTotalResultsEstimate()
     {
         return false;
     }
 
-    @Override
+    //@Override
     protected boolean hasUtfResults()
     {
         return false;

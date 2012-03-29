@@ -38,7 +38,7 @@ public class QueryLabelFilter extends SingleLabelFilterBase
     @Attribute
     public boolean enabled = true;
 
-    @Override
+    //@Override
     public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
     {
         final int [] wordIndices = context.allPhrases.wordIndices[phraseIndex];
@@ -55,7 +55,7 @@ public class QueryLabelFilter extends SingleLabelFilterBase
         return false;
     }
 
-    @Override
+    //@Override
     public boolean acceptWord(PreprocessingContext context, int wordIndex)
     {
         return !isQueryWord(context.allWords.type[wordIndex]);

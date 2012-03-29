@@ -118,13 +118,13 @@ public class URLResourceWithParams implements IResource
         return "${" + attributePlaceholderName + "}";
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return this.info;
     }
 
-    @Override
+    //@Override
     public final boolean equals(Object obj)
     {
         if (this == obj)
@@ -138,7 +138,7 @@ public class URLResourceWithParams implements IResource
         return false;
     }
 
-    @Override
+    //@Override
     public final int hashCode()
     {
         return this.info.hashCode();

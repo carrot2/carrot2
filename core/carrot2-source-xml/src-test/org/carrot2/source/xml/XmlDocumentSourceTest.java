@@ -44,7 +44,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     private ResourceLookup resourceLocator = new ResourceLookup(
         new ContextClassLoaderLocator());
 
-    @Override
+    //@Override
     public Class<XmlDocumentSource> getComponentClass()
     {
         return XmlDocumentSource.class;

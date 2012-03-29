@@ -100,7 +100,7 @@ public class JawrUrlGenerator
             this.links = links;
         }
 
-        @Override
+        //@Override
         protected String renderLink(String link)
         {
             links.add(link);

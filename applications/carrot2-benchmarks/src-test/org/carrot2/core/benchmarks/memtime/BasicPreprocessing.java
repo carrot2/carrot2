@@ -83,7 +83,7 @@ public final class BasicPreprocessing extends ProcessingComponentBase implements
     /**
      * Performs STC clustering of {@link #documents}.
      */
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         final List<Document> originalDocuments = documents;

@@ -55,7 +55,7 @@ public class AutoUpdateActionDelegate extends ActionDelegate implements IWorkben
     /*
      * 
      */
-    @Override
+    //@Override
     public void run(IAction action)
     {
         store.setValue(PreferenceConstants.AUTO_UPDATE, 
@@ -65,7 +65,7 @@ public class AutoUpdateActionDelegate extends ActionDelegate implements IWorkben
     /*
      * 
      */
-    @Override
+    //@Override
     public void init(IAction action)
     {
         super.init(action);
@@ -77,7 +77,7 @@ public class AutoUpdateActionDelegate extends ActionDelegate implements IWorkben
         updateActionState();
     }
 
-    @Override
+    //@Override
     public void dispose()
     {
         super.dispose();

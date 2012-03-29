@@ -55,7 +55,7 @@ class DocumentListPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void createControl(Composite parent)
     {
         documentList = new DocumentList(parent, SWT.NONE);
@@ -67,7 +67,7 @@ class DocumentListPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public Control getControl()
     {
         return documentList;
@@ -76,7 +76,7 @@ class DocumentListPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void setFocus()
     {
         documentList.setFocus();
@@ -85,7 +85,7 @@ class DocumentListPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         unregisterListeners();

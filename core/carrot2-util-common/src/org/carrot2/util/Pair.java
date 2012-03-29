@@ -28,7 +28,7 @@ public class Pair<I, J>
         this.objectB = parameter;
     }
 
-    @Override
+    //@Override
     public boolean equals(Object obj)
     {
         if (!(obj instanceof Pair))
@@ -42,7 +42,7 @@ public class Pair<I, J>
             && ObjectUtils.equals(other.objectB, objectB);
     }
 
-    @Override
+    //@Override
     public int hashCode()
     {
         return ObjectUtils.hashCode(objectA) ^ ObjectUtils.hashCode(objectB);

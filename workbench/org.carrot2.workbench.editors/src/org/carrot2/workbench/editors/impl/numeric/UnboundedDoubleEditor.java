@@ -41,7 +41,7 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
     /*
      * 
      */
-    @Override
+    //@Override
     public AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         constraint = NumberUtils.getDoubleRange(descriptor);
@@ -66,7 +66,7 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
     /**
      * Parse the number and return its string representation.
      */
-    @Override
+    //@Override
     protected String to_s(Number object)
     {
         return NumberUtils.to_decimal(object.doubleValue());
@@ -75,7 +75,7 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
     /*
      * 
      */
-    @Override
+    //@Override
     protected void doPageIncrement(boolean positive)
     {
         if (getValue() == null)
@@ -91,7 +91,7 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
     /*
      * 
      */
-    @Override
+    //@Override
     protected Double toRange(Double d)
     {
         if (d <= min) d = min;
@@ -102,7 +102,7 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
     /*
      * 
      */
-    @Override
+    //@Override
     protected boolean isValid(String value)
     {
         if (pattern.matcher(value).matches())
@@ -127,7 +127,7 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
     /*
      * 
      */
-    @Override
+    //@Override
     protected Double to_v(String value)
     {
         return Double.parseDouble(value);
@@ -136,7 +136,7 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
     /*
      * 
      */
-    @Override
+    //@Override
     protected boolean isValidForEditing(String value)
     {
         return isValid(value) || temporaryPattern.matcher(value).matches();

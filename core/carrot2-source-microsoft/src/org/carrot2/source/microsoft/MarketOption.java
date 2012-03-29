@@ -161,7 +161,7 @@ public enum MarketOption
     /**
      * Return human-readable description. 
      */
-    @Override
+    //@Override
     public String toString()
     {
         return description;

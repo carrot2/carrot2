@@ -35,7 +35,7 @@ public final class BooleanEditor extends AttributeEditorAdapter implements IAttr
     /*
      * 
      */
-    @Override
+    //@Override
     protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, true);
@@ -44,7 +44,7 @@ public final class BooleanEditor extends AttributeEditorAdapter implements IAttr
     /*
      * 
      */
-    @Override
+    //@Override
     public void createEditor(Composite parent, int gridColumns)
     {
         button = new Button(parent, SWT.CHECK);
@@ -68,7 +68,7 @@ public final class BooleanEditor extends AttributeEditorAdapter implements IAttr
         });
     }
 
-    @Override
+    //@Override
     public void setValue(Object newValue)
     {
         if (getValue().equals(newValue))
@@ -80,7 +80,7 @@ public final class BooleanEditor extends AttributeEditorAdapter implements IAttr
         fireAttributeChanged(new AttributeEvent(this));
     }
 
-    @Override
+    //@Override
     public Object getValue()
     {
         return button.getSelection();

@@ -160,7 +160,7 @@ public class ControllerTest
     
     public static class SimpleControllerCommonTests extends ControllerTestsCommon
     {
-        @Override
+        //@Override
         public Controller getSimpleController()
         {
             return ControllerFactory.createSimple();
@@ -170,7 +170,7 @@ public class ControllerTest
     @Bindable
     public static class TestProcessingComponent1 extends ProcessingComponentBase
     {
-        @Override
+        //@Override
         public void process() throws ProcessingException
         {
             try
@@ -188,19 +188,19 @@ public class ControllerTest
     {
         private static final int EAGERLY_INITIALIZED_INSTANCES = 6;
 
-        @Override
+        //@Override
         public Controller getSimpleController()
         {
             return ControllerFactory.createPooling(EAGERLY_INITIALIZED_INSTANCES);
         }
 
-        @Override
+        //@Override
         public boolean hasPooling()
         {
             return true;
         }
 
-        @Override
+        //@Override
         public int eagerlyInitializedInstances()
         {
             return EAGERLY_INITIALIZED_INSTANCES;
@@ -211,13 +211,13 @@ public class ControllerTest
     {
         private static final int EAGERLY_INITIALIZED_INSTANCES = 4;
 
-        @Override
+        //@Override
         public Controller getPoolingController()
         {
             return ControllerFactory.createPooling(EAGERLY_INITIALIZED_INSTANCES);
         }
 
-        @Override
+        //@Override
         public int eagerlyInitializedInstances()
         {
             return EAGERLY_INITIALIZED_INSTANCES;
@@ -226,13 +226,13 @@ public class ControllerTest
     
     public static class PoolingControllerCommonTests extends ControllerTestsCommon
     {
-        @Override
+        //@Override
         public Controller getSimpleController()
         {
             return ControllerFactory.createPooling();
         }
 
-        @Override
+        //@Override
         public boolean hasPooling()
         {
             return true;
@@ -241,7 +241,7 @@ public class ControllerTest
 
     public static class PoolingControllerPoolingTests extends ControllerTestsPooling
     {
-        @Override
+        //@Override
         public Controller getPoolingController()
         {
             return ControllerFactory.createPooling();
@@ -251,13 +251,13 @@ public class ControllerTest
     public static class CachingPoolingControllerCachingOffCommonTests extends
         ControllerTestsCommon
     {
-        @Override
+        //@Override
         public Controller getSimpleController()
         {
             return ControllerFactory.createCachingPooling();
         }
 
-        @Override
+        //@Override
         public boolean hasPooling()
         {
             return true;
@@ -267,7 +267,7 @@ public class ControllerTest
     public static class CachingPoolingControllerCachingOffPoolingTests extends
         ControllerTestsPooling
     {
-        @Override
+        //@Override
         public Controller getPoolingController()
         {
             return ControllerFactory.createCachingPooling();
@@ -277,19 +277,19 @@ public class ControllerTest
     public static class CachingPoolingControllerCachingOnCommonTests extends
         ControllerTestsCommon
     {
-        @Override
+        //@Override
         public Controller getSimpleController()
         {
             return ControllerFactory.createCachingPooling(IProcessingComponent.class);
         }
 
-        @Override
+        //@Override
         public boolean hasCaching()
         {
             return true;
         }
 
-        @Override
+        //@Override
         public boolean hasPooling()
         {
             return true;
@@ -299,13 +299,13 @@ public class ControllerTest
     public static class CachingPoolingControllerCachingOnPoolingTests extends
         ControllerTestsPooling
     {
-        @Override
+        //@Override
         public Controller getPoolingController()
         {
             return ControllerFactory.createCachingPooling(IProcessingComponent.class);
         }
 
-        @Override
+        //@Override
         public boolean hasCaching()
         {
             return true;
@@ -315,14 +315,14 @@ public class ControllerTest
     public static class CachingPoolingControllerCachingOnCachingTests extends
         ControllerTestsCaching
     {
-        @Override
+        //@Override
         public Controller getCachingController(
             Class<? extends IProcessingComponent>... cachedComponentClasses)
         {
             return ControllerFactory.createCachingPooling(cachedComponentClasses);
         }
 
-        @Override
+        //@Override
         public boolean hasPooling()
         {
             return true;
@@ -332,7 +332,7 @@ public class ControllerTest
     public static class CachingControllerCachingOffCommonTests extends
         ControllerTestsCommon
     {
-        @Override
+        //@Override
         public Controller getSimpleController()
         {
             return ControllerFactory.createCaching();
@@ -342,13 +342,13 @@ public class ControllerTest
     public static class CachingControllerCachingOnCommonTests extends
         ControllerTestsCommon
     {
-        @Override
+        //@Override
         public Controller getSimpleController()
         {
             return ControllerFactory.createCaching(IProcessingComponent.class);
         }
 
-        @Override
+        //@Override
         public boolean hasCaching()
         {
             return true;
@@ -358,7 +358,7 @@ public class ControllerTest
     public static class CachingControllerCachingOnCachingTests extends
         ControllerTestsCaching
     {
-        @Override
+        //@Override
         public Controller getCachingController(
             Class<? extends IProcessingComponent>... cachedComponentClasses)
         {

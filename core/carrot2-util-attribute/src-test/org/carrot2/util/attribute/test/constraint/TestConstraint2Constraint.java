@@ -34,7 +34,7 @@ public class TestConstraint2Constraint extends Constraint
         return false; // does not matter
     }
 
-    @Override
+    //@Override
     protected void populateCustom(Annotation annotation)
     {
         this.value = ((TestConstraint2) annotation).value();

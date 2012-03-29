@@ -100,7 +100,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
             componentResetListener, ComponentDisposalListener.INSTANCE);
     }
 
-    @Override
+    //@Override
     public void init(IControllerContext context, Map<String, Object> attributes,
         ProcessingComponentConfiguration... configurations)
     {
@@ -118,7 +118,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
             .indexByComponentId(configurations);
     }
 
-    @Override
+    //@Override
     public IProcessingComponent prepare(Class<? extends IProcessingComponent> clazz,
         String id, Map<String, Object> inputAttributes,
         Map<String, Object> outputAttributes)
@@ -150,13 +150,13 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         }
     }
 
-    @Override
+    //@Override
     public void recycle(IProcessingComponent component, String id)
     {
         componentPool.returnObject(component, id);
     }
 
-    @Override
+    //@Override
     public void dispose()
     {
         componentPool.dispose();
@@ -288,7 +288,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
             this.values = values;
         }
 
-        @Override
+        //@Override
         public void performAction(BindingTracker bindingTracker, int level,
             Object object, Field field, Object fieldValue, Predicate<Field> predicate)
             throws InstantiationException

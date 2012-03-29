@@ -28,7 +28,7 @@ public class BindableReferenceImpl2 implements IBindableReference
     @Attribute
     private int initInputInt = 12;
 
-    @Override
+    //@Override
     public boolean equals(Object obj)
     {
         if (!(obj instanceof BindableReferenceImpl2))
@@ -41,7 +41,7 @@ public class BindableReferenceImpl2 implements IBindableReference
         return initInputInt == other.initInputInt;
     }
 
-    @Override
+    //@Override
     public int hashCode()
     {
         return initInputInt;

@@ -24,7 +24,7 @@ public final class NewClassInstanceFactory<T> implements IFactory<T>
         this.clazz = clazz;
     }
     
-    @Override
+    //@Override
     public T createInstance()
     {
         try

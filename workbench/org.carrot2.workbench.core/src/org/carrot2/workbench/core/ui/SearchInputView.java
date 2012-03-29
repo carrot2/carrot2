@@ -172,7 +172,7 @@ public class SearchInputView extends ViewPart
     private class LinkWithEditorActionDelegate extends ActiveSearchEditorActionDelegate
     {
         /* */
-        @Override
+        //@Override
         protected void run(SearchEditor editor)
         {
             linkWithEditor = !linkWithEditor;
@@ -198,7 +198,7 @@ public class SearchInputView extends ViewPart
         /**
          * Detect editor switch.
          */
-        @Override
+        //@Override
         protected void switchingEditors(IEditorPart previous, IEditorPart activeEditor)
         {
             super.switchingEditors(previous, activeEditor);
@@ -267,7 +267,7 @@ public class SearchInputView extends ViewPart
             setChecked(state);
         }
 
-        @Override
+        //@Override
         public void run()
         {
             final IPreferenceStore preferenceStore = WorkbenchCorePlugin.getDefault()
@@ -283,7 +283,7 @@ public class SearchInputView extends ViewPart
     /*
      * 
      */
-    @Override
+    //@Override
     public void init(IViewSite site) throws PartInitException
     {
         super.init(site);
@@ -299,7 +299,7 @@ public class SearchInputView extends ViewPart
     /*
      * 
      */
-    @Override
+    //@Override
     public void init(IViewSite site, IMemento memento) throws PartInitException
     {
         super.init(site, memento);
@@ -349,7 +349,7 @@ public class SearchInputView extends ViewPart
     /**
      * Create user interface for the view.
      */
-    @Override
+    //@Override
     public void createPartControl(Composite parent)
     {
         /*
@@ -975,7 +975,7 @@ public class SearchInputView extends ViewPart
     /*
      * 
      */
-    @Override
+    //@Override
     public void saveState(IMemento memento)
     {
         final SearchInputViewMemento state = new SearchInputViewMemento();
@@ -1000,7 +1000,7 @@ public class SearchInputView extends ViewPart
      * We set the focus to the current {@link #attributeGroups}'s default element if
      * possible. Otherwise, set the focus to the input source combo.
      */
-    @Override
+    //@Override
     public void setFocus()
     {
         if (attributeGroups != null)
@@ -1016,7 +1016,7 @@ public class SearchInputView extends ViewPart
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         if (this.attributeGroups != null) attributeGroups.dispose();

@@ -22,7 +22,7 @@ public final class ContextClassLoaderLocator implements IResourceLocator
     /**
      *
      */
-    @Override
+    //@Override
     public IResource [] getAll(String resource)
     {
         final ClassLoader cl = Thread.currentThread().getContextClassLoader();
@@ -35,13 +35,13 @@ public final class ContextClassLoaderLocator implements IResourceLocator
     }
 
 
-    @Override
+    //@Override
     public int hashCode()
     {
         return 0xbebe;
     }
 
-    @Override
+    //@Override
     public boolean equals(Object target)
     {
         if (target == this) return true;
@@ -54,7 +54,7 @@ public final class ContextClassLoaderLocator implements IResourceLocator
         return false;
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return this.getClass().getName() + " [current: "

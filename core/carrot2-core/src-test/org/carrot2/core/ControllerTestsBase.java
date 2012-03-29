@@ -212,7 +212,7 @@ public abstract class ControllerTestsBase
         }, strict = false)
         protected IProcessingComponent delegate1;
 
-        @Override
+        //@Override
         IProcessingComponent getDelegate()
         {
             return delegate1;
@@ -232,7 +232,7 @@ public abstract class ControllerTestsBase
         }, strict = false)
         protected IProcessingComponent delegate2;
 
-        @Override
+        //@Override
         IProcessingComponent getDelegate()
         {
             return delegate2;
@@ -251,7 +251,7 @@ public abstract class ControllerTestsBase
         }, strict = false)
         protected IProcessingComponent delegate3;
 
-        @Override
+        //@Override
         IProcessingComponent getDelegate()
         {
             return delegate3;
@@ -289,7 +289,7 @@ public abstract class ControllerTestsBase
         }, strict = false)
         protected IControllerContextListener contextListener;
 
-        @Override
+        //@Override
         public void init(IControllerContext context)
         {
             super.init(context);
@@ -297,7 +297,7 @@ public abstract class ControllerTestsBase
             context.addListener(contextListener);
         }
 
-        @Override
+        //@Override
         IProcessingComponent getDelegate()
         {
             return delegate;
@@ -320,7 +320,7 @@ public abstract class ControllerTestsBase
         @Attribute(key = "key2")
         protected String key2;
 
-        @Override
+        //@Override
         public void process() throws ProcessingException
         {
             super.process();
@@ -359,7 +359,7 @@ public abstract class ControllerTestsBase
         @SuppressWarnings("unused")
         private String result;
 
-        @Override
+        //@Override
         public void process() throws ProcessingException
         {
             result = init + init;
@@ -380,7 +380,7 @@ public abstract class ControllerTestsBase
         @SuppressWarnings("unused")
         private String result;
 
-        @Override
+        //@Override
         public void process() throws ProcessingException
         {
             result = processing + processing;
@@ -420,7 +420,7 @@ public abstract class ControllerTestsBase
         @SuppressWarnings("unused")
         private String result;
 
-        @Override
+        //@Override
         public void process() throws ProcessingException
         {
             result = initProcessingRequired;
@@ -448,7 +448,7 @@ public abstract class ControllerTestsBase
         @Attribute(key = "initOutput")
         protected String initOutput;
 
-        @Override
+        //@Override
         public void init(IControllerContext context)
         {
             initOutput = "initOutput";
@@ -464,7 +464,7 @@ public abstract class ControllerTestsBase
         @SuppressWarnings("unused")
         private String result;
 
-        @Override
+        //@Override
         public void process() throws ProcessingException
         {
             result = "anything";
@@ -482,7 +482,7 @@ public abstract class ControllerTestsBase
         @Attribute(key = "attr")
         private String result;
 
-        @Override
+        //@Override
         public void process() throws ProcessingException
         {
             if (result == null) throw new RuntimeException();

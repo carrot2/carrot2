@@ -33,7 +33,7 @@ final class ReadOnlyEditor extends AttributeEditorAdapter
     /** */
     private Object lastValue;
 
-    @Override
+    //@Override
     protected AttributeEditorInfo init(Map<String,Object> defaultValues)
     {
         return new AttributeEditorInfo(1, false);
@@ -42,13 +42,13 @@ final class ReadOnlyEditor extends AttributeEditorAdapter
     /*
      * Return the current editor value.
      */
-    @Override
+    //@Override
     public Object getValue()
     {
         return lastValue;
     }
 
-    @Override
+    //@Override
     public void setValue(Object object)
     {
         if (lastValue == object)
@@ -65,7 +65,7 @@ final class ReadOnlyEditor extends AttributeEditorAdapter
     /*
      * 
      */
-    @Override
+    //@Override
     public void createEditor(Composite parent, int gridColumns)
     {
         createText(parent, gridColumns);

@@ -27,13 +27,13 @@ public class IntModuloConstraintTest extends ConstraintTestBase<IntModulo>
         double field;
     }
 
-    @Override
+    //@Override
     Class<?> getAnnotationContainerClass()
     {
         return AnnotationContainer.class;
     }
 
-    @Override
+    //@Override
     Class<IntModulo> getAnnotationType()
     {
         return IntModulo.class;

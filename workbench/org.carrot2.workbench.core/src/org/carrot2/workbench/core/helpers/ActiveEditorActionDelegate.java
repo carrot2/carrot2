@@ -79,7 +79,7 @@ public abstract class ActiveEditorActionDelegate
     /*
      * 
      */
-    @Override
+    //@Override
     public void init(IAction action)
     {
         this.action = action;
@@ -91,7 +91,7 @@ public abstract class ActiveEditorActionDelegate
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         if (window != null)

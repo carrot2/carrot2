@@ -776,7 +776,7 @@ public class PhraseExtractorTest extends PreprocessingComponentTestBase
         return result;
     }
 
-    @Override
+    //@Override
     protected IStemmerFactory createStemmerFactory()
     {
         return new TestStemmerFactory();

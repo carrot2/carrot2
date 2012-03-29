@@ -81,7 +81,7 @@ final class AttributeViewPage extends Page
     /**
      * Make contributions to menus, toolbars and status line.
      */
-    @Override
+    //@Override
     public void makeContributions(IMenuManager menu,
         IToolBarManager toolBar, IStatusLineManager statusManager)
     {
@@ -145,7 +145,7 @@ final class AttributeViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void createControl(Composite parent)
     {
         final IPreferenceStore prefStore = 
@@ -219,7 +219,7 @@ final class AttributeViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public Control getControl()
     {
         return this.mainControl;
@@ -228,7 +228,7 @@ final class AttributeViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void setFocus()
     {
         attributeEditors.setFocus();
@@ -237,7 +237,7 @@ final class AttributeViewPage extends Page
     /*
      * 
      */
-    @Override
+    //@Override
     public void dispose()
     {
         unregisterListeners();

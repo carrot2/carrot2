@@ -734,7 +734,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
         return result;
     }
 
-    @Override
+    //@Override
     protected void beforePrepareWordIndices(Tokenizer temporaryTokenizer,
         CaseNormalizer temporaryCaseNormalizer)
     {

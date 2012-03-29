@@ -60,7 +60,7 @@ public final class DisplayWelcomeView extends AbstractHandler
     /**
      * Displays the welcome view ({@link IHandler} callback).
      */
-    @Override
+    //@Override
     public Object execute(ExecutionEvent event)
     {
         try

@@ -70,7 +70,7 @@ final class BenchmarkJob extends Job
     }
 
     /* */
-    @Override
+    //@Override
     protected IStatus run(IProgressMonitor monitor)
     {
         prepareLogs();

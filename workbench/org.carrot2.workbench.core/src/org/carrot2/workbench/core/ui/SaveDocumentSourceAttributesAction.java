@@ -42,7 +42,7 @@ final class SaveDocumentSourceAttributesAction extends SaveAttributesAction
     /*
      * 
      */
-    @Override
+    //@Override
     protected AttributeValueSets collectAttributes()
     {
         /*
@@ -75,7 +75,7 @@ final class SaveDocumentSourceAttributesAction extends SaveAttributesAction
     /*
      * 
      */
-    @Override
+    //@Override
     protected void applyAttributes(AttributeValueSets attrs)
     {
         for (Map.Entry<String, Object> e : attrs.getDefaultAttributeValueSet()
@@ -88,7 +88,7 @@ final class SaveDocumentSourceAttributesAction extends SaveAttributesAction
     /*
      * 
      */
-    @Override
+    //@Override
     protected IPath getFileNameHint()
     {
         return getDefaultHint(this.searchInputView.getSourceId(), "source-");

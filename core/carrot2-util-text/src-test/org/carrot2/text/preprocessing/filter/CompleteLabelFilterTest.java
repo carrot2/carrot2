@@ -21,7 +21,7 @@ import org.junit.Test;
  */
 public class CompleteLabelFilterTest extends LabelFilterTestBase
 {
-    @Override
+    //@Override
     protected void initializeFilters(LabelFilterProcessor filterProcessor)
     {
         filterProcessor.stopWordLabelFilter.enabled = true;

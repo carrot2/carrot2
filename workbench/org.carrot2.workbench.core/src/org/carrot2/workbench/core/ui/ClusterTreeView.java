@@ -28,7 +28,7 @@ public final class ClusterTreeView extends PageBookViewBase
     /**
      * Create a tree view for the given part.
      */
-    @Override
+    //@Override
     protected PageRec doCreatePage(IWorkbenchPart part)
     {
         final SearchEditor editor = (SearchEditor) part;
@@ -43,7 +43,7 @@ public final class ClusterTreeView extends PageBookViewBase
     /**
      * Only react to {@link SearchEditor} instances.
      */
-    @Override
+    //@Override
     protected boolean isImportant(IWorkbenchPart part)
     {
         return part instanceof SearchEditor;

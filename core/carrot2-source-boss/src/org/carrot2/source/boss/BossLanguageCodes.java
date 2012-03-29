@@ -146,7 +146,7 @@ public enum BossLanguageCodes implements IValueHintMapping
         return friendlyName;
     }
     
-    @Override
+    //@Override
     public String toString()
     {
         return getUserFriendlyName();

@@ -48,7 +48,7 @@ public final class ServletContextLocator implements IResourceLocator
             return context.getResourceAsStream(resource);
         }
 
-        @Override
+        //@Override
         public String toString()
         {
             return "[webapp: " + resource + "]";
@@ -61,7 +61,7 @@ public final class ServletContextLocator implements IResourceLocator
         this.context = servletContext;
     }
 
-    @Override
+    //@Override
     public IResource [] getAll(String resource)
     {
         // Check if the path is webapp-relative.
@@ -84,13 +84,13 @@ public final class ServletContextLocator implements IResourceLocator
         return new IResource [0];
     }
 
-    @Override
+    //@Override
     public int hashCode()
     {
         return this.context.hashCode();
     }
 
-    @Override
+    //@Override
     public boolean equals(Object target)
     {
         if (target == this) return true;
@@ -103,7 +103,7 @@ public final class ServletContextLocator implements IResourceLocator
         return false;
     }
     
-    @Override
+    //@Override
     public String toString()
     {
         return this.getClass().getName() + " [context: " + context + "]";

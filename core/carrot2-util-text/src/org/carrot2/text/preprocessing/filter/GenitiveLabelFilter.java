@@ -41,14 +41,14 @@ public class GenitiveLabelFilter extends SingleLabelFilterBase
         "'s".toCharArray(), "`s".toCharArray(), "s'".toCharArray(), "s`".toCharArray()
     };
 
-    @Override
+    //@Override
     public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
     {
         final int [] wordIndices = context.allPhrases.wordIndices[phraseIndex];
         return isGenitive(context.allWords.image, wordIndices[wordIndices.length - 1]);
     }
     
-    @Override
+    //@Override
     public boolean acceptWord(PreprocessingContext context, int wordIndex)
     {
         return isGenitive(context.allWords.image, wordIndex);

@@ -53,7 +53,7 @@ public final class VelocityServlet extends HttpServlet
     /*
      * 
      */
-    @Override
+    //@Override
     public void init() throws ServletException
     {
         super.init();
@@ -84,7 +84,7 @@ public final class VelocityServlet extends HttpServlet
     /*
      * 
      */
-    @Override
+    //@Override
     public void destroy()
     {
         super.destroy();
@@ -94,7 +94,7 @@ public final class VelocityServlet extends HttpServlet
     /**
      * Serve the content.
      */
-    @Override
+    //@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws ServletException, IOException
     {

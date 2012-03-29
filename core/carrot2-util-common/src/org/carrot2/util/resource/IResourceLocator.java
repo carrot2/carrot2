@@ -29,13 +29,13 @@ public interface IResourceLocator
      * Override hash code to return consistent hash code depending on all locations
      * scanned by this locator. 
      */
-    @Override
+    //@Override
     public int hashCode();
     
     /**
      * Override equals to return <code>true</code> for locators scanning an identical
      * set of locations.
      */
-    @Override
+    //@Override
     public boolean equals(Object obj);
 }

@@ -43,13 +43,13 @@ class IntModuloConstraint extends Constraint
         return Math.abs((v % modulo)) == offset;
     }
 
-    @Override
+    //@Override
     public String toString()
     {
         return "modulo(modulo = " + modulo + ", offset = " + offset + ")";
     }
 
-    @Override
+    //@Override
     public void populateCustom(Annotation annotation)
     {
         final IntModulo modulo = (IntModulo) annotation;

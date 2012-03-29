@@ -76,7 +76,7 @@ public final class CompletePreprocessing extends ProcessingComponentBase impleme
     /**
      * Performs STC clustering of {@link #documents}.
      */
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         final List<Document> originalDocuments = documents;

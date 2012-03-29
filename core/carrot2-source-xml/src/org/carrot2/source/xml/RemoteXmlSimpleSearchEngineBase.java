@@ -37,7 +37,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
     /** XSLT transformation to Carrot2 DTD */
     private Templates toCarrot2Xslt;
 
-    @Override
+    //@Override
     public void init(IControllerContext context)
     {
         super.init(context);
@@ -45,7 +45,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
         toCarrot2Xslt = xmlDocumentSourceHelper.loadXslt(getXsltResource());
     }
 
-    @Override
+    //@Override
     public void beforeProcessing() throws ProcessingException
     {
         super.beforeProcessing();
@@ -55,7 +55,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
         }
     }
 
-    @Override
+    //@Override
     protected SearchEngineResponse fetchSearchResponse() throws Exception
     {
         final String serviceURL = buildServiceUrl();

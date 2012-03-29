@@ -36,7 +36,7 @@ public interface ClusterPairCheck
      */
     public static class PhrasesEqual implements ClusterPairCheck
     {
-        @Override
+        //@Override
         public void check(Cluster actual, Cluster expected)
         {
             assertThat(actual.getPhrases()).as("cluster phrases").isEqualTo(
@@ -49,7 +49,7 @@ public interface ClusterPairCheck
      */
     public static class LabelEqual implements ClusterPairCheck
     {
-        @Override
+        //@Override
         public void check(Cluster actual, Cluster expected)
         {
             assertThat(actual.getLabel()).as("cluster label").isEqualTo(
@@ -62,7 +62,7 @@ public interface ClusterPairCheck
      */
     public static class ScoreEqual implements ClusterPairCheck
     {
-        @Override
+        //@Override
         public void check(Cluster actual, Cluster expected)
         {
             assertThat(actual.getScore()).as("cluster score").isEqualTo(
@@ -75,7 +75,7 @@ public interface ClusterPairCheck
      */
     public static class AllDocumentsEquivalent implements ClusterPairCheck
     {
-        @Override
+        //@Override
         public void check(Cluster actual, Cluster expected)
         {
             assertThatDocuments(actual.getAllDocuments()).as("cluster all documents")

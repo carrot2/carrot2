@@ -120,7 +120,7 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
             return new TreeSelection(paths);
         }
 
-        @Override
+        //@Override
         public String toString()
         {
             return treeSelection.toString();

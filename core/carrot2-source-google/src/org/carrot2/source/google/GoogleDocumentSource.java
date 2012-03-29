@@ -116,13 +116,13 @@ public class GoogleDocumentSource extends MultipageSearchEngine
      */
     private static final int MAX_CONCURRENT_THREADS = 10;
 
-    @Override
+    //@Override
     public void process() throws ProcessingException
     {
         super.process(metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()));
     }
 
-    @Override
+    //@Override
     protected Callable<SearchEngineResponse> createFetcher(final SearchRange bucket)
     {
         return new SearchEngineResponseCallable()
@@ -202,7 +202,7 @@ public class GoogleDocumentSource extends MultipageSearchEngine
         };
     }
 
-    @Override
+    //@Override
     protected void afterFetch(SearchEngineResponse response)
     {
         clean(response, keepHighlights, Document.TITLE, Document.SUMMARY);

@@ -94,19 +94,19 @@ public class YahooDocumentSourceTest extends
         }
     }
 
-    @Override
+    //@Override
     public Class<YahooDocumentSource> getComponentClass()
     {
         return YahooDocumentSource.class;
     }
 
-    @Override
+    //@Override
     protected MultipageSearchEngineMetadata getSearchEngineMetadata()
     {
         return YahooSearchService.DEFAULT_METADATA;
     }
 
-    @Override
+    //@Override
     protected boolean hasUtfResults()
     {
         return true;

@@ -123,7 +123,7 @@ public class QueryProcessorServlet extends HttpServlet
     /*
      * Servlet lifecycle.
      */
-    @Override
+    //@Override
     public void init(ServletConfig config) throws ServletException
     {
         super.init(config);
@@ -168,7 +168,7 @@ public class QueryProcessorServlet extends HttpServlet
     /*
      * Servlet lifecycle.
      */
-    @Override
+    //@Override
     public void destroy()
     {
         if (this.controller != null)

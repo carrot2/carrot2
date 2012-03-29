@@ -166,7 +166,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
      * 
      */
     @SuppressWarnings("unchecked")
-    @Override
+    //@Override
     public void init(IControllerContext context)
     {
         super.init(context);

@@ -52,7 +52,7 @@ public class ToggleRelaxationAction extends Action
         updateState();
     }
     
-    @Override
+    //@Override
     public void runWithEvent(Event event)
     {
         IPreferenceStore store = Activator.getInstance().getPreferenceStore();

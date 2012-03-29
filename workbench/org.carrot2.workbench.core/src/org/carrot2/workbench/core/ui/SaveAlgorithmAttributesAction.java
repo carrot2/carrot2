@@ -40,7 +40,7 @@ final class SaveAlgorithmAttributesAction extends SaveAttributesAction
     /**
      * 
      */
-    @Override
+    //@Override
     protected void applyAttributes(AttributeValueSets attrs)
     {
         for (Map.Entry<String, Object> e : attrs.getDefaultAttributeValueSet()
@@ -53,7 +53,7 @@ final class SaveAlgorithmAttributesAction extends SaveAttributesAction
     /**
      * 
      */
-    @Override
+    //@Override
     protected AttributeValueSets collectAttributes()
     {
         /*
@@ -85,7 +85,7 @@ final class SaveAlgorithmAttributesAction extends SaveAttributesAction
         return merged;
     }
     
-    @Override
+    //@Override
     protected IPath getFileNameHint()
     {
         return getDefaultHint(searchInput.getAlgorithmId(), "algorithm-");

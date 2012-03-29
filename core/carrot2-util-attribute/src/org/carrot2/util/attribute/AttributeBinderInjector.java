@@ -78,7 +78,7 @@ public class AttributeBinderInjector
             this.values = values;
         }
 
-        @Override
+        //@Override
         public void performAction(BindingTracker bindingTracker, int level,
             Object object, Field field, Object value, Predicate<Field> predicate)
             throws InstantiationException
