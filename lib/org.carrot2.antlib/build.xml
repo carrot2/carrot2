@@ -21,7 +21,7 @@
     <target name="jar" depends="clean">
         <mkdir dir="${carrot2.common.antlib.basedir}/tmp/classes" />
 
-        <javac debug="true" destdir="${carrot2.common.antlib.basedir}/tmp/classes" includeantruntime="true">
+        <javac source="1.5" target="1.5" debug="true" destdir="${carrot2.common.antlib.basedir}/tmp/classes" includeantruntime="true">
             <src path="${carrot2.common.antlib.basedir}/src" />
         </javac>
         <copy todir="${carrot2.common.antlib.basedir}/tmp/classes">

@@ -1144,7 +1144,7 @@
 
     <delete dir="${utilities.build.dir}" failonerror="false" />
     <mkdir dir="${utilities.build.dir}" />
-    <javac destdir="${utilities.build.dir}" compiler="modern">
+    <javac destdir="${utilities.build.dir}" compiler="modern" source="1.5" target="1.5">
       <src location="${carrot2.master.basedir}/core/carrot2-util-attribute/src" />
       <src location="${carrot2.master.basedir}/core/carrot2-util-attribute/src-apt" />
       <include name="org/carrot2/util/attribute/metadata/**" />
