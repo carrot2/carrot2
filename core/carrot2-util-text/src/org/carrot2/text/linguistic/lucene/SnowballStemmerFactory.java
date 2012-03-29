@@ -52,7 +52,7 @@ public class SnowballStemmerFactory implements IFactory<IStemmer>
 
             if (snowballStemmer.stem())
             {
-                return new MutableCharArray(Arrays.copyOf(
+                return new MutableCharArray(org.carrot2.core.Jdk15.copyOf(
                     snowballStemmer.getCurrentBuffer(), snowballStemmer.getCurrentBufferLength()));
             }
             else

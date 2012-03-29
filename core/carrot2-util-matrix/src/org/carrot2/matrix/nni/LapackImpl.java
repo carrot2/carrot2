@@ -113,7 +113,7 @@ public final class LapackImpl implements ILapackOperations
         // Copy the data array of the A matrix (LAPACK will overwrite the
         // input data)
         final double [] data = A.getData();
-        double [] dataA = Arrays.copyOf(data, data.length);
+        double [] dataA = org.carrot2.core.Jdk15.copyOf(data, data.length);
 
         LAPACK.syevr(new char []
         {
@@ -214,7 +214,7 @@ public final class LapackImpl implements ILapackOperations
         // Copy the data array of the A matrix (LAPACK will overwrite the
         // input data)
         double [] data = A.getData();
-        double [] dataA = Arrays.copyOf(data, data.length);
+        double [] dataA = org.carrot2.core.Jdk15.copyOf(data, data.length);
 
         LAPACK.geev(new char []
         {

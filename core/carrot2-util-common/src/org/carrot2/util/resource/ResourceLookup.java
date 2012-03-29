@@ -86,7 +86,7 @@ public final class ResourceLookup
      */
     public ResourceLookup(IResourceLocator... locators)
     {
-        this.locators = Arrays.copyOf(locators, locators.length); 
+        this.locators = org.carrot2.core.Jdk15.copyOf(locators, locators.length); 
     }
 
     /**
@@ -182,7 +182,7 @@ public final class ResourceLookup
      */
     public IResourceLocator [] getLocators()
     {
-        return Arrays.copyOf(this.locators, this.locators.length);
+        return org.carrot2.core.Jdk15.copyOf(this.locators, this.locators.length);
     }
 
     /**

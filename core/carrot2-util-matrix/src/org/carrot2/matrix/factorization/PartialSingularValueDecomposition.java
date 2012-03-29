@@ -108,7 +108,7 @@ public class PartialSingularValueDecomposition extends MatrixFactorizationBase i
             // Copy the data array of the A matrix (LAPACK will overwrite the
             // input data)
             final double [] data = ((NNIDenseDoubleMatrix2D) A).getData();
-            double [] dataA = Arrays.copyOf(data, data.length);
+            double [] dataA = org.carrot2.core.Jdk15.copyOf(data, data.length);
 
             int [] info = new int [1];
 

@@ -213,7 +213,7 @@ public class HttpUtils
         }
         catch (URISyntaxException e)
         {
-            throw new IOException(e);
+            throw new IOException(e.getMessage());
         }
         finally
         {
