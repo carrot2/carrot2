@@ -23,6 +23,7 @@ import org.junit.Test;
 /**
  * Tests image service accessor.
  */
+@org.junit.Ignore
 public class BossImageSearchServiceTest
 {
     private BossSearchService service;

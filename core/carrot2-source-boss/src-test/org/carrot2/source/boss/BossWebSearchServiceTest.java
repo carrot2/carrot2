@@ -27,6 +27,7 @@ import org.junit.Test;
 /**
  * Tests Web service accessor.
  */
+@org.junit.Ignore
 public class BossWebSearchServiceTest
 {
     private BossSearchService service;

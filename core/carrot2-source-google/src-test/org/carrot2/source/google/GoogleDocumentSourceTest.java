@@ -26,6 +26,7 @@ import org.junit.Test;
 /**
  * Test cases for {@link GoogleDocumentSource}.
  */
+@org.junit.Ignore
 public class GoogleDocumentSourceTest extends
     MultipageDocumentSourceTestBase<GoogleDocumentSource>
 {

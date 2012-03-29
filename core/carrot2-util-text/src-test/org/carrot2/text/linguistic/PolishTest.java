@@ -17,6 +17,7 @@ import org.carrot2.core.LanguageCode;
 /**
  * Test support for {@link LanguageCode#POLISH}.
  */
+@org.junit.Ignore
 public class PolishTest extends LanguageModelTestBase
 {
     protected LanguageCode getLanguageCode()

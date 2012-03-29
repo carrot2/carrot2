@@ -24,6 +24,7 @@ import org.junit.Test;
 /**
  * Tests News service accessor.
  */
+@org.junit.Ignore
 public class BossNewsSearchServiceTest
 {
     private BossSearchService service;

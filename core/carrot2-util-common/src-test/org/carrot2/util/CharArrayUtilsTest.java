@@ -67,10 +67,10 @@ public class CharArrayUtilsTest
         char [] buffer = new char [1024];
         
         assertTrue(CharArrayUtils.toLowerCase(input1, buffer));
-        assertArrayEquals(input2, Arrays.copyOf(buffer, input1.length));
+        assertArrayEquals(input2, org.carrot2.core.Jdk15.copyOf(buffer, input1.length));
 
         assertFalse(CharArrayUtils.toLowerCase(input2, buffer));
-        assertArrayEquals(input2, Arrays.copyOf(buffer, input2.length));
+        assertArrayEquals(input2, org.carrot2.core.Jdk15.copyOf(buffer, input2.length));
     }
     
     @Test

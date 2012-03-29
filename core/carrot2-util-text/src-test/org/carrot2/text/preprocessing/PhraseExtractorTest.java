@@ -124,7 +124,7 @@ public class PhraseExtractorTest extends PreprocessingComponentTestBase
     @Test
     public void testSubphrasesOnly()
     {
-        createDocuments(null, "a b c d . a b c d");
+        createDocuments((String) null, "a b c d . a b c d");
 
         int [][] expectedPhraseWordIndexes = get4TokenSubphrases();
 

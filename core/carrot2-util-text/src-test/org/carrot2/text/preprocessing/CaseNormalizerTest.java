@@ -578,7 +578,7 @@ public class CaseNormalizerTest extends PreprocessingComponentTestBase
     @Test
     public void testMoreDocuments()
     {
-        createDocuments(null, "ABC abc", "bcd", "BCD", "ABC", "BCD", "def DEF DEF", "DEF");
+        createDocuments((String) null, "ABC abc", "bcd", "BCD", "ABC", "BCD", "def DEF DEF", "DEF");
 
         char [][] expectedWordImages = createExpectedWordImages(new String []
         {

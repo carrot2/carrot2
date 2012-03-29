@@ -28,6 +28,7 @@ import org.junit.Test;
 /**
  * Tests Yahoo Boss {@link IDocumentSource}.
  */
+@org.junit.Ignore
 public class BossDocumentSourceTest extends
     MultipageDocumentSourceTestBase<BossDocumentSource>
 {

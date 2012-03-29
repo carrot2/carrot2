@@ -89,7 +89,7 @@ public class TokenizerTest extends PreprocessingComponentTestBase
     @Test
     public void testEmptyFirstField()
     {
-        createDocuments(null, "a");
+        createDocuments((String) null, "a");
 
         final char [][] expectedTokensImages = new char [] []
         {
