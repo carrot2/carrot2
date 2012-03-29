@@ -129,7 +129,8 @@
     <dependency>
       <groupId>com.carrotsearch</groupId>
       <artifactId>hppc</artifactId>
-      <version>0.3.3</version>
+      <version>0.3.4</version>
+      <classifier>jdk15</classifier>
     </dependency>
   </dependencies>
 

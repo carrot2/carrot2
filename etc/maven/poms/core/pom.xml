@@ -160,6 +160,7 @@
       <groupId>org.carrot2</groupId>
       <artifactId>morfologik-stemming</artifactId>
       <version>1.5.1</version>
+      <optional>true</optional>
       <exclusions>
         <exclusion>
           <groupId>commons-cli</groupId>
