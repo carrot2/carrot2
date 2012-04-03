@@ -411,7 +411,7 @@
     </condition>
 
     <!-- junit4 -->
-    <taskdef resource="junit4.antlib.xml" loaderref="junit4.loader">
+    <taskdef resource="com/carrotsearch/junit4/antlib.xml" loaderref="junit4.loader">
         <classpath>
             <fileset dir="${carrot2.master.basedir}">
                 <include name="lib/org.junit4-ext/junit*.jar" />
