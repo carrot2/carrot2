@@ -5,9 +5,10 @@ Bundle-SymbolicName: com.carrotsearch.randomizedtesting
 Bundle-Version: 0.0.4.SNAPSHOT
 Bundle-Vendor: Carrot Search s.c.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: randomizedtesting-runner-1.0.0-SNAPSHOT.jar
+Bundle-ClassPath: randomizedtesting-runner-1.0.0.jar
 Export-Package: com.carrotsearch.randomizedtesting,
  com.carrotsearch.randomizedtesting.annotations,
  com.carrotsearch.randomizedtesting.generators,
  com.carrotsearch.randomizedtesting.listeners,
+ com.carrotsearch.randomizedtesting.rules,
  com.carrotsearch.randomizedtesting.validators
