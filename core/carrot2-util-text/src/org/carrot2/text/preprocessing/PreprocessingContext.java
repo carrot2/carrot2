@@ -303,7 +303,8 @@ public final class PreprocessingContext
          * <code>[2, 15, 138, 7]</code> means that the word appeared 15 times in document
          * at index 2 and 7 times in document at index 138.
          * <p>
-         * This array is produced by {@link CaseNormalizer}.
+         * This array is produced by {@link CaseNormalizer}. The order of documents in this
+         * array is not defined.
          */
         public int [][] tfByDocument;
 
@@ -411,7 +412,8 @@ public final class PreprocessingContext
          * Term frequency of the stem for each document. For the encoding of this array,
          * see {@link AllWords#tfByDocument}.
          * <p>
-         * This array is produced by {@link LanguageModelStemmer}.
+         * This array is produced by {@link LanguageModelStemmer}. The order of documents in this
+         * array is not defined.
          */
         public int [][] tfByDocument;
 
@@ -489,7 +491,8 @@ public final class PreprocessingContext
          * array is similar to {@link AllWords#tfByDocument}: consecutive pairs of:
          * document index, frequency.
          * <p>
-         * This array is produced by {@link PhraseExtractor}.
+         * This array is produced by {@link PhraseExtractor}. The order of documents in this
+         * array is not defined.
          */
         public int [][] tfByDocument;
 
