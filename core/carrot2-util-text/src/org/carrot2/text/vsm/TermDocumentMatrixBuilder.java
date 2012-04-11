@@ -179,20 +179,12 @@ public class TermDocumentMatrixBuilder
             final int df = tfByDocument.length / 2;
             final byte fieldIndices = stemsFieldIndices[stemIndex];
 
-            int tfByDocumentIndex = 0;
-            for (int documentIndex = 0; documentIndex < documentCount; documentIndex++)
-            {
-                if (tfByDocumentIndex * 2 < tfByDocument.length
-                    && tfByDocument[tfByDocumentIndex * 2] == documentIndex)
-                {
-                    double weight = termWeighting.calculateTermWeight(
-                        tfByDocument[tfByDocumentIndex * 2 + 1], df, documentCount);
+            for (int j = 0; j < df; j++) {
+                double weight = termWeighting.calculateTermWeight(
+                    tfByDocument[j * 2 + 1], df, documentCount);
 
-                    weight *= getWeightBoost(titleFieldIndex, fieldIndices);
-                    tfByDocumentIndex++;
-
-                    tdMatrix.set(i, documentIndex, weight);
-                }
+                weight *= getWeightBoost(titleFieldIndex, fieldIndices);
+                tdMatrix.set(i, tfByDocument[j * 2], weight);
             }
         }
 

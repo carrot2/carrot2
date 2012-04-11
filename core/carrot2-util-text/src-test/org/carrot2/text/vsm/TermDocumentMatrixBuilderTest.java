@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -186,13 +185,67 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
         check(expectedTdMatrixElements, expectedTdMatrixStemIndices);
     }
 
+    @Test
+    public void testCarrot905()
+    {
+        createDocuments("", "aa . bb", "", "bb . cc", "", "aa . cc . cc");
+
+        preprocessingPipeline.preprocess(context);
+
+        // The preprocessing pipeline will produce increasing indices in tfByDocument,
+        // so to reproduce the bug, we need to perturb them, e.g. reverse. 
+        final int [][] tfByDocument = context.allStems.tfByDocument;
+        for (int s = 0; s < tfByDocument.length; s++)
+        {
+            final int [] stemTfByDocument = tfByDocument[s];
+            for (int i = 0; i < stemTfByDocument.length / 4; i++)
+            {
+                int t = stemTfByDocument[i * 2];
+                stemTfByDocument[i * 2] = stemTfByDocument[(stemTfByDocument.length / 2 - i - 1) * 2];
+                stemTfByDocument[(stemTfByDocument.length / 2 - i - 1) * 2] = t;
+                
+                t = stemTfByDocument[i * 2 + 1];
+                stemTfByDocument[i * 2 + 1] = stemTfByDocument[(stemTfByDocument.length / 2 - i - 1) * 2 + 1];
+                stemTfByDocument[(stemTfByDocument.length / 2 - i - 1) * 2 + 1] = t;
+            }
+        }
+
+        vsmContext = new VectorSpaceModelContext(context);
+        matrixBuilder.buildTermDocumentMatrix(vsmContext);
+        matrixBuilder.buildTermPhraseMatrix(vsmContext);
+
+        int [] expectedTdMatrixStemIndices = new int []
+        {
+            2, 0, 1
+        };
+        double [][] expectedTdMatrixElements = new double [] []
+        {
+            {
+                0, 1, 2
+            },
+            {
+                1, 0, 1
+            },
+            {
+                1, 1, 0
+            }
+        };
+
+        checkOnly(expectedTdMatrixElements, expectedTdMatrixStemIndices);
+    }
+
     private void check(double [][] expectedTdMatrixElements,
         int [] expectedTdMatrixStemIndices)
     {
         buildTermDocumentMatrix();
+        checkOnly(expectedTdMatrixElements, expectedTdMatrixStemIndices);
+    }
 
-        assertThat(vsmContext.termDocumentMatrix.rows()).as("tdMatrix.rowCount").isEqualTo(
-            expectedTdMatrixStemIndices.length);
+    void checkOnly(double [][] expectedTdMatrixElements,
+        int [] expectedTdMatrixStemIndices)
+    {
+        assertThat(vsmContext.termDocumentMatrix.rows()).as("tdMatrix.rowCount")
+            .isEqualTo(expectedTdMatrixStemIndices.length);
         MatrixAssertions.assertThat(vsmContext.termDocumentMatrix).isEquivalentTo(
             expectedTdMatrixElements);
 
