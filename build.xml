@@ -435,18 +435,21 @@
             leaveTemporary="false"
     >
         <listeners>
-            <report-console
-              showThrowable="true" 
-              showStackTraces="true"
-              showErrorStream="true"
-              showOutputStream="true" 
+            <report-text
+                showThrowable="true" 
+                showStackTraces="true" 
+                showOutputStream="true" 
+                showErrorStream="true"
 
-              showStatusOk="true"
-              showStatusError="true"
-              showStatusFailure="true"
-              showStatusIgnored="true"
+                showStatusOk="false"
+                showStatusError="true"
+                showStatusFailure="true"
+                showStatusIgnored="true"
 
-              showSuiteSummary="false"
+                showSuiteSummary="true"
+
+                useSimpleNames="true"
+                maxClassNameColumns="70"
             />
 
             <!-- Store execution times-->
