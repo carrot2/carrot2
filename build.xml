@@ -448,8 +448,8 @@
 
                 showSuiteSummary="true"
 
-                useSimpleNames="true"
-                maxClassNameColumns="70"
+                useSimpleNames="false"
+                maxClassNameColumns="110"
             />
 
             <!-- Store execution times-->
