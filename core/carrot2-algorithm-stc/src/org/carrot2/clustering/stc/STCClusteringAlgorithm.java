@@ -1160,8 +1160,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
 
                 // If this word occurs in more than a given fraction of the input
                 // collection don't count it.
-                final int tf = context.allWords.tf[termIndex]; 
-                if (tf < lower || tf > upper)
+                final int docCount = context.allWords.tfByDocument[termIndex].length / 2; 
+                if (docCount < lower || docCount > upper)
                 {
                     continue;
                 }
