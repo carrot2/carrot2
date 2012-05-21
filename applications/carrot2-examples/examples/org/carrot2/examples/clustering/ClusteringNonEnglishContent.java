@@ -26,7 +26,6 @@ import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.source.google.GoogleDocumentSource;
-import org.carrot2.source.google.GoogleDocumentSourceDescriptor;
 import org.carrot2.source.microsoft.Bing2WebDocumentSource;
 import org.carrot2.source.microsoft.Bing2WebDocumentSourceDescriptor;
 import org.carrot2.source.microsoft.MarketOption;
@@ -143,9 +142,6 @@ public class ClusteringNonEnglishContent
 
         MultilingualClusteringDescriptor.attributeBuilder(attributes)
             .defaultLanguage(LanguageCode.CHINESE_SIMPLIFIED);
-        GoogleDocumentSourceDescriptor
-            .attributeBuilder(attributes)
-                .apiKey(GoogleDocumentSource.CARROTSEARCH_API_KEY); // use your own key here
 
         final ProcessingResult chineseResult2 = controller.process(attributes,
             GoogleDocumentSource.class, LingoClusteringAlgorithm.class);
