@@ -24,14 +24,20 @@ import org.junit.Test;
  * Tests Microsoft Bing document source.
  */
 @UsesExternalServices
-public class Bing2WebDocumentSourceTest extends
-    MultipageDocumentSourceTestBase<Bing2WebDocumentSource>
+public class Bing3WebDocumentSourceTest extends
+    MultipageDocumentSourceTestBase<Bing3WebDocumentSource>
 {
+    @Override
+    protected boolean hasTotalResultsEstimate()
+    {
+        return false;
+    }
+    
     @Test
     public void testMarketOption() throws Exception
     {
         super.processingAttributes.put(
-            AttributeUtils.getKey(Bing2DocumentSource.class, "market"), 
+            AttributeUtils.getKey(Bing3DocumentSource.class, "market"), 
             MarketOption.POLISH_POLAND);
 
         final int documentsReturned = runQuery("warszawa", 10);
@@ -44,7 +50,7 @@ public class Bing2WebDocumentSourceTest extends
     public void testSiteOption() throws Exception
     {
         super.processingAttributes.put(
-            AttributeUtils.getKey(Bing2WebDocumentSource.class, "site"), 
+            AttributeUtils.getKey(Bing3WebDocumentSource.class, "site"), 
             "put.poznan.pl");
 
         final int documentsReturned = runQuery("politechnika", 10);
@@ -57,17 +63,14 @@ public class Bing2WebDocumentSourceTest extends
     @Test
     public void testFileTypeOption() throws Exception
     {
-        super.processingAttributes.put(
-            AttributeUtils.getKey(Bing2WebDocumentSource.class, "fileTypes"), 
-            "pdf doc");
-
-        final int documentsReturned = runQuery("cats", 10);
+        final int documentsReturned = runQuery("cats (filetype:pdf | filetype:doc)", 100);
         assertThat(documentsReturned).isGreaterThan(0);
         boolean hadPdfs = false;
         boolean hadDocs = false;
         for (Document doc : getDocuments())
         {
             String url = doc.getContentUrl().toLowerCase();
+            System.out.println(url);
             hadPdfs |= url.contains(".pdf");
             hadDocs |= url.contains(".doc");
         }
@@ -76,15 +79,15 @@ public class Bing2WebDocumentSourceTest extends
     }
 
     @Override
-    public Class<Bing2WebDocumentSource> getComponentClass()
+    public Class<Bing3WebDocumentSource> getComponentClass()
     {
-        return Bing2WebDocumentSource.class;
+        return Bing3WebDocumentSource.class;
     }
 
     @Override
     protected MultipageSearchEngineMetadata getSearchEngineMetadata()
     {
-        return Bing2WebDocumentSource.metadata;
+        return Bing3WebDocumentSource.metadata;
     }
 
     @Override

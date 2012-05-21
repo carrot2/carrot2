@@ -1,7 +1,7 @@
 <!-- Components included in all applications -->
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.microsoft.Bing2WebDocumentSource" id="wiki"
+    <source component-class="org.carrot2.source.microsoft.Bing3WebDocumentSource" id="wiki"
             attribute-sets-resource="source-bing-attributes-wiki.xml">
       <label>Wiki</label>
       <title>Wikipedia search with Bing</title>
@@ -15,7 +15,7 @@
       </example-queries>
     </source>
 
-    <source component-class="org.carrot2.source.microsoft.Bing2WebDocumentSource" id="bing-web"
+    <source component-class="org.carrot2.source.microsoft.Bing3WebDocumentSource" id="bing-web"
             attribute-sets-resource="source-bing-attributes.xml">
       <label>Bing</label>
       <title>Bing Web Search</title>
@@ -29,7 +29,7 @@
       </example-queries>
     </source>
 
-    <source component-class="org.carrot2.source.microsoft.Bing2NewsDocumentSource" id="news"
+    <source component-class="org.carrot2.source.microsoft.Bing3NewsDocumentSource" id="news"
             attribute-sets-resource="source-bing-attributes.xml">
       <label>News</label>
       <title>Bing News Search</title>
@@ -43,7 +43,7 @@
       </example-queries>
     </source>
     
-    <source component-class="org.carrot2.source.microsoft.Bing2ImageDocumentSource" id="images"
+    <source component-class="org.carrot2.source.microsoft.Bing3ImageDocumentSource" id="images"
             attribute-sets-resource="source-bing-attributes.xml">
       <label>Images</label>
       <title>Bing Image Search</title>

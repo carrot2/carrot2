@@ -36,6 +36,11 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
     ProcessingComponentTestBase<T>
 {
     /**
+     * Result of the last call to any of the {@link #runQuery()} methods.
+     */
+    protected ProcessingResult result;
+
+    /**
      * Processing components should be bindable, so their metadata should 
      * always be available.
      */
@@ -85,12 +90,10 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
     @SuppressWarnings("unchecked")
     protected int runQuery(Controller controller)
     {
-        final ProcessingResult result = controller.process(processingAttributes,
-            getComponentClass());
+        result = controller.process(processingAttributes, getComponentClass());
         resultAttributes = result.getAttributes();
 
-        final List<Document> documents = (List<Document>) resultAttributes
-            .get(AttributeNames.DOCUMENTS);
+        final List<Document> documents = (List<Document>) resultAttributes.get(AttributeNames.DOCUMENTS);
         assertNotNull(result.getDocuments());
         assertThat(result.getDocuments()).isEqualTo(documents);
         return documents.size();

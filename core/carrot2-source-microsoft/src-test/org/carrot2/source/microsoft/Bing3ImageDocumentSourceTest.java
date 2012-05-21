@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,6 +11,7 @@
 
 package org.carrot2.source.microsoft;
 
+import org.carrot2.core.Document;
 import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
@@ -20,18 +20,28 @@ import org.junit.Test;
  * Tests Microsoft Bing document source (news).
  */
 @UsesExternalServices
-public class Bing2ImageDocumentSourceTest extends DocumentSourceTestBase<Bing2ImageDocumentSource>
+public class Bing3ImageDocumentSourceTest extends
+    DocumentSourceTestBase<Bing3ImageDocumentSource>
 {
     @Override
-    public Class<Bing2ImageDocumentSource> getComponentClass()
+    public Class<Bing3ImageDocumentSource> getComponentClass()
     {
-        return Bing2ImageDocumentSource.class;
+        return Bing3ImageDocumentSource.class;
     }
 
     @Test
     public void testCatsQuery()
     {
-        System.out.println("baha");
         assertThat(runQuery("cats", 25)).isGreaterThan(20);
+
+        int withThumbnail = 0;
+        for (Document doc : result.getDocuments())
+        {
+            if (doc.getField(Document.THUMBNAIL_URL) != null)
+            {
+                withThumbnail++;
+            }
+        }
+        assertThat(withThumbnail).isGreaterThan(result.getDocuments().size() / 2);
     }
 }

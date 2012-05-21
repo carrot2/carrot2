@@ -12,57 +12,59 @@
 
 package org.carrot2.source.microsoft;
 
-import java.util.ArrayList;
-
-import org.apache.http.NameValuePair;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.MultipageSearchEngineMetadata;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+
+import com.google.common.base.Strings;
 
 /**
- * News search specific document source fetching from Bing using Bing2 API. 
+ * Web search specific document source. 
+ * 
+ * @see Bing3DocumentSource
  */
-@Bindable(prefix = "Bing2NewsDocumentSource")
-public class Bing2NewsDocumentSource extends Bing2DocumentSource
+@Bindable(prefix = "Bing3WebDocumentSource")
+public class Bing3WebDocumentSource extends Bing3DocumentSource
 {
     /** Web search specific metadata. */
     final static MultipageSearchEngineMetadata metadata = 
-        new MultipageSearchEngineMetadata(15, 100);
+        new MultipageSearchEngineMetadata(50, 950);
 
     /**
-     * Specifies the sort order of results.
+     * Site restriction to return results under a given URL. Example:
+     * <tt>http://www.wikipedia.com</tt> or simply <tt>wikipedia.com</tt>.
      * 
-     * @label Sort order
+     * @label Site restriction
      * @group Results filtering
-     * @level Medium
+     * @level Advanced
      */
     @Processing
     @Input
     @Attribute
-    public SortOrder sortOrder;
+    public String site;
 
     /**
      * Initialize source type properly.
      */
-    public Bing2NewsDocumentSource()
+    public Bing3WebDocumentSource()
     {
-        super(SourceType.NEWS);
+        super(SourceType.WEB);
     }
-
+    
     /**
      * Process the query.
      */
     @Override
     public void process() throws ProcessingException
     {
+        if (!Strings.isNullOrEmpty(site))
+        {
+            query = Strings.nullToEmpty(query) + " site:" + site;
+        }
+
         super.process(metadata, getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()));
-    }
-    
-    @Override
-    protected void appendSourceParams(ArrayList<NameValuePair> params)
-    {
-        super.appendSourceParams(params);
-        addIfNotEmpty(params, "News.SortBy", sortOrder);
     }
 }

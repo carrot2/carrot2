@@ -26,8 +26,8 @@ import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.source.google.GoogleDocumentSource;
-import org.carrot2.source.microsoft.Bing2WebDocumentSource;
-import org.carrot2.source.microsoft.Bing2WebDocumentSourceDescriptor;
+import org.carrot2.source.microsoft.Bing3WebDocumentSource;
+import org.carrot2.source.microsoft.Bing3WebDocumentSourceDescriptor;
 import org.carrot2.source.microsoft.MarketOption;
 import org.carrot2.text.clustering.MultilingualClusteringDescriptor;
 
@@ -64,8 +64,8 @@ import com.google.common.collect.Maps;
  * {@link org.carrot2.core.Document#LANGUAGE} of documents they produce based on their
  * specific language-related attributes. Currently, three documents support this scenario:
  * <ol>
- * <li>{@link org.carrot2.source.microsoft.Bing2WebDocumentSource} through the
- * {@link org.carrot2.source.microsoft.Bing2WebDocumentSource#market} attribute,</li>
+ * <li>{@link org.carrot2.source.microsoft.Bing3WebDocumentSource} through the
+ * {@link org.carrot2.source.microsoft.Bing3WebDocumentSource#market} attribute,</li>
  * <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the
  * {@link org.carrot2.source.etools.EToolsDocumentSource#language} attribute.</li>
  * </ol>
@@ -117,14 +117,14 @@ public class ClusteringNonEnglishContent
             .query("聚类" /* clustering? */)
             .results(100);
 
-        Bing2WebDocumentSourceDescriptor.attributeBuilder(attributes)
+        Bing3WebDocumentSourceDescriptor.attributeBuilder(attributes)
             .market(MarketOption.CHINESE_CHINA);
-        Bing2WebDocumentSourceDescriptor
+        Bing3WebDocumentSourceDescriptor
             .attributeBuilder(attributes)
-                .appid(Bing2WebDocumentSource.CARROTSEARCH_APPID); // use your own ID here
+                .appid(Bing3WebDocumentSource.CARROTSEARCH_APPID); // use your own ID here!
 
         final ProcessingResult chineseResult = controller.process(attributes,
-            Bing2WebDocumentSource.class, LingoClusteringAlgorithm.class);
+            Bing3WebDocumentSource.class, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(chineseResult);
 
         /*

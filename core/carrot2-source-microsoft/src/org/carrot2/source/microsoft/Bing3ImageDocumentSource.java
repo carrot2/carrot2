@@ -20,10 +20,12 @@ import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.attribute.Bindable;
 
 /**
- * Image search document source fetching from Bing using Bing2 API. 
+ * Image search document source.
+ * 
+ * @see Bing3DocumentSource
  */
-@Bindable(prefix = "Bing2ImageDocumentSource")
-public class Bing2ImageDocumentSource extends Bing2DocumentSource
+@Bindable(prefix = "Bing3ImageDocumentSource")
+public class Bing3ImageDocumentSource extends Bing3DocumentSource
 {
     /** Web search specific metadata. */
     final static MultipageSearchEngineMetadata metadata = 
@@ -32,7 +34,7 @@ public class Bing2ImageDocumentSource extends Bing2DocumentSource
     /**
      * Initialize source type properly.
      */
-    public Bing2ImageDocumentSource()
+    public Bing3ImageDocumentSource()
     {
         super(SourceType.IMAGE);
     }

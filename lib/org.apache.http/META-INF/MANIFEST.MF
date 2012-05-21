@@ -6,7 +6,8 @@ Bundle-Version: 4.1.0
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.commons.logging
-Require-Bundle: org.slf4j;bundle-version="1.5.8";resolution:=optional;visibility:=reexport
+Require-Bundle: org.slf4j;bundle-version="1.5.8";resolution:=optional;visibility:=reexport,
+ org.apache.commons;bundle-version="0.0.0";visibility:=reexport
 Bundle-ClassPath: httpclient-4.1.jar,
  httpcore-4.1.jar,
  httpmime-4.1.jar

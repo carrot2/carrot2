@@ -15,7 +15,7 @@ package org.carrot2.source.microsoft;
 import org.carrot2.util.StringUtils;
 
 /**
- * Sort order for {@link Bing2NewsDocumentSource}.
+ * Sort order for {@link Bing3NewsDocumentSource}.
  */
 public enum SortOrder
 {

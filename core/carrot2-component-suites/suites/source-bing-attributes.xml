@@ -11,13 +11,13 @@
 
       for tools that will help you to edit this file.
 
-      <attribute key="Bing2DocumentSource.appid">
+      <attribute key="Bing3DocumentSource.appid">
         <value type="java.lang.String" value="EFABBE1342...."/>
       </attribute>
-      <attribute key="Bing2DocumentSource.market">
+      <attribute key="Bing3DocumentSource.market">
         <value type="java.lang.String" value="FRENCH_FRANCE"/>
       </attribute>
-      <attribute key="Bing2DocumentSource.adult">
+      <attribute key="Bing3DocumentSource.adult">
         <value type="java.lang.String" value="Strict"/>
       </attribute>
       <attribute key="search-mode">

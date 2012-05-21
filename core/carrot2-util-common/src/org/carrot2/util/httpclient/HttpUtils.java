@@ -22,16 +22,22 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.AuthCache;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.protocol.BasicHttpContext;
 import org.carrot2.util.StreamUtils;
 
 import com.google.common.collect.Lists;
@@ -148,12 +154,7 @@ public class HttpUtils
             HttpVersion.HTTP_1_1);
 
         final HttpGet request = new HttpGet();
-
-        if (user != null && password != null)
-        {
-            client.getCredentialsProvider().setCredentials(new AuthScope(null, 80, null),
-                new UsernamePasswordCredentials(user, password));
-        }
+        final BasicHttpContext context = new BasicHttpContext();
 
         final Response response = new Response();
         try
@@ -169,7 +170,6 @@ public class HttpUtils
             uri = URIUtils.createURI(uri.getScheme(), uri.getHost(), uri.getPort(),
                 uri.getPath(),
                 URLEncodedUtils.format(Lists.newArrayList(params), "UTF-8"), null);
-
             request.setURI(uri);
 
             request.setHeader(HttpHeaders.URL_ENCODED);
@@ -180,10 +180,23 @@ public class HttpUtils
                     request.setHeader(header);
             }
 
+            if (user != null && password != null)
+            {
+                client.getCredentialsProvider().setCredentials(
+                    AuthScope.ANY,
+                    new UsernamePasswordCredentials(user, password));
+                
+                // Use preemptive authentication (send credentials immediately to the target
+                // URI, without waiting for 401).
+                AuthCache authCache = new BasicAuthCache();
+                authCache.put(new HttpHost(uri.getHost(), uri.getPort(), uri.getScheme()), new BasicScheme());
+                context.setAttribute(ClientContext.AUTH_CACHE, authCache);    
+            }
+
             org.slf4j.LoggerFactory.getLogger(HttpUtils.class).debug(
                 "GET: " + request.getURI());
 
-            final HttpResponse httpResponse = client.execute(request);
+            final HttpResponse httpResponse = client.execute(request, context);
             response.status = httpResponse.getStatusLine().getStatusCode();
 
             HttpEntity entity = httpResponse.getEntity();

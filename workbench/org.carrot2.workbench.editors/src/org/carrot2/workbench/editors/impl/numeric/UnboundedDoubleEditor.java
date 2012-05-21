@@ -105,7 +105,7 @@ final class UnboundedDoubleEditor extends UnboundedEditorBase<Double>
     @Override
     protected boolean isValid(String value)
     {
-        if (pattern.matcher(value).matches())
+        if (value != null && pattern.matcher(value).matches())
         {
             try
             {

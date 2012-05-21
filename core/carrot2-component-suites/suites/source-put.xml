@@ -1,6 +1,6 @@
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.microsoft.Bing2WebDocumentSource" id="put"
+    <source component-class="org.carrot2.source.microsoft.Bing3WebDocumentSource" id="put"
             attribute-sets-resource="source-put-attributes.xml">
       <label>PUT</label>
       <title>Poznan University of Technology search with Bing</title>

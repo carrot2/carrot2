@@ -21,7 +21,7 @@ import com.google.common.collect.Maps;
 
 
 /**
- * Language and country/region information for {@link Bing2DocumentSource}.
+ * Language and country/region information for {@link Bing3DocumentSource}.
  */
 public enum MarketOption
 {

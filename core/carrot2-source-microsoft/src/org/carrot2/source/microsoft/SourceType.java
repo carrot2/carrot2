@@ -15,7 +15,7 @@ package org.carrot2.source.microsoft;
 import org.carrot2.util.StringUtils;
 
 /**
- * Source type for Bing2 searches.
+ * Source type for Bing3 searches.
  */
 public enum SourceType
 {

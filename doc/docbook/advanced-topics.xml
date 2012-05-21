@@ -256,9 +256,9 @@
     
     <para>
       Two sources that currently do not support the above properties are: 
-      Bing2WebDocumentSource and OpenSearchDocumentSource.
+      Bing3WebDocumentSource and OpenSearchDocumentSource.
     </para>
-    
+
     <note>
       <para>Password-based authentication is not supported at the moment.
       You can alter the source code to change this 
