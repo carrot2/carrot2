@@ -13,11 +13,13 @@
 package org.carrot2.source.google;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.tests.UsesExternalServices;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
@@ -60,6 +62,12 @@ public class GoogleDocumentSourceTest extends
         return true;
     }
 
+    @Before
+    public void delayBeforeEachTest()
+    {
+        sleep(TimeUnit.SECONDS.toMillis(1));
+    }
+    
     @Test
     public void testHighlightsRemoved()
     {

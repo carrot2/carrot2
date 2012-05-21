@@ -36,17 +36,11 @@ import org.codehaus.jackson.map.ObjectMapper;
  * A {@link IDocumentSource} fetching search results from Google JSON API. Please note
  * that this document source cannot deliver more than 32 search results.
  * 
- * @see <a href="http://code.google.com/apis/ajaxsearch/documentation/#fonje">Google AJAX
- *      API</a>
+ * @see <a href="http://code.google.com/apis/ajaxsearch/documentation/">Google AJAX API</a>
  */
 @Bindable(prefix = "GoogleDocumentSource")
 public class GoogleDocumentSource extends MultipageSearchEngine
 {
-    /**
-     * Google API key assigned to Carrot2/ Carrot Search. Use your own, please.
-     */
-    public static final String CARROTSEARCH_API_KEY = "ABQIAAAA_XmITjrzoipJYoBApAgGJhS8yIvkL4-1sNwOJWkV7nbkjq_Z_BQW0-uzOh5lKXRtEXQDTGbzIEz06Q";
-
     /**
      * Service URL. Google web search service URL.
      * 
@@ -90,22 +84,6 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     public boolean keepHighlights = false;
 
     /**
-     * Google API Key. Please do not use the default key when deploying this component in
-     * production environments. Instead, apply generate and use your own key.
-     * 
-     * @see <a href="http://code.google.com/apis/ajaxsearch/signup.html">Google AJAX signup</a>
-     * 
-     * @group Service
-     * @level Advanced
-     * @label Google API Key
-     */
-    @Input
-    @Processing
-    @Internal
-    @Attribute
-    public String apiKey = CARROTSEARCH_API_KEY;
-
-    /**
      * Google search metadata.
      */
     static final MultipageSearchEngineMetadata metadata = new MultipageSearchEngineMetadata(8, 32);
@@ -134,7 +112,6 @@ public class GoogleDocumentSource extends MultipageSearchEngine
                     new BasicNameValuePair("v", "1.0"), 
                     new BasicNameValuePair("rsz", "large"),
                     new BasicNameValuePair("start", Integer.toString(bucket.start)),
-                    new BasicNameValuePair("key", apiKey), 
                     new BasicNameValuePair("q", query),
                 };
                 final Header [] headers = new Header []
