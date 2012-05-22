@@ -15,8 +15,8 @@ package org.carrot2.workbench.editors.lucene;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.index.FieldInfo;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexReader.FieldOption;
 import org.apache.lucene.store.Directory;
 import org.carrot2.source.lucene.LuceneDocumentSource;
 import org.carrot2.util.attribute.AttributeUtils;
@@ -78,8 +78,11 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
                 final IndexReader ir = IndexReader.open(dir);
                 try
                 {
-                    final List<String> all = new ArrayList<String>(ir
-                        .getFieldNames(FieldOption.ALL));
+                    List<String> all = Lists.newArrayList();
+                    for (FieldInfo fi : ir.getFieldInfos())
+                    {
+                        all.add(fi.name);
+                    }
 
                     Collections.sort(all);
                     for (String field : all)
