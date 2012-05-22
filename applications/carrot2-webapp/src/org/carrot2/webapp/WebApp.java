@@ -76,6 +76,6 @@ public class WebApp
          */
         System.setProperty(QueryProcessorServlet.ENABLE_CLASSPATH_LOCATOR, "true");
 
-        new WebApp().start(8080);
+        new WebApp().start(8081);
     }
 }

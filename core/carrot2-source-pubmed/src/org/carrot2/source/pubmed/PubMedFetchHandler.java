@@ -86,9 +86,9 @@ class PubMedFetchHandler implements ContentHandler
             // Push the result
             try
             {
-                response.results.add(new Document(title, snippet,
-                    PubMedDocumentSource.E_FETCH_URL + "?db=pubmed&id=" + id
-                        + "&retmode=html&rettype=abstract"));
+                response.results.add(
+                    new Document(title, snippet,
+                        "http://www.ncbi.nlm.nih.gov/pubmed/" + id));
             }
             catch (ProcessingException e)
             {
