@@ -85,9 +85,6 @@
   <property name="smartsprites.home" location="${carrot2.master.basedir}/etc/smartsprites" />
 
   <property name="workbench.build.dir" location="tmp/workbench" />
-  <property name="workbench.tests.html.report.dir" location="${workbench.build.dir}/test-report" />
-  <property name="workbench.tests.txt.report.dir"  location="${workbench.build.dir}/test-report-txt" />
-
 
   <!-- Compilation presets. -->
   <presetdef name="javac">
@@ -1181,90 +1178,6 @@
   <target name="workbench.rcp.defaults">
     <rcp-defaults />
   </target>
-
-  <target name="workbench.test" depends="workbench.rcp.defaults, workbench.plugins.gather" description="Run Workbench tests.">
-    <pde.build
-        build.dir="${workbench.build.dir}/test" 
-        extra.args="
-            -Dproduct=/org.carrot2.workbench.feature/Workbench.product
-            -DfeatureList=org.carrot2.workbench.core.test.feature
-
-            -DjavacSource=1.6
-            -DjavacTarget=1.6
-
-            -Dconfigs=${rcp.os},${rcp.ws},${rcp.arch}
-            -DarchivesFormat=${rcp.os},${rcp.ws},${rcp.arch}-folder
-
-            -DarchivePrefix=${carrot2.workbench.base}-${carrot2.version}
-            -DbuildId=${carrot2.workbench.base}
-            -DbuildType=T
-
-            -DpluginPath='${pde.pluginPath}'
-
-            -Dcarrot2.version=${carrot2.version}
-            -Dcarrot2.workbench.base=${carrot2.workbench.base}
-            -Dworkbench.static=${workbench.build.dir}/static
-            -Dworkbench.build.dir=${workbench.build.dir}
-        " />
-
-    <pathconvert property="test.buildfile.location">
-        <path>
-            <fileset dir="${workbench.build.dir}/test/tmp/" 
-                includes="**/org.carrot2.workbench.core.test*/test.xml" />
-        </path>
-    </pathconvert>
-
-    <property name="workbench.test.home"
-        location="${workbench.build.dir}/test/tmp/${carrot2.workbench.base}-${carrot2.version}" />
-
-    <findVersion property="eclipse.test.plugin"
-        eclipsehome="${workbench.test.home}"
-        pluginid="org.eclipse.test"
-        pluginform="dir" />
-
-    <property name="library-file"
-        location="${workbench.test.home}/plugins/${eclipse.test.plugin}/library.xml" />
-
-    <!-- For some reason we must run the tests via Equinox (and sub-ANT). To investigate later. -->
-    <delete dir="${workbench.test.home}/junit.results" />
-    <java jar="${eclipse.home}/plugins/${equinox.launcher.plugin.jar}" fork="true" failonerror="true">
-      <arg line="-application org.eclipse.ant.core.antRunner" />
-      <arg line="-buildfile ${test.buildfile.location}" />
-      <arg line="-Declipse-home=${workbench.test.home}" />
-      <arg line="-Dlibrary.xml.location=${library-file}" />
-      <arg line="-Dos=${rcp.os} -Dws=${rcp.ws} -Darch=${rcp.arch}" />
-    </java>
-
-    <property name="workbench.tests.html.report.dir" location="${workbench.build.dir}/test-report" />
-    <mkdir dir="${workbench.tests.html.report.dir}" />
-
-    <!-- Collect the results and render the report. -->
-    <junitreport todir="${workbench.tests.html.report.dir}">
-      <fileset dir="${workbench.test.home}">
-        <include name="*.xml" />
-      </fileset>
-      <report format="frames"
-              todir="${workbench.tests.html.report.dir}" />
-    </junitreport>
-
-    <!-- 
-        A hacky way of finding out whether tests passed. The Eclipse runner doesn't
-        seem to expose this information directly.
-      -->
-    <loadfile property="workbench.test.results"
-              srcFile="${workbench.tests.html.report.dir}/TESTS-TestSuites.xml" />
-    <fail message="Tests failed, see ${workbench.tests.html.report.dir} for report.">
-      <condition>
-          <matches string="${workbench.test.results}" pattern="(failures|errors)=.[1-9][0-9]*" />
-      </condition>
-    </fail>
-    <fail message="Tests did not run, see ${workbench.tests.txt.report.dir} for logs.">
-      <condition>
-          <matches string="${workbench.test.results}" pattern="testsuites />" />
-      </condition>
-    </fail>
-  </target>
-
 
   <!--
       Compilation and assembly of static utility JARs (apt preprocessors).
