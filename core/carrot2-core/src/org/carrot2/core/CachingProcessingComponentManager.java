@@ -12,22 +12,19 @@
 
 package org.carrot2.core;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
-
-import net.sf.ehcache.*;
-import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
-import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 
 import org.carrot2.core.Controller.IControllerStatisticsProvider;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.Pair;
 import org.carrot2.util.attribute.*;
-import org.carrot2.util.resource.ClassResource;
 
+import com.google.common.cache.*;
 import com.google.common.collect.*;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 
 /**
  * An {@link IProcessingComponentManager} that implements processing results caching
@@ -42,19 +39,6 @@ import com.google.common.collect.*;
 public class CachingProcessingComponentManager implements IProcessingComponentManager,
     Controller.IControllerStatisticsProvider
 {
-    static
-    {
-        /*
-         * Disable ehcache update check, unless explicitly given.
-         */
-        if (System.getProperty("net.sf.ehcache.skipUpdateCheck") == null)
-        {
-            System.setProperty("net.sf.ehcache.skipUpdateCheck", "true");
-        }
-    }
-
-    private final static AtomicLong instanceCounter = new AtomicLong();
-
     /** The delegate manager that prepares the actual processing components */
     final IProcessingComponentManager delegate;
 
@@ -70,9 +54,6 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
      */
     final Set<Class<? extends IProcessingComponent>> cachedComponentClasses;
 
-    /** Ehcache manager */
-    private final CacheManager cacheManager;
-
     /**
      * Populates on-demand and caches the data from components of classes provided in
      * {@link #cachedComponentClasses}. The key of the cache is a map of all {@link Input}
@@ -80,13 +61,11 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
      * value of the cache is a map of all {@link Output} {@link Processing} attributes
      * produced by the component.
      */
-    private final SelfPopulatingCache dataCache;
+    private Cache<AttributeMapCacheKey, Map<String,Object>> cache;
 
     /** Cache statistics keys. */
     static final String CACHE_MISSES = "cache.misses";
     static final String CACHE_HITS_TOTAL = "cache.hits.total";
-    static final String CACHE_HITS_MEMORY = "cache.hits.memory";
-    static final String CACHE_HITS_DISK = "cache.hits.disk";
 
     /**
      * Creates a {@link CachingProcessingComponentManager}.
@@ -105,24 +84,12 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
         this.delegate = delegate;
         this.cachedComponentClasses = ImmutableSet.copyOf(cachedComponentClasses);
 
-        // Initialize cache
-        try
-        {
-            cacheManager = CacheManager.create(new ClassResource(
-                CachingProcessingComponentManager.class, "/controller-ehcache.xml")
-                .open());
-        }
-        catch (IOException e)
-        {
-            throw new ComponentInitializationException("Could not initalize cache.", e);
-        }
-
-        // Create a new cache for each controller instance.
-        final String cacheName = "CachingProcessingComponentManagerCache-" 
-            + instanceCounter.addAndGet(1);
-        cacheManager.addCache(cacheName);
-        dataCache = new SelfPopulatingCache(cacheManager.getCache(cacheName),
-            new CachedDataFactory());
+        // Initialize cache.
+        cache = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .recordStats()
+            .weakValues()
+            .build();
     }
 
     public void init(IControllerContext context, Map<String, Object> attributes,
@@ -167,7 +134,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
             delegate.recycle(component, id);
         }
 
-        // The wrapped actual components are recycled in CachedDataFactory when
+        // The wrapped actual components are recycled in ValueProducer when
         // they're asked to perform processing.
     }
 
@@ -176,27 +143,28 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
         try
         {
             delegate.dispose();
-            cacheManager.removeCache(dataCache.getName());
+            if (cache != null)
+            {
+                cache.invalidateAll();
+            }
         }
         finally
         {
-            cacheManager.shutdown();
+            cache = null;
         }
     }
 
     public Map<String, Object> getStatistics()
     {
         // Return some custom statistics
-        final Statistics statistics = dataCache.getStatistics();
+        final CacheStats cacheStats = cache.stats();
         final Map<String, Object> stats = Maps.newHashMap();
         if (delegate instanceof IControllerStatisticsProvider) 
         {
             stats.putAll(((IControllerStatisticsProvider) delegate).getStatistics());
         }
-        stats.put(CACHE_MISSES, (Object) statistics.getCacheMisses());
-        stats.put(CACHE_HITS_TOTAL, statistics.getCacheHits());
-        stats.put(CACHE_HITS_DISK, statistics.getOnDiskHits());
-        stats.put(CACHE_HITS_MEMORY, statistics.getInMemoryHits());
+        stats.put(CACHE_MISSES, cacheStats.missCount());
+        stats.put(CACHE_HITS_TOTAL, cacheStats.hitCount());
         
         return stats;
     }
@@ -236,7 +204,6 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public void process() throws ProcessingException
         {
             final InputOutputAttributeDescriptors descriptors = prepareAttributeDescriptors();
@@ -255,22 +222,25 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
             inputProcessingAttributes.put(COMPONENT_CLASS_KEY, componentClass);
             inputProcessingAttributes.put(COMPONENT_ID_KEY, componentId);
 
+            // Get data from cache. If the result is not in the cache yet, it will
+            // be created by the ValueProducer.
+            final AttributeMapCacheKey key = new AttributeMapCacheKey(
+                inputProcessingAttributes, inputAttributes);
             try
             {
-                // Get data from cache. If the result is not in the cache yet, it will
-                // be created by the CachedDataFactory.
-                final AttributeMapCacheKey key = new AttributeMapCacheKey(
-                    inputProcessingAttributes, inputAttributes);
-                final Map<String, Object> processingResult = (Map<String, Object>) dataCache
-                    .get(key).getObjectValue();
+                final Map<String, Object> processingResult = 
+                    cache.get(key, new ValueProducer(key));
 
                 // Copy the results @Output @Processing attributes back to the result
                 outputAttributes.putAll(getAttributesForDescriptors(
                     descriptors.outputDescriptors, processingResult));
             }
-            catch (CacheException e)
+            catch (UncheckedExecutionException e)
             {
-                // Rethrow the cause of an error
+                throw ExceptionUtils.wrapAs(ProcessingException.class, e.getCause());
+            }
+            catch (ExecutionException e)
+            {
                 throw ExceptionUtils.wrapAs(ProcessingException.class, e.getCause());
             }
         }
@@ -422,28 +392,36 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
      * A cached data factory that actually performs the processing. This factory is called
      * only if the cache does not contain the requested value.
      */
-    private final class CachedDataFactory implements CacheEntryFactory
+    private final class ValueProducer 
+        implements Callable<Map<String,Object>>
     {
-        @SuppressWarnings("unchecked")
-        public Object createEntry(Object key) throws Exception
-        {
-            final AttributeMapCacheKey cacheKey = (AttributeMapCacheKey) key;
-            final Map<String, Object> inputProcessingAttributes = cacheKey.inputProcessingAttributes;
+        private final AttributeMapCacheKey key;
 
-            final Class<? extends IProcessingComponent> componentClass = (Class<? extends IProcessingComponent>) inputProcessingAttributes
-                .get(COMPONENT_CLASS_KEY);
-            final String componentId = (String) inputProcessingAttributes
-                .get(COMPONENT_ID_KEY);
+        public ValueProducer(AttributeMapCacheKey key)
+        {
+            this.key = key;
+        }
+
+        @Override
+        public Map<String, Object> call() throws Exception
+        {
+            final Map<String, Object> inputProcessingAttributes = key.inputProcessingAttributes;
+
+            @SuppressWarnings("unchecked")
+            final Class<? extends IProcessingComponent> componentClass = 
+                (Class<? extends IProcessingComponent>) 
+                    inputProcessingAttributes.get(COMPONENT_CLASS_KEY);
+
+            final String componentId = (String) inputProcessingAttributes.get(COMPONENT_ID_KEY);
 
             IProcessingComponent component = null;
             try
             {
                 final Map<String, Object> attributes = Maps.newHashMap();
-                component = delegate.prepare(componentClass, componentId,
-                    cacheKey.inputAttributes, attributes);
+                component = delegate.prepare(componentClass, componentId, 
+                    key.inputAttributes, attributes);
 
-                ControllerUtils.performProcessing(component, inputProcessingAttributes,
-                    attributes);
+                ControllerUtils.performProcessing(component, inputProcessingAttributes, attributes);
 
                 return attributes;
             }

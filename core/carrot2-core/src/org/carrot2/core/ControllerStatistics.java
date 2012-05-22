@@ -107,27 +107,12 @@ public final class ControllerStatistics
     @Attribute(name = "cache-hits-total", required = false)
     public final Long cacheHitsTotal;
 
-    /**
-     * Number of requests served from in-memory cache. May be null if the controller does
-     * not perform caching.
-     */
-    @Attribute(name = "cache-hits-memory", required = false)
-    public final Long cacheHitsMemory;
-
-    /**
-     * Number of requests served from on-disk cache. May be null if the controller does
-     * not perform caching.
-     */
-    @Attribute(name = "cache-hits-disk", required = false)
-    public final Long cacheHitsDisk;
-
     ControllerStatistics(long totalQueries, long goodQueries,
         double algorithmTimeAverageInWindow, long algorithmTimeMeasurementsInWindow,
         long algorithmTimeWindowSize, double sourceTimeAverageInWindow,
         long sourceTimeMeasurementsInWindow, long sourceTimeWindowSize,
         double totalTimeAverageInWindow, long totalTimeMeasurementsInWindow,
-        long totalTimeWindowSize, Long cacheMisses, Long cacheHitsTotal,
-        Long cacheHitsMemory, Long cacheHitsDisk)
+        long totalTimeWindowSize, Long cacheMisses, Long cacheHitsTotal)
     {
         this.totalQueries = totalQueries;
         this.goodQueries = goodQueries;
@@ -146,8 +131,6 @@ public final class ControllerStatistics
 
         this.cacheMisses = cacheMisses;
         this.cacheHitsTotal = cacheHitsTotal;
-        this.cacheHitsMemory = cacheHitsMemory;
-        this.cacheHitsDisk = cacheHitsDisk;
     }
 
     /**

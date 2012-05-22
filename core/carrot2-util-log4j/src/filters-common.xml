@@ -24,9 +24,6 @@
 <logger name="jetty"><level value="warn"/></logger>
 <logger name="org.eclipse.jetty"><level value="warn"/></logger>
 
-<!-- EHCache -->
-<logger name="net.sf.ehcache"><level value="info"/></logger>
-
 <!-- Velocity -->
 <logger name="org.apache.velocity"><level value="info" /></logger>
 

@@ -66,7 +66,6 @@
         <zipfileset dir="${api.dir}/lib/required" prefix="${@{solr.version}.solr.dist.name}/contrib/clustering/lib">
           <exclude name="*guava*" unless="@{solr.version}.is-1.4.x" />
           <exclude name="*log4j*" />
-          <exclude name="*ehcache*" />
           <exclude name="*commons-lang*" unless="@{solr.version}.is-1.4.x" />
           <exclude name="*slf4j*" />
         </zipfileset>

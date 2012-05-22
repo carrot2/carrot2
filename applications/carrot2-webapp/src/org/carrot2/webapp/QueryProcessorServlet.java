@@ -381,10 +381,8 @@ public class QueryProcessorServlet extends HttpServlet
             output.write("jvm.freemem: " + Runtime.getRuntime().freeMemory() + "\n");
             output.write("jvm.totalmem: " + Runtime.getRuntime().totalMemory() + "\n");
 
-            output.write("ehcache.hits: " + statistics.cacheHitsTotal + "\n");
-            output.write("ehcache.misses: " + statistics.cacheMisses + "\n");
-            output.write("ehcache.memhits: " + statistics.cacheHitsMemory + "\n");
-            output.write("ehcache.diskhits: " + statistics.cacheHitsDisk + "\n");
+            output.write("cache.hits: " + statistics.cacheHitsTotal + "\n");
+            output.write("cache.misses: " + statistics.cacheMisses + "\n");
 
             output.flush();
         }

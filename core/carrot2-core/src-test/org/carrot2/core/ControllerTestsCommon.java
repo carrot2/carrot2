@@ -555,15 +555,11 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         {
             assertThat(statistics.cacheMisses).isEqualTo(0);
             assertThat(statistics.cacheHitsTotal).isEqualTo(0);
-            assertThat(statistics.cacheHitsMemory).isEqualTo(0);
-            assertThat(statistics.cacheHitsDisk).isEqualTo(0);
         }
         else
         {
             assertThat((Object) statistics.cacheMisses).isNull();
             assertThat((Object) statistics.cacheHitsTotal).isNull();
-            assertThat((Object) statistics.cacheHitsMemory).isNull();
-            assertThat((Object) statistics.cacheHitsDisk).isNull();
         }
         
         controller.dispose();
@@ -602,8 +598,6 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         {
             assertThat(statistics.cacheMisses).isEqualTo(2);
             assertThat(statistics.cacheHitsTotal).isEqualTo(0);
-            assertThat(statistics.cacheHitsMemory).isEqualTo(0);
-            assertThat(statistics.cacheHitsDisk).isEqualTo(0);
         }
 
         controller.dispose();
@@ -627,8 +621,6 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         {
             assertThat(statistics.cacheMisses).isEqualTo(1);
             assertThat(statistics.cacheHitsTotal).isEqualTo(1);
-            assertThat(statistics.cacheHitsMemory).isEqualTo(1);
-            assertThat(statistics.cacheHitsDisk).isEqualTo(0);
         }
 
         controller.dispose();
@@ -664,8 +656,6 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
             {
                 assertThat(statistics.cacheMisses).isEqualTo(2);
                 assertThat(statistics.cacheHitsTotal).isEqualTo(0);
-                assertThat(statistics.cacheHitsMemory).isEqualTo(0);
-                assertThat(statistics.cacheHitsDisk).isEqualTo(0);
             }
 
             controller.dispose();

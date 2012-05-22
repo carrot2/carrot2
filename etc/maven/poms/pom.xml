@@ -64,7 +64,6 @@
     <morfologik.version>1.5.2</morfologik.version>
     <net.java.dev.rome.version>1.0.0</net.java.dev.rome.version>
     <net.java.dev.rome.fetcher.version>1.0.0</net.java.dev.rome.fetcher.version>
-    <net.sf.ehcache.version>1.7.2</net.sf.ehcache.version>
     <commons.lang.version>2.6</commons.lang.version>
     <commons.codec.version>1.4</commons.codec.version>
     <org.codehaus.jackson.version>1.7.4</org.codehaus.jackson.version>
@@ -106,12 +105,6 @@
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-mapper-asl</artifactId>
       <version>${org.codehaus.jackson.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>net.sf.ehcache</groupId>
-      <artifactId>ehcache-core</artifactId>
-      <version>${net.sf.ehcache.version}</version>
     </dependency>
 
     <dependency>

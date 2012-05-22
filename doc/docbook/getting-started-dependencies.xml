@@ -22,16 +22,6 @@
     <itemizedlist>
       <listitem>
         <formalpara>
-          <title>ehcache-common</title>
-          
-          <para>
-            Required only if using the caching controller.
-          </para>
-        </formalpara>
-      </listitem>
-      
-      <listitem>
-        <formalpara>
           <title>log4j, slf4j-log4j</title>
           
           <para>

@@ -606,12 +606,7 @@ public final class Controller implements Closeable
                     totalTimeAverage.getUpdatesInWindow(),
                     totalTimeAverage.getWindowSizeMillis(),
                     (Long) extraStats.get(CachingProcessingComponentManager.CACHE_MISSES),
-                    (Long) extraStats
-                        .get(CachingProcessingComponentManager.CACHE_HITS_TOTAL),
-                    (Long) extraStats
-                        .get(CachingProcessingComponentManager.CACHE_HITS_MEMORY),
-                    (Long) extraStats
-                        .get(CachingProcessingComponentManager.CACHE_HITS_DISK));
+                    (Long) extraStats.get(CachingProcessingComponentManager.CACHE_HITS_TOTAL));
             }
         }
 

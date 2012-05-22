@@ -237,12 +237,10 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
     @ThreadSafe
     public static class ThreadSafeClass 
     {
-        
     }
     
     public static class NonThreadSafeClass
     {
-        
     }
 
     @Test(expected = AssertionError.class)
