@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Google Guava
 Bundle-SymbolicName: com.google.guava
 Bundle-Version: 10.0.1
-Bundle-ClassPath: guava-10.0.1.jar
+Bundle-ClassPath: guava-12.0.jar
 Bundle-Vendor: Google Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.google.common.annotations,
@@ -12,7 +12,10 @@ Export-Package: com.google.common.annotations,
  com.google.common.cache,
  com.google.common.collect,
  com.google.common.eventbus,
+ com.google.common.hash,
  com.google.common.io,
+ com.google.common.math,
  com.google.common.net,
  com.google.common.primitives,
+ com.google.common.reflect,
  com.google.common.util.concurrent
