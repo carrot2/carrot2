@@ -83,13 +83,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.carrot2.source.google.desktop"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.carrot2.source.solr"
          download-size="0"
          install-size="0"

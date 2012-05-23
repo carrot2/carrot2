@@ -9,7 +9,6 @@
 
     <!-- Local sources. -->
     <include suite="source-xml.xml" />
-    <include suite="source-google-desktop.xml" />
     <include suite="source-solr.xml" />
 
     <!-- Algorithms. -->

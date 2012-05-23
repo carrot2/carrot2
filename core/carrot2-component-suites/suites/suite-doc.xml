@@ -10,7 +10,6 @@
   <include suite="source-solr.xml" />
   <include suite="source-opensearch.xml" />
   <include suite="source-idolsearch.xml" />
-  <include suite="source-google-desktop.xml" />
   <include suite="source-ambient.xml" />
 
   <!-- Algorithms. -->

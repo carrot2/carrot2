@@ -23,7 +23,7 @@
     search results clustering: Suffix Tree Clustering and Lingo.
     &PROD; also contains components for fetching search results from several search
     engines, such as Bing, Google, but it also supports other
-    sources of documents like Lucene, Solr or Google Desktop index. 
+    sources of documents like Lucene or Solr indexes. 
   </para>
 
   <para>

@@ -126,7 +126,7 @@
           <title>Various document sources included.</title>
           <para>
             &DCW; can fetch and cluster documents from a number of sources, including major search
-            engines, indexing engines (Lucene, Solr, Google Desktop) as well as generic
+            engines, indexing engines (Lucene, Solr) as well as generic
             XML feeds and files.
           </para>
         </formalpara>
