@@ -33,10 +33,9 @@ import com.google.common.collect.*;
  * <p>
  * Clusters will be ordered by size (number of documents) descendingly; in case of equal
  * sizes, alphabetically by URL, see {@link Cluster#BY_REVERSED_SIZE_AND_LABEL_COMPARATOR}.
- * 
- * @label By URL Clustering
  */
 @Bindable(inherit = CommonAttributes.class)
+@Label("By URL Clustering")
 public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {

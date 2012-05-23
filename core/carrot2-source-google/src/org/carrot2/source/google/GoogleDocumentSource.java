@@ -43,44 +43,41 @@ public class GoogleDocumentSource extends MultipageSearchEngine
 {
     /**
      * Service URL. Google web search service URL.
-     * 
-     * @group Service
-     * @level Advanced
-     * @label Service URL
      */
     @Input
     @Processing
     @Internal
     @Attribute
+    @Label("Service URL")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)
     public String serviceUrl = "http://ajax.googleapis.com/ajax/services/search/web";
 
     /**
-     * Request referer. Please do not use the default value when deploying this
+     * Request referrer. Please do not use the default value when deploying this
      * component in production environments. Instead, put the URL to your application
      * here.
-     * 
-     * @group Service
-     * @level Advanced
-     * @label Referer
      */
     @Input
     @Processing
     @Internal
     @Attribute
+    @Label("Referrer")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)
     public String referer = "http://www.carrot2.org";
 
     /**
      * Keep query word highlighting. Google by default highlights query words in snippets
      * using the bold HTML tag. Set this attribute to <code>true</code> to keep these
      * highlights.
-     * 
-     * @group Postprocessing
-     * @level Advanced
-     * @label Keep highlights
      */
     @Input
     @Processing
     @Attribute
+    @Label("Keep highlights")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(POSTPROCESSING)
     public boolean keepHighlights = false;
 
     /**

@@ -24,52 +24,49 @@ public class FilteringSuperClass
     private FilteringReferenceClass reference = new FilteringReferenceClass();
 
     /**
-     * @level basic
+     * 
      */
     @TestInit
     @Input
     @Attribute
+    @Level(AttributeLevel.BASIC)
     private int initInput = 10;
 
     /**
-     * @level medium
+     * 
      */
     @TestInit
     @Output
     @Attribute
+    @Level(AttributeLevel.MEDIUM)
     private int initOutput = 10;
 
     /**
-     * @level advanced
+     * 
      */
     @TestInit
     @Input
     @Output
     @Attribute
+    @Level(AttributeLevel.ADVANCED)
     private int initInputOutput = 10;
 
-    /**
-     * @group Group C
-     */
     @TestProcessing
     @Input
     @Attribute
+    @Group("Group C")
     private int processingInput = 10;
 
-    /**
-     * @group Group C
-     */
     @TestProcessing
     @Output
     @Attribute
+    @Group("Group C")
     private int processingOutput = 10;
 
-    /**
-     * @group Group B
-     */
     @TestProcessing
     @Input
     @Output
     @Attribute
+    @Group("Group B")
     private int processingInputOutput = 10;
 }

@@ -15,11 +15,18 @@ package org.carrot2.util.attribute;
 import java.lang.annotation.*;
 
 /**
- * Denotes fields whose values can be set (written) by {@link AttributeBinder}.
+ * User interface name for an attribute or type.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Input
+@Target({ElementType.FIELD, ElementType.TYPE})
+public @interface Label
 {
+    /**
+     * User interface name for an attribute or type.
+     *
+     * We don't care about i18n. This could also be the key to a localized
+     * resource at some point.
+     */
+    String value();
 }

@@ -23,24 +23,22 @@ public final class SearchEngineStats
 {
     /**
      * Number queries handled successfully by this data source.
-     * 
-     * @label Successful Queries
-     * @group Data source status
      */
     @Processing
     @Output
     @Attribute
+    @Label("Successful queries")
+    @Group(DefaultGroups.RESULT_INFO)
     public int queries;
 
     /**
      * Number of individual page requests issued by this data source.
-     * 
-     * @label Page Requests
-     * @group Data source status
      */
     @Processing
     @Output
     @Attribute
+    @Label("Page requests")
+    @Group(DefaultGroups.RESULT_INFO)
     public int pageRequests;
     
     /* */

@@ -21,20 +21,16 @@ import org.carrot2.util.attribute.*;
 @SuppressWarnings("unused")
 public class AttributeGroups
 {
-    /**
-     * @group Group
-     */
     @TestInit
     @Input
     @Attribute
+    @Group("Group")
     private int oneWordGroup;
 
-    /**
-     * @group Multi word group
-     */
     @TestInit
     @Input
     @Attribute
+    @Group("Multi word group")
     private int multiWordGroup;
 
     /**

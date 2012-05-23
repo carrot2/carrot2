@@ -21,8 +21,13 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.BitSet;
@@ -57,15 +62,14 @@ public final class CaseNormalizer
     /**
      * Word Document Frequency threshold. Words appearing in fewer than
      * <code>dfThreshold</code> documents will be ignored.
-     * 
-     * @level Advanced
-     * @group Preprocessing
-     * @label Word Document Frequency threshold
      */
     @Processing
     @Input
     @Attribute
     @IntRange(min = 1, max = 100)
+    @Label("Word document frequency threshold")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.PREPROCESSING)
     public int dfThreshold = 1;
 
     /**

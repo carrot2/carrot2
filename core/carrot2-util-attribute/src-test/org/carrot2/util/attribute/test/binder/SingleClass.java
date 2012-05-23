@@ -23,26 +23,24 @@ public class SingleClass
 {
     /**
      * Init input int attribute.
-     *
-     * @label Init Input Int
-     * @level Basic
-     * @group Group A
      */
     @TestInit
     @Input
     @Attribute
+    @Level(AttributeLevel.BASIC)
+    @Group("Group A")
+    @Label("Init Input Int")
     private int initInputInt = 10;
 
     /**
      * Processing input string attribute. Some description.
-     *
-     * @label Processing Input String
-     * @level Advanced
-     * @group Group B
      */
     @TestProcessing
     @Input
     @Attribute
+    @Level(AttributeLevel.ADVANCED)
+    @Group("Group B")
+    @Label("Processing Input String")
     private String processingInputString = "test";
 
     /**

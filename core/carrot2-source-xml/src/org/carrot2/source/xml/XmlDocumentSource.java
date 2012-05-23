@@ -39,6 +39,11 @@ import com.google.common.collect.*;
 @Bindable(prefix = "XmlDocumentSource", inherit = CommonAttributes.class)
 public class XmlDocumentSource extends ProcessingComponentBase implements IDocumentSource
 {
+    /** {@link Group} name. */
+    private static final String XML_DATA = "XML data";
+    /** {@link Group} name. */
+    private static final String XML_TRANSFORMATION = "XML transformation";
+
     /**
      * The resource to load XML data from. You can either create instances of
      * {@link org.carrot2.util.resource.IResource} implementations directly or use 
@@ -61,10 +66,6 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      * Additionally, custom placeholders can be used. Values for the custom placeholders
      * should be provided in the {@link #xmlParameters} attribute.
      * </p>
-     * 
-     * @label XML Resource
-     * @level Basic
-     * @group XML data
      */
     @Input
     @Init
@@ -80,6 +81,9 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
         @ResourceNameFilter(pattern = "*.xml;*.XML", description = "XML files"),
         @ResourceNameFilter(pattern = "*.*", description = "All files")
     })
+    @Label("XML resource")
+    @Level(AttributeLevel.BASIC)
+    @Group(XML_DATA)
     public IResource xml;
 
     /**
@@ -97,10 +101,6 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      * To pass additional parameters to the XSLT transformer, use the
      * {@link #xsltParameters} attribute.
      * </p>
-     * 
-     * @label XSLT Stylesheet
-     * @level Medium
-     * @group XML transformation
      */
     @Input
     @Init
@@ -115,6 +115,9 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
         @ResourceNameFilter(pattern = "*.xsl;*.xslt;*.XSL;*.XSLT", description = "XML stylesheets"),
         @ResourceNameFilter(pattern = "*.*", description = "All files")
     })
+    @Label("XSLT stylesheet")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(XML_TRANSFORMATION)
     public IResource xslt;
 
     /**
@@ -123,31 +126,29 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
      * values for custom placeholders found in the XML URL. Keys of the map correspond to
      * placeholder names, values of the map will be used to replace the placeholders.
      * Please see {@link #xml} for the placeholder syntax.
-     * 
-     * @label XML Parameters
-     * @level Advanced
-     * @group XML data
      */
     @Input
     @Init
     @Processing
     @Attribute
     @Internal(configuration = true)
+    @Label("XML parameters")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(XML_DATA)
     public Map<String, String> xmlParameters = ImmutableMap.of();
 
     /**
      * Parameters to be passed to the XSLT transformer. Keys of the map will be used as
      * parameter names, values of the map as parameter values.
-     * 
-     * @label XSLT Parameters
-     * @level Advanced
-     * @group XML transformation
      */
     @Input
     @Init
     @Processing
     @Attribute
     @Internal(configuration = true)
+    @Label("XSLT parameters")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(XML_TRANSFORMATION)
     public Map<String, String> xsltParameters = ImmutableMap.of();
 
     /**
@@ -173,14 +174,13 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     /**
      * If <code>true</code>, all documents are read from the input XML stream, regardless
      * of the limit set by {@link #results}.
-     * 
-     * @label Read all documents
-     * @level Basic
-     * @group Search query
      */
     @Input
     @Processing
     @Attribute
+    @Label("Read all documents")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.QUERY)
     public boolean readAll = true;
 
     /**

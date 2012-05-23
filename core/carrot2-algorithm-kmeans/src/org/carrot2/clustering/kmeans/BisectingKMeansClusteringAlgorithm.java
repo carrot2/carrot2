@@ -40,11 +40,7 @@ import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.Input;
-import org.carrot2.util.attribute.Output;
-import org.carrot2.util.attribute.Required;
+import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.IntArrayList;
@@ -67,6 +63,9 @@ import com.google.common.collect.Lists;
 public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
+    /** {@link Group} name. */
+    private final static String GROUP_KMEANS = "K-means";
+    
     @Processing
     @Input
     @Required
@@ -83,28 +82,26 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
     /**
      * The number of clusters to create. The algorithm will create at most the specified
      * number of clusters.
-     * 
-     * @group Clusters
-     * @level Basic
-     * @label Cluster count
      */
     @Processing
     @Input
     @Attribute
     @IntRange(min = 2)
+    @Group(DefaultGroups.CLUSTERS)
+    @Level(AttributeLevel.BASIC)
+    @Label("Cluster count")
     public int clusterCount = 25;
 
     /**
      * The maximum number of k-means iterations to perform.
-     * 
-     * @group K-means
-     * @level Basic
-     * @label Maximum iterations
      */
     @Processing
     @Input
     @Attribute
     @IntRange(min = 1)
+    @Group(GROUP_KMEANS)
+    @Level(AttributeLevel.BASIC)
+    @Label("Maximum iterations")
     public int maxIterations = 15;
 
     /**
@@ -112,41 +109,38 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
      * dimensionality-reduced term-document matrix with the number of dimensions being
      * equal to the number of requested clusters. If <code>false</code>, the k-means will
      * be performed directly on the original term-document matrix.
-     * 
-     * @group K-means
-     * @level Basic
-     * @label Use dimensionality reduction
      */
     @Processing
     @Input
     @Attribute
+    @Group(GROUP_KMEANS)
+    @Level(AttributeLevel.BASIC)
+    @Label("Use dimensionality reduction")
     public boolean useDimensionalityReduction = true;
 
     /**
      * Partition count. The number of partitions to create at each k-means clustering
      * iteration.
-     * 
-     * @group K-means
-     * @level Basic
-     * @label Partition count
      */
     @Processing
     @Input
     @Attribute
     @IntRange(min = 2, max = 10)
+    @Group(GROUP_KMEANS)
+    @Level(AttributeLevel.BASIC)
+    @Label("Partition count")
     public int partitionCount = 2;
 
     /**
      * Label count. The minimum number of labels to return for each cluster.
-     * 
-     * @group Clusters
-     * @level Basic
-     * @label Label count
      */
     @Processing
     @Input
     @Attribute
     @IntRange(min = 1, max = 10)
+    @Group(DefaultGroups.CLUSTERS)
+    @Level(AttributeLevel.BASIC)
+    @Label("Label count")
     public int labelCount = 3;
 
     /**

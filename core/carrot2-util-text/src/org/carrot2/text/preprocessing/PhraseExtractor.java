@@ -59,15 +59,14 @@ public class PhraseExtractor
     /**
      * Phrase Document Frequency threshold. Phrases appearing in fewer than
      * <code>dfThreshold</code> documents will be ignored.
-     * 
-     * @level Advanced
-     * @group Phrase extraction
-     * @label Phrase Document Frequency threshold
      */
     @Processing
     @Input
     @Attribute
     @IntRange(min = 1, max = 100)
+    @Label("Phrase document frequency threshold")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.PHRASE_EXTRACTION)
     public int dfThreshold = 1;
 
     /**

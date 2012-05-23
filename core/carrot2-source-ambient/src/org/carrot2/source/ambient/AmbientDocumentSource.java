@@ -33,14 +33,13 @@ public class AmbientDocumentSource extends FubDocumentSource
 
     /**
      * Ambient Topic. The Ambient Topic to load documents from.
-     * 
-     * @group Topic ID
-     * @level Basic
      */
     @Input
     @Processing
     @Attribute
     @Required
+    @Group(TOPIC_ID)
+    @Level(AttributeLevel.BASIC)
     public AmbientTopic topic = AmbientTopic.AIDA;
 
     @Processing

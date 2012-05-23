@@ -18,7 +18,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -30,10 +34,17 @@ import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.annotations.AspectModified;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.ResourceCache;
+import org.carrot2.util.resource.ResourceLookup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,15 +103,14 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
      * matter the active language. Lexical resource merging is useful when clustering data
      * in a mix of different languages and should increase clustering quality in such
      * settings.
-     * 
-     * @level Medium
-     * @group Preprocessing
-     * @label Merge lexical resources
      */
     @Init
     @Processing
     @Input
     @Attribute(key = "merge-resources")
+    @Label("Merge lexical resources")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.PREPROCESSING)
     public boolean mergeResources = true;
 
     @Init

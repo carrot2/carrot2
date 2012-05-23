@@ -39,20 +39,4 @@ public enum AttributeLevel
     {
         return StringUtils.capitalize(name().toLowerCase());
     }
-
-    /**
-     * Robust version of valueOf, accepting invalid values.
-     */
-    public static AttributeLevel robustValueOf(String value)
-    {
-        if (value == null) return null;
-        try
-        {
-            return valueOf(value.toUpperCase());
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
-    }
 }

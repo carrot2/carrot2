@@ -21,22 +21,19 @@ import org.carrot2.util.attribute.*;
 @SuppressWarnings("unused")
 public class AttributeTitles
 {
-    /**
-     * @label label
-     */
     @TestInit
     @Input
     @Attribute
+    @Label("label")
     private int noTitle;
 
     /**
      * . Description follows.
-     *
-     * @label label
      */
     @TestInit
     @Input
     @Attribute
+    @Label("label")
     private int emptyTitle;
 
     /**
@@ -91,7 +88,7 @@ public class AttributeTitles
     private int titleWithLink;
 
     /**
-     * Title. Description with {@link #titleAtTheBottom} and {@link String} links.
+     * Title. Description with {@link #descriptionWithLinks} and {@link String} links.
      */
     @TestInit
     @Input
@@ -116,21 +113,10 @@ public class AttributeTitles
 
     /**
      * Title with label.
-     *
-     * @label label
      */
     @TestInit
     @Input
     @Attribute
+    @Label("label")
     private int titleWithLabel;
-
-    /**
-     * @label label
-     *
-     * Title at the bottom. This arrangement is not supported.
-     */
-    @TestInit
-    @Input
-    @Attribute
-    private int titleAtTheBottom;
 }

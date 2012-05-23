@@ -41,45 +41,42 @@ public class ClusterBuilder
      * Phrase label boost. The weight of multi-word labels relative to one-word labels.
      * Low values will result in more one-word labels being produced, higher values will
      * favor multi-word labels.
-     * 
-     * @group Labels
-     * @level Medium
-     * @label Phrase label boost
      */
     @Input
     @Processing
     @Attribute
     @DoubleRange(min = 0.0, max = 10.00)
+    @Group(DefaultGroups.LABELS)
+    @Level(AttributeLevel.MEDIUM)
+    @Label("Phrase label boost")    
     public double phraseLabelBoost = 1.5;
 
     /**
      * Phrase length penalty start. The phrase length at which the overlong multi-word
      * labels should start to be penalized. Phrases of length smaller than
      * <code>phraseLengthPenaltyStart</code> will not be penalized.
-     * 
-     * @group Labels
-     * @level Advanced
-     * @label Phrase length penalty start
      */
     @Input
     @Processing
     @Attribute
     @IntRange(min = 2, max = 8)
+    @Group(DefaultGroups.LABELS)
+    @Level(AttributeLevel.ADVANCED)
+    @Label("Phrase length penalty start")    
     public int phraseLengthPenaltyStart = 8;
 
     /**
      * Phrase length penalty stop. The phrase length at which the overlong multi-word
      * labels should be removed completely. Phrases of length larger than
      * <code>phraseLengthPenaltyStop</code> will be removed.
-     * 
-     * @group Labels
-     * @level Advanced
-     * @label Phrase length penalty stop
      */
     @Input
     @Processing
     @Attribute
     @IntRange(min = 2, max = 8)
+    @Group(DefaultGroups.LABELS)
+    @Level(AttributeLevel.ADVANCED)
+    @Label("Phrase length penalty stop")    
     public int phraseLengthPenaltyStop = 8;
 
     /**
@@ -88,15 +85,14 @@ public class ClusterBuilder
      * more aggressive merging, which may lead to irrelevant documents in clusters. High
      * values will result in fewer clusters being merged, which may lead to very similar
      * or duplicated clusters.
-     * 
-     * @group Labels
-     * @level Medium
-     * @label Cluster merging threshold
      */
     @Input
     @Processing
     @Attribute
     @DoubleRange(min = 0.0, max = 1.0)
+    @Group(DefaultGroups.CLUSTERS)
+    @Level(AttributeLevel.MEDIUM)
+    @Label("Cluster merging threshold")        
     public double clusterMergingThreshold = 0.7;
 
     /**
@@ -107,10 +103,6 @@ public class ClusterBuilder
 
     /**
      * Cluster label assignment method.
-     * 
-     * @group Labels
-     * @level Advanced
-     * @label Cluster label assignment method
      */
     @Input
     @Processing
@@ -120,6 +112,9 @@ public class ClusterBuilder
     {
         UniqueLabelAssigner.class, SimpleLabelAssigner.class
     })
+    @Group(DefaultGroups.LABELS)
+    @Level(AttributeLevel.ADVANCED)
+    @Label("Cluster label assignment method")                
     public ILabelAssigner labelAssigner = new UniqueLabelAssigner();
 
     /**

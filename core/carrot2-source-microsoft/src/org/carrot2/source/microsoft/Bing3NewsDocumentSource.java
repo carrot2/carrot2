@@ -35,26 +35,24 @@ public class Bing3NewsDocumentSource extends Bing3DocumentSource
 
     /**
      * Specifies the sort order of results.
-     * 
-     * @label Sort order
-     * @group Results filtering
-     * @level Medium
      */
     @Processing
     @Input
     @Attribute
+    @Label("Sort order")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.FILTERING)    
     public SortOrder sortOrder;
 
     /**
      * Specifies news category.
-     * 
-     * @label News category
-     * @group Results filtering
-     * @level Medium
      */
     @Processing
     @Input
     @Attribute
+    @Label("Category")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.FILTERING)    
     public NewsCategory newsCategory;
 
     /**

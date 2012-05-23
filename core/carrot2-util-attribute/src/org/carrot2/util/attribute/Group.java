@@ -10,20 +10,24 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.core.attribute;
+package org.carrot2.util.attribute;
 
 import java.lang.annotation.*;
 
-import org.carrot2.core.IProcessingComponent;
-
 /**
- * Marks attributes that will be bound before and after Carrot<sup>2</sup> component
- * performs processing. Please see {@link IProcessingComponent#beforeProcessing()} and
- * {@link IProcessingComponent#afterProcessing()} for details.
+ * User interface group name for an attribute.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Processing
+public @interface Group
 {
+    /**
+     * Name of the target user interface group. Constants from
+     * {@link DefaultGroups} are encouraged.
+     * 
+     * We don't care about i18n. This could also be the key to a localized
+     * resource at some point.
+     */
+    String value();
 }

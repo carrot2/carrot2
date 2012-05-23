@@ -173,7 +173,7 @@ public class BindableMetadataBuilderTest extends CarrotTestCase
         checkDescription(AttributeTitles.class, "descriptionWithLinks",
             "Description with <code>" +
             AttributeTitles.class.getName() + 
-            ".titleAtTheBottom</code> and <code>String</code> links.");
+            ".descriptionWithLinks</code> and <code>String</code> links.");
     }
     
     @Test
@@ -184,14 +184,6 @@ public class BindableMetadataBuilderTest extends CarrotTestCase
         checkTitle(AttributeTitles.class, "descriptionWithNumericEntities", "Title");
         checkDescription(AttributeTitles.class, "descriptionWithNumericEntities",
             "Description with &#160;.");
-    }
-
-    @Test
-    public void testTitleAtTheBottomNotSupported()
-    {
-
-        // Note that this scenario is not supported
-        checkTitle(AttributeTitles.class, "titleAtTheBottom", null);
     }
 
     @Test
@@ -323,13 +315,6 @@ public class BindableMetadataBuilderTest extends CarrotTestCase
     {
 
         checkLevel(AttributeLevels.class, "advancedLevel", AttributeLevel.ADVANCED);
-    }
-
-    @Test
-    public void testUnknownLevel()
-    {
-
-        assertNull(getLevel(AttributeLevels.class, "unknownLevel"));
     }
 
     @Test

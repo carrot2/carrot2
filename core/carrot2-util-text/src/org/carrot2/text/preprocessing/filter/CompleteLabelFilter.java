@@ -34,14 +34,13 @@ public class CompleteLabelFilter implements ILabelFilter
      * Databases</i>. When truncated phrase removal is enabled, the algorithm would try to
      * remove the "incomplete" phrases like the former one and leave only the more
      * informative variants.
-     * 
-     * @level Basic
-     * @group Label filtering
-     * @label Remove truncated phrases
      */
     @Input
     @Processing
     @Attribute
+    @Label("Remove truncated phrases")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.LABELS)    
     public boolean enabled = true;
 
     /**
@@ -49,15 +48,14 @@ public class CompleteLabelFilter implements ILabelFilter
      * The lowest value means strongest truncated labels elimination, which may lead to
      * overlong cluster labels and many unclustered documents. The highest value
      * effectively disables the filter, which may result in short or truncated labels.
-     * 
-     * @level Advanced
-     * @group Phrase extraction
-     * @label Truncated label threshold
      */
     @Input
     @Processing
     @Attribute
     @DoubleRange(min = 0.0, max = 1.0)
+    @Label("Truncated label threshold")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.LABELS)    
     public double labelOverrideThreshold = 0.65;
 
     /**

@@ -50,27 +50,25 @@ public class DocumentAssigner
      * but also a larger "Other Topics" group. Disabling this option will cause more
      * documents to be put in clusters, which will make the "Other Topics" cluster
      * smaller, but also lower the precision of cluster-document assignments.
-     * 
-     * @level Medium
-     * @group Preprocessing
-     * @label Exact phrase assignment
      */
     @Input
     @Processing
     @Attribute
+    @Label("Exact phrase assignment")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.PREPROCESSING)
     public boolean exactPhraseAssignment = false;
 
     /**
      * Determines the minimum number of documents in each cluster.
-     * 
-     * @level Medium
-     * @group Preprocessing
-     * @label Minimum cluster size
      */
     @Input
     @Processing
     @Attribute
     @IntRange(min = 1, max = 100)
+    @Label("Minimum cluster size")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.PREPROCESSING)
     public int minClusterSize = 2;
 
     /**

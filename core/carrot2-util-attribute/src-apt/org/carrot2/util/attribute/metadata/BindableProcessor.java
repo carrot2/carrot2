@@ -148,7 +148,16 @@ public final class BindableProcessor extends AbstractProcessor
         final String javaDoc = processJavaDoc(type, tags);
         final BindableMetadata metadata = new BindableMetadata();
         extractTitleDescription(metadata, javaDoc);
-        metadata.setLabel(tags.get("label"));
+        
+        if (tags.get("label") != null) {
+            messager.printMessage(Kind.WARNING, 
+                "Replace @label javadoc with a @Label annotation in: " +
+                    type.getQualifiedName());
+        }
+        Label label = type.getAnnotation(Label.class);
+        if (label != null) {
+            metadata.setLabel(label.value());
+        }
 
         // Collect this bindable's attribute metadata.
         final Map<String, AttributeMetadata> attributeMetadata = new LinkedHashMap<String, AttributeMetadata>();
@@ -217,9 +226,42 @@ public final class BindableProcessor extends AbstractProcessor
                     javaDoc = processJavaDoc(field, tags);
 
                     extractTitleDescription(metadata, javaDoc);
-                    metadata.setLabel(tags.get("label"));
-                    metadata.setGroup(tags.get("group"));
-                    metadata.setLevel(AttributeLevel.robustValueOf(tags.get("level")));
+
+                    // Process @Level
+                    if (tags.get("level") != null) {
+                        messager.printMessage(Kind.WARNING, 
+                            "Replace @level javadoc with a @Level annotation in: " +
+                                type.getQualifiedName() + "#" + field.getSimpleName());
+                    }
+
+                    Level level = field.getAnnotation(Level.class);
+                    if (level != null) {
+                        metadata.setLevel(level.value());
+                    }
+
+                    // Process @Group
+                    if (tags.get("group") != null) {
+                        messager.printMessage(Kind.WARNING, 
+                            "Replace @group javadoc with a @Group annotation in: " +
+                                type.getQualifiedName() + "#" + field.getSimpleName());
+                    }
+
+                    Group group = field.getAnnotation(Group.class);
+                    if (group != null) {
+                        metadata.setGroup(group.value());
+                    }                    
+
+                    // Process @Label
+                    if (tags.get("label") != null) {
+                        messager.printMessage(Kind.WARNING, 
+                            "Replace @label javadoc with a @Label annotation in: " +
+                                type.getQualifiedName() + "#" + field.getSimpleName());
+                    }
+
+                    Label label = field.getAnnotation(Label.class);
+                    if (label != null) {
+                        metadata.setLabel(label.value());
+                    }
                 }
 
                 AttributeFieldInfo inherited = null;

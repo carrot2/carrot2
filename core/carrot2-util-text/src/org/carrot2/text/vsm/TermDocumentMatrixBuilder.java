@@ -22,8 +22,12 @@ import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.DoubleRange;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
@@ -41,33 +45,32 @@ import com.carrotsearch.hppc.sorting.IndirectSort;
 @Bindable(prefix = "TermDocumentMatrixBuilder")
 public class TermDocumentMatrixBuilder
 {
+    /** {@link Group} name. */
+    public static final String MATRIX_MODEL = "Matrix model";
+
     /**
      * Title word boost. Gives more weight to words that appeared in
      * {@link org.carrot2.core.Document#TITLE} fields.
-     * 
-     * @level Medium
-     * @group Labels
-     * @label Title word boost
      */
     @Input
     @Processing
     @Attribute
     @DoubleRange(min = 0, max = 10)
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.LABELS)
     public double titleWordsBoost = 2.0;
 
     /**
      * Maximum matrix size. The maximum number of the term-document matrix elements. The
      * larger the size, the more accurate, time- and memory-consuming clustering.
-     * 
-     * @level Medium
-     * @group Matrix model
-     * @label Maximum matrix size
      */
     @Input
     @Processing
     @Attribute
     @IntRange(min = 50 * 100)
     @Internal(configuration = true)
+    @Level(AttributeLevel.ADVANCED)
+    @Group(MATRIX_MODEL)
     public int maximumMatrixSize = 250 * 150;
 
     /**
@@ -89,24 +92,18 @@ public class TermDocumentMatrixBuilder
      * This can be achieved by setting <code>maxWordDf</code> to extremely low values,
      * e.g. <code>0.1</code> or <code>0.05</code>.
      * </p>
-     * 
-     * @level Advanced
-     * @group Matrix model
-     * @label Maximum word document frequency
      */
     @Input
     @Processing
     @Attribute
     @DoubleRange(min = 0.00, max = 1.0)
+    @Level(AttributeLevel.ADVANCED)
+    @Group(MATRIX_MODEL)
     public double maxWordDf = 0.9;
 
     /**
      * Term weighting. The method for calculating weight of words in the term-document
      * matrices.
-     * 
-     * @level Advanced
-     * @group Matrix model
-     * @label Term weighting
      */
     @Input
     @Processing
@@ -117,6 +114,8 @@ public class TermDocumentMatrixBuilder
         LogTfIdfTermWeighting.class, LinearTfIdfTermWeighting.class,
         TfTermWeighting.class
     }, strict = false)
+    @Level(AttributeLevel.ADVANCED)
+    @Group(MATRIX_MODEL)
     public ITermWeighting termWeighting = new LogTfIdfTermWeighting();
 
     /**

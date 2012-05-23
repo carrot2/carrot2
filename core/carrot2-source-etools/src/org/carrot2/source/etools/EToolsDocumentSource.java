@@ -37,15 +37,14 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
 {
     /**
      * Base URL for the eTools service
-     * 
-     * @label Service URL
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Processing
     @Internal
     @Attribute
+    @Label("Service URL")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)
     public String serviceUrlBase = "http://www.etools.ch/partnerSearch.do";
 
     /**
@@ -85,14 +84,13 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
 
     /**
      * Determines the country of origin for the returned search results.
-     * 
-     * @label Country
-     * @level Medium
-     * @group Results filtering
      */
     @Input
     @Processing
     @Attribute
+    @Label("Country")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.FILTERING)
     public Country country = Country.ALL;
 
     /**
@@ -154,39 +152,36 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
 
     /**
      * Determines the language of the returned search results.
-     * 
-     * @label Language
-     * @level Medium
-     * @group Results filtering
      */
     @Input
     @Processing
     @Attribute
+    @Label("Language")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.FILTERING)    
     public Language language = Language.ENGLISH;
 
     /**
      * Maximum time in milliseconds to wait for all data sources to return results.
-     * 
-     * @label Timeout
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Processing
     @Attribute
     @IntRange(min = 0)
+    @Label("Timeout")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)    
     public int timeout = 4000;
 
     /**
      * Determines which data sources to search.
-     * 
-     * @label Data sources
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Processing
     @Attribute
+    @Label("Data sources")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)
     public DataSources dataSources = DataSources.ALL;
 
     /**
@@ -226,28 +221,26 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
 
     /**
      * If enabled, excludes offensive content from the results.
-     * 
-     * @label Safe search
-     * @level Basic
-     * @group Results filtering
      */
     @Input
     @Processing
     @Attribute
+    @Label("Safe search")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.FILTERING)
     public boolean safeSearch = false;
 
     /**
      * eTools partner identifier. If you have commercial arrangements with eTools, specify
      * your partner id here.
-     * 
-     * @label Partner
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Processing
     @Attribute
     @Internal
+    @Label("Partner ID")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)
     public String partnerId = "Carrot2";
 
     /** Some constants for calculation of request parameters */

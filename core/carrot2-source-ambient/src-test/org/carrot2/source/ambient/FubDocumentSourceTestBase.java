@@ -83,6 +83,8 @@ public abstract class FubDocumentSourceTestBase<T extends IDocumentSource> exten
     @Test
     public void testAllTopicsWithDocumentsWithoutTopic()
     {
+        assumeTrue("Awaits fix: CARROT-916", false);
+
         final int minTopicSize = 1;
         final boolean includeDocumentsWithoutTopic = true;
         checkAllTopics(minTopicSize, includeDocumentsWithoutTopic);

@@ -26,8 +26,13 @@ import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.httpclient.HttpClientFactory;
 import org.carrot2.util.httpclient.HttpUtils;
@@ -53,16 +58,15 @@ public class PubMedDocumentSource extends SimpleSearchEngine
     /**
      * Maximum results to fetch. No more than the specified number of results
      * will be fetched from PubMed, regardless of the requested number of results. 
-     * 
-     * @label Maximum results
-     * @group Search query
-     * @level ADVANCED
      */
     @Processing
     @Input
     @Attribute
     @IntRange(min = 1)
     @Internal(configuration = true)
+    @Label("Maximum results")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.QUERY)
     public int maxResults = 150;
     
     @Override

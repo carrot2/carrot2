@@ -25,14 +25,13 @@ public class MinLengthLabelFilter extends SingleLabelFilterBase
     /**
      * Remove labels shorter than 3 characters. Removes labels whose total length in
      * characters, including spaces, is less than 3.
-     * 
-     * @level Basic
-     * @group Label filtering
-     * @label Remove short labels
      */
     @Input
     @Processing
     @Attribute
+    @Label("Remove short labels")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.LABELS)    
     public boolean enabled = true;
 
     private final static int MIN_LENGTH = 3;

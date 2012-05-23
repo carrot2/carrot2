@@ -65,9 +65,7 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
     /**
      * Base service URI.
      */
-    private final static String SERVICE_URI =
-        // "http://localhost:8888/Web";
-        "https://api.datamarket.azure.com/Bing/Search";
+    private final static String SERVICE_URI = "https://api.datamarket.azure.com/Bing/Search";
 
     /** Logger for this class. */
     private final static Logger logger = LoggerFactory.getLogger(Bing3DocumentSource.class);
@@ -106,64 +104,59 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
      * Microsoft-assigned application ID for querying the API. Please <strong>generate
      * your own ID</strong> for production deployments and branches off the Carrot2.org's
      * code.
-     * 
-     * @label Application ID
-     * @level Advanced
-     * @group Service
      */
     @Init
     @Input
     @Attribute
     @Required
+    @Label("Application ID")
+    @Level(AttributeLevel.BASIC)
+    @Group(SERVICE)
     public String appid = CARROTSEARCH_APPID;
 
     /**
      * Language and country/region information for the request.
-     * 
-     * @label Market
-     * @group Results filtering
-     * @level Basic
      */
     @Input
     @Processing
     @Attribute
     @Required
+    @Label("Market")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.FILTERING)
     public MarketOption market = MarketOption.ENGLISH_UNITED_STATES;
 
     /**
      * Adult search restriction (porn filter).
-     * 
-     * @label Safe Search
-     * @group Results filtering
-     * @level Medium
      */
     @Processing
     @Input
     @Attribute
+    @Label("Safe search")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.FILTERING)
     public AdultOption adult;
 
     /**
      * Latitude (north/south coordinate). Valid input values range from –90 to 90.
-     * 
-     * @label Latitude Hint
-     * @group Results filtering
-     * @level Medium
      */
     @Processing
     @Input
     @Attribute
+    @Label("Latitude hint")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.FILTERING)
     public Double latitude;
 
     /**
      * Longitude (east/west coordinate). Valid input values range from –180 to 180.
-     * 
-     * @label Longitude Hint
-     * @group Results filtering
-     * @level Medium
      */
     @Processing
     @Input
     @Attribute
+    @Label("Longitude hint")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.FILTERING)
     public Double longitude;
 
     /**

@@ -32,8 +32,12 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.StopListMarker;
 import org.carrot2.text.preprocessing.Tokenizer;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
@@ -71,9 +75,6 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
 
     /**
      * Tokenizer factory. Creates the tokenizers to be used by the clustering algorithm.
-     * 
-     * @group Preprocessing
-     * @level Advanced
      */
     @Input
     @Init
@@ -81,13 +82,12 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
     @Internal
     @Attribute
     @ImplementingClasses(classes = {}, strict = false)
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.PREPROCESSING)
     public ITokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
 
     /**
      * Stemmer factory. Creates the stemmers to be used by the clustering algorithm.
-     * 
-     * @group Preprocessing
-     * @level Advanced
      */
     @Input
     @Init
@@ -95,14 +95,13 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
     @Internal
     @Attribute
     @ImplementingClasses(classes = {}, strict = false)
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.PREPROCESSING)
     public IStemmerFactory stemmerFactory = new DefaultStemmerFactory();
 
     /**
      * Lexical data factory. Creates the lexical data to be used by the clustering
      * algorithm, including stop word and stop label dictionaries.
-     * 
-     * @group Preprocessing
-     * @level Advanced
      */
     @Input
     @Init
@@ -110,6 +109,8 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
     @Internal
     @Attribute
     @ImplementingClasses(classes = {}, strict = false)
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.PREPROCESSING)
     public ILexicalDataFactory lexicalDataFactory = new DefaultLexicalDataFactory();
 
     /**

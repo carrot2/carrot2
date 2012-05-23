@@ -31,14 +31,13 @@ public class Odp239DocumentSource extends FubDocumentSource
 
     /**
      * ODP239 Topic. The ODP239 Topic to load documents from.
-     * 
-     * @group Topic ID
-     * @level Basic
      */
     @Input
     @Processing
     @Attribute
     @Required
+    @Group(TOPIC_ID)
+    @Level(AttributeLevel.BASIC)
     public Odp239Topic topic = Odp239Topic.ARTS_ANIMATION;
 
     @Processing

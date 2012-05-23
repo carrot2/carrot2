@@ -18,6 +18,7 @@ import java.lang.annotation.*;
  * Denotes attributes the end-user applications may not want to display in their User
  * Interfaces.
  */
+@Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Internal

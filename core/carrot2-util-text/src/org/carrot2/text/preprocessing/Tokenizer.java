@@ -31,8 +31,13 @@ import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
@@ -55,14 +60,13 @@ public final class Tokenizer
 {
     /**
      * Textual fields of documents that should be tokenized and parsed for clustering.
-     * 
-     * @level Advanced
-     * @group Preprocessing
-     * @label Document fields
      */
     @Init
     @Input
     @Attribute
+    @Label("Document fields")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.PREPROCESSING)
     public Collection<String> documentFields = Arrays.asList(new String []
     {
         Document.TITLE, Document.SUMMARY

@@ -27,8 +27,12 @@ import org.carrot2.matrix.factorization.NonnegativeMatrixFactorizationEDFactory;
 import org.carrot2.matrix.factorization.NonnegativeMatrixFactorizationKLFactory;
 import org.carrot2.matrix.factorization.PartialSingularValueDecompositionFactory;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
@@ -43,10 +47,6 @@ public class TermDocumentMatrixReducer
     /**
      * Factorization method. The method to be used to factorize the term-document matrix
      * and create base vectors that will give rise to cluster labels.
-     * 
-     * @level Advanced
-     * @group Matrix model
-     * @label Factorization method
      */
     @Input
     @Processing
@@ -60,20 +60,22 @@ public class TermDocumentMatrixReducer
         LocalNonnegativeMatrixFactorizationFactory.class,
         KMeansMatrixFactorizationFactory.class
     }, strict = false)
+    @Label("Factorization method")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(TermDocumentMatrixBuilder.MATRIX_MODEL)
     public IMatrixFactorizationFactory factorizationFactory = new NonnegativeMatrixFactorizationEDFactory();
 
     /**
      * Factorization quality. The number of iterations of matrix factorization to perform.
      * The higher the required quality, the more time-consuming clustering.
-     * 
-     * @level Advanced
-     * @group Matrix model
-     * @label Factorization quality
      */
     @Input
     @Processing
     @Required
     @Attribute
+    @Label("Factorization quality")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(TermDocumentMatrixBuilder.MATRIX_MODEL)
     public FactorizationQuality factorizationQuality = FactorizationQuality.HIGH;
 
     /**

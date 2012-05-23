@@ -10,20 +10,20 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.core.attribute;
+package org.carrot2.util.attribute;
 
 import java.lang.annotation.*;
 
-import org.carrot2.core.IProcessingComponent;
-
 /**
- * Marks attributes that will be bound before and after Carrot<sup>2</sup> component
- * performs processing. Please see {@link IProcessingComponent#beforeProcessing()} and
- * {@link IProcessingComponent#afterProcessing()} for details.
+ * User-friendliness level for sorting/ hiding attributes in the GUI.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Processing
+public @interface Level
 {
+    /**
+     * An {@link AttributeLevel} assigned to the attribute.
+     */
+    AttributeLevel value();
 }

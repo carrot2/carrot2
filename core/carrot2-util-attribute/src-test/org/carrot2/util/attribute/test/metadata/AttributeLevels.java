@@ -21,44 +21,26 @@ import org.carrot2.util.attribute.*;
 @SuppressWarnings("unused")
 public class AttributeLevels
 {
-    /**
-     * @level Basic
-     */
     @TestInit
     @Input
     @Attribute
+    @Level(AttributeLevel.BASIC)
     private int basicLevel;
 
-    /**
-     * @level Medium
-     */
     @TestInit
     @Input
     @Attribute
+    @Level(AttributeLevel.MEDIUM)
     private int mediumLevel;
 
-    /**
-     * @level Advanced
-     */
     @TestInit
     @Input
     @Attribute
+    @Level(AttributeLevel.ADVANCED)
     private int advancedLevel;
 
-    /**
-     * 
-     */
     @TestInit
     @Input
     @Attribute
     private int noLevel;
-    
-    /**
-     * @level Unknown
-     */
-    @TestInit
-    @Input
-    @Attribute
-    private int unknownLevel;
-
 }

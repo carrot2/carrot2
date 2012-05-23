@@ -22,6 +22,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -47,9 +48,14 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.Output;
 import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
@@ -69,6 +75,8 @@ import com.google.common.collect.Maps;
 public final class LuceneDocumentSource extends ProcessingComponentBase implements
     IDocumentSource
 {
+    protected final static String INDEX_PROPERTIES = "Index properties";
+
     /** Logger for this class. */
     private final static Logger logger = org.slf4j.LoggerFactory
         .getLogger(LuceneDocumentSource.class);
@@ -103,10 +111,6 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     /**
      * Search index {@link org.apache.lucene.store.Directory}. Must be unlocked for
      * reading.
-     * 
-     * @label Index directory
-     * @group Index properties
-     * @level Basic
      */
     @Input
     @Attribute
@@ -118,15 +122,14 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     {
         RAMDirectory.class, FSDirectory.class
     }, strict = false)
+    @Label("Index directory")
+    @Level(AttributeLevel.BASIC)
+    @Group(INDEX_PROPERTIES)    
     public Directory directory;
 
     /**
      * {@link org.apache.lucene.analysis.Analyzer} used at indexing time. The same
      * analyzer should be used for querying.
-     * 
-     * @label Analyzer
-     * @group Index properties
-     * @level Medium
      */
     @SuppressWarnings("deprecation")
     @Input
@@ -138,15 +141,14 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     {
         SimpleAnalyzer.class, StandardAnalyzer.class, WhitespaceAnalyzer.class
     }, strict = false)
+    @Label("Analyzer")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(INDEX_PROPERTIES)    
     public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
 
     /**
      * {@link IFieldMapper} provides the link between Carrot2
      * {@link org.carrot2.core.Document} fields and Lucene index fields.
-     * 
-     * @label Field mapper
-     * @group Index field mapping
-     * @level Advanced
      */
     @Input
     @Init
@@ -158,27 +160,28 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     {
         SimpleFieldMapper.class
     }, strict = false)
+    @Label("Field mapper")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SimpleFieldMapper.INDEX_FIELD_MAPPING)
     public IFieldMapper fieldMapper = new SimpleFieldMapper();
 
     /**
      * A pre-parsed {@link org.apache.lucene.search.Query} object or a {@link String}
      * parsed using the built-in {@link org.apache.lucene.queryParser.QueryParser} over a
      * set of search fields returned from the {@link #fieldMapper}.
-     * 
-     * @label Query
-     * @group Search query
-     * @level Basic
      */
     @Input
     @Processing
-    @Attribute(key = AttributeNames.QUERY, inherit = false)
-    /* false intentional! */
+    @Attribute(key = AttributeNames.QUERY, inherit = false) // false intentional!
     @Required
     @ImplementingClasses(classes =
     {
         Query.class, String.class
     }, strict = false)
     @NotBlank
+    @Label("Query")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.QUERY)    
     public Object query;
 
     /**
@@ -194,15 +197,14 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
      * {@link org.carrot2.core.ControllerFactory#createCachingPooling(Class...) configured to cache} the
      * output from {@link LuceneDocumentSource}.</li>
      * </ul>
-     * 
-     * @label Keep Lucene documents
-     * @group Results
-     * @level Advanced
      */
     @Input
     @Processing
     @Attribute
     @Internal
+    @Label("Keep Lucene documents")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.RESULT_INFO)
     public boolean keepLuceneDocuments = false;
 
     /**
@@ -388,7 +390,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             {
                 try
                 {
-                    searcher = new IndexSearcher(directory, true);
+                    searcher = new IndexSearcher(IndexReader.open(directory));
                     openIndexes.put(directory, searcher);
                 }
                 catch (IOException e)

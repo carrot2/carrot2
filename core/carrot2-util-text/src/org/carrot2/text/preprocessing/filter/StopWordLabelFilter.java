@@ -27,13 +27,12 @@ public class StopWordLabelFilter extends SingleLabelFilterBase
     /**
      * Remove leading and trailing stop words. Removes labels that consist of, start or
      * end in stop words.
-     * 
-     * @level Basic
-     * @group Label filtering
      */
     @Input
     @Processing
     @Attribute
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.LABELS)    
     public boolean enabled = true;
 
     @Override

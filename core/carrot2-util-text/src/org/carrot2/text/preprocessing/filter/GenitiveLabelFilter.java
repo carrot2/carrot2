@@ -26,14 +26,13 @@ public class GenitiveLabelFilter extends SingleLabelFilterBase
     /**
      * Remove labels ending in genitive form. Removes labels that do end in words
      * in the Saxon Genitive form (e.g. "Threatening the Country's").
-     * 
-     * @level Basic
-     * @group Label filtering
-     * @label Remove labels ending in genitive form
      */
     @Input
     @Processing
     @Attribute
+    @Label("Remove labels ending in genitive form")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.LABELS)    
     public boolean enabled = true;
 
     private final static char [][] ENDINGS = new char [] []

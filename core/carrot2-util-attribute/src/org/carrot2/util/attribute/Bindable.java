@@ -21,6 +21,7 @@ import java.lang.annotation.*;
  * itself is not marked with {@link Bindable}, the {@link Attribute} annotations will be
  * ignored.
  */
+@Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Bindable

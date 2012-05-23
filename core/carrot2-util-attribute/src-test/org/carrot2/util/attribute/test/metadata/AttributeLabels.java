@@ -21,37 +21,30 @@ import org.carrot2.util.attribute.*;
 @SuppressWarnings("unused")
 public class AttributeLabels
 {
-    /**
-     * @label word
-     */
     @TestInit
     @Input
     @Attribute
+    @Label("word")
     private int singleWordLabel;
 
-    /**
-     * @label multi word label
-     */
     @TestInit
     @Input
     @Attribute
+    @Label("multi word label")
     private int multiWordLabel;
 
-    /**
-     * @label First label sentence. Second label sentence.
-     */
     @TestInit
     @Input
     @Attribute
+    @Label("First label sentence. Second label sentence.")
     private int multiSentenceLabel;
 
     /**
      * Attribute comment. Second sentence of attribute comment.
-     *
-     * @label word
      */
     @TestInit
     @Input
     @Attribute
+    @Label("word")
     private int labelWithComment;
 }

@@ -26,6 +26,9 @@ import org.carrot2.util.attribute.constraint.IntRange;
 @Bindable(prefix = "FubDocumentSource", inherit = CommonAttributes.class)
 public class FubDocumentSource extends ProcessingComponentBase implements IDocumentSource
 {
+    /** {@link Group} name. */
+    protected static final String TOPIC_ID = "Topic ID";
+    
     @Processing
     @Output
     @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
@@ -36,13 +39,12 @@ public class FubDocumentSource extends ProcessingComponentBase implements IDocum
      * Topics and subtopics covered in the output documents. The set is computed for the
      * output {@link #documents} and it may vary for the same main topic based e.g. on the
      * requested number of requested results or {@link #minTopicSize}.
-     * 
-     * @level Advanced
-     * @group Topic ID
      */
     @Processing
     @Output
     @Attribute
+    @Group(TOPIC_ID)
+    @Level(AttributeLevel.ADVANCED)
     public Set<Object> topicIds;
 
     @Processing
@@ -53,22 +55,23 @@ public class FubDocumentSource extends ProcessingComponentBase implements IDocum
     /**
      * Minimum topic size. Documents belonging to a topic with fewer documents than
      * minimum topic size will not be returned.
-     * 
-     * @level Medium
-     * @group Filtering
      */
     @Input
     @Processing
     @Attribute
     @IntRange(min = 1)
+    @Group(DefaultGroups.FILTERING)
+    @Level(AttributeLevel.MEDIUM)
     public int minTopicSize = 1;
 
     /**
      * Include documents without topics.
-     * 
-     * @level Medium
-     * @group Filtering
      */
+    @Input
+    @Processing
+    @Attribute
+    @Group(DefaultGroups.FILTERING)
+    @Level(AttributeLevel.MEDIUM)
     public boolean includeDocumentsWithoutTopic = false;
 
     protected void processInternal(FubTestCollection data, int topicId,

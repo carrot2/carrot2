@@ -36,8 +36,13 @@ import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.Output;
 import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.DoubleRange;
@@ -53,6 +58,7 @@ import com.google.common.collect.Ordering;
  * Systems, May/June, 3 (vol. 20), 2005, pp. 48—54."</i>.
  */
 @Bindable(prefix = "LingoClusteringAlgorithm", inherit = CommonAttributes.class)
+@Label("Lingo Clustering")
 public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
@@ -86,15 +92,14 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      * Balance between cluster score and size during cluster sorting. Value equal to 0.0
      * will cause Lingo to sort clusters based only on cluster size. Value equal to 1.0
      * will cause Lingo to sort clusters based only on cluster score.
-     * 
-     * @label Size-Score sorting ratio
-     * @level Medium
-     * @group Clusters
      */
     @Input
     @Processing
     @Attribute
     @DoubleRange(min = 0.0, max = 1.0)
+    @Label("Size-Score sorting ratio")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.CLUSTERS)
     public double scoreWeight = 0.0;
 
     /**
@@ -102,15 +107,14 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      * based on the number of documents on input. The larger the value, the more clusters
      * will be created. The number of clusters created by the algorithm will be
      * proportional to the cluster count base, but not in a linear way.
-     * 
-     * @level Basic
-     * @group Clusters
-     * @label Cluster count base
      */
     @Input
     @Processing
     @Attribute
     @IntRange(min = 2, max = 100)
+    @Label("Cluster count base")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.CLUSTERS)
     public int desiredClusterCountBase = 30;
 
     /**

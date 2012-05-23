@@ -16,8 +16,13 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 
 /**
  * Accepts labels that do not consist only of query words.
@@ -28,14 +33,13 @@ public class QueryLabelFilter extends SingleLabelFilterBase
     /**
      * Remove query words. Removes labels that consist only of words contained in the
      * query.
-     * 
-     * @level Basic
-     * @group Label filtering
-     * @label Remove query words
      */
     @Input
     @Processing
     @Attribute
+    @Label("Remove query words")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.LABELS)    
     public boolean enabled = true;
 
     @Override

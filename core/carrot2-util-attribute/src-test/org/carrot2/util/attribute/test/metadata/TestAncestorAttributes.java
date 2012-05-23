@@ -12,8 +12,7 @@
 
 package org.carrot2.util.attribute.test.metadata;
 
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.*;
 
 /**
  *
@@ -23,9 +22,8 @@ public class TestAncestorAttributes
 {
     /**
      * Title. Description.
-     *
-     * @label label
      */
     @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL)
+    @Label("label")
     public String fieldNameDoesNotMatter;
 }

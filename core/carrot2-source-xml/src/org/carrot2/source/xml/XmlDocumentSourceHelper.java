@@ -12,10 +12,17 @@
 
 package org.carrot2.source.xml;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
-import javax.xml.transform.*;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -24,11 +31,16 @@ import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
+import org.carrot2.source.SimpleSearchEngine;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.StreamUtils;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.IResource;
@@ -49,17 +61,16 @@ public class XmlDocumentSourceHelper
     /**
      * Data transfer timeout. Specifies the data transfer timeout, in seconds. A timeout value of 
      * zero is interpreted as an infinite timeout.  
-     * 
-     * @label Data transfer timeout
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Processing
     @Attribute
     @IntRange(min = 0, max = 5 * 60)
+    @Label("Data transfer timeout")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SimpleSearchEngine.SERVICE)
     public int timeout = 8;
-    
+
     /** Precompiled XSLT templates. */
     private final TemplatesPool pool;
 

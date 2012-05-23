@@ -30,52 +30,50 @@ import com.google.common.collect.Maps;
 @Bindable(prefix = "SolrDocumentSource")
 public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
 {
+    protected static final String FIELD_MAPPING = "Index field mapping";
+    
     /**
      * Solr service URL base.
-     * 
-     * @label Service URL
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Processing
     @Attribute
+    @Label("Service URL")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)
     public String serviceUrlBase = "http://localhost:8983/solr/select";
 
     /**
      * Title field name. Name of the Solr field that will provide document titles.
-     *
-     * @label Title field name
-     * @level Medium
-     * @group Index field mapping
      */
     @Input
     @Processing
     @Attribute
+    @Label("Title field name")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(FIELD_MAPPING)
     public String solrTitleFieldName = "title";
 
     /**
      * Summary field name. Name of the Solr field that will provide document summary.
-     * 
-     * @label Summary field name
-     * @group Index field mapping
-     * @level Medium
      */
     @Input
     @Processing
     @Attribute
+    @Label("Summary field name")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(FIELD_MAPPING)
     public String solrSummaryFieldName = "description";
 
     /**
      * URL field name. Name of the Solr field that will provide document URLs.
-     * 
-     * @label URL field name
-     * @group Index field mapping
-     * @level Medium
      */
     @Input
     @Processing
     @Attribute
+    @Label("URL field name")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(FIELD_MAPPING)
     public String solrUrlFieldName = "url";
 
     @Override

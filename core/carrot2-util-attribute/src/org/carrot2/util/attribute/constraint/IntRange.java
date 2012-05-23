@@ -19,6 +19,7 @@ import java.lang.annotation.*;
  * Requires that the integer attribute value is between {@link #min()} (inclusively) and
  * {@link #max()} (inclusively).
  */
+@Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @IsConstraint(implementation = IntRangeConstraint.class)

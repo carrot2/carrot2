@@ -28,6 +28,7 @@ import java.lang.reflect.Field;
  * used to selectively bind only some of a {@link Bindable}'s attributes (see
  * {@link AttributeBinder} for more details).
  */
+@Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Attribute

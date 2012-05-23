@@ -16,8 +16,13 @@ import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 
 import com.google.common.base.Strings;
 
@@ -36,14 +41,13 @@ public class Bing3WebDocumentSource extends Bing3DocumentSource
     /**
      * Site restriction to return results under a given URL. Example:
      * <tt>http://www.wikipedia.com</tt> or simply <tt>wikipedia.com</tt>.
-     * 
-     * @label Site restriction
-     * @group Results filtering
-     * @level Advanced
      */
     @Processing
     @Input
     @Attribute
+    @Label("Site restriction")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.FILTERING)        
     public String site;
 
     /**

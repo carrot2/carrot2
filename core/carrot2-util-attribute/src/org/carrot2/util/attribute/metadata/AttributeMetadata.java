@@ -38,8 +38,7 @@ public class AttributeMetadata extends CommonMetadata
         this(title, label, description, null, null);
     }
 
-    public AttributeMetadata(String title, String label, String description, String group,
-        AttributeLevel level)
+    public AttributeMetadata(String title, String label, String description, String group, AttributeLevel level)
     {
         this.title = title;
         this.label = label;
@@ -76,7 +75,7 @@ public class AttributeMetadata extends CommonMetadata
     {
         return level;
     }
-
+    
     public void setLevel(AttributeLevel level)
     {
         this.level = level;

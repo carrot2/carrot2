@@ -13,13 +13,13 @@
 package org.carrot2.util.attribute.test.metadata;
 
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Label;
 
 /**
  * Some test bindable. Description.
- *
- * @label Test Bindable
  */
 @Bindable
+@Label("Test Bindable")
 public class TestBindable
 {
 

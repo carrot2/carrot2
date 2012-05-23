@@ -29,14 +29,13 @@ public class StopLabelFilter extends SingleLabelFilterBase
      * Remove stop labels. Removes labels that are declared as stop labels in the
      * stoplabels.&lt;lang&gt; files. Please note that adding a long list of regular
      * expressions to the stoplabels file may result in a noticeable performance penalty.
-     * 
-     * @level Basic
-     * @group Label filtering
-     * @label Remove stop labels
      */
     @Input
     @Processing
     @Attribute
+    @Label("Remove stop labels")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.LABELS)    
     public boolean enabled = true;
 
     /*

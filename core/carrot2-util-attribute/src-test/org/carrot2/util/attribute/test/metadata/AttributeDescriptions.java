@@ -21,22 +21,19 @@ import org.carrot2.util.attribute.*;
 @SuppressWarnings("unused")
 public class AttributeDescriptions
 {
-    /**
-     * @label label
-     */
     @TestInit
     @Input
     @Attribute
+    @Label("label")
     private int noDescriptionNoTitle;
 
     /**
      * Title.
-     *
-     * @label label
      */
     @TestInit
     @Input
     @Attribute
+    @Label("label")
     private int noDescription;
 
     /**

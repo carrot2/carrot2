@@ -29,12 +29,10 @@ public class NamedAttributes
     @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL, inherit = true)
     private int noJavadoc;
 
-    /**
-     * @label overridden
-     */
     @TestInit
     @Input
     @Attribute(key = TestAttributeNames.TITLE_DESCRIPTION_LABEL, inherit = true)
+    @Label("overridden")
     private int labelOverride;
 
     /**

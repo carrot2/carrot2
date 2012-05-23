@@ -26,14 +26,13 @@ public class NumericLabelFilter extends SingleLabelFilterBase
 {
     /**
      * Remove numeric labels. Remove labels that consist only of or start with numbers.
-     * 
-     * @level Basic
-     * @group Label filtering
-     * @label Remove numeric labels
      */
     @Input
     @Processing
     @Attribute
+    @Label("Remove numeric labels")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.LABELS)    
     public boolean enabled = true;
 
     @Override

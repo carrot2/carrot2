@@ -36,6 +36,13 @@ import org.carrot2.util.attribute.constraint.NotBlank;
 public abstract class SearchEngineBase extends ProcessingComponentBase implements
     IDocumentSource
 {
+    /** {@link Group} name. */
+    public static final String SERVICE = "Service";
+
+    /** {@link Group} name. */
+    protected static final String POSTPROCESSING = "Postprocessing";
+    
+    
     @Processing
     @Input
     @Attribute(key = AttributeNames.START, inherit = true)
@@ -68,13 +75,12 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
 
     /**
      * Indicates whether the search engine returned a compressed result stream.
-     * 
-     * @label Compression used
-     * @group Data source status
      */
     @Processing
     @Output
     @Attribute
+    @Label("Compression used")
+    @Group(DefaultGroups.RESULT_INFO)
     public boolean compressed;
 
     /**

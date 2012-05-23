@@ -25,8 +25,12 @@ import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.URLResourceWithParams;
@@ -67,35 +71,28 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * to be searched. Mutually exclusive with <code>startIndex</code>.</li><li><code>
      * count</code> the number of search results per page</li>
      * </ul>
-     * <p>
-     * Example URL feed templates for public services:
+     * 
+     * <p>Example URL feed templates for public services:
      * <dl>
      *   <dt>nature.com</dt>
      *   <dd><code>http://www.nature.com/opensearch/request?interface=opensearch&amp;operation=searchRetrieve&amp;query=${searchTerms}&amp;startRecord=${startIndex}&amp;maximumRecords=${count}&amp;httpAccept=application/rss%2Bxml</code></dd>
      *   <dt>indeed.com</dt>
      *   <dd><code>http://www.indeed.com/opensearch?q=${searchTerms}&amp;start=${startIndex}&amp;limit=${count}</code></dd>
-     * </dl>
-     * 
-     * </p>
-     * 
-     * @label Feed URL template
-     * @level Basic
-     * @group Service
+     * </dl></p>
      */
     @Input
     @Processing
     @Init
     @Attribute
     @Required
+    @Label("Feed URL template")
+    @Level(AttributeLevel.BASIC)
+    @Group(SERVICE)            
     public String feedUrlTemplate;
 
     /**
      * Results per page. The number of results per page the document source will expect
      * the feed to return.
-     * 
-     * @label Results per page
-     * @level Basic
-     * @group Service
      */
     @Input
     @Processing
@@ -103,34 +100,35 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
     @Attribute
     @Required
     @IntRange(min = 1)
+    @Label("Results per page")
+    @Level(AttributeLevel.BASIC)
+    @Group(SERVICE)                
     public int resultsPerPage = 50;
 
     /**
      * Maximum number of results. The maximum number of results the document source can
      * deliver.
-     * 
-     * @label Maximum results
-     * @level Basic
-     * @group Service
      */
     @Input
     @Processing
     @Init
     @Attribute
     @IntRange(min = 1)
+    @Label("Maximum results")
+    @Level(AttributeLevel.BASIC)
+    @Group(SERVICE)            
     public int maximumResults = 1000;
 
     /**
      * Additional parameters to be appended to {@link #feedUrlTemplate} on each request.
-     * 
-     * @label Feed URL parameters
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Init
     @Processing
     @Attribute
+    @Label("Feed URL parameters")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)                
     public Map<String, String> feedUrlParams = null;
     
     /**
@@ -138,15 +136,14 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * requests to the feed URL. If empty or <code>null</code> value is provided,
      * the following User-Agent will be sent: <code>Rome Client (http://tinyurl.com/64t5n) 
      * Ver: UNKNOWN</code>.
-     * 
-     * @label User agent
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Init
     @Processing
     @Attribute
+    @Label("User agent")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)
     public String userAgent = null;
 
     /**

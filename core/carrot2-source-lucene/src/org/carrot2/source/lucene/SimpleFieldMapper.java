@@ -35,69 +35,65 @@ import org.carrot2.util.attribute.constraint.IntRange;
 @Bindable
 public class SimpleFieldMapper implements IFieldMapper
 {
+    /** {@link Group} name. */
+    final static String INDEX_FIELD_MAPPING = "Index field mapping";
+    /** {@link Group} name. */
+    final static String HIGHLIGHTER = "Highlighter";
+
     /**
      * Document title field name.
-     * 
-     * @label Document title field
-     * @group Index field mapping
-     * @level Basic
      */
     @Input
     @Attribute
     @Init
     @Processing
     @Internal(configuration = true)
+    @Label("Document title field")
+    @Level(AttributeLevel.BASIC)
+    @Group(INDEX_FIELD_MAPPING)
     public String titleField;
 
     /**
      * Document content field name.
-     * 
-     * @label Document content field
-     * @group Index field mapping
-     * @level Basic
      */
     @Input
     @Attribute
     @Init
     @Processing
     @Internal(configuration = true)
+    @Label("Document content field")
+    @Level(AttributeLevel.BASIC)
+    @Group(INDEX_FIELD_MAPPING)
     public String contentField;
 
     /**
      * Document URL field name.
-     * 
-     * @label Document URL field
-     * @group Index field mapping
-     * @level Medium
      */
     @Input
     @Attribute
     @Init
     @Processing
     @Internal(configuration = true)
+    @Label("Document URL field")
+    @Level(AttributeLevel.BASIC)
+    @Group(INDEX_FIELD_MAPPING)
     public String urlField;
 
     /**
      * Index search field names. If not specified, title and content fields are used.
-     * 
-     * @label Search fields
-     * @group Index field mapping
-     * @level Medium
      */
     @Input
     @Attribute
     @Init
     @Processing
     @Internal(configuration = true)
+    @Label("Search fields")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(INDEX_FIELD_MAPPING)
     public List<String> searchFields;
 
     /**
-     * Snippet formatter for the highlighter. Highlighter is not used if <code>null</code>
-     * .
-     * 
-     * @label Formatter
-     * @group Highlighter
-     * @level Advanced
+     * Snippet formatter for the highlighter. Highlighter is not used if <code>null</code>.
      */
     @Input
     @Attribute
@@ -107,33 +103,34 @@ public class SimpleFieldMapper implements IFieldMapper
     {
         PlainTextFormatter.class, SimpleHTMLFormatter.class
     }, strict = false)
+    @Label("Formatter")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(HIGHLIGHTER)
     public Formatter formatter = new PlainTextFormatter();
 
     /**
      * Number of context fragments for the highlighter.
-     * 
-     * @label Context fragments
-     * @group Highlighter
-     * @level Advanced
      */
     @Input
     @Attribute
     @Init
     @Processing
     @IntRange(min = 1)
+    @Label("Context fragments")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(HIGHLIGHTER)
     public int contextFragments = 3;
 
     /**
      * A string used to join context fragments when highlighting.
-     * 
-     * @label Join string
-     * @group Highlighter
-     * @level Advanced
      */
     @Input
     @Attribute
     @Init
     @Processing
+    @Label("Join string")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(HIGHLIGHTER)
     public String fragmentJoin = "...";
 
     /**

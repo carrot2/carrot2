@@ -25,10 +25,9 @@ import com.google.common.collect.Maps;
 /**
  * Clusters documents into a flat structure based on the values of some field of the
  * documents. By default the {@link Document#SOURCES} field is used.
- * 
- * @label By Attribute Clustering
  */
 @Bindable(prefix = "ByAttributeClusteringAlgorithm", inherit = CommonAttributes.class)
+@Label("By Attribute Clustering")
 public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
@@ -56,16 +55,15 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
      * value returned by {@link #buildClusterLabel(Object)}. If the field value is a collection,
      * the document will be assigned to all clusters corresponding to the values in the
      * collection. Note that arrays will not be 'unfolded' in this way.
-     * 
-     * @label Field name
-     * @level Basic
-     * @group Field
      */
     @Processing
     @Input
     @Attribute
     @Required
     @NotBlank
+    @Level(AttributeLevel.BASIC)
+    @Group("Fields")
+    @Label("Field name")
     public String fieldName = Document.SOURCES;
 
     /**
@@ -123,5 +121,4 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
     {
         return fieldValue.toString();
     }
-    
 }

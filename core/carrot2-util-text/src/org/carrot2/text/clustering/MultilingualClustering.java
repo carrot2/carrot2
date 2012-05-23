@@ -33,6 +33,9 @@ import com.google.common.collect.*;
 @Bindable(prefix = "MultilingualClustering")
 public class MultilingualClustering
 {
+    /** {@link Group} name. */
+    private static final String MULTILINGUAL_CLUSTERING = "Multilingual clustering";
+
     /**
      * Defines how monolingual partial clusters will be combined to form final results.
      */
@@ -83,27 +86,25 @@ public class MultilingualClustering
      * languages should be combined to form the final result. Please see
      * {@link org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy} 
      * for the list of available options.
-     * 
-     * @group Multilingual clustering
-     * @level Medium
      */
     @Input
     @Processing
     @Attribute
     @Required
+    @Group(MULTILINGUAL_CLUSTERING)
+    @Level(AttributeLevel.MEDIUM)
     public LanguageAggregationStrategy languageAggregationStrategy = LanguageAggregationStrategy.FLATTEN_MAJOR_LANGUAGE;
 
     /**
      * Default clustering language. The default language to use for documents with
      * undefined {@link org.carrot2.core.Document#LANGUAGE}.
-     * 
-     * @group Multilingual clustering
-     * @level Medium
      */
     @Input
     @Processing
     @Attribute
     @Required
+    @Group(MULTILINGUAL_CLUSTERING)
+    @Level(AttributeLevel.MEDIUM)
     public LanguageCode defaultLanguage = LanguageCode.ENGLISH;
 
     public List<Cluster> process(List<Document> documents,

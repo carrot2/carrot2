@@ -29,8 +29,12 @@ import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.opensearch.RomeFetcherUtils;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.slf4j.Logger;
@@ -67,68 +71,60 @@ public class IdolDocumentSource extends MultipageSearchEngine
 
     /**
      * URL of the IDOL Server.
-     * 
-     * @label IDOL Server Address
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Processing
     @Init
     @Attribute
     @Required
+    @Label("IDOL server address")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)    
     public String idolServerName;
 
     /**
      * IDOL Server Port.
-     * 
-     * @label IDOL Server Port
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Processing
     @Init
     @Attribute
     @Required
+    @Label("IDOL server port")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)
     public int idolServerPort;
 
     /**
      * IDOL XSL Template Name. The Reference of an IDOL XSL template that outputs the
      * results in OpenSearch format.
-     * 
-     * @label IDOL XSL Template Name
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Processing
     @Init
     @Attribute
     @Required
+    @Label("IDOL XSL template name")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)    
     public String xslTemplateName;
 
     /**
      * Any other search attributes (separated by &amp;) from the Autonomy Query Search
      * API's Ensure all the attributes are entered to satisfy XSL that will be applied.
-     * 
-     * @label Other IDOLSearch Attributes
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Processing
     @Init
     @Attribute
+    @Label("Other IDOLSearch attributes")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)
     public String otherSearchAttributes;
 
     /**
      * Results per page. The number of results per page the document source will expect
      * the feed to return.
-     * 
-     * @label Results per page
-     * @level Advanced
-     * @group Service
      */
     @Input
     @Processing
@@ -136,64 +132,62 @@ public class IdolDocumentSource extends MultipageSearchEngine
     @Attribute
     @Required
     @IntRange(min = 1)
+    @Label("Results per page")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)
     public int resultsPerPage = 50;
 
     /**
      * Minimum IDOL Score. The minimum score of the results returned by IDOL.
-     * 
-     * @label Minimum Score
-     * @level Basic
-     * @group Service
      */
     @Input
     @Processing
     @Init
     @Attribute
     @IntRange(min = 1)
+    @Label("Minimum score")
+    @Level(AttributeLevel.BASIC)
+    @Group(SERVICE)
     public int minScore = 50;
 
     /**
      * Maximum number of results. The maximum number of results the document source can
      * deliver.
-     * 
-     * @label Maximum results
-     * @level Basic
-     * @group Service
      */
     @Input
     @Processing
     @Init
     @Attribute
     @IntRange(min = 1)
+    @Label("Maximum results")
+    @Level(AttributeLevel.BASIC)
+    @Group(SERVICE)
     public int maximumResults = 100;
 
     /**
      * User agent header. The contents of the User-Agent HTTP header to use when making
      * requests to the feed URL. If empty or <code>null</code> value is provided, the
      * following User-Agent will be sent:
-     * <code>Rome Client (http://tinyurl.com/64t5n) 
-     * Ver: UNKNOWN</code>.
-     * 
-     * @label User agent
-     * @level Advanced
-     * @group Service
+     * <code>Rome Client (http://tinyurl.com/64t5n) Ver: UNKNOWN</code>.
      */
     @Input
     @Init
     @Processing
     @Attribute
+    @Label("User agent")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(SERVICE)
     public String userAgent = null;
     
     /**
      * User name to use for authentication.
-     * 
-     * @label User name
-     * @level Medium
-     * @group Service
      */
     @Input
     @Processing
     @Attribute
+    @Label("User name")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(SERVICE)
     public String userName;
 
     /**

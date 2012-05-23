@@ -36,15 +36,14 @@ public abstract class MultipageSearchEngine extends SearchEngineBase
     /**
      * Search mode defines how fetchers returned from {@link #createFetcher}
      * are called.
-     * 
-     * @label Search Mode
-     * @level Advanced
-     * @group Results paging
      * @see SearchMode
      */
     @Processing
     @Input
     @Attribute(key = "search-mode")
+    @Level(AttributeLevel.ADVANCED)
+    @Label("Search Mode")
+    @Group(DefaultGroups.SOURCE_PAGING)
     public SearchMode searchMode = SearchMode.SPECULATIVE;
 
     /**

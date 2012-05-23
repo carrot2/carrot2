@@ -620,6 +620,9 @@
 
     <javadoc destdir="${javadoc.dir}"
              access="protected"
+             noindex="true"
+             nohelp="true"
+             notree="true"
              version="true"
              use="false"
              encoding="UTF-8"
