@@ -13,6 +13,7 @@
     <include suite="source-pubmed.xml" />
     <include suite="source-indeed.xml" />
     <include suite="source-opensearch.xml" />
+    <include suite="source-idolsearch.xml" />
 
     <!-- Algorithms -->
     <include suite="algorithm-lingo.xml" />

@@ -56,6 +56,8 @@ import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
  * Based on code donated by Julien Nioche. Autonomy IDOL support contributed by James
  * Sealey.
  * </p>
+ * 
+ * @see "http://www.autonomy.com/content/Products/products-idol-server/index.en.html"
  */
 @Bindable(prefix = "IdolDocumentSource")
 public class IdolDocumentSource extends MultipageSearchEngine
@@ -78,7 +80,7 @@ public class IdolDocumentSource extends MultipageSearchEngine
     @Attribute
     @Required
     @Label("IDOL server address")
-    @Level(AttributeLevel.ADVANCED)
+    @Level(AttributeLevel.BASIC)
     @Group(SERVICE)    
     public String idolServerName;
 
@@ -91,7 +93,7 @@ public class IdolDocumentSource extends MultipageSearchEngine
     @Attribute
     @Required
     @Label("IDOL server port")
-    @Level(AttributeLevel.ADVANCED)
+    @Level(AttributeLevel.BASIC)
     @Group(SERVICE)
     public int idolServerPort;
 
