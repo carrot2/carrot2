@@ -616,6 +616,14 @@
     <delete dir="${javadoc.dir}" failonerror="false" />
     <property name="tmp.src" location="${tmp.dir}/src" />
 
+    <fail message="Use java 7 or later to render javadocs (they look super-ugly with java 6).">
+      <condition>
+        <not>
+          <hasmethod classname="java.lang.Throwable" method="getSuppressed"  />
+        </not>
+      </condition>
+    </fail>
+
     <mkdir dir="${javadoc.dir}" />
 
     <javadoc destdir="${javadoc.dir}"
