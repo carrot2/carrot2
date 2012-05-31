@@ -104,7 +104,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
         // Initialize cache
         try
         {
-            cacheManager = CacheManager.create(new ClassResource(
+            cacheManager = new CacheManager(new ClassResource(
                 CachingProcessingComponentManager.class, "/controller-ehcache.xml")
                 .open());
         }
