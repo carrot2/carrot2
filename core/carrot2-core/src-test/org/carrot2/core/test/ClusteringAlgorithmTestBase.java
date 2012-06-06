@@ -35,7 +35,7 @@ import org.carrot2.core.Platform;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.metadata.BindableMetadata;
+import org.carrot2.util.attribute.BindableMetadata;
 import org.fest.assertions.Assertions;
 import org.junit.Assume;
 import org.junit.Test;

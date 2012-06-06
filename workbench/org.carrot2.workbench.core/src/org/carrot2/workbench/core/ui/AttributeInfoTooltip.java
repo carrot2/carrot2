@@ -15,7 +15,7 @@ package org.carrot2.workbench.core.ui;
 import static org.carrot2.workbench.core.ui.StyledTextContentBuilder.BOLD;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
-import org.carrot2.util.attribute.metadata.AttributeMetadata;
+import org.carrot2.util.attribute.AttributeMetadata;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.eclipse.core.runtime.*;

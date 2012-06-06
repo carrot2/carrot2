@@ -10,7 +10,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.simpleframework.xml"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-text"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-common"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-attribute"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-algorithm-lingo"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-algorithm-stc"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-algorithm-synthetic"/>
@@ -20,5 +19,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-matrix"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.apache.commons"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.apache.lucene"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.carrot2.attributes"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

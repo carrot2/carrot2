@@ -4,7 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-component-suites"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-core"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-attribute"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-common"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
 </classpath>

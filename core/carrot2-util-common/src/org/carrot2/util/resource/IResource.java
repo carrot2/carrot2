@@ -15,11 +15,13 @@ package org.carrot2.util.resource;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.carrot2.util.attribute.IAssignable;
+
 /**
  * Resource abstraction. Override {@link Object#toString()} to have meaningful logging
  * information at runtime.
  */
-public interface IResource
+public interface IResource extends IAssignable
 {
     /**
      * Open an input stream to the resource. Specific implementations may cache and close

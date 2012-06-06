@@ -675,7 +675,6 @@
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Clustering Algorithms" packages="org.carrot2.clustering*" />
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Results post-processing" packages="org.carrot2.output*" />
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Text preprocessing utilities" packages="org.carrot2.text*" />
-      <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Attribute Binding" packages="org.carrot2.util.attribute*" />
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Matrix utilities" packages="org.carrot2.matrix*" />
       <group title="Carrot&lt;sup&gt;2&lt;/sup&gt; Utility classes" packages="org.carrot2.util*" />
       
@@ -1187,60 +1186,6 @@
   <target name="workbench.rcp.defaults">
     <rcp-defaults />
   </target>
-
-  <!--
-      Compilation and assembly of static utility JARs (apt preprocessors).
-   -->
-  <target name="utility.jars" description="Re(create) utility JARs.">
-    <property name="utilities.build.dir" location="${tmp.dir}/utility.jars" />
-
-    <delete dir="${utilities.build.dir}" failonerror="false" />
-    <mkdir dir="${utilities.build.dir}" />
-    <javac destdir="${utilities.build.dir}" compiler="modern">
-      <src location="${carrot2.master.basedir}/core/carrot2-util-attribute/src" />
-      <src location="${carrot2.master.basedir}/core/carrot2-util-attribute/src-apt" />
-      <include name="org/carrot2/util/attribute/metadata/**" />
-      <include name="org/carrot2/util/attribute/Bindable.java" />
-      <include name="org/carrot2/util/attribute/Attribute.java" />
-      <include name="org/carrot2/util/attribute/AttributeLevel.java" />
-
-      <classpath id="utility.classpath">
-        <fileset dir="${carrot2.master.basedir}" id="utility.jars.fileset">
-          <include name="lib/org.apache.commons/commons-lang-*.jar" />
-          <include name="lib/org.apache.commons/commons-collections-*.jar" />
-          <include name="lib/org.apache.oro/oro-*.jar" />
-          <include name="lib/com.thoughtworks.qdox/*.jar" />
-          <include name="lib/org.apache.velocity/velocity-*.jar" />
-          <include name="lib/org.simpleframework.xml/*.jar" />
-        </fileset>
-      </classpath>
-    </javac>
-
-    <pathconvert property="utility.manifest.classpath" pathsep=" " dirsep="/">
-        <fileset refid="utility.jars.fileset" />
-
-        <mapper>
-          <chainedmapper>
-             <filtermapper><replacestring
-                from="${carrot2.master.basedir}" 
-                to="../../.."/></filtermapper> 
-          </chainedmapper>
-        </mapper>
-    </pathconvert>
-
-    <jar destfile="${carrot2.master.basedir}/core/carrot2-util-attribute/.apt_factory/org.carrot2.bindables.jar">
-      <fileset dir="${utilities.build.dir}" />
-      <fileset dir="${carrot2.master.basedir}/core/carrot2-util-attribute/src-apt" excludes="**/*.java" />
-
-      <service type="javax.annotation.processing.Processor" provider="org.carrot2.util.attribute.metadata.BindableProcessor" />
-      <manifest>
-        <attribute name="Class-Path" value="${utility.manifest.classpath}" />
-      </manifest>
-    </jar>
-
-    <delete dir="${utilities.build.dir}" failonerror="false" />
-  </target>
-
 
   <!--
       Source code management: license headers list and replace.

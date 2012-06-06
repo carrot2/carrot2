@@ -8,8 +8,7 @@ Export-Package: org.carrot2.core,
  org.carrot2.core.test,
  org.carrot2.core.test.assertions,
  org.carrot2.source
-Require-Bundle: org.carrot2.util.attribute;visibility:=reexport,
- org.carrot2.util.common;visibility:=reexport,
+Require-Bundle: org.carrot2.util.common;visibility:=reexport,
  org.codehaus.jackson
 Bundle-ClassPath: META-INF/,
  .

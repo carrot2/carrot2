@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Carrot2 Attribute Utils
+Bundle-SymbolicName: org.carrot2.attributes
+Bundle-Version: 0.0.0.QUALIFIER
+Require-Bundle: org.simpleframework.xml;visibility:=reexport,
+ com.google.guava;bundle-version="10.0.1";visibility:=reexport
+Bundle-Vendor: Carrot2.org
+Eclipse-BuddyPolicy: registered
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: attributes-binder-1.0.0.jar
+Export-Package: org.carrot2.util.attribute,
+ org.carrot2.util.attribute.constraint

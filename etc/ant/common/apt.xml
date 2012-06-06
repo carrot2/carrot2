@@ -7,8 +7,8 @@
   <target name="paths">
     <fail unless="carrot2.master.basedir">carrot2.master.basedir undefined.</fail>
     <path id="carrot2.apt.jars">
-      <fileset dir="${carrot2.master.basedir}/core/carrot2-util-attribute/.apt_factory">
-        <include name="*.jar" />
+      <fileset dir="${carrot2.master.basedir}/lib/org.carrot2.attributes">
+        <include name="attributes-processor-*.jar" />
       </fileset>
     </path>
   </target>

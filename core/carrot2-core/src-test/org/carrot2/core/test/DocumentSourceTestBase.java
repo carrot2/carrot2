@@ -22,7 +22,7 @@ import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.metadata.BindableMetadata;
+import org.carrot2.util.attribute.BindableMetadata;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
