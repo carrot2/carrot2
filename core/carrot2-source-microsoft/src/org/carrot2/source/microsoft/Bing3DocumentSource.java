@@ -98,7 +98,7 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
      * your own ID</strong> for production deployments and branches off the Carrot2.org's
      * code.
      *
-     * <p>By default takes the system property's value under key: <code>bing3.api<code>
+     * <p>By default takes the system property's value under key: <code>bing3.api</code>.</p>
      */
     @Init
     @Input
