@@ -155,7 +155,7 @@
     <exclude name="lib/**/servlet-api-*.jar" />
     <exclude name="lib/**/jsr305*" />
     <exclude name="lib/org.junit4*/**" />
-    <exclude name="lib/org.carrot2*/**" />
+    <exclude name="lib/org.carrot2*/attributes-processor*.jar" />
     <exclude name="lib/org.gargoylesoftware.htmlunit/**" />
     <exclude name="lib/com.thoughtworks.qdox/**" />
     <exclude name="lib/org.apache.velocity/**" />
@@ -190,6 +190,8 @@
     <include name="lib/**/slf4j-api*.jar" />
     <include name="lib/**/slf4j-nop*.jar" />
     <include name="lib/**/slf4j.LICENSE" />
+
+    <include name="lib/**/attributes-binder-*.jar" />
   </patternset>
 
   <patternset id="licenses.core">
