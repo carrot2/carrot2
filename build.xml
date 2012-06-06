@@ -480,7 +480,12 @@
         <sysproperty key="carrot2.xml.feed.url.base" value="${carrot2.xml.feed.url.base.internal}" />
         <sysproperty key="dcs.test.web.dir.prefix" value="${applications.dir}/carrot2-dcs" />
         <sysproperty key="log4j.configuration" value="log4j-tests.xml" />
-        
+
+        <!-- Pass any command-line properties that may alter tests' behavior. -->
+        <syspropertyset>
+          <propertyref name="bing3.key" />
+        </syspropertyset>
+
         <fileset dir="${build.dir.tests}">
           <include name="**/*Test.class" />
         </fileset>
