@@ -803,8 +803,8 @@
   <!--
         Carrot2 mini JAR, just core and algorithms. No extended support for Chinese and Arabic.
     -->
-  <target name="jar.mini" />
-    
+  <target name="jar.mini" depends="jar.mini.build" />
+
   <target name="jar.mini.build" depends="jar">
     <jar destfile="${jar.dir}/carrot2-mini-${carrot2.version}.jar">
       <!-- selectors don't seem to work with zipfileset -->

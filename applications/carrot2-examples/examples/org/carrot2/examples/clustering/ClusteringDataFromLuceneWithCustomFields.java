@@ -29,6 +29,7 @@ import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.CreateLuceneIndex;
 import org.carrot2.source.lucene.*;
+import org.carrot2.util.annotations.ThreadSafe;
 
 import com.google.common.collect.Maps;
 
@@ -148,6 +149,7 @@ public class ClusteringDataFromLuceneWithCustomFields
      * Our custom Lucene -> Carrot2 content mapper. You can {@link SimpleFieldMapper}
      * source code for the default implementation.
      */
+    @ThreadSafe
     public static final class CustomFieldMapper implements IFieldMapper
     {
         public void map(Query luceneQuery, Analyzer analyzer, Document luceneDoc,
