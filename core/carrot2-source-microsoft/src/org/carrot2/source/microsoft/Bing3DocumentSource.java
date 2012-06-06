@@ -17,15 +17,13 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import org.apache.http.*;
 import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
-import org.carrot2.source.MultipageSearchEngine;
-import org.carrot2.source.SearchEngineResponse;
+import org.carrot2.source.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.httpclient.HttpUtils;
@@ -34,6 +32,7 @@ import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -43,8 +42,7 @@ import com.google.common.collect.Maps;
  * type (web, image, news).
  * 
  * <p>Important: there are limits for free use of the above API (beyond which it is a
- * paid service). Do not reuse our keys in your applications, please - 
- * see {@link #CARROTSEARCH_APPID} for more info.
+ * paid service).
  * 
  * @see "https://datamarket.azure.com/dataset/5ba839f1-12ce-4cce-bf57-a49d98d29a44"
  */
@@ -52,15 +50,10 @@ import com.google.common.collect.Maps;
 public abstract class Bing3DocumentSource extends MultipageSearchEngine
 {
     /**
-     * Application ID assigned to Carrot Search s.c.
-     * <p>
-     * <b>Use your own keys if you plan to use Bing with Carrot2!</b> The keys can be
-     * acquired from Microsoft, see <a
-     * href="https://datamarket.azure.com/dataset/5ba839f1-12ce-4cce-bf57-a49d98d29a44">
-     * this link</a> for more info and <a href="https://datamarket.azure.com/account/keys">
-     * here</a> for your key management.
+     * System property key under which Bing app key can be passed (default).
+     * You can also override the key via init or runtime attributes of course.
      */
-    public final static String CARROTSEARCH_APPID = "ObajbMJpwe4/u0YWpXvayn0IdSu8xijsUADknnXC8aI=";
+    public static final String SYSPROP_BING3_API = "bing3.api";
 
     /**
      * Base service URI.
@@ -104,15 +97,16 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
      * Microsoft-assigned application ID for querying the API. Please <strong>generate
      * your own ID</strong> for production deployments and branches off the Carrot2.org's
      * code.
+     *
+     * <p>By default takes the system property's value under key: <code>bing3.api<code>
      */
     @Init
     @Input
     @Attribute
-    @Required
     @Label("Application ID")
     @Level(AttributeLevel.BASIC)
     @Group(SERVICE)
-    public String appid = CARROTSEARCH_APPID;
+    public String appid = System.getProperty(SYSPROP_BING3_API);
 
     /**
      * Language and country/region information for the request.
@@ -170,6 +164,17 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
     public Bing3DocumentSource(SourceType sourceType)
     {
         this.sourceType = sourceType;
+    }
+    
+    @Override
+    protected void process(MultipageSearchEngineMetadata metadata,
+        ExecutorService executor) throws ProcessingException
+    {
+        if (Strings.isNullOrEmpty(appid)) {
+            throw new ProcessingException("Bing API requires a key. See "
+                + Bing3DocumentSource.class.getSimpleName() + " class documentation.");
+        }
+        super.process(metadata, executor);
     }
     
     /**

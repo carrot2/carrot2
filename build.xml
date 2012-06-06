@@ -488,7 +488,7 @@
 
     <fail message="Tests failed. See ${tests.report.dir} for report." if="tests.failed" />
   </target>
-
+  
   <!-- 
        Code duplication detection.
     -->
@@ -803,7 +803,7 @@
   <!--
         Carrot2 mini JAR, just core and algorithms. No extended support for Chinese and Arabic.
     -->
-  <target name="jar.mini" depends="jar.mini.test" />
+  <target name="jar.mini" />
     
   <target name="jar.mini.build" depends="jar">
     <jar destfile="${jar.dir}/carrot2-mini-${carrot2.version}.jar">
@@ -882,6 +882,7 @@
       <exclude name="**/slf4j-nop*" />
       <include name="**/mahout*" />
       <include name="**/colt.LICENSE" />
+      <include name="**/attributes-binder*" />
     </patternset>
       
     <patternset id="carrot2.optional">
@@ -1274,7 +1275,7 @@
   <!--
        Pre-commit check for developers
   -->
-  <target name="precommit" depends="clean, test, jar.mini.test" />
+  <target name="test.integration" depends="clean, test, jar.mini.test" description="Integration tests." />
 
   <!--
        Pre-release source code updates.

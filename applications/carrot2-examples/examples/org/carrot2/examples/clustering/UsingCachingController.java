@@ -21,8 +21,7 @@ import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
-import org.carrot2.source.microsoft.Bing3WebDocumentSource;
-import org.carrot2.source.microsoft.Bing3WebDocumentSourceDescriptor;
+import org.carrot2.source.microsoft.*;
 
 /**
  * This example shows how to set up and use a {@link Controller} that reuses instances of
@@ -59,7 +58,7 @@ public class UsingCachingController
                 .results(50);
         Bing3WebDocumentSourceDescriptor
             .attributeBuilder(globalAttributes)
-                .appid(Bing3WebDocumentSource.CARROTSEARCH_APPID); // use your own ID here
+                .appid(BingKeyAccess.getKey()); // use your own ID here
         controller.init(globalAttributes);
 
         /*

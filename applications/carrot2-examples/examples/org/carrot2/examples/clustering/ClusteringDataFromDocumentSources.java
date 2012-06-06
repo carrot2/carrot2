@@ -100,7 +100,7 @@ public class ClusteringDataFromDocumentSources
             
             /* Put your own API key here! */
             Bing3WebDocumentSourceDescriptor.attributeBuilder(attributes)
-                .appid(Bing3WebDocumentSource.CARROTSEARCH_APPID);
+                .appid(BingKeyAccess.getKey());
 
             /* Query an the required number of results */
             attributes.put(CommonAttributesDescriptor.Keys.QUERY, "clustering");

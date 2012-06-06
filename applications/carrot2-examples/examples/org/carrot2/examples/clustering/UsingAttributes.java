@@ -72,7 +72,7 @@ public class UsingAttributes
 
             /* Put your own API key here! */
             Bing3WebDocumentSourceDescriptor.attributeBuilder(attributes)
-                .appid(Bing3WebDocumentSource.CARROTSEARCH_APPID);
+                .appid(BingKeyAccess.getKey());
 
             attributes.put("LingoClusteringAlgorithm.desiredClusterCountBase", 15);
             
@@ -142,7 +142,7 @@ public class UsingAttributes
                         
             Bing3WebDocumentSourceDescriptor
                 .attributeBuilder(attributes)
-                    .appid(Bing3WebDocumentSource.CARROTSEARCH_APPID); // use your own key here
+                    .appid(BingKeyAccess.getKey()); // use your own key here
             
             /* Perform processing */
             final ProcessingResult result = controller.process(attributes,

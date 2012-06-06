@@ -121,7 +121,7 @@ public class ClusteringNonEnglishContent
             .market(MarketOption.CHINESE_CHINA);
         Bing3WebDocumentSourceDescriptor
             .attributeBuilder(attributes)
-                .appid(Bing3WebDocumentSource.CARROTSEARCH_APPID); // use your own ID here!
+                .appid(BingKeyAccess.getKey()); // use your own ID here!
 
         final ProcessingResult chineseResult = controller.process(attributes,
             Bing3WebDocumentSource.class, LingoClusteringAlgorithm.class);

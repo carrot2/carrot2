@@ -25,6 +25,7 @@ import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
+import org.carrot2.source.microsoft.Bing3WebDocumentSourceDescriptor;
 import org.carrot2.util.resource.ContextClassLoaderLocator;
 import org.carrot2.util.resource.DirLocator;
 import org.carrot2.util.resource.IResource;
@@ -56,6 +57,12 @@ public class UsingComponentSuites
             new DirLocator(new File("suites")),
             new ContextClassLoaderLocator());
 
+        // We know we'll be using Bing so set up its access key.
+        // use your own ID here!
+        Bing3WebDocumentSourceDescriptor
+            .attributeBuilder(initAttributes)
+                .appid(BingKeyAccess.getKey());
+        
         // We'll read the component suite definition from an XML stream.
         // IResource is an abstraction layer over resources in Carrot2.
         IResource suiteXml = resourceLookup.getFirst("suite-examples.xml");
