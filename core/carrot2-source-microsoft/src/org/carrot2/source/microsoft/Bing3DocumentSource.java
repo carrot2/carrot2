@@ -53,7 +53,7 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
      * System property key under which Bing app key can be passed (default).
      * You can also override the key via init or runtime attributes of course.
      */
-    public static final String SYSPROP_BING3_API = "bing3.api";
+    public static final String SYSPROP_BING3_API = "bing3.key";
 
     /**
      * Base service URI.
@@ -98,7 +98,7 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
      * your own ID</strong> for production deployments and branches off the Carrot2.org's
      * code.
      *
-     * <p>By default takes the system property's value under key: <code>bing3.api</code>.</p>
+     * <p>By default takes the system property's value under key: <code>bing3.key</code>.</p>
      */
     @Init
     @Input
