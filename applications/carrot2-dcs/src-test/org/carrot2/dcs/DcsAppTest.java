@@ -296,6 +296,7 @@ public class DcsAppTest extends CarrotTestCase
             "Loading\\.\\.\\.");
     }
 
+    @UsesExternalServices    
     @Test
     public void testGetWithExternalSource() throws Exception
     {
@@ -309,6 +310,7 @@ public class DcsAppTest extends CarrotTestCase
         assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
     }
 
+    @UsesExternalServices
     @Test
     public void testPostUrlEncodedWithExternalSource() throws Exception
     {
