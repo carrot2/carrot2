@@ -90,7 +90,7 @@ public final class Cluster
     /** Documents contained in this cluster. */
     private final ArrayList<Document> documents = new ArrayList<Document>();
 
-    /** A read-only list of this cluster's document exposed in {@link #getDocuments()}. */
+    /** A read-only list of this cluster's documents exposed in {@link #getDocuments()}. */
     private final List<Document> documentsView = Collections.unmodifiableList(documents);
 
     /** Attributes of this cluster. */
