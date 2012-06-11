@@ -294,12 +294,13 @@
     </javac>
   </target>
 
-  <target name="jdiff">
+  <target name="jdiff" depends="jar" description="Create API report for jdiff">
     <mkdir dir="${compatibility.report.dir}" />
 
     <javadoc destdir="${compatibility.report.dir}"
              access="protected"
-             failonerror="true">
+             failonerror="true"
+             useexternalfile="true">
 
       <classpath refid="javadoc.classpath" />
 
@@ -327,6 +328,46 @@
         <param name="-apidir"  value="${compatibility.report.dir}"/>
       </doclet>
       
+      <arg value="-quiet" />
+    </javadoc>
+  </target>
+
+  <target name="jdiff-compare" depends="jdiff" description="Compare API against previous version">
+    <fail unless="version.previous">API compare syntax: jdiff-compare -Dversion.previous=x.y.z</fail>
+
+    <mkdir dir="${compatibility.report.dir}/report" />
+    <path id="jdiff.path">
+      <pathelement location="${carrot2.master.basedir}/etc/jdiff/jdiff.jar" />
+      <fileset dir="${carrot2.master.basedir}/lib/org.apache.xml">
+        <include name="*.jar" />
+      </fileset>
+    </path>
+
+    <javadoc destdir="${compatibility.report.dir}/report"
+             access="protected"
+             failonerror="true"
+             useexternalfile="true"
+             docletpathref="jdiff.path">
+
+      <classpath refid="javadoc.classpath" />
+
+      <doclet name="jdiff.JDiff">
+        <param name="-oldapi"     value="carrot2-${version.previous}"/>
+        <param name="-oldapidir"  value="${carrot2.master.basedir}/etc/jdiff" />
+        <param name="-javadocold" value="http://download.carrot2.org/stable/${version.previous}/javadoc/" />
+
+        <param name="-newapi"     value="carrot2-${carrot2.version}"/>
+        <param name="-newapidir"  value="${compatibility.report.dir}"/>
+        <param name="-javadocnew" value="http://download.carrot2.org/stable/${carrot2.version}/javadoc/" />
+      </doclet>
+
+      <sourcefiles>
+        <!-- Anything to make javadoc run. -->
+        <fileset dir="${build.dir}">
+          <include name="**/*.java" />
+        </fileset>
+      </sourcefiles>
+
       <arg value="-quiet" />
     </javadoc>
   </target>
