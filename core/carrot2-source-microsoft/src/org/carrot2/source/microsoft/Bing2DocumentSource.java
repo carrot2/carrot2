@@ -417,7 +417,8 @@ public abstract class Bing2DocumentSource extends MultipageSearchEngine
          */
         public Document toDocument()
         {
-            final Document doc = new Document(title, null, displayUrl);
+            final Document doc = new Document(title, null, mediaUrl);
+            if (displayUrl != null) doc.setField(Document.CLICK_URL, displayUrl);
             if (thumbnail != null) doc.setField(Document.THUMBNAIL_URL, thumbnail.url);
             return doc;
         }
