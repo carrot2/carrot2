@@ -296,6 +296,44 @@
       <classpath refid="lib.classpath" />
     </javac>
   </target>
+  
+  <target name="jdiff" depends="jar">
+    <mkdir dir="${compatibility.report.dir}" />
+
+    <javadoc destdir="${compatibility.report.dir}"
+             access="protected"
+             failonerror="true"
+             useexternalfile="true">
+
+      <classpath refid="javadoc.classpath" />
+
+      <sourcefiles>
+        <fileset dir="core">
+          <include name="**/src/**/*.java" />
+          <exclude name="**/org/carrot2/util/xsltfilter/**" />
+          <exclude name="**/*Descriptor$*/**" />
+          <exclude name="**/*Descriptor*/**" />
+          <exclude name="**/org/carrot2/util/attribute/AttributeBinder**" />
+          <exclude name="**/org/carrot2/util/httpclient/**" />
+          <exclude name="**/org/carrot2/util/log4j/**" />
+          <exclude name="**/org/carrot2/util/simplexml/**" />
+          <exclude name="**/org/carrot2/util/factory/**" />
+          <include name="**/src/**/doc-files" />
+        </fileset>
+        <fileset dir="${build.dir}">
+          <include name="**/*.java" />
+        </fileset>
+      </sourcefiles>
+
+      <doclet name="jdiff.JDiff"
+             path="${carrot2.master.basedir}/etc/jdiff/jdiff.jar">
+        <param name="-apiname" value="carrot2-${carrot2.version}"/>
+        <param name="-apidir"  value="${compatibility.report.dir}"/>
+      </doclet>
+      
+      <arg value="-quiet" />
+    </javadoc>
+  </target>
 
   <target name="compatibility" depends="core">
     <!-- This will not work anymore if we release a bugfix off the branch. -->
