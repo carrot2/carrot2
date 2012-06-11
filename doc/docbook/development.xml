@@ -119,6 +119,25 @@ ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></p
             Update <filename>carrot2.version</filename> 
             and remove <filename>-SNAPSHOT</filename> suffix. This number will be embedded in 
             distribution file names, JavaDoc page title and other version-sensitive places. 
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
+          <title>Generate API XML file and API differences.</title>
+          <para>
+            Pick the previous version to compare against (typically the previous version on the branch).
+            Generate API XML and a comparison report:
+            <programlisting><![CDATA[ant clean jdiff-compare -Dversion.previous=x.y.z]]></programlisting>
+          </para>
+
+          <para>
+            Copy API XML report for future comparisons:
+            <programlisting><![CDATA[cp tmp/compatibility-report/*.xml etc/jdiff/]]></programlisting>
+          </para>
+
+          <para>
             Commit changes. Push.
           </para>
         </formalpara>
