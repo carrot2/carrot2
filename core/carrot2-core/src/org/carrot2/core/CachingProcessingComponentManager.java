@@ -88,7 +88,6 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
         cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .recordStats()
-            .weakValues()
             .build();
     }
 
