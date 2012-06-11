@@ -284,7 +284,6 @@ public class MemTimeBenchmark
                 w.addDocument(nd);
             }
 
-            w.optimize(true);
             w.close();
         }
         catch (IOException e)

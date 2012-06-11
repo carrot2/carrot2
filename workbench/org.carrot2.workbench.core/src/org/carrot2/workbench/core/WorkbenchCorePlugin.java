@@ -450,6 +450,6 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
      */
     public static IEclipsePreferences getPreferences()
     {
-        return new InstanceScope().getNode(WorkbenchCorePlugin.PLUGIN_ID);
+        return InstanceScope.INSTANCE.getNode(WorkbenchCorePlugin.PLUGIN_ID);
     }
 }

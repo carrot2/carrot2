@@ -103,7 +103,7 @@ final class WebServiceManager
         }
 
         // Save the port number Jetty selected for us.
-        ServiceReference [] reference = bundle.getBundleContext()
+        ServiceReference<?> [] reference = bundle.getBundleContext()
             .getServiceReferences(
                 "org.osgi.service.http.HttpService",
                 "(other.info=" + otherInfo + ")");

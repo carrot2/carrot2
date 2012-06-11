@@ -21,7 +21,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
 {
     public void initializeDefaultPreferences()
     {
-        IEclipsePreferences prefs = new DefaultScope().getNode(AdunaActivator.PLUGIN_ID);
+        IEclipsePreferences prefs = DefaultScope.INSTANCE.getNode(AdunaActivator.PLUGIN_ID);
         prefs.put(PreferenceConstants.VISUALIZATION_MODE, VisualizationMode.SHOW_FIRST_LEVEL_CLUSTERS.name());
     }
 }

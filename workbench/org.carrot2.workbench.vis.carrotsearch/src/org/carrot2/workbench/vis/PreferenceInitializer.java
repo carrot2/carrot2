@@ -24,7 +24,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
 {
     public void initializeDefaultPreferences()
     {
-        IEclipsePreferences prefs = new DefaultScope().getNode(Activator.ID);
+        IEclipsePreferences prefs = DefaultScope.INSTANCE.getNode(Activator.ID);
         prefs.put(LayoutAlgorithmAction.LAYOUT_ALGORITHM_KEY, LayoutAlgorithm.STRIP.name());
         prefs.putBoolean(ToggleRelaxationAction.RELAXATION_ENABLED_KEY, false);
     }
