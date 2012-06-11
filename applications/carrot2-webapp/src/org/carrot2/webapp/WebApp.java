@@ -14,13 +14,16 @@ package org.carrot2.webapp;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.util.component.AbstractLifeCycle;
+import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.slf4j.LoggerFactory;
 
 public class WebApp
 {
     Server server;
 
-    void start(int port) throws Exception
+    void start(final int port) throws Exception
     {
         server = new Server();
         SelectChannelConnector connector = new SelectChannelConnector();
@@ -34,6 +37,20 @@ public class WebApp
         wac.setContextPath("/");
         wac.setWar("web");
         wac.setDefaultsDescriptor("etc/webdefault.xml");
+        wac.addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener()
+        {
+            @Override
+            public void lifeCycleStarting(LifeCycle arg0)
+            {
+            }
+
+            @Override
+            public void lifeCycleStarted(LifeCycle arg0)
+            {
+                LoggerFactory.getLogger("webapp")
+                    .info("Started at port: " + port);
+            }
+        });
 
         server.setHandler(wac);
         server.setStopAtShutdown(true);
