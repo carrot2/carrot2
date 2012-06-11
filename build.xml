@@ -294,60 +294,41 @@
     </javac>
   </target>
 
-  <target name="compatibility" depends="core">
-    <!-- This will not work anymore if we release a bugfix off the branch. -->
-
-    <mkdir dir="tmp/compatibility" />
-    <get src="http://repo1.maven.org/maven2/org/carrot2/carrot2-core/maven-metadata.xml" dest="tmp/compatibility/maven-metadata.xml" />
-    <xmlproperty file="tmp/compatibility/maven-metadata.xml" collapseAttributes="true" keepRoot="false" />
-    <get src="http://download.carrot2.org/stable/${versioning.latest}/carrot2-java-api-${versioning.latest}.zip" 
-         dest="tmp/compatibility/carrot2-java-api-${versioning.latest}.zip" />
-
-    <unzip src="tmp/compatibility/carrot2-java-api-${versioning.latest}.zip" dest="tmp/compatibility">
-      <patternset>
-        <include name="**/*.jar" />
-      </patternset>
-    </unzip>
-
-    <taskdef classpath="${etc.dir}/clirr/clirr-core-0.6-fixed.jar" resource="clirrtask.properties"/>
-
+  <target name="jdiff">
     <mkdir dir="${compatibility.report.dir}" />
-    <clirr failOnBinError="false" failOnSrcError="false">
-      <origfiles dir="tmp/compatibility/carrot2-java-api-${versioning.latest}/lib/required" includes="carrot2-core-${versioning.latest}.jar" />
-      <origClassPath>
-        <fileset dir="tmp/compatibility/carrot2-java-api-${versioning.latest}/lib" />
-      </origClassPath>
-      <newfiles dir="tmp/api" includes="**/carrot2-core-${carrot2.version}.jar" />
-      <newClassPath>
-        <fileset dir="tmp/api/lib" />
-      </newClassPath>
 
-      <apiclasses>
-        <exclude name="**/org/carrot2/util/xsltfilter/**" />
-        <exclude name="**/*Descriptor$*/**" />
-        <exclude name="**/*Descriptor*/**" />
-        <exclude name="**/org/carrot2/util/attribute/AttributeBinder**" />
-        <exclude name="**/org/carrot2/util/httpclient/**" />
-        <exclude name="**/org/carrot2/util/log4j/**" />
-        <exclude name="**/org/carrot2/util/simplexml/**" />
-        <exclude name="**/org/carrot2/util/factory/**" />
-      </apiclasses>
+    <javadoc destdir="${compatibility.report.dir}"
+             access="protected"
+             failonerror="true">
 
-      <formatter type="plain" outfile="${compatibility.report.dir}/api-compatibility.txt" />
-      <formatter type="xml" outfile="${compatibility.report.dir}/api-compatibility.xml" />
-    </clirr>
-   
-    <xslt.xinclude in="${compatibility.report.dir}/api-compatibility.xml" 
-          out="${compatibility.report.dir}/api-compatibility.html"
-          style="${etc.dir}/clirr/clirr2html.xsl">
-      <classpath>
-        <fileset dir="${lib.dir}/org.apache.xml">
-          <include name="*.jar" />
+      <classpath refid="javadoc.classpath" />
+
+      <sourcefiles>
+        <fileset dir="core">
+          <include name="**/src/**/*.java" />
+          <exclude name="**/org/carrot2/util/xsltfilter/**" />
+          <exclude name="**/*Descriptor$*/**" />
+          <exclude name="**/*Descriptor*/**" />
+          <exclude name="**/org/carrot2/util/attribute/AttributeBinder**" />
+          <exclude name="**/org/carrot2/util/httpclient/**" />
+          <exclude name="**/org/carrot2/util/log4j/**" />
+          <exclude name="**/org/carrot2/util/simplexml/**" />
+          <exclude name="**/org/carrot2/util/factory/**" />
+          <include name="**/src/**/doc-files" />
         </fileset>
-      </classpath>
-      <param name="current" expression="${carrot2.version}" />
-      <param name="baseline" expression="${versioning.latest}" />
-    </xslt.xinclude>
+        <fileset dir="${build.dir}">
+          <include name="**/*.java" />
+        </fileset>
+      </sourcefiles>
+
+      <doclet name="jdiff.JDiff"
+             path="${carrot2.master.basedir}/etc/jdiff/jdiff.jar">
+        <param name="-apiname" value="carrot2-${carrot2.version}"/>
+        <param name="-apidir"  value="${compatibility.report.dir}"/>
+      </doclet>
+      
+      <arg value="-quiet" />
+    </javadoc>
   </target>
 
   <!--
@@ -660,7 +641,6 @@
           <include name="**/src/**/*.java" />
           <include name="**/src/**/doc-files" />
           <exclude name="**/org/carrot2/core/test/**" />
-          <exclude name="**/com/microsoft/msnsearch/**" />
           <exclude name="carrot2-util-text/src/**" />
         </fileset>
         <fileset dir="${build.dir}">
@@ -1005,7 +985,7 @@
     </copy>
   </target>
 
-  <target name="reports" depends="test, coverage, duplication, findbugs, compatibility" description="Builds all Carrot2 test and code quality reports" />
+  <target name="reports" depends="test, coverage, duplication, findbugs" description="Builds all Carrot2 test and code quality reports" />
   <target name="webapp" depends="carrot2.webapp.build" description="Builds Carrot2 web application" />
   <target name="dcs" depends="carrot2.dcs.build" description="Builds Carrot2 Document Clustering Server" />
   <target name="cli" depends="carrot2.cli.build" description="Builds Carrot2 Command Line Interface" />
