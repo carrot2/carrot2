@@ -82,6 +82,8 @@
       <arg file="index" />
     </run.example>
     <delete dir="index" failonerror="true" includeemptydirs="true" />
+
+    <run.example classname="org.carrot2.examples.source.ExampleDocumentSource" dependencies="libs.all" />
   </target>
 
   <!-- Removes all compiled binaries -->
