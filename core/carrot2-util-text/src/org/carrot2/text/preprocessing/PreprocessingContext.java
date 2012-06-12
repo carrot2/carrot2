@@ -12,6 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.util.MutableCharArray;
-import org.carrot2.text.util.Tabular;
+import org.carrot2.text.util.TabularOutput;
 
 import com.carrotsearch.hppc.*;
 
@@ -149,16 +150,16 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
-            StringBuilder b = new StringBuilder();
-            Tabular t = new Tabular()
-                .addColumn("#")
-                .addColumn("token").flushLeft()
-                .addColumn("type")
-                .addColumn("fieldIndex")
-                .addColumn("=>field").flushLeft()
-                .addColumn("docIdx")
-                .addColumn("wordIdx")
-                .addColumn("=>word").flushLeft();
+            StringWriter sw = new StringWriter();
+            TabularOutput t = new TabularOutput(sw);
+            t.addColumn("#");
+            t.addColumn("token").alignLeft();
+            t.addColumn("type");
+            t.addColumn("fieldIndex");
+            t.addColumn("=>field").alignLeft();
+            t.addColumn("docIdx");
+            t.addColumn("wordIdx");
+            t.addColumn("=>word").alignLeft();
 
             for (int i = 0; i < image.length; i++, t.nextRow())
             {
@@ -170,19 +171,18 @@ public final class PreprocessingContext
                     fieldIndex[i] >= 0 ? allFields.name[fieldIndex[i]] : null,
                     documentIndex[i],
                     wordIndex[i],
-                    wordIndex[i] >= 0 ? allWords.image[wordIndex[i]] : null);
+                    wordIndex[i] >= 0 ? new String(allWords.image[wordIndex[i]]) : null);
             }
-
-            t.toString(b);
 
             if (suffixOrder != null)
             {
-                t = new Tabular()
-                    .addColumn("#")
-                    .addColumn("sa")
-                    .addColumn("lcp")
-                    .addColumn("=>words").flushLeft();
+                t = new TabularOutput(sw);
+                t.addColumn("#");
+                t.addColumn("sa");
+                t.addColumn("lcp");
+                t.addColumn("=>words").alignLeft();
 
+                sw.append("\n");
                 final StringBuilder suffixImage = new StringBuilder();
                 for (int i = 0; i < suffixOrder.length; i++, t.nextRow())
                 {
@@ -202,11 +202,11 @@ public final class PreprocessingContext
                     t.rowData(suffixImage.toString());
                     suffixImage.setLength(0);
                 }
-                b.append("\n");
-                t.toString(b);
+                sw.append("\n");
             }
 
-            return b.toString();
+            sw.append("\n");
+            return sw.toString();
         }
     }
 
@@ -233,15 +233,19 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
-            Tabular t = new Tabular()
-                .addColumn("#")
-                .addColumn("name").flushLeft();
+            StringWriter sw = new StringWriter();
+            TabularOutput t = new TabularOutput(sw);
+            t.addColumn("#");
+            t.addColumn("name").format("%-10s").alignLeft();
 
             int i = 0;
             for (String n : name)
+            {
                 t.rowData(i++, n).nextRow();
+            }
 
-            return t.toString();
+            sw.append("\n");
+            return sw.toString();
         }        
     }
 
@@ -329,18 +333,19 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
-            Tabular t = new Tabular()
-                .addColumn("#")
-                .addColumn("image").flushLeft()
-                .addColumn("type")
-                .addColumn("tf")
-                .addColumn("tfByDocument").flushLeft()
-                .addColumn("fieldIndices");
+            StringWriter sw = new StringWriter();
+            TabularOutput t = new TabularOutput(sw);
+            t.addColumn("#");
+            t.addColumn("image").alignLeft();
+            t.addColumn("type");
+            t.addColumn("tf");
+            t.addColumn("tfByDocument").alignLeft();
+            t.addColumn("fieldIndices");
 
             if (stemIndex != null)
             {
-                t.addColumn("stemIndex")
-                 .addColumn("=>stem").flushLeft();
+                t.addColumn("stemIndex");
+                t.addColumn("=>stem").alignLeft();
             }
 
             for (int i = 0; i < image.length; i++, t.nextRow())
@@ -357,11 +362,12 @@ public final class PreprocessingContext
                 if (stemIndex != null)
                 {
                     t.rowData(stemIndex[i]);
-                    t.rowData(allStems.image[stemIndex[i]]);
+                    t.rowData(new String(allStems.image[stemIndex[i]]));
                 }
             }
 
-            return t.toString();
+            sw.append("\n");
+            return sw.toString();
         }
     }
 
@@ -431,14 +437,15 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
-            Tabular t = new Tabular()
-                .addColumn("#")
-                .addColumn("stem")
-                .addColumn("mostFrqWord")
-                .addColumn("=>mostFrqWord").flushLeft()
-                .addColumn("tf")
-                .addColumn("tfByDocument").flushLeft()
-                .addColumn("fieldIndices");
+            StringWriter sw = new StringWriter();
+            TabularOutput t = new TabularOutput(sw);
+            t.addColumn("#");
+            t.addColumn("stem");
+            t.addColumn("mostFrqWord");
+            t.addColumn("=>mostFrqWord").alignLeft();
+            t.addColumn("tf");
+            t.addColumn("tfByDocument").alignLeft();
+            t.addColumn("fieldIndices");
 
             for (int i = 0; i < image.length; i++, t.nextRow())
             {
@@ -446,13 +453,14 @@ public final class PreprocessingContext
                     i,
                     image[i] == null ? "<null>" : new String(image[i]),
                     mostFrequentOriginalWordIndex[i],
-                    allWords.image[mostFrequentOriginalWordIndex[i]],
+                    new String(allWords.image[mostFrequentOriginalWordIndex[i]]),
                     tf[i],
                     SparseArray.sparseToString(tfByDocument[i]),
                     Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
             }
 
-            return t.toString();
+            sw.append("\n");
+            return sw.toString();
         }
     }
 
@@ -500,12 +508,17 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
-            Tabular t = new Tabular()
-                .addColumn("#")
-                .addColumn("wordIndices")
-                .addColumn("=>words").flushLeft()
-                .addColumn("tf")
-                .addColumn("tfByDocument").flushLeft();
+            if (wordIndices == null) {
+                return "";
+            }
+            
+            StringWriter sw = new StringWriter();
+            TabularOutput t = new TabularOutput(sw);
+            t.addColumn("#");
+            t.addColumn("wordIndices");
+            t.addColumn("=>words").alignLeft();
+            t.addColumn("tf");
+            t.addColumn("tfByDocument").alignLeft();
 
             for (int i = 0; i < wordIndices.length; i++, t.nextRow())
             {
@@ -517,7 +530,8 @@ public final class PreprocessingContext
                     SparseArray.sparseToString(tfByDocument[i]));
             }
 
-            return t.toString();
+            sw.append("\n");
+            return sw.toString();
         }
 
         /** Returns space-separated words that constitute this phrase. */
@@ -592,11 +606,12 @@ public final class PreprocessingContext
             if (featureIndex == null)
                 return UNINITIALIZED;
 
-            Tabular t = new Tabular()
-                .addColumn("#")
-                .addColumn("featureIdx")
-                .addColumn("=>feature").flushLeft()
-                .addColumn("documentIdx").flushLeft();
+            StringWriter sw = new StringWriter();
+            TabularOutput t = new TabularOutput(sw);
+            t.addColumn("#");
+            t.addColumn("featureIdx");
+            t.addColumn("=>feature").alignLeft();
+            t.addColumn("documentIdx").alignLeft();
 
             for (int i = 0; i < featureIndex.length; i++, t.nextRow())
             {
@@ -607,6 +622,7 @@ public final class PreprocessingContext
                     documentIndices != null ? documentIndices[i].toString().replace(" ", "") : "");
             }
 
+            sw.append("\n");
             return t.toString();
         }
 
@@ -645,12 +661,12 @@ public final class PreprocessingContext
     public String toString()
     {
         return "PreprocessingContext 0x" + Integer.toHexString(this.hashCode()) + "\n"
-            + "Fields:\n" + this.allFields.toString()
-            + "Tokens:\n" + this.allTokens.toString()
-            + "Words:\n" + this.allWords.toString()
-            + "Stems:\n" + this.allStems.toString()
-            + "Phrases:\n" + this.allPhrases.toString()
-            + "Labels:\n" + this.allLabels.toString();
+            + "== Fields:\n" + this.allFields.toString()
+            + "== Tokens:\n" + this.allTokens.toString()
+            + "== Words:\n" + this.allWords.toString()
+            + "== Stems:\n" + this.allStems.toString()
+            + "== Phrases:\n" + this.allPhrases.toString()
+            + "== Labels:\n" + this.allLabels.toString();
     }
     
     /**
