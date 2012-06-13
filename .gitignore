@@ -17,3 +17,4 @@ junit*.properties
 *.patch
 /*.log
 /.tools
+/applications/carrot2-dcs/logs
