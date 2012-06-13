@@ -13,7 +13,7 @@
     <path id="libs.required">
       <fileset dir="lib/required" includes="**/*.jar" />
     </path>
-      
+
     <!--
          Dependencies (JARs) required for both fetching documents using
          document sources and clustering them using one of Carrot2 algorithms.
@@ -24,10 +24,7 @@
 
     <mkdir dir="tmp/classes" />
 
-    <javac srcdir="examples"
-           destdir="tmp/classes"
-           source="1.6" target="1.6"
-           encoding="UTF-8">
+    <javac srcdir="examples" destdir="tmp/classes" source="1.6" target="1.6" encoding="UTF-8">
       <classpath>
         <fileset dir=".">
           <include name="**/*.jar" />
@@ -47,27 +44,28 @@
   </target>
 
   <target name="carrot2.api.test.maven">
-      <path id="libs.all">
-        <fileset dir="${basedir}/target">
-          <include name="carrot2*.jar" />
-          <include name="dependency/*.jar" />
-        </fileset>
-      </path>
-      <path id="libs.required" refid="libs.all" />
+    <path id="libs.all">
+      <fileset dir="${basedir}/target">
+        <include name="carrot2*.jar" />
+        <include name="dependency/*.jar" />
+      </fileset>
+    </path>
+    <path id="libs.required" refid="libs.all" />
 
-      <antcall target="carrot2.api.test.only" inheritrefs="true" />
+    <antcall target="carrot2.api.test.only" inheritrefs="true" />
   </target>
 
   <!-- Runs selected classes (invoked from Maven too). -->
   <target name="carrot2.api.test.only">
     <!-- Run some example classes -->
+    <run.example classname="org.carrot2.examples.source.ExampleCustomComponents" dependencies="libs.all" />
     <run.example classname="org.carrot2.examples.research.ClusteringQualityBenchmark" dependencies="libs.all" />
     <run.example classname="org.carrot2.examples.clustering.ClusteringDocumentList" dependencies="libs.required" />
     <run.example classname="org.carrot2.examples.clustering.UsingCachingController" dependencies="libs.all" />
     <run.example classname="org.carrot2.examples.clustering.UsingAttributes" dependencies="libs.all" />
     <run.example classname="org.carrot2.examples.clustering.UsingComponentSuites" dependencies="libs.all" />
     <run.example classname="org.carrot2.examples.clustering.UsingCustomLanguageModel" dependencies="libs.required" />
-    <run.example classname="org.carrot2.examples.clustering.UsingCustomLexicalResources"  dependencies="libs.required"/>
+    <run.example classname="org.carrot2.examples.clustering.UsingCustomLexicalResources" dependencies="libs.required" />
     <run.example classname="org.carrot2.examples.core.LoadingAttributeValuesFromXml" dependencies="libs.required" />
     <run.example classname="org.carrot2.examples.core.SavingAttributeValuesToXml" dependencies="libs.required" />
 
@@ -83,8 +81,6 @@
       <arg file="index" />
     </run.example>
     <delete dir="index" failonerror="true" includeemptydirs="true" />
-
-    <run.example classname="org.carrot2.examples.source.ExampleDocumentSource" dependencies="libs.all" />
   </target>
 
   <!-- Removes all compiled binaries -->
@@ -101,11 +97,9 @@
     <sequential>
       <echo>Running: @{classname}</echo>
       <mkdir dir="tmp" />
-      <java fork="true"
-            classname="@{classname}" logError="true"
-            failonerror="true" output="tmp/@{classname}.log">
+      <java fork="true" classname="@{classname}" logError="true" failonerror="true" output="tmp/@{classname}.log">
         <classpath>
-          <pathelement location="tmp/classes"/>
+          <pathelement location="tmp/classes" />
           <path refid="@{dependencies}" />
         </classpath>
         <args />

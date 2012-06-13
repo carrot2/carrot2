@@ -925,6 +925,7 @@
       <include name="**/lucene*" />
       <exclude name="**/lucene-analyzers*" />
       <include name="**/rome*" />
+      <include name="**/attributes-processor*" />
     </patternset>
 
     <copy todir="${api.dir}/lib/required">
