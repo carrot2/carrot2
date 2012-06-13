@@ -16,8 +16,15 @@ import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.slf4j.LoggerFactory;
 
@@ -82,6 +89,18 @@ public final class Utils
         if (showError)
         {
             showError(status);
+        }
+        else
+        {
+            try
+            {
+                PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(
+                    "org.eclipse.pde.runtime.LogView");
+            }
+            catch (Exception e)
+            {
+                // Don't do anything.
+            }
         }
     }
 

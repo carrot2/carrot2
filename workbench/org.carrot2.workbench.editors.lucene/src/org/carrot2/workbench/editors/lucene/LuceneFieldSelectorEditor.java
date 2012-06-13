@@ -18,8 +18,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.index.FieldInfo;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.util.ReaderUtil;
 import org.carrot2.source.lucene.LuceneDocumentSource;
 import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.impl.MappedValueComboEditor;
 
@@ -79,7 +81,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
                 try
                 {
                     List<String> all = Lists.newArrayList();
-                    for (FieldInfo fi : ir.getFieldInfos())
+                    for (FieldInfo fi : ReaderUtil.getMergedFieldInfos(ir))
                     {
                         all.add(fi.name);
                     }
@@ -98,8 +100,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
             }
             catch (Exception e)
             {
-                org.slf4j.LoggerFactory.getLogger(LuceneFieldSelectorEditor.class).warn(
-                    "Index access error.", e);
+                Utils.logError("Index access error.", e, false);
             }
         }
 
