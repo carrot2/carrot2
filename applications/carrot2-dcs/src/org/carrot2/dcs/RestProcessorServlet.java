@@ -68,6 +68,11 @@ import com.google.common.collect.*;
 @SuppressWarnings("serial")
 public final class RestProcessorServlet extends HttpServlet
 {
+    /**
+     * C2 stream parameter.
+     */
+    private static final String DCS_C2STREAM = "dcs.c2stream";
+
     /** System property to disable log file appender. */
     final static String DISABLE_LOGFILE_APPENDER = "disable.logfile";
 
@@ -341,7 +346,7 @@ public final class RestProcessorServlet extends HttpServlet
     {
         // Don't allow GET/dcs.c2stream combination.
         if (request.getMethod().equalsIgnoreCase("GET") &&
-            request.getParameter("dcs.c2stream") != null)
+            request.getParameter(DCS_C2STREAM) != null)
         {
             sendBadRequest("dcs.c2stream only supported in POST requests.", response, null);
             return;
@@ -350,12 +355,12 @@ public final class RestProcessorServlet extends HttpServlet
         // Check for c2stream in a POST/www-url-encoded and decode it... or try to.
         ProcessingResult input = null;
         if (request.getMethod().equalsIgnoreCase("POST") &&
-            request.getParameter("dcs.c2stream") != null)
+            request.getParameter(DCS_C2STREAM) != null)
         {
             // Deserialize documents from the stream
             try
             {
-                input = ProcessingResult.deserialize(request.getParameter("dcs.c2stream"));
+                input = ProcessingResult.deserialize(request.getParameter(DCS_C2STREAM));
             }
             catch (Exception e)
             {
@@ -369,7 +374,11 @@ public final class RestProcessorServlet extends HttpServlet
         @SuppressWarnings("unchecked")
         final Enumeration<String> parameterNames = (Enumeration<String>) request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
-            String key = parameterNames.nextElement();
+            final String key = parameterNames.nextElement();
+            if (DCS_C2STREAM.equals(key))
+            {
+                continue;
+            }
             parameters.put(key, request.getParameter(key));
         }
         processRequest(response, input, parameters);
@@ -401,7 +410,7 @@ public final class RestProcessorServlet extends HttpServlet
         for (FileItem fileItem : items)
         {
             final String fieldName = fileItem.getFieldName();
-            if ("dcs.c2stream".equals(fieldName))
+            if (DCS_C2STREAM.equals(fieldName))
             {
                 final InputStream uploadInputStream;
                 if (fileItem.isFormField())
