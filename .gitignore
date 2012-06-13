@@ -18,3 +18,4 @@ junit*.properties
 /*.log
 /.tools
 /applications/carrot2-dcs/logs
+/applications/carrot2-dcs/examples/curl/*.xml
