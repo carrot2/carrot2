@@ -76,8 +76,8 @@
       </fileset>
     </jar>
 
-    <copy todir="${dcs.dir}" file="${carrot2.dcs.basedir}/etc/dcs.cmd" />
-    <copy todir="${dcs.dir}" file="${carrot2.dcs.basedir}/etc/dcs.sh" />
+    <copy todir="${dcs.dir}" file="${carrot2.dcs.basedir}/etc/distribution/dcs.cmd" />
+    <copy todir="${dcs.dir}" file="${carrot2.dcs.basedir}/etc/distribution/dcs.sh" />
 
     <copy todir="${dcs.dir}">
       <fileset dir="${carrot2.dcs.basedir}">
@@ -86,7 +86,7 @@
 		    <exclude name="**/obj/**" />
 		    <exclude name="**/*.suo" />
       </fileset>
-      <fileset dir="${carrot2.dcs.basedir}/etc">
+      <fileset dir="${carrot2.dcs.basedir}/etc/distribution">
         <include name="readme.txt" />
       </fileset>
       <fileset dir="${carrot2.master.basedir}">
@@ -102,7 +102,7 @@
        Builds the DCS ZIP archive.
     -->
   <target name="carrot2.dcs.dist" depends="basedir.check, carrot2.dcs.build, carrot2.dcs.webtest.war">
-    <carrot2.readme readme.src="${carrot2.dcs.basedir}/etc/readme.txt"
+    <carrot2.readme readme.src="${carrot2.dcs.basedir}/etc/distribution/readme.txt"
                     readme.dest="${dcs.dir}/readme.txt" />
     <zip destfile="${dcs.dir}/../${dcs.dist.base}-${carrot2.version}.zip">
       <zipfileset dir="${dcs.dir}" prefix="${dcs.dist.base}-${carrot2.version}">
