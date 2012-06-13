@@ -885,7 +885,12 @@
   <target name="clean.jar">
     <delete dir="${jar.dir}" failonerror="false" />
   </target>
-  
+
+  <!--
+      Builds examples.
+  -->
+  <target name="examples" depends="core" description="Builds examples" />
+
   <!--
        Builds API distribution: core JAR, dependencies, example source code.
     -->
@@ -965,6 +970,10 @@
 
     <copy todir="${api.dir}/examples">
       <fileset dir="${carrot2.master.basedir}/applications/carrot2-examples/examples" />
+      <fileset dir="${carrot2.master.basedir}/core/carrot2-source-ambient/src">
+        <include name="ambient/**" />
+        <include name="odp239/**" />
+      </fileset>
     </copy>
 
     <copy todir="${api.dir}" file="${carrot2.master.basedir}/applications/carrot2-examples/build.xml" />
