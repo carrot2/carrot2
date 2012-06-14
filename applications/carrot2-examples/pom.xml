@@ -16,6 +16,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
+    <attributes.processor.version>1.0.1</attributes.processor.version>
   </properties>
 
   <dependencies>
@@ -61,7 +62,7 @@
           <dependency>
             <groupId>org.carrot2.attributes</groupId>
             <artifactId>attributes-processor</artifactId>
-            <version>1.0.1</version>
+            <version>${attributes.processor.version}</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -128,13 +129,25 @@
         <dependency>
           <groupId>org.carrot2.attributes</groupId>
           <artifactId>attributes-processor</artifactId>
-          <version>1.0.1</version>
+          <version>${attributes.processor.version}</version>
         </dependency>
       </dependencies>
     </profile>
   </profiles>
-  
+
   <repositories>
+    <repository>
+      <id>sonatype.releases</id>
+      <name>Sonatype Releases Repository</name>
+      <url>http://oss.sonatype.org/content/repositories/releases</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
+    </repository>
+    
     <repository>
       <id>sonatype-shapshots</id>
       <name>SonaType Snapshots Repository</name>
