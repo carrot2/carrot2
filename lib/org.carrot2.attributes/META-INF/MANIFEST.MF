@@ -8,6 +8,6 @@ Require-Bundle: org.simpleframework.xml;visibility:=reexport,
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: registered
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: attributes-processor-1.0.0.jar
+Bundle-ClassPath: attributes-processor-1.0.1.jar
 Export-Package: org.carrot2.util.attribute,
  org.carrot2.util.attribute.constraint

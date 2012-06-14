@@ -13,6 +13,7 @@
 package org.carrot2.workbench.core.ui;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.AttributeEvent;
 import org.carrot2.workbench.editors.IAttributeListener;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -43,7 +44,12 @@ final class InvalidStateDecorationListener implements IAttributeListener
         }
         else if (event.key.equals(descriptor.key))
         {
-            valid = descriptor.isValid(event.value);
+            try {
+                valid = descriptor.isValid(event.value);
+            } catch (Exception e) {
+                Utils.logError(e, false);
+                valid = false;
+            }
             updateOverlay();
         }
     }
