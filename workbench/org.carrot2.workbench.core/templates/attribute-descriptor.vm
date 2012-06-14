@@ -44,7 +44,11 @@
 
 		#if (!$fields.constraints.isEmpty())
 		<dt>Constraints:</dt>
-		<dd>$fields.constraints</dd>
+		<dd>
+		  #foreach( $ctr in $fields.constraints )
+		      $annotationutils.shortName($ctr)<br/>
+		  #end
+		</dd>
 		#end
 
 		<dt>Required availability:</dt>
