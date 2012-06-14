@@ -26,6 +26,7 @@ import org.carrot2.core.attribute.*;
 import org.carrot2.source.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.constraint.NotBlank;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
@@ -96,16 +97,20 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
     /**
      * Microsoft-assigned application ID for querying the API. Please <strong>generate
      * your own ID</strong> for production deployments and branches off the Carrot2.org's
-     * code.
+     * code. See <a href="https://datamarket.azure.com/dataset/5ba839f1-12ce-4cce-bf57-a49d98d29a44">http://goo.gl/usVXW</a>
+     * for more.
      *
      * <p>By default takes the system property's value under key: <code>bing3.key</code>.</p>
      */
     @Init
+    @Processing
     @Input
     @Attribute
-    @Label("Application ID")
+    @Label("Application API key")
     @Level(AttributeLevel.BASIC)
     @Group(SERVICE)
+    @Required
+    @NotBlank
     public String appid = System.getProperty(SYSPROP_BING3_API);
 
     /**
