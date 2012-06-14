@@ -21,9 +21,9 @@ public class BingKeyAccess
 
         if (key == null)
         {
-            System.out.println("Empty Bing API key,  pass it via -D"
+            System.out.println("WARNING! Empty Bing API key,  pass it via -D"
                 + Bing3DocumentSource.SYSPROP_BING3_API + "=...");
-            System.exit(0);
+            System.exit(-1);
         }
         
         return key;

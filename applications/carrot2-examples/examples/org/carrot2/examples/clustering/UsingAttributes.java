@@ -66,15 +66,13 @@ public class UsingAttributes
             /* Prepare attribute map */
             final Map<String, Object> attributes = new HashMap<String, Object>();
 
-            /* Put values using attribute builders */
+            /* Put attribute values using direct keys. */
             attributes.put(CommonAttributesDescriptor.Keys.QUERY, "data mining");
             attributes.put(CommonAttributesDescriptor.Keys.RESULTS, 100);
+            attributes.put("LingoClusteringAlgorithm.desiredClusterCountBase", 15);
 
             /* Put your own API key here! */
-            Bing3WebDocumentSourceDescriptor.attributeBuilder(attributes)
-                .appid(BingKeyAccess.getKey());
-
-            attributes.put("LingoClusteringAlgorithm.desiredClusterCountBase", 15);
+            attributes.put(Bing3WebDocumentSourceDescriptor.Keys.APPID, BingKeyAccess.getKey()); 
             
             /* Perform processing */
             final ProcessingResult result = controller.process(attributes,

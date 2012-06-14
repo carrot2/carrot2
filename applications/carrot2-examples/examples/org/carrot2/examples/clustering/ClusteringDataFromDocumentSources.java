@@ -26,6 +26,7 @@ import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
+import org.carrot2.source.etools.EToolsDocumentSource;
 import org.carrot2.source.microsoft.Bing3WebDocumentSource;
 import org.carrot2.source.microsoft.Bing3WebDocumentSourceDescriptor;
 
@@ -56,7 +57,7 @@ public class ClusteringDataFromDocumentSources
          * way to do it is to use the {@link org.carrot2.core.Controller#process(String, Integer, Class...)} 
          * method from the {@link org.carrot2.core.Controller}. The code shown below retrieves 
          * 100 search results for query <em>data mining</em> from 
-         * {@link org.carrot2.source.microsoft.Bing3WebDocumentSource} and clusters them using 
+         * {@link org.carrot2.source.etools.EToolsDocumentSource} and clusters them using 
          * the {@link org.carrot2.clustering.lingo.LingoClusteringAlgorithm}.
          * </div>
          * 
@@ -66,10 +67,10 @@ public class ClusteringDataFromDocumentSources
             /// [[[start:clustering-data-from-document-sources-simple]]]
             /* A controller to manage the processing pipeline. */
             final Controller controller = ControllerFactory.createSimple();
-            
+
             /* Perform processing */
             final ProcessingResult result = controller.process("data mining", 100,
-                Bing3WebDocumentSource.class, LingoClusteringAlgorithm.class);
+                EToolsDocumentSource.class, LingoClusteringAlgorithm.class);
     
             /* Documents fetched from the document source, clusters created by Carrot2. */
             final List<Document> documents = result.getDocuments();
