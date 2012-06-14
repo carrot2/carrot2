@@ -23,7 +23,9 @@ public class BingKeyAccess
         {
             System.out.println("WARNING! Empty Bing API key,  pass it via -D"
                 + Bing3DocumentSource.SYSPROP_BING3_API + "=...");
-            System.exit(-1);
+
+            // Return immediately as if nothing happened.
+            System.exit(0);
         }
         
         return key;
