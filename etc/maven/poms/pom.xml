@@ -61,7 +61,7 @@
     <!-- Versions of dependencies. -->
     <com.carrotsearch.hppc.version>0.4.1</com.carrotsearch.hppc.version>
     <com.google.guava.version>12.0</com.google.guava.version>
-    <morfologik.version>1.5.2</morfologik.version>
+    <morfologik.version>1.5.3</morfologik.version>
     <net.java.dev.rome.version>1.0.0</net.java.dev.rome.version>
     <net.java.dev.rome.fetcher.version>1.0.0</net.java.dev.rome.fetcher.version>
     <commons.lang.version>2.6</commons.lang.version>
@@ -71,7 +71,7 @@
     <org.apache.mahout.version>0.6</org.apache.mahout.version>
     <org.apache.mahout.collections.version>1.0</org.apache.mahout.collections.version>
     <org.apache.httpcomponents.version>4.1</org.apache.httpcomponents.version>
-    <org.apache.lucene.version>3.5.0</org.apache.lucene.version>
+    <org.apache.lucene.version>3.6.0</org.apache.lucene.version>
     <org.jdom.version>1.1</org.jdom.version>
     <org.simpleframework.version>2.6.3</org.simpleframework.version>
     <org.carrot2.attributes>1.0.1</org.carrot2.attributes>
