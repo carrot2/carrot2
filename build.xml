@@ -36,7 +36,6 @@
   <import file="${carrot2.master.basedir}/applications/carrot2-cli/build.xml" />
   <import file="${carrot2.master.basedir}/doc/build.xml" />
   <import file="${carrot2.master.basedir}/etc/maven/build.xml" />
-  <import file="${carrot2.master.basedir}/etc/solr/build.xml" />
   <import file="${carrot2.master.basedir}/lib/org.carrot2.antlib/build.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/readme.xml" />
   <import file="${carrot2.master.basedir}/etc/ant/common/rcp-defaults.xml" />
@@ -1012,7 +1011,6 @@
     reports,
     javadoc,
     doc,
-    carrot2.solr.dist,
     assemble.dist" description="Builds Carrot2 distribution (requires external tools)." />
 
   <target name="assemble.dist" depends="version">
@@ -1031,7 +1029,6 @@
         <include name="carrot2-manual-${carrot2.version}.zip" />
         <include name="carrot2-webapp-${carrot2.version}.war" />
         <include name="carrot2-workbench-*.zip" />
-        <include name="carrot2-solr-*.zip" />
       </fileset>
     </copy>
   </target>

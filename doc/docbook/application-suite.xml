@@ -575,8 +575,6 @@
     </section>
   </section>
   
-  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="application-suite-solr.xml" /> 
-  
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="application-suite-sections-suffix.xml" /> 
 
 </chapter>

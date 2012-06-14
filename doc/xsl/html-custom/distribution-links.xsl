@@ -15,7 +15,6 @@
   <xsl:param name="product.cli.base" />
   <xsl:param name="product.workbench.base" />
   <xsl:param name="product.manual.base" />
-  <xsl:param name="product.solr-compat.base" />
   <xsl:param name="carrot2.javadoc.url" />
   
   <xsl:template match="product:java-api-download-link">
@@ -40,10 +39,6 @@
 
   <xsl:template match="product:workbench-download-link">
     <a href="{$dist.url}/{$product.workbench.base}-{@os}.{@wm}.x86-{$product.version}.zip"><xsl:apply-templates /></a>
-  </xsl:template>
-  
-  <xsl:template match="product:solr-compat-download-link">
-    <a href="{$dist.url}/{$product.solr-compat.base}-{@solr.version}-compatibility-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>
   
   <xsl:template match="product:online-demo-link">
