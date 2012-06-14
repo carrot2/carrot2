@@ -152,6 +152,8 @@ public final class PreprocessingContext
         {
             StringWriter sw = new StringWriter();
             TabularOutput t = new TabularOutput(sw);
+            t.flushEvery(Integer.MAX_VALUE);
+
             t.addColumn("#");
             t.addColumn("token").alignLeft();
             t.addColumn("type");
@@ -205,6 +207,7 @@ public final class PreprocessingContext
                 sw.append("\n");
             }
 
+            t.flush();
             sw.append("\n");
             return sw.toString();
         }
@@ -235,6 +238,7 @@ public final class PreprocessingContext
         {
             StringWriter sw = new StringWriter();
             TabularOutput t = new TabularOutput(sw);
+            t.flushEvery(Integer.MAX_VALUE);
             t.addColumn("#");
             t.addColumn("name").format("%-10s").alignLeft();
 
@@ -244,6 +248,7 @@ public final class PreprocessingContext
                 t.rowData(i++, n).nextRow();
             }
 
+            t.flush();
             sw.append("\n");
             return sw.toString();
         }        
@@ -335,6 +340,7 @@ public final class PreprocessingContext
         {
             StringWriter sw = new StringWriter();
             TabularOutput t = new TabularOutput(sw);
+            t.flushEvery(Integer.MAX_VALUE);
             t.addColumn("#");
             t.addColumn("image").alignLeft();
             t.addColumn("type");
@@ -366,6 +372,7 @@ public final class PreprocessingContext
                 }
             }
 
+            t.flush();
             sw.append("\n");
             return sw.toString();
         }
@@ -439,6 +446,7 @@ public final class PreprocessingContext
         {
             StringWriter sw = new StringWriter();
             TabularOutput t = new TabularOutput(sw);
+            t.flushEvery(Integer.MAX_VALUE);
             t.addColumn("#");
             t.addColumn("stem");
             t.addColumn("mostFrqWord");
@@ -459,6 +467,7 @@ public final class PreprocessingContext
                     Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
             }
 
+            t.flush();
             sw.append("\n");
             return sw.toString();
         }
@@ -514,6 +523,7 @@ public final class PreprocessingContext
             
             StringWriter sw = new StringWriter();
             TabularOutput t = new TabularOutput(sw);
+            t.flushEvery(Integer.MAX_VALUE);
             t.addColumn("#");
             t.addColumn("wordIndices");
             t.addColumn("=>words").alignLeft();
@@ -530,6 +540,7 @@ public final class PreprocessingContext
                     SparseArray.sparseToString(tfByDocument[i]));
             }
 
+            t.flush();
             sw.append("\n");
             return sw.toString();
         }
@@ -608,6 +619,7 @@ public final class PreprocessingContext
 
             StringWriter sw = new StringWriter();
             TabularOutput t = new TabularOutput(sw);
+            t.flushEvery(Integer.MAX_VALUE);
             t.addColumn("#");
             t.addColumn("featureIdx");
             t.addColumn("=>feature").alignLeft();
@@ -622,6 +634,7 @@ public final class PreprocessingContext
                     documentIndices != null ? documentIndices[i].toString().replace(" ", "") : "");
             }
 
+            t.flush();
             sw.append("\n");
             return t.toString();
         }

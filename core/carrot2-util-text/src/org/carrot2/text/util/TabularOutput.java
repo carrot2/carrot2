@@ -194,6 +194,8 @@ public final class TabularOutput
             if (object == null) {
                 formatted = "--";
             } else {
+                object = toStringAdapters(object);
+
                 if (format == null) {
                     format(defaultSpec(object.getClass()).format);
                 }
@@ -213,6 +215,22 @@ public final class TabularOutput
             }
             return alignment.align(text, maxWidth);
         }
+    }
+
+    /**
+     * Apply toString adapters to an object, if any.
+     */
+    private Object toStringAdapters(Object object)
+    {
+        if (object instanceof char[]) return new String((char[]) object);
+        if (object instanceof byte[]) return Arrays.toString((byte[]) object);
+        if (object instanceof short[]) return Arrays.toString((short[]) object);
+        if (object instanceof int[]) return Arrays.toString((int[]) object);
+        if (object instanceof long[]) return Arrays.toString((long[]) object);
+        if (object instanceof float[]) return Arrays.toString((float[]) object);
+        if (object instanceof double[]) return Arrays.toString((double[]) object);
+
+        return object;
     }
 
     /**
