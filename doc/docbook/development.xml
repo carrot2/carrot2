@@ -222,6 +222,26 @@ ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></p
 
       <listitem>
         <formalpara>
+          <title>Upload .NET release bundle to download area.</title>
+          <para>
+            Upload .NET bundle of &C2; to ophelia.
+          </para>
+        </formalpara>
+      </listitem>      
+
+      <listitem>
+        <formalpara>
+          <title>Update download area server</title>
+          
+          <para>
+            Update symbolic links in <tt>/srv/www/vhosts/download.carrot2.org/stable</tt>
+            on ophelia to point to the new release artifacts.
+          </para>
+        </formalpara>
+      </listitem>
+
+      <listitem>
+        <formalpara>
           <title>Update project website</title>
           
           <para>
@@ -297,15 +317,6 @@ ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></p
           </para>
         </formalpara>
       </listitem>
-
-      <listitem>
-        <formalpara>
-          <title>Upload .NET release bundle to download area.</title>
-          <para>
-            After a following Lingo3G release, update corresponding .NET bundle of &C2;.
-          </para>
-        </formalpara>
-      </listitem>      
     </orderedlist>
   </section>
 
