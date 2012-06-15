@@ -21,4 +21,4 @@ goto setupArgs
 rem
 rem Launch the DCS
 rem
-java %OPTS% -Djava.ext.dirs=lib -Ddcs.war=war/carrot2-dcs.war org.carrot2.dcs.DcsApp %CMD_LINE_ARGS%
+java %OPTS% -Ddcs.war=war/carrot2-dcs.war -jar invoker.jar -cpdir lib org.carrot2.dcs.DcsApp %CMD_LINE_ARGS%

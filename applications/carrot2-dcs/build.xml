@@ -76,8 +76,12 @@
       </fileset>
     </jar>
 
-    <copy todir="${dcs.dir}" file="${carrot2.dcs.basedir}/etc/distribution/dcs.cmd" />
-    <copy todir="${dcs.dir}" file="${carrot2.dcs.basedir}/etc/distribution/dcs.sh" />
+    <copy todir="${dcs.dir}">
+      <fileset dir="${carrot2.dcs.basedir}/etc/distribution">
+        <include name="dcs.*" />
+        <include name="invoker.jar" />
+      </fileset>
+    </copy>
 
     <copy todir="${dcs.dir}">
       <fileset dir="${carrot2.dcs.basedir}">
