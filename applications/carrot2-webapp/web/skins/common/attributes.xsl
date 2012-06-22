@@ -80,9 +80,13 @@
         <xsl:value-of select="//init-values[@source = $source]//init-value[@key = $key]/value/@value" />
       </xsl:when>
       
+      <!-- 
+      Do not externalize default values, keep them empty.
+
       <xsl:otherwise>
         <xsl:value-of select="//attribute-descriptors[@source = $source]//attribute-descriptor[@key = $key]/@default" />
       </xsl:otherwise>
+      -->
     </xsl:choose>
   </xsl:template>
   
