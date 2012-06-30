@@ -1,0 +1,60 @@
+.startup {
+  background-color: #f8f8f8;
+}
+
+.startup > .search {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 150px;
+  width: 500px;
+  height: 300px;
+  margin: auto;
+  padding-left: 185px;
+
+  background: url(../img/carrot-search-logo-large.png) no-repeat 0 0;
+}
+
+.startup > .search > .sources {
+  margin-top: 26px;
+  margin-bottom: 15px;
+}
+
+.startup > .search > form {
+  margin-bottom: 10px;
+}
+
+.startup > .search > form > .query {
+  width: 30em;
+}
+
+.startup > .search > form > .btn {
+  margin: 0 0 9px 5px;
+}
+
+.examples > a {
+  padding: 0 0.4em;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.footer > div {
+  padding: 10px;
+}
+.footer > div:first-child {
+  float: left;
+}
+.footer > div:last-child {
+  text-align: right;
+  float: right;
+}
+.footer a {
+  color: #777;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
