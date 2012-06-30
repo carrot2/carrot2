@@ -13,6 +13,7 @@ local.properties
 tmp
 .apt_generated
 .clover
+.idea
 junit*.properties
 *.patch
 /*.log
