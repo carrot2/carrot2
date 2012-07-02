@@ -149,6 +149,7 @@
 }
 .docs > div > a {
   margin-right: 0.5em;
+  word-wrap: break-word;
 }
 .docs > div > span {
   font-size: 11px;
