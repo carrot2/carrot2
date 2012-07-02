@@ -121,6 +121,7 @@
 .docs {
   overflow-y: auto;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   position: absolute;
   top: 0;
   bottom: 0;
