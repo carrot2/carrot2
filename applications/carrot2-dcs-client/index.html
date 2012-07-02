@@ -29,8 +29,17 @@
         <li><a href="#">Jobs</a></li>
       </ul>
 
-      <form>
-        <input class="query" type="text" /><button class="btn btn-primary" type="submit">Search</button>
+      <form class="btn-toolbar">
+        <input class="query" type="text" />
+        <div class="btn-group">
+          <button class="btn btn-primary" type="submit">Search</button>
+          <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="#">50 results</a></li>
+            <li><a href="#">100 results <i class="icon-ok"></i></a></li>
+            <li><a href="#">200 results</a></li>
+          </ul>
+        </div>
       </form>
       
       <p class="intro">
@@ -741,7 +750,7 @@
         })(), undefined);
       }
 
-      $(".search button").click(function() {
+      $(".search button[type = 'submit']").click(function() {
         $("body").attr("class", "results");
         embed();
         return false;

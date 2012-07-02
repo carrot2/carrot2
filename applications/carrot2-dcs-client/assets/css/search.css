@@ -30,8 +30,8 @@
   width: 30em;
 }
 
-.search > form > .btn {
-  margin: 0 0 9px 5px;
+.search > form > .query {
+  margin: 0;
 }
 
 .examples > a {
@@ -173,4 +173,9 @@
   position: absolute;
   top: 22px;
   right: 10px;
+}
+
+/** Bootrstrap patches */
+.btn-toolbar .btn-group {
+  vertical-align: top;
 }
