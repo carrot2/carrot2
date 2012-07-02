@@ -768,8 +768,14 @@
       }
 
       $(".search button[type = 'submit']").click(function() {
-        $("body").attr("class", "results");
-        embed();
+        if ($("body").is(".startup")) {
+          $("body").fadeOut(function() {
+            $("body").attr("class", "results");
+            $("body").fadeIn(function() {
+              embed();
+            });
+          });
+        }
         return false;
       });
 

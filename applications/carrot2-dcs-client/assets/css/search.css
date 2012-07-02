@@ -1,5 +1,5 @@
 /** Startup screen */
-.startup, .results > .search {
+.startup {
   background-color: #f8f8f8;
 }
 
@@ -46,6 +46,7 @@
 
 /** Results screen */
 .results > .search {
+  background-color: #f6f6f6;
   height: 80px;
   padding-left: 90px;
   padding-top: 15px;
@@ -74,11 +75,13 @@
   border-color: #eee;
 }
 .browsing > .nav > li > a {
-  border-color: #eee #eee transparent;
   padding: 4px 8px;
 }
+.browsing > .nav > li.active > a {
+  border-color: #eee #eee transparent;
+}
 .grouping {
-  margin-left: 1em;
+  margin-left: 2em;
 }
 
 .data {
@@ -177,6 +180,30 @@
   position: absolute;
   top: 22px;
   right: 10px;
+}
+
+.startup .sources > .active > a,
+.startup .sources > .active > a:hover {
+  background-image: linear-gradient(bottom, #f8f8f8 0%, #fcfcfc 80%, #fff 100%);
+  background-image: -webkit-linear-gradient(bottom, #f8f8f8 0%, #fcfcfc 80%, #fff 100%);
+  background-image: -moz-linear-gradient(bottom, #f6f6f6 0%, #fcfcfc 80%, #fff 100%);
+  background-image: -o-linear-gradient(bottom, #f6f6f6 0%, #fcfcfc 80%, #fff 100%);
+  background-image: -ms-linear-gradient(bottom, #f6f6f6 0%, #fcfcfc 80%, #fff 100%);
+  border-bottom-color: #f6f6f6;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+.results .sources > .active > a,
+.results .sources > .active > a:hover {
+  background-image: linear-gradient(bottom, #f4f4f4 0%, #fcfcfc 80%, #fff 100%);
+  background-image: -webkit-linear-gradient(bottom, #f4f4f4 0%, #fcfcfc 80%, #fff 100%);
+  background-image: -moz-linear-gradient(bottom, #f4f4f4 0%, #fcfcfc 80%, #fff 100%);
+  background-image: -o-linear-gradient(bottom, #f4f4f4 0%, #fcfcfc 80%, #fff 100%);
+  background-image: -ms-linear-gradient(bottom, #f4f4f4 0%, #fcfcfc 80%, #fff 100%);
+  border-bottom-color: #f4f4f4;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+.views > .active > a {
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.025);
 }
 
 /** Bootrstrap patches */
