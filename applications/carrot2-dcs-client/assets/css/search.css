@@ -130,6 +130,7 @@
   bottom: 0;
   left: 0;
   right: 0;
+  padding-right: 10px;
 }
 
 .docs > div {
@@ -142,8 +143,8 @@
 }
 
 .docs > div > h2 {
-  font-weight: normal;
-  font-size: 18px;
+  /*font-weight: normal;*/
+  font-size: 15px;
   line-height: 1.2;
 }
 .docs > div > a {
@@ -209,4 +210,23 @@
 /** Bootrstrap patches */
 .btn-toolbar .btn-group {
   vertical-align: top;
+}
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #fcfcfc;
+  -webkit-box-shadow: inset 1px 1px 1px rgba(0,0,0,0.05);
+}
+::-webkit-scrollbar-thumb {
+  background: #CCC;
+  -webkit-box-shadow: inset 1px 1px 1px rgba(0,0,0,0.2);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #AAA;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #888;
+  -webkit-box-shadow: inset 1px 1px 1px rgba(0,0,0,0.3);
 }

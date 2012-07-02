@@ -1,0 +1,4 @@
+* Tuning of FoamTree selection outline
+* Tuning of default FoamTree colors
+* Breadcrumbs?
+* FoamTree interaction hints
