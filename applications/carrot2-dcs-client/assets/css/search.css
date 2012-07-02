@@ -8,17 +8,17 @@
   top: 0;
   bottom: 0;
   left: 0;
-  right: 70px;
+  right: 65px;
   width: 500px;
   height: 300px;
   margin: auto;
-  padding-left: 175px;
+  padding-left: 165px;
 
   background: url(../img/carrot-search-logo-large.png) no-repeat 0 0;
 }
 
 .startup > .search > .sources {
-  margin-top: 25px;
+  margin-top: 22px;
   margin-bottom: 15px;
 }
 
@@ -70,20 +70,23 @@
   padding-top: 5px;
 }
 
+.browsing > .nav {
+  border-color: #eee;
+}
+.browsing > .nav > li > a {
+  border-color: #eee #eee transparent;
+  padding: 4px 8px;
+}
+.grouping {
+  margin-left: 1em;
+}
+
 .data {
   position: absolute;
   top: 140px;
   left: 15px;
   right: 15px;
   bottom: 15px;
-}
-
-.browsing > .views {
-  border-color: #eee;
-}
-.browsing > .views > li > a {
-  border-color: #eee #eee transparent;
-  padding: 4px 8px;
 }
 
 .clusters {
