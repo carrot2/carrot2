@@ -8,7 +8,7 @@
   top: 0;
   bottom: 0;
   left: 0;
-  right: 150px;
+  right: 75px;
   width: 500px;
   height: 300px;
   margin: auto;
@@ -38,6 +38,11 @@
   padding: 0 0.4em;
 }
 
+.startup > .data,
+.startup > .browsing {
+  display: none;
+}
+
 
 /** Results screen */
 .results > .search {
@@ -65,7 +70,7 @@
   top: 170px;
   left: 15px;
   right: 15px;
-  bottom: 35px;
+  bottom: 15px;
 }
 
 .browsing > .views {
@@ -107,6 +112,7 @@
 
 .docs {
   overflow-y: auto;
+  overflow-x: hidden;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -143,25 +149,23 @@
   display: none;
 }
 
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-.footer > div {
-  padding: 10px;
-}
-.footer > div:first-child {
-  float: left;
-}
-.footer > div:last-child {
-  text-align: right;
-  float: right;
-}
 .footer a {
   color: #777;
   margin-left: 0.5em;
   margin-right: 0.5em;
+}
+
+.startup > .footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  text-align: right;
+}
+
+.results > .footer {
+  position: absolute;
+  top: 29px;
+  right: 10px;
 }

@@ -15,7 +15,7 @@
     <!-- TODO: fav and touch icons -->
   </head>
 
-  <body class="results">
+  <body class="startup">
 
     <div class="search">
       <ul class="sources nav nav-tabs">
@@ -696,14 +696,9 @@
     </div>
 
     <div class="footer">
-      <div>
-        <a href="#">About</a>
-        <a href="#">Privacy policy</a>
-        <a href="#">Contact</a>
-      </div>
-      <div>
-        <a href="#">Settings</a>
-      </div>
+      <a href="#">About</a>
+      <a href="#">Privacy policy</a>
+      <a href="#">Contact</a>
     </div>
 
     <script src="assets/js/jquery-1.7.2.min.js"></script>
@@ -725,24 +720,36 @@
       })();
     </script>
     <script>
-      var foamtree = new CarrotSearchFoamTree({
-        id: "foamtree",
-        backgroundColor: "rgba(255, 255, 255, 0)",
-        groupFontFamily: "Oxygen, Tahoma, sans-serif",
-        titleBarFontFamily: "Oxygen, Tahoma, sans-serif"
+      var d;
+
+      function embed() {
+        var foamtree = new CarrotSearchFoamTree({
+          id: "foamtree",
+          backgroundColor: "rgba(255, 255, 255, 0)",
+          groupFontFamily: "Oxygen, Tahoma, sans-serif",
+          titleBarFontFamily: "Oxygen, Tahoma, sans-serif",
+          dataObject: d
+        });
+        window.addEventListener("resize", (function () {
+          var timeout;
+          return function () {
+            window.clearTimeout(timeout);
+            timeout = window.setTimeout(function () {
+              foamtree.resize();
+            }, 150);
+          };
+        })(), undefined);
+      }
+
+      $(".search button").click(function() {
+        $("body").attr("class", "results");
+        embed();
+        return false;
       });
-      window.addEventListener("resize", (function() {
-        var timeout;
-        return function() {
-          window.clearTimeout(timeout);
-          timeout = window.setTimeout(function() {
-            foamtree.resize();
-          }, 150);
-        };
-      })(), undefined);
 
       function foamTreeJsonDataAvailable(data) {
-        foamtree.set("dataObject", data);
+        d = data;
+//        foamtree.set("dataObject", data);
       }
     </script>
     <script src="assets/js/data-mining-100-topic-hierarchical.jsonp"></script>
