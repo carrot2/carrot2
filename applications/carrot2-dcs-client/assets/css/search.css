@@ -8,17 +8,17 @@
   top: 0;
   bottom: 0;
   left: 0;
-  right: 75px;
+  right: 70px;
   width: 500px;
   height: 300px;
   margin: auto;
-  padding-left: 185px;
+  padding-left: 175px;
 
   background: url(../img/carrot-search-logo-large.png) no-repeat 0 0;
 }
 
 .startup > .search > .sources {
-  margin-top: 26px;
+  margin-top: 25px;
   margin-bottom: 15px;
 }
 
@@ -46,9 +46,9 @@
 
 /** Results screen */
 .results > .search {
-  height: 105px;
-  padding-left: 100px;
-  padding-top: 20px;
+  height: 80px;
+  padding-left: 90px;
+  padding-top: 15px;
 
   background-image: url(../img/carrot-search-logo-small.png);
   background-repeat: no-repeat;
@@ -57,6 +57,11 @@
 }
 
 .results > .search > .sources {
+  margin-bottom: 10px;
+}
+
+.results > .search > .sources a {
+  padding: 6px 10px;
 }
 
 .browsing {
@@ -67,7 +72,7 @@
 
 .data {
   position: absolute;
-  top: 170px;
+  top: 140px;
   left: 15px;
   right: 15px;
   bottom: 15px;
@@ -89,7 +94,7 @@
   width: 65%;
 }
 
-#foamtree {
+#visualization {
   position: absolute;
   left: 0px;
   right: 15px;
@@ -166,6 +171,6 @@
 
 .results > .footer {
   position: absolute;
-  top: 29px;
+  top: 22px;
   right: 10px;
 }
