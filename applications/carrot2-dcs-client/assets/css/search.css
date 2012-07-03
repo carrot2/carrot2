@@ -97,23 +97,91 @@
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 65%;
+  right: 35%;
+}
+.folders-active > .clusters {
+  width: 350px;
 }
 
-#visualization {
+
+#visualization, #folders {
   position: absolute;
   left: 0px;
   right: 15px;
   top: 0px;
   bottom: 0px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
+/** Folders */
+#folders {
+}
+
+#folders ul {
+  list-style: none;
+  margin: 0;
+}
+#folders li > ul {
+  padding-left: 20px;
+}
+#folders li.folded > ul {
+  display: none;
+}
+
+#folders li {
+  background-position: 0 center;
+  background-repeat: repeat-y;
+  background-image: url(../img/tree-trunk.gif);
+  padding-top: 2px;
+}
+#folders li > a > .tree {
+  background-image: url(../img/tree-leaf.gif);
+  background-position: 0 1px;
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 20px;
+  position: absolute;
+  margin-left: -34px;
+}
+#folders li:last-child > a > .tree {
+  background-image: url(../img/tree-leaf-last.gif);
+  background-position: 0 -3px;
+}
+#folders li.branch > a > .tree,
+#folders li.branch:last-child > a > .tree {
+  background-image: url(../img/tree-branch.gif);
+}
+
+#folders a {
+  display: block;
+  padding-left: 34px;
+  background-image: url(../img/tree-folder.png);
+  background-position: 14px 0;
+  background-repeat: no-repeat;
+}
+
+#folders a > .size {
+  padding-left: 0.3em;
+  text-decoration: none;
+}
+#folders a > .phrase {
+  font-weight: bold;
+}
+#folders a > .phrase {
+}
+
+/** Documents */
 .links {
   position: absolute;
   right: 0;
   top: 0px;
   bottom: 0px;
-  width: 35%;
+  left: 65%;
+}
+.folders-active > .links {
+  left: 350px;
 }
 
 .summary {

@@ -15,7 +15,7 @@
     <!-- TODO: fav and touch icons -->
   </head>
 
-  <body class="startup">
+  <body class="results">
 
     <div class="search">
       <ul class="sources nav nav-tabs">
@@ -82,9 +82,10 @@
       </ul>
     </div>
 
-    <div class="data">
+    <div class="data folders-active">
       <div class="clusters">
         <div id="visualization"></div>
+        <div id="folders"></div>
       </div>
 
       <div class="links">
@@ -729,6 +730,7 @@
 
     <script src="assets/js/jquery-1.7.2.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/underscore.js"></script>
     <script src="assets/js/carrotsearch.foamtree.html5.min.js"></script>
 
     <script type="text/javascript">
@@ -745,6 +747,7 @@
         s.parentNode.insertBefore(wf, s);
       })();
     </script>
+
     <script>
       var d;
 
@@ -779,11 +782,47 @@
         return false;
       });
 
+
       function foamTreeJsonDataAvailable(data) {
         d = data;
-//        foamtree.set("dataObject", data);
+      }
+
+      var folderTemplate = _.template(
+        "<li class='folded <%= clazz %>'>" +
+          "<a id='<%- cluster.id %>' href='#'>" +
+            "<span class='tree'></span>" +
+            "<span class='phrase'><%- cluster.phrases[0] %></span>" +
+            "<span class='size'>(<%- cluster.size %>)</span>" +
+          "</a>" +
+          "<%= subclusters %>" +
+        "</li>");
+
+      function dataLoaded(data) {
+        $("#folders").html(clusterList(data.clusters)).on("click", "a", function() {
+          $(this).parent().toggleClass("folded");
+        });
+
+        function clusterList(clusters) {
+          if (!clusters) {
+            return "";
+          }
+
+          var tree = "<ul>";
+          for (var i = 0; i < clusters.length; i++) {
+            var cluster = clusters[i];
+            console.log(clusterList(cluster.clusters));
+            tree += folderTemplate({
+              cluster: cluster,
+              clazz: cluster.clusters ? "branch" : "",
+              subclusters: clusterList(cluster.clusters)
+            });
+          }
+          tree += "</ul>";
+          return tree;
+        }
       }
     </script>
     <script src="assets/js/data-mining-100-topic-hierarchical.jsonp"></script>
+    <script src="assets/js/carrot2.data.js"></script>
   </body>
 </html>
