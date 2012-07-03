@@ -69,19 +69,30 @@
   background-color: #fcfcfc;
   padding-left: 15px;
   padding-top: 5px;
+  position: relative;
 }
 
 .browsing > .nav {
   border-color: #eee;
 }
+.browsing > .nav > li.active > a {
+  color: #222;
+}
 .browsing > .nav > li > a {
-  padding: 4px 8px;
+  color: #666;
+  padding: 4px 6px;
 }
 .browsing > .nav > li.active > a {
   border-color: #eee #eee transparent;
 }
 .grouping {
-  margin-left: 2em;
+  margin-left: 3em;
+}
+.grouping > span {
+  position: absolute;
+  padding: 5px 0;
+  margin-left: -1.5em;
+  color: #bbb;
 }
 
 .data {
@@ -100,7 +111,7 @@
   right: 35%;
 }
 .folders-active > .clusters {
-  width: 350px;
+  width: 300px;
 }
 
 
@@ -116,15 +127,12 @@
 }
 
 /** Folders */
-#folders {
-}
-
 #folders ul {
   list-style: none;
   margin: 0;
 }
 #folders li > ul {
-  padding-left: 20px;
+  padding-left: 18px;
 }
 #folders li.folded > ul {
   display: none;
@@ -181,7 +189,7 @@
   left: 65%;
 }
 .folders-active > .links {
-  left: 350px;
+  left: 300px;
 }
 
 .summary {
@@ -274,6 +282,18 @@
 }
 .views > .active > a {
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.025);
+}
+
+/** Icons */
+.icon-foamtree {
+  background-image: url(../img/foamtree-icon.png);
+  background-position: 0 0;
+}
+.icon-circles {
+  background-image: url(../img/circles-icon.png);
+  width: 16px;
+  height: 16px;
+  background-position: 0 0;
 }
 
 /** Bootrstrap patches */
