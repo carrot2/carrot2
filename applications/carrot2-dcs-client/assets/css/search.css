@@ -139,7 +139,7 @@
 }
 
 #folders li {
-  background-position: 0 center;
+  background-position: 3px center;
   background-repeat: repeat-y;
   background-image: url(../img/tree-trunk.gif);
   padding-top: 2px;
@@ -151,7 +151,7 @@
   width: 16px;
   height: 20px;
   position: absolute;
-  margin-left: -34px;
+  margin-left: -35px;
 }
 #folders li:last-child > a > .tree {
   background-image: url(../img/tree-leaf-last.gif);
@@ -164,10 +164,14 @@
 
 #folders a {
   display: block;
-  padding-left: 34px;
+  padding-left: 38px;
   background-image: url(../img/tree-folder.png);
-  background-position: 14px 0;
+  background-position: 18px 0;
   background-repeat: no-repeat;
+}
+#folders > a {
+  padding-left: 20px;
+  background-position: 0 0;
 }
 
 #folders a > .size {

@@ -789,7 +789,7 @@
         "</li>");
 
       function dataLoaded(data) {
-        $("#folders").html(clusterList(data.clusters)).on("click", "a", function() {
+        $("#folders").html("<a href='#'><span class='phrase'>All topics</span><span class='size'>(100)</span></a>" + clusterList(data.clusters)).on("click", "a", function() {
           $(this).parent().toggleClass("folded");
         });
 
@@ -801,7 +801,6 @@
           var tree = "<ul>";
           for (var i = 0; i < clusters.length; i++) {
             var cluster = clusters[i];
-            console.log(clusterList(cluster.clusters));
             tree += folderTemplate({
               cluster: cluster,
               clazz: cluster.clusters ? "branch" : "",
