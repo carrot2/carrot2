@@ -1,9 +1,52 @@
+/** Application loading */
+*,
+.faded > #loading,
+.faded > #loading * {
+  opacity: 1;
+}
+.faded *, #loading {
+  opacity: 0;
+}
+*, #loading {
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-property: opacity;
+  -moz-transition-duration: 0.5s;
+  -o-transition-property: opacity;
+  -o-transition-duration: 0.5s;
+  -ms-transition-property: opacity;
+  -ms-transition-duration: 0.5s;
+}
+
+#loading {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 150px;
+  height: 150px;
+  color: #999;
+  font-size: 20px;
+}
+#loading > small {
+  margin-top: 8px;
+  color: #999;
+  display: block;
+  font-size: 13px;
+}
+.loading > #loading {
+  display: block;
+}
+
 /** Startup screen */
-.startup {
+.startup, .faded {
   background-color: #f8f8f8;
 }
 
-.startup > .search {
+.startup > #search {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -13,28 +56,38 @@
   height: 300px;
   margin: auto;
   padding-left: 165px;
-
   background: url(../img/carrot-search-logo-large.png) no-repeat 0 0;
 }
 
-.startup > .search > .sources {
+.startup #sources {
   margin-top: 22px;
   margin-bottom: 15px;
 }
 
-.startup > .search > form {
+.startup > #search > form {
   margin-bottom: 10px;
 }
 
-.search > form > .query {
+#query {
   width: 30em;
 }
 
-.search > form > .query {
+#query {
   margin: 0;
 }
 
-.examples > a {
+#results > li > a > i {
+  display: none;
+}
+#results > li.active > a {
+  background-color: white;
+  color: #333;
+}
+#results > li.active > a > i {
+  display: inline-block;
+}
+
+#queries > a {
   padding: 0 0.4em;
 }
 
@@ -45,7 +98,7 @@
 
 
 /** Results screen */
-.results > .search {
+.results > #search {
   background-color: #f6f6f6;
   height: 80px;
   padding-left: 90px;
@@ -57,11 +110,11 @@
   border-bottom: 1px solid #eee;
 }
 
-.results > .search > .sources {
+.results #sources {
   margin-bottom: 10px;
 }
 
-.results > .search > .sources a {
+.results #sources a {
   padding: 6px 10px;
 }
 
@@ -239,7 +292,7 @@
 }
 
 .results .intro,
-.results .examples {
+.results #examples {
   display: none;
 }
 
@@ -264,8 +317,8 @@
   right: 10px;
 }
 
-.startup .sources > .active > a,
-.startup .sources > .active > a:hover {
+.startup #sources > .active > a,
+.startup #sources > .active > a:hover {
   background-image: linear-gradient(bottom, #f8f8f8 0%, #fcfcfc 80%, #fff 100%);
   background-image: -webkit-linear-gradient(bottom, #f8f8f8 0%, #fcfcfc 80%, #fff 100%);
   background-image: -moz-linear-gradient(bottom, #f6f6f6 0%, #fcfcfc 80%, #fff 100%);
@@ -274,8 +327,8 @@
   border-bottom-color: #f6f6f6;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
 }
-.results .sources > .active > a,
-.results .sources > .active > a:hover {
+.results #sources > .active > a,
+.results #sources > .active > a:hover {
   background-image: linear-gradient(bottom, #f4f4f4 0%, #fcfcfc 80%, #fff 100%);
   background-image: -webkit-linear-gradient(bottom, #f4f4f4 0%, #fcfcfc 80%, #fff 100%);
   background-image: -moz-linear-gradient(bottom, #f4f4f4 0%, #fcfcfc 80%, #fff 100%);

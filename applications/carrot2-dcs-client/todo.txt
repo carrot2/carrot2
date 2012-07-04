@@ -2,3 +2,8 @@
 * Tuning of default FoamTree colors
 * Breadcrumbs?
 * FoamTree interaction hints
+* Google analytics
+* Persistent URLs
+* IE 8 fixes
+* maintain default values and serialize only differences for shorter URLs
+* persist settings to the local storage (only when changes initiated by UI, not by parsing a permanent URL)

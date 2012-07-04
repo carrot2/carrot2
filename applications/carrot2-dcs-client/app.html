@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Carrot2 document clustering engine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="assets/css/search.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+
+    <!-- TODO: fav and touch icons -->
+    <script>
+      var loadingTimeout = setTimeout(function() {
+        document.body.setAttribute("class", "faded loading");
+      }, 150);
+    </script>
+  </head>
+
+  <body class="faded">
+    <div id="search">
+      <ul id="sources" class="nav nav-tabs"></ul>
+
+      <form class="btn-toolbar">
+        <input id="query" type="text" />
+        <div class="btn-group">
+          <button class="btn btn-primary" type="submit">Search</button>
+          <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+          <ul id="results" class="dropdown-menu" />
+        </div>
+      </form>
+      
+      <p class="intro">
+        Lingo3G clustering engine organizes your search results into topics. With an instant overview of what's
+        available, you will quickly find what you're looking for.
+      </p>
+      
+      <p id="examples">
+        Example queries:
+        <span id="queries"></span>
+      </p>
+    </div>
+
+    <div class="browsing">
+      <ul class="views nav nav-tabs">
+        <li class="active"><a href="#" title="FoamTree visualization view"><i class="icon icon-foamtree"></i></a></li>
+        <li><a href="#"><i class="icon icon-circles" title="Circles visualization view"></i></a></li>
+        <li><a href="#"><i class="icon icon-folder-open" style="opacity: 0.8" title="Folder view"></i></a></li>
+
+        <li class="grouping active"><span>by</span><a href="#" title="Clusters from the Lingo algorithm">topic</i></a></li>
+        <li class=""><a href="#">URL</i></a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">more<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" title="Clusters from the STC algorithm">by topic: STC</a></li>
+            <li><a href="#">by source</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="data folders-active">
+      <div class="clusters">
+        <div id="visualization"></div>
+        <div id="folders"></div>
+      </div>
+
+      <div class="links">
+        <div class="summary">Top 100 results of about 281000000 for test</div>
+        <div class="docs"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <a href="#">About</a>
+      <a href="#">Privacy policy</a>
+      <a href="#">Contact</a>
+    </div>
+
+    <div id="loading">
+      Loading...
+      <small>Carrot<sup>2</sup> clustering engine<small>
+    </div>
+
+    <script src="assets/js/jquery-1.7.2.min.js"></script>
+    <script src="assets/js/underscore.js"></script>
+    <script src="assets/js/bootstrap-dropdown.js"></script>
+    <script src="assets/js/carrotsearch.pluginhelper.js"></script>
+    <script src="assets/js/carrot2.webapp.controller.js"></script>
+    <script src="assets/js/carrot2.webapp.search.js"></script>
+    <script>
+      clearTimeout(loadingTimeout);
+      var $controller = $("body").controller({
+        search: {
+          sources: [
+            { id: "web", label: "Web", examples: [ "data mining", "london", "clustering" ] },
+            { id: "wikipedia", label: "Wikipedia", examples: [ "photography", "physics", "clustering" ] },
+            { id: "images", label: "Web", examples: [ "cats", "apple", "dark side of the moon" ] },
+            { id: "news", label: "News", examples: [ "crisis", "market", "war" ] },
+            { id: "jobs", label: "Jobs", examples: [ "java", "manager", "ruby" ] },
+            { id: "pubmed", label: "PubMed", examples: [ "cancer", "heart", "lung" ] },
+            { id: "put", label: "PUT", examples: [ "idss", "seminaria", "publikacje" ] }
+          ],
+          results: [ 50, 100, 200 ],
+          container: "#search",
+          components: {
+            query: "#query",
+            sources: "#sources",
+            examples: "#examples",
+            queries: "#queries",
+            results: "#results"
+          }
+        },
+        defaults: {
+          source: "web",
+          results: 100
+        }
+      });
+    </script>
+    <script src="assets/js/carrotsearch.foamtree.html5.min.js"></script>
+  </body>
+</html>
