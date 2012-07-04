@@ -3,12 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <title>Carrot2 document clustering engine</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <meta name="description" content="" />
     <meta name="author" content="" />
 
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
-    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet" />
     <link href="assets/css/search.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
 
@@ -773,6 +772,11 @@
         return false;
       });
 
+      if (/iPad|iPhone|Android/.test(window.navigator.userAgent)) {
+        $("body").addClass("mobile");
+      } else {
+        $("body").addClass("desktop");
+      }
 
       function foamTreeJsonDataAvailable(data) {
         d = data;

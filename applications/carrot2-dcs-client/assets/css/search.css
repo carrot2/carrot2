@@ -304,22 +304,22 @@
 .btn-toolbar .btn-group {
   vertical-align: top;
 }
-::-webkit-scrollbar {
+.desktop ::-webkit-scrollbar {
   width: 12px;
 }
-::-webkit-scrollbar-track {
+.desktop ::-webkit-scrollbar-track {
   background: #fcfcfc;
   -webkit-box-shadow: inset 1px 1px 1px rgba(0,0,0,0.05);
 }
-::-webkit-scrollbar-thumb {
+.desktop ::-webkit-scrollbar-thumb {
   background: #CCC;
   -webkit-box-shadow: inset 1px 1px 1px rgba(0,0,0,0.2);
   border-radius: 2px;
 }
-::-webkit-scrollbar-thumb:hover {
+.desktop ::-webkit-scrollbar-thumb:hover {
   background: #AAA;
 }
-::-webkit-scrollbar-thumb:active {
+.desktop ::-webkit-scrollbar-thumb:active {
   background: #888;
   -webkit-box-shadow: inset 1px 1px 1px rgba(0,0,0,0.3);
 }
