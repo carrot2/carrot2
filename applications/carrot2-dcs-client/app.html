@@ -43,22 +43,8 @@
       </p>
     </div>
 
-    <div class="browsing">
-      <ul class="views nav nav-tabs">
-        <li class="active"><a href="#" title="FoamTree visualization view"><i class="icon icon-foamtree"></i></a></li>
-        <li><a href="#"><i class="icon icon-circles" title="Circles visualization view"></i></a></li>
-        <li><a href="#"><i class="icon icon-folder-open" style="opacity: 0.8" title="Folder view"></i></a></li>
-
-        <li class="grouping active"><span>by</span><a href="#" title="Clusters from the Lingo algorithm">topic</i></a></li>
-        <li class=""><a href="#">URL</i></a></li>
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">more<b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="#" title="Clusters from the STC algorithm">by topic: STC</a></li>
-            <li><a href="#">by source</a></li>
-          </ul>
-        </li>
-      </ul>
+    <div id="browsing">
+      <ul id="views" class="nav nav-tabs"></ul>
     </div>
 
     <div class="data folders-active">
@@ -68,7 +54,7 @@
       </div>
 
       <div class="links">
-        <div class="summary">Top 100 results of about 281000000 for test</div>
+        <div class="summary"></div>
         <div class="docs"></div>
       </div>
     </div>
@@ -90,6 +76,7 @@
     <script src="assets/js/carrotsearch.pluginhelper.js"></script>
     <script src="assets/js/carrot2.webapp.controller.js"></script>
     <script src="assets/js/carrot2.webapp.search.js"></script>
+    <script src="assets/js/carrot2.webapp.clusters.js"></script>
     <script>
       clearTimeout(loadingTimeout);
       var $controller = $("body").controller({
@@ -113,9 +100,64 @@
             results: "#results"
           }
         },
+        clusters: {
+          views: [
+            {
+              id: "foamtree",
+              label: "FoamTree visualization",
+              plugin: $.carrotsearchHtml5Visualization,
+              config: {
+              }
+            },
+            {
+              id: "circles",
+              label: "Circles visualization",
+              plugin: $.carrotsearchFlashVisualization,
+              config: {
+              }
+            },
+            {
+              id: "folders",
+              label: "Folder view",
+              plugin: $.foldersView,
+              config: {
+              }
+            }
+          ],
+          algorithms: [
+            {
+              id: "lingo",
+              label: "topic",
+              description: "Topics from Lingo clustering algorithm"
+            },
+            {
+              id: "url",
+              label: "URL",
+              description: "Domains of the results' URLs"
+            },
+            {
+              id: "stc",
+              label: "by topic: STC",
+              description: "Topics from STC clustering algorithm",
+              other: true
+            },
+            {
+              id: "source",
+              label: "by source",
+              description: "By results' source",
+              other: true
+            }
+          ],
+          container: "#browsing",
+          components: {
+            views: "#views"
+          }
+        },
         defaults: {
           source: "web",
-          results: 100
+          results: 100,
+          view: "foamtree",
+          algorithm: "lingo"
         }
       });
     </script>

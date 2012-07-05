@@ -3,11 +3,13 @@
     // Initialize application state
     state.source = options.defaults.source;
     state.results = options.defaults.results;
+    state.view = options.defaults.view;
+    state.algorithm = options.defaults.algorithm;
 
     // Initialize and wire the components
-    var $search = null, $visualization = null, $documents = null;
+    var $search = null, $clusters = null, $documents = null;
 
-    this.$search = $search = $(options.search.container).search($.extend({}, options.search, {
+    $search = $(options.search.container).search($.extend({}, options.search, {
       sourceChanged: function(source) {
         state.source = source;
       },
@@ -16,16 +18,30 @@
       },
       searchTriggered: function(query) {
         state.query = query;
+        $(el).attr("class", "results");
       }
     }));
-    this.$search.search("source", state.source);
-    this.$search.search("results", state.results);
+    $search.search("source", state.source);
+    $search.search("results", state.results);
+
+    $clusters = $(options.clusters.container).clusters($.extend({}, options.clusters, {
+      viewChanged: function(view) {
+        state.view = view;
+      },
+      algorithmChanged: function(algorithm) {
+        state.algorithm = algorithm;
+      }
+    }));
+    $clusters.clusters("view", state.view);
+    $clusters.clusters("algorithm", state.algorithm);
+
+
 
 //    $documents = $(options.documents.container).documents($.extend({}, options.documents, {
 //    }));
 
     // Show the UI when initialization complete
-    $(el).attr("class", "startup");
+    $(el).attr("class", "results");
     return;
   });
 
@@ -33,6 +49,8 @@
   var state = {
     source: "",
     results: "",
+    algorithm: "",
+    view: "",
     query: "",
 
     encode: function() {
