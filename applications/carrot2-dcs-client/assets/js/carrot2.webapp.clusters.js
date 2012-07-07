@@ -141,7 +141,7 @@
         // Let the plugin do the embedding
         $v[view.plugin](view.config, complete);
       } else {
-        $v.show();
+        $v.show()[viewsById[activeView].plugin]("shown");
         complete();
       }
     }

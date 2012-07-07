@@ -26,6 +26,7 @@
     this.populate = populate;
     this.clear = clear;
     this.populated = populated;
+    this.shown = function() { };
     return undefined;
 
 

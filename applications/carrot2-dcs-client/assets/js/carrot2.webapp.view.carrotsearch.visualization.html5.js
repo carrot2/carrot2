@@ -1,13 +1,30 @@
 (function($) {
   $.pluginhelper.make("carrotsearchHtml5Visualization", function(el, options, initialized) {
+    var $element = $(el);
     var visualization = options.factory($.extend({}, options.options, {
-      id: $(el).attr("id")
+      id: $element.attr("id")
     }));
+
+    var resizePending = false;
+    $(window).resize((function() {
+      var to;
+      return function() {
+        window.clearTimeout(to);
+        to = window.setTimeout(function() {
+          if ($element.is(":visible")) {
+            visualization.resize();
+          } else {
+            resizePending = true;
+          }
+        }, 250);
+      };
+    })());
 
     // Export public methods
     this.populate = populate;
     this.clear = clear;
     this.populated = populated;
+    this.shown = shown;
 
     initialized();
     return undefined;
@@ -37,6 +54,13 @@
 
     function populated() {
       return visualization.get("dataObject") !== null;
+    }
+
+    function shown() {
+      if (resizePending) {
+        visualization.resize();
+        resizePending = false;
+      }
     }
   });
 })(jQuery);
