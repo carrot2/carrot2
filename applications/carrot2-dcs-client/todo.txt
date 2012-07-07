@@ -12,3 +12,4 @@
 * lazy loading of visualization plugin dependencies
 * keyboard shortcuts for source tab switching
 * FoamTree resize hook (only when visualization visible)
+* Improve FoamTree hover/selection visibility on white backgrounds

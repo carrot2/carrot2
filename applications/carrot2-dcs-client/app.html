@@ -139,7 +139,9 @@
                 options: {
                   backgroundColor: "#fff",
                   groupFontFamily: "Oxygen",
-                  titleBarFontFamily: "Oxygen"
+                  titleBarFontFamily: "Oxygen",
+                  rainbowStartColor: "hsla(0, 85%, 50%, 0.9)",
+                  rainbowEndColor: "hsla(300, 85%, 50%, 0.9)"
                 }
               }
             },
@@ -153,9 +155,10 @@
                   return new CarrotSearchCircles(options);
                 },
                 options: {
-                  backgroundColor: "#fff",
+                  backgroundColor: 0x00000000,
                   visualizationSwfLocation: "assets/swf/com.carrotsearch.visualizations.circles.swf",
-                  flashPlayerInstallerSwfLocation: "assets/swf/playerProductInstall.swf"
+                  flashPlayerInstallerSwfLocation: "assets/swf/playerProductInstall.swf",
+                  groupOutlineColor: 0xffffffff
                 }
               }
             },
