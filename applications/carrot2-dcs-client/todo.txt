@@ -10,3 +10,4 @@
 * support "open link in new tab" case?
 * expose searcher function to the outside to enable other backends (Solr, Elastic Search)
 * lazy loading of visualization plugin dependencies
+* keyboard shortcuts for source tab switching

@@ -187,12 +187,15 @@
   right: 15px;
   top: 0px;
   bottom: 0px;
+}
+
+/** Folders */
+#folders {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
 
-/** Folders */
 #folders ul {
   list-style: none;
   margin: 0;
