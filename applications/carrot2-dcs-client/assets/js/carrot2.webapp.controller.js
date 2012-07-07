@@ -9,6 +9,7 @@
     // Initialize and wire the components
     var $search = null, $clusters = null, $documents = null;
 
+    // Search form
     $search = $(options.search.container).search($.extend({}, options.search, {
       sourceChanged: function(source) {
         state.source = source;
@@ -28,11 +29,13 @@
         });
 
         $clusters.clusters("populate", data);
+        $documents.documents("populate", data);
       }
     }));
     $search.search("source", state.source);
     $search.search("results", state.results);
 
+    // Cluster views
     $clusters = $(options.clusters.container).clusters($.extend({}, options.clusters, {
       viewChanged: function(view) {
         state.view = view;
@@ -44,10 +47,9 @@
     $clusters.clusters("view", state.view);
     $clusters.clusters("algorithm", state.algorithm);
 
-
-
-//    $documents = $(options.documents.container).documents($.extend({}, options.documents, {
-//    }));
+    // Document view
+    $documents = $(options.documents.container).documents($.extend({}, options.documents, {
+    }));
 
     // Show the UI when initialization complete
     $(el).attr("class", "results");

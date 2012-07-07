@@ -12,6 +12,7 @@
 * lazy loading of visualization plugin dependencies
 * keyboard shortcuts for source tab switching
 * Improve FoamTree hover/selection visibility on white backgrounds
+* Fading out/in when switching from startup to results screen?
 
 DONE:
 
