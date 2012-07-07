@@ -11,3 +11,4 @@
 * expose searcher function to the outside to enable other backends (Solr, Elastic Search)
 * lazy loading of visualization plugin dependencies
 * keyboard shortcuts for source tab switching
+* FoamTree resize hook (only when visualization visible)

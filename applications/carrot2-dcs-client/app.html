@@ -63,6 +63,7 @@
       <a href="#">Contact</a>
     </div>
 
+
     <div id="loading">
       Loading...
       <small>Carrot<sup>2</sup> clustering engine</small>
@@ -78,13 +79,29 @@
     <script src="assets/js/carrot2.webapp.controller.js"></script>
     <script src="assets/js/carrot2.webapp.search.js"></script>
     <script src="assets/js/carrot2.webapp.clusters.js"></script>
-    <script src="assets/js/carrot2.webapp.view.carrotsearchHtml5Visualization.js"></script>
-    <script src="assets/js/carrot2.webapp.view.carrotsearchFlashVisualization.js"></script>
+    <script src="assets/js/carrot2.webapp.view.carrotsearch.visualization.html5.js"></script>
+    <script src="assets/js/carrot2.webapp.view.carrotsearch.visualization.flash.js"></script>
     <script src="assets/js/carrot2.webapp.view.folders.js"></script>
 
     <script src="assets/js/carrotsearch.foamtree.html5.min.js"></script>
     <script src="assets/js/swfobject.js"></script>
     <script src="assets/js/carrotsearch.circles.min.js"></script>
+
+    <script type="text/javascript">
+      WebFontConfig = {
+        google: { families: [ "Oxygen:400" ] }
+      };
+      (function() {
+        var wf = document.createElement('script');
+        wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+        wf.type = 'text/javascript';
+        wf.async = 'true';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(wf, s);
+      })();
+    </script>
+
     <script>
       clearTimeout(loadingTimeout);
       var $controller = $("body").controller({
@@ -116,9 +133,13 @@
               type: "wide",
               plugin: "carrotsearchHtml5Visualization",
               config: {
-                constructor: CarrotSearchFoamTree,
+                factory: function(options) {
+                  return new CarrotSearchFoamTree(options);
+                },
                 options: {
-                  backgroundColor: "#fff"
+                  backgroundColor: "#fff",
+                  groupFontFamily: "Oxygen",
+                  titleBarFontFamily: "Oxygen"
                 }
               }
             },
@@ -128,7 +149,9 @@
               type: "wide",
               plugin: "carrotsearchFlashVisualization",
               config: {
-                constructor: CarrotSearchCircles,
+                factory: function(options) {
+                  return new CarrotSearchCircles(options);
+                },
                 options: {
                   backgroundColor: "#fff",
                   visualizationSwfLocation: "assets/swf/com.carrotsearch.visualizations.circles.swf",

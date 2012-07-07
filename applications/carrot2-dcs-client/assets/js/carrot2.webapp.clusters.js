@@ -6,7 +6,7 @@
 
     // Data
     var viewsById = _.reduce(options.views, function (byId, v) { byId[v.id] = v; return byId; }, {});
-    var activeView, currentData, viewPlugins = { };
+    var activeView, currentData;
 
     // Compiled templates
     var viewTemplate = _.template('<li><a href="#<%- id %>" class="view"><i class="icon icon-<%- id %>" title="<%- label %>"></i></a></li>');
@@ -70,7 +70,7 @@
     // Export public methods
     this.view = setActiveView;
     this.algorithm = setActiveAlgorithm;
-    this.populate = populate;
+    this.populate = populateAndClearInvisible;
     return undefined;
 
 
@@ -85,7 +85,15 @@
       actiateByClassAndId($views, "view", view);
 
       // Show the actual view element
-      embedOrShow(view);
+      embedOrShow(view, function() {
+        // TODO: remove the callback when we get rid of Flash visualizations
+
+        // Populate if needed
+        var pop = $("#" + activeView)[viewsById[activeView].plugin]("populated");
+        if (!pop && currentData) {
+          populate(currentData);
+        }
+      });
     }
 
     function setActiveAlgorithm(algorithm) {
@@ -100,27 +108,43 @@
     }
 
     function populate(data) {
-
-      // Clear inactive views so that old data doesn't flash when switching views
-      viewsById[activeView].plugin
+      currentData = data;
+      $("#" + activeView)[viewsById[activeView].plugin]("populate", data);
     }
 
-    function embedOrShow(id) {
+    function populateAndClearInvisible(data) {
+      populate(data);
+
+      // Clear the invisible views to avoid flashes of old content when switching
+      clearInvisible(viewsById, activeView);
+    }
+
+    function clearInvisible(viewsById, activeView) {
+      $.each(viewsById, function (id, view) {
+        if (id != activeView) {
+          $("#" + id)[viewsById[id].plugin]("clear");
+        }
+      });
+    }
+
+    function embedOrShow(id, complete) {
       var view = viewsById[id];
       var $v = $("#" + id);
+
+      $data.toggleClass("narrow-view", view.type == "narrow");
+      $clusters.children().not($v).hide();
 
       if ($v.size() == 0) {
         // Create an element
         $v = $("<div id='" + id + "' />").appendTo($clusters);
 
         // Let the plugin do the embedding
-        $v[view.plugin](view.config);
+        $v[view.plugin](view.config, complete);
+      } else {
+        $v.show();
+        complete();
       }
-
-      // TODO: a smoother transition here?
-      $data.toggleClass("narrow-view", view.type == "narrow");
-      $clusters.children().not($v).hide();
-      $v.show();
     }
+
   });
 })(jQuery);
