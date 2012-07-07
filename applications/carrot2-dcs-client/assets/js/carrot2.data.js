@@ -1,4 +1,4 @@
-dataLoaded({"processing-time-total": 1802, "clusters": [
+var carrot2Result = {"processing-time-total": 1802, "clusters": [
   {"id": 0, "size": 21, "phrases": ["Data Mining Software"], "score": 1.0, "documents": [], "attributes": {"score": 1.0, "label-scores": [0.9849020343549272]}, "clusters": [
     {"id": 1, "size": 7, "phrases": ["Data Mining and Analytics"], "score": 1.0, "documents": [5, 22, 51, 66, 90, 151, 153], "attributes": {"score": 1.0, "label-scores": [0.9923835683890208]}},
     {"id": 2, "size": 4, "phrases": ["Data Analysis"], "score": 0.9064896455309901, "documents": [62, 66, 97, 131], "attributes": {"score": 0.9064896455309901, "label-scores": [1.0]}},
@@ -245,4 +245,4 @@ dataLoaded({"processing-time-total": 1802, "clusters": [
   {"id": 152, "url": "http://www.wirtschaftslexikon24.net/d/data-mining/data-mining.htm", "language": "en", "title": "Data Mining - Wirtschaftslexikon", "sources": ["Ask"], "snippet": "Data Mining dar. Für das Interpretieren der Daten haben Softwareentwickler sog. Data Mining-Programme entwickelt, die aus den Daten Informationen …"},
   {"id": 153, "url": "http://www.kdnuggets.com/index.html?lg", "language": "en", "title": "Data Mining Community's Top Resource", "sources": ["Entireweb"], "snippet": "Data Mining and Analytics Software, Jobs, Consulting, Courses, and more; KDnuggets News, the leading newsletter on data mining and analytics."},
   {"id": 154, "url": "http://en.wikipedia.org/wiki/National_Security_Agency", "language": "en", "title": "National Security Agency", "sources": ["Wikipedia"], "snippet": "Transaction data mining: NSA is reported to use its computing capability to analyze \"transactional\" data that it regularly acquires from …"}
-], "query": "data mining", "processing-time-source": 745, "SearchEngineStats.pageRequests": 0, "SearchEngineStats.queries": 0});
+], "query": "data mining", "processing-time-source": 745, "SearchEngineStats.pageRequests": 0, "SearchEngineStats.queries": 0};

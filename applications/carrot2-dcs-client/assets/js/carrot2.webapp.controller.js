@@ -19,6 +19,15 @@
       searchTriggered: function(query) {
         state.query = query;
         $(el).attr("class", "results");
+
+        var data = searcher({
+          query: state.query,
+          results: state.results,
+          source: state.source,
+          algorithm: state.algorithm
+        });
+
+        $clusters.clusters("populate", data);
       }
     }));
     $search.search("source", state.source);
@@ -44,6 +53,10 @@
     $(el).attr("class", "results");
     return;
   });
+
+  function searcher(params) {
+    return carrot2Result;
+  }
 
   // Application state management
   var state = {

@@ -1,6 +1,12 @@
 (function($) {
   $.pluginhelper.make("clusters", function(el, options) {
-    var $views = $(options.components.views);
+    var $views = $(options.components.views); // view tabs
+    var $data = $(options.components.data); // documents and clusters container
+    var $clusters = $(options.components.clusters); // container of all views
+
+    // Data
+    var viewsById = _.reduce(options.views, function (byId, v) { byId[v.id] = v; return byId; }, {});
+    var activeView, currentData, viewPlugins = { };
 
     // Compiled templates
     var viewTemplate = _.template('<li><a href="#<%- id %>" class="view"><i class="icon icon-<%- id %>" title="<%- label %>"></i></a></li>');
@@ -61,13 +67,25 @@
       e.preventDefault();
     });
 
-
+    // Export public methods
     this.view = setActiveView;
     this.algorithm = setActiveAlgorithm;
-    return;
+    this.populate = populate;
+    return undefined;
+
+
+    //
+    // Private methods
+    //
 
     function setActiveView(view) {
+      activeView = view;
+
+      // Show active tab
       actiateByClassAndId($views, "view", view);
+
+      // Show the actual view element
+      embedOrShow(view);
     }
 
     function setActiveAlgorithm(algorithm) {
@@ -79,6 +97,30 @@
     function actiateByClassAndId($list, clazz, id) {
       $list.find("a." + clazz).parent().removeClass("active");
       return $list.find("a." + clazz + "[href = '#" + id + "']").parent().addClass("active");
+    }
+
+    function populate(data) {
+
+      // Clear inactive views so that old data doesn't flash when switching views
+      viewsById[activeView].plugin
+    }
+
+    function embedOrShow(id) {
+      var view = viewsById[id];
+      var $v = $("#" + id);
+
+      if ($v.size() == 0) {
+        // Create an element
+        $v = $("<div id='" + id + "' />").appendTo($clusters);
+
+        // Let the plugin do the embedding
+        $v[view.plugin](view.config);
+      }
+
+      // TODO: a smoother transition here?
+      $data.toggleClass("narrow-view", view.type == "narrow");
+      $clusters.children().not($v).hide();
+      $v.show();
     }
   });
 })(jQuery);

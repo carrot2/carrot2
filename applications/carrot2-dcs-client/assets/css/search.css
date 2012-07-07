@@ -100,7 +100,7 @@
   padding: 0 0.4em;
 }
 
-.startup > .data,
+.startup > #data,
 .startup > #browsing {
   display: none;
 }
@@ -161,7 +161,7 @@
   color: #bbb;
 }
 
-.data {
+#data {
   position: absolute;
   top: 140px;
   left: 15px;
@@ -169,7 +169,7 @@
   bottom: 15px;
 }
 
-.clusters {
+#clusters {
   position: absolute;
   left: 0px;
   top: 0px;
@@ -177,11 +177,11 @@
   right: 35%;
 }
 
-.folders-active > .clusters {
+.narrow-view > #clusters {
   width: 300px;
 }
 
-#visualization, #folders {
+#clusters > div {
   position: absolute;
   left: 0px;
   right: 15px;
@@ -267,7 +267,7 @@
   left: 65%;
 }
 
-.folders-active > .links {
+.narrow-view > .links {
   left: 300px;
 }
 

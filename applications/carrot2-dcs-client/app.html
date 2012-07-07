@@ -47,10 +47,8 @@
       <ul id="views" class="nav nav-tabs"></ul>
     </div>
 
-    <div class="data folders-active">
-      <div class="clusters">
-        <div id="visualization"></div>
-        <div id="folders"></div>
+    <div id="data" class="narrow-view">
+      <div id="clusters">
       </div>
 
       <div class="links">
@@ -70,13 +68,23 @@
       <small>Carrot<sup>2</sup> clustering engine</small>
     </div>
 
+    <script src="assets/js/carrot2.data.js"></script>
+
     <script src="assets/js/jquery-1.7.2.min.js"></script>
     <script src="assets/js/underscore.js"></script>
     <script src="assets/js/bootstrap-dropdown.js"></script>
+
     <script src="assets/js/carrotsearch.pluginhelper.js"></script>
     <script src="assets/js/carrot2.webapp.controller.js"></script>
     <script src="assets/js/carrot2.webapp.search.js"></script>
     <script src="assets/js/carrot2.webapp.clusters.js"></script>
+    <script src="assets/js/carrot2.webapp.view.carrotsearchHtml5Visualization.js"></script>
+    <script src="assets/js/carrot2.webapp.view.carrotsearchFlashVisualization.js"></script>
+    <script src="assets/js/carrot2.webapp.view.folders.js"></script>
+
+    <script src="assets/js/carrotsearch.foamtree.html5.min.js"></script>
+    <script src="assets/js/swfobject.js"></script>
+    <script src="assets/js/carrotsearch.circles.min.js"></script>
     <script>
       clearTimeout(loadingTimeout);
       var $controller = $("body").controller({
@@ -105,21 +113,34 @@
             {
               id: "foamtree",
               label: "FoamTree visualization",
-              plugin: $.carrotsearchHtml5Visualization,
+              type: "wide",
+              plugin: "carrotsearchHtml5Visualization",
               config: {
+                constructor: CarrotSearchFoamTree,
+                options: {
+                  backgroundColor: "#fff"
+                }
               }
             },
             {
               id: "circles",
               label: "Circles visualization",
-              plugin: $.carrotsearchFlashVisualization,
+              type: "wide",
+              plugin: "carrotsearchFlashVisualization",
               config: {
+                constructor: CarrotSearchCircles,
+                options: {
+                  backgroundColor: "#fff",
+                  visualizationSwfLocation: "assets/swf/com.carrotsearch.visualizations.circles.swf",
+                  flashPlayerInstallerSwfLocation: "assets/swf/playerProductInstall.swf"
+                }
               }
             },
             {
               id: "folders",
               label: "Folder view",
-              plugin: $.foldersView,
+              type: "narrow",
+              plugin: "foldersView",
               config: {
               }
             }
@@ -150,7 +171,9 @@
           ],
           container: "#browsing",
           components: {
-            views: "#views"
+            views: "#views",
+            clusters: "#clusters",
+            data: "#data"
           }
         },
         defaults: {
