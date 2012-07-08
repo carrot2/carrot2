@@ -6,6 +6,8 @@
     state.view = options.defaults.view;
     state.algorithm = options.defaults.algorithm;
 
+    var currentData, clustersById;
+
     // Initialize and wire the components
     var $search = null, $clusters = null, $documents = null;
 
@@ -27,6 +29,12 @@
           source: state.source,
           algorithm: state.algorithm
         });
+        currentData = data;
+        clustersById = _.reduce(data.clusters, function reducer(byId, cluster) {
+          byId[cluster.id] = cluster;
+          _.reduce(cluster.clusters || [], reducer, byId);
+          return byId;
+        }, {});
 
         $clusters.clusters("populate", data);
         $documents.documents("populate", data);
@@ -37,11 +45,24 @@
 
     // Cluster views
     $clusters = $(options.clusters.container).clusters($.extend({}, options.clusters, {
-      viewChanged: function(view) {
+      viewChanged: function (view) {
         state.view = view;
       },
-      algorithmChanged: function(algorithm) {
+      algorithmChanged: function (algorithm) {
         state.algorithm = algorithm;
+      },
+      clusterSelectionChanged: function (selectedClusters) {
+        if (selectedClusters.length == 0) {
+          // select all docs
+          $documents.documents("selectAll");
+        } else {
+          var docsToSelect = _.reduce(selectedClusters, function reducer(docsToSelect, cluster) {
+            _.each(cluster.documents, function(docId) { docsToSelect[docId] = true; } );
+            _.reduce(cluster.clusters || [], reducer, docsToSelect);
+            return docsToSelect;
+          }, {});
+          $documents.documents("select", docsToSelect, _.chain(selectedClusters).pluck("phrases").flatten().value());
+        }
       }
     }));
     $clusters.clusters("view", state.view);

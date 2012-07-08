@@ -2,7 +2,10 @@
   $.pluginhelper.make("carrotsearchHtml5Visualization", function(el, options, initialized) {
     var $element = $(el);
     var visualization = options.factory($.extend({}, options.options, {
-      id: $element.attr("id")
+      id: $element.attr("id"),
+      onGroupSelectionChanged: function(info) {
+        options.clusterSelectionChanged(_.pluck(info.selectedGroups, "cluster"));
+      }
     }));
 
     var resizePending = false;
@@ -41,7 +44,8 @@
               id: cluster.id,
               weight: cluster.attributes["other-topics"] ? 0 : cluster.size,
               label: cluster.phrases[0],
-              groups: _.reduce(cluster.clusters || [], reducer, [])
+              groups: _.reduce(cluster.clusters || [], reducer, []),
+              cluster: cluster
             });
             return arr;
           }, [])

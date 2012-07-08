@@ -139,7 +139,9 @@
         $v = $("<div id='" + id + "' />").appendTo($clusters);
 
         // Let the plugin do the embedding
-        $v[view.plugin](view.config, complete);
+        $v[view.plugin]($.extend({}, view.config, {
+          clusterSelectionChanged: options.clusterSelectionChanged
+        }), complete);
       } else {
         $v.show()[viewsById[activeView].plugin]("shown");
         complete();
