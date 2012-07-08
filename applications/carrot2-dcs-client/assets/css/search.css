@@ -277,6 +277,9 @@
 #summary {
   position: relative;
   top: -35px;
+  height: 20px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 #listing {

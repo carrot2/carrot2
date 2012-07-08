@@ -10,6 +10,7 @@
       '<a href="<%- url %>"><%- url %></a>' +
       '<span><%= sources.join(\'</span><span>\') %></span>' +
     '</div>');
+    var summaryTemplate = _.template('Top <%- count %> results for <b><%- query %></b>');
 
     // Export public methods
     this.populate = populate;
@@ -23,6 +24,11 @@
         html += documentTemplate(doc);
         return html;
       }, ""));
+
+      $summary.html(summaryTemplate({
+        count: data.documents.length,
+        query: data.query
+      }));
     }
   });
 })(jQuery);
