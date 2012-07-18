@@ -122,13 +122,13 @@ public final class Cluster
     static class DocumentRefid
     {
         @Attribute
-        Integer refid;
+        String refid;
 
         DocumentRefid()
         {
         }
 
-        DocumentRefid(Integer refid)
+        DocumentRefid(String refid)
         {
             this.refid = refid;
         }
@@ -235,8 +235,7 @@ public final class Cluster
 
     /**
      * Returns all documents in this cluster ordered according to the provided comparator.
-     * See {@link Document} for common comparators, e.g. {@link Document#BY_ID_COMPARATOR}
-     * .
+     * See {@link Document} for common comparators.
      */
     public List<Document> getAllDocuments(Comparator<Document> comparator)
     {
@@ -807,7 +806,7 @@ public final class Cluster
         {
             public DocumentRefid apply(Document document)
             {
-                return new DocumentRefid(document.getId());
+                return new DocumentRefid(document.getStringId());
             }
         });
 
@@ -840,11 +839,20 @@ public final class Cluster
      */
     @JsonProperty("documents")
     @SuppressWarnings("unused")
-    private List<Integer> getDocumentIds()
+    private List<String> getDocumentIds()
     {
-        return Lists.transform(documents, Document.DocumentToId.INSTANCE);
+        return Lists.transform(documents, DOCUMENT_TO_ID);
     }
 
+    private static Function<Document, String> DOCUMENT_TO_ID = new Function<Document, String>()
+    {
+        @Override
+        public String apply(Document doc)
+        {
+            return doc.getStringId();
+        }
+    };
+    
     /**
      * For JSON and XML serialization only.
      */
