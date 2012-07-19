@@ -51,12 +51,21 @@ import org.fest.assertions.StringAssert;
 import org.fest.assertions.ThrowableAssert;
 
 import com.carrotsearch.randomizedtesting.RandomizedTest;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakGroup;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakGroup.Group;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope.Scope;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakZombies;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakZombies.Consequence;
 import com.carrotsearch.randomizedtesting.annotations.TimeoutSuite;
 
 /**
  * Base class for Carrot2 test classes. Contains common hooks and setups.
  */
 @TimeoutSuite(millis = 180 * 1000) // No suite should run longer than 180 seconds.
+@ThreadLeakZombies(Consequence.IGNORE_REMAINING_TESTS)
+@ThreadLeakGroup(Group.MAIN)
+@ThreadLeakScope(Scope.TEST)
 public class CarrotTestCase extends RandomizedTest
 {
     /*
