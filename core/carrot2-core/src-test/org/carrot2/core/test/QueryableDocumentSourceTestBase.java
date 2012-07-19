@@ -32,7 +32,7 @@ import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.RandomizedContext;
-import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -112,7 +112,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
 
     @UsesExternalServices
     @Test 
-    @ThreadLeaks(linger = 2000)
+    @ThreadLeakLingering(linger = 2000)
     @SuppressWarnings("unchecked")
     public void testInCachingController() throws InterruptedException, ExecutionException
     {

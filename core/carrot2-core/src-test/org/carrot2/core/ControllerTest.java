@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -44,7 +44,7 @@ import com.google.common.collect.ImmutableMap;
 @SuppressWarnings("unchecked")
 public class ControllerTest
 {
-    @ThreadLeaks(linger = 2000)
+    @ThreadLeakLingering(linger = 2000)
     public static class ComponentManagerIndependentTests extends CarrotTestCase
     {
         @Test

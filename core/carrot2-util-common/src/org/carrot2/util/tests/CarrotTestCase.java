@@ -51,12 +51,12 @@ import org.fest.assertions.StringAssert;
 import org.fest.assertions.ThrowableAssert;
 
 import com.carrotsearch.randomizedtesting.RandomizedTest;
-import com.carrotsearch.randomizedtesting.annotations.Timeout;
+import com.carrotsearch.randomizedtesting.annotations.TimeoutSuite;
 
 /**
  * Base class for Carrot2 test classes. Contains common hooks and setups.
  */
-@Timeout(millis = 60 * 1000) // No test should last longer than 60 seconds.
+@TimeoutSuite(millis = 180 * 1000) // No suite should run longer than 180 seconds.
 public class CarrotTestCase extends RandomizedTest
 {
     /*
