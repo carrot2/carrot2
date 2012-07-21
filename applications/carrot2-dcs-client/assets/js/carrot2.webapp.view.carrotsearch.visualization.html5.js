@@ -28,6 +28,7 @@
     this.clear = clear;
     this.populated = populated;
     this.shown = shown;
+    this.select = select;
 
     initialized();
     return undefined;
@@ -65,6 +66,11 @@
         visualization.resize();
         resizePending = false;
       }
+    }
+
+    function select(ids) {
+      visualization.set("selection", { all: true, selected: false });
+      visualization.set("selection", ids);
     }
   });
 })(jQuery);

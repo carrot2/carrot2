@@ -6,7 +6,7 @@
 
     // Data
     var viewsById = _.reduce(options.views, function (byId, v) { byId[v.id] = v; return byId; }, {});
-    var activeView, currentData;
+    var activeView, currentData, currentSelection;
 
     // Compiled templates
     var viewTemplate = _.template('<li><a href="#<%- id %>" class="view"><i class="icon icon-<%- id %>" title="<%- label %>"></i></a></li>');
@@ -70,7 +70,7 @@
     // Export public methods
     this.view = setActiveView;
     this.algorithm = setActiveAlgorithm;
-    this.populate = populateAndClearInvisible;
+    this.populate = populate;
     return undefined;
 
 
@@ -91,7 +91,11 @@
         // Populate if needed
         var pop = $("#" + activeView)[viewsById[activeView].plugin]("populated");
         if (!pop && currentData) {
-          populate(currentData);
+          populateActiveView(currentData);
+        }
+
+        if (currentSelection) {
+          $("#" + activeView)[viewsById[activeView].plugin]("select", _.pluck(currentSelection, "id"));
         }
       });
     }
@@ -107,13 +111,15 @@
       return $list.find("a." + clazz + "[href = '#" + id + "']").parent().addClass("active");
     }
 
-    function populate(data) {
-      currentData = data;
+    function populateActiveView(data) {
       $("#" + activeView)[viewsById[activeView].plugin]("populate", data);
     }
 
-    function populateAndClearInvisible(data) {
-      populate(data);
+    function populate(data) {
+      currentData = data;
+      currentSelection = undefined;
+
+      populateActiveView(data);
 
       // Clear the invisible views to avoid flashes of old content when switching
       clearInvisible(viewsById, activeView);
@@ -140,7 +146,12 @@
 
         // Let the plugin do the embedding
         $v[view.plugin]($.extend({}, view.config, {
-          clusterSelectionChanged: options.clusterSelectionChanged
+          clusterSelectionChanged: function(clusters) {
+            currentSelection = clusters;
+
+            // Invoke controller's listener
+            options.clusterSelectionChanged(clusters);
+          }
         }), complete);
       } else {
         $v.show()[viewsById[activeView].plugin]("shown");

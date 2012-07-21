@@ -6,7 +6,7 @@
     state.view = options.defaults.view;
     state.algorithm = options.defaults.algorithm;
 
-    var currentData, clustersById;
+    var currentData;
 
     // Initialize and wire the components
     var $search = null, $clusters = null, $documents = null;
@@ -30,11 +30,6 @@
           algorithm: state.algorithm
         });
         currentData = data;
-        clustersById = _.reduce(data.clusters, function reducer(byId, cluster) {
-          byId[cluster.id] = cluster;
-          _.reduce(cluster.clusters || [], reducer, byId);
-          return byId;
-        }, {});
 
         $clusters.clusters("populate", data);
         $documents.documents("populate", data);
@@ -54,7 +49,7 @@
       clusterSelectionChanged: function (selectedClusters) {
         if (selectedClusters.length == 0) {
           // select all docs
-          $documents.documents("selectAll");
+          $documents.documents("clearSelection");
         } else {
           var docsToSelect = _.reduce(selectedClusters, function reducer(docsToSelect, cluster) {
             _.each(cluster.documents, function(docId) { docsToSelect[docId] = true; } );

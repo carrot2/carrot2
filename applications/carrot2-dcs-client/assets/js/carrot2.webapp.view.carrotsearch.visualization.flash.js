@@ -4,9 +4,12 @@
     var $inner = $element.html("<div id='" + $element.attr("id") + "-flash' />").find("div");
     var visualization = options.factory($.extend({}, options.options, {
       id: $inner.attr("id"),
-      onInitialize: initialized
+      onInitialize: initialized,
+      onGroupSelectionChanged: function(groups) {
+        options.clusterSelectionChanged(_.map(groups, function(id) { return clustersById[id]; }));
+      }
     }));
-    var hasData = false;
+    var hasData = false, clustersById;
 
     // Templates
     var carrot2Document = _.template("<document id='<%- id %>'>" +
@@ -26,6 +29,7 @@
     this.populate = populate;
     this.clear = clear;
     this.populated = populated;
+    this.select = select;
     this.shown = function() { };
     return undefined;
 
@@ -56,7 +60,13 @@
       xml += "</searchresult>";
 
       visualization.set("dataXml", xml);
+
       hasData = true;
+      clustersById = _.reduce(data.clusters, function reducer(byId, cluster) {
+        byId[cluster.id] = cluster;
+        _.reduce(cluster.clusters || [], reducer, byId);
+        return byId;
+      }, {});
     }
 
     function clear() {
@@ -68,5 +78,9 @@
       return hasData;
     }
 
+    function select(ids) {
+      visualization.set("selection", null);
+      visualization.set("selection", ids);
+    }
   });
 })(jQuery);

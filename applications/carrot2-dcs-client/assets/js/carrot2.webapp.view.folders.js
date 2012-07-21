@@ -19,6 +19,7 @@
     this.populate = populate;
     this.clear = clear;
     this.populated = populated;
+    this.select = select;
     this.shown = function() { };
 
     initialized();
@@ -56,6 +57,9 @@
 
     function populated() {
       return hasData;
+    }
+
+    function select(ids) {
     }
   });
 })(jQuery);

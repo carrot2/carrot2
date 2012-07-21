@@ -19,7 +19,7 @@
     // Export public methods
     this.populate = populate;
     this.select = select;
-    this.selectAll = selectAll;
+    this.clearSelection = clearSelection;
     return undefined;
 
     //
@@ -57,7 +57,7 @@
       }
     }
 
-    function selectAll() {
+    function clearSelection() {
       $listing.children().show();
 
       $summary.html(summaryRootTemplate({
