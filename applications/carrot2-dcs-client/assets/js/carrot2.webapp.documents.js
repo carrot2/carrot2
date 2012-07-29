@@ -26,8 +26,9 @@
     // Private methods
     //
     function populate(data) {
+      var docDefaults = { title: "", snippet: "", url: "", sources: [] };
       $listing.html(_.reduce(data.documents, function (html, doc) {
-        html += documentTemplate(doc);
+        html += documentTemplate(_.defaults(doc, docDefaults));
         return html;
       }, ""));
 

@@ -104,6 +104,32 @@
     <script>
       clearTimeout(loadingTimeout);
       var $controller = $("body").controller({
+        searcher: function(params, done) {
+          var toDcsSource = {
+            web: "etools",
+            wikipedia: "wiki",
+            images: "images",
+            news: "news",
+            jobs: "indeed",
+            pubmed: "pubmed",
+            put: "put"
+          };
+
+          $.ajax({
+            url: "http://localhost:8080/dcs/rest",
+            data: {
+              "dcs.source": toDcsSource[params.source],
+              "dcs.algorithm": params.algorithm,
+              "results": params.results,
+              "query": params.query,
+              "dcs.output.format": "JSON",
+              "dcs.clusters.only": false
+            },
+            success: done,
+            dataType: "jsonp",
+            jsonp: "dcs.json.callback"
+          });
+        },
         search: {
           sources: [
             { id: "web", label: "Web", examples: [ "data mining", "london", "clustering" ] },

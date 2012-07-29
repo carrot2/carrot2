@@ -1,5 +1,7 @@
 (function($) {
   var ControllerDesktop = $.pluginhelper.make("controller", function(el, options) {
+    var $container = $(el);
+
     // Initialize application state
     state.source = options.defaults.source;
     state.results = options.defaults.results;
@@ -21,18 +23,19 @@
       },
       searchTriggered: function(query) {
         state.query = query;
-        $(el).attr("class", "results");
+        $container.attr("class", "results");
 
-        var data = searcher({
+        options.searcher({
           query: state.query,
           results: state.results,
           source: state.source,
           algorithm: state.algorithm
+        }, function (data) {
+          console.log(data);
+          currentData = data;
+          $clusters.clusters("populate", data);
+          $documents.documents("populate", data);
         });
-        currentData = data;
-
-        $clusters.clusters("populate", data);
-        $documents.documents("populate", data);
       }
     }));
     $search.search("source", state.source);
@@ -68,13 +71,9 @@
     }));
 
     // Show the UI when initialization complete
-    $(el).attr("class", "results");
+    $container.attr("class", "startup");
     return;
   });
-
-  function searcher(params) {
-    return carrot2Result;
-  }
 
   // Application state management
   var state = {
