@@ -6,7 +6,7 @@
     var currentData;
 
     // Compiled templates
-    var documentTemplate = _.template('<div id="<%- id %>">' +
+    var documentTemplate = _.template('<div id="d<%- id %>">' +
       '<h2><a href="<%- url %>"><%- title %></a></h2>' +
       '<p><%- snippet %></p>' +
       '<a href="<%- url %>"><%- url %></a>' +
@@ -41,7 +41,7 @@
 
     function select(ids, labels) {
       $listing.children().each(function() {
-        $(this).toggle(ids[this.id] === true);
+        $(this).toggle(ids[this.id.substring(1)] === true);
       });
 
       if (labels.length == 1) {
