@@ -398,26 +398,26 @@
   vertical-align: top;
 }
 
-.desktop ::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 12px;
 }
 
-.desktop ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: #fcfcfc;
   -webkit-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.05);
 }
 
-.desktop ::-webkit-scrollbar-thumb {
-  background: #CCC;
+::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
   -webkit-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.2);
   border-radius: 2px;
 }
 
-.desktop ::-webkit-scrollbar-thumb:hover {
-  background: #AAA;
+::-webkit-scrollbar-thumb:hover {
+  background: #ccc;
 }
 
-.desktop ::-webkit-scrollbar-thumb:active {
-  background: #888;
+::-webkit-scrollbar-thumb:active {
+  background: #aaa;
   -webkit-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
