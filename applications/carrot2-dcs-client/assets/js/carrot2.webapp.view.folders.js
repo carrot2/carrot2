@@ -1,12 +1,12 @@
 (function($) {
   $.pluginhelper.make("foldersView", function(el, options, initialized) {
     var $container = $(el);
-    var hasData = false;
+    var hasData = false, clustersById;
 
     // Templates
     var folderTemplate = _.template(
       "<li class='folded <%= clazz %>'>" +
-        "<a id='<%- cluster.id %>' href='#'>" +
+        "<a id='c<%- cluster.id %>' href='#'>" +
           "<span class='tree'></span>" +
           "<span class='phrase'><%- cluster.phrases[0] %></span>" +
           "<span class='size'>(<%- cluster.size %>)</span>" +
@@ -14,6 +14,51 @@
         "<%= clusters %>" +
       "</li>");
 
+    // Event handlers
+    $container.on("click", "a", function(e) {
+      e.preventDefault();
+
+      if ($(e.target).is("span.tree")) {
+        var $li = $(this).closest("li");
+        if ($li.is(".folded")) {
+          unfold($li);
+        } else {
+          fold($li);
+        }
+      } else {
+        // Mimic the old windows explorer behaviour for filesystem trees
+        var $previousActive = $container.find("a.active");
+        var $previousActiveLi = $previousActive.parent();
+        var $newActive = $(this);
+        var $newActiveLi = $newActive.parent();
+
+        unfold($newActiveLi);
+        $newActive.addClass("active");
+
+        if (!e.ctrlKey) {
+          fold($newActiveLi.siblings().filter($previousActiveLi));
+          $previousActive.removeClass("active");
+        }
+
+        options.clusterSelectionChanged(_.map(
+          $container.find("a.active").map(function() {
+            return this.id;
+          }),
+          function(id) { return clustersById[id.substring(1)]; }));
+      }
+
+      function fold($el) {
+        $el.find("ul").slideUp(function() {
+          $el.addClass("folded");
+        });
+      }
+
+      function unfold($el) {
+        $el.find("ul").slideDown(function() {
+          $el.removeClass("folded");
+        });
+      }
+    });
 
     // Export public methods
     this.populate = populate;
@@ -43,10 +88,14 @@
           }, "") +
         "</ul>";
 
-      $container.html(html).on("click", "a", function() {
-        $(this).parent().toggleClass("folded");
-      });
+      clustersById = _.reduce(data.clusters, function reducer(byId, cluster) {
+        byId[cluster.id] = cluster;
+        _.reduce(cluster.clusters || [], reducer, byId);
+        return byId;
+      }, {});
 
+
+      $container.html(html);
       hasData = true;
     }
 
@@ -60,6 +109,8 @@
     }
 
     function select(ids) {
+      $container.find("a").removeClass("active");
+      $("#c" + ids.join(", #c")).addClass("active").parents("li").removeClass("folded");
     }
   });
 })(jQuery);

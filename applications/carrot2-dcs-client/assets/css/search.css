@@ -203,6 +203,7 @@
 
 #folders li > ul {
   padding-left: 18px;
+  overflow: hidden;
 }
 
 #folders li.folded > ul {
@@ -214,6 +215,7 @@
   background-repeat: repeat-y;
   background-image: url(../img/tree-trunk.gif);
   padding-top: 2px;
+  position: relative;
 }
 
 #folders li > a > .tree {
@@ -243,6 +245,14 @@
   background-position: 18px 0;
   background-repeat: no-repeat;
 }
+#folders a.active {
+  text-decoration: none;
+}
+#folders a.active > .phrase,
+#folders a.active > .size {
+  color: white;
+  background-color: #0088CC;
+}
 
 #folders > a {
   padding-left: 20px;
@@ -250,15 +260,15 @@
 }
 
 #folders a > .size {
-  padding-left: 0.3em;
   text-decoration: none;
+  border-radius: 0 2px 2px 0;
+  padding: 2px 2px 2px 0.3em;
 }
 
 #folders a > .phrase {
   font-weight: bold;
-}
-
-#folders a > .phrase {
+  border-radius: 2px 0 0 2px;
+  padding: 2px 0 2px 0;
 }
 
 /** Documents */
@@ -420,4 +430,8 @@
 ::-webkit-scrollbar-thumb:active {
   background: #aaa;
   -webkit-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+a {
+  outline: none !important;
 }

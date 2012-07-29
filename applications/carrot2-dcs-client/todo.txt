@@ -14,6 +14,8 @@
 * Improve FoamTree hover/selection visibility on white backgrounds
 * Fading out/in when switching from startup to results screen?
 
+* Don't display secondary cluster labels
+
 DONE:
 
 * FoamTree resize hook (only when visualization visible)
