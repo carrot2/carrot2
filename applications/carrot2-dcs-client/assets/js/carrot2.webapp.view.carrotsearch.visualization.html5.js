@@ -43,7 +43,7 @@
           function reducer(arr, cluster) {
             arr.push({
               id: cluster.id,
-              weight: cluster.attributes["other-topics"] ? 0 : cluster.size,
+              weight: cluster.attributes && cluster.attributes["other-topics"] ? 0 : cluster.size,
               label: cluster.phrases[0],
               groups: _.reduce(cluster.clusters || [], reducer, []),
               cluster: cluster

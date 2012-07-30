@@ -19,6 +19,7 @@
 * document settings in index.html
 * remember changed parameters (number of results, view, source, algorithm)
 * expose document templates, per-source customization of templates (images)
+* Error handling
 
 * Don't display secondary cluster labels
 

@@ -17,25 +17,15 @@
     $search = $(options.search.container).search($.extend({}, options.search, {
       sourceChanged: function(source) {
         state.source = source;
+        doSearch();
       },
       resultsCountChanged: function(count) {
         state.results = count;
+        doSearch();
       },
       searchTriggered: function(query) {
         state.query = query;
-        $container.attr("class", "results");
-
-        options.searcher({
-          query: state.query,
-          results: state.results,
-          source: state.source,
-          algorithm: state.algorithm
-        }, function (data) {
-          console.log(data);
-          currentData = data;
-          $clusters.clusters("populate", data);
-          $documents.documents("populate", data);
-        });
+        doSearch();
       }
     }));
     $search.search("source", state.source);
@@ -48,6 +38,7 @@
       },
       algorithmChanged: function (algorithm) {
         state.algorithm = algorithm;
+        doSearch();
       },
       clusterSelectionChanged: function (selectedClusters) {
         if (selectedClusters.length == 0) {
@@ -72,7 +63,29 @@
 
     // Show the UI when initialization complete
     $container.attr("class", "startup");
-    return;
+    return undefined;
+
+    /**
+     * Queries the searcher and updates the views with results.
+     */
+    function doSearch() {
+      if ($.trim(state.query).length == 0) {
+        $search.search("focus");
+        return;
+      }
+
+      $container.attr("class", "results");
+      options.searcher({
+        query: state.query,
+        results: state.results,
+        source: state.source,
+        algorithm: state.algorithm
+      }, function (data) {
+        currentData = data;
+        $clusters.clusters("populate", data);
+        $documents.documents("populate", data);
+      });
+    }
   });
 
   // Application state management

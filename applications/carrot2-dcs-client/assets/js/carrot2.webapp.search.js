@@ -53,6 +53,9 @@
     // Export public methods
     this.source = setActiveSource;
     this.results = setActiveResults;
+    this.focus = function() {
+      $query.focus();
+    };
     return;
 
     // Private methods
