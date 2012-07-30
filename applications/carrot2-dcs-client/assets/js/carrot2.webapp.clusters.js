@@ -3,6 +3,8 @@
     var $views = $(options.components.views); // view tabs
     var $data = $(options.components.data); // documents and clusters container
     var $clusters = $(options.components.clusters); // container of all views
+    var $loading = $(options.components.loading);
+    var $container = $(el);
 
     // Data
     var viewsById = _.reduce(options.views, function (byId, v) { byId[v.id] = v; return byId; }, {});
@@ -71,6 +73,7 @@
     this.view = setActiveView;
     this.algorithm = setActiveAlgorithm;
     this.populate = populate;
+    this.loading = function () { $container.addClass("loading"); };
     return undefined;
 
 
@@ -151,6 +154,9 @@
 
             // Invoke controller's listener
             options.clusterSelectionChanged(clusters);
+          },
+          modelChange: function() {
+            $container.removeClass("loading");
           }
         }), complete);
       } else {
@@ -158,6 +164,5 @@
         complete();
       }
     }
-
   });
 })(jQuery);

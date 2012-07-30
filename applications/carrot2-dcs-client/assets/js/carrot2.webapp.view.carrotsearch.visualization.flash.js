@@ -7,7 +7,8 @@
       onInitialize: initialized,
       onGroupSelectionChanged: function(groups) {
         options.clusterSelectionChanged(_.map(groups, function(id) { return clustersById[id]; }));
-      }
+      },
+      onModelChanged: options.modelChange
     }));
     var hasData = false, clustersById;
 
@@ -39,9 +40,10 @@
     //
     function populate(data) {
       var xml = "<searchresult><query>test</query>";
+      var docDefaults = { title: "", snippet: "", url: "", sources: [] };
 
       xml += _.reduce(data.documents, function (xml, doc) {
-        xml += carrot2Document(doc);
+        xml += carrot2Document(_.defaults(doc, docDefaults));
         return xml;
       }, "");
 

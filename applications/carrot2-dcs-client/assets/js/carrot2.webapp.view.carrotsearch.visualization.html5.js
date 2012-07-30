@@ -5,7 +5,8 @@
       id: $element.attr("id"),
       onGroupSelectionChanged: function(info) {
         options.clusterSelectionChanged(_.pluck(info.selectedGroups, "cluster"));
-      }
+      },
+      onRolloutStart: options.modelChange
     }));
 
     var resizePending = false;

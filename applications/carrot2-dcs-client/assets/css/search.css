@@ -9,15 +9,12 @@
   opacity: 0;
 }
 
-*, #loading {
-  -webkit-transition-property: opacity;
-  -webkit-transition-duration: 0.5s;
-  -moz-transition-property: opacity;
-  -moz-transition-duration: 0.5s;
-  -o-transition-property: opacity;
-  -o-transition-duration: 0.5s;
-  -ms-transition-property: opacity;
-  -ms-transition-duration: 0.5s;
+* {
+  -webkit-transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  -ms-transition: opacity 0.5s;
+  transition: opacity 0.5s;
 }
 
 #loading {
@@ -171,22 +168,29 @@
 
 #clusters {
   position: absolute;
-  left: 0px;
-  top: 0px;
-  bottom: 0px;
+  left: 0;
+  top: 0;
+  bottom: 0;
   right: 35%;
+}
+#clusters > .listing {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .narrow-view > #clusters {
   width: 300px;
 }
 
-#clusters > div {
+#clusters > .listing > div {
   position: absolute;
-  left: 0px;
+  left: 0;
   right: 15px;
-  top: 0px;
-  bottom: 0px;
+  top: 0;
+  bottom: 0;
 }
 
 /** Folders */
@@ -275,8 +279,8 @@
 #documents {
   position: absolute;
   right: 0;
-  top: 0px;
-  bottom: 0px;
+  top: 0;
+  bottom: 0;
   left: 65%;
 }
 
@@ -292,7 +296,7 @@
   overflow: hidden;
 }
 
-#listing {
+#documents > .listing {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -304,31 +308,114 @@
   padding-right: 10px;
 }
 
-#listing > div {
+#documents > .listing > div {
   margin-bottom: 30px;
 }
 
-#listing > div > p {
+#documents > .listing > div > p {
   margin-bottom: 5px;
   margin-top: 5px;
 }
 
-#listing > div > h2 {
+#documents > .listing > div > h2 {
   /*font-weight: normal;*/
   font-size: 15px;
   line-height: 1.2;
 }
 
-#listing > div > a {
+#documents > .listing > div > a {
   margin-right: 0.5em;
   word-wrap: break-word;
 }
 
-#listing > div > span {
+#documents > .listing > div > span {
   font-size: 11px;
   text-transform: uppercase;
   padding: 0 0.2em;
   color: #888;
+}
+
+/** Loading indicator */
+.indicator, .indicator > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+#clusters .indicator,
+#documents .indicator {
+  visibility: hidden;
+  opacity: 0;
+  top: -40px;
+  background-image: -webkit-gradient(radial, center center, 0, center center, 600, from(rgba(255, 255, 255, 1)), to(rgba(255, 255, 255, 0.7)));
+  background-image: -moz-radial-gradient(center 45deg, circle closest-side, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.7) 90%);
+  -webkit-transition: visibility 0s linear 0.5s, opacity 0.5s linear 0s;
+  -moz-transition: visibility 0s linear 0.5s, opacity 0.5s linear 0s;
+  -o-transition: visibility 0s linear 0.5s, opacity 0.5s linear 0s;
+  -ms-transition: visibility 0s linear 0.5s, opacity 0.5s linear 0s;
+  transition: visibility 0s linear 0.5s, opacity 0.5s linear 0s;
+}
+#clusters.loading .indicator,
+#documents.loading .indicator {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition-delay: 0s;
+  -moz-transition-delay: 0s;
+  -o-transition-delay: 0s;
+  -ms-transition-delay: 0s;
+  transition-delay: 0s;
+}
+.indicator > div {
+  margin: auto;
+  height: 22px;
+  width: 100px;
+  text-indent: 30px;
+  line-height: 24px;
+  color: #999;
+}
+
+.outer, .inner {
+  border: 2px solid rgba(0, 0, 0, 0);
+  border-radius: 30px;
+  position: absolute;
+}
+.outer {
+  border: 2px solid rgba(0, 0, 0, 0);
+  border-top: 2px solid #ccc;
+ 	border-left: 2px solid #ccc;
+	width: 20px;
+	height: 20px;
+  -moz-animation: spin .8s infinite linear;
+ 	-webkit-animation: spin .8s infinite linear;
+}
+.inner {
+  margin: 6px 0 0 6px;
+	width: 8px;
+	height: 8px;
+  border-top: 2px solid #ccc;
+ 	border-right: 2px solid #ccc;
+ 	border-left: 2px solid #ccc;
+  -moz-animation:spinoff .8s infinite linear;
+ 	-webkit-animation:spinoff .8s infinite linear;
+}
+
+@-moz-keyframes spin {
+	0% { -moz-transform:rotate(0deg); }
+	100% { -moz-transform:rotate(360deg); }
+}
+@-moz-keyframes spinoff {
+	0% { -moz-transform:rotate(0deg); }
+	100% { -moz-transform:rotate(-360deg); }
+}
+@-webkit-keyframes spin {
+	0% { -webkit-transform:rotate(0deg); }
+	100% { -webkit-transform:rotate(360deg); }
+}
+@-webkit-keyframes spinoff {
+	0% { -webkit-transform:rotate(0deg); }
+	100% { -webkit-transform:rotate(-360deg); }
 }
 
 .results .intro,

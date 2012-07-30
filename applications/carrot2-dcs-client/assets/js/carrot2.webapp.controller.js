@@ -74,7 +74,11 @@
         return;
       }
 
+      // TODO: cancel running search if we get another one
       $container.attr("class", "results");
+      $documents.documents("loading");
+      $clusters.clusters("loading");
+
       options.searcher({
         query: state.query,
         results: state.results,

@@ -14,15 +14,22 @@
 * Improve FoamTree hover/selection visibility on white backgrounds
 * Fading out/in when switching from startup to results screen?
 * Highlighting of query/label terms in snippets (in JavaScript, no stemming/synonyms support)
-* Loading indicator
 * Prefetching of first N results
-* document settings in index.html
+* document settings in index.html so that others can customize them
 * remember changed parameters (number of results, view, source, algorithm)
 * expose document templates, per-source customization of templates (images)
 * Error handling
+* Fallback message for legacy browsers?
+* IndeedDocumentSource --> click vs. view URLs?
+* carrot2.webapp.clusters should notify controller of widtch change rather than do it on its own
+* Loading screen delay threshold (show after 150ms or so)
+* Optimization: changing of algorithm should not reload documents view
+* BUG: Uncaught TypeError: Object #<HTMLObjectElement> has no method 'loadDataFromXML' on new query after switching views (Chrome)
+* BUG: Circles gets reloaded on view switches (Chrome)
 
 * Don't display secondary cluster labels
 
 DONE:
 
 * FoamTree resize hook (only when visualization visible)
+* Loading indicator

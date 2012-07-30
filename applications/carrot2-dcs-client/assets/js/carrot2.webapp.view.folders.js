@@ -97,6 +97,7 @@
 
       $container.html(html);
       hasData = true;
+      options.modelChange();
     }
 
     function clear() {

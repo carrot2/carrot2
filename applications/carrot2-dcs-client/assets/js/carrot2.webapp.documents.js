@@ -2,6 +2,7 @@
   $.pluginhelper.make("documents", function(el, options) {
     var $listing = $(options.components.listing);
     var $summary = $(options.components.summary);
+    var $container = $(el);
 
     var currentData;
 
@@ -20,6 +21,7 @@
     this.populate = populate;
     this.select = select;
     this.clearSelection = clearSelection;
+    this.loading = function () { $container.addClass("loading"); };
     return undefined;
 
     //
@@ -38,6 +40,7 @@
       }));
 
       currentData = data;
+      $container.removeClass("loading");
     }
 
     function select(ids, labels) {

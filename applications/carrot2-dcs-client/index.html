@@ -47,11 +47,27 @@
     </div>
 
     <div id="data" class="narrow-view">
-      <div id="clusters"></div>
+      <div id="clusters">
+        <div class="listing"></div>
+        <div class="indicator">
+          <div>
+            <div class="outer"></div>
+            <div class="inner"></div>
+            Loading...
+          </div>
+        </div>
+      </div>
 
       <div id="documents">
         <div id="summary"></div>
-        <div id="listing"></div>
+        <div class="listing"></div>
+        <div class="indicator">
+          <div>
+            <div class="outer"></div>
+            <div class="inner"></div>
+            Loading...
+          </div>
+        </div>
       </div>
     </div>
 
@@ -221,10 +237,10 @@
               other: true
             }
           ],
-          container: "#browsing",
+          container: "#clusters",
           components: {
             views: "#views",
-            clusters: "#clusters",
+            clusters: "#clusters > .listing",
             data: "#data"
           }
         },
@@ -232,7 +248,7 @@
           container: "#documents",
           components: {
             summary: "#summary",
-            listing: "#listing"
+            listing: "#documents > .listing"
           }
         },
         defaults: {
