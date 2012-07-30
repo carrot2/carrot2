@@ -41,7 +41,7 @@
     }
 
     function select(ids, labels) {
-      $listing.children().each(function() {
+      $listing.scrollTop(0).children().each(function() {
         $(this).toggle(ids[this.id.substring(1)] === true);
       });
 
