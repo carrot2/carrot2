@@ -238,7 +238,7 @@ public final class ProcessingResult
         // Convert document ids to the actual references
         if (clusters != null && documents != null)
         {
-            final Map<Integer, Document> documentsById = Maps.newHashMap();
+            final Map<String, Document> documentsById = Maps.newHashMap();
             for (Document document : documents)
             {
                 documentsById.put(document.id, document);
@@ -254,7 +254,7 @@ public final class ProcessingResult
     /**
      * Replace document refids with the actual references upon deserialization.
      */
-    private void documentIdToReference(Cluster cluster, Map<Integer, Document> documents)
+    private void documentIdToReference(Cluster cluster, Map<String, Document> documents)
     {
         if (cluster.documentIds != null)
         {

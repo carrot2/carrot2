@@ -33,7 +33,8 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     protected static final String FIELD_MAPPING = "Index field mapping";
     
     /**
-     * Solr service URL base.
+     * Solr service URL base. The URL base can contain additional Solr parameters, 
+     * for example: <tt>http://localhost:8983/solr/select?fq=timestemp:[NOW-24HOUR TO NOW]</tt>
      */
     @Input
     @Processing
@@ -79,7 +80,8 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Override
     protected String buildServiceUrl()
     {
-        return serviceUrlBase + "?q=" + urlEncode(query) + "&start=" + start + "&rows="
+        return serviceUrlBase + (serviceUrlBase.contains("?") ? "&" : "?") 
+            + "q=" + urlEncode(query) + "&start=" + start + "&rows="
             + results + "&indent=off";
     }
 

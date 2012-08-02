@@ -102,6 +102,32 @@ public class ProcessingResultTest extends CarrotTestCase
         Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
             .isEqualTo(query);
     }
+    
+    @Test
+    public void deserializeStringDocumentIds() throws Exception
+    {
+        final String title = "Apple Computer, Inc.";
+        final String id = "cafe00f0";
+        
+        StringBuilder xml = new StringBuilder();
+        xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        xml.append("<searchresult>\n");
+        xml.append("<document id=\"" + id + "\">");
+        xml.append("<title>" + title + "</title>\n");
+        xml.append("</document>\n");
+        xml.append("</searchresult>\n");
+        
+        final ProcessingResult deserialized = ProcessingResult
+            .deserialize(new ByteArrayInputStream(xml.toString().getBytes("UTF-8")));
+        
+        assertNotNull(deserialized);
+        assertNotNull(deserialized.getAttributes());
+        
+        Document deserializedDocument = CollectionUtils.getFirst(deserialized
+            .getDocuments());
+        assertEquals(title, deserializedDocument.getField(Document.TITLE));
+        assertEquals(id, deserializedDocument.getStringId());
+    }
 
     @Test
     public void testDocumentDeserializationLanguageByIsoCode() throws Exception
@@ -435,7 +461,6 @@ public class ProcessingResultTest extends CarrotTestCase
         document.setField("testBoolean", true);
         document.setLanguage(LanguageCode.POLISH);
         document.setSources(Lists.newArrayList("s1", "s2"));
-        document.id = 3; // assign an id so that the max id is larger than the list size
         Document.assignDocumentIds(documents);
 
         final Cluster clusterA = new Cluster();

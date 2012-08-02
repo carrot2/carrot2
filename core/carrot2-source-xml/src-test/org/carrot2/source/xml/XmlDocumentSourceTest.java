@@ -133,7 +133,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             xml);
         final int documentCount = runQuery();
         assertEquals(4, documentCount);
-        assertEquals(Lists.newArrayList(6, 2, 5, 7), Lists.transform(getDocuments(),
+        assertEquals(Lists.newArrayList(null, 2, 5, null), Lists.transform(getDocuments(),
             DOCUMENT_TO_ID));
     }
 
@@ -147,7 +147,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         runQuery();
         final List<Document> documents = getDocuments();
         assertThat(documents.get(0).getId()).isEqualTo(1);
-        assertThat(documents.get(1).getId()).isEqualTo(2);
+        assertThat(documents.get(1).getId()).isEqualTo(1);
     }
 
     @Test

@@ -44,7 +44,9 @@ import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.*;
 
 import com.carrotsearch.randomizedtesting.annotations.Nightly;
-import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope.Scope;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
@@ -56,7 +58,8 @@ import com.google.common.io.Files;
  * Test cases for the {@link DcsApp}.
  */
 @Nightly
-@ThreadLeaks(linger = 1000, leakedThreadsBelongToSuite = true)
+@ThreadLeakLingering(linger = 1000)
+@ThreadLeakScope(Scope.SUITE)
 public class DcsAppTest extends CarrotTestCase
 {
     private static DcsApp dcs;

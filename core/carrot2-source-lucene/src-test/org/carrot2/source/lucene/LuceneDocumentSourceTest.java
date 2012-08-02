@@ -31,6 +31,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -52,11 +53,9 @@ public class LuceneDocumentSourceTest extends
         LuceneIndexUtils.createAndPopulateIndex(directory, analyzer);
     }
 
-    @Override
+    @Before
     public void prepareComponent()
     {
-        super.prepareComponent();
-
         this.initAttributes.put(
             AttributeUtils.getKey(LuceneDocumentSource.class, "directory"), directory);
 

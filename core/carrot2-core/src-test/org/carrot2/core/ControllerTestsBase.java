@@ -37,13 +37,13 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
-import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import com.google.common.collect.Maps;
 
 /**
  * Base class for {@link Controller} tests.
  */
-@ThreadLeaks(linger = 5000)
+@ThreadLeakLingering(linger = 5000)
 public abstract class ControllerTestsBase extends CarrotTestCase
 {
     protected IMocksControl mocksControl;

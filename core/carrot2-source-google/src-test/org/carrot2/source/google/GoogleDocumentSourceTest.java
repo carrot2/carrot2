@@ -22,13 +22,13 @@ import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 
 /**
  * Test cases for {@link GoogleDocumentSource}.
  */
 @UsesExternalServices
-@ThreadLeaks(linger = 2000)
+@ThreadLeakLingering(linger = 2000)
 public class GoogleDocumentSourceTest extends
     MultipageDocumentSourceTestBase<GoogleDocumentSource>
 {

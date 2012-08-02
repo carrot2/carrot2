@@ -49,23 +49,84 @@ import org.fest.assertions.ShortArrayAssert;
 import org.fest.assertions.ShortAssert;
 import org.fest.assertions.StringAssert;
 import org.fest.assertions.ThrowableAssert;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 
+import com.carrotsearch.randomizedtesting.MixWithSuiteName;
 import com.carrotsearch.randomizedtesting.RandomizedTest;
-import com.carrotsearch.randomizedtesting.annotations.Timeout;
+import com.carrotsearch.randomizedtesting.annotations.SeedDecorators;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakAction;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakGroup;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakAction.Action;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakGroup.Group;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope.Scope;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakZombies;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakZombies.Consequence;
+import com.carrotsearch.randomizedtesting.annotations.TimeoutSuite;
+import com.carrotsearch.randomizedtesting.annotations.Validators;
+import com.carrotsearch.randomizedtesting.rules.StaticFieldsInvariantRule;
+import com.carrotsearch.randomizedtesting.rules.SystemPropertiesInvariantRule;
+import com.carrotsearch.randomizedtesting.validators.NoHookMethodShadowing;
+import com.carrotsearch.randomizedtesting.validators.NoJUnit3TestMethods;
+import com.carrotsearch.randomizedtesting.validators.NoTestMethodOverrides;
 
 /**
  * Base class for Carrot2 test classes. Contains common hooks and setups.
  */
-@Timeout(millis = 60 * 1000) // No test should last longer than 60 seconds.
+@TimeoutSuite(millis = 180 * 1000) // No suite should run longer than 180 seconds.
+@ThreadLeakZombies(Consequence.IGNORE_REMAINING_TESTS)
+@ThreadLeakGroup(Group.MAIN)
+@ThreadLeakScope(Scope.TEST)
+@ThreadLeakLingering(linger = 1000)
+@ThreadLeakAction({Action.WARN, Action.INTERRUPT})
+@SeedDecorators({MixWithSuiteName.class})
+@Validators({
+    NoHookMethodShadowing.class,
+    NoTestMethodOverrides.class,
+    NoJUnit3TestMethods.class
+})
 public class CarrotTestCase extends RandomizedTest
 {
+    /**
+     * These property keys will be ignored in verification of altered properties.
+     * @see SystemPropertiesInvariantRule
+     * @see #classRules
+     */
+    private static final String [] IGNORED_INVARIANT_PROPERTIES = {
+      "user.timezone"
+    };
+
+    /**
+     * Maximum left memory allocated in static fields of a suite.  
+     */
+    private static final long MAX_STATIC_MEMORY_PER_SUITE_CLASS = 10 * 1024 * 1024;
+
+    /**
+     * Class {@link TestRule}s.
+     */
+    @ClassRule
+    public static TestRule classRules = RuleChain
+      .outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES))
+      .around(new StaticFieldsInvariantRule(MAX_STATIC_MEMORY_PER_SUITE_CLASS, true));
+
+    /**
+     * Test {@link TestRule}s.
+     */
+    @Rule
+    public final TestRule ruleChain = RuleChain
+      .outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
+
     /*
      * Declare fest-assertion shortcuts. If not declared there is no way to use static
      * imports because superclass's Assert.assertThat always takes precedence.   
      */
 
     public static BigDecimalAssert assertThat(BigDecimal actual) { return Assertions.assertThat(actual); }
-    public static BooleanAssert    assertThat(boolean actual)    { return Assertions.assertThat(actual); }
+    public static BooleanAssert assertThat(boolean actual)    { return Assertions.assertThat(actual); }
     public static BooleanAssert assertThat(Boolean actual) { return Assertions.assertThat(actual); }
     public static BooleanArrayAssert assertThat(boolean[] actual) { return Assertions.assertThat(actual); }
     public static ImageAssert assertThat(BufferedImage actual) { return Assertions.assertThat(actual); }

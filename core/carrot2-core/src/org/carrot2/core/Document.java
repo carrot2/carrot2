@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -17,7 +16,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +37,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
 
 /**
  * A document that to be processed by the framework. Each document is a collection of
@@ -123,7 +120,7 @@ public final class Document
      * @see ProcessingResult
      */
     @Attribute(required = false)
-    Integer id;
+    String id;
 
     /**
      * Listeners to be notified before this document gets serialized.
@@ -192,14 +189,34 @@ public final class Document
     }
 
     /**
-     * A unique identifier of this document. The identifiers are assigned to documents
-     * before processing finishes. Note that two documents with equal contents will be
-     * assigned different identifiers.
-     * 
-     * @return unique identifier of this document
+     * @deprecated please use {@link #getStringId()} instead. Currently, this method
+     *             attempts to parse the string identifier returned by
+     *             {@link #getStringId()} into an integer.
+     * @throws NumberFormatException if the identifier could not be converted to an integer
+     *             number
      */
-    @JsonProperty
     public Integer getId()
+    {
+        return id != null ? Integer.parseInt(id) : null;
+    }
+
+    /**
+    /**
+     * Identifier of this document. The semantics of the identifier varies depending on
+     * the {@link IDocumentSource} that produced the documents.
+     * <p>
+     * When processing documents produced by Carrot2-provided {@link IDocumentSource}, the
+     * framework generates unique integer identifiers for all the documents. However, when
+     * XML document sets are loaded using the
+     * {@link ProcessingResult#deserialize(java.io.InputStream)} or
+     * {@link ProcessingResult#deserialize(CharSequence)} methods, the original document
+     * identifiers are preserved, which means they may be non-unique or not present at all.
+     * </p>
+     * 
+     * @return identifier of this document, possibly <code>null</code>
+     */
+    @JsonProperty("id")
+    public String getStringId()
     {
         return id;
     }
@@ -474,12 +491,11 @@ public final class Document
     }
 
     /**
-     * Assigns sequential identifiers to the provided <code>documents</code>. If a
-     * document already has an identifier, the identifier will not be changed.
+     * Assigns sequential identifiers to the provided <code>documents</code>. If any
+     * document in the set has a non-empty identifier, no identifiers will be generated at
+     * all.
      * 
      * @param documents documents to assign identifiers to.
-     * @throws IllegalArgumentException if the provided documents contain non-unique
-     *             identifiers
      */
     public static void assignDocumentIds(Collection<Document> documents)
     {
@@ -487,36 +503,21 @@ public final class Document
         // in the same list, so we need to synchronize here.
         synchronized (documents)
         {
-            final HashSet<Integer> ids = Sets.newHashSet();
-
-            // First, find the start value for the id, check uniqueness of the ids
-            // already provided and erase duplicated ids.
-            int maxId = Integer.MIN_VALUE;
-            for (final Document document : documents)
+            // Make sure there are no identifiers
+            for (Document document : documents)
             {
                 if (document.id != null)
                 {
-                    if (ids.add(document.id))
-                    {
-                        maxId = Math.max(maxId, document.id);
-                    }
-                    else
-                    {
-                        document.id = null;
-                    }
+                    return;
                 }
             }
 
-            // We'd rather start with 0
-            maxId = Math.max(maxId, -1);
-
-            // Assign missing ids
+            // Assign ids
+            int id = 0;
             for (final Document document : documents)
             {
-                if (document.id == null)
-                {
-                    document.id = ++maxId;
-                }
+                document.id = Integer.toString(id);
+                id++;
             }
         }
     }
@@ -524,6 +525,9 @@ public final class Document
     /**
      * Transforms a {@link Document} to its identifier returned by
      * {@link Document#getId()}.
+     * 
+     * @deprecated Please use #getStringId() directly or use your own {@link Function}
+     *             implementation.
      */
     public static final class DocumentToId implements Function<Document, Integer>
     {
@@ -535,13 +539,16 @@ public final class Document
 
         public Integer apply(Document document)
         {
-            return document.id;
+            return document.getId();
         }
     }
 
     /**
      * Compares {@link Document}s by their identifiers {@link #getId()}, which effectively
      * gives the original order in which they were returned by the document source.
+     * 
+     * @deprecated semantics of the identifiers depends on the document source, please
+     *             roll your own comparator that is aware of the actual id semantics.
      */
     public static final Comparator<Document> BY_ID_COMPARATOR = Ordering.natural()
         .nullsFirst().onResultOf(DocumentToId.INSTANCE);

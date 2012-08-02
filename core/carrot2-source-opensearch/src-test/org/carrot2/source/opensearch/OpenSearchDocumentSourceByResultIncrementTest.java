@@ -46,11 +46,8 @@ public class OpenSearchDocumentSourceByResultIncrementTest extends
         return false;
     }
 
-    @Override
     public void prepareComponent()
     {
-        super.prepareComponent();
-
         initAttributes
             .put(
                 AttributeUtils.getKey(OpenSearchDocumentSource.class, "feedUrlTemplate"),
