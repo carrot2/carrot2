@@ -51,8 +51,9 @@ public abstract class ProcessingComponentTestBase<T extends IProcessingComponent
     /**
      * Controller and attributes are cleared before every test.
      */
+    @SuppressWarnings("unused")
     @Before
-    public void prepareComponent()
+    private void prepareComponent()
     {
         this.initAttributes = new HashMap<String, Object>();
         this.processingAttributes = new HashMap<String, Object>();
