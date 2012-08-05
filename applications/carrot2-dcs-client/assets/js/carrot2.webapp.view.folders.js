@@ -48,13 +48,13 @@
       }
 
       function fold($el) {
-        $el.find("ul").slideUp(function() {
+        $el.children("ul").slideUp(function() {
           $el.addClass("folded");
         });
       }
 
       function unfold($el) {
-        $el.find("ul").slideDown(function() {
+        $el.children("ul").slideDown(function() {
           $el.removeClass("folded");
         });
       }
