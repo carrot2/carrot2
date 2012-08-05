@@ -28,8 +28,17 @@
     this.populate = populate;
     this.clear = clear;
     this.populated = populated;
-    this.shown = shown;
     this.select = select;
+    this.show = function() {
+      $element.show();
+      if (resizePending) {
+        visualization.resize();
+        resizePending = false;
+      }
+    };
+    this.hide = function() {
+      $element.hide();
+    };
 
     initialized();
     return undefined;
@@ -60,13 +69,6 @@
 
     function populated() {
       return visualization.get("dataObject") !== null;
-    }
-
-    function shown() {
-      if (resizePending) {
-        visualization.resize();
-        resizePending = false;
-      }
     }
 
     function select(ids) {

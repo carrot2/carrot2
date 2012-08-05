@@ -1,10 +1,14 @@
 (function($) {
   $.pluginhelper.make("carrotsearchFlashVisualization", function(el, options, initialized) {
     var $element = $(el);
-    var $inner = $element.html("<div id='" + $element.attr("id") + "-flash' />").find("div");
+    var flashId = $element.attr("id") + "-flash";
+    var $inner = $element.html("<div id='" + flashId + "' />").find("div");
     var visualization = options.factory($.extend({}, options.options, {
       id: $inner.attr("id"),
-      onInitialize: initialized,
+      onInitialize: function() {
+        $inner = $("#" + flashId);
+        initialized();
+      },
       onGroupSelectionChanged: function(groups) {
         options.clusterSelectionChanged(_.map(groups, function(id) { return clustersById[id]; }));
       },
@@ -31,7 +35,14 @@
     this.clear = clear;
     this.populated = populated;
     this.select = select;
-    this.shown = function() { };
+    this.show = function() {
+      $inner.css("visibility", "visible");
+      $element.css("z-index", "0");
+    };
+    this.hide = function() {
+      $inner.css("visibility", "hidden");
+      $element.css("z-index", "-1");
+    };
     return undefined;
 
 

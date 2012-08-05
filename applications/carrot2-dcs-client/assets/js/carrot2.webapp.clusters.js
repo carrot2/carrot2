@@ -141,7 +141,9 @@
       var $v = $("#" + id);
 
       $data.toggleClass("narrow-view", view.type == "narrow");
-      $clusters.children().not($v).hide();
+      $clusters.children().not($v).each(function() {
+        $(this)[viewsById[this.id].plugin]("hide");
+      });
 
       if ($v.size() == 0) {
         // Create an element
@@ -160,7 +162,7 @@
           }
         }), complete);
       } else {
-        $v.show()[viewsById[activeView].plugin]("shown");
+        $v[viewsById[activeView].plugin]("show");
         complete();
       }
     }
