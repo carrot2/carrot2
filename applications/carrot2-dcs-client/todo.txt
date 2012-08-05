@@ -3,7 +3,6 @@
 * Breadcrumbs?
 * FoamTree interaction hints
 * Google analytics
-* Persistent URLs
 * IE 8 fixes, support for FoamTree Flash fallback
 * maintain default values and serialize only differences for shorter URLs
 * persist settings to the local storage (only when changes initiated by UI, not by parsing a permanent URL)
@@ -23,6 +22,7 @@
 * Loading screen delay threshold (show after 150ms or so)
 * Optimization: changing of algorithm should not reload documents view
 * Redirections for legacy GET URLs
+* Clickable startup and results logos
 
 * Don't display secondary cluster labels
 
@@ -33,3 +33,4 @@ DONE:
 * BUG: Circles gets reloaded on view switches (Chrome)
 * BUG: Uncaught TypeError: Object #<HTMLObjectElement> has no method 'loadDataFromXML' on new query after switching views (Chrome)
 * expose searcher function to the outside to enable other backends (Solr, Elastic Search)
+* Persistent URLs
