@@ -65,7 +65,12 @@
     this.clear = clear;
     this.populated = populated;
     this.select = select;
-    this.shown = function() { };
+    this.show = function() {
+      $container.show();
+    };
+    this.hide = function() {
+      $container.hide();
+    };
 
     initialized();
     return undefined;
@@ -111,7 +116,15 @@
 
     function select(ids) {
       $container.find("a").removeClass("active");
-      $("#c" + ids.join(", #c")).addClass("active").parents("li").removeClass("folded");
+      var $active = $("#c" + ids.join(", #c"));
+      $active.addClass("active").parents("li").removeClass("folded");
+
+      // Scroll to view
+      var clusterOffsetTopRelative = $active.offset().top - $container.offset().top;
+      $container.animate({
+        scrollTop: clusterOffsetTopRelative < $container.height() - 20 ?
+          0 : clusterOffsetTopRelative - ($container.height() - 20) / 2
+      }, 800);
     }
   });
 })(jQuery);
