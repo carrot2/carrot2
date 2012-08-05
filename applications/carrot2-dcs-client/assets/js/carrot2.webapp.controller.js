@@ -24,8 +24,11 @@
         state.results = count;
         state.push();
       },
-      searchTriggered: function(query) {
+      searchTriggered: function(query, source) {
         state.query = query;
+        if (source) {
+          state.source = source;
+        }
         if ($.trim(state.query).length == 0) {
           $search.search("focus");
         } else {

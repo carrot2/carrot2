@@ -68,7 +68,11 @@
         $queries.html(_.reduce(examples,
           function(html, query) {
             return html += exampleQueryTemplate({ id: id, query: query })
-          }, ""));
+          }, ""))
+          .on("click", "a", function(e) {
+            options.searchTriggered($.trim($(this).text()), this.href.substring(this.href.indexOf('#') + 1));
+            e.preventDefault();
+          });
         $examples.show();
       } else {
         $examples.hide();
