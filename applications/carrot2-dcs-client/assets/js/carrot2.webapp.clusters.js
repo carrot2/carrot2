@@ -58,13 +58,11 @@
     // Bind listeners
     $views.on("click", "a.view", function(e) {
       var id = $(this).attr("href").substring(1);
-      setActiveView(id);
       options.viewChanged(id);
       e.preventDefault();
     });
     $views.on("click", "a.algorithm", function(e) {
       var id = $(this).attr("href").substring(1);
-      setActiveAlgorithm(id);
       options.algorithmChanged(id);
       e.preventDefault();
     });

@@ -32,13 +32,11 @@
     // Bind listeners
     $sources.on("click", "a", function(e) {
       var id = $(this).attr("href").substring(1);
-      setActiveSource(id);
       options.sourceChanged(id);
       e.preventDefault();
     });
     $results.on("click", "a", function(e) {
       var count = $(this).attr("href").substring(1);
-      setActiveResults(count);
       options.resultsCountChanged(count);
       e.preventDefault();
     });
@@ -53,6 +51,7 @@
     // Export public methods
     this.source = setActiveSource;
     this.results = setActiveResults;
+    this.query = setQuery;
     this.focus = function() {
       $query.focus();
     };
@@ -61,7 +60,7 @@
     // Private methods
     function setActiveSource(id) {
       // Activate tab
-      actiateById($sources, id);
+      activateById($sources, id);
 
       // Update example queries
       var examples = sourcesById[id].examples;
@@ -77,10 +76,14 @@
     }
 
     function setActiveResults(count) {
-      actiateById($results, count);
+      activateById($results, count);
     }
 
-    function actiateById($list, id) {
+    function setQuery(query) {
+      $query.val(query);
+    }
+
+    function activateById($list, id) {
       $list.children().removeClass("active");
       $list.find("a[href = '#" + id + "']").parent().addClass("active");
     }

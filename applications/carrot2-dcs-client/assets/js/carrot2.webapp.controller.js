@@ -7,6 +7,7 @@
     state.results = options.defaults.results;
     state.view = options.defaults.view;
     state.algorithm = options.defaults.algorithm;
+    state.decode(); // capture initial state
 
     var currentData;
 
@@ -17,15 +18,19 @@
     $search = $(options.search.container).search($.extend({}, options.search, {
       sourceChanged: function(source) {
         state.source = source;
-        doSearch();
+        state.push();
       },
       resultsCountChanged: function(count) {
         state.results = count;
-        doSearch();
+        state.push();
       },
       searchTriggered: function(query) {
         state.query = query;
-        doSearch();
+        if ($.trim(state.query).length == 0) {
+          $search.search("focus");
+        } else {
+          state.push();
+        }
       }
     }));
     $search.search("source", state.source);
@@ -35,10 +40,11 @@
     $clusters = $(options.clusters.container).clusters($.extend({}, options.clusters, {
       viewChanged: function (view) {
         state.view = view;
+        state.push();
       },
       algorithmChanged: function (algorithm) {
         state.algorithm = algorithm;
-        doSearch();
+        state.push();
       },
       clusterSelectionChanged: function (selectedClusters) {
         if (selectedClusters.length == 0) {
@@ -58,11 +64,34 @@
     $clusters.clusters("algorithm", state.algorithm);
 
     // Document view
-    $documents = $(options.documents.container).documents($.extend({}, options.documents, {
-    }));
+    $documents = $(options.documents.container).documents($.extend({}, options.documents));
 
-    // Show the UI when initialization complete
-    $container.attr("class", "startup");
+    // React to path changes
+    $(window).pathchange(function () {
+      var changed = state.decode();
+      if (state.query.length == 0) {
+        $container.attr("class", "startup");
+      }
+
+      $clusters.clusters("algorithm", state.algorithm);
+      $clusters.clusters("view", state.view);
+      $search.search("source", state.source);
+      $search.search("results", state.results);
+      $search.search("query", state.query);
+      if (changed.query || changed.results || changed.algorithm || changed.source) {
+        doSearch();
+      }
+    });
+    $.pathchange.init({
+      useHistory: false
+    });
+
+    // Initialization complete, show the UI
+    if (window.location.hash) {
+      $(window).pathchange(); // decode and refresh
+    } else {
+      $container.attr("class", "startup");
+    }
     return undefined;
 
     /**
@@ -124,51 +153,76 @@
       }
     },
 
-    decode: function(string) {
-      var s = string || window.location.href;
-      var split = (s.split("#")[1] || "").split("/");
-      var decoded = { };
-      outer: for (var i = 0; i < split.length / 2; i++) {
-        var path = decodeURIComponent(split[i*2] || "").split(/\./);
-        var property = path.shift();
-        var target = decoded;
-        while (path.length > 0) {
-          if (!$.isPlainObject(target)) {
-            break outer;
-          }
-          if (typeof target[property] == 'undefined') {
-            target[property] = { };
-          }
-          target = target[property];
-          property = path.shift();
+    decode: (function(string) {
+      var previousState = {};
+      var initial;
+
+      return function() {
+        if (!initial) {
+          initial = $.extend({}, this);
+          return;
         }
 
-        var val = convert(decodeURIComponent(split[i*2 + 1] || ""));
-        if (property.indexOf("[]") > 0) {
-          property = property.replace(/[\[\]]/g, "");
-          if (typeof target[property] == 'undefined') {
-            target[property] = [];
-          }
-          target[property].push(val);
-        } else {
-          target[property] = val;
-        }
-      }
-      delete decoded.encode;
-      delete decoded.decode;
-      delete decoded.push;
-      $.extend(this, decoded);
+        var s = string || window.location.href;
+        var split = (s.split("#")[1] || "").split("/");
 
-      function convert(val) {
-        if (val == "false") {
-          return false;
-        } else if (val == "true") {
-          return true;
+        var decoded;
+        if (split.length > 1) {
+          decoded = { };
+          outer: for (var i = 0; i < split.length / 2; i++) {
+            var path = decodeURIComponent(split[i*2] || "").split(/\./);
+            var property = path.shift();
+            var target = decoded;
+            while (path.length > 0) {
+              if (!$.isPlainObject(target)) {
+                break outer;
+              }
+              if (typeof target[property] == 'undefined') {
+                target[property] = { };
+              }
+              target = target[property];
+              property = path.shift();
+            }
+
+            var val = convert(decodeURIComponent(split[i*2 + 1] || ""));
+            if (property.indexOf("[]") > 0) {
+              property = property.replace(/[\[\]]/g, "");
+              if (typeof target[property] == 'undefined') {
+                target[property] = [];
+              }
+              target[property].push(val);
+            } else {
+              target[property] = val;
+            }
+          }
         } else {
-          return val;
+          decoded = initial;
         }
-      }
-    },
+        delete decoded.encode;
+        delete decoded.decode;
+        delete decoded.push;
+
+        var changed = {};
+        $.extend(this, decoded);
+        $.each(decoded, function(key, value) {
+          if (previousState[key] != value) {
+            changed[key] = true;
+          }
+        });
+        $.extend(previousState, decoded);
+        return changed;
+
+        function convert(val) {
+          if (val == "false") {
+            return false;
+          } else if (val == "true") {
+            return true;
+          } else {
+            return val;
+          }
+        }
+      };
+    })(),
 
     push: function() {
       var prev = window.location.hash;
