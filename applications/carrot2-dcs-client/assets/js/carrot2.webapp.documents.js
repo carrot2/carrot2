@@ -7,12 +7,6 @@
     var currentData;
 
     // Compiled templates
-    var documentTemplate = _.template('<div id="d<%- id %>">' +
-      '<h2><a href="<%- url %>"><%- title %></a></h2>' +
-      '<p><%- snippet %></p>' +
-      '<a href="<%- url %>"><%- url %></a>' +
-      '<span><%= sources.join(\'</span><span>\') %></span>' +
-    '</div>');
     var summaryRootTemplate = _.template('Top <%- count %> results for <b><%- query %></b>');
     var summaryOneGroupTemplate = _.template('<%- count %> results in group <b><%- label %></b>');
     var summaryMoreGroupsTemplate = _.template('<%- count %> results in groups <%= groups %> ');
@@ -27,10 +21,12 @@
     //
     // Private methods
     //
-    function populate(data) {
+    function populate(data, source) {
+      var template = options.templates.custom[source] || options.templates.fallback;
+
       var docDefaults = { title: "", snippet: "", url: "", sources: [] };
       $listing.html(_.reduce(data.documents, function (html, doc) {
-        html += documentTemplate(_.defaults(doc, docDefaults));
+        html += template(_.defaults(doc, docDefaults));
         return html;
       }, ""));
 

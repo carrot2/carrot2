@@ -84,7 +84,9 @@
       <small>Carrot<sup>2</sup> clustering engine</small>
     </div>
 
-    <script src="assets/js/carrot2.data.js"></script>
+    <!--
+    <script src="assets/js/carrot2.data.images.js"></script>
+    -->
 
     <script src="assets/js/jquery-1.7.2.min.js"></script>
     <script src="assets/js/jquery.pathchange.js"></script>
@@ -123,6 +125,11 @@
       clearTimeout(loadingTimeout);
       var $controller = $("body").controller({
         searcher: function(params, done) {
+          if (typeof carrot2Result != 'undefined') {
+            done(carrot2Result);
+            return;
+          }
+
           var toDcsSource = {
             web: "etools",
             wikipedia: "wiki",
@@ -152,7 +159,7 @@
           sources: [
             { id: "web", label: "Web", examples: [ "data mining", "london", "clustering" ] },
             { id: "wikipedia", label: "Wikipedia", examples: [ "photography", "physics", "clustering" ] },
-            { id: "images", label: "Images", examples: [ "cats", "apple", "dark side of the moon" ] },
+            { id: "images", label: "Images", examples: [ "williams", "apple", "washington" ] },
             { id: "news", label: "News", examples: [ "crisis", "market", "war" ] },
             { id: "jobs", label: "Jobs", examples: [ "java", "manager", "ruby" ] },
             { id: "pubmed", label: "PubMed", examples: [ "cancer", "heart", "lung" ] },
@@ -248,6 +255,20 @@
         },
         documents: {
           container: "#documents",
+          templates: {
+            fallback: _.template('<div id="d<%- id %>">' +
+              '<h2><a target="_blank" href="<%- url %>"><%- title %></a></h2>' +
+              '<p><%- snippet %></p>' +
+              '<a href="<%- url %>"><%- url %></a>' +
+              '<span><%= sources.join(\'</span><span>\') %></span>' +
+            '</div>'),
+            custom: {
+              images: _.template('<div class="thumb" id="d<%- id %>">' +
+                '<img src="<%- obj.fields[\'thumbnail-url\'] %>" title="<%- title %>" />' +
+                '<a target="_blank" href="<%- url %>"><%- title %></a>' +
+              '</div>')
+            }
+          },
           components: {
             summary: "#summary",
             listing: "#documents > .listing"

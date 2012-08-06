@@ -119,7 +119,7 @@
       }, function (data) {
         currentData = data;
         $clusters.clusters("populate", data);
-        $documents.documents("populate", data);
+        $documents.documents("populate", data, state.source);
       });
     }
   });

@@ -326,28 +326,56 @@
 #documents > .listing > div {
   margin-bottom: 30px;
 }
-
 #documents > .listing > div > p {
   margin-bottom: 5px;
   margin-top: 5px;
 }
-
 #documents > .listing > div > h2 {
-  /*font-weight: normal;*/
   font-size: 15px;
   line-height: 1.2;
 }
-
 #documents > .listing > div > a {
   margin-right: 0.5em;
   word-wrap: break-word;
 }
-
 #documents > .listing > div > span {
   font-size: 11px;
   text-transform: uppercase;
   padding: 0 0.2em;
   color: #888;
+}
+
+/* Image result */
+#documents > .listing > div.thumb {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  position: relative;
+}
+#documents > .listing > div.thumb > a {
+  text-decoration: none;
+  line-height: 1.2;
+  opacity: 0;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  border-radius: 2px;
+  z-index: 1;
+  background-color: white;
+  margin: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 5px;
+  color: black;
+}
+#documents > .listing > div.thumb:hover > a {
+  opacity: 0.8;
+}
+#documents > .listing > div.thumb > img {
+  max-height: 100px;
+  border-radius: 2px;
 }
 
 /** Loading indicator */
@@ -534,6 +562,6 @@
   -webkit-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
 
-a {
+a, input, button {
   outline: none !important;
 }
