@@ -22,7 +22,6 @@
 * Loading screen delay threshold (show after 150ms or so)
 * Optimization: changing of algorithm should not reload documents view
 * Redirections for legacy GET URLs
-* Clickable startup and results logos
 
 * Don't display secondary cluster labels
 
@@ -34,3 +33,4 @@ DONE:
 * BUG: Uncaught TypeError: Object #<HTMLObjectElement> has no method 'loadDataFromXML' on new query after switching views (Chrome)
 * expose searcher function to the outside to enable other backends (Solr, Elastic Search)
 * Persistent URLs
+* Clickable startup and results logos

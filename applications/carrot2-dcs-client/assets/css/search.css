@@ -42,6 +42,15 @@
   display: block;
 }
 
+#logo > img {
+  display: none;
+  border: none;
+}
+#search > #logo {
+  position: absolute;
+  left: 0;
+}
+
 /** Startup screen */
 .startup, .faded {
   background-color: #f8f8f8;
@@ -57,7 +66,9 @@
   height: 300px;
   margin: auto;
   padding-left: 165px;
-  background: url(../img/carrot-search-logo-large.png) no-repeat 0 0;
+}
+.startup > #search > #logo > img[src *= 'large'] {
+  display: block;
 }
 
 .startup #sources {
@@ -109,10 +120,14 @@
   padding-left: 90px;
   padding-top: 15px;
 
-  background-image: url(../img/carrot-search-logo-small.png);
-  background-repeat: no-repeat;
-  background-position: 15px 10px;
   border-bottom: 1px solid #eee;
+}
+.results > #search > #logo {
+  left: 15px;
+  top: 10px;
+}
+.results > #search > #logo > img[src *= 'small'] {
+  display: block;
 }
 
 .results #sources {
