@@ -67,12 +67,10 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope.Scope;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakZombies;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakZombies.Consequence;
 import com.carrotsearch.randomizedtesting.annotations.TimeoutSuite;
-import com.carrotsearch.randomizedtesting.annotations.Validators;
+import com.carrotsearch.randomizedtesting.rules.NoClassHooksShadowingRule;
+import com.carrotsearch.randomizedtesting.rules.NoInstanceHooksOverridesRule;
 import com.carrotsearch.randomizedtesting.rules.StaticFieldsInvariantRule;
 import com.carrotsearch.randomizedtesting.rules.SystemPropertiesInvariantRule;
-import com.carrotsearch.randomizedtesting.validators.NoHookMethodShadowing;
-import com.carrotsearch.randomizedtesting.validators.NoJUnit3TestMethods;
-import com.carrotsearch.randomizedtesting.validators.NoTestMethodOverrides;
 
 /**
  * Base class for Carrot2 test classes. Contains common hooks and setups.
@@ -84,11 +82,6 @@ import com.carrotsearch.randomizedtesting.validators.NoTestMethodOverrides;
 @ThreadLeakLingering(linger = 1000)
 @ThreadLeakAction({Action.WARN, Action.INTERRUPT})
 @SeedDecorators({MixWithSuiteName.class})
-@Validators({
-    NoHookMethodShadowing.class,
-    NoTestMethodOverrides.class,
-    NoJUnit3TestMethods.class
-})
 public class CarrotTestCase extends RandomizedTest
 {
     /**
@@ -111,7 +104,9 @@ public class CarrotTestCase extends RandomizedTest
     @ClassRule
     public static TestRule classRules = RuleChain
       .outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES))
-      .around(new StaticFieldsInvariantRule(MAX_STATIC_MEMORY_PER_SUITE_CLASS, true));
+      .around(new StaticFieldsInvariantRule(MAX_STATIC_MEMORY_PER_SUITE_CLASS, true))
+      .around(new NoClassHooksShadowingRule())
+      .around(new NoInstanceHooksOverridesRule());
 
     /**
      * Test {@link TestRule}s.
