@@ -22,6 +22,7 @@
 * Optimization: changing of algorithm should not reload documents view
 * Redirections for legacy GET URLs
 * BUG: font does not embed correcly when loading local (debug) data for the first time
+* Add site search support to eTools
 
 * Don't display secondary cluster labels
 
