@@ -61,20 +61,32 @@ public class Bing3WebDocumentSourceTest extends
     }
 
     @Test
-    public void testFileTypeOption() throws Exception
+    public void testPdfFileType() throws Exception
     {
-        final int documentsReturned = runQuery("cats (filetype:pdf | filetype:doc)", 100);
+        final int documentsReturned = runQuery("cats filetype:pdf", 100);
         assertThat(documentsReturned).isGreaterThan(0);
         boolean hadPdfs = false;
-        boolean hadDocs = false;
         for (Document doc : getDocuments())
         {
             String url = doc.getContentUrl().toLowerCase();
             System.out.println(url);
             hadPdfs |= url.contains(".pdf");
-            hadDocs |= url.contains(".doc");
         }
         assertTrue(hadPdfs);
+    }
+
+    @Test
+    public void testDocFileType() throws Exception
+    {
+        final int documentsReturned = runQuery("cats filetype:doc", 100);
+        assertThat(documentsReturned).isGreaterThan(0);
+        boolean hadDocs = false;
+        for (Document doc : getDocuments())
+        {
+            String url = doc.getContentUrl().toLowerCase();
+            System.out.println(url);
+            hadDocs |= url.contains(".doc");
+        }
         assertTrue(hadDocs);
     }
 
