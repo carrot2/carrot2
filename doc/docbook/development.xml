@@ -234,7 +234,7 @@ ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></p
           <title>Update download area server</title>
           
           <para>
-            Update symbolic links in <tt>/srv/www/vhosts/download.carrot2.org/stable</tt>
+            Update symbolic links in <filename>/srv/www/vhosts/download.carrot2.org/stable</filename>
             on ophelia to point to the new release artifacts.
           </para>
         </formalpara>
