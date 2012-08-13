@@ -41,7 +41,7 @@ import org.junit.Assume;
 import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.annotations.Nightly;
-import com.carrotsearch.randomizedtesting.annotations.ThreadLeaks;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -112,7 +112,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
 
     @SuppressWarnings("unchecked")
     @Test
-    @ThreadLeaks(linger = 5000)
+    @ThreadLeakLingering(linger = 5000)
     public void testRepeatedClusteringWithCache()
     {
         // Caching controller is not available for .NET at the moment.
@@ -134,7 +134,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
      * test is performed with default init attributes.
      */
     @Nightly @Test 
-    @ThreadLeaks(linger = 5000)
+    @ThreadLeakLingering(linger = 5000)
     public void testStress() throws InterruptedException, ExecutionException
     {
         final int numberOfThreads = randomIntBetween(1, 10);

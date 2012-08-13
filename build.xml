@@ -457,8 +457,7 @@
             <report-text
                 showThrowable="true" 
                 showStackTraces="true" 
-                showOutputStream="true" 
-                showErrorStream="true"
+                showOutput="onerror"
 
                 showStatusOk="false"
                 showStatusError="true"

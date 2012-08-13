@@ -14,6 +14,7 @@ package org.carrot2.source.opensearch;
 
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
+import org.junit.Before;
 
 /**
  * Test cases for {@link OpenSearchDocumentSource} with feeds where start result index is
@@ -46,14 +47,12 @@ public class OpenSearchDocumentSourceByResultIncrementTest extends
         return false;
     }
 
-    @Override
-    public void prepareComponent()
+    @SuppressWarnings("unused")
+    @Before
+    private void prepareComponent()
     {
-        super.prepareComponent();
-
-        initAttributes
-            .put(
-                AttributeUtils.getKey(OpenSearchDocumentSource.class, "feedUrlTemplate"),
+        initAttributes.put(
+            AttributeUtils.getKey(OpenSearchDocumentSource.class, "feedUrlTemplate"),
                 "http://www.indeed.com/opensearch?q=${searchTerms}&start=${startIndex}&limit=${count}");
         initAttributes.put(AttributeUtils.getKey(OpenSearchDocumentSource.class,
             "resultsPerPage"), 50);
