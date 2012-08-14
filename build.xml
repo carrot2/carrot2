@@ -448,6 +448,7 @@
 
     <junit4 haltonfailure="false"
             failureproperty="tests.failed"
+            dir="${tmp.dir}"
             tempdir="${tmp.dir}"
             parallelism="${tests.cpus}"
             shuffleOnSlave="true"
