@@ -448,6 +448,7 @@
 
     <junit4 haltonfailure="false"
             failureproperty="tests.failed"
+            dir="${tmp.dir}"
             tempdir="${tmp.dir}"
             parallelism="${tests.cpus}"
             shuffleOnSlave="true"
@@ -457,8 +458,7 @@
             <report-text
                 showThrowable="true" 
                 showStackTraces="true" 
-                showOutputStream="true" 
-                showErrorStream="true"
+                showOutput="onerror"
 
                 showStatusOk="false"
                 showStatusError="true"
