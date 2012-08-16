@@ -185,13 +185,10 @@ class FubTestCollection
         int [][] resultSubtopicIds)
     {
         final Map<Integer, List<Document>> documents = Maps.newHashMap();
-
         BufferedReader reader = null;
-
         try
         {
-            reader = new BufferedReader(new InputStreamReader(resultsResource.open(),
-                "UTF-8"));
+            reader = new BufferedReader(new InputStreamReader(resultsResource.open(), "UTF-8"));
 
             String line = reader.readLine(); // discard first line
             while ((line = reader.readLine()) != null)
@@ -235,11 +232,14 @@ class FubTestCollection
         }
         finally
         {
-            if (reader != null)
-            {
-                CloseableUtils.close(reader);
-            }
+            CloseableUtils.close(reader);
         }
+
+        final List<Document> allDocuments = Lists.newArrayList();
+        for (List<Document> docList : documents.values()) {
+            allDocuments.addAll(docList);
+        }
+        Document.assignDocumentIds(allDocuments);
 
         return documents;
     }
