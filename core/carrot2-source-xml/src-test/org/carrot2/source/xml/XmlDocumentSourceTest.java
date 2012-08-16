@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.Map;
 
 import org.carrot2.core.Controller;
+import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTestBase;
@@ -24,6 +25,7 @@ import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.resource.*;
 import org.junit.Test;
 
+import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -38,6 +40,17 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
      */
     private ResourceLookup resourceLocator = new ResourceLookup(
         new ContextClassLoaderLocator());
+
+    /**
+     * Transforms {@link Document}s to their ids.
+     */
+    protected static final Function<Document, Integer> DOCUMENT_TO_INT_ID = new Function<Document, Integer>()
+    {
+        public Integer apply(Document document)
+        {
+            return Integer.valueOf(document.getStringId());
+        }
+    };
 
     @Override
     public Class<XmlDocumentSource> getComponentClass()
@@ -120,7 +133,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         final int documentCount = runQuery();
         assertEquals(2, documentCount);
         assertEquals(Lists.newArrayList(0, 1), Lists.transform(getDocuments(),
-            DOCUMENT_TO_ID));
+            DOCUMENT_TO_INT_ID));
     }
 
     @Test
@@ -270,7 +283,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         assertEquals(2, documentCount);
         assertEquals("xslt test", resultAttributes.get(AttributeNames.QUERY));
         assertEquals(Lists.newArrayList(498967, 831478), Lists.transform(getDocuments(),
-            DOCUMENT_TO_ID));
+            DOCUMENT_TO_INT_ID));
         assertEquals(Lists.newArrayList("IBM's MARS Block Cipher.",
             "IBM WebSphere Studio Device Developer"), Lists.transform(getDocuments(),
             DOCUMENT_TO_TITLE));

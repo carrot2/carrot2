@@ -31,7 +31,7 @@ public class DocumentAssertion extends GenericAssert<DocumentAssertion, Document
 
     /**
      * Asserts that the document is equivalent to the provided document. Two documents are
-     * equivalent if their {@link Document#getId()} and {@link Document#getFields()} are
+     * equivalent if their {@link Document#getStringId()} and {@link Document#getFields()} are
      * equal.
      * 
      * @param expectedDocument the expected document
@@ -39,8 +39,8 @@ public class DocumentAssertion extends GenericAssert<DocumentAssertion, Document
      */
     public DocumentAssertion isEquivalentTo(Document expectedDocument)
     {
-        assertThat((Object) actual.getId()).as(description() + ", id").isEqualTo(
-            expectedDocument.getId());
+        assertThat((Object) actual.getStringId()).as(description() + ", id").isEqualTo(
+            expectedDocument.getStringId());
         assertThat(actual.getFields()).as(description()).isEqualTo(
             expectedDocument.getFields());
         return this;

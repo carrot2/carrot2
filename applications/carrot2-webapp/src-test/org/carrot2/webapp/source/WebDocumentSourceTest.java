@@ -52,7 +52,7 @@ public class WebDocumentSourceTest extends
 
         for (int i = 0; i < documents.size(); i++)
         {
-            assertThat(documents.get(i).getId()).isEqualTo(i);
+            assertThat(Integer.valueOf(documents.get(i).getStringId())).isEqualTo(i);
         }
     }
 }

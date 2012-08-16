@@ -54,6 +54,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -369,9 +370,7 @@ public abstract class FlashViewPage extends Page
 
                 if (arguments.length == 1)
                 {
-                    final int documentId = (int) Double.parseDouble(arguments[0]
-                        .toString());
-                    doDocumentSelection(documentId);
+                    doDocumentSelection(arguments[0].toString());
                 }
 
                 return null;
@@ -443,20 +442,21 @@ public abstract class FlashViewPage extends Page
     /**
      * 
      */
-    private void doDocumentSelection(int documentId)
+    private void doDocumentSelection(String documentId)
     {
         final ProcessingResult pr = getProcessingResult();
         if (pr == null) return;
 
         for (Document d : pr.getDocuments())
         {
-            if (documentId == d.getId())
+            if (Objects.equal(d.getStringId(), documentId))
             {
                 final String url = d.getField(Document.CONTENT_URL);
                 if (!StringUtils.isEmpty(url))
                 {
                     openURL(url);
                 }
+                break;
             }
         }
     }

@@ -116,9 +116,7 @@ public final class Document
     private final Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
 
     /**
-     * Internal identifier of the document. This identifier is assigned dynamically after
-     * documents are returned from {@link IDocumentSource}.
-     * 
+     * @see #getStringId()
      * @see ProcessingResult
      */
     @Attribute(required = false)
@@ -199,10 +197,13 @@ public final class Document
      */
     public Integer getId()
     {
-        return id != null ? Integer.parseInt(id) : null;
+        try {
+            return id != null ? Integer.parseInt(id) : null;
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Could not parse document identifier as an integer: " + id);
+        }
     }
 
-    /**
     /**
      * Identifier of this document. The semantics of the identifier varies depending on
      * the {@link IDocumentSource} that produced the documents.
