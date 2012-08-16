@@ -37,7 +37,7 @@ public enum LanguageCode
     BULGARIAN ("bg"),
     CZECH ("cz"),
     CHINESE_SIMPLIFIED ("zh_cn"),
-    CROATIAN("hk"),
+    CROATIAN("hr"),
     DANISH ("da"),
     DUTCH ("nl"),
     ENGLISH ("en"),
