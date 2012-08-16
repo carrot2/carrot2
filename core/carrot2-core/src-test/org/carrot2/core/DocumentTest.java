@@ -53,4 +53,18 @@ public class DocumentTest extends CarrotTestCase
             // expected.
         }
     }
+
+    @Test
+    public void testSingleNull()
+    {
+        final Document d1 = new Document();
+        d1.id = "2";
+        final Document d2 = new Document();
+        try {
+            Document.assignDocumentIds(Lists.newArrayList(d1, d2));
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected.
+        }
+    }    
 }

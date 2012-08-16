@@ -508,31 +508,43 @@ public final class Document
         // in the same list, so we need to synchronize here.
         synchronized (documents)
         {
-            // Make sure there are no identifiers. Or if they are present, they should
-            // be unique.
+            // Make sure there are no identifiers. Or if they are present, they should be unique.
+            boolean hadIds = false;
             for (Document document : documents)
             {
                 if (document.id != null)
                 {
-                    HashSet<String> ids = Sets.newHashSet();
-                    for (Document doc : documents)
-                    {
-                        if (!ids.add(doc.getStringId()))
-                        {
-                            throw new IllegalArgumentException("Identifiers must be unique, duplicated identifier: "
-                                + doc.getStringId());
-                        }
-                    }
-                    return;
+                    hadIds = true;
+                    break;
                 }
             }
 
-            // Assign ids
-            int id = 0;
-            for (final Document document : documents)
+            if (hadIds)
             {
-                document.id = Integer.toString(id);
-                id++;
+                final HashSet<String> ids = Sets.newHashSet();
+                for (Document doc : documents)
+                {
+                    if (!ids.add(doc.getStringId()))
+                    {
+                        throw new IllegalArgumentException(
+                            "Identifiers must be unique, duplicated identifier: " + doc.getStringId());
+                    }
+                }
+                if (ids.contains(null))
+                {
+                    throw new IllegalArgumentException(
+                        "Null identifiers cannot be mixed with existing non-null identifiers.");
+                }
+            }
+            else
+            {
+                // All nulls, assign ids.
+                int id = 0;
+                for (final Document document : documents)
+                {
+                    document.id = Integer.toString(id);
+                    id++;
+                }
             }
         }
     }

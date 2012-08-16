@@ -226,7 +226,7 @@ public class ClusterTest extends CarrotTestCase
         assertThat(d3.id).isEqualTo(3);
     }
 
-    @Test()
+    @Test(expected = IllegalArgumentException.class)
     public void testSomeIdentifiers()
     {
         final Cluster d1 = new Cluster();
@@ -238,11 +238,6 @@ public class ClusterTest extends CarrotTestCase
         final Cluster d5 = new Cluster();
 
         Cluster.assignClusterIds(Lists.newArrayList(d1, d2, d3, d4, d5));
-        assertThat(d1.id).isEqualTo(2);
-        assertThat(d2.id).isEqualTo(6);
-        assertThat(d3.id).isEqualTo(7);
-        assertThat(d4.id).isEqualTo(5);
-        assertThat(d5.id).isEqualTo(8);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -253,6 +248,15 @@ public class ClusterTest extends CarrotTestCase
         final Cluster d2 = new Cluster();
         d2.id = 0;
 
+        Cluster.assignClusterIds(Lists.newArrayList(d1, d2));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSingleNullIdentifier()
+    {
+        final Cluster d1 = new Cluster();
+        d1.id = 0;
+        final Cluster d2 = new Cluster();
         Cluster.assignClusterIds(Lists.newArrayList(d1, d2));
     }
 
