@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 
 /**
  * A document that to be processed by the framework. Each document is a collection of
@@ -496,6 +498,8 @@ public final class Document
      * all.
      * 
      * @param documents documents to assign identifiers to.
+     * @throws IllegalArgumentException Thrown if the collection of documents already contains
+     *              identifiers and they are not unique.
      */
     public static void assignDocumentIds(Collection<Document> documents)
     {
@@ -503,11 +507,21 @@ public final class Document
         // in the same list, so we need to synchronize here.
         synchronized (documents)
         {
-            // Make sure there are no identifiers
+            // Make sure there are no identifiers. Or if they are present, they should
+            // be unique.
             for (Document document : documents)
             {
                 if (document.id != null)
                 {
+                    HashSet<String> ids = Sets.newHashSet();
+                    for (Document doc : documents)
+                    {
+                        if (!ids.add(doc.getStringId()))
+                        {
+                            throw new IllegalArgumentException("Identifiers must be unique, duplicated identifier: "
+                                + doc.getStringId());
+                        }
+                    }
                     return;
                 }
             }
