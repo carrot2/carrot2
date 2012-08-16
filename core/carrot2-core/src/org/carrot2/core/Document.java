@@ -189,6 +189,18 @@ public final class Document
     }
 
     /**
+     * Creates a document with the provided <code>title</code>, <code>summary</code>,
+     * <code>contentUrl</code> and <code>language</code> and ID. IDs should be unique
+     * for clustering. If all documents passed for clustering have null IDs then
+     * IDs are automatically generated. 
+     */
+    public Document(String title, String summary, String contentUrl, LanguageCode language, String id)
+    {
+        this(title, summary, contentUrl, language);
+        this.id = id;
+    }
+
+    /**
      * @deprecated please use {@link #getStringId()} instead. Currently, this method
      *             attempts to parse the string identifier returned by
      *             {@link #getStringId()} into an integer.

@@ -172,6 +172,16 @@ public final class Cluster
     }
 
     /**
+     * Same as {@link #Cluster(String,Document...)} but allows specifying
+     * cluster identifier.
+     */
+    public Cluster(Integer id, String phrase, Document... documents)
+    {
+        this(phrase, documents);
+        this.id = id;
+    }
+
+    /**
      * Formats this cluster's label. If there is more than one phrase describing this
      * cluster, phrases will be separated by a comma followed by a space, e.g. "Phrase
      * one, Phrase two". To format multi-phrase label in a different way, use
