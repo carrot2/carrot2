@@ -139,7 +139,7 @@ public final class Tokenizer
                     try
                     {
                         short tokenType;
-                        
+
                         ts.reset(new StringReader(fieldValue));
                         if ((tokenType = ts.nextToken()) != ITokenizer.TT_EOF)
                         {

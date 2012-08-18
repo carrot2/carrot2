@@ -12,7 +12,19 @@
 
 package org.carrot2.text.preprocessing.pipeline;
 
-import org.carrot2.text.preprocessing.*;
+import java.util.List;
+
+import org.carrot2.core.Document;
+import org.carrot2.core.LanguageCode;
+import org.carrot2.text.linguistic.LanguageModel;
+import org.carrot2.text.preprocessing.CaseNormalizer;
+import org.carrot2.text.preprocessing.DocumentAssigner;
+import org.carrot2.text.preprocessing.LabelFilterProcessor;
+import org.carrot2.text.preprocessing.LanguageModelStemmer;
+import org.carrot2.text.preprocessing.PhraseExtractor;
+import org.carrot2.text.preprocessing.PreprocessingContext;
+import org.carrot2.text.preprocessing.StopListMarker;
+import org.carrot2.text.preprocessing.Tokenizer;
 import org.carrot2.util.attribute.Bindable;
 
 /**
@@ -46,12 +58,14 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
      */
     public final DocumentAssigner documentAssigner = new DocumentAssigner();
 
-    /**
-     * Performs preprocessing on the provided {@link PreprocessingContext}.
-     */
     @Override
-    public void preprocess(PreprocessingContext context)
+    public PreprocessingContext preprocess(List<Document> documents, String query,
+        LanguageCode language)
     {
+        final PreprocessingContext context = new PreprocessingContext(
+            LanguageModel.create(language, stemmerFactory, tokenizerFactory,
+                lexicalDataFactory), documents, query);
+
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context);
@@ -61,5 +75,7 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
         documentAssigner.assign(context);
 
         context.preprocessingFinished();
+        return context;
+
     }
 }

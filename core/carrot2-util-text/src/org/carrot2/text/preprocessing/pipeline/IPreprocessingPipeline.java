@@ -28,9 +28,4 @@ public interface IPreprocessingPipeline
      * context on the way. Results can be obtained from the returned {@link PreprocessingContext}.
      */
     PreprocessingContext preprocess(List<Document> documents, String query, LanguageCode language);
-
-    /**
-     * Performs preprocessing on the provided {@link PreprocessingContext}.
-     */
-    void preprocess(PreprocessingContext context);
 }

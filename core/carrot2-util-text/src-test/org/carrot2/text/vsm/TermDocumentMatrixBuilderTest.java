@@ -12,6 +12,7 @@
 package org.carrot2.text.vsm;
 
 import org.carrot2.matrix.MatrixAssertions;
+import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.junit.Test;
 
 import com.carrotsearch.hppc.IntIntOpenHashMap;
@@ -118,7 +119,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
     public void testSinglePhraseWithStopWord()
     {
         createDocuments("", "aa stop cc", "", "aa stop cc", "", "aa stop cc");
-
+        
         int [] expectedTdMatrixStemIndices = new int []
         {
             0, 1
@@ -133,6 +134,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
             }
         };
 
+        System.out.println(context);
         check(expectedTdMatrixElements, expectedTdMatrixStemIndices);
     }
 
@@ -190,7 +192,10 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
     {
         createDocuments("", "aa . bb", "", "bb . cc", "", "aa . cc . cc");
 
-        preprocessingPipeline.preprocess(context);
+        PreprocessingContext context = preprocessingPipeline.preprocess(
+            this.context.documents, 
+            this.context.query, 
+            this.context.language.getLanguageCode());
 
         // The preprocessing pipeline will produce increasing indices in tfByDocument,
         // so to reproduce the bug, we need to perturb them, e.g. reverse. 
