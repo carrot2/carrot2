@@ -22,6 +22,7 @@ import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
 import org.carrot2.source.microsoft.Bing3WebDocumentSource;
+import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDescriptor;
 
 import com.google.common.collect.Maps;
 
@@ -57,8 +58,7 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
          */
         final Map<String, Object> globalAttributes = new HashMap<String, Object>();
 
-        LingoClusteringAlgorithmDescriptor.attributeBuilder(globalAttributes)
-            .preprocessingPipeline()
+        CompletePreprocessingPipelineDescriptor.attributeBuilder(globalAttributes)
                 .documentAssigner()
                     .exactPhraseAssignment(false);
 
@@ -73,8 +73,7 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
             .matrixReducer()
                 .factorizationQuality(FactorizationQuality.LOW);
 
-        LingoClusteringAlgorithmDescriptor.attributeBuilder(fastAttributes)
-            .preprocessingPipeline()
+        CompletePreprocessingPipelineDescriptor.attributeBuilder(fastAttributes)
                 .caseNormalizer()
                     .dfThreshold(2);
 
@@ -84,13 +83,11 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
             .matrixReducer()
                 .factorizationQuality(FactorizationQuality.HIGH);
 
-        LingoClusteringAlgorithmDescriptor.attributeBuilder(accurateAttributes)
-            .preprocessingPipeline()
+        CompletePreprocessingPipelineDescriptor.attributeBuilder(accurateAttributes)
                 .documentAssigner()
                     .exactPhraseAssignment(true);
 
-        LingoClusteringAlgorithmDescriptor.attributeBuilder(fastAttributes)
-            .preprocessingPipeline()
+        CompletePreprocessingPipelineDescriptor.attributeBuilder(fastAttributes)
                 .caseNormalizer()
                     .dfThreshold(1);
 

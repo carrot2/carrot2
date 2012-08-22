@@ -23,6 +23,7 @@ import org.carrot2.core.ProcessingComponentBase;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.CommonAttributes;
+import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
@@ -31,6 +32,7 @@ import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStr
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
 import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
@@ -46,6 +48,7 @@ import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.Output;
 import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.DoubleRange;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.BitSet;
@@ -120,7 +123,12 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     /**
      * Common preprocessing tasks handler, contains bindable attributes.
      */
-    public final CompletePreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
+    @Init
+    @Input
+    @Attribute
+    @Internal
+    @ImplementingClasses(classes = {}, strict = false)
+    public IPreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
 
     /**
      * Term-document matrix builder for the algorithm, contains bindable attributes.
