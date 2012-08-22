@@ -124,20 +124,13 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
         final PreprocessingContext context = new PreprocessingContext(
             LanguageModel.create(language, stemmerFactory, tokenizerFactory,
                 lexicalDataFactory), documents, query);
-        preprocess(context);
-        return context;
-    }
 
-    /**
-     * Performs preprocessing on the provided {@link PreprocessingContext}.
-     */
-    @Override
-    public void preprocess(PreprocessingContext context)
-    {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context);
         stopListMarker.mark(context);
+
         context.preprocessingFinished();
+        return context;
     }
 }

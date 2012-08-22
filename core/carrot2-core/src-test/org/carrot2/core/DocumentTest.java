@@ -36,7 +36,7 @@ public class DocumentTest extends CarrotTestCase
     }
 
     @Test
-    public void testSomeIdentifiers()
+    public void testNonUniqueIdentifiers()
     {
         final Document d1 = new Document();
         d1.id = "2";
@@ -45,9 +45,26 @@ public class DocumentTest extends CarrotTestCase
         final Document d4 = new Document();
         d4.id = "id5";
         final Document d5 = new Document();
-        
-        Document.assignDocumentIds(Lists.newArrayList(d1, d2, d3, d4, d5));
-        assertThat(d1.id).isEqualTo("2");
-        assertThat(d4.id).isEqualTo("id5");
+
+        try {
+            Document.assignDocumentIds(Lists.newArrayList(d1, d2, d3, d4, d5));
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected.
+        }
     }
+
+    @Test
+    public void testSingleNull()
+    {
+        final Document d1 = new Document();
+        d1.id = "2";
+        final Document d2 = new Document();
+        try {
+            Document.assignDocumentIds(Lists.newArrayList(d1, d2));
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected.
+        }
+    }    
 }

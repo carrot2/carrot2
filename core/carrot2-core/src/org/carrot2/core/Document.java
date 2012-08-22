@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 
 /**
  * A document that to be processed by the framework. Each document is a collection of
@@ -114,9 +116,7 @@ public final class Document
     private final Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
 
     /**
-     * Internal identifier of the document. This identifier is assigned dynamically after
-     * documents are returned from {@link IDocumentSource}.
-     * 
+     * @see #getStringId()
      * @see ProcessingResult
      */
     @Attribute(required = false)
@@ -189,6 +189,18 @@ public final class Document
     }
 
     /**
+     * Creates a document with the provided <code>title</code>, <code>summary</code>,
+     * <code>contentUrl</code> and <code>language</code> and ID. IDs should be unique
+     * for clustering. If all documents passed for clustering have null IDs then
+     * IDs are automatically generated. 
+     */
+    public Document(String title, String summary, String contentUrl, LanguageCode language, String id)
+    {
+        this(title, summary, contentUrl, language);
+        this.id = id;
+    }
+
+    /**
      * @deprecated please use {@link #getStringId()} instead. Currently, this method
      *             attempts to parse the string identifier returned by
      *             {@link #getStringId()} into an integer.
@@ -197,10 +209,13 @@ public final class Document
      */
     public Integer getId()
     {
-        return id != null ? Integer.parseInt(id) : null;
+        try {
+            return id != null ? Integer.parseInt(id) : null;
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Could not parse document identifier as an integer: " + id);
+        }
     }
 
-    /**
     /**
      * Identifier of this document. The semantics of the identifier varies depending on
      * the {@link IDocumentSource} that produced the documents.
@@ -496,6 +511,8 @@ public final class Document
      * all.
      * 
      * @param documents documents to assign identifiers to.
+     * @throws IllegalArgumentException Thrown if the collection of documents already contains
+     *              identifiers and they are not unique.
      */
     public static void assignDocumentIds(Collection<Document> documents)
     {
@@ -503,21 +520,43 @@ public final class Document
         // in the same list, so we need to synchronize here.
         synchronized (documents)
         {
-            // Make sure there are no identifiers
+            // Make sure there are no identifiers. Or if they are present, they should be unique.
+            boolean hadIds = false;
             for (Document document : documents)
             {
                 if (document.id != null)
                 {
-                    return;
+                    hadIds = true;
+                    break;
                 }
             }
 
-            // Assign ids
-            int id = 0;
-            for (final Document document : documents)
+            if (hadIds)
             {
-                document.id = Integer.toString(id);
-                id++;
+                final HashSet<String> ids = Sets.newHashSet();
+                for (Document doc : documents)
+                {
+                    if (!ids.add(doc.getStringId()))
+                    {
+                        throw new IllegalArgumentException(
+                            "Identifiers must be unique, duplicated identifier: " + doc.getStringId());
+                    }
+                }
+                if (ids.contains(null))
+                {
+                    throw new IllegalArgumentException(
+                        "Null identifiers cannot be mixed with existing non-null identifiers.");
+                }
+            }
+            else
+            {
+                // All nulls, assign ids.
+                int id = 0;
+                for (final Document document : documents)
+                {
+                    document.id = Integer.toString(id);
+                    id++;
+                }
             }
         }
     }

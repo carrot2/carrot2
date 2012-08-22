@@ -172,17 +172,6 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
     }
 
     /**
-     * Transforms {@link Document}s to their ids.
-     */
-    protected static final Function<Document, Integer> DOCUMENT_TO_ID = new Function<Document, Integer>()
-    {
-        public Integer apply(Document document)
-        {
-            return document.getId();
-        }
-    };
-
-    /**
      * Transforms {@link Document}s to their titles.
      */
     protected static final DocumentToFieldTransformer DOCUMENT_TO_TITLE = new DocumentToFieldTransformer(

@@ -39,8 +39,10 @@ public final class LanguageModel
             lexicalDataFactory);
     }
 
-    public static LanguageModel create(final LanguageCode languageCode,
-        final IStemmerFactory stemmerFactory, final ITokenizerFactory tokenizerFactory,
+    public static LanguageModel create(
+        final LanguageCode languageCode,
+        final IStemmerFactory stemmerFactory, 
+        final ITokenizerFactory tokenizerFactory,
         final ILexicalDataFactory lexicalDataFactory)
     {
         // TODO: we could try to get rid of this extra layer of indirection here:

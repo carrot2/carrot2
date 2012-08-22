@@ -383,7 +383,11 @@ public final class Controller implements Closeable
                 }
             }
 
-            processingResult = new ProcessingResult(resultAttributes);
+            try {
+                processingResult = new ProcessingResult(resultAttributes);
+            } catch (IllegalArgumentException e) {
+                throw new ProcessingException(e);
+            }
             return processingResult;
         }
         finally

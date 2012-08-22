@@ -12,20 +12,37 @@
 
 package org.carrot2.core;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
-import org.codehaus.jackson.annotate.*;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonMethod;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.simpleframework.xml.*;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementMap;
+import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persist;
 
 import com.google.common.base.Function;
-import com.google.common.collect.*;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 
 /**
  * A cluster (group) of {@link Document}s. Each cluster has a human-readable label
@@ -152,6 +169,16 @@ public final class Cluster
     {
         addPhrases(phrase);
         addDocuments(documents);
+    }
+
+    /**
+     * Same as {@link #Cluster(String,Document...)} but allows specifying
+     * cluster identifier.
+     */
+    public Cluster(Integer id, String phrase, Document... documents)
+    {
+        this(phrase, documents);
+        this.id = id;
     }
 
     /**
@@ -629,45 +656,57 @@ public final class Cluster
 
     /**
      * Assigns sequential identifiers to the provided <code>clusters</code> (and their
-     * sub-clusters). If a cluster already has an identifier, the identifier will not be
-     * changed.
+     * sub-clusters). If any cluster already has an identifier, identifier will not be
+     * changed but all clusters must have unique identifiers.
      * 
      * @param clusters Clusters to assign identifiers to.
      * @throws IllegalArgumentException if the provided clusters contain non-unique
-     *             identifiers
+     *             identifiers.
      */
     public static void assignClusterIds(Collection<Cluster> clusters)
     {
         final List<Cluster> flattened = flatten(clusters);
         synchronized (clusters)
         {
-            final HashSet<Integer> ids = Sets.newHashSet();
-
             // First, find the start value for the id and check uniqueness of the ids
             // already provided.
-            int maxId = Integer.MIN_VALUE;
+            boolean hadIds = false;
             for (final Cluster cluster : flattened)
             {
                 if (cluster.id != null)
                 {
-                    if (!ids.add(cluster.id))
-                    {
-                        throw new IllegalArgumentException(
-                            "Non-unique cluster id found: " + cluster.id);
-                    }
-                    maxId = Math.max(maxId, cluster.id);
+                    hadIds = true;
+                    break;
                 }
             }
 
-            // We'd rather start with 0
-            maxId = Math.max(maxId, -1);
-
-            // Assign missing ids
-            for (final Cluster c : flattened)
+            if (hadIds)
             {
-                if (c.id == null)
+                final HashSet<Integer> ids = Sets.newHashSet();
+                for (final Cluster c : flattened)
                 {
-                    c.id = ++maxId;
+                    if (!ids.add(c.id))
+                    {
+                        throw new IllegalArgumentException(
+                            "Cluster identifiers must be unique, duplicated identifier: " + c.id);
+                    }
+                }
+                if (ids.contains(null))
+                {
+                    throw new IllegalArgumentException(
+                        "Null cluster identifiers cannot be mixed with existing non-null identifiers.");
+                }
+            }
+            else
+            {
+                // Assign new IDs.
+                int id = 0;
+                for (final Cluster c : flattened)
+                {
+                    if (c.id == null)
+                    {
+                        c.id = id++;
+                    }
                 }
             }
         }

@@ -12,13 +12,21 @@
 
 package org.carrot2.text.vsm;
 
+import java.util.Map;
+
+import org.carrot2.core.attribute.Init;
 import org.carrot2.text.linguistic.ILexicalDataFactory;
 import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.preprocessing.PreprocessingComponentTestBase;
 import org.carrot2.text.preprocessing.TestLexicalDataFactory;
 import org.carrot2.text.preprocessing.TestStemmerFactory;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDescriptor;
+import org.carrot2.util.attribute.AttributeBinder;
+import org.carrot2.util.attribute.Input;
 import org.junit.Before;
+
+import com.google.common.collect.Maps;
 
 /**
  * A base class for tests requiring that the main term-document document matrix is built.
@@ -34,11 +42,22 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     /** Preprocessing pipeline used for tests */
     protected CompletePreprocessingPipeline preprocessingPipeline;
     
+    @SuppressWarnings("unchecked")
     @Before
-    public void setUpMatrixBuilder()
+    public void setUpMatrixBuilder() throws Exception
     {
         preprocessingPipeline = new CompletePreprocessingPipeline();
         preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
+        
+        Map<String,Object> attrs = Maps.newHashMap();
+
+        CompletePreprocessingPipelineDescriptor.attributeBuilder(attrs)
+            .lexicalDataFactory(createLexicalDataFactory())
+            .stemmerFactory(createStemmerFactory())
+            .tokenizerFactory(createTokenizerFactory());
+
+        AttributeBinder.set(preprocessingPipeline, attrs, Input.class, Init.class);
+
         matrixBuilder = new TermDocumentMatrixBuilder();
         matrixBuilder.termWeighting = new TfTermWeighting();
         matrixBuilder.maxWordDf = 1.0;
@@ -46,7 +65,8 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
 
     protected void buildTermDocumentMatrix()
     {
-        preprocessingPipeline.preprocess(context);
+        context = preprocessingPipeline.preprocess(
+            context.documents, context.query, context.language.getLanguageCode());
         
         vsmContext = new VectorSpaceModelContext(context);
         matrixBuilder.buildTermDocumentMatrix(vsmContext);

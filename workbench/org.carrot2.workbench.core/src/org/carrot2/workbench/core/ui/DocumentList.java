@@ -56,7 +56,6 @@ public final class DocumentList extends Composite
      * Template displayed in {@link #show(Cluster...)}.
      */
     private static final String TEMPLATE_CLUSTERS = "clusters.vm";
-    
 
     /**
      * Lazy velocity initialization flag.
@@ -131,7 +130,7 @@ public final class DocumentList extends Composite
 
         update(context, TEMPLATE_PROCESSING_RESULT);
     }
-
+    
     /**
      * Show a template displaying one or more {@link Cluster}s.
      */
@@ -145,8 +144,6 @@ public final class DocumentList extends Composite
         {
             final VelocityContext context = VelocityInitializer.createContext();
 
-            final Comparator<Document> comparator = Document.BY_ID_COMPARATOR;
-            context.put("comparator", comparator);
             context.put("clusters", Arrays.asList(clusters));
             context.put("maxDisplay", maxDisplayPerCluster);
 

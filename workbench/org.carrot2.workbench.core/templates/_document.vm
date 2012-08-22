@@ -1,6 +1,6 @@
 #macro( document $document )
     <div class="snippet">
-        <span class="id"> [$document.Id]</span>
+        <span class="id"> [$document.stringId]</span>
         
         #set ($title = ${document.getField("title")})
         #set ($hasTitle = ($title && $title != ""))

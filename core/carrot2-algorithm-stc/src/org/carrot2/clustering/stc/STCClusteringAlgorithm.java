@@ -35,9 +35,11 @@ import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStr
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
 import org.carrot2.util.PriorityQueue;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.DoubleRange;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.*;
@@ -266,7 +268,14 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Common preprocessing tasks handler.
      */
-    public final BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
+    @Init
+    @Input
+    @Attribute
+    @Internal
+    @ImplementingClasses(classes = {
+        BasicPreprocessingPipeline.class
+    }, strict = false)
+    public IPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
     /**
      * A helper for performing multilingual clustering.

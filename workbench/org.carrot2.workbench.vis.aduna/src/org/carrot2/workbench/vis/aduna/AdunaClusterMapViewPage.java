@@ -70,7 +70,7 @@ final class AdunaClusterMapViewPage extends Page
     /**
      * A map of the most recently shown {@link Document}s.
      */
-    private Map<Integer, DefaultObject> documentMap = Maps.newHashMap();
+    private Map<String, DefaultObject> documentMap = Maps.newHashMap();
 
     /**
      * UI job for applying selection to the cluster map component.
@@ -243,25 +243,24 @@ final class AdunaClusterMapViewPage extends Page
             {
                 if (clusterMap.containsKey(cluster.getId())) continue;
 
-                final DefaultClassification cc = new DefaultClassification(cluster
-                    .getLabel(), parent);
+                final DefaultClassification cc = new DefaultClassification(cluster.getLabel(), parent);
                 clusterMap.put(cluster.getId(), cc);
 
                 for (Document d : cluster.getAllDocuments())
                 {
-                    if (!documentMap.containsKey(d.getId()))
+                    if (!documentMap.containsKey(d.getStringId()))
                     {
                         String dt = (String) (String) d.getField(Document.TITLE);
-                        String title = "[" + d.getId() + "]";
+                        String title = "[" + d.getStringId() + "]";
                         if (!StringUtils.isEmpty(dt))
                         {
                             title = title + " " + dt;
                         }
 
-                        documentMap.put(d.getId(), new DefaultObject(title));
+                        documentMap.put(d.getStringId(), new DefaultObject(title));
                     }
 
-                    cc.add(documentMap.get(d.getId()));
+                    cc.add(documentMap.get(d.getStringId()));
                 }
 
                 toClassification(cc, cluster.getSubclusters());

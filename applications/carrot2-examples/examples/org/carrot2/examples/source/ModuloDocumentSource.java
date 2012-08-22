@@ -73,10 +73,12 @@ public class ModuloDocumentSource extends ProcessingComponentBase implements
 
     /**
      * A non-primitive attribute do demonstrate the need for
-     * {@link ImplementingClasses} constraint. It must be added to specify
+     * {@link org.carrot2.util.attribute.constraint.ImplementingClasses} constraint. 
+     * It must be added to specify
      * which assignable types are allowed as values for the attribute. To allow all
-     * assignable values, specify empty {@link ImplementingClasses#classes()} and
-     * {@link ImplementingClasses#strict()} equal to <code>false</code>.
+     * assignable values, specify empty 
+     * {@link org.carrot2.util.attribute.constraint.ImplementingClasses#classes()} and
+     * {@link org.carrot2.util.attribute.constraint.ImplementingClasses#strict()} equal to <code>false</code>.
      */
     @SuppressWarnings("deprecation")
     @Processing

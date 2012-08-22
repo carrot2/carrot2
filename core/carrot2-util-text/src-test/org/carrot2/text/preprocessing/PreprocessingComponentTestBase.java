@@ -59,8 +59,7 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
         context = createPreprocessingContext(query, documents);
     }
 
-    private PreprocessingContext createPreprocessingContext(String query,
-        final List<Document> documents)
+    private PreprocessingContext createPreprocessingContext(String query, final List<Document> documents)
     {
         return new PreprocessingContext(
             LanguageModel.create(LanguageCode.ENGLISH, createStemmerFactory(),
@@ -150,9 +149,7 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
     {
         final Tokenizer temporaryTokenizer = new Tokenizer();
         final CaseNormalizer temporaryCaseNormalizer = new CaseNormalizer();
-        final PreprocessingContext temporaryContext = createPreprocessingContext(null,
-            documents);
-        beforePrepareWordIndices(temporaryTokenizer, temporaryCaseNormalizer);
+        final PreprocessingContext temporaryContext = createPreprocessingContext(null, documents);
 
         temporaryTokenizer.tokenize(temporaryContext);
         temporaryCaseNormalizer.normalize(temporaryContext);
@@ -163,13 +160,5 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
         {
             wordIndices.put(new String(images[i]), i);
         }
-    }
-
-    /**
-     * A hook that allows some customization in the word index preparation stage.
-     */
-    protected void beforePrepareWordIndices(Tokenizer temporaryTokenizer,
-        CaseNormalizer temporaryCaseNormalizer)
-    {
     }
 }

@@ -35,7 +35,7 @@ import com.carrotsearch.hppc.*;
 public final class PreprocessingContext
 {
     /** Uninitialized structure constant. */
-    private static final String UNINITIALIZED = "[uninitialized]";
+    private static final String UNINITIALIZED = "[uninitialized]\n";
 
     /** Query used to perform processing, may be <code>null</code> */
     public final String query;
@@ -150,6 +150,11 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
+            if (image == null)
+            {
+                return UNINITIALIZED;
+            }
+
             StringWriter sw = new StringWriter();
             TabularOutput t = new TabularOutput(sw);
             t.flushEvery(Integer.MAX_VALUE);
@@ -236,6 +241,11 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
+            if (name == null)
+            {
+                return UNINITIALIZED;
+            }
+            
             StringWriter sw = new StringWriter();
             TabularOutput t = new TabularOutput(sw);
             t.flushEvery(Integer.MAX_VALUE);
@@ -338,6 +348,11 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
+            if (image == null)
+            {
+                return UNINITIALIZED;
+            }
+            
             StringWriter sw = new StringWriter();
             TabularOutput t = new TabularOutput(sw);
             t.flushEvery(Integer.MAX_VALUE);
@@ -444,6 +459,11 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
+            if (image == null)
+            {
+                return UNINITIALIZED;
+            }
+            
             StringWriter sw = new StringWriter();
             TabularOutput t = new TabularOutput(sw);
             t.flushEvery(Integer.MAX_VALUE);
@@ -517,10 +537,11 @@ public final class PreprocessingContext
         @Override
         public String toString()
         {
-            if (wordIndices == null) {
-                return "";
+            if (wordIndices == null)
+            {
+                return UNINITIALIZED;
             }
-            
+
             StringWriter sw = new StringWriter();
             TabularOutput t = new TabularOutput(sw);
             t.flushEvery(Integer.MAX_VALUE);
