@@ -118,7 +118,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
             map.put(GERMAN, LanguageCode.GERMAN);
             map.put(ITALIAN, LanguageCode.ITALIAN);
             map.put(SPANISH, LanguageCode.SPANISH);
-            
+
             TO_LANGUAGE_CODE = Collections.unmodifiableMap(map);
         }
         

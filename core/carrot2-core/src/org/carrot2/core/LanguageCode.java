@@ -29,10 +29,17 @@ import com.google.common.collect.Maps;
  *  if it is available in the classpath.</li>
  *  <li>{@link #CHINESE_SIMPLIFIED} makes use of Lucene's <code>smartcn</code> tokenizer
  *  if it is available in the classpath.</li>
+ *  <li>{@link #THAI} makes use of Lucene's <code>ThaiWordFilter</code>
+ *  if it is available in the classpath.</li>
  * </ul> 
  */
 public enum LanguageCode
 {
+    //
+    // When adding constants here add appropriate mappings to Bing and other 
+    // document sources.
+    //
+    
     ARABIC ("ar"),
     BULGARIAN ("bg"),
     CZECH ("cz"),
