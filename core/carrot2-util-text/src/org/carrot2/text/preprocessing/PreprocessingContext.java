@@ -181,15 +181,18 @@ public final class PreprocessingContext
                     wordIndex[i] >= 0 ? new String(allWords.image[wordIndex[i]]) : null);
             }
 
+            t.flush();
+            sw.append("\n");
+
             if (suffixOrder != null)
             {
                 t = new TabularOutput(sw);
+                t.flushEvery(Integer.MAX_VALUE);
                 t.addColumn("#");
                 t.addColumn("sa");
                 t.addColumn("lcp");
                 t.addColumn("=>words").alignLeft();
 
-                sw.append("\n");
                 final StringBuilder suffixImage = new StringBuilder();
                 for (int i = 0; i < suffixOrder.length; i++, t.nextRow())
                 {
@@ -209,7 +212,6 @@ public final class PreprocessingContext
                     t.rowData(suffixImage.toString());
                     suffixImage.setLength(0);
                 }
-                sw.append("\n");
             }
 
             t.flush();

@@ -33,10 +33,8 @@ public final class LanguageModel
     {
         this.languageCode = languageCode;
         this.stemmerFactory = new CachedInstanceFactoryDecorator<IStemmer>(stemmerFactory);
-        this.tokenizerFactory = new CachedInstanceFactoryDecorator<ITokenizer>(
-            tokenizerFactory);
-        this.lexicalDataFactory = new CachedInstanceFactoryDecorator<ILexicalData>(
-            lexicalDataFactory);
+        this.tokenizerFactory = new CachedInstanceFactoryDecorator<ITokenizer>(tokenizerFactory);
+        this.lexicalDataFactory = new CachedInstanceFactoryDecorator<ILexicalData>(lexicalDataFactory);
     }
 
     public static LanguageModel create(
@@ -49,28 +47,28 @@ public final class LanguageModel
         // eagerly create instances of language model elements and keep references
         // to them rather than their factories. I'm not sure if the .NET API
         // would work correctly in that case though.
-        return new LanguageModel(languageCode, new IFactory<IStemmer>()
-        {
-            @Override
-            public IStemmer createInstance()
-            {
-                return stemmerFactory.getStemmer(languageCode);
-            }
-        }, new IFactory<ITokenizer>()
-        {
-            @Override
-            public ITokenizer createInstance()
-            {
-                return tokenizerFactory.getTokenizer(languageCode);
-            }
-        }, new IFactory<ILexicalData>()
-        {
-            @Override
-            public ILexicalData createInstance()
-            {
-                return lexicalDataFactory.getLexicalData(languageCode);
-            }
-        });
+        return new LanguageModel(languageCode, 
+            new IFactory<IStemmer>() {
+                @Override
+                public IStemmer createInstance()
+                {
+                    return stemmerFactory.getStemmer(languageCode);
+                }
+            }, 
+            new IFactory<ITokenizer>() {
+                @Override
+                public ITokenizer createInstance()
+                {
+                    return tokenizerFactory.getTokenizer(languageCode);
+                }
+            },
+            new IFactory<ILexicalData>() {
+                @Override
+                public ILexicalData createInstance()
+                {
+                    return lexicalDataFactory.getLexicalData(languageCode);
+                }
+            });
     }
 
     public LanguageCode getLanguageCode()

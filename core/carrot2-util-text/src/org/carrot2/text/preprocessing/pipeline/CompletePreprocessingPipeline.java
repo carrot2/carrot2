@@ -59,8 +59,7 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
     public final DocumentAssigner documentAssigner = new DocumentAssigner();
 
     @Override
-    public PreprocessingContext preprocess(List<Document> documents, String query,
-        LanguageCode language)
+    public PreprocessingContext preprocess(List<Document> documents, String query, LanguageCode language)
     {
         final PreprocessingContext context = new PreprocessingContext(
             LanguageModel.create(language, stemmerFactory, tokenizerFactory,
@@ -76,6 +75,5 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
 
         context.preprocessingFinished();
         return context;
-
     }
 }
