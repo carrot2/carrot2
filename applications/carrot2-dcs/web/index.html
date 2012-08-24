@@ -46,15 +46,15 @@
 
             <div class="controls">
               <label class="radio">
-                <input value="external" checked="checked" name="input-type" type="radio" />
+                <input value="external" checked="checked" name="input" type="radio" />
                 External document source
               </label>
               <label class="radio">
-                <input value="from-string" name="input-type" type="radio" />
+                <input value="from-string" name="input" type="radio" />
                 From XML string
               </label>
               <label class="radio">
-                <input value="from-file" name="input-type" type="radio" />
+                <input value="from-file" name="input" type="radio" />
                 From XML file
               </label>
             </div>
@@ -96,6 +96,26 @@
           </div>
 
           <div class="control-group">
+            <label class="control-label" for="input-string">XML data</label>
+
+            <div class="controls">
+              <textarea id="input-string" name="dcs.c2stream" rows="10" style="width: 30em"></textarea>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="input-string">XML data</label>
+
+            <div class="controls">
+              <input name="dcs.c2stream" type="file" id="input-file" style='display:none' />
+              <div class="input-append">
+                 <input id="input-file-proxy" type="text" />
+                 <a id="input-file-proxy-browse" class="btn">Browse</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="control-group">
             <label class="control-label" for="algorithm">Clustering algorithm</label>
 
             <div class="controls">
@@ -109,7 +129,7 @@
             <label class="control-label" for="only-clusters">Output only clusters</label>
 
             <div class="controls">
-              <input type="checkbox" id="only-clusters" name="dcs.clusters.only" />
+              <input type="checkbox" id="only-clusters" name="dcs.clusters.only" value="true" />
             </div>
           </div>
         </form>
@@ -168,8 +188,28 @@
         var dcsBase = "http://localhost:8080/";
         var $form = $("form");
 
+        $("input[name = 'input']").change(function() {
+          var value = $("input[name = 'input']:checked").val();
+
+          $("#input-string").enable(value == "from-string");
+          $("#input-file").enable(value == "from-file");
+          $("#query, #source, #results").enable(value == "external");
+        }).trigger("change");
+
+        $("#input-file-proxy-browse").click(function() {
+          $("#input-file").click();
+        });
+        $('#input-file').change(function() {
+          $("#input-file-proxy").val($(this).val());
+        });
+        $('#input-file-proxy').click(function() {
+          $("#input-file").click();
+        });
+
         $form.submit(function() {
-          $(this).attr("action", dcsBase + "cluster/" + $("input[name = 'output']:checked").val());
+          var method = $("input[name = 'method']:checked").val().split("|");
+          $(this).attr("action", dcsBase + "cluster/" + $("input[name = 'output']:checked").val())
+                 .attr("method", method[0]).attr("enctype", method[1]);
         });
 
         $("button[type = 'submit']").click(function() {
@@ -195,6 +235,14 @@
           }
         })
       });
+
+      $.fn.enable = function(enabled) {
+        return this.each(function() {
+          var $this = $(this);
+          $this.attr("disabled", !enabled);
+          $this.closest(".control-group").toggle(enabled);
+        });
+      };
     </script>
   </body>
 </html>

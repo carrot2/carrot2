@@ -11,6 +11,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
@@ -118,6 +119,11 @@ public class DcsApplication extends Application
     {
         // TODO: configurable CORS header, disabled by default
         return Response.ok().header("Access-Control-Allow-Origin", "*");
+    }
+    
+    ResponseBuilder error(String message) 
+    {
+        return Response.status(500).entity(message).type(MediaType.TEXT_PLAIN);
     }
     
     public Set<Class<?>> getClasses()
