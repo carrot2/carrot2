@@ -34,6 +34,10 @@ import org.carrot2.util.attribute.Required;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.simplexml.PersisterHelpers;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonMethod;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.core.Commit;
@@ -45,6 +49,8 @@ import com.google.common.collect.Maps;
  * Descriptor of a {@link IProcessingComponent} being part of a
  * {@link ProcessingComponentSuite}.
  */
+@JsonAutoDetect(JsonMethod.NONE)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ProcessingComponentDescriptor
 {
     @Attribute(name = "component-class")
@@ -135,21 +141,31 @@ public class ProcessingComponentDescriptor
         return this.componentClass;
     }
 
+    @JsonProperty
+    private String getComponentClassName() 
+    {
+        return componentClassName;
+    }
+    
+    @JsonProperty
     public String getId()
     {
         return id;
     }
 
+    @JsonProperty
     public String getLabel()
     {
         return label;
     }
 
+    @JsonProperty
     public String getMnemonic()
     {
         return mnemonic;
     }
 
+    @JsonProperty
     public String getTitle()
     {
         return title;
@@ -160,11 +176,13 @@ public class ProcessingComponentDescriptor
      *         of this path is up to the application (icon resources may be placed in
      *         various places).
      */
+    @JsonProperty
     public String getIconPath()
     {
         return iconPath;
     }
 
+    @JsonProperty
     public String getDescription()
     {
         return description;
@@ -174,6 +192,7 @@ public class ProcessingComponentDescriptor
      * @return Return the name of a resource from which {@link #getAttributeSets()} were
      *         read or <code>null</code> if there was no such resource.
      */
+    @JsonProperty
     public String getAttributeSetsResource()
     {
         return attributeSetsResource;
@@ -184,6 +203,7 @@ public class ProcessingComponentDescriptor
         return attributeSets;
     }
 
+    @JsonProperty
     public String getAttributeSetId()
     {
         return attributeSetId;

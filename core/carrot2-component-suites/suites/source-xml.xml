@@ -6,10 +6,7 @@
       <title>XML</title>
       <icon-path>icons/xml.gif</icon-path>
       <mnemonic>X</mnemonic>
-      <description>
-        XML document source retrieves documents from local XML files or remote XML streams.
-        It can optionally apply an XSLT transformation to convert the XML to the required format.
-      </description>
+      <description>XML document source retrieves documents from local XML files or remote XML streams. It can optionally apply an XSLT transformation to convert the XML to the required format.</description>
     </source>
   </sources>
 </component-suite>

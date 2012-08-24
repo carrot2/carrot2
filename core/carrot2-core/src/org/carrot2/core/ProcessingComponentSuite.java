@@ -17,6 +17,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +27,14 @@ import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.simplexml.PersisterHelpers;
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonMethod;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.util.DefaultPrettyPrinter;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
@@ -40,6 +49,8 @@ import com.google.common.collect.Lists;
  * A set of {@link IProcessingComponent}s used in Carrot2 applications.
  */
 @Root(name = "component-suite")
+@JsonAutoDetect(JsonMethod.NONE)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ProcessingComponentSuite
 {
     @ElementList(inline = true, required = false, entry = "include")
@@ -66,6 +77,7 @@ public class ProcessingComponentSuite
      * Returns the internal list of document sources. Changes to this list will affect the
      * suite.
      */
+    @JsonProperty
     public List<DocumentSourceDescriptor> getSources()
     {
         return sources;
@@ -75,6 +87,7 @@ public class ProcessingComponentSuite
      * Returns the internal list of algorithms. Changes to this list will affect the
      * suite.
      */
+    @JsonProperty
     public List<ProcessingComponentDescriptor> getAlgorithms()
     {
         return algorithms;
@@ -180,6 +193,17 @@ public class ProcessingComponentSuite
     public void serialize(OutputStream stream) throws Exception
     {
         new Persister().write(this, stream);
+    }
+    
+    /**
+     * Serializes this component suite as JSON.
+     */
+    public void serializeJson(Writer writer) throws Exception
+    {
+        final ObjectMapper mapper = new ObjectMapper();
+        final JsonGenerator generator = new JsonFactory().createJsonGenerator(writer);
+        generator.setPrettyPrinter(new DefaultPrettyPrinter());
+        mapper.writeValue(generator, this);
     }
 
     /**
