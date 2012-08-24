@@ -1,6 +1,7 @@
 package org.carrot2.text.analysis;
 %%
 
+%public
 %final
 %class ExtendedWhitespaceTokenizerImpl
 %unicode
