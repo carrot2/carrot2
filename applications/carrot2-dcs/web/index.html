@@ -1,250 +1,164 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" title="style" media="all" href="css/style.css" />
-    <title>Quick start - Document Clustering Server</title>
+    <meta charset="utf-8" />
+    <title>Carrot2 document clustering server</title>
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/dcs.css" rel="stylesheet" />
   </head>
 
   <body>
-    <div class="first-active" id="source-tabs">
-      <span id="tab-lead-in"></span>
-      <ul class="tabs clearfix" style="position: relative;">
-        <li class="tab active">
-          <a accesskey="Q" href="index.html" class="label quick-start"><u>Q</u>uick start</a>
-          <span class="right"></span>
+    <div id="main">
+      <a id="logo" href="index.html"><img src="img/carrot-search-logo-small.png" /></a>
+
+      <ul class="nav nav-tabs no-margin">
+        <li class="active">
+          <a href="#">Quick start</a>
         </li>
-        <li class="tab passive">
-          <a accesskey="P" href="parameters.html" class="label parameters"><u>P</u>arameters</a>
-          <span class="right"></span>
-        </li>
-        <li class="tab passive">
-          <a accesskey="I" href="input.html" class="label input"><u>I</u>nput format</a>
-          <span class="right"></span>
-        </li>
-        <li class="tab passive">
-          <a accesskey="O" href="output.html" class="label output"><u>O</u>utput format</a>
-          <span class="right"></span>
-        </li>
-        <li class="tab passive passive-last">
-          <a accesskey="S" href="status.html" class="label status"><u>S</u>tatus</a>
-          <span class="right"></span>
-        </li>
+        <li><a href="#">Parameters</a></li>
+        <li><a href="#">Input format</a></li>
+        <li><a href="#">Output format</a></li>
+        <li><a href="#">Admin</a></li>
       </ul>
-    </div>
 
-    <div id="content">
-      <a href="index.html"><span id="logo"></span></a>
-      <p>
-        <b>Document Clustering Server</b> (DCS) exposes clustering algorithms 
-        as a <b>REST service</b>. It can cluster documents from an <b>external source</b>
-        (e.g., a search engine) or <b>documents provided directly</b> as an 
-        <a href="input.html">XML stream</a> and returns results in <a href="output.html">XML or JSON formats</a>. 
-      </p>
+      <div id="content">
+        <p>
+          <strong>Document Clustering Server</strong> (DCS) exposes clustering algorithms
+          as a <strong>REST service</strong>. It can cluster documents from an external source
+          (e.g., a search engine) or documents provided directly as an
+          <a href="input.html">XML stream</a> and returns results in <a href="output.html">XML or JSON formats</a>.
+        </p>
+        
+        <p>
+          To invoke clustering, send a GET or POST request to
+          the <a href="dcs/rest" class="tt">/dcs/rest</a> URL.
+          You can use the form to try clustering from your browser.
+        </p>
 
-      <p>
-        To invoke clustering, send a GET or POST request to  
-        the <tt>/dcs/rest</tt></b> URL. Take a look at the 
-        <a href="parameters.html">service parameters and HTTP methods</a>
-        or use the form below to trigger clustering from your browser.
-      </p>
 
-      <ul>
-        <li>
-          <label><span class="label">Document source</span></label>
-          <label><input value="external" checked="checked"  name="input-type" type="radio" />External document source</label><br />
-          <label><input value="from-string" name="input-type" type="radio" />From XML string</label><br/>
-          <label><input value="from-file" name="input-type" type="radio" />From XML file</label>
-        </li>
-      </ul>
-      
-      <form name="dcs" action="dcs/rest" method="post" enctype="multipart/form-data" target="_blank">
-        <ul>
-          <li id="document-source" class="hide">
-            <label>
-              <span class="label">Document source</span>
-              <select name="dcs.source" id="sources">
+        <form class="form-horizontal quickstart-form">
+          <div class="control-group">
+            <label class="control-label">Input data type</label>
+
+            <div class="controls">
+              <label class="radio">
+                <input value="external" checked="checked" name="input-type" type="radio" />
+                External document source
+              </label>
+              <label class="radio">
+                <input value="from-string" name="input-type" type="radio" />
+                From XML string
+              </label>
+              <label class="radio">
+                <input value="from-file" name="input-type" type="radio" />
+                From XML file
+              </label>
+            </div>
+          </div>
+
+          <hr />
+
+          <div class="control-group">
+            <label class="control-label" for="document-source">Document source</label>
+
+            <div class="controls">
+              <select id="document-source" name="dcs.source">
                 <option>Loading...</option>
               </select>
-            </label>
-          </li>
-          
-          <li id="query" class="hide">
-            <label>
-              <span class="label">Query</span>
-              <input name="query" type="text" />
-            </label>
-          </li>
-          
-          <li id="results" class="hide">
-            <label>
-              <span class="label">Results to fetch</span>
-              <select name="results">
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="query">Query</label>
+
+            <div class="controls">
+              <input type="text" id="query" />
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="results">Results count</label>
+
+            <div class="controls">
+              <select id="results" name="results">
                 <option>50</option>
                 <option selected="selected">100</option>
                 <option>200</option>
                 <option>400</option>
               </select>
-            </label>
-          </li>
-          
-          <li id="xml-file" class="hide">
-            <label>
-              <span class="label">XML File</span>
-              <input name="dcs.c2stream" type="file" />
-            </label>
-          </li>
-          
-          <li id="xml-string">
-            <label>
-              <span class="label">XML string</span>
-              <textarea name="dcs.c2stream" rows="10" cols="40"></textarea><br />
-            </label>
-          </li>
-          
-          <li>
-            <label>
-              <span class="label">Clustering algorithm</span>
-              <select id="algorithms" name="dcs.algorithm">
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="algorithm">Clustering algorithm</label>
+
+            <div class="controls">
+              <select id="algorithm" name="dcs.algorithm">
                 <option>Loading...</option>
               </select>
-            </label>
-          </li>
-          
-          <li>
-            <label>
-              <span class="label">Output format</span>
-            </label>
-            <label><input checked="checked" name="dcs.output.format" type="radio" value="XML" />XML</label><br />
-            <label><input name="dcs.output.format" type="radio" value="JSON" />JSON</label><br />
-          </li>
-          
-          <li id="json-callback" class="hide">
-            <label>
-              <span class="label">JSON callback</span>
-              <input name="dcs.json.callback" type="text" /> <span class="hint">(optional)</span>
-            </label>
-          </li>
-          
-          <li>
-            <label>
-              <span class="label">Output only clusters</span>
-              <input name="dcs.clusters.only" type="checkbox" value="true" /> 
-            </label>
-          </li>
-        </ul>
-      </form>
-      <ul class="submit">          
-        <li>
-          <label><span class="label">Submit using</span></label>
-          <label><input value="POST|multipart/form-data" checked="checked" name="method" type="radio" />POST <tt>multipart/form-data</tt></label><br />
-          <label><input value="POST|x-www-form-urlencoded" name="method" type="radio" />POST <tt>application/x-www-form-urlencoded</tt></label><br/>
-          <label><input value="GET|x-www-form-urlencoded" name="method" type="radio" />GET</label>
-        </li>
-      </ul>
-      <ul class="submit">          
-        <li>
-          <button name="submit" type="submit">Cluster &raquo;</button><span class="hint">(opens in a new window)</span>
-        </li>
-      </ul>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Output format</label>
+
+            <div class="controls">
+              <label class="radio inline">
+                <input value="XML" name="dcs.output.format" type="radio" checked="checked" />
+                XML
+              </label>
+              <label class="radio inline">
+                <input value="JSON" name="dcs.output.format" type="radio" />
+                JSON
+              </label>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="only-clusters">Output only clusters</label>
+
+            <div class="controls">
+              <input type="checkbox" id="only-clusters" name="dcs.clusters.only" />
+            </div>
+          </div>
+
+          <hr />
+
+          <div class="control-group">
+            <label class="control-label">Request method</label>
+
+            <div class="controls">
+              <label class="radio">
+                <input value="POST|multipart/form-data" checked="checked" name="method" type="radio" />
+                POST <span class="tt">multipart/form-data</span>
+              </label>
+              <label class="radio">
+                <input value="POST|x-www-form-urlencoded" name="method" type="radio" />
+                POST <span class="tt">application/x-www-form-urlencoded</span>
+              </label>
+              <label class="radio">
+                <input value="GET|x-www-form-urlencoded" name="method" type="radio" /> GET
+              </label>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Cluster</button>
+            (opens in a new window)
+          </div>
+        </form>
+      </div>
     </div>
     
-    <script src="js/jquery-1.2.6.js" type="text/javascript"></script>
-    <script type="text/javascript">//<![CDATA[
-      $(document).ready(function() {
-        var $form = $("form").eq(0);
-          
-        $("input[name = 'input-type']").change(function() {
-          var $postUrlencoded = $("input[value = 'post-urlencoded']");
-          var $get = $("input[value = 'get']");
-          
-          var value = $("input[name = 'input-type']:checked").val();
-          $("#xml-string").disabled(value != "from-string");
-          $("#xml-file").disabled(value != "from-file");
-          $("input[name = 'query'], #document-source, #query, #results").disabled(value != "external");
+    
+    <script src="js/jquery-1.8.0.min.js"></script>
+    <script src="js/underscore.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
-          $("input[value = 'POST|x-www-form-urlencoded']").attr("disabled", value == "from-file");
-          $("input[value = 'GET|x-www-form-urlencoded']").attr("disabled", value != "external");
-          if ($("input[name = 'method']:checked").is(":disabled")) {
-            $("input[name = 'method']").filter(":enabled:eq(0)").attr("checked", true);
-          }
-          
-          // Focus the relevant input field
-          $("textarea[name = 'dcs.c2stream'], input[name = 'dcs.c2stream'], input[name = 'query']").filter(":visible").focus();
-          
-          updateButton();
-        }).trigger("change");
-        
-        $("input[name = 'dcs.output.format']").change(function() {
-          $("#json-callback").disabled($("input[name = 'dcs.output.format']:checked").val() != "JSON");
-        }).trigger("change");
-        
-        $("input[name = 'query'], textarea[name = 'dcs.c2stream']").keyup(updateButton).change(updateButton);
-        $("input[name = 'dcs.c2stream']").change(updateButton);
-        
-        $("input[name = 'method']").change(function() {
-          var s = this.value.split("|");
-          $form.attr("enctype", s[1]).attr("method", s[0]);
-        });
-        
-        $(":submit").click(function() {
-          $form.submit();
-        });
-
-        $("#sources").loadOptions("source");
-        $("#algorithms").loadOptions("algorithm");
-      });
-
-      $.fn.loadOptions = function (option) {
-        return this.each(function() {
-          var $select = $(this);
-          $.ajax({
-            method: "GET",
-            url: "dcs/components",
-            dataType: "xml",
-            success: function (data) {
-              $select.html("");
-              $(data).find(option).each(function() {
-                $this = $(this);
-                $select.append("<option value='" + $this.attr("id") + "'>" + $this.find("label").text() + "<\/option>"); 
-              });
-            }
-          });
-        });
-      }
-
-      $.fn.disabled = function(disabled) {
-        return this.each(function() {
-          var $this = $(this);
-          if (disabled) {
-            $this.hide();
-          } else {
-            $this.show();
-          }
-          $this.find(":input").attr("disabled", disabled);
-        });
-      };
-      
-      function updateButton() 
-      {
-        var sel;
-        var value = $("input[name = 'input-type']:checked").val()
-
-        switch (value) {
-          case "external":
-	          sel = "input[name = 'query']";
-            break;
-          
-          case "from-string":
-	          sel = "textarea[name = 'dcs.c2stream']";
-            break;
-          
-          case "from-file":
-	          sel = "input[name = 'dcs.c2stream']";
-            break;
-        }
-        $("button[name = 'submit']").attr("disabled", $.trim($(sel).val()).length == 0);
-      }
-    //]]></script>
+    <script>
+    </script>
   </body>
 </html>

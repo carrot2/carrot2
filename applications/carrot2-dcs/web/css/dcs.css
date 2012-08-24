@@ -1,0 +1,54 @@
+body {
+  background-color: #f8f8f8;
+}
+
+#main {
+  position: relative;
+  margin: 30px auto;
+  width: 870px;
+  padding-left: 70px;
+}
+
+#logo {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+
+#content {
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  padding: 20px 10px 40px 10px;
+  z-index: 2;
+  position: relative;
+}
+
+.nav.no-margin {
+  margin-bottom: 0;
+}
+.nav.no-margin a {
+  margin-right: 0;
+}
+
+.nav > .active > a {
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.quickstart-form {
+  margin-top: 40px;
+}
+
+.tt {
+  font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+  line-height: 100%;
+}
+
+.form-actions {
+  background-color: transparent;
+}

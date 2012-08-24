@@ -6,6 +6,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.kohsuke.args4j"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-component-suites"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-core-1.13.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-json-1.13.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-server-1.13.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-servlet-1.13.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/javax.servlet"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.simpleframework.xml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.gargoylesoftware.htmlunit"/>
