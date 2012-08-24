@@ -24,7 +24,7 @@ body {
   border: 1px solid #ddd;
   border-top: none;
   border-radius: 0 0 4px 4px;
-  padding: 20px 10px 40px 10px;
+  padding: 20px 20px 0px 20px;
   z-index: 2;
   position: relative;
 }
@@ -41,7 +41,6 @@ body {
 }
 
 .quickstart-form {
-  margin-top: 40px;
 }
 
 .tt {
