@@ -1,6 +1,7 @@
 package org.carrot2.text.analysis;
 %%
 
+%public
 %final
 %class ExtendedWhitespaceTokenizerImpl
 %unicode
@@ -42,31 +43,31 @@ URL_PATH   = ([!*'();:@&=+$,/?%#_.~] | "-" | "[" | "]" | {LETTER} | {DIGIT})+
 
 %%
 
-{DIGIT}+  ((":" | "-" | "/" | "," | ".") {DIGIT}+)*          { return ITokenType.TT_NUMERIC; }
+{DIGIT}+  ((":" | "-" | "/" | "," | ".") {DIGIT}+)*          { return ITokenizer.TT_NUMERIC; }
 
-({LETTER} "." ({LETTER} ".")+) | ({TERM} ("&" {TERM})+)      { return ITokenType.TT_ACRONYM; }
+({LETTER} "." ({LETTER} ".")+) | ({TERM} ("&" {TERM})+)      { return ITokenizer.TT_ACRONYM; }
 
-{LETTER} "." 												                         { return ITokenType.TT_TERM; }
+{LETTER} "." 												                         { return ITokenizer.TT_TERM; }
 
-{TERM} ( "-" {TERM})+                                        { return ITokenType.TT_HYPHTERM; }
+{TERM} ( "-" {TERM})+                                        { return ITokenizer.TT_HYPHTERM; }
 
-{TERM} ("'" | "`") {LETTER}{1,2}                             { return ITokenType.TT_TERM; }
+{TERM} ("'" | "`") {LETTER}{1,2}                             { return ITokenizer.TT_TERM; }
 
-{TERM} "s" ("'" | "`")                                       { return ITokenType.TT_TERM; }
+{TERM} "s" ("'" | "`")                                       { return ITokenizer.TT_TERM; }
 
-{TERM}                                                       { return ITokenType.TT_TERM; }
+{TERM}                                                       { return ITokenizer.TT_TERM; }
 
-("mailto:")?{SYMBOL}("."{SYMBOL})*"@"{SYMBOL}("."{SYMBOL})*  { return ITokenType.TT_EMAIL; }
+("mailto:")?{SYMBOL}("."{SYMBOL})*"@"{SYMBOL}("."{SYMBOL})*  { return ITokenizer.TT_EMAIL; }
 
-{BARE_URL}                                                   { return ITokenType.TT_BARE_URL;}
+{BARE_URL}                                                   { return ITokenizer.TT_BARE_URL;}
 	
-{SYMBOL}("."{SYMBOL})*                                       { return ITokenType.TT_FILE;}
+{SYMBOL}("."{SYMBOL})*                                       { return ITokenizer.TT_FILE;}
 	
-(("http" | "https" | "ftp") "://")? {BARE_URL} {URL_PATH}?   { return ITokenType.TT_FULL_URL; }
+(("http" | "https" | "ftp") "://")? {BARE_URL} {URL_PATH}?   { return ITokenizer.TT_FULL_URL; }
 	
-("." | "?" | "!" | ";" )+	                                   { return ITokenType.TT_PUNCTUATION | ITokenType.TF_SEPARATOR_SENTENCE; }
+("." | "?" | "!" | ";" )+	                                   { return ITokenizer.TT_PUNCTUATION | ITokenizer.TF_SEPARATOR_SENTENCE; }
 
-"," | "'" | "`" | ":" | "-"                                  { return ITokenType.TT_PUNCTUATION; }
+"," | "'" | "`" | ":" | "-"                                  { return ITokenizer.TT_PUNCTUATION; }
 
 /** Ignore HTML entities */
 "&" [a-zA-Z0-9#]+ ";"                                        { ; }

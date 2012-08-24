@@ -56,7 +56,10 @@
     <xsl:choose>
       <xsl:when test="../attribute[@key = 'other-topics']/value[@value = 'true']">Other topics</xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="phrase[1]" />
+        <xsl:for-each select="phrase">
+            <xsl:if test="not(position() = 1)">, </xsl:if>
+            <xsl:apply-templates select="." />
+        </xsl:for-each>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
