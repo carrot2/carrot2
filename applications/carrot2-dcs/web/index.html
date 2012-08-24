@@ -40,7 +40,7 @@
 
         <hr />
 
-        <form class="form-horizontal quickstart-form">
+        <div class="form-horizontal">
           <div class="control-group">
             <label class="control-label">Input data type</label>
 
@@ -59,14 +59,16 @@
               </label>
             </div>
           </div>
+        </div>
 
-          <hr />
+        <hr />
 
+        <form class="form-horizontal" target="_blank">
           <div class="control-group">
-            <label class="control-label" for="document-source">Document source</label>
+            <label class="control-label" for="source">Document source</label>
 
             <div class="controls">
-              <select id="document-source" name="dcs.source">
+              <select id="source" name="dcs.source">
                 <option>Loading...</option>
               </select>
             </div>
@@ -76,7 +78,7 @@
             <label class="control-label" for="query">Query</label>
 
             <div class="controls">
-              <input type="text" id="query" />
+              <input type="text" id="query" name="query" />
             </div>
           </div>
 
@@ -104,44 +106,46 @@
           </div>
 
           <div class="control-group">
-            <label class="control-label">Output format</label>
-
-            <div class="controls">
-              <label class="radio inline">
-                <input value="XML" name="dcs.output.format" type="radio" checked="checked" />
-                XML
-              </label>
-              <label class="radio inline">
-                <input value="JSON" name="dcs.output.format" type="radio" />
-                JSON
-              </label>
-            </div>
-          </div>
-
-          <div class="control-group">
             <label class="control-label" for="only-clusters">Output only clusters</label>
 
             <div class="controls">
               <input type="checkbox" id="only-clusters" name="dcs.clusters.only" />
             </div>
           </div>
+        </form>
 
-          <hr />
+        <hr />
+
+        <div class="form-horizontal">
+          <div class="control-group">
+            <label class="control-label">Output format</label>
+
+            <div class="controls">
+              <label class="radio inline">
+                <input value="xml" name="output" type="radio" checked="checked" />
+                XML
+              </label>
+              <label class="radio inline">
+                <input value="json" name="output" type="radio" />
+                JSON
+              </label>
+            </div>
+          </div>
 
           <div class="control-group">
             <label class="control-label">Request method</label>
 
             <div class="controls">
               <label class="radio">
-                <input value="POST|multipart/form-data" checked="checked" name="method" type="radio" />
-                POST <span class="tt">multipart/form-data</span>
+                <input value="GET|x-www-form-urlencoded" name="method" checked="checked" type="radio" /> GET
               </label>
               <label class="radio">
                 <input value="POST|x-www-form-urlencoded" name="method" type="radio" />
                 POST <span class="tt">application/x-www-form-urlencoded</span>
               </label>
               <label class="radio">
-                <input value="GET|x-www-form-urlencoded" name="method" type="radio" /> GET
+                <input value="POST|multipart/form-data" name="method" type="radio" />
+                POST <span class="tt">multipart/form-data</span>
               </label>
             </div>
           </div>
@@ -150,7 +154,7 @@
             <button type="submit" class="btn btn-primary">Cluster</button>
             (opens in a new window)
           </div>
-        </form>
+        </div>
       </div>
     </div>
     
@@ -160,6 +164,37 @@
     <script src="js/bootstrap.min.js"></script>
 
     <script>
+      $(document).ready(function() {
+        var dcsBase = "http://localhost:8080/";
+        var $form = $("form");
+
+        $form.submit(function() {
+          $(this).attr("action", dcsBase + "cluster/" + $("input[name = 'output']:checked").val());
+        });
+
+        $("button[type = 'submit']").click(function() {
+          $form.submit();
+        });
+
+        // Load sources and algorithms
+        $.ajax({
+          url: dcsBase + "metadata",
+          method: "GET",
+          dataType: "json",
+          success: function(data) {
+            var option = _.template("<option value='<%- id %>'><%- label %></option>");
+
+            $("#source").html(_.reduce(data.sources, function (html, item) {
+              html += option(item);
+              return html;
+            }, ""));
+            $("#algorithm").html(_.reduce(data.algorithms, function (html, item) {
+              html += option(item);
+              return html;
+            }, ""));
+          }
+        })
+      });
     </script>
   </body>
 </html>

@@ -23,6 +23,6 @@
   
   <filter-mapping>
     <filter-name>jerseyFilter</filter-name>
-    <url-pattern>/dcs/*</url-pattern>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
 </web-app>

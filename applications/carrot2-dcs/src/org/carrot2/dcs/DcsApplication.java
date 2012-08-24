@@ -11,6 +11,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
@@ -41,7 +43,7 @@ public class DcsApplication extends Application
 
     private static final Logger log = LoggerFactory.getLogger("DcsApplication");
 
-    private transient ProcessingComponentSuite componentSuite;
+    transient ProcessingComponentSuite componentSuite;
 
     transient Controller controller;
 
@@ -112,10 +114,17 @@ public class DcsApplication extends Application
         controller.dispose();
     }
 
+    ResponseBuilder ok() 
+    {
+        // TODO: configurable CORS header, disabled by default
+        return Response.ok().header("Access-Control-Allow-Origin", "*");
+    }
+    
     public Set<Class<?>> getClasses()
     {
         Set<Class<?>> s = new HashSet<Class<?>>();
         s.add(ClusteringResource.class);
+        s.add(MetadataResource.class);
         return s;
     }
 }
