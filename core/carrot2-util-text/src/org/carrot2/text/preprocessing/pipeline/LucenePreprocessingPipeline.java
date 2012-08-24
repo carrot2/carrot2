@@ -8,11 +8,14 @@ import org.apache.lucene.analysis.LowerCaseFilter;
 import org.apache.lucene.analysis.PorterStemFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.analysis.WhitespaceTokenizer;
+import org.apache.lucene.analysis.cjk.CJKWidthFilter;
 import org.apache.lucene.analysis.en.EnglishPossessiveFilter;
-import org.apache.lucene.analysis.standard.ClassicTokenizer;
+import org.apache.lucene.analysis.ja.JapaneseBaseFormFilter;
+import org.apache.lucene.analysis.ja.JapaneseKatakanaStemFilter;
+import org.apache.lucene.analysis.ja.JapaneseTokenizer;
+import org.apache.lucene.analysis.ja.JapaneseTokenizer.Mode;
+import org.apache.lucene.analysis.ja.dict.UserDictionary;
 import org.apache.lucene.analysis.standard.StandardFilter;
-import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.util.Version;
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
@@ -114,8 +117,8 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
         caseNormalizer.normalize(context);
         preprocessor.fillStemData(context);
         phraseExtractor.extractPhrases(context);
-        // labelFilterProcessor.process(context);
-        // documentAssigner.assign(context);
+        labelFilterProcessor.process(context);
+        documentAssigner.assign(context);
 
         context.preprocessingFinished();
         return context;
@@ -131,14 +134,16 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
         // or rewriting a preprocessing pipeline for all languages?
         switch (language) {
             case ENGLISH:
-                return englishAnalyzer();
+                return defaultEnglishAnalyzer();
+            case JAPANESE:
+                return defaultJapaneseAnalyzer();
             default:
                 throw new RuntimeException(this.getClass().getSimpleName() + 
                     " cannot be used with language: " + language);
         }
     }
 
-    private Analyzer englishAnalyzer()
+    private Analyzer defaultEnglishAnalyzer()
     {
         return new Analyzer()
         {
@@ -147,8 +152,7 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
             public TokenStream tokenStream(String field, Reader reader)
             {
                 Version matchVersion = Version.LUCENE_CURRENT;
-                final Tokenizer source = new StandardTokenizer(matchVersion, reader);
-                TokenStream result = new StandardFilter(matchVersion, source);
+                TokenStream result = new LuceneExtendedWhitespaceTokenizer(reader);
                 result = new EnglishPossessiveFilter(matchVersion, result);
                 result = new LowerCaseFilter(matchVersion, result);
                 result = new CommonWordMarkerFilter(result, lexicalDataFactory.getLexicalData(LanguageCode.ENGLISH));
@@ -157,4 +161,22 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
             }
         };
     }
+
+    private Analyzer defaultJapaneseAnalyzer()
+    {
+        return new Analyzer()
+        {
+            @Override
+            public TokenStream tokenStream(String field, Reader reader)
+            {
+                TokenStream result = new JapaneseTokenizer(
+                    reader, null, false, JapaneseTokenizer.DEFAULT_MODE);
+                result = new JapaneseBaseFormFilter(result);
+                result = new CJKWidthFilter(result);
+                result = new JapaneseKatakanaStemFilter(result);
+                result = new JapaneseTokenTypeConverter(result);
+                return result;
+            }
+        };
+    }    
 }

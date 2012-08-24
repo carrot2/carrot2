@@ -2,12 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Lucene
 Bundle-SymbolicName: org.apache.lucene.v2
-Bundle-Version: 3.6.0
-Bundle-ClassPath: lucene-analyzers-3.6.0.jar,
- lucene-core-3.6.0.jar,
- lucene-highlighter-3.6.0.jar,
- lucene-memory-3.6.0.jar,
- lucene-smartcn-3.6.0.jar
+Bundle-Version: 3.6.1
+Bundle-ClassPath: lucene-analyzers-3.6.1.jar,
+ lucene-core-3.6.1.jar,
+ lucene-highlighter-3.6.1.jar,
+ lucene-memory-3.6.1.jar,
+ lucene-smartcn-3.6.1.jar,
+ lucene-kuromoji-3.6.1.jar
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.apache.lucene,
@@ -42,6 +43,10 @@ Export-Package: org.apache.lucene,
  org.apache.lucene.analysis.id,
  org.apache.lucene.analysis.in,
  org.apache.lucene.analysis.it,
+ org.apache.lucene.analysis.ja,
+ org.apache.lucene.analysis.ja.dict,
+ org.apache.lucene.analysis.ja.tokenattributes,
+ org.apache.lucene.analysis.ja.util,
  org.apache.lucene.analysis.lv,
  org.apache.lucene.analysis.miscellaneous,
  org.apache.lucene.analysis.ngram,

@@ -57,6 +57,7 @@ public enum LanguageCode
     HUNGARIAN ("hu"),
     ITALIAN ("it"),
     IRISH ("ie"),
+    JAPANESE ("ja"),
     KOREAN ("ko"),
     LATVIAN ("lv"),
     LITHUANIAN ("lt"),

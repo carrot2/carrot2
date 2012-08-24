@@ -21,11 +21,11 @@ package org.carrot2.text.analysis;
     /**
      * Return the internal token's character buffer.
      */
-	final char [] yybuffer() {
+	public final char [] yybuffer() {
 		return zzBuffer;
 	}
 
-	final int yystart() {
+	public final int yystart() {
 		return zzStartRead;
 	}
 %}

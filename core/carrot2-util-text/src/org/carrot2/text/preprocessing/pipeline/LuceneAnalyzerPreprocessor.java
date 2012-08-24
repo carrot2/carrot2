@@ -200,16 +200,22 @@ class LuceneAnalyzerPreprocessor
             final OffsetAttribute offset = ts.getAttribute(OffsetAttribute.class);
             final PositionIncrementAttribute posIncrement = ts.getAttribute(PositionIncrementAttribute.class);
             final CommonWordAttribute commonWord = ts.addAttribute(CommonWordAttribute.class);
-            boolean hadTokens = false;
+            final TokenTypeAttribute tokenTypeAtt = ts.getAttribute(TokenTypeAttribute.class);
 
-            boolean first = true;
+            boolean firstFieldToken = true;
             while (ts.incrementToken()) {
-                if (first && hadTokens) addFieldSeparator(documentIndex);
-                first = false;
-
                 // TODO what about pos. increment is > 1?
                 if (posIncrement.getPositionIncrement() == 0) {
                     continue;
+                }
+
+                if (firstFieldToken)
+                {
+                    final int lastDocIndex = documentIndices.size() - 1;
+                    if (lastDocIndex >= 0 && documentIndices.get(lastDocIndex) == documentIndex) {
+                        addFieldSeparator(documentIndex);
+                    }
+                    firstFieldToken = false;
                 }
 
                 // Get the processed token image.
@@ -219,7 +225,7 @@ class LuceneAnalyzerPreprocessor
                 rawImage.reset(fieldValue.substring(offset.startOffset(), offset.endOffset()));
 
                 // TODO is there any info about numerics in POS tags?
-                short tokenType = ITokenizer.TT_TERM;
+                int tokenType = tokenTypeAtt.getType();
                 if (commonWord.isCommon())
                 {
                     tokenType |= ITokenizer.TF_COMMON_WORD;
@@ -229,9 +235,7 @@ class LuceneAnalyzerPreprocessor
                     fieldIndex, 
                     context.intern(rawImage),
                     context.intern(tokenImage),
-                    tokenType);
-
-                hadTokens = true;
+                    (short) tokenType);
             }
         }
         catch (IOException e)
@@ -314,10 +318,13 @@ class LuceneAnalyzerPreprocessor
                 continue;
             }
 
-            final char [] stemImage = Objects.firstNonNull(stemImages[i], ctx.allTokens.image[i]);
+            final char [] stemImage = stemImages[i];
 
             if (stemIndexes[wordIndex] >= 0) {
-                assert sameStemImages(image.get(stemIndexes[wordIndex]), stemImage);
+                // assert 
+                if (!sameStemImages(image.get(stemIndexes[wordIndex]), stemImage)) {
+                    Logger.getLogger("").warning("Token: " + new String(ctx.allTokens.image[i]));
+                }
                 continue;
             }
 

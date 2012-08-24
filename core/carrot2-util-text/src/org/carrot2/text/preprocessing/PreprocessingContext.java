@@ -659,7 +659,7 @@ public final class PreprocessingContext
 
             t.flush();
             sw.append("\n");
-            return t.toString();
+            return sw.toString();
         }
 
         private CharSequence getLabel(int index)

@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
@@ -251,8 +252,9 @@ public final class CaseNormalizer
      */
     private boolean isNotIndexed(final int tokenType)
     {
-        return tokenType == ITokenizer.TT_PUNCTUATION
-            || tokenType == ITokenizer.TT_FULL_URL
+        final int typeOnly = TokenTypeUtils.maskType(tokenType);
+        return typeOnly == ITokenizer.TT_PUNCTUATION
+            || typeOnly == ITokenizer.TT_FULL_URL
             || (tokenType & ITokenizer.TF_SEPARATOR_SENTENCE) != 0;
     }
 }

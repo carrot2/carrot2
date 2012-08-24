@@ -124,6 +124,7 @@ public enum MarketOption
         map.put(GERMAN_SWITZERLAND, LanguageCode.GERMAN);
         map.put(HUNGARIAN_HUNGARY, LanguageCode.HUNGARIAN);
         map.put(ITALIAN_ITALY, LanguageCode.ITALIAN);
+        map.put(JAPANESE_JAPAN, LanguageCode.JAPANESE);
         map.put(KOREAN_KOREA, LanguageCode.KOREAN);
         map.put(NORWEGIAN_NORWAY, LanguageCode.NORWEGIAN);
         map.put(POLISH_POLAND, LanguageCode.POLISH);

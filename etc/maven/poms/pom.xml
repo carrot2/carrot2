@@ -71,7 +71,7 @@
     <org.apache.mahout.version>0.6</org.apache.mahout.version>
     <org.apache.mahout.collections.version>1.0</org.apache.mahout.collections.version>
     <org.apache.httpcomponents.version>4.1</org.apache.httpcomponents.version>
-    <org.apache.lucene.version>3.6.0</org.apache.lucene.version>
+    <org.apache.lucene.version>3.6.1</org.apache.lucene.version>
     <org.jdom.version>1.1</org.jdom.version>
     <org.simpleframework.version>2.6.4</org.simpleframework.version>
     <org.carrot2.attributes>1.1.0</org.carrot2.attributes>
