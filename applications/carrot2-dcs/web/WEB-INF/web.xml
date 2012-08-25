@@ -12,10 +12,6 @@
       <param-value>org.carrot2.dcs.DcsApplication</param-value>
     </init-param>
     <init-param>
-      <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-      <param-value>true</param-value>
-    </init-param>        
-    <init-param>
       <param-name>com.sun.jersey.config.property.WebPageContentRegex</param-name>
       <param-value>/.*\.html</param-value>
     </init-param>

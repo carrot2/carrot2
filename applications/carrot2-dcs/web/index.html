@@ -125,16 +125,18 @@
             </div>
           </div>
 
+          <hr />
+
           <div class="control-group">
-            <label class="control-label" for="only-clusters">Output only clusters</label>
+            <label class="control-label">Output data</label>
 
             <div class="controls">
-              <input type="checkbox" id="only-clusters" name="dcs.clusters.only" value="true" />
+              <label class="checkbox inline"><input type="checkbox" id="documents" name="dcs.output.documents" value="true" checked="checked" /> Documents</label>
+              <label class="checkbox inline"><input type="checkbox" id="clusters" name="dcs.output.clusters" value="true" checked="checked" /> Clusters</label>
+              <label class="checkbox inline"><input type="checkbox" id="attributes" name="dcs.output.attributes" value="true" checked="checked" /> Other attributes</label>
             </div>
           </div>
         </form>
-
-        <hr />
 
         <div class="form-horizontal">
           <div class="control-group">

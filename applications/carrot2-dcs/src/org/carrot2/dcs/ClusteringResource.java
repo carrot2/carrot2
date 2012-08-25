@@ -1,29 +1,47 @@
 package org.carrot2.dcs;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
+import org.carrot2.util.ExceptionUtils;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
+import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
+import com.google.common.io.Closeables;
+import com.sun.jersey.multipart.FormDataParam;
 
+/**
+ * TODO: support for custom attributes<br />
+ * TODO: support for JSON callbacks<br />
+ * TODO: soft error reporting (missing parameters)<br />
+ * TODO: support for JSON data on input<br />
+ * TODO: verbose logging<br />
+ * TODO: set default parameter values, default source and algorithm<br />
+ * TODO: max document count?
+ */
 @Path("/cluster")
 public class ClusteringResource
 {
@@ -42,89 +60,308 @@ public class ClusteringResource
         "application/x-javascript; charset=UTF-8",
         MediaType.APPLICATION_JSON + "; charset=UTF-8"
     })
-    public Response jsonGet(@QueryParam("dcs.source") String source,
-        @QueryParam("dcs.algorithm") String algorithm, @QueryParam("query") String query,
+    public Response jsonGet(
+        @QueryParam("dcs.source") String source,
+        @QueryParam("dcs.algorithm") String algorithm,
+        @QueryParam("query") String query,
         @QueryParam("results") int results,
-        @QueryParam("dcs.clusters.only") boolean clustersOnly) throws IOException
+        @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
+        @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
+        throws IOException
     {
-        final Map<String, Object> attrs = Maps.newHashMap();
-        CommonAttributesDescriptor.attributeBuilder(attrs).query(query).results(results);
-        final ProcessingResult result = application().controller.process(attrs, source,
-            algorithm);
-
-        final StringWriter writer = new StringWriter();
-        result.serializeJson(writer);
-
-        return application().ok().entity(writer.toString())
+        return application()
+            .ok()
+            .entity(
+                new JsonStreamingOutput(processFromExternalSource(source, algorithm,
+                    query, results), outputDocuments, outputClusters, outputAttributes))
             .type(MediaType.APPLICATION_JSON).build();
     }
 
     @GET
     @Path("/xml")
     @Produces(MediaType.APPLICATION_XML + "; charset=UTF-8")
-    public Response xmlGet(@QueryParam("dcs.source") String source,
-        @QueryParam("dcs.algorithm") String algorithm, @QueryParam("query") String query,
+    public Response xmlGet(
+        @QueryParam("dcs.source") String source,
+        @QueryParam("dcs.algorithm") String algorithm,
+        @QueryParam("query") String query,
         @QueryParam("results") int results,
-        @QueryParam("dcs.clusters.only") boolean clustersOnly) throws Exception
+        @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
+        @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
+        throws Exception
+    {
+        return application()
+            .ok()
+            .entity(
+                new XmlStreamingOutput(processFromExternalSource(source, algorithm,
+                    query, results), outputDocuments, outputClusters, outputAttributes))
+            .type(MediaType.APPLICATION_XML).build();
+    }
+
+    /**
+     * Processes clustering of documents from external sources.
+     */
+    private ProcessingResult processFromExternalSource(String source, String algorithm,
+        String query, int results)
     {
         final Map<String, Object> attrs = Maps.newHashMap();
         CommonAttributesDescriptor.attributeBuilder(attrs).query(query).results(results);
-        final ProcessingResult result = application().controller.process(attrs, source,
-            algorithm);
-
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        result.serialize(out, clustersOnly, true, true);
-
-        return application().ok().entity(out.toString(Charsets.UTF_8.name()))
-            .type(MediaType.APPLICATION_XML).build();
+        return application().controller.process(attrs, source, algorithm);
     }
 
     @POST
     @Path("/xml")
     @Produces("application/xml; charset=UTF-8")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response xmlPost(@FormParam("dcs.source") String source,
-        @FormParam("dcs.c2stream") String c2stream,
-        @FormParam("dcs.algorithm") String algorithm, @FormParam("query") String query,
+    public Response xmlPostForm(
+        @FormParam("dcs.source") String source,
+        final @FormParam("dcs.c2stream") String c2stream,
+        @FormParam("dcs.algorithm") String algorithm,
+        @FormParam("query") String query,
         @FormParam("results") int results,
-        @FormParam("dcs.clusters.only") boolean clustersOnly) throws Exception
+        @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
+        @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
+        throws Exception
     {
-        if (Strings.isNullOrEmpty(source) && Strings.isNullOrEmpty(c2stream))
-        {
-            return application()
-                .error("Non-empty dcs.source or dcs.c2stream is required").build();
-        }
+        return application()
+            .ok()
+            .entity(
+                new XmlStreamingOutput(processPost(source,
+                    new StringProcessingResultSupplier(c2stream), algorithm, query,
+                    results), outputDocuments, outputClusters, outputAttributes))
+            .type(MediaType.APPLICATION_XML).build();
+    }
 
+    @POST
+    @Path("/xml")
+    @Produces("application/xml; charset=UTF-8")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response xmlPostMultipart(
+        @FormDataParam("dcs.source") String source,
+        final @FormDataParam("dcs.c2stream") String c2stream,
+        @FormDataParam("dcs.algorithm") String algorithm,
+        @FormDataParam("query") String query,
+        @FormDataParam("results") int results,
+        @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
+        @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
+        throws Exception
+    {
+        return application()
+            .ok()
+            .entity(
+                new XmlStreamingOutput(processPost(source,
+                    new StringProcessingResultSupplier(c2stream), algorithm, query,
+                    results), outputDocuments, outputClusters, outputAttributes))
+            .type(MediaType.APPLICATION_XML).build();
+    }
+
+    @POST
+    @Path("/json")
+    @Produces(
+    {
+        "application/x-javascript; charset=UTF-8",
+        MediaType.APPLICATION_JSON + "; charset=UTF-8"
+    })
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response jsonPostForm(
+        @FormParam("dcs.source") String source,
+        final @FormParam("dcs.c2stream") String c2stream,
+        @FormParam("dcs.algorithm") String algorithm,
+        @FormParam("query") String query,
+        @FormParam("results") int results,
+        @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
+        @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
+        throws Exception
+    {
+        return application()
+            .ok()
+            .entity(
+                new JsonStreamingOutput(processPost(source,
+                    new StringProcessingResultSupplier(c2stream), algorithm, query,
+                    results), outputDocuments, outputClusters, outputAttributes))
+            .type(MediaType.APPLICATION_JSON).build();
+    }
+
+    @POST
+    @Path("/json")
+    @Produces(
+    {
+        "application/x-javascript; charset=UTF-8",
+        MediaType.APPLICATION_JSON + "; charset=UTF-8"
+    })
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response jsonPostMultipart(
+        @FormDataParam("dcs.source") String source,
+        final @FormDataParam("dcs.c2stream") InputStream c2stream,
+        @FormDataParam("dcs.algorithm") String algorithm,
+        @FormDataParam("query") String query,
+        @FormDataParam("results") int results,
+        @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
+        @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
+        throws Exception
+    {
+        return application()
+            .ok()
+            .entity(
+                new JsonStreamingOutput(processPost(source,
+                    new InputStreamProcessingResultSupplier(c2stream), algorithm, query,
+                    results), outputDocuments, outputClusters, outputAttributes))
+            .type(MediaType.APPLICATION_JSON).build();
+    }
+
+    /**
+     * Processes the POST clustering requests.
+     */
+    private ProcessingResult processPost(String source,
+        Supplier<ProcessingResult> processingResultSupplier, String algorithm,
+        String query, int results) throws Exception, UnsupportedEncodingException
+    {
         final Map<String, Object> attrs = Maps.newHashMap();
         CommonAttributesDescriptor.attributeBuilder(attrs).query(query).results(results);
-        final ProcessingResult result;
+
         if (!Strings.isNullOrEmpty(source))
         {
-            result = application().controller.process(attrs, source, algorithm);
+            return application().controller.process(attrs, source, algorithm);
         }
         else
         {
             final ProcessingResult input;
             try
             {
-                input = ProcessingResult.deserialize(c2stream);
+                input = processingResultSupplier.get();
             }
             catch (Exception e)
             {
-                // TODO: log the exception
-                return application().error("Could not parse Carrot2 XML stream").build();
+                // This exception will get converted to a bad request response
+                throw new InvalidInputException("Could not parse Carrot2 XML stream", e);
             }
 
-            // TODO: test with XML without documents
-            attrs.putAll(input.getAttributes());
+            if (input == null)
+            {
+                throw new InvalidInputException(
+                    "Non-empty dcs.source or dcs.c2stream is required");
+            }
 
-            result = application().controller.process(attrs, algorithm);
+            attrs.putAll(input.getAttributes());
+            if (attrs.get(CommonAttributesDescriptor.Keys.DOCUMENTS) == null)
+            {
+                throw new InvalidInputException(
+                    "The dcs.c2stream must contain at least one document");
+            }
+
+            return application().controller.process(attrs, algorithm);
+        }
+    }
+
+    private static final class InputStreamProcessingResultSupplier implements
+        Supplier<ProcessingResult>
+    {
+        private final InputStream c2stream;
+
+        private InputStreamProcessingResultSupplier(InputStream c2stream)
+        {
+            this.c2stream = c2stream;
         }
 
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        result.serialize(out, clustersOnly, true, true);
+        @Override
+        public ProcessingResult get()
+        {
+            try
+            {
+                return ProcessingResult.deserialize(c2stream);
+            }
+            catch (Exception e)
+            {
+                throw ExceptionUtils.wrapAsRuntimeException(e);
+            }
+            finally
+            {
+                Closeables.closeQuietly(c2stream);
+            }
+        }
+    }
 
-        return application().ok().entity(out.toString(Charsets.UTF_8.name()))
-            .type(MediaType.APPLICATION_XML).build();
+    private static final class StringProcessingResultSupplier implements
+        Supplier<ProcessingResult>
+    {
+        private final String c2stream;
+
+        private StringProcessingResultSupplier(String c2stream)
+        {
+            this.c2stream = c2stream;
+        }
+
+        @Override
+        public ProcessingResult get()
+        {
+            try
+            {
+                return ProcessingResult.deserialize(c2stream);
+            }
+            catch (Exception e)
+            {
+                throw ExceptionUtils.wrapAsRuntimeException(e);
+            }
+        }
+    }
+
+    private static final class JsonStreamingOutput implements StreamingOutput
+    {
+        private final ProcessingResult result;
+        private final boolean outputDocuments;
+        private final boolean outputClusters;
+        private final boolean outputAttributes;
+
+        public JsonStreamingOutput(ProcessingResult result, boolean outputDocuments,
+            boolean outputClusters, boolean outputAttributes)
+        {
+            this.result = result;
+            this.outputDocuments = outputDocuments;
+            this.outputClusters = outputClusters;
+            this.outputAttributes = outputAttributes;
+        }
+
+        @Override
+        public void write(OutputStream out) throws IOException, WebApplicationException
+        {
+            result.serializeJson(new OutputStreamWriter(out, Charsets.UTF_8), null,
+                false, outputDocuments, outputClusters, outputAttributes);
+        }
+    }
+
+    private static final class XmlStreamingOutput implements StreamingOutput
+    {
+        private final ProcessingResult result;
+        private final boolean outputDocuments;
+        private final boolean outputClusters;
+        private final boolean outputAttributes;
+
+        public XmlStreamingOutput(ProcessingResult result, boolean outputDocuments,
+            boolean outputClusters, boolean outputAttributes)
+        {
+            super();
+            this.result = result;
+            this.outputDocuments = outputDocuments;
+            this.outputClusters = outputClusters;
+            this.outputAttributes = outputAttributes;
+        }
+
+        @Override
+        public void write(OutputStream out) throws IOException, WebApplicationException
+        {
+            try
+            {
+                result.serialize(out, outputDocuments, outputClusters, outputAttributes);
+            }
+            catch (Exception e)
+            {
+                throw new IOException("Could not serialize result", e);
+            }
+        }
     }
 }

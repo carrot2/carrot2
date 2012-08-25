@@ -131,6 +131,8 @@ public class DcsApplication extends Application
         Set<Class<?>> s = new HashSet<Class<?>>();
         s.add(ClusteringResource.class);
         s.add(MetadataResource.class);
+        s.add(InvalidInputExceptionMapper.class);
+        s.add(ProcessingExceptionMapper.class);
         return s;
     }
 }
