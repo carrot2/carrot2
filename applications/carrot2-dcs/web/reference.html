@@ -1,0 +1,193 @@
+<div>
+  <p>
+    The following reference describes all URIs exposed by the DCS, all supported parameters and data formats.
+  </p>
+
+  <h3>Endpoints</h3>
+
+  <p>
+    The DCS exposes the service URIs listed below. All URIs support both <code>GET</code> and <code>POST</code>
+    methods. In case of <code>POST</code> requests, both the <code>multipart/form-data</code> and
+    <code>application/x-www-form-urlencoded</code> encodings are supported.
+  </p>
+
+  <p>
+    Non-ASCII characters in requests should be encoded consistently with the servlet container on which DCS is deployed.
+    For <code>multipart/form-data</code> requests, the character encoding for parameters should be UTF-8.
+  </p>
+
+
+  <dl>
+    <dt>cluster/xml</dt>
+    <dd>
+      Performs clustering of documents, outputs results in the XML format. Depending on the parameters, documents
+      can be provided directly in the request body or fetched from an external source.
+    </dd>
+
+    <dt>cluster/json</dt>
+    <dd>
+      Performs clustering of documents, outputs results in the JSON format. Depending on the parameters, documents
+      can be provided directly in the request body or fetched from an external source.
+    </dd>
+  </dl>
+
+  <h3>Parameters</h3>
+
+  <p>
+    Clustering endpoints support the following HTTP parameters:
+  </p>
+
+  <dl>
+    <dt>dcs.source</dt>
+    <dd>
+      Identifier of the external source of documents to be queried. If a non-empty value is provided,
+      the <code>dcs.c2stream</code> parameter will be ignored.
+      This DCS instance supports the following external source identifiers: <span id="sources">(loading)</span>.
+    </dd>
+
+    <dt>query</dt>
+    <dd>
+      Query to be sent to the external document source.
+    </dd>
+
+    <dt>results</dt>
+    <dd>
+      The number of results to fetch from the external source. Meaningful only if the
+      <code>dcs.source</code> parameter is not empty.
+    </dd>
+
+    <dt>dcs.c2stream</dt>
+    <dd>
+      Documents to be clustered in the <a href="#xml">XML format</a>, including content encoding prologue if needed.
+      This parameter is ignored if <code>dcs.source</code> is provided. This parameter will be parsed only if the
+      request is sent using the <code>POST</code> method.
+    </dd>
+
+    <dt>dcs.algorithm</dt>
+    <dd>
+      Identifier of the clustering algorithm to use. This DCS instance supports the following
+      clustering algorithm identifiers: <span id="algorithms">(loading)</span>.
+    </dd>
+
+    <dt>dcs.output.documents</dt>
+    <dd>
+      If <code>true</code>, the response will also echo the input documents. Default value: <code>true</code>.
+    </dd>
+
+    <dt>dcs.output.clusters</dt>
+    <dd>
+      If <code>true</code>, the response will contain the clusters. Default value: <code>true</code>.
+    </dd>
+
+    <dt>dcs.output.attributes</dt>
+    <dd>
+      If <code>true</code>, the response will contain additional information, such as processing time.
+      Default value: <code>true</code>.
+    </dd>
+
+    <dt>dcs.json.callback</dt>
+    <dd>
+      If a non-empty value is provided and output format is <code>JSON</code>, the response
+      data will be wrapped with a function name as specified by the parameter value.
+    </dd>
+
+    <dt>MultilingualClustering.defaultLanguage</dt>
+    <dd>
+      The default language to use for documents with undefined language.
+      <p>
+        Possible values: ARABIC, BULGARIAN, CZECH, CHINESE_SIMPLIFIED,
+        DANISH, DUTCH, ENGLISH, ESTONIAN, FINNISH, FRENCH, GERMAN, GREEK,
+        HUNGARIAN, ITALIAN, IRISH, KOREAN, LATVIAN, LITHUANIAN, MALTESE,
+        NORWEGIAN, POLISH, PORTUGUESE, ROMANIAN, RUSSIAN, SLOVAK, SLOVENE,
+        SPANISH, SWEDISH, TURKISH.
+      </p>
+    </dd>
+
+    <dt>&lt;attribute-key&gt;</dt>
+    <dd>
+      Any other parameter names will be treated as attribute keys and will be passed, along with the value,
+      to the respective component. A complete reference of each component's attributes
+      is available in the documentation and in the source code of each algorithm.
+    </dd>
+  </dl>
+
+  <h3>Data formats</h3>
+
+  <p>
+    Documents must be fed to the DCS in the XML format. An example XML stream can be the following:
+  </p>
+
+  <pre id="xml">Loading...</pre>
+  <dl>
+    <dt>query</dt>
+    <dd>
+      The query that generated the documents, optional, can also be provided as a HTTP parameter.
+      Providing the query can improve the clusters.
+    </dd>
+
+    <dt>document</dt>
+    <dd>
+      <dl>
+        <p>Represents the document to be clustered.</p>
+
+        <dt>id</dt>
+        <dd>
+          Unique identifier of the document, optional. If identifiers are provided, they must be defined and uniqie
+          for all documents. If documents identifiers are not provided, numeric identifiers will be automatically
+          generated.
+        </dd>
+
+        <dt>title</dt>
+        <dd>
+          Title of the document. The clustering algorithms may give more weight to document titles compared to
+          document content. Either document title or content must be non-empty.
+        </dd>
+
+        <dt>snippet</dt>
+        <dd>
+          Content of the document. Either document title or content must be non-empty.
+        </dd>
+
+        <dt>url</dt>
+        <dd>
+          The URL of the full document, optional.
+        </dd>
+
+        <dt>language</dt>
+        <dd>
+          The two-letter ISO 639-1 code of the document's language, optional.
+        </dd>
+
+        <dt>field</dt>
+        <dd>
+          Custom field.
+        </dd>
+      </dl>
+    </dd>
+
+    <dt>attribute</dt>
+    <dd>
+      Additional attribute configuring specific properties of the clustering algorithm, optional, can
+      also be passed as HTTP parameters.
+    </dd>
+  </dl>
+
+  <script>
+    $.getJSON("metadata/json", function (data) {
+      var li = _.template("<code><%- id %></code>");
+      $("#sources").html(_.reduce(data.sources, function (items, source) {
+        items += (items == "" ? "" : ", ") + li(source) + (items == "" ? " (default)" : "");
+        return items;
+      }, ""));
+      $("#algorithms").html(_.reduce(data.algorithms, function (items, algorithm) {
+        items += (items == "" ? "" : ", ") + li(algorithm) + (items == "" ? " (default)" : "");
+        return items;
+      }, ""));
+    });
+
+    $.get("format/xml", function (data) {
+      $("#xml").text(data);
+    }, "text");
+
+  </script>
+</div>

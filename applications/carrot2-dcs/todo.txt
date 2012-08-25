@@ -1,0 +1,9 @@
+* support for custom attributes
+* support for JSON callbacks
+* soft error reporting (missing parameters)
+* support for JSON data on input
+* verbose logging
+* set default parameter values, default source and algorithm
+* max document count?
+* disabling HTML interface
+* embedded client-side webapp, possibility to make it the default page?

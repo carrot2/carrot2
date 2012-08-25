@@ -15,169 +15,12 @@
       <a id="logo" href="index.html"><img src="img/carrot-search-logo-small.png" /></a>
 
       <ul class="nav nav-tabs no-margin">
-        <li class="active">
-          <a href="#">Quick start</a>
-        </li>
-        <li><a href="#">Parameters</a></li>
-        <li><a href="#">Input format</a></li>
-        <li><a href="#">Output format</a></li>
-        <li><a href="#">Admin</a></li>
+        <li class="active"><a href="quickstart.html">Quick start</a></li>
+        <li><a href="reference.html">Reference</a></li>
+        <li><a href="status.html">Status</a></li>
       </ul>
 
-      <div id="content">
-        <p>
-          <strong>Document Clustering Server</strong> (DCS) exposes clustering algorithms
-          as a <strong>REST service</strong>. It can cluster documents from an external source
-          (e.g., a search engine) or documents provided directly as an
-          <a href="input.html">XML stream</a> and returns results in <a href="output.html">XML or JSON formats</a>.
-        </p>
-        
-        <p>
-          To invoke clustering, send a GET or POST request to
-          the <a href="cluster/xml" class="tt">cluster/xml</a> or <a href="cluster/json" class="tt">cluster/json</a> URI.<br />
-          You can use the form below to trigger clustering from your browser.
-        </p>
-
-        <hr />
-
-        <div class="form-horizontal">
-          <div class="control-group">
-            <label class="control-label">Input data type</label>
-
-            <div class="controls">
-              <label class="radio">
-                <input value="external" checked="checked" name="input" type="radio" />
-                External document source
-              </label>
-              <label class="radio">
-                <input value="from-string" name="input" type="radio" />
-                From XML string
-              </label>
-              <label class="radio">
-                <input value="from-file" name="input" type="radio" />
-                From XML file
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <hr />
-
-        <form class="form-horizontal" target="_blank">
-          <div class="control-group">
-            <label class="control-label" for="source">Document source</label>
-
-            <div class="controls">
-              <select id="source" name="dcs.source">
-                <option>Loading...</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="control-group">
-            <label class="control-label" for="query">Query</label>
-
-            <div class="controls">
-              <input type="text" id="query" name="query" />
-            </div>
-          </div>
-
-          <div class="control-group">
-            <label class="control-label" for="results">Results count</label>
-
-            <div class="controls">
-              <select id="results" name="results">
-                <option>50</option>
-                <option selected="selected">100</option>
-                <option>200</option>
-                <option>400</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="control-group">
-            <label class="control-label" for="input-string">XML data string</label>
-
-            <div class="controls">
-              <textarea id="input-string" name="dcs.c2stream" rows="10" style="width: 30em"></textarea>
-            </div>
-          </div>
-
-          <div class="control-group">
-            <label class="control-label" for="input-string">XML data file</label>
-
-            <div class="controls">
-              <input name="dcs.c2stream" type="file" id="input-file" style='display:none' />
-              <div class="input-append">
-                 <input id="input-file-proxy" type="text" />
-                 <button id="input-file-proxy-browse" class="btn" type="button">Browse</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="control-group">
-            <label class="control-label" for="algorithm">Clustering algorithm</label>
-
-            <div class="controls">
-              <select id="algorithm" name="dcs.algorithm">
-                <option>Loading...</option>
-              </select>
-            </div>
-          </div>
-
-          <hr />
-
-          <div class="control-group">
-            <label class="control-label">Output data</label>
-
-            <div class="controls">
-              <label class="checkbox inline"><input type="checkbox" id="documents" name="dcs.output.documents" value="true" checked="checked" /> Documents</label>
-              <label class="checkbox inline"><input type="checkbox" id="clusters" name="dcs.output.clusters" value="true" checked="checked" /> Clusters</label>
-              <label class="checkbox inline"><input type="checkbox" id="attributes" name="dcs.output.attributes" value="true" checked="checked" /> Other attributes</label>
-            </div>
-          </div>
-        </form>
-
-        <div class="form-horizontal">
-          <div class="control-group">
-            <label class="control-label">Output format</label>
-
-            <div class="controls">
-              <label class="radio inline">
-                <input value="xml" name="output" type="radio" checked="checked" />
-                XML
-              </label>
-              <label class="radio inline">
-                <input value="json" name="output" type="radio" />
-                JSON
-              </label>
-            </div>
-          </div>
-
-          <div class="control-group">
-            <label class="control-label">Request method</label>
-
-            <div class="controls">
-              <label class="radio">
-                <input value="GET|x-www-form-urlencoded" name="method" checked="checked" type="radio" /> GET
-              </label>
-              <label class="radio">
-                <input value="POST|x-www-form-urlencoded" name="method" type="radio" />
-                POST <span class="tt">application/x-www-form-urlencoded</span>
-              </label>
-              <label class="radio">
-                <input value="POST|multipart/form-data" name="method" type="radio" />
-                POST <span class="tt">multipart/form-data</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Cluster</button>
-            (opens in a new window)
-          </div>
-        </div>
-      </div>
+      <div id="content">Loading...</div>
     </div>
     
     
@@ -187,69 +30,14 @@
 
     <script>
       $(document).ready(function() {
-        var dcsBase = "http://localhost:8080/";
-        var $form = $("form");
-
-        // Rearrange form based on the input type
-        $("input[name = 'input']").change(function() {
-          var value = $("input[name = 'input']:checked").val();
-
-          // Show relevant form element
-          $("#input-string").enable(value == "from-string");
-          $("#input-file").enable(value == "from-file");
-          $("#query, #source, #results").enable(value == "external");
-
-          // Set allowed methods and encodings
-          $("input[value = 'POST|x-www-form-urlencoded']").attr("disabled", value == "from-file");
-          $("input[value = 'GET|x-www-form-urlencoded']").attr("disabled", value != "external");
-          if ($("input[name = 'method']:checked").is(":disabled")) {
-            $("input[name = 'method']").filter(":enabled:eq(0)").attr("checked", true);
-          }
-
-          // Focus the relevant input field
-          $("#input-string, #input-file-proxy-browse, #query").filter(":enabled").focus();
-        }).trigger("change");
-
-        // A nicer file selector
-        $("#input-file-proxy-browse").click(function() {
-          $("#input-file").click();
+        $(".nav a").click("click", function() {
+          var $link = $(this);
+          $(".nav li").removeClass("active");
+          $link.closest("li").addClass("active");
+          $("#content").load($link.attr("href"));
+          return false;
         });
-        $('#input-file').change(function() {
-          $("#input-file-proxy").val($(this).val());
-        });
-        $('#input-file-proxy').click(function() {
-          $("#input-file").click();
-        });
-
-        // Set appropriate method and encoding before submitting
-        $form.submit(function() {
-          var method = $("input[name = 'method']:checked").val().split("|");
-          $(this).attr("action", dcsBase + "cluster/" + $("input[name = 'output']:checked").val())
-                 .attr("method", method[0]).attr("enctype", method[1]);
-        });
-
-        $("button[type = 'submit']").click(function() {
-          $form.submit();
-        });
-
-        // Load sources and algorithms
-        $.ajax({
-          url: dcsBase + "metadata",
-          method: "GET",
-          dataType: "json",
-          success: function(data) {
-            var option = _.template("<option value='<%- id %>'><%- label %></option>");
-
-            $("#source").html(_.reduce(data.sources, function (html, item) {
-              html += option(item);
-              return html;
-            }, ""));
-            $("#algorithm").html(_.reduce(data.algorithms, function (html, item) {
-              html += option(item);
-              return html;
-            }, ""));
-          }
-        })
+        $(".nav > li.active > a").trigger("click");
       });
 
       $.fn.enable = function(enabled) {

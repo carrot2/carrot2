@@ -10,7 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/metadata")
+@Path("/metadata/json")
 public class MetadataResource
 {
     @Context

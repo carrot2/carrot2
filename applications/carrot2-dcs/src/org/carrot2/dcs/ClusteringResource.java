@@ -33,15 +33,6 @@ import com.google.common.collect.Maps;
 import com.google.common.io.Closeables;
 import com.sun.jersey.multipart.FormDataParam;
 
-/**
- * TODO: support for custom attributes<br />
- * TODO: support for JSON callbacks<br />
- * TODO: soft error reporting (missing parameters)<br />
- * TODO: support for JSON data on input<br />
- * TODO: verbose logging<br />
- * TODO: set default parameter values, default source and algorithm<br />
- * TODO: max document count?
- */
 @Path("/cluster")
 public class ClusteringResource
 {
@@ -221,15 +212,13 @@ public class ClusteringResource
         Supplier<ProcessingResult> processingResultSupplier, String algorithm,
         String query, int results) throws Exception, UnsupportedEncodingException
     {
-        final Map<String, Object> attrs = Maps.newHashMap();
-        CommonAttributesDescriptor.attributeBuilder(attrs).query(query).results(results);
-
         if (!Strings.isNullOrEmpty(source))
         {
-            return application().controller.process(attrs, source, algorithm);
+            return processFromExternalSource(source, algorithm, query, results);
         }
         else
         {
+            final Map<String, Object> attrs = Maps.newHashMap();
             final ProcessingResult input;
             try
             {
@@ -253,6 +242,7 @@ public class ClusteringResource
                 throw new InvalidInputException(
                     "The dcs.c2stream must contain at least one document");
             }
+            CommonAttributesDescriptor.attributeBuilder(attrs).query(query);
 
             return application().controller.process(attrs, algorithm);
         }

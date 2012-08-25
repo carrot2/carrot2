@@ -129,10 +129,14 @@ public class DcsApplication extends Application
     public Set<Class<?>> getClasses()
     {
         Set<Class<?>> s = new HashSet<Class<?>>();
+        
         s.add(ClusteringResource.class);
         s.add(MetadataResource.class);
+        s.add(FormatsResource.class);
+        
         s.add(InvalidInputExceptionMapper.class);
         s.add(ProcessingExceptionMapper.class);
+        
         return s;
     }
 }
