@@ -1,5 +1,8 @@
 body {
   background-color: #f8f8f8;
+  background-image: -moz-radial-gradient(50% 50%, circle farthest-corner, #d8d8d8, #f0f0f0 60%, #f8f8f8);
+  background-image: -webkit-radial-gradient(50% 50%, circle farthest-corner, #d8d8d8, #f0f0f0 60%, #f8f8f8);
+  background-image: -ms-radial-gradient(50% 50%, circle farthest-corner, #d8d8d8, #f0f0f0 60%, #f8f8f8);
 }
 
 #main {
