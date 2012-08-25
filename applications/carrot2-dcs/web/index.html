@@ -34,7 +34,7 @@
         
         <p>
           To invoke clustering, send a GET or POST request to
-          the <a href="dcs/rest" class="tt">/dcs/rest</a> URL.<br />
+          the <a href="cluster/xml" class="tt">cluster/xml</a> or <a href="cluster/json" class="tt">cluster/json</a> URI.<br />
           You can use the form below to trigger clustering from your browser.
         </p>
 
@@ -96,7 +96,7 @@
           </div>
 
           <div class="control-group">
-            <label class="control-label" for="input-string">XML data</label>
+            <label class="control-label" for="input-string">XML data string</label>
 
             <div class="controls">
               <textarea id="input-string" name="dcs.c2stream" rows="10" style="width: 30em"></textarea>
@@ -104,13 +104,13 @@
           </div>
 
           <div class="control-group">
-            <label class="control-label" for="input-string">XML data</label>
+            <label class="control-label" for="input-string">XML data file</label>
 
             <div class="controls">
               <input name="dcs.c2stream" type="file" id="input-file" style='display:none' />
               <div class="input-append">
                  <input id="input-file-proxy" type="text" />
-                 <a id="input-file-proxy-browse" class="btn">Browse</a>
+                 <button id="input-file-proxy-browse" class="btn" type="button">Browse</button>
               </div>
             </div>
           </div>
@@ -190,14 +190,27 @@
         var dcsBase = "http://localhost:8080/";
         var $form = $("form");
 
+        // Rearrange form based on the input type
         $("input[name = 'input']").change(function() {
           var value = $("input[name = 'input']:checked").val();
 
+          // Show relevant form element
           $("#input-string").enable(value == "from-string");
           $("#input-file").enable(value == "from-file");
           $("#query, #source, #results").enable(value == "external");
+
+          // Set allowed methods and encodings
+          $("input[value = 'POST|x-www-form-urlencoded']").attr("disabled", value == "from-file");
+          $("input[value = 'GET|x-www-form-urlencoded']").attr("disabled", value != "external");
+          if ($("input[name = 'method']:checked").is(":disabled")) {
+            $("input[name = 'method']").filter(":enabled:eq(0)").attr("checked", true);
+          }
+
+          // Focus the relevant input field
+          $("#input-string, #input-file-proxy-browse, #query").filter(":enabled").focus();
         }).trigger("change");
 
+        // A nicer file selector
         $("#input-file-proxy-browse").click(function() {
           $("#input-file").click();
         });
@@ -208,6 +221,7 @@
           $("#input-file").click();
         });
 
+        // Set appropriate method and encoding before submitting
         $form.submit(function() {
           var method = $("input[name = 'method']:checked").val().split("|");
           $(this).attr("action", dcsBase + "cluster/" + $("input[name = 'output']:checked").val())
