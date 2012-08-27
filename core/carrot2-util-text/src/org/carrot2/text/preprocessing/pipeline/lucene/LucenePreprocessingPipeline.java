@@ -4,6 +4,7 @@ import static org.carrot2.util.resource.ResourceLookup.Location.CONTEXT_CLASS_LO
 
 import java.io.Reader;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.LowerCaseFilter;
@@ -27,6 +28,7 @@ import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.linguistic.ITokenizerFactory;
 import org.carrot2.text.linguistic.LanguageModel;
+import org.carrot2.text.linguistic.LexicalDataLoader;
 import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.text.preprocessing.DocumentAssigner;
 import org.carrot2.text.preprocessing.LabelFilterProcessor;
@@ -35,6 +37,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.AttributeLevel;
+import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.DefaultGroups;
 import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
@@ -48,6 +51,7 @@ import org.carrot2.util.resource.ResourceLookup;
  * 
  * @see "http://lucene.apache.org"
  */
+@Bindable(inherit = LexicalDataLoader.class)
 public class LucenePreprocessingPipeline implements IPreprocessingPipeline
 {
     /** A dummy unusable {@link IStemmerFactory}. */
@@ -83,6 +87,11 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
     @Attribute(key = "resource-lookup", inherit = true)
     @ImplementingClasses(classes = {}, strict = false)
     public ResourceLookup resourceLookup = new ResourceLookup(CONTEXT_CLASS_LOADER);
+
+    @Processing
+    @Input
+    @Attribute(key = "reload-resources", inherit = true)
+    public boolean reloadResources = false;
 
     /** */
     private final LuceneAnalyzerPreprocessor preprocessor = new LuceneAnalyzerPreprocessor();
@@ -174,8 +183,19 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
         };
     }
 
+    /**
+     * Stop POS set for Japanese.
+     */
+    private Set<String> stopPosSet;
+
     private Analyzer defaultJapaneseAnalyzer()
     {
+        if (stopPosSet == null || reloadResources)
+        {
+            stopPosSet = DefaultLexicalDataFactory.load(resourceLookup, "stoptags.ja");
+            reloadResources = false;
+        }
+
         return new Analyzer()
         {
             @SuppressWarnings("deprecation")
@@ -187,7 +207,7 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
                 result = new JapaneseBaseFormFilter(result);
                 result = new CJKWidthFilter(result);
                 result = new CommonWordMarkerFilter(result, lexicalDataFactory.getLexicalData(LanguageCode.JAPANESE));
-                result = new JapanesePosCommonWordMarkerFilter(result, DefaultLexicalDataFactory.load(resourceLookup, "stoptags.ja"));
+                result = new JapanesePosCommonWordMarkerFilter(result, stopPosSet);
                 result = new JapaneseKatakanaStemFilter(result);
                 result = new JapaneseTokenTypeConverter(result);
                 result = new LowerCaseFilter(Version.LUCENE_CURRENT, result);
