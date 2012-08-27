@@ -319,9 +319,11 @@ class LuceneAnalyzerPreprocessor
             final char [] stemImage = stemImages[i];
 
             if (stemIndexes[wordIndex] >= 0) {
+                /*
                 if (!sameStemImages(image.get(stemIndexes[wordIndex]), stemImage)) {
                     Logger.getLogger("").warning("Token: " + new String(ctx.allTokens.image[i]));
                 }
+                */
                 continue;
             }
 

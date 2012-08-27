@@ -5,12 +5,14 @@ import java.io.IOException;
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.ja.tokenattributes.PartOfSpeechAttribute;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.carrot2.text.analysis.ITokenizer;
 
 public final class JapaneseTokenTypeConverter extends TokenFilter
 {
     private final TokenTypeAttribute tokenTypeAtt = addAttribute(TokenTypeAttribute.class);
     private final PartOfSpeechAttribute posAtt = getAttribute(PartOfSpeechAttribute.class);
+    private final CharTermAttribute charTerm = getAttribute(CharTermAttribute.class);
 
     protected JapaneseTokenTypeConverter(TokenStream input)
     {
@@ -25,9 +27,7 @@ public final class JapaneseTokenTypeConverter extends TokenFilter
         {
             final String pos = posAtt.getPartOfSpeech();
 
-            // TODO: Do we need to determine numeric tokens here?
             int type = ITokenizer.TT_TERM;
-            
             if (pos.equals("名詞-数"))
             {
                 type = ITokenizer.TT_NUMERIC;
@@ -40,6 +40,14 @@ public final class JapaneseTokenTypeConverter extends TokenFilter
                 if (pos.equals("記号-句点"))
                 {
                     type |= ITokenizer.TF_SEPARATOR_SENTENCE;
+                }
+            }
+            else
+            {
+                // Manually check for punctuation sequences.
+                if (charTerm.toString().matches("\\p{Punct}+"))
+                {
+                    type = ITokenizer.TT_PUNCTUATION;
                 }
             }
 

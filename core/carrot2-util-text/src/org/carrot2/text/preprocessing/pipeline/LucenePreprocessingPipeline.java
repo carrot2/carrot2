@@ -173,6 +173,7 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
     {
         return new Analyzer()
         {
+            @SuppressWarnings("deprecation")
             @Override
             public TokenStream tokenStream(String field, Reader reader)
             {
@@ -184,6 +185,7 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
                 result = new JapanesePosCommonWordMarkerFilter(result, DefaultLexicalDataFactory.load(resourceLookup, "stoptags.ja"));
                 result = new JapaneseKatakanaStemFilter(result);
                 result = new JapaneseTokenTypeConverter(result);
+                result = new LowerCaseFilter(Version.LUCENE_CURRENT, result);
                 return result;
             }
         };
