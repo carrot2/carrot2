@@ -18,7 +18,7 @@ import static org.carrot2.text.preprocessing.PreprocessingContextBuilder.FieldVa
 import java.util.Arrays;
 
 import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.text.preprocessing.pipeline.PreprocessingPipelineImpl;
+import org.carrot2.text.preprocessing.pipeline.DefaultPreprocessingPipeline;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +34,7 @@ public class TokenizerTest extends PreprocessingContextTestBase
     public void prepareContextBuilder()
     {
         contextBuilder = new PreprocessingContextBuilder()
-            .withPreprocessingPipeline(new PreprocessingPipelineImpl());
+            .withPreprocessingPipeline(new DefaultPreprocessingPipeline());
     }
 
     // @formatter:off

@@ -1,4 +1,4 @@
-package org.carrot2.text.preprocessing.pipeline;
+package org.carrot2.text.preprocessing.pipeline.lucene;
 
 import java.io.IOException;
 import java.util.Set;

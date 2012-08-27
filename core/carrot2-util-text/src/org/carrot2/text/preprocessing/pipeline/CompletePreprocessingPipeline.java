@@ -44,7 +44,10 @@ import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
- * Performs a complete preprocessing on the provided documents. The preprocessing consists
+ * You should use {@link DefaultPreprocessingPipeline} to delegate preprocessing
+ * to an appropriate implementation. 
+ * 
+ * <p>Performs a complete preprocessing on the provided documents. The preprocessing consists
  * of the following steps:
  * <ol>
  * <li>{@link Tokenizer#tokenize(PreprocessingContext)}</li>

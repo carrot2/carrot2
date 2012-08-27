@@ -35,7 +35,7 @@ import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStr
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
-import org.carrot2.text.preprocessing.pipeline.PreprocessingPipelineImpl;
+import org.carrot2.text.preprocessing.pipeline.DefaultPreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
 import org.carrot2.util.PriorityQueue;
 import org.carrot2.util.attribute.*;
@@ -275,7 +275,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Attribute
     @Internal
     @ImplementingClasses(classes = {}, strict = false)
-    public IPreprocessingPipeline preprocessingPipeline = new PreprocessingPipelineImpl();
+    public IPreprocessingPipeline preprocessingPipeline = new DefaultPreprocessingPipeline();
 
     /**
      * Balance between cluster score and size during cluster sorting. Value equal to 0.0

@@ -31,7 +31,7 @@ import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
-import org.carrot2.text.preprocessing.pipeline.PreprocessingPipelineImpl;
+import org.carrot2.text.preprocessing.pipeline.DefaultPreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
@@ -75,7 +75,7 @@ public final class BasicPreprocessing extends ProcessingComponentBase implements
     /**
      * Common preprocessing tasks handler.
      */
-    public IPreprocessingPipeline preprocessingPipeline = new PreprocessingPipelineImpl();
+    public IPreprocessingPipeline preprocessingPipeline = new DefaultPreprocessingPipeline();
 
     /**
      * A helper for performing multilingual clustering.

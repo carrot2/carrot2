@@ -8,6 +8,7 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.test.SampleDocumentData;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
+import org.carrot2.text.preprocessing.pipeline.lucene.LucenePreprocessingPipeline;
 import org.junit.Ignore;
 import org.junit.Test;
 

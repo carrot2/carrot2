@@ -31,10 +31,9 @@ import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
-import org.carrot2.text.preprocessing.pipeline.PreprocessingPipelineImpl;
+import org.carrot2.text.preprocessing.pipeline.DefaultPreprocessingPipeline;
 import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
@@ -130,7 +129,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Attribute
     @Internal
     @ImplementingClasses(classes = {}, strict = false)
-    public IPreprocessingPipeline preprocessingPipeline = new PreprocessingPipelineImpl();
+    public IPreprocessingPipeline preprocessingPipeline = new DefaultPreprocessingPipeline();
 
     /**
      * Term-document matrix builder for the algorithm, contains bindable attributes.

@@ -1,4 +1,4 @@
-package org.carrot2.text.preprocessing.pipeline;
+package org.carrot2.text.preprocessing.pipeline.lucene;
 
 /**
  * An attribute for propagating information about stop list terms.
