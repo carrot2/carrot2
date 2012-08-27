@@ -33,6 +33,8 @@ import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
+import org.carrot2.text.preprocessing.pipeline.PreprocessingPipelineImpl;
 import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
@@ -128,7 +130,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Attribute
     @Internal
     @ImplementingClasses(classes = {}, strict = false)
-    public IPreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
+    public IPreprocessingPipeline preprocessingPipeline = new PreprocessingPipelineImpl();
 
     /**
      * Term-document matrix builder for the algorithm, contains bindable attributes.
@@ -198,7 +200,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     {
         // Preprocessing of documents
         final PreprocessingContext context = preprocessingPipeline.preprocess(documents,
-            query, language);
+            query, language, ContextRequired.COMPLETE);
 
         // Further processing only if there are words to process
         clusters = Lists.newArrayList();

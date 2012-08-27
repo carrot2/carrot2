@@ -19,7 +19,7 @@ import static org.carrot2.text.preprocessing.PreprocessingContextAssert.FS;
 import static org.carrot2.text.preprocessing.PreprocessingContextAssert.EOS;
 
 import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.PreprocessingPipelineImpl;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class CaseNormalizerTest extends PreprocessingContextTestBase
     public void prepareContextBuilder()
     {
         contextBuilder = new PreprocessingContextBuilder()
-            .withPreprocessingPipeline(new BasicPreprocessingPipeline());
+            .withPreprocessingPipeline(new PreprocessingPipelineImpl());
     }
 
     // @formatter:off

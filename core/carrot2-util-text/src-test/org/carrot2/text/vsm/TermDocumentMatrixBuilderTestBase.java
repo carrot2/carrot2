@@ -22,6 +22,7 @@ import org.carrot2.text.preprocessing.TestLexicalDataFactory;
 import org.carrot2.text.preprocessing.TestStemmerFactory;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDescriptor;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.junit.Before;
@@ -66,7 +67,8 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     protected void buildTermDocumentMatrix()
     {
         context = preprocessingPipeline.preprocess(
-            context.documents, context.query, context.language.getLanguageCode());
+            context.documents, context.query, context.language.getLanguageCode(),
+            ContextRequired.COMPLETE);
         
         vsmContext = new VectorSpaceModelContext(context);
         matrixBuilder.buildTermDocumentMatrix(vsmContext);

@@ -34,8 +34,9 @@ import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.PreprocessingPipelineImpl;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
 import org.carrot2.util.PriorityQueue;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.DoubleRange;
@@ -273,10 +274,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Input
     @Attribute
     @Internal
-    @ImplementingClasses(classes = {
-        BasicPreprocessingPipeline.class
-    }, strict = false)
-    public IPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
+    @ImplementingClasses(classes = {}, strict = false)
+    public IPreprocessingPipeline preprocessingPipeline = new PreprocessingPipelineImpl();
 
     /**
      * Balance between cluster score and size during cluster sorting. Value equal to 0.0
@@ -419,7 +418,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         /*
          * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
          */
-        context = preprocessingPipeline.preprocess(documents, query, language);
+        context = preprocessingPipeline.preprocess(documents, query, language, ContextRequired.SIMPLE);
 
         /*
          * Step 2: Create a generalized suffix tree from phrases in the input.

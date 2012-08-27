@@ -7,6 +7,7 @@ import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.test.SampleDocumentData;
 import org.carrot2.text.preprocessing.PreprocessingContext;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ public class TestLucenePreprocessingPipeline
 
         IPreprocessingPipeline p = new LucenePreprocessingPipeline();
         PreprocessingContext ctx = p.preprocess(
-            input.subList(0, 3), "東京", LanguageCode.JAPANESE);
+            input.subList(0, 3), "東京", LanguageCode.JAPANESE, ContextRequired.COMPLETE);
 
         System.out.println(ctx);
     }
@@ -36,7 +37,7 @@ public class TestLucenePreprocessingPipeline
 
         IPreprocessingPipeline p = new LucenePreprocessingPipeline();
         PreprocessingContext ctx = p.preprocess(
-            input, "data mining", LanguageCode.ENGLISH);
+            input, "data mining", LanguageCode.ENGLISH, ContextRequired.COMPLETE);
         
         System.out.println(ctx);
     }
@@ -53,12 +54,12 @@ public class TestLucenePreprocessingPipeline
         {
             for (IPreprocessingPipeline p : new IPreprocessingPipeline [] {
                 new LucenePreprocessingPipeline(),
-                new BasicPreprocessingPipeline(),
                 new CompletePreprocessingPipeline()
             }) 
             {
                 long start = System.currentTimeMillis();
-                PreprocessingContext ctx = p.preprocess(all, "data mining", LanguageCode.ENGLISH);
+                PreprocessingContext ctx = p.preprocess(all, "data mining", 
+                    LanguageCode.ENGLISH, ContextRequired.COMPLETE);
                 guard += ctx.allTokens.image.length;
                 long end = System.currentTimeMillis();
 

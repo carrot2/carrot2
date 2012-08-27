@@ -21,6 +21,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.text.linguistic.ILexicalDataFactory;
 import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.preprocessing.pipeline.*;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
 import org.carrot2.util.attribute.*;
 
 import com.google.common.collect.Lists;
@@ -87,14 +88,14 @@ class PreprocessingContextBuilder
     public PreprocessingContextBuilder withStemmerFactory(IStemmerFactory stemmerFactory)
     {
         return setAttribute(
-            AttributeUtils.getKey(BasicPreprocessingPipeline.class, "stemmerFactory"),
+            AttributeUtils.getKey(CompletePreprocessingPipeline.class, "stemmerFactory"),
             stemmerFactory);
     }
 
     public PreprocessingContextBuilder withLexicalDataFactory(ILexicalDataFactory lexicalFactory)
     {
         return setAttribute(
-            AttributeUtils.getKey(BasicPreprocessingPipeline.class, "lexicalDataFactory"), 
+            AttributeUtils.getKey(CompletePreprocessingPipeline.class, "lexicalDataFactory"), 
             lexicalFactory);
     }
 
@@ -121,7 +122,7 @@ class PreprocessingContextBuilder
         try
         {
             AttributeBinder.set(pipeline, attributes, true);
-            return pipeline.preprocess(documents, query, language);
+            return pipeline.preprocess(documents, query, language, ContextRequired.COMPLETE);
         }
         catch (AttributeBindingException e)
         {

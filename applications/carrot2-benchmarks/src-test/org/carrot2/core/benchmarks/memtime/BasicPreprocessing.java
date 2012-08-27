@@ -30,7 +30,9 @@ import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.PreprocessingPipelineImpl;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
@@ -38,7 +40,7 @@ import org.carrot2.util.attribute.Output;
 import org.carrot2.util.attribute.Required;
 
 /**
- * This class simulates running {@link BasicPreprocessingPipeline} and
+ * This class simulates running {@link IPreprocessingPipeline} in simple mode and
  * {@link MultilingualClustering} only, no clustering is performed.
  */
 @Bindable(prefix = "BasicPreprocessing")
@@ -73,7 +75,7 @@ public final class BasicPreprocessing extends ProcessingComponentBase implements
     /**
      * Common preprocessing tasks handler.
      */
-    public BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
+    public IPreprocessingPipeline preprocessingPipeline = new PreprocessingPipelineImpl();
 
     /**
      * A helper for performing multilingual clustering.
@@ -125,6 +127,6 @@ public final class BasicPreprocessing extends ProcessingComponentBase implements
     private void cluster(LanguageCode language)
     {
         clusters = new ArrayList<Cluster>();
-        context = preprocessingPipeline.preprocess(documents, null, language);
+        context = preprocessingPipeline.preprocess(documents, null, language, ContextRequired.SIMPLE);
     }
 }

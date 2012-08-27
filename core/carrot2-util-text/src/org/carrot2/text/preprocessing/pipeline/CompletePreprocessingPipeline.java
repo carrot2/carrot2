@@ -16,6 +16,15 @@ import java.util.List;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
+import org.carrot2.text.linguistic.DefaultStemmerFactory;
+import org.carrot2.text.linguistic.DefaultTokenizerFactory;
+import org.carrot2.text.linguistic.ILexicalDataFactory;
+import org.carrot2.text.linguistic.IStemmerFactory;
+import org.carrot2.text.linguistic.ITokenizerFactory;
 import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.text.preprocessing.DocumentAssigner;
@@ -25,7 +34,14 @@ import org.carrot2.text.preprocessing.PhraseExtractor;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.StopListMarker;
 import org.carrot2.text.preprocessing.Tokenizer;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Level;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
 
 /**
  * Performs a complete preprocessing on the provided documents. The preprocessing consists
@@ -41,8 +57,68 @@ import org.carrot2.util.attribute.Bindable;
  * </ol>
  */
 @Bindable(prefix = "PreprocessingPipeline")
-public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
+public class CompletePreprocessingPipeline implements IPreprocessingPipeline
 {
+    /**
+     * Tokenizer used by the algorithm, contains bindable attributes.
+     */
+    public final Tokenizer tokenizer = new Tokenizer();
+
+    /**
+     * Case normalizer used by the algorithm, contains bindable attributes.
+     */
+    public final CaseNormalizer caseNormalizer = new CaseNormalizer();
+
+    /**
+     * Stemmer used by the algorithm, contains bindable attributes.
+     */
+    public final LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
+
+    /**
+     * Stop list marker used by the algorithm, contains bindable attributes.
+     */
+    public final StopListMarker stopListMarker = new StopListMarker();
+
+    /**
+     * Tokenizer factory. Creates the tokenizers to be used by the clustering algorithm.
+     */
+    @Input
+    @Init
+    @Processing
+    @Internal
+    @Attribute
+    @ImplementingClasses(classes = {}, strict = false)
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.PREPROCESSING)
+    public ITokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
+
+    /**
+     * Stemmer factory. Creates the stemmers to be used by the clustering algorithm.
+     */
+    @Input
+    @Init
+    @Processing
+    @Internal
+    @Attribute
+    @ImplementingClasses(classes = {}, strict = false)
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.PREPROCESSING)
+    public IStemmerFactory stemmerFactory = new DefaultStemmerFactory();
+
+    /**
+     * Lexical data factory. Creates the lexical data to be used by the clustering
+     * algorithm, including stop word and stop label dictionaries.
+     */
+    @Input
+    @Init
+    @Processing
+    @Internal
+    @Attribute
+    @ImplementingClasses(classes = {}, strict = false)
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.PREPROCESSING)
+    public ILexicalDataFactory lexicalDataFactory = new DefaultLexicalDataFactory();
+
     /**
      * Phrase extractor used by the algorithm, contains bindable attributes.
      */
@@ -59,7 +135,8 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
     public final DocumentAssigner documentAssigner = new DocumentAssigner();
 
     @Override
-    public PreprocessingContext preprocess(List<Document> documents, String query, LanguageCode language)
+    public PreprocessingContext preprocess(List<Document> documents, String query, 
+        LanguageCode language, ContextRequired contextRequired)
     {
         final PreprocessingContext context = new PreprocessingContext(
             LanguageModel.create(language, stemmerFactory, tokenizerFactory,
@@ -69,9 +146,13 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context);
         stopListMarker.mark(context);
-        phraseExtractor.extractPhrases(context);
-        labelFilterProcessor.process(context);
-        documentAssigner.assign(context);
+
+        if (contextRequired == ContextRequired.COMPLETE)
+        {
+            phraseExtractor.extractPhrases(context);
+            labelFilterProcessor.process(context);
+            documentAssigner.assign(context);
+        }
 
         context.preprocessingFinished();
         return context;

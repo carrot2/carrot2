@@ -30,6 +30,7 @@ import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
@@ -118,6 +119,6 @@ public final class CompletePreprocessing extends ProcessingComponentBase impleme
     private void cluster(LanguageCode language)
     {
         clusters = new ArrayList<Cluster>();
-        preprocessingPipeline.preprocess(documents, null, language);
+        preprocessingPipeline.preprocess(documents, null, language, ContextRequired.COMPLETE);
     }
 }

@@ -24,7 +24,7 @@ import org.carrot2.core.ProcessingComponentBase;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.AttributeUtils;
@@ -51,9 +51,9 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
     public static class TestComponent extends ProcessingComponentBase
     {
         /**
-         * Basic preprocessing pipeline.
+         * Preprocessing pipeline.
          */
-        private final BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
+        private final CompletePreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
 
         /**
          * Expose the lexical data for English.

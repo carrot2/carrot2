@@ -437,10 +437,11 @@ class LuceneAnalyzerPreprocessor
         }
         return false;
     }    
-    
+
     /**
      * Compare stem images and emit a warning if different.
      */
+    @SuppressWarnings("unused")
     private static boolean sameStemImages(char [] si1, char [] si2)
     {
         if (!Arrays.equals(si1, si2)) {

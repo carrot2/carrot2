@@ -23,9 +23,17 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  */
 public interface IPreprocessingPipeline
 {
+    public enum ContextRequired {
+        SIMPLE,
+        COMPLETE
+    }
+    
     /**
      * Performs preprocessing on the provided list of documents, creating a new preprocessing
      * context on the way. Results can be obtained from the returned {@link PreprocessingContext}.
      */
-    PreprocessingContext preprocess(List<Document> documents, String query, LanguageCode language);
+    PreprocessingContext preprocess(
+        List<Document> documents, 
+        String query, LanguageCode language, 
+        ContextRequired contextRequired);
 }

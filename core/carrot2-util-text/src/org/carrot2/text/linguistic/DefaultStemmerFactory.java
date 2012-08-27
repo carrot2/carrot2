@@ -122,6 +122,15 @@ public class DefaultStemmerFactory implements IStemmerFactory
                 map.put(lc, identity);
             }
         }
+        
+        map.put(LanguageCode.JAPANESE, new IFactory<IStemmer>()
+        {
+            @Override
+            public IStemmer createInstance()
+            {
+                throw new RuntimeException("Use Japanese-specific preprocessing pipeline.");
+            }
+        });
 
         return map;
     }

@@ -16,9 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
-import org.carrot2.clustering.stc.STCClusteringAlgorithmDescriptor;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
@@ -28,11 +26,9 @@ import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.core.attribute.CommonAttributes;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.text.clustering.MultilingualClusteringDescriptor;
-import org.carrot2.text.preprocessing.pipeline.LucenePreprocessingPipeline;
 
 import com.google.common.collect.Maps;
 
@@ -45,7 +41,6 @@ public class ClusteringJapaneseDocuments
     public static void main(String [] args)
         throws Exception
     {
-        @SuppressWarnings("unchecked")
         final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
 
         Map<String, Object> attrs = Maps.newHashMap();
@@ -53,12 +48,6 @@ public class ClusteringJapaneseDocuments
         // Setup Japanese preprocessing pipeline.
         MultilingualClusteringDescriptor.attributeBuilder(attrs)
             .defaultLanguage(LanguageCode.JAPANESE);
-        
-        STCClusteringAlgorithmDescriptor.attributeBuilder(attrs)
-            .preprocessingPipeline(LucenePreprocessingPipeline.class);
-
-        LingoClusteringAlgorithmDescriptor.attributeBuilder(attrs)
-            .preprocessingPipeline(LucenePreprocessingPipeline.class);
 
         controller.init(attrs);
 

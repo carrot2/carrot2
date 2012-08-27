@@ -124,6 +124,16 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
             }
         }
 
+        // Japanese is not supported with the default tokenizer.
+        map.put(LanguageCode.JAPANESE, new IFactory<ITokenizer>()
+        {
+            @Override
+            public ITokenizer createInstance()
+            {
+                throw new RuntimeException("Use Japanese-specific preprocessing pipeline.");
+            }
+        });
+
         return map;
     }
 }

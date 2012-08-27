@@ -33,7 +33,7 @@ import org.carrot2.text.linguistic.ILexicalDataFactory;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.linguistic.ITokenizerFactory;
-import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipelineDescriptor;
+import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDescriptor;
 import org.carrot2.text.util.MutableCharArray;
 
 import com.google.common.collect.ImmutableSet;
@@ -57,7 +57,7 @@ public class UsingCustomLanguageModel
         // processing-time attributes because the instances created at initialization
         // time will be reused for all further requests.
         Map<String, Object> attrs = Maps.newHashMap();
-        BasicPreprocessingPipelineDescriptor.attributeBuilder(attrs)
+        CompletePreprocessingPipelineDescriptor.attributeBuilder(attrs)
             .stemmerFactory(CustomStemmerFactory.class)
             .tokenizerFactory(CustomTokenizerFactory.class)
             .lexicalDataFactory(CustomLexicalDataFactory.class);

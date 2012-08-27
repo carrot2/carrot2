@@ -107,14 +107,14 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
     public final DocumentAssigner documentAssigner = new DocumentAssigner();
 
     @Override
-    public PreprocessingContext preprocess(List<Document> documents, String query, LanguageCode language)
+    public PreprocessingContext preprocess(List<Document> documents, String query, LanguageCode language, ContextRequired contextRequired)
     {
         // Pick an analyzer based on the language.
         final Analyzer analyzer = pickAnalyzer(language);
 
         // Process the input.
         final PreprocessingContext context = new PreprocessingContext(
-            LanguageModel.create(language, 
+            LanguageModel.create(language,
                 NOSTEMMER, 
                 NOTOKENIZER, 
                 lexicalDataFactory), documents, query);
@@ -123,9 +123,13 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
         preprocessor.preprocessDocuments(context, analyzer);
         caseNormalizer.normalize(context);
         preprocessor.fillStemData(context);
-        phraseExtractor.extractPhrases(context);
-        labelFilterProcessor.process(context);
-        documentAssigner.assign(context);
+        
+        if (contextRequired == ContextRequired.COMPLETE)
+        {
+            phraseExtractor.extractPhrases(context);
+            labelFilterProcessor.process(context);
+            documentAssigner.assign(context);
+        }
 
         context.preprocessingFinished();
         return context;
