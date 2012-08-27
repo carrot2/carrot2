@@ -1,5 +1,7 @@
 package org.carrot2.text.preprocessing.pipeline;
 
+import static org.carrot2.util.resource.ResourceLookup.Location.CONTEXT_CLASS_LOADER;
+
 import java.io.Reader;
 import java.util.List;
 
@@ -7,15 +9,11 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.LowerCaseFilter;
 import org.apache.lucene.analysis.PorterStemFilter;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.cjk.CJKWidthFilter;
 import org.apache.lucene.analysis.en.EnglishPossessiveFilter;
 import org.apache.lucene.analysis.ja.JapaneseBaseFormFilter;
 import org.apache.lucene.analysis.ja.JapaneseKatakanaStemFilter;
 import org.apache.lucene.analysis.ja.JapaneseTokenizer;
-import org.apache.lucene.analysis.ja.JapaneseTokenizer.Mode;
-import org.apache.lucene.analysis.ja.dict.UserDictionary;
-import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.util.Version;
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
@@ -41,6 +39,7 @@ import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.resource.ResourceLookup;
 
 /**
  * A {@link IPreprocessingPipeline} based on tokenizers and filtering 
@@ -75,6 +74,14 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
     @Level(AttributeLevel.ADVANCED)
     @Group(DefaultGroups.PREPROCESSING)
     public ILexicalDataFactory lexicalDataFactory = new DefaultLexicalDataFactory();
+
+    @Init
+    @Processing
+    @Input 
+    @Internal
+    @Attribute(key = "resource-lookup", inherit = true)
+    @ImplementingClasses(classes = {}, strict = false)
+    public ResourceLookup resourceLookup = new ResourceLookup(CONTEXT_CLASS_LOADER);
 
     /** */
     private final LuceneAnalyzerPreprocessor preprocessor = new LuceneAnalyzerPreprocessor();
@@ -173,6 +180,8 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
                     reader, null, false, JapaneseTokenizer.DEFAULT_MODE);
                 result = new JapaneseBaseFormFilter(result);
                 result = new CJKWidthFilter(result);
+                result = new CommonWordMarkerFilter(result, lexicalDataFactory.getLexicalData(LanguageCode.JAPANESE));
+                result = new JapanesePosCommonWordMarkerFilter(result, DefaultLexicalDataFactory.load(resourceLookup, "stoptags.ja"));
                 result = new JapaneseKatakanaStemFilter(result);
                 result = new JapaneseTokenTypeConverter(result);
                 return result;

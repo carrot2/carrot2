@@ -215,7 +215,7 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     /**
      * Attempts to load <code>resourceName</code> from the provided {@link ResourceLookup}.
      */
-    private static HashSet<String> load(ResourceLookup resourceLookup, String resourceName)
+    public static HashSet<String> load(ResourceLookup resourceLookup, String resourceName)
     {
         final IResource resource = resourceLookup.getFirst(resourceName);
         if (resource == null)

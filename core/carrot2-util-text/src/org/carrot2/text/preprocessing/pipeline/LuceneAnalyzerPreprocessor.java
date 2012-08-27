@@ -42,7 +42,6 @@ import com.carrotsearch.hppc.ObjectArrayList;
 import com.carrotsearch.hppc.ObjectIntOpenHashMap;
 import com.carrotsearch.hppc.ObjectOpenHashSet;
 import com.carrotsearch.hppc.ShortArrayList;
-import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 @Bindable
@@ -224,7 +223,6 @@ class LuceneAnalyzerPreprocessor
                 // Reconstruct the 'raw' token image based on position/ offsets.
                 rawImage.reset(fieldValue.substring(offset.startOffset(), offset.endOffset()));
 
-                // TODO is there any info about numerics in POS tags?
                 int tokenType = tokenTypeAtt.getType();
                 if (commonWord.isCommon())
                 {
@@ -321,7 +319,6 @@ class LuceneAnalyzerPreprocessor
             final char [] stemImage = stemImages[i];
 
             if (stemIndexes[wordIndex] >= 0) {
-                // assert 
                 if (!sameStemImages(image.get(stemIndexes[wordIndex]), stemImage)) {
                     Logger.getLogger("").warning("Token: " + new String(ctx.allTokens.image[i]));
                 }
@@ -406,6 +403,10 @@ class LuceneAnalyzerPreprocessor
         ctx.allStems.fieldIndices = fieldIndices.toArray();
     }
 
+    /**
+     * Pick a better representative token for a word consistently, with no 
+     * dependency on the order if token images. 
+     */
     private static boolean isBetterRepresentative(
         PreprocessingContext preprocessingContext,
         int mostFrequentWordIndex, int candidateWordIndex)
