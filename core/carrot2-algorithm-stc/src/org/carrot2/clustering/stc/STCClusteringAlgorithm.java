@@ -46,6 +46,7 @@ import com.carrotsearch.hppc.*;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 
 /**
  * Suffix Tree Clustering (STC) algorithm. Pretty much as described in: <i>Oren Zamir,
@@ -278,6 +279,20 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     public IPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
     /**
+     * Balance between cluster score and size during cluster sorting. Value equal to 0.0
+     * will sort clusters based only on cluster size. Value equal to 1.0
+     * will sort clusters based only on cluster score.
+     */
+    @Input
+    @Processing
+    @Attribute
+    @DoubleRange(min = 0.0, max = 1.0)
+    @Label("Size-Score sorting ratio")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.CLUSTERS)
+    public double scoreWeight = 1.0;
+
+    /**
      * A helper for performing multilingual clustering.
      */
     public final MultilingualClustering multilingualClustering = new MultilingualClustering();
@@ -385,23 +400,11 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             });
         documents = originalDocuments;
 
-        // TODO: be consistent here with Lingo implementation (sort with a compound).
         if (multilingualClustering.languageAggregationStrategy == LanguageAggregationStrategy.FLATTEN_ALL)
         {
-            Collections.sort(clusters, new Comparator<Cluster>() {
-                public int compare(Cluster c1, Cluster c2)
-                {
-                    if (c1.isOtherTopics() != c2.isOtherTopics())
-                    {
-                        return c1.isOtherTopics() ? 1 : -1;
-                    }
-                    if (c1.getScore() < c2.getScore()) return 1;
-                    if (c1.getScore() > c2.getScore()) return -1;
-                    if (c1.size() < c2.size()) return 1;
-                    if (c1.size() > c2.size()) return -1;
-                    return 0;
-                } 
-            });
+            Collections.sort(clusters, Ordering.compound(Lists.newArrayList(
+                Cluster.OTHER_TOPICS_AT_THE_END,
+                Cluster.byReversedWeightedScoreAndSizeComparator(scoreWeight))));
         }
     }
 
