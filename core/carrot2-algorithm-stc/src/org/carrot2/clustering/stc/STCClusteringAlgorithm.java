@@ -402,7 +402,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                     return 0;
                 } 
             });
-        }}
+        }
+    }
 
     /**
      * Performs the actual clustering with an assumption that all documents are written in
