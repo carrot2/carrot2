@@ -19,6 +19,7 @@ import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.IProcessingComponent;
 import org.carrot2.core.ProcessingComponentSuite;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.source.SearchEngineBase;
 import org.carrot2.text.linguistic.LexicalDataLoaderDescriptor;
 import org.carrot2.util.resource.IResource;
@@ -31,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -42,7 +44,7 @@ public class DcsApplication extends Application
     /** System property to enable class path search for resources in tests. */
     final static String ENABLE_CLASSPATH_LOCATOR = "enable.classpath.locator";
 
-    private static final Logger log = LoggerFactory.getLogger("DcsApplication");
+    private static final Logger log = LoggerFactory.getLogger("dcs");
 
     transient ProcessingComponentSuite componentSuite;
 
@@ -78,7 +80,7 @@ public class DcsApplication extends Application
         }
         componentSuite = ProcessingComponentSuite
             .deserialize(suiteResource, suitesLookup);
-        if (componentSuite.getAlgorithms().size() == 0)
+        if (componentSuite.getAlgorithms().isEmpty())
         {
             throw new ServletException("Component suite has no algorithms.");
         }
@@ -115,28 +117,51 @@ public class DcsApplication extends Application
         controller.dispose();
     }
 
-    ResponseBuilder ok() 
+    public Set<Class<?>> getClasses()
+    {
+        Set<Class<?>> s = new HashSet<Class<?>>();
+
+        s.add(ClusteringResource.class);
+        s.add(MetadataResource.class);
+        s.add(FormatsResource.class);
+
+        s.add(InvalidInputExceptionMapper.class);
+        s.add(ProcessingExceptionMapper.class);
+
+        return s;
+    }
+
+    ProcessingResult process(Map<String, Object> attrs, String source, String algorithm)
+    {
+        if (componentSuite.getSources().isEmpty())
+        {
+            throw new InvalidInputException("Component suite has no document sources."
+                + " Only directly-fed documents can be clustered.");
+        }
+        return controller.process(attrs,
+            Objects.firstNonNull(source, componentSuite.getSources().get(0).getId()),
+            providedOrDefaultAlgorithm(algorithm));
+    }
+
+    ProcessingResult process(Map<String, Object> attrs, String algorithm)
+    {
+        return controller.process(attrs, providedOrDefaultAlgorithm(algorithm));
+    }
+
+    ResponseBuilder ok()
     {
         // TODO: configurable CORS header, disabled by default
         return Response.ok().header("Access-Control-Allow-Origin", "*");
     }
-    
-    ResponseBuilder error(String message) 
+
+    ResponseBuilder error(String message)
     {
         return Response.status(500).entity(message).type(MediaType.TEXT_PLAIN);
     }
-    
-    public Set<Class<?>> getClasses()
+
+    private String providedOrDefaultAlgorithm(String algorithm)
     {
-        Set<Class<?>> s = new HashSet<Class<?>>();
-        
-        s.add(ClusteringResource.class);
-        s.add(MetadataResource.class);
-        s.add(FormatsResource.class);
-        
-        s.add(InvalidInputExceptionMapper.class);
-        s.add(ProcessingExceptionMapper.class);
-        
-        return s;
+        return Objects.firstNonNull(algorithm, componentSuite.getAlgorithms().get(0)
+            .getId());
     }
 }

@@ -55,7 +55,7 @@ public class ClusteringResource
         @QueryParam("dcs.source") String source,
         @QueryParam("dcs.algorithm") String algorithm,
         @QueryParam("query") String query,
-        @QueryParam("results") int results,
+        @QueryParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
         @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
@@ -76,7 +76,7 @@ public class ClusteringResource
         @QueryParam("dcs.source") String source,
         @QueryParam("dcs.algorithm") String algorithm,
         @QueryParam("query") String query,
-        @QueryParam("results") int results,
+        @QueryParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
         @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
@@ -94,11 +94,11 @@ public class ClusteringResource
      * Processes clustering of documents from external sources.
      */
     private ProcessingResult processFromExternalSource(String source, String algorithm,
-        String query, int results)
+        String query, Integer results)
     {
         final Map<String, Object> attrs = Maps.newHashMap();
         CommonAttributesDescriptor.attributeBuilder(attrs).query(query).results(results);
-        return application().controller.process(attrs, source, algorithm);
+        return application().process(attrs, source, algorithm);
     }
 
     @POST
@@ -110,7 +110,7 @@ public class ClusteringResource
         final @FormParam("dcs.c2stream") String c2stream,
         @FormParam("dcs.algorithm") String algorithm,
         @FormParam("query") String query,
-        @FormParam("results") int results,
+        @FormParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
         @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
@@ -134,7 +134,7 @@ public class ClusteringResource
         final @FormDataParam("dcs.c2stream") String c2stream,
         @FormDataParam("dcs.algorithm") String algorithm,
         @FormDataParam("query") String query,
-        @FormDataParam("results") int results,
+        @FormDataParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
         @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
@@ -162,7 +162,7 @@ public class ClusteringResource
         final @FormParam("dcs.c2stream") String c2stream,
         @FormParam("dcs.algorithm") String algorithm,
         @FormParam("query") String query,
-        @FormParam("results") int results,
+        @FormParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
         @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
@@ -190,7 +190,7 @@ public class ClusteringResource
         final @FormDataParam("dcs.c2stream") InputStream c2stream,
         @FormDataParam("dcs.algorithm") String algorithm,
         @FormDataParam("query") String query,
-        @FormDataParam("results") int results,
+        @FormDataParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
         @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
@@ -210,7 +210,7 @@ public class ClusteringResource
      */
     private ProcessingResult processPost(String source,
         Supplier<ProcessingResult> processingResultSupplier, String algorithm,
-        String query, int results) throws Exception, UnsupportedEncodingException
+        String query, Integer results) throws Exception, UnsupportedEncodingException
     {
         if (!Strings.isNullOrEmpty(source))
         {
@@ -244,10 +244,10 @@ public class ClusteringResource
             }
             CommonAttributesDescriptor.attributeBuilder(attrs).query(query);
 
-            return application().controller.process(attrs, algorithm);
+            return application().process(attrs, algorithm);
         }
     }
-
+    
     private static final class InputStreamProcessingResultSupplier implements
         Supplier<ProcessingResult>
     {

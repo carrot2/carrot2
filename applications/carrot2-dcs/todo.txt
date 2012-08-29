@@ -7,3 +7,5 @@
 * max document count?
 * disabling HTML interface
 * embedded client-side webapp, possibility to make it the default page?
+* option to suppress passing internal-configuration attributes? May be useful in public deployments.
+* when started by DcsApp, read resources and config from a local directory?

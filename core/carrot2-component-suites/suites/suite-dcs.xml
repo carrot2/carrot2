@@ -8,7 +8,6 @@
     <include suite="source-indeed.xml" />
 
     <!-- Local sources. -->
-    <include suite="source-xml.xml" />
     <include suite="source-solr.xml" />
 
     <!-- Algorithms. -->
