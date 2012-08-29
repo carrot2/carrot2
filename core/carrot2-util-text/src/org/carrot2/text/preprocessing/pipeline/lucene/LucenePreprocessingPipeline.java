@@ -150,9 +150,6 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
      */
     protected Analyzer pickAnalyzer(LanguageCode language)
     {
-        // TODO: maybe we could make it a set of fields (englishAnalyzer, frenchAnalyzer), provide
-        // the defaults but then users could replace a single analyzer without the need of subclassing
-        // or rewriting a preprocessing pipeline for all languages?
         switch (language) {
             case ENGLISH:
                 return defaultEnglishAnalyzer();
