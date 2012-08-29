@@ -13,15 +13,20 @@
 package org.carrot2.clustering.kmeans;
 
 import java.util.List;
+import java.util.Set;
 
-import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
+import org.carrot2.core.test.SampleDocumentData;
 import org.carrot2.core.test.assertions.Carrot2CoreAssertions;
+import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
+import org.carrot2.text.clustering.MultilingualClusteringDescriptor;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class BisectingKMeansClusteringAlgorithmTest extends
     ClusteringAlgorithmTestBase<BisectingKMeansClusteringAlgorithm>
@@ -52,5 +57,24 @@ public class BisectingKMeansClusteringAlgorithmTest extends
         Carrot2CoreAssertions.assertThat(clusters.get(0)).hasLabel("WordA");
         Carrot2CoreAssertions.assertThat(clusters.get(1)).hasLabel("WordB");
         Carrot2CoreAssertions.assertThat(clusters.get(2)).hasLabel("WordC");
+    }
+
+    @Test
+    public void testMultilingualSplit() throws Exception
+    {
+        BisectingKMeansClusteringAlgorithmDescriptor.attributeBuilder(processingAttributes)
+            .labelCount(1).partitionCount(3);
+
+        MultilingualClusteringDescriptor.attributeBuilder(processingAttributes)
+            .languageAggregationStrategy(LanguageAggregationStrategy.FLATTEN_NONE);
+
+        final ProcessingResult pr = cluster(SampleDocumentData.DOCUMENTS_SALSA_MULTILINGUAL);
+        final List<Cluster> clusters = pr.getClusters();
+        final Set<String> clusterNames = Sets.newHashSet();
+        for (Cluster c : clusters) {
+            clusterNames.add(c.getLabel());
+        }
+
+        assertThat(clusterNames).contains("English", "Italian", "French", "Spanish", "German");
     }
 }
