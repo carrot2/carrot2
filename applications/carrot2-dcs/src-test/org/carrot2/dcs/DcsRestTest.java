@@ -32,6 +32,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
@@ -42,7 +43,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import com.sun.jersey.multipart.FormDataMultiPart;
-import com.sun.jersey.multipart.MultiPart;
 import com.sun.jersey.multipart.file.StreamDataBodyPart;
 
 /**
@@ -186,7 +186,6 @@ public class DcsRestTest extends CarrotTestCase
             String.class,
             resourceFormData(RESOURCE_KACZYNSKI_UTF8, Charsets.UTF_8.name()));
         assertXmlHasDocumentsAndClusters(result);
-        assertXmlHasQuery(result, "kaczyński");
     }
 
     @Test
@@ -195,7 +194,6 @@ public class DcsRestTest extends CarrotTestCase
         final String result = xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(
             String.class, resourceMultiPart(RESOURCE_KACZYNSKI_UTF8));
         assertXmlHasDocumentsAndClusters(result);
-        assertXmlHasQuery(result, "kaczyński");
     }
 
     @Test
@@ -214,7 +212,7 @@ public class DcsRestTest extends CarrotTestCase
         final ProcessingResult utf8Result = ProcessingResult.deserialize(xmlUrl.type(
             MediaType.MULTIPART_FORM_DATA).post(String.class,
             resourceMultiPart(RESOURCE_KACZYNSKI_UTF8)));
-        
+
         final List<Document> doc16 = utf16Result.getDocuments();
         final List<Document> doc8 = utf8Result.getDocuments();
         assertThat(doc16.size()).isEqualTo(doc8.size());
@@ -227,6 +225,42 @@ public class DcsRestTest extends CarrotTestCase
         }
     }
 
+    @Test
+    public void queryOverriding() throws Exception
+    {
+        // Check query from the XML
+        FormDataMultiPart multiPart = resourceMultiPart(RESOURCE_KACZYNSKI_UTF8);
+        assertXmlHasQuery(
+            xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(String.class, multiPart),
+            "kaczyński");
+
+        // Add query override
+        final String query = "overridden";
+        multiPart = resourceMultiPart(RESOURCE_KACZYNSKI_UTF8);
+        multiPart.field("query", query);
+        assertXmlHasQuery(
+            xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(String.class, multiPart),
+            query);
+    }
+
+    @Test
+    @Ignore("Not implemented yet")
+    public void attributeOverriding() throws Exception
+    {
+        // Check attribute from the XML
+        FormDataMultiPart multiPart = resourceMultiPart(RESOURCE_KACZYNSKI_UTF8);
+        assertXmlHasAttribute(
+            xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(String.class, multiPart),
+            "DocumentAssigner.exactPhraseAssignment", true);
+
+        // Add attribute override
+        multiPart = resourceMultiPart(RESOURCE_KACZYNSKI_UTF8);
+        multiPart.field("DocumentAssigner.exactPhraseAssignment", "false");
+        assertXmlHasAttribute(
+            xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(String.class, multiPart),
+            "DocumentAssigner.exactPhraseAssignment", false);
+    }
+
     private MultivaluedMap<String, String> resourceFormData(final String res,
         String encoding) throws IOException
     {
@@ -236,10 +270,10 @@ public class DcsRestTest extends CarrotTestCase
         return formData;
     }
 
-    private MultiPart resourceMultiPart(final String res) throws IOException
+    private FormDataMultiPart resourceMultiPart(final String res) throws IOException
     {
-        return new MultiPart().bodyPart(new StreamDataBodyPart("dcs.c2stream",
-            prefetchResource(res)));
+        return (FormDataMultiPart) new FormDataMultiPart()
+            .bodyPart(new StreamDataBodyPart("dcs.c2stream", prefetchResource(res)));
     }
 
     private InputStream prefetchResource(String resource) throws IOException
@@ -278,8 +312,14 @@ public class DcsRestTest extends CarrotTestCase
     private void assertXmlHasQuery(final String xml, String expectedQuery)
         throws Exception
     {
+        assertXmlHasAttribute(xml, "query", expectedQuery);
+    }
+
+    private void assertXmlHasAttribute(final String xml, String key, Object expectedValue)
+        throws Exception
+    {
         final ProcessingResult result = ProcessingResult.deserialize(xml);
-        assertThat(result.getAttribute("query")).isEqualTo(expectedQuery);
+        assertThat(result.getAttribute(key)).isEqualTo(expectedValue);
     }
 
     private void assertJsonHasDocumentsAndClusters(final String json)
