@@ -11,13 +11,11 @@
 
 package org.carrot2.dcs;
 
-import static org.carrot2.dcs.RestProcessorServlet.DISABLE_LOGFILE_APPENDER;
-import static org.carrot2.dcs.RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.log4j.BufferingAppender;
 import org.carrot2.util.StreamUtils;
 import org.carrot2.util.SystemPropertyStack;
@@ -29,7 +27,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
@@ -65,10 +62,10 @@ public class DcsRestTest extends CarrotTestCase
     @BeforeClass
     public static void startDcs() throws Throwable
     {
-        appenderProperty = new SystemPropertyStack(DISABLE_LOGFILE_APPENDER);
+        appenderProperty = new SystemPropertyStack(DcsApplication.DISABLE_LOGFILE_APPENDER);
         appenderProperty.push("true");
 
-        classpathLocatorProperty = new SystemPropertyStack(ENABLE_CLASSPATH_LOCATOR);
+        classpathLocatorProperty = new SystemPropertyStack(DcsApplication.ENABLE_CLASSPATH_LOCATOR);
         classpathLocatorProperty.push("true");
 
         // Tests run with slf4j-log4j, so attach to the logger directly.
@@ -146,8 +143,12 @@ public class DcsRestTest extends CarrotTestCase
     }
 
     @Test
-    public void getWithDefaults()
+    public void getXmlFromExternalSourceDefaultParameters() throws Exception
     {
-        System.out.println(dcsBase.path("cluster/xml").queryParam("query", "test").get(String.class));
+        final ProcessingResult result = ProcessingResult.deserialize(dcsBase
+            .path("cluster/xml").queryParam("query", "test").get(String.class));
+
+        assertThat(result.getDocuments().size()).isGreaterThan(0);
+        assertThat(result.getClusters().size()).isGreaterThan(1);
     }
 }

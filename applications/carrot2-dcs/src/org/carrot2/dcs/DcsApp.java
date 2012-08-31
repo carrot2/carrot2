@@ -138,7 +138,7 @@ public class DcsApp
             /*
              * Allow context classloader resource loading.
              */
-            System.setProperty(RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR, "true");
+            System.setProperty(DcsApplication.ENABLE_CLASSPATH_LOCATOR, "true");
         }
 
         if (System.getProperty("dcs.development.mode") != null)

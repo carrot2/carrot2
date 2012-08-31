@@ -14,21 +14,33 @@ package org.carrot2.dcs;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
-import static org.carrot2.dcs.RestProcessorServlet.DISABLE_LOGFILE_APPENDER;
-import static org.carrot2.dcs.RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.apache.http.*;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.*;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.Document;
@@ -37,11 +49,17 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.log4j.BufferingAppender;
 import org.carrot2.util.StreamUtils;
 import org.carrot2.util.SystemPropertyStack;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.carrot2.util.tests.UsesExternalServices;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.annotations.Nightly;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
@@ -49,9 +67,16 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope.Scope;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
+import com.gargoylesoftware.htmlunit.html.HtmlButton;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlOption;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 
 /**
@@ -90,10 +115,10 @@ public class DcsAppTest extends CarrotTestCase
     @BeforeClass
     public static void startDcs() throws Throwable
     {
-        appenderProperty = new SystemPropertyStack(DISABLE_LOGFILE_APPENDER);
+        appenderProperty = new SystemPropertyStack(DcsApplication.DISABLE_LOGFILE_APPENDER);
         appenderProperty.push("true");
 
-        classpathLocatorProperty = new SystemPropertyStack(ENABLE_CLASSPATH_LOCATOR);
+        classpathLocatorProperty = new SystemPropertyStack(DcsApplication.ENABLE_CLASSPATH_LOCATOR);
         classpathLocatorProperty.push("true");
 
         // Tests run with slf4j-log4j, so attach to the logger directly.

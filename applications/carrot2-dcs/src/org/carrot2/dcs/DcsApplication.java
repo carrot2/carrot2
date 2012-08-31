@@ -1,5 +1,6 @@
 package org.carrot2.dcs;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.IProcessingComponent;
@@ -28,41 +33,60 @@ import org.carrot2.util.resource.PrefixDecoratorLocator;
 import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.resource.ServletContextLocator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class DcsApplication extends Application
 {
-    @Context
-    private ServletContext servletContext;
-
     /** System property to enable class path search for resources in tests. */
     final static String ENABLE_CLASSPATH_LOCATOR = "enable.classpath.locator";
 
-    private static final Logger log = LoggerFactory.getLogger("dcs");
+    /** System property to disable log file appender. */
+    final static String DISABLE_LOGFILE_APPENDER = "disable.logfile";
+
+    private static final Logger log = Logger.getLogger("dcs");
+
+    @Context
+    private ServletContext servletContext;
 
     transient ProcessingComponentSuite componentSuite;
 
     transient Controller controller;
 
-    public DcsApplication() throws SAXException
-    {
-        log.info("Starting Document Clustering Server application");
-    }
+    transient DcsConfig config;
 
     @PostConstruct
     @SuppressWarnings("unchecked")
     public void init() throws Exception
     {
+        // Initialize appender
+        if (!Boolean.getBoolean(DISABLE_LOGFILE_APPENDER))
+        {
+            Logger.getRootLogger().addAppender(getLogAppender(servletContext));
+        }
+
+        final PrefixDecoratorLocator webInfLocator = new PrefixDecoratorLocator(
+            new ServletContextLocator(servletContext), "/WEB-INF/");
+
+        // Load config
+        log.info("Loading configuration file");
+        final IResource [] configResource = webInfLocator.getAll("dcs.xml");
+        if (configResource.length > 0)
+        {
+            config = DcsConfig.deserialize(configResource[0]);
+        }
+        else
+        {
+            log.warn("Configuration file (WEB-INF/dcs.xml) not found, using defaults.");
+            config = new DcsConfig();
+        }
+
         // We'll use WEB-INF locators (and classpath for tests)
         final List<IResourceLocator> resourceLocators = Lists.newArrayList();
-        resourceLocators.add(new PrefixDecoratorLocator(new ServletContextLocator(
-            servletContext), "/WEB-INF/suites/"));
+        resourceLocators.add(new PrefixDecoratorLocator(webInfLocator, "suites/"));
         if (Boolean.getBoolean(ENABLE_CLASSPATH_LOCATOR))
         {
             resourceLocators.add(Location.CONTEXT_CLASS_LOADER.locator);
@@ -87,7 +111,6 @@ public class DcsApplication extends Application
 
         // Initialize controller
         log.info("Initializing controller");
-
         final List<Class<? extends IProcessingComponent>> cachedComponentClasses = Lists
             .newArrayListWithExpectedSize(2);
 
@@ -151,7 +174,7 @@ public class DcsApplication extends Application
     ResponseBuilder ok()
     {
         // TODO: configurable CORS header, disabled by default
-        return Response.ok().header("Access-Control-Allow-Origin", "*");
+        return Response.ok().header("Access-Control-Allow-Origin", config.accessControlAllowOrigin);
     }
 
     ResponseBuilder error(String message)
@@ -163,5 +186,27 @@ public class DcsApplication extends Application
     {
         return Objects.firstNonNull(algorithm, componentSuite.getAlgorithms().get(0)
             .getId());
+    }
+
+    private FileAppender getLogAppender(ServletContext context) throws IOException
+    {
+        String contextPath = context.getContextPath();
+        if (StringUtils.isBlank(contextPath))
+        {
+            contextPath = "root";
+        }
+
+        contextPath = contextPath.replaceAll("[^a-zA-Z0-9\\-]", "");
+        final String catalinaHome = System.getProperty("catalina.home");
+        final String logPrefix = (catalinaHome != null ? catalinaHome + "/logs" : "logs");
+
+        final FileAppender appender = new FileAppender(new PatternLayout(
+            "%d{ISO8601} [%-5p] [%c] %m%n"), logPrefix + "/c2-dcs-" + contextPath
+            + "-full.log", true);
+
+        appender.setEncoding(Charsets.UTF_8.name());
+        appender.setImmediateFlush(true);
+
+        return appender;
     }
 }

@@ -27,6 +27,7 @@ import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.util.ExceptionUtils;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
@@ -97,7 +98,13 @@ public class ClusteringResource
         String query, Integer results)
     {
         final Map<String, Object> attrs = Maps.newHashMap();
-        CommonAttributesDescriptor.attributeBuilder(attrs).query(query).results(results);
+        CommonAttributesDescriptor
+            .attributeBuilder(attrs)
+            .query(query)
+            .results(
+                Math.min(application().config.maxResultsFromExternalSource, Objects
+                    .firstNonNull(results,
+                        application().config.defaultResultsFromExternalSource)));
         return application().process(attrs, source, algorithm);
     }
 
@@ -247,7 +254,7 @@ public class ClusteringResource
             return application().process(attrs, algorithm);
         }
     }
-    
+
     private static final class InputStreamProcessingResultSupplier implements
         Supplier<ProcessingResult>
     {
