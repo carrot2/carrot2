@@ -272,6 +272,32 @@ public class DcsRestTest extends CarrotTestCase
                 .get(String.class), "DocumentAssigner.exactPhraseAssignment", true);
     }
 
+    @Test
+    @UsesExternalServices
+    @Ignore("Not implemented yet")
+    public void postUrlencodedCustomAttributes() throws Exception
+    {
+        final MultivaluedMap<String, String> formData = sourceQueryFormData("etools",
+            "test");
+        formData.add("DocumentAssigner.exactPhraseAssignment", "true");
+
+        assertXmlHasAttribute(xmlUrl.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+            .post(String.class, formData), "DocumentAssigner.exactPhraseAssignment", true);
+    }
+
+    @Test
+    @UsesExternalServices
+    @Ignore("Not implemented yet")
+    public void postMultipartCustomAttributes() throws Exception
+    {
+        final FormDataMultiPart formData = sourceQueryFormDataMultipart("etools", "test");
+        formData.field("DocumentAssigner.exactPhraseAssignment", "true");
+
+        assertXmlHasAttribute(
+            xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(String.class, formData),
+            "DocumentAssigner.exactPhraseAssignment", true);
+    }
+
     private MultivaluedMap<String, String> resourceFormData(final String res,
         String encoding) throws IOException
     {
