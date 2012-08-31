@@ -11,13 +11,14 @@
 
 package org.carrot2.dcs;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.HashMap;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.log4j.BufferingAppender;
 import org.carrot2.util.StreamUtils;
@@ -36,11 +37,13 @@ import org.junit.Test;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope.Scope;
-import com.google.common.collect.Maps;
+import com.google.common.base.Charsets;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import com.sun.jersey.multipart.FormDataMultiPart;
+import com.sun.jersey.multipart.MultiPart;
+import com.sun.jersey.multipart.file.StreamDataBodyPart;
 
 /**
  * Test cases for the {@link DcsApp}.
@@ -58,9 +61,8 @@ public class DcsRestTest extends CarrotTestCase
     private static SystemPropertyStack appenderProperty;
     private static SystemPropertyStack classpathLocatorProperty;
 
-    private static String KEY_KACZYNSKI = "/xml/carrot2-kaczynski.utf8.xml";
-    private static String KEY_KACZYNSKI_UTF16 = "/xml/carrot2-kaczynski.utf16.xml";
-    private static HashMap<String, File> testFiles = Maps.newHashMap();
+    private static String RESOURCE_KACZYNSKI_UTF8 = "/xml/carrot2-kaczynski.utf8.xml";
+    private static String RESOURCE_KACZYNSKI_UTF16 = "/xml/carrot2-kaczynski.utf16.xml";
 
     /**
      * Buffered log stream.
@@ -98,30 +100,6 @@ public class DcsRestTest extends CarrotTestCase
         baseUrl = client.resource("http://localhost:" + dcs.port + "/");
         xmlUrl = baseUrl.path("cluster/xml");
         jsonUrl = baseUrl.path("cluster/json");
-    }
-
-    @BeforeClass
-    public static void prepareStaticFiles() throws Exception
-    {
-        String [] resources =
-        {
-            "/xml/carrot2-kaczynski.utf8.xml", "/xml/carrot2-kaczynski.utf16.xml"
-        };
-
-        final ResourceLookup resourceLookup = new ResourceLookup(
-            Location.CONTEXT_CLASS_LOADER);
-
-        for (String resource : resources)
-        {
-            final IResource res = resourceLookup.getFirst(resource);
-            assertThat(res).isNotNull();
-
-            final File tmp = File.createTempFile("dcs-xml-data", ".xml");
-            StreamUtils.copyAndClose(res.open(), new FileOutputStream(tmp), 8192);
-            tmp.deleteOnExit();
-
-            testFiles.put(resource, tmp);
-        }
     }
 
     @AfterClass
@@ -189,16 +167,87 @@ public class DcsRestTest extends CarrotTestCase
     @UsesExternalServices
     public void postMultipartXmlFromExternalSource() throws Exception
     {
-        assertXmlHasDocumentsAndClusters(xmlUrl.type(MediaType.MULTIPART_FORM_DATA)
-            .post(String.class, sourceQueryFormDataMultipart("etools", "test")));
+        assertXmlHasDocumentsAndClusters(xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(
+            String.class, sourceQueryFormDataMultipart("etools", "test")));
     }
-    
+
     @Test
     @UsesExternalServices
     public void postMultipartJsonFromExternalSource() throws Exception
     {
         assertJsonHasDocumentsAndClusters(jsonUrl.type(MediaType.MULTIPART_FORM_DATA)
             .post(String.class, sourceQueryFormDataMultipart("etools", "test")));
+    }
+
+    @Test
+    public void postUrlencodedXmlFromStream() throws Exception
+    {
+        final String result = xmlUrl.type(MediaType.APPLICATION_FORM_URLENCODED).post(
+            String.class,
+            resourceFormData(RESOURCE_KACZYNSKI_UTF8, Charsets.UTF_8.name()));
+        assertXmlHasDocumentsAndClusters(result);
+        assertXmlHasQuery(result, "kaczyński");
+    }
+
+    @Test
+    public void postMultipartXmlFromStream() throws Exception
+    {
+        final String result = xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(
+            String.class, resourceMultiPart(RESOURCE_KACZYNSKI_UTF8));
+        assertXmlHasDocumentsAndClusters(result);
+        assertXmlHasQuery(result, "kaczyński");
+    }
+
+    @Test
+    public void postMultipartJsonFromStream() throws Exception
+    {
+        assertJsonHasDocumentsAndClusters(jsonUrl.type(MediaType.MULTIPART_FORM_DATA)
+            .post(String.class, resourceMultiPart(RESOURCE_KACZYNSKI_UTF8)));
+    }
+
+    @Test
+    public void postMultipartWithVariousEncodings() throws Exception
+    {
+        final ProcessingResult utf16Result = ProcessingResult.deserialize(xmlUrl.type(
+            MediaType.MULTIPART_FORM_DATA).post(String.class,
+            resourceMultiPart(RESOURCE_KACZYNSKI_UTF16)));
+        final ProcessingResult utf8Result = ProcessingResult.deserialize(xmlUrl.type(
+            MediaType.MULTIPART_FORM_DATA).post(String.class,
+            resourceMultiPart(RESOURCE_KACZYNSKI_UTF8)));
+        
+        final List<Document> doc16 = utf16Result.getDocuments();
+        final List<Document> doc8 = utf8Result.getDocuments();
+        assertThat(doc16.size()).isEqualTo(doc8.size());
+        for (int i = 0; i < Math.min(doc16.size(), doc8.size()); i++)
+        {
+            final Document d1 = doc16.get(i);
+            final Document d2 = doc8.get(i);
+            assertThat(d1.getTitle()).isEqualTo(d2.getTitle());
+            assertThat(d1.getSummary()).isEqualTo(d2.getSummary());
+        }
+    }
+
+    private MultivaluedMap<String, String> resourceFormData(final String res,
+        String encoding) throws IOException
+    {
+        final MultivaluedMap<String, String> formData = new MultivaluedMapImpl();
+        formData.add("dcs.c2stream",
+            new String(StreamUtils.readFully(prefetchResource(res)), encoding));
+        return formData;
+    }
+
+    private MultiPart resourceMultiPart(final String res) throws IOException
+    {
+        return new MultiPart().bodyPart(new StreamDataBodyPart("dcs.c2stream",
+            prefetchResource(res)));
+    }
+
+    private InputStream prefetchResource(String resource) throws IOException
+    {
+        final IResource res = new ResourceLookup(Location.CONTEXT_CLASS_LOADER)
+            .getFirst(resource);
+        assertThat(res).isNotNull();
+        return StreamUtils.prefetch(res.open());
     }
 
     private MultivaluedMap<String, String> sourceQueryFormData(final String source,
@@ -224,6 +273,13 @@ public class DcsRestTest extends CarrotTestCase
         final ProcessingResult result = ProcessingResult.deserialize(xml);
         assertThat(result.getDocuments().size()).isGreaterThan(0);
         assertThat(result.getClusters().size()).isGreaterThan(1);
+    }
+
+    private void assertXmlHasQuery(final String xml, String expectedQuery)
+        throws Exception
+    {
+        final ProcessingResult result = ProcessingResult.deserialize(xml);
+        assertThat(result.getAttribute("query")).isEqualTo(expectedQuery);
     }
 
     private void assertJsonHasDocumentsAndClusters(final String json)

@@ -138,7 +138,7 @@ public class ClusteringResource
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response xmlPostMultipart(
         @FormDataParam("dcs.source") String source,
-        final @FormDataParam("dcs.c2stream") String c2stream,
+        final @FormDataParam("dcs.c2stream") InputStream c2stream,
         @FormDataParam("dcs.algorithm") String algorithm,
         @FormDataParam("query") String query,
         @FormDataParam("results") Integer results,
@@ -151,7 +151,7 @@ public class ClusteringResource
             .ok()
             .entity(
                 new XmlStreamingOutput(processPost(source,
-                    new StringProcessingResultSupplier(c2stream), algorithm, query,
+                    new InputStreamProcessingResultSupplier(c2stream), algorithm, query,
                     results), outputDocuments, outputClusters, outputAttributes))
             .type(MediaType.APPLICATION_XML).build();
     }
@@ -253,7 +253,12 @@ public class ClusteringResource
                 throw new InvalidInputException(
                     "The dcs.c2stream must contain at least one document");
             }
-            CommonAttributesDescriptor.attributeBuilder(attrs).query(query);
+
+            // Override by parameter-provided query, if present
+            if (!Strings.isNullOrEmpty(query))
+            {
+                CommonAttributesDescriptor.attributeBuilder(attrs).query(query);
+            }
 
             return application().process(attrs, algorithm);
         }
