@@ -261,6 +261,17 @@ public class DcsRestTest extends CarrotTestCase
             "DocumentAssigner.exactPhraseAssignment", false);
     }
 
+    @Test
+    @UsesExternalServices
+    @Ignore("Not implemented yet")
+    public void getCustomAttributes() throws Exception
+    {
+        assertXmlHasAttribute(
+            xmlUrl.queryParam("query", "test")
+                .queryParam("DocumentAssigner.exactPhraseAssignment", "true")
+                .get(String.class), "DocumentAssigner.exactPhraseAssignment", true);
+    }
+
     private MultivaluedMap<String, String> resourceFormData(final String res,
         String encoding) throws IOException
     {
