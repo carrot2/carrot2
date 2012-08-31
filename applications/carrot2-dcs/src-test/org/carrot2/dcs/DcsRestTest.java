@@ -32,7 +32,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
@@ -244,7 +243,6 @@ public class DcsRestTest extends CarrotTestCase
     }
 
     @Test
-    @Ignore("Not implemented yet")
     public void attributeOverriding() throws Exception
     {
         // Check attribute from the XML
@@ -258,23 +256,21 @@ public class DcsRestTest extends CarrotTestCase
         multiPart.field("DocumentAssigner.exactPhraseAssignment", "false");
         assertXmlHasAttribute(
             xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(String.class, multiPart),
-            "DocumentAssigner.exactPhraseAssignment", false);
+            "DocumentAssigner.exactPhraseAssignment", "false");
     }
 
     @Test
     @UsesExternalServices
-    @Ignore("Not implemented yet")
     public void getCustomAttributes() throws Exception
     {
         assertXmlHasAttribute(
             xmlUrl.queryParam("query", "test")
                 .queryParam("DocumentAssigner.exactPhraseAssignment", "true")
-                .get(String.class), "DocumentAssigner.exactPhraseAssignment", true);
+                .get(String.class), "DocumentAssigner.exactPhraseAssignment", "true");
     }
 
     @Test
     @UsesExternalServices
-    @Ignore("Not implemented yet")
     public void postUrlencodedCustomAttributes() throws Exception
     {
         final MultivaluedMap<String, String> formData = sourceQueryFormData("etools",
@@ -282,12 +278,11 @@ public class DcsRestTest extends CarrotTestCase
         formData.add("DocumentAssigner.exactPhraseAssignment", "true");
 
         assertXmlHasAttribute(xmlUrl.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
-            .post(String.class, formData), "DocumentAssigner.exactPhraseAssignment", true);
+            .post(String.class, formData), "DocumentAssigner.exactPhraseAssignment", "true");
     }
 
     @Test
     @UsesExternalServices
-    @Ignore("Not implemented yet")
     public void postMultipartCustomAttributes() throws Exception
     {
         final FormDataMultiPart formData = sourceQueryFormDataMultipart("etools", "test");
@@ -295,7 +290,7 @@ public class DcsRestTest extends CarrotTestCase
 
         assertXmlHasAttribute(
             xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(String.class, formData),
-            "DocumentAssigner.exactPhraseAssignment", true);
+            "DocumentAssigner.exactPhraseAssignment", "true");
     }
 
     private MultivaluedMap<String, String> resourceFormData(final String res,

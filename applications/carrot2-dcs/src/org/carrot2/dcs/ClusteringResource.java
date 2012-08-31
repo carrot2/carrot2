@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -19,8 +21,10 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
+import javax.ws.rs.core.UriInfo;
 
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
@@ -32,6 +36,8 @@ import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
 import com.google.common.io.Closeables;
+import com.sun.jersey.multipart.FormDataBodyPart;
+import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.FormDataParam;
 
 @Path("/cluster")
@@ -59,15 +65,20 @@ public class ClusteringResource
         @QueryParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
-        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
-        throws IOException
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes,
+        @Context UriInfo uriInfo) throws IOException
     {
         return application()
             .ok()
             .entity(
-                new JsonStreamingOutput(processFromExternalSource(source, algorithm,
-                    query, results), outputDocuments, outputClusters, outputAttributes))
-            .type(MediaType.APPLICATION_JSON).build();
+                new JsonStreamingOutput(processFromExternalSource(
+                    source,
+                    algorithm,
+                    query,
+                    results,
+                    new MultivaluedMapCustomAttributesSupplier(uriInfo
+                        .getQueryParameters())), outputDocuments, outputClusters,
+                    outputAttributes)).type(MediaType.APPLICATION_JSON).build();
     }
 
     @GET
@@ -80,24 +91,32 @@ public class ClusteringResource
         @QueryParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
-        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
-        throws Exception
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes,
+        @Context UriInfo uriInfo) throws Exception
     {
         return application()
             .ok()
             .entity(
-                new XmlStreamingOutput(processFromExternalSource(source, algorithm,
-                    query, results), outputDocuments, outputClusters, outputAttributes))
-            .type(MediaType.APPLICATION_XML).build();
+                new XmlStreamingOutput(processFromExternalSource(
+                    source,
+                    algorithm,
+                    query,
+                    results,
+                    new MultivaluedMapCustomAttributesSupplier(uriInfo
+                        .getQueryParameters())), outputDocuments, outputClusters,
+                    outputAttributes)).type(MediaType.APPLICATION_XML).build();
     }
 
     /**
      * Processes clustering of documents from external sources.
      */
     private ProcessingResult processFromExternalSource(String source, String algorithm,
-        String query, Integer results)
+        String query, Integer results,
+        Supplier<Map<String, Object>> customAttributesSupplier)
     {
-        final Map<String, Object> attrs = Maps.newHashMap();
+        final Map<String, Object> attrs = customAttributesSupplier.get();
+
+        // Override common attributes
         CommonAttributesDescriptor
             .attributeBuilder(attrs)
             .query(query)
@@ -105,6 +124,7 @@ public class ClusteringResource
                 Math.min(application().config.maxResultsFromExternalSource, Objects
                     .firstNonNull(results,
                         application().config.defaultResultsFromExternalSource)));
+
         return application().process(attrs, source, algorithm);
     }
 
@@ -120,15 +140,16 @@ public class ClusteringResource
         @FormParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
-        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
-        throws Exception
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes,
+        MultivaluedMap<String, String> allParams) throws Exception
     {
         return application()
             .ok()
             .entity(
                 new XmlStreamingOutput(processPost(source,
                     new StringProcessingResultSupplier(c2stream), algorithm, query,
-                    results), outputDocuments, outputClusters, outputAttributes))
+                    results, new MultivaluedMapCustomAttributesSupplier(allParams)),
+                    outputDocuments, outputClusters, outputAttributes))
             .type(MediaType.APPLICATION_XML).build();
     }
 
@@ -144,15 +165,16 @@ public class ClusteringResource
         @FormDataParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
-        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
-        throws Exception
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes,
+        FormDataMultiPart formData) throws Exception
     {
         return application()
             .ok()
             .entity(
                 new XmlStreamingOutput(processPost(source,
                     new InputStreamProcessingResultSupplier(c2stream), algorithm, query,
-                    results), outputDocuments, outputClusters, outputAttributes))
+                    results, new FormDataMultiPartCustomAttributesSupplier(formData)),
+                    outputDocuments, outputClusters, outputAttributes))
             .type(MediaType.APPLICATION_XML).build();
     }
 
@@ -172,15 +194,16 @@ public class ClusteringResource
         @FormParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
-        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
-        throws Exception
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes,
+        MultivaluedMap<String, String> allParams) throws Exception
     {
         return application()
             .ok()
             .entity(
                 new JsonStreamingOutput(processPost(source,
                     new StringProcessingResultSupplier(c2stream), algorithm, query,
-                    results), outputDocuments, outputClusters, outputAttributes))
+                    results, new MultivaluedMapCustomAttributesSupplier(allParams)),
+                    outputDocuments, outputClusters, outputAttributes))
             .type(MediaType.APPLICATION_JSON).build();
     }
 
@@ -200,7 +223,8 @@ public class ClusteringResource
         @FormDataParam("results") Integer results,
         @QueryParam("dcs.output.documents") @DefaultValue("true") boolean outputDocuments,
         @QueryParam("dcs.output.clusters") @DefaultValue("true") boolean outputClusters,
-        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes)
+        @QueryParam("dcs.output.attributes") @DefaultValue("true") boolean outputAttributes,
+        FormDataMultiPart formData)
         throws Exception
     {
         return application()
@@ -208,7 +232,7 @@ public class ClusteringResource
             .entity(
                 new JsonStreamingOutput(processPost(source,
                     new InputStreamProcessingResultSupplier(c2stream), algorithm, query,
-                    results), outputDocuments, outputClusters, outputAttributes))
+                    results, new FormDataMultiPartCustomAttributesSupplier(formData)), outputDocuments, outputClusters, outputAttributes))
             .type(MediaType.APPLICATION_JSON).build();
     }
 
@@ -217,11 +241,14 @@ public class ClusteringResource
      */
     private ProcessingResult processPost(String source,
         Supplier<ProcessingResult> processingResultSupplier, String algorithm,
-        String query, Integer results) throws Exception, UnsupportedEncodingException
+        String query, Integer results,
+        Supplier<Map<String, Object>> customAttributesSupplier) throws Exception,
+        UnsupportedEncodingException
     {
         if (!Strings.isNullOrEmpty(source))
         {
-            return processFromExternalSource(source, algorithm, query, results);
+            return processFromExternalSource(source, algorithm, query, results,
+                customAttributesSupplier);
         }
         else
         {
@@ -254,6 +281,9 @@ public class ClusteringResource
                     "The dcs.c2stream must contain at least one document");
             }
 
+            // Override custom attributes, if provided
+            attrs.putAll(customAttributesSupplier.get());
+            
             // Override by parameter-provided query, if present
             if (!Strings.isNullOrEmpty(query))
             {
@@ -261,6 +291,60 @@ public class ClusteringResource
             }
 
             return application().process(attrs, algorithm);
+        }
+    }
+
+    private static final class FormDataMultiPartCustomAttributesSupplier implements
+        Supplier<Map<String, Object>>
+    {
+        private final FormDataMultiPart formData;
+
+        public FormDataMultiPartCustomAttributesSupplier(FormDataMultiPart formData)
+        {
+            this.formData = formData;
+        }
+
+        @Override
+        public Map<String, Object> get()
+        {
+            final Map<String, Object> attrs = Maps.newHashMap();
+
+            // Custom attributes
+            for (Entry<String, List<FormDataBodyPart>> entry : formData.getFields()
+                .entrySet())
+            {
+                if (!entry.getKey().equals("dcs.c2stream"))
+                {
+                    attrs.put(entry.getKey(), entry.getValue().get(0).getValue());
+                }
+            }
+
+            return attrs;
+        }
+    }
+
+    private static final class MultivaluedMapCustomAttributesSupplier implements
+        Supplier<Map<String, Object>>
+    {
+        private final MultivaluedMap<String, String> map;
+
+        public MultivaluedMapCustomAttributesSupplier(MultivaluedMap<String, String> map)
+        {
+            this.map = map;
+        }
+
+        @Override
+        public Map<String, Object> get()
+        {
+            final Map<String, Object> attrs = Maps.newHashMap();
+
+            // Custom attributes
+            for (String key : map.keySet())
+            {
+                attrs.put(key, map.getFirst(key));
+            }
+
+            return attrs;
         }
     }
 
