@@ -231,6 +231,10 @@ public class ClusteringResource
             {
                 input = processingResultSupplier.get();
             }
+            catch (InvalidInputException e)
+            {
+                throw e;
+            }
             catch (Exception e)
             {
                 // This exception will get converted to a bad request response
@@ -268,6 +272,12 @@ public class ClusteringResource
         @Override
         public ProcessingResult get()
         {
+            if (c2stream == null)
+            {
+                throw new InvalidInputException(
+                    "Non-empty dcs.source or dcs.c2stream is required");
+            }
+
             try
             {
                 return ProcessingResult.deserialize(c2stream);
@@ -296,6 +306,12 @@ public class ClusteringResource
         @Override
         public ProcessingResult get()
         {
+            if (Strings.isNullOrEmpty(c2stream))
+            {
+                throw new InvalidInputException(
+                    "Non-empty dcs.source or dcs.c2stream is required");
+            }
+
             try
             {
                 return ProcessingResult.deserialize(c2stream);

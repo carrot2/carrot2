@@ -15,6 +15,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.log4j.BufferingAppender;
 import org.carrot2.util.StreamUtils;
@@ -23,6 +26,7 @@ import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.tests.CarrotTestCase;
+import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -35,6 +39,8 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope.Scope;
 import com.google.common.collect.Maps;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
+import com.sun.jersey.multipart.FormDataMultiPart;
 
 /**
  * Test cases for the {@link DcsApp}.
@@ -45,7 +51,9 @@ public class DcsRestTest extends CarrotTestCase
 {
     private static DcsApp dcs;
     private static Client client;
-    private static WebResource dcsBase;
+    private static WebResource baseUrl;
+    private static WebResource xmlUrl;
+    private static WebResource jsonUrl;
 
     private static SystemPropertyStack appenderProperty;
     private static SystemPropertyStack classpathLocatorProperty;
@@ -62,10 +70,12 @@ public class DcsRestTest extends CarrotTestCase
     @BeforeClass
     public static void startDcs() throws Throwable
     {
-        appenderProperty = new SystemPropertyStack(DcsApplication.DISABLE_LOGFILE_APPENDER);
+        appenderProperty = new SystemPropertyStack(
+            DcsApplication.DISABLE_LOGFILE_APPENDER);
         appenderProperty.push("true");
 
-        classpathLocatorProperty = new SystemPropertyStack(DcsApplication.ENABLE_CLASSPATH_LOCATOR);
+        classpathLocatorProperty = new SystemPropertyStack(
+            DcsApplication.ENABLE_CLASSPATH_LOCATOR);
         classpathLocatorProperty.push("true");
 
         // Tests run with slf4j-log4j, so attach to the logger directly.
@@ -82,6 +92,12 @@ public class DcsRestTest extends CarrotTestCase
             dcs = null;
             throw e;
         }
+
+        // Prepare client
+        client = Client.create();
+        baseUrl = client.resource("http://localhost:" + dcs.port + "/");
+        xmlUrl = baseUrl.path("cluster/xml");
+        jsonUrl = baseUrl.path("cluster/json");
     }
 
     @BeforeClass
@@ -106,13 +122,6 @@ public class DcsRestTest extends CarrotTestCase
 
             testFiles.put(resource, tmp);
         }
-    }
-
-    @BeforeClass
-    public static void prepareClient()
-    {
-        client = Client.create();
-        dcsBase = client.resource("http://localhost:" + dcs.port + "/");
     }
 
     @AfterClass
@@ -143,12 +152,82 @@ public class DcsRestTest extends CarrotTestCase
     }
 
     @Test
+    @UsesExternalServices
     public void getXmlFromExternalSourceDefaultParameters() throws Exception
     {
-        final ProcessingResult result = ProcessingResult.deserialize(dcsBase
-            .path("cluster/xml").queryParam("query", "test").get(String.class));
+        assertXmlHasDocumentsAndClusters(xmlUrl.queryParam("query", "test").get(
+            String.class));
+    }
 
+    @Test
+    @UsesExternalServices
+    public void getJsonFromExternalSourceDefaultParameters() throws Exception
+    {
+        assertJsonHasDocumentsAndClusters(jsonUrl.queryParam("query", "test").get(
+            String.class));
+    }
+
+    @Test
+    @UsesExternalServices
+    public void postUrlencodedXmlFromExternalSource() throws Exception
+    {
+        assertXmlHasDocumentsAndClusters(xmlUrl.type(
+            MediaType.APPLICATION_FORM_URLENCODED_TYPE).post(String.class,
+            sourceQueryFormData("etools", "test")));
+    }
+
+    @Test
+    @UsesExternalServices
+    public void postUrlencodedJsonFromExternalSource() throws Exception
+    {
+        assertJsonHasDocumentsAndClusters(jsonUrl.type(
+            MediaType.APPLICATION_FORM_URLENCODED_TYPE).post(String.class,
+            sourceQueryFormData("etools", "test")));
+    }
+
+    @Test
+    @UsesExternalServices
+    public void postMultipartXmlFromExternalSource() throws Exception
+    {
+        assertXmlHasDocumentsAndClusters(xmlUrl.type(MediaType.MULTIPART_FORM_DATA)
+            .post(String.class, sourceQueryFormDataMultipart("etools", "test")));
+    }
+    
+    @Test
+    @UsesExternalServices
+    public void postMultipartJsonFromExternalSource() throws Exception
+    {
+        assertJsonHasDocumentsAndClusters(jsonUrl.type(MediaType.MULTIPART_FORM_DATA)
+            .post(String.class, sourceQueryFormDataMultipart("etools", "test")));
+    }
+
+    private MultivaluedMap<String, String> sourceQueryFormData(final String source,
+        final String query)
+    {
+        final MultivaluedMap<String, String> formData = new MultivaluedMapImpl();
+        formData.add("dcs.source", source);
+        formData.add("query", query);
+        return formData;
+    }
+
+    private FormDataMultiPart sourceQueryFormDataMultipart(final String source,
+        final String query)
+    {
+        final FormDataMultiPart formData = new FormDataMultiPart();
+        formData.field("dcs.source", source);
+        formData.field("query", query);
+        return formData;
+    }
+
+    private void assertXmlHasDocumentsAndClusters(final String xml) throws Exception
+    {
+        final ProcessingResult result = ProcessingResult.deserialize(xml);
         assertThat(result.getDocuments().size()).isGreaterThan(0);
         assertThat(result.getClusters().size()).isGreaterThan(1);
+    }
+
+    private void assertJsonHasDocumentsAndClusters(final String json)
+    {
+        assertThat(json).contains("\"documents\":").contains("\"clusters\":");
     }
 }
