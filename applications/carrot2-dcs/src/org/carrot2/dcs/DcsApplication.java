@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -154,26 +155,37 @@ public class DcsApplication extends Application
         return s;
     }
 
-    ProcessingResult process(Map<String, Object> attrs, String source, String algorithm)
+    ProcessingResult process(HttpServletRequest request, Map<String, Object> attrs,
+        String source, String algorithm)
     {
         if (componentSuite.getSources().isEmpty())
         {
             throw new InvalidInputException("Component suite has no document sources."
                 + " Only directly-fed documents can be clustered.");
         }
-        return controller.process(attrs,
-            firstNonBlank(source, componentSuite.getSources().get(0).getId()),
-            providedOrDefaultAlgorithm(algorithm));
+        final String resolvedSource = firstNonBlank(source, componentSuite.getSources()
+            .get(0).getId());
+        final String resolvedAlgorithm = providedOrDefaultAlgorithm(algorithm);
+        log.info("Processing " + request.getMethod() + " request from "
+            + request.getRemoteAddr() + ": " + resolvedAlgorithm + ":" + resolvedSource
+            + ":" + attrs.get("results") + ":" + attrs.get("query"));
+        return controller.process(attrs, resolvedSource, resolvedAlgorithm);
     }
 
-    ProcessingResult process(Map<String, Object> attrs, String algorithm)
+    ProcessingResult process(HttpServletRequest request, Map<String, Object> attrs,
+        String algorithm)
     {
-        return controller.process(attrs, providedOrDefaultAlgorithm(algorithm));
+        final String resolvedAlgorithm = providedOrDefaultAlgorithm(algorithm);
+        log.info("Processing " + request.getMethod() + " request from "
+            + request.getRemoteAddr() + ": " + resolvedAlgorithm
+            + ":<direct-document-feed>");
+        return controller.process(attrs, resolvedAlgorithm);
     }
 
     ResponseBuilder ok()
     {
-        return Response.ok().header("Access-Control-Allow-Origin", config.accessControlAllowOrigin);
+        return Response.ok().header("Access-Control-Allow-Origin",
+            config.accessControlAllowOrigin);
     }
 
     private String providedOrDefaultAlgorithm(String algorithm)
@@ -203,16 +215,17 @@ public class DcsApplication extends Application
 
         return appender;
     }
-    
+
     private String firstNonBlank(String... strings)
     {
         for (String string : strings)
         {
-            if (!Strings.isNullOrEmpty(string)) {
+            if (!Strings.isNullOrEmpty(string))
+            {
                 return string;
             }
         }
-        
+
         return null;
     }
 }

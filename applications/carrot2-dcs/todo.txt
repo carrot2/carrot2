@@ -1,4 +1,3 @@
-* verbose logging (queries, methods)
 * disabling HTML interface and non-clustering endpoints
 * embedded client-side webapp, possibility to make it the default page?
 * option to suppress passing internal-configuration attributes? May be useful in public deployments.
@@ -14,3 +13,8 @@ Done:
 * max document count?
 * support for JSON callbacks
 * soft error reporting (missing parameters)
+* verbose logging (queries, methods)
+
+
+Intercepting requests:
+https://fisheye4.atlassian.com/browse/jersey/trunk/jersey/jersey-server/src/main/java/com/sun/jersey/api/container/filter/RolesAllowedResourceFilterFactory.java?r=HEAD* verbose logging (queries, methods)

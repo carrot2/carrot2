@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
@@ -47,6 +48,9 @@ public class ClusteringResource
 {
     @Context
     private Application application;
+
+    @Context
+    private HttpServletRequest request;
 
     private DcsApplication application()
     {
@@ -241,7 +245,7 @@ public class ClusteringResource
                     .firstNonNull(results,
                         application().config.defaultResultsFromExternalSource)));
 
-        return application().process(attrs, source, algorithm);
+        return application().process(request, attrs, source, algorithm);
     }
 
     /**
@@ -292,7 +296,7 @@ public class ClusteringResource
                 CommonAttributesDescriptor.attributeBuilder(attrs).query(query);
             }
 
-            return application().process(attrs, algorithm);
+            return application().process(request, attrs, algorithm);
         }
     }
 
