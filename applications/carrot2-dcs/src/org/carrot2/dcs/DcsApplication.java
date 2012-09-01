@@ -148,6 +148,7 @@ public class DcsApplication extends Application
         s.add(ClusteringResource.class);
         s.add(MetadataResource.class);
         s.add(FormatsResource.class);
+        s.add(AdminResource.class);
 
         s.add(InvalidInputExceptionMapper.class);
         s.add(ProcessingExceptionMapper.class);

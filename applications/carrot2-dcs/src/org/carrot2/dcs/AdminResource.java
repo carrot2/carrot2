@@ -1,17 +1,14 @@
 package org.carrot2.dcs;
 
-import java.io.StringWriter;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/metadata/json")
-public class MetadataResource
+@Path("/admin")
+public class AdminResource
 {
     @Context
     private Application application;
@@ -22,12 +19,10 @@ public class MetadataResource
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
-    public Response metadata() throws Exception
+    @Path("/status/json")
+    public Response status() throws Exception
     {
-        final StringWriter writer = new StringWriter();
-        application().componentSuite.serializeJson(writer);
-        return application().ok().entity(writer.toString())
+        return application().ok().entity(application().controller.getStatistics())
             .type(MediaType.APPLICATION_JSON).build();
     }
 }

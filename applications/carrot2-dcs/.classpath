@@ -14,6 +14,8 @@
 	<classpathentry kind="lib" path="lib/jersey-multipart-1.13.jar"/>
 	<classpathentry kind="lib" path="lib/mimepull-1.3.jar" sourcepath="C:/Users/stachoo/.m2/repository/org/jvnet/mimepull/1.3/mimepull-1.3-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jersey-client-1.13.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-jaxrs-1.7.4.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-xc-1.7.4.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/javax.servlet"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.simpleframework.xml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.gargoylesoftware.htmlunit"/>

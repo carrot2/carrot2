@@ -1,8 +1,29 @@
 <div>
   <p>
-    Status
+    Total queries: <strong id="totalQueries" /><br />
+    Successful queries: <strong id="goodQueries" /><br />
+    Error queries: <strong id="errorQueries" />
+  </p>
+  
+  <p>
+    Cache hits: <strong id="cacheHitsTotal" /><br />
+    Cache misses: <strong id="cacheMisses" />
+  </p>
+  
+  <p>
+    Document source time average: <strong id="sourceTimeAverageInWindow" /> ms<br />
+    Clustering time average: <strong id="algorithmTimeAverageInWindow" /> ms<br />
+    Total time average: <strong id="totalTimeAverageInWindow" /> ms
   </p>
 
+
   <script>
+    $.getJSON("admin/status/json", function (data) {
+      data.errorQueries = data.totalQueries - data.goodQueries;
+      
+      for (var key in data) {
+        $("#" + key).text(data[key]);
+      }
+    });
   </script>
 </div>

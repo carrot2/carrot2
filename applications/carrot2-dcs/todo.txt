@@ -1,12 +1,14 @@
+TODO:
+
 * disabling HTML interface and non-clustering endpoints
 * embedded client-side webapp, possibility to make it the default page?
 * option to suppress passing internal-configuration attributes? May be useful in public deployments.
 * when started by DcsApp, read resources and config from a local directory?
-* implement status tab
 * query rate limiting
 * support for JSON data on input
+* redirect to index.html or even better -- serve it from the root URL
 
-Done:
+DONE:
 
 * set default parameter values, default source and algorithm
 * support for custom attributes
@@ -14,6 +16,7 @@ Done:
 * support for JSON callbacks
 * soft error reporting (missing parameters)
 * verbose logging (queries, methods)
+* implement status tab
 
 
 Intercepting requests:

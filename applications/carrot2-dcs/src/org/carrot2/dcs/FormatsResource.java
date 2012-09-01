@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
+import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingResult;
@@ -55,7 +56,8 @@ public class FormatsResource
         LingoClusteringAlgorithmDescriptor.attributeBuilder(attrs)
             .desiredClusterCountBase(35);
 
-        final ProcessingResult result = application().controller.process(attrs,
+        // Use a one-off simple controller so that we don't disturb the query count stats
+        final ProcessingResult result = ControllerFactory.createSimple().process(attrs,
             new String [] {});
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         result.serialize(out);

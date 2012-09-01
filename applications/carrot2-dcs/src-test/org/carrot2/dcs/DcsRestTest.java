@@ -447,6 +447,13 @@ public class DcsRestTest extends CarrotTestCase
         final String json = baseUrl.path("metadata/json").get(String.class);
         assertThat(json).startsWith("{").endsWith("}");
     }
+    
+    @Test
+    public void statsEndpoint()
+    {
+        final String json = baseUrl.path("admin/status/json").get(String.class);
+        assertThat(json).startsWith("{").endsWith("}");
+    }
 
     @Test
     public void formatEndpoint() throws Exception
