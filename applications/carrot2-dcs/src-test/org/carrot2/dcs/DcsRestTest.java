@@ -42,6 +42,7 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope.Scope;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import com.sun.jersey.multipart.FormDataMultiPart;
@@ -65,6 +66,8 @@ public class DcsRestTest extends CarrotTestCase
 
     private static String RESOURCE_KACZYNSKI_UTF8 = "/xml/carrot2-kaczynski.utf8.xml";
     private static String RESOURCE_KACZYNSKI_UTF16 = "/xml/carrot2-kaczynski.utf16.xml";
+    private static String RESOURCE_NO_DOCUMENTS_UTF8 = "/xml/carrot2-no-documents.utf8.xml";
+    private static String RESOURCE_INVALID_SYNTAX_UTF8 = "/xml/carrot2-invalid-syntax.utf8.xml";
 
     /**
      * Buffered log stream.
@@ -135,16 +138,16 @@ public class DcsRestTest extends CarrotTestCase
     @UsesExternalServices
     public void getXmlFromExternalSourceDefaultParameters() throws Exception
     {
-        assertXmlHasDocumentsAndClusters(xmlUrl.queryParam("query", "test").get(
-            String.class));
+        assertXmlHasDocumentsAndClusters(requestExternalSource(Method.GET, xmlUrl,
+            "dcs.source", null));
     }
 
     @Test
     @UsesExternalServices
     public void getJsonFromExternalSourceDefaultParameters() throws Exception
     {
-        assertJsonHasDocumentsAndClusters(jsonUrl.queryParam("query", "test").get(
-            String.class));
+        assertJsonHasDocumentsAndClusters(requestExternalSource(Method.GET, jsonUrl,
+            "dcs.source", null));
     }
 
     @Test
@@ -314,6 +317,143 @@ public class DcsRestTest extends CarrotTestCase
         assertJsonHasCallback(
             requestExternalSource(Method.POST_MULTIPART, jsonUrl, "dcs.json.callback",
                 "cb"), "cb");
+    }
+
+    @Test(expected = UniformInterfaceException.class)
+    @UsesExternalServices
+    public void getNoQuerySpecified() throws Exception
+    {
+        try
+        {
+            requestExternalSource(Method.GET, xmlUrl, "query", null);
+        }
+        catch (UniformInterfaceException e)
+        {
+            assertThat(e.getResponse().getStatus()).isEqualTo(400);
+            assertThat(e.getResponse().getEntity(String.class)).contains(
+                "Non-empty query is required");
+            throw e;
+        }
+    }
+
+    @Test(expected = UniformInterfaceException.class)
+    public void postUrlencodedNoSourceNoStream() throws Exception
+    {
+        try
+        {
+            requestExternalSource(Method.POST_URLENCODED, xmlUrl, "dcs.source", null);
+        }
+        catch (UniformInterfaceException e)
+        {
+            assertThat(e.getResponse().getStatus()).isEqualTo(400);
+            assertThat(e.getResponse().getEntity(String.class)).contains(
+                "Non-empty dcs.source or dcs.c2stream is required");
+            throw e;
+        }
+    }
+
+    @Test(expected = UniformInterfaceException.class)
+    public void postMultipartNoSourceNoStream() throws Exception
+    {
+        try
+        {
+            requestExternalSource(Method.POST_MULTIPART, xmlUrl, "dcs.source", "");
+        }
+        catch (UniformInterfaceException e)
+        {
+            assertThat(e.getResponse().getStatus()).isEqualTo(400);
+            assertThat(e.getResponse().getEntity(String.class)).contains(
+                "Non-empty dcs.source or dcs.c2stream is required");
+            throw e;
+        }
+    }
+
+    @Test(expected = UniformInterfaceException.class)
+    public void postFromStreamNoDocuments() throws Exception
+    {
+        try
+        {
+            xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(String.class,
+                resourceMultiPart(RESOURCE_NO_DOCUMENTS_UTF8));
+        }
+        catch (UniformInterfaceException e)
+        {
+            assertThat(e.getResponse().getStatus()).isEqualTo(400);
+            assertThat(e.getResponse().getEntity(String.class)).contains(
+                "The dcs.c2stream must contain at least one document");
+            throw e;
+        }
+    }
+
+    @Test(expected = UniformInterfaceException.class)
+    public void postMultipartFromStreamInvalidSyntax() throws Exception
+    {
+        try
+        {
+            xmlUrl.type(MediaType.MULTIPART_FORM_DATA).post(String.class,
+                resourceMultiPart(RESOURCE_INVALID_SYNTAX_UTF8));
+        }
+        catch (UniformInterfaceException e)
+        {
+            assertThat(e.getResponse().getStatus()).isEqualTo(400);
+            assertThat(e.getResponse().getEntity(String.class)).contains(
+                "Could not parse Carrot2 XML stream");
+            throw e;
+        }
+    }
+
+    @Test(expected = UniformInterfaceException.class)
+    public void postUrlencodedFromStreamInvalidSyntax() throws Exception
+    {
+        try
+        {
+            xmlUrl.type(MediaType.APPLICATION_FORM_URLENCODED).post(String.class,
+                resourceFormData(RESOURCE_INVALID_SYNTAX_UTF8, Charsets.UTF_8.name()));
+        }
+        catch (UniformInterfaceException e)
+        {
+            assertThat(e.getResponse().getStatus()).isEqualTo(400);
+            assertThat(e.getResponse().getEntity(String.class)).contains(
+                "Could not parse Carrot2 XML stream");
+            throw e;
+        }
+    }
+
+    @Test(expected = UniformInterfaceException.class)
+    public void processingError() throws Exception
+    {
+        try
+        {
+            final MultivaluedMap<String, String> form = resourceFormData(
+                RESOURCE_KACZYNSKI_UTF8, Charsets.UTF_8.name());
+
+            // Invalid attribute value to force a processing error
+            form.add("LingoClusteringAlgorithm.desiredClusterCountBase", "0");
+
+            xmlUrl.type(MediaType.APPLICATION_FORM_URLENCODED).post(String.class, form);
+        }
+        catch (UniformInterfaceException e)
+        {
+            assertThat(e.getResponse().getStatus()).isEqualTo(500);
+            assertThat(e.getResponse().getEntity(String.class)).contains(
+                "Processing error");
+            throw e;
+        }
+    }
+
+    @Test
+    public void metadataEndpoint()
+    {
+        final String json = baseUrl.path("metadata/json").get(String.class);
+        assertThat(json).startsWith("{").endsWith("}");
+    }
+
+    @Test
+    public void formatEndpoint() throws Exception
+    {
+        final ProcessingResult result = ProcessingResult.deserialize(baseUrl.path(
+            "format/xml").get(String.class));
+        assertThat(result.getDocuments()).isNotEmpty();
     }
 
     enum Method

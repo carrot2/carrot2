@@ -12,7 +12,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
@@ -36,6 +35,7 @@ import org.carrot2.util.resource.ServletContextLocator;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -162,7 +162,7 @@ public class DcsApplication extends Application
                 + " Only directly-fed documents can be clustered.");
         }
         return controller.process(attrs,
-            Objects.firstNonNull(source, componentSuite.getSources().get(0).getId()),
+            firstNonBlank(source, componentSuite.getSources().get(0).getId()),
             providedOrDefaultAlgorithm(algorithm));
     }
 
@@ -173,13 +173,7 @@ public class DcsApplication extends Application
 
     ResponseBuilder ok()
     {
-        // TODO: configurable CORS header, disabled by default
         return Response.ok().header("Access-Control-Allow-Origin", config.accessControlAllowOrigin);
-    }
-
-    ResponseBuilder error(String message)
-    {
-        return Response.status(500).entity(message).type(MediaType.TEXT_PLAIN);
     }
 
     private String providedOrDefaultAlgorithm(String algorithm)
@@ -208,5 +202,17 @@ public class DcsApplication extends Application
         appender.setImmediateFlush(true);
 
         return appender;
+    }
+    
+    private String firstNonBlank(String... strings)
+    {
+        for (String string : strings)
+        {
+            if (!Strings.isNullOrEmpty(string)) {
+                return string;
+            }
+        }
+        
+        return null;
     }
 }

@@ -227,6 +227,11 @@ public class ClusteringResource
     {
         final Map<String, Object> attrs = customAttributesSupplier.get();
 
+        if (Strings.isNullOrEmpty(query))
+        {
+            throw new InvalidInputException("Non-empty query is required");
+        }
+
         // Override common attributes
         CommonAttributesDescriptor
             .attributeBuilder(attrs)
@@ -269,12 +274,6 @@ public class ClusteringResource
             {
                 // This exception will get converted to a bad request response
                 throw new InvalidInputException("Could not parse Carrot2 XML stream", e);
-            }
-
-            if (input == null)
-            {
-                throw new InvalidInputException(
-                    "Non-empty dcs.source or dcs.c2stream is required");
             }
 
             attrs.putAll(input.getAttributes());
