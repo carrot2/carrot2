@@ -11,12 +11,6 @@
     <code>application/x-www-form-urlencoded</code> encodings are supported.
   </p>
 
-  <p>
-    Non-ASCII characters in requests should be encoded consistently with the servlet container on which DCS is deployed.
-    For <code>multipart/form-data</code> requests, the character encoding for parameters should be UTF-8.
-  </p>
-
-
   <dl>
     <dt>cluster/xml</dt>
     <dd>
@@ -87,8 +81,9 @@
 
     <dt>dcs.json.callback</dt>
     <dd>
-      If a non-empty value is provided and output format is <code>JSON</code>, the response
-      data will be wrapped with a function name as specified by the parameter value.
+      <strong>Note:</strong> Applies only to the <code>cluster/json</code> endpoint. 
+      If a non-empty value is provided, the response data will be wrapped with a function 
+      name as specified by the parameter value.
     </dd>
 
     <dt>MultilingualClustering.defaultLanguage</dt>
@@ -171,6 +166,15 @@
       also be passed as HTTP parameters.
     </dd>
   </dl>
+  
+  <h3>Character encoding</h3>
+  
+  <p>
+    Non-ASCII characters in GET and POST requests should be encoded in UTF-8. The <code>dcs.c2stream</code> 
+    part of the <code>multipart/form-data</code> POST requests should be a raw XML, with correct 
+    encoding prologue, if needed.
+  </p>
+  
 
   <script>
     $.getJSON("metadata/json", function (data) {
