@@ -190,7 +190,7 @@
     // Set appropriate method and encoding before submitting
     $form.submit(function() {
       var method = $("input[name = 'method']:checked").val().split("|");
-      $(this).attr("action", dcsBase + "cluster/" + $("input[name = 'output']:checked").val())
+      $(this).attr("action", "cluster/" + $("input[name = 'output']:checked").val())
              .attr("method", method[0]).attr("enctype", method[1]);
     });
 

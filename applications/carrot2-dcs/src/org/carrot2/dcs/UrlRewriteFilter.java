@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class UrlRewriteFilter implements Filter
 {
+    private static final String DCS_APP_PREFIX = "/dcs";
+    private static final String SEARCH_APP_PREFIX = "/search";
+
     private RequestDispatcher defaultRequestDispatcher;
 
     /**
@@ -42,13 +45,13 @@ public class UrlRewriteFilter implements Filter
         final boolean searchAppMode = false;
 
         // In search application mode, the DCS frontent is not available
-        if (searchAppMode && uri.startsWith("/dcs"))
+        if (searchAppMode && uri.startsWith(DCS_APP_PREFIX))
         {
             ((HttpServletResponse) response).setStatus(404);
             return;
         }
 
-        final String prefix = searchAppMode ? "/webapp" : "/dcs";
+        final String prefix = searchAppMode ? SEARCH_APP_PREFIX : DCS_APP_PREFIX;
 
         // Forward root URL to the desired front-ent
         if (uri.equals("/"))
@@ -68,7 +71,7 @@ public class UrlRewriteFilter implements Filter
         {
             // Static content, if already forwarded to the right front-end,
             // forward to the default servlet for serving.
-            if (uri.startsWith("/dcs") || uri.startsWith("/webapp"))
+            if (uri.startsWith(DCS_APP_PREFIX) || uri.startsWith(SEARCH_APP_PREFIX))
             {
                 defaultRequestDispatcher.forward(request, response);
             }

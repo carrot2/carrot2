@@ -5,17 +5,17 @@
   <description>Document Clustering Server</description>
 
   <filter>  
-    <filter-name>default</filter-name>  
+    <filter-name>rewrite</filter-name>  
     <servlet-name>default</servlet-name>  
-    <filter-class>org.carrot2.dcs.DefaultFilter</filter-class>  
+    <filter-class>org.carrot2.dcs.UrlRewriteFilter</filter-class>  
   </filter>  
   <filter-mapping>  
-    <filter-name>default</filter-name>  
+    <filter-name>rewrite</filter-name>  
     <url-pattern>/*</url-pattern>  
   </filter-mapping>   
 
   <filter>
-    <filter-name>jerseyFilter</filter-name>
+    <filter-name>jersey</filter-name>
     <filter-class>com.sun.jersey.spi.container.servlet.ServletContainer</filter-class>
     <init-param>
       <param-name>javax.ws.rs.Application</param-name>
@@ -32,7 +32,7 @@
   </filter>
   
   <filter-mapping>
-    <filter-name>jerseyFilter</filter-name>
+    <filter-name>jersey</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 </web-app>
