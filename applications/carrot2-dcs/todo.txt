@@ -1,12 +1,45 @@
 TODO:
 
 * disabling HTML interface and non-clustering endpoints
-* embedded client-side webapp, possibility to make it the default page?
 * option to suppress passing internal-configuration attributes? May be useful in public deployments.
 * when started by DcsApp, read resources and config from a local directory?
 * query rate limiting
 * support for JSON data on input
-* redirect to index.html or even better -- serve it from the root URL
+* disable "Cluster" button when input is invalid
+* "refresh" link on the status page
+* gzip filter
+* far future expires filter
+* option to completely disable serving static content?
+* pass the "search application mode" option to the filter
+
+
+* Tuning of FoamTree selection outline
+* Tuning of default FoamTree colors
+* Breadcrumbs?
+* FoamTree interaction hints
+* Google analytics
+* IE 8 fixes, support for FoamTree Flash fallback
+* maintain default values and serialize only differences for shorter URLs
+* persist settings to the local storage (only when changes initiated by UI, not by parsing a permanent URL)
+* support "open link in new tab" case?
+* lazy loading of visualization plugin dependencies
+* keyboard shortcuts for source tab switching
+* Improve FoamTree hover/selection visibility on white backgrounds
+* Fading out/in when switching from startup to results screen?
+* Highlighting of query/label terms in snippets (in JavaScript, no stemming/synonyms support)
+* Prefetching of first N results
+* document settings in index.html so that others can customize them
+* Error handling, after CORS is implemented
+* Fallback message for legacy browsers?
+* IndeedDocumentSource --> click vs. view URLs?
+* carrot2.webapp.clusters should notify controller of widtch change rather than do it on its own
+* Loading screen delay threshold (show after 150ms or so)
+* Optimization: changing of algorithm should not reload documents view
+* Redirections for legacy GET URLs
+* BUG: font does not embed correcly when loading local (debug) data for the first time
+* Add site search support to eTools
+* Optionally display secondary cluster labels
+
 
 DONE:
 
@@ -19,5 +52,13 @@ DONE:
 * implement status tab
 
 
-Intercepting requests:
-https://fisheye4.atlassian.com/browse/jersey/trunk/jersey/jersey-server/src/main/java/com/sun/jersey/api/container/filter/RolesAllowedResourceFilterFactory.java?r=HEAD* verbose logging (queries, methods)
+* FoamTree resize hook (only when visualization visible)
+* Loading indicator
+* BUG: Circles gets reloaded on view switches (Chrome)
+* BUG: Uncaught TypeError: Object #<HTMLObjectElement> has no method 'loadDataFromXML' on new query after switching views (Chrome)
+* expose searcher function to the outside to enable other backends (Solr, Elastic Search)
+* Persistent URLs
+* Clickable startup and results logos
+* expose document templates, per-source customization of templates (images)
+* embedded client-side webapp, possibility to make it the default page?
+* redirect to index.html or even better -- serve it from the root URL

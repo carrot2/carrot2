@@ -154,7 +154,6 @@
   </div>
 
   <script>
-    var dcsBase = "http://localhost:8080/";
     var $form = $("form");
 
     // Rearrange form based on the input type
@@ -201,7 +200,7 @@
 
     // Load sources and algorithms
     $.ajax({
-      url: dcsBase + "metadata/json",
+      url: "metadata/json",
       method: "GET",
       dataType: "json",
       success: function(data) {

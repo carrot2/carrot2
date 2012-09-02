@@ -141,18 +141,16 @@
           };
 
           $.ajax({
-            url: "http://localhost:8080/dcs/rest",
+            url: document.location.search == "?preview" ? "../cluster/json" : "cluster/json",
             data: {
               "dcs.source": toDcsSource[params.source],
               "dcs.algorithm": params.algorithm,
               "results": params.results,
               "query": params.query,
-              "dcs.output.format": "JSON",
               "dcs.clusters.only": false
             },
             success: done,
-            dataType: "jsonp",
-            jsonp: "dcs.json.callback"
+            dataType: "json"
           });
         },
         search: {

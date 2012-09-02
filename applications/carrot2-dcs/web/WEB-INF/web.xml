@@ -4,6 +4,16 @@
   <display-name>dcs</display-name>
   <description>Document Clustering Server</description>
 
+  <filter>  
+    <filter-name>default</filter-name>  
+    <servlet-name>default</servlet-name>  
+    <filter-class>org.carrot2.dcs.DefaultFilter</filter-class>  
+  </filter>  
+  <filter-mapping>  
+    <filter-name>default</filter-name>  
+    <url-pattern>/*</url-pattern>  
+  </filter-mapping>   
+
   <filter>
     <filter-name>jerseyFilter</filter-name>
     <filter-class>com.sun.jersey.spi.container.servlet.ServletContainer</filter-class>
