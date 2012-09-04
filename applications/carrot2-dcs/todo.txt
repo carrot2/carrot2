@@ -13,6 +13,7 @@ TODO:
 * support for branding (icons, algorithms, sources)
 
 
+* BUG: selection of the number of results stopped working
 * Tuning of FoamTree selection outline
 * Tuning of default FoamTree colors
 * Breadcrumbs?
