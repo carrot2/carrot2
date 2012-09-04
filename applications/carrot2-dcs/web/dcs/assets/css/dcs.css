@@ -69,3 +69,7 @@ a {
 li.active [class^="icon-"] {
   background-image: url(../img/glyphicons-halflings.png) !important;
 }
+
+.btn.disabled, .btn[disabled] {
+  opacity: 0.4;
+}
