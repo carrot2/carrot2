@@ -143,7 +143,7 @@ public class RateLimiter<T>
             }
         }
 
-        boolean check()
+        synchronized boolean check()
         {
             final long now = System.currentTimeMillis();
             final long passed = now - lastCheck;
