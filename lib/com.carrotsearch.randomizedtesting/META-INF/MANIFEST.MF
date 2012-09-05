@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: RandomizedTesting
 Bundle-SymbolicName: com.carrotsearch.randomizedtesting
-Bundle-Version: 1.5.0
+Bundle-Version: 2.0.0
 Bundle-Vendor: Carrot Search s.c.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: randomizedtesting-runner-2.0.0-SNAPSHOT.jar
+Bundle-ClassPath: randomizedtesting-runner-2.0.0.jar
 Export-Package: com.carrotsearch.randomizedtesting,
  com.carrotsearch.randomizedtesting.annotations,
  com.carrotsearch.randomizedtesting.generators,
