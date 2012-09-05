@@ -12,7 +12,7 @@ TODO:
 * pass the "search application mode" option to the filter
 * support for branding (icons, algorithms, sources)
 
-
+* BUG: FoamTree looks blurry on FF (container sizing problem?)
 * BUG: selection of the number of results stopped working
 * Tuning of FoamTree selection outline
 * Tuning of default FoamTree colors
