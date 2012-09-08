@@ -12,6 +12,7 @@
 
 package org.carrot2.workbench.vis.foamtree;
 
+import java.util.EnumSet;
 import java.util.Map;
 
 import org.carrot2.workbench.core.ui.SearchEditor;
@@ -62,7 +63,7 @@ final class FoamTreeViewPage extends FlashViewPage
      */
     public FoamTreeViewPage(SearchEditor editor)
     {
-        super(editor, ENTRY_PAGE);
+        super(editor, ENTRY_PAGE, EnumSet.noneOf(DocumentData.class));
     }
 
     /**

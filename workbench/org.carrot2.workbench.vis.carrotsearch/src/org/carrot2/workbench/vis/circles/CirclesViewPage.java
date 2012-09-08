@@ -12,6 +12,8 @@
 
 package org.carrot2.workbench.vis.circles;
 
+import java.util.EnumSet;
+
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.actions.ExportImageAction;
 import org.carrot2.workbench.core.ui.actions.IControlProvider;
@@ -36,7 +38,7 @@ final class CirclesViewPage extends FlashViewPage
      */
     public CirclesViewPage(SearchEditor editor)
     {
-        super(editor, ENTRY_PAGE);
+        super(editor, ENTRY_PAGE, EnumSet.of(DocumentData.TITLE));
     }
     
     @Override
