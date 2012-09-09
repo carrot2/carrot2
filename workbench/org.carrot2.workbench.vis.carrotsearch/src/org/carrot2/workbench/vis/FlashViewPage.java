@@ -301,7 +301,7 @@ public abstract class FlashViewPage extends Page
         for (Document doc : pr.getDocuments()) {
             String title = passData.contains(DocumentData.TITLE) ? doc.getTitle() : null;
             String snippet = passData.contains(DocumentData.SNIPPET) ? doc.getSummary() : null;
-            Document docMirror = new Document(title, snippet, null, null, doc.getStringId());
+            Document docMirror = new Document(title, snippet, null, null, doc.getId());
             prm.documents.add(docMirror);
             docMapping.put(doc, docMirror);
         }
@@ -314,7 +314,7 @@ public abstract class FlashViewPage extends Page
 
     private static Cluster mirrorOf(Cluster c, IdentityHashMap<Document, Document> docMapping)
     {
-        Cluster cMirror = new Cluster(c.getId(), null);
+        Cluster cMirror = new Cluster(c.getId());
         for (Document doc : c.getDocuments()) {
             cMirror.addDocuments(docMapping.get(doc));
         }

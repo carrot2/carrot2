@@ -192,6 +192,16 @@ public final class Document
     }
 
     /**
+     * Assigns document {@link #getId()}. This is a forward compatibility method
+     * with 3.7.x branch where IDs are no longer integers and can be set manually. 
+     */
+    public Document(String title, String summary, String contentUrl, LanguageCode language, int id)
+    {
+        this(title, summary, contentUrl, language);
+        this.id = id;
+    }
+
+    /**
      * A unique identifier of this document. The identifiers are assigned to documents
      * before processing finishes. Note that two documents with equal contents will be
      * assigned different identifiers.

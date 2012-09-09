@@ -155,6 +155,16 @@ public final class Cluster
     }
 
     /**
+     * Assigns cluster {@link #getId()}. This is a forward compatibility method
+     * with 3.7.x branch where IDs are no longer integers and can be set manually. 
+     */
+    public Cluster (int id)
+    {
+        this();
+        this.id = id;
+    }
+
+    /**
      * Formats this cluster's label. If there is more than one phrase describing this
      * cluster, phrases will be separated by a comma followed by a space, e.g. "Phrase
      * one, Phrase two". To format multi-phrase label in a different way, use
