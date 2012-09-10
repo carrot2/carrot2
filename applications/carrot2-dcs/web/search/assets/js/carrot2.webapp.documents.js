@@ -40,9 +40,13 @@
     }
 
     function select(ids, labels) {
-      $listing.scrollTop(0).children().hide().filter(function() {
-        return ids[this.id.substring(1)];
-      }).show();
+      window.setTimeout(function() {
+        $listing.scrollTop(0).removeClass("forceshowall")
+          .children(":visible").hide().end()
+          .children().filter(function() {
+            return ids[this.id.substring(1)];
+          }).show();
+      }, 0);
 
       if (labels.length == 1) {
         $summary.html(summaryOneGroupTemplate({
@@ -58,7 +62,9 @@
     }
 
     function clearSelection() {
-      $listing.children().show();
+      window.setTimeout(function() {
+        $listing.addClass("forceshowall");
+      }, 0);
 
       $summary.html(summaryRootTemplate({
         count: currentData.documents.length,

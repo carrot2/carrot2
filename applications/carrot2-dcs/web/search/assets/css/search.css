@@ -322,6 +322,9 @@
   right: 0;
   padding-right: 10px;
 }
+#documents > .listing.forceshowall > div {
+  display: block !important;
+}
 
 #documents > .listing > div {
   margin-bottom: 30px;
