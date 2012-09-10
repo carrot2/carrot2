@@ -40,9 +40,9 @@
     }
 
     function select(ids, labels) {
-      $listing.scrollTop(0).children().each(function() {
-        $(this).toggle(ids[this.id.substring(1)] === true);
-      });
+      $listing.scrollTop(0).children().hide().filter(function() {
+        return ids[this.id.substring(1)];
+      }).show();
 
       if (labels.length == 1) {
         $summary.html(summaryOneGroupTemplate({
