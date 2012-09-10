@@ -81,7 +81,7 @@
     //
     function populate(data) {
       // Generate HTML
-      var html = "<a href='#'><span class='phrase'>All topics</span><span class='size'>(100)</span></a>" +
+      var html = "<a href='#'><span class='phrase'>All topics</span><span class='size'>(" + data.documents.length + ")</span></a>" +
         "<ul>" +
           _.reduce(data.clusters, function reducer(html, cluster) {
             html += folderTemplate({
