@@ -15,7 +15,12 @@ package org.carrot2.workbench.vis;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -27,6 +32,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.helpers.Utils;
@@ -51,6 +57,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
+import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,13 +177,28 @@ public abstract class FlashViewPage extends Page
      */
     private ProcessingResult lastProcessingResult;
 
+    /**
+     * @see DocumentData
+     */
+    private EnumSet<DocumentData> passData;
+
+    /**
+     * What data to pass to the visualization. Helps to decrease memory requirements
+     * on the browser side.
+     */
+    protected static enum DocumentData {
+        TITLE,
+        SNIPPET
+    }
+
     /*
      * 
      */
-    public FlashViewPage(SearchEditor editor, String entryPageUri)
+    public FlashViewPage(SearchEditor editor, String entryPageUri, EnumSet<DocumentData> passData)
     {
         this.entryPageUri = entryPageUri;
         this.editor = editor;
+        this.passData = passData;
     }
 
     /*
@@ -242,7 +264,7 @@ public abstract class FlashViewPage extends Page
         try
         {
             final ByteArrayOutputStream os = new ByteArrayOutputStream();
-            pr.serialize(os, true, true);
+            new Persister().write(smallerMemFootprintMirror(pr), os);
             os.close();
 
             String xml = new String(os.toByteArray(), "UTF-8");
@@ -265,6 +287,43 @@ public abstract class FlashViewPage extends Page
         }
 
         return Status.OK_STATUS;
+    }
+
+    /**
+     * Create a mirror of a processing result with a smaller memory footprint
+     * for visualizations.
+     */
+    private ProcessingResultMirror smallerMemFootprintMirror(ProcessingResult pr)
+    {
+        ProcessingResultMirror prm = new ProcessingResultMirror();
+        prm.query = pr.getAttribute(AttributeNames.QUERY);
+        prm.documents = Lists.newArrayList();
+        IdentityHashMap<Document, Document> docMapping = Maps.newIdentityHashMap();
+        for (Document doc : pr.getDocuments()) {
+            String title = passData.contains(DocumentData.TITLE) ? doc.getTitle() : null;
+            String snippet = passData.contains(DocumentData.SNIPPET) ? doc.getSummary() : null;
+            Document docMirror = new Document(title, snippet, null, null, doc.getStringId());
+            prm.documents.add(docMirror);
+            docMapping.put(doc, docMirror);
+        }
+        prm.clusters = Lists.newArrayList();
+        for (Cluster c : pr.getClusters()) {
+            prm.clusters.add(mirrorOf(c, docMapping));
+        }
+        return prm;
+    }
+
+    private static Cluster mirrorOf(Cluster c, IdentityHashMap<Document, Document> docMapping)
+    {
+        Cluster cMirror = new Cluster(c.getId(), null);
+        for (Document doc : c.getDocuments()) {
+            cMirror.addDocuments(docMapping.get(doc));
+        }
+        cMirror.addPhrases(c.getPhrases());
+        for (Cluster sub : c.getSubclusters()) {
+            cMirror.addSubclusters(mirrorOf(sub, docMapping));
+        }
+        return cMirror;
     }
 
     /**
