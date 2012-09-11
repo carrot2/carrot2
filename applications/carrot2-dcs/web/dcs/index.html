@@ -15,10 +15,10 @@
       <a id="logo" href="index.html"><img src="assets/img/carrot-search-logo-small.png" /></a>
 
       <ul class="nav nav-tabs no-margin">
-        <li class="active"><a href="quickstart.html">Quick start</a></li>
-        <li><a href="reference.html">Reference</a></li>
-        <li><a href="status.html"> Status</a></li>
-        <li style="float: right"><a href="preview.html"><i class="icon-search"></i> Search application</a></li>
+        <li class="active"><a href="#quickstart.html">Quick start</a></li>
+        <li><a href="#reference.html">Reference</a></li>
+        <li><a href="#status.html"> Status</a></li>
+        <li style="float: right"><a href="#preview.html"><i class="icon-search"></i> Search application</a></li>
       </ul>
 
       <div id="content">Loading...</div>
@@ -26,19 +26,15 @@
     
     
     <script src="assets/js/jquery-1.8.1.min.js"></script>
+    <script src="assets/js/jquery.pathchange.js"></script>
     <script src="assets/js/underscore.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
 
     <script>
       $(document).ready(function() {
-        $(".nav a").click("click", function() {
-          var $link = $(this);
-          $(".nav li").removeClass("active");
-          $link.closest("li").addClass("active");
-          $("#content").load($link.attr("href"));
-          return false;
-        });
-        $(".nav > li.active > a").trigger("click");
+        if (document.location.hash.length == 0) {
+          document.location.hash = $(".nav > li.active > a").attr("href");
+        }
       });
 
       $.fn.enable = function(enabled) {
@@ -48,6 +44,31 @@
           $this.closest(".control-group").toggle(enabled);
         });
       };
+
+      $(window).pathchange(function () {
+        if (document.location.hash.indexOf("#") != 0) {
+          return;
+        }
+
+        var hash = document.location.hash.substring(1);
+
+        var $link = $(".nav a[href='#" + hash.substring(0, hash.indexOf(".html") + 5) + "']");
+        $(".nav li").removeClass("active");
+        $link.closest("li").addClass("active");
+
+        $("#content").load(hash, function() {
+          var nextHashIndex = hash.indexOf("#");
+          if (nextHashIndex > 0) {
+            $('html, body').animate({
+              scrollTop: $("#" + hash.substring(nextHashIndex + 1)).offset().top
+            }, 800);
+          }
+        });
+      });
+      $.pathchange.init({
+        useHistory: false
+      });
+      $(window).pathchange();
     </script>
   </body>
 </html>
