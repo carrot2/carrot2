@@ -3,9 +3,6 @@
 <config default-results-from-external-source="50"
         max-results-from-external-source="200"
         access-control-allow-origin="*">
-  <limits>
-    <limit requests="5"    per="2" />
-    <limit requests="100"  per="180" />
-    <limit requests="1000" per="86400" />
-  </limits>
+  <!-- No limits on request rates -->
+  <limits />
 </config>

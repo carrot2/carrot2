@@ -11,6 +11,7 @@ TODO:
 * option to completely disable serving static content?
 * pass the "search application mode" option to the filter
 * support for branding (icons, algorithms, sources)
+* DCS front-end (status) available only from listed hosts?
 
 * BUG: FoamTree looks blurry on FF (container sizing problem?)
 * BUG: selection of the number of results stopped working

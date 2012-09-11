@@ -1,11 +1,19 @@
 package org.carrot2.dcs;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicLong;
 
+import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
 
 /**
  * A simple keyed event rate limiter based the Token Bucket algorithm. A typical use case
@@ -21,6 +29,11 @@ public class RateLimiter<T>
      * Ordered list of limits.
      */
     private final List<RateLimit> limits;
+
+    /**
+     * Tracks the number of violations for each key.
+     */
+    private final ConcurrentMap<T, AtomicLong> violations = Maps.newConcurrentMap();
 
     /**
      * A cache of buckets for each key.
@@ -56,7 +69,52 @@ public class RateLimiter<T>
      */
     public boolean check(T key)
     {
-        return buckets.getUnchecked(key).check();
+        final boolean allowed = buckets.getUnchecked(key).check();
+        if (!allowed)
+        {
+            violations.putIfAbsent(key, new AtomicLong(0));
+            violations.get(key).incrementAndGet();
+        }
+        return allowed;
+    }
+
+    /**
+     * Returns a snapshot of top {@code n} rate violating keys and values.
+     */
+    public LinkedHashMap<T, Long> getViolationCounts(int n)
+    {
+        // Grab a snapshot of the violations count
+        final Map<T, Long> snapshot = Maps.newHashMap(Maps.transformValues(violations,
+            new Function<AtomicLong, Long>()
+            {
+                @Override
+                public Long apply(AtomicLong value)
+                {
+                    return value.longValue();
+                }
+            }));
+
+        final List<T> sortedKeys = Ordering.natural().reverse()
+            .onResultOf(Functions.forMap(snapshot))
+            .immutableSortedCopy(violations.keySet());
+        final LinkedHashMap<T, Long> top = Maps.newLinkedHashMap();
+        for (T key : sortedKeys)
+        {
+            if (top.size() > n)
+            {
+                break;
+            }
+            top.put(key, snapshot.get(key));
+        }
+        return top;
+    }
+    
+    /**
+     * Clears the violation counters for all keys.
+     */
+    public void clearViolationCounts()
+    {
+        violations.clear();
     }
 
     /**
@@ -69,9 +127,9 @@ public class RateLimiter<T>
         private final List<RateLimit> limits = Lists.newArrayList();
 
         /**
-         * Adds a limit of <code>allowed</code> events per <code>periodMilliseconds</code>.
-         * Limits must be added in the strictly increasing order of period lengths and in
-         * the strictly decreasing order of rates (
+         * Adds a limit of <code>allowed</code> events per <code>periodMilliseconds</code>
+         * . Limits must be added in the strictly increasing order of period lengths and
+         * in the strictly decreasing order of rates (
          * <code>allowed / periodMilliseconds</code>).
          */
         public RateLimiterBuilder<T> limitTo(int allowed, int periodMilliseconds)

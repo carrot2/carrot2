@@ -1,5 +1,6 @@
 package org.carrot2.dcs;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +28,7 @@ import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.source.SearchEngineBase;
 import org.carrot2.text.linguistic.LexicalDataLoaderDescriptor;
+import org.carrot2.util.resource.FileResource;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.IResourceLocator;
 import org.carrot2.util.resource.PrefixDecoratorLocator;
@@ -43,10 +45,13 @@ import com.google.common.collect.Maps;
 public class DcsApplication extends Application
 {
     /** System property to enable class path search for resources in tests. */
-    final static String ENABLE_CLASSPATH_LOCATOR = "enable.classpath.locator";
+    final static String ENABLE_CLASSPATH_LOCATOR = "carrot2.dcs.enable.classpath.locator";
 
     /** System property to disable log file appender. */
-    final static String DISABLE_LOGFILE_APPENDER = "disable.logfile";
+    final static String DISABLE_LOGFILE_APPENDER = "carrot2.dcs.disable.logfile";
+
+    /** Path to the DCS config XML file. */
+    final static String DCS_CONFIG_PATH = "carrot2.dcs.config.path";
 
     private static final Logger log = Logger.getLogger("dcs");
 
@@ -56,6 +61,8 @@ public class DcsApplication extends Application
     transient ProcessingComponentSuite componentSuite;
 
     transient Controller controller;
+
+    transient RateLimiter<String> rateLimiter;
 
     transient DcsConfig config;
 
@@ -74,16 +81,35 @@ public class DcsApplication extends Application
 
         // Load config
         log.info("Loading configuration file");
-        final IResource [] configResource = webInfLocator.getAll("dcs.xml");
-        if (configResource.length > 0)
+        final String configPath = System.getProperty(DCS_CONFIG_PATH);
+        if (!Strings.isNullOrEmpty(configPath))
         {
-            config = DcsConfig.deserialize(configResource[0]);
+            try
+            {
+                config = DcsConfig.deserialize(new FileResource(new File(configPath)));
+            }
+            catch (IOException e)
+            {
+                throw new Exception(
+                    "Configuration file not found in WEB-INF/dcs.xml, using defaults.", e);
+            }
         }
         else
         {
-            log.warn("Configuration file (WEB-INF/dcs.xml) not found, using defaults.");
-            config = new DcsConfig();
+            final IResource [] configResource = webInfLocator.getAll("dcs.xml");
+            if (configResource.length > 0)
+            {
+                config = DcsConfig.deserialize(configResource[0]);
+            }
+            else
+            {
+                log.warn("Configuration file not found in WEB-INF/dcs.xml, using defaults.");
+                config = new DcsConfig();
+            }
         }
+
+        // Get rate limiter configured in dcs.xml
+        rateLimiter = config.buildRateLimiter();
 
         // We'll use WEB-INF locators (and classpath for tests)
         final List<IResourceLocator> resourceLocators = Lists.newArrayList();
@@ -152,6 +178,7 @@ public class DcsApplication extends Application
 
         s.add(InvalidInputExceptionMapper.class);
         s.add(ProcessingExceptionMapper.class);
+        s.add(RequestCountLimitExceededMapper.class);
 
         return s;
     }
@@ -159,6 +186,12 @@ public class DcsApplication extends Application
     ProcessingResult process(HttpServletRequest request, Map<String, Object> attrs,
         String source, String algorithm)
     {
+        final String ip = request.getRemoteAddr();
+        if (!rateLimiter.check(ip))
+        {
+            throw new RequestCountLimitExceeded();
+        }
+
         if (componentSuite.getSources().isEmpty())
         {
             throw new InvalidInputException("Component suite has no document sources."
@@ -167,19 +200,24 @@ public class DcsApplication extends Application
         final String resolvedSource = firstNonBlank(source, componentSuite.getSources()
             .get(0).getId());
         final String resolvedAlgorithm = providedOrDefaultAlgorithm(algorithm);
-        log.info("Processing " + request.getMethod() + " request from "
-            + request.getRemoteAddr() + ": " + resolvedAlgorithm + ":" + resolvedSource
-            + ":" + attrs.get("results") + ":" + attrs.get("query"));
+        log.info("Processing " + request.getMethod() + " request from " + ip + ": "
+            + resolvedAlgorithm + ":" + resolvedSource + ":" + attrs.get("results") + ":"
+            + attrs.get("query"));
         return controller.process(attrs, resolvedSource, resolvedAlgorithm);
     }
 
     ProcessingResult process(HttpServletRequest request, Map<String, Object> attrs,
         String algorithm)
     {
+        final String ip = request.getRemoteAddr();
+        if (!rateLimiter.check(ip))
+        {
+            throw new RequestCountLimitExceeded();
+        }
+
         final String resolvedAlgorithm = providedOrDefaultAlgorithm(algorithm);
-        log.info("Processing " + request.getMethod() + " request from "
-            + request.getRemoteAddr() + ": " + resolvedAlgorithm
-            + ":<direct-document-feed>");
+        log.info("Processing " + request.getMethod() + " request from " + ip + ": "
+            + resolvedAlgorithm + ":<direct-document-feed>");
         return controller.process(attrs, resolvedAlgorithm);
     }
 
