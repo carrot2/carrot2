@@ -1,4 +1,6 @@
 <div>
+  <h3>Query statistics</h3>
+
   <p>
     Total queries: <strong id="totalQueries" /><br />
     Successful queries: <strong id="goodQueries" /><br />
@@ -16,14 +18,27 @@
     Total time average: <strong id="totalTimeAverageInWindow" /> ms
   </p>
 
+  <h3>Top rate limit violations</h3>
+
+  <ul id="violations"></ul>
 
   <script>
     $.getJSON("admin/status/json", function (data) {
       data.errorQueries = data.totalQueries - data.goodQueries;
       
       for (var key in data) {
-        $("#" + key).text(data[key]);
+        $("#" + key).text(key.indexOf("Average") > 0 ? data[key].toFixed(2) : data[key]);
       }
+    });
+
+    $.getJSON("admin/violations/json", function (data) {
+      var template = _.template("<li><%- ip %>: <%- count %></li>");
+      var content = "";
+
+      _.each(data, function(val, key) {
+        content += template({ ip: key, count: val });
+      });
+      $("#violations").html(content);
     });
   </script>
 </div>
