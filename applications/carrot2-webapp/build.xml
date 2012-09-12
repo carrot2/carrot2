@@ -175,7 +175,8 @@
     <copy todir="${webapp.context.dir}/WEB-INF/resources">
       <fileset dir="${carrot2.master.basedir}/core/carrot2-util-text/src-resources">
         <include name="stopwords.*" />
-    	<include name="stoplabels.*" />
+        <include name="stoplabels.*" />
+        <include name="stoptags.*" />
       </fileset>
     </copy>
   </target>
