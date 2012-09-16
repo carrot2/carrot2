@@ -278,7 +278,8 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      */
     int getDataSourceResultsCount()
     {
-        int sources = DataSources.ALL.equals(dataSources) ? ALL_SOURCES_COUNT
+        int sources = DataSources.ALL.equals(dataSources) 
+            ? ALL_SOURCES_COUNT 
             : FASTEST_SOURCES_COUNT;
 
         if (results == 0)
