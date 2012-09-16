@@ -39,6 +39,14 @@ public class WebDocumentSourceTest extends
 
     @UsesExternalServices
     @Test
+    @Override
+    public void testLargeQuery() throws Exception
+    {
+        runAndCheckMinimumResults(getLargeQueryText(), getLargeQuerySize(), 100);
+    }
+
+    @UsesExternalServices
+    @Test
     public void testFirstResults()
     {
         runQuery("obama", getSmallQuerySize());
