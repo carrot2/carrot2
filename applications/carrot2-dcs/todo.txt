@@ -3,7 +3,6 @@ TODO:
 * disabling HTML interface and non-clustering endpoints
 * option to suppress passing internal-configuration attributes? May be useful in public deployments.
 * when started by DcsApp, read resources and config from a local directory?
-* query rate limiting
 * support for JSON data on input
 * "refresh" link on the status page
 * gzip filter
@@ -51,6 +50,7 @@ DONE:
 * soft error reporting (missing parameters)
 * verbose logging (queries, methods)
 * implement status tab
+* query rate limiting
 
 
 * FoamTree resize hook (only when visualization visible)
