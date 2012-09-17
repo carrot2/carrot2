@@ -13,7 +13,6 @@ TODO:
 * DCS front-end (status) available only from listed hosts?
 
 * BUG: FoamTree looks blurry on FF (container sizing problem?)
-* BUG: selection of the number of results stopped working
 * Tuning of FoamTree selection outline
 * Tuning of default FoamTree colors
 * Breadcrumbs?
@@ -36,7 +35,6 @@ TODO:
 * Loading screen delay threshold (show after 150ms or so)
 * Optimization: changing of algorithm should not reload documents view
 * Redirections for legacy GET URLs
-* BUG: font does not embed correcly when loading local (debug) data for the first time
 * Add site search support to eTools
 * Optionally display secondary cluster labels
 
@@ -51,6 +49,8 @@ DONE:
 * verbose logging (queries, methods)
 * implement status tab
 * query rate limiting
+* BUG: selection of the number of results stopped working
+* BUG: font does not embed correcly when loading local (debug) data for the first time
 
 
 * FoamTree resize hook (only when visualization visible)

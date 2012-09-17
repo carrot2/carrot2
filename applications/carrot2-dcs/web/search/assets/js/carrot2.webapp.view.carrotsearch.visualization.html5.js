@@ -25,7 +25,29 @@
     })());
 
     // Export public methods
-    this.populate = populate;
+    this.populate = (function() {
+      // A wrapper over the target populate method that
+      // delays the display if web fonts are loading.
+      var fontsLoaded = false;
+      var lastData = undefined;
+      $("body").bind("webfontactive webfontinactive", function() {
+        if (!fontsLoaded) {
+          fontsLoaded = true;
+          if (lastData) {
+            populate(lastData);
+            lastData = undefined;
+          }
+        }
+      });
+      return function(data) {
+        if (fontsLoaded || !($("body").webfont("loading") === true) /* sic! */) {
+          populate(data);
+        } else {
+          lastData = data;
+        }
+      };
+    })();
+
     this.clear = clear;
     this.populated = populated;
     this.select = select;
