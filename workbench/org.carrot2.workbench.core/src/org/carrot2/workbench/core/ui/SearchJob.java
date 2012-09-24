@@ -48,7 +48,7 @@ public final class SearchJob extends Job
     {
         this(results.getInput().getName(), results);
     }
-
+    
     /**
      * Run this job
      */
@@ -67,8 +67,8 @@ public final class SearchJob extends Job
 
         try
         {
-            final Map<String, Object> attributes = searchInput.getAttributeValueSet()
-                .getAttributeValues();
+            final Map<String, Object> attributes = 
+                searchInput.getAttributeValueSet().getAttributeValues();
 
             final Controller controller = core.getController();
 
@@ -80,6 +80,8 @@ public final class SearchJob extends Job
                 {
                     public void run()
                     {
+                        searchResult.getInput().setAttribute(
+                            CachingProcessingComponentManager.CACHE_BYPASS_ATTR, false, false);
                         searchResult.setProcessingResult(result);
                     }
                 }
