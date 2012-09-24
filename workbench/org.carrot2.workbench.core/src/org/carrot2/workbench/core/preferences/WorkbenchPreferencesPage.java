@@ -91,7 +91,21 @@ public class WorkbenchPreferencesPage extends FieldEditorPreferencePage implemen
         delayEditor.setValidateStrategy(StringFieldEditor.VALIDATE_ON_KEY_STROKE);
         delayEditor.fillIntoGrid(spacer, 2);
         addField(delayEditor);
-        
+
+        /*
+         * Search result view.
+         */
+        g = createOptionGroup(parent, "Search result display");
+        spacer = createSpacerComposite(g);
+
+        final IntegerFieldEditor maxFieldLength = 
+            new IntegerFieldEditor(PreferenceConstants.MAX_FIELD_LENGTH, "Maximum snippet/title length", spacer);
+        maxFieldLength.setEmptyStringAllowed(false);
+        maxFieldLength.setValidRange(0, 100000);
+        maxFieldLength.setValidateStrategy(StringFieldEditor.VALIDATE_ON_KEY_STROKE);
+        maxFieldLength.fillIntoGrid(spacer, 2);
+        addField(maxFieldLength);
+
         initialize();
         checkState();
 

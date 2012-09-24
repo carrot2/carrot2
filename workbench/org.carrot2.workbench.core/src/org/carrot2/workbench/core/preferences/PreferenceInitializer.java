@@ -32,8 +32,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
 {
     public void initializeDefaultPreferences()
     {
-        final IPreferenceStore store = WorkbenchCorePlugin.getDefault()
-            .getPreferenceStore();
+        final IPreferenceStore store = 
+            WorkbenchCorePlugin.getDefault().getPreferenceStore();
 
         /*
          * Default editor panels.
@@ -71,6 +71,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
          * Automatically show attribute info in the view.
          */
         store.setDefault(PreferenceConstants.ATTRIBUTE_INFO_SYNC, true);
+        
+        /*
+         * Truncate long snippets and titles after this many characters.
+         */
+        store.setDefault(PreferenceConstants.MAX_FIELD_LENGTH, 280);
     }
 
     /*

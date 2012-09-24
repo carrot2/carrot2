@@ -146,7 +146,7 @@
       <page
             class="org.carrot2.workbench.core.preferences.WorkbenchPreferencesPage"
             id="org.carrot2.workbench.core.preferences.WorkbenchPreferencePage"
-            name="Carrot2">
+            name="Workbench">
       </page>
       <page
             class="org.carrot2.workbench.core.preferences.GeneralPreferencesPage"
