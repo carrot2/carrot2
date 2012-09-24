@@ -919,6 +919,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          * attributes (temporal), but is much simpler than trying to pool/ cache/ stack
          * dirty tokens and manage them in synchronization with running jobs.
          */
+        System.out.println("###");
         setDirty(false);
         searchJob.schedule();
     }

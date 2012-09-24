@@ -170,12 +170,14 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
 
     // Two extra attributes to add to the input map. This way, they will also become
     // part of the cache key, which is what we need.
-    private static final String COMPONENT_CLASS_KEY = CachingProcessingComponentManager.class
-        .getName()
-        + ".componentClass";
-    private static final String COMPONENT_ID_KEY = CachingProcessingComponentManager.class
-        .getName()
-        + ".componentId";
+    private static final String COMPONENT_CLASS_KEY = 
+        CachingProcessingComponentManager.class.getName() + ".componentClass";
+    private static final String COMPONENT_ID_KEY = 
+        CachingProcessingComponentManager.class.getName() + ".componentId";
+    
+    /** Any values put under this attribute will cause a cache bypass (dropping of the stale value). */
+    public static final String CACHE_BYPASS_ATTR = 
+        CachingProcessingComponentManager.class.getName() + ".cacheBypass";
 
     /**
      * A stub component that fetches the data from the cache and adds the results to the
@@ -225,10 +227,16 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
             // be created by the ValueProducer.
             final AttributeMapCacheKey key = new AttributeMapCacheKey(
                 inputProcessingAttributes, inputAttributes);
+
+            // Cache bypass.
+            if (inputAttributes.containsKey(CACHE_BYPASS_ATTR) &&
+                Boolean.valueOf(inputAttributes.get(CACHE_BYPASS_ATTR).toString())) {
+                cache.invalidate(key);
+            }
+
             try
             {
-                final Map<String, Object> processingResult = 
-                    cache.get(key, new ValueProducer(key));
+                final Map<String, Object> processingResult = cache.get(key, new ValueProducer(key));
 
                 // Copy the results @Output @Processing attributes back to the result
                 outputAttributes.putAll(getAttributesForDescriptors(
@@ -331,7 +339,8 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
          */
         private Map<String, Object> inputAttributes;
 
-        private AttributeMapCacheKey(Map<String, Object> inputProcessingAttributes,
+        private AttributeMapCacheKey(
+            Map<String, Object> inputProcessingAttributes,
             Map<String, Object> inputAttributes)
         {
             /*
@@ -347,8 +356,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
              * contained in the map. To be completely safe, we'd have to make a deep copy.
              * To prevent simple errors, we make the map unmodifiable.
              */
-            this.inputProcessingAttributes = Collections
-                .unmodifiableMap(inputProcessingAttributes);
+            this.inputProcessingAttributes = Collections.unmodifiableMap(inputProcessingAttributes);
             this.hashCode = inputProcessingAttributes.hashCode();
 
             this.inputAttributes = inputAttributes;

@@ -104,7 +104,7 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
      * @return <code>true</code> if the attribute's value has changed compared
      * to the old value.
      */
-    boolean setAttribute(String key, Object value, boolean fireEvent)
+    public boolean setAttribute(String key, Object value, boolean fireEvent)
     {
         final Object prev = getAttribute(key);
         if (ObjectUtils.equals(prev, value))
