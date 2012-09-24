@@ -164,9 +164,10 @@ abstract class NumericRangeEditorBase extends AttributeEditorAdapter
     private void createScale(Composite holder)
     {
         scale = new Scale(holder, SWT.HORIZONTAL);
-
-        scale.setMinimum(min);
+        
         scale.setMaximum(max);
+        scale.setMinimum(min);
+        
         scale.setIncrement(increment);
         scale.setPageIncrement(pageIncrement);
         scale.setToolTipText(tooltip);
