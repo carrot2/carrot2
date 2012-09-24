@@ -57,6 +57,11 @@ public final class PreferenceConstants
      * Automatically show extended attribute info when tooltip is shown. 
      */
     public static final String ATTRIBUTE_INFO_SYNC = "attribute-info-view.sync";
+    
+    /**
+     * Maximum field length (snippet, title) before it is truncated for views.
+     */
+    public static final String MAX_FIELD_LENGTH = "max.field.length";
 
     /**
      * Default source component (if no previous memento is available).
