@@ -25,7 +25,6 @@ Must have before release:
 * Error handling, after CORS is implemented
 * Redirections for legacy GET URLs
 
-* IndeedDocumentSource --> click vs. view URLs?
 * Add site search support to eTools
 * Optionally display secondary cluster labels
 
@@ -48,6 +47,7 @@ Nice to have:
 
 DONE:
 
+* IndeedDocumentSource --> click vs. view URLs? (Indeed does not return view URLs)
 * keyboard shortcuts for source tab switching
 * set default parameter values, default source and algorithm
 * support for custom attributes

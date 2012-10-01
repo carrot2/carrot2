@@ -110,6 +110,7 @@
     <script>
       clearTimeout(loadingTimeout);
       $("body").webfont({ google: { families: [ "Oxygen:400" ] } });
+      $("#logo").attr("href", document.location.href.replace(/#.*/, ""));
       var $controller = $("body").controller({
         searcher: function(params, done) {
           if (typeof carrot2Result != 'undefined') {
