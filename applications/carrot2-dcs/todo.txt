@@ -20,7 +20,6 @@ Must have before release:
 * settings dialog for common parameters (language, safe search)
 * handling of Bing limits exceeded
 * detailed Google analytics
-* keyboard shortcuts for source tab switching
 * Prefetching of first N results
 * document settings in index.html so that others can customize them
 * Error handling, after CORS is implemented
@@ -49,6 +48,7 @@ Nice to have:
 
 DONE:
 
+* keyboard shortcuts for source tab switching
 * set default parameter values, default source and algorithm
 * support for custom attributes
 * max document count?

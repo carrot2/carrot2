@@ -113,6 +113,11 @@
   display: none;
 }
 
+em.underline {
+  font-style: normal;
+  text-decoration: underline;
+}
+
 /** Results screen */
 .results > #search {
   background-color: #f6f6f6;

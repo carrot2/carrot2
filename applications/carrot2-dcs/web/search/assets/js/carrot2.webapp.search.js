@@ -13,14 +13,23 @@
     var sourcesById = _.reduce(sources, function(byId, obj) { byId[obj.id] = obj; return byId; }, {});
 
     // Compiled templates
-    var sourceTemplate = _.template("<li><a href='#<%- id %>'><%- label %></a></li>");
+    var sourceTemplate = _.template("<li><a href='#<%- id %>' accesskey='<%- shortcut %>'><%= label %></a></li>");
     var exampleQueryTemplate = _.template("<a href='#<%- id %>'><%- query %></a>");
     var resultsCountTemplate = _.template("<li><a href='#<%- count %>'><%- count %> results <i class='icon-ok'></i></a></li>");
 
     // Generate source tabs
     $sources.html(_.reduce(sources,
       function(html, source) {
-        return html += sourceTemplate(source);
+        // Add keyboard shortcut
+        var shortcutIndex = source.shortcut ? source.label.indexOf(source.shortcut) : -1;
+        var src = _.extend({}, source);
+        if (shortcutIndex >= 0) {
+          src.label = source.label.substring(0, shortcutIndex) + "<em class='underline'>"
+            + _.escape(source.shortcut) + "</em>" + source.label.substring(shortcutIndex + 1);
+        } else {
+          src.shortcut = "";
+        }
+        return html += sourceTemplate(src);
       }, ""));
 
     // Generate results counts
