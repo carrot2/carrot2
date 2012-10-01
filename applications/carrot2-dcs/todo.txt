@@ -1,42 +1,50 @@
 TODO:
 
+Must have before release:
+
 * disabling HTML interface and non-clustering endpoints
+* DCS front-end (status) available only from listed hosts?
 * option to suppress passing internal-configuration attributes? May be useful in public deployments.
 * when started by DcsApp, read resources and config from a local directory?
-* support for JSON data on input
 * "refresh" link on the status page
 * gzip filter
-* far future expires filter
-* option to completely disable serving static content?
 * pass the "search application mode" option to the filter
 * support for branding (icons, algorithms, sources)
-* DCS front-end (status) available only from listed hosts?
 
-* BUG: FoamTree looks blurry on FF (container sizing problem?)
-* Tuning of FoamTree selection outline
+* Improve FoamTree hover/selection visibility on white backgrounds
 * Tuning of default FoamTree colors
 * Breadcrumbs?
 * FoamTree interaction hints
+* IE 8: disable FoamTree
+* Fallback message for legacy browsers
+* settings dialog for common parameters (language, safe search)
+* handling of Bing limits exceeded
 * detailed Google analytics
-* IE 8 fixes, support for FoamTree Flash fallback?
-* persist settings to the local storage (only when changes initiated by UI, not by parsing a permanent URL)
-* support "open link in new tab" case?
-* lazy loading of visualization plugin dependencies
 * keyboard shortcuts for source tab switching
-* Improve FoamTree hover/selection visibility on white backgrounds
-* Fading out/in when switching from startup to results screen?
-* Highlighting of query/label terms in snippets (in JavaScript, no stemming/synonyms support)
 * Prefetching of first N results
 * document settings in index.html so that others can customize them
 * Error handling, after CORS is implemented
-* Fallback message for legacy browsers?
+* Redirections for legacy GET URLs
+
 * IndeedDocumentSource --> click vs. view URLs?
+* Add site search support to eTools
+* Optionally display secondary cluster labels
+
+Nice to have:
+
+* support for FoamTree Flash fallback?
+* BUG: FoamTree looks blurry on FF (container sizing problem?)
+* support for JSON data on input
+* far future expires filter + asset versioning
+* JavaScript/CSS minification
+* CSS sprites
+* support "open link in new tab" case?
+* lazy loading of visualization plugin dependencies
+* Fading out/in when switching from startup to results screen?
+* Highlighting of query/label terms in snippets (in JavaScript, no stemming/synonyms support)
 * carrot2.webapp.clusters should notify controller of widtch change rather than do it on its own
 * Loading screen delay threshold (show after 150ms or so)
 * Optimization: changing of algorithm should not reload documents view
-* Redirections for legacy GET URLs
-* Add site search support to eTools
-* Optionally display secondary cluster labels
 
 
 DONE:
