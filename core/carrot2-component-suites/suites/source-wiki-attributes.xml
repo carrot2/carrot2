@@ -1,0 +1,11 @@
+<attribute-sets default="overridden-attributes">
+  <attribute-set id="overridden-attributes">
+    <value-set>
+      <label>overridden-attributes</label>
+
+      <attribute key="EToolsDocumentSource.site">
+        <value value="wikipedia.org"/>
+      </attribute>
+    </value-set>
+  </attribute-set>
+</attribute-sets>

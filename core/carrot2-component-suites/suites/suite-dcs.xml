@@ -2,6 +2,7 @@
     <!-- Search engines. -->
     <include suite="source-etools.xml" />
     <include suite="source-bing.xml" />
+    <include suite="source-wiki.xml" />
 
     <!-- PubMed, Indeed job search. -->
     <include suite="source-pubmed.xml" />

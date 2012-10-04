@@ -17,6 +17,7 @@
 
     <!-- Search engines. -->
     <include suite="source-bing.xml" />
+    <include suite="source-wiki.xml" />
     
     <!-- PubMed, Indeed job search. -->
     <include suite="source-indeed.xml" />
