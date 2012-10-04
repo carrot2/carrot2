@@ -1,0 +1,18 @@
+<!-- Components included in all applications -->
+<component-suite>
+  <sources>
+    <source component-class="org.carrot2.source.etools.EToolsDocumentSource" id="wiki"
+            attribute-sets-resource="source-wiki-attributes.xml">
+      <label>Wiki</label>
+      <title>Wikipedia search with eTools</title>
+      <mnemonic>k</mnemonic>
+      <description>Searches the Wikipedia using eTools</description>
+      <icon-path>icons/wiki.png</icon-path>
+      <example-queries>
+        <example-query>photography</example-query>
+        <example-query>physics</example-query>
+        <example-query>clustering</example-query>
+      </example-queries>
+    </source>
+  </sources>
+</component-suite>
