@@ -40,7 +40,7 @@ public class Bing3WebDocumentSource extends Bing3DocumentSource
 
     /**
      * Site restriction to return results under a given URL. Example:
-     * <tt>http://www.wikipedia.com</tt> or simply <tt>wikipedia.com</tt>.
+     * <tt>http://www.wikipedia.org</tt> or simply <tt>wikipedia.org</tt>.
      */
     @Processing
     @Input
