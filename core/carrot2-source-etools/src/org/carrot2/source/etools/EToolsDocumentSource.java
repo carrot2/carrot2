@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -17,15 +16,26 @@ import java.util.Map;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
 import org.carrot2.util.StringUtils;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.ClassResource;
 import org.carrot2.util.resource.IResource;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 /**
@@ -53,15 +63,8 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      */
     public enum Country
     {
-        ALL("web"), 
-        AUSTRIA("AT"), 
-        FRANCE("FR"), 
-        GERMANY("DE"), 
-        GREAT_BRITAIN("GB"),
-        ITALY("IT"), 
-        LICHTENSTEIN("LI"), 
-        SPAIN("ES"),
-        SWITZERLAND("CH"); 
+        ALL("web"), AUSTRIA("AT"), FRANCE("FR"), GERMANY("DE"), GREAT_BRITAIN("GB"), ITALY(
+            "IT"), LICHTENSTEIN("LI"), SPAIN("ES"), SWITZERLAND("CH");
 
         private String code;
 
@@ -99,12 +102,8 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      */
     public enum Language
     {
-        ALL("all"), 
-        ENGLISH("en"), 
-        FRENCH("fr"), 
-        GERMAN("de"), 
-        ITALIAN("it"), 
-        SPANISH("es");
+        ALL("all"), ENGLISH("en"), FRENCH("fr"), GERMAN("de"), ITALIAN("it"), SPANISH(
+            "es");
 
         /**
          * Maps <b>some</b> of the values of this enum to {@link LanguageCode}s.
@@ -121,7 +120,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
 
             TO_LANGUAGE_CODE = Collections.unmodifiableMap(map);
         }
-        
+
         private String code;
 
         private Language(String code)
@@ -139,7 +138,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
         {
             return code;
         }
-        
+
         /**
          * Returns a corresponding {@link LanguageCode} or <code>null</code> if no
          * {@link LanguageCode} corresponds to this {@link Language} constant.
@@ -158,7 +157,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Attribute
     @Label("Language")
     @Level(AttributeLevel.MEDIUM)
-    @Group(DefaultGroups.FILTERING)    
+    @Group(DefaultGroups.FILTERING)
     public Language language = Language.ENGLISH;
 
     /**
@@ -170,7 +169,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @IntRange(min = 0)
     @Label("Timeout")
     @Level(AttributeLevel.ADVANCED)
-    @Group(SERVICE)    
+    @Group(SERVICE)
     public int timeout = 4000;
 
     /**
@@ -231,6 +230,20 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     public boolean safeSearch = false;
 
     /**
+     * Site URL or comma-separated list of site site URLs to which the returned results
+     * should be restricted. For example: <tt>wikipedia.org</tt> or
+     * <tt>en.wikipedia.org,de.wikipedia.org</tt>. Very larger lists of site restrictions
+     * (larger than 2000 characters) may result in a processing exception.
+     */
+    @Input
+    @Processing
+    @Attribute
+    @Label("Site restriction")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.FILTERING)
+    public String site = null;
+
+    /**
      * eTools partner identifier. If you have commercial arrangements with eTools, specify
      * your partner id here.
      */
@@ -289,6 +302,22 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
         int rawDataSourceResults = results / sources;
         return Math.min(((rawDataSourceResults + 9) / 10 + 1) * 10,
             MAX_DATA_SOURCE_RESULTS);
+    }
+
+    @Override
+    public void beforeProcessing() throws ProcessingException
+    {
+        super.beforeProcessing();
+        if (!Strings.isNullOrEmpty(site))
+        {
+            this.query = "(" + this.query + ") AND ("
+                + Joiner.on(" OR ").join(site.split(",\\s*")) + ")";
+            if (this.query.length() > 2048)
+            {
+                throw new ProcessingException(
+                    "Query length must not exceed 2048 characters");
+            }
+        }
     }
 
     @Override
