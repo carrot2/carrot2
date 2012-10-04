@@ -59,6 +59,14 @@ public class EToolsDocumentSourceTest extends
 
         assertThat(sources.size()).isGreaterThanOrEqualTo(2);
     }
+    
+    @UsesExternalServices
+    @Test
+    @Override
+    public void testLargeQuery() throws Exception
+    {
+        runAndCheckMinimumResults(getLargeQueryText(), getLargeQuerySize(), 100);
+    }
 
     @Test
     public void testGzipCompression() throws Exception

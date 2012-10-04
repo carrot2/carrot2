@@ -146,7 +146,7 @@
       <page
             class="org.carrot2.workbench.core.preferences.WorkbenchPreferencesPage"
             id="org.carrot2.workbench.core.preferences.WorkbenchPreferencePage"
-            name="Carrot2">
+            name="Workbench">
       </page>
       <page
             class="org.carrot2.workbench.core.preferences.GeneralPreferencesPage"
@@ -315,7 +315,6 @@
             targetID="org.carrot2.workbench.core.editors.searchEditor">
       </editorContribution>
    </extension>
-
    <extension
          id="org.carrot2.workbench.core.ui.bindings"
          point="org.eclipse.ui.bindings">
@@ -325,10 +324,21 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+R">
       </key>
+      <key
+            commandId="org.carrot2.workbench.core.ui.actions.ReprocessFlushCachesCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="SHIFT+M1+R">
+      </key>
    </extension>
    <extension
          id="org.carrot2.workbench.core.ui.commands"
          point="org.eclipse.ui.commands">
+      <command
+            description="Restart processing, bypass input data cache."
+            id="org.carrot2.workbench.core.ui.actions.ReprocessFlushCachesCommand"
+            name="Restart Processing (bypass cached input)">
+      </command>
       <command
             description="Restart processing in the currently active editor."
             id="org.carrot2.workbench.core.ui.actions.ReprocessCommand"
@@ -352,6 +362,17 @@
             id="org.carrot2.workbench.core.SearchEditorActionSet"
             label="Search Editor Actions"
             visible="true">
+         <action
+               class="org.carrot2.workbench.core.ui.actions.ReprocessFlushCachesActionDelegate"
+               definitionId="org.carrot2.workbench.core.ui.actions.ReprocessFlushCachesCommand"
+               disabledIcon="icons/reprocessnocache_d.gif"
+               icon="icons/reprocessnocache_e.gif"
+               id="org.carrot2.workbench.core.ui.actions.ReprocessFlushCachesAction"
+               label="&amp;Restart Processing (bypass cached input)"
+               menubarPath="org.carrot2.workbench.menus.searchMenu/processing"
+               toolbarPath="Search"
+               tooltip="Restart processing, bypass input data cache">
+         </action>
          <action
                class="org.carrot2.workbench.core.ui.actions.ReprocessActionDelegate"
                definitionId="org.carrot2.workbench.core.ui.actions.ReprocessCommand"

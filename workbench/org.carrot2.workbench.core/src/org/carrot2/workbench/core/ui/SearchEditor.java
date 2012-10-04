@@ -338,8 +338,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
 
         public void valueChanged(AttributeEvent event)
         {
-            final IPreferenceStore store = WorkbenchCorePlugin.getDefault()
-                .getPreferenceStore();
+            final IPreferenceStore store = WorkbenchCorePlugin.getDefault().getPreferenceStore();
             if (store.getBoolean(PreferenceConstants.AUTO_UPDATE))
             {
                 final int delay = store.getInt(PreferenceConstants.AUTO_UPDATE_DELAY);
@@ -920,6 +919,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
          * attributes (temporal), but is much simpler than trying to pool/ cache/ stack
          * dirty tokens and manage them in synchronization with running jobs.
          */
+        System.out.println("###");
         setDirty(false);
         searchJob.schedule();
     }

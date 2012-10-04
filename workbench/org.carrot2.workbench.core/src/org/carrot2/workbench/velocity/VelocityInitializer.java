@@ -19,6 +19,9 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeInstance;
 import org.apache.velocity.runtime.log.NullLogChute;
 import org.apache.velocity.tools.generic.EscapeTool;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
+import org.carrot2.workbench.core.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * See {@link #createInstance(String, String)}.
@@ -68,6 +71,11 @@ public final class VelocityInitializer
         context.put("esc", new EscapeTool());
         context.put("stringutils", new StringUtils());
         context.put("annotationutils", new AnnotationUtils());
+
+        final IPreferenceStore store = WorkbenchCorePlugin.getDefault().getPreferenceStore();
+        int maxFieldLength = store.getInt(PreferenceConstants.MAX_FIELD_LENGTH);
+        if (maxFieldLength == 0) maxFieldLength = Integer.MAX_VALUE; 
+        context.put("maxFieldLength", maxFieldLength);
 
         return context;
     }
