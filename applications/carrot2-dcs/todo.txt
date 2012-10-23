@@ -27,6 +27,7 @@ Must have before release:
 
 * Add site search support to eTools
 * Optionally display secondary cluster labels
+* Enable gzip compression: http://javaevangelist.blogspot.com/2012/01/jersey-tip-of-day-use-gzip-compression.html
 
 Nice to have:
 
