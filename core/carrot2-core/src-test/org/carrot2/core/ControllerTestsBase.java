@@ -412,6 +412,18 @@ public abstract class ControllerTestsBase extends CarrotTestCase
             result = init + init;
         }
     }
+    
+    @Bindable
+    public static class ComponentWithInitOutputParameter extends ProcessingComponentBase
+    {
+        @Init
+        @Output
+        @Attribute(key = "nullValue")
+        public String init;
+
+        @Override
+        public void process() throws ProcessingException {}
+    }    
 
     @Bindable
     public static class ComponentWithProcessingParameter extends ProcessingComponentBase
@@ -494,6 +506,11 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         @Output
         @Attribute(key = "initOutput")
         protected String initOutput;
+
+        @Init
+        @Output
+        @Attribute(key = "initOutputNull")
+        protected String initOutputNull;
 
         @Override
         public void init(IControllerContext context)

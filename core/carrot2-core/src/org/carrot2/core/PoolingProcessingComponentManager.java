@@ -17,6 +17,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -46,7 +47,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
@@ -193,7 +193,8 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
                 // Capture @Init @Output attributes
                 initOutputAttributes.putIfAbsent(
                     new Pair<Class<? extends IProcessingComponent>, String>(component
-                        .getClass(), parameter), ImmutableMap.copyOf(initOutputAttrs));
+                        .getClass(), parameter), 
+                        Collections.unmodifiableMap(Maps.newHashMap(initOutputAttrs)));
 
                 // To support a very natural scenario where processing attributes are
                 // provided/overridden during initialization, we'll also bind processing
