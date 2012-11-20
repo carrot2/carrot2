@@ -36,6 +36,7 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.helpers.Utils;
+import org.carrot2.workbench.core.ui.BrowserFacade;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.SearchEditorSelectionProvider;
 import org.carrot2.workbench.core.ui.SearchResultListenerAdapter;
@@ -390,7 +391,7 @@ public abstract class FlashViewPage extends Page
         /*
          * Open the browser and redirect it to the internal HTTP server.
          */
-        browser = new Browser(parent, SWT.NONE);
+        browser = BrowserFacade.createNew(parent, SWT.NONE);
 
         final Activator plugin = Activator.getInstance();
         final Map<String, Object> customParams = contributeCustomParams();

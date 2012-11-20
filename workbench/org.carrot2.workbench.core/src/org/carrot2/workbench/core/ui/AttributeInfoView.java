@@ -118,7 +118,7 @@ public class AttributeInfoView extends ViewPart
     @Override
     public void createPartControl(Composite parent)
     {
-        this.browser = new Browser(parent, SWT.NONE);
+        this.browser = BrowserFacade.createNew(parent, SWT.NONE);
         bin.add(browser);
         
         clear();

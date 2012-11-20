@@ -209,7 +209,7 @@ public final class DocumentList extends Composite
     {
         this.setLayout(new FillLayout());
 
-        browser = new Browser(this, SWT.NONE);
+        browser = BrowserFacade.createNew(this, SWT.NONE);
 
         /*
          * Attach to location change event and open 
