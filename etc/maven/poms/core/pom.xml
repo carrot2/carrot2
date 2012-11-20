@@ -22,7 +22,6 @@
   <packaging>jar</packaging>
 
   <dependencies>
-    <!-- Support for Polish stemming. -->
     <dependency>
       <groupId>org.carrot2</groupId>
       <artifactId>morfologik-stemming</artifactId>
@@ -132,20 +131,13 @@
       <artifactId>lucene-highlighter</artifactId>
       <version>${org.apache.lucene.version}</version>
       <exclusions>
-	<exclusion>
+        <exclusion>
           <groupId>org.apache.lucene</groupId>
           <artifactId>lucene-queries</artifactId>
-	</exclusion>
+        </exclusion>
       </exclusions>
     </dependency>
 
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-smartcn</artifactId>
-      <version>${org.apache.lucene.version}</version>
-      <optional>true</optional>
-    </dependency>
-        
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-memory</artifactId>
@@ -157,16 +149,30 @@
       <artifactId>simple-xml</artifactId>
       <version>${org.simpleframework.version}</version>
       <exclusions>
-	<exclusion>
+        <exclusion>
           <groupId>stax</groupId>
           <artifactId>stax-api</artifactId>
-	</exclusion>
-	<exclusion>
+        </exclusion>
+        <exclusion>
           <groupId>stax</groupId>
           <artifactId>stax</artifactId>
-	</exclusion>
+        </exclusion>
       </exclusions>
     </dependency>
+    
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-smartcn</artifactId>
+      <version>${org.apache.lucene.version}</version>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>org.carrot2</groupId>
+      <artifactId>morfologik-polish</artifactId>
+      <version>${morfologik.version}</version>
+      <optional>true</optional>
+    </dependency>    
   </dependencies>
 
   <build>
