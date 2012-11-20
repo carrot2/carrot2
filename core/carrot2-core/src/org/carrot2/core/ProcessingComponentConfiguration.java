@@ -14,7 +14,6 @@ package org.carrot2.core;
 
 import java.util.*;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 /**
@@ -50,7 +49,7 @@ public class ProcessingComponentConfiguration
     {
         this.componentClass = componentClass;
         this.componentId = componentId;
-        this.attributes = ImmutableMap.copyOf(attributes);
+        this.attributes = Collections.unmodifiableMap(Maps.newHashMap(attributes));
     }
 
     /**

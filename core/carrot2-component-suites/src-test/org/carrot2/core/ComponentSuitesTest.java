@@ -28,6 +28,20 @@ import com.google.common.collect.Lists;
 public class ComponentSuitesTest extends CarrotTestCase
 {
     @Test
+    public void testNullValues_Carrot973() throws Exception
+    {
+        ResourceLookup resourceLookup = new ResourceLookup(new ClassLocator(getClass()));
+
+        IResource resource = resourceLookup.getFirst("suite-nullvalues.xml");
+        assertThat(resource).isNotNull();
+        ProcessingComponentSuite suite = 
+            ProcessingComponentSuite.deserialize(resource, resourceLookup);
+
+        // Must not throw an exception.
+        suite.getComponentConfigurations();
+    }
+
+    @Test
     public void testCarrot2DefaultComponentSuite() throws Exception
     {
         // Default suites should be reachable via context class loader.
@@ -78,6 +92,9 @@ public class ComponentSuitesTest extends CarrotTestCase
         assertThat(resource).isNotNull();
         ProcessingComponentSuite suite = ProcessingComponentSuite.deserialize(resource,
             resourceLookup);
+
+        // CARROT-973
+        suite.getComponentConfigurations();
 
         assertThat(suite).isNotNull();
         assertThat(suite.getAlgorithms()).isNotEmpty();
