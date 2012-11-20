@@ -63,8 +63,15 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      */
     public enum Country
     {
-        ALL("web"), AUSTRIA("AT"), FRANCE("FR"), GERMANY("DE"), GREAT_BRITAIN("GB"), ITALY(
-            "IT"), LICHTENSTEIN("LI"), SPAIN("ES"), SWITZERLAND("CH");
+        ALL("web"), 
+        AUSTRIA("AT"), 
+        FRANCE("FR"), 
+        GERMANY("DE"), 
+        GREAT_BRITAIN("GB"), 
+        ITALY("IT"), 
+        LICHTENSTEIN("LI"), 
+        SPAIN("ES"), 
+        SWITZERLAND("CH");
 
         private String code;
 
@@ -102,8 +109,12 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
      */
     public enum Language
     {
-        ALL("all"), ENGLISH("en"), FRENCH("fr"), GERMAN("de"), ITALIAN("it"), SPANISH(
-            "es");
+        ALL("all"),
+        ENGLISH("en"), 
+        FRENCH("fr"), 
+        GERMAN("de"), 
+        ITALIAN("it"), 
+        SPANISH("es");
 
         /**
          * Maps <b>some</b> of the values of this enum to {@link LanguageCode}s.
