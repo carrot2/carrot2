@@ -86,19 +86,17 @@
       actiateByClassAndId($views, "view", view);
 
       // Show the actual view element
-      embedOrShow(view, function() {
-        // TODO: remove the callback when we get rid of Flash visualizations
+      embedOrShow(view);
 
-        // Populate if needed
-        var pop = $("#" + activeView)[viewsById[activeView].plugin]("populated");
-        if (!pop && currentData) {
-          populateActiveView(currentData);
-        }
+      // Populate if needed
+      var pop = $("#" + activeView)[viewsById[activeView].plugin]("populated");
+      if (!pop && currentData) {
+        populateActiveView(currentData);
+      }
 
-        if (currentSelection) {
-          $("#" + activeView)[viewsById[activeView].plugin]("select", _.pluck(currentSelection, "id"));
-        }
-      });
+      if (currentSelection) {
+        $("#" + activeView)[viewsById[activeView].plugin]("select", _.pluck(currentSelection, "id"));
+      }
     }
 
     function setActiveAlgorithm(algorithm) {
@@ -134,7 +132,7 @@
       });
     }
 
-    function embedOrShow(id, complete) {
+    function embedOrShow(id) {
       var view = viewsById[id];
       var $v = $("#" + id);
 
@@ -158,10 +156,9 @@
           modelChange: function() {
             $container.removeClass("loading");
           }
-        }), complete);
+        }));
       } else {
         $v[viewsById[activeView].plugin]("show");
-        complete();
       }
     }
   });

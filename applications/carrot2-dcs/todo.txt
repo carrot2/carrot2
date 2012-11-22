@@ -15,19 +15,29 @@ Must have before release:
 * Tuning of default FoamTree colors
 * Breadcrumbs?
 * FoamTree interaction hints
-* IE 8: disable FoamTree
+* IE 8: disable FoamTree and Circles
 * Fallback message for legacy browsers
 * settings dialog for common parameters (language, safe search)
 * handling of Bing limits exceeded
 * detailed Google analytics
 * Prefetching of first N results
-* document settings in index.html so that others can customize them
 * Error handling, after CORS is implemented
 * Redirections for legacy GET URLs
 
 * Add site search support to eTools
 * Optionally display secondary cluster labels
 * Enable gzip compression: http://javaevangelist.blogspot.com/2012/01/jersey-tip-of-day-use-gzip-compression.html
+
+* Add center panel in Circles
+* Check if there's a need to resize after view switch.
+* Explicit message for loading fonts and other JS
+
+Customizability:
+
+* move configuration object to a dedicated file? document settings
+* changing logo
+* changing sources
+
 
 Nice to have:
 

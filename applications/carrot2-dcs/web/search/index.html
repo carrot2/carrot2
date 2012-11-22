@@ -100,12 +100,10 @@
     <script src="assets/js/carrot2.webapp.clusters.js"></script>
     <script src="assets/js/carrot2.webapp.documents.js"></script>
     <script src="assets/js/carrot2.webapp.view.carrotsearch.visualization.html5.js"></script>
-    <script src="assets/js/carrot2.webapp.view.carrotsearch.visualization.flash.js"></script>
     <script src="assets/js/carrot2.webapp.view.folders.js"></script>
 
     <script src="assets/js/carrotsearch.foamtree.html5.min.js"></script>
-    <script src="assets/js/swfobject.js"></script>
-    <script src="assets/js/carrotsearch.circles.min.js"></script>
+    <script src="assets/js/carrotsearch.circles.html5.min.js"></script>
 
     <script>
       clearTimeout(loadingTimeout);
@@ -186,16 +184,14 @@
               id: "circles",
               label: "Circles visualization",
               type: "wide",
-              plugin: "carrotsearchFlashVisualization",
+              plugin: "carrotsearchHtml5Visualization",
               config: {
                 factory: function(options) {
                   return new CarrotSearchCircles(options);
                 },
                 options: {
-                  backgroundColor: 0x00000000,
-                  visualizationSwfLocation: "assets/swf/com.carrotsearch.visualizations.circles.swf",
-                  flashPlayerInstallerSwfLocation: "assets/swf/playerProductInstall.swf",
-                  groupOutlineColor: 0xffffffff
+                  backgroundColor: "#fff",
+                  groupOutlineColor: "#fff"
                 }
               }
             },
@@ -268,6 +264,5 @@
         }
       });
     </script>
-    <script src="assets/js/carrotsearch.foamtree.html5.min.js"></script>
   </body>
 </html>

@@ -1,10 +1,10 @@
 (function($) {
-  $.pluginhelper.make("carrotsearchHtml5Visualization", function(el, options, initialized) {
+  $.pluginhelper.make("carrotsearchHtml5Visualization", function(el, options) {
     var $element = $(el);
     var visualization = options.factory($.extend({}, options.options, {
       id: $element.attr("id"),
       onGroupSelectionChanged: function(info) {
-        options.clusterSelectionChanged(_.pluck(info.selectedGroups, "cluster"));
+        options.clusterSelectionChanged(_.pluck(info.groups, "cluster"));
       },
       onRolloutStart: options.modelChange
     }));
@@ -62,7 +62,6 @@
       $element.hide();
     };
 
-    initialized();
     return undefined;
 
 
