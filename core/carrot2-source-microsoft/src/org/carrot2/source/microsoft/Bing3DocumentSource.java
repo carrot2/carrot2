@@ -260,10 +260,18 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
         }
         else
         {
-            // Read the output and throw an exception.
             final String m = "Bing returned HTTP Error: " + response.status
                 + ", HTTP payload: " + new String(response.payload, "iso8859-1");
+
             logger.warn(m);
+
+            if (response.status == HttpStatus.SC_SERVICE_UNAVAILABLE &&
+                m.contains("Insufficient balance"))
+            {
+                throw new IOException("Bing API query limit depleted. See Carrot2 FAQ: http://project.carrot2.org/faq.html#bing");
+            }
+
+            // Read the output and throw an exception.
             throw new IOException(m);
         }
     }
