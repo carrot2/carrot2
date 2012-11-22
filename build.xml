@@ -1267,39 +1267,6 @@
       <fileset refid="licensed.sources" />
     </licenseList>
   </target>  
-
-  <target name="fix-line-endings">
-    <patternset id="fix-line-endings-text-files">
-      <include name="**/*.js" />
-      <include name="**/*.css" />
-      <include name="**/*.java" />
-      <include name="**/*.xml" />
-    </patternset>
-
-    <patternset id="fix-line-endings-excludes">
-      <exclude name="**/*.utf16.xml" />
-      <exclude name="**/tmp/**" />
-      <exclude name="**/.git/**" />
-    </patternset>
-
-    <patternset id="fix-line-endings-unix">
-      <exclude name="**/*.cmd" />
-      <exclude name="**/*.bat" />
-      <exclude name="**/csharp/**" />
-    </patternset>
-
-    <fixcrlf srcdir="." eol="unix" encoding="UTF-8">
-      <patternset refid="fix-line-endings-excludes" />
-      <patternset refid="fix-line-endings-text-files" />
-      <patternset refid="fix-line-endings-unix" />
-    </fixcrlf>
-
-    <fixcrlf srcdir="." eol="dos" encoding="UTF-8">
-      <patternset refid="fix-line-endings-excludes" />
-      <include name="**/*.cmd" />
-      <include name="**/*.bat" />
-    </fixcrlf>
-  </target>
   
   <!--
        Generate development files for Eclipse.
@@ -1314,7 +1281,7 @@
   <!--
        Pre-release source code updates.
     -->
-  <target name="prerelease" depends="licenses.update, fix-line-endings" />
+  <target name="prerelease" depends="licenses.update" />
 
 </project>
 
