@@ -51,6 +51,55 @@ public interface ITokenizer
     public static final int TT_FILE = 0x0008;
     public static final int TT_HYPHTERM = 0x0009;
 
+    public static enum TokenType {
+        TERM(TT_TERM),
+        NUMERIC(TT_NUMERIC),
+        PUNCTUATION(TT_PUNCTUATION),
+        EMAIL(TT_EMAIL),
+        ACRONYM(TT_ACRONYM),
+        FULL_URL(TT_FULL_URL),
+        BARE_URL(TT_BARE_URL),
+        FILE(TT_FILE),
+        HYPHTERM(TT_HYPHTERM),
+        EOF(TT_EOF);
+
+        public final int value;
+
+        // Allocate an array once.
+        private static TokenType[] values = TokenType.values();
+        
+        private TokenType(int value)
+        {
+            this.value = value;
+        }
+
+        public static String toString(short type)
+        {
+            final int v = TokenTypeUtils.maskType(type);
+            String typeName = null;
+            if (v != 0) {
+                for (int i = 0; i < values.length; i++) {
+                    if (v == values[i].value) {
+                        typeName = values[i].name();
+                        break;
+                    }
+                }
+                if (typeName == null) {
+                    typeName = "TT_UNKNOWN_" + Integer.toString(v);
+                }
+            } else {
+                typeName = "";
+            }
+
+            return typeName + 
+                (TokenTypeUtils.isFieldSeparator(type) ? "|FS" : "") +
+                (TokenTypeUtils.isDocumentSeparator(type) ? "|DS" : "") +
+                (TokenTypeUtils.isSentenceSeparator(type) ? "|SS" : "") +
+                (TokenTypeUtils.isCommon(type) ? "|SW" : "") +
+                (TokenTypeUtils.isInQuery(type) ? "|QW" : "");
+        }
+    }
+    
     /**
      * Indicates the end of the token stream.
      */

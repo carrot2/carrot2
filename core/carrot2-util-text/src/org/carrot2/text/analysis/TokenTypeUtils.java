@@ -32,6 +32,14 @@ public final class TokenTypeUtils
     }
 
     /**
+     * Returns <code>true</code> if the given type has {@link ITokenizer#TF_SEPARATOR_SENTENCE} set.
+     */
+    public static boolean isSentenceSeparator(int type)
+    {
+        return (type & ITokenizer.TF_SEPARATOR_SENTENCE) != 0;
+    }
+
+    /**
      * Returns <code>true</code> if the given type has {@link ITokenizer#TF_SEPARATOR_DOCUMENT} set.
      */
     public static boolean isDocumentSeparator(int type)
