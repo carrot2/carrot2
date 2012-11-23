@@ -12,8 +12,10 @@
 
 package org.carrot2.core;
 
+import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.carrot2.util.StringUtils;
 
@@ -102,6 +104,16 @@ public enum LanguageCode
     }
     
     /**
+     * A hash map of all languages which do NOT use space delimiters.
+     */
+    private final static Set<LanguageCode> noSpaceLanguages;
+    static {
+        noSpaceLanguages = EnumSet.of(
+            LanguageCode.CHINESE_SIMPLIFIED,
+            LanguageCode.JAPANESE);
+    }
+
+    /**
      * 
      */
     private LanguageCode(String isoCode)
@@ -137,6 +149,14 @@ public enum LanguageCode
         return isoToLangCode.get(language);
     }
     
+    /**
+     * Returns <code>true</code> if this language uses space delimiters between words.
+     * This is a hint for formatting cluster labels.
+     */
+    public boolean usesSpaceDelimiters() {
+        return !noSpaceLanguages.contains(this);
+    }
+
     @Override
     public String toString()
     {

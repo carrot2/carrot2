@@ -387,13 +387,10 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         {
             if (centroid.getQuick(i) >= minValueForLabel)
             {
-                labels.add(LabelFormatter.format(new char [] []
-                {
-                    wordImage[mostFrequentOriginalWordIndex[rowToStemIndex.get(i)]]
-                }, new boolean []
-                {
-                    false
-                }, false));
+                labels.add(LabelFormatter.format(
+                    new char [][] { wordImage[mostFrequentOriginalWordIndex[rowToStemIndex.get(i)]]},
+                    new boolean [] { false }, 
+                    false));
             }
         }
         return labels;

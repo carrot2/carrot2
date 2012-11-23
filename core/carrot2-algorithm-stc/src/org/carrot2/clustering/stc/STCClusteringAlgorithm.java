@@ -994,9 +994,6 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      */
     private String buildLabel(int [] phraseIndices)
     {
-        final boolean joinWithSpace = 
-            context.language.getLanguageCode() != LanguageCode.CHINESE_SIMPLIFIED;
-    
         // Count the number of terms first.
         int termsCount = 0;
         for (int j = 0; j < phraseIndices.length; j += 2)
@@ -1020,7 +1017,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             }
         }
         
-        return LabelFormatter.format(images, stopwords, joinWithSpace);
+        return LabelFormatter.format(images, stopwords, 
+            context.language.getLanguageCode().usesSpaceDelimiters());
     }
 
     @SuppressWarnings("unused")
