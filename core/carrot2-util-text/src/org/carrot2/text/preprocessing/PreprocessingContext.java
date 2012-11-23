@@ -14,20 +14,18 @@ package org.carrot2.text.preprocessing;
 
 import java.io.StringWriter;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.carrot2.core.Document;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.analysis.ITokenizer.TokenType;
-import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.text.util.TabularOutput;
 
-import com.carrotsearch.hppc.*;
-import com.google.common.collect.Maps;
+import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.ObjectOpenHashSet;
 
 /**
  * Document preprocessing context provides low-level (usually integer-coded) data
@@ -149,6 +147,14 @@ public final class PreprocessingContext
          * This array is produced by {@link PhraseExtractor}.
          */
         public int [] lcp;
+
+        /**
+         * Returns length of all arrays in this {@link AllTokens}.
+         */
+        public int size()
+        {
+            return image.length;
+        }
 
         /** For debugging purposes. */
         @Override

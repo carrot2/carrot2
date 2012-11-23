@@ -1,4 +1,4 @@
-package org.carrot2.text.preprocessing.pipeline;
+package org.carrot2.text.preprocessing.pipeline.lucene;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.test.SampleDocumentData;
 import org.carrot2.text.preprocessing.PreprocessingContext;
+import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
 import org.carrot2.text.preprocessing.pipeline.lucene.LucenePreprocessingPipeline;
 import org.junit.Ignore;

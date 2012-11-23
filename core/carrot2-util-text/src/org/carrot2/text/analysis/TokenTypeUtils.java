@@ -77,5 +77,5 @@ public final class TokenTypeUtils
     public static boolean isInQuery(int flag)
     {
         return (flag & ITokenizer.TF_QUERY_WORD) != 0;
-    }    
+    }
 }
