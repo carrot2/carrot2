@@ -41,7 +41,7 @@ public class TestLucenePreprocessingPipeline
         IPreprocessingPipeline p = new LucenePreprocessingPipeline();
         PreprocessingContext ctx = p.preprocess(
             input, "data mining", LanguageCode.ENGLISH, ContextRequired.COMPLETE);
-        
+
         System.out.println(ctx);
     }
 

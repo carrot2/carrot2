@@ -29,6 +29,8 @@ public class TestJapanesePunctuation extends CarrotTestCase
         PreprocessingContext ctx = p.preprocess(
             input, "", LanguageCode.JAPANESE, ContextRequired.COMPLETE);
 
+        // System.out.println(ctx);
+
         // Ensure the only terms are crocodiles and the remaining ones are punctuation.
         AllTokens allTokens = ctx.allTokens;
         for (int i = 0; i < allTokens.size(); i++)
