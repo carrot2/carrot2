@@ -57,21 +57,21 @@
 #名詞-固有名詞-地域-国
 #
 #  noun-pronoun: Pronouns where the sub-classification is undefined
-#名詞-代名詞
+名詞-代名詞
 #
 #  noun-pronoun-misc: miscellaneous pronouns: 
 #  e.g. それ, ここ, あいつ, あなた, あちこち, いくつ, どこか, なに, みなさん, みんな, わたくし, われわれ
-#名詞-代名詞-一般
+名詞-代名詞-一般
 #
 #  noun-pronoun-contraction: Spoken language contraction made by combining a 
 #  pronoun and the particle 'wa'.
 #  e.g. ありゃ, こりゃ, こりゃあ, そりゃ, そりゃあ 
-#名詞-代名詞-縮約
+名詞-代名詞-縮約
 #
 #  noun-adverbial: Temporal nouns such as names of days or months that behave 
 #  like adverbs. Nouns that represent amount or ratios and can be used adverbially,
 #  e.g. 金曜, 一月, 午後, 少量
-#名詞-副詞可能
+名詞-副詞可能
 #
 #  noun-verbal: Nouns that take arguments with case and can appear followed by 
 #  'suru' and related verbs (する, できる, なさる, くださる)
@@ -96,7 +96,7 @@
 #       順, せい, 所為, ついで, 序で, つもり, 積もり, 点, どころ, の, はず, 筈, はずみ, 弾み, 
 #       拍子, ふう, ふり, 振り, ほう, 方, 旨, もの, 物, 者, ゆえ, 故, ゆえん, 所以, わけ, 訳,
 #       わり, 割り, 割, ん-口語/, もん-口語/
-#名詞-非自立-一般
+名詞-非自立-一般
 #
 #  noun-affix-adverbial: noun affixes that that can behave as adverbs.
 #  e.g. あいだ, 間, あげく, 挙げ句, あと, 後, 余り, 以外, 以降, 以後, 以上, 以前, 一方, うえ, 
@@ -104,17 +104,17 @@
 #       最中, じたい, 自体, たび, 度, ため, 為, つど, 都度, とおり, 通り, とき, 時, ところ, 所, 
 #       とたん, 途端, なか, 中, のち, 後, ばあい, 場合, 日, ぶん, 分, ほか, 他, まえ, 前, まま, 
 #       儘, 侭, みぎり, 矢先
-#名詞-非自立-副詞可能
+名詞-非自立-副詞可能
 #
 #  noun-affix-aux: noun affixes treated as 助動詞 ("auxiliary verb") in school grammars 
 #  with the stem よう(だ) ("you(da)").
 #  e.g.  よう, やう, 様 (よう)
-#名詞-非自立-助動詞語幹
+名詞-非自立-助動詞語幹
 #  
 #  noun-affix-adjective-base: noun affixes that can connect to the indeclinable
 #  connection form な (aux "da").
 #  e.g. みたい, ふう
-#名詞-非自立-形容動詞語幹
+名詞-非自立-形容動詞語幹
 #
 #  noun-special: special nouns where the sub-classification is undefined.
 #名詞-特殊
@@ -123,7 +123,7 @@
 #  treated as 助動詞 ("auxiliary verb") in school grammars, and attach to the base 
 #  form of inflectional words.
 #  e.g. そう
-#名詞-特殊-助動詞語幹
+名詞-特殊-助動詞語幹
 #
 #  noun-suffix: noun suffixes where the sub-classification is undefined.
 #名詞-接尾
@@ -149,32 +149,32 @@
 #  noun-suffix-verbal: Of the suffixes that attach to nouns and form nouns, those that 
 #  can appear before スル ("suru").
 #  e.g. 化, 視, 分け, 入り, 落ち, 買い
-#名詞-接尾-サ変接続
+名詞-接尾-サ変接続
 #
 #  noun-suffix-aux: The stem form of そうだ (様態) that is used to indicate conditions, 
 #  is treated as 助動詞 ("auxiliary verb") in school grammars, and attach to the 
 #  conjunctive form of inflectional words.
 #  e.g. そう
-#名詞-接尾-助動詞語幹
+名詞-接尾-助動詞語幹
 #
 #  noun-suffix-adjective-base: Suffixes that attach to other nouns or the conjunctive 
 #  form of inflectional words and appear before the copula だ ("da").
 #  e.g. 的, げ, がち
-#名詞-接尾-形容動詞語幹
+名詞-接尾-形容動詞語幹
 #
 #  noun-suffix-adverbial: Suffixes that attach to other nouns and can behave as adverbs.
 #  e.g. 後 (ご), 以後, 以降, 以前, 前後, 中, 末, 上, 時 (じ)
-#名詞-接尾-副詞可能
+名詞-接尾-副詞可能
 #
 #  noun-suffix-classifier: Suffixes that attach to numbers and form nouns. This category 
 #  is more inclusive than 助数詞 ("classifier") and includes common nouns that attach 
 #  to numbers.
 #  e.g. 個, つ, 本, 冊, パーセント, cm, kg, カ月, か国, 区画, 時間, 時半
-#名詞-接尾-助数詞
+名詞-接尾-助数詞
 #
 #  noun-suffix-special: Special suffixes that mainly attach to inflecting words.
 #  e.g. (楽し) さ, (考え) 方
-#名詞-接尾-特殊
+名詞-接尾-特殊
 #
 #  noun-suffix-conjunctive: Nouns that behave like conjunctions and join two words 
 #  together.
@@ -184,17 +184,17 @@
 #  noun-verbal_aux: Nouns that attach to the conjunctive particle て ("te") and are 
 #  semantically verb-like.
 #  e.g. ごらん, ご覧, 御覧, 頂戴
-#名詞-動詞非自立的
+名詞-動詞非自立的
 #
 #  noun-quotation: text that cannot be segmented into words, proverbs, Chinese poetry, 
 #  dialects, English, etc. Currently, the only entry for 名詞 引用文字列 ("noun quotation") 
 #  is いわく ("iwaku").
-#名詞-引用文字列
+名詞-引用文字列
 #
 #  noun-nai_adjective: Words that appear before the auxiliary verb ない ("nai") and
 #  behave like an adjective.
 #  e.g. 申し訳, 仕方, とんでも, 違い
-#名詞-ナイ形容詞語幹
+名詞-ナイ形容詞語幹
 #
 #####
 #  prefix: unclassified prefixes
@@ -203,20 +203,20 @@
 #  prefix-nominal: Prefixes that attach to nouns (including adjective stem forms) 
 #  excluding numerical expressions.
 #  e.g. お (水), 某 (氏), 同 (社), 故 (～氏), 高 (品質), お (見事), ご (立派)
-#接頭詞-名詞接続
+接頭詞-名詞接続
 #
 #  prefix-verbal: Prefixes that attach to the imperative form of a verb or a verb
 #  in conjunctive form followed by なる/なさる/くださる.
 #  e.g. お (読みなさい), お (座り)
-#接頭詞-動詞接続
+接頭詞-動詞接続
 #
 #  prefix-adjectival: Prefixes that attach to adjectives.
 #  e.g. お (寒いですねえ), バカ (でかい)
-#接頭詞-形容詞接続
+接頭詞-形容詞接続
 #
 #  prefix-numerical: Prefixes that attach to numerical expressions.
 #  e.g. 約, およそ, 毎時
-#接頭詞-数接続
+接頭詞-数接続
 #
 #####
 #  verb: unclassified verbs
@@ -251,19 +251,19 @@
 #  adverb-misc: Words that can be segmented into one unit and where adnominal 
 #  modification is not possible.
 #  e.g. あいかわらず, 多分
-#副詞-一般
+副詞-一般
 #
 #  adverb-particle_conjunction: Adverbs that can be followed by の, は, に, 
 #  な, する, だ, etc.
 #  e.g. こんなに, そんなに, あんなに, なにか, なんでも
-#副詞-助詞類接続
+副詞-助詞類接続
 #
 #####
 #  adnominal: Words that only have noun-modifying forms.
 #  e.g. この, その, あの, どの, いわゆる, なんらかの, 何らかの, いろんな, こういう, そういう, ああいう, 
 #       どういう, こんな, そんな, あんな, どんな, 大きな, 小さな, おかしな, ほんの, たいした, 
 #       「(, も) さる (ことながら)」, 微々たる, 堂々たる, 単なる, いかなる, 我が」「同じ, 亡き
-#連体詞
+連体詞
 #
 #####
 #  conjunction: Conjunctions that can occur independently.
@@ -361,7 +361,7 @@
 #  interjection: Greetings and other exclamations.
 #  e.g. おはよう, おはようございます, こんにちは, こんばんは, ありがとう, どうもありがとう, ありがとうございます, 
 #       いただきます, ごちそうさま, さよなら, さようなら, はい, いいえ, ごめん, ごめんなさい
-#感動詞
+感動詞
 #
 #####
 #  symbol: unclassified Symbols.
