@@ -22,7 +22,7 @@ import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
 import org.carrot2.source.microsoft.Bing3WebDocumentSource;
-import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDescriptor;
+import org.carrot2.text.preprocessing.pipeline.builtin.BuiltinPreprocessingPipelineDescriptor;
 
 import com.google.common.collect.Maps;
 
@@ -58,7 +58,7 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
          */
         final Map<String, Object> globalAttributes = new HashMap<String, Object>();
 
-        CompletePreprocessingPipelineDescriptor.attributeBuilder(globalAttributes)
+        BuiltinPreprocessingPipelineDescriptor.attributeBuilder(globalAttributes)
                 .documentAssigner()
                     .exactPhraseAssignment(false);
 
@@ -73,7 +73,7 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
             .matrixReducer()
                 .factorizationQuality(FactorizationQuality.LOW);
 
-        CompletePreprocessingPipelineDescriptor.attributeBuilder(fastAttributes)
+        BuiltinPreprocessingPipelineDescriptor.attributeBuilder(fastAttributes)
                 .caseNormalizer()
                     .dfThreshold(2);
 
@@ -83,11 +83,11 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
             .matrixReducer()
                 .factorizationQuality(FactorizationQuality.HIGH);
 
-        CompletePreprocessingPipelineDescriptor.attributeBuilder(accurateAttributes)
+        BuiltinPreprocessingPipelineDescriptor.attributeBuilder(accurateAttributes)
                 .documentAssigner()
                     .exactPhraseAssignment(true);
 
-        CompletePreprocessingPipelineDescriptor.attributeBuilder(fastAttributes)
+        BuiltinPreprocessingPipelineDescriptor.attributeBuilder(fastAttributes)
                 .caseNormalizer()
                     .dfThreshold(1);
 

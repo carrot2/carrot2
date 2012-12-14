@@ -29,8 +29,8 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
-import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
+import org.carrot2.text.preprocessing.pipeline.builtin.BuiltinPreprocessingPipeline;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
@@ -38,7 +38,7 @@ import org.carrot2.util.attribute.Output;
 import org.carrot2.util.attribute.Required;
 
 /**
- * This class simulates running {@link CompletePreprocessingPipeline} and
+ * This class simulates running {@link BuiltinPreprocessingPipeline} and
  * {@link MultilingualClustering} only, no clustering is performed.
  */
 @Bindable(prefix = "CompletePreprocessing")
@@ -67,7 +67,7 @@ public final class CompletePreprocessing extends ProcessingComponentBase impleme
     /**
      * Common preprocessing tasks handler.
      */
-    public CompletePreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
+    public BuiltinPreprocessingPipeline preprocessingPipeline = new BuiltinPreprocessingPipeline();
 
     /**
      * A helper for performing multilingual clustering.

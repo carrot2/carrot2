@@ -1,21 +1,8 @@
 package org.carrot2.text.preprocessing.pipeline.lucene;
 
-import static org.carrot2.util.resource.ResourceLookup.Location.CONTEXT_CLASS_LOADER;
-
-import java.io.Reader;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.LowerCaseFilter;
-import org.apache.lucene.analysis.PorterStemFilter;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.cjk.CJKWidthFilter;
-import org.apache.lucene.analysis.en.EnglishPossessiveFilter;
-import org.apache.lucene.analysis.ja.JapaneseBaseFormFilter;
-import org.apache.lucene.analysis.ja.JapaneseKatakanaStemFilter;
-import org.apache.lucene.analysis.ja.JapaneseTokenizer;
-import org.apache.lucene.util.Version;
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.attribute.Init;
@@ -43,7 +30,6 @@ import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.resource.ResourceLookup;
 
 /**
  * A {@link IPreprocessingPipeline} based on tokenizers and filtering 
@@ -80,18 +66,20 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
     @Group(DefaultGroups.PREPROCESSING)
     public ILexicalDataFactory lexicalDataFactory = new DefaultLexicalDataFactory();
 
+    /**
+     * A provider of Lucene analyzers to do token stream preprocessing. 
+     * The TokenStream components in the chain should delimit
+     * sentence boundaries (return boundary tokens) and mark stop words. See
+     * the source code of {@link DefaultAnalyzerProvider} for
+     * an example. 
+     */
     @Init
     @Processing
     @Input 
     @Internal
-    @Attribute(key = "resource-lookup", inherit = true)
+    @Attribute(key = "analyzer")
     @ImplementingClasses(classes = {}, strict = false)
-    public ResourceLookup resourceLookup = new ResourceLookup(CONTEXT_CLASS_LOADER);
-
-    @Processing
-    @Input
-    @Attribute(key = "reload-resources", inherit = true)
-    public boolean reloadResources = false;
+    public IAnalyzerProvider analyzerProvider = new DefaultAnalyzerProvider();
 
     /** */
     private final LuceneAnalyzerPreprocessor preprocessor = new LuceneAnalyzerPreprocessor();
@@ -120,7 +108,7 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
     public PreprocessingContext preprocess(List<Document> documents, String query, LanguageCode language, ContextRequired contextRequired)
     {
         // Pick an analyzer based on the language.
-        final Analyzer analyzer = pickAnalyzer(language);
+        final Analyzer analyzer = analyzerProvider.getAnalyzerFor(language, lexicalDataFactory);
 
         // Process the input.
         final PreprocessingContext context = new PreprocessingContext(
@@ -144,72 +132,4 @@ public class LucenePreprocessingPipeline implements IPreprocessingPipeline
         context.preprocessingFinished();
         return context;
     }
-
-    /**
-     * Pick analyzer and token stream for the given language.
-     */
-    protected Analyzer pickAnalyzer(LanguageCode language)
-    {
-        switch (language) {
-            case ENGLISH:
-                return defaultEnglishAnalyzer();
-            case JAPANESE:
-                return defaultJapaneseAnalyzer();
-            default:
-                throw new RuntimeException(this.getClass().getSimpleName() + 
-                    " cannot be used with language: " + language);
-        }
-    }
-
-    private Analyzer defaultEnglishAnalyzer()
-    {
-        return new Analyzer()
-        {
-            @SuppressWarnings("deprecation")
-            @Override
-            public TokenStream tokenStream(String field, Reader reader)
-            {
-                Version matchVersion = Version.LUCENE_CURRENT;
-                TokenStream result = new LuceneExtendedWhitespaceTokenizer(reader);
-                result = new EnglishPossessiveFilter(matchVersion, result);
-                result = new LowerCaseFilter(matchVersion, result);
-                result = new CommonWordMarkerFilter(result, lexicalDataFactory.getLexicalData(LanguageCode.ENGLISH));
-                result = new PorterStemFilter(result);
-                return result;
-            }
-        };
-    }
-
-    /**
-     * Stop POS set for Japanese.
-     */
-    private Set<String> stopPosSet;
-
-    private Analyzer defaultJapaneseAnalyzer()
-    {
-        if (stopPosSet == null || reloadResources)
-        {
-            stopPosSet = DefaultLexicalDataFactory.load(resourceLookup, "stoptags.ja");
-            reloadResources = false;
-        }
-
-        return new Analyzer()
-        {
-            @SuppressWarnings("deprecation")
-            @Override
-            public TokenStream tokenStream(String field, Reader reader)
-            {
-                TokenStream result = new JapaneseTokenizer(
-                    reader, null, false, JapaneseTokenizer.DEFAULT_MODE);
-                result = new JapaneseBaseFormFilter(result);
-                result = new CJKWidthFilter(result);
-                result = new CommonWordMarkerFilter(result, lexicalDataFactory.getLexicalData(LanguageCode.JAPANESE));
-                result = new JapanesePosCommonWordMarkerFilter(result, stopPosSet);
-                result = new JapaneseKatakanaStemFilter(result);
-                result = new JapaneseTokenTypeConverter(result);
-                result = new LowerCaseFilter(Version.LUCENE_CURRENT, result);
-                return result;
-            }
-        };
-    }    
 }

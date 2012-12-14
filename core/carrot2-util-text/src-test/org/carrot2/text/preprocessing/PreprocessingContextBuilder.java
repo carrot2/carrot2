@@ -22,6 +22,7 @@ import org.carrot2.text.linguistic.ILexicalDataFactory;
 import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.preprocessing.pipeline.*;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
+import org.carrot2.text.preprocessing.pipeline.builtin.BuiltinPreprocessingPipeline;
 import org.carrot2.util.attribute.*;
 
 import com.google.common.collect.Lists;
@@ -37,7 +38,7 @@ class PreprocessingContextBuilder
     private LanguageCode language = LanguageCode.ENGLISH;
 
     private Map<String, Object> attributes = Maps.newHashMap();
-    private IPreprocessingPipeline pipeline = new CompletePreprocessingPipeline();
+    private IPreprocessingPipeline pipeline = new BuiltinPreprocessingPipeline();
 
     public final static class FieldValue
     {
@@ -88,14 +89,14 @@ class PreprocessingContextBuilder
     public PreprocessingContextBuilder withStemmerFactory(IStemmerFactory stemmerFactory)
     {
         return setAttribute(
-            AttributeUtils.getKey(CompletePreprocessingPipeline.class, "stemmerFactory"),
+            AttributeUtils.getKey(BuiltinPreprocessingPipeline.class, "stemmerFactory"),
             stemmerFactory);
     }
 
     public PreprocessingContextBuilder withLexicalDataFactory(ILexicalDataFactory lexicalFactory)
     {
         return setAttribute(
-            AttributeUtils.getKey(CompletePreprocessingPipeline.class, "lexicalDataFactory"), 
+            AttributeUtils.getKey(BuiltinPreprocessingPipeline.class, "lexicalDataFactory"), 
             lexicalFactory);
     }
 

@@ -1,7 +1,9 @@
 package org.carrot2.text.preprocessing.pipeline.lucene;
 
+import org.carrot2.text.analysis.ITokenizer;
+
 /**
- * An attribute for propagating token types.
+ * An attribute for providing token types from {@link ITokenizer}.
  */
 public interface TokenTypeAttribute extends org.apache.lucene.util.Attribute
 {

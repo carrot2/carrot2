@@ -7,9 +7,9 @@ import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.test.SampleDocumentData;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
+import org.carrot2.text.preprocessing.pipeline.builtin.BuiltinPreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.lucene.LucenePreprocessingPipeline;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -57,7 +57,7 @@ public class TestLucenePreprocessingPipeline
         {
             for (IPreprocessingPipeline p : new IPreprocessingPipeline [] {
                 new LucenePreprocessingPipeline(),
-                new CompletePreprocessingPipeline()
+                new BuiltinPreprocessingPipeline()
             }) 
             {
                 long start = System.currentTimeMillis();

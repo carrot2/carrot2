@@ -18,7 +18,7 @@ import java.util.Map;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithmDescriptor;
 import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
-import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDescriptor;
+import org.carrot2.text.preprocessing.pipeline.builtin.BuiltinPreprocessingPipelineDescriptor;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilderDescriptor;
 import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.util.attribute.AttributeValueSets;
@@ -48,7 +48,7 @@ public class SavingAttributeValuesToXml
                 .factorizationQuality(FactorizationQuality.MEDIUM)
                 .factorizationFactory(LocalNonnegativeMatrixFactorizationFactory.class);
 
-        CompletePreprocessingPipelineDescriptor.attributeBuilder(attributes)
+        BuiltinPreprocessingPipelineDescriptor.attributeBuilder(attributes)
             .documentAssigner()
                 .exactPhraseAssignment(true);
 

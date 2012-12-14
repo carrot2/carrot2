@@ -20,9 +20,9 @@ import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.preprocessing.PreprocessingComponentTestBase;
 import org.carrot2.text.preprocessing.TestLexicalDataFactory;
 import org.carrot2.text.preprocessing.TestStemmerFactory;
-import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
-import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDescriptor;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline.ContextRequired;
+import org.carrot2.text.preprocessing.pipeline.builtin.BuiltinPreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.builtin.BuiltinPreprocessingPipelineDescriptor;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.junit.Before;
@@ -41,18 +41,18 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     protected VectorSpaceModelContext vsmContext;
 
     /** Preprocessing pipeline used for tests */
-    protected CompletePreprocessingPipeline preprocessingPipeline;
+    protected BuiltinPreprocessingPipeline preprocessingPipeline;
     
     @SuppressWarnings("unchecked")
     @Before
     public void setUpMatrixBuilder() throws Exception
     {
-        preprocessingPipeline = new CompletePreprocessingPipeline();
+        preprocessingPipeline = new BuiltinPreprocessingPipeline();
         preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
         
         Map<String,Object> attrs = Maps.newHashMap();
 
-        CompletePreprocessingPipelineDescriptor.attributeBuilder(attrs)
+        BuiltinPreprocessingPipelineDescriptor.attributeBuilder(attrs)
             .lexicalDataFactory(createLexicalDataFactory())
             .stemmerFactory(createStemmerFactory())
             .tokenizerFactory(createTokenizerFactory());

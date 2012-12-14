@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.text.preprocessing.pipeline;
+package org.carrot2.text.preprocessing.pipeline.builtin;
 
 import java.util.List;
 
@@ -34,6 +34,8 @@ import org.carrot2.text.preprocessing.PhraseExtractor;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.StopListMarker;
 import org.carrot2.text.preprocessing.Tokenizer;
+import org.carrot2.text.preprocessing.pipeline.DefaultPreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
@@ -60,7 +62,7 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
  * </ol>
  */
 @Bindable(prefix = "PreprocessingPipeline")
-public class CompletePreprocessingPipeline implements IPreprocessingPipeline
+public class BuiltinPreprocessingPipeline implements IPreprocessingPipeline
 {
     /**
      * Tokenizer used by the algorithm, contains bindable attributes.
