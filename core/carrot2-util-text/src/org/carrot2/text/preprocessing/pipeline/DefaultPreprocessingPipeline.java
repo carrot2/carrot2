@@ -8,6 +8,10 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.builtin.BuiltinPreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.lucene.LucenePreprocessingPipeline;
 import org.carrot2.util.attribute.Bindable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Throwables;
 
 /**
  * Implements {@link IPreprocessingPipeline} delegation to 
@@ -17,8 +21,23 @@ import org.carrot2.util.attribute.Bindable;
 @Bindable
 public class DefaultPreprocessingPipeline implements IPreprocessingPipeline
 {
+    private final static Logger logger = LoggerFactory
+        .getLogger(DefaultPreprocessingPipeline.class);
+
     private IPreprocessingPipeline builtinPipeline = new BuiltinPreprocessingPipeline();
-    private IPreprocessingPipeline lucenePipeline = new LucenePreprocessingPipeline();
+    private IPreprocessingPipeline lucenePipeline;
+
+    public DefaultPreprocessingPipeline()
+    {
+        try {
+            lucenePipeline = new LucenePreprocessingPipelineIndirect().get();
+        } catch (Throwable t) {
+            logger.warn("Lucene preprocessing pipeline not available. Clustering in certain" +
+            		" languages may not be possible. Cause: {}",
+            		t.toString() + 
+            		(logger.isDebugEnabled() ? "\n" + Throwables.getStackTraceAsString(t) : ""));
+        }
+    }
 
     @Override
     public PreprocessingContext preprocess(List<Document> documents, String query, LanguageCode language, ContextRequired contextRequired)
@@ -30,5 +49,18 @@ public class DefaultPreprocessingPipeline implements IPreprocessingPipeline
             default:
                 return builtinPipeline.preprocess(documents, query, language, contextRequired);
         }
+    }
+}
+
+
+/**
+ * Indirect construction of {@link LucenePreprocessingPipeline} for .NET port where
+ * linking is done earlier than in Java.
+ */
+class LucenePreprocessingPipelineIndirect {
+
+    public IPreprocessingPipeline get()
+    {
+        return new LucenePreprocessingPipeline();
     }
 }

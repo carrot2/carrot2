@@ -68,6 +68,7 @@
     <run.example classname="org.carrot2.examples.clustering.UsingCustomLexicalResources" dependencies="libs.required" />
     <run.example classname="org.carrot2.examples.core.LoadingAttributeValuesFromXml" dependencies="libs.required" />
     <run.example classname="org.carrot2.examples.core.SavingAttributeValuesToXml" dependencies="libs.required" />
+    <run.example classname="org.carrot2.examples.clustering.japanese.ClusteringJapaneseDocuments" dependencies="libs.all" />
 
     <!-- Create a simple Lucene index and run Lucene examples. -->
     <delete dir="index" failonerror="true" includeemptydirs="true" />
