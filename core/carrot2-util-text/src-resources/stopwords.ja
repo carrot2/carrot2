@@ -17,6 +17,7 @@
 # normally done after a CJKWidthFilter in your chain, you would usually want your romaji
 # entries to be in half-width and your kana entries to be in full-width.
 #
+# ・  -> shouldn't lead or trail the cluster label.  
 の
 に
 は

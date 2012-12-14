@@ -26,8 +26,9 @@ public final class JapaneseTokenTypeConverter extends TokenFilter
         if (v)
         {
             final String pos = posAtt.getPartOfSpeech();
-
             int type = ITokenizer.TT_TERM;
+
+            // Check for numerals.
             if (pos.equals("名詞-数"))
             {
                 type = ITokenizer.TT_NUMERIC;
