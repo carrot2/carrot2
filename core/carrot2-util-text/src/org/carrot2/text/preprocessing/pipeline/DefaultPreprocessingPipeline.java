@@ -45,6 +45,10 @@ public class DefaultPreprocessingPipeline implements IPreprocessingPipeline
         switch (language)
         {
             case JAPANESE:
+                if (lucenePipeline == null) {
+                    throw new RuntimeException("Apache Lucene is required for Japanese " +
+                    		"preprocessing and clustering. Include it in your classpath.");
+                }
                 return lucenePipeline.preprocess(documents, query, language, contextRequired);
             default:
                 return builtinPipeline.preprocess(documents, query, language, contextRequired);
