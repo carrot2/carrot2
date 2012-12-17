@@ -18,7 +18,6 @@ import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.util.CharArrayComparators;
@@ -48,16 +47,11 @@ import com.google.common.collect.Lists;
 class LuceneAnalyzerPreprocessor
 {
     /**
-     * Case normalizer used by the algorithm, contains bindable attributes.
-     */
-    public final CaseNormalizer caseNormalizer = new CaseNormalizer();
-
-    /**
      * Textual fields of documents that should be tokenized and parsed for clustering.
      */
     @Init
     @Input
-    @Attribute
+    @Attribute(key = "Tokenizer.documentFields")
     @Label("Document fields")
     @Level(AttributeLevel.ADVANCED)
     @Group(DefaultGroups.PREPROCESSING)
