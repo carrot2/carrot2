@@ -25,12 +25,17 @@ public final class CommonWordMarkerFilter extends TokenFilter
         super(input);
         this.lexicalData = lexicalData; 
     }
+    
+    public CommonWordMarkerFilter(TokenStream input)
+    {
+        this(input, null);
+    }
 
     @Override
     public boolean incrementToken() throws IOException
     {
         final boolean v = input.incrementToken();
-        if (v)
+        if (v && lexicalData != null)
         {
             scratch.reset(termAtt);
             commonWordAtt.setCommon(lexicalData.isCommonWord(scratch));
