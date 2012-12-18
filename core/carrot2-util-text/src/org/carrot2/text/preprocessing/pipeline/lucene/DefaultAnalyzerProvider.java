@@ -65,8 +65,7 @@ public class DefaultAnalyzerProvider implements IAnalyzerProvider
 
     private Analyzer defaultEnglishAnalyzer(final ILexicalDataFactory lexicalDataFactory)
     {
-        return new Analyzer()
-        {
+        final class Temp extends Analyzer {
             @SuppressWarnings("deprecation")
             @Override
             public TokenStream tokenStream(String field, Reader reader)
@@ -79,7 +78,8 @@ public class DefaultAnalyzerProvider implements IAnalyzerProvider
                 result = new PorterStemFilter(result);
                 return result;
             }
-        };
+        }
+        return new Temp();
     }
 
     /**
@@ -95,8 +95,7 @@ public class DefaultAnalyzerProvider implements IAnalyzerProvider
             reloadResources = false;
         }
 
-        return new Analyzer()
-        {
+        final class Temp extends Analyzer {
             @SuppressWarnings("deprecation")
             @Override
             public TokenStream tokenStream(String field, Reader reader)
@@ -111,7 +110,8 @@ public class DefaultAnalyzerProvider implements IAnalyzerProvider
                 result = new JapaneseTokenTypeConverter(result);
                 result = new LowerCaseFilter(Version.LUCENE_CURRENT, result);
                 return result;
-            }
-        };
+            }            
+        }
+        return new Temp();
     }        
 }
