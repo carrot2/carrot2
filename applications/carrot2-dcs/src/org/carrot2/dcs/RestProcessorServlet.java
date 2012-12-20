@@ -513,15 +513,17 @@ public final class RestProcessorServlet extends HttpServlet
         {
             if (requestModel.source != null)
             {
-                config.logger.info("Processing results from " + requestModel.source
-                    + " with " + requestModel.algorithm);
-                result = controller.process(processingAttributes, requestModel.source,
+                config.logger.info("Processing results from " + 
+                    requestModel.source + 
+                    " with " + 
+                    requestModel.algorithm);
+                result = controller.process(processingAttributes, 
+                    requestModel.source,
                     requestModel.algorithm);
             }
             else
             {
-                config.logger.info("Processing direct results feed with "
-                    + requestModel.algorithm);
+                config.logger.info("Processing direct results feed with " + requestModel.algorithm);
                 result = controller.process(processingAttributes, requestModel.algorithm);
             }
         }
