@@ -26,6 +26,13 @@
       <version>${project.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-kuromoji</artifactId>
+      <version>3.6.1</version>
+      <optional>true</optional>
+    </dependency>
+
     <!-- SLF4J, simple console logging -->
     <dependency>
     	<groupId>org.slf4j</groupId>

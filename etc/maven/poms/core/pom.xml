@@ -168,6 +168,13 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-kuromoji</artifactId>
+      <version>${org.apache.lucene.version}</version>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
       <groupId>org.carrot2</groupId>
       <artifactId>morfologik-polish</artifactId>
       <version>${morfologik.version}</version>
