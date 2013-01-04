@@ -129,6 +129,18 @@
           <groupId>com.google.code.gson</groupId>
           <artifactId>gson</artifactId>
         </exclusion>
+        <exclusion>
+          <artifactId>xpp3</artifactId>
+          <groupId>xpp3</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>uncommons-maths</artifactId>
+          <groupId>org.uncommons.maths</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-math</artifactId>
+          <groupId>org.apache.commons</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
 
