@@ -101,7 +101,7 @@ public class DefaultAnalyzerProvider implements IAnalyzerProvider
             public TokenStream tokenStream(String field, Reader reader)
             {
                 TokenStream result = new JapaneseTokenizer(
-                    reader, null, false, JapaneseTokenizer.DEFAULT_MODE);
+                    reader, null, false, JapaneseTokenizer.Mode.NORMAL);
                 result = new JapaneseBaseFormFilter(result);
                 result = new CJKWidthFilter(result);
                 result = new CommonWordMarkerFilter(result, lexicalDataFactory.getLexicalData(LanguageCode.JAPANESE));
