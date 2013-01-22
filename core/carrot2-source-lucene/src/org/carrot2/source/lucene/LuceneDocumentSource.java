@@ -19,12 +19,12 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.SimpleAnalyzer;
-import org.apache.lucene.analysis.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.core.SimpleAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -34,12 +34,12 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.carrot2.core.Document;
+import org.carrot2.core.Document.IDocumentSerializationListener;
 import org.carrot2.core.IControllerContext;
 import org.carrot2.core.IControllerContextListener;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingComponentBase;
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.Document.IDocumentSerializationListener;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.CommonAttributes;
 import org.carrot2.core.attribute.Init;
@@ -167,7 +167,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
 
     /**
      * A pre-parsed {@link org.apache.lucene.search.Query} object or a {@link String}
-     * parsed using the built-in {@link org.apache.lucene.queryParser.QueryParser} over a
+     * parsed using the built-in classic QueryParser over a
      * set of search fields returned from the {@link #fieldMapper}.
      */
     @Input
@@ -368,7 +368,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             {
                 try
                 {
-                    searcher.close();
+                    searcher.getIndexReader().close();
                 }
                 catch (IOException e)
                 {
@@ -390,7 +390,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             {
                 try
                 {
-                    searcher = new IndexSearcher(IndexReader.open(directory));
+                    searcher = new IndexSearcher(DirectoryReader.open(directory));
                     openIndexes.put(directory, searcher);
                 }
                 catch (IOException e)

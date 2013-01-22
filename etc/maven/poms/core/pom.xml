@@ -145,6 +145,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-queryparser</artifactId>
+      <version>${org.apache.lucene.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.simpleframework</groupId>
       <artifactId>simple-xml</artifactId>
       <version>${org.simpleframework.version}</version>

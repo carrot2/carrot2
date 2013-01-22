@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import org.apache.lucene.analysis.SimpleAnalyzer;
+import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.carrot2.util.ReflectionUtils;

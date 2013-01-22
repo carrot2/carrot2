@@ -12,23 +12,27 @@
 
 package org.carrot2.examples.clustering;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.core.*;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.ProcessingComponentConfiguration;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.CreateLuceneIndex;
-import org.carrot2.source.lucene.*;
+import org.carrot2.source.lucene.IFieldMapper;
+import org.carrot2.source.lucene.LuceneDocumentSource;
+import org.carrot2.source.lucene.LuceneDocumentSourceDescriptor;
+import org.carrot2.source.lucene.SimpleFieldMapper;
 import org.carrot2.util.annotations.ThreadSafe;
 
 import com.google.common.collect.Maps;
@@ -108,14 +112,6 @@ public class ClusteringDataFromLuceneWithCustomFields
             .fieldMapper(new CustomFieldMapper());
 
         /*
-         * The Analyzer used by Lucene while searching can also be provided. We provide
-         * a class reference here to make sure instances are used in a thread safe manner.
-         */
-        LuceneDocumentSourceDescriptor
-            .attributeBuilder(luceneGlobalAttributes)
-            .analyzer(StandardAnalyzerWrapper.class);
-
-        /*
          * Initialize the controller passing the above attributes as component-specific
          * for Lucene. The global attributes map will be empty. Note that we've provided
          * an identifier for our specially-configured Lucene component, we'll need to use
@@ -176,28 +172,6 @@ public class ClusteringDataFromLuceneWithCustomFields
             {
                 "fullContent"
             };
-        }
-    }
-
-    /**
-     * Carrot2 attribute classes require parameterless constructor, so we delegate to
-     * standard analyzer from here.
-     */
-    public static final class StandardAnalyzerWrapper extends Analyzer
-    {
-        private final StandardAnalyzer target;
-
-        public StandardAnalyzerWrapper()
-        {
-            @SuppressWarnings("deprecation")
-            Version luceneVersion = Version.LUCENE_CURRENT;            
-            this.target = new StandardAnalyzer(luceneVersion);
-        }
-
-        @Override
-        public TokenStream tokenStream(String s, Reader reader)
-        {
-            return target.tokenStream(s, reader);
         }
     }
 }

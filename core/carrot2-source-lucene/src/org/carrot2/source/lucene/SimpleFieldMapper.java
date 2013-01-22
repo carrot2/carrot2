@@ -19,7 +19,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Fieldable;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.highlight.*;
 import org.carrot2.core.attribute.*;
@@ -245,9 +245,9 @@ public class SimpleFieldMapper implements IFieldMapper
         }
 
         StringBuilder builder = null;
-        for (Fieldable field : doc.getFields())
+        for (IndexableField field : doc.getFields())
         {
-            if (field.name().equals(fieldName) && (!field.isBinary()))
+            if (field.name().equals(fieldName))
             {
                 if (builder == null) builder = new StringBuilder();
                 if (builder.length() > 0) builder.append(" ");

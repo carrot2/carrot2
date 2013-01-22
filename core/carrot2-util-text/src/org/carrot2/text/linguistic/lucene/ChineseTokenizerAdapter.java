@@ -83,7 +83,7 @@ public final class ChineseTokenizerAdapter implements ITokenizer
     {
         try
         {
-            sentenceTokenizer.reset(input);
+            sentenceTokenizer.setReader(input);
             wordTokenFilter = new WordTokenFilter(sentenceTokenizer);
             this.term = wordTokenFilter.addAttribute(CharTermAttribute.class);
         }

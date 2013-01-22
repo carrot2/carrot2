@@ -15,10 +15,11 @@ package org.carrot2.workbench.editors.lucene;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.FieldInfo;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.util.ReaderUtil;
 import org.carrot2.source.lucene.LuceneDocumentSource;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.workbench.core.helpers.Utils;
@@ -77,11 +78,11 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
             try
             {
                 final Directory dir = (Directory) directory;
-                final IndexReader ir = IndexReader.open(dir);
+                final IndexReader ir = DirectoryReader.open(dir);
                 try
                 {
                     List<String> all = Lists.newArrayList();
-                    for (FieldInfo fi : ReaderUtil.getMergedFieldInfos(ir))
+                    for (FieldInfo fi : MultiFields.getMergedFieldInfos(ir))
                     {
                         all.add(fi.name);
                     }
