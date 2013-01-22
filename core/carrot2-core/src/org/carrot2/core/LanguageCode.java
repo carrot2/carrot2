@@ -52,13 +52,13 @@ public enum LanguageCode
     ENGLISH ("en"),
     ESTONIAN ("ee"),
     FINNISH ("fi"),
-    // PERSIAN ("fa"),
     FRENCH ("fr"),
     GERMAN ("de"),
     GREEK ("gr"),
     HUNGARIAN ("hu"),
     ITALIAN ("it"),
     IRISH ("ie"),
+    JAPANESE ("ja"),
     KOREAN ("ko"),
     LATVIAN ("lv"),
     LITHUANIAN ("lt"),
@@ -108,7 +108,8 @@ public enum LanguageCode
     private final static Set<LanguageCode> noSpaceLanguages;
     static {
         noSpaceLanguages = EnumSet.of(
-            LanguageCode.CHINESE_SIMPLIFIED);
+            LanguageCode.CHINESE_SIMPLIFIED,
+            LanguageCode.JAPANESE);
     }
 
     /**
