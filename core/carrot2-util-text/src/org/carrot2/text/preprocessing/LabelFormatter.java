@@ -12,7 +12,6 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.attribute.Bindable;
@@ -40,18 +39,16 @@ public class LabelFormatter
         }
         else
         {
-            final boolean insertSpace = context.language.getLanguageCode() != LanguageCode.CHINESE_SIMPLIFIED;
+            final boolean insertSpace = context.language.getLanguageCode().usesSpaceDelimiters();
             final int [] wordIndices = phrasesWordIndices[featureIndex - wordCount];
             final short [] termTypes = context.allWords.type;
             for (int i = 0; i < wordIndices.length; i++)
             {
+                if (insertSpace && i > 0) label.append(' ');
+
                 final int wordIndex = wordIndices[i];
                 appendFormatted(label, wordsImage[wordIndex], i == 0,
                     TokenTypeUtils.isCommon(termTypes[wordIndex]));
-                if (insertSpace && i < wordIndices.length - 1)
-                {
-                    label.append(' ');
-                }
             }
         }
 

@@ -222,8 +222,7 @@ public class MultilingualClustering
         {
             final ImmutableList<Document> languageDocuments = documentsByLanguage
                 .get(language);
-            final LanguageCode languageCode = language.equals("") ? null : LanguageCode
-                .valueOf(language);
+            final LanguageCode languageCode = language.equals("") ? null : LanguageCode.valueOf(language);
             final Cluster languageCluster = new Cluster(
                 languageCode != null ? languageCode.toString() : "Unknown Language");
 
