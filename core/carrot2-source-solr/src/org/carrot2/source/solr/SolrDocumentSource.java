@@ -18,7 +18,10 @@ import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.constraint.ImplementingClasses;
+import org.carrot2.util.resource.ClassLoaderResource;
 import org.carrot2.util.resource.ClassResource;
+import org.carrot2.util.resource.FileResource;
 import org.carrot2.util.resource.IResource;
 
 import com.google.common.collect.Maps;
@@ -90,6 +93,11 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Label("Custom XSLT adapter from Solr to Carrot2 format")
     @Level(AttributeLevel.ADVANCED)
     @Group(FIELD_MAPPING)
+    @ImplementingClasses(classes =
+    {
+        ClassLoaderResource.class,
+        FileResource.class
+    }, strict = false)
     public IResource solrXsltAdapter = new ClassResource(SolrDocumentSource.class, "solr-to-c2.xsl");
 
     @Override

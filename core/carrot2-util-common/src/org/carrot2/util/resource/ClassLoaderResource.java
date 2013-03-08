@@ -54,7 +54,12 @@ public final class ClassLoaderResource implements IResource
 
     public InputStream open() throws IOException
     {
-        return StreamUtils.prefetch(clazzLoader.getResourceAsStream(resource));
+        InputStream resourceAsStream = clazzLoader.getResourceAsStream(resource);
+        if (resourceAsStream == null)
+        {
+            throw new IOException("Resource not found: " + toString());
+        }
+        return StreamUtils.prefetch(resourceAsStream);
     }
 
     @Override
@@ -81,5 +86,22 @@ public final class ClassLoaderResource implements IResource
     public String toString()
     {
         return "[CLASSPATH RESOURCE: " + resource + "@" + clazzLoader.toString() + "]";
+    }
+    
+    /**
+     * Restores a {@link ClassLoaderResource} from a string, resolving against the current context
+     * class loader.
+     */
+    public static ClassLoaderResource valueOf(String name)
+    {
+        // Return non-null value only if the name is an existing resource (resolved
+        // relative to context class loader).
+        try {
+            ClassLoaderResource res = new ClassLoaderResource(name);
+            res.open().close();
+            return res;
+        } catch (IOException e) {
+            return null;
+        }
     }
 }
