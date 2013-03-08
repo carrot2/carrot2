@@ -40,8 +40,8 @@ public class ResourceFromStringTest extends CarrotTestCase
     @Test
     public void testFileResourceFile() throws Exception
     {
-        final File file = File.createTempFile(ResourceFromStringTest.class
-            .getSimpleName(), "");
+        final File file = File.createTempFile(
+            ResourceFromStringTest.class.getSimpleName(), "");
         file.deleteOnExit();
         check("resource", file.getAbsolutePath(), new FileResource(file));
     }
@@ -56,9 +56,8 @@ public class ResourceFromStringTest extends CarrotTestCase
     private void check(String fieldName, String stringValue,
         Object expectedTransformedValue) throws Exception
     {
-        final Field field = ResourceFromStringTest.class
-            .getDeclaredField(fieldName);
-        assertThat(
-            AttributeTransformerFromString.INSTANCE.transform(stringValue, null, field)).isEqualTo(expectedTransformedValue);
+        final Field field = ResourceFromStringTest.class.getDeclaredField(fieldName);
+        assertThat(AttributeTransformerFromString.INSTANCE.transform(
+            stringValue, null, field)).isEqualTo(expectedTransformedValue);
     }
 }
