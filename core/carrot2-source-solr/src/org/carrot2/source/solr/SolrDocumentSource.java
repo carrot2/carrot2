@@ -14,6 +14,7 @@ package org.carrot2.source.solr;
 
 import java.util.Map;
 
+import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
 import org.carrot2.util.attribute.*;
@@ -77,6 +78,20 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Group(FIELD_MAPPING)
     public String solrUrlFieldName = "url";
 
+    /**
+     * Provides a custom XSLT stylesheet for converting from Solr's output to
+     * an XML format <a href="http://download.carrot2.org/head/manual/index.html#section.architecture.xml-formats">
+     * parsed by Carrot2</a>. For performance reasons this attribute
+     * can be provided at initialization time only (no processing-time overrides).  
+     */
+    @Input
+    @Init
+    @Attribute
+    @Label("Custom XSLT adapter from Solr to Carrot2 format")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(FIELD_MAPPING)
+    public IResource solrXsltAdapter = new ClassResource(SolrDocumentSource.class, "solr-to-c2.xsl");
+
     @Override
     protected String buildServiceUrl()
     {
@@ -88,7 +103,7 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Override
     protected IResource getXsltResource()
     {
-        return new ClassResource(SolrDocumentSource.class, "solr-to-c2.xsl");
+        return solrXsltAdapter;
     }
 
     @Override
