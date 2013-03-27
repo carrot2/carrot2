@@ -12,14 +12,15 @@
 
 package org.carrot2.workbench.core.ui.actions;
 
+import org.carrot2.core.CachingProcessingComponentManager;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorPart;
 
 /**
- * Restarts processing in the currently active editor.
+ * Restarts processing in the currently active editor, flushes any cached input data.
  */
-public class ReprocessActionDelegate extends ActiveSearchEditorActionDelegate 
+public class ReprocessFlushCachesActionDelegate extends ActiveSearchEditorActionDelegate 
 {
     @Override
     public void init(IAction action)
@@ -30,6 +31,9 @@ public class ReprocessActionDelegate extends ActiveSearchEditorActionDelegate
     @Override
     public void run(SearchEditor editor)
     {
+        // Drop existing caches.
+        editor.getSearchResult().getInput().setAttribute(
+            CachingProcessingComponentManager.CACHE_BYPASS_ATTR, true, false);
         editor.reprocess();
     }
 
