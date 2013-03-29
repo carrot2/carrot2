@@ -14,7 +14,7 @@ package org.carrot2.source.xml;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
+import java.util.*;
 
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Controller;
