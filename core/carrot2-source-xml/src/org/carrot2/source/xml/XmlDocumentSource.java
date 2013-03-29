@@ -172,6 +172,16 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     public int results = 100;
 
     /**
+     * If clusters are present in the input XML they will be read and exposed to components
+     * further down the processing chain.
+     */
+    @Input
+    @Init 
+    @Processing
+    @Attribute
+    public boolean readClusters = false;
+
+    /**
      * If <code>true</code>, all documents are read from the input XML stream, regardless
      * of the limit set by {@link #results}.
      */
@@ -199,6 +209,17 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     @Output
     @Attribute(key = AttributeNames.DOCUMENTS, inherit = true)
     public List<Document> documents;
+
+    /**
+     * If {@link #readClusters} is <code>true</code> and clusters are present in the input
+     * XML, they will be deserialized and exposed to components further down the processing
+     * chain.
+     */
+    @Processing
+    @Input @Output
+    @Internal
+    @Attribute(key = AttributeNames.CLUSTERS, inherit = true)
+    public List<Cluster> clusters;
 
     /**
      * The XSLT resource provided at init. If we want to allow specifying the XSLT both on
@@ -240,10 +261,18 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
             query = (String) processingResult.getAttributes().get(AttributeNames.QUERY);
             documents = processingResult.getDocuments();
 
+            if (readClusters)
+            {
+                this.clusters = processingResult.getClusters();
+            }
+
             /*
              * Override the result title if query is present.
              */
-            if (!StringUtils.isEmpty(query)) title = null;
+            if (!StringUtils.isEmpty(query))
+            {
+                title = null;
+            }
 
             if (documents == null)
             {
