@@ -179,6 +179,9 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     @Init 
     @Processing
     @Attribute
+    @Label("Read clusters from input")
+    @Level(AttributeLevel.BASIC)
+    @Group(XML_TRANSFORMATION)
     public boolean readClusters = false;
 
     /**
