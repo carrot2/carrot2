@@ -100,18 +100,6 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     }, strict = false)
     public IResource solrXsltAdapter = new ClassResource(SolrDocumentSource.class, "solr-to-c2.xsl");
 
-    /**
-     * If clusters are present in Solr's response they will be 
-     * parsed and exposed to components further down the processing chain.
-     */
-    @Input
-    @Init 
-    @Processing
-    @Attribute
-    @Label("Read clusters from Solr's response")
-    @Level(AttributeLevel.BASIC)
-    public boolean readClusters = false;
-
     @Override
     protected String buildServiceUrl()
     {
@@ -131,11 +119,9 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     {
         final Map<String, String> parameters = Maps.newHashMap();
 
-        parameters.put("solr.title-field",   solrTitleFieldName);
+        parameters.put("solr.title-field", solrTitleFieldName);
         parameters.put("solr.summary-field", solrSummaryFieldName);
-        parameters.put("solr.url-field",     solrUrlFieldName);
-
-        parameters.put("solr.read-clusters", readClusters ? "true" : "false");
+        parameters.put("solr.url-field", solrUrlFieldName);
         
         return parameters;
     }
