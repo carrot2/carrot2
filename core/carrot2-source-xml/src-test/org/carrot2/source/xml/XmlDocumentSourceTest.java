@@ -16,13 +16,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import org.carrot2.core.Cluster;
 import org.carrot2.core.Controller;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.DocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.ContextClassLoaderLocator;
+import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.ResourceLookup;
+import org.carrot2.util.resource.URLResourceWithParams;
 import org.junit.Test;
 
 import com.google.common.base.Function;
@@ -56,6 +60,20 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     public Class<XmlDocumentSource> getComponentClass()
     {
         return XmlDocumentSource.class;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testReadClusters()
+    {
+        IResource xml = resourceLocator.getFirst("/xml/carrot2-with-clusters.xml");
+
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"), xml);
+        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "readClusters"), true);
+        runQuery();
+
+        List<Cluster> clusters = (List<Cluster>) resultAttributes.get(AttributeNames.CLUSTERS);
+        assertThat(clusters).isNotEmpty();
     }
 
     @Test
