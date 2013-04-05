@@ -18,9 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
@@ -34,6 +36,7 @@ import org.carrot2.source.lucene.LuceneDocumentSource;
 import org.carrot2.source.lucene.LuceneDocumentSourceDescriptor;
 import org.carrot2.source.lucene.SimpleFieldMapper;
 import org.carrot2.util.annotations.ThreadSafe;
+import org.carrot2.util.attribute.IObjectFactory;
 
 import com.google.common.collect.Maps;
 
@@ -86,6 +89,12 @@ public class ClusteringDataFromLuceneWithCustomFields
             indexPath = args[0];
         }
 
+        // Sanity check.
+        if (!new File(indexPath).isDirectory()) {
+            System.err.println("Index directory does not exist: " + indexPath);
+            return;
+        }
+
         LuceneDocumentSourceDescriptor
             .attributeBuilder(luceneGlobalAttributes)
             .directory(FSDirectory.open(new File(indexPath)));
@@ -110,6 +119,14 @@ public class ClusteringDataFromLuceneWithCustomFields
         LuceneDocumentSourceDescriptor
             .attributeBuilder(luceneGlobalAttributes)
             .fieldMapper(new CustomFieldMapper());
+
+        /*
+         * The Analyzer used by Lucene while searching can also be provided via factory
+         * because it does not have a parameterless constructor.
+         */
+        LuceneDocumentSourceDescriptor
+            .attributeBuilder(luceneGlobalAttributes)
+            .analyzer(StandardAnalyzerFactory.class);
 
         /*
          * Initialize the controller passing the above attributes as component-specific
@@ -139,6 +156,18 @@ public class ClusteringDataFromLuceneWithCustomFields
             processingAttributes, "lucene", LingoClusteringAlgorithm.class.getName());
 
         ConsoleFormatter.displayResults(process);
+    }
+    
+    /**
+     * A wrapper class producing {@link StandardAnalyzer} instances.
+     */
+    public static final class StandardAnalyzerFactory implements IObjectFactory<Analyzer> {
+        @SuppressWarnings("deprecation")
+        @Override
+        public Analyzer create()
+        {
+            return new StandardAnalyzer(Version.LUCENE_CURRENT);
+        }
     }
 
     /**

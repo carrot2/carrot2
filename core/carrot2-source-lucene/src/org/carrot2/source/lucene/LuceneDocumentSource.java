@@ -86,9 +86,15 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
      */
     static
     {
-        SimpleXmlWrappers.addWrapper(FSDirectory.class, FSDirectoryWrapper.class, false);
-        SimpleXmlWrappers.addWrapper(StandardAnalyzer.class,
-            StandardAnalyzerWrapper.class, true);
+        SimpleXmlWrappers.addWrapper(
+            FSDirectory.class, 
+            FSDirectoryWrapper.class, 
+            false);
+
+        SimpleXmlWrappers.addWrapper(
+            StandardAnalyzer.class,
+            StandardAnalyzerWrapper.class, 
+            true);
     }
 
     @Processing
@@ -139,7 +145,9 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     @Attribute
     @ImplementingClasses(classes =
     {
-        SimpleAnalyzer.class, StandardAnalyzer.class, WhitespaceAnalyzer.class
+        SimpleAnalyzer.class, 
+        StandardAnalyzer.class, 
+        WhitespaceAnalyzer.class
     }, strict = false)
     @Label("Analyzer")
     @Level(AttributeLevel.MEDIUM)
