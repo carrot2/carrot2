@@ -78,10 +78,10 @@
   
       <listitem>
         <formalpara>
-          <title>lucene-analyzers, lucene-smartcn</title>
+          <title>lucene-analyzers-*</title>
           
           <para>
-            Required for clustering Chinese content.
+            Required for clustering Chinese and Thai content.
           </para>
         </formalpara>
       </listitem>

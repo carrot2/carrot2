@@ -14,6 +14,7 @@ package org.carrot2.text.linguistic.lucene;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.TokenStream;
@@ -42,7 +43,7 @@ public final class ChineseTokenizerAdapter implements ITokenizer
     public ChineseTokenizerAdapter()
     {
         this.tempCharSequence = new MutableCharArray(new char [0]);
-        this.sentenceTokenizer = new SentenceTokenizer(null);
+        this.sentenceTokenizer = new SentenceTokenizer(new StringReader(""));
     }
 
     public short nextToken() throws IOException
