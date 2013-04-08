@@ -99,8 +99,11 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
         map.put(LanguageCode.CHINESE_SIMPLIFIED, 
             new NewClassInstanceFactory<ITokenizer>(ChineseTokenizerAdapter.class));
 
-        map.put(LanguageCode.THAI, new NewClassInstanceFactory<ITokenizer>(
-            ThaiTokenizerAdapter.class));
+        map.put(LanguageCode.THAI, 
+            new NewClassInstanceFactory<ITokenizer>(ThaiTokenizerAdapter.class));
+        
+        // Japanese is currently not supported. TODO: CARROT-903
+        map.put(LanguageCode.JAPANESE, new JapaneseUnsupportedStub());
 
         // Decorate everything with a fallback tokenizer.
         for (LanguageCode lc : LanguageCode.values())
