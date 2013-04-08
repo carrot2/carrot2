@@ -57,7 +57,7 @@ public enum LanguageCode
     GREEK ("gr"),
     HUNGARIAN ("hu"),
     ITALIAN ("it"),
-    IRISH ("ie"),
+    IRISH ("ie"), // (Gaelic)
     JAPANESE ("ja"),
     KOREAN ("ko"),
     LATVIAN ("lv"),
