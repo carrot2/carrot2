@@ -273,7 +273,7 @@ public final class RestProcessorServlet extends HttpServlet
     }
 
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse arg1)
+    protected void service(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
         synchronized (this)
@@ -287,7 +287,13 @@ public final class RestProcessorServlet extends HttpServlet
                 loggerInitialized = true;
             }
         }
-        super.service(request, arg1);
+        
+        // Allow ajax requests from anywhere. This is respected by browsers only 
+        // anyway and somebody installing the DCS should provide other authentication/ filtering
+        // means to limit potential spam/ leechers.
+        response.setHeader("Access-Control-Allow-Origin", "*");
+
+        super.service(request, response);
     }
 
     @Override

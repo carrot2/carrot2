@@ -152,6 +152,7 @@
           // created above. We'll use the JSON-P response format
           // to avoid same-origin-domain restrictions. The downside of JSON-P
           // is that we won't be able to catch errors.
+          $.support.cors = true;
           $.ajax({
             
             // The URL at which the DCS service is running
