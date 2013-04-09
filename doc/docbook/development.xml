@@ -313,7 +313,7 @@ ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></p
           <title>Consider upgrading &C2; in dependent projects</title>
           <para>
             If reasonable, upgrade &C2; dependency in other known projects, such as
-            Apache Solr and Nutch.
+            Apache Solr.
           </para>
         </formalpara>
       </listitem>

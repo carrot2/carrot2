@@ -29,7 +29,7 @@
   <para>
     &PROD; <emphasis role="bold">is not a search engine</emphasis> itself, it
     does not have a crawler and indexer. There is a number of Open Source projects
-    you can use to crawl (<link xlink:href="http://lucene.apache.org/nutch/">Nutch</link>), 
+    you can use to crawl (<link xlink:href="http://nutch.apache.org/">Nutch</link>), 
     index and search (<link xlink:href="http://lucene.apache.org/">Lucene</link>, 
     <link xlink:href="http://lucene.apache.org/solr/">Solr</link>) your content, which
     can then be queried and clustered by &PROD;
