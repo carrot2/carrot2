@@ -95,19 +95,12 @@ public class QueryWordHighlighter extends ProcessingComponentBase
         
         for (Document document : inputDocuments)
         {
-            final Document newDocument = new Document();
-            final Map<String, Object> newDocumentFields = document.getFields();
-            for (Map.Entry<String, Object> entry : newDocumentFields.entrySet())
-            {
-                newDocument.setField(entry.getKey(), entry.getValue());
-            }
-            
+            final Document clonedDocument = document.clone();
             for (String fieldName : fields)
             {
-                highlightQueryTerms(newDocument, fieldName, queryPatterns);
+                highlightQueryTerms(clonedDocument, fieldName, queryPatterns);
             }
-            
-            outputDocuments.add(newDocument);
+            outputDocuments.add(clonedDocument);
         }
         documents = outputDocuments;
     }

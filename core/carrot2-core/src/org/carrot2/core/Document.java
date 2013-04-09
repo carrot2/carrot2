@@ -49,7 +49,7 @@ import com.google.common.collect.Sets;
 @Root(name = "document")
 @JsonAutoDetect(JsonMethod.NONE)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public final class Document
+public final class Document implements Cloneable
 {
     /** Field name for the title of the document. */
     public static final String TITLE = "title";
@@ -504,6 +504,19 @@ public final class Document
             fields.put(name, value);
         }
         return this;
+    }
+    
+    /**
+     * Creates a <strong>shallow</strong> clone of itself. The identifier
+     * and the fields map is copied but values inside fields are not cloned. 
+     */
+    @Override
+    public Document clone()
+    {
+        Document clone = new Document();
+        clone.id = this.id;
+        clone.fields.putAll(this.fields);
+        return clone;
     }
 
     /**
