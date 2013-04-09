@@ -11,6 +11,9 @@
   <xsl:param name="solr.summary-field">description</xsl:param>
   <xsl:param name="solr.url-field">url</xsl:param>
   <xsl:param name="solr.id-field"></xsl:param>
+  <xsl:param name="solr.use-highlighter-output">true</xsl:param>
+
+  <xsl:key name="highlighter"  match="/response/lst[@name='highlighting']/lst" use="@name" />
 
   <xsl:template match="/">
     <searchresult>
@@ -19,17 +22,28 @@
 
       <!-- Emit documents. -->
       <xsl:for-each select="/response/result/doc">
+        <xsl:variable name="docid" select="*[@name = $solr.id-field]" />
         <document>
-          <xsl:if test="$solr.id-field != '' and *[@name = $solr.id-field]">
+          <xsl:if test="$solr.id-field != ''">
             <xsl:attribute name="id">
-                <xsl:value-of select="*[@name = $solr.id-field]" />
+                <xsl:value-of select="$docid" />
             </xsl:attribute>
           </xsl:if>
 
           <url><xsl:value-of select="*[@name=$solr.url-field]" /></url>
           <title><xsl:value-of select="*[@name=$solr.title-field]" /></title>
           <snippet>
-            <xsl:value-of select="*[@name=$solr.summary-field]" />
+            <xsl:variable name="fragment" select="key('highlighter', $docid)/arr[@name=$solr.summary-field]" />
+            <xsl:choose>
+              <xsl:when test="$solr.use-highlighter-output = 'true' and $fragment">
+                <xsl:for-each select="$fragment/str">
+                  ... <xsl:value-of select="." />
+                </xsl:for-each>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="*[@name=$solr.summary-field]" />
+              </xsl:otherwise>
+            </xsl:choose>
           </snippet>
         </document>
       </xsl:for-each>

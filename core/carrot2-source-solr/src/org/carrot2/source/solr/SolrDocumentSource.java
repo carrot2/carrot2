@@ -148,6 +148,23 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     public boolean readClusters = false;
 
     /**
+     * If highlighter fragments are present in the Solr output they will be used (and preferred) over full
+     * field content. This may be used to decrease the memory required for clustering. In general if highlighter
+     * is used the contents of full fields won't be emitted from Solr though (because it makes little sense).
+     * 
+     * <p>Setting this option to <code>false</code> will disable using the highlighter output
+     * entirely.
+     */
+    @Input
+    @Init 
+    @Processing
+    @Attribute
+    @Label("Use highlighter output if present")
+    @Level(AttributeLevel.BASIC)
+    @Group(FIELD_MAPPING)
+    public boolean useHighlighterOutput = true;
+
+    /**
      * If {@link #readClusters} is <code>true</code> and clusters are present in the input
      * XML, they will be deserialized and exposed to components further down the processing
      * chain.
@@ -209,6 +226,7 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
         parameters.put("solr.summary-field", solrSummaryFieldName);
         parameters.put("solr.url-field", solrUrlFieldName);
         parameters.put("solr.id-field", Strings.nullToEmpty(solrIdFieldName));
+        parameters.put("solr.use-highlighter-output", useHighlighterOutput ? "true" : "false");
 
         return parameters;
     }
