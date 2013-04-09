@@ -28,6 +28,7 @@ import org.carrot2.source.xml.RemoteXmlSimpleSearchEngineBase;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
 import org.carrot2.util.attribute.Group;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Label;
@@ -154,7 +155,10 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Processing
     @Input @Output
     @Internal
-    @Attribute(key = AttributeNames.CLUSTERS, inherit = true)
+    @Attribute(key = AttributeNames.CLUSTERS)
+    @Label("Clusters")
+    @Level(AttributeLevel.BASIC)
+    @Group(DefaultGroups.RESULT_INFO)
     public List<Cluster> clusters;
 
     @Override
