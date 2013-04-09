@@ -1,1 +1,21 @@
-<phrase></phrase>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<section xml:id="section.solr"
+         xmlns="http://docbook.org/ns/docbook" version="5.0"
+         xmlns:product="http://www.carrot2.org">
+  <title>&PROD; clustering in Apache Solr</title>
+  
+  <para>
+    As of version 1.4.x of Apache Solr, &PROD; clustering can be performed directly
+    within Solr by means of the <link xlink:href="http://wiki.apache.org/solr/ClusteringComponent">Solr 
+    Clustering Component</link>.  We provide examples and a whitepaper discussing
+    several integration strategies with Solr at 
+    <link xlink:href="http://carrot2.github.io/solr-integration-strategies/">a separate GitHub repository</link>.
+  </para>  
+</section>
