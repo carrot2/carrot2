@@ -17,7 +17,10 @@ import java.util.Map;
 
 import javax.xml.transform.Templates;
 
-import org.carrot2.core.*;
+import org.carrot2.core.Document;
+import org.carrot2.core.IControllerContext;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
@@ -81,8 +84,18 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
         }
 
         afterFetch(response);
+        afterFetch(response, processingResult);
 
         return response;
+    }
+
+    /**
+     * Invoked after the response has been partially parsed and {@link ProcessingResult}
+     * deserialized. 
+     */
+    protected void afterFetch(SearchEngineResponse response, ProcessingResult processingResult)
+    {
+        // Empty by default.
     }
 
     /**
