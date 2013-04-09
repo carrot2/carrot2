@@ -153,7 +153,7 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
      * is used the contents of full fields won't be emitted from Solr though (because it makes little sense).
      * 
      * <p>Setting this option to <code>false</code> will disable using the highlighter output
-     * entirely.
+     * entirely.</p>
      */
     @Input
     @Init 
