@@ -36,7 +36,7 @@
     <div id="d{@id}" class="document">
       <div class="title">
         <h3>
-          <xsl:apply-templates select="." mode="rank" />
+          <span class="rank"><xsl:value-of select="position()" /></span>
           <span class="title-in-clusters">
             <a href="{url}" class="title">
               <xsl:if test="$open-results-in-new-window = 'true'">
@@ -86,10 +86,6 @@
       </div>
       <div style="clear: both"><xsl:comment></xsl:comment></div>
     </div>
-  </xsl:template>
-  
-  <xsl:template match="document" mode="rank">
-    <span class="rank"><xsl:value-of select="number(@id) + 1" /></span>
   </xsl:template>
   
   <xsl:template match="document/sources/source[position() = last()]" mode="document-source">
