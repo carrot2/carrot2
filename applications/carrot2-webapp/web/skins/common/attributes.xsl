@@ -80,13 +80,16 @@
         <xsl:value-of select="//init-values[@source = $source]//init-value[@key = $key]/value/@value" />
       </xsl:when>
       
-      <!-- 
-      Do not externalize default values, keep them empty.
+      <!-- If it's a boolean, externalize the default value. -->
+      <xsl:when test="//attribute-descriptors[@source = $source]//attribute-descriptor[@key = $key and @type = 'java.lang.Boolean']">
+        <xsl:value-of select="//attribute-descriptors[@source = $source]//attribute-descriptor[@key = $key]/@default" />
+      </xsl:when>
 
+      <!-- Do not externalize any other defaults.
       <xsl:otherwise>
         <xsl:value-of select="//attribute-descriptors[@source = $source]//attribute-descriptor[@key = $key]/@default" />
       </xsl:otherwise>
-      -->
+       -->
     </xsl:choose>
   </xsl:template>
   
