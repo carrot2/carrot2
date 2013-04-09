@@ -241,7 +241,7 @@ public final class ProcessingResult
             final Map<String, Document> documentsById = Maps.newHashMap();
             for (Document document : documents)
             {
-                documentsById.put(document.id, document);
+                documentsById.put(document.getStringId(), document);
             }
 
             for (Cluster cluster : clusters)
