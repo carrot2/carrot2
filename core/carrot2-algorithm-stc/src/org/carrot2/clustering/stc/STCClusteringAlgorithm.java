@@ -377,6 +377,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Performs STC clustering of {@link #documents}.
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void process() throws ProcessingException
     {

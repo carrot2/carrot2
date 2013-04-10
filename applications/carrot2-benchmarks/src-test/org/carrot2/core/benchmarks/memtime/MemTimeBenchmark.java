@@ -28,10 +28,8 @@ import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.Field.TermVector;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -276,11 +274,8 @@ public class MemTimeBenchmark
             for (Document d : inputList)
             {
                 final org.apache.lucene.document.Document nd = new org.apache.lucene.document.Document();
-                nd.add(new Field("title", StringUtils.defaultIfEmpty(d.getTitle(), ""),
-                    Store.NO, Index.ANALYZED, TermVector.YES));
-                nd.add(new Field("snippet", StringUtils
-                    .defaultIfEmpty(d.getSummary(), ""), Store.NO, Index.ANALYZED,
-                    TermVector.YES));
+                nd.add(new TextField("title", StringUtils.defaultIfEmpty(d.getTitle(), ""), Store.NO));
+                nd.add(new TextField("snippet", StringUtils.defaultIfEmpty(d.getSummary(), ""), Store.NO));
                 w.addDocument(nd);
             }
 

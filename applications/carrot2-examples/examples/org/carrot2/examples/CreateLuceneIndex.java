@@ -16,9 +16,9 @@ import java.io.File;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.FSDirectory;
@@ -63,11 +63,11 @@ public class CreateLuceneIndex
              * We will create Lucene documents with searchable "fullContent" field and "title", 
              * "url" and "snippet" fields for clustering.
              */
-            doc.add(new Field("fullContent", d.getSummary(), Store.NO, Index.ANALYZED));
+            doc.add(new TextField("fullContent", d.getSummary(), Store.NO));
 
-            doc.add(new Field("title", d.getTitle(), Store.YES, Index.NO));
-            doc.add(new Field("snippet", d.getSummary(), Store.YES, Index.NO));
-            doc.add(new Field("url", d.getContentUrl(), Store.YES, Index.NO));
+            doc.add(new TextField("title", d.getTitle(), Store.YES));
+            doc.add(new TextField("snippet", d.getSummary(), Store.YES));
+            doc.add(new StringField("url", d.getContentUrl(), Store.YES));
             writer.addDocument(doc);
         }
 
