@@ -14,7 +14,7 @@ package org.carrot2.util.pool;
 
 /**
  * A parameterized pool of objects. Each borrowed object is characterized by its class and
- * an arbitrary parameter. The <class, parameter> pair uniquely identifies a "class"
+ * an arbitrary parameter. The [class, parameter] pair uniquely identifies a "class"
  * (equivalence class) of pooled objects.
  * <p>
  * Please see {@link SoftUnboundedPool} for a reference implementation.

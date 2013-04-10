@@ -30,7 +30,7 @@ import com.carrotsearch.hppc.*;
  * structures useful for further processing.
  * 
  * <p><img src="doc-files/preprocessing-arrays.png"
- *      alt="Internals of PreprocessingContext"/></p>
+ *      alt="Internals of PreprocessingContext"></p>
  */
 public final class PreprocessingContext
 {

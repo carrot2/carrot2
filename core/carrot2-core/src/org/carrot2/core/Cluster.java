@@ -540,8 +540,7 @@ public final class Cluster
      * documents are larger.
      */
     public static final Comparator<Cluster> BY_SIZE_COMPARATOR = Ordering.natural()
-        .nullsFirst().onResultOf(new Function<Cluster, Integer>()
-        {
+        .nullsFirst().onResultOf(new Function<Cluster, Integer>(){
             public Integer apply(Cluster cluster)
             {
                 return cluster.size();
@@ -553,8 +552,7 @@ public final class Cluster
      * score are larger.
      */
     public static final Comparator<Cluster> BY_SCORE_COMPARATOR = Ordering.natural()
-        .nullsFirst().onResultOf(new Function<Cluster, Double>()
-        {
+        .nullsFirst().onResultOf(new Function<Cluster, Double>(){
             public Double apply(Cluster cluster)
             {
                 return cluster.getAttribute(SCORE);
@@ -566,8 +564,7 @@ public final class Cluster
      * {@link #getLabel()}.
      */
     public static final Comparator<Cluster> BY_LABEL_COMPARATOR = Ordering.natural()
-        .nullsFirst().onResultOf(new Function<Cluster, String>()
-        {
+        .nullsFirst().onResultOf(new Function<Cluster, String>(){
             public String apply(Cluster cluster)
             {
                 return cluster.getLabel();

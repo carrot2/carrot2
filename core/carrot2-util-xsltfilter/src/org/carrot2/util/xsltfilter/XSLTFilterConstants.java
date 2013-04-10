@@ -12,6 +12,8 @@
 
 package org.carrot2.util.xsltfilter;
 
+import java.util.Map;
+
 /**
  * A public class with several constants used in the XSLT filter.
  */
@@ -30,7 +32,7 @@ public final class XSLTFilterConstants
     public static final String NO_XSLT_PROCESSING = "xslt.filter:disable";
 
     /**
-     * To pass parameters to a stylesheet, register a Map<String,Object> attribute with
+     * To pass parameters to a stylesheet, register a {@link Map} attribute with
      * the key equal to this constant in the request context.
      */
     public static final String XSLT_PARAMS_MAP = "xslt.filter:stylesheet-params";

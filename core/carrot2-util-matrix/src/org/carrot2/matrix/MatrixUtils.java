@@ -253,16 +253,16 @@ public class MatrixUtils
 
     /**
      * Finds the first maximum element in each column of matrix A. When calculating
-     * maximum values for each column this version should perform better than scannning
+     * maximum values for each column this version should perform better than scanning
      * each column separately.
      * 
      * @param A
      * @param indices an array of <code>A.columns()</code> integers in which indices of
      *            the first maximum element will be stored. If this parameter is
-     *            <code>null<code> a new array will be allocated.
+     *            <code>null</code> a new array will be allocated.
      * @param maxValues an array of <code>A.columns()</code> doubles in which values of
      *            each column's maximum elements will be stored. If this parameter is
-     *            <code>null<code> a new array will be 
+     *            <code>null</code> a new array will be 
      *            allocated.
      * @return for each column of A the index of the maximum element
      */

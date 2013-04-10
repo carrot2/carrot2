@@ -65,20 +65,21 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
      * runtime. The format of the place holder is <code>${variable}</code>. The following
      * variables are supported:
      * <ul>
-     * <li><code>searchTerms</code> will be replaced by the query</li> <li><code>
-     * startIndex</code> index of the first result to be searched. Mutually exclusive with
-     * <code>startPage</code></li>. <li><code>startPage</code> index of the first result
-     * to be searched. Mutually exclusive with <code>startIndex</code>.</li><li><code>
-     * count</code> the number of search results per page</li>
+     * <li><code>searchTerms</code> will be replaced by the query</li>
+     * <li><code>startIndex</code> index of the first result to be searched. Mutually 
+     * exclusive with <code>startPage</code></li>
+     * <li><code>startPage</code> index of the first result
+     * to be searched. Mutually exclusive with <code>startIndex</code>.</li>
+     * <li><code>count</code> the number of search results per page</li>
      * </ul>
      * 
-     * <p>Example URL feed templates for public services:
+     * <p>Example URL feed templates for public services:</p>
      * <dl>
      *   <dt>nature.com</dt>
      *   <dd><code>http://www.nature.com/opensearch/request?interface=opensearch&amp;operation=searchRetrieve&amp;query=${searchTerms}&amp;startRecord=${startIndex}&amp;maximumRecords=${count}&amp;httpAccept=application/rss%2Bxml</code></dd>
      *   <dt>indeed.com</dt>
      *   <dd><code>http://www.indeed.com/opensearch?q=${searchTerms}&amp;start=${startIndex}&amp;limit=${count}</code></dd>
-     * </dl></p>
+     * </dl>
      */
     @Input
     @Processing
