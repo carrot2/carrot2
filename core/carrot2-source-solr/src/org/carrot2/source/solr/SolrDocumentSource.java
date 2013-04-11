@@ -12,6 +12,7 @@
 
 package org.carrot2.source.solr;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -184,19 +185,24 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     {
         if (readClusters) {
             final Set<String> ids = Sets.newHashSet();
-            for (Document doc : processingResult.getDocuments()) {
-                ids.add(doc.getStringId());
-            }
-
-            Predicate<Document> docFilter = new Predicate<Document>()
-            {
-                @Override
-                public boolean apply(Document input)
-                {
-                    return input != null && ids.contains(input.getStringId());
+            List<Document> documents = processingResult.getDocuments();
+            if (documents == null) documents = Collections.emptyList();
+            List<Cluster> clusters = processingResult.getClusters();
+            if (documents != null && clusters != null) {
+                for (Document doc : documents) {
+                    ids.add(doc.getStringId());
                 }
-            };
-            this.clusters = sanityCheck(processingResult.getClusters(), docFilter);
+    
+                Predicate<Document> docFilter = new Predicate<Document>()
+                {
+                    @Override
+                    public boolean apply(Document input)
+                    {
+                        return input != null && ids.contains(input.getStringId());
+                    }
+                };
+                this.clusters = sanityCheck(clusters, docFilter);
+            }
         }
     }
 
