@@ -8,7 +8,8 @@ Bundle-ClassPath: lucene-analyzers-common-4.2.1.jar,
  lucene-core-4.2.1.jar,
  lucene-highlighter-4.2.1.jar,
  lucene-memory-4.2.1.jar,
- lucene-queryparser-4.2.1.jar
+ lucene-queryparser-4.2.1.jar,
+ lucene-queries-4.2.1.jar
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.apache.lucene,
@@ -85,6 +86,11 @@ Export-Package: org.apache.lucene,
  org.apache.lucene.document,
  org.apache.lucene.index,
  org.apache.lucene.index.memory,
+ org.apache.lucene.queries,
+ org.apache.lucene.queries.function,
+ org.apache.lucene.queries.function.docvalues,
+ org.apache.lucene.queries.function.valuesource,
+ org.apache.lucene.queries.mlt,
  org.apache.lucene.queryparser.analyzing,
  org.apache.lucene.queryparser.classic,
  org.apache.lucene.queryparser.complexPhrase,

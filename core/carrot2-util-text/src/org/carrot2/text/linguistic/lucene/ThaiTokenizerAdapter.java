@@ -83,12 +83,14 @@ public final class ThaiTokenizerAdapter implements ITokenizer
     @SuppressWarnings("deprecation")
     public void reset(Reader input) throws IOException
     {
+        assert input != null;
         try
         {
             this.wordTokenFilter = new ThaiWordFilter(Version.LUCENE_CURRENT,
                 new StandardTokenizer(Version.LUCENE_CURRENT, input));
             this.term = wordTokenFilter.addAttribute(CharTermAttribute.class);
             this.type = wordTokenFilter.addAttribute(TypeAttribute.class);
+            this.wordTokenFilter.reset();
         }
         catch (Exception e)
         {

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lucene-queries-4.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lucene-queryparser-4.2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-analyzers-common-4.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-analyzers-common-4.2.1.jar" sourcepath="C:/Users/dweiss/Downloads/lucene-4.2.1/analysis/common/src/java/"/>
 	<classpathentry exported="true" kind="lib" path="lucene-analyzers-smartcn-4.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lucene-core-4.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lucene-highlighter-4.2.1.jar"/>
