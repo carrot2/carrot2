@@ -654,13 +654,10 @@
        JavaDoc generation.
     -->
   <property name="overview.dir" location="${tmp.dir}/javadoc-overview" />
-  
-  <!-- Check for broken javadoc in JDK18 -->
-  <condition property="broken.jdk18" value="true">
-    <equals arg1="${build.java.runtime}" arg2="1.8"/>
-  </condition>
 
-  <target name="javadoc" unless="broken.jdk18" depends="jar, javadoc.overview" description="Generates JavaDocs for all core classes">
+  <target name="javadoc"
+          depends="jar, javadoc.overview" 
+          description="Generates JavaDocs for all core classes">
     <delete dir="${javadoc.dir}" failonerror="false" />
     <property name="tmp.src" location="${tmp.dir}/src" />
 
@@ -675,7 +672,7 @@
     <mkdir dir="${javadoc.dir}" />
 
     <!-- for now disable doclint on JDK 8: -->
-    <condition property="javadoc.args" value="-Xdoclint:none" else="">
+    <condition property="javadoc.failonerror" value="false" else="true">
       <equals arg1="${build.java.runtime}" arg2="1.8"/>
     </condition>
 
@@ -695,7 +692,7 @@
              footer="&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
              bottom="&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;&lt;script type=&quot;text/javascript&quot;&gt; var gaJsHost = ((&quot;https:&quot; == document.location.protocol) ? &quot;https://ssl.&quot; : &quot;http://www.&quot;); document.write(unescape(&quot;%3Cscript src='&quot; + gaJsHost + &quot;google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E&quot;)); &lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; var pageTracker = _gat._getTracker(&quot;UA-317750-1&quot;); pageTracker._trackPageview(); &lt;/script&gt;"
              overview="${overview.dir}/overview.html"
-             failonerror="true"
+             failonerror="${javadoc.failonerror}"
              stylesheetfile="${etc.dir}/javadoc/stylesheet.css"
              useexternalfile="true">
 
@@ -735,7 +732,6 @@
       <tag name="group" enabled="true" scope="fields" description="Attribute group:" />
 
       <arg value="-quiet" />
-      <arg line="${javadoc.args}"/>      
     </javadoc>
 
     <copy todir="${javadoc.dir}">
