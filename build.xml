@@ -249,6 +249,20 @@
   </fail>
 
   <!-- 
+    The property "ant.java.version" is not always correct, depending on used ANT version.
+    E.g. Java 8 is only detected in ANT 1.8.3+.
+   -->
+  <condition property="build.java.runtime" value="1.8">
+    <hasmethod classname="java.util.Collections" method="emptySortedSet"/>
+  </condition>
+  <condition property="build.java.runtime" value="1.7">
+    <hasmethod classname="java.lang.Throwable" method="getSuppressed"/>
+  </condition>
+  <!-- Assume it's 1.6+ -->
+  <property name="build.java.runtime" value="1.6" />
+
+
+  <!-- 
        Output cleanup.
     -->
   <target name="clean" depends="coverage.clean" description="Cleans all build results">
@@ -641,7 +655,12 @@
     -->
   <property name="overview.dir" location="${tmp.dir}/javadoc-overview" />
   
-  <target name="javadoc" depends="jar, javadoc.overview" description="Generates JavaDocs for all core classes">
+  <!-- Check for broken javadoc in JDK18 -->
+  <condition property="broken.jdk18" value="true">
+    <equals arg1="${build.java.runtime}" arg2="1.8"/>
+  </condition>
+
+  <target name="javadoc" unless="broken.jdk18" depends="jar, javadoc.overview" description="Generates JavaDocs for all core classes">
     <delete dir="${javadoc.dir}" failonerror="false" />
     <property name="tmp.src" location="${tmp.dir}/src" />
 
@@ -654,6 +673,11 @@
     </fail>
 
     <mkdir dir="${javadoc.dir}" />
+
+    <!-- for now disable doclint on JDK 8: -->
+    <condition property="javadoc.args" value="-Xdoclint:none" else="">
+      <equals arg1="${build.java.runtime}" arg2="1.8"/>
+    </condition>
 
     <javadoc destdir="${javadoc.dir}"
              access="protected"
@@ -709,8 +733,9 @@
       <tag name="label" enabled="true" scope="types,fields" description="Attribute label:" />
       <tag name="level" enabled="true" scope="fields" description="Attribute level:" />
       <tag name="group" enabled="true" scope="fields" description="Attribute group:" />
-      
+
       <arg value="-quiet" />
+      <arg line="${javadoc.args}"/>      
     </javadoc>
 
     <copy todir="${javadoc.dir}">
