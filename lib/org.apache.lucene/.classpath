@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lucene-queryparser-4.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-analyzers-common-4.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-analyzers-smartcn-4.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-core-4.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-highlighter-4.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-memory-4.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-queryparser-4.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-analyzers-common-4.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-analyzers-smartcn-4.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-core-4.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-highlighter-4.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-memory-4.2.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
