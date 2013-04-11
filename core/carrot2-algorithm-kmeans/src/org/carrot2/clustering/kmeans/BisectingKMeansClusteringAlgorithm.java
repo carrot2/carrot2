@@ -167,6 +167,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
     @Attribute
     @Internal
     @ImplementingClasses(classes = {}, strict = false)
+    @Level(AttributeLevel.ADVANCED)
     public IPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
     /**

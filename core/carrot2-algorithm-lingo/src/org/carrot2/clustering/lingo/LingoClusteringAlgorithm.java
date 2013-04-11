@@ -128,6 +128,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Attribute
     @Internal
     @ImplementingClasses(classes = {}, strict = false)
+    @Level(AttributeLevel.ADVANCED)
     public IPreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
 
     /**

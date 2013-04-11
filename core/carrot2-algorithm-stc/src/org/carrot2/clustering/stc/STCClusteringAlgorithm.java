@@ -276,6 +276,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @ImplementingClasses(classes = {
         BasicPreprocessingPipeline.class
     }, strict = false)
+    @Level(AttributeLevel.ADVANCED)
     public IPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
     /**
