@@ -3,7 +3,7 @@
 rem
 rem Add extra JVM options here
 rem
-set OPTS=-Xms64m -Xmx256m
+set OPTS=-Xms64m -Xmx768m
 
 rem
 rem Build command line arguments

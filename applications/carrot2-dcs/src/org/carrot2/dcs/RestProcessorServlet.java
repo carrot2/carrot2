@@ -517,18 +517,26 @@ public final class RestProcessorServlet extends HttpServlet
         ProcessingResult result = null;
         try
         {
+            long start = System.currentTimeMillis();
+            final String logMsg;
             if (requestModel.source != null)
             {
-                config.logger.info("Processing results from " + requestModel.source
-                    + " with " + requestModel.algorithm);
+                logMsg = "Processed results from " + requestModel.source + " with " + requestModel.algorithm;
                 result = controller.process(processingAttributes, requestModel.source,
                     requestModel.algorithm);
             }
             else
             {
-                config.logger.info("Processing direct results feed with "
-                    + requestModel.algorithm);
+                logMsg = "Processed direct results feed with " + requestModel.algorithm;
                 result = controller.process(processingAttributes, requestModel.algorithm);
+            }
+
+            if (config.logger.isInfoEnabled()) {
+                config.logger.info(
+                    String.format(Locale.ENGLISH,
+                        "%s [%.2fs.]",
+                        logMsg,
+                        (System.currentTimeMillis() - start) / 1000.0));
             }
         }
         catch (ProcessingException e)
