@@ -7,8 +7,10 @@ curl $DCS_HOST -# \
      -F "query=test" \
      -o clusters-from-document-source-post.xml
 
+echo Results saved to clusters-from-document-source-post.xml
+
 # With HTTP GET
 curl "${DCS_HOST}?dcs.source=etools&query=test" \
      -o clusters-from-document-source-get.xml
 
-echo Results saved to $RESULT
+echo Results saved to clusters-from-document-source-get.xml
