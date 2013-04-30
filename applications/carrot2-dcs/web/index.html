@@ -165,8 +165,12 @@
 
           $("input[value = 'POST|x-www-form-urlencoded']").attr("disabled", value == "from-file");
           $("input[value = 'GET|x-www-form-urlencoded']").attr("disabled", value != "external");
+
           if ($("input[name = 'method']:checked").is(":disabled")) {
-            $("input[name = 'method']").filter(":enabled:eq(0)").attr("checked", true);
+            var $e = $("input[name = 'method']").filter(":enabled:eq(0)");
+            $e.attr("checked", true);
+            var s = $e.attr("value").split("|");
+            $form.attr("enctype", s[1]).attr("method", s[0]);
           }
           
           // Focus the relevant input field
