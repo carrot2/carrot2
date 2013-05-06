@@ -750,7 +750,7 @@ public final class PreprocessingContext
     {
         if (tokenCache.contains(chs))
         {
-            return tokenCache.lget().getBuffer();
+            return tokenCache.lkey().getBuffer();
         }
         else
         {
