@@ -59,7 +59,7 @@
     <carrot2.version>@carrot2.version@</carrot2.version>
 
     <!-- Versions of dependencies. -->
-    <com.carrotsearch.hppc.version>0.4.3</com.carrotsearch.hppc.version>
+    <com.carrotsearch.hppc.version>0.5.0</com.carrotsearch.hppc.version>
     <com.google.guava.version>14.0.1</com.google.guava.version>
     <morfologik.version>1.6.0</morfologik.version>
     <net.java.dev.rome.version>1.0.0</net.java.dev.rome.version>
