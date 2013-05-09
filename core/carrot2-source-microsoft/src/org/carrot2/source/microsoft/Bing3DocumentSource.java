@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.*;
 
+import javax.net.ssl.SSLPeerUnverifiedException;
+
 import org.apache.http.*;
 import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.*;
@@ -240,10 +242,23 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
             throw new RuntimeException("Service suffix is null?: " + sourceType);
         }
         
-        final HttpUtils.Response response = HttpUtils.doGET(
-            SERVICE_URI + serviceSuffix,
-            params, HTTP_HEADERS,
-            "", appid, BING_TIMEOUT);
+        HttpUtils.Response response = null;
+        for (int retries = 3; retries >= 0; retries--) {
+            try
+            {
+                response = HttpUtils.doGET(
+                    SERVICE_URI + serviceSuffix,
+                    params, HTTP_HEADERS,
+                    "", appid, BING_TIMEOUT);
+                break;
+            } catch (SSLPeerUnverifiedException e) {
+                if (retries == 0) {
+                    throw e;
+                }
+                logger.warn("Bing peer authentication failure, retries: " + retries);
+            }
+        }
+
         if (response.status == HttpStatus.SC_OK)
         {
             // Parse the data stream.
