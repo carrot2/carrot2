@@ -12,11 +12,14 @@
 
 package org.carrot2.source.xml;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.transform.Templates;
 
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpResponseException;
 import org.carrot2.core.Document;
 import org.carrot2.core.IControllerContext;
 import org.carrot2.core.ProcessingException;
@@ -34,6 +37,7 @@ import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Label;
 import org.carrot2.util.attribute.Level;
 import org.carrot2.util.httpclient.HttpRedirectStrategy;
+import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.IResource;
 
 /**
@@ -85,8 +89,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
         final String serviceURL = buildServiceUrl();
         final SearchEngineResponse response = new SearchEngineResponse();
 
-        final ProcessingResult processingResult = xmlDocumentSourceHelper
-            .loadProcessingResult(
+        final ProcessingResult processingResult = loadProcessingResult(
                 serviceURL, 
                 toCarrot2Xslt, 
                 getXsltParameters(),
@@ -115,6 +118,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
 
         return response;
     }
+
 
     /**
      * Invoked after the response has been partially parsed and {@link ProcessingResult}
@@ -164,5 +168,42 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
     protected String getPassword()
     {
         return null;
+    }
+
+    /**
+     * Loads a {@link ProcessingResult} from the provided remote URL, applying XSLT
+     * transform if specified. This method can handle gzip-compressed streams if supported
+     * by the data source.
+     * 
+     * @param metadata if a non-<code>null</code> map is provided, request metadata will
+     *            be put into the map.
+     * @param user if not <code>null</code>, the user name to use for HTTP Basic
+     *            Authentication
+     * @param password if not <code>null</code>, the password to use for HTTP Basic
+     *            Authentication
+     */
+    protected ProcessingResult loadProcessingResult(String url, Templates stylesheet,
+        Map<String, String> xsltParameters, Map<String, Object> metadata, String user,
+        String password, HttpRedirectStrategy redirectStrategy) throws Exception
+    {
+        final HttpUtils.Response response = HttpUtils.doGET(
+            url, 
+            null, null, 
+            user, password, 
+            xmlDocumentSourceHelper.timeout * 1000,
+            redirectStrategy.value());
+    
+        final InputStream carrot2XmlStream = response.getPayloadAsStream();
+        final int statusCode = response.status;
+    
+        if (statusCode == HttpStatus.SC_OK)
+        {
+            metadata.put(SearchEngineResponse.COMPRESSION_KEY, response.compression);
+            return xmlDocumentSourceHelper.loadProcessingResult(carrot2XmlStream, stylesheet, xsltParameters);
+        }
+        else
+        {
+            throw new HttpResponseException(statusCode, response.statusMessage);
+        }
     }
 }
