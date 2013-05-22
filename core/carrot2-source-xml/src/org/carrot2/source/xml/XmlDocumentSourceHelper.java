@@ -42,6 +42,7 @@ import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Label;
 import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.IntRange;
+import org.carrot2.util.httpclient.HttpRedirectStrategy;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.xslt.NopURIResolver;
@@ -70,6 +71,17 @@ public class XmlDocumentSourceHelper
     @Level(AttributeLevel.ADVANCED)
     @Group(SimpleSearchEngine.SERVICE)
     public int timeout = 8;
+
+    /**
+     * HTTP redirect response strategy (follow or throw an error).
+     */
+    @Input
+    @Processing
+    @Attribute
+    @Label("HTTP redirect strategy")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(SimpleSearchEngine.SERVICE)
+    public HttpRedirectStrategy redirectStrategy = HttpRedirectStrategy.NO_REDIRECTS; 
 
     /** Precompiled XSLT templates. */
     private final TemplatesPool pool;
@@ -114,10 +126,14 @@ public class XmlDocumentSourceHelper
         Map<String, String> xsltParameters, Map<String, Object> metadata, String user,
         String password) throws Exception
     {
-        final HttpUtils.Response response = HttpUtils.doGET(url, null, null, user,
-            password, timeout * 1000);
-        final InputStream carrot2XmlStream = response.getPayloadAsStream();
+        final HttpUtils.Response response = HttpUtils.doGET(
+            url, 
+            null, null, 
+            user, password, 
+            timeout * 1000,
+            redirectStrategy.value());
 
+        final InputStream carrot2XmlStream = response.getPayloadAsStream();
         final int statusCode = response.status;
 
         if (statusCode == HttpStatus.SC_OK)

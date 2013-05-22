@@ -15,8 +15,13 @@ package org.carrot2.webapp.source;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
-import org.carrot2.core.*;
+import org.carrot2.core.Document;
+import org.carrot2.core.IControllerContext;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.ProcessingException;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
 import org.carrot2.source.etools.EToolsDocumentSource;
@@ -48,6 +53,11 @@ public class WebDocumentSource extends SimpleSearchEngine
      */
     private static final int MAX_CONCURRENT_THREADS = 10;
 
+    /**
+     * Query failure string (must be identical to cause a query for tests).
+     */
+    static final String QUERY_FAILURE = new String("foobar");
+
     @Override
     public void init(IControllerContext context)
     {
@@ -67,20 +77,24 @@ public class WebDocumentSource extends SimpleSearchEngine
     @Override
     public SearchEngineResponse fetchSearchResponse() throws Exception
     {
-        final List<Callable<Object>> tasks = Lists.newArrayList();
-        tasks.add(new Callable<Object>()
+        final List<Callable<Void>> tasks = Lists.newArrayList();
+        tasks.add(new Callable<Void>()
         {
-            public Object call() throws Exception
+            public Void call() throws Exception
             {
                 google.results = 8;
                 google.process();
                 return null;
             }
         });
-        tasks.add(new Callable<Object>()
+        tasks.add(new Callable<Void>()
         {
-            public Object call() throws Exception
+            public Void call() throws Exception
             {
+                if (query == QUERY_FAILURE) {
+                    throw new RuntimeException("Synthetic failure.");
+                }
+
                 etools.process();
                 return null;
             }
@@ -90,7 +104,25 @@ public class WebDocumentSource extends SimpleSearchEngine
 
         try
         {
-            getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()).invokeAll(tasks);
+            List<Future<Void>> invokeAll = 
+                getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()).invokeAll(tasks);
+
+            // Rethrow an exception on errors from sub-tasks. 
+            for (Future<Void> foo : invokeAll) {
+                try {
+                    foo.get();
+                } catch (ExecutionException e) {
+                    Throwable t = e.getCause();
+                    if (t != null) {
+                        if (t instanceof Exception) {
+                            throw (Exception) t;
+                        } else if (t instanceof Error) {
+                            throw (Error) t;
+                        }
+                    }
+                    throw e;
+                }
+            }
 
             final Map<String, Document> googleDocumentsByUrl = Maps.newHashMap();
             if (google.documents != null)
@@ -155,6 +187,9 @@ public class WebDocumentSource extends SimpleSearchEngine
     {
         etools.afterProcessing();
         google.afterProcessing();
+
+        etools.documents = null;
+        google.documents = null;
     }
 
     @Override

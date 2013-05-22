@@ -35,6 +35,7 @@ import org.carrot2.util.attribute.Label;
 import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.httpclient.HttpClientFactory;
+import org.carrot2.util.httpclient.HttpRedirectStrategy;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -69,6 +70,17 @@ public class PubMedDocumentSource extends SimpleSearchEngine
     @Group(DefaultGroups.QUERY)
     public int maxResults = 150;
     
+    /**
+     * HTTP redirect response strategy (follow or throw an error).
+     */
+    @Input
+    @Processing
+    @Attribute
+    @Label("HTTP redirect strategy")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(SimpleSearchEngine.SERVICE)
+    public HttpRedirectStrategy redirectStrategy = HttpRedirectStrategy.NO_REDIRECTS; 
+
     @Override
     protected SearchEngineResponse fetchSearchResponse() throws Exception
     {
@@ -102,8 +114,13 @@ public class PubMedDocumentSource extends SimpleSearchEngine
             + StringUtils.urlEncodeWrapException(query, "UTF-8") + "&retmax="
             + Integer.toString(Math.min(requestedResults, maxResults));
 
-        final HttpUtils.Response response = HttpUtils.doGET(url, null, null,
-            null, null, PUBMED_TIMEOUT);
+        final HttpUtils.Response response = HttpUtils.doGET(
+            url, 
+            null, 
+            null,
+            null, null, 
+            PUBMED_TIMEOUT,
+            redirectStrategy.value());
 
         // Get document IDs
         if (response.status == HttpStatus.SC_OK)
@@ -140,8 +157,12 @@ public class PubMedDocumentSource extends SimpleSearchEngine
         final String url = E_FETCH_URL + "?db=pubmed&retmode=xml&rettype=abstract&id="
             + getIdsString(ids);
 
-        final HttpUtils.Response response = HttpUtils.doGET(url, null, null,
-            null, null, PUBMED_TIMEOUT);
+        final HttpUtils.Response response = HttpUtils.doGET(
+            url, 
+            null, null,
+            null, null, 
+            PUBMED_TIMEOUT,
+            redirectStrategy.value());
 
         // Get document contents
         // No URL logging here, as the url can get really long

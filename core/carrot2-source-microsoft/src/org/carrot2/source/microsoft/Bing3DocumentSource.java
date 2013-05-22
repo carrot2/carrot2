@@ -29,6 +29,7 @@ import org.carrot2.source.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.constraint.NotBlank;
+import org.carrot2.util.httpclient.HttpRedirectStrategy;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
@@ -161,6 +162,17 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
     public Double longitude;
 
     /**
+     * HTTP redirect response strategy (follow or throw an error).
+     */
+    @Input
+    @Processing
+    @Attribute
+    @Label("HTTP redirect strategy")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(SimpleSearchEngine.SERVICE)
+    public HttpRedirectStrategy redirectStrategy = HttpRedirectStrategy.NO_REDIRECTS; 
+
+    /**
      * Data source type.
      */
     private final SourceType sourceType;
@@ -241,15 +253,18 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
         if (serviceSuffix == null) {
             throw new RuntimeException("Service suffix is null?: " + sourceType);
         }
-        
+
         HttpUtils.Response response = null;
         for (int retries = 3; retries >= 0; retries--) {
             try
             {
                 response = HttpUtils.doGET(
                     SERVICE_URI + serviceSuffix,
-                    params, HTTP_HEADERS,
-                    "", appid, BING_TIMEOUT);
+                    params, 
+                    HTTP_HEADERS,
+                    "", appid, 
+                    BING_TIMEOUT,
+                    redirectStrategy.value());
                 break;
             } catch (SSLPeerUnverifiedException e) {
                 if (retries == 0) {

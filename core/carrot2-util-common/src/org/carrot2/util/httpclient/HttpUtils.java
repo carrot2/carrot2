@@ -29,6 +29,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
+import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.utils.URIUtils;
@@ -39,6 +40,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.protocol.BasicHttpContext;
 import org.carrot2.util.StreamUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
@@ -47,6 +50,8 @@ import com.google.common.collect.Lists;
  */
 public class HttpUtils
 {
+    private static Logger logger = LoggerFactory.getLogger(HttpUtils.class);
+
     /**
      * A static holder storing HTTP response fields.
      */
@@ -93,24 +98,6 @@ public class HttpUtils
      *            <b>not</b> perform any escaping.
      * @param params Query string parameters to be attached to the url.
      * @param headers Any extra HTTP headers to add to the request.
-     * @return The {@link HttpUtils.Response} object. Note that entire payload is read and
-     *         buffered so that the HTTP connection can be closed when leaving this
-     *         method.
-     */
-    public static Response doGET(String url, Collection<NameValuePair> params,
-        Collection<Header> headers) throws IOException
-    {
-        return doGET(url, params, headers, null, null);
-    }
-
-    /**
-     * Opens a HTTP/1.1 connection to the given URL using the GET method, decompresses
-     * compressed response streams, if supported by the server.
-     * 
-     * @param url The URL to open. The URL must be properly escaped, this method will
-     *            <b>not</b> perform any escaping.
-     * @param params Query string parameters to be attached to the url.
-     * @param headers Any extra HTTP headers to add to the request.
      * @param user if not <code>null</code>, the user name to send during Basic
      *            Authentication
      * @param password if not <code>null</code>, the password name to send during Basic
@@ -119,39 +106,20 @@ public class HttpUtils
      *         buffered so that the HTTP connection can be closed when leaving this
      *         method.
      */
-    public static Response doGET(String url, Collection<NameValuePair> params,
-        Collection<Header> headers, String user, String password) throws IOException
-    {
-        return doGET(url, params, headers, user, password,
-            HttpClientFactory.DEFAULT_TIMEOUT);
-    }
-
-    /**
-     * Opens a HTTP/1.1 connection to the given URL using the GET method, decompresses
-     * compressed response streams, if supported by the server.
-     * 
-     * @param url The URL to open. The URL must be properly escaped, this method will
-     *            <b>not</b> perform any escaping.
-     * @param params Query string parameters to be attached to the url.
-     * @param headers Any extra HTTP headers to add to the request.
-     * @param user if not <code>null</code>, the user name to send during Basic
-     *            Authentication
-     * @param password if not <code>null</code>, the password name to send during Basic
-     *            Authentication
-     * @return The {@link HttpUtils.Response} object. Note that entire payload is read and
-     *         buffered so that the HTTP connection can be closed when leaving this
-     *         method.
-     */
-    public static Response doGET(String url, Collection<NameValuePair> params,
-        Collection<Header> headers, String user, String password, int timeout)
+    public static Response doGET(
+        String url, 
+        Collection<NameValuePair> params,
+        Collection<Header> headers, 
+        String user, String password, 
+        int timeoutMillis,
+        RedirectStrategy redirectStrategy)
         throws IOException
     {
-        // TODO: add request/response handlers to process compressed content.
-        // TODO: resign from a custom Response class and return HttpResponse?
+        final DefaultHttpClient client = HttpClientFactory.getTimeoutingClient(timeoutMillis);
+        client.setRedirectStrategy(redirectStrategy);
 
-        final DefaultHttpClient client = HttpClientFactory.getTimeoutingClient(timeout);
-        client.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
-            HttpVersion.HTTP_1_1);
+        client.getParams().setParameter(
+            CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
         final HttpGet request = new HttpGet();
         final BasicHttpContext context = new BasicHttpContext();
@@ -193,8 +161,7 @@ public class HttpUtils
                 context.setAttribute(ClientContext.AUTH_CACHE, authCache);    
             }
 
-            org.slf4j.LoggerFactory.getLogger(HttpUtils.class).debug(
-                "GET: " + request.getURI());
+            logger.debug("GET: " + request.getURI());
 
             final HttpResponse httpResponse = client.execute(request, context);
             response.status = httpResponse.getStatusLine().getStatusCode();
