@@ -28,6 +28,8 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.*;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.attribute.*;
+import org.carrot2.util.httpclient.HttpClientFactory;
+import org.carrot2.util.httpclient.HttpRedirectStrategy;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.codehaus.jackson.*;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -81,6 +83,17 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     public boolean keepHighlights = false;
 
     /**
+     * HTTP redirect response strategy (follow or throw an error).
+     */
+    @Input
+    @Processing
+    @Attribute
+    @Label("HTTP redirect strategy")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(SimpleSearchEngine.SERVICE)
+    public HttpRedirectStrategy redirectStrategy = HttpRedirectStrategy.NO_REDIRECTS; 
+
+    /**
      * Google search metadata.
      */
     static final MultipageSearchEngineMetadata metadata = new MultipageSearchEngineMetadata(8, 32);
@@ -116,11 +129,19 @@ public class GoogleDocumentSource extends MultipageSearchEngine
                     new BasicHeader("Referer", referer),
                 };
 
-                final HttpUtils.Response httpResp = HttpUtils.doGET(serviceUrl, Arrays
-                    .asList(queryParams), Arrays.asList(headers));
+                final HttpUtils.Response httpResp = HttpUtils.doGET(
+                    serviceUrl, 
+                    Arrays.asList(queryParams), 
+                    Arrays.asList(headers),
+                    null, null,
+                    HttpClientFactory.DEFAULT_TIMEOUT,
+                    redirectStrategy.value());
 
-                final JsonParser jsonParser = new JsonFactory().createJsonParser(httpResp
-                    .getPayloadAsStream());
+                final JsonParser jsonParser = 
+                    new JsonFactory()
+                        .createJsonParser(
+                            httpResp.getPayloadAsStream());
+
                 final ObjectMapper mapper = new ObjectMapper();
                 final JsonNode root = mapper.readTree(jsonParser);
                 if (root == null)

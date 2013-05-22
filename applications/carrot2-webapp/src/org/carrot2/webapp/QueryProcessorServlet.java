@@ -429,7 +429,7 @@ public class QueryProcessorServlet extends HttpServlet
                         processingResult = controller.process(requestParameters,
                             requestModel.source, QueryWordHighlighter.class.getName());
                         break;
-                        
+
                     case CARROT2DOCUMENTS:
                         processingResult = controller.process(requestParameters,
                             requestModel.source);

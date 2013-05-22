@@ -13,11 +13,19 @@
 package org.carrot2.webapp.source;
 
 import java.util.List;
+import java.util.Map;
 
+import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.Document;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
+
+import com.google.common.collect.Maps;
 
 /**
  *
@@ -61,6 +69,38 @@ public class WebDocumentSourceTest extends
         for (int i = 0; i < documents.size(); i++)
         {
             assertThat(Integer.valueOf(documents.get(i).getStringId())).isEqualTo(i);
+        }
+    }
+    
+    @UsesExternalServices
+    @Test
+    public void testRequestIndependence() 
+    {
+        @SuppressWarnings("unchecked")
+        final Controller controller = ControllerFactory.createCachingPooling(
+            org.carrot2.core.IDocumentSource.class);
+        closeAfterTest(controller);
+
+        final Map<String,Object> attrs = Maps.newHashMap();
+
+        CommonAttributesDescriptor.attributeBuilder(attrs)
+            .results(50)
+            .query("data mining");
+        
+        controller.process(attrs,
+            org.carrot2.webapp.source.WebDocumentSource.class, LingoClusteringAlgorithm.class);               
+
+        attrs.clear();
+        CommonAttributesDescriptor.attributeBuilder(attrs)
+            .results(50)
+            .query(WebDocumentSource.QUERY_FAILURE);
+
+        try {
+            controller.process(attrs,
+                org.carrot2.webapp.source.WebDocumentSource.class, LingoClusteringAlgorithm.class);
+            fail();
+        } catch (ProcessingException e) {
+            assertThat(e.getCause().getMessage()).contains("Synthetic failure");
         }
     }
 }
