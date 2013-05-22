@@ -290,10 +290,6 @@ public class QueryProcessorServlet extends HttpServlet
                     handleSearchRequest(request, response, requestParameters, requestModel);
             }
         }
-        catch (IpBannedException e)
-        {
-            logger.info("Skipping, source IP banned: " + request.getRemoteAddr());
-        }
         catch (Exception e)
         {
             throw new ServletException(e);
@@ -461,7 +457,15 @@ public class QueryProcessorServlet extends HttpServlet
         catch (ProcessingException e)
         {
             processingException = e;
-            logger.error("Processing error: " + e.getMessage(), e);
+
+            if (e.getCause() instanceof IpBannedException)
+            {
+                logger.info("Skipping, source IP banned: " + request.getRemoteAddr());
+            }
+            else
+            {
+                logger.error("Processing error: " + e.getMessage(), e);
+            }
         }
 
         // Send response, sets encoding of the response writer.

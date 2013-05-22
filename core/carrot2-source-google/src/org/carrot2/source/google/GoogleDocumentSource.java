@@ -91,6 +91,7 @@ public class GoogleDocumentSource extends MultipageSearchEngine
     @Label("HTTP redirect strategy")
     @Level(AttributeLevel.MEDIUM)
     @Group(SimpleSearchEngine.SERVICE)
+    @Internal
     public HttpRedirectStrategy redirectStrategy = HttpRedirectStrategy.NO_REDIRECTS; 
 
     /**
