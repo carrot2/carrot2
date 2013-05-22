@@ -22,6 +22,7 @@ import org.carrot2.core.IControllerContext;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
@@ -54,6 +55,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
     @Label("HTTP redirect strategy")
     @Level(AttributeLevel.MEDIUM)
     @Group(SimpleSearchEngine.SERVICE)
+    @Internal
     public HttpRedirectStrategy redirectStrategy = HttpRedirectStrategy.NO_REDIRECTS; 
 
     /** XSLT transformation to Carrot2 DTD */
