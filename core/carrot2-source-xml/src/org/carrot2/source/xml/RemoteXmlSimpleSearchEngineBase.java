@@ -22,9 +22,17 @@ import org.carrot2.core.IControllerContext;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Group;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
+import org.carrot2.util.httpclient.HttpRedirectStrategy;
 import org.carrot2.util.resource.IResource;
 
 /**
@@ -36,6 +44,17 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
 {
     /** A helper class that groups common functionality for XML/XSLT based data sources. */
     private final XmlDocumentSourceHelper xmlDocumentSourceHelper = new XmlDocumentSourceHelper();
+
+    /**
+     * HTTP redirect response strategy (follow or throw an error).
+     */
+    @Input
+    @Processing
+    @Attribute
+    @Label("HTTP redirect strategy")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(SimpleSearchEngine.SERVICE)
+    public HttpRedirectStrategy redirectStrategy = HttpRedirectStrategy.NO_REDIRECTS; 
 
     /** XSLT transformation to Carrot2 DTD */
     private Templates toCarrot2Xslt;
@@ -65,8 +84,14 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
         final SearchEngineResponse response = new SearchEngineResponse();
 
         final ProcessingResult processingResult = xmlDocumentSourceHelper
-            .loadProcessingResult(serviceURL, toCarrot2Xslt, getXsltParameters(),
-                response.metadata, getUser(), getPassword());
+            .loadProcessingResult(
+                serviceURL, 
+                toCarrot2Xslt, 
+                getXsltParameters(),
+                response.metadata, 
+                getUser(), 
+                getPassword(),
+                redirectStrategy);
 
         final List<Document> documents = processingResult.getDocuments();
         if (documents != null)

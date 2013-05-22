@@ -38,6 +38,7 @@ import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.source.etools.IpBannedException;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.AttributeBinder;
@@ -212,7 +213,7 @@ public class QueryProcessorServlet extends HttpServlet
         try {
             requestParameters = MapUtils.unpack(request.getParameterMap());
         } catch (Exception e) {
-            logger.debug("Skipping, could not parse parameters: " + e.toString());
+            logger.info("Skipping, could not parse parameters: " + e.toString());
             return;
         }
 
@@ -264,7 +265,7 @@ public class QueryProcessorServlet extends HttpServlet
        }
        catch (Exception e)
        {
-           logger.debug("Skipping, could not map/bind request model attributes: " + e.toString());
+           logger.info("Skipping, could not map/bind request model attributes: " + e.toString());
            return;
        }
 
@@ -288,6 +289,10 @@ public class QueryProcessorServlet extends HttpServlet
                 default:
                     handleSearchRequest(request, response, requestParameters, requestModel);
             }
+        }
+        catch (IpBannedException e)
+        {
+            logger.info("Skipping, source IP banned: " + request.getRemoteAddr());
         }
         catch (Exception e)
         {
@@ -384,8 +389,7 @@ public class QueryProcessorServlet extends HttpServlet
 
             if (statistics.totalTimeAverageInWindow > 0)
             {
-                output.write("all-ms-per-query: " + statistics.totalTimeAverageInWindow
-                    + "\n");
+                output.write("all-ms-per-query: " + statistics.totalTimeAverageInWindow + "\n");
                 output.write("all-updates-in-window: "
                     + statistics.totalTimeMeasurementsInWindow + "\n");
             }
@@ -505,7 +509,10 @@ public class QueryProcessorServlet extends HttpServlet
             + (processingResult == null ? "-" : processingResult.getAttributes().get(
                 AttributeNames.PROCESSING_TIME_TOTAL)) + "," + requestModel.query;
 
-        if (debug) queryLogger.debug(message); else queryLogger.info(message);
+        if (debug) 
+            queryLogger.debug(message); 
+        else 
+            queryLogger.info(message);
     }
 
     private void setExpires(HttpServletResponse response, int minutes)

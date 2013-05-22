@@ -61,6 +61,7 @@ public class HttpUtils
         public int status;
         public String compression;
         public String [][] headers;
+        public String statusMessage;
 
         public InputStream getPayloadAsStream()
         {
@@ -165,6 +166,7 @@ public class HttpUtils
 
             final HttpResponse httpResponse = client.execute(request, context);
             response.status = httpResponse.getStatusLine().getStatusCode();
+            response.statusMessage = httpResponse.getStatusLine().getReasonPhrase();
 
             HttpEntity entity = httpResponse.getEntity();
             InputStream stream = entity.getContent();
