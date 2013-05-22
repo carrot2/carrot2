@@ -26,12 +26,9 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpResponseException;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.source.SimpleSearchEngine;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.StreamUtils;
@@ -43,8 +40,6 @@ import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Label;
 import org.carrot2.util.attribute.Level;
 import org.carrot2.util.attribute.constraint.IntRange;
-import org.carrot2.util.httpclient.HttpRedirectStrategy;
-import org.carrot2.util.httpclient.HttpUtils;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.xslt.NopURIResolver;
 import org.carrot2.util.xslt.TemplatesPool;
@@ -97,43 +92,6 @@ public class XmlDocumentSourceHelper
         catch (Exception e)
         {
             throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Loads a {@link ProcessingResult} from the provided remote URL, applying XSLT
-     * transform if specified. This method can handle gzip-compressed streams if supported
-     * by the data source.
-     * 
-     * @param metadata if a non-<code>null</code> map is provided, request metadata will
-     *            be put into the map.
-     * @param user if not <code>null</code>, the user name to use for HTTP Basic
-     *            Authentication
-     * @param password if not <code>null</code>, the password to use for HTTP Basic
-     *            Authentication
-     */
-    public ProcessingResult loadProcessingResult(String url, Templates stylesheet,
-        Map<String, String> xsltParameters, Map<String, Object> metadata, String user,
-        String password, HttpRedirectStrategy redirectStrategy) throws Exception
-    {
-        final HttpUtils.Response response = HttpUtils.doGET(
-            url, 
-            null, null, 
-            user, password, 
-            timeout * 1000,
-            redirectStrategy.value());
-
-        final InputStream carrot2XmlStream = response.getPayloadAsStream();
-        final int statusCode = response.status;
-
-        if (statusCode == HttpStatus.SC_OK)
-        {
-            metadata.put(SearchEngineResponse.COMPRESSION_KEY, response.compression);
-            return loadProcessingResult(carrot2XmlStream, stylesheet, xsltParameters);
-        }
-        else
-        {
-            throw new HttpResponseException(statusCode, response.statusMessage);
         }
     }
 
