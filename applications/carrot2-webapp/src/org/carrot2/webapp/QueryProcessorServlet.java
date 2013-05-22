@@ -208,12 +208,17 @@ public class QueryProcessorServlet extends HttpServlet
         }
 
         // Unpack parameters from string arrays
-        final Map<String, Object> requestParameters = MapUtils.unpack(request
-            .getParameterMap());
+        final Map<String, Object> requestParameters;
+        try {
+            requestParameters = MapUtils.unpack(request.getParameterMap());
+        } catch (Exception e) {
+            logger.debug("Skipping, could not parse parameters: " + e.toString());
+            return;
+        }
 
         // Alias "q" to "query" parameter
-        final String queryFromAlias = (String) requestParameters
-            .get(WebappConfig.QUERY_PARAM_ALIAS);
+        final String queryFromAlias = 
+            (String) requestParameters.get(WebappConfig.QUERY_PARAM_ALIAS);
         if (StringUtils.isNotBlank(queryFromAlias))
         {
             requestParameters.put(WebappConfig.QUERY_PARAM, queryFromAlias);
@@ -230,12 +235,13 @@ public class QueryProcessorServlet extends HttpServlet
            requestParameters.put(WebappConfig.QUERY_PARAM, query.trim());
        }
 
-        try
-        {
+       final RequestModel requestModel;
+       try
+       {
             // Build model for this request
-            final RequestModel requestModel = new RequestModel(webappConfig);
+            requestModel = new RequestModel(webappConfig);
             requestModel.modern = UserAgentUtils.isModernBrowser(request);
-
+            
             // Request type is normally bound to the model, but we need to know
             // the type before binding to choose the unknown values resolution strategy
             final String requestType = (String)requestParameters.get(WebappConfig.TYPE_PARAM);
@@ -255,7 +261,15 @@ public class QueryProcessorServlet extends HttpServlet
                 }, Input.class);
             requestModel.afterParametersBound(attributeBinderActionBind.remainingValues,
                 extractCookies(request));
+       }
+       catch (Exception e)
+       {
+           logger.debug("Skipping, could not map/bind request model attributes: " + e.toString());
+           return;
+       }
 
+       try 
+       {
             switch (requestModel.type)
             {
                 case STATS:
@@ -305,11 +319,9 @@ public class QueryProcessorServlet extends HttpServlet
     private static class AjaxAttributesModel
     {
         @Element(name = "request")
-        @SuppressWarnings("unused")
         public final RequestModel requestModel;
 
         @Element(name = "attribute-metadata")
-        @SuppressWarnings("unused")
         public final AttributeMetadataModel attributesModel;
 
         private AjaxAttributesModel(WebappConfig config, RequestModel requestModel)
