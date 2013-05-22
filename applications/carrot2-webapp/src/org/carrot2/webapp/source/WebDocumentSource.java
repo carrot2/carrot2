@@ -73,10 +73,18 @@ public class WebDocumentSource extends SimpleSearchEngine
 
         // Run sub-components sequentially so that we have a chance to weed out spammers
         // before we query Google.
-        etools.process();
-
-        google.results = 8;
-        google.process();
+        try {
+            etools.process();
+    
+            google.results = 8;
+            google.process();
+        } catch (ProcessingException e) {
+            if (e.getCause() instanceof Exception) {
+                throw (Exception) e.getCause(); 
+            } else {
+                throw e;
+            }
+        }
 
         final Map<String, Document> googleDocumentsByUrl = Maps.newHashMap();
         if (google.documents != null)
