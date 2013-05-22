@@ -15,6 +15,7 @@ package org.carrot2.source.etools;
 import java.util.Collections;
 import java.util.Map;
 
+import org.apache.http.client.HttpResponseException;
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingException;
@@ -297,6 +298,23 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
             + country.getCode();
     }
 
+    @Override
+    protected SearchEngineResponse fetchSearchResponse() throws Exception
+    {
+        try {
+            return super.fetchSearchResponse();
+        } catch (Exception e) {
+            if (e instanceof HttpResponseException) {
+                HttpResponseException httpException = (HttpResponseException) e;
+                int sCode = httpException.getStatusCode();
+                if (sCode == 302 || sCode == 403) {
+                    throw new IpBannedException(httpException);
+                }
+            }
+            throw e;
+        }
+    }
+    
     /**
      * Returns the number of results per data source, estimated based on the total
      * requested results.

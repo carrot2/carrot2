@@ -14,9 +14,6 @@ package org.carrot2.webapp.source;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.IControllerContext;
@@ -49,11 +46,6 @@ public class WebDocumentSource extends SimpleSearchEngine
     private GoogleDocumentSource google = new GoogleDocumentSource();
 
     /**
-     * Maximum concurrent threads from all instances of this component.
-     */
-    private static final int MAX_CONCURRENT_THREADS = 10;
-
-    /**
      * Query failure string (must be identical to cause a query for tests).
      */
     static final String QUERY_FAILURE = new String("foobar");
@@ -77,107 +69,63 @@ public class WebDocumentSource extends SimpleSearchEngine
     @Override
     public SearchEngineResponse fetchSearchResponse() throws Exception
     {
-        final List<Callable<Void>> tasks = Lists.newArrayList();
-        tasks.add(new Callable<Void>()
-        {
-            public Void call() throws Exception
-            {
-                google.results = 8;
-                google.process();
-                return null;
-            }
-        });
-        tasks.add(new Callable<Void>()
-        {
-            public Void call() throws Exception
-            {
-                if (query == QUERY_FAILURE) {
-                    throw new RuntimeException("Synthetic failure.");
-                }
-
-                etools.process();
-                return null;
-            }
-        });
-
         final SearchEngineResponse response = new SearchEngineResponse();
 
-        try
+        // Run sub-components sequentially so that we have a chance to weed out spammers
+        // before we query Google.
+        etools.process();
+
+        google.results = 8;
+        google.process();
+
+        final Map<String, Document> googleDocumentsByUrl = Maps.newHashMap();
+        if (google.documents != null)
         {
-            List<Future<Void>> invokeAll = 
-                getSharedExecutor(MAX_CONCURRENT_THREADS, getClass()).invokeAll(tasks);
-
-            // Rethrow an exception on errors from sub-tasks. 
-            for (Future<Void> foo : invokeAll) {
-                try {
-                    foo.get();
-                } catch (ExecutionException e) {
-                    Throwable t = e.getCause();
-                    if (t != null) {
-                        if (t instanceof Exception) {
-                            throw (Exception) t;
-                        } else if (t instanceof Error) {
-                            throw (Error) t;
-                        }
-                    }
-                    throw e;
-                }
-            }
-
-            final Map<String, Document> googleDocumentsByUrl = Maps.newHashMap();
-            if (google.documents != null)
+            for (Document googleDocument : google.documents)
             {
-                for (Document googleDocument : google.documents)
-                {
-                    googleDocumentsByUrl.put((String) googleDocument
-                        .getField(Document.CONTENT_URL), googleDocument);
-                    googleDocument.setField(Document.SOURCES, Lists
-                        .newArrayList("Google"));
+                googleDocumentsByUrl.put((String) googleDocument
+                    .getField(Document.CONTENT_URL), googleDocument);
+                googleDocument.setField(Document.SOURCES, Lists
+                    .newArrayList("Google"));
 
-                    // Set the language based on the eTools source configuration
-                    googleDocument.setLanguage(etools.language != null ? etools.language
-                        .toLanguageCode() : null);
-                }
-                response.results.addAll(google.documents);
+                // Set the language based on the eTools source configuration
+                googleDocument.setLanguage(etools.language != null ? etools.language
+                    .toLanguageCode() : null);
             }
-
-            if (etools.documents != null)
-            {
-                for (Document etoolsDocument : etools.documents)
-                {
-                    final Document matchingGoogleDocument = googleDocumentsByUrl
-                        .get(etoolsDocument.getField(Document.CONTENT_URL));
-                    if (matchingGoogleDocument != null)
-                    {
-                        final List<String> sources = etoolsDocument
-                            .getField(Document.SOURCES);
-                        if (!sources.contains("Google"))
-                        {
-                            sources.add("Google");
-                        }
-                        matchingGoogleDocument.setField(Document.SOURCES, sources);
-                    }
-                    else
-                    {
-                        response.results.add(etoolsDocument);
-                    }
-                }
-            }
-
-            // Trim to size (cannot use sublist because the field is final)
-            while (response.results.size() > results)
-            {
-                response.results.remove(results);
-            }
-
-            response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY,
-                google.resultsTotal);
+            response.results.addAll(google.documents);
         }
-        catch (InterruptedException e)
+
+        if (etools.documents != null)
         {
-            // If interrupted, return the empty response we have
-            return response;
+            for (Document etoolsDocument : etools.documents)
+            {
+                final Document matchingGoogleDocument = googleDocumentsByUrl
+                    .get(etoolsDocument.getField(Document.CONTENT_URL));
+                if (matchingGoogleDocument != null)
+                {
+                    final List<String> sources = etoolsDocument
+                        .getField(Document.SOURCES);
+                    if (!sources.contains("Google"))
+                    {
+                        sources.add("Google");
+                    }
+                    matchingGoogleDocument.setField(Document.SOURCES, sources);
+                }
+                else
+                {
+                    response.results.add(etoolsDocument);
+                }
+            }
         }
+
+        // Trim to size (cannot use sublist because the field is final)
+        while (response.results.size() > results)
+        {
+            response.results.remove(results);
+        }
+
+        response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY,
+            google.resultsTotal);
 
         return response;
     }

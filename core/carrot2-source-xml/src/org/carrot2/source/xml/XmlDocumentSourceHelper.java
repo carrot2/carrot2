@@ -27,6 +27,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpResponseException;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.Processing;
@@ -72,17 +73,6 @@ public class XmlDocumentSourceHelper
     @Group(SimpleSearchEngine.SERVICE)
     public int timeout = 8;
 
-    /**
-     * HTTP redirect response strategy (follow or throw an error).
-     */
-    @Input
-    @Processing
-    @Attribute
-    @Label("HTTP redirect strategy")
-    @Level(AttributeLevel.MEDIUM)
-    @Group(SimpleSearchEngine.SERVICE)
-    public HttpRedirectStrategy redirectStrategy = HttpRedirectStrategy.NO_REDIRECTS; 
-
     /** Precompiled XSLT templates. */
     private final TemplatesPool pool;
 
@@ -124,7 +114,7 @@ public class XmlDocumentSourceHelper
      */
     public ProcessingResult loadProcessingResult(String url, Templates stylesheet,
         Map<String, String> xsltParameters, Map<String, Object> metadata, String user,
-        String password) throws Exception
+        String password, HttpRedirectStrategy redirectStrategy) throws Exception
     {
         final HttpUtils.Response response = HttpUtils.doGET(
             url, 
@@ -143,7 +133,7 @@ public class XmlDocumentSourceHelper
         }
         else
         {
-            throw new IOException("HTTP error, status code: " + statusCode);
+            throw new HttpResponseException(statusCode, response.statusMessage);
         }
     }
 
