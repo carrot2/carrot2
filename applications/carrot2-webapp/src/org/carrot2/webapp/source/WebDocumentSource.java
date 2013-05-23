@@ -74,6 +74,12 @@ public class WebDocumentSource extends SimpleSearchEngine
         // Run sub-components sequentially so that we have a chance to weed out spammers
         // before we query Google.
         try {
+            // String equality intentional; will work for tests only.
+            if (query == QUERY_FAILURE)
+            {
+                throw new RuntimeException("Synthetic failure.");
+            }
+
             etools.process();
     
             google.results = 8;
