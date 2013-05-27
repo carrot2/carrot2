@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -223,7 +224,6 @@ public final class Cluster
      * For JSON serialization only.
      */
     @JsonProperty("clusters")
-    @SuppressWarnings("unused")
     private List<Cluster> getSubclustersForSerialization()
     {
         return subclustersView.isEmpty() ? null : subclustersView;
@@ -503,7 +503,6 @@ public final class Cluster
      */
     @JsonProperty
     @Attribute(required = false)
-    @SuppressWarnings("unused")
     private int getSize()
     {
         return size();
@@ -513,7 +512,6 @@ public final class Cluster
      * Empty implementation, SimpleXML requires both a getter and a setter.
      */
     @Attribute(required = false)
-    @SuppressWarnings("unused")
     private void setSize(int size)
     {
         // We only serialize the size, hence empty implementation
@@ -835,10 +833,10 @@ public final class Cluster
      * 
      * @see #buildOtherTopics(List, List)
      */
-    public static void appendOtherTopics(List<Document> allDocuments,
+    public static Cluster appendOtherTopics(List<Document> allDocuments,
         List<Cluster> clusters)
     {
-        appendOtherTopics(allDocuments, clusters, OTHER_TOPICS_LABEL);
+        return appendOtherTopics(allDocuments, clusters, OTHER_TOPICS_LABEL);
     }
 
     /**
@@ -847,7 +845,7 @@ public final class Cluster
      * 
      * @see #buildOtherTopics(List, List, String)
      */
-    public static void appendOtherTopics(List<Document> allDocuments,
+    public static Cluster appendOtherTopics(List<Document> allDocuments,
         List<Cluster> clusters, String label)
     {
         final Cluster otherTopics = buildOtherTopics(allDocuments, clusters, label);
@@ -855,10 +853,32 @@ public final class Cluster
         {
             clusters.add(otherTopics);
         }
+        return otherTopics;
+    }
+
+    /**
+     * An extremely dodgy method that remaps {@link Document} references 
+     * inside this cluster. This operation is allowed only when the cluster has not been
+     * assigned an ID yet (so theoretically before the {@link ProcessingResult} has been
+     * published. While there are theoretically other ways to achieve the same result (copying
+     * the entire set of clusters) this is the most memory and cpu efficient way.
+     * 
+     * Only documents from this cluster are remapped, subclusters need to be processed separately.
+     */
+    public void remapDocumentReferences(IdentityHashMap<Document, Document> docMapping)
+    {
+        if (this.id != null) throw new IllegalStateException();
+        for (int i = documents.size(); --i >= 0;) 
+        {
+            Document doc = documents.get(i);
+            Document remapped = docMapping.get(doc);
+            if (remapped != null) {
+                documents.set(i, remapped);
+            }
+        }
     }
 
     @Persist
-    @SuppressWarnings("unused")
     private void beforeSerialization()
     {
         documentIds = Lists.transform(documents, new Function<Document, DocumentRefid>()
@@ -880,7 +900,6 @@ public final class Cluster
     }
 
     @Commit
-    @SuppressWarnings("unused")
     private void afterDeserialization() throws Exception
     {
         if (otherAttributesForSerialization != null)
@@ -897,7 +916,6 @@ public final class Cluster
      * For JSON serialization only.
      */
     @JsonProperty("documents")
-    @SuppressWarnings("unused")
     private List<String> getDocumentIds()
     {
         return Lists.transform(documents, DOCUMENT_TO_ID);
@@ -916,7 +934,6 @@ public final class Cluster
      * For JSON and XML serialization only.
      */
     @JsonProperty("attributes")
-    @SuppressWarnings("unused")
     private Map<String, Object> getOtherAttributes()
     {
         final Map<String, Object> otherAttributes = Maps.newHashMap(attributesView);

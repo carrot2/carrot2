@@ -220,8 +220,7 @@ public class MultilingualClustering
         final Map<LanguageCode, Cluster> clusters = Maps.newHashMap();
         for (String language : documentsByLanguage.keySet())
         {
-            final ImmutableList<Document> languageDocuments = documentsByLanguage
-                .get(language);
+            final ImmutableList<Document> languageDocuments = documentsByLanguage.get(language);
             final LanguageCode languageCode = language.equals("") ? null : LanguageCode.valueOf(language);
             final Cluster languageCluster = new Cluster(
                 languageCode != null ? languageCode.toString() : "Unknown Language");
