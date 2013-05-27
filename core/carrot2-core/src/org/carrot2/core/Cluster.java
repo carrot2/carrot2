@@ -345,6 +345,18 @@ public final class Cluster
     }
 
     /**
+     * Method optimized for single document instead of a vararg.
+     * @see #addDocuments(Document...)
+     */
+    public Cluster addDocument(Document document)
+    {
+        this.documents.add(document);
+        allDocuments = null;
+        return this;
+    }
+
+
+    /**
      * Adds document to this cluster.
      * 
      * @param documents to be added to this cluster
@@ -375,6 +387,17 @@ public final class Cluster
         }
         allDocuments = null;
 
+        return this;
+    }
+
+    /**
+     * Adds a subcluster to this cluster.
+     * @see #addSubclusters(Cluster...)
+     */
+    public Cluster addSubcluster(Cluster cluster)
+    {
+        this.subclusters.add(cluster);
+        this.allDocuments = null;
         return this;
     }
 
