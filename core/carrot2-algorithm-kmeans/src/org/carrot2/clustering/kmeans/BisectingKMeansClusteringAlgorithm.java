@@ -13,6 +13,7 @@
 package org.carrot2.clustering.kmeans;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -123,7 +124,9 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
     /**
      * Use dimensionality reduction. If <code>true</code>, k-means will be applied on the
      * dimensionality-reduced term-document matrix with the number of dimensions being
-     * equal to the number of requested clusters. If <code>false</code>, the k-means will
+     * equal to twice the number of requested clusters. If the number of dimensions is 
+     * lower than the number of input documents, reduction will not be performed.
+     * If <code>false</code>, the k-means will
      * be performed directly on the original term-document matrix.
      */
     @Processing
@@ -266,9 +269,9 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
             }
 
             final DoubleMatrix2D tdMatrix;
-            if (useDimensionalityReduction)
+            if (useDimensionalityReduction && clusterCount * 2 < preprocessingContext.documents.size())
             {
-                matrixReducer.reduce(reducedVsmContext, clusterCount);
+                matrixReducer.reduce(reducedVsmContext, clusterCount * 2);
                 tdMatrix = reducedVsmContext.coefficientMatrix.viewDice();
             }
             else
@@ -284,29 +287,18 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
             }
             final List<IntArrayList> rawClusters = Lists.newArrayList();
             rawClusters.addAll(split(partitionCount, tdMatrix, columns, maxIterations));
-
-            boolean finished = false;
-            int emptySplits = 0;
-            while (rawClusters.size() < clusterCount && !finished)
+            Collections.sort(rawClusters, BY_SIZE_DESCENDING);
+            
+            int largestIndex = 0;
+            while (rawClusters.size() < clusterCount && largestIndex < rawClusters.size())
             {
                 // Find largest cluster to split
-                int largestIndex = 0;
-                IntArrayList largest = rawClusters.get(0);
-                finished = largest.size() <= partitionCount * 2;
-                for (int i = 1; i < rawClusters.size(); i++)
+                IntArrayList largest = rawClusters.get(largestIndex);
+                if (largest.size() <= partitionCount * 2) 
                 {
-                    final int size = rawClusters.get(i).size();
-                    if (size > largest.size() && size > partitionCount * 2)
-                    {
-                        largest = rawClusters.get(i);
-                        largestIndex = i;
-                        finished = false;
-                    }
-                }
-
-                if (finished)
-                {
-                    // No more splittable clusters
+                    // No cluster is large enough to produce a meaningful
+                    // split (i.e. a split into subclusters with more than
+                    // 1 member).
                     break;
                 }
 
@@ -316,16 +308,12 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
                 {
                     rawClusters.remove(largestIndex);
                     rawClusters.addAll(split);
-                    emptySplits = 0;
+                    Collections.sort(rawClusters, BY_SIZE_DESCENDING);
+                    largestIndex = 0;
                 }
                 else
                 {
-                    if (++emptySplits >= rawClusters.size())
-                    {
-                        // For each cluster we tried to split, we got no subclusters.
-                        // This means there's no more clusters we can create.
-                        break;
-                    }
+                    largestIndex++;
                 }
             }
 
@@ -353,6 +341,16 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         Cluster.appendOtherTopics(documents, clusters);
     }
 
+    private static final Comparator<IntArrayList> BY_SIZE_DESCENDING = new Comparator<IntArrayList>()
+    {
+        @Override
+        public int compare(IntArrayList o1, IntArrayList o2)
+        {
+            // We don't expect very large sizes here.
+            return o2.size() - o1.size();
+        }
+    };
+    
     private List<String> getLabels(IntArrayList documents,
         DoubleMatrix2D termDocumentMatrix, IntIntOpenHashMap rowToStemIndex,
         int [] mostFrequentOriginalWordIndex, char [][] wordImage)
@@ -422,6 +420,10 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         {
             result.add(new IntArrayList(selected.columns()));
         }
+        for (int i = 0; i < selected.columns(); i++) 
+        {
+            result.get(i % partitions).add(i);
+        }
 
         // Matrices for centroids and document-centroid similarities
         final DoubleMatrix2D centroids = new DenseDoubleMatrix2D(selected.rows(),
@@ -432,6 +434,31 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         // Run a fixed number of K-means iterations
         for (int it = 0; it < iterations; it++)
         {
+            // Update centroids
+            for (int i = 0; i < result.size(); i++)
+            {
+                final IntArrayList cluster = result.get(i);
+                for (int k = 0; k < selected.rows(); k++)
+                {
+                    double sum = 0;
+                    for (int j = 0; j < cluster.size(); j++)
+                    {
+                        sum += selected.get(k, cluster.get(j));
+                    }
+                    centroids.setQuick(k, i, sum / cluster.size());
+                }
+            }
+
+            if (it < iterations - 1)
+            {
+                previousResult = result;
+                result = Lists.newArrayList();
+                for (int i = 0; i < partitions; i++)
+                {
+                    result.add(new IntArrayList(selected.columns()));
+                }
+            }
+
             // Calculate similarity to centroids
             centroids.zMult(selected, similarities, 1, 0, true, false);
 
@@ -456,31 +483,6 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
             {
                 // Unchanged result
                 break;
-            }
-
-            // Update centroids
-            for (int i = 0; i < result.size(); i++)
-            {
-                final IntArrayList cluster = result.get(i);
-                for (int k = 0; k < selected.rows(); k++)
-                {
-                    double sum = 0;
-                    for (int j = 0; j < cluster.size(); j++)
-                    {
-                        sum += selected.get(k, cluster.get(j));
-                    }
-                    centroids.setQuick(k, i, sum / cluster.size());
-                }
-            }
-
-            if (it < iterations - 1)
-            {
-                previousResult = result;
-                result = Lists.newArrayList();
-                for (int i = 0; i < partitions; i++)
-                {
-                    result.add(new IntArrayList(selected.columns()));
-                }
             }
         }
 
