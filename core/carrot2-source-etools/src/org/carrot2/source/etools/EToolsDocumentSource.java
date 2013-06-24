@@ -341,8 +341,16 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
         super.beforeProcessing();
         if (!Strings.isNullOrEmpty(site))
         {
+            String [] sites = site.split(",\\s*");
+            for (int i = 0; i < sites.length; i++)
+            {
+                if (!sites[i].startsWith("site:")) {
+                    sites[i] = "site:" + sites[i];
+                }
+            }
+
             this.query = "(" + this.query + ") AND ("
-                + Joiner.on(" OR ").join(site.split(",\\s*")) + ")";
+                + Joiner.on(" OR ").join(sites) + ")";
             if (this.query.length() > 2048)
             {
                 throw new ProcessingException(
