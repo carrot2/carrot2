@@ -175,17 +175,15 @@ public class ClusterBuilder
         final double [] featureScores = featureScorer != null ? featureScorer
             .getFeatureScores(context) : null;
         final int [] wordLabelIndex = new int [wordCount];
-        if (featureScores != null)
+
+        // Word index to feature index mapping
+        Arrays.fill(wordLabelIndex, -1);
+        for (int i = 0; i < labelsFeatureIndex.length; i++)
         {
-            // Word index to feature index mapping
-            Arrays.fill(wordLabelIndex, -1);
-            for (int i = 0; i < labelsFeatureIndex.length; i++)
+            final int featureIndex = labelsFeatureIndex[i];
+            if (featureIndex < wordCount)
             {
-                final int featureIndex = labelsFeatureIndex[i];
-                if (featureIndex < wordCount)
-                {
-                    wordLabelIndex[featureIndex] = i;
-                }
+                wordLabelIndex[featureIndex] = i;
             }
         }
 

@@ -94,8 +94,11 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase
     @Test
     public void testMultiMerge()
     {
-        createDocuments("aa", "aa", "aa bb", "aa bb", "aa bb cc", "aa bb cc", "dd dd",
-            "dd dd", "dd dd", "dd dd");
+        createDocuments("aa", "aa", 
+                        "aa bb", "aa bb", 
+                        "aa bb cc", "aa bb cc", 
+                        "dd dd", "dd dd", 
+                        "dd dd", "dd dd");
         preprocessingPipeline.documentAssigner.minClusterSize = 2;
         desiredClusterCountBase = 20;
         clusterBuilder.phraseLabelBoost = 0.05;
@@ -110,12 +113,12 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase
                 3, 4
             },
 
-            null,
-
             new int []
             {
                 0, 1, 2
             },
+
+            null,
 
             null,
         };
