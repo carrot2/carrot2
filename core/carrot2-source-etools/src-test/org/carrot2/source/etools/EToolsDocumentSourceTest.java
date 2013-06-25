@@ -21,7 +21,6 @@ import org.carrot2.source.SearchEngineBase;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.tests.UsesExternalServices;
 import org.fest.assertions.MapAssert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
@@ -45,7 +44,6 @@ public class EToolsDocumentSourceTest extends
         return true;
     }
 
-    @UsesExternalServices
     @Test
     public void testDataSources() throws Exception
     {
@@ -70,9 +68,7 @@ public class EToolsDocumentSourceTest extends
         runAndCheckMinimumResults(getLargeQueryText(), getLargeQuerySize(), 100);
     }
 
-    @UsesExternalServices
     @Test
-    @Ignore("ETools does not compress results as of 25/06/2013")
     public void testGzipCompression() throws Exception
     {
         runQuery("apache", 50);
