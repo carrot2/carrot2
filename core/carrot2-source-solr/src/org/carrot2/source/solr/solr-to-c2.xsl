@@ -41,7 +41,7 @@
                 </xsl:for-each>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="*[@name=$solr.summary-field]" />
+                <xsl:apply-templates select="*[@name=$solr.summary-field]" />
               </xsl:otherwise>
             </xsl:choose>
           </snippet>
@@ -64,6 +64,13 @@
         </attribute>
       </xsl:if>
     </searchresult>
+  </xsl:template>
+  
+  <xsl:template match="arr/str">
+    <xsl:apply-templates />
+    <xsl:if test="not(position() = last())">
+      <xsl:value-of select="' . '" />
+    </xsl:if>
   </xsl:template>
 
   <!-- Solr to Carrot2 cluster adapter. -->  
