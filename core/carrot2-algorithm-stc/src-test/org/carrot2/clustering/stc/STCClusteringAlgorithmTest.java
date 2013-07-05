@@ -13,13 +13,21 @@
 package org.carrot2.clustering.stc;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import org.carrot2.core.Cluster;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
 import org.carrot2.core.test.SampleDocumentData;
 import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.util.attribute.AttributeUtils;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
+import com.google.common.io.Resources;
 
 /**
  * Test cases for the {@link STCClusteringAlgorithm}.
@@ -74,5 +82,48 @@ public class STCClusteringAlgorithmTest extends
 
         t1 = new int [] {0, 1, 2,   0};
         assertEquals(1, STCClusteringAlgorithm.computeIntersection(t1, 0, 3, t1, 3, 1));
+    }
+
+    /**
+     * CARROT-1008: STC is not using term stems.
+     */
+    @Test
+    @Ignore
+    public void testCarrot1008() throws Exception
+    {
+        ProcessingResult pr = ProcessingResult.deserialize(
+            Resources.newInputStreamSupplier(
+                Resources.getResource(this.getClass(), "CARROT-1008.xml")).getInput());
+
+        STCClusteringAlgorithmDescriptor.attributeBuilder(processingAttributes)
+            .maxClusters(30);
+
+        pr = cluster(pr.getDocuments());
+
+        Set<String> clusterLabels = collectClusterLabels(pr);
+        assertThat(
+            clusterLabels.contains("Guns") &&
+            clusterLabels.contains("Gun")).isFalse();
+    }
+
+    private Set<String> collectClusterLabels(ProcessingResult pr)
+    {
+        final Set<String> clusterLabels = Sets.newHashSet();
+        new Cloneable()
+        {
+            public void dumpClusters(List<Cluster> clusters, int depth) 
+            {
+                String indent = Strings.repeat("  ", depth);
+                for (Cluster c : clusters) {
+                    System.out.println(indent + c.getLabel());
+                    clusterLabels.add(c.getLabel());
+                    if (c.getSubclusters() != null) {
+                        dumpClusters(c.getSubclusters(), depth + 1);
+                    }
+                }
+            }
+        }.dumpClusters(pr.getClusters(), 0);
+
+        return clusterLabels;
     }
 }
