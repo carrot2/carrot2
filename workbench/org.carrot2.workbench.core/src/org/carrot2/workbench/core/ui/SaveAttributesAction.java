@@ -63,8 +63,8 @@ abstract class SaveAttributesAction extends Action
     {
         public void runWithEvent(Event event)
         {
-            saveAttributes(getFileNameHint(),
-                createAttributeValueSetsToSave(collectAttributes()));
+            AttributeValueSets avs = createAttributeValueSetsToSave(collectAttributes());
+            saveAttributes(getFileNameHint(), avs);
         }
     };
 
