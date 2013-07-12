@@ -132,7 +132,7 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
         ClassLoaderResource.class,
         FileResource.class
     }, strict = false)
-    public IResource solrXsltAdapter = new ClassResource(SolrDocumentSource.class, "solr-to-c2.xsl");
+    public IResource solrXsltAdapter;
 
     /**
      * If clusters are present in the Solr output they will be read and exposed to components
@@ -220,7 +220,11 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Override
     protected IResource getXsltResource()
     {
-        return solrXsltAdapter;
+        if (solrXsltAdapter == null) {
+            return new ClassResource(SolrDocumentSource.class, "solr-to-c2.xsl");
+        } else {
+            return solrXsltAdapter; 
+        }
     }
 
     @Override
