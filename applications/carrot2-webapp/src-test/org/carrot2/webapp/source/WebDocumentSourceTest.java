@@ -50,7 +50,7 @@ public class WebDocumentSourceTest extends
     @Override
     public void testLargeQuery() throws Exception
     {
-        runAndCheckMinimumResults(getLargeQueryText(), getLargeQuerySize(), 100);
+        runAndCheckMinimumResults(getLargeQueryText(), getLargeQuerySize(), 75);
     }
 
     @UsesExternalServices
