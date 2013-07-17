@@ -13,7 +13,6 @@
 package org.carrot2.clustering.stc;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import org.carrot2.core.Cluster;
@@ -25,8 +24,6 @@ import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Sets;
 import com.google.common.io.Resources;
 
 /**
@@ -100,30 +97,9 @@ public class STCClusteringAlgorithmTest extends
 
         pr = cluster(pr.getDocuments());
 
-        Set<String> clusterLabels = collectClusterLabels(pr);
+        Set<String> clusterLabels = ClusteringAlgorithmTestBase.collectClusterLabels(pr);
         assertThat(
             clusterLabels.contains("Guns") &&
             clusterLabels.contains("Gun")).isFalse();
-    }
-
-    private Set<String> collectClusterLabels(ProcessingResult pr)
-    {
-        final Set<String> clusterLabels = Sets.newHashSet();
-        new Cloneable()
-        {
-            public void dumpClusters(List<Cluster> clusters, int depth) 
-            {
-                String indent = Strings.repeat("  ", depth);
-                for (Cluster c : clusters) {
-                    System.out.println(indent + c.getLabel());
-                    clusterLabels.add(c.getLabel());
-                    if (c.getSubclusters() != null) {
-                        dumpClusters(c.getSubclusters(), depth + 1);
-                    }
-                }
-            }
-        }.dumpClusters(pr.getClusters(), 0);
-
-        return clusterLabels;
     }
 }

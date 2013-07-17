@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -42,11 +43,13 @@ import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.annotations.Nightly;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
+import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 
 /**
  * Simple baseline tests that apply to all clustering algorithms.
@@ -242,4 +245,40 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
 
         return documents;
     }
+
+    public static Set<String> collectClusterLabels(ProcessingResult pr)
+    {
+        final Set<String> clusterLabels = Sets.newHashSet();
+        new Cloneable()
+        {
+            public void dumpClusters(List<Cluster> clusters, int depth) 
+            {
+                for (Cluster c : clusters) {
+                    clusterLabels.add(c.getLabel());
+                    if (c.getSubclusters() != null) {
+                        dumpClusters(c.getSubclusters(), depth + 1);
+                    }
+                }
+            }
+        }.dumpClusters(pr.getClusters(), 0);
+
+        return clusterLabels;
+    }
+    
+    public static void dumpClusterLabels(ProcessingResult pr)
+    {
+        new Cloneable()
+        {
+            public void dumpClusters(List<Cluster> clusters, int depth) 
+            {
+                String indent = Strings.repeat("  ", depth);
+                for (Cluster c : clusters) {
+                    System.out.println(indent + c.getLabel());
+                    if (c.getSubclusters() != null) {
+                        dumpClusters(c.getSubclusters(), depth + 1);
+                    }
+                }
+            }
+        }.dumpClusters(pr.getClusters(), 0);
+    }    
 }
