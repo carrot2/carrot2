@@ -73,7 +73,7 @@
     <org.apache.httpcomponents.version>4.1</org.apache.httpcomponents.version>
     <org.apache.lucene.version>4.2.1</org.apache.lucene.version>
     <org.jdom.version>1.1</org.jdom.version>
-    <org.simpleframework.version>2.6.4</org.simpleframework.version>
+    <org.simpleframework.version>2.7.0</org.simpleframework.version>
     <org.carrot2.attributes>1.2.0</org.carrot2.attributes>
   </properties>
 
