@@ -36,9 +36,7 @@
         <formalpara>
           <title>Precondition: successful continuous integration builds</title>
           <para>
-            The status of the <link xlink:href="http://builds.carrot2.org/browse/C2HEAD-CORE">C2HEAD-CORE</link>
-            and <link xlink:href="http://builds.carrot2.org/browse/C2HEAD-SOURCES">C2HEAD-SOURCES</link>
-            builds must be successful.
+            The status of the all builds must be successful.
           </para>
 
           <para>
