@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
+                 "http://www.docbook.org/xml/5.0/dtd/docbook.dtd" [
+  <!ENTITY % local SYSTEM "local-entities.ent">
+  <!ENTITY % custom SYSTEM "custom-entities.ent">
+  %local;
+  %custom;
+]>
+<section xml:id="section.es"
+         xmlns="http://docbook.org/ns/docbook" version="5.0"
+         xmlns:product="http://www.carrot2.org">
+  <title>&PROD; clustering in ElasticSearch</title>
+  
+  <para>
+    &PROD; search results clustering can be performed directly in ElasticSearch by
+    installing a dedicated 
+    <link xlink:href="https://github.com/carrot2/elasticsearch-carrot2">elasticsearch-carrot2</link>
+    plugin. Installation instructions are described in detail at the
+    plugin's GitHub web site. The API's documentation is dynamically rendered 
+    once installed (see installation instructions).
+  </para>  
+</section>
