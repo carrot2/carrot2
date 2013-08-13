@@ -13,17 +13,19 @@
 package org.carrot2.clustering.stc;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.carrot2.core.Cluster;
+import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
 import org.carrot2.core.test.SampleDocumentData;
 import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.util.attribute.AttributeUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 
 /**
@@ -81,11 +83,33 @@ public class STCClusteringAlgorithmTest extends
         assertEquals(1, STCClusteringAlgorithm.computeIntersection(t1, 0, 3, t1, 3, 1));
     }
 
+    @Test
+    public void testMergingBaseClustersWithStemEquivalentPhrases()
+    {
+        List<Document> documents = Lists.newArrayList();
+        documents.add(new Document("good programs . foo1"));
+        documents.add(new Document("foo2 good programs . foo2"));
+        documents.add(new Document("good programs taste good"));
+        documents.add(new Document("good programs are good"));
+
+        documents.add(new Document("good programming . foo3"));
+        documents.add(new Document("foo4 good programming . foo4"));
+        documents.add(new Document("good programming makes you feel better"));
+
+        // Lower base cluster score.
+        STCClusteringAlgorithmDescriptor.attributeBuilder(processingAttributes)
+            .minBaseClusterScore(0);
+
+        ProcessingResult pr = cluster(documents);
+        Set<String> clusterLabels = collectClusterLabels(pr);
+        assertThat("Good Programs").isIn(clusterLabels);
+        assertThat("Good Programming").isNotIn(clusterLabels);
+    }
+
     /**
      * CARROT-1008: STC is not using term stems.
      */
     @Test
-    @Ignore
     public void testCarrot1008() throws Exception
     {
         ProcessingResult pr = ProcessingResult.deserialize(
@@ -97,6 +121,7 @@ public class STCClusteringAlgorithmTest extends
 
         pr = cluster(pr.getDocuments());
 
+        dumpClusterLabels(pr);
         Set<String> clusterLabels = ClusteringAlgorithmTestBase.collectClusterLabels(pr);
         assertThat(
             clusterLabels.contains("Guns") &&

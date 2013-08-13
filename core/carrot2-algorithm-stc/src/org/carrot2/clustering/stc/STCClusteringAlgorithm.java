@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.core.Cluster;
@@ -26,7 +27,11 @@ import org.carrot2.core.IClusteringAlgorithm;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.ProcessingComponentBase;
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.CommonAttributes;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
@@ -36,16 +41,28 @@ import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
-import org.carrot2.util.PriorityQueue;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.AttributeLevel;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.DefaultGroups;
+import org.carrot2.util.attribute.Group;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Level;
+import org.carrot2.util.attribute.Output;
+import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.DoubleRange;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 
-import com.carrotsearch.hppc.*;
+import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.BitSetIterator;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.IntStack;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 
 /**
@@ -294,6 +311,19 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     public double scoreWeight = 1.0;
 
     /**
+     * Merge all stem-equivalent base clusters before running the merge phase.
+     * 
+     * @see "http://issues.carrot2.org/browse/CARROT-1008"
+     */
+    @Input
+    @Processing
+    @Attribute
+    @Label("Merge all stem-equivalent phrases when discovering base clusters")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(DefaultGroups.CLUSTERS)
+    public boolean mergeStemEquivalentBaseClusters = true;
+
+    /**
      * A helper for performing multilingual clustering.
      */
     public final MultilingualClustering multilingualClustering = new MultilingualClustering();
@@ -345,35 +375,6 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             return !p.selected;
         }
     };
-
-    /**
-     * Custom priority queue for collecting base clusters.
-     */
-    private final static class BaseClusterQueue extends PriorityQueue<ClusterCandidate>
-    {
-        private final int maxSize;
-    
-        public BaseClusterQueue(int maxSize)
-        {
-            super.initialize(maxSize);
-            this.maxSize = maxSize;
-        }
-        
-        @Override
-        protected boolean lessThan(ClusterCandidate c1, ClusterCandidate c2)
-        {
-            return c1.score < c2.score;
-        }
-    
-        /**
-         * Return <code>true</code> if a cluster with <code>score</code> will be added to
-         * the priority queue.
-         */
-        public boolean willInsert(float score)
-        {
-            return size() < maxSize || ((ClusterCandidate) top()).score < score;
-        }
-    }
 
     /**
      * Performs STC clustering of {@link #documents}.
@@ -446,11 +447,11 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             final int s = i;
 
             while (tokenIndex[i + 1] != -1) i++;
-            final int phraseLenght = 1 + i - s; 
-            if (phraseLenght >= 1)
+            final int phraseLength = 1 + i - s; 
+            if (phraseLength >= 1)
             {
                 /* We have a phrase. */
-                sb.addPhrase(tokenIndex, s, phraseLenght);
+                sb.addPhrase(tokenIndex, s, phraseLength);
             }
         }
         sb.buildSuffixTree();
@@ -459,12 +460,12 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
          * Step 3: Find "base" clusters by looking up frequently recurring phrases in the 
          * generalized suffix tree.
          */
-        final ArrayList<ClusterCandidate> baseClusters = createBaseClusters(sb);
+        List<ClusterCandidate> baseClusters = createBaseClusters(sb);
 
         /*
          * Step 4: Merge base clusters that overlap too much to form final clusters.
          */
-        final ArrayList<ClusterCandidate> mergedClusters = createMergedClusters(baseClusters);
+        List<ClusterCandidate> mergedClusters = createMergedClusters(baseClusters);
 
         /*
          * Step 5: Create the junk (unassigned documents) cluster and create the final
@@ -490,13 +491,13 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      * each phrase, and extracting paths from those internal tree states, that occurred in
      * more than one document.
      */
-    private ArrayList<ClusterCandidate> createBaseClusters(SequenceBuilder sb)
+    private List<ClusterCandidate> createBaseClusters(SequenceBuilder sb)
     {
         /*
-         * We limit the number of base clusters to the one requested by the user. A priority
-         * queue speeds up computations here.
+         * Collect all phrases that will form base clusters, 
+         * initially filtered to fulfill the minimum acceptance criteria.
          */
-        final BaseClusterQueue pq = new BaseClusterQueue(maxBaseClusters);
+        final List<ClusterCandidate> candidates = Lists.newArrayList();
 
         // Walk the internal nodes of the suffix tree.
         new GeneralizedSuffixTree.Visitor(sb, minBaseClusterSize) {
@@ -527,24 +528,114 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                  * phrases (which usually correspond to duplicated snippets anyway). 
                  */
                 final float score = baseClusterScore(effectivePhraseLen, cardinality);
-                if (score > minBaseClusterScore && pq.willInsert(score))
-                {
-                    pq.insertWithOverflow(
-                        new ClusterCandidate(path.toArray(), 
-                            (BitSet) documents.clone(), cardinality, score));
-                }
+                candidates.add(
+                    new ClusterCandidate(path.toArray(), 
+                        (BitSet) documents.clone(), cardinality, score));
             }
         }.visit();
 
-        final ArrayList<ClusterCandidate> clusterCandidates = 
-            Lists.newArrayListWithExpectedSize(pq.size());
-        while (pq.size() > 0)
+        // Combine all phrases that are stem-equivalent into one candidate.
+        if (mergeStemEquivalentBaseClusters)
         {
-            clusterCandidates.add((ClusterCandidate) pq.pop());
-        }
-        Collections.reverse(clusterCandidates);
+            // Look for candidates to merge.
+            Map<IntArrayList, ClusterCandidate> merged = Maps.newHashMap();
+            int j = 0;
+            for (int max = candidates.size(), i = 0; i < max; i++)
+            {
+                ClusterCandidate cc = candidates.get(i);
+                candidates.set(j, cc);
 
-        return clusterCandidates;
+                // Convert word indices to stem indices.
+                assert cc.phrases.size() == 1;
+                int [] stemIndices = context.allWords.stemIndex;
+                int [] phraseWords = cc.phrases.get(0);
+                IntArrayList stemList = new IntArrayList(phraseWords.length);
+                for (int seqIndex : phraseWords)
+                {
+                    int termIndex = sb.input.get(seqIndex);
+                    stemList.add(stemIndices[termIndex]);
+                }
+                
+                // Check if we have stem-equivalent phrase like this.
+                ClusterCandidate equivalent = merged.get(stemList);
+                if (equivalent == null)
+                {
+                    merged.put(stemList, cc);
+                    j++;
+                }
+                else
+                {
+                    // Merge the two candidates. The surface form with the highest cardinality
+                    // is taken as the representation of an equivalence group.
+                    if (equivalent.cardinality < cc.cardinality)
+                    {
+                        equivalent.cardinality = cc.cardinality;
+                        equivalent.phrases.add(0, cc.phrases.get(0));
+                    }
+                    else
+                    {
+                        equivalent.phrases.add(cc.phrases.get(0));
+                    }
+
+                    // Collect actual documents to recompute cardinality later on.
+                    equivalent.documents.or(cc.documents);
+                }
+            }
+
+            // Trim to only include shifted merged candidates.
+            candidates.subList(j, candidates.size()).clear();
+
+            // Recalculate score after merging.
+            IntStack scratch = new IntStack();
+            for (ClusterCandidate cc : candidates)
+            {
+                if (cc.phrases.size() > 1)
+                {
+                    cc.cardinality = (int) cc.documents.cardinality();
+                    scratch.buffer = cc.phrases.get(0);
+                    scratch.elementsCount = scratch.buffer.length;
+                    cc.score = baseClusterScore(
+                        effectivePhraseLength(scratch),
+                        cc.cardinality);
+
+                    // Clear any other phrase variants. 
+                    cc.phrases.subList(1, cc.phrases.size()).clear();
+                }
+            }
+        }
+
+        /*
+         * Remove any base clusters that fall below the minimum score.
+         */
+        int j = 0;
+        for (int max = candidates.size(), i = 0; i < max; i++) 
+        {
+            ClusterCandidate cc = candidates.get(i);
+            if (cc.score >= minBaseClusterScore) {
+                candidates.set(j++, cc);
+            }
+        }
+        candidates.subList(j, candidates.size()).clear();
+
+        /*
+         * We limit the number of base clusters to the one requested by the user.
+         */
+        Collections.sort(candidates, new Comparator<ClusterCandidate>()
+        {
+            @Override
+            public int compare(ClusterCandidate c1, ClusterCandidate c2)
+            {
+                return -Float.compare(c1.score, c2.score);
+            }
+        });
+
+        if (candidates.size() > maxBaseClusters)
+        {
+            candidates.subList(maxBaseClusters, candidates.size()).clear();
+            assert candidates.size() == maxBaseClusters; 
+        }
+
+        return candidates;
     }
 
     /**
@@ -553,8 +644,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      * by a certain ratio. In other words, phrases that "cover" nearly identical document
      * sets will be conflated.
      */
-    private ArrayList<ClusterCandidate> createMergedClusters(
-        ArrayList<ClusterCandidate> baseClusters)
+    private ArrayList<ClusterCandidate> createMergedClusters(List<ClusterCandidate> baseClusters)
     {
         /*
          * Calculate overlap between base clusters first, saving adjacency lists for
@@ -939,7 +1029,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      * Create the junk (unassigned documents) cluster and create the final
      * set of clusters in Carrot2 format. 
      */
-    private void postProcessing(ArrayList<ClusterCandidate> clusters)
+    private void postProcessing(List<ClusterCandidate> clusters)
     {
         // Adapt to Carrot2 classes, counting used documents on the way.
         final BitSet all = new BitSet(documents.size());
