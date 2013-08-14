@@ -33,7 +33,7 @@ public class Bing3ImageDocumentSourceTest extends
     @Test
     public void testCatsQuery()
     {
-        assertThat(runQuery("cats", 25)).isGreaterThan(20);
+        assertThat(runQuery("cats", 30)).isGreaterThan(20);
 
         int withThumbnail = 0;
         for (Document doc : result.getDocuments())
