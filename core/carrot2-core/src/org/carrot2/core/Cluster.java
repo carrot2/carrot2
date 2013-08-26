@@ -939,4 +939,10 @@ public final class Cluster
         final Map<String, Object> otherAttributes = Maps.newHashMap(attributesView);
         return otherAttributes.isEmpty() ? null : otherAttributes;
     }
+
+    @Override
+    public String toString()
+    {
+        return "[Cluster, label: " + getLabel() + ", docs: " + size() + ", subclusters: " + getSubclusters().size() + "]";
+    }
 }
