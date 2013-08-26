@@ -107,22 +107,21 @@ public class MultilingualClustering
     @Level(AttributeLevel.MEDIUM)
     public LanguageCode defaultLanguage = LanguageCode.ENGLISH;
 
-    public List<Cluster> process(List<Document> documents,
-        IMonolingualClusteringAlgorithm algorithm)
+    public List<Cluster> process(List<Document> documents, IMonolingualClusteringAlgorithm algorithm)
     {
         if (documents.isEmpty())
         {
             return Lists.newArrayList();
         }
 
-        // Clusters documents in each language separately.
-        final Map<LanguageCode, Cluster> clustersByLanguage = clusterByLanguage(
-            documents, algorithm);
+        // Clusters documents in each language separately,
+        // creates a map of top-level Cluster instances named after the language code.
+        final Map<LanguageCode, Cluster> clustersByLanguage = clusterByLanguage(documents, algorithm);
         final List<Cluster> clusters = Lists.newArrayList(clustersByLanguage.values());
 
-        // Postprocess the final results according to the language clustering strategy
-        if (LanguageAggregationStrategy.FLATTEN_ALL.equals(languageAggregationStrategy)
-            || clustersByLanguage.keySet().size() == 1)
+        // For FLATTEN_ALL we combine all clusters
+        if (clustersByLanguage.size() == 1 ||
+            LanguageAggregationStrategy.FLATTEN_ALL.equals(languageAggregationStrategy))
         {
             // For FLATTEN_ALL, we simply mix up all clusters, moving all unclustered
             // documents under one common Other Topics cluster.
@@ -139,16 +138,23 @@ public class MultilingualClustering
                 }
             }
 
+            // If there's more than one language, sort clusters by their number of
+            // documents, irrespectively of their original score. We don't know how
+            // to normalize the score between languages (independent clustering)
+            // and larger clusters are typically more intuitive (better?) than smaller clusters.
+            if (clustersByLanguage.size() > 1)
+            {
+                Collections.sort(flattenedClusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);    
+            }
+
             Cluster.appendOtherTopics(documents, flattenedClusters);
             return flattenedClusters;
         }
         else
         {
-            Collections.sort(clusters, Collections
-                .reverseOrder(Cluster.BY_SIZE_COMPARATOR));
+            Collections.sort(clusters, Collections.reverseOrder(Cluster.BY_SIZE_COMPARATOR));
 
-            if (LanguageAggregationStrategy.FLATTEN_MAJOR_LANGUAGE
-                .equals(languageAggregationStrategy))
+            if (LanguageAggregationStrategy.FLATTEN_MAJOR_LANGUAGE.equals(languageAggregationStrategy))
             {
                 // For FLATTEN_MAJOR_LANGUAGE, we flatten the first biggest language
                 // cluster that has some nontrivial subclusters (clusters in that
@@ -204,8 +210,8 @@ public class MultilingualClustering
         // Partition by language first. As Multimaps.index() does not handle null
         // keys, we'd need to index by LanguageCode string and have a dedicated empty
         // string for the null language.
-        final ImmutableListMultimap<String, Document> documentsByLanguage = Multimaps
-            .index(documents, new Function<Document, String>()
+        final ImmutableListMultimap<String, Document> documentsByLanguage = 
+            Multimaps.index(documents, new Function<Document, String>()
             {
                 public String apply(Document document)
                 {
@@ -231,8 +237,8 @@ public class MultilingualClustering
             final List<Cluster> clustersForLanguage = algorithm.process(
                 languageDocuments, currentLanguage);
 
-            if (clustersForLanguage.size() == 0 || clustersForLanguage.size() == 1
-                && clustersForLanguage.get(0).isOtherTopics())
+            if (clustersForLanguage.size() == 0 || 
+                clustersForLanguage.size() == 1 && clustersForLanguage.get(0).isOtherTopics())
             {
                 languageCluster.addDocuments(languageDocuments);
             }

@@ -28,7 +28,6 @@ import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
-import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
@@ -53,7 +52,6 @@ import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.BitSet;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
 
 /**
  * Lingo clustering algorithm. Implementation as described in: <i> "Stanisław Osiński,
@@ -160,7 +158,6 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
      * Performs Lingo clustering of {@link #documents}.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public void process() throws ProcessingException
     {
         // There is a tiny trick here to support multilingual clustering without
@@ -182,13 +179,6 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                 }
             });
         documents = originalDocuments;
-
-        if (multilingualClustering.languageAggregationStrategy == LanguageAggregationStrategy.FLATTEN_ALL)
-        {
-            Collections.sort(clusters, Ordering.compound(Lists.newArrayList(
-                Cluster.OTHER_TOPICS_AT_THE_END,
-                Cluster.byReversedWeightedScoreAndSizeComparator(scoreWeight))));
-        }
     }
 
     /**

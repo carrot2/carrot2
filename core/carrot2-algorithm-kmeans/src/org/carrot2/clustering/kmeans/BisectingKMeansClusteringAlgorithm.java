@@ -37,7 +37,6 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
-import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
@@ -67,7 +66,6 @@ import com.carrotsearch.hppc.cursors.IntIntCursor;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
 
 /**
  * A very simple implementation of bisecting k-means clustering. Unlike other algorithms
@@ -193,7 +191,6 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
      */
     public final MultilingualClustering multilingualClustering = new MultilingualClustering();
 
-    @SuppressWarnings("unchecked")
     @Override
     public void process() throws ProcessingException
     {
@@ -215,13 +212,6 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
                 }
             });
         documents = originalDocuments;
-
-        if (multilingualClustering.languageAggregationStrategy == LanguageAggregationStrategy.FLATTEN_ALL)
-        {
-            Collections.sort(clusters, Ordering.compound(Lists.newArrayList(
-                Cluster.OTHER_TOPICS_AT_THE_END,
-                Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR)));
-        }
     }
 
     /**

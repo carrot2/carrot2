@@ -92,23 +92,6 @@ public final class CompletePreprocessing extends ProcessingComponentBase impleme
                 }
             });
         documents = originalDocuments;
-
-        if (multilingualClustering.languageAggregationStrategy == LanguageAggregationStrategy.FLATTEN_ALL)
-        {
-            Collections.sort(clusters, new Comparator<Cluster>()
-            {
-                public int compare(Cluster c1, Cluster c2)
-                {
-                    if (c1.isOtherTopics()) return 1;
-                    if (c2.isOtherTopics()) return -1;
-                    if (c1.getScore() < c2.getScore()) return 1;
-                    if (c1.getScore() > c2.getScore()) return -1;
-                    if (c1.size() < c2.size()) return 1;
-                    if (c1.size() > c2.size()) return -1;
-                    return 0;
-                }
-            });
-        }
     }
 
     /**

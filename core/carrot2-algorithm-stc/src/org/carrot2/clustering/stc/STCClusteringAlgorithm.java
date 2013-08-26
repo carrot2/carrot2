@@ -36,7 +36,6 @@ import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
-import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
@@ -63,7 +62,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Ordering;
 
 /**
  * Suffix Tree Clustering (STC) algorithm. Pretty much as described in: <i>Oren Zamir,
@@ -379,7 +377,6 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Performs STC clustering of {@link #documents}.
      */
-    @SuppressWarnings("unchecked")
     @Override
     public void process() throws ProcessingException
     {
@@ -402,13 +399,6 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                 }
             });
         documents = originalDocuments;
-
-        if (multilingualClustering.languageAggregationStrategy == LanguageAggregationStrategy.FLATTEN_ALL)
-        {
-            Collections.sort(clusters, Ordering.compound(Lists.newArrayList(
-                Cluster.OTHER_TOPICS_AT_THE_END,
-                Cluster.byReversedWeightedScoreAndSizeComparator(scoreWeight))));
-        }
     }
 
     /**
@@ -1047,6 +1037,9 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             docs.clear(); 
             phrases.clear();
         }
+
+        Collections.sort(this.clusters,
+            Cluster.byReversedWeightedScoreAndSizeComparator(scoreWeight));
 
         Cluster.appendOtherTopics(this.documents, this.clusters);
     }
