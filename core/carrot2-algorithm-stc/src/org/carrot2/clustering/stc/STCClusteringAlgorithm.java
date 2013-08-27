@@ -36,6 +36,7 @@ import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
+import org.carrot2.text.linguistic.ILexicalData;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
@@ -524,74 +525,12 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             }
         }.visit();
 
-        // Combine all phrases that are stem-equivalent into one candidate.
+        /*
+         * Combine all phrases that are stem-equivalent into one candidate.
+         */
         if (mergeStemEquivalentBaseClusters)
         {
-            // Look for candidates to merge.
-            Map<IntArrayList, ClusterCandidate> merged = Maps.newHashMap();
-            int j = 0;
-            for (int max = candidates.size(), i = 0; i < max; i++)
-            {
-                ClusterCandidate cc = candidates.get(i);
-                candidates.set(j, cc);
-
-                // Convert word indices to stem indices.
-                assert cc.phrases.size() == 1;
-                int [] stemIndices = context.allWords.stemIndex;
-                int [] phraseWords = cc.phrases.get(0);
-                IntArrayList stemList = new IntArrayList(phraseWords.length);
-                for (int seqIndex : phraseWords)
-                {
-                    int termIndex = sb.input.get(seqIndex);
-                    stemList.add(stemIndices[termIndex]);
-                }
-                
-                // Check if we have stem-equivalent phrase like this.
-                ClusterCandidate equivalent = merged.get(stemList);
-                if (equivalent == null)
-                {
-                    merged.put(stemList, cc);
-                    j++;
-                }
-                else
-                {
-                    // Merge the two candidates. The surface form with the highest cardinality
-                    // is taken as the representation of an equivalence group.
-                    if (equivalent.cardinality < cc.cardinality)
-                    {
-                        equivalent.cardinality = cc.cardinality;
-                        equivalent.phrases.add(0, cc.phrases.get(0));
-                    }
-                    else
-                    {
-                        equivalent.phrases.add(cc.phrases.get(0));
-                    }
-
-                    // Collect actual documents to recompute cardinality later on.
-                    equivalent.documents.or(cc.documents);
-                }
-            }
-
-            // Trim to only include shifted merged candidates.
-            candidates.subList(j, candidates.size()).clear();
-
-            // Recalculate score after merging.
-            IntStack scratch = new IntStack();
-            for (ClusterCandidate cc : candidates)
-            {
-                if (cc.phrases.size() > 1)
-                {
-                    cc.cardinality = (int) cc.documents.cardinality();
-                    scratch.buffer = cc.phrases.get(0);
-                    scratch.elementsCount = scratch.buffer.length;
-                    cc.score = baseClusterScore(
-                        effectivePhraseLength(scratch),
-                        cc.cardinality);
-
-                    // Clear any other phrase variants. 
-                    cc.phrases.subList(1, cc.phrases.size()).clear();
-                }
-            }
+            mergeStemEquivalentBaseClusters(sb, candidates);
         }
 
         /*
@@ -609,6 +548,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
 
         /*
          * We limit the number of base clusters to the one requested by the user.
+         * First we sort by the base clusters score, then pick the top-K entries,
+         * filtering out any stop labels on the way.
          */
         Collections.sort(candidates, new Comparator<ClusterCandidate>()
         {
@@ -619,13 +560,97 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
             }
         });
 
-        if (candidates.size() > maxBaseClusters)
+        j = 0;
+        ILexicalData lexicalData = context.language.getLexicalData();
+        for (int max = candidates.size(), i = 0; i < max && j < maxBaseClusters; i++) 
         {
-            candidates.subList(maxBaseClusters, candidates.size()).clear();
-            assert candidates.size() == maxBaseClusters; 
+            ClusterCandidate cc = candidates.get(i);
+            // Build the candidate cluster's label for filtering. This may be costly so
+            // we only do this for base clusters which are promoted to merging phase.
+            assert cc.phrases.size() == 1;
+            if (!lexicalData.isStopLabel(buildLabel(cc.phrases.get(0))))
+            {
+                candidates.set(j++, cc);
+            }
+        }
+
+        if (j < candidates.size())
+        {
+            candidates.subList(j, candidates.size()).clear();
+            assert candidates.size() == j; 
         }
 
         return candidates;
+    }
+
+    /* */
+    private void mergeStemEquivalentBaseClusters(SequenceBuilder sb, final List<ClusterCandidate> candidates)
+    {
+        // Look for candidates to merge.
+        Map<IntArrayList, ClusterCandidate> merged = Maps.newHashMap();
+        int j = 0;
+        for (int max = candidates.size(), i = 0; i < max; i++)
+        {
+            ClusterCandidate cc = candidates.get(i);
+            candidates.set(j, cc);
+
+            // Convert word indices to stem indices.
+            assert cc.phrases.size() == 1;
+            int [] stemIndices = context.allWords.stemIndex;
+            int [] phraseWords = cc.phrases.get(0);
+            IntArrayList stemList = new IntArrayList(phraseWords.length);
+            for (int seqIndex : phraseWords)
+            {
+                int termIndex = sb.input.get(seqIndex);
+                stemList.add(stemIndices[termIndex]);
+            }
+            
+            // Check if we have stem-equivalent phrase like this.
+            ClusterCandidate equivalent = merged.get(stemList);
+            if (equivalent == null)
+            {
+                merged.put(stemList, cc);
+                j++;
+            }
+            else
+            {
+                // Merge the two candidates. The surface form with the highest cardinality
+                // is taken as the representation of an equivalence group.
+                if (equivalent.cardinality < cc.cardinality)
+                {
+                    equivalent.cardinality = cc.cardinality;
+                    equivalent.phrases.add(0, cc.phrases.get(0));
+                }
+                else
+                {
+                    equivalent.phrases.add(cc.phrases.get(0));
+                }
+
+                // Collect actual documents to recompute cardinality later on.
+                equivalent.documents.or(cc.documents);
+            }
+        }
+
+        // Trim to only include shifted merged candidates.
+        candidates.subList(j, candidates.size()).clear();
+
+        // Recalculate score after merging.
+        IntStack scratch = new IntStack();
+        for (ClusterCandidate cc : candidates)
+        {
+            if (cc.phrases.size() > 1)
+            {
+                cc.cardinality = (int) cc.documents.cardinality();
+                scratch.buffer = cc.phrases.get(0);
+                scratch.elementsCount = scratch.buffer.length;
+                cc.score = baseClusterScore(
+                    effectivePhraseLength(scratch),
+                    cc.cardinality);
+
+                // Clear any other phrase variants. 
+                cc.phrases.subList(1, cc.phrases.size()).clear();
+            }
+        }
     }
 
     /**
