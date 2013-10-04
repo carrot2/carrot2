@@ -15,6 +15,15 @@
         </source>
     </sources>
 
+    <components>
+        <component component-class="org.carrot2.webapp.filter.QueryWordHighlighter" 
+                   id="org.carrot2.webapp.filter.QueryWordHighlighter"
+                   attribute-sets-resource="component-query-highlighter-attributes.xml">
+            <label>Query Highlighter</label>
+            <title>Webapp in-document Query Highlighter component</title>
+        </component>
+    </components>
+
     <!-- Search engines. -->
     <include suite="source-bing.xml" />
     <include suite="source-wiki.xml" />

@@ -50,7 +50,6 @@ import org.carrot2.util.resource.PrefixDecoratorLocator;
 import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.resource.ServletContextLocator;
-import org.carrot2.webapp.filter.QueryWordHighlighter;
 import org.carrot2.webapp.jawr.JawrUrlGenerator;
 import org.carrot2.webapp.model.AttributeMetadataModel;
 import org.carrot2.webapp.model.ModelWithDefault;
@@ -207,7 +206,7 @@ public class QueryProcessorServlet extends HttpServlet
                 logInitializer = null;
             }
         }
-
+    
         // Unpack parameters from string arrays
         final Map<String, Object> requestParameters;
         try {
@@ -216,7 +215,7 @@ public class QueryProcessorServlet extends HttpServlet
             logger.info("Skipping, could not parse parameters: " + e.toString());
             return;
         }
-
+    
         // Alias "q" to "query" parameter
         final String queryFromAlias = 
             (String) requestParameters.get(WebappConfig.QUERY_PARAM_ALIAS);
@@ -224,21 +223,21 @@ public class QueryProcessorServlet extends HttpServlet
         {
             requestParameters.put(WebappConfig.QUERY_PARAM, queryFromAlias);
         }
-        
-        // Remove query if blank. This will get the user back to the startup screen.
-       final String query = (String)requestParameters.get(WebappConfig.QUERY_PARAM);
-       if (StringUtils.isBlank(query))
-       {
-           requestParameters.remove(WebappConfig.QUERY_PARAM);
-       }
-       else
-       {
-           requestParameters.put(WebappConfig.QUERY_PARAM, query.trim());
-       }
 
-       final RequestModel requestModel;
-       try
-       {
+        // Remove query if blank. This will get the user back to the startup screen.
+        final String query = (String) requestParameters.get(WebappConfig.QUERY_PARAM);
+        if (StringUtils.isBlank(query))
+        {
+            requestParameters.remove(WebappConfig.QUERY_PARAM);
+        }
+        else
+        {
+            requestParameters.put(WebappConfig.QUERY_PARAM, query.trim());
+        }
+
+        final RequestModel requestModel;
+        try
+        {
             // Build model for this request
             requestModel = new RequestModel(webappConfig);
             requestModel.modern = UserAgentUtils.isModernBrowser(request);
@@ -262,15 +261,16 @@ public class QueryProcessorServlet extends HttpServlet
                 }, Input.class);
             requestModel.afterParametersBound(attributeBinderActionBind.remainingValues,
                 extractCookies(request));
-       }
-       catch (Exception e)
-       {
-           logger.info("Skipping, could not map/bind request model attributes: " + e.toString());
-           return;
-       }
+        }
+        catch (Exception e)
+        {
+            logger.info("Skipping, could not map/bind request model attributes: "
+                + e.toString());
+            return;
+        }
 
-       try 
-       {
+        try
+        {
             switch (requestModel.type)
             {
                 case STATS:
@@ -283,11 +283,13 @@ public class QueryProcessorServlet extends HttpServlet
                     break;
 
                 case SOURCES:
-                    handleSourcesRequest(request, response, requestParameters, requestModel);
+                    handleSourcesRequest(request, response, requestParameters,
+                        requestModel);
                     break;
 
                 default:
-                    handleSearchRequest(request, response, requestParameters, requestModel);
+                    handleSearchRequest(request, response, requestParameters,
+                        requestModel);
             }
         }
         catch (Exception e)
@@ -439,7 +441,8 @@ public class QueryProcessorServlet extends HttpServlet
 
                     case DOCUMENTS:
                         processingResult = controller.process(requestParameters,
-                            requestModel.source, QueryWordHighlighter.class.getName());
+                            requestModel.source, 
+                            webappConfig.QUERY_HIGHLIGHTER_ID);
                         break;
 
                     case CARROT2DOCUMENTS:
@@ -577,8 +580,7 @@ public class QueryProcessorServlet extends HttpServlet
                 resultSizes.add(size.size);
             }
             knownValues.put(WebappConfig.RESULTS_PARAM, resultSizes);
-            defaultValues.put(WebappConfig.RESULTS_PARAM, ModelWithDefault
-                .getDefault(config.sizes).size);
+            defaultValues.put(WebappConfig.RESULTS_PARAM, ModelWithDefault.getDefault(config.sizes).size);
 
             // Skins
             final Set<String> skinIds = Sets.newHashSet();
@@ -587,8 +589,7 @@ public class QueryProcessorServlet extends HttpServlet
                 skinIds.add(skin.id);
             }
             knownValues.put(WebappConfig.SKIN_PARAM, skinIds);
-            defaultValues.put(WebappConfig.SKIN_PARAM, ModelWithDefault
-                .getDefault(config.skins).id);
+            defaultValues.put(WebappConfig.SKIN_PARAM, ModelWithDefault.getDefault(config.skins).id);
 
             // Views
             final Set<String> viewIds = Sets.newHashSet();
@@ -597,26 +598,21 @@ public class QueryProcessorServlet extends HttpServlet
                 viewIds.add(view.id);
             }
             knownValues.put(WebappConfig.VIEW_PARAM, viewIds);
-            defaultValues.put(WebappConfig.VIEW_PARAM, ModelWithDefault
-                .getDefault(config.views).id);
+            defaultValues.put(WebappConfig.VIEW_PARAM, ModelWithDefault.getDefault(config.views).id);
 
             // Sources
             knownValues.put(WebappConfig.SOURCE_PARAM,
                 config.sourceAttributeMetadata.keySet());
-            defaultValues.put(WebappConfig.SOURCE_PARAM, config.components
-                .getSources().get(0).getId());
+            defaultValues.put(WebappConfig.SOURCE_PARAM, config.components.getSources().get(0).getId());
 
             // Algorithms
             knownValues
-                .put(
-                    WebappConfig.ALGORITHM_PARAM,
-                    Lists
-                        .transform(
+                .put(WebappConfig.ALGORITHM_PARAM,
+                    Lists.transform(
                             config.components.getAlgorithms(),
                             ProcessingComponentDescriptor.ProcessingComponentDescriptorToId.INSTANCE));
             defaultValues.put(WebappConfig.ALGORITHM_PARAM,
                 config.components.getAlgorithms().get(0).getId());
-
         }
 
         public Object transform(Object value, String key, Field field)

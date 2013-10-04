@@ -25,6 +25,7 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.resource.*;
 import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.webapp.QueryProcessorServlet;
+import org.carrot2.webapp.filter.QueryWordHighlighter;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.core.Persister;
@@ -84,13 +85,18 @@ public class WebappConfig
     public String componentSuite = "suites/suite-webapp.xml";
 
     @Attribute(name = "search-url", required = false)
-    public final static String SEARCH_URL = "search";
+    public String SEARCH_URL = "search";
 
     @Attribute(name = "xml-url", required = false)
-    public final static String XML_URL = "xml";
+    public String XML_URL = "xml";
+
+    @Attribute(name = "query-highlighter", required = false)
+    public String QUERY_HIGHLIGHTER_ID = QueryWordHighlighter.class.getName();
 
     @Attribute(name = "max-carrot2-results", required = false)
     public Integer maxCarrot2Results = null;
+
+    // These are for output serialization only, this is somewhat clumsy. 
 
     @Attribute(name = "query-param", required = false)
     public final static String QUERY_PARAM = AttributeNames.QUERY;

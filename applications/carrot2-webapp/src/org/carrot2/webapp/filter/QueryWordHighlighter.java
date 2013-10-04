@@ -37,6 +37,15 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     public static final String HIGHLIGHTED_FIELD_NAME_SUFFIX = "-highlight";
 
     /**
+     * Enable query highlighter.
+     */
+    @Init
+    @Processing
+    @Input
+    @Attribute(key = "QueryWordHighlighter.enabled")
+    public boolean enabled = true;
+
+    /**
      * Query that produced the documents, optional. If query is blank, no processing will
      * be performed.
      */
@@ -72,7 +81,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     public void process() throws ProcessingException
     {
         // No processing if query is blank
-        if (StringUtils.isBlank(query))
+        if (!enabled || StringUtils.isBlank(query))
         {
             return;
         }

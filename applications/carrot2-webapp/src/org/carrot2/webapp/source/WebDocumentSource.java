@@ -46,7 +46,7 @@ public class WebDocumentSource extends SimpleSearchEngine
     private GoogleDocumentSource google = new GoogleDocumentSource();
 
     /**
-     * Query failure string (must be identical to cause a query for tests).
+     * Query failure string (must be an identical object to cause a query for tests).
      */
     static final String QUERY_FAILURE = new String("foobar");
 

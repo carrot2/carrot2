@@ -162,6 +162,7 @@
       <fileset dir="${carrot2.master.basedir}/core/carrot2-component-suites/suites">
         <include name="algorithm-*.xml" />
         <include name="source-*.xml" />
+        <include name="component-query-highlighter-attributes.xml" />
         <include name="suite-webapp.xml" />
       </fileset>
     </copy>

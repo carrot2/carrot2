@@ -89,11 +89,11 @@ public class PageModel
         this.assetUrls = new AssetUrlsModel(webappConfig.getSkinById(requestModel.skin),
             request, urlGenerator);
 
-        this.requestUrl = buildSearchUrlBase(requestModel, WebappConfig.SEARCH_URL)
+        this.requestUrl = buildSearchUrlBase(requestModel, config.SEARCH_URL)
             .toString();
 
         // XML stream url base
-        StringBuilder xmlUrl = buildSearchUrlBase(requestModel, WebappConfig.XML_URL);
+        StringBuilder xmlUrl = buildSearchUrlBase(requestModel, config.XML_URL);
         appendParameter(xmlUrl, WebappConfig.TYPE_PARAM, RequestType.CARROT2.name());
         this.xmlUrlEncoded = StringUtils.urlEncodeWrapException(xmlUrl.toString(),
             "UTF-8");
