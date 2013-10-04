@@ -51,6 +51,9 @@ public class ProcessingComponentSuite
     @ElementList(name = "algorithms", entry = "algorithm", required = false)
     private ArrayList<ProcessingComponentDescriptor> algorithms;
 
+    @ElementList(name = "components", entry = "component", required = false)
+    private ArrayList<ProcessingComponentDescriptor> otherComponents;
+
     public ProcessingComponentSuite()
     {
     }
@@ -60,6 +63,7 @@ public class ProcessingComponentSuite
     {
         this.algorithms = algorithms;
         this.sources = sources;
+        this.otherComponents = Lists.newArrayList();
     }
 
     /**
@@ -81,27 +85,32 @@ public class ProcessingComponentSuite
     }
 
     /**
+     * Return a list of other components (not algorithms, not sources).
+     */
+    public List<ProcessingComponentDescriptor> getOtherComponents()
+    {
+        return otherComponents;
+    }
+    
+    /**
      * Returns all components available in this suite, including data sources, algorithms
      * and any other types.
      */
     public List<ProcessingComponentDescriptor> getComponents()
     {
-        return Lists.newArrayList(Iterables.concat(sources, algorithms));
+        return Lists.newArrayList(Iterables.concat(sources, algorithms, otherComponents));
     }
 
     /**
      * Replace missing attributes with empty lists.
      */
-    @SuppressWarnings("unused")
     @Commit
     private void postDeserialize(Map<Object, Object> session) throws Exception
     {
         if (sources == null) sources = newArrayList();
         if (algorithms == null) algorithms = newArrayList();
         if (includes == null) includes = newArrayList();
-
-        final ArrayList<DocumentSourceDescriptor> mergedSources = newArrayList();
-        final ArrayList<ProcessingComponentDescriptor> mergedAlgorithms = newArrayList();
+        if (otherComponents == null) otherComponents = newArrayList();
 
         // Acquire contextual resource lookup from the session.
         final ResourceLookup resourceLookup = PersisterHelpers.getResourceLookup(session);
@@ -120,21 +129,12 @@ public class ProcessingComponentSuite
         }
 
         // Merge sources
-        mergedSources.addAll(sources);
         for (ProcessingComponentSuite suite : suites)
         {
-            mergedSources.addAll(suite.getSources());
+            sources.addAll(suite.getSources());
+            algorithms.addAll(suite.getAlgorithms());
+            otherComponents.addAll(suite.getOtherComponents());
         }
-
-        // Merge algorithms
-        mergedAlgorithms.addAll(algorithms);
-        for (ProcessingComponentSuite suite : suites)
-        {
-            mergedAlgorithms.addAll(suite.getAlgorithms());
-        }
-
-        sources = mergedSources;
-        algorithms = mergedAlgorithms;
     }
 
     /**
@@ -213,8 +213,8 @@ public class ProcessingComponentSuite
     public ProcessingComponentConfiguration [] getComponentConfigurations()
     {
         final List<ProcessingComponentDescriptor> components = getComponents();
-        final ProcessingComponentConfiguration [] result = new ProcessingComponentConfiguration [components
-            .size()];
+        final ProcessingComponentConfiguration [] result = 
+            new ProcessingComponentConfiguration [components.size()];
         int i = 0;
         for (ProcessingComponentDescriptor processingComponentDescriptor : components)
         {
