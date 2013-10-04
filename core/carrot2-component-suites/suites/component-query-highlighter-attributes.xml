@@ -6,6 +6,14 @@
       <attribute key="QueryWordHighlighter.enabled">
         <value value="true" />
       </attribute>
+      
+      <attribute key="QueryWordHighlighter.querySanitizePattern">
+        <value value="[&quot;'()+\-!]" />
+      </attribute>
+
+      <attribute key="QueryWordHighlighter.dontHighlightPattern">
+        <value value="(?i:and)|(?i:or)|(?i:not)" />
+      </attribute>
     </value-set>
   </attribute-set>
 </attribute-sets>

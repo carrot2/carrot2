@@ -12,15 +12,28 @@
 
 package org.carrot2.webapp.filter;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
-import org.carrot2.util.attribute.*;
+import org.carrot2.core.Document;
+import org.carrot2.core.IControllerContext;
+import org.carrot2.core.ProcessingComponentBase;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.Init;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Output;
+import org.carrot2.util.attribute.Required;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 /**
@@ -37,13 +50,31 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     public static final String HIGHLIGHTED_FIELD_NAME_SUFFIX = "-highlight";
 
     /**
-     * Enable query highlighter.
+     * Enable or disable query highlighter.
      */
     @Init
     @Processing
     @Input
     @Attribute(key = "QueryWordHighlighter.enabled")
     public boolean enabled = true;
+
+    /**
+     * A regular expression that disables highlighting for certain terms.
+     */
+    @Init
+    @Input
+    @Attribute(key = "QueryWordHighlighter.dontHighlightPattern")
+    public String dontHighlightString;
+    private Pattern dontHighlightPattern;
+
+    /**
+     * Query-sanitize pattern (any matches are replaced with an empty string).
+     */
+    @Init
+    @Input
+    @Attribute(key = "QueryWordHighlighter.querySanitizePattern")
+    public String querySanitizeString = "[\"'()]";
+    private Pattern querySanitizePattern;
 
     /**
      * Query that produced the documents, optional. If query is blank, no processing will
@@ -76,6 +107,20 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     {
         Document.TITLE, Document.SUMMARY
     });
+    
+    @Override
+    public void init(IControllerContext context)
+    {
+        super.init(context);
+        
+        if (dontHighlightString != null) {
+            dontHighlightPattern = Pattern.compile(dontHighlightString);
+        }
+        
+        if (querySanitizeString != null) {
+            querySanitizePattern = Pattern.compile(querySanitizeString);
+        }
+    }
 
     @Override
     public void process() throws ProcessingException
@@ -87,13 +132,31 @@ public class QueryWordHighlighter extends ProcessingComponentBase
         }
 
         // Create regexp patterns for each query word
-        final String [] queryWords = query.replace("\"", "").split("\\s+");
-        final Pattern [] queryPatterns = new Pattern [queryWords.length];
-        for (int i = 0; i < queryWords.length; i++)
+        final String [] queryTerms = querySanitizePattern
+            .matcher(query).replaceAll("")
+            .split("\\s+");
+
+        Pattern queryPattern = null;
+        List<String> patterns = Lists.newArrayList();
+        for (String queryTerm : queryTerms)
         {
-            queryPatterns[i] = Pattern.compile("("
-                + Pattern.quote(escapeLtGt(queryWords[i])) + ")",
-                Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+            if (queryTerm == null)
+            { 
+                continue;
+            }
+            
+            if (dontHighlightPattern != null && dontHighlightPattern.matcher(queryTerm).matches())
+            {
+                continue;
+            }
+
+            patterns.add("(" + Pattern.quote(escapeLtGt(queryTerm)) + ")");
+        }
+        
+        if (patterns.size() > 0)
+        {
+            queryPattern = Pattern.compile(
+                Joiner.on("|").join(patterns), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE); 
         }
 
         // As we're going to modify documents, we need to copy them to
@@ -107,15 +170,14 @@ public class QueryWordHighlighter extends ProcessingComponentBase
             final Document clonedDocument = document.clone();
             for (String fieldName : fields)
             {
-                highlightQueryTerms(clonedDocument, fieldName, queryPatterns);
+                highlightQueryTerms(clonedDocument, fieldName, queryPattern);
             }
             outputDocuments.add(clonedDocument);
         }
         documents = outputDocuments;
     }
 
-    private void highlightQueryTerms(Document document, String fieldName,
-        Pattern [] queryPatterns)
+    private void highlightQueryTerms(Document document, String fieldName, Pattern queryPattern)
     {
         String field = (String) document.getField(fieldName);
 
@@ -125,11 +187,9 @@ public class QueryWordHighlighter extends ProcessingComponentBase
         }
 
         field = escapeLtGt(field);
-
-        for (Pattern pattern : queryPatterns)
-        {
-            Matcher matcher = pattern.matcher(field);
-            field = matcher.replaceAll("<b>$1</b>");
+        if (queryPattern != null) {
+            Matcher matcher = queryPattern.matcher(field);
+            field = matcher.replaceAll("<b>$0</b>");
         }
 
         document.setField(fieldName + HIGHLIGHTED_FIELD_NAME_SUFFIX, field);
