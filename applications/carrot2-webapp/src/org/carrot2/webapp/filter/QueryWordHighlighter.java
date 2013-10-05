@@ -64,8 +64,8 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     @Init
     @Input
     @Attribute(key = "QueryWordHighlighter.dontHighlightPattern")
-    public String dontHighlightString;
-    private Pattern dontHighlightPattern;
+    public String dontHighlightPattern;
+    private Pattern dontHighlightPatternCompiled;
 
     /**
      * Query-sanitize pattern (any matches are replaced with an empty string).
@@ -73,8 +73,8 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     @Init
     @Input
     @Attribute(key = "QueryWordHighlighter.querySanitizePattern")
-    public String querySanitizeString = "[\"'()]";
-    private Pattern querySanitizePattern;
+    public String querySanitizePattern = "[\"'()]";
+    private Pattern querySanitizePatternCompiled;
 
     /**
      * Query that produced the documents, optional. If query is blank, no processing will
@@ -113,12 +113,12 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     {
         super.init(context);
         
-        if (dontHighlightString != null) {
-            dontHighlightPattern = Pattern.compile(dontHighlightString);
+        if (dontHighlightPattern != null) {
+            dontHighlightPatternCompiled = Pattern.compile(dontHighlightPattern);
         }
         
-        if (querySanitizeString != null) {
-            querySanitizePattern = Pattern.compile(querySanitizeString);
+        if (querySanitizePattern != null) {
+            querySanitizePatternCompiled = Pattern.compile(querySanitizePattern);
         }
     }
 
@@ -132,7 +132,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
         }
 
         // Create regexp patterns for each query word
-        final String [] queryTerms = querySanitizePattern
+        final String [] queryTerms = querySanitizePatternCompiled
             .matcher(query).replaceAll("")
             .split("\\s+");
 
@@ -145,7 +145,8 @@ public class QueryWordHighlighter extends ProcessingComponentBase
                 continue;
             }
             
-            if (dontHighlightPattern != null && dontHighlightPattern.matcher(queryTerm).matches())
+            if (dontHighlightPatternCompiled != null && 
+                dontHighlightPatternCompiled.matcher(queryTerm).matches())
             {
                 continue;
             }
