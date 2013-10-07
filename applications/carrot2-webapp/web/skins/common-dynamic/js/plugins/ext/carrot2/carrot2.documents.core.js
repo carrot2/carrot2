@@ -66,7 +66,7 @@
     withDocumentsDetached(function ($documents) {
       var selected = { };
       for (var i = 0; i < documentIndexes.length; i++) {
-        selected["d" + documentIndexes[i]] = true;
+        selected[documentIndexes[i]] = true;
       }
       
       $documents.children().each(function(i) {
@@ -163,7 +163,7 @@
   function clusters()
   {
     $("#documents .title-in-clusters").hover(function() {
-      var documentId = $(this).parents(".document").get(0).id.substring(1) - 1;
+      var documentId = $(this).parents(".document").get(0).id;
       $.clusters.showInClusters(documentId);
       $(this).addClass("hl");
     },
@@ -188,7 +188,7 @@
       var url = unescape(result.url);
       
       $document = $templateDocument.clone();
-      $document.attr("id", "d" + i);
+      $document.attr("id", "__google_" + i);
       $document.find(".rank").html(i + 1);
       $document.find("a.title, a.in-new-window").attr("href", url);
       $document.find("a.title").html(result.title);

@@ -33,7 +33,7 @@
   </xsl:template>
 
   <xsl:template match="document">
-    <div id="d{@id}" class="document">
+    <div id="{concat('DOCID', @id)}" class="document">
       <div class="title">
         <h3>
           <span class="rank"><xsl:value-of select="position()" /></span>

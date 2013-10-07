@@ -10,7 +10,7 @@
   var flattenedDocuments;
   
   /**
-   * An array containing ids of clusters for each document. Index: document index, 
+   * An array containing ids of clusters for each document. Index: document id attribute, 
    * Value: array of ids of clusters to which the document belongs.
    */
   var documentClusters;
@@ -339,24 +339,23 @@
   jQuery.clusters.documentClusters = function(flattenedDocuments)
   {
     var documentClusters = [];
-    $.each(flattenedDocuments, function(clusterId, documentIndexes) {
-      $.each(documentIndexes, function(j, documentIndex) {
-        if (!documentClusters[documentIndex - 1]) {
-          documentClusters[documentIndex - 1] = [];
+    $.each(flattenedDocuments, function(clusterId, documentIds) {
+      $.each(documentIds, function(index, docId) {
+        if (!(docId in documentClusters)) {
+          documentClusters[docId] = [];
         }
-        documentClusters[documentIndex - 1].push(clusterId);
+        documentClusters[docId].push(clusterId);
       });
     });
-    
     return documentClusters;
   }
   
   /**
    * Highlights those clusters that contain the provided document
    */
-  jQuery.clusters.showInClusters = function(documentIndex) {
+  jQuery.clusters.showInClusters = function(documentId) {
     if (documentClusters) {
-      $.each(documentClusters[documentIndex], function(i, clusterId) {
+      $.each(documentClusters[documentId], function(i, clusterId) {
         $("#" + clusterId).addClass("hl");
       });
     }
