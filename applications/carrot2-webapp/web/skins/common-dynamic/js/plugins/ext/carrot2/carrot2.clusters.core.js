@@ -338,7 +338,7 @@
    */
   jQuery.clusters.documentClusters = function(flattenedDocuments)
   {
-    var documentClusters = [];
+    var documentClusters = {};
     $.each(flattenedDocuments, function(clusterId, documentIds) {
       $.each(documentIds, function(index, docId) {
         if (!(docId in documentClusters)) {
