@@ -876,6 +876,9 @@ public final class Cluster
                 documents.set(i, remapped);
             }
         }
+
+        // Invalidate recursive flattened cache.
+        this.allDocuments = null;
     }
 
     @Persist
