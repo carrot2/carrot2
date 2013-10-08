@@ -341,7 +341,7 @@
     var documentClusters = {};
     $.each(flattenedDocuments, function(clusterId, documentIds) {
       $.each(documentIds, function(index, docId) {
-        if (!(docId in documentClusters)) {
+        if (typeof documentClusters[docId] === "undefined") {
           documentClusters[docId] = [];
         }
         documentClusters[docId].push(clusterId);
