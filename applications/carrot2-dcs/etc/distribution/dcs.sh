@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#
-# Add extra JVM options to DCS_OPTS
-#
+if [ -z "$DCS_OPTS" ]; then
+  DCS_OPTS="-Xms64m -Xmx768m"
+fi
 
 java $DCS_OPTS -Ddcs.war=war/carrot2-dcs.war -jar invoker.jar -cpdir lib org.carrot2.dcs.DcsApp $@

@@ -33,6 +33,7 @@
       <fileset dir="${carrot2.cli.basedir}/etc">
         <include name="*.cmd" />
         <include name="*.sh" />
+        <include name="invoker.jar" />
       </fileset>
     </copy>
 

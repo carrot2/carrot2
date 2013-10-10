@@ -1,24 +1,33 @@
 @echo off
 
 rem
-rem Add extra JVM options here
+rem Suppress Terminate batch job on CTRL+C
 rem
-set OPTS=-Xms64m -Xmx256m
+if ""%1"" == ""run"" goto delRun
+if "%TEMP%" == "" goto mainEntry
+if exist "%TEMP%\%~nx0.run" goto mainEntry
+echo Y>"%TEMP%\%~nx0.run"
+if not exist "%TEMP%\%~nx0.run" goto mainEntry
+echo Y>"%TEMP%\%~nx0.Y"
+call "%~f0" %* <"%TEMP%\%~nx0.Y"
+rem Use provided errorlevel
+set RETVAL=%ERRORLEVEL%
+del /Q "%TEMP%\%~nx0.Y" >NUL 2>&1
+exit /B %RETVAL%
+:delRun
+rem consume the dummy argument.
+shift
+:mainEntry
+del /Q "%TEMP%\%~nx0.run" >NUL 2>&1
 
 rem
-rem Build command line arguments
+rem Default JVM options here
 rem
-set CMD_LINE_ARGS=%1
-if ""%1""=="""" goto doneStart
-shift
-:setupArgs
-if ""%1""=="""" goto doneStart
-set CMD_LINE_ARGS=%CMD_LINE_ARGS% %1
-shift
-goto setupArgs
-:doneStart
+if not "%BATCH_OPTS%"=="" goto optsSet
+set BATCH_OPTS=-Xmx768m
+:optsSet
 
 rem
-rem Launch the DCS
+rem Launch the batch app
 rem
-java %OPTS% -Djava.ext.dirs=lib org.carrot2.cli.batch.BatchApp %CMD_LINE_ARGS%
+java %BATCH_OPTS% -jar invoker.jar -cpdir lib org.carrot2.cli.batch.BatchApp %*
