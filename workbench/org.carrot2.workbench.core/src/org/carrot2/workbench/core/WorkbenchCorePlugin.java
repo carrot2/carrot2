@@ -15,23 +15,42 @@ package org.carrot2.workbench.core;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.carrot2.core.*;
-import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
-import org.carrot2.util.attribute.AttributeUtils;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.DocumentSourceDescriptor;
+import org.carrot2.core.IClusteringAlgorithm;
+import org.carrot2.core.IDocumentSource;
+import org.carrot2.core.ProcessingComponentDescriptor;
+import org.carrot2.core.ProcessingComponentSuite;
+import org.carrot2.text.linguistic.DefaultLexicalDataFactoryDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.DirLocator;
+import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.IResourceLocator;
+import org.carrot2.util.resource.PrefixDecoratorLocator;
+import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.resource.ResourceLookup.Location;
+import org.carrot2.util.resource.URLResource;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IContributor;
+import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,6 +106,11 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     private List<ProcessingComponentDescriptor> failed = Lists.newArrayList();
 
     /**
+     * Workspace locator.
+     */
+    private IResourceLocator workspaceLocator;
+
+    /**
      * Starts the bundle: scan suites and initialize the controller.
      */
     @SuppressWarnings("unchecked")
@@ -97,12 +121,14 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         
         // Fix instance location first.
         fixInstanceLocation();
+        
+        // Workspace resource locator.
+        workspaceLocator = getWorkspaceResourceLocator();
 
         // Scan the list of suite extension points.
         scanSuites();
 
         ArrayList<IResourceLocator> locators = Lists.newArrayList();
-        IResourceLocator workspaceLocator = getWorkspaceResourceLocator();
         if (workspaceLocator != null)
         {
             locators.add(workspaceLocator);
@@ -111,7 +137,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
 
         Map<String, Object> initAttributes = Maps.newHashMap();
         initAttributes.put(
-            AttributeUtils.getKey(DefaultLexicalDataFactory.class, "resourceLookup"),
+            DefaultLexicalDataFactoryDescriptor.Keys.RESOURCE_LOOKUP,
             new ResourceLookup(locators));
 
         controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
@@ -258,8 +284,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                 String suiteRoot = configElements[0].getAttribute("resourceRoot");
                 if (StringUtils.isEmpty(suiteRoot)) suiteRoot = "";
 
-                final String suiteResource = configElements[0].getAttribute("resource");
-                if (StringUtils.isEmpty(suiteResource))
+                final String suiteResourceName = configElements[0].getAttribute("resource");
+                if (StringUtils.isEmpty(suiteResourceName))
                 {
                     continue;
                 }
@@ -291,11 +317,15 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                     }
                 }
 
-                final String suitePath = suiteRoot + suiteResource;
-                final URL bundleURL = b.getEntry(suitePath);
-                if (bundleURL == null)
+                final ResourceLookup resourceLookup = new ResourceLookup(
+                    workspaceLocator,
+                    new PrefixDecoratorLocator(new BundleResourceLocator(b), suiteRoot));
+
+                IResource suiteResource = resourceLookup.getFirst(suiteResourceName);
+                if (suiteResource == null)
                 {
-                    String message = "Suite extension resource not found: " + suitePath;
+                    String message = "Suite extension resource not found in " 
+                        + b.getSymbolicName() + ": " + bundleId;
                     Utils.logError(message, false);
                     continue;
                 }
@@ -313,11 +343,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                  */
                 try
                 {
-                    final ResourceLookup resourceLookup = new ResourceLookup(
-                        new PrefixDecoratorLocator(new BundleResourceLocator(b), suiteRoot));
-
                     final ProcessingComponentSuite suite = ProcessingComponentSuite
-                        .deserialize(new URLResource(bundleURL), resourceLookup);
+                        .deserialize(suiteResource, resourceLookup);
 
                     /*
                      * Remove invalid descriptors, cache icons.

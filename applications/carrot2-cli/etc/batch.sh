@@ -1,8 +1,7 @@
 #!/bin/sh
 
-#
-# Add extra JVM options here
-#
-OPTS="-Xms64m -Xmx256m"
+if [ -z "$BATCH_OPTS" ]; then
+  BATCH_OPTS="-Xms64m -Xmx768m"
+fi
 
-java $OPTS -Djava.ext.dirs=lib org.carrot2.cli.batch.BatchApp $@
+java $BATCH_OPTS -jar invoker.jar -cpdir lib org.carrot2.cli.batch.BatchApp $@
