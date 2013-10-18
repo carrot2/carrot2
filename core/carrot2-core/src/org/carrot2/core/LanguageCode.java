@@ -56,6 +56,7 @@ public enum LanguageCode
     GERMAN ("de"),
     GREEK ("gr"),
     HUNGARIAN ("hu"),
+    HINDI("hi"),
     ITALIAN ("it"),
     IRISH ("ie"), // (Gaelic)
     JAPANESE ("ja"),
