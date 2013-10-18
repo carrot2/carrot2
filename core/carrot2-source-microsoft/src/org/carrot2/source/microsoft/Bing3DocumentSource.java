@@ -122,7 +122,6 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
     @Input
     @Processing
     @Attribute
-    @Required
     @Label("Market")
     @Level(AttributeLevel.BASIC)
     @Group(DefaultGroups.FILTERING)
@@ -224,7 +223,9 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
         params.add(new BasicNameValuePair("Query", stringValue(query)));
 
         addIfNotEmpty(params, "Adult", stringValue(adult));
-        addIfNotEmpty(params, "Market", stringValue(market.marketCode));
+        if (market != null) {
+            addIfNotEmpty(params, "Market", stringValue(market.marketCode));
+        }
 
         if (latitude != null)
         {
@@ -438,7 +439,7 @@ public abstract class Bing3DocumentSource extends MultipageSearchEngine
         final AtomFeed response = new Persister().read(AtomFeed.class, payloadAsStream);
 
         final SearchEngineResponse ser = new SearchEngineResponse();
-        final LanguageCode langCode = market.toLanguageCode();
+        final LanguageCode langCode = market != null ? market.toLanguageCode() : null;
         
         if (response.entries != null)
         {
