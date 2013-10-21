@@ -12,6 +12,7 @@
 
 package org.carrot2.text.linguistic.lucene;
 
+import org.apache.mahout.math.Arrays;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.util.MutableCharArray;
 
@@ -48,7 +49,7 @@ public class ArabicStemmerAdapter implements IStemmer
 
         if (newLen != word.length() || !equals(buffer, newLen, word))
         {
-            return new MutableCharArray(buffer, 0, newLen);
+            return new MutableCharArray(Arrays.copyOf(buffer, newLen));
         }
 
         // Same-same.
