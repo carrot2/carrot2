@@ -15,7 +15,9 @@ package org.carrot2.clustering.lingo;
 import java.util.Collection;
 import java.util.List;
 
-import org.carrot2.core.*;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.Document;
+import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
 import org.carrot2.core.test.SampleDocumentData;

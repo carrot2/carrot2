@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.tests.CarrotTestCase;
+import org.fest.assertions.Assertions;
 
 /**
  * A base class for testing Carrot2 tokenizers.
@@ -89,7 +90,12 @@ abstract class TokenizerTestBase extends CarrotTestCase
                 tokens.add(new TokenImage(buffer.toString(), token));
             }
 
-            org.junit.Assert.assertArrayEquals(expectedTokens, tokens.toArray());
+            for (int i = 0; i < tokens.size(); i++) {
+            }        
+
+            Assertions
+                .assertThat(tokens)
+                .containsExactly((Object[]) expectedTokens);
         }
         catch (IOException e)
         {
@@ -105,6 +111,11 @@ abstract class TokenizerTestBase extends CarrotTestCase
     protected TokenImage punctuation(String image)
     {
         return new TokenImage(image, ITokenizer.TT_PUNCTUATION);
+    }
+
+    protected TokenImage sentenceDelimiter(String image)
+    {
+        return new TokenImage(image, ITokenizer.TT_PUNCTUATION | ITokenizer.TF_SEPARATOR_SENTENCE);
     }
 
     protected TokenImage numeric(String image)

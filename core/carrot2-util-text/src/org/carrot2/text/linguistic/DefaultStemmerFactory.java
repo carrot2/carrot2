@@ -16,6 +16,7 @@ import java.util.EnumMap;
 
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.linguistic.lucene.ArabicStemmerAdapter;
+import org.carrot2.text.linguistic.lucene.HindiStemmerAdapter;
 import org.carrot2.text.linguistic.lucene.SnowballStemmerFactory;
 import org.carrot2.text.linguistic.morfologik.MorfologikStemmerAdapter;
 import org.carrot2.util.annotations.ThreadSafe;
@@ -98,6 +99,9 @@ public class DefaultStemmerFactory implements IStemmerFactory
 
         // Identity stemming for Chinese.
         map.put(LanguageCode.CHINESE_SIMPLIFIED, identity);
+        
+        // Specialized stemming for Hindi (ported from Lucene)
+        map.put(LanguageCode.HINDI, new NewClassInstanceFactory<IStemmer>(HindiStemmerAdapter.class));
 
         // Decorate everything with a fallback identity stemmer.
         for (LanguageCode lc : LanguageCode.values())

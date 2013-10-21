@@ -43,11 +43,14 @@ URL_PATH   = ([!*'();:@&=+$,/?%#_.~] | "-" | "[" | "]" | {LETTER} | {DIGIT})+
 
 %%
 
+
 {DIGIT}+  ((":" | "-" | "/" | "," | ".") {DIGIT}+)*          { return ITokenizer.TT_NUMERIC; }
 
 ({LETTER} "." ({LETTER} ".")+) | ({TERM} ("&" {TERM})+)      { return ITokenizer.TT_ACRONYM; }
 
-{LETTER} "." 												                         { return ITokenizer.TT_TERM; }
+{LETTER} "."                                                 { return ITokenizer.TT_TERM; }
+
+("." | "?" | "!" | ";" | [\u0964-\u0965] )+                  { return ITokenizer.TT_PUNCTUATION | ITokenizer.TF_SEPARATOR_SENTENCE; }
 
 {TERM} ( "-" {TERM})+                                        { return ITokenizer.TT_HYPHTERM; }
 
@@ -64,8 +67,7 @@ URL_PATH   = ([!*'();:@&=+$,/?%#_.~] | "-" | "[" | "]" | {LETTER} | {DIGIT})+
 {SYMBOL}("."{SYMBOL})*                                       { return ITokenizer.TT_FILE;}
 	
 (("http" | "https" | "ftp") "://")? {BARE_URL} {URL_PATH}?   { return ITokenizer.TT_FULL_URL; }
-	
-("." | "?" | "!" | ";" )+	                                   { return ITokenizer.TT_PUNCTUATION | ITokenizer.TF_SEPARATOR_SENTENCE; }
+
 
 "," | "'" | "`" | ":" | "-"                                  { return ITokenizer.TT_PUNCTUATION; }
 
