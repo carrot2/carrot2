@@ -12,7 +12,8 @@
 
 package org.carrot2.text.linguistic.lucene;
 
-import org.apache.mahout.math.Arrays;
+import java.util.Arrays;
+
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.util.MutableCharArray;
 
