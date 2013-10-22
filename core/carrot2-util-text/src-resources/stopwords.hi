@@ -7,7 +7,9 @@
 # Note: by default this file also contains forms normalized by HindiNormalizer 
 # for spelling variation (see section below), such that it can be used whether or 
 # not you enable that feature. When adding additional entries to this list,
-# please add the normalized form as well. 
+# please add the normalized form as well.
+तथा
+उसकी 
 अंदर
 अत
 अपना
@@ -236,3 +238,5 @@
 हुअ
 जेसा
 नहिं
+एंड
+उसका
