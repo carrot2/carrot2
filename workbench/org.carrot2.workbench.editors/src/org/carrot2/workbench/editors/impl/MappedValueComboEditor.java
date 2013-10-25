@@ -40,12 +40,12 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
     /**
      * Mapping between values and their user-interface representations.
      */
-    protected BiMap<? extends Object, String> valueToName;
+    private BiMap<? extends Object, String> valueToName;
 
     /**
      * Order of values on the suggestion list.
      */
-    protected List<Object> valueOrder;
+    private List<Object> valueOrder;
 
     /**
      * A box container.

@@ -14,7 +14,6 @@ package org.carrot2.source.lucene;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,14 +25,12 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-import org.carrot2.core.Controller;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.util.attribute.AttributeUtils;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -253,24 +250,4 @@ public class LuceneDocumentSourceTest extends
         assertThat(xml.toString("UTF-8")).doesNotContain(
             "org.apache.lucene.document.Document");
     }
-
-    @Test
-    public void analyzerHintClassesShouldPass() throws Exception
-    {
-        Field analyzerField = LuceneDocumentSource.class.getField(
-            LuceneDocumentSourceDescriptor.attributes.analyzer.fieldName);
-        
-        Class<?> [] implementingClasses = 
-            analyzerField.getAnnotation(ImplementingClasses.class).classes();
-
-        Controller controller = getSimpleController(initAttributes);
-        for (Class<?> implementingClassHint : implementingClasses)
-        {
-            LuceneDocumentSourceDescriptor.attributeBuilder(processingAttributes)
-                .analyzer(implementingClassHint);
-
-            // Just make sure it passes without an exception.
-            controller.process(processingAttributes, LuceneDocumentSource.class);
-        }
-    }    
 }
