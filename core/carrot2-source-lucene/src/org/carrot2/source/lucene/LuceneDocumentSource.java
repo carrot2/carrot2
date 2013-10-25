@@ -19,8 +19,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.core.SimpleAnalyzer;
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
@@ -143,12 +141,9 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     @Processing
     @Required
     @Attribute
+    @Internal(configuration = false)
     @ImplementingClasses(classes =
-    {
-        SimpleAnalyzer.class, 
-        StandardAnalyzer.class, 
-        WhitespaceAnalyzer.class
-    }, strict = false)
+        { /* No suggestions for default implementations. */ }, strict = false)
     @Label("Analyzer")
     @Level(AttributeLevel.MEDIUM)
     @Group(INDEX_PROPERTIES)    
