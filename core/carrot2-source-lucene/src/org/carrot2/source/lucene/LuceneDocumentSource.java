@@ -95,6 +95,16 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
             StandardAnalyzer.class,
             StandardAnalyzerWrapper.class, 
             true);
+        
+        SimpleXmlWrappers.addWrapper(
+            WhitespaceAnalyzer.class,
+            WhitespaceAnalyzerWrapper.class, 
+            true);
+
+        SimpleXmlWrappers.addWrapper(
+            SimpleAnalyzer.class,
+            SimpleAnalyzerWrapper.class, 
+            true);
     }
 
     @Processing
@@ -145,9 +155,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
     @Attribute
     @ImplementingClasses(classes =
     {
-        SimpleAnalyzer.class, 
-        StandardAnalyzer.class, 
-        WhitespaceAnalyzer.class
+        /* no default hints. See CARROT-1026. */
     }, strict = false)
     @Label("Analyzer")
     @Level(AttributeLevel.MEDIUM)
