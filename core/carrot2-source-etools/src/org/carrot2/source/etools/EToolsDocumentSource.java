@@ -363,9 +363,12 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     protected void afterFetch(SearchEngineResponse response)
     {
         // Set document's language
-        for (Document document : response.results)
+        if (language != Language.ALL) 
         {
-            document.setLanguage(language.toLanguageCode());
+            for (Document document : response.results)
+            {
+                document.setLanguage(language.toLanguageCode());
+            }
         }
     }
 }
