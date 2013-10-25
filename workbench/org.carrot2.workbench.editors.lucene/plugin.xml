@@ -11,6 +11,11 @@
             class="org.carrot2.workbench.editors.lucene.IndexDirectoryEditor">
       </type-editor>
 
+      <type-editor
+            attribute-class="org.apache.lucene.analysis.Analyzer"
+            class="org.carrot2.workbench.editors.lucene.AnalyzerEditor">
+      </type-editor>
+
       <dedicated-editor
             attribute-id="query"
             class="org.carrot2.workbench.editors.impl.StringEditor"
