@@ -71,6 +71,11 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
      * Servlet context for resolving local paths.
      */
     private ServletContext context;
+    
+    /**
+     * Target content type.
+     */
+    private String targetContentType = "text/html; charset=UTF-8"; 
 
     /**
      * Creates an XSLT filter servlet response for a single request, wrapping a given
@@ -90,6 +95,11 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
         this.origRequest = request;
         this.context = context;
     }
+    
+    void setTargetContentType(String targetContentType)
+    {
+        this.targetContentType = targetContentType;
+    }
 
     /**
      * We override this method to detect XML data streams.
@@ -106,14 +116,13 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
         }
 
         if (!processingSuppressed
-            && (contentType.startsWith("text/xml") || contentType
-                .startsWith("application/xml")))
+            && (contentType.startsWith("text/xml") || 
+                contentType.startsWith("application/xml")))
         {
             /*
              * We have an XML data stream. Set the real response to proper content type.
-             * TODO: Should we make the encoding a configurable setting?
              */
-            origResponse.setContentType("text/html; charset=UTF-8");
+            origResponse.setContentType(targetContentType);
         }
         else
         {
