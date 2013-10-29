@@ -58,7 +58,7 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
     private ServletOutputStream stream = null;
 
     /**
-     * The {@link PrintWriter} returned frmo {@link #getWriter()} or <code>null</code>.
+     * The {@link PrintWriter} returned from {@link #getWriter()} or <code>null</code>.
      */
     private PrintWriter writer = null;
 
