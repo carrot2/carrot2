@@ -78,6 +78,6 @@
   </xsl:template>
 
   <xsl:template match="group/document" mode="json">
-    '<xsl:value-of select="concat('DOCID', @refid)" />'<xsl:if test="not(position() = last())">,</xsl:if>
+    '<xsl:value-of select="concat('', @refid)" />'<xsl:if test="not(position() = last())">,</xsl:if>
   </xsl:template>
 </xsl:stylesheet>
