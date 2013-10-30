@@ -91,49 +91,51 @@ public class PageModel
             : processingException.getMessage();
 
         // TODO: determine based on skin
-        this.fullHtml = !RequestType.DOCUMENTS.equals(requestModel.type)
-            && !RequestType.CLUSTERS.equals(requestModel.type);
+        this.fullHtml = !RequestType.DOCUMENTS.equals(requestModel.type) && 
+                        !RequestType.CLUSTERS.equals(requestModel.type);
 
         this.contextPath = request.getContextPath();
         this.skinPath = contextPath + "/" + webappConfig.skinsFolder;
-        this.assetUrls = new AssetUrlsModel(webappConfig.getSkinById(requestModel.skin),
-            request, urlGenerator);
+        this.assetUrls = new AssetUrlsModel(
+            webappConfig.getSkinById(requestModel.skin), request, urlGenerator);
 
-        this.requestUri = buildRequestUri(requestModel).toString();
-        this.requestUrl = buildSearchUrlBase(requestModel, config.SEARCH_URL).toString() + this.requestUri;
+        this.requestUri = buildRequestUri(requestModel);
+        
+        StringBuilder b = new StringBuilder();
+        buildSearchUrlBase(b, requestModel, config.SEARCH_URL);
+        this.requestUrl = b.toString() + this.requestUri;
 
         // XML stream url base
-        StringBuilder xmlUrl = buildSearchUrlBase(requestModel, config.XML_URL);
-        appendParameter(xmlUrl, WebappConfig.TYPE_PARAM, RequestType.CARROT2.name());
-        this.xmlUrlEncoded = StringUtils.urlEncodeWrapException(xmlUrl.toString(), "UTF-8");
-        
+        b.setLength(0);
+        buildSearchUrlBase(b, requestModel, config.XML_URL);
+        b.append(this.requestUri);
+        appendParameter(b, WebappConfig.TYPE_PARAM, RequestType.CARROT2.name());
+        this.xmlUrlEncoded = StringUtils.urlEncodeWrapException(b.toString(), "UTF-8");
+
         this.currentYear = Calendar.getInstance().get(Calendar.YEAR);
     }
 
-    private StringBuilder buildRequestUri(RequestModel requestModel)
+    private String buildRequestUri(RequestModel requestModel)
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        appendParameter(stringBuilder, WebappConfig.QUERY_PARAM, requestModel.query, '?');
-        appendParameter(stringBuilder, WebappConfig.RESULTS_PARAM, Integer.toString(requestModel.results));
-        appendParameter(stringBuilder, WebappConfig.SOURCE_PARAM, requestModel.source);
-        appendParameter(stringBuilder, WebappConfig.ALGORITHM_PARAM, requestModel.algorithm);
-        appendParameter(stringBuilder, WebappConfig.VIEW_PARAM, requestModel.view);
-        appendParameter(stringBuilder, WebappConfig.SKIN_PARAM, requestModel.skin);
-
+        StringBuilder builder = new StringBuilder();
+        appendParameter(builder, WebappConfig.QUERY_PARAM, requestModel.query, '?');
+        appendParameter(builder, WebappConfig.RESULTS_PARAM, Integer.toString(requestModel.results));
+        appendParameter(builder, WebappConfig.SOURCE_PARAM, requestModel.source);
+        appendParameter(builder, WebappConfig.ALGORITHM_PARAM, requestModel.algorithm);
+        appendParameter(builder, WebappConfig.VIEW_PARAM, requestModel.view);
+        appendParameter(builder, WebappConfig.SKIN_PARAM, requestModel.skin);
         for (Map.Entry<String, Object> entry: requestModel.otherParameters.entrySet())
         {
-            appendParameter(stringBuilder, entry.getKey(), entry.getValue().toString());
+            appendParameter(builder, entry.getKey(), entry.getValue().toString());
         }
-        return stringBuilder;
+        return builder.toString();
     }
 
-    private StringBuilder buildSearchUrlBase(RequestModel requestModel, String action)
+    private void buildSearchUrlBase(StringBuilder builder, RequestModel requestModel, String action)
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(contextPath);
-        stringBuilder.append('/');
-        stringBuilder.append(action);
-        return stringBuilder;
+        builder.append(contextPath);
+        builder.append('/');
+        builder.append(action);
     }
 
     private static void appendParameter(StringBuilder builder, String name, String value)
