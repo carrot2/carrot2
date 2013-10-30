@@ -535,7 +535,7 @@ public class QueryProcessorServlet extends HttpServlet
     {
         return new Format(2, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             + "<?ext-stylesheet resource=\""
-            + webappConfig.getContextRelativeSkinStylesheet(requestModel.skin) + "\" ?>");
+            + webappConfig.getContextRelativeSkinStylesheet(requestModel) + "\" ?>");
     }
 
     private Map<String, String> extractCookies(HttpServletRequest request)

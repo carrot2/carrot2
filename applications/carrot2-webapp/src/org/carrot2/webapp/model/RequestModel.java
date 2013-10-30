@@ -75,6 +75,11 @@ public class RequestModel
     public String view;
 
     @Input
+    @Attribute(key = WebappConfig.STYLESHEET_PARAM)
+    @org.simpleframework.xml.Attribute
+    public String stylesheet = "page.xsl";
+
+    @Input
     @Attribute(key = QueryProcessorServlet.STATS_KEY)
     public String statsKey;
 

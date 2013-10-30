@@ -120,6 +120,9 @@ public class WebappConfig
     @Attribute(name = "skin-param", required = false)
     public final static String SKIN_PARAM = "skin";
 
+    @Attribute(name = "stylesheet-param", required = false)
+    public final static String STYLESHEET_PARAM = "stylesheet";
+
     /**
      * @return Initialize the global configuration and return it.
      */
@@ -189,9 +192,9 @@ public class WebappConfig
         }
     }
 
-    public String getContextRelativeSkinStylesheet(String skinName)
+    public String getContextRelativeSkinStylesheet(RequestModel requestModel)
     {
-        return "/" + skinsFolder + "/" + skinName + "/page.xsl";
+        return "/" + skinsFolder + "/" + requestModel.skin + "/" + requestModel.stylesheet;
     }
 
     public SkinModel getSkinById(String skinId)
