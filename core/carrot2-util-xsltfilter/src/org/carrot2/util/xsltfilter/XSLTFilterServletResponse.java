@@ -73,9 +73,9 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
     private ServletContext context;
     
     /**
-     * Target content type.
+     * Enforced target content type.
      */
-    private String targetContentType = "text/html; charset=UTF-8"; 
+    private String targetContentType; 
 
     /**
      * Creates an XSLT filter servlet response for a single request, wrapping a given
@@ -95,7 +95,7 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
         this.origRequest = request;
         this.context = context;
     }
-    
+
     void setTargetContentType(String targetContentType)
     {
         this.targetContentType = targetContentType;
@@ -122,7 +122,8 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
             /*
              * We have an XML data stream. Set the real response to proper content type.
              */
-            origResponse.setContentType(targetContentType);
+            origResponse.setContentType(
+                targetContentType != null ? targetContentType : "text/html; charset=UTF-8");
         }
         else
         {
@@ -300,8 +301,9 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
                     // Otherwise apply XSLT transformation to it.
                     try
                     {
-                        processWithXslt(bytes, (Map<String, Object>) origRequest
-                            .getAttribute(XSLTFilterConstants.XSLT_PARAMS_MAP),
+                        processWithXslt(
+                            bytes, 
+                            (Map<String, Object>) origRequest.getAttribute(XSLTFilterConstants.XSLT_PARAMS_MAP),
                             origResponse);
                     }
                     catch (TransformerException e)
@@ -383,6 +385,10 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
             {
                 public void setContentType(String contentType, String encoding)
                 {
+                    if (targetContentType != null) {
+                        contentType = targetContentType;
+                    }
+
                     if (encoding == null)
                     {
                         response.setContentType(contentType);
