@@ -95,6 +95,8 @@
   
   <xsl:template match="ajax-attribute-metadata">
     <xsl:variable name="source" select="request/@source" />
-    <xsl:apply-templates select="attribute-metadata/attribute-descriptors[@source=$source]" />
+    <div>
+      <xsl:apply-templates select="attribute-metadata/attribute-descriptors[@source=$source]" />
+    </div>
   </xsl:template>
 </xsl:stylesheet>
