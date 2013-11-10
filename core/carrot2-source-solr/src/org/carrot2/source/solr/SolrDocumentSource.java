@@ -71,6 +71,18 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     public String serviceUrlBase = "http://localhost:8983/solr/select";
 
     /**
+     * Filter query appended to {@link #serviceUrlBase}.
+     */
+    @Input
+    @Init
+    @Processing
+    @Attribute
+    @Label("Filter query")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(SERVICE)
+    public String solrFilterQuery = "";
+
+    /**
      * Title field name. Name of the Solr field that will provide document titles.
      */
     @Input
@@ -210,9 +222,10 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     protected String buildServiceUrl()
     {
         return serviceUrlBase 
-            + (serviceUrlBase.contains("?") ? "&" : "?") 
-            + "q=" + urlEncode(query) 
-            + "&start=" + start 
+            + (serviceUrlBase.contains("?") ? "&" : "?")
+            + "q=" + urlEncode(query)
+            + (Strings.isNullOrEmpty(solrFilterQuery) ? "" : "&fq=" + urlEncode(solrFilterQuery))
+            + "&start=" + start
             + "&rows=" + results 
             + "&indent=off";
     }
