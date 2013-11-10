@@ -178,6 +178,18 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     public boolean useHighlighterOutput = true;
 
     /**
+     * Copy Solr fields from the search result to Carrot2 {@link Document} instances (as fields).
+     */
+    @Input
+    @Init 
+    @Processing
+    @Attribute
+    @Label("Copy Solr document fields")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(FIELD_MAPPING)
+    public boolean copyFields = false;
+
+    /**
      * If {@link #readClusters} is <code>true</code> and clusters are present in the input
      * XML, they will be deserialized and exposed to components further down the processing
      * chain.
@@ -250,6 +262,7 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
         parameters.put("solr.url-field", solrUrlFieldName);
         parameters.put("solr.id-field", Strings.nullToEmpty(solrIdFieldName));
         parameters.put("solr.use-highlighter-output", useHighlighterOutput ? "true" : "false");
+        parameters.put("solr.copy-fields", copyFields ? "true" : "false");
 
         return parameters;
     }

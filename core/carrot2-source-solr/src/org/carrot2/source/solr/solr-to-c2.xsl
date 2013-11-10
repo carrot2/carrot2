@@ -12,7 +12,7 @@
   <xsl:param name="solr.url-field">url</xsl:param>
   <xsl:param name="solr.id-field"></xsl:param>
   <xsl:param name="solr.use-highlighter-output">true</xsl:param>
-  <xsl:param name="solr.copy-fields">true</xsl:param>
+  <xsl:param name="solr.copy-fields">false</xsl:param>
 
   <xsl:key name="highlighter"  match="/response/lst[@name='highlighting']/lst" use="@name" />
 
