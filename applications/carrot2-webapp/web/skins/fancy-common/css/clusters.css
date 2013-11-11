@@ -9,6 +9,10 @@ a#tree-top {
   padding-top: 2px;
 }
 
+#clusters li.leaf-last {
+  background-image: none;
+}
+
 #clusters li.leaf-last > a > span.tree {
   background-color: transparent;
 }
