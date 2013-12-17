@@ -84,9 +84,15 @@ public final class ChineseTokenizerAdapter implements ITokenizer
     {
         try
         {
+            if (wordTokenFilter != null) {
+                wordTokenFilter.end();
+                wordTokenFilter.close();
+            }
+
             sentenceTokenizer.setReader(input);
             wordTokenFilter = new WordTokenFilter(sentenceTokenizer);
             this.term = wordTokenFilter.addAttribute(CharTermAttribute.class);
+            wordTokenFilter.reset();
         }
         catch (Exception e)
         {

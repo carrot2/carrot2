@@ -2,14 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Lucene
 Bundle-SymbolicName: org.apache.lucene.v2
-Bundle-Version: 3.6.0
-Bundle-ClassPath: lucene-analyzers-common-4.2.1.jar,
- lucene-analyzers-smartcn-4.2.1.jar,
- lucene-core-4.2.1.jar,
- lucene-highlighter-4.2.1.jar,
- lucene-memory-4.2.1.jar,
- lucene-queryparser-4.2.1.jar,
- lucene-queries-4.2.1.jar
+Bundle-Version: 4.6.0
+Bundle-ClassPath: lucene-analyzers-common-4.6.0.jar,
+ lucene-analyzers-smartcn-4.6.0.jar,
+ lucene-core-4.6.0.jar,
+ lucene-highlighter-4.6.0.jar,
+ lucene-memory-4.6.0.jar,
+ lucene-queryparser-4.6.0.jar,
+ lucene-queries-4.6.0.jar
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.apache.lucene,
@@ -80,6 +80,8 @@ Export-Package: org.apache.lucene,
  org.apache.lucene.codecs.lucene40,
  org.apache.lucene.codecs.lucene41,
  org.apache.lucene.codecs.lucene42,
+ org.apache.lucene.codecs.lucene45,
+ org.apache.lucene.codecs.lucene46,
  org.apache.lucene.codecs.perfield,
  org.apache.lucene.collation,
  org.apache.lucene.collation.tokenattributes,
