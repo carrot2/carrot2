@@ -433,6 +433,19 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
                     throw (TransformerException) nested;
                 }
             }
+            
+            if (log.isDebugEnabled()) {
+                StringBuilder sb = new StringBuilder();
+                char [] hex = "0123456789abcdef".toCharArray();
+                for (int i = 0; i < bytes.length; i++) {
+                    int c = bytes[i] & 0xff;
+                    sb.append(hex[c >>> 4]);
+                    sb.append(hex[c & 0xf]);
+                }
+                log.debug("Failed to parse the following input (hex-encoded): " 
+                    + sb.toString(), e);
+            }
+
             throw new TransformerException("Input parsing exception.", e);
         }
     }
