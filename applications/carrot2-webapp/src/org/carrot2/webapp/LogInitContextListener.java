@@ -163,10 +163,10 @@ public class LogInitContextListener implements ServletContextListener
         /*
          * Check for catalina's (Tomcat) default log folder.
          */
-        final String catalinaHome = System.getProperty("catalina.home");
-        if (!StringUtils.isEmpty(catalinaHome) && new File(catalinaHome).isDirectory())
+        final String catalinaBase = System.getProperty("catalina.base");
+        if (!StringUtils.isEmpty(catalinaBase) && new File(catalinaBase).isDirectory())
         {
-            final File logDir = new File(new File(catalinaHome), "logs");
+            final File logDir = new File(new File(catalinaBase), "logs");
             if (logDir.isDirectory())
             {
                 return logDir;
