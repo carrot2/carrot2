@@ -31,8 +31,17 @@
   background-image: url('../img/tree-branch.gif'); /** sprite-ref: vert; */
 }
 
+#clusters li.branch.unfolded > a > span.tree {
+  margin-top: 2px;
+  background-image: url('../img/tree-branch-unfolded.gif'); /** sprite-ref: vert; */
+}
+
 #clusters li.branch-last > a > span.tree {
   background-image: url('../img/tree-branch-last.gif'); /** sprite-ref: vert; */
+}
+
+#clusters li.branch-last.unfolded > a > span.tree {
+  background-image: url('../img/tree-branch-last-unfolded.gif'); /** sprite-ref: vert; */
 }
 
 #clusters li.leaf-last > a > span.tree {

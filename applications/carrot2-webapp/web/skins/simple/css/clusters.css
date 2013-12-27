@@ -32,6 +32,12 @@ a#tree-top {
   background-image: url('../img/tree-branch.gif'); /** sprite-ref: vert; sprite-margin-right: 300px */
 }
 
+#clusters li.branch.unfolded > a > span.tree {
+  width: 12px; 
+  height: 15px;
+  background-image: url('../img/tree-branch-unfolded.gif'); /** sprite-ref: vert; sprite-margin-right: 300px */
+}
+
 #clusters li.more a {
   background-position: left 2px;
   background-image: url('../img/tree-more.gif'); /** sprite-ref: vert; sprite-margin-top: 2px; sprite-margin-bottom: 5px */
