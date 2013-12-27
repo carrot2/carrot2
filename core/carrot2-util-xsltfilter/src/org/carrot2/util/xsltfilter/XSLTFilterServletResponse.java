@@ -110,7 +110,8 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
                 contentType.startsWith("application/xml")))
         {
             /*
-             * We have an XML data stream. Set the real response to proper content type.
+             * We have an XML data stream. Do not enforce the content type. If needed,
+             * the XSLT stylesheet can override it via the xsl:output instruction.
              */
             origResponse.setContentType(contentType);
         }
