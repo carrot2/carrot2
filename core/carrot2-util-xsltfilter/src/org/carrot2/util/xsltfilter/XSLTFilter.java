@@ -54,11 +54,6 @@ public final class XSLTFilter implements Filter
      * stylesheet reloaded for each request. Default value: <code>true</code>
      */
     private final static String PARAM_TEMPLATE_CACHING = "template.caching";
-    
-    /**
-     * Target content type.
-     */
-    private final static String PARAM_CONTENT_TYPE = "content.type";
 
     /**
      * A pool of cached stylesheets.
@@ -138,10 +133,6 @@ public final class XSLTFilter implements Filter
         // Generate the stream and process it with the stylesheet.
         final XSLTFilterServletResponse wrappedResponse = new XSLTFilterServletResponse(
             httpResponse, httpRequest, context, pool);
-
-        if (filterConfig.getInitParameter(PARAM_CONTENT_TYPE) != null) {
-            wrappedResponse.setTargetContentType(filterConfig.getInitParameter(PARAM_CONTENT_TYPE));
-        }
 
         try
         {
