@@ -14,8 +14,7 @@ package org.carrot2.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.*;
-import java.util.regex.Matcher;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.WordUtils;
@@ -26,11 +25,16 @@ import org.apache.commons.lang.WordUtils;
  */
 public final class StringUtils
 {
-    private static final Pattern CAMEL_CASE_SEGMENT_PATTERN = Pattern
-        .compile("([A-Z]*)([A-Z0-9][a-z0-9]*)");
-
-    private static final Pattern HTML_TAG_PATTERN = Pattern.compile("<.+?>",
-        Pattern.CASE_INSENSITIVE);
+    private static final Pattern CAMEL_CASE_FRAGMENT = Pattern.compile(
+        // a sequence of upper case letters followed by digits
+        "([A-Z]{1,}(?=[0-9]+))|" +
+        // a sequence of upper case letters followed by an upper letter, followed by lower case or digits
+        "([A-Z]{1,}(?=[A-Z][a-z0-9]+))|" +
+        // upper case letters followed by lower case letters or digits
+        "([A-Z]?[A-Z]+[a-z0-9]+)|" + 
+        // sequence of digits
+        "([0-9]+)");
+    private static final Pattern HTML_TAG_PATTERN = Pattern.compile("<.+?>", Pattern.CASE_INSENSITIVE);
 
     private StringUtils()
     {
@@ -55,19 +59,7 @@ public final class StringUtils
 
     public static String splitCamelCase(String camelCaseString)
     {
-        final Matcher matcher = CAMEL_CASE_SEGMENT_PATTERN.matcher(camelCaseString);
-        final List<String> parts = new ArrayList<String>();
-        while (matcher.find())
-        {
-            for (int i = 1; i <= matcher.groupCount(); i++)
-            {
-                final String group = matcher.group(i);
-                if (group.length() == 0) continue;
-
-                parts.add(group);
-            }
-        }
-        return org.apache.commons.lang.StringUtils.join(parts, ' ');
+        return CAMEL_CASE_FRAGMENT.matcher(camelCaseString).replaceAll("$0 ").trim();
     }
 
     public static String urlEncodeWrapException(String string, String encoding)

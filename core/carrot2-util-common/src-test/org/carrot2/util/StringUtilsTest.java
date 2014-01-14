@@ -39,6 +39,18 @@ public class StringUtilsTest extends CarrotTestCase
     }
 
     @Test
+    public void testSplitArray()
+    {
+        assertEquals("String []", splitCamelCase("String[]"));
+    }
+
+    @Test
+    public void testIFooFace()
+    {
+        assertEquals("I Foo Face", splitCamelCase("IFooFace"));
+    }
+
+    @Test
     public void testRemoveHtmlNoTags()
     {
         assertThat(removeHtmlTags(">test <string")).isEqualTo(">test <string");
