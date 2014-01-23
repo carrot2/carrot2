@@ -30,6 +30,8 @@
           log="${tomcat.log.dir}/cargo.log" action="start" wait="100">
         <configuration home="${tomcat.config.dir}">
           <property name="cargo.servlet.port" value="@{webtest.port}"/>
+          <property name="cargo.rmi.port" value="2@{webtest.port}"/>
+          <property name="cargo.tomcat.ajp.port" value="3@{webtest.port}"/>
           <property name="cargo.logging" value="high"/>
           <deployable type="war" file="@{war.path}"/>
         </configuration>
