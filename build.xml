@@ -312,6 +312,7 @@
     <mkdir dir="${compatibility.report.dir}" />
 
     <javadoc destdir="${compatibility.report.dir}"
+             encoding="utf-8"
              access="protected"
              failonerror="true"
              useexternalfile="true">
