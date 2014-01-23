@@ -554,9 +554,11 @@
       <fileset dir="${core.dir}">
         <include name="**/*.java" />
         <exclude name="carrot2-source-microsoft/src/com/microsoft/msnsearch/**" />
+        <exclude name="**/.apt_generated/**" />
       </fileset>
       <fileset dir="${applications.dir}">
         <include name="**/*.java" />
+        <exclude name="**/.apt_generated/**" />
       </fileset>
       <fileset dir="${workbench.dir}">
         <include name="**/*.java" />
