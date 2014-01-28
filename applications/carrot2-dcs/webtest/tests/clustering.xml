@@ -26,7 +26,10 @@
       <!-- Wait for AJAX stuff to load -->
       <sleep seconds="5" />
       <clickButton xpath="//button[@type = 'submit']" />
+
       <!-- As long as we get 200 code, it's fine. We have more coverage in unit tests. -->
+      <storeResponseCode property="status" />
+      <verifyProperty name="status" text="200" />
     </sequential>
   </macrodef>
 </project>
