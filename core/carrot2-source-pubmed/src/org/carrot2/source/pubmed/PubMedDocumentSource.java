@@ -85,7 +85,10 @@ public class PubMedDocumentSource extends SimpleSearchEngine
     @Override
     protected SearchEngineResponse fetchSearchResponse() throws Exception
     {
-        return getPubMedAbstracts(getPubMedIds(query, results));
+        PubMedIdSearchHandler idResponse = getPubMedIds(query, results);
+        SearchEngineResponse response = getPubMedAbstracts(idResponse.getPubMedPrimaryIds());
+        response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, idResponse.getMatchCount());
+        return response;
     }
 
     @Override
@@ -100,7 +103,7 @@ public class PubMedDocumentSource extends SimpleSearchEngine
     /**
      * Gets PubMed entry ids matching the query.
      */
-    private List<String> getPubMedIds(final String query, final int requestedResults)
+    private PubMedIdSearchHandler getPubMedIds(final String query, final int requestedResults)
         throws Exception
     {
         final XMLReader reader = SAXParserFactory.newInstance().newSAXParser()
@@ -108,7 +111,7 @@ public class PubMedDocumentSource extends SimpleSearchEngine
         reader.setFeature("http://xml.org/sax/features/validation", false);
         reader.setFeature("http://xml.org/sax/features/namespaces", true);
 
-        PubMedSearchHandler searchHandler = new PubMedSearchHandler();
+        PubMedIdSearchHandler searchHandler = new PubMedIdSearchHandler();
         reader.setContentHandler(searchHandler);
 
         final String url = E_SEARCH_URL + "?db=pubmed&usehistory=n&term="
@@ -134,7 +137,7 @@ public class PubMedDocumentSource extends SimpleSearchEngine
                 + ", HTTP payload: " + new String(response.payload, "iso8859-1"));
         }
 
-        return searchHandler.getPubMedPrimaryIds();
+        return searchHandler;
     }
 
     /**
@@ -152,7 +155,7 @@ public class PubMedDocumentSource extends SimpleSearchEngine
         reader.setFeature("http://xml.org/sax/features/validation", false);
         reader.setFeature("http://xml.org/sax/features/namespaces", true);
 
-        final PubMedFetchHandler fetchHandler = new PubMedFetchHandler();
+        final PubMedContentHandler fetchHandler = new PubMedContentHandler();
         reader.setContentHandler(fetchHandler);
 
         final String url = E_FETCH_URL + "?db=pubmed&retmode=xml&rettype=abstract&id="
