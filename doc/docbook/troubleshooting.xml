@@ -117,37 +117,6 @@
       </orderedlist>
     </section>
 
-    <section xml:id="section.troubleshooting.workbench.windows-64bit-circles-missing">
-      <title>Circles visualization not visible on Windows 64-bit</title>
-      
-      <section>
-        <title>Symptoms</title>
-        
-        <para>
-          The Circles visualization is not visible in &DCW; for Windows 64-bit.
-        </para>
-      </section>
-      
-      <section>
-        <title>Cause</title>
-        
-        <para>
-          Adobe does not provide 64-bit binaries of their Flash player plug-in.
-          As a result, &DCW; for Windows 64-bit is unable to display the visualization. 
-        </para>
-      </section>
-      
-      <section>
-        <title>Solution</title>
-        
-        <para>
-          To be able to use the Circels visualization on Windows 64-bit systems, downowad
-          and install a 32-bit Java Runtime Environment and run the 32-bit version of &DCW;. 
-        </para>
-      </section>
-    </section>
-  </section>    
-  
   <section xml:id="section.troubleshooting.webapp">
     <title>Troubleshooting &WA;</title>
     
