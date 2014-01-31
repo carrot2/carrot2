@@ -97,14 +97,22 @@
           var flattened = jQuery.makeArray(cluster.find("document").map(function(i, e) { return $(e).attr("refid")}));
           cluster.remove();
           var subgroups = cluster.children("group").size() > 0 ? convert(cluster.children("group")) : [];
+
+          var weight = cluster.attr("size") ? cluster.attr("size") : 0;
+          if (cluster.find("attribute[key ~= 'other-topics']").length > 0) {
+            weight = 0;
+          } 
+
           return {
             id:     cluster.attr("id"),
             label:     jQuery.makeArray(cluster.find("title > phrase").map(function(i, e) { return $(e).text(); })).join(", "),
             documents: flattened,
-            weight: cluster.attr("score") ? cluster.attr("score") : 0,
+            weight: Number(weight),
             groups: subgroups
           }
         });
+
+        console.log($foo);
 
         return jQuery.makeArray($foo);
       }
