@@ -25,12 +25,12 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 /**
  * Switching foamtree layouts.
  */
-public final class LayoutAlgorithmAction extends Action
+public final class LayoutInitializerAction extends Action
 {
     /**
      * 
      */
-    public final static String LAYOUT_ALGORITHM_KEY = "layout-algorithm";
+    public final static String LAYOUT_INITIALIZER_KEY = "layout-initializer";
 
     /*
      * 
@@ -42,11 +42,10 @@ public final class LayoutAlgorithmAction extends Action
      */
     public enum LayoutAlgorithm
     {
-        STRIP("Strip", "strip"),
-        ORDERED("Ordered", "ordered"),
-        GREEDY("Greedy", "greedy"),
-        SPLIT_WIDEST_ANGLE("Split widest angle", "splitWidestAngle"),
-        FIRST_POWER_OF_2("First power of 2", "firstPowerOf2");
+        FISHEYE("Large groups in the center", "fisheye"),
+        BLACKHOLE("Small groups in the center", "blackhole"),
+        TREEMAP("TreeMap-like", "treemap"),
+        RANDOM("Random group positions", "random");
 
         final String label;
         final String id;
@@ -66,9 +65,9 @@ public final class LayoutAlgorithmAction extends Action
     /*
      * 
      */
-    private LayoutAlgorithmAction(final String propertyKey, IPropertyHost host)
+    private LayoutInitializerAction(final String propertyKey, IPropertyHost host)
     {
-        super("Initial foam layout", Action.AS_DROP_DOWN_MENU);
+        super("FoamTree layout initializer", Action.AS_DROP_DOWN_MENU);
 
         LayoutAlgorithm [] constants = LayoutAlgorithm.values();
         this.menuCreator = DropDownMenuAction.getMenuFor(propertyKey, getText(), constants, host);
@@ -80,9 +79,9 @@ public final class LayoutAlgorithmAction extends Action
     /**
      * 
      */
-    public LayoutAlgorithmAction()
+    public LayoutInitializerAction()
     {
-        this(LAYOUT_ALGORITHM_KEY, 
+        this(LAYOUT_INITIALIZER_KEY, 
             new PreferenceStorePropertyHost(
                 Activator.getInstance().getPreferenceStore()));
     }
@@ -108,11 +107,11 @@ public final class LayoutAlgorithmAction extends Action
         try
         {
             return LayoutAlgorithm.valueOf(preferenceStore
-                .getString(LAYOUT_ALGORITHM_KEY));
+                .getString(LAYOUT_INITIALIZER_KEY));
         }
         catch (Exception e)
         {
-            return LayoutAlgorithm.STRIP;
+            return LayoutAlgorithm.FISHEYE;
         }
     }
 }

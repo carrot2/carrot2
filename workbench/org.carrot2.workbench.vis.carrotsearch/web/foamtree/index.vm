@@ -1,62 +1,57 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-#set ( $version = "1.0.10" )
-
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>Carrot Search FoamTree - Interactive visualization of hierarchical data structures</title>
+    <title>Carrot Search FoamTree - interactive visualization of hierarchical data structures</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <link rel="stylesheet" type="text/css" href="/common/css/fill.css" />
   </head>
 
   <body>
-    <!-- Required JavaScripts -->
-    <script type="text/javascript" src="assets/$version/required/js/swfobject.js"></script>
-    <script type="text/javascript" src="assets/$version/required/js/carrotsearch.foamtree.min.js"></script>
-    <script type="text/javascript" src="/common/js/swt-to-visualization.js"></script>
-
     <div id="main">
-      <div id="swfcontainer" class="nopadding">
-        <div id="swf">
-          <!-- Alternative content to show when Flash Player is missing, optional -->
-          <div id="alt">To see the visualization, <a href="http://get.adobe.com/flashplayer/">install Adobe Flash Player</a></div>
-        </div>
-      </div>
-
-      <!-- Alternative content if JavaScript is disabled, optional -->
-      <noscript>
-        To use Carrot Search FoamTree, enable JavaScript.
-      </noscript>
+      <div id="viscontainer">Loading Visualization...</div>
     </div>
+
+    <script type="text/javascript" src="assets/js/carrotsearch.foamtree.js"></script>
+    <script type="text/javascript" src="/common/js/swt-to-visualization.js"></script>
 
     <!-- Embed the visualization. -->
     <script type="text/javascript">//<![CDATA[
       var vis = new CarrotSearchFoamTree({
-        // Location of the Flash binary
-        visualizationSwfLocation: "assets/$version/required/swf/com.carrotsearch.visualizations.foamtree.swf",
+        id: "viscontainer",
+        captureMouseEvents: false,
+        pixelRatio: Math.min(1.5, window.devicePixelRatio || 1),
 
-        // Location of the Flash Player installer
-        flashPlayerInstallerSwfLocation: "assets/$version/required/swf/playerProductInstall.swf",
+        rainbowStartColor: "hsla(  0, 100%, 70%, 1)",
+        rainbowEndColor:   "hsla(359, 100%, 70%, 1)",
+        groupFillGradientCenterLightnessShift: 12,
 
-        // Identifier of the DOM element into which to embed Circles
-        id: "swf",
+        relaxationVisible: ${request.getParameter("relaxationVisible")},
+        initializer: "${request.getParameter("initializer")}",
 
-        // Show a tip if embedding fails        
-        onLoad: showTip,
+        rolloutDuration: 1000,
+        relaxationMaxDuration: 5000,
+        wireframeLabelDrawing: true,
 
-        // Attach Flash-SWT event hooks.
-        onInitialize: onInitialized,
-        onGroupSelectionChanged: proxy_groupClicked,
-        onDocumentSelection: proxy_documentClicked,
-        onModelChange: proxy_onModelChanged,
+        onModelChanged: swt_onModelChanged,
 
-        // Customize relaxation.
-        performRelaxation: ${request.getParameter("performRelaxation")},
-        mapLayoutAlgorithm: "${request.getParameter("mapLayoutAlgorithm")}",
-        maxRelaxationSteps: 20
+        onGroupSelectionChanged: function(selection) {
+            swt_onGroupSelectionChanged(selection.groups.map(function(g) { return g.id; }));
+        },
       });
-      ie64Notice();
+
+      // Resize on window size changes
+      window.addEventListener("resize", (function() {
+        var timeout;
+        return function() {
+          window.clearTimeout(timeout);
+          timeout = window.setTimeout(vis.resize, 300);
+        }
+      })()); 
+
+      // The visualization should be loaded and ready by now.
+      swt_onVisualizationLoaded();
     //]]></script>
   </body>
 </html>

@@ -44,9 +44,9 @@ public class ToggleRelaxationAction extends Action
     {
         super(null, IAction.AS_CHECK_BOX);
 
-        setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.ID, "icons/enabled/suspend_co.gif"));
-        setDisabledImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.ID, "icons/disabled/suspend_co.gif"));
-        setToolTipText("Pause relaxation");
+        setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.ID, "icons/enabled/resume_co.gif"));
+        setDisabledImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.ID, "icons/disabled/resume_co.gif"));
+        setToolTipText("Relaxation visible");
 
         Activator.getInstance().getPreferenceStore().addPropertyChangeListener(listener);
         updateState();
