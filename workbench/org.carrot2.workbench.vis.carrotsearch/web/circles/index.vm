@@ -46,7 +46,11 @@
             function() {
               this.set("open", {all: true, open: true});
             },         
-            swt_onModelChanged
+            function() {
+              // Wrap in JS with a dummy function so that arguments are not passed
+              // to SWT (this causes errors on a Mac).
+              swt_onModelChanged();
+            }
         ],
 
         onGroupSelectionChanged: function(selection) {

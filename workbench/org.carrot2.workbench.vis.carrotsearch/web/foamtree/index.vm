@@ -34,7 +34,11 @@
         relaxationMaxDuration: 5000,
         wireframeLabelDrawing: true,
 
-        onModelChanged: swt_onModelChanged,
+        onModelChanged: function() {
+          // Wrap in JS with a dummy function so that arguments are not passed
+          // to SWT (this causes errors on a Mac).
+          swt_onModelChanged();
+        },
 
         onGroupSelectionChanged: function(selection) {
             swt_onGroupSelectionChanged(selection.groups.map(function(g) { return g.id; }));
