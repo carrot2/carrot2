@@ -99,16 +99,25 @@ public class DcsAppTest extends CarrotTestCase
         // Tests run with slf4j-log4j, so attach to the logger directly.
         logStream = BufferingAppender.attachToRootLogger();
 
+        // Try to bind to a random port number a few times
         dcs = new DcsApp("dcs");
-        dcs.port = 57913;
-        try
+        int retries = 10;
+        
+        while (retries-- > 0)
         {
-            dcs.start(System.getProperty("dcs.test.web.dir.prefix"));
-        }
-        catch (Throwable e)
-        {
-            dcs = null;
-            throw e;
+            dcs.port = 1024 + (int) (Math.random() * (65536 - 1024));
+            try
+            {
+                dcs.start(System.getProperty("dcs.test.web.dir.prefix"));
+                break;
+            }
+            catch (Throwable e)
+            {
+                if (retries == 0)
+                {
+                    fail("Failed to find a free port number to bind to.");
+                }
+            }
         }
 
         startupLog = logStream.getBuffer();
