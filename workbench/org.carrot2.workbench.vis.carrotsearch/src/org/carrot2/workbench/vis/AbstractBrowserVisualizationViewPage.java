@@ -12,30 +12,22 @@
 
 package org.carrot2.workbench.vis;
 
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.Cluster;
-import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
-import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.BrowserFacade;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.SearchEditorSelectionProvider;
@@ -55,18 +47,16 @@ import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
-import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Objects;
+import com.carrotsearch.hppc.IntStack;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public abstract class FlashViewPage extends Page
+public abstract class AbstractBrowserVisualizationViewPage extends Page
 {
     /**
      * Delay between the update event and refreshing the browser view.
@@ -178,28 +168,13 @@ public abstract class FlashViewPage extends Page
      */
     private ProcessingResult lastProcessingResult;
 
-    /**
-     * @see DocumentData
-     */
-    private EnumSet<DocumentData> passData;
-
-    /**
-     * What data to pass to the visualization. Helps to decrease memory requirements
-     * on the browser side.
-     */
-    protected static enum DocumentData {
-        TITLE,
-        SNIPPET
-    }
-
     /*
      * 
      */
-    public FlashViewPage(SearchEditor editor, String entryPageUri, EnumSet<DocumentData> passData)
+    public AbstractBrowserVisualizationViewPage(SearchEditor editor, String entryPageUri)
     {
         this.entryPageUri = entryPageUri;
         this.editor = editor;
-        this.passData = passData;
     }
 
     /*
@@ -218,11 +193,12 @@ public abstract class FlashViewPage extends Page
             return Status.OK_STATUS;
         }
 
-        browser.execute("javascript:clearSelection();");
+        IntStack ids = IntStack.newInstanceWithCapacity(selected.size());
         for (Cluster cluster : selected)
         {
-            browser.execute("javascript:selectGroupById(" + cluster.getId() + ", true);");
+            ids.push(cluster.getId());
         }
+        browser.execute("javascript:selectGroupsById(" + Arrays.toString(ids.toArray()) + ");");
 
         return Status.OK_STATUS;
     }
@@ -264,18 +240,17 @@ public abstract class FlashViewPage extends Page
 
         try
         {
-            final ByteArrayOutputStream os = new ByteArrayOutputStream();
-            new Persister().write(smallerMemFootprintMirror(pr), os);
-            os.close();
+            StringWriter sw = new StringWriter();
+            pr.serializeJson(sw, "updateDataJson", true, false, true, false);
 
-            String xml = new String(os.toByteArray(), "UTF-8");
-            logger.info("Updating view XML: " + StringEscapeUtils.escapeJava(StringUtils.abbreviate(xml, 120)));
+            String json = sw.toString();
+            logger.info("Updating view XML: " + 
+                StringUtils.abbreviate(json, 180));
 
-            if (!browser.execute("javascript:updateDataXml('" 
-                + StringEscapeUtils.escapeJavaScript(xml) + "')"))
+            if (!browser.execute("javascript:" + json))
             {
-                logger.warn("Failed to update the XML (reason unknown): "
-                    + StringUtils.abbreviate(xml, 200));
+                logger.warn("Failed to update the data model (reason unknown): "
+                    + StringUtils.abbreviate(json, 200));
             }
             else
             {
@@ -288,43 +263,6 @@ public abstract class FlashViewPage extends Page
         }
 
         return Status.OK_STATUS;
-    }
-
-    /**
-     * Create a mirror of a processing result with a smaller memory footprint
-     * for visualizations.
-     */
-    private ProcessingResultMirror smallerMemFootprintMirror(ProcessingResult pr)
-    {
-        ProcessingResultMirror prm = new ProcessingResultMirror();
-        prm.query = pr.getAttribute(AttributeNames.QUERY);
-        prm.documents = Lists.newArrayList();
-        IdentityHashMap<Document, Document> docMapping = Maps.newIdentityHashMap();
-        for (Document doc : pr.getDocuments()) {
-            String title = passData.contains(DocumentData.TITLE) ? doc.getTitle() : null;
-            String snippet = passData.contains(DocumentData.SNIPPET) ? doc.getSummary() : null;
-            Document docMirror = new Document(title, snippet, null, null, doc.getStringId());
-            prm.documents.add(docMirror);
-            docMapping.put(doc, docMirror);
-        }
-        prm.clusters = Lists.newArrayList();
-        for (Cluster c : pr.getClusters()) {
-            prm.clusters.add(mirrorOf(c, docMapping));
-        }
-        return prm;
-    }
-
-    private static Cluster mirrorOf(Cluster c, IdentityHashMap<Document, Document> docMapping)
-    {
-        Cluster cMirror = new Cluster(c.getId(), null);
-        for (Document doc : c.getDocuments()) {
-            cMirror.addDocuments(docMapping.get(doc));
-        }
-        cMirror.addPhrases(c.getPhrases());
-        for (Cluster sub : c.getSubclusters()) {
-            cMirror.addSubclusters(mirrorOf(sub, docMapping));
-        }
-        return cMirror;
     }
 
     /**
@@ -364,28 +302,6 @@ public abstract class FlashViewPage extends Page
     /**
      * 
      */
-    private static void openURL(String location)
-    {
-        try
-        {
-            WorkbenchCorePlugin
-                .getDefault().getWorkbench().getBrowserSupport()
-                .createBrowser(
-                    IWorkbenchBrowserSupport.AS_EDITOR |
-                    IWorkbenchBrowserSupport.LOCATION_BAR |
-                    IWorkbenchBrowserSupport.NAVIGATION_BAR |
-                    IWorkbenchBrowserSupport.STATUS, null, null, null)
-                .openURL(new URL(location));
-        }
-        catch (Exception e)
-        {
-            Utils.logError("Couldn't open internal browser", e, false);
-        }
-    }
-
-    /**
-     * 
-     */
     @Override
     public void createControl(Composite parent)
     {
@@ -401,38 +317,19 @@ public abstract class FlashViewPage extends Page
         /*
          * Register custom callback functions.
          */
-        new BrowserFunction(browser, "swt_groupClicked")
+        new BrowserFunction(browser, "swt_onGroupSelectionChanged")
         {
             public Object function(Object [] arguments)
             {
                 if (!browserInitialized) return null;
 
-                // selected groups, [selected documents]
-                if (arguments.length > 1)
-                {
-                    Object [] ids = (Object[]) arguments[0];
-                    int [] groupIds = new int [ids.length];
-                    
-                    for (int i = 0; i < groupIds.length; i++)
-                      groupIds[i] = (int) Double.parseDouble(ids[i].toString());
-                    doGroupSelection(groupIds);
+                Object [] ids = (Object[]) arguments[0];
+                int [] groupIds = new int [ids.length];
+                
+                for (int i = 0; i < groupIds.length; i++) {
+                  groupIds[i] = (int) Double.parseDouble(ids[i].toString());
                 }
-
-                return null;
-            }
-        };
-
-        new BrowserFunction(browser, "swt_documentClicked")
-        {
-            public Object function(Object [] arguments)
-            {
-                if (!browserInitialized) return null;
-
-                if (arguments.length == 1)
-                {
-                    doDocumentSelection(arguments[0].toString());
-                }
-
+                doGroupSelection(groupIds);
                 return null;
             }
         };
@@ -452,8 +349,17 @@ public abstract class FlashViewPage extends Page
             public Object function(Object [] arguments)
             {
                 browserInitialized = true;
-                new ReloadXMLJob("browser loaded").reschedule(0);
+                new ReloadXMLJob("Browser loaded").reschedule(0);
                 selectionJob.reschedule(0);
+                return null;
+            }
+        };
+
+        new BrowserFunction(browser, "swt_log")
+        {
+            public Object function(Object [] arguments)
+            {
+                logger.info("JS->SWT log: " + Arrays.toString(arguments));
                 return null;
             }
         };
@@ -497,28 +403,6 @@ public abstract class FlashViewPage extends Page
           (SearchEditorSelectionProvider) editor.getSite().getSelectionProvider();
 
         prov.setSelected(selectedGroups, selectionListener);
-    }
-
-    /**
-     * 
-     */
-    private void doDocumentSelection(String documentId)
-    {
-        final ProcessingResult pr = getProcessingResult();
-        if (pr == null) return;
-
-        for (Document d : pr.getDocuments())
-        {
-            if (Objects.equal(d.getStringId(), documentId))
-            {
-                final String url = d.getField(Document.CONTENT_URL);
-                if (!StringUtils.isEmpty(url))
-                {
-                    openURL(url);
-                }
-                break;
-            }
-        }
     }
 
     /**

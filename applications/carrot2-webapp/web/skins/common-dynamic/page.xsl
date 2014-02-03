@@ -16,9 +16,10 @@
     <xsl:apply-templates select="/page/asset-urls/js-urls/js-url" />
   
     <xsl:if test="contains('circles foamtree', /page/request/@view)">
-      <script type="text/javascript" src="{$skin-path}/common-dynamic/js/swfobject.js"><xsl:comment></xsl:comment></script>
+        <script type="text/javascript" src="{$skin-path}/common-dynamic/js/carrotsearch.circles.html5.js"><xsl:comment></xsl:comment></script>
+        <script type="text/javascript" src="{$skin-path}/common-dynamic/js/carrotsearch.foamtree.js"><xsl:comment></xsl:comment></script>
     </xsl:if>
-    
+
     <script type="text/javascript">
       jQuery.carrot2.build = "<xsl:value-of select="concat($version-number, 'b', $build-number)" />";
       jQuery.options.url = "<xsl:value-of select="$attributes-url" disable-output-escaping="no" />";
@@ -33,16 +34,18 @@
 
         <xsl:if test="contains('circles foamtree', /page/request/@view)">
           jQuery.visualization.dataUrl = "<xsl:value-of select="$xml-url-encoded" />";
-          jQuery.visualization.skinPath = "<xsl:value-of select="$skin-path" />";
-          jQuery.visualization.logo = "<xsl:value-of select="$circles-logo" />";
           jQuery.visualization.visualization = "<xsl:value-of select="/page/request/@view" />";
+          
+          // Are these even used anymore?
+          jQuery.visualization.skinPath = "<xsl:value-of select="$skin-path" />";
+          jQuery.visualization.logo = "<xsl:value-of select="$circles-logo" />";          
         </xsl:if>
       </xsl:if>
 
-<!-- Common initialization -->
-$(document).ready(function() {
-  $("body").trigger("carrot2-loaded");
-});
+      <!-- Common initialization -->
+      $(document).ready(function() {
+        $("body").trigger("carrot2-loaded");
+      });
     </script>
     
     <xsl:apply-imports />
@@ -75,9 +78,6 @@ $(document).ready(function() {
           <xsl:attribute name="class">single-view</xsl:attribute>
         </xsl:if>
         <xsl:comment></xsl:comment>
-        <xsl:if test="contains('circles foamtree', /page/request/@view)">
-          <div id="clusters-visu"><xsl:comment></xsl:comment></div>
-        </xsl:if>
       </div>
 
       <div id="split-panel"><xsl:comment></xsl:comment></div>
