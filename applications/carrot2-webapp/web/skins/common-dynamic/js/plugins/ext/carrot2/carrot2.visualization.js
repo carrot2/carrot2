@@ -6,15 +6,16 @@
   
   $(document).ready(function() {
     if (typeof $.visualization.dataUrl != 'undefined') {
-      if (!CarrotSearchFoamTree.supported | !CarrotSearchCircles.supported) {
+      if (!CarrotSearchFoamTree.supported || !CarrotSearchCircles.supported) {
         $("#clusters-panel").text("Oops! Visualizations require a modern, HTML5-capable browser.");
         return;
       }
 
+      var containerId = "clusters-panel";
       var visualization;
       if ($.visualization.visualization == 'foamtree') {
         visualization = new CarrotSearchFoamTree({
-          id: "clusters-panel",
+          id: containerId,
           captureMouseEvents: false,
           pixelRatio: Math.min(1.5, window.devicePixelRatio || 1),
 
@@ -29,7 +30,7 @@
       if ($.visualization.visualization == 'circles') {
         // configure inner title box, animation speed, colors. 
         visualization = new CarrotSearchCircles({
-          id: "clusters-panel",
+          id: containerId,
           captureMouseEvents: false,
           pixelRatio: Math.min(1.5, window.devicePixelRatio || 1),
           titleBar: "inscribed",
@@ -62,8 +63,8 @@
               $("#clusters-panel").trigger("carrot2-clusters-selected-top");
             } else {
               if (selection.groups.length > 1) {
-                var docUnion = {}
-                var labels = []
+                var docUnion = {};
+                var labels = [];
                 selection.groups.forEach(function(g) {
                   g.documents.forEach(function(d) { docUnion[d] = true; });
                   labels.push(g.label);
@@ -78,14 +79,39 @@
         });
       }
 
-      // Attach container resize listener.
-      window.addEventListener("resize", (function() {
+      // Add a timeout-based check for container size. Unfortunately
+      // there seems to be no other event-based way to do it (hacks with
+      // overflow/underflow don't work in IE11).
+      var resizer = (function() {
+        var container = document.getElementById(containerId);
+        var dimensions = {
+          width: container.clientWidth,
+          height: container.clientHeight
+        };
         var timeout;
         return function() {
-          window.clearTimeout(timeout);
-          timeout = window.setTimeout(visualization.resize, 300);
+          if (timeout) window.clearTimeout(timeout);
+          timeout = window.setTimeout(arguments.callee, 500);
+
+          if (container.clientWidth != dimensions.width ||
+              container.clientHeight != dimensions.height) {
+            dimensions.width = container.clientWidth;
+            dimensions.height = container.clientHeight;
+            visualization.resize();
+          }
         };
-      })());
+      })();
+
+      window.addEventListener("resize", resizer);
+      resizer();
+
+      // Add a timeout-based check for container size. Unfortunately
+      // there seems to be no other event-based way to do it (hacks with overflow/underflow don't work in IE11).
+      var dimensions = {};
+      (function() {
+
+        window.setTimeout(arguments.callee, 1000);
+      })();
 
       // Load the data model (convert from legacy XML).
       function convert(clusters) {
@@ -111,8 +137,6 @@
             groups: subgroups
           }
         });
-
-        console.log($foo);
 
         return jQuery.makeArray($foo);
       }
