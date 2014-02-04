@@ -13,18 +13,11 @@
 package org.carrot2.workbench.vis;
 
 import java.io.StringWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.workbench.core.helpers.PostponableJob;
@@ -54,7 +47,6 @@ import org.slf4j.LoggerFactory;
 
 import com.carrotsearch.hppc.IntStack;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public abstract class AbstractBrowserVisualizationViewPage extends Page
 {
@@ -266,40 +258,6 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     }
 
     /**
-     * Contribute custom parameters to the page URI. 
-     */
-    protected Map<String, Object> contributeCustomParams()
-    {
-        return Maps.newHashMap();
-    }
-
-    /**
-     * Construct a HTTP GET. 
-     */
-    private String createGetURI(String uriString, Map<String, Object> customParams)
-    {
-        try
-        {
-            List<NameValuePair> pairs = Lists.newArrayList();
-            for (Map.Entry<String, Object> e : customParams.entrySet())
-            {
-                pairs.add(new BasicNameValuePair(e.getKey(), e.getValue().toString()));
-            }
-
-            URI uri = new URI(uriString);
-            uri = URIUtils.createURI(uri.getScheme(), uri.getHost(), uri.getPort(),
-                uri.getPath(),
-                URLEncodedUtils.format(pairs, "UTF-8"), null);
-
-            return uri.toString();
-        }
-        catch (URISyntaxException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * 
      */
     @Override
@@ -311,8 +269,7 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
         browser = BrowserFacade.createNew(parent, SWT.NONE);
 
         final Activator plugin = Activator.getInstance();
-        final Map<String, Object> customParams = contributeCustomParams();
-        final String refreshURL = createGetURI(plugin.getFullURL(entryPageUri), customParams);
+        final String refreshURL = plugin.getFullURL(entryPageUri);
 
         /*
          * Register custom callback functions.

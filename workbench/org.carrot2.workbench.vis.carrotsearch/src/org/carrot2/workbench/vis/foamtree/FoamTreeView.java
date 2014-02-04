@@ -23,11 +23,6 @@ import org.eclipse.ui.*;
 public final class FoamTreeView extends PageBookViewBase
 {
     /**
-     * Entry page for the view.
-     */
-    protected static final String ENTRY_PAGE = "/foamtree/index.vm";
-
-    /**
      * Public identifier of this view.
      */
     public static final String ID = "org.carrot2.workbench.views.foamtree";

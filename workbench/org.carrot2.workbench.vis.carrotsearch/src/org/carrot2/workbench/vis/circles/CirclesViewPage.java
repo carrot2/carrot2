@@ -29,7 +29,7 @@ final class CirclesViewPage extends AbstractBrowserVisualizationViewPage
     /**
      * Entry page for the view.
      */
-    private static final String ENTRY_PAGE = "/circles/index.vm";
+    private static final String ENTRY_PAGE = "/circles.html";
 
     /*
      * 
