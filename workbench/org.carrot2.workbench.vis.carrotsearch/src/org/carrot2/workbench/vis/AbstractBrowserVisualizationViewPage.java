@@ -13,6 +13,7 @@
 package org.carrot2.workbench.vis;
 
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +21,9 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingResult;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.BrowserFacade;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.SearchEditorSelectionProvider;
@@ -37,10 +40,13 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.BrowserFunction;
+import org.eclipse.swt.browser.LocationAdapter;
+import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
 import org.slf4j.Logger;
@@ -308,8 +314,9 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
             {
                 browserInitialized = true;
                 onBrowserReady();
-                new ReloadXMLJob("Browser loaded").reschedule(0);
-                selectionJob.reschedule(0);
+
+                ReloadXMLJob reloadXMLJob = new ReloadXMLJob("Browser loaded");
+                reloadXMLJob.reschedule(500);
                 return null;
             }
         };
@@ -325,6 +332,18 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
 
         browserInitialized = false;
         browser.setUrl(refreshURL);
+
+        browser.addLocationListener(new LocationAdapter()
+        {
+            @Override
+            public void changing(LocationEvent event)
+            {
+                if (!event.location.startsWith("file:")) {
+                    event.doit = false;
+                    openURL(event.location);
+                }
+            }
+        });            
 
         editor.getSearchResult().addListener(editorSyncListener);
         editor.getSite().getSelectionProvider().addSelectionChangedListener(
@@ -398,8 +417,35 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     void updateSize(Rectangle clientArea)
     {
         if (isBrowserInitialized()) {
-            getBrowser().execute("javascript:updateSize("
-                + clientArea.width + ", " + clientArea.height + ")");
+            if (!getBrowser().isDisposed()) {
+                getBrowser().execute("javascript:updateSize("
+                    + clientArea.width + ", " + clientArea.height + ")");
+            } else {
+                logger.warn("Browser disposed: " + this);
+            }
+        }
+    }    
+    
+
+    /**
+     * 
+     */
+    private static void openURL(String location)
+    {
+        try
+        {
+            WorkbenchCorePlugin
+                .getDefault().getWorkbench().getBrowserSupport()
+                .createBrowser(
+                    IWorkbenchBrowserSupport.AS_EDITOR |
+                    IWorkbenchBrowserSupport.LOCATION_BAR |
+                    IWorkbenchBrowserSupport.NAVIGATION_BAR |
+                    IWorkbenchBrowserSupport.STATUS, null, null, null)
+                .openURL(new URL(location));
+        }
+        catch (Exception e)
+        {
+            Utils.logError("Couldn't open internal browser", e, false);
         }
     }    
 }

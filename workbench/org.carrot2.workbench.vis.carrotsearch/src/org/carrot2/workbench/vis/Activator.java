@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.slf4j.LoggerFactory;
 
 /**
  * Bundle activator.
@@ -64,11 +65,14 @@ public class Activator extends AbstractUIPlugin
         final URL bundleURL = FileLocator.find(getBundle(), new Path("web"), null);
         URL resourceURL = FileLocator.toFileURL(bundleURL);
 
+        LoggerFactory.getLogger(Activator.class).debug("Bundled resources at: "
+            + resourceURL.toExternalForm());
+
         if (!"file".equals(resourceURL.getProtocol())) {
             throw new Exception("Expected file protocol on bundled Web resources: "
                 + resourceURL.toExternalForm());
         }
-        
+
         this.staticResourceURL = resourceURL.toExternalForm();
         while (this.staticResourceURL.endsWith("/")) {
             this.staticResourceURL = staticResourceURL.substring(0, staticResourceURL.length() - 1);
@@ -128,8 +132,10 @@ public class Activator extends AbstractUIPlugin
     {
         synchronized (this)
         {
-            for (Map.Entry<SearchEditor, Integer> e : editors.entrySet()) {
-                if (e.getValue().intValue() == id) {
+            for (Map.Entry<SearchEditor, Integer> e : editors.entrySet())
+            {
+                if (e.getValue().intValue() == id)
+                {
                     return e.getKey();
                 }
             }

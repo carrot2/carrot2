@@ -47,8 +47,8 @@ public abstract class AbstractVisualizationView extends PageBookViewBase
     @Override
     protected final void doDestroyPage(IWorkbenchPart part, PageRec pageRecord)
     {
-        super.doDestroyPage(part, pageRecord);
         listeners.remove(pageRecord.page);
+        super.doDestroyPage(part, pageRecord);
     }
 
     /**
