@@ -306,6 +306,7 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
             public Object function(Object [] arguments)
             {
                 browserInitialized = true;
+                onBrowserReady();
                 new ReloadXMLJob("Browser loaded").reschedule(0);
                 selectionJob.reschedule(0);
                 return null;
@@ -328,6 +329,11 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
         editor.getSite().getSelectionProvider().addSelectionChangedListener(
             selectionListener);
     }
+
+    /**
+     * Invoked when the browser successfully embedded the visualization.
+     */
+    protected void onBrowserReady() {}
 
     @Override
     public Control getControl()

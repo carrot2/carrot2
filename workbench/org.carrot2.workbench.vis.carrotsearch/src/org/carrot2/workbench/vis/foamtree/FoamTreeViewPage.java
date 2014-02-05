@@ -20,6 +20,7 @@ import org.carrot2.workbench.vis.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.IPageSite;
@@ -51,6 +52,9 @@ final class FoamTreeViewPage extends AbstractBrowserVisualizationViewPage
                     throw new IllegalStateException();
 
                 passAttributes();
+
+                // Reload the model to flush new settings.
+                getBrowser().execute("javascript:vis.set('dataObject', vis.get('dataObject'))");
             }
         }
     };
@@ -63,12 +67,18 @@ final class FoamTreeViewPage extends AbstractBrowserVisualizationViewPage
         super(editor, ENTRY_PAGE);
     }
 
+    @Override
+    protected void onBrowserReady()
+    {
+        passAttributes();
+    }
+    
     protected void passAttributes()
     {
-        getBrowser().execute("javascript:vis.set({"
+        Browser browser = getBrowser();
+        browser.execute("javascript:vis.set({"
             + "relaxationVisible: " + ToggleRelaxationAction.getCurrent() + ","
             + "initializer: '" + LayoutInitializerAction.getCurrent().id + "'})");
-        getBrowser().execute("javascript:vis.set('dataObject', vis.get('dataObject'))");
     }
 
     /**
