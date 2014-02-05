@@ -59,7 +59,7 @@ function installOnErrorHandler() {
       var container = document.getElementById("viscontainer");
       if (container) {
         var hasSwtLog = (typeof swt_log === 'undefined');
-        var msg = "Error: " + error + ", container size: " +
+        var msg = "Error: " + JSON.stringify(arguments, null, "  ") + ", container size: " +
           container.clientWidth + "x" + container.clientHeight + 
           (hasSwtLog ? " swt_log defined." : " swt_log undefined.");
 
