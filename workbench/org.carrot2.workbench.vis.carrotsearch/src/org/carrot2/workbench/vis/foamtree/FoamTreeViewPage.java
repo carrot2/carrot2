@@ -51,10 +51,12 @@ final class FoamTreeViewPage extends AbstractBrowserVisualizationViewPage
                 if (Display.getCurrent() == null)
                     throw new IllegalStateException();
 
-                passAttributes();
-
                 // Reload the model to flush new settings.
-                getBrowser().execute("javascript:vis.set('dataObject', vis.get('dataObject'))");
+                if (isBrowserInitialized()) {
+                    passAttributes();
+                    getBrowser().execute(
+                        "javascript:vis.set('dataObject', vis.get('dataObject'))");
+                }
             }
         }
     };
@@ -75,10 +77,12 @@ final class FoamTreeViewPage extends AbstractBrowserVisualizationViewPage
     
     protected void passAttributes()
     {
-        Browser browser = getBrowser();
-        browser.execute("javascript:vis.set({"
-            + "relaxationVisible: " + ToggleRelaxationAction.getCurrent() + ","
-            + "initializer: '" + LayoutInitializerAction.getCurrent().id + "'})");
+        if (isBrowserInitialized()) {
+            Browser browser = getBrowser();
+            browser.execute("javascript:vis.set({"
+                + "relaxationVisible: " + ToggleRelaxationAction.getCurrent() + ","
+                + "initializer: '" + LayoutInitializerAction.getCurrent().id + "'})");
+        }
     }
 
     /**

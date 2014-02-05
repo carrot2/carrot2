@@ -36,6 +36,15 @@ function updateDataJson(c2json) {
     });
 }
 
+/** SWT->JS: view changed size. */
+function updateSize() {
+    // Defer actual resize until we receive resize event.
+    window.addEventListener("resize", function() {
+        vis.resize();
+        window.removeEventListener("resize", arguments.callee);    
+    });
+}
+
 /** 
  * Defer visualization embedding until we have a non 0x0 container size
  * and SWT browser functions are defined.

@@ -37,6 +37,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.BrowserFunction;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -388,4 +389,17 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     {
         return browser;
     }
+    
+    public boolean isBrowserInitialized()
+    {
+        return browser != null && browserInitialized;
+    }
+
+    void updateSize(Rectangle clientArea)
+    {
+        if (isBrowserInitialized()) {
+            getBrowser().execute("javascript:updateSize("
+                + clientArea.width + ", " + clientArea.height + ")");
+        }
+    }    
 }

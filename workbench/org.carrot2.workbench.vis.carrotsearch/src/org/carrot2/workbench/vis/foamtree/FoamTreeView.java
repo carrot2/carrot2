@@ -12,15 +12,19 @@
 
 package org.carrot2.workbench.vis.foamtree;
 
-import org.carrot2.workbench.core.ui.PageBookViewBase;
 import org.carrot2.workbench.core.ui.SearchEditor;
+import org.carrot2.workbench.vis.AbstractBrowserVisualizationViewPage;
+import org.carrot2.workbench.vis.AbstractVisualizationView;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.ui.*;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 
 /**
  * {@link FoamTreeView} displays clusters using browser-embedded Flash application.
  */
-public final class FoamTreeView extends PageBookViewBase
+public final class FoamTreeView extends AbstractVisualizationView
 {
     /**
      * Public identifier of this view.
@@ -31,32 +35,19 @@ public final class FoamTreeView extends PageBookViewBase
     public void init(IViewSite site, IMemento memento) throws PartInitException
     {
         super.init(site, memento);
-
+    
         IToolBarManager toolbar = site.getActionBars().getToolBarManager();
         toolbar.add(new ToggleRelaxationAction());
         toolbar.add(new LayoutInitializerAction());
     }
 
-    /**
-     * Create a document list for the given part.
-     */
     @Override
-    protected PageRec doCreatePage(IWorkbenchPart part)
+    protected AbstractBrowserVisualizationViewPage wrappedCreatePage(IWorkbenchPart part)
     {
         final SearchEditor editor = (SearchEditor) part;
         final FoamTreeViewPage page = new FoamTreeViewPage(editor);
         initPage(page);
         page.createControl(getPageBook());
-
-        return new PageRec(part, page);
-    }
-    
-    /**
-     * Only react to {@link SearchEditor} instances.
-     */
-    @Override
-    protected boolean isImportant(IWorkbenchPart part)
-    {
-        return (part instanceof SearchEditor);
+        return page;
     }
 }

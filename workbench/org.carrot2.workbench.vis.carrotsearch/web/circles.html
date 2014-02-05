@@ -61,15 +61,6 @@
             },
           });
     
-          // Resize on window size changes
-          window.addEventListener("resize", (function() {
-            var timeout;
-            return function() {
-              window.clearTimeout(timeout);
-              timeout = window.setTimeout(vis.resize, 300);
-            }
-          })()); 
-    
           // The visualization should be loaded and ready by now.
           swt_onVisualizationLoaded();
       });
