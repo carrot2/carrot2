@@ -21,9 +21,10 @@
   <para>
     &PROD; contains two document clustering algorighms designed specifically for
     search results clustering: Suffix Tree Clustering and Lingo.
-    &PROD; also contains components for fetching search results from several search
-    engines, such as Bing, Google, but it also supports other
-    sources of documents like Lucene or Solr indexes. 
+    &PROD; offers components for fetching data from search engines that provide
+    the required APIs (for example Microsoft Bing or PubMed), 
+    as well as  other sources of documents like Lucene, Apache Solr or
+    ElasticSearch.
   </para>
 
   <para>
