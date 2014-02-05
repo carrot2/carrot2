@@ -12,16 +12,15 @@
 
 package org.carrot2.workbench.vis.foamtree;
 
-import java.util.Map;
-
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.actions.ExportImageAction;
 import org.carrot2.workbench.core.ui.actions.IControlProvider;
-import org.carrot2.workbench.vis.Activator;
 import org.carrot2.workbench.vis.AbstractBrowserVisualizationViewPage;
+import org.carrot2.workbench.vis.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.IPageSite;
@@ -36,7 +35,7 @@ final class FoamTreeViewPage extends AbstractBrowserVisualizationViewPage
     /**
      * Entry page for the view.
      */
-    private static final String ENTRY_PAGE = "/foamtree/index.vm";
+    private static final String ENTRY_PAGE = "/foamtree.html";
 
     /**
      * 
@@ -52,10 +51,12 @@ final class FoamTreeViewPage extends AbstractBrowserVisualizationViewPage
                 if (Display.getCurrent() == null)
                     throw new IllegalStateException();
 
-                getBrowser().execute("javascript:vis.set({"
-                    + "relaxationVisible: " + ToggleRelaxationAction.getCurrent() + ","
-                    + "initializer: '" + LayoutInitializerAction.getCurrent().id + "'})");
-                getBrowser().execute("javascript:vis.set('dataObject', vis.get('dataObject'))");
+                // Reload the model to flush new settings.
+                if (isBrowserInitialized()) {
+                    passAttributes();
+                    getBrowser().execute(
+                        "javascript:vis.set('dataObject', vis.get('dataObject'))");
+                }
             }
         }
     };
@@ -66,6 +67,22 @@ final class FoamTreeViewPage extends AbstractBrowserVisualizationViewPage
     public FoamTreeViewPage(SearchEditor editor)
     {
         super(editor, ENTRY_PAGE);
+    }
+
+    @Override
+    protected void onBrowserReady()
+    {
+        passAttributes();
+    }
+    
+    protected void passAttributes()
+    {
+        if (isBrowserInitialized()) {
+            Browser browser = getBrowser();
+            browser.execute("javascript:vis.set({"
+                + "relaxationVisible: " + ToggleRelaxationAction.getCurrent() + ","
+                + "initializer: '" + LayoutInitializerAction.getCurrent().id + "'})");
+        }
     }
 
     /**
@@ -96,14 +113,5 @@ final class FoamTreeViewPage extends AbstractBrowserVisualizationViewPage
 
         IPreferenceStore store = Activator.getInstance().getPreferenceStore();
         store.removePropertyChangeListener(listener);
-    }
-
-    @Override
-    protected Map<String, Object> contributeCustomParams()
-    {
-        Map<String, Object> params = super.contributeCustomParams();
-        params.put("relaxationVisible", ToggleRelaxationAction.getCurrent());
-        params.put("initializer", LayoutInitializerAction.getCurrent().id);
-        return params;
     }
 }

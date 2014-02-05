@@ -13,21 +13,17 @@
 package org.carrot2.workbench.vis;
 
 import java.io.StringWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingResult;
+import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
+import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.core.ui.BrowserFacade;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.SearchEditorSelectionProvider;
@@ -44,9 +40,13 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.BrowserFunction;
+import org.eclipse.swt.browser.LocationAdapter;
+import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
 import org.slf4j.Logger;
@@ -54,7 +54,6 @@ import org.slf4j.LoggerFactory;
 
 import com.carrotsearch.hppc.IntStack;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public abstract class AbstractBrowserVisualizationViewPage extends Page
 {
@@ -266,40 +265,6 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     }
 
     /**
-     * Contribute custom parameters to the page URI. 
-     */
-    protected Map<String, Object> contributeCustomParams()
-    {
-        return Maps.newHashMap();
-    }
-
-    /**
-     * Construct a HTTP GET. 
-     */
-    private String createGetURI(String uriString, Map<String, Object> customParams)
-    {
-        try
-        {
-            List<NameValuePair> pairs = Lists.newArrayList();
-            for (Map.Entry<String, Object> e : customParams.entrySet())
-            {
-                pairs.add(new BasicNameValuePair(e.getKey(), e.getValue().toString()));
-            }
-
-            URI uri = new URI(uriString);
-            uri = URIUtils.createURI(uri.getScheme(), uri.getHost(), uri.getPort(),
-                uri.getPath(),
-                URLEncodedUtils.format(pairs, "UTF-8"), null);
-
-            return uri.toString();
-        }
-        catch (URISyntaxException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * 
      */
     @Override
@@ -311,8 +276,7 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
         browser = BrowserFacade.createNew(parent, SWT.NONE);
 
         final Activator plugin = Activator.getInstance();
-        final Map<String, Object> customParams = contributeCustomParams();
-        final String refreshURL = createGetURI(plugin.getFullURL(entryPageUri), customParams);
+        final String refreshURL = plugin.getFullURL(entryPageUri);
 
         /*
          * Register custom callback functions.
@@ -349,8 +313,10 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
             public Object function(Object [] arguments)
             {
                 browserInitialized = true;
-                new ReloadXMLJob("Browser loaded").reschedule(0);
-                selectionJob.reschedule(0);
+                onBrowserReady();
+
+                ReloadXMLJob reloadXMLJob = new ReloadXMLJob("Browser loaded");
+                reloadXMLJob.reschedule(500);
                 return null;
             }
         };
@@ -367,10 +333,27 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
         browserInitialized = false;
         browser.setUrl(refreshURL);
 
+        browser.addLocationListener(new LocationAdapter()
+        {
+            @Override
+            public void changing(LocationEvent event)
+            {
+                if (!event.location.startsWith("file:")) {
+                    event.doit = false;
+                    openURL(event.location);
+                }
+            }
+        });            
+
         editor.getSearchResult().addListener(editorSyncListener);
         editor.getSite().getSelectionProvider().addSelectionChangedListener(
             selectionListener);
     }
+
+    /**
+     * Invoked when the browser successfully embedded the visualization.
+     */
+    protected void onBrowserReady() {}
 
     @Override
     public Control getControl()
@@ -425,4 +408,44 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     {
         return browser;
     }
+    
+    public boolean isBrowserInitialized()
+    {
+        return browser != null && browserInitialized;
+    }
+
+    void updateSize(Rectangle clientArea)
+    {
+        if (isBrowserInitialized()) {
+            if (!getBrowser().isDisposed()) {
+                getBrowser().execute("javascript:updateSize("
+                    + clientArea.width + ", " + clientArea.height + ")");
+            } else {
+                logger.warn("Browser disposed: " + this);
+            }
+        }
+    }    
+    
+
+    /**
+     * 
+     */
+    private static void openURL(String location)
+    {
+        try
+        {
+            WorkbenchCorePlugin
+                .getDefault().getWorkbench().getBrowserSupport()
+                .createBrowser(
+                    IWorkbenchBrowserSupport.AS_EDITOR |
+                    IWorkbenchBrowserSupport.LOCATION_BAR |
+                    IWorkbenchBrowserSupport.NAVIGATION_BAR |
+                    IWorkbenchBrowserSupport.STATUS, null, null, null)
+                .openURL(new URL(location));
+        }
+        catch (Exception e)
+        {
+            Utils.logError("Couldn't open internal browser", e, false);
+        }
+    }    
 }

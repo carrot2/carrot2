@@ -26,47 +26,6 @@
    </extension>
 
    <extension
-         point="org.eclipse.equinox.http.registry.httpcontexts">
-      <httpcontext
-            id="org.carrot2.workbench.vis.circles.http-service">
-         <resource-mapping
-               path="/">
-         </resource-mapping>
-      </httpcontext>
-   </extension>
-
-   <extension
-         point="org.eclipse.equinox.http.registry.resources">
-      <resource
-            alias="/"
-            base-name="/web"
-            httpcontextId="org.carrot2.workbench.vis.circles.http-service">
-      </resource>
-   </extension>
-
-   <extension
-         point="org.eclipse.equinox.http.registry.servlets">
-      <servlet
-            alias="/*.vm"
-            class="org.carrot2.workbench.vis.http.VelocityServlet"
-            httpcontextId="org.carrot2.workbench.vis.circles.http-service"
-            load-on-startup="true">
-         <init-param
-               name="content-type"
-               value="text/html; charset=UTF-8">
-         </init-param>
-         <init-param
-               name="templates-prefix"
-               value="/web">
-         </init-param>
-         <init-param
-               name="bundleID"
-               value="org.carrot2.workbench.vis.carrotsearch">
-         </init-param>
-      </servlet>
-   </extension>
-
-   <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
             targetID="org.carrot2.workbench.core.perspective.search">
