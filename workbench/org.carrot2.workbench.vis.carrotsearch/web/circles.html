@@ -18,57 +18,61 @@
 
     <!-- Embed the visualization. -->
     <script type="text/javascript">//<![CDATA[
-      var vis = new CarrotSearchCircles({
-        id: "viscontainer",
-        captureMouseEvents: false,
-        pixelRatio: Math.min(1.5, window.devicePixelRatio || 1),
+      installOnErrorHandler();
+
+      embedWhenReady(function() {
+          window.vis = new CarrotSearchCircles({
+            id: "viscontainer",
+            captureMouseEvents: false,
+            pixelRatio: Math.min(1.5, window.devicePixelRatio || 1),
+            
+            titleBar: "inscribed",
+            titleBarTextColor: "#555",
+            groupOutlineColor: "#fff",
+            groupFontFamily: "Tahoma, Arial, sans-serif",
+            groupMinFontSize: "8",
+            groupMaxFontSize: "25",
+            ratioAngularPadding: 0.2,
+            labelColorThreshold: 0.2,
+            groupLinePadding: 1,
+            groupLabelDecorator: function(opts, props, vars) {
+              vars.labelText = vars.labelText.toLocaleUpperCase();
+            },
         
-        titleBar: "inscribed",
-        titleBarTextColor: "#555",
-        groupOutlineColor: "#fff",
-        groupFontFamily: "Tahoma, Arial, sans-serif",
-        groupMinFontSize: "8",
-        groupMaxFontSize: "25",
-        ratioAngularPadding: 0.2,
-        labelColorThreshold: 0.2,
-        groupLinePadding: 1,
-        groupLabelDecorator: function(opts, props, vars) {
-          vars.labelText = vars.labelText.toLocaleUpperCase();
-        },
+            rolloutTime: 0.75,
+            rolloutAnimation: "implode",
     
-        rolloutTime: 0.75,
-        rolloutAnimation: "implode",
-
-        rainbowStartColor: "hsla(  0, 100%, 50%, 0.6)",
-        rainbowEndColor:   "hsla(300, 100%, 50%, 0.6)",
+            rainbowStartColor: "hsla(  0, 100%, 50%, 0.6)",
+            rainbowEndColor:   "hsla(300, 100%, 50%, 0.6)",
+        
+            onModelChanged: [
+                function() {
+                  this.set("open", {all: true, open: true});
+                },         
+                function() {
+                  // Wrap in JS with a dummy function so that arguments are not passed
+                  // to SWT (this causes errors on a Mac).
+                  swt_onModelChanged();
+                }
+            ],
     
-        onModelChanged: [
-            function() {
-              this.set("open", {all: true, open: true});
-            },         
-            function() {
-              // Wrap in JS with a dummy function so that arguments are not passed
-              // to SWT (this causes errors on a Mac).
-              swt_onModelChanged();
+            onGroupSelectionChanged: function(selection) {
+                swt_onGroupSelectionChanged(selection.groups.map(function(g) { return g.id; }));
+            },
+          });
+    
+          // Resize on window size changes
+          window.addEventListener("resize", (function() {
+            var timeout;
+            return function() {
+              window.clearTimeout(timeout);
+              timeout = window.setTimeout(vis.resize, 300);
             }
-        ],
-
-        onGroupSelectionChanged: function(selection) {
-            swt_onGroupSelectionChanged(selection.groups.map(function(g) { return g.id; }));
-        },
+          })()); 
+    
+          // The visualization should be loaded and ready by now.
+          swt_onVisualizationLoaded();
       });
-
-      // Resize on window size changes
-      window.addEventListener("resize", (function() {
-        var timeout;
-        return function() {
-          window.clearTimeout(timeout);
-          timeout = window.setTimeout(vis.resize, 300);
-        }
-      })()); 
-
-      // The visualization should be loaded and ready by now.
-      swt_onVisualizationLoaded();
     //]]></script>
   </body>
 </html>

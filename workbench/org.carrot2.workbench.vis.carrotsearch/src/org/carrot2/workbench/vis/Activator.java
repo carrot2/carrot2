@@ -17,11 +17,11 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.carrot2.workbench.core.ui.SearchEditor;
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
-import com.google.common.reflect.ClassPath.ResourceInfo;
 
 /**
  * Bundle activator.

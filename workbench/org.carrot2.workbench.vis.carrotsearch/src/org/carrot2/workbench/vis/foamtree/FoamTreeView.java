@@ -50,7 +50,7 @@ public final class FoamTreeView extends PageBookViewBase
 
         return new PageRec(part, page);
     }
-
+    
     /**
      * Only react to {@link SearchEditor} instances.
      */

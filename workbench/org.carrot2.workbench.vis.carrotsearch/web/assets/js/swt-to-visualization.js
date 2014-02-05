@@ -35,3 +35,39 @@ function updateDataJson(c2json) {
       }
     });
 }
+
+/** 
+ * Defer visualization embedding until we have a non 0x0 container size
+ * and SWT browser functions are defined.
+ */
+function embedWhenReady(embeddingFunction) {
+    window.addEventListener("load", function() {
+      var container = document.getElementById("viscontainer");
+
+      if (container.clientWidth == 0 || container.clientHeight == 0 ||
+        (typeof swt_log === 'undefined')) {
+        window.setTimeout(arguments.callee, 500);
+      } else {
+        embeddingFunction();
+      }
+    });
+}
+
+/** On error, try to log the message to SWT. */
+function installOnErrorHandler() {
+    window.onerror = function(error) {
+      var container = document.getElementById("viscontainer");
+      if (container) {
+        var hasSwtLog = (typeof swt_log === 'undefined');
+        var msg = "Error: " + error + ", container size: " +
+          container.clientWidth + "x" + container.clientHeight + 
+          (hasSwtLog ? " swt_log defined." : " swt_log undefined.");
+
+          container.innerText = msg;
+          if (hasSwtLog) {
+            swt_log(msg);
+          }
+      }
+      throw error;
+    }
+}
