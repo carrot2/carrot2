@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Morfologik Stemming
 Bundle-SymbolicName: morfologik
-Bundle-Version: 1.6.0
+Bundle-Version: 1.7.0
 Bundle-ClassPath: morfologik-fsa-1.7.0.jar,
  morfologik-polish-1.7.0.jar,
  morfologik-stemming-1.7.0.jar
