@@ -16,7 +16,7 @@
     <xsl:apply-templates select="/page/asset-urls/js-urls/js-url" />
   
     <xsl:if test="contains('circles foamtree', /page/request/@view)">
-        <script type="text/javascript" src="{$skin-path}/common-dynamic/js/carrotsearch.circles.html5.js"><xsl:comment></xsl:comment></script>
+        <script type="text/javascript" src="{$skin-path}/common-dynamic/js/carrotsearch.circles.js"><xsl:comment></xsl:comment></script>
         <script type="text/javascript" src="{$skin-path}/common-dynamic/js/carrotsearch.foamtree.js"><xsl:comment></xsl:comment></script>
     </xsl:if>
 
