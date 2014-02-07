@@ -3,8 +3,6 @@ package org.carrot2.source.pubmed;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 
-import javax.xml.parsers.SAXParserFactory;
-
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 import org.xml.sax.InputSource;
@@ -171,10 +169,7 @@ public class PubMedIdSearchHandlerTest extends CarrotTestCase
     @Test
     public void testIdHandler() throws Exception
     {
-        final XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-        reader.setFeature("http://xml.org/sax/features/validation", false);
-        reader.setFeature("http://xml.org/sax/features/namespaces", true);
-
+        final XMLReader reader = PubMedDocumentSource.newXmlReader();
         PubMedIdSearchHandler searchHandler = new PubMedIdSearchHandler();
         reader.setContentHandler(searchHandler);
         

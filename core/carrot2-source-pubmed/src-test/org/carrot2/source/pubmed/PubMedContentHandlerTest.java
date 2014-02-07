@@ -3,8 +3,6 @@ package org.carrot2.source.pubmed;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import javax.xml.parsers.SAXParserFactory;
-
 import org.carrot2.core.Document;
 import org.carrot2.source.SearchEngineResponse;
 import org.carrot2.util.tests.CarrotTestCase;
@@ -20,10 +18,7 @@ public class PubMedContentHandlerTest extends CarrotTestCase
     @Test
     public void testContentHandler() throws Exception
     {
-        final XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-        reader.setFeature("http://xml.org/sax/features/validation", false);
-        reader.setFeature("http://xml.org/sax/features/namespaces", true);
-
+        final XMLReader reader = PubMedDocumentSource.newXmlReader();
         PubMedContentHandler searchHandler = new PubMedContentHandler();
         reader.setContentHandler(searchHandler);
         
