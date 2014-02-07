@@ -15,6 +15,7 @@ package org.carrot2.source.pubmed;
 import java.io.IOException;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.http.HttpStatus;
@@ -38,6 +39,7 @@ import org.carrot2.util.httpclient.HttpClientFactory;
 import org.carrot2.util.httpclient.HttpRedirectStrategy;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
@@ -106,11 +108,7 @@ public class PubMedDocumentSource extends SimpleSearchEngine
     private PubMedIdSearchHandler getPubMedIds(final String query, final int requestedResults)
         throws Exception
     {
-        final XMLReader reader = SAXParserFactory.newInstance().newSAXParser()
-            .getXMLReader();
-        reader.setFeature("http://xml.org/sax/features/validation", false);
-        reader.setFeature("http://xml.org/sax/features/namespaces", true);
-
+        final XMLReader reader = newXmlReader();
         PubMedIdSearchHandler searchHandler = new PubMedIdSearchHandler();
         reader.setContentHandler(searchHandler);
 
@@ -150,11 +148,7 @@ public class PubMedDocumentSource extends SimpleSearchEngine
             return new SearchEngineResponse();
         }
         
-        final XMLReader reader = SAXParserFactory.newInstance().newSAXParser()
-            .getXMLReader();
-        reader.setFeature("http://xml.org/sax/features/validation", false);
-        reader.setFeature("http://xml.org/sax/features/namespaces", true);
-
+        final XMLReader reader = newXmlReader();
         final PubMedContentHandler fetchHandler = new PubMedContentHandler();
         reader.setContentHandler(fetchHandler);
 
@@ -181,6 +175,18 @@ public class PubMedDocumentSource extends SimpleSearchEngine
         }
 
         return fetchHandler.getResponse();
+    }
+
+    static XMLReader newXmlReader()
+        throws SAXException, ParserConfigurationException
+    {
+        XMLReader reader = SAXParserFactory.newInstance()
+            .newSAXParser()
+            .getXMLReader();
+        reader.setFeature("http://xml.org/sax/features/validation", false);
+        reader.setFeature("http://xml.org/sax/features/namespaces", true);
+        reader.setEntityResolver(new EmptyEntityResolver());
+        return reader;
     }
 
     private String getIdsString(List<String> ids)
