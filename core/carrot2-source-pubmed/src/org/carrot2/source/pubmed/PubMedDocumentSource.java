@@ -15,6 +15,7 @@ package org.carrot2.source.pubmed;
 import java.io.IOException;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.http.HttpStatus;
@@ -38,6 +39,7 @@ import org.carrot2.util.httpclient.HttpClientFactory;
 import org.carrot2.util.httpclient.HttpRedirectStrategy;
 import org.carrot2.util.httpclient.HttpUtils;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
@@ -85,7 +87,10 @@ public class PubMedDocumentSource extends SimpleSearchEngine
     @Override
     protected SearchEngineResponse fetchSearchResponse() throws Exception
     {
-        return getPubMedAbstracts(getPubMedIds(query, results));
+        PubMedIdSearchHandler idResponse = getPubMedIds(query, results);
+        SearchEngineResponse response = getPubMedAbstracts(idResponse.getPubMedPrimaryIds());
+        response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, idResponse.getMatchCount());
+        return response;
     }
 
     @Override
@@ -100,15 +105,11 @@ public class PubMedDocumentSource extends SimpleSearchEngine
     /**
      * Gets PubMed entry ids matching the query.
      */
-    private List<String> getPubMedIds(final String query, final int requestedResults)
+    private PubMedIdSearchHandler getPubMedIds(final String query, final int requestedResults)
         throws Exception
     {
-        final XMLReader reader = SAXParserFactory.newInstance().newSAXParser()
-            .getXMLReader();
-        reader.setFeature("http://xml.org/sax/features/validation", false);
-        reader.setFeature("http://xml.org/sax/features/namespaces", true);
-
-        PubMedSearchHandler searchHandler = new PubMedSearchHandler();
+        final XMLReader reader = newXmlReader();
+        PubMedIdSearchHandler searchHandler = new PubMedIdSearchHandler();
         reader.setContentHandler(searchHandler);
 
         final String url = E_SEARCH_URL + "?db=pubmed&usehistory=n&term="
@@ -134,7 +135,7 @@ public class PubMedDocumentSource extends SimpleSearchEngine
                 + ", HTTP payload: " + new String(response.payload, "iso8859-1"));
         }
 
-        return searchHandler.getPubMedPrimaryIds();
+        return searchHandler;
     }
 
     /**
@@ -147,12 +148,8 @@ public class PubMedDocumentSource extends SimpleSearchEngine
             return new SearchEngineResponse();
         }
         
-        final XMLReader reader = SAXParserFactory.newInstance().newSAXParser()
-            .getXMLReader();
-        reader.setFeature("http://xml.org/sax/features/validation", false);
-        reader.setFeature("http://xml.org/sax/features/namespaces", true);
-
-        final PubMedFetchHandler fetchHandler = new PubMedFetchHandler();
+        final XMLReader reader = newXmlReader();
+        final PubMedContentHandler fetchHandler = new PubMedContentHandler();
         reader.setContentHandler(fetchHandler);
 
         final String url = E_FETCH_URL + "?db=pubmed&retmode=xml&rettype=abstract&id="
@@ -178,6 +175,18 @@ public class PubMedDocumentSource extends SimpleSearchEngine
         }
 
         return fetchHandler.getResponse();
+    }
+
+    static XMLReader newXmlReader()
+        throws SAXException, ParserConfigurationException
+    {
+        XMLReader reader = SAXParserFactory.newInstance()
+            .newSAXParser()
+            .getXMLReader();
+        reader.setFeature("http://xml.org/sax/features/validation", false);
+        reader.setFeature("http://xml.org/sax/features/namespaces", true);
+        reader.setEntityResolver(new EmptyEntityResolver());
+        return reader;
     }
 
     private String getIdsString(List<String> ids)

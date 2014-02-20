@@ -220,20 +220,15 @@ ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></p
 
       <listitem>
         <formalpara>
-          <title>Upload .NET release bundle to download area.</title>
-          <para>
-            Upload .NET bundle of &C2; to ophelia.
-          </para>
-        </formalpara>
-      </listitem>      
-
-      <listitem>
-        <formalpara>
           <title>Update download area server</title>
           
           <para>
-            Update symbolic links in <filename>/srv/www/vhosts/download.carrot2.org/stable</filename>
-            on ophelia to point to the new release artifacts.
+            Copy the stable version from gamma's 
+            <filename>/srv/vhosts/get.carrot2.org/head/</filename>
+            to 
+            <filename>/srv/vhosts/get.carrot2.org/stable/</filename>
+            and update the symbolic link <filename>stable/latest/</filename> to point
+            to the newest stable release.
           </para>
         </formalpara>
       </listitem>

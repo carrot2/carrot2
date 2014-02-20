@@ -10,6 +10,7 @@
     <attribute name="webtest.tests.dir" />
     <attribute name="webtest.report.dir" />
     <attribute name="webtest.port" default="8181" />
+    <attribute name="webtest.jvmargs" default="" />
     
     <sequential>
       <!-- Deploy the WAR file -->
@@ -30,7 +31,10 @@
           log="${tomcat.log.dir}/cargo.log" action="start" wait="100">
         <configuration home="${tomcat.config.dir}">
           <property name="cargo.servlet.port" value="@{webtest.port}"/>
+          <property name="cargo.rmi.port" value="2@{webtest.port}"/>
+          <property name="cargo.tomcat.ajp.port" value="3@{webtest.port}"/>
           <property name="cargo.logging" value="high"/>
+          <property name="cargo.jvmargs" value="@{webtest.jvmargs}"/>
           <deployable type="war" file="@{war.path}"/>
         </configuration>
       </cargo>

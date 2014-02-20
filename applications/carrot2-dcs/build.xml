@@ -134,6 +134,7 @@
   <target name="carrot2.dcs.webtest.war" depends="basedir.check, carrot2.common.webtest.war.prepare"
           if="webtest.war.resources.available">
     <webtest-war cargo.tmp.dir="tmp/cargo"
+                 webtest.port="8384"
                  war.path="${dcs.war.dir}/${dcs.war.base.name}.war"
                  war.base.name="${dcs.war.base.name}"
                  webtest.tests.dir="${carrot2.dcs.basedir}/webtest"

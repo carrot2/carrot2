@@ -12,12 +12,10 @@
 
 package org.carrot2.workbench.vis.circles;
 
-import java.util.EnumSet;
-
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.actions.ExportImageAction;
 import org.carrot2.workbench.core.ui.actions.IControlProvider;
-import org.carrot2.workbench.vis.FlashViewPage;
+import org.carrot2.workbench.vis.AbstractBrowserVisualizationViewPage;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.IPageSite;
 
@@ -26,19 +24,19 @@ import org.eclipse.ui.part.IPageSite;
  * A single {@link CirclesView} page embedding a Web browser and redirecting to an
  * internal HTTP server with flash animation.
  */
-final class CirclesViewPage extends FlashViewPage
+final class CirclesViewPage extends AbstractBrowserVisualizationViewPage
 {
     /**
      * Entry page for the view.
      */
-    private static final String ENTRY_PAGE = "/circles/index.vm";
+    private static final String ENTRY_PAGE = "/circles.html";
 
     /*
      * 
      */
     public CirclesViewPage(SearchEditor editor)
     {
-        super(editor, ENTRY_PAGE, EnumSet.of(DocumentData.TITLE));
+        super(editor, ENTRY_PAGE);
     }
     
     @Override

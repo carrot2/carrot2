@@ -17,9 +17,12 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.carrot2.workbench.core.ui.SearchEditor;
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.slf4j.LoggerFactory;
 
 /**
  * Bundle activator.
@@ -30,16 +33,6 @@ public class Activator extends AbstractUIPlugin
      * Bundle identifier.
      */
     public final static String ID = "org.carrot2.workbench.vis.carrotsearch";
-    
-    /**
-     * HTTP service name.
-     */
-    public final static String HTTP_SERVICE_NAME = ID + ".http-service";
-
-    /**
-     * Built-in HTTP service.
-     */
-    private WebServiceManager webService;
 
     /**
      * 
@@ -56,6 +49,11 @@ public class Activator extends AbstractUIPlugin
      */
     private int sequencer;
 
+    /**
+     * An URL to statically served resources (visualizations).
+     */
+    private String staticResourceURL;
+
     /*
      * 
      */
@@ -64,16 +62,22 @@ public class Activator extends AbstractUIPlugin
     {
         super.start(context);
 
-        this.webService = new WebServiceManager(ID, "circles.");
-        this.webService.start(HTTP_SERVICE_NAME, context);
-
         final URL bundleURL = FileLocator.find(getBundle(), new Path("web"), null);
-        final URL fileURL = FileLocator.toFileURL(bundleURL);
+        URL resourceURL = FileLocator.toFileURL(bundleURL);
 
-        logInfo("Web service started: http://" + webService.getHost() + ":" + webService.getPort()
-            + ", static resources at: "
-            + fileURL.toExternalForm());
-        
+        LoggerFactory.getLogger(Activator.class).debug("Bundled resources at: "
+            + resourceURL.toExternalForm());
+
+        if (!"file".equals(resourceURL.getProtocol())) {
+            throw new Exception("Expected file protocol on bundled Web resources: "
+                + resourceURL.toExternalForm());
+        }
+
+        this.staticResourceURL = resourceURL.toExternalForm();
+        while (this.staticResourceURL.endsWith("/")) {
+            this.staticResourceURL = staticResourceURL.substring(0, staticResourceURL.length() - 1);
+        }
+
         instance = this;
     }
 
@@ -84,10 +88,6 @@ public class Activator extends AbstractUIPlugin
     public void stop(BundleContext context) throws Exception
     {
         instance = null;
-
-        this.webService.stop();
-        this.webService = null;
-
         super.stop(context);
     }
 
@@ -97,8 +97,8 @@ public class Activator extends AbstractUIPlugin
      */
     public String getFullURL(String relativeURL)
     {
-        final String base = "http://" + webService.getHost() + ":" + webService.getPort();
-        
+        final String base = staticResourceURL;
+
         if (!relativeURL.startsWith("/"))
         {
             return base + "/" + relativeURL;
@@ -132,8 +132,10 @@ public class Activator extends AbstractUIPlugin
     {
         synchronized (this)
         {
-            for (Map.Entry<SearchEditor, Integer> e : editors.entrySet()) {
-                if (e.getValue().intValue() == id) {
+            for (Map.Entry<SearchEditor, Integer> e : editors.entrySet())
+            {
+                if (e.getValue().intValue() == id)
+                {
                     return e.getKey();
                 }
             }

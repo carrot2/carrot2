@@ -8,10 +8,10 @@
   $(document).ready(function() {
     $("#clusters-panel").bind("carrot2-clusters-selected", function(target, clusterId, documents, clusterLabel) {
       $("#more-like-this").remove();
-      if ($("#" + clusterId).is(".other")) {
+      if (!clusterId || $("#" + clusterId).is(".other")) {
         return;
       }
-      
+
       // Handle a special case for by-url clustering
       var algorithm = $("#algorithm").val();
       var label;

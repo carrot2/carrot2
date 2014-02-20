@@ -12,17 +12,17 @@
 
 package org.carrot2.workbench.vis.foamtree;
 
-import java.util.EnumSet;
-import java.util.Map;
-
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.actions.ExportImageAction;
 import org.carrot2.workbench.core.ui.actions.IControlProvider;
-import org.carrot2.workbench.vis.*;
+import org.carrot2.workbench.vis.AbstractBrowserVisualizationViewPage;
+import org.carrot2.workbench.vis.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.IPageSite;
 
 
@@ -30,12 +30,12 @@ import org.eclipse.ui.part.IPageSite;
  * A single {@link FoamTreeView} page embedding a Web browser and redirecting to an
  * internal HTTP server with flash animation.
  */
-final class FoamTreeViewPage extends FlashViewPage
+final class FoamTreeViewPage extends AbstractBrowserVisualizationViewPage
 {
     /**
      * Entry page for the view.
      */
-    private static final String ENTRY_PAGE = "/foamtree/index.vm";
+    private static final String ENTRY_PAGE = "/foamtree.html";
 
     /**
      * 
@@ -46,14 +46,17 @@ final class FoamTreeViewPage extends FlashViewPage
         {
             String property = event.getProperty();
             if (property.equals(ToggleRelaxationAction.RELAXATION_ENABLED_KEY) ||
-                property.equals(LayoutAlgorithmAction.LAYOUT_ALGORITHM_KEY))
+                property.equals(LayoutInitializerAction.LAYOUT_INITIALIZER_KEY))
             {
                 if (Display.getCurrent() == null)
                     throw new IllegalStateException();
 
-                getBrowser().execute("javascript:vis.set({"
-                    + "performRelaxation: " + !ToggleRelaxationAction.getCurrent() + ","
-                    + "mapLayoutAlgorithm: '" + LayoutAlgorithmAction.getCurrent().id + "'})");
+                // Reload the model to flush new settings.
+                if (isBrowserInitialized()) {
+                    passAttributes();
+                    getBrowser().execute(
+                        "javascript:vis.set('dataObject', vis.get('dataObject'))");
+                }
             }
         }
     };
@@ -63,7 +66,23 @@ final class FoamTreeViewPage extends FlashViewPage
      */
     public FoamTreeViewPage(SearchEditor editor)
     {
-        super(editor, ENTRY_PAGE, EnumSet.noneOf(DocumentData.class));
+        super(editor, ENTRY_PAGE);
+    }
+
+    @Override
+    protected void onBrowserReady()
+    {
+        passAttributes();
+    }
+    
+    protected void passAttributes()
+    {
+        if (isBrowserInitialized()) {
+            Browser browser = getBrowser();
+            browser.execute("javascript:vis.set({"
+                + "relaxationVisible: " + ToggleRelaxationAction.getCurrent() + ","
+                + "initializer: '" + LayoutInitializerAction.getCurrent().id + "'})");
+        }
     }
 
     /**
@@ -94,14 +113,5 @@ final class FoamTreeViewPage extends FlashViewPage
 
         IPreferenceStore store = Activator.getInstance().getPreferenceStore();
         store.removePropertyChangeListener(listener);
-    }
-
-    @Override
-    protected Map<String, Object> contributeCustomParams()
-    {
-        Map<String, Object> params = super.contributeCustomParams();
-        params.put("performRelaxation", !ToggleRelaxationAction.getCurrent());
-        params.put("mapLayoutAlgorithm", LayoutAlgorithmAction.getCurrent().id);
-        return params;
     }
 }

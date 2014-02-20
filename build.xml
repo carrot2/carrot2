@@ -312,6 +312,7 @@
     <mkdir dir="${compatibility.report.dir}" />
 
     <javadoc destdir="${compatibility.report.dir}"
+             encoding="utf-8"
              access="protected"
              failonerror="true"
              useexternalfile="true">
@@ -553,9 +554,11 @@
       <fileset dir="${core.dir}">
         <include name="**/*.java" />
         <exclude name="carrot2-source-microsoft/src/com/microsoft/msnsearch/**" />
+        <exclude name="**/.apt_generated/**" />
       </fileset>
       <fileset dir="${applications.dir}">
         <include name="**/*.java" />
+        <exclude name="**/.apt_generated/**" />
       </fileset>
       <fileset dir="${workbench.dir}">
         <include name="**/*.java" />
