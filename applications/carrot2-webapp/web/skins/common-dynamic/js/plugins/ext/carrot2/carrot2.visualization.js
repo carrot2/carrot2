@@ -23,7 +23,8 @@
           rainbowEndColor:   "hsla(359, 100%, 70%, 1)",
           "groupFillGradientCenterLightnessShift": 12,
 
-          groupFontFamily: "Tahoma, Arial, sans-serif"
+          groupFontFamily: "Tahoma, Arial, sans-serif",
+          wireframeLabelDrawing: "always"
         });
       }
 
@@ -116,22 +117,18 @@
       // Load the data model (convert from legacy XML).
       function convert(clusters) {
         var $foo = $(clusters).map(function(index, cluster) {
-          cluster = $(cluster); // destroys the model, simplifies processing.
-          // Traversal is child-first and we detach children so that 'title > phrase' selector later on
-          // only captures the current cluster's phrases. We want all documents though, so the flattened list
-          // is collected before remove().
+          cluster = $(cluster);
           var flattened = jQuery.makeArray(cluster.find("document").map(function(i, e) { return $(e).attr("refid")}));
-          cluster.remove();
           var subgroups = cluster.children("group").size() > 0 ? convert(cluster.children("group")) : [];
 
           var weight = cluster.attr("size") ? cluster.attr("size") : 0;
-          if (cluster.find("attribute[key ~= 'other-topics']").length > 0) {
+          if (cluster.children("attribute[key ~= 'other-topics']").length > 0) {
             weight = 0;
           } 
 
           return {
             id:     cluster.attr("id"),
-            label:     jQuery.makeArray(cluster.find("title > phrase").map(function(i, e) { return $(e).text(); })).join(", "),
+            label:  jQuery.makeArray(cluster.children("title").children("phrase").map(function(i, e) { return $(e).text(); })).join(", "),
             documents: flattened,
             weight: Number(weight),
             groups: subgroups
