@@ -23,7 +23,8 @@
           rainbowEndColor:   "hsla(359, 100%, 70%, 1)",
           "groupFillGradientCenterLightnessShift": 12,
 
-          groupFontFamily: "Tahoma, Arial, sans-serif"
+          groupFontFamily: "Tahoma, Arial, sans-serif",
+          wireframeLabelDrawing: "always"
         });
       }
 
