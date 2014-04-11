@@ -268,6 +268,18 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Level(AttributeLevel.ADVANCED)
     @Group(SERVICE)
     public String partnerId = "Carrot2";
+    
+    /**
+     * eTools customer identifier. For commercial use of eTools, please e-mail: 
+     * <code>contact@comcepta.com</code> to obtain your customer identifier. 
+     */
+    @Input
+    @Processing
+    @Attribute
+    @Label("Customer ID")
+    @Level(AttributeLevel.MEDIUM)
+    @Group(SERVICE)
+    public String customerId = "";
 
     /** Some constants for calculation of request parameters */
     private static final int MAX_DATA_SOURCE_RESULTS = 40;
@@ -295,7 +307,8 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
             + "&maxRecords=" + results + "&language=" + language.getCode() + "&timeout="
             + Integer.toString(timeout) + "&dataSources=" + dataSources.getCode()
             + "&safeSearch=" + Boolean.toString(safeSearch) + "&country="
-            + country.getCode();
+            + country.getCode() + "&customerId=" 
+            + StringUtils.urlEncodeWrapException(customerId, "UTF-8");
     }
 
     @Override
