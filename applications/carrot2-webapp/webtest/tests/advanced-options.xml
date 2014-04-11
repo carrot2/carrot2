@@ -8,11 +8,12 @@
 
       <clickLink xpath="id('show-options')/a[1]" />
       <clickLink xpath="id('show-advanced-options')" />
-      <verifyXPath xpath="count(id('advanced-options')/div) = 3" 
+      <verifyXPath xpath="count(id('advanced-options')/div) = 4" 
                    description="3 advanced options expected for the default source" />
       <setSelectField name="EToolsDocumentSource.country" value="ITALY" />
       <setSelectField name="EToolsDocumentSource.language" value="ITALIAN" />
       <setCheckbox htmlid="EToolsDocumentSource.safeSearch" checked="true" />
+      <setInputField name="EToolsDocumentSource.customerId" value="test" />
       
       <clickButton htmlId="search" />
       
@@ -20,6 +21,7 @@
       <verifySelectField name="EToolsDocumentSource.language" value="ITALIAN" />
       <verifyCheckbox htmlid="EToolsDocumentSource.safeSearch" checked="true" />
       <verifyInputField name="EToolsDocumentSource.safeSearch" value="true" />
+      <verifyInputField name="EToolsDocumentSource.customerId" value="test" />
     </webtest>
   </target>
 </project>
