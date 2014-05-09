@@ -1,5 +1,6 @@
 .idea/
 .DS_Store
+.settings/
 hotspot.log
 applications/carrot2-webapp/src/jawr.properties
 applications/carrot2-webapp/web/WEB-INF/webapp-config.xml
