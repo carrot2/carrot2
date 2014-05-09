@@ -14,9 +14,14 @@ package org.carrot2.dcs;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -59,7 +64,9 @@ import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.resource.ServletContextLocator;
 import org.carrot2.util.xslt.NopURIResolver;
 
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * A servlet that parses HTTP POST input in Carrot<sup>2</sup> XML format, clusters it and
@@ -644,11 +651,14 @@ public final class RestProcessorServlet extends HttpServlet
 
         contextPath = contextPath.replaceAll("[^a-zA-Z0-9\\-]", "");
         final String catalinaHome = System.getProperty("catalina.home");
-        final String logPrefix = (catalinaHome != null ? catalinaHome + "/logs" : "logs");
+        final File logPrefix = new File(catalinaHome != null ? catalinaHome + "/logs" : "logs");
+        if (!logPrefix.isDirectory()) {
+            logPrefix.mkdirs();
+        }
 
-        final FileAppender appender = new FileAppender(new PatternLayout(
-            "%d{ISO8601} [%-5p] [%c] %m%n"), logPrefix + "/c2-dcs-" + contextPath
-            + "-full.log", true);
+        String logDestination = new File(logPrefix, "/c2-dcs-" + contextPath + "-full.log").getAbsolutePath();
+        final FileAppender appender = 
+            new FileAppender(new PatternLayout("%d{ISO8601} [%-5p] [%c] %m%n"), logDestination, true);
 
         appender.setEncoding(UTF8);
         appender.setImmediateFlush(true);

@@ -12,16 +12,18 @@
 
 package org.carrot2.dcs;
 
+import java.net.URL;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.util.component.LifeCycle;
+import org.eclipse.jetty.util.component.LifeCycle.Listener;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
-import org.eclipse.jetty.util.component.LifeCycle.Listener;
 
 /**
  * Bootstraps the Document Clustering Server using an embedded Jetty server.
@@ -38,13 +40,13 @@ public class DcsApp
      */
     final Logger log = org.slf4j.LoggerFactory.getLogger("dcs");
 
-    @Option(name = "-port", usage = "Port number to bind to")
+    @Option(name = "-port", usage = "Port number to bind to.")
     int port = 8080;
 
     @Option(name = "-v", aliases =
     {
         "--verbose"
-    }, required = false, usage = "Print detailed messages")
+    }, required = false, usage = "Print detailed messages.")
     boolean verbose;
 
     @Option(name = "--accept-queue", required = false, 
@@ -82,6 +84,7 @@ public class DcsApp
 
     void start(String webPathPrefix) throws Exception
     {
+        configureLogging();
         log.info("Starting DCS...");
 
         // http://issues.carrot2.org/browse/CARROT-581
@@ -92,7 +95,7 @@ public class DcsApp
         }
 
         server = new Server();
-        SelectChannelConnector connector = new SelectChannelConnector();
+        final SelectChannelConnector connector = new SelectChannelConnector();
         connector.setPort(port);
         connector.setReuseAddress(false);
         connector.setAcceptQueueSize(acceptQueue);
@@ -109,10 +112,16 @@ public class DcsApp
                 log.info("DCS started on port: " + port);
             }
             
-            
             public void lifeCycleFailure(LifeCycle lc, Throwable t)
             {
-                log.error("DCS startup failure.");
+                if (verbose)
+                {
+                    log.error("DCS startup failure.", t);
+                } 
+                else
+                {
+                    log.error("DCS startup failure.");
+                }
                 stop();
             }
             
@@ -134,7 +143,7 @@ public class DcsApp
             // Run from the provided web dir
             wac.setWar(webPathPrefix != null ? webPathPrefix + "/web" : "web");
             wac.setClassLoader(Thread.currentThread().getContextClassLoader());
-            
+
             /*
              * Allow context classloader resource loading.
              */
@@ -158,6 +167,22 @@ public class DcsApp
         {
             stop();
             throw e;
+        }
+    }
+
+    private void configureLogging()
+    {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        try {
+            String log4jConfiguration = "log4j-dcs" + (verbose ? "-verbose" : "") + ".xml";
+            final URL configurationResourceUrl = cl.getResource(log4jConfiguration);
+            if (configurationResourceUrl == null) {
+                System.err.println("No log4j configuration resource found: " + log4jConfiguration);
+            } else {
+                org.apache.log4j.xml.DOMConfigurator.configure(configurationResourceUrl);
+            }
+        } catch (Exception e) {
+            System.err.println("Could not initialize log4j logging system: " + e);
         }
     }
 
