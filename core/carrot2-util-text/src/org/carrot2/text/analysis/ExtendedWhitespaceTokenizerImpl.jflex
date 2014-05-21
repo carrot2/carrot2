@@ -1,4 +1,7 @@
 package org.carrot2.text.analysis;
+
+@SuppressWarnings("all")
+/** JFlex-generated scanner. */
 %%
 
 %public

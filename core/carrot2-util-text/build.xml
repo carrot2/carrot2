@@ -13,7 +13,7 @@
               <fileset dir="lib" includes="*.jar" />
             </classpath>
 
-            <arg value="-nobak" />
+            <arg line="-nobak --noinputstreamctor" />
             <arg file="src/org/carrot2/text/analysis/ExtendedWhitespaceTokenizerImpl.jflex" />
         </java>
 	</target>
