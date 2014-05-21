@@ -12,21 +12,27 @@
 
 package org.carrot2.clustering.lingo;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.util.Collection;
 import java.util.List;
 
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingException;
+import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
 import org.carrot2.core.test.SampleDocumentData;
+import org.carrot2.text.analysis.ExtendedWhitespaceTokenizerImpl;
 import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.io.Resources;
 
 /**
  * Test cases for the {@link LingoClusteringAlgorithm}

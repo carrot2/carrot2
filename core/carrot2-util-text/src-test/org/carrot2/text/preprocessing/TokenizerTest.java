@@ -196,5 +196,21 @@ public class TokenizerTest extends PreprocessingContextTestBase
         });
     }
 
+    @Test
+    public void testUnicodeNextLine()
+    {
+        PreprocessingContext ctx = contextBuilder
+            .newDoc("Foo\u0085 Bar")
+            .buildContext();
+
+        assertThat(tokens(ctx)).onProperty("tokenImage").isEqualTo(Arrays.asList(
+            "Foo", "Bar", null));
+        
+        assertThat(ctx.allTokens.type).isEqualTo(new short [] {
+            ITokenizer.TT_TERM, ITokenizer.TT_TERM,
+            ITokenizer.TF_TERMINATOR
+            });
+    }
+
     // @formatter:on
 }
