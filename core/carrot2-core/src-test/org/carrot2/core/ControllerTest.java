@@ -58,7 +58,7 @@ public class ControllerTest
             }
             finally
             {
-                controller.dispose();
+                controller.close();
             }
         }
 
@@ -111,7 +111,7 @@ public class ControllerTest
             }
             finally
             {
-                controller.dispose();
+                controller.close();
             }
         }
 
@@ -119,9 +119,13 @@ public class ControllerTest
         public void testMultipleDisposal()
         {
             final Controller controller = new Controller();
-            controller.init();
-            controller.dispose();
-            controller.dispose();
+            try {
+              controller.init();
+              controller.dispose();
+              controller.dispose();
+            } finally {
+              controller.close();
+            }
         }
 
         private void checkManagerWithMultipleControllers(
@@ -138,8 +142,8 @@ public class ControllerTest
             }
             finally
             {
-                controller1.dispose();
-                controller2.dispose();
+                controller1.close();
+                controller2.close();
             }
         }
 
@@ -154,7 +158,7 @@ public class ControllerTest
             }
             finally
             {
-                controller.dispose();
+                controller.close();
             }
         }
         

@@ -18,12 +18,10 @@
       See http://www.carrot2.org/carrot2.LICENSE for license.
    </license>
 
-   <includes
-         id="org.carrot2.workbench.core.feature"
-         version="0.0.0"/>
+   <includes id="org.carrot2.workbench.core.feature" version="0.0.0" />
 
    <requires>
-      <import feature="org.eclipse.rcp" version="3.4.1" match="compatible"/>
+      <import feature="org.eclipse.rcp" version="3.8.2" match="compatible"/>
    </requires>
 
    <plugin
