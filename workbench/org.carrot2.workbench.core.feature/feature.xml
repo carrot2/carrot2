@@ -18,7 +18,7 @@
    </license>
 
    <requires>
-      <import feature="org.eclipse.rcp" version="3.8.2" match="compatible"/>
+      <import feature="org.eclipse.rcp" version="4.3.2" match="compatible"/>
    </requires>
 
    <plugin
@@ -363,6 +363,41 @@
 
    <plugin
          id="morfologik"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.ecore"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.e4.ui.workbench"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.common"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.ecore.change"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.ecore.xmi"
          download-size="0"
          install-size="0"
          version="0.0.0"

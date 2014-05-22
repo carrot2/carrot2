@@ -47,7 +47,7 @@ wt.headless=true
 
 # Workbench PDE Build and tests. Note the unusual layout of folders below -- 
 # they have the distribution version name and an /eclipse *subfolder*.
-target.platform=${tools.dir}/rcp/3.8.2
+target.platform=${tools.dir}/rcp/4.3.2
 eclipse.home=${target.platform}/eclipse
 
 # Workbench distribution (locally built). Your local platform by default, but can

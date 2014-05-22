@@ -21,7 +21,7 @@
    <includes id="org.carrot2.workbench.core.feature" version="0.0.0" />
 
    <requires>
-      <import feature="org.eclipse.rcp" version="3.8.2" match="compatible"/>
+      <import feature="org.eclipse.rcp" version="4.3.2" match="compatible"/>
    </requires>
 
    <plugin
