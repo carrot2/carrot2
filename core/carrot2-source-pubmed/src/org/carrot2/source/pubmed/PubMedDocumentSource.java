@@ -21,6 +21,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.http.HttpStatus;
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
+import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.source.SearchEngineResponse;
@@ -57,6 +58,18 @@ public class PubMedDocumentSource extends SimpleSearchEngine
 
     /** HTTP timeout for pubmed services.*/
     public static final int PUBMED_TIMEOUT = HttpClientFactory.DEFAULT_TIMEOUT * 3;
+
+    /**
+     * Tool name, if registered.
+     * @see "http://www.ncbi.nlm.nih.gov"
+     */
+    @Init
+    @Input
+    @Attribute
+    @Label("EUtils Registered Tool Name")
+    @Level(AttributeLevel.ADVANCED)
+    @Group(DefaultGroups.QUERY)
+    public String toolName = "Carrot Search";
 
     /**
      * Maximum results to fetch. No more than the specified number of results
@@ -112,9 +125,12 @@ public class PubMedDocumentSource extends SimpleSearchEngine
         PubMedIdSearchHandler searchHandler = new PubMedIdSearchHandler();
         reader.setContentHandler(searchHandler);
 
-        final String url = E_SEARCH_URL + "?db=pubmed&usehistory=n&term="
-            + StringUtils.urlEncodeWrapException(query, "UTF-8") + "&retmax="
-            + Integer.toString(Math.min(requestedResults, maxResults));
+        final String url = E_SEARCH_URL
+            + "?db=pubmed"
+            + "&usehistory=n&" 
+            + "&term=" + StringUtils.urlEncodeWrapException(query, "UTF-8") 
+            + "&retmax=" + Integer.toString(Math.min(requestedResults, maxResults))
+            + "&tool=" + StringUtils.urlEncodeWrapException(toolName, "UTF-8");
 
         final HttpUtils.Response response = HttpUtils.doGET(
             url, 
@@ -152,8 +168,12 @@ public class PubMedDocumentSource extends SimpleSearchEngine
         final PubMedContentHandler fetchHandler = new PubMedContentHandler();
         reader.setContentHandler(fetchHandler);
 
-        final String url = E_FETCH_URL + "?db=pubmed&retmode=xml&rettype=abstract&id="
-            + getIdsString(ids);
+        final String url = E_FETCH_URL 
+            + "?db=pubmed"
+            + "&retmode=xml" 
+            + "&rettype=abstract" 
+            + "&id=" + getIdsString(ids)
+            + "&tool=" + StringUtils.urlEncodeWrapException(toolName, "UTF-8");
 
         final HttpUtils.Response response = HttpUtils.doGET(
             url, 
