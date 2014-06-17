@@ -215,4 +215,9 @@ public final class ResourceLookup
 
         return false;
     }
+    
+    @Override
+    public String toString() {
+      return "[" + this.getClass().getSimpleName() + ": " + Arrays.toString(locators) + "]";
+    }
 }
