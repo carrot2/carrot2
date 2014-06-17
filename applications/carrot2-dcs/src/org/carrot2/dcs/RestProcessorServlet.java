@@ -284,7 +284,6 @@ public final class RestProcessorServlet extends HttpServlet
         for (int i = 0; i < configurations.length; i++) {
             ProcessingComponentConfiguration config = configurations[i];
             Object location = config.attributes.get(altResourceLookupAttrKey);
-            System.out.println("#> " + config.componentId + " " + location + " " + config.attributes);
             if (location != null && location instanceof String) {
                 File resourceDir = new File((String) location);
                 if (!resourceDir.isDirectory()) {
