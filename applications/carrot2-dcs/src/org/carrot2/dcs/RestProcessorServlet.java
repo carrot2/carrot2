@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -46,6 +47,7 @@ import org.carrot2.core.Document;
 import org.carrot2.core.IClusteringAlgorithm;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.IProcessingComponent;
+import org.carrot2.core.ProcessingComponentConfiguration;
 import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
@@ -56,6 +58,7 @@ import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.resource.ClassResource;
+import org.carrot2.util.resource.DirLocator;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.IResourceLocator;
 import org.carrot2.util.resource.PrefixDecoratorLocator;
@@ -274,9 +277,33 @@ public final class RestProcessorServlet extends HttpServlet
         if (Boolean.getBoolean(ENABLE_CLASSPATH_LOCATOR)) locators
             .add(Location.CONTEXT_CLASS_LOADER.locator);
 
-        controller.init(ImmutableMap.<String, Object> of(
-            AttributeUtils.getKey(DefaultLexicalDataFactory.class, "resourceLookup"),
-            new ResourceLookup(locators)), componentSuite.getComponentConfigurations());
+        // Allow multiple resource lookup paths for different component configurations.
+        String resourceLookupAttrKey = AttributeUtils.getKey(DefaultLexicalDataFactory.class, "resourceLookup");
+        String altResourceLookupAttrKey = "dcs.resource-lookup";
+        ProcessingComponentConfiguration [] configurations = componentSuite.getComponentConfigurations();
+        for (int i = 0; i < configurations.length; i++) {
+            ProcessingComponentConfiguration config = configurations[i];
+            Object location = config.attributes.get(altResourceLookupAttrKey);
+            System.out.println("#> " + config.componentId + " " + location + " " + config.attributes);
+            if (location != null && location instanceof String) {
+                File resourceDir = new File((String) location);
+                if (!resourceDir.isDirectory()) {
+                    Logger.getRootLogger().warn("Not a resource folder, ignored: " + resourceDir);
+                } else {
+                    HashMap<String,Object> mutableMap = new HashMap<String,Object>(config.attributes);
+                    mutableMap.put(resourceLookupAttrKey,
+                        new ResourceLookup(new DirLocator(resourceDir)));
+                    config = configurations[i] = new ProcessingComponentConfiguration(
+                        config.componentClass,
+                        config.componentId,
+                        mutableMap);
+                }
+            }
+        }
+
+        controller.init(
+            ImmutableMap.<String, Object> of(resourceLookupAttrKey, new ResourceLookup(locators)), 
+            configurations);
     }
 
     @Override
