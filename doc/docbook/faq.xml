@@ -59,7 +59,7 @@
           <answer>
             <para>
               No. &C2; can add clustering of search results to an existing search engine. 
-              You can use other open source rojects (like Nutch or Heritrix) to crawl your website.
+              You can use other open source projects (like Nutch or Heritrix) to crawl your website.
             </para>
           </answer>
         </qandaentry>

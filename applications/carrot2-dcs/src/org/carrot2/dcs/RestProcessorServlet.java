@@ -403,6 +403,7 @@ public final class RestProcessorServlet extends HttpServlet
             }
             catch (Exception e)
             {
+                config.logger.error("Trying to parse: " + request.getParameter(DCS_C2STREAM));
                 sendBadRequest("Could not parse Carrot2 XML stream", response, e);
                 return;
             }
