@@ -18,27 +18,27 @@
   <xsl:param name="carrot2.javadoc.url" />
   
   <xsl:template match="product:java-api-download-link">
-    <a href="{$dist.url}/{$product.java-api.base}-{$product.version}.zip"><xsl:apply-templates /></a>
+    <a href="{$dist.url}/{$product.version}/{$product.java-api.base}-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>
     
   <xsl:template match="product:csharp-api-download-link">
-    <a href="{$dist.url}/{$product.csharp-api.base}-{$product.version}.zip"><xsl:apply-templates /></a>
+    <a href="{$dist.url}/{$product.version}/{$product.csharp-api.base}-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>
     
   <xsl:template match="product:dcs-download-link">
-    <a href="{$dist.url}/{$product.dcs.base}-{$product.version}.zip"><xsl:apply-templates /></a>
+    <a href="{$dist.url}/{$product.version}/{$product.dcs.base}-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>  
 
   <xsl:template match="product:cli-download-link">
-    <a href="{$dist.url}/{$product.cli.base}-{$product.version}.zip"><xsl:apply-templates /></a>
+    <a href="{$dist.url}/{$product.version}/{$product.cli.base}-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>  
 
   <xsl:template match="product:webapp-download-link">
-    <a href="{$dist.url}/{$product.webapp.base}-{$product.version}.war"><xsl:apply-templates /></a>
+    <a href="{$dist.url}/{$product.version}/{$product.webapp.base}-{$product.version}.war"><xsl:apply-templates /></a>
   </xsl:template>  
 
   <xsl:template match="product:workbench-download-link">
-    <a href="{$dist.url}/{$product.workbench.base}-{@os}.{@wm}.x86-{$product.version}.zip"><xsl:apply-templates /></a>
+    <a href="{$dist.url}/{$product.version}/{$product.workbench.base}-{@os}.{@wm}.x86-{$product.version}.zip"><xsl:apply-templates /></a>
   </xsl:template>
   
   <xsl:template match="product:online-demo-link">
