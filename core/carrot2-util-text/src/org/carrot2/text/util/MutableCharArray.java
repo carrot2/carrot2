@@ -12,6 +12,8 @@
 
 package org.carrot2.text.util;
 
+import java.util.Arrays;
+
 /**
  * Implements {@link CharSequence} over a mutable <code>char[]</code> buffer.
  * <p>
@@ -89,7 +91,9 @@ public final class MutableCharArray implements CharSequence, Cloneable
      */
     public void reset(CharSequence seq)
     {
-        this.buffer = new char [seq.length()];
+        if (buffer == null || buffer.length < seq.length()) {
+          buffer = new char [seq.length()];
+        }
         this.length = seq.length();
         this.start = 0;
 
@@ -253,5 +257,9 @@ public final class MutableCharArray implements CharSequence, Cloneable
         final char [] cloned = new char [length];
         System.arraycopy(buffer, start, cloned, 0, length);
         return new MutableCharArray(cloned);
+    }
+
+    public char [] toArray() {
+      return Arrays.copyOfRange(getBuffer(), getStart(), length());
     }
 }
