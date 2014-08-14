@@ -34,6 +34,7 @@ import org.carrot2.util.attribute.Output;
 import org.carrot2.util.attribute.Required;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 /**
@@ -58,6 +59,16 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     @Attribute(key = "QueryWordHighlighter.enabled")
     public boolean enabled = true;
 
+    /**
+     * Enable or disable query highlighter.
+     */
+    @Init
+    @Processing
+    @Input
+    @Attribute(key = "QueryWordHighlighter.maxContentLength")
+    public int maxContentLength = Integer.MAX_VALUE;
+
+    
     /**
      * A regular expression that disables highlighting for certain terms.
      */
@@ -125,10 +136,14 @@ public class QueryWordHighlighter extends ProcessingComponentBase
     @Override
     public void process() throws ProcessingException
     {
-        // No processing if query is blank
-        if (!enabled || StringUtils.isBlank(query))
+        if (!enabled)
         {
             return;
+        }
+        
+        if (query == null) 
+        {
+            query = "";
         }
 
         // Create regexp patterns for each query word
@@ -140,7 +155,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
         List<String> patterns = Lists.newArrayList();
         for (String queryTerm : queryTerms)
         {
-            if (queryTerm == null)
+            if (Strings.isNullOrEmpty(queryTerm))
             { 
                 continue;
             }
@@ -185,6 +200,11 @@ public class QueryWordHighlighter extends ProcessingComponentBase
         if (StringUtils.isBlank(field))
         {
             return;
+        }
+        
+        if (field.length() > maxContentLength) 
+        {
+            field = field.substring(0, maxContentLength);
         }
 
         field = escapeLtGt(field);
