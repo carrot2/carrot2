@@ -39,7 +39,7 @@ public class QueryWordHighlighterTest extends CarrotTestCase
         QueryWordHighlighterDescriptor.attributeBuilder(attrs)
             .maxContentLength(5);
 
-        check(null, "12345678", "12345");
+        check(null, "12345678", "12345...");
     }
 
     @Test
@@ -48,7 +48,7 @@ public class QueryWordHighlighterTest extends CarrotTestCase
         QueryWordHighlighterDescriptor.attributeBuilder(attrs)
             .maxContentLength(5);
 
-        check("abc", "abc abc abc", "<b>abc</b> a");
+        check("abc", "abc abc abc", "<b>abc</b> a...");
     }
     
     @Test

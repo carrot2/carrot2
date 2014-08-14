@@ -204,7 +204,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
         
         if (field.length() > maxContentLength) 
         {
-            field = field.substring(0, maxContentLength);
+            field = field.substring(0, maxContentLength) + "...";
         }
 
         field = escapeLtGt(field);
