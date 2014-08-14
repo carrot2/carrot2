@@ -32,6 +32,25 @@ public class QueryWordHighlighterTest extends CarrotTestCase
 {
     private Map<String, Object> attrs;
 
+
+    @Test
+    public void contentTruncation()
+    {
+        QueryWordHighlighterDescriptor.attributeBuilder(attrs)
+            .maxContentLength(5);
+
+        check(null, "12345678", "12345");
+    }
+
+    @Test
+    public void contentTruncationAndHighlighting()
+    {
+        QueryWordHighlighterDescriptor.attributeBuilder(attrs)
+            .maxContentLength(5);
+
+        check("abc", "abc abc abc", "<b>abc</b> a");
+    }
+    
     @Test
     public void testExcludedPatterns()
     {
@@ -53,8 +72,8 @@ public class QueryWordHighlighterTest extends CarrotTestCase
     @Test
     public void testNullQuery()
     {
-        check(null, "test", null);
-        check("", "test", null);
+        check(null, "test", "test");
+        check("", "test", "test");
     }
 
     @Test
