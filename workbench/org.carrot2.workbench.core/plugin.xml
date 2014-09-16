@@ -212,6 +212,27 @@
                relationship="stack"
                visible="false"
                relative="org.carrot2.workbench.core.views.clusters" />
+
+         <view
+               id="org.carrot2.workbench.views.foamtree"
+               relationship="stack"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.clusters">
+         </view>
+
+         <view
+               id="org.carrot2.workbench.views.circles"
+               relationship="stack"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.clusters">
+         </view>
+         
+         <view
+               id="org.carrot2.workbench.views.aduna"
+               relationship="stack"
+               visible="true"
+               relative="org.carrot2.workbench.core.views.clusters">
+         </view>         
       </perspectiveExtension>
 
       <perspectiveExtension
