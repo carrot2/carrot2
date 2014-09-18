@@ -1,7 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!doctype html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html>
 <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
     <title>Carrot Search FoamTree - interactive visualization of hierarchical data structures</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
@@ -13,13 +15,14 @@
       <div id="viscontainer">Loading Visualization...</div>
     </div>
 
+    <script type="text/javascript" src="assets/js/json2.js"></script>
+    <script type="text/javascript" src="assets/js/error-handler.js"></script>
+
     <script type="text/javascript" src="assets/js/carrotsearch.foamtree.js"></script>
     <script type="text/javascript" src="assets/js/swt-to-visualization.js"></script>
 
     <!-- Embed the visualization. -->
     <script type="text/javascript">//<![CDATA[
-      installOnErrorHandler();
-
       embedWhenReady(function() {
           window.vis = new CarrotSearchFoamTree({
             id: "viscontainer",
@@ -42,7 +45,7 @@
     
             onGroupSelectionChanged: function(selection) {
                 swt_onGroupSelectionChanged(selection.groups.map(function(g) { return g.id; }));
-            },
+            }
           });
 
           // The visualization should be loaded and ready by now.
