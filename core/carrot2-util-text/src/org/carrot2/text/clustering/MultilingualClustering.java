@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.*;
+import com.google.common.collect.Multiset.Entry;
 
 /**
  * A helper for clustering multilingual collections of documents. The helper partitions
@@ -60,7 +61,17 @@ public class MultilingualClustering
          * on the first level of the hierarchy. Each such cluster contains the actual
          * clusters generated for documents in the corresponding language.
          */
-        FLATTEN_NONE("Dedicated parent cluster for each language");
+        FLATTEN_NONE("Dedicated parent cluster for each language"),
+        
+        /**
+         * Clusters all documents assuming the language of the majority of documents.
+         * For example, if 40 documents are English, 30 documents German and 30 French,
+         * all 100 documents will be clustered with English settings. In case of ties,
+         * an arbitrary major language will be chosen. When the majority of documents
+         * have undefined language, {@link MultilingualClustering#defaultLanguage}
+         * will be used.
+         */
+        CLUSTER_IN_MAJORITY_LANGUAGE("Cluster all documents assuming the language of the majority");
         
         private String label;
         
@@ -112,6 +123,11 @@ public class MultilingualClustering
         if (documents.isEmpty())
         {
             return Lists.newArrayList();
+        }
+        
+        if (LanguageAggregationStrategy.CLUSTER_IN_MAJORITY_LANGUAGE.equals(languageAggregationStrategy)) 
+        {
+            return clusterInMajorityLanguage(documents, algorithm);
         }
 
         // Clusters documents in each language separately,
@@ -250,6 +266,31 @@ public class MultilingualClustering
             clusters.put(languageCode, languageCluster);
         }
 
+        return clusters;
+    }
+    
+    private List<Cluster> clusterInMajorityLanguage(List<Document> documents,
+        IMonolingualClusteringAlgorithm algorithm)
+    {
+        final Multiset<LanguageCode> languageCounts = HashMultiset.create();
+        for (Document d : documents)
+        {
+            languageCounts.add(d.getLanguage());
+        }
+        LanguageCode majorityLanguage = defaultLanguage;
+        int maxCount = 0;
+        for (Entry<LanguageCode> entry : languageCounts.entrySet())
+        {
+            if (entry.getElement() != null && entry.getCount() > maxCount)
+            {
+                maxCount = entry.getCount();
+                majorityLanguage = entry.getElement();
+            }
+        }
+        
+        logger.debug("Performing clustering in majority language: " + majorityLanguage);
+        final List<Cluster> clusters = algorithm.process(documents, majorityLanguage);
+        Cluster.appendOtherTopics(documents, clusters);
         return clusters;
     }
 }

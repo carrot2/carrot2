@@ -58,6 +58,12 @@ public class MultilingualClusteringTest extends CarrotTestCase
     {
         checkEmpty(LanguageAggregationStrategy.FLATTEN_NONE);
     }
+    
+    @Test
+    public void testEmptyMajorityLanguage()
+    {
+        checkEmpty(LanguageAggregationStrategy.CLUSTER_IN_MAJORITY_LANGUAGE);
+    }
 
     @Test
     public void testNoLanguageFlattenAll()
@@ -75,6 +81,12 @@ public class MultilingualClusteringTest extends CarrotTestCase
     public void testNoLanguageFlattenNone()
     {
         checkNoLanguage(LanguageAggregationStrategy.FLATTEN_NONE);
+    }
+    
+    @Test
+    public void testNoLanguageMajorityLanguage()
+    {
+        checkNoLanguage(LanguageAggregationStrategy.CLUSTER_IN_MAJORITY_LANGUAGE);
     }
 
     @Test
@@ -99,6 +111,13 @@ public class MultilingualClusteringTest extends CarrotTestCase
     }
 
     @Test
+    public void testOneLanguageNontrivialClustersMajorityLanguage()
+    {
+        checkOneLanguageNontrivialClusters(LanguageAggregationStrategy.CLUSTER_IN_MAJORITY_LANGUAGE,
+            LanguageCode.GERMAN);
+    }
+    
+    @Test
     public void testOneLanguageOtherTopicsClusterFlattenAll()
     {
         checkOneLanguageOtherTopicsCluster(LanguageAggregationStrategy.FLATTEN_ALL);
@@ -114,6 +133,12 @@ public class MultilingualClusteringTest extends CarrotTestCase
     public void testOneLanguageOtherTopicsClusterFlattenNone()
     {
         checkOneLanguageOtherTopicsCluster(LanguageAggregationStrategy.FLATTEN_NONE);
+    }
+    
+    @Test
+    public void testOneLanguageOtherTopicsClusterMajorityLanguage()
+    {
+        checkOneLanguageOtherTopicsCluster(LanguageAggregationStrategy.CLUSTER_IN_MAJORITY_LANGUAGE);
     }
 
     @Test
@@ -131,6 +156,24 @@ public class MultilingualClusteringTest extends CarrotTestCase
 
         check(documents, expectedClusters, Lists.newArrayList(LanguageCode.POLISH,
             LanguageCode.GERMAN), LanguageAggregationStrategy.FLATTEN_ALL);
+    }
+    
+    @Test
+    public void testMoreLanguagesMajorityLanguage()
+    {
+        final List<Document> documents = documentsWithLanguages(LanguageCode.POLISH,
+            LanguageCode.POLISH, LanguageCode.GERMAN, LanguageCode.GERMAN,
+            LanguageCode.GERMAN);
+        
+        final Cluster c1 = new Cluster("Cluster 1").addDocuments(documents.get(2), documents.get(4));
+        final Cluster c2 = new Cluster("Cluster 2").addDocuments(documents.get(1), documents.get(3));
+        final Cluster co = new Cluster("Other Topics").addDocuments(
+            documents.get(0)).setOtherTopics(true);
+        
+        final List<Cluster> expectedClusters = Lists.newArrayList(c1, c2, co);
+        
+        check(documents, expectedClusters, Lists.newArrayList(LanguageCode.GERMAN), 
+            LanguageAggregationStrategy.CLUSTER_IN_MAJORITY_LANGUAGE);
     }
 
     @Test
@@ -188,7 +231,23 @@ public class MultilingualClusteringTest extends CarrotTestCase
         check(documents, expectedClusters, Lists.newArrayList(LanguageCode.POLISH,
             LanguageCode.NORWEGIAN), LanguageAggregationStrategy.FLATTEN_MAJOR_LANGUAGE);
     }
-
+    
+    @Test
+    public void testMoreLanguagesTrivialOrNoClustersMajorityLanguage()
+    {
+        final List<Document> documents = documentsWithLanguages(LanguageCode.POLISH,
+            LanguageCode.POLISH, LanguageCode.POLISH, LanguageCode.NORWEGIAN,
+            LanguageCode.NORWEGIAN);
+        
+        final Cluster co = new Cluster("Other Topics").addDocuments(
+            documents).setOtherTopics(true);
+        
+        final List<Cluster> expectedClusters = Lists.newArrayList(co);
+        
+        check(documents, expectedClusters, Lists.newArrayList(LanguageCode.POLISH),
+            LanguageAggregationStrategy.CLUSTER_IN_MAJORITY_LANGUAGE);
+    }
+    
     private void checkEmpty(final LanguageAggregationStrategy strategy)
     {
         final List<Document> documents = documentsWithLanguages();
