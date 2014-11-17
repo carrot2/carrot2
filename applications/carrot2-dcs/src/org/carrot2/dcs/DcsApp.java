@@ -105,13 +105,13 @@ public class DcsApp
 
         WebAppContext wac = new WebAppContext();
         wac.setContextPath("/");
-        wac.addLifeCycleListener(new ListenerAdapter()
+        server.addLifeCycleListener(new ListenerAdapter()
         {
             public void lifeCycleStarted(LifeCycle lc)
             {
-                log.info("DCS started on port: " + port);
+                log.info("DCS started on port: " + port + " [local: " + connector.getLocalPort() + "]");
             }
-            
+
             public void lifeCycleFailure(LifeCycle lc, Throwable t)
             {
                 if (verbose)
