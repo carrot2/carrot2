@@ -168,7 +168,8 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
      */
     protected String getPassword()
     {
-        return new String(HttpAuthHub.getPassword());
+        char[] password = HttpAuthHub.getPassword();
+        return password == null ? null : new String(password);
     }
 
     /**
