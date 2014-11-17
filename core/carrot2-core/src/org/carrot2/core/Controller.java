@@ -104,6 +104,7 @@ public final class Controller implements Closeable
      */
     public Controller(IProcessingComponentManager componentManager)
     {
+        HttpAuthHub.setupAuthenticator();
         this.componentManager = componentManager;
     }
 
