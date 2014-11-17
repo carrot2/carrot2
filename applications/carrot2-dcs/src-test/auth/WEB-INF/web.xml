@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+  <display-name>access-test</display-name>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Foo</web-resource-name>
+      <url-pattern>/basic/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>role1</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>Basic Auth Realm</realm-name>
+  </login-config>  
+</web-app>

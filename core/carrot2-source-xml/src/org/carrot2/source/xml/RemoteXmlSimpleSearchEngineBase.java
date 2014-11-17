@@ -21,6 +21,7 @@ import javax.xml.transform.Templates;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpResponseException;
 import org.carrot2.core.Document;
+import org.carrot2.core.HttpAuthHub;
 import org.carrot2.core.IControllerContext;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
@@ -159,7 +160,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
      */
     protected String getUser()
     {
-        return null;
+        return HttpAuthHub.getUser();
     }
 
     /**
@@ -167,7 +168,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
      */
     protected String getPassword()
     {
-        return null;
+        return new String(HttpAuthHub.getPassword());
     }
 
     /**

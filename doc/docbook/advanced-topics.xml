@@ -258,11 +258,35 @@
       Two sources that currently do not support the above properties are: 
       Bing3WebDocumentSource and OpenSearchDocumentSource.
     </para>
-
-    <note>
-      <para>Password-based authentication is not supported at the moment.
-      You can alter the source code to change this 
-      in the <filename>HttpUtils</filename> class.</para>
-    </note>
   </section>
+  
+  <section xml:id="section.http-authentication">
+    <title>HTTP BASIC or DIGEST authentication</title>
+
+    <para>
+    If your document source initiates HTTP connections to a server protected
+    with BASIC or DIGEST HTTP authentication, you will have to pass the username
+    and password to the application so that such connections can be established.
+    Define the following global system properties (they are picked up once,
+    when the Controller is created):
+    </para>
+
+    <variablelist>
+      <varlistentry>
+        <term>http.auth.username</term>
+        <listitem><para>Username for BASIC or DIGEST authentication.</para></listitem>
+      </varlistentry>
+  
+      <varlistentry>
+        <term>http.auth.password</term>
+        <listitem><para>Password for BASIC or DIGEST authentication.</para></listitem>
+      </varlistentry>
+    </variablelist>
+    
+    <para>
+      Note that, in general, it's better not to have any HTTP authentication at all since
+      it's a very weak form of protection anyway and only increases network traffic (two HTTP 
+      requests may have to be made in order to fetch the remote resource).
+    </para>
+  </section>  
 </chapter>
