@@ -152,7 +152,7 @@ public class DcsApp
 
         if (System.getProperty("dcs.development.mode") != null)
         {
-            wac.setDefaultsDescriptor("etc/webdefault.xml");
+            wac.setDefaultsDescriptor("etc/distribution/webdefault.xml");
         }
 
         server.setHandler(wac);
