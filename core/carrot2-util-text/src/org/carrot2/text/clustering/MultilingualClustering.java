@@ -118,6 +118,29 @@ public class MultilingualClustering
     @Level(AttributeLevel.MEDIUM)
     public LanguageCode defaultLanguage = LanguageCode.ENGLISH;
 
+    /**
+     * Number of documents in each language.
+     */
+    @Output
+    @Processing
+    @Attribute
+    @Group(MULTILINGUAL_CLUSTERING)
+    @Level(AttributeLevel.MEDIUM)
+    public Map<String, Integer> languageCounts = Maps.newHashMap(); 
+    
+    /**
+     * If {@link #languageAggregationStrategy} is {@link LanguageAggregationStrategy#CLUSTER_IN_MAJORITY_LANGUAGE},
+     * this attribute will provide the majority language that was used to cluster all the documents.
+     * If the majority of the documents have undefined language, this attribute will be 
+     * empty and the clustering will be performed in the {@link #defaultLanguage}.
+     */
+    @Output
+    @Processing
+    @Attribute
+    @Group(MULTILINGUAL_CLUSTERING)
+    @Level(AttributeLevel.MEDIUM)
+    public String majorityLanguage = ""; 
+    
     public List<Cluster> process(List<Document> documents, IMonolingualClusteringAlgorithm algorithm)
     {
         if (documents.isEmpty())
@@ -246,6 +269,9 @@ public class MultilingualClustering
             final LanguageCode languageCode = language.equals("") ? null : LanguageCode.valueOf(language);
             final Cluster languageCluster = new Cluster(
                 languageCode != null ? languageCode.toString() : "Unknown Language");
+            
+            languageCounts.put(languageCode != null ? languageCode.getIsoCode() : "",
+                languageDocuments.size());
 
             // Perform clustering
             final LanguageCode currentLanguage = languageCode != null ? languageCode : defaultLanguage;
@@ -272,20 +298,26 @@ public class MultilingualClustering
     private List<Cluster> clusterInMajorityLanguage(List<Document> documents,
         IMonolingualClusteringAlgorithm algorithm)
     {
-        final Multiset<LanguageCode> languageCounts = HashMultiset.create();
+        final Multiset<LanguageCode> counts = HashMultiset.create();
         for (Document d : documents)
         {
-            languageCounts.add(d.getLanguage());
+            counts.add(d.getLanguage());
         }
         LanguageCode majorityLanguage = defaultLanguage;
         int maxCount = 0;
-        for (Entry<LanguageCode> entry : languageCounts.entrySet())
+        for (Entry<LanguageCode> entry : counts.entrySet())
         {
-            if (entry.getElement() != null && entry.getCount() > maxCount)
+            if (entry.getElement() != null)
             {
-                maxCount = entry.getCount();
-                majorityLanguage = entry.getElement();
-            }
+                if (entry.getCount() > maxCount)
+                {
+                    maxCount = entry.getCount();
+                    majorityLanguage = entry.getElement();
+                    this.majorityLanguage = entry.getElement().getIsoCode();
+                }
+            } 
+            languageCounts.put(entry.getElement() != null ? entry.getElement().getIsoCode() : "", 
+                entry.getCount());
         }
         
         logger.debug("Performing clustering in majority language: " + majorityLanguage);
