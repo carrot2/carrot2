@@ -129,6 +129,7 @@ public class MultilingualClustering
     public Map<String, Integer> languageCounts = Maps.newHashMap(); 
     
     /**
+     * The majority language detected in the documents.
      * If {@link #languageAggregationStrategy} is {@link LanguageAggregationStrategy#CLUSTER_IN_MAJORITY_LANGUAGE},
      * this attribute will provide the majority language that was used to cluster all the documents.
      * If the majority of the documents have undefined language, this attribute will be 
