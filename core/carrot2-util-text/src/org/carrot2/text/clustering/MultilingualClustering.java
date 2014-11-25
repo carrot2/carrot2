@@ -126,7 +126,7 @@ public class MultilingualClustering
     @Attribute
     @Group(MULTILINGUAL_CLUSTERING)
     @Level(AttributeLevel.MEDIUM)
-    public Map<String, Integer> languageCounts = Maps.newHashMap(); 
+    public Map<String, Integer> languageCounts; 
     
     /**
      * The majority language detected in the documents.
@@ -144,6 +144,8 @@ public class MultilingualClustering
     
     public List<Cluster> process(List<Document> documents, IMonolingualClusteringAlgorithm algorithm)
     {
+        languageCounts = Maps.newHashMap();
+        
         if (documents.isEmpty())
         {
             return Lists.newArrayList();
