@@ -119,7 +119,8 @@ public class MultilingualClustering
     public LanguageCode defaultLanguage = LanguageCode.ENGLISH;
 
     /**
-     * Number of documents in each language.
+     * Document languages. The number of documents in each language. Empty string key means
+     * unknown language.
      */
     @Output
     @Processing
@@ -129,7 +130,7 @@ public class MultilingualClustering
     public Map<String, Integer> languageCounts; 
     
     /**
-     * The majority language detected in the documents.
+     * Majority language.
      * If {@link #languageAggregationStrategy} is {@link LanguageAggregationStrategy#CLUSTER_IN_MAJORITY_LANGUAGE},
      * this attribute will provide the majority language that was used to cluster all the documents.
      * If the majority of the documents have undefined language, this attribute will be 
