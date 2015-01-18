@@ -439,14 +439,11 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
                 }
             }
 
-            if (it < iterations - 1)
+            previousResult = result;
+            result = Lists.newArrayList();
+            for (int i = 0; i < partitions; i++)
             {
-                previousResult = result;
-                result = Lists.newArrayList();
-                for (int i = 0; i < partitions; i++)
-                {
-                    result.add(new IntArrayList(selected.columns()));
-                }
+                result.add(new IntArrayList(selected.columns()));
             }
 
             // Calculate similarity to centroids
