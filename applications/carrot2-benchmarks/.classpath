@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src-test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry exported="true" kind="lib" path="lib/h2-1.2.132.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/junit-benchmarks-0.1.0.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-core"/>

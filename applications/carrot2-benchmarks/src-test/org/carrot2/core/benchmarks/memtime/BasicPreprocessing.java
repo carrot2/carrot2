@@ -13,8 +13,6 @@
 package org.carrot2.core.benchmarks.memtime;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.carrot2.core.Cluster;
@@ -28,7 +26,6 @@ import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
-import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.carrot2.util.attribute.Attribute;

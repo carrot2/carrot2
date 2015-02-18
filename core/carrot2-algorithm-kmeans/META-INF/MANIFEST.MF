@@ -11,5 +11,5 @@ Require-Bundle: org.carrot2.core,
  org.apache.mahout;bundle-version="0.3.0";visibility:=reexport
 Bundle-ClassPath: META-INF/,
  .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.carrot2.clustering.kmeans

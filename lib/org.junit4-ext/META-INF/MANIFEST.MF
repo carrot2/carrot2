@@ -36,4 +36,4 @@ Export-Package: junit.extensions,
  org.junit.runner.notification,
  org.junit.runners,
  org.junit.runners.model
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

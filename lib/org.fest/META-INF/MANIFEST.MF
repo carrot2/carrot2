@@ -10,4 +10,4 @@ Export-Package: org.fest.assertions,
  org.fest.mocks,
  org.fest.util
 Bundle-Vendor: fest.easytesting.org
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

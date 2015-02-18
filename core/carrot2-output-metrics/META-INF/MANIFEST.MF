@@ -8,4 +8,4 @@ Require-Bundle: org.carrot2.core;bundle-version="0.0.0"
 Bundle-Vendor: Carrot2.org
 Bundle-ClassPath: META-INF/,
  .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

@@ -88,7 +88,7 @@
   <!-- Compilation presets. -->
   <presetdef name="javac">
       <javac deprecation="false" debug="true"
-          target="1.6" source="1.6"
+          target="1.7" source="1.7"
           encoding="UTF-8" includeantruntime="true" optimize="true"/>
   </presetdef>
 
@@ -247,20 +247,6 @@
   <fail message="Use ANT 1.8.2 or later. Your ANT is: ${ant.version}">
     <condition><not><antversion atleast="1.8.2" /></not></condition>
   </fail>
-
-  <!-- 
-    The property "ant.java.version" is not always correct, depending on used ANT version.
-    E.g. Java 8 is only detected in ANT 1.8.3+.
-   -->
-  <condition property="build.java.runtime" value="1.8">
-    <hasmethod classname="java.util.Collections" method="emptySortedSet"/>
-  </condition>
-  <condition property="build.java.runtime" value="1.7">
-    <hasmethod classname="java.lang.Throwable" method="getSuppressed"/>
-  </condition>
-  <!-- Assume it's 1.6+ -->
-  <property name="build.java.runtime" value="1.6" />
-
 
   <!-- 
        Output cleanup.
@@ -674,11 +660,6 @@
     </fail>
 
     <mkdir dir="${javadoc.dir}" />
-
-    <!-- for now disable doclint on JDK 8: -->
-    <condition property="javadoc.failonerror" value="false" else="true">
-      <equals arg1="${build.java.runtime}" arg2="1.8"/>
-    </condition>
 
     <javadoc destdir="${javadoc.dir}"
              access="protected"
@@ -1181,8 +1162,8 @@
         extra.args="
             -Dproduct=/org.carrot2.workbench.feature/Workbench.product
 
-            -DjavacSource=1.6
-            -DjavacTarget=1.6
+            -DjavacSource=1.7
+            -DjavacTarget=1.7
 
             -Dconfigs=${rcp.os},${rcp.ws},${rcp.arch}
             -DarchivesFormat=${rcp.os},${rcp.ws},${rcp.arch}-folder
@@ -1211,8 +1192,8 @@
         extra.args="
             -Dproduct=/org.carrot2.workbench.feature/Workbench.product
 
-            -DjavacSource=1.6
-            -DjavacTarget=1.6
+            -DjavacSource=1.7
+            -DjavacTarget=1.7
 
             -DarchivePrefix=${carrot2.workbench.base}-${carrot2.version}
             -DbuildId=${carrot2.workbench.base}

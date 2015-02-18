@@ -24,7 +24,7 @@
 
     <mkdir dir="tmp/classes" />
 
-    <javac srcdir="examples" destdir="tmp/classes" source="1.6" target="1.6" encoding="UTF-8">
+    <javac srcdir="examples" destdir="tmp/classes" source="1.7" target="1.7" encoding="UTF-8">
       <classpath>
         <fileset dir=".">
           <include name="**/*.jar" />

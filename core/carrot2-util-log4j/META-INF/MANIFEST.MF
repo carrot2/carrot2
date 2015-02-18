@@ -5,4 +5,4 @@ Bundle-SymbolicName: org.carrot2.util.log4j
 Bundle-Version: 0.0.0.QUALIFIER
 Fragment-Host: org.apache.log4j
 Bundle-Vendor: Carrot2.org
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

@@ -5,7 +5,7 @@ Bundle-SymbolicName: com.google.guava
 Bundle-Version: 14.0.1
 Bundle-ClassPath: guava-14.0.1.jar
 Bundle-Vendor: Google Inc.
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.google.common.annotations,
  com.google.common.base,
  com.google.common.base.internal,

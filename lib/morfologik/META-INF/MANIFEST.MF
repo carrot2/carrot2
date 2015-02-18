@@ -7,7 +7,7 @@ Bundle-ClassPath: morfologik-fsa-1.7.0.jar,
  morfologik-polish-1.7.0.jar,
  morfologik-stemming-1.7.0.jar
 Bundle-Vendor: morfologik.blogspot.com
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: morfologik.dictionaries,
  morfologik.fsa,
  morfologik.stemming,

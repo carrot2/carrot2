@@ -15,5 +15,5 @@ Export-Package: com.thoughtworks.qdox,
  com.thoughtworks.qdox.parser.structs,
  com.thoughtworks.qdox.tools
 Bundle-Vendor: com.thoughtworks.qdox
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: qdox-1.12.jar

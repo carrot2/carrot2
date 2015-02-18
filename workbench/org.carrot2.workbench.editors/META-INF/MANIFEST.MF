@@ -15,5 +15,5 @@ Bundle-ClassPath: .,
  META-INF/
 Export-Package: org.carrot2.workbench.editors.impl,
  org.carrot2.workbench.editors.impl.numeric
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Carrot2.org

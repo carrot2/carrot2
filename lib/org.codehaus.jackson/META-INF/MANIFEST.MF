@@ -6,7 +6,7 @@ Bundle-Version: 1.7.4
 Bundle-ClassPath: jackson-core-asl-1.7.4.jar,
  jackson-mapper-asl-1.7.4.jar
 Bundle-Vendor: jackson.codehaus.org
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.codehaus.jackson,
  org.codehaus.jackson.annotate,
  org.codehaus.jackson.impl,

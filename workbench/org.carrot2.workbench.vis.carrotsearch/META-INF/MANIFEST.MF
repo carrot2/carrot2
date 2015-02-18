@@ -15,7 +15,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  META-INF/,
  icons/
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Carrot2.org
 Export-Package: org.carrot2.workbench.vis,
  org.carrot2.workbench.vis.circles

@@ -14,5 +14,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  META-INF/
 Export-Package: org.carrot2.workbench.editors.lucene
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Carrot2.org

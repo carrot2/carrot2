@@ -12,4 +12,4 @@ Export-Package: com.carrotsearch.hppc,
  com.carrotsearch.hppc.procedures,
  com.carrotsearch.hppc.sorting
 Bundle-Vendor: Carrot Search s.c.
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

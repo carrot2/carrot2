@@ -36,7 +36,6 @@ import org.carrot2.util.resource.IResourceLocator;
 import org.carrot2.util.resource.PrefixDecoratorLocator;
 import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.resource.ResourceLookup.Location;
-import org.carrot2.util.resource.URLResource;
 import org.carrot2.workbench.core.helpers.Utils;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;

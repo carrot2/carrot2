@@ -4,4 +4,4 @@ Bundle-Name: Welcome
 Bundle-SymbolicName: org.carrot2.workbench.core.welcome
 Bundle-Version: 0.0.0.QUALIFIER
 Fragment-Host: org.carrot2.workbench.core;bundle-version="0.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

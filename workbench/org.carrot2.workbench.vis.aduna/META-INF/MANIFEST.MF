@@ -14,7 +14,7 @@ Bundle-ClassPath: .,
  icons/,
  lib/aduna-clustermap-2006.1.jar,
  lib/aduna-clustermap-2006.1-resources.jar
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Carrot2.org
 Export-Package: org.carrot2.workbench.vis.aduna
 Bundle-Activator: org.carrot2.workbench.vis.aduna.AdunaActivator

@@ -11,4 +11,4 @@ Export-Package: org.apache.oro.io,
  org.apache.oro.text.perl,
  org.apache.oro.text.regex,
  org.apache.oro.util
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

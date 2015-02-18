@@ -37,4 +37,4 @@ Export-Package: org.apache.velocity,
  org.apache.velocity.util.introspection
 Require-Bundle: org.apache.oro;visibility:=reexport,
  org.apache.commons;visibility:=reexport
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

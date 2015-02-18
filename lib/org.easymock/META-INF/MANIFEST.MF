@@ -8,4 +8,4 @@ Bundle-Vendor: EasyMock
 Export-Package: org.easymock,
  org.easymock.internal,
  org.easymock.internal.matchers
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
