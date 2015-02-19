@@ -59,6 +59,14 @@
                name="preferenceCustomization"
                value="plugin_customization.ini">
          </property>
+         <property 
+               name="cssTheme"
+               value="org.eclipse.e4.ui.css.theme.e4_classic">
+         </property>
+         <property
+               name="applicationCSSResources" 
+               value="platform:/plugin/org.eclipse.ui.themes/images/"> 
+         </property>         
       </product>
    </extension>
    <extension
