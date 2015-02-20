@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.util.Version;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.core.attribute.CommonAttributesDescriptor.Keys;
@@ -80,12 +79,11 @@ public class ModuloDocumentSource extends ProcessingComponentBase implements
      * {@link org.carrot2.util.attribute.constraint.ImplementingClasses#classes()} and
      * {@link org.carrot2.util.attribute.constraint.ImplementingClasses#strict()} equal to <code>false</code>.
      */
-    @SuppressWarnings("deprecation")
     @Processing
     @Input
     @Attribute
     @ImplementingClasses(classes = {}, strict = false)
-    public Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
+    public Analyzer analyzer = new StandardAnalyzer();
 
     /**
      * Processing routine.

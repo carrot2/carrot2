@@ -12,8 +12,8 @@
 
 package org.carrot2.source.lucene;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import org.apache.lucene.store.FSDirectory;
 import org.carrot2.util.simplexml.ISimpleXmlWrapper;
@@ -46,7 +46,7 @@ public final class FSDirectoryWrapper implements ISimpleXmlWrapper<FSDirectory>
     @Persist
     void beforeSerialization()
     {
-        indexPath = value.getDirectory().getAbsolutePath();
+        indexPath = value.getDirectory().toAbsolutePath().toString();
     }
 
     @Commit
@@ -54,7 +54,7 @@ public final class FSDirectoryWrapper implements ISimpleXmlWrapper<FSDirectory>
     {
         try
         {
-            value = FSDirectory.open(new File(indexPath));
+            value = FSDirectory.open(Paths.get(indexPath));
         }
         catch (IOException e)
         {

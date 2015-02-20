@@ -267,8 +267,7 @@ public class MemTimeBenchmark
         try
         {
             Directory dir = new RAMDirectory();
-            @SuppressWarnings("deprecation")
-            IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_CURRENT, new StandardAnalyzer(Version.LUCENE_CURRENT));
+            IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
             IndexWriter w = new IndexWriter(dir, config);
 
             for (Document d : inputList)

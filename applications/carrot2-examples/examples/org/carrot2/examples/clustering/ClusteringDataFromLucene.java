@@ -12,8 +12,8 @@
 
 package org.carrot2.examples.clustering;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,7 +82,7 @@ public class ClusteringDataFromLucene
 
         LuceneDocumentSourceDescriptor
             .attributeBuilder(luceneGlobalAttributes)
-            .directory(FSDirectory.open(new File(indexPath)));
+            .directory(FSDirectory.open(Paths.get(indexPath)));
 
         /*
          * Specify fields providing data inside your Lucene index.

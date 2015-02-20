@@ -57,6 +57,6 @@ public class ThaiTokenizerTest extends TokenizerTestBase
     {
         Assume.assumeTrue(Platform.getPlatform() != Platform.DOTNET);
         Assume.assumeTrue(ThaiTokenizerAdapter.platformSupportsThai());
-        assertEqualTokens("๑๒๓", tokens(ITokenizer.TT_NUMERIC, "๑๒๓"));
+        assertEqualTokens("๑๒๓", tokens(ITokenizer.TT_TERM, "๑๒๓"));
     }
 }

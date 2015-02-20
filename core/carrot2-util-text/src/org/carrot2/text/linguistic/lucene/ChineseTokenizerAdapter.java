@@ -14,13 +14,10 @@ package org.carrot2.text.linguistic.lucene;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.regex.Pattern;
 
-import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.analysis.cn.smart.SentenceTokenizer;
-import org.apache.lucene.analysis.cn.smart.WordTokenFilter;
+import org.apache.lucene.analysis.cn.smart.HMMChineseTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.util.MutableCharArray;
@@ -35,7 +32,6 @@ public final class ChineseTokenizerAdapter implements ITokenizer
         .compile("[\\-+'$]?\\d+([:\\-/,.]?\\d+)*[%$]?");
 
     private Tokenizer sentenceTokenizer;
-    private TokenStream wordTokenFilter;
     private CharTermAttribute term = null;
 
     private final MutableCharArray tempCharSequence;
@@ -43,12 +39,12 @@ public final class ChineseTokenizerAdapter implements ITokenizer
     public ChineseTokenizerAdapter()
     {
         this.tempCharSequence = new MutableCharArray(new char [0]);
-        this.sentenceTokenizer = new SentenceTokenizer(new StringReader(""));
+        this.sentenceTokenizer = new HMMChineseTokenizer();
     }
 
     public short nextToken() throws IOException
     {
-        final boolean hasNextToken = wordTokenFilter.incrementToken();
+        final boolean hasNextToken = sentenceTokenizer.incrementToken();
         if (hasNextToken)
         {
             short flags = 0;
@@ -84,15 +80,15 @@ public final class ChineseTokenizerAdapter implements ITokenizer
     {
         try
         {
-            if (wordTokenFilter != null) {
-                wordTokenFilter.end();
-                wordTokenFilter.close();
+            if (sentenceTokenizer != null)
+            {
+                sentenceTokenizer.end();
+                sentenceTokenizer.close();
             }
 
             sentenceTokenizer.setReader(input);
-            wordTokenFilter = new WordTokenFilter(sentenceTokenizer);
-            this.term = wordTokenFilter.addAttribute(CharTermAttribute.class);
-            wordTokenFilter.reset();
+            this.term = sentenceTokenizer.addAttribute(CharTermAttribute.class);
+            sentenceTokenizer.reset();
         }
         catch (Exception e)
         {

@@ -15,10 +15,10 @@ package org.carrot2.source.lucene;
 import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.file.Files;
 
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.carrot2.util.ReflectionUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
@@ -44,15 +44,13 @@ public class FSDirectoryWrapperTest extends CarrotTestCase
         ReflectionUtils.classForName(LuceneDocumentSource.class.getName());
     }
 
-    @SuppressWarnings("deprecation")
     @BeforeClass
     public static void prepareIndex() throws Exception
     {
         indexDir = newTempDir(LifecycleScope.SUITE);
-        directory = FSDirectory.open(indexDir);
+        directory = FSDirectory.open(indexDir.toPath());
         closeAfterSuite(directory);
-        LuceneIndexUtils.createAndPopulateIndex(directory, 
-            new SimpleAnalyzer(Version.LUCENE_CURRENT));
+        LuceneIndexUtils.createAndPopulateIndex(directory, new SimpleAnalyzer());
     }
 
     @Test
@@ -73,8 +71,7 @@ public class FSDirectoryWrapperTest extends CarrotTestCase
             unserializedDir = SimpleXmlWrappers.unwrap(wrapper);
 
             assertThat(unserializedDir).isNotNull();
-            assertThat(unserializedDir.getDirectory().getCanonicalFile())
-                .isEqualTo(file.getCanonicalFile());
+            assertThat(Files.isSameFile(unserializedDir.getDirectory(), file.toPath())).isTrue();
         }
         finally
         {

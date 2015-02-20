@@ -24,7 +24,6 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.util.Version;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
@@ -44,12 +43,11 @@ public class LuceneDocumentSourceTest extends
     private static SimpleAnalyzer analyzer;
     private static RAMDirectory directory;
 
-    @SuppressWarnings("deprecation")
     @BeforeClass
     public static void prepareIndex() throws Exception
     {
         directory = new RAMDirectory();
-        analyzer = new SimpleAnalyzer(Version.LUCENE_CURRENT);
+        analyzer = new SimpleAnalyzer();
         LuceneIndexUtils.createAndPopulateIndex(directory, analyzer);
     }
 

@@ -14,6 +14,7 @@ package org.carrot2.examples.clustering;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
@@ -97,7 +97,7 @@ public class ClusteringDataFromLuceneWithCustomFields
 
         LuceneDocumentSourceDescriptor
             .attributeBuilder(luceneGlobalAttributes)
-            .directory(FSDirectory.open(new File(indexPath)));
+            .directory(FSDirectory.open(Paths.get(indexPath)));
 
         /*
          * In ClusteringDataFromLucene we used a simple configuration of
@@ -166,7 +166,7 @@ public class ClusteringDataFromLuceneWithCustomFields
         @Override
         public Analyzer create()
         {
-            return new StandardAnalyzer(Version.LUCENE_CURRENT);
+            return new StandardAnalyzer();
         }
     }
 

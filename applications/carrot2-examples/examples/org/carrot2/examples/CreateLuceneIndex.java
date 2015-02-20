@@ -22,7 +22,6 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.carrot2.core.Document;
 import org.carrot2.examples.clustering.ClusteringDataFromLucene;
 
@@ -49,12 +48,9 @@ public class CreateLuceneIndex
             System.exit(-2);
         }
 
-        @SuppressWarnings("deprecation")
-        Version luceneVersion = Version.LUCENE_CURRENT;
-
-        Analyzer analyzer = new StandardAnalyzer(luceneVersion);
-        IndexWriterConfig config = new IndexWriterConfig(luceneVersion, analyzer);
-        IndexWriter writer = new IndexWriter(FSDirectory.open(indexDir), config);
+        Analyzer analyzer = new StandardAnalyzer();
+        IndexWriterConfig config = new IndexWriterConfig(analyzer);
+        IndexWriter writer = new IndexWriter(FSDirectory.open(indexDir.toPath()), config);
         
         for (Document d : SampleDocumentData.DOCUMENTS_DATA_MINING)
         {

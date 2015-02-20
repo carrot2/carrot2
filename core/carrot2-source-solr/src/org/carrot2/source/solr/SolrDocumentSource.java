@@ -178,7 +178,7 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     public boolean useHighlighterOutput = true;
 
     /**
-     * Copy Solr fields from the search result to Carrot2 {@link Document} instances (as fields).
+     * Copy Solr fields from the search result to Carrot2 {@link org.carrot2.core.Document} instances (as fields).
      */
     @Input
     @Init 

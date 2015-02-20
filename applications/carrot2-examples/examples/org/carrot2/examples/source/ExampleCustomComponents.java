@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
-import org.apache.lucene.util.Version;
 import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.IClusteringAlgorithm;
@@ -55,7 +54,7 @@ public class ExampleCustomComponents
                 .results(10)
                 .documents(SampleDocumentData.DOCUMENTS_DATA_MINING)
                 .modulo(2)
-                .analyzer(new WhitespaceAnalyzer(Version.LUCENE_CURRENT));
+                .analyzer(new WhitespaceAnalyzer());
 
             ByFirstTitleLetterClusteringAlgorithmDescriptor.attributeBuilder(params)
                 .caseSensitive(false);

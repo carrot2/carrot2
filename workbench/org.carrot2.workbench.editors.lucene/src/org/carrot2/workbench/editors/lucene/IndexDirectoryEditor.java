@@ -12,7 +12,8 @@
 
 package org.carrot2.workbench.editors.lucene;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import org.apache.lucene.store.Directory;
@@ -125,7 +126,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
 
         if (this.current != null && current instanceof FSDirectory)
         {
-            dialog.setFilterPath(((FSDirectory) current).getDirectory().getAbsolutePath());
+            dialog.setFilterPath(((FSDirectory) current).getDirectory().toAbsolutePath().toString());
         }
         else
         {
@@ -139,12 +140,12 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
         {
             try
             {
-                final File file = new File(path);
+                final Path p = Paths.get(path);
 
                 EditorsPlugin.getDefault().getPreferenceStore().setValue(
-                    PREF_LAST_SELECTED_LUCENE_DIR, file.getAbsolutePath());
+                    PREF_LAST_SELECTED_LUCENE_DIR, p.toAbsolutePath().toString());
 
-                setValue(FSDirectory.open(file));
+                setValue(FSDirectory.open(p));
             }
             catch (Exception e)
             {
@@ -178,7 +179,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
         }
         else if (current instanceof FSDirectory)
         {
-            representation = ((FSDirectory) current).getDirectory().getAbsolutePath();
+            representation = ((FSDirectory) current).getDirectory().toAbsolutePath().toString();
         }
         else representation = current.getClass().getSimpleName();
 

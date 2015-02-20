@@ -14,29 +14,22 @@ package org.carrot2.text.linguistic.lucene;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.text.BreakIterator;
-import java.util.Locale;
 
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.standard.StandardTokenizer;
-import org.apache.lucene.analysis.th.ThaiWordFilter;
+import org.apache.lucene.analysis.th.ThaiTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
-import org.apache.lucene.util.Version;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.ExceptionUtils;
 
 /**
- * Thai tokenizer implemented using Lucene's {@link ThaiWordFilter}.
+ * Thai tokenizer implemented using Lucene's {@link ThaiTokenizer}.
  */
 public final class ThaiTokenizerAdapter implements ITokenizer
 {
-    private TokenStream wordTokenFilter;
     private CharTermAttribute term = null;
-    private TypeAttribute type = null;
 
     private final MutableCharArray tempCharSequence;
+    private ThaiTokenizer tokenizer;
 
     public ThaiTokenizerAdapter()
     {
@@ -48,28 +41,14 @@ public final class ThaiTokenizerAdapter implements ITokenizer
 
     public short nextToken() throws IOException
     {
-        final boolean hasNextToken = wordTokenFilter.incrementToken();
+        final boolean hasNextToken = tokenizer.incrementToken();
         if (hasNextToken)
         {
             final char [] image = term.buffer();
             final int length = term.length();
             tempCharSequence.reset(image, 0, length);
 
-            short flags = 0;
-            final String typeString = type.type();
-            if (typeString.equals("<SOUTHEAST_ASIAN>") || typeString.equals("<ALPHANUM>"))
-            {
-                flags = ITokenizer.TT_TERM;
-            }
-            else if (typeString.equals("<NUM>"))
-            {
-                flags = ITokenizer.TT_NUMERIC;
-            }
-            else
-            {
-                flags = ITokenizer.TT_PUNCTUATION;
-            }
-            return flags;
+            return ITokenizer.TT_TERM;
         }
 
         return ITokenizer.TT_EOF;
@@ -80,17 +59,16 @@ public final class ThaiTokenizerAdapter implements ITokenizer
         array.reset(term.buffer(), 0, term.length());
     }
 
-    @SuppressWarnings("deprecation")
     public void reset(Reader input) throws IOException
     {
         assert input != null;
         try
         {
-            this.wordTokenFilter = new ThaiWordFilter(Version.LUCENE_CURRENT,
-                new StandardTokenizer(Version.LUCENE_CURRENT, input));
-            this.term = wordTokenFilter.addAttribute(CharTermAttribute.class);
-            this.type = wordTokenFilter.addAttribute(TypeAttribute.class);
-            this.wordTokenFilter.reset();
+            this.tokenizer = new ThaiTokenizer();
+            tokenizer.setReader(input);
+
+            this.term = tokenizer.addAttribute(CharTermAttribute.class);
+            this.tokenizer.reset();
         }
         catch (Exception e)
         {
@@ -104,10 +82,7 @@ public final class ThaiTokenizerAdapter implements ITokenizer
     public static boolean platformSupportsThai()
     {
         try {
-            // Check if Thai break iteration is supported, code taken from Lucene's ThaiWordFilter. 
-            final BreakIterator proto = BreakIterator.getWordInstance(new Locale("th"));
-            proto.setText("ภาษาไทย");
-            return proto.isBoundary(4);
+           return ThaiTokenizer.DBBI_AVAILABLE; 
         } catch (Throwable e) {
             return false;
         }
