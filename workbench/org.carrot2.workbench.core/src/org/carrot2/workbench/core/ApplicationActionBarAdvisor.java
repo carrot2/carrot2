@@ -33,7 +33,6 @@ import org.eclipse.ui.application.IActionBarConfigurer;
  */
 final class ApplicationActionBarAdvisor extends ActionBarAdvisor
 {
-
     private IWorkbenchAction closeAction;
     private IWorkbenchAction closeAllAction;
     private IWorkbenchAction closeOthersAction;

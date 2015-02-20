@@ -38,11 +38,11 @@ function updateDataJson(c2json) {
 
 /** SWT->JS: view changed size. */
 function updateSize() {
+    vis.resize();
     // Defer actual resize until we receive resize event.
-    window.addEventListener("resize", function() {
-        vis.resize();
-        window.removeEventListener("resize", arguments.callee);    
-    });
+    // window.addEventListener("resize", function() {
+    //   window.removeEventListener("resize", arguments.callee);    
+    // });
 }
 
 /** 
@@ -53,30 +53,13 @@ function embedWhenReady(embeddingFunction) {
     window.addEventListener("load", function() {
       var container = document.getElementById("viscontainer");
 
-      if (container.clientWidth == 0 || container.clientHeight == 0 ||
-        (typeof swt_log === 'undefined')) {
+      if (container.clientWidth == 0 || container.clientHeight == 0 || (typeof swt_log === 'undefined')) {
         window.setTimeout(arguments.callee, 500);
       } else {
+        swt_log("Calling embedding function. Container: "
+           + container.clientWidth + "x" 
+           + container.clientHeight)
         embeddingFunction();
       }
     });
-}
-
-/** On error, try to log the message to SWT. */
-function installOnErrorHandler() {
-    window.onerror = function(error) {
-      var container = document.getElementById("viscontainer");
-      if (container) {
-        var hasSwtLog = (typeof swt_log === 'undefined');
-        var msg = "Error: " + JSON.stringify(arguments, null, "  ") + ", container size: " +
-          container.clientWidth + "x" + container.clientHeight + 
-          (hasSwtLog ? " swt_log defined." : " swt_log undefined.");
-
-          container.innerText = msg;
-          if (hasSwtLog) {
-            swt_log(msg);
-          }
-      }
-      throw error;
-    }
 }

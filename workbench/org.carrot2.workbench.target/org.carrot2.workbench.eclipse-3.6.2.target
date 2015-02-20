@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.5"?>
-
-<target name="org.carrot2.workbench.eclipse-3.6.2">
-<locations>
-<location path="${workspace_loc:org.carrot2.workbench.target}/3.6.2/eclipse" type="Directory"/>
-</locations>
-</target>
