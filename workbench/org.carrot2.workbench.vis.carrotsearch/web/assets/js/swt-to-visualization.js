@@ -53,8 +53,7 @@ function embedWhenReady(embeddingFunction) {
     window.addEventListener("load", function() {
       var container = document.getElementById("viscontainer");
 
-      if (container.clientWidth == 0 || container.clientHeight == 0 ||
-        (typeof swt_log === 'undefined')) {
+      if (container.clientWidth == 0 || container.clientHeight == 0 || (typeof swt_log === 'undefined')) {
         window.setTimeout(arguments.callee, 500);
       } else {
         embeddingFunction();
@@ -67,7 +66,7 @@ function installOnErrorHandler() {
     window.onerror = function(error) {
       var container = document.getElementById("viscontainer");
       if (container) {
-        var hasSwtLog = (typeof swt_log === 'undefined');
+        var hasSwtLog = (typeof swt_log !== 'undefined');
         var msg = "Error: " + JSON.stringify(arguments, null, "  ") + ", container size: " +
           container.clientWidth + "x" + container.clientHeight + 
           (hasSwtLog ? " swt_log defined." : " swt_log undefined.");

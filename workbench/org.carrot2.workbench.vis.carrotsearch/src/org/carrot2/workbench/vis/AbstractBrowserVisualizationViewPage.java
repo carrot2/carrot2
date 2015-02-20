@@ -343,7 +343,7 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
                     openURL(event.location);
                 }
             }
-        });            
+        });
 
         editor.getSearchResult().addListener(editorSyncListener);
         editor.getSite().getSelectionProvider().addSelectionChangedListener(
@@ -418,11 +418,14 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     {
         if (isBrowserInitialized()) {
             if (!getBrowser().isDisposed()) {
+                logger.info("updateSize(): " + clientArea);
                 getBrowser().execute("javascript:updateSize("
                     + clientArea.width + ", " + clientArea.height + ")");
             } else {
                 logger.warn("Browser disposed: " + this);
             }
+        } else {
+          logger.warn("Browser not initialized for updateSize(): " + clientArea);
         }
     }    
     
