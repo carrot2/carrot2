@@ -31,6 +31,8 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
@@ -106,6 +108,19 @@ final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
          * activities API (declarative extension point in plugin.xml).
          */
         logContributionIdentifiers();
+
+        // Hack for CARROT-1088 (perspective switcher ignores previous setting of
+        // org.eclipse.ui/PERSPECTIVE_BAR_EXTRAS
+        IWorkbenchWindow window = getWindowConfigurer().getWindow();
+        IPerspectiveRegistry perspectiveRegistry = window.getWorkbench().getPerspectiveRegistry();
+        for (String perspectiveId : new String [] {
+            "org.carrot2.workbench.core.perspective.visualization",
+            "org.carrot2.workbench.core.perspective.tuning",
+            "org.carrot2.workbench.core.perspective.search",
+        }) {
+          window.getActivePage().setPerspective(
+              perspectiveRegistry.findPerspectiveWithId(perspectiveId));
+        }
     }
 
     /**
