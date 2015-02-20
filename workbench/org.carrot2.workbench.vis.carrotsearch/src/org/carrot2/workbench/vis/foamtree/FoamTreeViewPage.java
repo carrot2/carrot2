@@ -72,6 +72,7 @@ final class FoamTreeViewPage extends AbstractBrowserVisualizationViewPage
     @Override
     protected void onBrowserReady()
     {
+    	super.onBrowserReady();
         passAttributes();
     }
     

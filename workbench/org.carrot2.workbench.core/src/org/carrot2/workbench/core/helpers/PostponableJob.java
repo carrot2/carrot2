@@ -12,6 +12,8 @@
 
 package org.carrot2.workbench.core.helpers;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -34,22 +36,35 @@ public class PostponableJob
     private Job job;
     
     /** Actual job to execute. */
-    private final Job actualJob;
+    private final AtomicReference<Job> jobRef = new AtomicReference<>();
 
-    /*
-     * 
-     */
     public PostponableJob(Job actualJob)
     {
-        this.actualJob = actualJob;
+        setJob(actualJob);
     }
+    
+    public PostponableJob() {
+	}
 
-    /**
+    protected final void setJob(Job actualJob)
+    {
+    	if (!this.jobRef.compareAndSet(null, actualJob))
+    	{
+    		throw new IllegalStateException("Can't set jobs twice."); 
+    	}
+	}
+
+	/**
      * Schedule (or postpone) the job to execute after a given delay. Any previous
      * pending job is canceled.
      */
     public final void reschedule(int delay)
     {
+    	final Job actualJob = jobRef.get();
+    	if (actualJob == null) {
+    		throw new IllegalStateException("Job not set.");
+    	}
+
         final Job newJob = new Job(actualJob.getName() + " (Delayed)")
         {
             protected IStatus run(IProgressMonitor monitor)

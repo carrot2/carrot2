@@ -38,11 +38,11 @@ function updateDataJson(c2json) {
 
 /** SWT->JS: view changed size. */
 function updateSize() {
+    vis.resize();
     // Defer actual resize until we receive resize event.
-    window.addEventListener("resize", function() {
-        vis.resize();
-        window.removeEventListener("resize", arguments.callee);    
-    });
+    // window.addEventListener("resize", function() {
+    //   window.removeEventListener("resize", arguments.callee);    
+    // });
 }
 
 /** 

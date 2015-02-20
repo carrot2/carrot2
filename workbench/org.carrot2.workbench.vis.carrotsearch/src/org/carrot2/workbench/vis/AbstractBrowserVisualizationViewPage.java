@@ -46,9 +46,13 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
+import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
+import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.progress.UIJob;
+import org.omg.PortableInterceptor.ClientRequestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +70,11 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
      * Delay between the selection event and refreshing the browser view.
      */
     protected static final int BROWSER_SELECTION_DELAY = 250;
+
+    /**
+     * Delay between the sizing event after the container is initialized.
+     */
+    protected static final int BROWSER_CLIENTSIZE_DELAY = 250;
 
     /**
      * The editor associated with this page.
@@ -107,6 +116,52 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
             });
         }
     };
+    
+    /**
+     * Client size update job.
+     */
+    private class UpdateClientSizeJob extends PostponableJob {
+        private volatile Rectangle clientArea;
+
+		public UpdateClientSizeJob()
+        {
+			setJob(new UIJob("UpdateClientSize") {
+                public IStatus runInUIThread(IProgressMonitor monitor)
+                {
+                	if (getBrowser().isDisposed())
+                	{
+                		logger.warn("Browser disposed.");
+                		return Status.OK_STATUS;
+                	}
+                	
+                	Rectangle r = clientArea;
+                	if (r == null)
+                	{
+                		logger.warn("Area is null?");
+                		return Status.OK_STATUS;
+                	}
+
+                	if (isBrowserInitialized()) {
+                        logger.info("updateSize(): " + clientArea);
+                        getBrowser().execute("javascript:updateSize("
+                            + clientArea.width + ", " + clientArea.height + ")");
+                	} else {
+                		reschedule(BROWSER_CLIENTSIZE_DELAY);
+                	}
+                		
+                	
+                    return Status.OK_STATUS;
+                }
+            });
+        }
+
+		public void update(Rectangle clientArea) {
+			this.clientArea = clientArea;
+			reschedule(BROWSER_CLIENTSIZE_DELAY);
+		}
+    };
+
+    private UpdateClientSizeJob updateClientSizeJob = new UpdateClientSizeJob();
 
     /**
      * Selection refresh job.
@@ -166,6 +221,8 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
      * in case there are delayed update events after the browser has started (race cond.).
      */
     private ProcessingResult lastProcessingResult;
+
+	private Composite parentControl;
 
     /*
      * 
@@ -270,6 +327,8 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     @Override
     public void createControl(Composite parent)
     {
+    	this.parentControl = parent;
+
         /*
          * Open the browser and redirect it to the internal HTTP server.
          */
@@ -353,7 +412,10 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     /**
      * Invoked when the browser successfully embedded the visualization.
      */
-    protected void onBrowserReady() {}
+    protected void onBrowserReady() {
+    	logger.info("onBrowserReady(): " + parentControl.getClientArea());
+    	updateSize(parentControl.getClientArea());
+    }
 
     @Override
     public Control getControl()
@@ -416,19 +478,8 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
 
     void updateSize(Rectangle clientArea)
     {
-        if (isBrowserInitialized()) {
-            if (!getBrowser().isDisposed()) {
-                logger.info("updateSize(): " + clientArea);
-                getBrowser().execute("javascript:updateSize("
-                    + clientArea.width + ", " + clientArea.height + ")");
-            } else {
-                logger.warn("Browser disposed: " + this);
-            }
-        } else {
-          logger.warn("Browser not initialized for updateSize(): " + clientArea);
-        }
+    	this.updateClientSizeJob.update(clientArea);
     }    
-    
 
     /**
      * 

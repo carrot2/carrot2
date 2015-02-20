@@ -21,6 +21,7 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
@@ -41,6 +42,8 @@ public abstract class AbstractVisualizationView extends PageBookViewBase
                 if (!getPageBook().isVisible()) return;
 
                 Rectangle clientArea = getPageBook().getClientArea();
+                LoggerFactory.getLogger("Foo").warn("controlResized(): " + 
+                  clientArea + " => " + listeners.size());
                 for (AbstractBrowserVisualizationViewPage page : listeners) {
                     page.updateSize(clientArea);
                 }
