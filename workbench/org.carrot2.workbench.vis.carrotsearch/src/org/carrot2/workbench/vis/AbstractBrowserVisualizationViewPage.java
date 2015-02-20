@@ -51,6 +51,8 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
@@ -107,13 +109,13 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     /**
      * Reloading XML data (with cause).
      */
+    // TODO: CARROT-1090
     private class ReloadXMLJob extends PostponableJob {
         public ReloadXMLJob(final String origin)
         {
             super(new UIJob("Browser refresh [" + origin + "]...") {
                 public IStatus runInUIThread(IProgressMonitor monitor)
                 {
-                    logger.debug("Browser refresh [" + origin + "]");
                     return reloadDataXml();
                 }
             });
@@ -289,8 +291,15 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
         // If the page has not finished loading, reschedule.
         if (!browserInitialized)
         {
-            logger.debug("Reloading XML rescheduled: browser not ready.");
-            new ReloadXMLJob("delaying").reschedule(BROWSER_REFRESH_DELAY);
+            if (!browser.isVisible())
+            {
+              new ReloadXMLJob("not visible").reschedule(BROWSER_REFRESH_DELAY);
+            }
+            else
+            {
+              logger.debug("Reloading XML rescheduled: browser not ready.");
+              new ReloadXMLJob("delaying").reschedule(BROWSER_REFRESH_DELAY);
+            }
             return Status.OK_STATUS;
         }
 
@@ -332,7 +341,7 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
      * 
      */
     @Override
-    public void createControl(Composite parent)
+    public void createControl(final Composite parent)
     {
         /*
          * Open the browser and redirect it to the internal HTTP server.
@@ -423,11 +432,6 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
             @Override
             public void controlResized(ControlEvent e)
             {
-                if (!browser.isVisible()) {
-                    logger.debug("Invisible, skipping");
-                    return;
-                }
-
                 updateClientSize();
             }
         });
