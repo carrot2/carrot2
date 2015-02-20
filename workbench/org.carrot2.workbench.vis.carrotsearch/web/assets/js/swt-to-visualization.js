@@ -56,26 +56,10 @@ function embedWhenReady(embeddingFunction) {
       if (container.clientWidth == 0 || container.clientHeight == 0 || (typeof swt_log === 'undefined')) {
         window.setTimeout(arguments.callee, 500);
       } else {
+        swt_log("Calling embedding function. Container: "
+           + container.clientWidth + "x" 
+           + container.clientHeight)
         embeddingFunction();
       }
     });
-}
-
-/** On error, try to log the message to SWT. */
-function installOnErrorHandler() {
-    window.onerror = function(error) {
-      var container = document.getElementById("viscontainer");
-      if (container) {
-        var hasSwtLog = (typeof swt_log !== 'undefined');
-        var msg = "Error: " + JSON.stringify(arguments, null, "  ") + ", container size: " +
-          container.clientWidth + "x" + container.clientHeight + 
-          (hasSwtLog ? " swt_log defined." : " swt_log undefined.");
-
-          container.innerText = msg;
-          if (hasSwtLog) {
-            swt_log(msg);
-          }
-      }
-      throw error;
-    }
 }
