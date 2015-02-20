@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.Cluster;
@@ -42,17 +43,17 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.BrowserFunction;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
-import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
-import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.progress.UIJob;
-import org.omg.PortableInterceptor.ClientRequestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,10 +97,12 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
      */
     private final String entryPageUri;
 
+    private final AtomicInteger view = new AtomicInteger();
+
     /**
      * This visualization's logger.
      */
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName() + ".view_" + view.incrementAndGet());
 
     /**
      * Reloading XML data (with cause).
@@ -116,49 +119,55 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
             });
         }
     };
-    
+
     /**
      * Client size update job.
      */
-    private class UpdateClientSizeJob extends PostponableJob {
+    private class UpdateClientSizeJob extends PostponableJob
+    {
         private volatile Rectangle clientArea;
 
-		public UpdateClientSizeJob()
+        public UpdateClientSizeJob()
         {
-			setJob(new UIJob("UpdateClientSize") {
+            setJob(new UIJob("UpdateClientSize")
+            {
                 public IStatus runInUIThread(IProgressMonitor monitor)
                 {
-                	if (getBrowser().isDisposed())
-                	{
-                		logger.warn("Browser disposed.");
-                		return Status.OK_STATUS;
-                	}
-                	
-                	Rectangle r = clientArea;
-                	if (r == null)
-                	{
-                		logger.warn("Area is null?");
-                		return Status.OK_STATUS;
-                	}
+                    if (getBrowser().isDisposed())
+                    {
+                        logger.warn("Browser disposed.");
+                        return Status.OK_STATUS;
+                    }
 
-                	if (isBrowserInitialized()) {
+                    Rectangle r = clientArea;
+                    if (r == null)
+                    {
+                        logger.warn("Area is null?");
+                        return Status.OK_STATUS;
+                    }
+
+                    if (isBrowserInitialized())
+                    {
                         logger.info("updateSize(): " + clientArea);
-                        getBrowser().execute("javascript:updateSize("
-                            + clientArea.width + ", " + clientArea.height + ")");
-                	} else {
-                		reschedule(BROWSER_CLIENTSIZE_DELAY);
-                	}
-                		
-                	
+                        getBrowser().execute(
+                            "javascript:updateSize(" + clientArea.width + ", "
+                                + clientArea.height + ")");
+                    }
+                    else
+                    {
+                        reschedule(BROWSER_CLIENTSIZE_DELAY);
+                    }
+
                     return Status.OK_STATUS;
                 }
             });
         }
 
-		public void update(Rectangle clientArea) {
-			this.clientArea = clientArea;
-			reschedule(BROWSER_CLIENTSIZE_DELAY);
-		}
+        public void update(Rectangle clientArea)
+        {
+            this.clientArea = clientArea;
+            reschedule(BROWSER_CLIENTSIZE_DELAY);
+        }
     };
 
     private UpdateClientSizeJob updateClientSizeJob = new UpdateClientSizeJob();
@@ -221,8 +230,6 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
      * in case there are delayed update events after the browser has started (race cond.).
      */
     private ProcessingResult lastProcessingResult;
-
-	private Composite parentControl;
 
     /*
      * 
@@ -327,8 +334,6 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     @Override
     public void createControl(Composite parent)
     {
-    	this.parentControl = parent;
-
         /*
          * Open the browser and redirect it to the internal HTTP server.
          */
@@ -404,17 +409,44 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
             }
         });
 
+        browser.addDisposeListener(new DisposeListener()
+        {
+            @Override
+            public void widgetDisposed(DisposeEvent e)
+            {
+                logger.debug("Browser disposed.");
+            }
+        });
+
+        browser.addControlListener(new ControlAdapter()
+        {
+            @Override
+            public void controlResized(ControlEvent e)
+            {
+                if (!browser.isVisible()) {
+                    logger.debug("Invisible, skipping");
+                    return;
+                }
+
+                updateClientSize();
+            }
+        });
+
         editor.getSearchResult().addListener(editorSyncListener);
-        editor.getSite().getSelectionProvider().addSelectionChangedListener(
-            selectionListener);
+        editor.getSite().getSelectionProvider().addSelectionChangedListener(selectionListener);
     }
 
     /**
      * Invoked when the browser successfully embedded the visualization.
      */
     protected void onBrowserReady() {
-    	logger.info("onBrowserReady(): " + parentControl.getClientArea());
-    	updateSize(parentControl.getClientArea());
+        updateClientSize();
+    }
+
+    private void updateClientSize() {
+        Rectangle clientArea = browser.getClientArea();
+        logger.debug("Updating client size: " + clientArea);
+        updateClientSizeJob.update(clientArea);
     }
 
     @Override
@@ -475,11 +507,6 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     {
         return browser != null && browserInitialized;
     }
-
-    void updateSize(Rectangle clientArea)
-    {
-    	this.updateClientSizeJob.update(clientArea);
-    }    
 
     /**
      * 
