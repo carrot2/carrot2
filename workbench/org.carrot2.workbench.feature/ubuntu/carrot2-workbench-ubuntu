@@ -1,0 +1,2 @@
+#!/bin/bash
+env UBUNTU_MENUPROXY=0 ./carrot2-workbench
