@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.Cluster;
@@ -51,8 +52,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
@@ -67,7 +66,8 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     /**
      * Delay between the update event and refreshing the browser view.
      */
-    protected static final int BROWSER_REFRESH_DELAY = 750;
+    protected static final int BROWSER_MODEL_UPDATE_RETRY = 750;
+    protected static final int BROWSER_MODEL_UPDATE_INITIAL = 250;
 
     /**
      * Delay between the selection event and refreshing the browser view.
@@ -107,20 +107,83 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName() + ".view_" + view.incrementAndGet());
 
     /**
-     * Reloading XML data (with cause).
+     * Update model XML.
      */
-    // TODO: CARROT-1090
-    private class ReloadXMLJob extends PostponableJob {
-        public ReloadXMLJob(final String origin)
+    private class UpdateModelJob extends PostponableJob {
+        private AtomicReference<ProcessingResult> currentModel = new AtomicReference<>();
+
+        public UpdateModelJob()
         {
-            super(new UIJob("Browser refresh [" + origin + "]...") {
+            setJob(new UIJob("Visualization model update") {
                 public IStatus runInUIThread(IProgressMonitor monitor)
                 {
-                    return reloadDataXml();
+                    if (getBrowser().isDisposed())
+                    {
+                        logger.warn("Browser disposed.");
+                        return Status.OK_STATUS;
+                    }
+
+                    // If the page has not finished loading, reschedule.
+                    if (!browserInitialized)
+                    {
+                        if (browser.isVisible())
+                        {
+                            logger.debug("Model update delayed (browser not ready).");
+                        }
+                        else
+                        {
+                            logger.debug("Model update delayed (browser invisible).");
+                        }
+                        reschedule(BROWSER_MODEL_UPDATE_RETRY);
+                        return Status.OK_STATUS;
+                    }
+
+                    doUpdateModel(currentModel.get());
+                    return Status.OK_STATUS;
+                }
+
+                private void doUpdateModel(ProcessingResult pr)
+                {
+                    try
+                    {
+                        StringWriter sw = new StringWriter();
+                        pr.serializeJson(sw, "updateDataJson", true, false, true, false);
+
+                        String json = sw.toString();
+                        String jsonLeader = StringUtils.abbreviate(json, 180);
+                        logger.info("Updating view XML: " + jsonLeader);
+
+                        if (!browser.execute("javascript:" + json))
+                        {
+                            logger.warn("Failed to update the data model: " + jsonLeader);
+                        }
+                    } 
+                    catch (Exception e)
+                    {
+                        logger.warn("Browser model update error.", e);
+                    }
                 }
             });
         }
+
+        public void updateModel(ProcessingResult model)
+        {
+            if (browser.isDisposed())
+            {
+                // Browser disposed.
+                return;
+            }
+
+            if (model == currentModel.getAndSet(model) || model == null)
+            {
+                // Same model, or no model, ignore.
+                return;
+            }
+
+            reschedule(BROWSER_MODEL_UPDATE_INITIAL);
+        }
     };
+    private final UpdateModelJob updateModelJob = new UpdateModelJob();
 
     /**
      * Client size update job.
@@ -193,7 +256,7 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     {
         public void processingResultUpdated(ProcessingResult result)
         {
-            new ReloadXMLJob("updated result").reschedule(BROWSER_REFRESH_DELAY);
+            updateModelJob.updateModel(result);
         }
     };
 
@@ -226,12 +289,6 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
             }
         }
     };
-
-    /**
-     * Most recently serialized processing result. Avoid re-rendering of visualization
-     * in case there are delayed update events after the browser has started (race cond.).
-     */
-    private ProcessingResult lastProcessingResult;
 
     /*
      * 
@@ -268,74 +325,6 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
         return Status.OK_STATUS;
     }
 
-    /**
-     * Reloads XML data in the browser. Use {@link ReloadXMLJob} for invoking this.
-     */
-    private IStatus reloadDataXml()
-    {
-        // If there is no search result, quit. Search result listener will reschedule.
-        if (getProcessingResult() == null)
-        {
-            logger.debug("Reloading XML aborted: no processing result.");
-            // No search result yet.
-            return Status.OK_STATUS;
-        }
-
-        // If browser disposed, quit.
-        if (browser.isDisposed())
-        {
-            logger.debug("Reloading XML aborted: browser disposed.");
-            return Status.OK_STATUS;
-        }
-
-        // If the page has not finished loading, reschedule.
-        if (!browserInitialized)
-        {
-            if (!browser.isVisible())
-            {
-              new ReloadXMLJob("not visible").reschedule(BROWSER_REFRESH_DELAY);
-            }
-            else
-            {
-              logger.debug("Reloading XML rescheduled: browser not ready.");
-              new ReloadXMLJob("delaying").reschedule(BROWSER_REFRESH_DELAY);
-            }
-            return Status.OK_STATUS;
-        }
-
-        ProcessingResult pr = getProcessingResult(); 
-        if (pr == lastProcessingResult)
-        {
-            logger.debug("Reloading XML aborted: identical processing result.");
-            return Status.OK_STATUS;
-        }
-
-        try
-        {
-            StringWriter sw = new StringWriter();
-            pr.serializeJson(sw, "updateDataJson", true, false, true, false);
-
-            String json = sw.toString();
-            logger.info("Updating view XML: " + 
-                StringUtils.abbreviate(json, 180));
-
-            if (!browser.execute("javascript:" + json))
-            {
-                logger.warn("Failed to update the data model (reason unknown): "
-                    + StringUtils.abbreviate(json, 200));
-            }
-            else
-            {
-                lastProcessingResult = pr;
-            }
-        }
-        catch (Exception e)
-        {
-            logger.warn("Embedded browser error: ", e);
-        }
-
-        return Status.OK_STATUS;
-    }
 
     /**
      * 
@@ -388,8 +377,7 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
                 browserInitialized = true;
                 onBrowserReady();
 
-                ReloadXMLJob reloadXMLJob = new ReloadXMLJob("Browser loaded");
-                reloadXMLJob.reschedule(500);
+                updateModelJob.updateModel(getProcessingResult());
                 return null;
             }
         };
