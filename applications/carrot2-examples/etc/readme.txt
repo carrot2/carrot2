@@ -2,7 +2,7 @@ Carrot2 Java API
 ----------------
 
 Carrot2 Java API lets you embed Carrot2 clustering in your Java software.
-The API requires a Java Development Kit (JDK) version 1.6.0 or later.
+The API requires a Java Development Kit (JDK) version 1.7.0 or later.
 
 See the examples/ directory for a number of copy-paste examples.
 

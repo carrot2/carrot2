@@ -9,7 +9,7 @@ batch.cmd input  (on Windows)
 
 and look for the "output" directory for the results. Run the script without parameters 
 to see the available switches. The CLI applications require a Java Runtime Environment 
-(JRE) version 1.6.0 or later. 
+(JRE) version 1.7.0 or later. 
 
 
 For more information, please refer to Carrot2 Manual:

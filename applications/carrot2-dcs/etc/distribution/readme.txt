@@ -6,7 +6,7 @@ service. It can cluster documents from an external source  (e.g., a search
 engine) or documents provided directly as an XML stream. Results are returned
 in XML or JSON formats. 
 
-The DCS requires a Java Runtime Environment (JRE) version 1.6.0 or later. To
+The DCS requires a Java Runtime Environment (JRE) version 1.7.0 or later. To
 run the DCS, execute the 'dcs' script and point your browser at
 http://localhost:8080 for further instructions.
 
