@@ -247,6 +247,32 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
         {
             return doSelectionRefresh();
         }
+
+        /*
+         * 
+         */
+        protected IStatus doSelectionRefresh()
+        {
+            if (browser.isDisposed() || !browserInitialized)
+            {
+                return Status.OK_STATUS;
+            }
+
+            final IStructuredSelection sel = (IStructuredSelection) editor.getSite()
+                .getSelectionProvider().getSelection();
+
+            @SuppressWarnings("unchecked")
+            final List<Cluster> selected = (List<Cluster>) sel.toList();
+
+            IntStack ids = IntStack.newInstanceWithCapacity(selected.size());
+            for (Cluster cluster : selected)
+            {
+                ids.push(cluster.getId());
+            }
+            browser.execute("javascript:selectGroupsById(" + Arrays.toString(ids.toArray()) + ");");
+
+            return Status.OK_STATUS;
+        }        
     });
 
     /**
@@ -268,6 +294,8 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
         /* */
         public void selectionChanged(SelectionChangedEvent event)
         {
+            if (!browserInitialized) return;
+
             final ISelection selection = event.getSelection();
             if (selection != null && selection instanceof IStructuredSelection)
             {
@@ -297,32 +325,6 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
     {
         this.entryPageUri = entryPageUri;
         this.editor = editor;
-    }
-
-    /*
-     * 
-     */
-    protected IStatus doSelectionRefresh()
-    {
-        final IStructuredSelection sel = (IStructuredSelection) editor.getSite()
-            .getSelectionProvider().getSelection();
-
-        @SuppressWarnings("unchecked")
-        final List<Cluster> selected = (List<Cluster>) sel.toList();
-
-        if (browser.isDisposed())
-        {
-            return Status.OK_STATUS;
-        }
-
-        IntStack ids = IntStack.newInstanceWithCapacity(selected.size());
-        for (Cluster cluster : selected)
-        {
-            ids.push(cluster.getId());
-        }
-        browser.execute("javascript:selectGroupsById(" + Arrays.toString(ids.toArray()) + ");");
-
-        return Status.OK_STATUS;
     }
 
 
