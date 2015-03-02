@@ -111,6 +111,7 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
      */
     private class UpdateModelJob extends PostponableJob {
         private AtomicReference<ProcessingResult> currentModel = new AtomicReference<>();
+        private ProcessingResult updatedModel;
 
         public UpdateModelJob()
         {
@@ -129,12 +130,19 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
                         if (browser.isVisible())
                         {
                             logger.debug("Model update delayed (browser not ready).");
+                            reschedule(BROWSER_MODEL_UPDATE_RETRY);
                         }
                         else
                         {
                             logger.debug("Model update delayed (browser invisible).");
                         }
-                        reschedule(BROWSER_MODEL_UPDATE_RETRY);
+
+                        return Status.OK_STATUS;
+                    }
+
+                    if (updatedModel == currentModel.getAndSet(updatedModel) || updatedModel == null)
+                    {
+                        // Same model, or no model, ignore.
                         return Status.OK_STATUS;
                     }
 
@@ -174,12 +182,7 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
                 return;
             }
 
-            if (model == currentModel.getAndSet(model) || model == null)
-            {
-                // Same model, or no model, ignore.
-                return;
-            }
-
+            updatedModel = model;
             reschedule(BROWSER_MODEL_UPDATE_INITIAL);
         }
     };
