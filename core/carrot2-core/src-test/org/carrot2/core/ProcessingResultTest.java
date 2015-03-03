@@ -248,6 +248,19 @@ public class ProcessingResultTest extends CarrotTestCase
     }
 
     @Test
+    public void testJsonDeserialization() throws IOException
+    {
+        final ProcessingResult input = prepareProcessingResult();
+        
+        StringWriter sw = new StringWriter();
+        input.serializeJson(sw, null, true, true, true, true);
+
+        final ProcessingResult roundtrip = ProcessingResult.deserializeJson(new StringReader(sw.toString()));
+
+        System.out.println(sw.toString());
+    }
+
+    @Test
     public void testJsonSerializationAll() throws IOException
     {
         final ProcessingResult result = prepareProcessingResult();
@@ -488,10 +501,13 @@ public class ProcessingResultTest extends CarrotTestCase
 
         final List<Cluster> clusters = Lists.newArrayList(clusterA, clusterB, clusterO);
         attributes.put(AttributeNames.CLUSTERS, clusters);
-
         attributes.put(AttributeNames.QUERY, "query");
-
         attributes.put(AttributeNames.RESULTS, 120);
+
+        attributes.put("testString", "test");
+        attributes.put("testInteger", 10);
+        attributes.put("testDouble", 10.3);
+        attributes.put("testBoolean", true);
 
         return new ProcessingResult(attributes);
     }

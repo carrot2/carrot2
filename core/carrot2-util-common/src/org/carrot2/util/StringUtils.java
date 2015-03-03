@@ -14,10 +14,11 @@ package org.carrot2.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.WordUtils;
+
+import com.google.common.base.Joiner;
 
 /**
  * Provides a number of useful method operating on {@link String}s that are not available
@@ -42,19 +43,7 @@ public final class StringUtils
 
     public static <T> String toString(Iterable<T> iterable, String separator)
     {
-        final StringBuilder stringBuilder = new StringBuilder();
-
-        for (final Iterator<T> iterator = iterable.iterator(); iterator.hasNext();)
-        {
-            final T object = iterator.next();
-            stringBuilder.append(object);
-            if (iterator.hasNext())
-            {
-                stringBuilder.append(separator);
-            }
-        }
-
-        return stringBuilder.toString();
+        return Joiner.on(separator).join(iterable);
     }
 
     public static String splitCamelCase(String camelCaseString)

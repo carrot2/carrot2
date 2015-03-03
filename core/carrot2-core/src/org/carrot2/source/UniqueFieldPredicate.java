@@ -35,7 +35,7 @@ final class UniqueFieldPredicate implements Predicate<Document>
 
     public boolean apply(Document document)
     {
-        final Object fieldValue = document.getField(fieldName);
+        final Object fieldValue = document.getAttribute(fieldName);
 
         if (fieldValue == null)
         {
