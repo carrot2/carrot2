@@ -413,18 +413,13 @@ final class AdunaClusterMapViewPage extends Page
 
         final Frame frame = SWT_AWT.new_Frame(embedded);
         frame.setLayout(new java.awt.BorderLayout());
-        
-        // LINGO-446: flicker fix; see "Creating a Root Pane Container" in http://www.eclipse.org/articles/article.php?file=Article-Swing-SWT-Integration/index.html
-        final JApplet applet = new JApplet();
-        frame.add(applet);
-        applet.setLayout(new java.awt.BorderLayout());
 
         final JScrollPane scrollPanel = new JScrollPane(
             JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPanel.setDoubleBuffered(true);
 
         scrollPanel.setBorder(BorderFactory.createEmptyBorder());
-        applet.getContentPane().add(scrollPanel, java.awt.BorderLayout.CENTER);
+        frame.add(scrollPanel, java.awt.BorderLayout.CENTER);
 
         final ClusterMapFactory factory = ClusterMapFactory.createFactory();
         final ClusterMap clusterMap = factory.createClusterMap();
@@ -432,7 +427,6 @@ final class AdunaClusterMapViewPage extends Page
         this.mapMediator = mapMediator;
 
         final ClusterGraphPanel graphPanel = mapMediator.getGraphPanel();
-        graphPanel.setDoubleBuffered(true);
         scrollPanel.setViewportView(graphPanel);
 
         scrollable.addControlListener(new ControlAdapter()
