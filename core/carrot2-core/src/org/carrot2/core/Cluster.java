@@ -13,6 +13,7 @@
 package org.carrot2.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ public final class Cluster extends AttributeSet
     public static final String OTHER_TOPICS = "other-topics";
 
     /**
-     * Default label for the <i>Other Topics</i> cluster.
+     * Default English label for the <i>Other Topics</i> cluster.
      */
     public static final String OTHER_TOPICS_LABEL = "Other Topics";
 
@@ -64,8 +65,14 @@ public final class Cluster extends AttributeSet
      */
     public static final String ID = "id";
 
-    // NOCOMMIT: docs
+    // NOCOMMIT: add docs
     public static final String PHRASES = "phrases";
+
+    // NOCOMMIT: add docs
+    public static final String DOCUMENTS = AttributeNames.DOCUMENTS;
+
+    // NOCOMMIT: add docs
+    public static final String CLUSTERS = AttributeNames.CLUSTERS;
 
     /**
      * Create a cluster with the given set of attributes. 
@@ -74,9 +81,9 @@ public final class Cluster extends AttributeSet
     {
         super(attributes);
 
-        assert assertListContainsOnly(attributes.get(AttributeNames.DOCUMENTS), Document.class) &&
-               assertListContainsOnly(attributes.get(AttributeNames.CLUSTERS), Cluster.class) &&
-               assertListContainsOnly(attributes.get(PHRASES), String.class);
+        assert checkListContainsOnly(attributes.get(DOCUMENTS), Document.class) &&
+               checkListContainsOnly(attributes.get(CLUSTERS), Cluster.class) &&
+               checkListContainsOnly(attributes.get(PHRASES), String.class);
     }
 
     /**
@@ -114,24 +121,32 @@ public final class Cluster extends AttributeSet
     }
 
     /**
-     * Returns all subclusters of this cluster.
+     * Returns all subclusters of this cluster or an empty list if none.
      */
     @SuppressWarnings("unchecked")
     public List<Cluster> getSubclusters()
     {
-        return (List<Cluster>) getAttribute(AttributeNames.CLUSTERS);
+        List<Cluster> subclusters = (List<Cluster>) getAttribute(CLUSTERS);
+        return subclusters != null ? subclusters : Collections.<Cluster> emptyList();
     }
 
     /**
-     * Returns all documents contained in this cluster.
+     * Returns all documents contained in this cluster or an empty list if none.
      */
     @SuppressWarnings("unchecked")
     public List<Document> getDocuments()
     {
-        return (List<Document>) getAttribute(AttributeNames.DOCUMENTS);
+        List<Document> docs = (List<Document>) getAttribute(DOCUMENTS);
+        return (docs != null ? docs : Collections.<Document> emptyList());
     }
 
-    
+    /**
+     * Returns the score of this cluster (or <code>null</code> if not present).
+     */
+    public Double getScore()
+    {
+        return getAttribute(SCORE, Double.class);
+    }
     
     /**
      * Returns all documents contained in this cluster and (recursively) all documents

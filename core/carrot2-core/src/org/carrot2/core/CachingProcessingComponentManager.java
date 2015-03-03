@@ -78,6 +78,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
      *            If {@link IProcessingComponent} is provided here, output of all
      *            components will be cached.
      */
+    @SafeVarargs
     public CachingProcessingComponentManager(IProcessingComponentManager delegate,
         Class<? extends IProcessingComponent>... cachedComponentClasses)
     {

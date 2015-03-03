@@ -2,6 +2,7 @@ package org.carrot2.core;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -47,12 +48,25 @@ abstract class AttributeSet
     /**
      * Verify if elements of a list are of a given type.
      */
-    protected boolean assertListContainsOnly(Object list, Class<?> elementType)
+    protected boolean checkListContainsOnly(Object list, Class<?> elementType)
     {
-        assert list instanceof List<?>;
+        if (!(list instanceof List)) {
+            throw new AssertionError(String.format(Locale.ROOT,
+                "Expected a List<? extends %s>: %s",
+                elementType.getName(),
+                list));
+        };
+
         for (Object element : ((List<?>) list)) {
-            assert elementType.isInstance(element);
+            if (!elementType.isInstance(element)) {
+                throw new AssertionError(String.format(Locale.ROOT,
+                    "Expected all list elements to be of type %s, but encountered type %s: %s",
+                    elementType.getName(),
+                    element.getClass().getName(),
+                    element));
+            }
         }
+
         return true;
     }    
 }

@@ -12,7 +12,11 @@
 
 package org.carrot2.core;
 
+import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.carrot2.core.attribute.AttributeNames;
@@ -24,6 +28,10 @@ import org.carrot2.core.attribute.AttributeNames;
  */
 public final class ProcessingResult extends AttributeSet
 {
+    public final static String DOCUMENTS = AttributeNames.DOCUMENTS;
+    public final static String CLUSTERS = AttributeNames.CLUSTERS;
+    public final static String QUERY = AttributeNames.QUERY;
+
     /**
      * Creates a {@link ProcessingResult} with the provided 
      * <code>attributes</code>.
@@ -32,27 +40,71 @@ public final class ProcessingResult extends AttributeSet
     {
         super(attributes);
 
-        assert assertListContainsOnly(attributes.get(AttributeNames.DOCUMENTS), Document.class) &&
-               assertListContainsOnly(attributes.get(AttributeNames.CLUSTERS), Cluster.class);
+        // Sanity checks.
+        assert checkListContainsOnly(attributes.get(DOCUMENTS), Document.class) &&
+               checkListContainsOnly(attributes.get(CLUSTERS), Cluster.class);
+
+        // Consistency checks.
+        assert checkClustersReferenceDocuments();
     }
 
     /**
-     * Returns the list documents that have been processed or <code>null</code>
-     * if no documents were present.
+     * Returns the list documents that have been processed or an empty list if
+     * no documents were present.
      */
     @SuppressWarnings("unchecked")
     public List<Document> getDocuments()
     {
-        return (List<Document>) getAttribute(AttributeNames.DOCUMENTS);
+        List<Document> docs = (List<Document>) getAttribute(DOCUMENTS);
+        return (docs != null ? docs : Collections.<Document> emptyList());
     }
 
     /**
-     * Returns the clusters that have been created during processing or <code>null</code>
-     * if none were created.
+     * Returns the clusters that have been created during processing or an empty list
+     * if no documents were present.
      */
     @SuppressWarnings("unchecked")
     public List<Cluster> getClusters()
     {
-        return (List<Cluster>) attributes.get(AttributeNames.CLUSTERS);
+        List<Cluster> clusters = (List<Cluster>) attributes.get(CLUSTERS);
+        return (clusters != null ? clusters : Collections.<Cluster> emptyList());
     }
+
+    /**
+     * Returns the query associated with the processing result (or <code>null</code>).
+     */
+    public String getQuery()
+    {
+        return getAttribute(QUERY, String.class);
+    }
+
+    private boolean checkClustersReferenceDocuments()
+    {
+        IdentityHashMap<Document, Boolean> documents = new IdentityHashMap<Document, Boolean>();
+        for (Document doc : getDocuments()) {
+            documents.put(doc, Boolean.TRUE);
+        }
+
+        IdentityHashMap<Cluster, Boolean> visited = new IdentityHashMap<Cluster, Boolean>();
+        ArrayDeque<Cluster> q = new ArrayDeque<Cluster>(getClusters());
+        while (!q.isEmpty()) {
+            final Cluster c = q.pop();
+            if (visited.put(c, Boolean.TRUE) != null) {
+                throw new AssertionError("Clusters don't form a plain tree: " + c);
+            }
+            q.addAll(c.getSubclusters());
+            for (Document doc : c.getDocuments()) {
+                if (!documents.containsKey(doc)) {
+                    throw new AssertionError(String.format(Locale.ROOT,
+                        "Cluster references a document from outside documents list: %s => %s",
+                        c,
+                        doc));
+                }
+            }
+        }
+        List<Cluster> clusters = getClusters();
+        if (clusters != null) {
+        }
+        return true;
+    }    
 }

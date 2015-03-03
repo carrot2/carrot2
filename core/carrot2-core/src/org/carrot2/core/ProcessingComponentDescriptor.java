@@ -317,7 +317,6 @@ public class ProcessingComponentDescriptor
      * On commit, attempt to verify component class and instance availability.
      */
     @Commit
-    @SuppressWarnings({"unused"})
     private void onCommit(Map<Object, Object> session)
     {
         this.initializationException = null;

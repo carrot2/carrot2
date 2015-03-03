@@ -15,13 +15,22 @@ package org.carrot2.core;
 import java.util.List;
 import java.util.Map;
 
-import org.simpleframework.xml.Attribute;
-
 /**
  * A document that to be processed by the framework. 
  */
 public final class Document extends AttributeSet
 {
+    // NOCOMMIT: move these to an enum 
+
+    /**
+     * The identifier of this document.
+     * 
+     * <p>
+     * Type of this attribute is a {@link String}.
+     * </p>
+     */
+    public static final String ID = "id";
+
     /** Field name for the title of the document. */
     public static final String TITLE = "title";
 
@@ -44,15 +53,6 @@ public final class Document extends AttributeSet
      * Field name for an URL pointing to the thumbnail image associated with the document.
      */
     public static final String THUMBNAIL_URL = "thumbnail-url";
-
-    /** Document size. */
-    public static final String SIZE = "size";
-
-    /**
-     * Document score. The semantics of the score depends on the specific document source.
-     * Some document sources may not provide document scores at all.
-     */
-    public static final String SCORE = "score";
 
     /**
      * Field name for a list of sources the document was found in. Value type:
@@ -82,22 +82,13 @@ public final class Document extends AttributeSet
     public static final String PARTITIONS = "partitions";
 
     /**
-     * The identifier of this document.
-     * 
-     * <p>
-     * Type of this attribute is a {@link String}.
-     * </p>
-     */
-    public static final String ID = "id";
-
-    /**
      * Creates an empty document with no fields.
      */
     public Document(Map<String, Object> attributes)
     {
         super(attributes);
         
-        assert assertListContainsOnly(attributes.get(SOURCES), String.class);
+        assert checkListContainsOnly(attributes.get(SOURCES), String.class);
     }
 
     /**
@@ -106,7 +97,7 @@ public final class Document extends AttributeSet
      * 
      * @return identifier of this document, possibly <code>null</code>.
      */
-    // TODO: rename to getId
+    // NOCOMMIT: rename to getId
     public String getStringId()
     {
         return getAttribute(ID, String.class);
@@ -129,11 +120,27 @@ public final class Document extends AttributeSet
     }
 
     /**
-     * Returns this document's {@link #CONTENT_URL} field.
+     * Returns this document's {@link #CONTENT_URL} field or <code>null</code>.
      */
-    public String getContentUrl()
+    public String getContentURL()
     {
         return getAttribute(CONTENT_URL, String.class);
+    }
+
+    /**
+     * Returns this document's {@link #CLICK_URL} field or <code>null</code>.
+     */
+    public String getClickURL()
+    {
+        return getAttribute(CLICK_URL, String.class);
+    }
+
+    /**
+     * Returns this document's {@link #THUMBNAIL_URL} field or <code>null</code>.
+     */
+    public String getThumbURL()
+    {
+        return getAttribute(THUMBNAIL_URL, String.class);
     }
 
     /**
@@ -151,14 +158,5 @@ public final class Document extends AttributeSet
     public LanguageCode getLanguage()
     {
         return getAttribute(LANGUAGE, LanguageCode.class);
-    }
-
-    /**
-     * Returns this document's {@link #SCORE}.
-     */
-    @Attribute(name = "score", required = false)
-    public Double getScore()
-    {
-        return getAttribute(SCORE, Double.class);
     }
 }
