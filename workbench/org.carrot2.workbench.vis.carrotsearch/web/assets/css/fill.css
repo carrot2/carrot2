@@ -28,7 +28,8 @@ html, body, div, #main, #viscontainer {
 #viscontainer img {
   position: relative;
   top: 50%;
-  transform: translateY(-50%);
+  height: 32px;
+  margin-top: -16px;
 }
 
 .smallpadding {
