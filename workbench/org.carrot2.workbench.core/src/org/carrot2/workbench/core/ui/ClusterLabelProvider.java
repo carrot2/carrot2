@@ -13,13 +13,12 @@
 package org.carrot2.workbench.core.ui;
 
 import org.carrot2.core.Cluster;
-import org.carrot2.core.ClusterWithParent;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 /**
- * Provides labels for {@link Cluster} or {@link ClusterWithParent}.
+ * Provides labels for {@link Cluster}.
  */
 public final class ClusterLabelProvider extends LabelProvider
 {
