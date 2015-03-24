@@ -185,18 +185,14 @@ public final class RestProcessorServlet extends HttpServlet
         });
 
         // Aliases for clustering commands.
-        put("rest", new CommandAction() {
+        CommandAction clusteringAction = new CommandAction() {
             public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
             {
                 handleWwwUrlEncoded(request, response);
             }
-        });
-        put("cluster", new CommandAction() {
-            public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
-            {
-                handleWwwUrlEncoded(request, response);
-            }
-        });
+        };
+        put("rest", clusteringAction);
+        put("cluster", clusteringAction);
     }};
 
     @Override
