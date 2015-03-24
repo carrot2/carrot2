@@ -17,16 +17,23 @@ import static org.easymock.EasyMock.isA;
 import static org.fest.assertions.MapAssert.entry;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
 import org.junit.Assert;
 import org.junit.Before;
@@ -678,6 +685,57 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
 
         performProcessingDisposeAndVerifyMocks(Component1.class);
         assertEquals("dir", resultAttributes.get("data"));
+    }
+
+    @Bindable
+    public static class ComponentWithMapParameter extends ProcessingComponentBase
+    {
+        @Input
+        @Processing
+        @Attribute(key = "other")
+        private Map<String,String> other;
+
+        @Output
+        @Processing
+        @Attribute(key = "result")
+        private String result;
+
+        @Override
+        public void process() throws ProcessingException
+        {
+            result = new TreeMap<>(other).toString();
+        }
+    }
+
+    @Test
+    public void testMapWithKeysAttribute()
+    {
+        Map<String, String> map1 = new HashMap<String, String>();
+        map1.put("k1", "v1");
+        map1.put("k2", "v2");
+
+        processingAttributes.put("other", map1);
+        ProcessingResult pr = performProcessing(ComponentWithMapParameter.class);
+        assertThat(pr.getAttribute("result")).isEqualTo("{k1=v1, k2=v2}");
+
+        if (isCaching())
+        {
+            pr = performProcessing(ComponentWithMapParameter.class);
+            assertThat(pr.getAttribute("result")).isEqualTo("{k1=v1, k2=v2}");
+
+            final ControllerStatistics statistics = controller.getStatistics();
+            assertThat(statistics.cacheMisses).isEqualTo(1);
+            assertThat(statistics.cacheHitsTotal).isEqualTo(1);
+        }
+
+        Map<String, String> map2 = new HashMap<String, String>();
+        map2.putAll(map1);
+        map1.put("k1", "v1_2");
+        pr = performProcessing(ComponentWithMapParameter.class);
+        assertThat(pr.getAttribute("result")).isEqualTo("{k1=v1_2, k2=v2}");
+        
+        controller.dispose();
+        controller = null;
     }
 
     /**
