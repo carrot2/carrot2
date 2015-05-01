@@ -10,16 +10,8 @@
         <property name="poms.dir" location="${carrot2.master.basedir}/tmp/maven" />
     </target>
 
+    <property name="mvn" value="mvn" />
     <target name="check.maven">
-        <property environment="env" />
-        <condition property="mvn.available">
-            <or>
-                <available file="mvn.bat" filepath="${env.Path}" />
-                <available file="mvn"     filepath="${env.PATH}" />
-            </or>
-        </condition>
-
-        <fail unless="mvn.available">mvn (Maven) not available in path.</fail>
     </target>
 
     <target name="filter.poms" depends="check.properties">
@@ -32,25 +24,25 @@
             <filterset begintoken="@" endtoken="@">
             	<filter token="carrot2.version" value="${carrot2.version}" />
                 <filter token="carrot2.version.maven" value="${carrot2.version.maven}" />
-		<filter token="carrot2.master.basedir" value="${carrot2.master.basedir}" />
+                <filter token="carrot2.master.basedir" value="${carrot2.master.basedir}" />
             </filterset>
         </copy>
     </target>
 
     <target name="install" depends="check.maven, filter.poms">
-    	<exec executable="mvn" failonerror="true" vmlauncher="false" dir="${poms.dir}">
+    	<exec executable="${mvn}" failonerror="true" vmlauncher="false" dir="${poms.dir}">
     	    <arg line="clean install" />
     	</exec>
     </target>
 
     <target name="deploy" depends="check.maven, filter.poms">
-        <exec executable="mvn" failonerror="true" vmlauncher="false" dir="${poms.dir}">
+        <exec executable="${mvn}" failonerror="true" vmlauncher="false" dir="${poms.dir}">
             <arg line="-Psonatype -Dgpg.passphrase= clean deploy" />
         </exec>
     </target>
 
     <target name="snapshot" depends="check.maven, filter.poms">
-        <exec executable="mvn" failonerror="true" vmlauncher="false" dir="${poms.dir}">
+        <exec executable="${mvn}" failonerror="true" vmlauncher="false" dir="${poms.dir}">
             <arg line="clean deploy" />
         </exec>
     </target>

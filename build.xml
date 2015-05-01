@@ -1048,10 +1048,11 @@
   <!--
       Maven artefacts.
     -->
+  <property name="mvn" value="mvn" />
   <target name="maven" depends="antlib, jar, jar.src, javadoc, jar.mini, core.test, carrot2.maven.install" description="Install Maven artifacts">
     <!-- Try to compile the examples using maven. -->
-    <exec executable="mvn" failonerror="true" vmlauncher="false" dir="${api.dir}">
-	<arg line="clean integration-test -Prun" />
+    <exec executable="${mvn}" failonerror="true" vmlauncher="false" dir="${api.dir}">
+	    <arg line="clean integration-test -Prun" />
     </exec>    
   </target>
 
