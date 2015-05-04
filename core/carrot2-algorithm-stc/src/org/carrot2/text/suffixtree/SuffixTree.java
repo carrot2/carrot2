@@ -13,7 +13,7 @@
 package org.carrot2.text.suffixtree;
 
 import com.carrotsearch.hppc.IntArrayList;
-import com.carrotsearch.hppc.LongIntOpenHashMap;
+import com.carrotsearch.hppc.LongIntHashMap;
 import com.carrotsearch.hppc.cursors.LongIntCursor;
 
 /**
@@ -68,7 +68,7 @@ public final class SuffixTree
      * keyed by a combination of state (upper 32 bits) and symbol (lower 32 bits). The
      * value is an index in the transitions array.
      */
-    private final LongIntOpenHashMap transitions_map = new LongIntOpenHashMap();
+    private final LongIntHashMap transitions_map = new LongIntHashMap();
 
     /**
      * An array of all transitions.
@@ -534,8 +534,7 @@ public final class SuffixTree
      */
     public final int findEdge(int state, int symbol)
     {
-        return transitions_map.containsKey(
-            asLong(state, symbol)) ? transitions_map.lget() : NO_EDGE;
+        return transitions_map.getOrDefault(asLong(state, symbol), NO_EDGE);
     }
 
     /**

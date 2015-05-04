@@ -15,12 +15,12 @@ package org.carrot2.clustering.lingo;
 import java.util.Arrays;
 
 import org.apache.mahout.math.function.Functions;
-import org.apache.mahout.math.matrix.*;
+import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attribute.Bindable;
 
-import com.carrotsearch.hppc.IntIntOpenHashMap;
+import com.carrotsearch.hppc.IntIntHashMap;
 
 /**
  * A simple and fast label assigner. For each base vector chooses the label that maximizes
@@ -35,7 +35,7 @@ import com.carrotsearch.hppc.IntIntOpenHashMap;
 public class SimpleLabelAssigner implements ILabelAssigner
 {
     public void assignLabels(LingoProcessingContext context, DoubleMatrix2D stemCos,
-        IntIntOpenHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos)
+        IntIntHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos)
     {
         final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final int firstPhraseIndex = preprocessingContext.allLabels.firstPhraseIndex;

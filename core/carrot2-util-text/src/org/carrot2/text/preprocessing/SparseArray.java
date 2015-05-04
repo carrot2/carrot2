@@ -14,7 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import java.util.Arrays;
 
-import com.carrotsearch.hppc.IntIntOpenHashMap;
+import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.IntStack;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
 
@@ -53,7 +53,7 @@ public final class SparseArray
      */
     public static int [] toSparseEncodingByHash(IntStack documents)
     {
-        final IntIntOpenHashMap map = new IntIntOpenHashMap();
+        final IntIntHashMap map = new IntIntHashMap();
 
         final int toIndex = documents.size();
         final int [] buffer = documents.buffer;
@@ -68,7 +68,7 @@ public final class SparseArray
     /*
      * 
      */
-    private static int [] hashToKeyValuePairs(IntIntOpenHashMap map)
+    private static int [] hashToKeyValuePairs(IntIntHashMap map)
     {
         final int [] result = new int [map.size() * 2];
         int k = 0;
@@ -145,7 +145,7 @@ public final class SparseArray
      */
     public static int [] mergeSparseArrays(Iterable<int []> source)
     {
-        final IntIntOpenHashMap m = new IntIntOpenHashMap();
+        final IntIntHashMap m = new IntIntHashMap();
         for (int[] list : source)
         {
             final int max = list.length;

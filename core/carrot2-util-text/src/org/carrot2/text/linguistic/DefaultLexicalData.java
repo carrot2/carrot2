@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 import org.carrot2.text.util.MutableCharArray;
 
-import com.carrotsearch.hppc.ObjectOpenHashSet;
+import com.carrotsearch.hppc.ObjectHashSet;
 
 /**
  * {@link ILexicalData} implemented on top of a hash set (stopwords) and a regular
@@ -25,13 +25,13 @@ import com.carrotsearch.hppc.ObjectOpenHashSet;
  */
 final class DefaultLexicalData implements ILexicalData
 {
-    private final ObjectOpenHashSet<MutableCharArray> stopwords;
+    private final ObjectHashSet<MutableCharArray> stopwords;
     private final Pattern stoplabelPattern;
 
     /*
      * 
      */
-    public DefaultLexicalData(ObjectOpenHashSet<MutableCharArray> stopwords, 
+    public DefaultLexicalData(ObjectHashSet<MutableCharArray> stopwords, 
                               ArrayList<Pattern> stoplabels)
     {
         this.stopwords = stopwords;

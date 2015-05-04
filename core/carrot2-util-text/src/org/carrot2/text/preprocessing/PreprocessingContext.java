@@ -50,7 +50,7 @@ public final class PreprocessingContext
      * Token interning cache. Token images are interned to save memory and allow reference
      * comparisons.
      */
-    private ObjectOpenHashSet<MutableCharArray> tokenCache = ObjectOpenHashSet.newInstance();
+    private ObjectHashSet<MutableCharArray> tokenCache = new ObjectHashSet<>();
 
     /**
      * Creates a preprocessing context for the provided <code>documents</code> and with
@@ -748,9 +748,10 @@ public final class PreprocessingContext
      */
     public char [] intern(MutableCharArray chs)
     {
-        if (tokenCache.contains(chs))
+        int index = tokenCache.indexOf(chs);
+        if (tokenCache.indexExists(index))
         {
-            return tokenCache.lkey().getBuffer();
+            return tokenCache.indexGet(index).getBuffer();
         }
         else
         {

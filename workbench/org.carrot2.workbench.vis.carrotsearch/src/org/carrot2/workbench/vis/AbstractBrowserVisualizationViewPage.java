@@ -267,7 +267,7 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
             @SuppressWarnings("unchecked")
             final List<Cluster> selected = (List<Cluster>) sel.toList();
 
-            IntStack ids = IntStack.newInstanceWithCapacity(selected.size());
+            IntStack ids = new IntStack(selected.size());
             for (Cluster cluster : selected)
             {
                 ids.push(cluster.getId());

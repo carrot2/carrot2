@@ -158,8 +158,8 @@ public class ClusterBuilder
             oneWordCandidateStemIndices.set(wordsStemIndex[featureIndex]);
         }
 
-        final IntIntOpenHashMap stemToRowIndex = vsmContext.stemToRowIndex;
-        final IntIntOpenHashMap filteredRowToStemIndex = new IntIntOpenHashMap();
+        final IntIntHashMap stemToRowIndex = vsmContext.stemToRowIndex;
+        final IntIntHashMap filteredRowToStemIndex = new IntIntHashMap();
         final IntArrayList filteredRows = new IntArrayList();
         int filteredRowIndex = 0;
         for (IntIntCursor it : stemToRowIndex)
@@ -273,7 +273,7 @@ public class ClusterBuilder
 
         final int [] labelsFeatureIndex = context.preprocessingContext.allLabels.featureIndex;
         final BitSet [] documentIndices = context.preprocessingContext.allLabels.documentIndices;
-        final IntIntOpenHashMap featureValueToIndex = new IntIntOpenHashMap();
+        final IntIntHashMap featureValueToIndex = new IntIntHashMap();
 
         for (int i = 0; i < labelsFeatureIndex.length; i++)
         {

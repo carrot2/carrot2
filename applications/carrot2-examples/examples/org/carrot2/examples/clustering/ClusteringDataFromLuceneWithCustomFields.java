@@ -162,7 +162,6 @@ public class ClusteringDataFromLuceneWithCustomFields
      * A wrapper class producing {@link StandardAnalyzer} instances.
      */
     public static final class StandardAnalyzerFactory implements IObjectFactory<Analyzer> {
-        @SuppressWarnings("deprecation")
         @Override
         public Analyzer create()
         {

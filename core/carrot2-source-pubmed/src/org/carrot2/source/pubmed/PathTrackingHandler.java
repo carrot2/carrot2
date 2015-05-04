@@ -40,7 +40,7 @@ class PathTrackingHandler implements ContentHandler
     private final StringBuilder path = new StringBuilder();
 
     /** Path segments for recursion. */
-    private final IntStack pathSegments = IntStack.newInstance();
+    private final IntStack pathSegments = new IntStack();
 
     private final HashMap<String, Trigger> triggers = Maps.newHashMap();
 

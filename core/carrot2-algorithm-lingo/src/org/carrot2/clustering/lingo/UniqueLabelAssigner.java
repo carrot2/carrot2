@@ -33,7 +33,7 @@ import com.carrotsearch.hppc.*;
 public class UniqueLabelAssigner implements ILabelAssigner
 {
     public void assignLabels(LingoProcessingContext context, DoubleMatrix2D stemCos,
-        IntIntOpenHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos)
+        IntIntHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos)
     {
         final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final int firstPhraseIndex = preprocessingContext.allLabels.firstPhraseIndex;

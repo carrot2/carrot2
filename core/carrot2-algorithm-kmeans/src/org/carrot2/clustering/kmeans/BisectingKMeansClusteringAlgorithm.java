@@ -59,8 +59,8 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.IntIntMap;
-import com.carrotsearch.hppc.IntIntOpenHashMap;
 import com.carrotsearch.hppc.cursors.IntCursor;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
@@ -252,7 +252,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
             matrixBuilder.buildTermPhraseMatrix(vsmContext);
 
             // Prepare rowIndex -> stemIndex mapping for labeling
-            final IntIntOpenHashMap rowToStemIndex = new IntIntOpenHashMap();
+            final IntIntHashMap rowToStemIndex = new IntIntHashMap();
             for (IntIntCursor c : vsmContext.stemToRowIndex)
             {
                 rowToStemIndex.put(c.value, c.key);
@@ -342,7 +342,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
     };
     
     private List<String> getLabels(IntArrayList documents,
-        DoubleMatrix2D termDocumentMatrix, IntIntOpenHashMap rowToStemIndex,
+        DoubleMatrix2D termDocumentMatrix, IntIntHashMap rowToStemIndex,
         int [] mostFrequentOriginalWordIndex, char [][] wordImage)
     {
         // Prepare a centroid. If dimensionality reduction was used,
@@ -397,7 +397,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         // Prepare selected matrix
         final DoubleMatrix2D selected = input.viewSelection(null, columns.toArray())
             .copy();
-        final IntIntMap selectedToInput = new IntIntOpenHashMap(selected.columns());
+        final IntIntMap selectedToInput = new IntIntHashMap(selected.columns());
         for (int i = 0; i < columns.size(); i++)
         {
             selectedToInput.put(i, columns.get(i));

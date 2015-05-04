@@ -15,20 +15,20 @@ package org.carrot2.util;
 import java.util.Iterator;
 
 import com.carrotsearch.hppc.BitSet;
-import com.carrotsearch.hppc.IntIntOpenHashMap;
+import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
 
 /**
- * A number of utilities for working with {@link IntIntOpenHashMap}s.
+ * A number of utilities for working with {@link IntIntHashMap}s.
  */
 public final class IntMapUtils
 {
     /**
-     * Converts an {@link IntIntOpenHashMap} into a flat int [] array. The
+     * Converts an {@link IntIntHashMap} into a flat int [] array. The
      * returned arrays contains [key,value] pairs and is sorted in ascending order
      * by key values.  
      */
-    public static final int [] flattenSortedByKey(IntIntOpenHashMap map)
+    public static final int [] flattenSortedByKey(IntIntHashMap map)
     {
         final int [] result = new int [map.size() * 2];
         int index = 0;
@@ -82,11 +82,11 @@ public final class IntMapUtils
     }
 
     /**
-     * Converts an {@link IntIntOpenHashMap} into a flat int [] array. Even indexes
+     * Converts an {@link IntIntHashMap} into a flat int [] array. Even indexes
      * in the flat array represent keys and the corresponding odd indexes --
      * values. Note: the order of keys in the flat array is arbitrary.
      */
-    public static final int [] flatten(IntIntOpenHashMap map)
+    public static final int [] flatten(IntIntHashMap map)
     {
         int [] result = new int [map.size() * 2];
 
@@ -107,8 +107,7 @@ public final class IntMapUtils
      * 
      * @return the input <code>map</code> for convenience
      */
-    public static final IntIntOpenHashMap addAllFromFlattened(
-        IntIntOpenHashMap map, int [] flattened)
+    public static final IntIntHashMap addAllFromFlattened(IntIntHashMap map, int [] flattened)
     {
         for (int i = 0; i < flattened.length / 2; i++)
         {

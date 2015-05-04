@@ -23,7 +23,7 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.IntArrayList;
-import com.carrotsearch.hppc.IntIntOpenHashMap;
+import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
 import com.google.common.collect.Lists;
 
@@ -106,7 +106,7 @@ public class PhraseExtractor
 
             int totalPhraseTf = rcs.get(0).frequency;
             Substring mostFrequentOriginal = rcs.get(0);
-            IntIntOpenHashMap phraseTfByDocument = new IntIntOpenHashMap();
+            IntIntHashMap phraseTfByDocument = new IntIntHashMap();
             phraseTfByDocument.putAll(mostFrequentOriginal.tfByDocument);
 
             // Don't change the rcs list type from ArrayList or we'll
@@ -209,7 +209,7 @@ public class PhraseExtractor
                         // By document tf. Again, topmost phrase gets tf = 2, the other
                         // ones get tf = 1. This time, we need to track from which document's
                         // tf we need to set off the "minus 1", hence the documentIndexToOffset field.
-                        rcsStack[sp].tfByDocument = new IntIntOpenHashMap();
+                        rcsStack[sp].tfByDocument = new IntIntHashMap();
                         rcsStack[sp].tfByDocument.put(
                             documentIndexArray[suffixArray[i - 1]], 1);
                         if (j == 0)
@@ -250,7 +250,7 @@ public class PhraseExtractor
                             rcsStack[sp] = new Substring(i, currentSuffixIndex,
                                 currentSuffixIndex + currentLcp - j, (j == 0 ? 2 : 1));
 
-                            rcsStack[sp].tfByDocument = new IntIntOpenHashMap();
+                            rcsStack[sp].tfByDocument = new IntIntHashMap();
                             rcsStack[sp].tfByDocument.put(
                                 documentIndexArray[suffixArray[i - 1]], 1);
                             if (j == 0)
@@ -316,7 +316,7 @@ public class PhraseExtractor
         return result;
     }
 
-    private static void addAllWithOffset(IntIntOpenHashMap dest, IntIntOpenHashMap src,
+    private static void addAllWithOffset(IntIntHashMap dest, IntIntHashMap src,
         int documentIndexToOffset)
     {
         for (IntIntCursor c : src)

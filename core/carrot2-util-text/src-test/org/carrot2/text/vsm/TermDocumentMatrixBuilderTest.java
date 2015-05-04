@@ -16,7 +16,7 @@ import org.carrot2.matrix.MatrixAssertions;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.junit.Test;
 
-import com.carrotsearch.hppc.IntIntOpenHashMap;
+import com.carrotsearch.hppc.IntIntHashMap;
 
 /**
  * Test cases for {@link TermDocumentMatrixBuilder}.
@@ -255,7 +255,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
         MatrixAssertions.assertThat(vsmContext.termDocumentMatrix).isEquivalentTo(
             expectedTdMatrixElements);
 
-        final IntIntOpenHashMap expectedStemToRowIndex = new IntIntOpenHashMap();
+        final IntIntHashMap expectedStemToRowIndex = new IntIntHashMap();
         for (int i = 0; i < expectedTdMatrixStemIndices.length; i++)
         {
             expectedStemToRowIndex.put(expectedTdMatrixStemIndices[i], i);

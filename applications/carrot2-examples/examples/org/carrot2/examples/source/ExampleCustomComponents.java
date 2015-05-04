@@ -30,7 +30,6 @@ import org.carrot2.examples.SampleDocumentData;
  */
 public class ExampleCustomComponents
 {
-    @SuppressWarnings("deprecation")
     public static void main(String [] args)
     {
         /*
