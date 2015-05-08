@@ -131,7 +131,8 @@ public class MultilingualClustering
     
     /**
      * Majority language.
-     * If {@link #languageAggregationStrategy} is {@link LanguageAggregationStrategy#CLUSTER_IN_MAJORITY_LANGUAGE},
+     * If {@link #languageAggregationStrategy} is 
+     * {@link org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy#CLUSTER_IN_MAJORITY_LANGUAGE},
      * this attribute will provide the majority language that was used to cluster all the documents.
      * If the majority of the documents have undefined language, this attribute will be 
      * empty and the clustering will be performed in the {@link #defaultLanguage}.
