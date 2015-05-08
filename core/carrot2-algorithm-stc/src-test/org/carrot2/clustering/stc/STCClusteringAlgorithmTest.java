@@ -113,8 +113,8 @@ public class STCClusteringAlgorithmTest extends
     public void testCarrot1008() throws Exception
     {
         ProcessingResult pr = ProcessingResult.deserialize(
-            Resources.newInputStreamSupplier(
-                Resources.getResource(this.getClass(), "CARROT-1008.xml")).getInput());
+            Resources.asByteSource(
+                Resources.getResource(this.getClass(), "CARROT-1008.xml")).openBufferedStream());
 
         STCClusteringAlgorithmDescriptor.attributeBuilder(processingAttributes)
             .maxClusters(30);

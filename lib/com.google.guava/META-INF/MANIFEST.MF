@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Google Guava
 Bundle-SymbolicName: com.google.guava
-Bundle-Version: 14.0.1
-Bundle-ClassPath: guava-14.0.1.jar
+Bundle-Version: 18.0
+Bundle-ClassPath: guava-18.0.jar
 Bundle-Vendor: Google Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.google.common.annotations,
