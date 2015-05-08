@@ -3,15 +3,16 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Apache Lucene
 Bundle-SymbolicName: org.apache.lucene.v2
 Bundle-Version: 5.0.0
-Bundle-ClassPath: lucene-analyzers-common-5.0.0.jar,
- lucene-analyzers-smartcn-5.0.0.jar,
- lucene-core-5.0.0.jar,
- lucene-highlighter-5.0.0.jar,
- lucene-memory-5.0.0.jar,
- lucene-queryparser-5.0.0.jar,
- lucene-queries-5.0.0.jar,
- lucene-backward-codecs-5.0.0.jar,
- lucene-join-5.0.0.jar
+Bundle-ClassPath: lucene-analyzers-common-5.1.0.jar,
+ lucene-analyzers-smartcn-5.1.0.jar,
+ lucene-backward-codecs-5.1.0.jar,
+ lucene-core-5.1.0.jar,
+ lucene-highlighter-5.1.0.jar,
+ lucene-join-5.1.0.jar,
+ lucene-memory-5.1.0.jar,
+ lucene-queries-5.1.0.jar,
+ lucene-queryparser-5.1.0.jar,
+ lucene-sandbox-5.1.0.jar
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.apache.lucene,
@@ -78,6 +79,7 @@ Export-Package: org.apache.lucene,
  org.apache.lucene.codecs,
  org.apache.lucene.codecs.blocktree,
  org.apache.lucene.codecs.compressing,
+ org.apache.lucene.codecs.idversion,
  org.apache.lucene.codecs.lucene40,
  org.apache.lucene.codecs.lucene41,
  org.apache.lucene.codecs.lucene410,
@@ -123,6 +125,8 @@ Export-Package: org.apache.lucene,
  org.apache.lucene.queryparser.surround.query,
  org.apache.lucene.queryparser.xml,
  org.apache.lucene.queryparser.xml.builders,
+ org.apache.lucene.sandbox.queries,
+ org.apache.lucene.sandbox.queries.regex,
  org.apache.lucene.search,
  org.apache.lucene.search.highlight,
  org.apache.lucene.search.join,
