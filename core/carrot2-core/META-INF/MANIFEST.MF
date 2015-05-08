@@ -9,7 +9,7 @@ Export-Package: org.carrot2.core,
  org.carrot2.core.test.assertions,
  org.carrot2.source
 Require-Bundle: org.carrot2.util.common;visibility:=reexport,
- org.codehaus.jackson
+ com.fasterxml.jackson
 Bundle-ClassPath: META-INF/,
  .
 Bundle-Vendor: Carrot2.org

@@ -21,7 +21,7 @@ Require-Bundle: org.carrot2.attributes;bundle-version="0.0.0";visibility:=reexpo
  org.junit4.ext;resolution:=optional;visibility:=reexport,
  org.easymock;resolution:=optional;visibility:=reexport,
  org.slf4j;bundle-version="1.5.8";visibility:=reexport,
- org.codehaus.jackson;bundle-version="0.9.2";visibility:=reexport,
+ com.fasterxml.jackson;bundle-version="0.9.2";visibility:=reexport,
  org.apache.mahout;bundle-version="0.3.0";visibility:=reexport,
  com.carrotsearch.hppc;bundle-version="0.5.0";visibility:=reexport,
  javax.servlet;bundle-version="2.5.0";resolution:=optional,

@@ -6,7 +6,7 @@ Bundle-Version: 0.0.0.QUALIFIER
 Export-Package: org.carrot2.source.google
 Require-Bundle: org.carrot2.core,
  org.carrot2.util.common,
- org.codehaus.jackson
+ com.fasterxml.jackson
 Bundle-ClassPath: META-INF/,
  .
 Bundle-Vendor: Carrot2.org
