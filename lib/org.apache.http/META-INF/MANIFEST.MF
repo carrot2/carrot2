@@ -2,29 +2,33 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache HTTP Components (Carrot2)
 Bundle-SymbolicName: org.apache.http
-Bundle-Version: 4.1.0
+Bundle-Version: 4.4.1
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.apache.commons.logging
 Require-Bundle: org.slf4j;bundle-version="1.5.8";resolution:=optional;visibility:=reexport,
  org.apache.commons;bundle-version="0.0.0";visibility:=reexport
-Bundle-ClassPath: httpclient-4.1.jar,
- httpcore-4.1.jar,
- httpmime-4.1.jar
+Bundle-ClassPath: httpclient-4.4.1.jar,
+ httpcore-4.4.1.jar,
+ httpmime-4.4.1.jar
 Export-Package: org.apache.http,
  org.apache.http.annotation,
  org.apache.http.auth,
  org.apache.http.auth.params,
  org.apache.http.client,
+ org.apache.http.client.config,
  org.apache.http.client.entity,
  org.apache.http.client.methods,
  org.apache.http.client.params,
  org.apache.http.client.protocol,
  org.apache.http.client.utils,
+ org.apache.http.concurrent,
+ org.apache.http.config,
  org.apache.http.conn,
  org.apache.http.conn.params,
  org.apache.http.conn.routing,
  org.apache.http.conn.scheme,
+ org.apache.http.conn.socket,
  org.apache.http.conn.ssl,
  org.apache.http.conn.util,
  org.apache.http.cookie,
@@ -34,14 +38,19 @@ Export-Package: org.apache.http,
  org.apache.http.entity.mime.content,
  org.apache.http.impl,
  org.apache.http.impl.auth,
+ org.apache.http.impl.bootstrap,
  org.apache.http.impl.client,
  org.apache.http.impl.conn,
  org.apache.http.impl.conn.tsccm,
  org.apache.http.impl.cookie,
  org.apache.http.impl.entity,
+ org.apache.http.impl.execchain,
  org.apache.http.impl.io,
+ org.apache.http.impl.pool,
  org.apache.http.io,
  org.apache.http.message,
  org.apache.http.params,
+ org.apache.http.pool,
  org.apache.http.protocol,
+ org.apache.http.ssl,
  org.apache.http.util

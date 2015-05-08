@@ -5,7 +5,8 @@ Bundle-SymbolicName: net.java.dev.rome
 Bundle-Version: 1.0.0
 Bundle-ClassPath: rome-1.0.0.jar,
  rome-fetcher-1.0.0.jar,
- META-INF/
+ META-INF/,
+ jdom-1.1.jar
 Bundle-Vendor: rome.dev.java.net
 Export-Package: 
  com.sun.syndication,
@@ -22,6 +23,5 @@ Export-Package:
  com.sun.syndication.fetcher.samples,
  com.sun.syndication.io,
  com.sun.syndication.io.impl
-Require-Bundle: org.jdom;bundle-version="1.1.0";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 

@@ -38,12 +38,6 @@
       <groupId>net.java.dev.rome</groupId>
       <artifactId>rome</artifactId>
       <version>${net.java.dev.rome.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>jdom</artifactId>
-          <groupId>jdom</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -51,10 +45,6 @@
       <artifactId>rome-fetcher</artifactId>
       <version>${net.java.dev.rome.fetcher.version}</version>
       <exclusions>
-        <exclusion>
-          <groupId>jdom</groupId>
-          <artifactId>jdom</artifactId>
-        </exclusion>
         <exclusion>
           <groupId>commons-httpclient</groupId>
           <artifactId>commons-httpclient</artifactId>
@@ -106,12 +96,6 @@
     			<groupId>commons-logging</groupId>
     		</exclusion>
     	</exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jdom</groupId>
-      <artifactId>jdom</artifactId>
-      <version>${org.jdom.version}</version>
     </dependency>
 
     <dependency>

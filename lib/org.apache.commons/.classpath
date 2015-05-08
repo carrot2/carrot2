@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="commons-collections-3.2.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry exported="true" kind="lib" path="commons-codec-1.4.jar" sourcepath="org.apache.commonssrc.zip"/>
-	<classpathentry exported="true" kind="lib" path="commons-collections-3.2.1.jar" sourcepath="org.apache.commonssrc.zip"/>
+	<classpathentry exported="true" kind="lib" path="commons-codec-1.10.jar" sourcepath="org.apache.commonssrc.zip"/>
 	<classpathentry exported="true" kind="lib" path="commons-io-2.0.1.jar" sourcepath="org.apache.commonssrc.zip"/>
 	<classpathentry exported="true" kind="lib" path="commons-lang-2.6.jar" sourcepath="org.apache.commonssrc.zip"/>
 	<classpathentry kind="output" path="bin"/>

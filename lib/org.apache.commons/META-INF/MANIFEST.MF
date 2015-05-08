@@ -3,10 +3,10 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Apache Commons (Carrot2)
 Bundle-SymbolicName: org.apache.commons
 Bundle-Version: 0.0.0.QUALIFIER
-Bundle-ClassPath: commons-codec-1.4.jar,
- commons-collections-3.2.1.jar,
+Bundle-ClassPath: commons-codec-1.10.jar,
  commons-io-2.0.1.jar,
- commons-lang-2.6.jar
+ commons-lang-2.6.jar,
+ commons-collections-3.2.1.jar
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.apache.commons.logging
@@ -15,6 +15,7 @@ Export-Package: org.apache.commons.codec,
  org.apache.commons.codec.binary,
  org.apache.commons.codec.digest,
  org.apache.commons.codec.language,
+ org.apache.commons.codec.language.bm,
  org.apache.commons.codec.net,
  org.apache.commons.collections,
  org.apache.commons.collections.bag,
@@ -36,6 +37,7 @@ Export-Package: org.apache.commons.codec,
  org.apache.commons.io.output,
  org.apache.commons.lang,
  org.apache.commons.lang.builder,
+ org.apache.commons.lang.enum,
  org.apache.commons.lang.enums,
  org.apache.commons.lang.exception,
  org.apache.commons.lang.math,

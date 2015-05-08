@@ -927,7 +927,6 @@
       <include name="**/commons-codec*" />
       <include name="org.apache.http/http*" />
       <include name="**/jcl-over-slf4j*" />
-      <include name="**/jdom*" />
       <include name="**/lucene*" />
       <exclude name="**/lucene-analyzers*" />
       <include name="**/rome*" />
