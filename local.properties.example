@@ -22,7 +22,7 @@ clover.enabled=false
 pmd.home=${tools.dir}/pmd-4.2.5
 
 # FindBugs. Required for static code analysis.
-findbugs.home=${tools.dir}/findbugs-1.3.9
+findbugs.home=${tools.dir}/findbugs-3.0.1
 
 # DocBook documentation resources. Specify the location of DocBook XSL
 # (the xsl-ns variant) and DocBook DTD 5.0.
