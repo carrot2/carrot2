@@ -28,10 +28,6 @@ import org.carrot2.util.MapUtils;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonMethod;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementMap;
@@ -39,6 +35,10 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persist;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -52,8 +52,14 @@ import com.google.common.collect.Sets;
  * {@link #OTHER_TOPICS}. This class is <strong>not</strong> thread-safe.
  */
 @Root(name = "group", strict = false)
-@JsonAutoDetect(JsonMethod.NONE)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonAutoDetect(
+    creatorVisibility  = JsonAutoDetect.Visibility.NONE,
+    fieldVisibility    = JsonAutoDetect.Visibility.NONE,
+    getterVisibility   = JsonAutoDetect.Visibility.NONE,
+    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+    setterVisibility   = JsonAutoDetect.Visibility.NONE)
+@JsonSerialize()
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Cluster
 {
     /**

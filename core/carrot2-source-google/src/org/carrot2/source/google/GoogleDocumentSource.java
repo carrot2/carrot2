@@ -15,7 +15,6 @@ package org.carrot2.source.google;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 import org.apache.http.Header;
@@ -31,8 +30,9 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.httpclient.HttpClientFactory;
 import org.carrot2.util.httpclient.HttpRedirectStrategy;
 import org.carrot2.util.httpclient.HttpUtils;
-import org.codehaus.jackson.*;
-import org.codehaus.jackson.map.ObjectMapper;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * A {@link IDocumentSource} fetching search results from Google JSON API. Please note
@@ -138,13 +138,8 @@ public class GoogleDocumentSource extends MultipageSearchEngine
                     HttpClientFactory.DEFAULT_TIMEOUT,
                     redirectStrategy.value());
 
-                final JsonParser jsonParser = 
-                    new JsonFactory()
-                        .createJsonParser(
-                            httpResp.getPayloadAsStream());
-
                 final ObjectMapper mapper = new ObjectMapper();
-                final JsonNode root = mapper.readTree(jsonParser);
+                final JsonNode root = mapper.readTree(httpResp.getPayloadAsStream());
                 if (root == null)
                 {
                     return response;
@@ -162,14 +157,12 @@ public class GoogleDocumentSource extends MultipageSearchEngine
                     return response;
                 }
 
-                final Iterator<JsonNode> results = resultsArray.getElements();
-                while (results.hasNext())
-                {
-                    final JsonNode result = results.next();
-                    final Document document = new Document(result
-                        .get("titleNoFormatting").getTextValue(), result.get("content")
-                        .getTextValue(), result.get("url").getTextValue());
-                    response.results.add(document);
+                for (JsonNode node : resultsArray) {
+                  final Document document = new Document(
+                      node.get("titleNoFormatting").textValue(), 
+                      node.get("content").textValue(), 
+                      node.get("url").textValue());
+                  response.results.add(document);
                 }
 
                 final JsonNode cursor = responseData.get("cursor");
@@ -182,7 +175,7 @@ public class GoogleDocumentSource extends MultipageSearchEngine
                 if (resultCount != null)
                 {
                     response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, Long
-                        .parseLong(resultCount.getTextValue()));
+                        .parseLong(resultCount.textValue()));
                 }
                 else
                 {

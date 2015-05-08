@@ -20,13 +20,11 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.util.DefaultPrettyPrinter;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.*;
 
 /**
@@ -174,7 +172,6 @@ public final class ProcessingResult
      * Extracts document and cluster lists before serialization.
      */
     @Persist
-    @SuppressWarnings("unused")
     private void beforeSerialization()
     {
         /*
@@ -221,7 +218,6 @@ public final class ProcessingResult
      * Transfers document and cluster lists to the attributes map after deserialization.
      */
     @Commit
-    @SuppressWarnings("unused")
     private void afterDeserialization() throws Exception
     {
         if (otherAttributesForSerialization != null)
@@ -473,11 +469,7 @@ public final class ProcessingResult
         throws IOException
     {
         final ObjectMapper mapper = new ObjectMapper();
-        final JsonGenerator generator = new JsonFactory().createJsonGenerator(writer);
-        if (indent)
-        {
-            generator.setPrettyPrinter(new DefaultPrettyPrinter());
-        }
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         if (StringUtils.isNotBlank(callback))
         {
@@ -485,7 +477,8 @@ public final class ProcessingResult
         }
         final Map<String, Object> attrs = prepareAttributesForSerialization(
             saveDocuments, saveClusters, saveOtherAttributes);
-        mapper.writeValue(generator, attrs);
+        
+        mapper.writeValue(writer, attrs);
         if (StringUtils.isNotBlank(callback))
         {
             writer.write(");");

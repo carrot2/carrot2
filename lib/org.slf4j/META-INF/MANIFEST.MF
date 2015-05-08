@@ -3,9 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Simple Logging Framework for Java
 Bundle-SymbolicName: org.slf4j
 Bundle-Version: 1.6.1
-Bundle-ClassPath: slf4j-api-1.6.1.jar,
- jcl-over-slf4j-1.6.1.jar,
- slf4j-log4j12-1.6.1.jar
+Bundle-ClassPath: jcl-over-slf4j-1.7.12.jar,
+ slf4j-api-1.7.12.jar,
+ slf4j-log4j12-1.7.12.jar
 Bundle-Vendor: www.slf4j.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.apache.commons.logging,

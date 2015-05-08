@@ -25,16 +25,16 @@ import org.apache.commons.lang.StringUtils;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonMethod;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -47,8 +47,14 @@ import com.google.common.collect.Sets;
  * {@link #CONTENT_URL}.
  */
 @Root(name = "document")
-@JsonAutoDetect(JsonMethod.NONE)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonAutoDetect(
+    creatorVisibility  = JsonAutoDetect.Visibility.NONE,
+    fieldVisibility    = JsonAutoDetect.Visibility.NONE,
+    getterVisibility   = JsonAutoDetect.Visibility.NONE,
+    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+    setterVisibility   = JsonAutoDetect.Visibility.NONE)
+@JsonSerialize()
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Document implements Cloneable
 {
     /** Field name for the title of the document. */
@@ -367,7 +373,6 @@ public final class Document implements Cloneable
         return setField(SCORE, score);
     }
 
-    @SuppressWarnings("unused")
     @JsonProperty("language")
     @Attribute(required = false, name = "language")
     private String getLanguageIsoCode()
@@ -376,7 +381,6 @@ public final class Document implements Cloneable
         return language != null ? language.getIsoCode() : null;
     }
 
-    @SuppressWarnings("unused")
     @Attribute(required = false, name = "language")
     private void setLanguageIsoCode(String languageIsoCode)
     {
@@ -403,7 +407,6 @@ public final class Document implements Cloneable
      * For JSON and XML serialization only.
      */
     @JsonProperty("fields")
-    @SuppressWarnings("unused")
     private Map<String, Object> getOtherFields()
     {
         final Map<String, Object> otherFields;
@@ -429,7 +432,6 @@ public final class Document implements Cloneable
      * 
      */
     @ElementMap(entry = "field", key = "key", attribute = true, inline = true, required = false)
-    @SuppressWarnings("unused")
     private HashMap<String, SimpleXmlWrapperValue> getOtherFieldsXml()
     {
         final HashMap<String, SimpleXmlWrapperValue> otherFieldsForSerialization;
@@ -452,7 +454,6 @@ public final class Document implements Cloneable
      * 
      */
     @ElementMap(entry = "field", key = "key", attribute = true, inline = true, required = false)
-    @SuppressWarnings("unused")
     private void setOtherFieldsXml(
         HashMap<String, SimpleXmlWrapperValue> otherFieldsForSerialization)
     {

@@ -15,17 +15,25 @@ package org.carrot2.util.resource;
 import java.io.*;
 
 import org.carrot2.util.StreamUtils;
-import org.codehaus.jackson.annotate.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A local filesystem resource. This loader provides cached content of
  * returned resources and closes the underlying stream handle in {@link #open()}.
  */
 @Root(name = "file-resource")
-@JsonAutoDetect(JsonMethod.NONE)
+@JsonAutoDetect(
+    creatorVisibility  = JsonAutoDetect.Visibility.NONE,
+    fieldVisibility    = JsonAutoDetect.Visibility.NONE,
+    getterVisibility   = JsonAutoDetect.Visibility.NONE,
+    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+    setterVisibility   = JsonAutoDetect.Visibility.NONE)
 public final class FileResource implements IResource
 {
     /**
@@ -94,7 +102,6 @@ public final class FileResource implements IResource
     }
     
     @JsonProperty
-    @SuppressWarnings("unused")
     private String getAbsolutePath()
     {
         return info;
