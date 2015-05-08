@@ -23,6 +23,7 @@ import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.*;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.*;
@@ -469,6 +470,7 @@ public final class ProcessingResult
         throws IOException
     {
         final ObjectMapper mapper = new ObjectMapper();
+        mapper.getFactory().disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         if (StringUtils.isNotBlank(callback))
@@ -477,7 +479,7 @@ public final class ProcessingResult
         }
         final Map<String, Object> attrs = prepareAttributesForSerialization(
             saveDocuments, saveClusters, saveOtherAttributes);
-        
+
         mapper.writeValue(writer, attrs);
         if (StringUtils.isNotBlank(callback))
         {

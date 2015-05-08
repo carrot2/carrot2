@@ -377,7 +377,12 @@ public class ProcessingResultTest extends CarrotTestCase
     private String getJsonString(final ProcessingResult result, String callback,
         boolean saveDocuments, boolean saveClusters, boolean saveAttributes) throws IOException
     {
-        final StringWriter json = new StringWriter();
+        final StringWriter json = new StringWriter() {
+          @Override
+          public void close() throws IOException {
+            throw new IOException("Should not be calling close.");
+          }
+        };
         result.serializeJson(json, callback, false, saveDocuments, saveClusters, saveAttributes);
         return json.toString();
     }
