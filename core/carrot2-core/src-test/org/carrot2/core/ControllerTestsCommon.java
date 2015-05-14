@@ -339,7 +339,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         final long c2Time = 500;
         final long c3Time = 750;
         final long totalTime = c1Time + c2Time + c3Time;
-        final double tolerance = 0.5;
+        final double tolerance = 1;
 
         mocksControl.resetToNice();
 
