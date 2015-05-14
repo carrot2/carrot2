@@ -237,7 +237,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
 
         assertThat(
             ((Long) (resultAttributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
-                .longValue()).as("Alorithm time")
+                .longValue()).as("Algorithm time")
             .isLessThan((long) (c2Time * (1 + tolerance) + 100 * tolerance))
             .isGreaterThan((long) (c2Time * (1 - tolerance) - 100 * tolerance));
     }
