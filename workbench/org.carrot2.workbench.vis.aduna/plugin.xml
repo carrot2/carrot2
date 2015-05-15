@@ -20,13 +20,6 @@
          <viewShortcut
                id="org.carrot2.workbench.views.aduna">
          </viewShortcut>
-
-         <view
-	      id="org.carrot2.workbench.views.aduna"
-               relationship="stack"
-               visible="true"
-               relative="org.carrot2.workbench.core.views.clusters">
-         </view>
       </perspectiveExtension>
 
       <perspectiveExtension
@@ -41,13 +34,6 @@
          <viewShortcut
               id="org.carrot2.workbench.views.aduna">
          </viewShortcut>
-
-         <view
-           id="org.carrot2.workbench.views.aduna"
-               relationship="stack"
-               visible="true"
-               relative="org.carrot2.workbench.core.views.documents">
-         </view>
       </perspectiveExtension>
    </extension>
 
