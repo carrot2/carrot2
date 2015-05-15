@@ -23,7 +23,7 @@ public class QueryStringEditor extends StringEditor
     @Override
     protected Text createTextBox(Composite parent, int gridColumns)
     {
-        Text textBox = new Text(parent, SWT.SEARCH | SWT.ICON_SEARCH | SWT.BORDER );
+        Text textBox = new Text(parent, SWT.BORDER );
         textBox.setLayoutData(
             GUIFactory.editorGridData()
                 .grab(true, false)
