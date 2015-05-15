@@ -293,6 +293,7 @@
 
    <plugin
          id="org.carrot2.workbench.vis.aduna"
+         os="linux,win32"
          download-size="0"
          install-size="0"
          version="0.0.0"
