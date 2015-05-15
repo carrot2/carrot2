@@ -12,7 +12,6 @@
 
 package org.carrot2.workbench.vis.aduna;
 
-import org.apache.commons.lang.SystemUtils;
 import org.carrot2.workbench.core.ui.PageBookViewBase;
 import org.carrot2.workbench.core.ui.SearchEditor;
 import org.carrot2.workbench.core.ui.actions.PreferenceStorePropertyHost;
@@ -39,14 +38,6 @@ public final class AdunaClusterMapView extends PageBookViewBase
         final IActionBars bars = getViewSite().getActionBars();
         createToolbar(bars.getToolBarManager());
         bars.updateActionBars();
-    }
-
-    @Override
-    public void partOpened(IWorkbenchPart part) {
-      // Aduna won't work on OsX (SWT_AWT bridge is broken, LINGO-466)
-      if (part == this && SystemUtils.IS_OS_MAC_OSX) {
-        getViewSite().getPage().hideView(this);
-      }
     }
 
     private void createToolbar(IToolBarManager toolBarManager)
