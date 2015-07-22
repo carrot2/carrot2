@@ -163,7 +163,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             runQuery();
             fail();
         } catch (ProcessingException e) {
-            assertThat(e.getMessage()).contains("Identifiers must be unique");
+            assertThat(e.getMessage()).contains("Null identifiers cannot be mixed with");
         }
     }
 
