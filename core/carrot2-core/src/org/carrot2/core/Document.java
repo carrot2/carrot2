@@ -551,16 +551,20 @@ public final class Document implements Cloneable
                 final HashSet<String> ids = Sets.newHashSet();
                 for (Document doc : documents)
                 {
-                    if (!ids.add(doc.getStringId()))
+                    String id = doc.getStringId();
+                    if (!ids.add(id) && id != null)
                     {
-                        throw new IllegalArgumentException(
-                            "Identifiers must be unique, duplicated identifier: " + doc.getStringId());
+                      throw new IllegalArgumentException(
+                          "Identifiers must be unique, duplicated identifier: " + id + 
+                          " [existing: " + ids.toString() + "]");
                     }
                 }
+
                 if (ids.contains(null))
                 {
                     throw new IllegalArgumentException(
-                        "Null identifiers cannot be mixed with existing non-null identifiers.");
+                        "Null identifiers cannot be mixed with existing non-null identifiers: " +
+                        " [existing: " + ids.toString() + "]");
                 }
             }
             else
