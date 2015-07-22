@@ -45,7 +45,7 @@ public final class ClusterLabelProvider extends LabelProvider
             return "<unknown node: " + element + ">";
         }
 
-        return String.format("%s (%d)", label, documentCount);
+        return String.format("%s \u200E(%d)", label, documentCount);
     }
 
     /*
