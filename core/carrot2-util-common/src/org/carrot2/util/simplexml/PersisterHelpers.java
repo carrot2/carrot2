@@ -84,8 +84,12 @@ public final class PersisterHelpers
             inputStream = new BufferedInputStream(res.open());
             try
             {
-                return PersisterHelpers.createPersister(resourceLookup, 
-                    new AnnotationStrategy()).read(clazz, inputStream);
+                T read = PersisterHelpers.createPersister(resourceLookup, new AnnotationStrategy()).read(clazz, inputStream);
+                if (read instanceof ISourceLocationAware)
+                {
+                    ((ISourceLocationAware) read).setSource(res.toString());
+                }
+                return read;
             }
             catch (IOException e)
             {
