@@ -1,0 +1,511 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.carrot2</groupId>
+    <artifactId>carrot2-bom</artifactId> 
+    <version>0.0.0-SNAPSHOT</version>
+    <relativePath>../carrot2-bom</relativePath>
+  </parent> 
+
+  <artifactId>carrot2</artifactId>
+  <packaging>jar</packaging>
+
+  <name>Carrot2 Core</name>
+  <description>
+    Core infrastructure and algorithms.
+  </description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+
+    <tests.jvms>auto</tests.jvms>
+    <tests.shuffle>true</tests.shuffle>
+    <tests.output>onerror</tests.output>
+    <tests.heap.size>512m</tests.heap.size>
+    <tests.filter>default or @slow</tests.filter>
+    <tests.timestamps>true</tests.timestamps>
+    <tests.useSimpleNames>true</tests.useSimpleNames>
+    <tests.maxClassNameColumns>10000</tests.maxClassNameColumns>
+    <tests.execution.hint.file>${project.build.directory}/.local-${project.version}-execution-hints.log</tests.execution.hint.file>
+  </properties>
+
+  <profiles>
+    <profile>
+      <id>ide-eclipse-m2e</id>
+      <activation>
+        <property>
+          <name>m2e.version</name>
+        </property>
+      </activation>
+      <build>
+        <directory>target/eclipse</directory>
+
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.eclipse.m2e</groupId>
+              <artifactId>lifecycle-mapping</artifactId>
+              <version>1.0.0</version>
+              <configuration>
+                <lifecycleMappingMetadata>
+                  <pluginExecutions>
+                    <pluginExecution>
+                      <pluginExecutionFilter>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <versionRange>[0,)</versionRange>
+                        <goals>
+                          <goal>run</goal>
+                        </goals>
+                      </pluginExecutionFilter>
+                      <action>
+                        <ignore />
+                      </action>
+                    </pluginExecution>
+
+                    <pluginExecution>
+                      <pluginExecutionFilter>
+                        <groupId>de.thetaphi</groupId>
+                        <artifactId>forbiddenapis</artifactId>
+                        <versionRange>[1.0.0,)</versionRange>
+                        <goals>
+                          <goal>testCheck</goal>
+                          <goal>check</goal>
+                        </goals>
+                      </pluginExecutionFilter>
+                      <action>
+                        <ignore />
+                      </action>
+                    </pluginExecution>
+                  </pluginExecutions>
+                </lifecycleMappingMetadata>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.carrotsearch.randomizedtesting</groupId>
+        <artifactId>randomizedtesting-runner</artifactId>
+        <version>${version.randomizedtesting}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${version.assertj}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.simpleframework</groupId>
+      <artifactId>simple-xml</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.carrotsearch</groupId>
+      <artifactId>hppc</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.mahout</groupId>
+      <artifactId>mahout-math</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.carrot2</groupId>
+      <artifactId>morfologik-polish</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-analyzers-smartcn</artifactId>
+      <version>${version.lucene}</version>
+    </dependency>
+
+    <!-- Discard commons-lang? -->
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+    </dependency>
+
+    <!-- NOCOMMIT: should be move the binder into this code (or someplace else entirely)? -->
+    <dependency>
+      <groupId>org.carrot2.attributes</groupId>
+      <artifactId>attributes-binder</artifactId>
+      <version>1.2.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.carrot2.attributes</groupId>
+      <artifactId>attributes-processor</artifactId>
+      <version>1.2.2</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${version.maven-clean-plugin}</version>
+          <configuration>
+            <failOnError>false</failOnError>
+            <excludeDefaultDirectories>true</excludeDefaultDirectories>
+            <filesets>
+              <fileset>
+                <directory>${project.build.directory}</directory>
+                <excludes>
+                  <exclude>eclipse/**</exclude>
+                  <exclude>idea/**</exclude>
+                </excludes>
+              </fileset>
+            </filesets>            
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>${version.maven-antrun-plugin}</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.ant</groupId>
+              <artifactId>ant</artifactId>
+              <version>${version.ant}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${version.maven-compiler-plugin}</version>
+          <configuration>
+            <source>${maven.compiler.source}</source>
+            <target>${maven.compiler.target}</target>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>${version.maven-install-plugin}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${version.maven-jar-plugin}</version>
+          <configuration>
+            <archive>
+              <addMavenDescriptor>false</addMavenDescriptor>
+              <manifestEntries>
+                <Project-GroupId>${project.groupId}</Project-GroupId>
+                <Project-ArtifactId>${project.artifactId}</Project-ArtifactId>
+                <Project-Version>${project.version}</Project-Version>
+                <Project-Name>${project.name}</Project-Name>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${version.maven-resources-plugin}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${version.maven-assembly-plugin}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>${version.maven-deploy-plugin}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>${version.maven-dependency-plugin}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>${version.maven-site-plugin}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-eclipse-plugin</artifactId>
+          <version>${version.maven-eclipse-plugin}</version>
+          <configuration>
+            <buildOutputDirectory>eclipse-build</buildOutputDirectory>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${version.maven-surefire-plugin}</version>
+          <executions>
+            <execution>
+              <id>default-test</id>
+              <phase>none</phase>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>com.carrotsearch.randomizedtesting</groupId>
+          <artifactId>junit4-maven-plugin</artifactId>
+          <version>${version.randomizedtesting}</version>
+
+          <executions>
+            <execution>
+              <id>tests</id>
+              <phase>test</phase>
+              <goals>
+                <goal>junit4</goal>
+              </goals>
+            </execution>
+          </executions>
+
+          <configuration>
+            <skipTests>${skip.UTs}</skipTests>
+            <heartbeat>60</heartbeat>
+            <jvmOutputAction>pipe,warn</jvmOutputAction>
+            <leaveTemporary>false</leaveTemporary>
+            <listeners>
+              <report-ant-xml mavenExtensions="true" dir="${project.build.directory}/surefire-reports" />
+              <report-json file="${project.build.directory}/test-results.html" />
+              <report-text showThrowable="true" 
+                           showStackTraces="true" 
+                           showOutput="${tests.output}"
+                           showStatusOk="false" 
+                           showStatusError="true" 
+                           showStatusFailure="true" 
+                           showStatusIgnored="true" 
+                           showSuiteSummary="true" 
+                           timestamps="${tests.timestamps}" 
+                           useSimpleNames="${tests.useSimpleNames}" 
+                           maxClassNameColumns="${tests.maxClassNameColumns}">
+              </report-text>
+
+              <report-execution-times historyLength="20" file="${tests.execution.hint.file}" />
+            </listeners>
+
+            <assertions>
+              <enable />
+            </assertions>
+
+            <parallelism>${tests.jvms}</parallelism>
+
+            <balancers>
+              <execution-times>
+                <filelist>
+                  <file name="${tests.execution.hint.file}" />
+                </filelist>
+              </execution-times>
+            </balancers>
+
+            <includes>
+              <include>**/*Tests.class</include>
+              <include>**/*Test.class</include>
+              <include>**/Test*.class</include>
+            </includes>
+
+            <excludes>
+              <exclude>**/Abstract*.class</exclude>
+              <exclude>**/*$*.class</exclude>
+            </excludes>
+
+            <jvmArgs>
+              <param>-Xmx${tests.heap.size}</param>
+              <param>-Xms${tests.heap.size}</param>
+            </jvmArgs>
+
+            <shuffleOnSlave>${tests.shuffle}</shuffleOnSlave>
+            <sysouts>${tests.verbose}</sysouts>
+            <seed>${tests.seed}</seed>
+            <haltOnFailure>${tests.failfast}</haltOnFailure>
+            <uniqueSuiteNames>true</uniqueSuiteNames>
+
+            <systemProperties>
+              <java.io.tmpdir>.</java.io.tmpdir>
+              <java.awt.headless>true</java.awt.headless>
+              <junit4.tempDir>${project.build.directory}</junit4.tempDir>
+              <tests.filter>${tests.filter}</tests.filter>
+              <tests.class>${tests.class}</tests.class>
+              <tests.method>${tests.method}</tests.method>
+            </systemProperties>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>${version.maven-shade-plugin}</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>true</createDependencyReducedPom>
+              <shadedArtifactAttached>false</shadedArtifactAttached> 
+              <minimizeJar>false</minimizeJar>
+              <artifactSet>
+                <includes>
+                  <include>org.carrot2.attributes:attributes-binder</include>
+
+                  <include>com.google.guava:*</include>
+                  <include>org.simpleframework:*</include>
+                  <include>com.carrotsearch:hppc</include>
+                  <include>commons-lang:*</include>
+                  <include>org.apache.mahout:*</include>
+                </includes>
+              </artifactSet>
+              <relocations>
+                <relocation>
+                  <pattern>com.google</pattern>
+                  <shadedPattern>org.carrot2.shaded.guava</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.carrotsearch.hppc</pattern>
+                  <shadedPattern>org.carrot2.shaded.hppc</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.apache.commons.lang</pattern>
+                  <shadedPattern>org.carrot2.shaded.commons.lang</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.simpleframework.xml</pattern>
+                  <shadedPattern>org.carrot2.shaded.simplexml</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.apache.mahout</pattern>
+                  <shadedPattern>org.carrot2.shaded.mahout</shadedPattern>
+                </relocation>
+              </relocations>                 
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${version.maven-enforcer-plugin}</version>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <id>enforce-environment</id>
+            <phase>package</phase>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <version>1.7.0</version>
+                </requireJavaVersion>
+                <requireMavenVersion>
+                  <version>${version.maven.api}</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>sonatype-nexus-public</id>
+      <name>SonaType public snapshots and releases repository</name>
+      <url>https://oss.sonatype.org/content/groups/public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sonatype-nexus-public</id>
+      <name>SonaType public snapshots and releases repository</name>
+      <url>https://oss.sonatype.org/content/groups/public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+</project>

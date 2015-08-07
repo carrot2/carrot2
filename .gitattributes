@@ -1,7 +1,0 @@
-# Explicitly declare text files we want to always be normalized and converted 
-# to native line endings on checkout.
-*.sh  text eol=lf
-
-# Declare files that will always have CRLF line endings on checkout.
-*.cmd text eol=crlf
-*.bat text eol=crlf

@@ -1,0 +1,136 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.carrot2</groupId>
+    <artifactId>carrot2-parent</artifactId> 
+    <version>0.0.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent> 
+
+  <artifactId>carrot2-bom</artifactId>
+  <packaging>pom</packaging>
+
+  <name>Carrot2 (BOM)</name>
+  <description>
+  Bill of materials POM provides dependency versions and preconfigures dependencies
+  in dependencyManagement section. If you import the BOM into dependencyManagement,
+  you can use exactly the same JARs as shipped with Carrot2 by default.
+  </description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+
+    <version.guava>18.0</version.guava>
+    <version.hppc>0.7.1</version.hppc>
+    <version.jackson>2.5.3</version.jackson>
+    <version.morfologik>1.10.0</version.morfologik>
+    <version.slf4j>1.7.10</version.slf4j>
+    <version.simplexml>2.7.1</version.simplexml>
+    <version.mahout-math>0.6</version.mahout-math>
+    <version.lucene>5.1.0</version.lucene>
+
+    <version.randomizedtesting>2.1.11</version.randomizedtesting>
+    <version.ant>1.9.4</version.ant>
+
+    <version.maven-assembly-plugin>2.5.5</version.maven-assembly-plugin>
+    <version.maven-clean-plugin>2.5</version.maven-clean-plugin>
+    <version.maven-compiler-plugin>3.1</version.maven-compiler-plugin>
+    <version.maven-dependency-plugin>2.10</version.maven-dependency-plugin>
+    <version.maven-deploy-plugin>2.8.2</version.maven-deploy-plugin>
+    <version.maven-install-plugin>2.5.2</version.maven-install-plugin>
+    <version.maven-jar-plugin>2.5</version.maven-jar-plugin>
+    <version.maven-resources-plugin>2.6</version.maven-resources-plugin>
+    <version.maven-surefire-plugin>2.17</version.maven-surefire-plugin>
+    <version.maven-site-plugin>3.4</version.maven-site-plugin>
+    <version.maven-eclipse-plugin>2.9</version.maven-eclipse-plugin>
+    <version.maven-antrun-plugin>1.7</version.maven-antrun-plugin>
+    <version.maven-enforcer-plugin>1.3.1</version.maven-enforcer-plugin>
+    <version.maven-shade-plugin>2.4.1</version.maven-shade-plugin>
+
+    <version.maven.api>3.2.3</version.maven.api>
+  </properties> 
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.carrot2</groupId>
+        <artifactId>morfologik-polish</artifactId>
+        <version>${version.morfologik}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>${version.guava}</version>
+      </dependency>
+  
+      <dependency>
+        <groupId>com.carrotsearch</groupId>
+        <artifactId>hppc</artifactId>
+        <version>${version.hppc}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${version.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${version.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${version.jackson}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>${version.slf4j}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${version.slf4j}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>${version.slf4j}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.simpleframework</groupId>
+        <artifactId>simple-xml</artifactId>
+        <version>${version.simplexml}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>stax</groupId>
+            <artifactId>stax-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>xpp3</groupId>
+            <artifactId>xpp3</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>stax</groupId>
+            <artifactId>stax</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.apache.mahout</groupId>
+        <artifactId>mahout-math</artifactId>
+        <version>${version.mahout-math}</version>
+      </dependency>
+    </dependencies>      
+  </dependencyManagement>
+</project> 

@@ -1,7 +1,0 @@
-<project name="Webapp setup tasks for for Eclipse" default="carrot2.webapp.eclipse.setup">
-  <target name="carrot2.webapp.eclipse.setup">
-    <ant dir="../../../../" antfile="build.xml" target="carrot2.webapp.eclipse.setup">
-      <property name="build.number" value="" />
-    </ant>
-  </target>
-</project>

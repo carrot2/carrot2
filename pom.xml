@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <prerequisites>
+    <maven>3.2.2</maven>
+  </prerequisites>
+
+  <groupId>org.carrot2</groupId>
+  <artifactId>carrot2-parent</artifactId>
+  <version>0.0.0-SNAPSHOT</version> 
+  <packaging>pom</packaging>
+
+  <name>Carrot2 Public Parent (POM)</name>
+
+  <modules>
+    <module>carrot2</module>
+    <module>carrot2-bom</module>
+  </modules>
+  
+  <organization>
+    <name>Carrot2.org</name>
+    <url>http://www.carrot2.org</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>BSD license</name>
+      <url>http://www.carrot2.org/carrot2.LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <mailingLists>
+    <mailingList>
+      <name>Developers List</name>
+      <subscribe>carrot2-developers-subscribe@lists.sourceforge.net</subscribe>
+      <unsubscribe>carrot2-developers-leave@lists.sourceforge.net</unsubscribe>
+      <post>carrot2-developers@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=carrot2-developers</archive>
+    </mailingList>
+  </mailingLists>
+
+  <issueManagement>
+    <system>Jira</system>
+    <url>http://issues.carrot2.org/</url>
+  </issueManagement>
+</project> 

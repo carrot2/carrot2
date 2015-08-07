@@ -1,7 +1,0 @@
-<component-suite>
-    <!-- Algorithms. -->
-    <include suite="algorithm-lingo.xml" />
-    <include suite="algorithm-stc.xml" />
-    <include suite="algorithm-kmeans.xml" />
-    <include suite="algorithm-synthetic.xml" />
-</component-suite>
