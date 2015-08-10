@@ -36,7 +36,7 @@ import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.IntStack;
 import com.carrotsearch.hppc.ShortArrayList;
 import com.carrotsearch.hppc.sorting.IndirectSort;
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Performs case normalization and calculates a number of frequency statistics for words.

@@ -17,8 +17,8 @@ import java.util.Map;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 
-import com.google.common.base.Predicates;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.base.Predicates;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Static life cycle and controller utilities (for use within the core package).

@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.carrot2.util.StringUtils;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Codes for languages for which linguistic resources are available 

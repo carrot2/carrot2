@@ -19,8 +19,8 @@ import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.*;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import org.carrot2.shaded.guava.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
  * Maintains a collection of {@link AttributeValueSet}s and provides methods for

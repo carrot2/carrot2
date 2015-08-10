@@ -14,7 +14,7 @@ package org.carrot2.text.preprocessing.filter;
 
 import java.util.*;
 
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Filters out phrases that are not left complete.

@@ -24,7 +24,7 @@ import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Label;
 import org.carrot2.util.attribute.Level;
 
-import com.google.common.base.Strings;
+import org.carrot2.shaded.guava.common.base.Strings;
 
 /**
  * Web search specific document source. 

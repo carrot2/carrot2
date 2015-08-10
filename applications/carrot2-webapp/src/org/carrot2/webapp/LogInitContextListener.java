@@ -23,7 +23,7 @@ import javax.servlet.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.*;
 
-import com.google.common.collect.*;
+import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * Initializes file appenders to save logs to files named after the context path. Works

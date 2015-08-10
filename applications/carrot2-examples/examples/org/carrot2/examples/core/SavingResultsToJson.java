@@ -25,7 +25,7 @@ import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.examples.clustering.ClusteringDataFromDocumentSources;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * This example shows how to save clustering results as JSON.

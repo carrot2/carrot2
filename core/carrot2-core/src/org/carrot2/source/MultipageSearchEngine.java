@@ -20,7 +20,7 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
-import com.google.common.base.Predicate;
+import org.carrot2.shaded.guava.common.base.Predicate;
 
 /**
  * A base class facilitating implementation of {@link IDocumentSource}s wrapping external

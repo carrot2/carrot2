@@ -17,8 +17,8 @@ import java.util.*;
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.ImmutableList;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A set of sample documents returned for the query <i>data mining</i>. This set is

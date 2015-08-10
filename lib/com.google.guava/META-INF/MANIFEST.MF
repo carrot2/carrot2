@@ -1,21 +1,25 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Google Guava
-Bundle-SymbolicName: com.google.guava
+Bundle-Name: Google Guava (Carrot2 Repackaged)
+Bundle-SymbolicName: org.carrot2.shaded.guava
 Bundle-Version: 18.0
-Bundle-ClassPath: guava-18.0.jar
-Bundle-Vendor: Google Inc.
+Bundle-ClassPath: carrot2-guava-18.0.jar
+Bundle-Vendor: Carrot2.org (Google Inc.)
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: com.google.common.annotations,
- com.google.common.base,
- com.google.common.base.internal,
- com.google.common.cache,
- com.google.common.collect,
- com.google.common.eventbus,
- com.google.common.hash,
- com.google.common.io,
- com.google.common.math,
- com.google.common.net,
- com.google.common.primitives,
- com.google.common.reflect,
- com.google.common.util.concurrent
+Export-Package: org.carrot2.shaded.guava.common.annotations,
+ org.carrot2.shaded.guava.common.base,
+ org.carrot2.shaded.guava.common.base.internal,
+ org.carrot2.shaded.guava.common.cache,
+ org.carrot2.shaded.guava.common.collect,
+ org.carrot2.shaded.guava.common.escape,
+ org.carrot2.shaded.guava.common.eventbus,
+ org.carrot2.shaded.guava.common.hash,
+ org.carrot2.shaded.guava.common.html,
+ org.carrot2.shaded.guava.common.io,
+ org.carrot2.shaded.guava.common.math,
+ org.carrot2.shaded.guava.common.net,
+ org.carrot2.shaded.guava.common.primitives,
+ org.carrot2.shaded.guava.common.reflect,
+ org.carrot2.shaded.guava.common.util.concurrent,
+ org.carrot2.shaded.guava.common.xml,
+ org.carrot2.shaded.guava.thirdparty.publicsuffix

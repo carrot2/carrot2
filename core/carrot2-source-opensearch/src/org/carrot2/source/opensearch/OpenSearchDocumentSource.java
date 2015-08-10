@@ -36,7 +36,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.URLResourceWithParams;
 import org.slf4j.Logger;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 import com.sun.syndication.fetcher.FeedFetcher;
 import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
 

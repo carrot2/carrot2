@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import com.google.common.collect.Sets;
+import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
  * A SAX content handler that collects the contents of PubMed abstracts.

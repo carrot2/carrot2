@@ -18,7 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.carrot2.matrix.factorization.seeding.KMeansSeedingStrategyFactory;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategyFactory;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 import org.apache.mahout.math.matrix.*;
 

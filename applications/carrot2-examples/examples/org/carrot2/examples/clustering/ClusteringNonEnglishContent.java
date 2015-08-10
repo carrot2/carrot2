@@ -31,8 +31,8 @@ import org.carrot2.source.microsoft.Bing3WebDocumentSourceDescriptor;
 import org.carrot2.source.microsoft.MarketOption;
 import org.carrot2.text.clustering.MultilingualClusteringDescriptor;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * [[[start:clustering-non-english-content-intro]]]

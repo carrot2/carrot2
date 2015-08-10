@@ -27,8 +27,8 @@ import org.fest.util.Strings;
 
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.procedures.IntIntProcedure;
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.base.Objects;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Fest-style assertions on the content of {@link PreprocessingContext}.

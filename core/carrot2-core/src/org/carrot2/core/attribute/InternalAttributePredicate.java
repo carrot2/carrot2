@@ -14,7 +14,7 @@ package org.carrot2.core.attribute;
 
 import org.carrot2.util.attribute.AttributeDescriptor;
 
-import com.google.common.base.Predicate;
+import org.carrot2.shaded.guava.common.base.Predicate;
 
 /**
  * A predicate that tests whether an {@link AttributeDescriptor} refers to an

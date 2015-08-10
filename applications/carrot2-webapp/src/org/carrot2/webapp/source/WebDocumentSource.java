@@ -25,8 +25,8 @@ import org.carrot2.source.etools.EToolsDocumentSource;
 import org.carrot2.source.google.GoogleDocumentSource;
 import org.carrot2.util.attribute.Bindable;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A {@link IDocumentSource} that folds in a few initial hits from Google API into the

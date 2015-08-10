@@ -20,10 +20,10 @@ import org.carrot2.util.attribute.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.*;
-import com.google.common.collect.Multiset.Entry;
+import org.carrot2.shaded.guava.common.base.Function;
+import org.carrot2.shaded.guava.common.base.Predicate;
+import org.carrot2.shaded.guava.common.collect.*;
+import org.carrot2.shaded.guava.common.collect.Multiset.Entry;
 
 /**
  * A helper for clustering multilingual collections of documents. The helper partitions

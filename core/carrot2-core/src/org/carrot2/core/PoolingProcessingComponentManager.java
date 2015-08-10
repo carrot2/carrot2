@@ -46,9 +46,9 @@ import org.carrot2.util.resource.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.base.Predicate;
+import org.carrot2.shaded.guava.common.collect.ImmutableSet;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * An {@link IProcessingComponentManager} that pools instances of processing components.

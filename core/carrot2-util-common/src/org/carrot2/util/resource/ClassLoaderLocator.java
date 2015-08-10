@@ -19,7 +19,7 @@ import java.util.Enumeration;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Scan for resources relative to a given class loader (possibly in all of this

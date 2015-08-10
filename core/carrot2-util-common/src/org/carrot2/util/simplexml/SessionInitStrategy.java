@@ -21,7 +21,7 @@ import org.simpleframework.xml.strategy.Value;
 import org.simpleframework.xml.stream.NodeMap;
 import org.simpleframework.xml.stream.OutputNode;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Proxy for initializing session values.

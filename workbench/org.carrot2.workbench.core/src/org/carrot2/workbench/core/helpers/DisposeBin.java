@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A collection of disposable resources (of multiple types that do not share a common

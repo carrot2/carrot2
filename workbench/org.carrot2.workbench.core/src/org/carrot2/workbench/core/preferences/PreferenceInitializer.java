@@ -23,7 +23,7 @@ import org.carrot2.workbench.core.ui.SearchEditor.PanelState;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Class used to initialize default preference values.

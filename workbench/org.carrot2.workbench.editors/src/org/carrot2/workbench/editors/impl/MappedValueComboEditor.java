@@ -25,7 +25,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import com.google.common.collect.BiMap;
+import org.carrot2.shaded.guava.common.collect.BiMap;
 
 /**
  * Template code for editors with mapped values (String to Object).

@@ -61,7 +61,7 @@ import org.carrot2.util.attribute.constraint.NotBlank;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.slf4j.Logger;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A {@link IDocumentSource} fetching {@link Document}s from a local Apache Lucene index.

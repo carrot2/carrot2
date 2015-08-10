@@ -15,8 +15,8 @@ package org.carrot2.util;
 import java.util.*;
 import java.util.Map.Entry;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Utilities for working with {@link Map}s.

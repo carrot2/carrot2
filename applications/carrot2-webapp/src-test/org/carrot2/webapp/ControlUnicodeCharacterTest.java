@@ -28,7 +28,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.google.common.base.Charsets;
+import org.carrot2.shaded.guava.common.base.Charsets;
 
 /** */
 public class ControlUnicodeCharacterTest extends CarrotTestCase

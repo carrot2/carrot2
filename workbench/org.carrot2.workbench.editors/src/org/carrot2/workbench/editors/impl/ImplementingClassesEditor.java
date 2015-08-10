@@ -22,7 +22,7 @@ import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.workbench.editors.AttributeEditorInfo;
 
-import com.google.common.collect.*;
+import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * An editor for any fields that have {@link ImplementingClasses} annotation. The field is

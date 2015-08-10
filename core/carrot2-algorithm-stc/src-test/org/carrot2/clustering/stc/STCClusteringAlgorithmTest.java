@@ -25,8 +25,8 @@ import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
-import com.google.common.io.Resources;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.io.Resources;
 
 /**
  * Test cases for the {@link STCClusteringAlgorithm}.

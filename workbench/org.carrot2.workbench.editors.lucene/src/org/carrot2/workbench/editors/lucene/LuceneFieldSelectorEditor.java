@@ -26,7 +26,7 @@ import org.carrot2.workbench.core.helpers.Utils;
 import org.carrot2.workbench.editors.*;
 import org.carrot2.workbench.editors.impl.MappedValueComboEditor;
 
-import com.google.common.collect.*;
+import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * Editor for mapped values (enumerated types and unrestricted strings with enum hints).

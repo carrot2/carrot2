@@ -26,7 +26,7 @@ import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.junit.Before;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A base class for tests requiring that the main term-document document matrix is built.

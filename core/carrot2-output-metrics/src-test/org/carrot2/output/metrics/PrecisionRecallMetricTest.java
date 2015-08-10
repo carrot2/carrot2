@@ -17,7 +17,7 @@ import org.carrot2.util.MathUtils;
 import org.fest.assertions.Delta;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Test cases for {@link IClusteringMetric}.

@@ -31,9 +31,9 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.*;
+import org.carrot2.shaded.guava.common.base.Predicate;
+import org.carrot2.shaded.guava.common.base.Predicates;
+import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * The application-wide configuration.

@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Test cases for {@link PreprocessedDocumentScannerTest}.

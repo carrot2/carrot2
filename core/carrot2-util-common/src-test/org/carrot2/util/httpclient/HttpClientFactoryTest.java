@@ -26,7 +26,7 @@ import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.*;
 
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * 

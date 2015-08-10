@@ -20,7 +20,7 @@ import org.carrot2.core.Document;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Test cases for the {@link ByUrlClusteringAlgorithm}.

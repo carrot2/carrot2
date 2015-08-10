@@ -22,7 +22,7 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.simpleframework.xml.core.Persister;
 
-import com.google.common.base.Strings;
+import org.carrot2.shaded.guava.common.base.Strings;
 
 public class FetchAndSaveBingResponse
 {

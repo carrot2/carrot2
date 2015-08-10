@@ -14,7 +14,7 @@ package org.carrot2.core;
 
 import java.util.*;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Represents a specific configuration of a {@link IProcessingComponent}.

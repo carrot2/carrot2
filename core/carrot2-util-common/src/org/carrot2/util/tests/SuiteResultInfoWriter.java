@@ -23,7 +23,7 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
-import com.google.common.base.Strings;
+import org.carrot2.shaded.guava.common.base.Strings;
 
 /**
  * Writes plain-text information about the suite's tests and their results. For

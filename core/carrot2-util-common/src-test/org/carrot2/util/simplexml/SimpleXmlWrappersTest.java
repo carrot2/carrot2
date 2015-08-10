@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.*;
 
-import com.google.common.collect.*;
+import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * Test cases for {@link SimpleXmlWrappers}.

@@ -38,7 +38,7 @@ import org.junit.Assert;
 import org.junit.Before;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Base class for {@link Controller} tests.

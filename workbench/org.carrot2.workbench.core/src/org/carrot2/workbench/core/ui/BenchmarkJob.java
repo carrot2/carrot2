@@ -28,7 +28,7 @@ import org.carrot2.workbench.core.helpers.Utils;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Actual background benchmarking job.

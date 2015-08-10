@@ -16,7 +16,7 @@ import java.util.*;
 
 import org.simpleframework.xml.Root;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Enables SimpleXML-based serialization of collections of arbitrary types, also those
