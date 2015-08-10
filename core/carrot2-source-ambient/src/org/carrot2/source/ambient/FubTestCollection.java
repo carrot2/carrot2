@@ -21,8 +21,8 @@ import org.carrot2.util.*;
 import org.carrot2.util.resource.ClassResource;
 import org.carrot2.util.resource.IResource;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.*;
+import org.carrot2.shaded.guava.common.base.Predicate;
+import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * Handles data of test collections developed by Fondazione Ugo Bordoni.

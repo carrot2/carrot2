@@ -22,7 +22,7 @@ import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
 
-import com.google.common.collect.ImmutableMap;
+import org.carrot2.shaded.guava.common.collect.ImmutableMap;
 
 /**
  * Simple XML session context helpers.

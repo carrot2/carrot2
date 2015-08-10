@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 
-import com.google.common.collect.ImmutableList;
+import org.carrot2.shaded.guava.common.collect.ImmutableList;
 
 public class TypeEditorWrapper extends AttributeEditorWrapper
 {

@@ -20,8 +20,8 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
-import com.google.common.base.Function;
-import com.google.common.collect.*;
+import org.carrot2.shaded.guava.common.base.Function;
+import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * Computes Normalized Mutual Information (NMI) metric for the cluster set.

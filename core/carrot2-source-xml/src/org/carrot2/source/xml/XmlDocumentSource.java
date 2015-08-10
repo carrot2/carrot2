@@ -27,7 +27,7 @@ import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.util.resource.*;
 
-import com.google.common.collect.*;
+import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * Fetches documents from XML files and streams. For additional flexibility, an XSLT

@@ -23,7 +23,7 @@ import org.carrot2.util.tests.UsesExternalServices;
 import org.fest.assertions.MapAssert;
 import org.junit.Test;
 
-import com.google.common.collect.Sets;
+import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
  * Test cases for {@link EToolsDocumentSource}.

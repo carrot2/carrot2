@@ -15,7 +15,7 @@ package org.carrot2.clustering.stc;
 import java.util.ArrayList;
 
 import com.carrotsearch.hppc.BitSet;
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A cluster candidate in the process of building STC clusters.

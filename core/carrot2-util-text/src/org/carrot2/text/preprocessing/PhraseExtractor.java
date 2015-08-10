@@ -25,7 +25,7 @@ import org.carrot2.util.attribute.constraint.IntRange;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Extracts frequent phrases from the provided document. A frequent phrase is a sequence

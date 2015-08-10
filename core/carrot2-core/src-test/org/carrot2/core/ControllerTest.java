@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
-import com.google.common.collect.ImmutableMap;
+import org.carrot2.shaded.guava.common.collect.ImmutableMap;
 
 /**
  * Runs matrix tests on {@link Controller} in all realistic configurations.

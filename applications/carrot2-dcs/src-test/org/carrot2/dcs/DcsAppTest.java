@@ -12,13 +12,13 @@
 
 package org.carrot2.dcs;
 
-import static com.google.common.base.Charsets.UTF_8;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.carrot2.dcs.RestProcessorServlet.DISABLE_LOGFILE_APPENDER;
 import static org.carrot2.dcs.RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR;
 
 import java.io.*;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.apache.http.*;
@@ -51,8 +51,9 @@ import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
-import com.google.common.collect.*;
-import com.google.common.io.Files;
+
+import org.carrot2.shaded.guava.common.collect.*;
+import org.carrot2.shaded.guava.common.io.Files;
 
 /**
  * Test cases for the {@link DcsApp}.
@@ -412,7 +413,7 @@ public class DcsAppTest extends CarrotTestCase
         // Click on the appropriate radio option to enable fields
         ((HtmlRadioButtonInput) (form.getPage().getByXPath("//input[@value = 'from-string']").get(0))).click();
         form.getTextAreaByName("dcs.c2stream").setText(
-            Files.toString(testFiles.get(KEY_KACZYNSKI), UTF_8));
+            Files.toString(testFiles.get(KEY_KACZYNSKI), StandardCharsets.UTF_8));
         return form;
     }
 
@@ -429,7 +430,7 @@ public class DcsAppTest extends CarrotTestCase
         final String responseXml = dcsResponse.asXml();
 
         final ProcessingResult dcsResult = ProcessingResult
-            .deserialize(new ByteArrayInputStream(responseXml.getBytes(UTF_8)));
+            .deserialize(new ByteArrayInputStream(responseXml.getBytes(StandardCharsets.UTF_8)));
         assertThat(dcsResult.getAttributes().get(AttributeNames.QUERY)).isEqualTo(query);
         if (onlyClusters)
         {
@@ -545,13 +546,13 @@ public class DcsAppTest extends CarrotTestCase
 
     private HttpEntity multipartParams(Map<String, Object> attributes) throws UnsupportedEncodingException
     {
-        final MultipartEntity body = new MultipartEntity(HttpMultipartMode.STRICT, null, UTF_8);
+        final MultipartEntity body = new MultipartEntity(HttpMultipartMode.STRICT, null, StandardCharsets.UTF_8);
         for (Map.Entry<String, Object> entry : attributes.entrySet())
         {
             if (entry.getValue() instanceof ContentBody) {
                 body.addPart(entry.getKey(), (ContentBody) entry.getValue());
             } else {
-                body.addPart(entry.getKey(), new StringBody(entry.getValue().toString(), UTF_8));
+                body.addPart(entry.getKey(), new StringBody(entry.getValue().toString(), StandardCharsets.UTF_8));
             }
         }
         return body;

@@ -27,8 +27,8 @@ import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Base class for {@link PreprocessingContext} tasks tests.

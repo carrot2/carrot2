@@ -15,8 +15,8 @@ package org.carrot2.core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Package-private implementation of {@link IControllerContext}.

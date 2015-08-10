@@ -28,8 +28,8 @@ import org.carrot2.source.ambient.AmbientDocumentSource.AmbientTopic;
 import org.carrot2.source.ambient.AmbientDocumentSourceDescriptor;
 import org.carrot2.text.util.TabularOutput;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Runs a clustering quality benchmark based on the data set embedded in

@@ -29,10 +29,10 @@ import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.resource.URLResourceWithParams;
 import org.junit.Test;
 
-import com.google.common.base.Function;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.base.Function;
+import org.carrot2.shaded.guava.common.base.Strings;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Test cases for {@link XmlDocumentSource}.

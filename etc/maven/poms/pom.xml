@@ -73,7 +73,7 @@
     <org.apache.httpcomponents.version>4.4.1</org.apache.httpcomponents.version>
     <org.apache.lucene.version>5.1.0</org.apache.lucene.version>
     <org.simpleframework.version>2.7.1</org.simpleframework.version>
-    <org.carrot2.attributes>1.2.2</org.carrot2.attributes>
+    <org.carrot2.attributes>1.2.3</org.carrot2.attributes>
   </properties>
 
   <dependencies>
@@ -90,8 +90,8 @@
     </dependency>
 
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
+      <groupId>org.carrot2.shaded</groupId>
+      <artifactId>carrot2-guava</artifactId>
       <version>${com.google.guava.version}</version>
     </dependency>
 

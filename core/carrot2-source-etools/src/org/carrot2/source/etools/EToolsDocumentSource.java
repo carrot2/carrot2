@@ -36,9 +36,9 @@ import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.ClassResource;
 import org.carrot2.util.resource.IResource;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.base.Joiner;
+import org.carrot2.shaded.guava.common.base.Strings;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A Carrot2 input component for the eTools service (http://www.etools.ch). For commercial

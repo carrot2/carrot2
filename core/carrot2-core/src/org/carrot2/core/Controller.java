@@ -26,8 +26,8 @@ import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
 import org.simpleframework.xml.Attribute;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.ImmutableMap;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A controller implementing the life cycle described in {@link IProcessingComponent}. Use

@@ -180,7 +180,7 @@
     <include name="lib/**/mahout.LICENSE" />
     <include name="lib/**/colt.LICENSE" />
     <include name="lib/**/commons-lang*" />
-    <include name="lib/**/guava*" />
+    <include name="lib/**/carrot2-guava*" />
     <include name="lib/**/jackson*" />
     <include name="lib/**/lucene-snowball*" />
     <include name="lib/**/lucene.LICENSE" />
@@ -909,7 +909,7 @@
     
     <patternset id="carrot2.required">
       <include name="**/commons-lang*" />
-      <include name="**/guava*" />
+      <include name="**/carrot2-guava*" />
       <include name="**/hppc*" />
       <include name="**/jackson*" />
       <include name="**/log4j*" />

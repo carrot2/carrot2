@@ -45,8 +45,8 @@ import org.eclipse.ui.progress.UIJob;
 
 import biz.aduna.map.cluster.*;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A single {@link AdunaClusterMapViewPage} page embeds Aduna's Swing component with

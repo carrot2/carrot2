@@ -14,8 +14,8 @@ package org.carrot2.util.factory;
 
 import org.slf4j.Logger;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Throwables;
+import org.carrot2.shaded.guava.common.base.Predicate;
+import org.carrot2.shaded.guava.common.base.Throwables;
 
 /**
  * Fallback to the first factory that returns a value.

@@ -18,8 +18,8 @@ import org.carrot2.core.Document;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
-import com.google.common.base.Function;
-import com.google.common.collect.*;
+import org.carrot2.shaded.guava.common.base.Function;
+import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * A base class for metrics based on some reference partitioning.

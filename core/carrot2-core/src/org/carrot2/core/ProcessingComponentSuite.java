@@ -12,8 +12,6 @@
 
 package org.carrot2.core;
 
-import static com.google.common.collect.Lists.newArrayList;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -32,9 +30,9 @@ import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.TreeStrategy;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Iterables;
+import org.carrot2.shaded.guava.common.collect.Iterators;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A set of {@link IProcessingComponent}s used in Carrot2 applications.
@@ -107,10 +105,10 @@ public class ProcessingComponentSuite
     @Commit
     private void postDeserialize(Map<Object, Object> session) throws Exception
     {
-        if (sources == null) sources = newArrayList();
-        if (algorithms == null) algorithms = newArrayList();
-        if (includes == null) includes = newArrayList();
-        if (otherComponents == null) otherComponents = newArrayList();
+        if (sources == null) sources = new ArrayList<>();
+        if (algorithms == null) algorithms = new ArrayList<>();
+        if (includes == null) includes = new ArrayList<>();
+        if (otherComponents == null) otherComponents = new ArrayList<>();
 
         // Acquire contextual resource lookup from the session.
         final ResourceLookup resourceLookup = PersisterHelpers.getResourceLookup(session);

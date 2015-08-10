@@ -17,7 +17,7 @@ import java.util.Map;
 
 import org.carrot2.core.LanguageCode;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 
 /**

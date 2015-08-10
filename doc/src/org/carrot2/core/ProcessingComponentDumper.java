@@ -21,9 +21,9 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
  * Dumps information on processing components from the provided suite into one XML file.
@@ -75,7 +75,6 @@ public class ProcessingComponentDumper
         }
     }
 
-    @SuppressWarnings("unused")
     @Root(name = "processing-component-doc")
     static class ProcessingComponentDoc
     {

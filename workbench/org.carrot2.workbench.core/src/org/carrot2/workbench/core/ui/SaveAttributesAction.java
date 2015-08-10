@@ -41,7 +41,7 @@ import org.eclipse.swt.widgets.Event;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Superclass for attribute management actions.

@@ -96,8 +96,8 @@ import org.eclipse.ui.progress.UIJob;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-import com.google.common.base.Predicates;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.base.Predicates;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Editor accepting {@link SearchInput} and performing operations on it. The editor also

@@ -19,7 +19,7 @@ import java.util.Map;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 public class AttributeValueSetTest extends CarrotTestCase
 {

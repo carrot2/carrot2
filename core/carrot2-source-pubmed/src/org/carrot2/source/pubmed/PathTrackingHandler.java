@@ -21,7 +21,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import com.carrotsearch.hppc.IntStack;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A simple SAX tracking handler that stores the current element's path.

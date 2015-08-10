@@ -21,8 +21,8 @@ import org.carrot2.core.IProcessingComponent;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.workbench.editors.IAttributeEditor;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.*;
+import org.carrot2.shaded.guava.common.base.Predicate;
+import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * See {@link #getEditorFor(Class, AttributeDescriptor)}.

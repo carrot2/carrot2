@@ -20,7 +20,7 @@ import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.ReflectionUtils;
 import org.simpleframework.xml.*;
 
-import com.google.common.collect.ImmutableSet;
+import org.carrot2.shaded.guava.common.collect.ImmutableSet;
 
 /**
  * A wrapper around typical serialized types, such as primitives. Without this wrapper

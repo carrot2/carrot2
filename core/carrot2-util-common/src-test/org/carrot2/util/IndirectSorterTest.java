@@ -19,7 +19,7 @@ import org.junit.Test;
 
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
-import com.google.common.collect.Ordering;
+import org.carrot2.shaded.guava.common.collect.Ordering;
 
 /**
  * Test cases for the legacy (removed) <code>IndirectSorter<code>. The replacement class

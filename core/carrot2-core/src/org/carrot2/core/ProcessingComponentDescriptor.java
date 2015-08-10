@@ -38,8 +38,8 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.core.Commit;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.base.Function;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Descriptor of a {@link IProcessingComponent} being part of a
@@ -317,7 +317,6 @@ public class ProcessingComponentDescriptor
      * On commit, attempt to verify component class and instance availability.
      */
     @Commit
-    @SuppressWarnings({"unused"})
     private void onCommit(Map<Object, Object> session)
     {
         this.initializationException = null;

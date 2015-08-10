@@ -28,7 +28,7 @@ import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Label;
 import org.carrot2.util.attribute.Output;
 
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A do-nothing implementation of {@link IClusteringAlgorithm}. If no clusters are

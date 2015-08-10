@@ -18,8 +18,8 @@ import java.util.List;
 import org.carrot2.core.Cluster;
 
 import com.carrotsearch.hppc.BitSet;
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.base.Objects;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 public class ClusterLabelPaths
 {

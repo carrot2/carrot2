@@ -32,7 +32,7 @@ import org.carrot2.source.lucene.LuceneDocumentSource;
 import org.carrot2.source.lucene.LuceneDocumentSourceDescriptor;
 import org.carrot2.source.lucene.SimpleFieldMapperDescriptor;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * This example shows how to cluster {@link Document}s retrieved from a Lucene index using

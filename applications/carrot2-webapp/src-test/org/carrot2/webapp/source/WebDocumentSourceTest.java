@@ -25,7 +25,7 @@ import org.carrot2.core.test.QueryableDocumentSourceTestBase;
 import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  *

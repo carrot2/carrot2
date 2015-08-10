@@ -19,8 +19,8 @@ import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.base.Function;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A very rough test case for the deserialization of component suites.

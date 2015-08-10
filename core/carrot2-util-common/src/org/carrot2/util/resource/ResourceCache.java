@@ -19,9 +19,9 @@ import org.carrot2.util.annotations.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.collect.MapMaker;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.base.Function;
+import org.carrot2.shaded.guava.common.collect.MapMaker;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A static cache of immutable, reusable resources associated with a given

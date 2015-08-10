@@ -33,9 +33,9 @@ import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
 import org.carrot2.util.attribute.Required;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+import org.carrot2.shaded.guava.common.base.Joiner;
+import org.carrot2.shaded.guava.common.base.Strings;
+import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Highlights query words in documents using the &lt;b&gt; HTML tag. Highlighting is

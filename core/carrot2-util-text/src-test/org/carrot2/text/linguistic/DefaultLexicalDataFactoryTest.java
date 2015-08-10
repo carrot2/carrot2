@@ -37,7 +37,7 @@ import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableMap;
+import org.carrot2.shaded.guava.common.collect.ImmutableMap;
 
 /**
  * Tests {@link ILexicalData}.

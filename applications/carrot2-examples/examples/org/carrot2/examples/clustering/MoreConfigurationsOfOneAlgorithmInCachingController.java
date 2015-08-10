@@ -24,7 +24,7 @@ import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQual
 import org.carrot2.source.microsoft.Bing3WebDocumentSource;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDescriptor;
 
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * It is possible to initialize a {@link Controller} to host a number of different

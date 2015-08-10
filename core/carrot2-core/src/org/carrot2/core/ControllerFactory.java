@@ -46,7 +46,6 @@ public final class ControllerFactory
      * @see #createCaching(Class...)
      * @see #create(boolean, Class...)
      */
-    @SuppressWarnings("unchecked")
     public static Controller createSimple()
     {
         return create(false);
@@ -67,7 +66,6 @@ public final class ControllerFactory
      * @see #create(boolean, Class...)
      * @see #createPooling(int)
      */
-    @SuppressWarnings("unchecked")
     public static Controller createPooling()
     {
         return create(true);
@@ -91,7 +89,6 @@ public final class ControllerFactory
      * @see #createPooling()
      * @see Runtime#availableProcessors()
      */
-    @SuppressWarnings("unchecked")
     public static Controller createPooling(int instancePoolSize)
     {
         return create(instancePoolSize);
@@ -118,6 +115,7 @@ public final class ControllerFactory
      *            If {@link IProcessingComponent} is provided here, output of all
      *            components will be cached.
      */
+    @SafeVarargs
     public static Controller createCaching(
         Class<? extends IProcessingComponent>... cachedProcessingComponents)
     {
@@ -138,6 +136,7 @@ public final class ControllerFactory
      *            If {@link IProcessingComponent} is provided here, output of all
      *            components will be cached.
      */
+    @SafeVarargs
     public static Controller createCachingPooling(
         Class<? extends IProcessingComponent>... cachedProcessingComponents)
     {
@@ -155,6 +154,7 @@ public final class ControllerFactory
      *            If {@link IProcessingComponent} is provided here, output of all
      *            components will be cached.
      */
+    @SafeVarargs
     public static Controller create(boolean componentPooling,
         Class<? extends IProcessingComponent>... cachedProcessingComponents)
     {
@@ -178,6 +178,7 @@ public final class ControllerFactory
      *            If {@link IProcessingComponent} is provided here, output of all
      *            components will be cached.
      */
+    @SafeVarargs
     public static Controller create(int instancePoolSize,
         Class<? extends IProcessingComponent>... cachedProcessingComponents)
     {
@@ -196,6 +197,7 @@ public final class ControllerFactory
      * Adds caching manager wrapper if caching is requested.
      */
     @AspectModified("Throws an exception in .NET")
+    @SafeVarargs
     private static IProcessingComponentManager addCachingManager(
         IProcessingComponentManager baseManager, 
         Class<? extends IProcessingComponent>... cachedProcessingComponents)

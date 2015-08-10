@@ -29,8 +29,8 @@ import org.carrot2.util.factory.NewClassInstanceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Maps;
+import org.carrot2.shaded.guava.common.base.Predicate;
+import org.carrot2.shaded.guava.common.collect.Maps;
 
 @Bindable
 @ThreadSafe
