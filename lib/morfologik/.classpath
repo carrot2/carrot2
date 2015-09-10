@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="morfologik-fsa-1.10.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="morfologik-polish-1.10.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="morfologik-stemming-1.10.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="morfologik-fsa-2.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="morfologik-polish-2.0.1.jar" sourcepath="C:/Users/dweiss/.m2/repository/org/carrot2/morfologik-polish/2.0.0/morfologik-polish-2.0.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="morfologik-stemming-2.0.1.jar" sourcepath="C:/Users/dweiss/.m2/repository/org/carrot2/morfologik-stemming/2.0.0/morfologik-stemming-2.0.0-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>

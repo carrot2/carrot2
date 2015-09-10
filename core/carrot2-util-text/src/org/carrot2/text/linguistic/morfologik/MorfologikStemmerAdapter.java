@@ -14,8 +14,8 @@ package org.carrot2.text.linguistic.morfologik;
 
 import java.util.List;
 
-import morfologik.stemming.PolishStemmer;
 import morfologik.stemming.WordData;
+import morfologik.stemming.polish.PolishStemmer;
 
 import org.carrot2.text.linguistic.IStemmer;
 

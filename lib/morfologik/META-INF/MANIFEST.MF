@@ -2,13 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Morfologik Stemming
 Bundle-SymbolicName: morfologik
-Bundle-Version: 1.10.0
-Bundle-ClassPath: morfologik-fsa-1.10.0.jar,
- morfologik-polish-1.10.0.jar,
- morfologik-stemming-1.10.0.jar
-Bundle-Vendor: morfologik.blogspot.com
+Bundle-Version: 2.0.1
+Bundle-ClassPath: morfologik-fsa-2.0.1.jar,
+ morfologik-polish-2.0.1.jar,
+ morfologik-stemming-2.0.1.jar
+Bundle-Vendor: https://github.com/morfologik/morfologik-stemming
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: morfologik.dictionaries,
- morfologik.fsa,
+Export-Package: morfologik.fsa,
  morfologik.stemming,
- morfologik.util
+ morfologik.stemming.polish
+
