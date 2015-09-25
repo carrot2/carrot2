@@ -109,7 +109,7 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
     @Test
     public void testLexicalDataIsReloadedOnDemand() throws IOException
     {
-        final File tempDir1 = createTempDir();
+        final File tempDir1 = newTempDir();
         FileUtils.writeStringToFile(new File(tempDir1, "stopwords.en"), "uniquea");
 
         final String resourceLookupKey = AttributeUtils.getKey(
@@ -182,10 +182,10 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
     @Test
     public void testSeparateLexicalDataForDifferentResourceLookup() throws IOException
     {
-        final File tempDir1 = createTempDir();
+        final File tempDir1 = newTempDir();
         FileUtils.writeStringToFile(new File(tempDir1, "stopwords.en"), "uniquea");
 
-        final File tempDir2 = createTempDir();
+        final File tempDir2 = newTempDir();
         FileUtils.writeStringToFile(new File(tempDir2, "stopwords.en"), "uniqueb");
 
         final IResourceLocator classpathLocator = Location.CONTEXT_CLASS_LOADER.locator;
@@ -233,34 +233,5 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
             assertTrue(data.isCommonWord(new MutableCharArray("uniquea")));
             assertFalse(data.isCommonWord(new MutableCharArray("uniqueb")));
         }        
-    }
-
-    /**
-     * Creates a temporary folder and deletes it on VM exit.
-     */
-    private File createTempDir()
-    {
-        try
-        {
-            File tempFile = File.createTempFile("tempdir", null);
-            if (tempFile.exists() && !tempFile.delete()) 
-            {
-                throw new RuntimeException("Could not delete temp. folder: " 
-                    + tempFile.getAbsolutePath());
-            }
-            if (!tempFile.mkdir()) 
-            {
-                throw new RuntimeException("Could not create temp. folder: " 
-                    + tempFile.getAbsolutePath());
-            }
-
-            tempFile.deleteOnExit();
-
-            return tempFile;
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Could not create temp directory.", e);
-        }
     }
 }
