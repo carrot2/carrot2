@@ -272,9 +272,6 @@ ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></p
             
             <orderedlist>
               <listitem><para>&C2; mailing lists</para></listitem>
-              <listitem>
-                <para><link xlink:href="https://sourceforge.net/news/submit.php?group_id=85379">SourceForge</link></para>
-              </listitem>
             </orderedlist>
           </para>
         </formalpara>
