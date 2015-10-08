@@ -266,18 +266,6 @@ ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></p
 
       <listitem>
         <formalpara>
-          <title>Upload distribution files to SourceForge</title>
-          <para>
-            Perform (from the build server):
-
-            <programlisting><![CDATA[rsync -e ssh *-x.y.z.zip *.war \
-<sf.user>,carrot2@frs.sourceforge.net:/home/frs/project/c/ca/carrot2/carrot2/x.y.z]]></programlisting>
-          </para>
-        </formalpara>
-      </listitem>
-
-      <listitem>
-        <formalpara>
           <title>Circulate release news</title>
           <para>
             If appropriate, circulate release news to:
