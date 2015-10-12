@@ -12,7 +12,7 @@
 
 package org.carrot2.matrix.factorization.seeding;
 
-import org.apache.mahout.math.matrix.*;
+import org.carrot2.mahout.math.matrix.*;
 
 /**
  * Defines the seeding routine to be used as part of a matrix factorization

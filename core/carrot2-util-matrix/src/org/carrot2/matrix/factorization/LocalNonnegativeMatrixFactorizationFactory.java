@@ -12,7 +12,7 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.apache.mahout.math.matrix.*;
+import org.carrot2.mahout.math.matrix.*;
 
 /**
  * {@link LocalNonnegativeMatrixFactorization} factory.

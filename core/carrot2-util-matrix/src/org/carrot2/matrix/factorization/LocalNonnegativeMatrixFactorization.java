@@ -12,11 +12,11 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.apache.mahout.math.function.DoubleDoubleFunction;
-import org.apache.mahout.math.function.DoubleFunction;
-import org.apache.mahout.math.function.Functions;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
+import org.carrot2.mahout.math.function.DoubleDoubleFunction;
+import org.carrot2.mahout.math.function.DoubleFunction;
+import org.carrot2.mahout.math.function.Functions;
+import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.matrix.MatrixUtils;
 
 /**

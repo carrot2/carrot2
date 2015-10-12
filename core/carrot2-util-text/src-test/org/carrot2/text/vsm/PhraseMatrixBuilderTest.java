@@ -14,8 +14,7 @@ package org.carrot2.text.vsm;
 
 import org.fest.assertions.Assertions;
 import org.junit.Test;
-
-import org.apache.mahout.math.matrix.*;
+import org.carrot2.mahout.math.matrix.*;
 import org.carrot2.matrix.MatrixAssertions;
 
 /**

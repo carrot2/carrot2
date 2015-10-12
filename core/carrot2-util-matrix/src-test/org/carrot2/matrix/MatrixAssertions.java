@@ -12,8 +12,7 @@
 
 package org.carrot2.matrix;
 
-import org.apache.mahout.math.matrix.DoubleMatrix1D;
-import org.apache.mahout.math.matrix.*;
+import org.carrot2.mahout.math.matrix.*;
 
 /**
  * FEST-style assertions for Colt matrices.

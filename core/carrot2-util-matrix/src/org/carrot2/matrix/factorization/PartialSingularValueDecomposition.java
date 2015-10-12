@@ -14,11 +14,11 @@ package org.carrot2.matrix.factorization;
 
 import java.util.Arrays;
 
-import org.apache.mahout.math.DenseMatrix;
-import org.apache.mahout.math.Matrix;
-import org.apache.mahout.math.SingularValueDecomposition;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
+import org.carrot2.mahout.math.DenseMatrix;
+import org.carrot2.mahout.math.Matrix;
+import org.carrot2.mahout.math.SingularValueDecomposition;
+import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 /**
  * Performs matrix factorization using the Singular Value Decomposition algorithm.

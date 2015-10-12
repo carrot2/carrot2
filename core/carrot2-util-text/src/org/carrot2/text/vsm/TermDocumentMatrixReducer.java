@@ -12,9 +12,9 @@
 
 package org.carrot2.text.vsm;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.matrix.factorization.IMatrixFactorization;
 import org.carrot2.matrix.factorization.IMatrixFactorizationFactory;

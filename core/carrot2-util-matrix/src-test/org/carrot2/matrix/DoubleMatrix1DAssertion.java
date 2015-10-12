@@ -15,8 +15,7 @@ package org.carrot2.matrix;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.assertions.Delta;
-
-import org.apache.mahout.math.matrix.DoubleMatrix1D;
+import org.carrot2.mahout.math.matrix.DoubleMatrix1D;
 
 /**
  * Assertions on <code>DoubleMatrix1D</code>.

@@ -14,10 +14,10 @@ package org.carrot2.matrix;
 
 import java.util.Arrays;
 
-import org.apache.mahout.math.function.DoubleFunction;
-import org.apache.mahout.math.function.Functions;
-import org.apache.mahout.math.function.IntIntDoubleFunction;
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.mahout.math.function.DoubleFunction;
+import org.carrot2.mahout.math.function.Functions;
+import org.carrot2.mahout.math.function.IntIntDoubleFunction;
+import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;

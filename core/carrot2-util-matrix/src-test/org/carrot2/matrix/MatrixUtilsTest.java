@@ -12,8 +12,8 @@
 
 package org.carrot2.matrix;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
-import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
+import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.fest.assertions.Delta;
 import org.junit.Test;

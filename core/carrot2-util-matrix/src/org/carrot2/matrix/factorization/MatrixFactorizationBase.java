@@ -12,7 +12,7 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.apache.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 
 /**
  * Abstract implementation of the {@link IMatrixFactorization} interface.

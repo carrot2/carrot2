@@ -15,12 +15,10 @@ package org.carrot2.matrix.factorization;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
+import org.carrot2.mahout.math.matrix.*;
 import org.carrot2.matrix.factorization.seeding.KMeansSeedingStrategyFactory;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategyFactory;
-
 import org.carrot2.shaded.guava.common.collect.Maps;
-
-import org.apache.mahout.math.matrix.*;
 
 /**
  * This class helps to guesstimate the number of iterations for iterative factorization

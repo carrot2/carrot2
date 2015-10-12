@@ -15,9 +15,9 @@ package org.carrot2.clustering.lingo;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.mahout.math.function.Functions;
-import org.apache.mahout.math.matrix.*;
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.mahout.math.function.Functions;
+import org.carrot2.mahout.math.matrix.*;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.vsm.ITermWeighting;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
