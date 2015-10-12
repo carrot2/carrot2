@@ -20,8 +20,6 @@ package org.apache.mahout.math.matrix.impl;
  @version 1.0, 09/24/99
  */
 
-/** @deprecated until unit tests are in place.  Until this time, this class/interface is unsupported. */
-@Deprecated
 public abstract class AbstractMatrix1D extends AbstractMatrix {
 
   /** the number of cells this matrix (view) has */

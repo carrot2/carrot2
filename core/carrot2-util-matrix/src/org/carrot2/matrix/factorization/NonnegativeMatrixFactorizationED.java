@@ -21,7 +21,6 @@ import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
  * Performs matrix factorization using the Non-negative Matrix Factorization algorithm
  * with minimization of Euclidean Distance between A and UV' and multiplicative updating.
  */
-@SuppressWarnings("deprecation")
 public class NonnegativeMatrixFactorizationED extends IterativeMatrixFactorizationBase
 {
     /**

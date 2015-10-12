@@ -25,7 +25,6 @@ import com.carrotsearch.hppc.sorting.IndirectSort;
 /**
  * A set of <code>DoubleMatrix2D</code> shorthands and utility methods.
  */
-@SuppressWarnings("deprecation")
 public class MatrixUtils
 {
     /**

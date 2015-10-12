@@ -20,7 +20,6 @@ import org.apache.mahout.math.matrix.DoubleMatrix2D;
 /**
  * Random matrix factorization seeding.
  */
-@SuppressWarnings("deprecation")
 public class RandomSeedingStrategy implements ISeedingStrategy
 {
     /** Colt's random number generator */

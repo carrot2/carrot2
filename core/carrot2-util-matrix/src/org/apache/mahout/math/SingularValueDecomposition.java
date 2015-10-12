@@ -23,7 +23,7 @@
  */
 package org.apache.mahout.math;
 
-public class SingularValueDecomposition implements java.io.Serializable {
+public class SingularValueDecomposition {
   
   /** Arrays for internal storage of U and V. */
   private final double[][] u;

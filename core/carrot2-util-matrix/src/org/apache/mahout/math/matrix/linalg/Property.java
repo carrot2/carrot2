@@ -15,8 +15,6 @@ import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.apache.mahout.math.matrix.impl.AbstractMatrix2D;
 import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
-/** @deprecated until unit tests are in place.  Until this time, this class/interface is unsupported. */
-@Deprecated
 public final class Property {
 
   /** The default Property object; currently has <tt>tolerance()==1.0E-9</tt>. */

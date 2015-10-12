@@ -23,7 +23,6 @@ import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 /**
  * Performs matrix factorization using the Singular Value Decomposition algorithm.
  */
-@SuppressWarnings("deprecation")
 public class PartialSingularValueDecomposition extends MatrixFactorizationBase implements
     IMatrixFactorization
 {

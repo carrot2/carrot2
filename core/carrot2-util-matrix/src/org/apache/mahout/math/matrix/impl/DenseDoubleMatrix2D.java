@@ -16,8 +16,6 @@ import org.apache.mahout.math.function.PlusMult;
 import org.apache.mahout.math.matrix.DoubleMatrix1D;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
-/** @deprecated until unit tests are in place.  Until this time, this class/interface is unsupported. */
-@Deprecated
 public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
 
   /**

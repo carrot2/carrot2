@@ -22,7 +22,6 @@ import org.carrot2.matrix.MatrixUtils;
  * Performs matrix factorization using the K-means clustering algorithm. This kind of
  * factorization is sometimes referred to as Concept Decomposition Factorization.
  */
-@SuppressWarnings("deprecation")
 public class KMeansMatrixFactorization extends IterativeMatrixFactorizationBase
 {
     /**

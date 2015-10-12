@@ -20,8 +20,6 @@ import org.apache.mahout.math.map.OpenIntDoubleHashMap;
 import org.apache.mahout.math.matrix.DoubleMatrix1D;
 import org.apache.mahout.math.matrix.DoubleMatrix2D;
 
-/** @deprecated until unit tests are in place.  Until this time, this class/interface is unsupported. */
-@Deprecated
 public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
   /*
    * The elements of the matrix.

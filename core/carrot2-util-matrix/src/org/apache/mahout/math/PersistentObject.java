@@ -32,8 +32,7 @@ package org.apache.mahout.math;
  * If this class inherits from <tt>com.objy.db.app.ooObj</tt> then all subclasses are <i>additionally</i> serializable with the Objectivity ODBMS persistance mechanism.
  * Thus, by modifying the inheritance of this class the entire tree of subclasses can be switched to Objectivity compatibility (and back) with minimum effort.
  */
-@SuppressWarnings("serial")
-public abstract class PersistentObject implements java.io.Serializable, Cloneable {
+public abstract class PersistentObject implements Cloneable {
 
   /** Not yet commented. */
   protected PersistentObject() {

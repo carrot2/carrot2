@@ -14,7 +14,6 @@ package org.carrot2.matrix.factorization;
 
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
-import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategyFactory;
 
 /**

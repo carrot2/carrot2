@@ -27,7 +27,6 @@ import org.apache.mahout.math.matrix.*;
  * algorithms. Note: for the time being it uses a very simple linear model with lots of
  * dodgy assumptions.
  */
-@SuppressWarnings("deprecation")
 public class IterationNumberGuesser
 {
     /**

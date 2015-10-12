@@ -16,14 +16,10 @@ import org.apache.mahout.math.matrix.DoubleMatrix2D;
 import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix1D;
 import org.apache.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
-import java.io.Serializable;
-
 import static org.apache.mahout.math.Algebra.hypot;
 import static org.apache.mahout.math.matrix.linalg.Property.checkSquare;
 
-/** @deprecated until unit tests are in place.  Until this time, this class/interface is unsupported. */
-@Deprecated
-public final class EigenvalueDecomposition implements Serializable {
+public final class EigenvalueDecomposition {
 
   /** Row and column dimension (square matrix). */
   private final int n;
@@ -809,12 +805,8 @@ public final class EigenvalueDecomposition implements Serializable {
       // otherwise, iterate.
 
       if (m > l) {
-        int iter = 0;
         do {
-          iter += 1;  // (Could check iteration count here.)
-
           // Compute implicit shift
-
           double g = d[l];
           double p = (d[l + 1] - g) / (2.0 * e[l]);
           double r = hypot(p, 1.0);

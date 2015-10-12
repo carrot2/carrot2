@@ -19,7 +19,6 @@ import org.apache.mahout.math.matrix.*;
  * </i> &times; <i>k</i> matrix <i>U</i> and <i>k</i> &times; <i>n</i> matrix <i>V'</i>
  * such that <i>A ~= UV'</i>.
  */
-@SuppressWarnings("deprecation")
 public interface IMatrixFactorization
 {
     /**

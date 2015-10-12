@@ -141,33 +141,4 @@ public class PrimeFinder {
     }
     return primeCapacities[i];
   }
-
-  /** Tests correctness. */
-  private static void statistics(int from, int to) {
-    // check that primes contain no accidental errors
-    for (int i = 0; i < primeCapacities.length - 1; i++) {
-      if (primeCapacities[i] >= primeCapacities[i + 1]) {
-        throw new IllegalStateException(
-            "primes are unsorted or contain duplicates; detected at " + i + '@' + primeCapacities[i]);
-      }
-    }
-
-    double accDeviation = 0.0;
-    double maxDeviation = -1.0;
-
-    for (int i = from; i <= to; i++) {
-      int primeCapacity = nextPrime(i);
-      //log.info(primeCapacity);
-      double deviation = (primeCapacity - i) / (double) i;
-
-      if (deviation > maxDeviation) {
-        maxDeviation = deviation;
-      }
-
-      accDeviation += deviation;
-    }
-    long width = 1 + (long) to - (long) from;
-
-    double meanDeviation = accDeviation / width;
-  }
 }

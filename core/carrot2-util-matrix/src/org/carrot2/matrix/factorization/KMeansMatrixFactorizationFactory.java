@@ -17,7 +17,6 @@ import org.apache.mahout.math.matrix.*;
 /**
  * {@link KMeansMatrixFactorization} factory.
  */
-@SuppressWarnings("deprecation")
 public class KMeansMatrixFactorizationFactory extends IterativeMatrixFactorizationFactory
 {
     public IMatrixFactorization factorize(DoubleMatrix2D A)

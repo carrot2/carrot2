@@ -17,7 +17,6 @@ import org.apache.mahout.math.matrix.*;
 /**
  * Factory for {@link NonnegativeMatrixFactorizationKL}s.
  */
-@SuppressWarnings("deprecation")
 public class NonnegativeMatrixFactorizationKLFactory extends
     IterativeMatrixFactorizationFactory
 {

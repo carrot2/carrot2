@@ -24,7 +24,6 @@ import org.carrot2.matrix.MatrixUtils;
  * algorithm with minimization of the Kullback-Leibler divergence between A and UV' and
  * multiplicative updating.
  */
-@SuppressWarnings("deprecation")
 public class LocalNonnegativeMatrixFactorization extends IterativeMatrixFactorizationBase
 {
     /**

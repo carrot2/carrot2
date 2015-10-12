@@ -23,7 +23,6 @@ import com.carrotsearch.hppc.sorting.IndirectComparator;
 /**
  * Base functionality for {@link IIterativeMatrixFactorization}s.
  */
-@SuppressWarnings("deprecation")
 abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase implements
     IIterativeMatrixFactorization
 {

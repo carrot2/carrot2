@@ -17,7 +17,6 @@ import org.apache.mahout.math.matrix.*;
 /**
  * Factory for {@link PartialSingularValueDecomposition}s.
  */
-@SuppressWarnings("deprecation")
 public class PartialSingularValueDecompositionFactory implements
     IMatrixFactorizationFactory
 {

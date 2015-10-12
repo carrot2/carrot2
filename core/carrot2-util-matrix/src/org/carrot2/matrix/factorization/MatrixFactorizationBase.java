@@ -17,7 +17,6 @@ import org.apache.mahout.math.matrix.DoubleMatrix2D;
 /**
  * Abstract implementation of the {@link IMatrixFactorization} interface.
  */
-@SuppressWarnings("deprecation")
 abstract class MatrixFactorizationBase implements IMatrixFactorization
 {
     /** Input matrix */

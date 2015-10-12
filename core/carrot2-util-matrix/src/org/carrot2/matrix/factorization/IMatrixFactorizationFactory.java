@@ -17,7 +17,6 @@ import org.apache.mahout.math.matrix.*;
 /**
  * A factory of {@link IMatrixFactorization}s.
  */
-@SuppressWarnings("deprecation")
 public interface IMatrixFactorizationFactory
 {
     /**
