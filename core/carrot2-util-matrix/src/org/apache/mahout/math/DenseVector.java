@@ -69,11 +69,6 @@ public class DenseVector extends AbstractVector {
   }
 
   @Override
-  protected Matrix matrixLike(int rows, int columns) {
-    return new DenseMatrix(rows, columns);
-  }
-
-  @Override
   public DenseVector clone() {
     return new DenseVector(values.clone());
   }

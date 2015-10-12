@@ -117,11 +117,6 @@ public class SequentialAccessSparseVector extends AbstractVector {
   }
 
   @Override
-  protected Matrix matrixLike(int rows, int columns) {
-    return new SparseRowMatrix(rows, columns);
-  }
-
-  @Override
   public SequentialAccessSparseVector clone() {
     return new SequentialAccessSparseVector(size(), values.clone());
   }

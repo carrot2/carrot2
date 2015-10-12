@@ -41,11 +41,6 @@ public class VectorView extends AbstractVector {
   }
 
   @Override
-  protected Matrix matrixLike(int rows, int columns) {
-    return ((AbstractVector) vector).matrixLike(rows, columns);
-  }
-
-  @Override
   public Vector clone() {
     VectorView r = (VectorView) super.clone();
     r.vector = vector.clone();

@@ -60,15 +60,6 @@ public abstract class AbstractVector implements Vector {
     return result;
   }
 
-  /**
-   * Subclasses must override to return an appropriately sparse or dense result
-   *
-   * @param rows    the row cardinality
-   * @param columns the column cardinality
-   * @return a Matrix
-   */
-  protected abstract Matrix matrixLike(int rows, int columns);
-
   @Override
   public Vector viewPart(int offset, int length) {
     if (offset < 0) {
@@ -569,11 +560,7 @@ public abstract class AbstractVector implements Vector {
 
   @Override
   public Matrix cross(Vector other) {
-    Matrix result = matrixLike(size, other.size());
-    for (int row = 0; row < size; row++) {
-      result.assignRow(row, other.times(getQuick(row)));
-    }
-    return result;
+    throw new RuntimeException();
   }
 
   @Override

@@ -634,11 +634,6 @@ public abstract class AbstractMatrix implements Matrix {
     }
 
     @Override
-    protected Matrix matrixLike(int rows, int columns) {
-      return matrix.like(rows, columns);
-    }
-
-    @Override
     public Iterator<Element> iterator() {
       return new AbstractIterator<Element>() {
         private int i;

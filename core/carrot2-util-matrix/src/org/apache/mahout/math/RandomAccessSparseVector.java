@@ -65,11 +65,6 @@ public class RandomAccessSparseVector extends AbstractVector {
   }
 
   @Override
-  protected Matrix matrixLike(int rows, int columns) {
-    return new SparseRowMatrix(rows, columns);
-  }
-
-  @Override
   public RandomAccessSparseVector clone() {
     return new RandomAccessSparseVector(size(), (OpenIntDoubleHashMap) values.clone());
   }
