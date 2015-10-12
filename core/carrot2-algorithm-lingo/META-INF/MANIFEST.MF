@@ -7,8 +7,7 @@ Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.core,
  org.carrot2.util.common,
  org.carrot2.text;visibility:=reexport,
- org.carrot2.util.matrix;visibility:=reexport,
- org.apache.mahout;bundle-version="0.3.0";visibility:=reexport
+ org.carrot2.util.matrix;visibility:=reexport
 Bundle-ClassPath: META-INF/,
  .
 Export-Package: org.carrot2.clustering.lingo

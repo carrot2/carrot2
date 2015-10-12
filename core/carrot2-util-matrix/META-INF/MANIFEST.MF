@@ -5,10 +5,20 @@ Bundle-SymbolicName: org.carrot2.util.matrix
 Bundle-Version: 0.0.0.QUALIFIER
 Bundle-ClassPath: .
 Export-Package: 
+ org.apache.mahout.collections,
+ org.apache.mahout.common,
+ org.apache.mahout.math,
+ org.apache.mahout.math.buffer,
+ org.apache.mahout.math.function,
+ org.apache.mahout.math.list,
+ org.apache.mahout.math.map,
+ org.apache.mahout.math.matrix,
+ org.apache.mahout.math.matrix.impl,
+ org.apache.mahout.math.matrix.linalg,
+ org.apache.mahout.math.set,
  org.carrot2.matrix,
  org.carrot2.matrix.factorization,
  org.carrot2.matrix.factorization.seeding
 Bundle-Vendor: Carrot2.org
-Require-Bundle: org.carrot2.util.common;bundle-version="0.0.0";visibility:=reexport,
- org.apache.mahout;bundle-version="0.3.0";visibility:=reexport
+Require-Bundle: org.carrot2.util.common;bundle-version="0.0.0";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

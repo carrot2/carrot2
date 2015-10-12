@@ -176,8 +176,6 @@
   </patternset>
 
   <patternset id="lib.core.mini">
-    <include name="lib/**/mahout-*.jar" />
-    <include name="lib/**/mahout.LICENSE" />
     <include name="lib/**/colt.LICENSE" />
     <include name="lib/**/commons-lang*" />
     <include name="lib/**/carrot2-guava*" />
@@ -917,7 +915,6 @@
       <include name="**/simple-xml*" />
       <include name="**/slf4j*" />
       <exclude name="**/slf4j-nop*" />
-      <include name="**/mahout*" />
       <include name="**/colt.LICENSE" />
       <include name="**/attributes-binder*" />
     </patternset>

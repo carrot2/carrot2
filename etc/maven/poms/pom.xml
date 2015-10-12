@@ -68,8 +68,6 @@
     <commons.codec.version>1.10</commons.codec.version>
     <com.fasterxml.jackson.version>2.5.3</com.fasterxml.jackson.version>
     <org.slf4j.version>1.7.12</org.slf4j.version>
-    <org.apache.mahout.version>0.6</org.apache.mahout.version>
-    <org.apache.mahout.collections.version>1.0</org.apache.mahout.collections.version>
     <org.apache.httpcomponents.version>4.4.1</org.apache.httpcomponents.version>
     <org.apache.lucene.version>5.1.0</org.apache.lucene.version>
     <org.simpleframework.version>2.7.1</org.simpleframework.version>
@@ -123,42 +121,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${org.slf4j.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.mahout</groupId>
-      <artifactId>mahout-math</artifactId>
-      <version>${org.apache.mahout.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.google.code.gson</groupId>
-          <artifactId>gson</artifactId>
-        </exclusion>
-        <exclusion>
-          <artifactId>xpp3</artifactId>
-          <groupId>xpp3</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>uncommons-maths</artifactId>
-          <groupId>org.uncommons.maths</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-math</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.mahout</groupId>
-      <artifactId>mahout-collections</artifactId>
-      <version>${org.apache.mahout.collections.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.mahout</groupId>
-          <artifactId>mahout-collection-codegen-plugin</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
 
