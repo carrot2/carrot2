@@ -8,11 +8,9 @@ It is provided "as is" without expressed or implied warranty.
 */
 package org.carrot2.mahout.math;
 
-/**
- * Interface for an object that knows how to swap elements at two positions (a,b).
- */
+/* removed */
 public interface Swapper {
 
-  /** Swaps the generic data g[a] with g[b]. */
+  /* removed */
   void swap(int a, int b);
 }

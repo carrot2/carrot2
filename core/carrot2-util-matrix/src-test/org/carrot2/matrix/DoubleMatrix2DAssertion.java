@@ -21,7 +21,6 @@ import org.carrot2.mahout.math.matrix.*;
 /**
  * Assertions on <code>DoubleMatrix2D</code>.
  */
-@SuppressWarnings("deprecation")
 public class DoubleMatrix2DAssertion implements AssertExtension
 {
     /** The actual matrix */

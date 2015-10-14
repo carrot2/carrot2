@@ -255,7 +255,6 @@ public class MatrixUtils
      * maximum values for each column this version should perform better than scanning
      * each column separately.
      * 
-     * @param A
      * @param indices an array of <code>A.columns()</code> integers in which indices of
      *            the first maximum element will be stored. If this parameter is
      *            <code>null</code> a new array will be allocated.

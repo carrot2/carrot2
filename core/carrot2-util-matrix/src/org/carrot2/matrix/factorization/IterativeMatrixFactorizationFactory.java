@@ -79,7 +79,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
     }
 
     /**
-     * Returns {@link RandomSeedingStrategy} with constant seed.
      */
     protected ISeedingStrategy createSeedingStrategy()
     {
@@ -128,8 +127,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
 
     /**
      * Sets the {@link ISeedingStrategyFactory} to be used by this factory.
-     * 
-     * @param seedingFactory
      */
     public void setSeedingFactory(ISeedingStrategyFactory seedingFactory)
     {
@@ -147,8 +144,6 @@ public abstract class IterativeMatrixFactorizationFactory implements
 
     /**
      * Set to <code>true</code> to generate an ordered basis.
-     * 
-     * @param ordered
      */
     public void setOrdered(boolean ordered)
     {

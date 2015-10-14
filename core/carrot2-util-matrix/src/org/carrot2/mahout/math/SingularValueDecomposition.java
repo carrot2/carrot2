@@ -25,28 +25,21 @@ package org.carrot2.mahout.math;
 
 public class SingularValueDecomposition {
   
-  /** Arrays for internal storage of U and V. */
+  /* removed */
   private final double[][] u;
   private final double[][] v;
   
-  /** Array for internal storage of singular values. */
+  /* removed */
   private final double[] s;
   
-  /** Row and column dimensions. */
+  /* removed */
   private final int m;
   private final int n;
   
-  /**To handle the case where numRows() < numCols() and to use the fact that SVD(A')=VSU'=> SVD(A')'=SVD(A)**/
+  /* removed */
   private boolean transpositionNeeded = false;
   
-  /**
-   * Constructs and returns a new singular value decomposition object; The
-   * decomposed matrices can be retrieved via instance methods of the returned
-   * decomposition object.
-   * 
-   * @param arg
-   *            A rectangular matrix.
-   */
+  /* removed */
   public SingularValueDecomposition(Matrix arg) {
     if (arg.numRows() < arg.numCols()) {
       transpositionNeeded = true;
@@ -490,16 +483,12 @@ public class SingularValueDecomposition {
     }
   }
   
-  /**
-   * Returns the two norm condition number, which is <tt>max(S) / min(S)</tt>.
-   */
+  /* removed */
   public double cond() {
     return s[0] / s[Math.min(m, n) - 1];
   }
   
-  /**
-   * @return the diagonal matrix of singular values.
-   */
+  /* removed */
   public Matrix getS() {
     double[][] s = new double[n][n];
     for (int i = 0; i < n; i++) {
@@ -512,21 +501,12 @@ public class SingularValueDecomposition {
     return new DenseMatrix(s);
   }
   
-  /**
-   * Returns the diagonal of <tt>S</tt>, which is a one-dimensional array of
-   * singular values
-   * 
-   * @return diagonal of <tt>S</tt>.
-   */
+  /* removed */
   public double[] getSingularValues() {
     return s;
   }
   
-  /**
-   * Returns the left singular vectors <tt>U</tt>.
-   * 
-   * @return <tt>U</tt>
-   */
+  /* removed */
   public Matrix getU() {
     if (transpositionNeeded) { //case numRows() < numCols()
       return new DenseMatrix(v);
@@ -543,11 +523,7 @@ public class SingularValueDecomposition {
     }
   }
   
-  /**
-   * Returns the right singular vectors <tt>V</tt>.
-   * 
-   * @return <tt>V</tt>
-   */
+  /* removed */
   public Matrix getV() {
     if (transpositionNeeded) { //case numRows() < numCols()
       int numCols = Math.min(m + 1, n);
@@ -564,15 +540,12 @@ public class SingularValueDecomposition {
     }
   }
   
-  /** Returns the two norm, which is <tt>max(S)</tt>. */
+  /* removed */
   public double norm2() {
     return s[0];
   }
   
-  /**
-   * Returns the effective numerical matrix rank, which is the number of
-   * nonnegligible singular values.
-   */
+  /* removed */
   public int rank() {
     double eps = Math.pow(2.0, -52.0);
     double tol = Math.max(m, n) * s[0] * eps;
@@ -585,14 +558,7 @@ public class SingularValueDecomposition {
     return r;
   }
   
-  /**
-   * @parameter minSingularValue
-   * minSingularValue - value below which singular values are ignored (a 0 or negative
-   * value implies all singular value will be used)
-   * @return Returns the n × n covariance matrix.
-   * The covariance matrix is V × J × Vt where J is the diagonal matrix of the inverse
-   *  of the squares of the singular values.
-   */
+  /* removed */
   Matrix getCovariance(double minSingularValue) {
     Matrix j = new DenseMatrix(s.length,s.length);
     Matrix vMat = new DenseMatrix(this.v);
@@ -602,15 +568,7 @@ public class SingularValueDecomposition {
     return vMat.times(j).times(vMat.transpose());
   }
   
-  /**
-   * Returns a String with (propertyName, propertyValue) pairs. Useful for
-   * debugging or to quickly get the rough picture. For example,
-   * 
-   * <pre>
-   * rank          : 3
-   * trace         : 0
-   * </pre>
-   */
+  /* removed */
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder();

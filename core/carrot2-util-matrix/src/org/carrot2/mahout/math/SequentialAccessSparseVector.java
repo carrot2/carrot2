@@ -1,19 +1,4 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* removed */
 
 package org.carrot2.mahout.math;
 
@@ -24,32 +9,12 @@ import org.carrot2.mahout.math.function.Functions;
 import org.carrot2.shaded.guava.common.collect.AbstractIterator;
 import org.carrot2.shaded.guava.common.primitives.Doubles;
 
-/**
- * <p>
- * Implements vector that only stores non-zero doubles as a pair of parallel arrays (OrderedIntDoubleMapping),
- * one int[], one double[].  If there are <b>k</b> non-zero elements in the vector, this implementation has
- * O(log(k)) random-access read performance, and O(k) random-access write performance, which is far below that
- * of the hashmap based {@link org.carrot2.mahout.math.RandomAccessSparseVector RandomAccessSparseVector}.  This
- * class is primarily used for operations where the all the elements will be accessed in a read-only fashion
- * sequentially: methods which operate not via get() or set(), but via iterateNonZero(), such as (but not limited
- * to) :</p>
- * <ul>
- *   <li>dot(Vector)</li>
- *   <li>addTo(Vector)</li>
- * </ul>
- * <p>
- * Note that the Vector passed to these above methods may (and currently, are) be used in a random access fashion,
- * so for example, calling SequentialAccessSparseVector.dot(SequentialAccessSparseVector) is slow.
- * TODO: this need not be the case - both are ordered, so this should be very fast if implmented in this class
- * </p>
- *
- * See {@link OrderedIntDoubleMapping}
- */
+/* removed */
 public class SequentialAccessSparseVector extends AbstractVector {
 
   private OrderedIntDoubleMapping values;
 
-  /** For serialization purposes only. */
+  /* removed */
   public SequentialAccessSparseVector() {
     super(0);
   }
@@ -158,17 +123,13 @@ public class SequentialAccessSparseVector extends AbstractVector {
     return result.toString();
   }
 
-  /**
-   * @return false
-   */
+  /* removed */
   @Override
   public boolean isDense() {
     return false;
   }
 
-  /**
-   * @return true
-   */
+  /* removed */
   @Override
   public boolean isSequentialAccess() {
     return true;

@@ -23,7 +23,6 @@ import com.carrotsearch.hppc.sorting.IndirectComparator;
 /**
  * Test cases for {@link MatrixUtils}.
  */
-@SuppressWarnings("deprecation")
 public class MatrixUtilsTest extends CarrotTestCase
 {
     @Test

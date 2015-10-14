@@ -19,9 +19,7 @@ package org.carrot2.mahout.math.function;
 
 import org.carrot2.mahout.math.Vector;
 
-/**
- * Defines a function of a vector that returns a double.
- */
+/* removed */
 public interface VectorFunction {
   double apply(Vector f);
 }

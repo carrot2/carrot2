@@ -46,8 +46,6 @@ public class KMeansSeedingStrategyFactory implements ISeedingStrategyFactory
     /**
      * Sets the maximum number of iterations the k-means algorithm is allowed to
      * perform.
-     * 
-     * @param maxIterations
      */
     public void setMaxIterations(int maxIterations)
     {

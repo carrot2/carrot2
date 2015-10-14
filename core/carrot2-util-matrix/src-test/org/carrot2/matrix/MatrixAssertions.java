@@ -17,24 +17,18 @@ import org.carrot2.mahout.math.matrix.*;
 /**
  * FEST-style assertions for Colt matrices.
  */
-@SuppressWarnings("deprecation")
 public class MatrixAssertions
 {
     /**
      * Creates a {@link DoubleMatrix1DAssertion}.
-     * 
-     * @param actualMatrix
-     * @return the assertion
      */
     public static DoubleMatrix1DAssertion assertThat(DoubleMatrix1D actualMatrix)
     {
         return new DoubleMatrix1DAssertion(actualMatrix);
     }
+
     /**
      * Creates a {@link DoubleMatrix2DAssertion}.
-     * 
-     * @param actualMatrix
-     * @return the assertion
      */
     public static DoubleMatrix2DAssertion assertThat(DoubleMatrix2D actualMatrix)
     {

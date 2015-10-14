@@ -20,9 +20,7 @@ package org.carrot2.mahout.math;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/**
- * Provides a virtual vector that is really a row or column or diagonal of a matrix.
- */
+/* removed */
 public class MatrixVectorView extends AbstractVector {
   private Matrix matrix;
   private int row;
@@ -58,32 +56,19 @@ public class MatrixVectorView extends AbstractVector {
     }
   }
 
-  /**
-   * @return true iff the {@link Vector} implementation should be considered
-   *         dense -- that it explicitly represents every value
-   */
+  /* removed */
   @Override
   public boolean isDense() {
     return true;
   }
 
-  /**
-   * @return true iff {@link Vector} should be considered to be iterable in
-   *         index order in an efficient way. In particular this implies that {@link #iterator()} and
-   *         {@link #iterateNonZero()} return elements in ascending order by index.
-   */
+  /* removed */
   @Override
   public boolean isSequentialAccess() {
     return true;
   }
 
-  /**
-   * Iterates over all elements <p/> * NOTE: Implementations may choose to reuse the Element returned
-   * for performance reasons, so if you need a copy of it, you should call {@link #getElement(int)} for
-   * the given index
-   *
-   * @return An {@link java.util.Iterator} over all elements
-   */
+  /* removed */
   @Override
   public Iterator<Element> iterator() {
     final LocalElement r = new LocalElement(0);
@@ -111,55 +96,31 @@ public class MatrixVectorView extends AbstractVector {
     };
   }
 
-  /**
-   * Iterates over all non-zero elements. <p/> NOTE: Implementations may choose to reuse the Element
-   * returned for performance reasons, so if you need a copy of it, you should call {@link
-   * #getElement(int)} for the given index
-   *
-   * @return An {@link java.util.Iterator} over all non-zero elements
-   */
+  /* removed */
   @Override
   public Iterator<Element> iterateNonZero() {
     return iterator();
   }
 
-  /**
-   * Return the value at the given index, without checking bounds
-   *
-   * @param index an int index
-   * @return the double at the index
-   */
+  /* removed */
   @Override
   public double getQuick(int index) {
     return matrix.getQuick(row + rowStride * index, column + columnStride * index);
   }
 
-  /**
-   * Return an empty vector of the same underlying class as the receiver
-   *
-   * @return a Vector
-   */
+  /* removed */
   @Override
   public Vector like() {
     return matrix.like(size(), 1).viewColumn(0);
   }
 
-  /**
-   * Set the value at the given index, without checking bounds
-   *
-   * @param index an int index into the receiver
-   * @param value a double value to set
-   */
+  /* removed */
   @Override
   public void setQuick(int index, double value) {
     matrix.setQuick(row + rowStride * index, column + columnStride * index, value);
   }
 
-  /**
-   * Return the number of values in the recipient
-   *
-   * @return an int
-   */
+  /* removed */
   @Override
   public int getNumNondefaultElements() {
     return size();

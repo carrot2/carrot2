@@ -20,7 +20,6 @@ import org.carrot2.mahout.math.matrix.DoubleMatrix1D;
 /**
  * Assertions on <code>DoubleMatrix1D</code>.
  */
-@SuppressWarnings("deprecation")
 public class DoubleMatrix1DAssertion
 {
     /** The actual matrix */

@@ -1,19 +1,4 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* removed */
 
 package org.carrot2.mahout.math;
 
@@ -24,14 +9,14 @@ import org.carrot2.mahout.math.map.OpenIntDoubleHashMap;
 import org.carrot2.shaded.guava.common.collect.AbstractIterator;
 
 
-/** Implements vector that only stores non-zero doubles */
+/* removed */
 public class RandomAccessSparseVector extends AbstractVector {
 
   private static final int INITIAL_CAPACITY = 11;
 
   private OpenIntDoubleHashMap values;
 
-  /** For serialization purposes only. */
+  /* removed */
   public RandomAccessSparseVector() {
     super(0);
   }
@@ -104,17 +89,13 @@ public class RandomAccessSparseVector extends AbstractVector {
     return this;
   }
 
-  /**
-   * @return false
-   */
+  /* removed */
   @Override
   public boolean isDense() {
     return false;
   }
 
-  /**
-   * @return false
-   */
+  /* removed */
   @Override
   public boolean isSequentialAccess() {
     return false;
@@ -145,13 +126,7 @@ public class RandomAccessSparseVector extends AbstractVector {
     return new RandomAccessSparseVector(size(), values.size());
   }
 
-  /**
-   * NOTE: this implementation reuses the Vector.Element instance for each call of next(). If you need to preserve the
-   * instance, you need to make a copy of it
-   *
-   * @return an {@link Iterator} over the Elements.
-   * @see #getElement(int)
-   */
+  /* removed */
   @Override
   public Iterator<Element> iterateNonZero() {
     return new NonDefaultIterator();

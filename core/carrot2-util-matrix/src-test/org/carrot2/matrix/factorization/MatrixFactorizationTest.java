@@ -23,7 +23,6 @@ import org.junit.Test;
 /**
  * Test cases for matrix factorizations.
  */
-@SuppressWarnings("deprecation")
 public class MatrixFactorizationTest extends CarrotTestCase
 {
     /** Factorization parameters */

@@ -35,8 +35,6 @@ public class RandomSeedingStrategy implements ISeedingStrategy
 
     /**
      * Creates RandomSeedingStrategy with given random seed.
-     * 
-     * @param seed
      */
     public RandomSeedingStrategy(int seed)
     {

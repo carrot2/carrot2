@@ -18,40 +18,22 @@ import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 
 public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
 
-  /**
-   * The elements of this matrix. elements are stored in row major, i.e. index==row*columns + column
-   * columnOf(index)==index%columns rowOf(index)==index/columns i.e. {row0 column0..m}, {row1 column0..m}, ..., {rown
-   * column0..m}
-   */
+  /* removed */
   final double[] elements;
 
-  /**
-   * Constructs a matrix with a copy of the given values. <tt>values</tt> is required to have the form
-   * <tt>values[row][column]</tt> and have exactly the same number of columns in every row. <p> The values are copied.
-   * So subsequent changes in <tt>values</tt> are not reflected in the matrix, and vice-versa.
-   *
-   * @param values The values to be filled into the new matrix.
-   * @throws IllegalArgumentException if <tt>for any 1 &lt;= row &lt; values.length: values[row].length !=
-   *                                  values[row-1].length</tt>.
-   */
+  /* removed */
   public DenseDoubleMatrix2D(double[][] values) {
     this(values.length, values.length == 0 ? 0 : values[0].length);
     assign(values);
   }
 
-  /**
-   * Constructs a matrix with a given number of rows and columns. All entries are initially <tt>0</tt>.
-   *
-   * @param rows    the number of rows the matrix shall have.
-   * @param columns the number of columns the matrix shall have.
-   * @throws IllegalArgumentException if <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>.
-   */
+  /* removed */
   public DenseDoubleMatrix2D(int rows, int columns) {
     setUp(rows, columns);
     this.elements = new double[rows * columns];
   }
 
-  /** Constructs an identity matrix (having ones on the diagonal and zeros elsewhere). */
+  /* removed */
   public static DoubleMatrix2D identity(int rowsAndColumns) {
     DoubleMatrix2D matrix = new DenseDoubleMatrix2D(rowsAndColumns, rowsAndColumns);
     for (int i = rowsAndColumns; --i >= 0;) {
@@ -60,15 +42,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return matrix;
   }
 
-  /**
-   * Sets all cells to the state specified by <tt>values</tt>. <tt>values</tt> is required to have the form
-   * <tt>values[row][column]</tt> and have exactly the same number of rows and columns as the receiver. <p> The values
-   * are copied. So subsequent changes in <tt>values</tt> are not reflected in the matrix, and vice-versa.
-   *
-   * @param values the values to be filled into the cells.
-   * @throws IllegalArgumentException if <tt>values.length != rows() || for any 0 &lt;= row &lt; rows():
-   *                                  values[row].length != columns()</tt>.
-   */
+  /* removed */
   @Override
   public void assign(double[][] values) {
     if (this.isNoView) {
@@ -90,12 +64,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  /**
-   * Sets all cells to the state specified by <tt>value</tt>.
-   *
-   * @param value the value to be filled into the cells.
-   * @return <tt>this</tt> (for convenience only).
-   */
+  /* removed */
   @Override
   public DoubleMatrix2D assign(double value) {
     double[] elems = this.elements;
@@ -112,25 +81,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  /**
-   * Assigns the result of a function to each cell; <tt>x[row,col] = function(x[row,col])</tt>. <p> <b>Example:</b>
-   * <pre>
-   * matrix = 2 x 2 matrix
-   * 0.5 1.5
-   * 2.5 3.5
-   *
-   * // change each cell to its sine
-   * matrix.assign(Functions.sin);
-   * -->
-   * 2 x 2 matrix
-   * 0.479426  0.997495
-   * 0.598472 -0.350783
-   * </pre>
-   * For further examples, see the <a href="package-summary.html#FunctionObjects">package doc</a>.
-   *
-   * @param function a function object taking as argument the current cell's value.
-   * @see org.carrot2.mahout.math.function.Functions
-   */
+  /* removed */
   @Override
   public void assign(DoubleFunction function) {
     double[] elems = this.elements;
@@ -169,16 +120,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  /**
-   * Replaces all cell values of the receiver with the values of another matrix. Both matrices must have the same number
-   * of rows and columns. If both matrices share the same cells (as is the case if they are views derived from the same
-   * matrix) and intersect in an ambiguous way, then replaces <i>as if</i> using an intermediate auxiliary deep copy of
-   * <tt>other</tt>.
-   *
-   * @param source the source matrix to copy from (may be identical to the receiver).
-   * @return <tt>this</tt> (for convenience only).
-   * @throws IllegalArgumentException if <tt>columns() != source.columns() || rows() != source.rows()</tt>
-   */
+  /* removed */
   @Override
   public DoubleMatrix2D assign(DoubleMatrix2D source) {
     // overriden for performance only
@@ -228,34 +170,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  /**
-   * Assigns the result of a function to each cell; <tt>x[row,col] = function(x[row,col],y[row,col])</tt>. <p>
-   * <b>Example:</b>
-   * <pre>
-   * // assign x[row,col] = x[row,col]<sup>y[row,col]</sup>
-   * m1 = 2 x 2 matrix
-   * 0 1
-   * 2 3
-   *
-   * m2 = 2 x 2 matrix
-   * 0 2
-   * 4 6
-   *
-   * m1.assign(m2, org.carrot2.mahout.math.function.Functions.pow);
-   * -->
-   * m1 == 2 x 2 matrix
-   * 1   1
-   * 16 729
-   * </pre>
-   * For further examples, see the <a href="package-summary.html#FunctionObjects">package doc</a>.
-   *
-   * @param y        the secondary matrix to operate on.
-   * @param function a function object taking as first argument the current cell's value of <tt>this</tt>, and as second
-   *                 argument the current cell's value of <tt>y</tt>,
-   * @return <tt>this</tt> (for convenience only).
-   * @throws IllegalArgumentException if <tt>columns() != other.columns() || rows() != other.rows()</tt>
-   * @see org.carrot2.mahout.math.function.Functions
-   */
+  /* removed */
   @Override
   public DoubleMatrix2D assign(DoubleMatrix2D y, DoubleDoubleFunction function) {
     // overriden for performance only
@@ -348,17 +263,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  /**
-   * Returns the matrix cell value at coordinate <tt>[row,column]</tt>.
-   *
-   * <p>Provided with invalid parameters this method may return invalid objects without throwing any exception. <b>You
-   * should only use this method when you are absolutely sure that the coordinate is within bounds.</b> Precondition
-   * (unchecked): <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-   *
-   * @param row    the index of the row-coordinate.
-   * @param column the index of the column-coordinate.
-   * @return the value at the specified coordinate.
-   */
+  /* removed */
   @Override
   public double getQuick(int row, int column) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -368,11 +273,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return elements[rowZero + row * rowStride + columnZero + column * columnStride];
   }
 
-  /**
-   * Returns <tt>true</tt> if both matrices share common cells. More formally, returns <tt>true</tt> if <tt>other !=
-   * null</tt> and at least one of the following conditions is met <ul> <li>the receiver is a view of the other matrix
-   * <li>the other matrix is a view of the receiver <li><tt>this == other</tt> </ul>
-   */
+  /* removed */
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
     if (other instanceof SelectedDenseDoubleMatrix2D) {
@@ -386,12 +287,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return false;
   }
 
-  /**
-   * Returns the position of the given coordinate within the (virtual or non-virtual) internal 1-dimensional array.
-   *
-   * @param row    the index of the row-coordinate.
-   * @param column the index of the column-coordinate.
-   */
+  /* removed */
   @Override
   protected int index(int row, int column) {
     // return super.index(row,column);
@@ -399,63 +295,25 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return rowZero + row * rowStride + columnZero + column * columnStride;
   }
 
-  /**
-   * Construct and returns a new empty matrix <i>of the same dynamic type</i> as the receiver, having the specified
-   * number of rows and columns. For example, if the receiver is an instance of type <tt>DenseDoubleMatrix2D</tt> the
-   * new matrix must also be of type <tt>DenseDoubleMatrix2D</tt>, if the receiver is an instance of type
-   * <tt>SparseDoubleMatrix2D</tt> the new matrix must also be of type <tt>SparseDoubleMatrix2D</tt>, etc. In general,
-   * the new matrix should have internal parametrization as similar as possible.
-   *
-   * @param rows    the number of rows the matrix shall have.
-   * @param columns the number of columns the matrix shall have.
-   * @return a new empty matrix of the same dynamic type.
-   */
+  /* removed */
   @Override
   public DoubleMatrix2D like(int rows, int columns) {
     return new DenseDoubleMatrix2D(rows, columns);
   }
 
-  /**
-   * Construct and returns a new 1-d matrix <i>of the corresponding dynamic type</i>, entirelly independent of the
-   * receiver. For example, if the receiver is an instance of type <tt>DenseDoubleMatrix2D</tt> the new matrix must be
-   * of type <tt>DenseDoubleMatrix1D</tt>, if the receiver is an instance of type <tt>SparseDoubleMatrix2D</tt> the new
-   * matrix must be of type <tt>SparseDoubleMatrix1D</tt>, etc.
-   *
-   * @param size the number of cells the matrix shall have.
-   * @return a new matrix of the corresponding dynamic type.
-   */
+  /* removed */
   @Override
   public DoubleMatrix1D like1D(int size) {
     return new DenseDoubleMatrix1D(size);
   }
 
-  /**
-   * Construct and returns a new 1-d matrix <i>of the corresponding dynamic type</i>, sharing the same cells. For
-   * example, if the receiver is an instance of type <tt>DenseDoubleMatrix2D</tt> the new matrix must be of type
-   * <tt>DenseDoubleMatrix1D</tt>, if the receiver is an instance of type <tt>SparseDoubleMatrix2D</tt> the new matrix
-   * must be of type <tt>SparseDoubleMatrix1D</tt>, etc.
-   *
-   * @param size   the number of cells the matrix shall have.
-   * @param zero   the index of the first element.
-   * @param stride the number of indexes between any two elements, i.e. <tt>index(i+1)-index(i)</tt>.
-   * @return a new matrix of the corresponding dynamic type.
-   */
+  /* removed */
   @Override
   protected DoubleMatrix1D like1D(int size, int zero, int stride) {
     return new DenseDoubleMatrix1D(size, this.elements, zero, stride);
   }
 
-  /**
-   * Sets the matrix cell at coordinate <tt>[row,column]</tt> to the specified value.
-   *
-   * <p>Provided with invalid parameters this method may access illegal indexes without throwing any exception. <b>You
-   * should only use this method when you are absolutely sure that the coordinate is within bounds.</b> Precondition
-   * (unchecked): <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-   *
-   * @param row    the index of the row-coordinate.
-   * @param column the index of the column-coordinate.
-   * @param value  the value to be filled into the specified cell.
-   */
+  /* removed */
   @Override
   public void setQuick(int row, int column, double value) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -465,13 +323,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     elements[rowZero + row * rowStride + columnZero + column * columnStride] = value;
   }
 
-  /**
-   * Construct and returns a new selection view.
-   *
-   * @param rowOffsets    the offsets of the visible elements.
-   * @param columnOffsets the offsets of the visible elements.
-   * @return a new view.
-   */
+  /* removed */
   @Override
   protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
     return new SelectedDenseDoubleMatrix2D(this.elements, rowOffsets, columnOffsets, 0);
@@ -670,11 +522,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return C;
   }
 
-  /**
-   * Returns the sum of all cells; <tt>Sum( x[i,j] )</tt>.
-   *
-   * @return the sum.
-   */
+  /* removed */
   @Override
   public double zSum() {
     double[] elems = this.elements;

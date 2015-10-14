@@ -1,21 +1,4 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements. See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership. The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+/* removed */
 /*
 Copyright 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
@@ -26,9 +9,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package org.carrot2.mahout.collections;
 
-/**
- * Arithmetic functions.
- */
+/* removed */
 public class Arithmetic extends Constants {
   // for method stirlingCorrection(...)
   private static final double[] stirlingCorrection = {
@@ -244,18 +225,11 @@ public class Arithmetic extends Constants {
       7.257415615308004E306
   };
 
-  /** Makes this class non instantiable, but still let's others inherit from it. */
+  /* removed */
   protected Arithmetic() {
   }
 
-  /**
-   * Efficiently returns the binomial coefficient, often also referred to as "n over k" or "n choose k". The binomial
-   * coefficient is defined as <tt>(n * n-1 * ... * n-k+1 ) / ( 1 * 2 * ... * k )</tt>. <ul> <li>k<0<tt>: <tt>0</tt>.
-   * <li>k==0<tt>: <tt>1</tt>. <li>k==1<tt>: <tt>n</tt>. <li>else: <tt>(n * n-1 * ... * n-k+1 ) / ( 1 * 2 * ... * k
-   * )</tt>. </ul>
-   *
-   * @return the binomial coefficient.
-   */
+  /* removed */
   public static double binomial(double n, long k) {
     if (k < 0) {
       return 0;
@@ -277,13 +251,7 @@ public class Arithmetic extends Constants {
     return binomial;
   }
 
-  /**
-   * Efficiently returns the binomial coefficient, often also referred to as "n over k" or "n choose k". The binomial
-   * coefficient is defined as <ul> <li>k<0<tt>: <tt>0</tt>. <li>k==0 || k==n<tt>: <tt>1</tt>. <li>k==1 || k==n-1<tt>:
-   * <tt>n</tt>. <li>else: <tt>(n * n-1 * ... * n-k+1 ) / ( 1 * 2 * ... * k )</tt>. </ul>
-   *
-   * @return the binomial coefficient.
-   */
+  /* removed */
   public static double binomial(long n, long k) {
     if (k < 0) {
       return 0;
@@ -324,35 +292,12 @@ public class Arithmetic extends Constants {
     return binomial;
   }
 
-  /**
-   * Returns the smallest <code>long &gt;= value</code>. <dt>Examples: <code>1.0 -> 1, 1.2 -> 2, 1.9 -> 2</code>. This
-   * method is safer than using (long) Math.ceil(value), because of possible rounding error.
-   */
+  /* removed */
   public static long ceil(double value) {
     return Math.round(Math.ceil(value));
   }
 
-  /**
-   * Evaluates the series of Chebyshev polynomials Ti at argument x/2. The series is given by
-   * <pre>
-   *        N-1
-   *         - '
-   *  y  =   >   coef[i] T (x/2)
-   *         -            i
-   *        i=0
-   * </pre>
-   * Coefficients are stored in reverse order, i.e. the zero order term is last in the array.  Note N is the number of
-   * coefficients, not the order. <p> If coefficients are for the interval a to b, x must have been transformed to x ->
-   * 2(2x - b - a)/(b-a) before entering the routine.  This maps x from (a, b) to (-1, 1), over which the Chebyshev
-   * polynomials are defined. <p> If the coefficients are for the inverted interval, in which (a, b) is mapped to (1/b,
-   * 1/a), the transformation required is x -> 2(2ab/x - b - a)/(b-a).  If b is infinity, this becomes x -> 4a/x - 1.
-   * <p> SPEED: <p> Taking advantage of the recurrence properties of the Chebyshev polynomials, the routine requires one
-   * more addition per loop than evaluating a nested polynomial of the same degree.
-   *
-   * @param x    argument to the polynomial.
-   * @param coef the coefficients of the polynomial.
-   * @param N    the number of coefficients.
-   */
+  /* removed */
   public static double chbevl(double x, double[] coef, int N) throws ArithmeticException {
 
     int p = 0;
@@ -371,11 +316,7 @@ public class Arithmetic extends Constants {
     return (0.5 * (b0 - b2));
   }
 
-  /**
-   * Instantly returns the factorial <tt>k!</tt>.
-   *
-   * @param k must hold <tt>k &gt;= 0</tt>.
-   */
+  /* removed */
   private static double factorial(int k) {
     if (k < 0) {
       throw new IllegalArgumentException();
@@ -394,38 +335,29 @@ public class Arithmetic extends Constants {
     }
   }
 
-  /**
-   * Returns the largest <code>long &lt;= value</code>. <dt>Examples: <code> 1.0 -> 1, 1.2 -> 1, 1.9 -> 1 <dt> 2.0 -> 2,
-   * 2.2 -> 2, 2.9 -> 2 </code><dt> This method is safer than using (long) Math.floor(value), because of possible
-   * rounding error.
-   */
+  /* removed */
   public static long floor(double value) {
     return Math.round(Math.floor(value));
   }
 
-  /** Returns <tt>log<sub>base</sub>value</tt>. */
+  /* removed */
   public static double log(double base, double value) {
     return Math.log(value) / Math.log(base);
   }
 
-  /** Returns <tt>log<sub>10</sub>value</tt>. */
+  /* removed */
   public static double log10(double value) {
     // 1.0 / Math.log(10) == 0.43429448190325176
     return Math.log(value) * 0.43429448190325176;
   }
 
-  /** Returns <tt>log<sub>2</sub>value</tt>. */
+  /* removed */
   public static double log2(double value) {
     // 1.0 / Math.log(2) == 1.4426950408889634
     return Math.log(value) * 1.4426950408889634;
   }
 
-  /**
-   * Returns <tt>log(k!)</tt>. Tries to avoid overflows. For <tt>k<30</tt> simply looks up a table in O(1). For
-   * <tt>k>=30</tt> uses stirlings approximation.
-   *
-   * @param k must hold <tt>k &gt;= 0</tt>.
-   */
+  /* removed */
   public static double logFactorial(int k) {
     if (k >= 30) {
 
@@ -442,11 +374,7 @@ public class Arithmetic extends Constants {
     }
   }
 
-  /**
-   * Instantly returns the factorial <tt>k!</tt>.
-   *
-   * @param k must hold <tt>k &gt;= 0 && k &lt; 21</tt>.
-   */
+  /* removed */
   public static long longFactorial(int k) throws IllegalArgumentException {
     if (k < 0) {
       throw new IllegalArgumentException("Negative k");
@@ -458,12 +386,7 @@ public class Arithmetic extends Constants {
     throw new IllegalArgumentException("Overflow");
   }
 
-  /**
-   * Returns the StirlingCorrection. <p> Correction term of the Stirling approximation for <tt>log(k!)</tt> (series in
-   * 1/k, or table values for small k) with int parameter k. <p> <tt> log k! = (k + 1/2)log(k + 1) - (k + 1) +
-   * (1/2)log(2Pi) + stirlingCorrection(k + 1) <p> log k! = (k + 1/2)log(k)     -  k      + (1/2)log(2Pi) +
-   * stirlingCorrection(k) </tt>
-   */
+  /* removed */
   public static double stirlingCorrection(int k) {
 
     if (k > 30) {

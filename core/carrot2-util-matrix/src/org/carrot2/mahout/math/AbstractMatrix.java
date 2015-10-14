@@ -1,19 +1,4 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* removed */
 
 package org.carrot2.mahout.math;
 
@@ -28,7 +13,7 @@ import org.carrot2.mahout.math.function.VectorFunction;
 import org.carrot2.shaded.guava.common.collect.AbstractIterator;
 import org.carrot2.shaded.guava.common.collect.Maps;
 
-/** A few universal implementations of convenience functions */
+/* removed */
 public abstract class AbstractMatrix implements Matrix {
 
   protected Map<String, Integer> columnLabelBindings;
@@ -71,10 +56,7 @@ public abstract class AbstractMatrix implements Matrix {
     };
   }
 
-  /**
-   * Abstracted out for the iterator
-   * @return numRows() for row-based iterator, numColumns() for column-based.
-   */
+  /* removed */
   @Override
   public int numSlices() {
     return numRows();
@@ -263,12 +245,7 @@ public abstract class AbstractMatrix implements Matrix {
     return this;
   }
 
-  /**
-   * Collects the results of a function applied to each row of a matrix.
-   *
-   * @param f The function to be applied to each row.
-   * @return The vector of results.
-   */
+  /* removed */
   @Override
   public Vector aggregateRows(VectorFunction f) {
     Vector r = new DenseVector(numRows());
@@ -279,42 +256,26 @@ public abstract class AbstractMatrix implements Matrix {
     return r;
   }
 
-  /**
-   * Returns a view of a row.  Changes to the view will affect the original.
-   * @param row  Which row to return.
-   * @return A vector that references the desired row.
-   */
+  /* removed */
   @Override
   public Vector viewRow(int row) {
     return new MatrixVectorView(this, row, 0, 0, 1);
   }
 
 
-  /**
-   * Returns a view of a row.  Changes to the view will affect the original.
-   * @param column Which column to return.
-   * @return A vector that references the desired column.
-   */
+  /* removed */
   @Override
   public Vector viewColumn(int column) {
     return new MatrixVectorView(this, 0, column, 1, 0);
   }
 
-  /**
-   * Provides a view of the diagonal of a matrix.
-   */
+  /* removed */
   @Override
   public Vector viewDiagonal() {
     return new MatrixVectorView(this, 0, 0, 1, 1);
   }
 
-  /**
-   * Collects the results of a function applied to each element of a matrix and then aggregated.
-   *
-   * @param combiner A function that combines the results of the mapper.
-   * @param mapper   A function to apply to each element.
-   * @return The result.
-   */
+  /* removed */
   @Override
   public double aggregate(final DoubleDoubleFunction combiner, final DoubleFunction mapper) {
     return aggregateRows(new VectorFunction() {
@@ -325,12 +286,7 @@ public abstract class AbstractMatrix implements Matrix {
     }).aggregate(combiner, Functions.IDENTITY);
   }
 
-  /**
-   * Collects the results of a function applied to each column of a matrix.
-   *
-   * @param f The function to be applied to each column.
-   * @return The vector of results.
-   */
+  /* removed */
   @Override
   public Vector aggregateColumns(VectorFunction f) {
     Vector r = new DenseVector(numCols());
@@ -647,11 +603,7 @@ public abstract class AbstractMatrix implements Matrix {
       };
     }
 
-    /**
-     * Currently delegates to {@link #iterator()}.
-     * TODO: This could be optimized to at least skip empty rows if there are many of them.
-     * @return an iterator (currently dense).
-     */
+    /* removed */
     @Override
     public Iterator<Element> iterateNonZero() {
       return iterator();
@@ -710,11 +662,7 @@ public abstract class AbstractMatrix implements Matrix {
       return new DenseVector(cardinality);
     }
 
-    /**
-     * TODO: currently I don't know of an efficient way to getVector this value correctly.
-     *
-     * @return the number of nonzero entries
-     */
+    /* removed */
     @Override
     public int getNumNondefaultElements() {
       return size();

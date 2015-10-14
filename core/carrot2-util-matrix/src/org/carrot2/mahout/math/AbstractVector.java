@@ -24,7 +24,7 @@ import org.carrot2.mahout.math.function.Functions;
 
 import java.util.Iterator;
 
-/** Implementations of generic capabilities like sum of elements and dot products */
+/* removed */
 public abstract class AbstractVector implements Vector {
   
   private static final double LOG2 = Math.log(2.0);
@@ -584,11 +584,7 @@ public abstract class AbstractVector implements Vector {
     return result;
   }
 
-  /**
-   * Determines whether this {@link Vector} represents the same logical vector as another
-   * object. Two {@link Vector}s are equal (regardless of implementation) if the value at
-   * each index is the same, and the cardinalities are the same.
-   */
+  /* removed */
   @Override
   public boolean equals(Object o) {
     if (this == o) {

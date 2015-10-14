@@ -8,32 +8,19 @@ It is provided "as is" without expressed or implied warranty.
 */
 package org.carrot2.mahout.math.map;
 
-/**
- * Provides various hash functions.
- *
- */
+/* removed */
 public final class HashFunctions {
 
-  /**
-   * Utility class pattern: all static members, no inheritance.
-   */
+  /* removed */
   private HashFunctions() {
   }
 
-  /**
-   * Returns a hashcode for the specified value.
-   *
-   * @return a hash code value for the specified value.
-   */
+  /* removed */
   public static int hash(char value) {
     return (int) value;
   }
 
-  /**
-   * Returns a hashcode for the specified value.
-   *
-   * @return a hash code value for the specified value.
-   */
+  /* removed */
   public static int hash(double value) {
     long bits = Double.doubleToLongBits(value);
     return (int) (bits ^ (bits >>> 32));
@@ -42,21 +29,13 @@ public final class HashFunctions {
     // this avoids excessive hashCollisions in the case values are of the form (1.0, 2.0, 3.0, ...)
   }
 
-  /**
-   * Returns a hashcode for the specified value.
-   *
-   * @return a hash code value for the specified value.
-   */
+  /* removed */
   public static int hash(float value) {
     return Float.floatToIntBits(value * 663608941.737f);
     // this avoids excessive hashCollisions in the case values are of the form (1.0, 2.0, 3.0, ...)
   }
 
-  /**
-   * Returns a hashcode for the specified value.
-   *
-   * @return a hash code value for the specified value.
-   */
+  /* removed */
   public static int hash(int value) {
     return value;
 
@@ -72,11 +51,7 @@ public final class HashFunctions {
     */
   }
 
-  /**
-   * Returns a hashcode for the specified value.
-   *
-   * @return a hash code value for the specified value.
-   */
+  /* removed */
   public static int hash(long value) {
     return (int) (value ^ (value >> 32));
     /*
@@ -89,29 +64,17 @@ public final class HashFunctions {
     */
   }
 
-  /**
-   * Returns a hashcode for the specified object.
-   *
-   * @return a hash code value for the specified object.
-   */
+  /* removed */
   public static int hash(Object object) {
     return object == null ? 0 : object.hashCode();
   }
 
-  /**
-   * Returns a hashcode for the specified value.
-   *
-   * @return a hash code value for the specified value.
-   */
+  /* removed */
   public static int hash(short value) {
     return (int) value;
   }
 
-  /**
-   * Returns a hashcode for the specified value.
-   *
-   * @return a hash code value for the specified value.
-   */
+  /* removed */
   public static int hash(boolean value) {
     return value ? 1231 : 1237;
   }

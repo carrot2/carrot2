@@ -8,27 +8,13 @@ It is provided "as is" without expressed or implied warranty.
 */
 package org.carrot2.mahout.math;
 
-/**
- * Array manipulations; complements <tt>java.util.Arrays</tt>.
- *
- * @see java.util.Arrays
- * @see org.carrot2.mahout.math.Sorting
- *
- */
+/* removed */
 public final class Arrays {
 
   private Arrays() {
   }
 
-  /**
-   * Ensures that a given array can hold up to <tt>minCapacity</tt> elements.
-   *
-   * Returns the identical array if it can hold at least the number of elements specified. Otherwise, returns a new
-   * array with increased capacity containing the same elements, ensuring that it can hold at least the number of
-   * elements specified by the minimum capacity argument.
-   *
-   * @param minCapacity the desired minimum capacity.
-   */
+  /* removed */
   public static byte[] ensureCapacity(byte[] array, int minCapacity) {
     int oldCapacity = array.length;
     byte[] newArray;
@@ -46,15 +32,7 @@ public final class Arrays {
     return newArray;
   }
 
-  /**
-   * Ensures that a given array can hold up to <tt>minCapacity</tt> elements.
-   *
-   * Returns the identical array if it can hold at least the number of elements specified. Otherwise, returns a new
-   * array with increased capacity containing the same elements, ensuring that it can hold at least the number of
-   * elements specified by the minimum capacity argument.
-   *
-   * @param minCapacity the desired minimum capacity.
-   */
+  /* removed */
   public static char[] ensureCapacity(char[] array, int minCapacity) {
     int oldCapacity = array.length;
     char[] newArray;
@@ -72,15 +50,7 @@ public final class Arrays {
     return newArray;
   }
 
-  /**
-   * Ensures that a given array can hold up to <tt>minCapacity</tt> elements.
-   *
-   * Returns the identical array if it can hold at least the number of elements specified. Otherwise, returns a new
-   * array with increased capacity containing the same elements, ensuring that it can hold at least the number of
-   * elements specified by the minimum capacity argument.
-   *
-   * @param minCapacity the desired minimum capacity.
-   */
+  /* removed */
   public static double[] ensureCapacity(double[] array, int minCapacity) {
     int oldCapacity = array.length;
     double[] newArray;
@@ -99,15 +69,7 @@ public final class Arrays {
     return newArray;
   }
 
-  /**
-   * Ensures that a given array can hold up to <tt>minCapacity</tt> elements.
-   *
-   * Returns the identical array if it can hold at least the number of elements specified. Otherwise, returns a new
-   * array with increased capacity containing the same elements, ensuring that it can hold at least the number of
-   * elements specified by the minimum capacity argument.
-   *
-   * @param minCapacity the desired minimum capacity.
-   */
+  /* removed */
   public static float[] ensureCapacity(float[] array, int minCapacity) {
     int oldCapacity = array.length;
     float[] newArray;
@@ -125,15 +87,7 @@ public final class Arrays {
     return newArray;
   }
 
-  /**
-   * Ensures that a given array can hold up to <tt>minCapacity</tt> elements.
-   *
-   * Returns the identical array if it can hold at least the number of elements specified. Otherwise, returns a new
-   * array with increased capacity containing the same elements, ensuring that it can hold at least the number of
-   * elements specified by the minimum capacity argument.
-   *
-   * @param minCapacity the desired minimum capacity.
-   */
+  /* removed */
   public static int[] ensureCapacity(int[] array, int minCapacity) {
     int oldCapacity = array.length;
     int[] newArray;
@@ -151,15 +105,7 @@ public final class Arrays {
     return newArray;
   }
 
-  /**
-   * Ensures that a given array can hold up to <tt>minCapacity</tt> elements.
-   *
-   * Returns the identical array if it can hold at least the number of elements specified. Otherwise, returns a new
-   * array with increased capacity containing the same elements, ensuring that it can hold at least the number of
-   * elements specified by the minimum capacity argument.
-   *
-   * @param minCapacity the desired minimum capacity.
-   */
+  /* removed */
   public static long[] ensureCapacity(long[] array, int minCapacity) {
     int oldCapacity = array.length;
     long[] newArray;
@@ -177,15 +123,7 @@ public final class Arrays {
     return newArray;
   }
 
-  /**
-   * Ensures that a given array can hold up to <tt>minCapacity</tt> elements.
-   *
-   * Returns the identical array if it can hold at least the number of elements specified. Otherwise, returns a new
-   * array with increased capacity containing the same elements, ensuring that it can hold at least the number of
-   * elements specified by the minimum capacity argument.
-   *
-   * @param minCapacity the desired minimum capacity.
-   */
+  /* removed */
   public static Object[] ensureCapacity(Object[] array, int minCapacity) {
     int oldCapacity = array.length;
     Object[] newArray;
@@ -203,15 +141,7 @@ public final class Arrays {
     return newArray;
   }
 
-  /**
-   * Ensures that a given array can hold up to <tt>minCapacity</tt> elements.
-   *
-   * Returns the identical array if it can hold at least the number of elements specified. Otherwise, returns a new
-   * array with increased capacity containing the same elements, ensuring that it can hold at least the number of
-   * elements specified by the minimum capacity argument.
-   *
-   * @param minCapacity the desired minimum capacity.
-   */
+  /* removed */
   public static short[] ensureCapacity(short[] array, int minCapacity) {
     int oldCapacity = array.length;
     short[] newArray;
@@ -229,15 +159,7 @@ public final class Arrays {
     return newArray;
   }
 
-  /**
-   * Ensures that a given array can hold up to <tt>minCapacity</tt> elements.
-   *
-   * Returns the identical array if it can hold at least the number of elements specified. Otherwise, returns a new
-   * array with increased capacity containing the same elements, ensuring that it can hold at least the number of
-   * elements specified by the minimum capacity argument.
-   *
-   * @param minCapacity the desired minimum capacity.
-   */
+  /* removed */
   public static boolean[] ensureCapacity(boolean[] array, int minCapacity) {
     int oldCapacity = array.length;
     boolean[] newArray;
@@ -255,13 +177,7 @@ public final class Arrays {
     return newArray;
   }
 
-  /**
-   * Returns a string representation of the specified array.  The string representation consists of a list of the
-   * arrays's elements, enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
-   * <tt>", "</tt> (comma and space).
-   *
-   * @return a string representation of the specified array.
-   */
+  /* removed */
   public static String toString(byte[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -276,13 +192,7 @@ public final class Arrays {
     return buf.toString();
   }
 
-  /**
-   * Returns a string representation of the specified array.  The string representation consists of a list of the
-   * arrays's elements, enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
-   * <tt>", "</tt> (comma and space).
-   *
-   * @return a string representation of the specified array.
-   */
+  /* removed */
   public static String toString(char[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -297,13 +207,7 @@ public final class Arrays {
     return buf.toString();
   }
 
-  /**
-   * Returns a string representation of the specified array.  The string representation consists of a list of the
-   * arrays's elements, enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
-   * <tt>", "</tt> (comma and space).
-   *
-   * @return a string representation of the specified array.
-   */
+  /* removed */
   public static String toString(double[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -318,13 +222,7 @@ public final class Arrays {
     return buf.toString();
   }
 
-  /**
-   * Returns a string representation of the specified array.  The string representation consists of a list of the
-   * arrays's elements, enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
-   * <tt>", "</tt> (comma and space).
-   *
-   * @return a string representation of the specified array.
-   */
+  /* removed */
   public static String toString(float[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -339,13 +237,7 @@ public final class Arrays {
     return buf.toString();
   }
 
-  /**
-   * Returns a string representation of the specified array.  The string representation consists of a list of the
-   * arrays's elements, enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
-   * <tt>", "</tt> (comma and space).
-   *
-   * @return a string representation of the specified array.
-   */
+  /* removed */
   public static String toString(int[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -360,13 +252,7 @@ public final class Arrays {
     return buf.toString();
   }
 
-  /**
-   * Returns a string representation of the specified array.  The string representation consists of a list of the
-   * arrays's elements, enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
-   * <tt>", "</tt> (comma and space).
-   *
-   * @return a string representation of the specified array.
-   */
+  /* removed */
   public static String toString(long[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -381,13 +267,7 @@ public final class Arrays {
     return buf.toString();
   }
 
-  /**
-   * Returns a string representation of the specified array.  The string representation consists of a list of the
-   * arrays's elements, enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
-   * <tt>", "</tt> (comma and space).
-   *
-   * @return a string representation of the specified array.
-   */
+  /* removed */
   public static String toString(Object[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -402,13 +282,7 @@ public final class Arrays {
     return buf.toString();
   }
 
-  /**
-   * Returns a string representation of the specified array.  The string representation consists of a list of the
-   * arrays's elements, enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
-   * <tt>", "</tt> (comma and space).
-   *
-   * @return a string representation of the specified array.
-   */
+  /* removed */
   public static String toString(short[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -423,13 +297,7 @@ public final class Arrays {
     return buf.toString();
   }
 
-  /**
-   * Returns a string representation of the specified array.  The string representation consists of a list of the
-   * arrays's elements, enclosed in square brackets (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
-   * <tt>", "</tt> (comma and space).
-   *
-   * @return a string representation of the specified array.
-   */
+  /* removed */
   public static String toString(boolean[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -444,14 +312,7 @@ public final class Arrays {
     return buf.toString();
   }
 
-  /**
-   * Ensures that the specified array cannot hold more than <tt>maxCapacity</tt> elements. An application can use this
-   * operation to minimize array storage. <p> Returns the identical array if <tt>array.length &lt;= maxCapacity</tt>.
-   * Otherwise, returns a new array with a length of <tt>maxCapacity</tt> containing the first <tt>maxCapacity</tt>
-   * elements of <tt>array</tt>.
-   *
-   * @param maxCapacity the desired maximum capacity.
-   */
+  /* removed */
   public static byte[] trimToCapacity(byte[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       byte[] oldArray = array;
@@ -461,14 +322,7 @@ public final class Arrays {
     return array;
   }
 
-  /**
-   * Ensures that the specified array cannot hold more than <tt>maxCapacity</tt> elements. An application can use this
-   * operation to minimize array storage. <p> Returns the identical array if <tt>array.length &lt;= maxCapacity</tt>.
-   * Otherwise, returns a new array with a length of <tt>maxCapacity</tt> containing the first <tt>maxCapacity</tt>
-   * elements of <tt>array</tt>.
-   *
-   * @param maxCapacity the desired maximum capacity.
-   */
+  /* removed */
   public static char[] trimToCapacity(char[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       char[] oldArray = array;
@@ -478,14 +332,7 @@ public final class Arrays {
     return array;
   }
 
-  /**
-   * Ensures that the specified array cannot hold more than <tt>maxCapacity</tt> elements. An application can use this
-   * operation to minimize array storage. <p> Returns the identical array if <tt>array.length &lt;= maxCapacity</tt>.
-   * Otherwise, returns a new array with a length of <tt>maxCapacity</tt> containing the first <tt>maxCapacity</tt>
-   * elements of <tt>array</tt>.
-   *
-   * @param maxCapacity the desired maximum capacity.
-   */
+  /* removed */
   public static double[] trimToCapacity(double[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       double[] oldArray = array;
@@ -495,14 +342,7 @@ public final class Arrays {
     return array;
   }
 
-  /**
-   * Ensures that the specified array cannot hold more than <tt>maxCapacity</tt> elements. An application can use this
-   * operation to minimize array storage. <p> Returns the identical array if <tt>array.length &lt;= maxCapacity</tt>.
-   * Otherwise, returns a new array with a length of <tt>maxCapacity</tt> containing the first <tt>maxCapacity</tt>
-   * elements of <tt>array</tt>.
-   *
-   * @param maxCapacity the desired maximum capacity.
-   */
+  /* removed */
   public static float[] trimToCapacity(float[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       float[] oldArray = array;
@@ -512,14 +352,7 @@ public final class Arrays {
     return array;
   }
 
-  /**
-   * Ensures that the specified array cannot hold more than <tt>maxCapacity</tt> elements. An application can use this
-   * operation to minimize array storage. <p> Returns the identical array if <tt>array.length &lt;= maxCapacity</tt>.
-   * Otherwise, returns a new array with a length of <tt>maxCapacity</tt> containing the first <tt>maxCapacity</tt>
-   * elements of <tt>array</tt>.
-   *
-   * @param maxCapacity the desired maximum capacity.
-   */
+  /* removed */
   public static int[] trimToCapacity(int[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       int[] oldArray = array;
@@ -529,14 +362,7 @@ public final class Arrays {
     return array;
   }
 
-  /**
-   * Ensures that the specified array cannot hold more than <tt>maxCapacity</tt> elements. An application can use this
-   * operation to minimize array storage. <p> Returns the identical array if <tt>array.length &lt;= maxCapacity</tt>.
-   * Otherwise, returns a new array with a length of <tt>maxCapacity</tt> containing the first <tt>maxCapacity</tt>
-   * elements of <tt>array</tt>.
-   *
-   * @param maxCapacity the desired maximum capacity.
-   */
+  /* removed */
   public static long[] trimToCapacity(long[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       long[] oldArray = array;
@@ -546,14 +372,7 @@ public final class Arrays {
     return array;
   }
 
-  /**
-   * Ensures that the specified array cannot hold more than <tt>maxCapacity</tt> elements. An application can use this
-   * operation to minimize array storage. <p> Returns the identical array if <tt>array.length &lt;= maxCapacity</tt>.
-   * Otherwise, returns a new array with a length of <tt>maxCapacity</tt> containing the first <tt>maxCapacity</tt>
-   * elements of <tt>array</tt>.
-   *
-   * @param maxCapacity the desired maximum capacity.
-   */
+  /* removed */
   public static Object[] trimToCapacity(Object[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       Object[] oldArray = array;
@@ -563,14 +382,7 @@ public final class Arrays {
     return array;
   }
 
-  /**
-   * Ensures that the specified array cannot hold more than <tt>maxCapacity</tt> elements. An application can use this
-   * operation to minimize array storage. <p> Returns the identical array if <tt>array.length &lt;= maxCapacity</tt>.
-   * Otherwise, returns a new array with a length of <tt>maxCapacity</tt> containing the first <tt>maxCapacity</tt>
-   * elements of <tt>array</tt>.
-   *
-   * @param maxCapacity the desired maximum capacity.
-   */
+  /* removed */
   public static short[] trimToCapacity(short[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       short[] oldArray = array;
@@ -580,14 +392,7 @@ public final class Arrays {
     return array;
   }
 
-  /**
-   * Ensures that the specified array cannot hold more than <tt>maxCapacity</tt> elements. An application can use this
-   * operation to minimize array storage. <p> Returns the identical array if <tt>array.length &lt;= maxCapacity</tt>.
-   * Otherwise, returns a new array with a length of <tt>maxCapacity</tt> containing the first <tt>maxCapacity</tt>
-   * elements of <tt>array</tt>.
-   *
-   * @param maxCapacity the desired maximum capacity.
-   */
+  /* removed */
   public static boolean[] trimToCapacity(boolean[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       boolean[] oldArray = array;
@@ -597,63 +402,49 @@ public final class Arrays {
     return array;
   }
 
-  /**
-   * {@link java.util.Arrays#copyOf} compatibility with Java 1.5.
-   */
+  /* removed */
   public static byte[] copyOf(byte[] src, int length) {
       byte[] result = new byte [length];
       System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
       return result;
   }
   
-  /**
-   * {@link java.util.Arrays#copyOf} compatibility with Java 1.5.
-   */
+  /* removed */
   public static char[] copyOf(char[] src, int length) {
       char[] result = new char [length];
       System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
       return result;
   }
   
-  /**
-   * {@link java.util.Arrays#copyOf} compatibility with Java 1.5.
-   */
+  /* removed */
   public static short[] copyOf(short[] src, int length) {
       short[] result = new short [length];
       System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
       return result;
   }
   
-  /**
-   * {@link java.util.Arrays#copyOf} compatibility with Java 1.5. 
-   */
+  /* removed */
   public static int[] copyOf(int[] src, int length) {
       int[] result = new int [length];
       System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
       return result;
   }
   
-  /**
-   * {@link java.util.Arrays#copyOf} compatibility with Java 1.5.
-   */
+  /* removed */
   public static float[] copyOf(float[] src, int length) {
       float[] result = new float [length];
       System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
       return result;
   }
 
-  /**
-   * {@link java.util.Arrays#copyOf} compatibility with Java 1.5.
-   */
+  /* removed */
   public static double[] copyOf(double[] src, int length) {
       double[] result = new double [length];
       System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
       return result;
   }
   
-  /**
-   * {@link java.util.Arrays#copyOf} compatibility with Java 1.5.
-   */
+  /* removed */
   public static long[] copyOf(long[] src, int length) {
       long[] result = new long [length];
       System.arraycopy(src, 0, result, 0, Math.min(length, src.length));

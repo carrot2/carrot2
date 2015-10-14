@@ -1,21 +1,4 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements. See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership. The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+/* removed */
 
 package org.carrot2.mahout.math;
 
@@ -40,23 +23,7 @@ public final class Sorting {
   /* empty */
   }
   
-  /**
-   * Performs a binary search for the specified element in the specified
-   * ascending sorted array. Searching in an unsorted array has an undefined
-   * result. It's also undefined which element is found if there are multiple
-   * occurrences of the same element.
-   * 
-   * @param array
-   *          the sorted {@code byte} array to search.
-   * @param value
-   *          the {@code byte} element to find.
-   * @param from
-   *          the first index to sort, inclusive.
-   * @param to
-   *          the last index to sort, inclusive.
-   * @return the non-negative index of the element, or a negative index which is
-   *         {@code -index - 1} where the element would be inserted.
-   */
+  /* removed */
   public static int binarySearchFromTo(byte[] array, byte value, int from,
       int to) {
     int mid = -1;
@@ -77,23 +44,7 @@ public final class Sorting {
     return -mid - (value < array[mid] ? 1 : 2);
   }
   
-  /**
-   * Performs a binary search for the specified element in the specified
-   * ascending sorted array. Searching in an unsorted array has an undefined
-   * result. It's also undefined which element is found if there are multiple
-   * occurrences of the same element.
-   * 
-   * @param array
-   *          the sorted {@code char} array to search.
-   * @param value
-   *          the {@code char} element to find.
-   * @param from
-   *          the first index to sort, inclusive.
-   * @param to
-   *          the last index to sort, inclusive.
-   * @return the non-negative index of the element, or a negative index which is
-   *         {@code -index - 1} where the element would be inserted.
-   */
+  /* removed */
   public static int binarySearchFromTo(char[] array, char value, int from,
       int to) {
     int mid = -1;
@@ -113,23 +64,7 @@ public final class Sorting {
     return -mid - (value < array[mid] ? 1 : 2);
   }
   
-  /**
-   * Performs a binary search for the specified element in the specified
-   * ascending sorted array. Searching in an unsorted array has an undefined
-   * result. It's also undefined which element is found if there are multiple
-   * occurrences of the same element.
-   * 
-   * @param array
-   *          the sorted {@code double} array to search.
-   * @param value
-   *          the {@code double} element to find.
-   * @param from
-   *          the first index to sort, inclusive.
-   * @param to
-   *          the last index to sort, inclusive.
-   * @return the non-negative index of the element, or a negative index which is
-   *         {@code -index - 1} where the element would be inserted.
-   */
+  /* removed */
   public static int binarySearchFromTo(double[] array, double value, int from,
       int to) {
     long longBits = Double.doubleToLongBits(value);
@@ -150,23 +85,7 @@ public final class Sorting {
     return -mid - (lessThan(value, array[mid]) ? 1 : 2);
   }
   
-  /**
-   * Performs a binary search for the specified element in the specified
-   * ascending sorted array. Searching in an unsorted array has an undefined
-   * result. It's also undefined which element is found if there are multiple
-   * occurrences of the same element.
-   * 
-   * @param array
-   *          the sorted {@code float} array to search.
-   * @param value
-   *          the {@code float} element to find.
-   * @param from
-   *          the first index to sort, inclusive.
-   * @param to
-   *          the last index to sort, inclusive.
-   * @return the non-negative index of the element, or a negative index which is
-   *         {@code -index - 1} where the element would be inserted.
-   */
+  /* removed */
   public static int binarySearchFromTo(float[] array, float value, int from,
       int to) {
     int intBits = Float.floatToIntBits(value);
@@ -187,23 +106,7 @@ public final class Sorting {
     return -mid - (lessThan(value, array[mid]) ? 1 : 2);
   }
   
-  /**
-   * Performs a binary search for the specified element in the specified
-   * ascending sorted array. Searching in an unsorted array has an undefined
-   * result. It's also undefined which element is found if there are multiple
-   * occurrences of the same element.
-   * 
-   * @param array
-   *          the sorted {@code int} array to search.
-   * @param value
-   *          the {@code int} element to find.
-   * @param from
-   *          the first index to sort, inclusive.
-   * @param to
-   *          the last index to sort, inclusive.
-   * @return the non-negative index of the element, or a negative index which is
-   *         {@code -index - 1} where the element would be inserted.
-   */
+  /* removed */
   public static int binarySearchFromTo(int[] array, int value, int from, int to) {
     int mid = -1;
     while (from <= to) {
@@ -222,23 +125,7 @@ public final class Sorting {
     return -mid - (value < array[mid] ? 1 : 2);
   }
   
-  /**
-   * Performs a binary search for the specified element in the specified
-   * ascending sorted array. Searching in an unsorted array has an undefined
-   * result. It's also undefined which element is found if there are multiple
-   * occurrences of the same element.
-   * 
-   * @param array
-   *          the sorted {@code long} array to search.
-   * @param value
-   *          the {@code long} element to find.
-   * @param from
-   *          the first index to sort, inclusive.
-   * @param to
-   *          the last index to sort, inclusive.
-   * @return the non-negative index of the element, or a negative index which is
-   *         {@code -index - 1} where the element would be inserted.
-   */
+  /* removed */
   public static int binarySearchFromTo(long[] array, long value, int from, int to) {
     int mid = -1;
     while (from <= to) {
@@ -257,24 +144,7 @@ public final class Sorting {
     return -mid - (value < array[mid] ? 1 : 2);
   }
   
-  /**
-   * Performs a binary search for the specified element in the specified
-   * ascending sorted array. Searching in an unsorted array has an undefined
-   * result. It's also undefined which element is found if there are multiple
-   * occurrences of the same element.
-   * 
-   * @param array
-   *          the sorted {@code Object} array to search.
-   * @param object
-   *          the {@code Object} element to find
-   * @param from
-   *          the first index to sort, inclusive.
-   * @param to
-   *          the last index to sort, inclusive.
-   * @return the non-negative index of the element, or a negative index which is
-   *         {@code -index - 1} where the element would be inserted.
-   * 
-   */
+  /* removed */
   public static <T extends Comparable<T>> int binarySearchFromTo(T[] array,
       T object, int from, int to) {
     if (array.length == 0) {
@@ -295,25 +165,7 @@ public final class Sorting {
     return -mid - (result >= 0 ? 1 : 2);
   }
   
-  /**
-   * Performs a binary search for the specified element in the specified
-   * ascending sorted array using the {@code Comparator} to compare elements.
-   * Searching in an unsorted array has an undefined result. It's also undefined
-   * which element is found if there are multiple occurrences of the same
-   * element.
-   * 
-   * @param array
-   *          the sorted array to search
-   * @param object
-   *          the element to find
-   * @param from
-   *          the first index to sort, inclusive.
-   * @param to
-   *          the last index to sort, inclusive.
-   * @param comparator
-   *          the {@code Comparator} used to compare the elements.
-   * @return the non-negative index of the element, or a negative index which
-   */
+  /* removed */
   public static <T> int binarySearchFromTo(T[] array, T object, int from,
       int to, Comparator<? super T> comparator) {
     int mid = 0, result = 0;
@@ -330,23 +182,7 @@ public final class Sorting {
     return -mid - (result >= 0 ? 1 : 2);
   }
   
-  /**
-   * Performs a binary search for the specified element in the specified
-   * ascending sorted array. Searching in an unsorted array has an undefined
-   * result. It's also undefined which element is found if there are multiple
-   * occurrences of the same element.
-   * 
-   * @param array
-   *          the sorted {@code short} array to search.
-   * @param value
-   *          the {@code short} element to find.
-   * @param from
-   *          the first index to sort, inclusive.
-   * @param to
-   *          the last index to sort, inclusive.
-   * @return the non-negative index of the element, or a negative index which is
-   *         {@code -index - 1} where the element would be inserted.
-   */
+  /* removed */
   public static int binarySearchFromTo(short[] array, short value, int from, int to) {
     int mid = -1;
     while (from <= to) {
@@ -482,15 +318,7 @@ public final class Sorting {
         : (comparisonxz > 0 ? c : a));
   }
   
-  /**
-   * This is used for 'external' sorting. The comparator takes <em>indices</em>,
-   * not values, and compares the external values found at those indices.
-   * @param a
-   * @param b
-   * @param c
-   * @param comp
-   * @return
-   */
+  /* removed */
   private static int med3(int a, int b, int c, IntComparator comp) {
     int comparisonab = comp.compare(a, b);
     int comparisonac = comp.compare(a, c);
@@ -521,22 +349,7 @@ public final class Sorting {
         : (comparisonxz > 0 ? c : a));
   }
   
-  /**
-   * Sorts the specified range in the array in a specified order.
-   * 
-   * @param array
-   *          the {@code byte} array to be sorted.
-   * @param start
-   *          the start index to sort.
-   * @param end
-   *          the last + 1 index to sort.
-   * @param comp
-   *          the comparison that determines the sort.
-   * @throws IllegalArgumentException
-   *           if {@code start > end}.
-   * @throws ArrayIndexOutOfBoundsException
-   *           if {@code start < 0} or {@code end > array.length}.
-   */
+  /* removed */
   public static void quickSort(byte[] array, int start, int end,
       ByteComparator comp) {
     if (array == null) {
@@ -643,21 +456,7 @@ public final class Sorting {
   }
 
   
-  /**
-   * Sorts some external data with QuickSort.
-   * 
-   * @param start
-   *          the start index to sort.
-   * @param end
-   *          the last + 1 index to sort.
-   * @param comp
-   *          the comparator.
-   * @param swap an object that can exchange the positions of two items.
-   * @throws IllegalArgumentException
-   *           if {@code start > end}.
-   * @throws ArrayIndexOutOfBoundsException
-   *           if {@code start < 0} or {@code end > array.length}.
-   */
+  /* removed */
   public static void quickSort(int start, int end, IntComparator comp, Swapper swap) {
     checkBounds(end+1, start, end);
     quickSort0(start, end, comp, swap);
@@ -777,14 +576,7 @@ public final class Sorting {
     }
   }
 
-  /**
-   * In-place insertion sort that is fast for pre-sorted data.
-   *
-   * @param start Where to start sorting (inclusive)
-   * @param end   Where to stop (exclusive)
-   * @param comp  Sort order.
-   * @param swap  How to swap items.
-   */
+  /* removed */
   private static void insertionSort(int start, int end, IntComparator comp, Swapper swap) {
     for (int i = start + 1; i < end; i++) {
       for (int j = i; j > start && comp.compare(j - 1, j) > 0; j--) {
@@ -792,20 +584,7 @@ public final class Sorting {
       }
     }
   }
-  /**
-   * Sorts the specified range in the array in a specified order.
-   * 
-   * @param array
-   *          the {@code char} array to be sorted.
-   * @param start
-   *          the start index to sort.
-   * @param end
-   *          the last + 1 index to sort.
-   * @throws IllegalArgumentException
-   *           if {@code start > end}.
-   * @throws ArrayIndexOutOfBoundsException
-   *           if {@code start < 0} or {@code end > array.length}.
-   */
+  /* removed */
   public static void quickSort(char[] array, int start, int end,
       CharComparator comp) {
     if (array == null) {
@@ -895,23 +674,7 @@ public final class Sorting {
     }
   }
   
-  /**
-   * Sorts the specified range in the array in a specified order.
-   * 
-   * @param array
-   *          the {@code double} array to be sorted.
-   * @param start
-   *          the start index to sort.
-   * @param end
-   *          the last + 1 index to sort.
-   * @param comp
-   *          the comparison.
-   * @throws IllegalArgumentException
-   *           if {@code start > end}.
-   * @throws ArrayIndexOutOfBoundsException
-   *           if {@code start < 0} or {@code end > array.length}.
-   * @see Double#compareTo(Double)
-   */
+  /* removed */
   public static void quickSort(double[] array, int start, int end,
       DoubleComparator comp) {
     if (array == null) {
@@ -1001,22 +764,7 @@ public final class Sorting {
     }
   }
   
-  /**
-   * Sorts the specified range in the array in a specified order.
-   * 
-   * @param array
-   *          the {@code float} array to be sorted.
-   * @param start
-   *          the start index to sort.
-   * @param end
-   *          the last + 1 index to sort.
-   * @param comp
-   *          the comparator.
-   * @throws IllegalArgumentException
-   *           if {@code start > end}.
-   * @throws ArrayIndexOutOfBoundsException
-   *           if {@code start < 0} or {@code end > array.length}.
-   */
+  /* removed */
   public static void quickSort(float[] array, int start, int end,
       FloatComparator comp) {
     if (array == null) {
@@ -1106,22 +854,7 @@ public final class Sorting {
     }
   }
   
-  /**
-   * Sorts the specified range in the array in a specified order.
-   * 
-   * @param array
-   *          the {@code int} array to be sorted.
-   * @param start
-   *          the start index to sort.
-   * @param end
-   *          the last + 1 index to sort.
-   * @param comp
-   *          the comparator.
-   * @throws IllegalArgumentException
-   *           if {@code start > end}.
-   * @throws ArrayIndexOutOfBoundsException
-   *           if {@code start < 0} or {@code end > array.length}.
-   */
+  /* removed */
   public static void quickSort(int[] array, int start, int end,
       IntComparator comp) {
     if (array == null) {
@@ -1211,22 +944,7 @@ public final class Sorting {
     }
   }
   
-  /**
-   * Sorts the specified range in the array in a specified order.
-   * 
-   * @param array
-   *          the {@code long} array to be sorted.
-   * @param start
-   *          the start index to sort.
-   * @param end
-   *          the last + 1 index to sort.
-   * @param comp
-   *          the comparator.
-   * @throws IllegalArgumentException
-   *           if {@code start > end}.
-   * @throws ArrayIndexOutOfBoundsException
-   *           if {@code start < 0} or {@code end > array.length}.
-   */
+  /* removed */
   public static void quickSort(long[] array, int start, int end,
       LongComparator comp) {
     if (array == null) {
@@ -1316,22 +1034,7 @@ public final class Sorting {
     }
   }
   
-  /**
-   * Sorts the specified range in the array in a specified order.
-   * 
-   * @param array
-   *          the array to be sorted.
-   * @param start
-   *          the start index to sort.
-   * @param end
-   *          the last + 1 index to sort.
-   * @param comp
-   *          the comparator.
-   * @throws IllegalArgumentException
-   *           if {@code start > end}.
-   * @throws ArrayIndexOutOfBoundsException
-   *           if {@code start < 0} or {@code end > array.length}.
-   */
+  /* removed */
   public static <T> void quickSort(T[] array, int start, int end,
       Comparator<T> comp) {
     if (array == null) {
@@ -1351,14 +1054,7 @@ public final class Sorting {
     
   }
   
-  /**
-   * Sort the specified range of an array of object that implement the Comparable
-   * interface.
-   * @param <T> The type of object.
-   * @param array the array.
-   * @param start the first index.
-   * @param end the last index (exclusive).
-   */
+  /* removed */
   public static <T extends Comparable<? super T>> void quickSort(T[] array,
       int start, int end) {
     quickSort(array, start, end, new ComparableAdaptor<T>());
@@ -1444,20 +1140,7 @@ public final class Sorting {
     }
   }
   
-  /**
-   * Sorts the specified range in the array in ascending numerical order.
-   * 
-   * @param array
-   *          the {@code short} array to be sorted.
-   * @param start
-   *          the start index to sort.
-   * @param end
-   *          the last + 1 index to sort.
-   * @throws IllegalArgumentException
-   *           if {@code start > end}.
-   * @throws ArrayIndexOutOfBoundsException
-   *           if {@code start < 0} or {@code end > array.length}.
-   */
+  /* removed */
   public static void quickSort(short[] array, int start, int end,
       ShortComparator comp) {
     if (array == null) {
@@ -1547,15 +1230,7 @@ public final class Sorting {
     }
   }
 
-  /**
-   * Perform a merge sort on the specified range of an array.
-   * 
-   * @param <T> the type of object in the array.
-   * @param array the array.
-   * @param start first index. 
-   * @param end last index (exclusive).
-   * @param comp comparator object.
-   */
+  /* removed */
   @SuppressWarnings("unchecked") // required to make the temp array work, afaict.
   public static <T> void mergeSort(T[] array, int start, int end,
       Comparator<T> comp) {
@@ -1570,36 +1245,12 @@ public final class Sorting {
     mergeSort(out, array, start, end, comp);
   }
   
-  /**
-   * Perform a merge sort of the specific range of an array of objects that implement
-   * Comparable.
-   * @param <T> the type of the objects in the array.
-   * @param array the array.
-   * @param start the first index.
-   * @param end the last index (exclusive).
-   */
+  /* removed */
   public static <T extends Comparable<? super T>> void mergeSort(T[] array, int start, int end) {
     mergeSort(array, start, end, new ComparableAdaptor<T>());
   }
   
-  /**
-   * Performs a sort on the section of the array between the given indices using
-   * a mergesort with exponential search algorithm (in which the merge is
-   * performed by exponential search). n*log(n) performance is guaranteed and in
-   * the average case it will be faster then any mergesort in which the merge is
-   * performed by linear search.
-   * 
-   * @param in
-   *          - the array for sorting.
-   * @param out
-   *          - the result, sorted array.
-   * @param start
-   *          the start index
-   * @param end
-   *          the end index + 1
-   * @param c
-   *          - the comparator to determine the order of the array.
-   */
+  /* removed */
   private static <T> void mergeSort(T[] in, T[] out, int start, int end,
       Comparator<T> c) {
     int len = end - start;
@@ -1662,26 +1313,7 @@ public final class Sorting {
     }
   }
   
-  /**
-   * Finds the place of specified range of specified sorted array, where the
-   * element should be inserted for getting sorted array. Uses exponential
-   * search algorithm.
-   * 
-   * @param arr
-   *          - the array with already sorted range
-   * @param val
-   *          - object to be inserted
-   * @param l
-   *          - the start index
-   * @param r
-   *          - the end index
-   * @param bnd
-   *          - possible values 0,-1. "-1" - val is located at index more then
-   *          elements equals to val. "0" - val is located at index less then
-   *          elements equals to val.
-   * @param c
-   *          - the comparator used to compare Objects
-   */
+  /* removed */
   private static <T> int find(T[] arr, T val, int bnd, int l, int r,
       Comparator<T> c) {
     int m = l;
@@ -1713,23 +1345,12 @@ public final class Sorting {
       return o1 - o2;
     }};
     
-    /**
-     * Perform a merge sort on a range of a byte array, using numerical order.
-     * @param array the array.
-     * @param start the first index.
-     * @param end the last index (exclusive).
-     */
+    /* removed */
   public static void mergeSort(byte[] array, int start, int end) {
     mergeSort(array, start, end, naturalByteComparison);
   }
   
-  /**
-   * Perform a merge sort on a range of a byte array using a specified ordering.
-   * @param array the array.
-   * @param start the first index.
-   * @param end the last index (exclusive).
-   * @param comp the comparator object.
-   */
+  /* removed */
   public static void mergeSort(byte[] array, int start, int end, ByteComparator comp) {
     checkBounds(array.length, start, end);
     byte[] out = Arrays.copyOf(array, array.length);
@@ -1829,23 +1450,12 @@ public final class Sorting {
       return o1 - o2;
     }};
     
-    /**
-     * Perform a merge sort on a range of a char array, using numerical order.
-     * @param array the array.
-     * @param start the first index.
-     * @param end the last index (exclusive).
-     */
+    /* removed */
   public static void mergeSort(char[] array, int start, int end) {
     mergeSort(array, start, end, naturalCharComparison);
   }
 
-  /**
-   * Perform a merge sort on a range of a char array using a specified ordering.
-   * @param array the array.
-   * @param start the first index.
-   * @param end the last index (exclusive).
-   * @param comp the comparator object.
-   */
+  /* removed */
   public static void mergeSort(char[] array, int start, int end, CharComparator comp) {
     checkBounds(array.length, start, end);
     char[] out = Arrays.copyOf(array, array.length);
@@ -1945,12 +1555,7 @@ public final class Sorting {
       return o1 - o2;
     }};
     
-    /**
-     * Perform a merge sort on a range of a short array, using numerical order.
-     * @param array the array.
-     * @param start the first index.
-     * @param end the last index (exclusive).
-     */
+    /* removed */
   public static void mergeSort(short[] array, int start, int end) {
     mergeSort(array, start, end, naturalShortComparison);
   }
@@ -1962,13 +1567,7 @@ public final class Sorting {
   }
 
   
-  /**
-   * Perform a merge sort on a range of a short array using a specified ordering.
-   * @param in the array.
-   * @param start the first index.
-   * @param end the last index (exclusive).
-   * @param c the comparator object.
-   */
+  /* removed */
   private static void mergeSort(short[] in, short[] out, int start, int end,
       ShortComparator c) {
     int len = end - start;
@@ -2066,26 +1665,14 @@ public final class Sorting {
     mergeSort(array, start, end, naturalIntComparison);
   }
 
-  /**
-   * Perform a merge sort on a range of a int array using numerical order.
-   * @param array the array.
-   * @param start the first index.
-   * @param end the last index (exclusive).
-   * @param comp the comparator object.
-   */
+  /* removed */
   public static void mergeSort(int[] array, int start, int end, IntComparator comp) {
     checkBounds(array.length, start, end);
     int[] out = Arrays.copyOf(array, array.length);
     mergeSort(out, array, start, end, comp);
   }
 
-  /**
-   * Perform a merge sort on a range of a int array using a specified ordering.
-   * @param in the array.
-   * @param start the first index.
-   * @param end the last index (exclusive).
-   * @param c the comparator object.
-   */
+  /* removed */
   private static void mergeSort(int[] in, int[] out, int start, int end,
       IntComparator c) {
     int len = end - start;
@@ -2180,23 +1767,12 @@ public final class Sorting {
       return o1 < o2 ? -1 : o1 > o2 ? 1 : 0;
     }};
     
-    /**
-     * Perform a merge sort on a range of a long array using numerical order.
-     * @param array the array.
-     * @param start the first index.
-     * @param end the last index (exclusive).
-     */
+    /* removed */
   public static void mergeSort(long[] array, int start, int end) {
     mergeSort(array, start, end, naturalLongComparison);
   }
 
-  /**
-   * Perform a merge sort on a range of a long array using a specified ordering.
-   * @param array the array.
-   * @param start the first index.
-   * @param end the last index (exclusive).
-   * @param comp the comparator object.
-   */
+  /* removed */
   public static void mergeSort(long[] array, int start, int end, LongComparator comp) {
     checkBounds(array.length, start, end);
     long[] out = Arrays.copyOf(array, array.length);
@@ -2296,23 +1872,12 @@ public final class Sorting {
       return Float.compare(o1, o2);
     }};
     
-    /**
-     * Perform a merge sort on a range of a float array using Float.compare for an ordering.
-     * @param array the array.
-     * @param start the first index.
-     * @param end the last index (exclusive).
-     */
+    /* removed */
   public static void mergeSort(float[] array, int start, int end) {
     mergeSort(array, start, end, naturalFloatComparison);
   }
 
-  /**
-   * Perform a merge sort on a range of a float array using a specified ordering.
-   * @param array the array.
-   * @param start the first index.
-   * @param end the last index (exclusive).
-   * @param comp the comparator object.
-   */
+  /* removed */
   public static void mergeSort(float[] array, int start, int end, FloatComparator comp) {
     checkBounds(array.length, start, end);
     float[] out = Arrays.copyOf(array, array.length);
@@ -2413,23 +1978,12 @@ public final class Sorting {
     }};
     
     
-    /**
-     * Perform a merge sort on a range of a double array using a Double.compare as an ordering.
-     * @param array the array.
-     * @param start the first index.
-     * @param end the last index (exclusive).
-     */
+    /* removed */
   public static void mergeSort(double[] array, int start, int end) {
     mergeSort(array, start, end, naturalDoubleComparison);
   }
 
-  /**
-   * Perform a merge sort on a range of a double array using a specified ordering.
-   * @param array the array.
-   * @param start the first index.
-   * @param end the last index (exclusive).
-   * @param comp the comparator object.
-   */
+  /* removed */
   public static void mergeSort(double[] array, int start, int end, DoubleComparator comp) {
     checkBounds(array.length, start, end);
     double[] out = Arrays.copyOf(array, array.length);
@@ -2523,11 +2077,7 @@ public final class Sorting {
     return l - 1;
   }
 
-  /**
-   * Transforms two consecutive sorted ranges into a single sorted range.  The initial ranges are <code>[first,
-   * middle)</code> and <code>[middle, last)</code>, and the resulting range is <code>[first, last)</code>. Elements in
-   * the first input range will precede equal elements in the second.
-   */
+  /* removed */
   static void inplace_merge(int first, int middle, int last, IntComparator comp, Swapper swapper) {
     if (first >= middle || middle >= last) {
       return;
@@ -2579,18 +2129,7 @@ public final class Sorting {
     inplace_merge(middle, secondCut, last, comp, swapper);
   }
 
-  /**
-   * Performs a binary search on an already-sorted range: finds the first position where an element can be inserted
-   * without violating the ordering. Sorting is by a user-supplied comparison function.
-   *
-   * @param first Beginning of the range.
-   * @param last  One past the end of the range.
-   * @param x     Element to be searched for.
-   * @param comp  Comparison function.
-   * @return The largest index i such that, for every j in the range <code>[first, i)</code>, <code>comp.apply(array[j],
-   *         x)</code> is <code>true</code>.
-   * @see Sorting#upper_bound
-   */
+  /* removed */
   static int lower_bound(int first, int last, int x, IntComparator comp) {
     //if (comp==null) throw new NullPointerException();
     int len = last - first;
@@ -2607,24 +2146,7 @@ public final class Sorting {
     return first;
   }
 
-  /**
-   * Sorts the specified range of elements according to the order induced by the specified comparator.  All elements in
-   * the range must be <i>mutually comparable</i> by the specified comparator (that is, <tt>c.compare(a, b)</tt> must
-   * not throw an exception for any indexes <tt>a</tt> and <tt>b</tt> in the range).<p>
-   *
-   * This sort is guaranteed to be <i>stable</i>:  equal elements will not be reordered as a result of the sort.<p>
-   *
-   * The sorting algorithm is a modified mergesort (in which the merge is omitted if the highest element in the low
-   * sublist is less than the lowest element in the high sublist).  This algorithm offers guaranteed n*log(n)
-   * performance, and can approach linear performance on nearly sorted lists.
-   *
-   * @param fromIndex the index of the first element (inclusive) to be sorted.
-   * @param toIndex   the index of the last element (exclusive) to be sorted.
-   * @param c         the comparator to determine the order of the generic data.
-   * @param swapper   an object that knows how to swap the elements at any two indexes (a,b).
-   * @see IntComparator
-   * @see Swapper
-   */
+  /* removed */
   public static void mergeSort(int fromIndex, int toIndex, IntComparator c, Swapper swapper) {
     /*
       We retain the same method signature as quickSort.
@@ -2659,18 +2181,7 @@ public final class Sorting {
     inplace_merge(fromIndex, mid, toIndex, c, swapper);
   }
 
-  /**
-   * Performs a binary search on an already-sorted range: finds the last position where an element can be inserted
-   * without violating the ordering. Sorting is by a user-supplied comparison function.
-   *
-   * @param first Beginning of the range.
-   * @param last  One past the end of the range.
-   * @param x     Element to be searched for.
-   * @param comp  Comparison function.
-   * @return The largest index i such that, for every j in the range <code>[first, i)</code>, <code>comp.apply(x,
-   *         array[j])</code> is <code>false</code>.
-   * @see Sorting#lower_bound
-   */
+  /* removed */
   static int upper_bound(int first, int last, int x, IntComparator comp) {
     //if (comp==null) throw new NullPointerException();
     int len = last - first;

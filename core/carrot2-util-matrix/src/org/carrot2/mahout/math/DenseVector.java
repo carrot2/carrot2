@@ -1,19 +1,4 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* removed */
 
 package org.carrot2.mahout.math;
 
@@ -24,17 +9,17 @@ import org.carrot2.mahout.math.function.DoubleDoubleFunction;
 import org.carrot2.mahout.math.function.PlusMult;
 import org.carrot2.shaded.guava.common.collect.AbstractIterator;
 
-/** Implements vector as an array of doubles */
+/* removed */
 public class DenseVector extends AbstractVector {
 
   private double[] values;
 
-  /** For serialization purposes only */
+  /* removed */
   public DenseVector() {
     super(0);
   }
 
-  /** Construct a new instance using provided values */
+  /* removed */
   public DenseVector(double[] values) {
     this(values, false);
   }
@@ -48,16 +33,13 @@ public class DenseVector extends AbstractVector {
     this(values.values, shallowCopy);
   }
 
-  /** Construct a new instance of the given cardinality */
+  /* removed */
   public DenseVector(int cardinality) {
     super(cardinality);
     this.values = new double[cardinality];
   }
 
-  /**
-   * Copy-constructor (for use in turning a sparse vector into a dense one, for example)
-   * @param vector
-   */
+  /* removed */
   public DenseVector(Vector vector) {
     super(vector.size());
     values = new double[vector.size()];
@@ -73,17 +55,13 @@ public class DenseVector extends AbstractVector {
     return new DenseVector(values.clone());
   }
 
-  /**
-   * @return true
-   */
+  /* removed */
   @Override
   public boolean isDense() {
     return true;
   }
 
-  /**
-   * @return true
-   */
+  /* removed */
   @Override
   public boolean isSequentialAccess() {
     return true;
@@ -170,9 +148,7 @@ public class DenseVector extends AbstractVector {
     return new VectorView(this, offset, length);
   }
 
-  /**
-   * Returns an iterator that traverses this Vector from 0 to cardinality-1, in that order.
-   */
+  /* removed */
   @Override
   public Iterator<Element> iterateNonZero() {
     return new NonDefaultIterator();

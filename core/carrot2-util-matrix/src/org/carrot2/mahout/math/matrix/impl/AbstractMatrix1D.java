@@ -8,115 +8,65 @@ It is provided "as is" without expressed or implied warranty.
 */
 package org.carrot2.mahout.math.matrix.impl;
 
-/**
- Abstract base class for 1-d matrices (aka <i>vectors</i>) holding objects or primitive data types such as
- {@code int}, {@code double}, etc.
- First see the <a href="package-summary.html">package summary</a> and javadoc
- <a href="package-tree.html">tree view</a> to get the broad picture.
- <p>
- <b>Note that this implementation is not synchronized.</b>
-
- @author wolfgang.hoschek@cern.ch
- @version 1.0, 09/24/99
- */
+/* removed */
 
 public abstract class AbstractMatrix1D extends AbstractMatrix {
 
-  /** the number of cells this matrix (view) has */
+  /* removed */
   protected int size;
-  /** the index of the first element */
+  /* removed */
   protected int zero;
-  /** the number of indexes between any two elements, i.e. <tt>index(i+1) - index(i)</tt>. */
+  /* removed */
   protected int stride;
 
-  /** Makes this class non instantiable, but still let's others inherit from it. */
+  /* removed */
   protected AbstractMatrix1D() {
   }
 
-  /**
-   * Returns the position of the given absolute rank within the (virtual or non-virtual) internal 1-dimensional array.
-   * Default implementation. Override, if necessary.
-   *
-   * @param absRank the absolute rank of the element.
-   * @return the position.
-   */
+  /* removed */
   protected int offset(int absRank) {
     return absRank;
   }
 
-  /**
-   * Returns the absolute rank of the given relative rank.
-   *
-   * @param rank the relative rank of the element.
-   * @return the absolute rank of the element.
-   */
+  /* removed */
   protected int rank(int rank) {
     return zero + rank * stride;
     //return zero + ((rank+flipMask)^flipMask);
     //return zero + rank*flip; // slower
   }
 
-  /**
-   * Sanity check for operations requiring an index to be within bounds.
-   *
-   * @throws IndexOutOfBoundsException if <tt>index < 0 || index >= size()</tt>.
-   */
+  /* removed */
   protected void checkIndex(int index) {
     if (index < 0 || index >= size) {
       throw new IndexOutOfBoundsException("Attempted to access at index=" + index);
     }
   }
 
-  /**
-   * Checks whether the receiver contains the given range and throws an exception, if necessary.
-   *
-   * @throws IndexOutOfBoundsException if <tt>index<0 || index+width>size()</tt>.
-   */
+  /* removed */
   protected void checkRange(int index, int width) {
     if (index < 0 || index + width > size) {
       throw new IndexOutOfBoundsException("index: " + index + ", width: " + width + ", size=" + size);
     }
   }
 
-  /**
-   * Sanity check for operations requiring two matrices with the same size.
-   *
-   * @throws IllegalArgumentException if <tt>size() != b.size()</tt>.
-   */
+  /* removed */
   public void checkSize(AbstractMatrix1D b) {
     if (size != b.size) {
       throw new IllegalArgumentException("Incompatible sizes: " + size + " and " + b.size);
     }
   }
 
-  /**
-   * Returns the position of the element with the given relative rank within the (virtual or non-virtual) internal
-   * 1-dimensional array. You may want to override this method for performance.
-   *
-   * @param rank the rank of the element.
-   */
+  /* removed */
   protected int index(int rank) {
     return offset(rank(rank));
   }
 
-  /**
-   * Sets up a matrix with a given number of cells.
-   *
-   * @param size the number of cells the matrix shall have.
-   * @throws IllegalArgumentException if <tt>size<0</tt>.
-   */
+  /* removed */
   protected void setUp(int size) {
     setUp(size, 0, 1);
   }
 
-  /**
-   * Sets up a matrix with the given parameters.
-   *
-   * @param size   the number of elements the matrix shall have.
-   * @param zero   the index of the first element.
-   * @param stride the number of indexes between any two elements, i.e. <tt>index(i+1)-index(i)</tt>.
-   * @throws IllegalArgumentException if <tt>size<0</tt>.
-   */
+  /* removed */
   protected void setUp(int size, int zero, int stride) {
     if (size < 0) {
       throw new IllegalArgumentException("negative size");
@@ -128,18 +78,13 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
     this.isNoView = true;
   }
 
-  /** Returns the number of cells. */
+  /* removed */
   @Override
   public int size() {
     return size;
   }
 
-  /**
-   * Returns the stride of the given dimension (axis, rank).
-   *
-   * @return the stride in the given dimension.
-   * @throws IllegalArgumentException if <tt>dimension != 0</tt>.
-   */
+  /* removed */
   protected int stride(int dimension) {
     if (dimension != 0) {
       throw new IllegalArgumentException("invalid dimension: " + dimension);
@@ -147,11 +92,7 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
     return this.stride;
   }
 
-  /**
-   * Self modifying version of viewPart().
-   *
-   * @throws IndexOutOfBoundsException if <tt>index<0 || index+width>size()</tt>.
-   */
+  /* removed */
   protected AbstractMatrix1D vPart(int index, int width) {
     checkRange(index, width);
     this.zero += this.stride * index;

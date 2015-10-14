@@ -66,7 +66,6 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
     protected double [] aggregates;
 
     /**
-     * @param A
      */
     public IterativeMatrixFactorizationBase(DoubleMatrix2D A)
     {
@@ -204,10 +203,6 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
     }
 
     /**
-     * Returns final approximation error or -1 if the approximation error calculation has
-     * been turned off (see {@link #setMaxIterations(int)}.
-     * 
-     * @return final approximation error or -1
      */
     public double getApproximationError()
     {
@@ -215,10 +210,6 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
     }
 
     /**
-     * Returns an array of approximation errors during after subsequent iterations of the
-     * algorithm. Element 0 of the array contains the approximation error before the first
-     * iteration. The array is <code>null</code> if the approximation error calculation
-     * has been turned off (see {@link #setMaxIterations(int)}.
      */
     public double [] getApproximationErrors()
     {

@@ -26,58 +26,24 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
    */
   final AbstractIntDoubleMap elements;
 
-  /**
-   * Constructs a matrix with a copy of the given values. <tt>values</tt> is required to have the form
-   * <tt>values[row][column]</tt> and have exactly the same number of columns in every row. <p> The values are copied.
-   * So subsequent changes in <tt>values</tt> are not reflected in the matrix, and vice-versa.
-   *
-   * @param values The values to be filled into the new matrix.
-   * @throws IllegalArgumentException if <tt>for any 1 &lt;= row &lt; values.length: values[row].length !=
-   *                                  values[row-1].length</tt>.
-   */
+  /* removed */
   public SparseDoubleMatrix2D(double[][] values) {
     this(values.length, values.length == 0 ? 0 : values[0].length);
     assign(values);
   }
 
-  /**
-   * Constructs a matrix with a given number of rows and columns and default memory usage. All entries are initially
-   * <tt>0</tt>.
-   *
-   * @param rows    the number of rows the matrix shall have.
-   * @param columns the number of columns the matrix shall have.
-   * @throws IllegalArgumentException if <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>.
-   */
+  /* removed */
   public SparseDoubleMatrix2D(int rows, int columns) {
     this(rows, columns, rows * (columns / 1000), 0.2, 0.5);
   }
 
-  /**
-   * Constructs a matrix with a given number of rows and columns using memory as specified. All entries are initially
-   * <tt>0</tt>. For details related to memory usage see {@link org.carrot2.mahout.math.map.OpenIntDoubleHashMap}.
-   *
-   * @param rows            the number of rows the matrix shall have.
-   * @param columns         the number of columns the matrix shall have.
-   * @param initialCapacity the initial capacity of the hash map. If not known, set <tt>initialCapacity=0</tt> or
-   *                        small.
-   * @param minLoadFactor   the minimum load factor of the hash map.
-   * @param maxLoadFactor   the maximum load factor of the hash map.
-   * @throws IllegalArgumentException if <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) ||
-   *                                  (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >=
-   *                                  maxLoadFactor)</tt>.
-   * @throws IllegalArgumentException if <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>.
-   */
+  /* removed */
   public SparseDoubleMatrix2D(int rows, int columns, int initialCapacity, double minLoadFactor, double maxLoadFactor) {
     setUp(rows, columns);
     this.elements = new OpenIntDoubleHashMap(initialCapacity, minLoadFactor, maxLoadFactor);
   }
 
-  /**
-   * Sets all cells to the state specified by <tt>value</tt>.
-   *
-   * @param value the value to be filled into the cells.
-   * @return <tt>this</tt> (for convenience only).
-   */
+  /* removed */
   @Override
   public DoubleMatrix2D assign(double value) {
     // overriden for performance only
@@ -89,25 +55,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  /**
-   * Assigns the result of a function to each cell; <tt>x[row,col] = function(x[row,col])</tt>. <p> <b>Example:</b>
-   * <pre>
-   * matrix = 2 x 2 matrix
-   * 0.5 1.5
-   * 2.5 3.5
-   *
-   * // change each cell to its sine
-   * matrix.assign(Functions.sin);
-   * -->
-   * 2 x 2 matrix
-   * 0.479426  0.997495
-   * 0.598472 -0.350783
-   * </pre>
-   * For further examples, see the <a href="package-summary.html#FunctionObjects">package doc</a>.
-   *
-   * @param function a function object taking as argument the current cell's value.
-   * @see org.carrot2.mahout.math.function.Functions
-   */
+  /* removed */
   @Override
   public void assign(DoubleFunction function) {
     if (this.isNoView && function instanceof Mult) { // x[i] = mult*x[i]
@@ -117,16 +65,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  /**
-   * Replaces all cell values of the receiver with the values of another matrix. Both matrices must have the same number
-   * of rows and columns. If both matrices share the same cells (as is the case if they are views derived from the same
-   * matrix) and intersect in an ambiguous way, then replaces <i>as if</i> using an intermediate auxiliary deep copy of
-   * <tt>other</tt>.
-   *
-   * @param source the source matrix to copy from (may be identical to the receiver).
-   * @return <tt>this</tt> (for convenience only).
-   * @throws IllegalArgumentException if <tt>columns() != source.columns() || rows() != source.rows()</tt>
-   */
+  /* removed */
   @Override
   public DoubleMatrix2D assign(DoubleMatrix2D source) {
     // overriden for performance only
@@ -209,21 +148,13 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return super.assign(y, function);
   }
 
-  /** Returns the number of cells having non-zero values. */
+  /* removed */
   @Override
   public int cardinality() {
     return this.isNoView ? this.elements.size() : super.cardinality();
   }
 
-  /**
-   * Ensures that the receiver can hold at least the specified number of non-zero cells without needing to allocate new
-   * internal memory. If necessary, allocates new internal memory and increases the capacity of the receiver. <p> This
-   * method never need be called; it is for performance tuning only. Calling this method before tt>set()</tt>ing a large
-   * number of non-zero values boosts performance, because the receiver will grow only once instead of potentially many
-   * times and hash collisions get less probable.
-   *
-   * @param minCapacity the desired minimum number of non-zero cells.
-   */
+  /* removed */
   @Override
   public void ensureCapacity(int minCapacity) {
     this.elements.ensureCapacity(minCapacity);
@@ -251,17 +182,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  /**
-   * Returns the matrix cell value at coordinate <tt>[row,column]</tt>.
-   *
-   * <p>Provided with invalid parameters this method may return invalid objects without throwing any exception. <b>You
-   * should only use this method when you are absolutely sure that the coordinate is within bounds.</b> Precondition
-   * (unchecked): <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-   *
-   * @param row    the index of the row-coordinate.
-   * @param column the index of the column-coordinate.
-   * @return the value at the specified coordinate.
-   */
+  /* removed */
   @Override
   public double getQuick(int row, int column) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -271,11 +192,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return this.elements.get(rowZero + row * rowStride + columnZero + column * columnStride);
   }
 
-  /**
-   * Returns <tt>true</tt> if both matrices share common cells. More formally, returns <tt>true</tt> if at least one of
-   * the following conditions is met <ul> <li>the receiver is a view of the other matrix <li>the other matrix is a view
-   * of the receiver <li><tt>this == other</tt> </ul>
-   */
+  /* removed */
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
     if (other instanceof SelectedSparseDoubleMatrix2D) {
@@ -289,12 +206,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return false;
   }
 
-  /**
-   * Returns the position of the given coordinate within the (virtual or non-virtual) internal 1-dimensional array.
-   *
-   * @param row    the index of the row-coordinate.
-   * @param column the index of the column-coordinate.
-   */
+  /* removed */
   @Override
   protected int index(int row, int column) {
     // return super.index(row,column);
@@ -302,63 +214,25 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return rowZero + row * rowStride + columnZero + column * columnStride;
   }
 
-  /**
-   * Construct and returns a new empty matrix <i>of the same dynamic type</i> as the receiver, having the specified
-   * number of rows and columns. For example, if the receiver is an instance of type <tt>DenseDoubleMatrix2D</tt> the
-   * new matrix must also be of type <tt>DenseDoubleMatrix2D</tt>, if the receiver is an instance of type
-   * <tt>SparseDoubleMatrix2D</tt> the new matrix must also be of type <tt>SparseDoubleMatrix2D</tt>, etc. In general,
-   * the new matrix should have internal parametrization as similar as possible.
-   *
-   * @param rows    the number of rows the matrix shall have.
-   * @param columns the number of columns the matrix shall have.
-   * @return a new empty matrix of the same dynamic type.
-   */
+  /* removed */
   @Override
   public DoubleMatrix2D like(int rows, int columns) {
     return new SparseDoubleMatrix2D(rows, columns);
   }
 
-  /**
-   * Construct and returns a new 1-d matrix <i>of the corresponding dynamic type</i>, entirelly independent of the
-   * receiver. For example, if the receiver is an instance of type <tt>DenseDoubleMatrix2D</tt> the new matrix must be
-   * of type <tt>DenseDoubleMatrix1D</tt>, if the receiver is an instance of type <tt>SparseDoubleMatrix2D</tt> the new
-   * matrix must be of type <tt>SparseDoubleMatrix1D</tt>, etc.
-   *
-   * @param size the number of cells the matrix shall have.
-   * @return a new matrix of the corresponding dynamic type.
-   */
+  /* removed */
   @Override
   public DoubleMatrix1D like1D(int size) {
     return new SparseDoubleMatrix1D(size);
   }
 
-  /**
-   * Construct and returns a new 1-d matrix <i>of the corresponding dynamic type</i>, sharing the same cells. For
-   * example, if the receiver is an instance of type <tt>DenseDoubleMatrix2D</tt> the new matrix must be of type
-   * <tt>DenseDoubleMatrix1D</tt>, if the receiver is an instance of type <tt>SparseDoubleMatrix2D</tt> the new matrix
-   * must be of type <tt>SparseDoubleMatrix1D</tt>, etc.
-   *
-   * @param size   the number of cells the matrix shall have.
-   * @param offset the index of the first element.
-   * @param stride the number of indexes between any two elements, i.e. <tt>index(i+1)-index(i)</tt>.
-   * @return a new matrix of the corresponding dynamic type.
-   */
+  /* removed */
   @Override
   protected DoubleMatrix1D like1D(int size, int offset, int stride) {
     return new SparseDoubleMatrix1D(size, this.elements, offset, stride);
   }
 
-  /**
-   * Sets the matrix cell at coordinate <tt>[row,column]</tt> to the specified value.
-   *
-   * <p>Provided with invalid parameters this method may access illegal indexes without throwing any exception. <b>You
-   * should only use this method when you are absolutely sure that the coordinate is within bounds.</b> Precondition
-   * (unchecked): <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-   *
-   * @param row    the index of the row-coordinate.
-   * @param column the index of the column-coordinate.
-   * @param value  the value to be filled into the specified cell.
-   */
+  /* removed */
   @Override
   public void setQuick(int row, int column, double value) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -375,13 +249,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  /**
-   * Construct and returns a new selection view.
-   *
-   * @param rowOffsets    the offsets of the visible elements.
-   * @param columnOffsets the offsets of the visible elements.
-   * @return a new view.
-   */
+  /* removed */
   @Override
   protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
     return new SelectedSparseDoubleMatrix2D(this.elements, rowOffsets, columnOffsets, 0);

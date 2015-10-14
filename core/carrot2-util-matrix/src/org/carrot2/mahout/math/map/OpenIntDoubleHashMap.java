@@ -1,21 +1,4 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements. See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership. The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+/* removed */
 
 /*
 Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
@@ -34,58 +17,42 @@ import org.carrot2.mahout.math.function.IntProcedure;
 import org.carrot2.mahout.math.list.DoubleArrayList;
 import org.carrot2.mahout.math.list.IntArrayList;
 
-/**
-  * Open hash map from int keys to double values.
- **/
+/* removed */
 public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
   protected static final byte FREE = 0;
   protected static final byte FULL = 1;
   protected static final byte REMOVED = 2;
   protected static final int NO_KEY_VALUE = 0;
 
-  /** The hash table keys. */
+  /* removed */
   protected int[] table;
 
-  /** The hash table values. */
+  /* removed */
   protected double[] values;
 
-  /** The state of each hash table entry (FREE, FULL, REMOVED). */
+  /* removed */
   protected byte[] state;
 
-  /** The number of table entries in state==FREE. */
+  /* removed */
   protected int freeEntries;
 
 
-  /** Constructs an empty map with default capacity and default load factors. */
+  /* removed */
   public OpenIntDoubleHashMap() {
     this(defaultCapacity);
   }
 
-  /**
-   * Constructs an empty map with the specified initial capacity and default load factors.
-   *
-   * @param initialCapacity the initial capacity of the map.
-   * @throws IllegalArgumentException if the initial capacity is less than zero.
-   */
+  /* removed */
   public OpenIntDoubleHashMap(int initialCapacity) {
     this(initialCapacity, defaultMinLoadFactor, defaultMaxLoadFactor);
   }
 
-  /**
-   * Constructs an empty map with the specified initial capacity and the specified minimum and maximum load factor.
-   *
-   * @param initialCapacity the initial capacity.
-   * @param minLoadFactor   the minimum load factor.
-   * @param maxLoadFactor   the maximum load factor.
-   * @throws IllegalArgumentException if <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) ||
-   *                                  (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >=
-   *                                  maxLoadFactor)</tt>.
-   */
+  /* removed */
   public OpenIntDoubleHashMap(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
     setUp(initialCapacity, minLoadFactor, maxLoadFactor);
   }
 
-  /** Removes all (key,value) associations from the receiver. Implicitly calls <tt>trimToSize()</tt>. */
+  /* removed */
   @Override
   public void clear() {
     Arrays.fill(this.state, FREE);
@@ -94,11 +61,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     trimToSize();
   }
 
-  /**
-   * Returns a deep copy of the receiver.
-   *
-   * @return a deep copy of the receiver.
-   */
+  /* removed */
   @Override
   public Object clone() {
     OpenIntDoubleHashMap copy = (OpenIntDoubleHashMap) super.clone();
@@ -108,35 +71,19 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return copy;
   }
 
-  /**
-   * Returns <tt>true</tt> if the receiver contains the specified key.
-   *
-   * @return <tt>true</tt> if the receiver contains the specified key.
-   */
+  /* removed */
   @Override
   public boolean containsKey(int key) {
     return indexOfKey(key) >= 0;
   }
 
-  /**
-   * Returns <tt>true</tt> if the receiver contains the specified value.
-   *
-   * @return <tt>true</tt> if the receiver contains the specified value.
-   */
+  /* removed */
   @Override
   public boolean containsValue(double value) {
     return indexOfValue(value) >= 0;
   }
 
-  /**
-   * Ensures that the receiver can hold at least the specified number of associations without needing to allocate new
-   * internal memory. If necessary, allocates new internal memory and increases the capacity of the receiver. <p> This
-   * method never need be called; it is for performance tuning only. Calling this method before <tt>put()</tt>ing a
-   * large number of associations boosts performance, because the receiver will grow only once instead of potentially
-   * many times and hash collisions get less probable.
-   *
-   * @param minCapacity the desired minimum capacity.
-   */
+  /* removed */
   @Override
   public void ensureCapacity(int minCapacity) {
     if (table.length < minCapacity) {
@@ -145,17 +92,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  /**
-   * Applies a procedure to each key of the receiver, if any. Note: Iterates over the keys in no particular order.
-   * Subclasses can define a particular order, for example, "sorted by key". All methods which <i>can</i> be expressed
-   * in terms of this method (most methods can) <i>must guarantee</i> to use the <i>same</i> order defined by this
-   * method, even if it is no particular order. This is necessary so that, for example, methods <tt>keys</tt> and
-   * <tt>values</tt> will yield association pairs, not two uncorrelated lists.
-   *
-   * @param procedure the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise
-   *                  continues.
-   * @return <tt>false</tt> if the procedure stopped before all keys where iterated over, <tt>true</tt> otherwise.
-   */
+  /* removed */
   @Override
   public boolean forEachKey(IntProcedure procedure) {
     for (int i = table.length; i-- > 0;) {
@@ -168,14 +105,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return true;
   }
 
-  /**
-   * Applies a procedure to each (key,value) pair of the receiver, if any. Iteration order is guaranteed to be
-   * <i>identical</i> to the order used by method {@link #forEachKey(IntProcedure)}.
-   *
-   * @param procedure the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise
-   *                  continues.
-   * @return <tt>false</tt> if the procedure stopped before all keys where iterated over, <tt>true</tt> otherwise.
-   */
+  /* removed */
   @Override
   public boolean forEachPair(IntDoubleProcedure procedure) {
     for (int i = table.length; i-- > 0;) {
@@ -188,14 +118,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return true;
   }
 
-  /**
-   * Returns the value associated with the specified key. It is often a good idea to first check with
-   * containsKey(int) whether the given key has a value associated or not, i.e. whether there exists an association
-   * for the given key or not.
-   *
-   * @param key the key to be searched for.
-   * @return the value associated with the specified key; <tt>0</tt> if no such key is present.
-   */
+  /* removed */
   @Override
   public double get(int key) {
     final int i = indexOfKey(key);
@@ -205,13 +128,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return values[i];
   }
 
-  /**
-   * @param key the key to be added to the receiver.
-   * @return the index where the key would need to be inserted, if it is not already contained. Returns -index-1 if the
-   *         key is already contained at slot index. Therefore, if the returned index < 0, then it is already contained
-   *         at slot -index-1. If the returned index >= 0, then it is NOT already contained and should be inserted at
-   *         slot index.
-   */
+  /* removed */
   protected int indexOfInsertion(int key) {
     final int length = table.length;
 
@@ -261,10 +178,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return i;
   }
 
-  /**
-   * @param key the key to be searched in the receiver.
-   * @return the index where the key is contained in the receiver, returns -1 if the key was not found.
-   */
+  /* removed */
   protected int indexOfKey(int key) {
     final int length = table.length;
 
@@ -292,10 +206,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return i; //found, return index where key is contained
   }
 
-  /**
-   * @param value the value to be searched in the receiver.
-   * @return the index where the value is contained in the receiver, returns -1 if the value was not found.
-   */
+  /* removed */
   protected int indexOfValue(double value) {
     double[] val = values;
     byte[] stat = state;
@@ -309,15 +220,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return -1; // not found
   }
 
-  /**
-   * Fills all keys contained in the receiver into the specified list. Fills the list, starting at index 0. After this
-   * call returns the specified list has a new size that equals <tt>this.size()</tt>. Iteration order is guaranteed to
-   * be <i>identical</i> to the order used by method {@link #forEachKey(IntProcedure)}.
-   * <p> This method can be used
-   * to iterate over the keys of the receiver.
-   *
-   * @param list the list to be filled, can have any size.
-   */
+  /* removed */
   @Override
   public void keys(IntArrayList list) {
     list.setSize(distinct);
@@ -331,23 +234,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  /**
-   * Fills all pairs satisfying a given condition into the specified lists. Fills into the lists, starting at index 0.
-   * After this call returns the specified lists both have a new size, the number of pairs satisfying the condition.
-   * Iteration order is guaranteed to be <i>identical</i> to the order used by method {@link
-   * #forEachKey(IntProcedure)}. <p> <b>Example:</b> <br>
-   * <pre>
-   * IntDoubleProcedure condition = new IntDoubleProcedure() { // match even values only
-   * public boolean apply(int key, double value) { return value%2==0; }
-   * }
-   * keys = (8,7,6), values = (1,2,2) --> keyList = (6,8), valueList = (2,1)</tt>
-   * </pre>
-   *
-   * @param condition the condition to be matched. Takes the current key as first and the current value as second
-   *                  argument.
-   * @param keyList   the list to be filled with keys, can have any size.
-   * @param valueList the list to be filled with values, can have any size.
-   */
+  /* removed */
   @Override
   public void pairsMatching(IntDoubleProcedure condition, 
                             IntArrayList keyList, 
@@ -363,15 +250,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  /**
-   * Associates the given key with the given value. Replaces any old <tt>(key,someOtherValue)</tt> association, if
-   * existing.
-   *
-   * @param key   the key the value shall be associated with.
-   * @param value the value to be associated.
-   * @return <tt>true</tt> if the receiver did not already contain such a key; <tt>false</tt> if the receiver did
-   *         already contain such a key - the new value has now replaced the formerly associated value.
-   */
+  /* removed */
   @Override
   public boolean put(int key, double value) {
     int i = indexOfInsertion(key);
@@ -416,11 +295,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
  }
   
-  /**
-   * Rehashes the contents of the receiver into a new table with a smaller or larger capacity. This method is called
-   * automatically when the number of keys in the receiver exceeds the high water mark or falls below the low water
-   * mark.
-   */
+  /* removed */
   protected void rehash(int newCapacity) {
     int oldCapacity = table.length;
     //if (oldCapacity == newCapacity) return;
@@ -449,12 +324,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  /**
-   * Removes the given key with its associated element from the receiver, if present.
-   *
-   * @param key the key to be removed from the receiver.
-   * @return <tt>true</tt> if the receiver contained the specified key, <tt>false</tt> otherwise.
-   */
+  /* removed */
   @Override
   public boolean removeKey(int key) {
     int i = indexOfKey(key);
@@ -474,16 +344,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return true;
   }
 
-  /**
-   * Initializes the receiver.
-   *
-   * @param initialCapacity the initial capacity of the receiver.
-   * @param minLoadFactor   the minLoadFactor of the receiver.
-   * @param maxLoadFactor   the maxLoadFactor of the receiver.
-   * @throws IllegalArgumentException if <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) ||
-   *                                  (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >=
-   *                                  maxLoadFactor)</tt>.
-   */
+  /* removed */
   @Override
   protected void setUp(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
     int capacity = initialCapacity;
@@ -516,10 +377,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     this.highWaterMark = chooseHighWaterMark(capacity, this.maxLoadFactor);
   }
 
-  /**
-   * Trims the capacity of the receiver to be the receiver's current size. Releases any superfluous internal memory. An
-   * application can use this operation to minimize the storage of the receiver.
-   */
+  /* removed */
   @Override
   public void trimToSize() {
     // * 1.2 because open addressing's performance exponentially degrades beyond that point
@@ -530,15 +388,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  /**
-   * Fills all values contained in the receiver into the specified list. Fills the list, starting at index 0. After this
-   * call returns the specified list has a new size that equals <tt>this.size()</tt>. Iteration order is guaranteed to
-   * be <i>identical</i> to the order used by method {@link #forEachKey(IntProcedure)}. 
-   * <p> This method can be used
-   * to iterate over the values of the receiver.
-   *
-   * @param list the list to be filled, can have any size.
-   */
+  /* removed */
   @Override
   public void values(DoubleArrayList list) {
     list.setSize(distinct);
@@ -552,12 +402,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
   
-  /**
-   * Access for unit tests.
-   * @param capacity
-   * @param minLoadFactor
-   * @param maxLoadFactor
-   */
+  /* removed */
   protected void getInternalFactors(int[] capacity, 
       double[] minLoadFactor, 
       double[] maxLoadFactor) {
