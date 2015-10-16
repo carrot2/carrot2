@@ -1,14 +1,4 @@
-/* removed */
- 
- /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.list;
+/* Imported from Mahout. */package org.carrot2.mahout.math.list;
 //CHECKSTYLE:OFF
 //CHECKSTYLE:ON
 
@@ -20,47 +10,47 @@ import org.carrot2.mahout.math.function.DoubleProcedure;
 import java.util.ArrayList;
 import java.util.List;
 
-/* removed */
+
 public abstract class AbstractDoubleList extends AbstractList implements DoubleBufferConsumer, Cloneable {
 
-  /* removed */
+  
   protected int size;
 
-  /* removed */
+  
   public void add(double element) {
     beforeInsert(size, element);
   }
 
-  /* removed */
+  
   public void addAllOf(AbstractDoubleList other) {
     addAllOfFromTo(other, 0, other.size() - 1);
   }
 
-  /* removed */
+  
   public void addAllOfFromTo(AbstractDoubleList other, int from, int to) {
     beforeInsertAllOfFromTo(size, other, from, to);
   }
   
-  /* removed */
+  
   @Override
   public void addAllOf(DoubleArrayList other) {
 	addAllOfFromTo(other, 0, other.size() - 1);
   }
 
-  /* removed */
+  
   public void beforeInsert(int index, double element) {
     beforeInsertDummies(index, 1);
     set(index, element);
   }
 
-  /* removed */
+  
   public void beforeInsertAllOfFromTo(int index, AbstractDoubleList other, int from, int to) {
     int length = to - from + 1;
     this.beforeInsertDummies(index, length);
     this.replaceFromToWithFrom(index, index + length - 1, other, from);
   }
 
-  /* removed */
+  
   @Override
   protected void beforeInsertDummies(int index, int length) {
     if (index > size || index < 0) {
@@ -72,12 +62,12 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
       replaceFromToWithFrom(index + length, size - 1, this, index);
     }
   }
-  /* removed */
+  
   public int binarySearch(double key) {
     return this.binarySearchFromTo(key, 0, size - 1);
   }
 
-  /* removed */
+  
   public int binarySearchFromTo(double key, int from, int to) {
     int low = from;
     int high = to;
@@ -96,18 +86,18 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return -(low + 1);  // key not found.
   }
 
-  /* removed */
+  
   @Override
   public Object clone() {
     return partFromTo(0, size - 1);
   }
 
-  /* removed */
+  
   public boolean contains(double elem) {
     return indexOfFromTo(elem, 0, size - 1) >= 0;
   }
 
-  /* removed */
+  
   public void delete(double element) {
     int index = indexOfFromTo(element, 0, size - 1);
     if (index >= 0) {
@@ -115,7 +105,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     }
   }
 
-  /* removed */
+  
   public double[] elements() {
     double[] myElements = new double[size];
     for (int i = size; --i >= 0;) {
@@ -124,17 +114,17 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return myElements;
   }
 
-  /* removed */
+  
   public AbstractDoubleList elements(double[] elements) {
     clear();
     addAllOfFromTo(new DoubleArrayList(elements), 0, elements.length - 1);
     return this;
   }
 
-  /* removed */
+  
   public abstract void ensureCapacity(int minCapacity);
 
-  /* removed */
+  
   public boolean equals(Object otherObj) { //delta
     if (otherObj == null) {
       return false;
@@ -158,7 +148,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return true;
   }
 
-  /* removed */
+  
   public void fillFromToWith(int from, int to, double val) {
     checkRangeFromTo(from, to, this.size);
     for (int i = from; i <= to;) {
@@ -166,7 +156,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     }
   }
 
-  /* removed */
+  
   public boolean forEach(DoubleProcedure procedure) {
     for (int i = 0; i < size;) {
       if (!procedure.apply(get(i++))) {
@@ -176,7 +166,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return true;
   }
 
-  /* removed */
+  
   public double get(int index) {
     if (index >= size || index < 0) {
       throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
@@ -184,15 +174,15 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return getQuick(index);
   }
 
-  /* removed */
+  
   protected abstract double getQuick(int index);
 
-  /* removed */
+  
   public int indexOf(double element) { //delta
     return indexOfFromTo(element, 0, size - 1);
   }
 
-  /* removed */
+  
   public int indexOfFromTo(double element, int from, int to) {
     checkRangeFromTo(from, to, size);
 
@@ -204,12 +194,12 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return -1; //not found
   }
 
-  /* removed */
+  
   public int lastIndexOf(double element) {
     return lastIndexOfFromTo(element, 0, size - 1);
   }
 
-  /* removed */
+  
   public int lastIndexOfFromTo(double element, int from, int to) {
     checkRangeFromTo(from, to, size());
 
@@ -221,7 +211,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return -1; //not found
   }
 
-  /* removed */
+  
   @Override
   public void mergeSortFromTo(int from, int to) {
     int mySize = size();
@@ -233,7 +223,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     setSizeRaw(mySize);
   }
 
-  /* removed */
+  
   public void mergeSortFromTo(int from, int to, DoubleComparator c) {
     int mySize = size();
     checkRangeFromTo(from, to, mySize);
@@ -244,7 +234,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     setSizeRaw(mySize);
   }
 
-  /* removed */
+  
   public AbstractDoubleList partFromTo(int from, int to) {
     checkRangeFromTo(from, to, size);
 
@@ -254,7 +244,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return part;
   }
   
-  /* removed */
+  
   @Override
   public void quickSortFromTo(int from, int to) {
     int mySize = size();
@@ -266,7 +256,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     setSizeRaw(mySize);
   }
 
-  /* removed */
+  
   public void quickSortFromTo(int from, int to, DoubleComparator c) {
     int mySize = size();
     checkRangeFromTo(from, to, mySize);
@@ -277,7 +267,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     setSizeRaw(mySize);
   }
 
-  /* removed */
+  
   public boolean removeAll(AbstractDoubleList other) {
     if (other.isEmpty()) {
       return false;
@@ -296,7 +286,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return modified;
   }
 
-  /* removed */
+  
   @Override
   public void removeFromTo(int from, int to) {
     checkRangeFromTo(from, to, size);
@@ -311,7 +301,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     }
   }
 
-  /* removed */
+  
   public void replaceFromToWithFrom(int from, int to, AbstractDoubleList other, int otherFrom) {
     int length = to - from + 1;
     if (length > 0) {
@@ -364,7 +354,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     }
   }
   
-  /* removed */
+  
   public boolean retainAll(AbstractDoubleList other) {
     if (other.isEmpty()) {
       if (size == 0) {
@@ -387,7 +377,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return modified;
   }
   
-  /* removed */
+  
   @Override
   public void reverse() {
     int limit = size() / 2;
@@ -400,7 +390,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     }
   }
 
-  /* removed */
+  
   public void set(int index, double element) {
     if (index >= size || index < 0) {
       throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
@@ -408,21 +398,21 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     setQuick(index, element);
   }
 
-  /* removed */
+  
   protected abstract void setQuick(int index, double element);
 
-  /* removed */
+  
   protected void setSizeRaw(int newSize) {
     size = newSize;
   }
 
-  /* removed */
+  
   @Override
   public int size() {
     return size;
   }
 
-  /* removed */
+  
   public AbstractDoubleList times(int times) {
     AbstractDoubleList newList = new DoubleArrayList(times * size());
     for (int i = times; --i >= 0;) {
@@ -431,7 +421,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return newList;
   }
 
-  /* removed */
+  
   public List<Double> toList() {
     int mySize = size();
     List<Double> list = new ArrayList<Double>(mySize);
@@ -455,7 +445,7 @@ public abstract class AbstractDoubleList extends AbstractList implements DoubleB
     return myElements;
   }
 
-  /* removed */
+  
   public String toString() {
     return org.carrot2.mahout.math.Arrays.toString(partFromTo(0, size() - 1).elements());
   }

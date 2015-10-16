@@ -1,24 +1,16 @@
-/*
-Copyright � 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.matrix.impl;
+/* Imported from Mahout. */package org.carrot2.mahout.math.matrix.impl;
 
 import org.carrot2.mahout.math.matrix.DoubleMatrix1D;
 import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 
-/* removed */
+
 class WrapperDoubleMatrix2D extends DoubleMatrix2D {
   /*
    * The elements of the matrix.
    */
   private final DoubleMatrix2D content;
 
-  /* removed */
+  
   WrapperDoubleMatrix2D(DoubleMatrix2D newContent) {
     if (newContent != null) {
       setUp(newContent.rows(), newContent.columns());
@@ -26,49 +18,49 @@ class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     this.content = newContent;
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix2D getContent() {
     return content;
   }
 
-  /* removed */
+  
   @Override
   public double getQuick(int row, int column) {
     return content.getQuick(row, column);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D like(int rows, int columns) {
     return content.like(rows, columns);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D like1D(int size) {
     return content.like1D(size);
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix1D like1D(int size, int offset, int stride) {
     throw new UnsupportedOperationException(); // should never get called
   }
 
-  /* removed */
+  
   @Override
   public void setQuick(int row, int column, double value) {
     content.setQuick(row, column, value);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D viewColumn(int column) {
     return viewDice().viewRow(column);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D viewColumnFlip() {
     if (columns == 0) {
@@ -87,7 +79,7 @@ class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     };
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D viewDice() {
     DoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
@@ -106,7 +98,7 @@ class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     return view;
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D viewPart(final int row, final int column, int height, int width) {
     checkBox(row, column, height, width);
@@ -127,14 +119,14 @@ class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     return view;
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D viewRow(int row) {
     checkRow(row);
     return new DelegateDoubleMatrix1D(this, row);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D viewRowFlip() {
     if (rows == 0) {
@@ -153,7 +145,7 @@ class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     };
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D viewSelection(int[] rowIndexes, int[] columnIndexes) {
     // check for "all"
@@ -192,7 +184,7 @@ class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     return view;
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
     throw new UnsupportedOperationException(); // should never be called

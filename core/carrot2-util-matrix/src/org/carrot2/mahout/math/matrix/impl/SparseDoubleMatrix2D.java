@@ -1,12 +1,4 @@
-/*
-Copyright � 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.matrix.impl;
+/* Imported from Mahout. */package org.carrot2.mahout.math.matrix.impl;
 
 import org.carrot2.mahout.math.function.DoubleDoubleFunction;
 import org.carrot2.mahout.math.function.DoubleFunction;
@@ -26,24 +18,24 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
    */
   final AbstractIntDoubleMap elements;
 
-  /* removed */
+  
   public SparseDoubleMatrix2D(double[][] values) {
     this(values.length, values.length == 0 ? 0 : values[0].length);
     assign(values);
   }
 
-  /* removed */
+  
   public SparseDoubleMatrix2D(int rows, int columns) {
     this(rows, columns, rows * (columns / 1000), 0.2, 0.5);
   }
 
-  /* removed */
+  
   public SparseDoubleMatrix2D(int rows, int columns, int initialCapacity, double minLoadFactor, double maxLoadFactor) {
     setUp(rows, columns);
     this.elements = new OpenIntDoubleHashMap(initialCapacity, minLoadFactor, maxLoadFactor);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D assign(double value) {
     // overriden for performance only
@@ -55,7 +47,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  /* removed */
+  
   @Override
   public void assign(DoubleFunction function) {
     if (this.isNoView && function instanceof Mult) { // x[i] = mult*x[i]
@@ -65,7 +57,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D assign(DoubleMatrix2D source) {
     // overriden for performance only
@@ -148,13 +140,13 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return super.assign(y, function);
   }
 
-  /* removed */
+  
   @Override
   public int cardinality() {
     return this.isNoView ? this.elements.size() : super.cardinality();
   }
 
-  /* removed */
+  
   @Override
   public void ensureCapacity(int minCapacity) {
     this.elements.ensureCapacity(minCapacity);
@@ -182,7 +174,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  /* removed */
+  
   @Override
   public double getQuick(int row, int column) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -192,7 +184,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return this.elements.get(rowZero + row * rowStride + columnZero + column * columnStride);
   }
 
-  /* removed */
+  
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
     if (other instanceof SelectedSparseDoubleMatrix2D) {
@@ -206,7 +198,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return false;
   }
 
-  /* removed */
+  
   @Override
   protected int index(int row, int column) {
     // return super.index(row,column);
@@ -214,25 +206,25 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return rowZero + row * rowStride + columnZero + column * columnStride;
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D like(int rows, int columns) {
     return new SparseDoubleMatrix2D(rows, columns);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D like1D(int size) {
     return new SparseDoubleMatrix1D(size);
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix1D like1D(int size, int offset, int stride) {
     return new SparseDoubleMatrix1D(size, this.elements, offset, stride);
   }
 
-  /* removed */
+  
   @Override
   public void setQuick(int row, int column, double value) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -249,7 +241,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
     return new SelectedSparseDoubleMatrix2D(this.elements, rowOffsets, columnOffsets, 0);

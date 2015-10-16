@@ -20,7 +20,7 @@ package org.carrot2.mahout.math;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/* removed */
+
 public class MatrixVectorView extends AbstractVector {
   private Matrix matrix;
   private int row;
@@ -56,19 +56,19 @@ public class MatrixVectorView extends AbstractVector {
     }
   }
 
-  /* removed */
+  
   @Override
   public boolean isDense() {
     return true;
   }
 
-  /* removed */
+  
   @Override
   public boolean isSequentialAccess() {
     return true;
   }
 
-  /* removed */
+  
   @Override
   public Iterator<Element> iterator() {
     final LocalElement r = new LocalElement(0);
@@ -96,31 +96,31 @@ public class MatrixVectorView extends AbstractVector {
     };
   }
 
-  /* removed */
+  
   @Override
   public Iterator<Element> iterateNonZero() {
     return iterator();
   }
 
-  /* removed */
+  
   @Override
   public double getQuick(int index) {
     return matrix.getQuick(row + rowStride * index, column + columnStride * index);
   }
 
-  /* removed */
+  
   @Override
   public Vector like() {
     return matrix.like(size(), 1).viewColumn(0);
   }
 
-  /* removed */
+  
   @Override
   public void setQuick(int index, double value) {
     matrix.setQuick(row + rowStride * index, column + columnStride * index, value);
   }
 
-  /* removed */
+  
   @Override
   public int getNumNondefaultElements() {
     return size();

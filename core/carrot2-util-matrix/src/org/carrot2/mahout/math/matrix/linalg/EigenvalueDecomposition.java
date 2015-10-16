@@ -1,12 +1,4 @@
-/*
-Copyright � 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.matrix.linalg;
+/* Imported from Mahout. */package org.carrot2.mahout.math.matrix.linalg;
 
 import org.carrot2.mahout.math.Matrix;
 import org.carrot2.mahout.math.MatrixSlice;
@@ -21,20 +13,20 @@ import static org.carrot2.mahout.math.matrix.linalg.Property.checkSquare;
 
 public final class EigenvalueDecomposition {
 
-  /* removed */
+  
   private final int n;
 
-  /* removed */
+  
   private final double[] d;
   private final double[] e;
 
-  /* removed */
+  
   private final double[][] V;
 
-  /* removed */
+  
   private double[][] H;
 
-  /* removed */
+  
   private double[] ort;
 
   // Complex scalar division.
@@ -117,7 +109,7 @@ public final class EigenvalueDecomposition {
     }
     return V;
   }
-  /* removed */
+  
   public EigenvalueDecomposition(DoubleMatrix2D A) {
     this(toArray(A));
   }
@@ -138,7 +130,7 @@ public final class EigenvalueDecomposition {
     }
   }
 
-  /* removed */
+  
   public DoubleMatrix2D getD() {
     double[][] D = new double[n][n];
     for (int i = 0; i < n; i++) {
@@ -155,22 +147,22 @@ public final class EigenvalueDecomposition {
     return new DenseDoubleMatrix2D(D);
   }
 
-  /* removed */
+  
   public DoubleMatrix1D getImagEigenvalues() {
     return new DenseDoubleMatrix1D(e);
   }
 
-  /* removed */
+  
   public DoubleMatrix1D getRealEigenvalues() {
     return new DenseDoubleMatrix1D(d);
   }
 
-  /* removed */
+  
   public DoubleMatrix2D getV() {
     return new DenseDoubleMatrix2D(V);
   }
 
-  /* removed */
+  
   private void hqr2() {
     //  This is derived from the Algol procedure hqr2,
     //  by Martin and Wilkinson, Handbook for Auto. Comp.,
@@ -613,7 +605,7 @@ public final class EigenvalueDecomposition {
     }
   }
 
-  /* removed */
+  
   private void orthes() {
     //  This is derived from the Algol procedures orthes and ortran,
     //  by Martin and Wilkinson, Handbook for Auto. Comp.,
@@ -704,7 +696,7 @@ public final class EigenvalueDecomposition {
     }
   }
 
-  /* removed */
+  
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder();
@@ -745,7 +737,7 @@ public final class EigenvalueDecomposition {
     return buf.toString();
   }
 
-  /* removed */
+  
   private void tql2() {
 
     //  This is derived from the Algol procedures tql2, by
@@ -858,7 +850,7 @@ public final class EigenvalueDecomposition {
     }
   }
 
-  /* removed */
+  
   private void tred2() {
     //  This is derived from the Algol procedures tred2 by
     //  Bowdler, Martin, Reinsch, and Wilkinson, Handbook for

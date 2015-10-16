@@ -1,16 +1,26 @@
-/* removed */
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2015, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
 
 package org.carrot2.mahout.math.map;
 
 import java.util.Arrays;
 
-/* removed */
+
 public class PrimeFinder {
 
-  /* removed */
+  
   public static final int largestPrime = Integer.MAX_VALUE; //yes, it is prime.
 
-  /* removed */
+  
 
   private static final int[] primeCapacities = {
       //chunk #0
@@ -73,11 +83,11 @@ public class PrimeFinder {
     Arrays.sort(primeCapacities);
   }
 
-  /* removed */
+  
   private PrimeFinder() {
   }
 
-  /* removed */
+  
   public static int nextPrime(int desiredCapacity) {
     int i = java.util.Arrays.binarySearch(primeCapacities, desiredCapacity);
     if (i < 0) {

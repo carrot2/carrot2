@@ -1,12 +1,4 @@
-/*
-Copyright 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.matrix.linalg;
+/* Imported from Mahout. */package org.carrot2.mahout.math.matrix.linalg;
 
 import org.carrot2.mahout.math.Matrix;
 import org.carrot2.mahout.math.function.Functions;
@@ -17,27 +9,27 @@ import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 public final class Property {
 
-  /* removed */
+  
   public static final Property DEFAULT = new Property(1.0E-9);
 
-  /* removed */
+  
   public static final Property ZERO = new Property(0.0);
 
   private final double tolerance;
 
-  /* removed */
+  
   public Property(double newTolerance) {
     tolerance = Math.abs(newTolerance);
   }
 
-  /* removed */
+  
   public static void checkRectangular(AbstractMatrix2D a) {
     if (a.rows() < a.columns()) {
       throw new IllegalArgumentException("Matrix must be rectangular");
     }
   }
 
-  /* removed */
+  
   public static void checkSquare(AbstractMatrix2D a) {
     if (a.rows() != a.columns()) {
       throw new IllegalArgumentException("Matrix must be square");
@@ -50,12 +42,12 @@ public final class Property {
     }
   }
 
-  /* removed */
+  
   public static double density(DoubleMatrix2D a) {
     return a.cardinality() / (double) a.size();
   }
 
-  /* removed */
+  
   public boolean equals(DoubleMatrix1D a, double value) {
     if (a == null) {
       return false;
@@ -76,7 +68,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean equals(DoubleMatrix1D a, DoubleMatrix1D b) {
     if (a == b) {
       return true;
@@ -106,7 +98,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean equals(DoubleMatrix2D a, double value) {
     if (a == null) {
       return false;
@@ -132,7 +124,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean equals(DoubleMatrix2D a, DoubleMatrix2D b) {
     if (a == b) {
       return true;
@@ -165,7 +157,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean isDiagonal(DoubleMatrix2D a) {
     double epsilon = tolerance();
     int rows = a.rows();
@@ -181,7 +173,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public static boolean isDiagonallyDominantByColumn(DoubleMatrix2D a) {
     //double epsilon = tolerance();
     int min = Math.min(a.rows(), a.columns());
@@ -195,7 +187,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public static boolean isDiagonallyDominantByRow(DoubleMatrix2D a) {
     //double epsilon = tolerance();
     int min = Math.min(a.rows(), a.columns());
@@ -209,7 +201,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean isIdentity(DoubleMatrix2D a) {
     double epsilon = tolerance();
     int rows = a.rows();
@@ -229,7 +221,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean isLowerBidiagonal(DoubleMatrix2D a) {
     double epsilon = tolerance();
     int rows = a.rows();
@@ -244,7 +236,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean isLowerTriangular(DoubleMatrix2D a) {
     double epsilon = tolerance();
     int rows = a.rows();
@@ -260,7 +252,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public static boolean isNonNegative(DoubleMatrix2D a) {
     int rows = a.rows();
     int columns = a.columns();
@@ -274,14 +266,14 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean isOrthogonal(DoubleMatrix2D a) {
     checkSquare(a);
     return equals(a.zMult(a, null, 1, 0, false, true),
                   DenseDoubleMatrix2D.identity(a.rows()));
   }
 
-  /* removed */
+  
   public static boolean isPositive(DoubleMatrix2D a) {
     int rows = a.rows();
     int columns = a.columns();
@@ -295,7 +287,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean isSkewSymmetric(DoubleMatrix2D a) {
     checkSquare(a);
     double epsilon = tolerance();
@@ -312,12 +304,12 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public static boolean isSquare(AbstractMatrix2D a) {
     return a.rows() == a.columns();
   }
 
-  /* removed */
+  
   public boolean isStrictlyLowerTriangular(DoubleMatrix2D a) {
     double epsilon = tolerance();
     int rows = a.rows();
@@ -333,7 +325,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean isStrictlyTriangular(DoubleMatrix2D a) {
     if (isTriangular(a)) {
       double epsilon = tolerance();
@@ -349,7 +341,7 @@ public final class Property {
     }
   }
 
-  /* removed */
+  
   public boolean isStrictlyUpperTriangular(DoubleMatrix2D a) {
     double epsilon = tolerance();
     int rows = a.rows();
@@ -365,18 +357,18 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean isSymmetric(DoubleMatrix2D a) {
     checkSquare(a);
     return equals(a, a.viewDice());
   }
 
-  /* removed */
+  
   public boolean isTriangular(DoubleMatrix2D a) {
     return isLowerTriangular(a) || isUpperTriangular(a);
   }
 
-  /* removed */
+  
   public boolean isTridiagonal(DoubleMatrix2D a) {
     double epsilon = tolerance();
     int rows = a.rows();
@@ -391,7 +383,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean isUnitTriangular(DoubleMatrix2D a) {
     if (isTriangular(a)) {
       double epsilon = tolerance();
@@ -407,7 +399,7 @@ public final class Property {
     }
   }
 
-  /* removed */
+  
   public boolean isUpperBidiagonal(DoubleMatrix2D a) {
     double epsilon = tolerance();
     int rows = a.rows();
@@ -422,7 +414,7 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean isUpperTriangular(DoubleMatrix2D a) {
     double epsilon = tolerance();
     int rows = a.rows();
@@ -438,12 +430,12 @@ public final class Property {
     return true;
   }
 
-  /* removed */
+  
   public boolean isZero(DoubleMatrix2D a) {
     return equals(a, 0);
   }
 
-  /* removed */
+  
   public int lowerBandwidth(DoubleMatrix2D a) {
     checkSquare(a);
     double epsilon = tolerance();
@@ -482,12 +474,12 @@ public final class Property {
     return 1;
   }
 
-  /* removed */
+  
   public double tolerance() {
     return tolerance;
   }
 
-  /* removed */
+  
   public int upperBandwidth(DoubleMatrix2D a) {
     checkSquare(a);
     double epsilon = tolerance();

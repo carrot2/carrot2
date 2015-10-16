@@ -1,32 +1,24 @@
-/*
-Copyright � 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.matrix.impl;
+/* Imported from Mahout. */package org.carrot2.mahout.math.matrix.impl;
 
 import org.carrot2.mahout.math.map.AbstractIntDoubleMap;
 import org.carrot2.mahout.math.matrix.DoubleMatrix1D;
 import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 
-/* removed */
+
 final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
   /*
    * The elements of the matrix.
    */
   final AbstractIntDoubleMap elements;
 
-  /* removed */
+  
   int[] rowOffsets;
   int[] columnOffsets;
 
-  /* removed */
+  
   int offset;
 
-  /* removed */
+  
   SelectedSparseDoubleMatrix2D(int rows, int columns, AbstractIntDoubleMap elements, int rowZero,
                                          int columnZero, int rowStride, int columnStride, int[] rowOffsets,
                                          int[] columnOffsets, int offset) {
@@ -41,25 +33,25 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     this.isNoView = false;
   }
 
-  /* removed */
+  
   SelectedSparseDoubleMatrix2D(AbstractIntDoubleMap elements, int[] rowOffsets, int[] columnOffsets,
                                          int offset) {
     this(rowOffsets.length, columnOffsets.length, elements, 0, 0, 1, 1, rowOffsets, columnOffsets, offset);
   }
 
-  /* removed */
+  
   @Override
   protected int columnOffset(int absRank) {
     return columnOffsets[absRank];
   }
 
-  /* removed */
+  
   @Override
   protected int rowOffset(int absRank) {
     return rowOffsets[absRank];
   }
 
-  /* removed */
+  
   @Override
   public double getQuick(int row, int column) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -70,7 +62,7 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
         .get(offset + rowOffsets[rowZero + row * rowStride] + columnOffsets[columnZero + column * columnStride]);
   }
 
-  /* removed */
+  
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
     if (other instanceof SelectedSparseDoubleMatrix2D) {
@@ -84,7 +76,7 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     return false;
   }
 
-  /* removed */
+  
   @Override
   protected int index(int row, int column) {
     //return this.offset + super.index(row,column);
@@ -92,26 +84,26 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     return this.offset + rowOffsets[rowZero + row * rowStride] + columnOffsets[columnZero + column * columnStride];
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D like(int rows, int columns) {
     return new SparseDoubleMatrix2D(rows, columns);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D like1D(int size) {
     return new SparseDoubleMatrix1D(size);
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix1D like1D(int size, int zero, int stride) {
     throw new UnsupportedOperationException();
     // this method is never called since viewRow() and viewColumn are overridden properly.
   }
 
-  /* removed */
+  
   @Override
   public void setQuick(int row, int column, double value) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -127,7 +119,7 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  /* removed */
+  
   @Override
   protected void setUp(int rows, int columns) {
     super.setUp(rows, columns);
@@ -136,7 +128,7 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     this.offset = 0;
   }
 
-  /* removed */
+  
   @Override
   protected AbstractMatrix2D vDice() {
     super.vDice();
@@ -151,7 +143,7 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D viewColumn(int column) {
     checkColumn(column);
@@ -163,7 +155,7 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     return new SelectedSparseDoubleMatrix1D(viewSize, this.elements, viewZero, viewStride, viewOffsets, viewOffset);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D viewRow(int row) {
     checkRow(row);
@@ -175,7 +167,7 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     return new SelectedSparseDoubleMatrix1D(viewSize, this.elements, viewZero, viewStride, viewOffsets, viewOffset);
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
     return new SelectedSparseDoubleMatrix2D(this.elements, rowOffsets, columnOffsets, this.offset);

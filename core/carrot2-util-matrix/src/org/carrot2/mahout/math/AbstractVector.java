@@ -24,7 +24,7 @@ import org.carrot2.mahout.math.function.Functions;
 
 import java.util.Iterator;
 
-/* removed */
+
 public abstract class AbstractVector implements Vector {
   
   private static final double LOG2 = Math.log(2.0);
@@ -584,7 +584,7 @@ public abstract class AbstractVector implements Vector {
     return result;
   }
 
-  /* removed */
+  
   @Override
   public boolean equals(Object o) {
     if (this == o) {

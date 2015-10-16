@@ -1,14 +1,4 @@
-/* removed */
-
-/*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.map;
+/* Imported from Mahout. */package org.carrot2.mahout.math.map;
 
 import org.carrot2.mahout.math.Sorting;
 import org.carrot2.mahout.math.Swapper;
@@ -22,7 +12,7 @@ import org.carrot2.mahout.math.set.AbstractSet;
 
 public abstract class AbstractIntDoubleMap extends AbstractSet {
 
-  /* removed */
+  
   public boolean containsKey(final int key) {
     return !forEachKey(
         new IntProcedure() {
@@ -34,7 +24,7 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     );
   }
 
-  /* removed */
+  
   public boolean containsValue(final double value) {
     return !forEachPair(
         new IntDoubleProcedure() {
@@ -46,12 +36,12 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     );
   }
 
-  /* removed */
+  
   public AbstractIntDoubleMap copy() {
     return (AbstractIntDoubleMap) clone();
   }
 
-  /* removed */
+  
   public boolean equals(Object obj) {
     if (obj == this) {
       return true;
@@ -85,10 +75,10 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
             );
   }
 
-  /* removed */
+  
   public abstract boolean forEachKey(IntProcedure procedure);
 
-  /* removed */
+  
   public boolean forEachPair(final IntDoubleProcedure procedure) {
     return forEachKey(
         new IntProcedure() {
@@ -100,17 +90,17 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     );
   }
 
-  /* removed */
+  
   public abstract double get(int key);
 
-  /* removed */
+  
   public IntArrayList keys() {
     IntArrayList list = new IntArrayList(size());
     keys(list);
     return list;
   }
 
-  /* removed */
+  
   public void keys(final IntArrayList list) {
     list.clear();
     forEachKey(
@@ -124,12 +114,12 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     );
   }
 
-  /* removed */
+  
   public void keysSortedByValue(IntArrayList keyList) {
     pairsSortedByValue(keyList, new DoubleArrayList(size()));
   }
 
-  /* removed */
+  
   public void pairsMatching(final IntDoubleProcedure condition, 
                            final IntArrayList keyList, 
                            final DoubleArrayList valueList) {
@@ -150,7 +140,7 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     );
   }
 
-  /* removed */
+  
   public void pairsSortedByKey(IntArrayList keyList, DoubleArrayList valueList) {
     keys(keyList);
     keyList.sort();
@@ -160,7 +150,7 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     }
   }
 
-  /* removed */
+  
   public void pairsSortedByValue(IntArrayList keyList, DoubleArrayList valueList) {
     keys(keyList);
     values(valueList);
@@ -189,13 +179,13 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     Sorting.quickSort(0, keyList.size(), comp, swapper);
   }
 
-  /* removed */
+  
   public abstract boolean put(int key, double value);
 
-  /* removed */
+  
   public abstract boolean removeKey(int key);
 
-  /* removed */
+  
   public String toString() {
     IntArrayList theKeys = keys();
     //theKeys.sort();
@@ -216,7 +206,7 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     return buf.toString();
   }
 
-  /* removed */
+  
   public String toStringByValue() {
     IntArrayList theKeys = new IntArrayList();
     keysSortedByValue(theKeys);
@@ -237,14 +227,14 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     return buf.toString();
   }
 
-  /* removed */
+  
   public DoubleArrayList values() {
     DoubleArrayList list = new DoubleArrayList(size());
     values(list);
     return list;
   }
 
-  /* removed */
+  
   public void values(final DoubleArrayList list) {
     list.clear();
     forEachKey(
@@ -258,7 +248,7 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     );
   }
   
-    /* removed */
+    
   public void assign(final DoubleFunction function) {
     copy().forEachPair(
         new IntDoubleProcedure() {
@@ -271,7 +261,7 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     );
   }
 
-  /* removed */
+  
   public void assign(AbstractIntDoubleMap other) {
     clear();
     other.forEachPair(
@@ -285,7 +275,7 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
     );
   }
   
-  /* removed */
+  
   public double adjustOrPutValue(int key, double newValue, double incrValue) {
       boolean present = containsKey(key);
       if (present) {

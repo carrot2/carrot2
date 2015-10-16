@@ -1,4 +1,14 @@
-/* removed */
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2015, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
 
 package org.carrot2.mahout.math;
 
@@ -9,12 +19,12 @@ import org.carrot2.mahout.math.function.Functions;
 import org.carrot2.shaded.guava.common.collect.AbstractIterator;
 import org.carrot2.shaded.guava.common.primitives.Doubles;
 
-/* removed */
+
 public class SequentialAccessSparseVector extends AbstractVector {
 
   private OrderedIntDoubleMapping values;
 
-  /* removed */
+  
   public SequentialAccessSparseVector() {
     super(0);
   }
@@ -123,13 +133,13 @@ public class SequentialAccessSparseVector extends AbstractVector {
     return result.toString();
   }
 
-  /* removed */
+  
   @Override
   public boolean isDense() {
     return false;
   }
 
-  /* removed */
+  
   @Override
   public boolean isSequentialAccess() {
     return true;

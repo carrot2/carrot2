@@ -1,14 +1,4 @@
-/* removed */
- 
- /*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.list;
+/* Imported from Mahout. */package org.carrot2.mahout.math.list;
 //CHECKSTYLE:OFF
 //CHECKSTYLE:ON
 
@@ -20,47 +10,47 @@ import org.carrot2.mahout.math.function.IntProcedure;
 import java.util.ArrayList;
 import java.util.List;
 
-/* removed */
+
 public abstract class AbstractIntList extends AbstractList implements IntBufferConsumer, Cloneable {
 
-  /* removed */
+  
   protected int size;
 
-  /* removed */
+  
   public void add(int element) {
     beforeInsert(size, element);
   }
 
-  /* removed */
+  
   public void addAllOf(AbstractIntList other) {
     addAllOfFromTo(other, 0, other.size() - 1);
   }
 
-  /* removed */
+  
   public void addAllOfFromTo(AbstractIntList other, int from, int to) {
     beforeInsertAllOfFromTo(size, other, from, to);
   }
   
-  /* removed */
+  
   @Override
   public void addAllOf(IntArrayList other) {
 	addAllOfFromTo(other, 0, other.size() - 1);
   }
 
-  /* removed */
+  
   public void beforeInsert(int index, int element) {
     beforeInsertDummies(index, 1);
     set(index, element);
   }
 
-  /* removed */
+  
   public void beforeInsertAllOfFromTo(int index, AbstractIntList other, int from, int to) {
     int length = to - from + 1;
     this.beforeInsertDummies(index, length);
     this.replaceFromToWithFrom(index, index + length - 1, other, from);
   }
 
-  /* removed */
+  
   @Override
   protected void beforeInsertDummies(int index, int length) {
     if (index > size || index < 0) {
@@ -72,12 +62,12 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
       replaceFromToWithFrom(index + length, size - 1, this, index);
     }
   }
-  /* removed */
+  
   public int binarySearch(int key) {
     return this.binarySearchFromTo(key, 0, size - 1);
   }
 
-  /* removed */
+  
   public int binarySearchFromTo(int key, int from, int to) {
     int low = from;
     int high = to;
@@ -96,18 +86,18 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return -(low + 1);  // key not found.
   }
 
-  /* removed */
+  
   @Override
   public Object clone() {
     return partFromTo(0, size - 1);
   }
 
-  /* removed */
+  
   public boolean contains(int elem) {
     return indexOfFromTo(elem, 0, size - 1) >= 0;
   }
 
-  /* removed */
+  
   public void delete(int element) {
     int index = indexOfFromTo(element, 0, size - 1);
     if (index >= 0) {
@@ -115,7 +105,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     }
   }
 
-  /* removed */
+  
   public int[] elements() {
     int[] myElements = new int[size];
     for (int i = size; --i >= 0;) {
@@ -124,17 +114,17 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return myElements;
   }
 
-  /* removed */
+  
   public AbstractIntList elements(int[] elements) {
     clear();
     addAllOfFromTo(new IntArrayList(elements), 0, elements.length - 1);
     return this;
   }
 
-  /* removed */
+  
   public abstract void ensureCapacity(int minCapacity);
 
-  /* removed */
+  
   public boolean equals(Object otherObj) { //delta
     if (otherObj == null) {
       return false;
@@ -158,7 +148,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return true;
   }
 
-  /* removed */
+  
   public void fillFromToWith(int from, int to, int val) {
     checkRangeFromTo(from, to, this.size);
     for (int i = from; i <= to;) {
@@ -166,7 +156,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     }
   }
 
-  /* removed */
+  
   public boolean forEach(IntProcedure procedure) {
     for (int i = 0; i < size;) {
       if (!procedure.apply(get(i++))) {
@@ -176,7 +166,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return true;
   }
 
-  /* removed */
+  
   public int get(int index) {
     if (index >= size || index < 0) {
       throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
@@ -184,15 +174,15 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return getQuick(index);
   }
 
-  /* removed */
+  
   protected abstract int getQuick(int index);
 
-  /* removed */
+  
   public int indexOf(int element) { //delta
     return indexOfFromTo(element, 0, size - 1);
   }
 
-  /* removed */
+  
   public int indexOfFromTo(int element, int from, int to) {
     checkRangeFromTo(from, to, size);
 
@@ -204,12 +194,12 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return -1; //not found
   }
 
-  /* removed */
+  
   public int lastIndexOf(int element) {
     return lastIndexOfFromTo(element, 0, size - 1);
   }
 
-  /* removed */
+  
   public int lastIndexOfFromTo(int element, int from, int to) {
     checkRangeFromTo(from, to, size());
 
@@ -221,7 +211,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return -1; //not found
   }
 
-  /* removed */
+  
   @Override
   public void mergeSortFromTo(int from, int to) {
     int mySize = size();
@@ -233,7 +223,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     setSizeRaw(mySize);
   }
 
-  /* removed */
+  
   public void mergeSortFromTo(int from, int to, IntComparator c) {
     int mySize = size();
     checkRangeFromTo(from, to, mySize);
@@ -244,7 +234,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     setSizeRaw(mySize);
   }
 
-  /* removed */
+  
   public AbstractIntList partFromTo(int from, int to) {
     checkRangeFromTo(from, to, size);
 
@@ -254,7 +244,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return part;
   }
   
-  /* removed */
+  
   @Override
   public void quickSortFromTo(int from, int to) {
     int mySize = size();
@@ -266,7 +256,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     setSizeRaw(mySize);
   }
 
-  /* removed */
+  
   public void quickSortFromTo(int from, int to, IntComparator c) {
     int mySize = size();
     checkRangeFromTo(from, to, mySize);
@@ -277,7 +267,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     setSizeRaw(mySize);
   }
 
-  /* removed */
+  
   public boolean removeAll(AbstractIntList other) {
     if (other.isEmpty()) {
       return false;
@@ -296,7 +286,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return modified;
   }
 
-  /* removed */
+  
   @Override
   public void removeFromTo(int from, int to) {
     checkRangeFromTo(from, to, size);
@@ -311,7 +301,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     }
   }
 
-  /* removed */
+  
   public void replaceFromToWithFrom(int from, int to, AbstractIntList other, int otherFrom) {
     int length = to - from + 1;
     if (length > 0) {
@@ -363,7 +353,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     }
   }
   
-  /* removed */
+  
   public boolean retainAll(AbstractIntList other) {
     if (other.isEmpty()) {
       if (size == 0) {
@@ -386,7 +376,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return modified;
   }
   
-  /* removed */
+  
   @Override
   public void reverse() {
     int limit = size() / 2;
@@ -399,7 +389,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     }
   }
 
-  /* removed */
+  
   public void set(int index, int element) {
     if (index >= size || index < 0) {
       throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
@@ -407,21 +397,21 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     setQuick(index, element);
   }
 
-  /* removed */
+  
   protected abstract void setQuick(int index, int element);
 
-  /* removed */
+  
   protected void setSizeRaw(int newSize) {
     size = newSize;
   }
 
-  /* removed */
+  
   @Override
   public int size() {
     return size;
   }
 
-  /* removed */
+  
   public AbstractIntList times(int times) {
     AbstractIntList newList = new IntArrayList(times * size());
     for (int i = times; --i >= 0;) {
@@ -430,7 +420,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return newList;
   }
 
-  /* removed */
+  
   public List<Integer> toList() {
     int mySize = size();
     List<Integer> list = new ArrayList<Integer>(mySize);
@@ -454,7 +444,7 @@ public abstract class AbstractIntList extends AbstractList implements IntBufferC
     return myElements;
   }
 
-  /* removed */
+  
   public String toString() {
     return org.carrot2.mahout.math.Arrays.toString(partFromTo(0, size() - 1).elements());
   }

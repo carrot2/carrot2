@@ -1,14 +1,4 @@
-/* removed */
-
-/*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.map;
+/* Imported from Mahout. */package org.carrot2.mahout.math.map;
 
 import java.util.Arrays;
 
@@ -17,42 +7,42 @@ import org.carrot2.mahout.math.function.IntProcedure;
 import org.carrot2.mahout.math.list.DoubleArrayList;
 import org.carrot2.mahout.math.list.IntArrayList;
 
-/* removed */
+
 public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
   protected static final byte FREE = 0;
   protected static final byte FULL = 1;
   protected static final byte REMOVED = 2;
   protected static final int NO_KEY_VALUE = 0;
 
-  /* removed */
+  
   protected int[] table;
 
-  /* removed */
+  
   protected double[] values;
 
-  /* removed */
+  
   protected byte[] state;
 
-  /* removed */
+  
   protected int freeEntries;
 
 
-  /* removed */
+  
   public OpenIntDoubleHashMap() {
     this(defaultCapacity);
   }
 
-  /* removed */
+  
   public OpenIntDoubleHashMap(int initialCapacity) {
     this(initialCapacity, defaultMinLoadFactor, defaultMaxLoadFactor);
   }
 
-  /* removed */
+  
   public OpenIntDoubleHashMap(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
     setUp(initialCapacity, minLoadFactor, maxLoadFactor);
   }
 
-  /* removed */
+  
   @Override
   public void clear() {
     Arrays.fill(this.state, FREE);
@@ -61,7 +51,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     trimToSize();
   }
 
-  /* removed */
+  
   @Override
   public Object clone() {
     OpenIntDoubleHashMap copy = (OpenIntDoubleHashMap) super.clone();
@@ -71,19 +61,19 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return copy;
   }
 
-  /* removed */
+  
   @Override
   public boolean containsKey(int key) {
     return indexOfKey(key) >= 0;
   }
 
-  /* removed */
+  
   @Override
   public boolean containsValue(double value) {
     return indexOfValue(value) >= 0;
   }
 
-  /* removed */
+  
   @Override
   public void ensureCapacity(int minCapacity) {
     if (table.length < minCapacity) {
@@ -92,7 +82,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  /* removed */
+  
   @Override
   public boolean forEachKey(IntProcedure procedure) {
     for (int i = table.length; i-- > 0;) {
@@ -105,7 +95,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return true;
   }
 
-  /* removed */
+  
   @Override
   public boolean forEachPair(IntDoubleProcedure procedure) {
     for (int i = table.length; i-- > 0;) {
@@ -118,7 +108,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return true;
   }
 
-  /* removed */
+  
   @Override
   public double get(int key) {
     final int i = indexOfKey(key);
@@ -128,7 +118,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return values[i];
   }
 
-  /* removed */
+  
   protected int indexOfInsertion(int key) {
     final int length = table.length;
 
@@ -178,7 +168,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return i;
   }
 
-  /* removed */
+  
   protected int indexOfKey(int key) {
     final int length = table.length;
 
@@ -206,7 +196,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return i; //found, return index where key is contained
   }
 
-  /* removed */
+  
   protected int indexOfValue(double value) {
     double[] val = values;
     byte[] stat = state;
@@ -220,7 +210,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return -1; // not found
   }
 
-  /* removed */
+  
   @Override
   public void keys(IntArrayList list) {
     list.setSize(distinct);
@@ -234,7 +224,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  /* removed */
+  
   @Override
   public void pairsMatching(IntDoubleProcedure condition, 
                             IntArrayList keyList, 
@@ -250,7 +240,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  /* removed */
+  
   @Override
   public boolean put(int key, double value) {
     int i = indexOfInsertion(key);
@@ -295,7 +285,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
  }
   
-  /* removed */
+  
   protected void rehash(int newCapacity) {
     int oldCapacity = table.length;
     //if (oldCapacity == newCapacity) return;
@@ -324,7 +314,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  /* removed */
+  
   @Override
   public boolean removeKey(int key) {
     int i = indexOfKey(key);
@@ -344,7 +334,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return true;
   }
 
-  /* removed */
+  
   @Override
   protected void setUp(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
     int capacity = initialCapacity;
@@ -377,7 +367,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     this.highWaterMark = chooseHighWaterMark(capacity, this.maxLoadFactor);
   }
 
-  /* removed */
+  
   @Override
   public void trimToSize() {
     // * 1.2 because open addressing's performance exponentially degrades beyond that point
@@ -388,7 +378,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  /* removed */
+  
   @Override
   public void values(DoubleArrayList list) {
     list.setSize(distinct);
@@ -402,7 +392,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
   
-  /* removed */
+  
   protected void getInternalFactors(int[] capacity, 
       double[] minLoadFactor, 
       double[] maxLoadFactor) {

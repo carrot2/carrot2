@@ -1,4 +1,14 @@
-/* removed */
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2015, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
 
 package org.carrot2.mahout.math;
 
@@ -9,14 +19,14 @@ import org.carrot2.mahout.math.map.OpenIntDoubleHashMap;
 import org.carrot2.shaded.guava.common.collect.AbstractIterator;
 
 
-/* removed */
+
 public class RandomAccessSparseVector extends AbstractVector {
 
   private static final int INITIAL_CAPACITY = 11;
 
   private OpenIntDoubleHashMap values;
 
-  /* removed */
+  
   public RandomAccessSparseVector() {
     super(0);
   }
@@ -89,13 +99,13 @@ public class RandomAccessSparseVector extends AbstractVector {
     return this;
   }
 
-  /* removed */
+  
   @Override
   public boolean isDense() {
     return false;
   }
 
-  /* removed */
+  
   @Override
   public boolean isSequentialAccess() {
     return false;
@@ -126,7 +136,7 @@ public class RandomAccessSparseVector extends AbstractVector {
     return new RandomAccessSparseVector(size(), values.size());
   }
 
-  /* removed */
+  
   @Override
   public Iterator<Element> iterateNonZero() {
     return new NonDefaultIterator();

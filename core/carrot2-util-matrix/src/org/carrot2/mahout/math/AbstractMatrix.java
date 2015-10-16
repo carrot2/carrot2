@@ -1,4 +1,14 @@
-/* removed */
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2015, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
 
 package org.carrot2.mahout.math;
 
@@ -13,7 +23,7 @@ import org.carrot2.mahout.math.function.VectorFunction;
 import org.carrot2.shaded.guava.common.collect.AbstractIterator;
 import org.carrot2.shaded.guava.common.collect.Maps;
 
-/* removed */
+
 public abstract class AbstractMatrix implements Matrix {
 
   protected Map<String, Integer> columnLabelBindings;
@@ -56,7 +66,7 @@ public abstract class AbstractMatrix implements Matrix {
     };
   }
 
-  /* removed */
+  
   @Override
   public int numSlices() {
     return numRows();
@@ -245,7 +255,7 @@ public abstract class AbstractMatrix implements Matrix {
     return this;
   }
 
-  /* removed */
+  
   @Override
   public Vector aggregateRows(VectorFunction f) {
     Vector r = new DenseVector(numRows());
@@ -256,26 +266,26 @@ public abstract class AbstractMatrix implements Matrix {
     return r;
   }
 
-  /* removed */
+  
   @Override
   public Vector viewRow(int row) {
     return new MatrixVectorView(this, row, 0, 0, 1);
   }
 
 
-  /* removed */
+  
   @Override
   public Vector viewColumn(int column) {
     return new MatrixVectorView(this, 0, column, 1, 0);
   }
 
-  /* removed */
+  
   @Override
   public Vector viewDiagonal() {
     return new MatrixVectorView(this, 0, 0, 1, 1);
   }
 
-  /* removed */
+  
   @Override
   public double aggregate(final DoubleDoubleFunction combiner, final DoubleFunction mapper) {
     return aggregateRows(new VectorFunction() {
@@ -286,7 +296,7 @@ public abstract class AbstractMatrix implements Matrix {
     }).aggregate(combiner, Functions.IDENTITY);
   }
 
-  /* removed */
+  
   @Override
   public Vector aggregateColumns(VectorFunction f) {
     Vector r = new DenseVector(numCols());
@@ -603,7 +613,7 @@ public abstract class AbstractMatrix implements Matrix {
       };
     }
 
-    /* removed */
+    
     @Override
     public Iterator<Element> iterateNonZero() {
       return iterator();
@@ -662,7 +672,7 @@ public abstract class AbstractMatrix implements Matrix {
       return new DenseVector(cardinality);
     }
 
-    /* removed */
+    
     @Override
     public int getNumNondefaultElements() {
       return size();

@@ -19,7 +19,7 @@ package org.carrot2.mahout.math.function;
 
 import org.carrot2.mahout.math.Vector;
 
-/* removed */
+
 public interface VectorFunction {
   double apply(Vector f);
 }

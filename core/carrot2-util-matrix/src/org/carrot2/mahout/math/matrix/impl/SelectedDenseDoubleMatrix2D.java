@@ -1,35 +1,27 @@
-/*
-Copyright � 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.matrix.impl;
+/* Imported from Mahout. */package org.carrot2.mahout.math.matrix.impl;
 
 import org.carrot2.mahout.math.matrix.DoubleMatrix1D;
 import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 
-/* removed */
+
 final class SelectedDenseDoubleMatrix2D extends DoubleMatrix2D {
 
-  /* removed */
+  
   final double[] elements;
 
-  /* removed */
+  
   private int[] rowOffsets;
   private int[] columnOffsets;
 
-  /* removed */
+  
   private int offset;
 
-  /* removed */
+  
   SelectedDenseDoubleMatrix2D(double[] elements, int[] rowOffsets, int[] columnOffsets, int offset) {
     this(rowOffsets.length, columnOffsets.length, elements, 0, 0, 1, 1, rowOffsets, columnOffsets, offset);
   }
 
-  /* removed */
+  
   SelectedDenseDoubleMatrix2D(int rows, int columns, double[] elements, int rowZero, int columnZero,
                                         int rowStride, int columnStride, int[] rowOffsets, int[] columnOffsets,
                                         int offset) {
@@ -44,19 +36,19 @@ final class SelectedDenseDoubleMatrix2D extends DoubleMatrix2D {
     this.isNoView = false;
   }
 
-  /* removed */
+  
   @Override
   protected int columnOffset(int absRank) {
     return columnOffsets[absRank];
   }
 
-  /* removed */
+  
   @Override
   protected int rowOffset(int absRank) {
     return rowOffsets[absRank];
   }
 
-  /* removed */
+  
   @Override
   public double getQuick(int row, int column) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -66,7 +58,7 @@ final class SelectedDenseDoubleMatrix2D extends DoubleMatrix2D {
     return elements[offset + rowOffsets[rowZero + row * rowStride] + columnOffsets[columnZero + column * columnStride]];
   }
 
-  /* removed */
+  
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
     if (other instanceof SelectedDenseDoubleMatrix2D) {
@@ -80,7 +72,7 @@ final class SelectedDenseDoubleMatrix2D extends DoubleMatrix2D {
     return false;
   }
 
-  /* removed */
+  
   @Override
   protected int index(int row, int column) {
     //return this.offset + super.index(row,column);
@@ -88,26 +80,26 @@ final class SelectedDenseDoubleMatrix2D extends DoubleMatrix2D {
     return this.offset + rowOffsets[rowZero + row * rowStride] + columnOffsets[columnZero + column * columnStride];
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D like(int rows, int columns) {
     return new DenseDoubleMatrix2D(rows, columns);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D like1D(int size) {
     return new DenseDoubleMatrix1D(size);
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix1D like1D(int size, int zero, int stride) {
     throw new UnsupportedOperationException();
     // this method is never called since viewRow() and viewColumn are overridden properly.
   }
 
-  /* removed */
+  
   @Override
   public void setQuick(int row, int column, double value) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -118,7 +110,7 @@ final class SelectedDenseDoubleMatrix2D extends DoubleMatrix2D {
         value;
   }
 
-  /* removed */
+  
   @Override
   protected void setUp(int rows, int columns) {
     super.setUp(rows, columns);
@@ -127,7 +119,7 @@ final class SelectedDenseDoubleMatrix2D extends DoubleMatrix2D {
     this.offset = 0;
   }
 
-  /* removed */
+  
   @Override
   protected AbstractMatrix2D vDice() {
     super.vDice();
@@ -142,7 +134,7 @@ final class SelectedDenseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D viewColumn(int column) {
     checkColumn(column);
@@ -154,7 +146,7 @@ final class SelectedDenseDoubleMatrix2D extends DoubleMatrix2D {
     return new SelectedDenseDoubleMatrix1D(viewSize, this.elements, viewZero, viewStride, viewOffsets, viewOffset);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D viewRow(int row) {
     checkRow(row);
@@ -166,7 +158,7 @@ final class SelectedDenseDoubleMatrix2D extends DoubleMatrix2D {
     return new SelectedDenseDoubleMatrix1D(viewSize, this.elements, viewZero, viewStride, viewOffsets, viewOffset);
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
     return new SelectedDenseDoubleMatrix2D(this.elements, rowOffsets, columnOffsets, this.offset);

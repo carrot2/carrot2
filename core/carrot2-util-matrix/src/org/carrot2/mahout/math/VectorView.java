@@ -1,4 +1,14 @@
-/* removed */
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2015, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
 
 package org.carrot2.mahout.math;
 
@@ -6,7 +16,7 @@ import java.util.Iterator;
 
 import org.carrot2.shaded.guava.common.collect.AbstractIterator;
 
-/* removed */
+
 public class VectorView extends AbstractVector {
 
   private Vector vector;
@@ -14,7 +24,7 @@ public class VectorView extends AbstractVector {
   // the offset into the Vector
   private int offset;
 
-  /* removed */
+  
   public VectorView() {
     super(0);
   }
@@ -74,7 +84,7 @@ public class VectorView extends AbstractVector {
     return new VectorView(vector, offset + this.offset, length);
   }
 
-  /* removed */
+  
   private boolean isInView(int index) {
     return index >= offset && index < offset + size();
   }

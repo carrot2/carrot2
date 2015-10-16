@@ -1,12 +1,4 @@
-/*
-Copyright � 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.matrix;
+/* Imported from Mahout. */package org.carrot2.mahout.math.matrix;
 
 import org.carrot2.mahout.math.function.DoubleDoubleFunction;
 import org.carrot2.mahout.math.function.DoubleFunction;
@@ -18,11 +10,11 @@ import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 
 public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneable {
 
-  /* removed */
+  
   protected DoubleMatrix2D() {
   }
 
-  /* removed */
+  
   public double aggregate(DoubleDoubleFunction aggr,
                           DoubleFunction f) {
     if (size() == 0) {
@@ -39,7 +31,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return a;
   }
 
-  /* removed */
+  
   public double aggregate(DoubleMatrix2D other, DoubleDoubleFunction aggr,
                           DoubleDoubleFunction f) {
     checkShape(other);
@@ -57,7 +49,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return a;
   }
 
-  /* removed */
+  
   public void assign(double[][] values) {
     if (values.length != rows) {
       throw new IllegalArgumentException("Must have same number of rows: rows=" + values.length + "rows()=" + rows());
@@ -74,7 +66,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     }
   }
 
-  /* removed */
+  
   public DoubleMatrix2D assign(double value) {
     int r = rows;
     int c = columns;
@@ -88,7 +80,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return this;
   }
 
-  /* removed */
+  
   public void assign(DoubleFunction function) {
     for (int row = rows; --row >= 0;) {
       for (int column = columns; --column >= 0;) {
@@ -97,7 +89,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     }
   }
 
-  /* removed */
+  
   public DoubleMatrix2D assign(DoubleMatrix2D other) {
     if (other == this) {
       return this;
@@ -117,7 +109,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return this;
   }
 
-  /* removed */
+  
   public DoubleMatrix2D assign(DoubleMatrix2D y, DoubleDoubleFunction function) {
     checkShape(y);
     for (int row = rows; --row >= 0;) {
@@ -128,7 +120,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return this;
   }
 
-  /* removed */
+  
   public int cardinality() {
     int cardinality = 0;
     for (int row = rows; --row >= 0;) {
@@ -141,17 +133,17 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return cardinality;
   }
 
-  /* removed */
+  
   public DoubleMatrix2D copy() {
     return like().assign(this);
   }
 
-  /* removed */
+  
   public boolean equals(double value) {
     return org.carrot2.mahout.math.matrix.linalg.Property.DEFAULT.equals(this, value);
   }
 
-  /* removed */
+  
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -167,7 +159,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return org.carrot2.mahout.math.matrix.linalg.Property.DEFAULT.equals(this, (DoubleMatrix2D) obj);
   }
 
-  /* removed */
+  
   public void forEachNonZero(IntIntDoubleFunction function) {
     for (int row = rows; --row >= 0;) {
       for (int column = columns; --column >= 0;) {
@@ -182,7 +174,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     }
   }
 
-  /* removed */
+  
   public double get(int row, int column) {
     if (column < 0 || column >= columns || row < 0 || row >= rows) {
       throw new IndexOutOfBoundsException("row:" + row + ", column:" + column);
@@ -190,15 +182,15 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return getQuick(row, column);
   }
 
-  /* removed */
+  
   protected DoubleMatrix2D getContent() {
     return this;
   }
 
-  /* removed */
+  
   public abstract double getQuick(int row, int column);
 
-  /* removed */
+  
   protected boolean haveSharedCells(DoubleMatrix2D other) {
     if (other == null) {
       return false;
@@ -209,26 +201,26 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return getContent().haveSharedCellsRaw(other.getContent());
   }
 
-  /* removed */
+  
   protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
     return false;
   }
 
-  /* removed */
+  
   public DoubleMatrix2D like() {
     return like(rows, columns);
   }
 
-  /* removed */
+  
   public abstract DoubleMatrix2D like(int rows, int columns);
 
-  /* removed */
+  
   public abstract DoubleMatrix1D like1D(int size);
 
-  /* removed */
+  
   protected abstract DoubleMatrix1D like1D(int size, int zero, int stride);
 
-  /* removed */
+  
   public void set(int row, int column, double value) {
     if (column < 0 || column >= columns || row < 0 || row >= rows) {
       throw new IndexOutOfBoundsException("row:" + row + ", column:" + column);
@@ -236,10 +228,10 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     setQuick(row, column, value);
   }
 
-  /* removed */
+  
   public abstract void setQuick(int row, int column, double value);
 
-  /* removed */
+  
   public double[][] toArray() {
     double[][] values = new double[rows][columns];
     for (int row = rows; --row >= 0;) {
@@ -251,7 +243,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return values;
   }
 
-  /* removed */
+  
   protected DoubleMatrix2D view() {
     try {
       return (DoubleMatrix2D) clone();
@@ -260,7 +252,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     }
   }
 
-  /* removed */
+  
   public DoubleMatrix1D viewColumn(int column) {
     checkColumn(column);
     int viewSize = this.rows;
@@ -269,22 +261,22 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return like1D(viewSize, viewZero, viewStride);
   }
 
-  /* removed */
+  
   public DoubleMatrix2D viewColumnFlip() {
     return (DoubleMatrix2D) view().vColumnFlip();
   }
 
-  /* removed */
+  
   public DoubleMatrix2D viewDice() {
     return (DoubleMatrix2D) view().vDice();
   }
 
-  /* removed */
+  
   public DoubleMatrix2D viewPart(int row, int column, int height, int width) {
     return (DoubleMatrix2D) view().vPart(row, column, height, width);
   }
 
-  /* removed */
+  
   public DoubleMatrix1D viewRow(int row) {
     checkRow(row);
     int viewSize = this.columns;
@@ -293,12 +285,12 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return like1D(viewSize, viewZero, viewStride);
   }
 
-  /* removed */
+  
   public DoubleMatrix2D viewRowFlip() {
     return (DoubleMatrix2D) view().vRowFlip();
   }
 
-  /* removed */
+  
   public DoubleMatrix2D viewSelection(int[] rowIndexes, int[] columnIndexes) {
     // check for "all"
     if (rowIndexes == null) {
@@ -327,7 +319,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return viewSelectionLike(rowOffsets, columnOffsets);
   }
 
-  /* removed */
+  
   /*
   public DoubleMatrix2D viewSelection(DoubleMatrix1DProcedure condition) {
     IntArrayList matches = new IntArrayList();
@@ -342,11 +334,11 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
   }
    */
 
-  /* removed */
+  
   protected abstract DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets);
 
 
-  /* removed */
+  
   public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z, double alpha, double beta, boolean transposeA) {
     if (transposeA) {
       return viewDice().zMult(y, z, alpha, beta, false);
@@ -369,7 +361,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return z;
   }
 
-  /* removed */
+  
   public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C, double alpha, double beta, boolean transposeA,
                               boolean transposeB) {
     if (transposeA) {
@@ -408,7 +400,7 @@ public abstract class DoubleMatrix2D extends AbstractMatrix2D implements Cloneab
     return C;
   }
 
-  /* removed */
+  
   public double zSum() {
     if (size() == 0) {
       return 0;

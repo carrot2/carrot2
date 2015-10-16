@@ -1,45 +1,22 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Copyright 1999 CERN - European Organization for Nuclear Research.
- * Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose
- * is hereby granted without fee, provided that the above copyright notice appear in all copies and
- * that both that copyright notice and this permission notice appear in supporting documentation.
- * CERN makes no representations about the suitability of this software for any purpose.
- * It is provided "as is" without expressed or implied warranty.
- */
-package org.carrot2.mahout.math;
+/* Imported from Mahout. */package org.carrot2.mahout.math;
 
 public class SingularValueDecomposition {
   
-  /* removed */
+  
   private final double[][] u;
   private final double[][] v;
   
-  /* removed */
+  
   private final double[] s;
   
-  /* removed */
+  
   private final int m;
   private final int n;
   
-  /* removed */
+  
   private boolean transpositionNeeded = false;
   
-  /* removed */
+  
   public SingularValueDecomposition(Matrix arg) {
     if (arg.numRows() < arg.numCols()) {
       transpositionNeeded = true;
@@ -483,12 +460,12 @@ public class SingularValueDecomposition {
     }
   }
   
-  /* removed */
+  
   public double cond() {
     return s[0] / s[Math.min(m, n) - 1];
   }
   
-  /* removed */
+  
   public Matrix getS() {
     double[][] s = new double[n][n];
     for (int i = 0; i < n; i++) {
@@ -501,12 +478,12 @@ public class SingularValueDecomposition {
     return new DenseMatrix(s);
   }
   
-  /* removed */
+  
   public double[] getSingularValues() {
     return s;
   }
   
-  /* removed */
+  
   public Matrix getU() {
     if (transpositionNeeded) { //case numRows() < numCols()
       return new DenseMatrix(v);
@@ -523,7 +500,7 @@ public class SingularValueDecomposition {
     }
   }
   
-  /* removed */
+  
   public Matrix getV() {
     if (transpositionNeeded) { //case numRows() < numCols()
       int numCols = Math.min(m + 1, n);
@@ -540,12 +517,12 @@ public class SingularValueDecomposition {
     }
   }
   
-  /* removed */
+  
   public double norm2() {
     return s[0];
   }
   
-  /* removed */
+  
   public int rank() {
     double eps = Math.pow(2.0, -52.0);
     double tol = Math.max(m, n) * s[0] * eps;
@@ -558,7 +535,7 @@ public class SingularValueDecomposition {
     return r;
   }
   
-  /* removed */
+  
   Matrix getCovariance(double minSingularValue) {
     Matrix j = new DenseMatrix(s.length,s.length);
     Matrix vMat = new DenseMatrix(this.v);
@@ -568,7 +545,7 @@ public class SingularValueDecomposition {
     return vMat.times(j).times(vMat.transpose());
   }
   
-  /* removed */
+  
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder();

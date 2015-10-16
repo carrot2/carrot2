@@ -1,4 +1,14 @@
-/* removed */
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2015, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
 
 package org.carrot2.mahout.math;
 
@@ -21,7 +31,7 @@ public final class Algebra {
     return result;
   }
   
-  /* removed */
+  
   public static double hypot(double a, double b) {
     double r;
     if (Math.abs(a) > Math.abs(b)) {
@@ -36,7 +46,7 @@ public final class Algebra {
     return r;
   }
   
-  /* removed */
+  
   public static double getNorm(Matrix m) {
     double max = 0.0;
     for (int i = 0; i < m.numRows(); i++) {

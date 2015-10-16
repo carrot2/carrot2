@@ -1,4 +1,14 @@
-/* removed */
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2015, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
 
 package org.carrot2.mahout.math;
 
@@ -9,17 +19,17 @@ import org.carrot2.mahout.math.function.DoubleDoubleFunction;
 import org.carrot2.mahout.math.function.PlusMult;
 import org.carrot2.shaded.guava.common.collect.AbstractIterator;
 
-/* removed */
+
 public class DenseVector extends AbstractVector {
 
   private double[] values;
 
-  /* removed */
+  
   public DenseVector() {
     super(0);
   }
 
-  /* removed */
+  
   public DenseVector(double[] values) {
     this(values, false);
   }
@@ -33,13 +43,13 @@ public class DenseVector extends AbstractVector {
     this(values.values, shallowCopy);
   }
 
-  /* removed */
+  
   public DenseVector(int cardinality) {
     super(cardinality);
     this.values = new double[cardinality];
   }
 
-  /* removed */
+  
   public DenseVector(Vector vector) {
     super(vector.size());
     values = new double[vector.size()];
@@ -55,13 +65,13 @@ public class DenseVector extends AbstractVector {
     return new DenseVector(values.clone());
   }
 
-  /* removed */
+  
   @Override
   public boolean isDense() {
     return true;
   }
 
-  /* removed */
+  
   @Override
   public boolean isSequentialAccess() {
     return true;
@@ -148,7 +158,7 @@ public class DenseVector extends AbstractVector {
     return new VectorView(this, offset, length);
   }
 
-  /* removed */
+  
   @Override
   public Iterator<Element> iterateNonZero() {
     return new NonDefaultIterator();

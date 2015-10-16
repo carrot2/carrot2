@@ -1,4 +1,14 @@
-/* removed */
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2015, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
 
 package org.carrot2.mahout.math;
 
@@ -23,7 +33,7 @@ public final class Sorting {
   /* empty */
   }
   
-  /* removed */
+  
   public static int binarySearchFromTo(byte[] array, byte value, int from,
       int to) {
     int mid = -1;
@@ -44,7 +54,7 @@ public final class Sorting {
     return -mid - (value < array[mid] ? 1 : 2);
   }
   
-  /* removed */
+  
   public static int binarySearchFromTo(char[] array, char value, int from,
       int to) {
     int mid = -1;
@@ -64,7 +74,7 @@ public final class Sorting {
     return -mid - (value < array[mid] ? 1 : 2);
   }
   
-  /* removed */
+  
   public static int binarySearchFromTo(double[] array, double value, int from,
       int to) {
     long longBits = Double.doubleToLongBits(value);
@@ -85,7 +95,7 @@ public final class Sorting {
     return -mid - (lessThan(value, array[mid]) ? 1 : 2);
   }
   
-  /* removed */
+  
   public static int binarySearchFromTo(float[] array, float value, int from,
       int to) {
     int intBits = Float.floatToIntBits(value);
@@ -106,7 +116,7 @@ public final class Sorting {
     return -mid - (lessThan(value, array[mid]) ? 1 : 2);
   }
   
-  /* removed */
+  
   public static int binarySearchFromTo(int[] array, int value, int from, int to) {
     int mid = -1;
     while (from <= to) {
@@ -125,7 +135,7 @@ public final class Sorting {
     return -mid - (value < array[mid] ? 1 : 2);
   }
   
-  /* removed */
+  
   public static int binarySearchFromTo(long[] array, long value, int from, int to) {
     int mid = -1;
     while (from <= to) {
@@ -144,7 +154,7 @@ public final class Sorting {
     return -mid - (value < array[mid] ? 1 : 2);
   }
   
-  /* removed */
+  
   public static <T extends Comparable<T>> int binarySearchFromTo(T[] array,
       T object, int from, int to) {
     if (array.length == 0) {
@@ -165,7 +175,7 @@ public final class Sorting {
     return -mid - (result >= 0 ? 1 : 2);
   }
   
-  /* removed */
+  
   public static <T> int binarySearchFromTo(T[] array, T object, int from,
       int to, Comparator<? super T> comparator) {
     int mid = 0, result = 0;
@@ -182,7 +192,7 @@ public final class Sorting {
     return -mid - (result >= 0 ? 1 : 2);
   }
   
-  /* removed */
+  
   public static int binarySearchFromTo(short[] array, short value, int from, int to) {
     int mid = -1;
     while (from <= to) {
@@ -318,7 +328,7 @@ public final class Sorting {
         : (comparisonxz > 0 ? c : a));
   }
   
-  /* removed */
+  
   private static int med3(int a, int b, int c, IntComparator comp) {
     int comparisonab = comp.compare(a, b);
     int comparisonac = comp.compare(a, c);
@@ -349,7 +359,7 @@ public final class Sorting {
         : (comparisonxz > 0 ? c : a));
   }
   
-  /* removed */
+  
   public static void quickSort(byte[] array, int start, int end,
       ByteComparator comp) {
     if (array == null) {
@@ -456,7 +466,7 @@ public final class Sorting {
   }
 
   
-  /* removed */
+  
   public static void quickSort(int start, int end, IntComparator comp, Swapper swap) {
     checkBounds(end+1, start, end);
     quickSort0(start, end, comp, swap);
@@ -576,7 +586,7 @@ public final class Sorting {
     }
   }
 
-  /* removed */
+  
   private static void insertionSort(int start, int end, IntComparator comp, Swapper swap) {
     for (int i = start + 1; i < end; i++) {
       for (int j = i; j > start && comp.compare(j - 1, j) > 0; j--) {
@@ -584,7 +594,7 @@ public final class Sorting {
       }
     }
   }
-  /* removed */
+  
   public static void quickSort(char[] array, int start, int end,
       CharComparator comp) {
     if (array == null) {
@@ -674,7 +684,7 @@ public final class Sorting {
     }
   }
   
-  /* removed */
+  
   public static void quickSort(double[] array, int start, int end,
       DoubleComparator comp) {
     if (array == null) {
@@ -764,7 +774,7 @@ public final class Sorting {
     }
   }
   
-  /* removed */
+  
   public static void quickSort(float[] array, int start, int end,
       FloatComparator comp) {
     if (array == null) {
@@ -854,7 +864,7 @@ public final class Sorting {
     }
   }
   
-  /* removed */
+  
   public static void quickSort(int[] array, int start, int end,
       IntComparator comp) {
     if (array == null) {
@@ -944,7 +954,7 @@ public final class Sorting {
     }
   }
   
-  /* removed */
+  
   public static void quickSort(long[] array, int start, int end,
       LongComparator comp) {
     if (array == null) {
@@ -1034,7 +1044,7 @@ public final class Sorting {
     }
   }
   
-  /* removed */
+  
   public static <T> void quickSort(T[] array, int start, int end,
       Comparator<T> comp) {
     if (array == null) {
@@ -1054,7 +1064,7 @@ public final class Sorting {
     
   }
   
-  /* removed */
+  
   public static <T extends Comparable<? super T>> void quickSort(T[] array,
       int start, int end) {
     quickSort(array, start, end, new ComparableAdaptor<T>());
@@ -1140,7 +1150,7 @@ public final class Sorting {
     }
   }
   
-  /* removed */
+  
   public static void quickSort(short[] array, int start, int end,
       ShortComparator comp) {
     if (array == null) {
@@ -1230,7 +1240,7 @@ public final class Sorting {
     }
   }
 
-  /* removed */
+  
   @SuppressWarnings("unchecked") // required to make the temp array work, afaict.
   public static <T> void mergeSort(T[] array, int start, int end,
       Comparator<T> comp) {
@@ -1245,12 +1255,12 @@ public final class Sorting {
     mergeSort(out, array, start, end, comp);
   }
   
-  /* removed */
+  
   public static <T extends Comparable<? super T>> void mergeSort(T[] array, int start, int end) {
     mergeSort(array, start, end, new ComparableAdaptor<T>());
   }
   
-  /* removed */
+  
   private static <T> void mergeSort(T[] in, T[] out, int start, int end,
       Comparator<T> c) {
     int len = end - start;
@@ -1313,7 +1323,7 @@ public final class Sorting {
     }
   }
   
-  /* removed */
+  
   private static <T> int find(T[] arr, T val, int bnd, int l, int r,
       Comparator<T> c) {
     int m = l;
@@ -1345,12 +1355,12 @@ public final class Sorting {
       return o1 - o2;
     }};
     
-    /* removed */
+    
   public static void mergeSort(byte[] array, int start, int end) {
     mergeSort(array, start, end, naturalByteComparison);
   }
   
-  /* removed */
+  
   public static void mergeSort(byte[] array, int start, int end, ByteComparator comp) {
     checkBounds(array.length, start, end);
     byte[] out = Arrays.copyOf(array, array.length);
@@ -1450,12 +1460,12 @@ public final class Sorting {
       return o1 - o2;
     }};
     
-    /* removed */
+    
   public static void mergeSort(char[] array, int start, int end) {
     mergeSort(array, start, end, naturalCharComparison);
   }
 
-  /* removed */
+  
   public static void mergeSort(char[] array, int start, int end, CharComparator comp) {
     checkBounds(array.length, start, end);
     char[] out = Arrays.copyOf(array, array.length);
@@ -1555,7 +1565,7 @@ public final class Sorting {
       return o1 - o2;
     }};
     
-    /* removed */
+    
   public static void mergeSort(short[] array, int start, int end) {
     mergeSort(array, start, end, naturalShortComparison);
   }
@@ -1567,7 +1577,7 @@ public final class Sorting {
   }
 
   
-  /* removed */
+  
   private static void mergeSort(short[] in, short[] out, int start, int end,
       ShortComparator c) {
     int len = end - start;
@@ -1665,14 +1675,14 @@ public final class Sorting {
     mergeSort(array, start, end, naturalIntComparison);
   }
 
-  /* removed */
+  
   public static void mergeSort(int[] array, int start, int end, IntComparator comp) {
     checkBounds(array.length, start, end);
     int[] out = Arrays.copyOf(array, array.length);
     mergeSort(out, array, start, end, comp);
   }
 
-  /* removed */
+  
   private static void mergeSort(int[] in, int[] out, int start, int end,
       IntComparator c) {
     int len = end - start;
@@ -1767,12 +1777,12 @@ public final class Sorting {
       return o1 < o2 ? -1 : o1 > o2 ? 1 : 0;
     }};
     
-    /* removed */
+    
   public static void mergeSort(long[] array, int start, int end) {
     mergeSort(array, start, end, naturalLongComparison);
   }
 
-  /* removed */
+  
   public static void mergeSort(long[] array, int start, int end, LongComparator comp) {
     checkBounds(array.length, start, end);
     long[] out = Arrays.copyOf(array, array.length);
@@ -1872,12 +1882,12 @@ public final class Sorting {
       return Float.compare(o1, o2);
     }};
     
-    /* removed */
+    
   public static void mergeSort(float[] array, int start, int end) {
     mergeSort(array, start, end, naturalFloatComparison);
   }
 
-  /* removed */
+  
   public static void mergeSort(float[] array, int start, int end, FloatComparator comp) {
     checkBounds(array.length, start, end);
     float[] out = Arrays.copyOf(array, array.length);
@@ -1978,12 +1988,12 @@ public final class Sorting {
     }};
     
     
-    /* removed */
+    
   public static void mergeSort(double[] array, int start, int end) {
     mergeSort(array, start, end, naturalDoubleComparison);
   }
 
-  /* removed */
+  
   public static void mergeSort(double[] array, int start, int end, DoubleComparator comp) {
     checkBounds(array.length, start, end);
     double[] out = Arrays.copyOf(array, array.length);
@@ -2077,7 +2087,7 @@ public final class Sorting {
     return l - 1;
   }
 
-  /* removed */
+  
   static void inplace_merge(int first, int middle, int last, IntComparator comp, Swapper swapper) {
     if (first >= middle || middle >= last) {
       return;
@@ -2129,7 +2139,7 @@ public final class Sorting {
     inplace_merge(middle, secondCut, last, comp, swapper);
   }
 
-  /* removed */
+  
   static int lower_bound(int first, int last, int x, IntComparator comp) {
     //if (comp==null) throw new NullPointerException();
     int len = last - first;
@@ -2146,7 +2156,7 @@ public final class Sorting {
     return first;
   }
 
-  /* removed */
+  
   public static void mergeSort(int fromIndex, int toIndex, IntComparator c, Swapper swapper) {
     /*
       We retain the same method signature as quickSort.
@@ -2181,7 +2191,7 @@ public final class Sorting {
     inplace_merge(fromIndex, mid, toIndex, c, swapper);
   }
 
-  /* removed */
+  
   static int upper_bound(int first, int last, int x, IntComparator comp) {
     //if (comp==null) throw new NullPointerException();
     int len = last - first;

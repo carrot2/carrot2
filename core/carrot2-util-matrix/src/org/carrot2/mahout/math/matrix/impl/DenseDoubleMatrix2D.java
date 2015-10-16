@@ -1,12 +1,4 @@
-/*
-Copyright � 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.matrix.impl;
+/* Imported from Mahout. */package org.carrot2.mahout.math.matrix.impl;
 
 import org.carrot2.mahout.math.function.DoubleDoubleFunction;
 import org.carrot2.mahout.math.function.DoubleFunction;
@@ -18,22 +10,22 @@ import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 
 public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
 
-  /* removed */
+  
   final double[] elements;
 
-  /* removed */
+  
   public DenseDoubleMatrix2D(double[][] values) {
     this(values.length, values.length == 0 ? 0 : values[0].length);
     assign(values);
   }
 
-  /* removed */
+  
   public DenseDoubleMatrix2D(int rows, int columns) {
     setUp(rows, columns);
     this.elements = new double[rows * columns];
   }
 
-  /* removed */
+  
   public static DoubleMatrix2D identity(int rowsAndColumns) {
     DoubleMatrix2D matrix = new DenseDoubleMatrix2D(rowsAndColumns, rowsAndColumns);
     for (int i = rowsAndColumns; --i >= 0;) {
@@ -42,7 +34,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return matrix;
   }
 
-  /* removed */
+  
   @Override
   public void assign(double[][] values) {
     if (this.isNoView) {
@@ -64,7 +56,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D assign(double value) {
     double[] elems = this.elements;
@@ -81,7 +73,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  /* removed */
+  
   @Override
   public void assign(DoubleFunction function) {
     double[] elems = this.elements;
@@ -120,7 +112,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D assign(DoubleMatrix2D source) {
     // overriden for performance only
@@ -170,7 +162,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D assign(DoubleMatrix2D y, DoubleDoubleFunction function) {
     // overriden for performance only
@@ -263,7 +255,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  /* removed */
+  
   @Override
   public double getQuick(int row, int column) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -273,7 +265,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return elements[rowZero + row * rowStride + columnZero + column * columnStride];
   }
 
-  /* removed */
+  
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
     if (other instanceof SelectedDenseDoubleMatrix2D) {
@@ -287,7 +279,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return false;
   }
 
-  /* removed */
+  
   @Override
   protected int index(int row, int column) {
     // return super.index(row,column);
@@ -295,25 +287,25 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return rowZero + row * rowStride + columnZero + column * columnStride;
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D like(int rows, int columns) {
     return new DenseDoubleMatrix2D(rows, columns);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D like1D(int size) {
     return new DenseDoubleMatrix1D(size);
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix1D like1D(int size, int zero, int stride) {
     return new DenseDoubleMatrix1D(size, this.elements, zero, stride);
   }
 
-  /* removed */
+  
   @Override
   public void setQuick(int row, int column, double value) {
     //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
@@ -323,7 +315,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     elements[rowZero + row * rowStride + columnZero + column * columnStride] = value;
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
     return new SelectedDenseDoubleMatrix2D(this.elements, rowOffsets, columnOffsets, 0);
@@ -522,7 +514,7 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return C;
   }
 
-  /* removed */
+  
   @Override
   public double zSum() {
     double[] elems = this.elements;

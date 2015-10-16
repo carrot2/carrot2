@@ -1,15 +1,6 @@
-/* removed */
-/*
-Copyright 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.collections;
+/* Imported from Mahout. */package org.carrot2.mahout.collections;
 
-/* removed */
+
 public class Arithmetic extends Constants {
   // for method stirlingCorrection(...)
   private static final double[] stirlingCorrection = {
@@ -225,11 +216,11 @@ public class Arithmetic extends Constants {
       7.257415615308004E306
   };
 
-  /* removed */
+  
   protected Arithmetic() {
   }
 
-  /* removed */
+  
   public static double binomial(double n, long k) {
     if (k < 0) {
       return 0;
@@ -251,7 +242,7 @@ public class Arithmetic extends Constants {
     return binomial;
   }
 
-  /* removed */
+  
   public static double binomial(long n, long k) {
     if (k < 0) {
       return 0;
@@ -292,12 +283,12 @@ public class Arithmetic extends Constants {
     return binomial;
   }
 
-  /* removed */
+  
   public static long ceil(double value) {
     return Math.round(Math.ceil(value));
   }
 
-  /* removed */
+  
   public static double chbevl(double x, double[] coef, int N) throws ArithmeticException {
 
     int p = 0;
@@ -316,7 +307,7 @@ public class Arithmetic extends Constants {
     return (0.5 * (b0 - b2));
   }
 
-  /* removed */
+  
   private static double factorial(int k) {
     if (k < 0) {
       throw new IllegalArgumentException();
@@ -335,29 +326,29 @@ public class Arithmetic extends Constants {
     }
   }
 
-  /* removed */
+  
   public static long floor(double value) {
     return Math.round(Math.floor(value));
   }
 
-  /* removed */
+  
   public static double log(double base, double value) {
     return Math.log(value) / Math.log(base);
   }
 
-  /* removed */
+  
   public static double log10(double value) {
     // 1.0 / Math.log(10) == 0.43429448190325176
     return Math.log(value) * 0.43429448190325176;
   }
 
-  /* removed */
+  
   public static double log2(double value) {
     // 1.0 / Math.log(2) == 1.4426950408889634
     return Math.log(value) * 1.4426950408889634;
   }
 
-  /* removed */
+  
   public static double logFactorial(int k) {
     if (k >= 30) {
 
@@ -374,7 +365,7 @@ public class Arithmetic extends Constants {
     }
   }
 
-  /* removed */
+  
   public static long longFactorial(int k) throws IllegalArgumentException {
     if (k < 0) {
       throw new IllegalArgumentException("Negative k");
@@ -386,7 +377,7 @@ public class Arithmetic extends Constants {
     throw new IllegalArgumentException("Overflow");
   }
 
-  /* removed */
+  
   public static double stirlingCorrection(int k) {
 
     if (k > 30) {

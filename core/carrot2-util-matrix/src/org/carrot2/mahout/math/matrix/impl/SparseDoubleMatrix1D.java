@@ -1,12 +1,4 @@
-/*
-Copyright � 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.matrix.impl;
+/* Imported from Mahout. */package org.carrot2.mahout.math.matrix.impl;
 
 import org.carrot2.mahout.math.RandomAccessSparseVector;
 import org.carrot2.mahout.math.Vector;
@@ -22,24 +14,24 @@ public final class SparseDoubleMatrix1D extends DoubleMatrix1D {
    */
   final AbstractIntDoubleMap elements;
 
-  /* removed */
+  
   public SparseDoubleMatrix1D(double[] values) {
     this(values.length);
     assign(values);
   }
 
-  /* removed */
+  
   public SparseDoubleMatrix1D(int size) {
     this(size, size / 1000, 0.2, 0.5);
   }
 
-  /* removed */
+  
   public SparseDoubleMatrix1D(int size, int initialCapacity, double minLoadFactor, double maxLoadFactor) {
     setUp(size);
     this.elements = new OpenIntDoubleHashMap(initialCapacity, minLoadFactor, maxLoadFactor);
   }
 
-  /* removed */
+  
   SparseDoubleMatrix1D(int size, AbstractIntDoubleMap elements, int offset, int stride) {
     setUp(size, offset, stride);
     this.elements = elements;
@@ -61,7 +53,7 @@ public final class SparseDoubleMatrix1D extends DoubleMatrix1D {
   }
 
 
-  /* removed */
+  
   @Override
   public void assign(double value) {
     // overriden for performance only
@@ -72,19 +64,19 @@ public final class SparseDoubleMatrix1D extends DoubleMatrix1D {
     }
   }
 
-  /* removed */
+  
   @Override
   public int cardinality() {
     return this.isNoView ? this.elements.size() : super.cardinality();
   }
 
-  /* removed */
+  
   @Override
   public void ensureCapacity(int minCapacity) {
     this.elements.ensureCapacity(minCapacity);
   }
 
-  /* removed */
+  
   @Override
   public double getQuick(int index) {
     //if (debug) if (index<0 || index>=size) checkIndex(index);
@@ -93,7 +85,7 @@ public final class SparseDoubleMatrix1D extends DoubleMatrix1D {
     return elements.get(zero + index * stride);
   }
 
-  /* removed */
+  
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix1D other) {
     if (other instanceof SelectedSparseDoubleMatrix1D) {
@@ -107,7 +99,7 @@ public final class SparseDoubleMatrix1D extends DoubleMatrix1D {
     return false;
   }
 
-  /* removed */
+  
   @Override
   protected int index(int rank) {
     // overriden for manual inlining only
@@ -115,19 +107,19 @@ public final class SparseDoubleMatrix1D extends DoubleMatrix1D {
     return zero + rank * stride;
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D like(int size) {
     return new SparseDoubleMatrix1D(size);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D like2D(int rows, int columns) {
     return new SparseDoubleMatrix2D(rows, columns);
   }
 
-  /* removed */
+  
   @Override
   public void setQuick(int index, double value) {
     //if (debug) if (index<0 || index>=size) checkIndex(index);
@@ -141,7 +133,7 @@ public final class SparseDoubleMatrix1D extends DoubleMatrix1D {
     }
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix1D viewSelectionLike(int[] offsets) {
     return new SelectedSparseDoubleMatrix1D(this.elements, offsets);

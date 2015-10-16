@@ -1,12 +1,4 @@
-/*
-Copyright � 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.matrix.impl;
+/* Imported from Mahout. */package org.carrot2.mahout.math.matrix.impl;
 
 import org.carrot2.mahout.math.function.DoubleDoubleFunction;
 import org.carrot2.mahout.math.function.DoubleFunction;
@@ -18,29 +10,29 @@ import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 
 public class DenseDoubleMatrix1D extends DoubleMatrix1D {
 
-  /* removed */
+  
   protected final double[] elements;
 
-  /* removed */
+  
   public DenseDoubleMatrix1D(double[] values) {
     this(values.length);
     assign(values);
   }
 
-  /* removed */
+  
   public DenseDoubleMatrix1D(int size) {
     setUp(size);
     this.elements = new double[size];
   }
 
-  /* removed */
+  
   protected DenseDoubleMatrix1D(int size, double[] elements, int zero, int stride) {
     setUp(size, zero, stride);
     this.elements = elements;
     this.isNoView = false;
   }
 
-  /* removed */
+  
   @Override
   public void assign(double[] values) {
     if (isNoView) {
@@ -54,7 +46,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
   }
 
-  /* removed */
+  
   @Override
   public void assign(double value) {
     int index = index(0);
@@ -66,7 +58,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
   }
 
-  /* removed */
+  
   @Override
   public void assign(DoubleFunction function) {
     int s = stride;
@@ -94,7 +86,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D assign(DoubleMatrix1D source) {
     // overriden for performance only
@@ -136,7 +128,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     return this;
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D assign(DoubleMatrix1D y, DoubleDoubleFunction function) {
     // overriden for performance only
@@ -202,7 +194,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     return this;
   }
 
-  /* removed */
+  
   @Override
   protected int cardinality(int maxCardinality) {
     int cardinality = 0;
@@ -219,7 +211,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     return cardinality;
   }
 
-  /* removed */
+  
   @Override
   public double getQuick(int index) {
     //if (debug) if (index<0 || index>=size) checkIndex(index);
@@ -228,7 +220,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     return elements[zero + index * stride];
   }
 
-  /* removed */
+  
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix1D other) {
     if (other instanceof SelectedDenseDoubleMatrix1D) {
@@ -242,7 +234,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     return false;
   }
 
-  /* removed */
+  
   @Override
   protected int index(int rank) {
     // overriden for manual inlining only
@@ -250,19 +242,19 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     return zero + rank * stride;
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix1D like(int size) {
     return new DenseDoubleMatrix1D(size);
   }
 
-  /* removed */
+  
   @Override
   public DoubleMatrix2D like2D(int rows, int columns) {
     return new DenseDoubleMatrix2D(rows, columns);
   }
 
-  /* removed */
+  
   @Override
   public void setQuick(int index, double value) {
     //if (debug) if (index<0 || index>=size) checkIndex(index);
@@ -271,7 +263,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     elements[zero + index * stride] = value;
   }
 
-  /* removed */
+  
   @Override
   public void swap(DoubleMatrix1D other) {
     // overriden for performance only
@@ -303,7 +295,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
   }
 
-  /* removed */
+  
   @Override
   public void toArray(double[] values) {
     if (values.length < size) {
@@ -316,13 +308,13 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
   }
 
-  /* removed */
+  
   @Override
   protected DoubleMatrix1D viewSelectionLike(int[] offsets) {
     return new SelectedDenseDoubleMatrix1D(this.elements, offsets);
   }
 
-  /* removed */
+  
   @Override
   public double zDotProduct(DoubleMatrix1D y, int from, int length) {
     if (!(y instanceof DenseDoubleMatrix1D)) {
@@ -378,7 +370,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     return sum;
   }
 
-  /* removed */
+  
   @Override
   public double zSum() {
     int s = stride;

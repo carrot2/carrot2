@@ -1,15 +1,25 @@
-/* removed */
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2015, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
 
 package org.carrot2.mahout.math;
 
 import java.util.Arrays;
 
-/* removed */
+
 public class DenseMatrix extends AbstractMatrix {
 
   private double[][] values;
 
-  /* removed */
+  
   public DenseMatrix(double[][] values) {
     super(values.length, values[0].length);
     // clone the rows
@@ -20,7 +30,7 @@ public class DenseMatrix extends AbstractMatrix {
     }
   }
   
-  /* removed */
+  
   public DenseMatrix(int rows, int columns) {
     super(rows, columns);
     this.values = new double[rows][columns];

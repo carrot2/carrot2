@@ -1,12 +1,4 @@
-/*
-Copyright � 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.matrix;
+/* Imported from Mahout. */package org.carrot2.mahout.math.matrix;
 
 import org.carrot2.mahout.math.DenseVector;
 import org.carrot2.mahout.math.Vector;
@@ -20,7 +12,7 @@ import org.carrot2.mahout.math.matrix.impl.AbstractMatrix1D;
 
 public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneable {
 
-  /* removed */
+  
   protected DoubleMatrix1D() {
   }
 
@@ -143,7 +135,7 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     }
   }
 
-  /* removed */
+  
   public int cardinality() {
     int cardinality = 0;
     for (int i = size; --i >= 0;) {
@@ -154,7 +146,7 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return cardinality;
   }
 
-  /* removed */
+  
   protected int cardinality(int maxCardinality) {
     int cardinality = 0;
     int i = size;
@@ -166,19 +158,19 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return cardinality;
   }
 
-  /* removed */
+  
   public DoubleMatrix1D copy() {
     DoubleMatrix1D copy = like();
     copy.assign(this);
     return copy;
   }
 
-  /* removed */
+  
   public boolean equals(double value) {
     return org.carrot2.mahout.math.matrix.linalg.Property.DEFAULT.equals(this, value);
   }
 
-  /* removed */
+  
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -201,7 +193,7 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return getQuick(index);
   }
 
-  /* removed */
+  
   protected DoubleMatrix1D getContent() {
     return this;
   }
@@ -279,18 +271,18 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return false;
   }
 
-  /* removed */
+  
   public DoubleMatrix1D like() {
     return like(size);
   }
 
-  /* removed */
+  
   public abstract DoubleMatrix1D like(int size);
 
-  /* removed */
+  
   public abstract DoubleMatrix2D like2D(int rows, int columns);
 
-  /* removed */
+  
   public void set(int index, double value) {
     if (index < 0 || index >= size) {
       checkIndex(index);
@@ -298,10 +290,10 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     setQuick(index, value);
   }
 
-  /* removed */
+  
   public abstract void setQuick(int index, double value);
 
-  /* removed */
+  
   public void swap(DoubleMatrix1D other) {
     checkSize(other);
     for (int i = size; --i >= 0;) {
@@ -311,14 +303,14 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     }
   }
 
-  /* removed */
+  
   public double[] toArray() {
     double[] values = new double[size];
     toArray(values);
     return values;
   }
 
-  /* removed */
+  
   public void toArray(double[] values) {
     if (values.length < size) {
       throw new IllegalArgumentException("values too small");
@@ -328,7 +320,7 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     }
   }
 
-  /* removed */
+  
   protected DoubleMatrix1D view() {
     try {
       return (DoubleMatrix1D) clone();
@@ -337,20 +329,20 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     }
   }
 
-  /* removed */
+  
   public DoubleMatrix1D viewPart(int index, int width) {
     return (DoubleMatrix1D) view().vPart(index, width);
   }
 
-  /* removed */
+  
   protected abstract DoubleMatrix1D viewSelectionLike(int[] offsets);
 
-  /* removed */
+  
   public double zDotProduct(DoubleMatrix1D y) {
     return zDotProduct(y, 0, size);
   }
 
-  /* removed */
+  
   public double zDotProduct(DoubleMatrix1D y, int from, int length) {
     if (from < 0 || length <= 0) {
       return 0;
@@ -373,7 +365,7 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return sum;
   }
 
-  /* removed */
+  
   public double zDotProduct(DoubleMatrix1D y, int from, int length, IntArrayList nonZeroIndexes) {
     // determine minimum length
     if (from < 0 || length <= 0) {
@@ -413,7 +405,7 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return sum;
   }
 
-  /* removed */
+  
   protected double zDotProduct(DoubleMatrix1D y, IntArrayList nonZeroIndexes) {
     return zDotProduct(y, 0, size, nonZeroIndexes);
     /*
@@ -427,7 +419,7 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     */
   }
 
-  /* removed */
+  
   public double zSum() {
     if (size() == 0) {
       return 0;

@@ -1,26 +1,18 @@
-/*
-Copyright 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.map;
+/* Imported from Mahout. */package org.carrot2.mahout.math.map;
 
-/* removed */
+
 public final class HashFunctions {
 
-  /* removed */
+  
   private HashFunctions() {
   }
 
-  /* removed */
+  
   public static int hash(char value) {
     return (int) value;
   }
 
-  /* removed */
+  
   public static int hash(double value) {
     long bits = Double.doubleToLongBits(value);
     return (int) (bits ^ (bits >>> 32));
@@ -29,13 +21,13 @@ public final class HashFunctions {
     // this avoids excessive hashCollisions in the case values are of the form (1.0, 2.0, 3.0, ...)
   }
 
-  /* removed */
+  
   public static int hash(float value) {
     return Float.floatToIntBits(value * 663608941.737f);
     // this avoids excessive hashCollisions in the case values are of the form (1.0, 2.0, 3.0, ...)
   }
 
-  /* removed */
+  
   public static int hash(int value) {
     return value;
 
@@ -51,7 +43,7 @@ public final class HashFunctions {
     */
   }
 
-  /* removed */
+  
   public static int hash(long value) {
     return (int) (value ^ (value >> 32));
     /*
@@ -64,17 +56,17 @@ public final class HashFunctions {
     */
   }
 
-  /* removed */
+  
   public static int hash(Object object) {
     return object == null ? 0 : object.hashCode();
   }
 
-  /* removed */
+  
   public static int hash(short value) {
     return (int) value;
   }
 
-  /* removed */
+  
   public static int hash(boolean value) {
     return value ? 1231 : 1237;
   }

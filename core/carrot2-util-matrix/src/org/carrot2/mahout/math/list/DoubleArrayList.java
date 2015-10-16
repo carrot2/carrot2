@@ -1,40 +1,31 @@
-/* removed */
-/*
-Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
-package org.carrot2.mahout.math.list;
+/* Imported from Mahout. */package org.carrot2.mahout.math.list;
 
 import org.carrot2.mahout.math.function.DoubleProcedure;
 
-/* removed */
+
 
 public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
 
-  /* removed */
+  
   private double[] elements;
 
-  /* removed */
+  
   public DoubleArrayList() {
     this(10);
   }
 
-  /* removed */
+  
   public DoubleArrayList(double[] elements) {
     elements(elements);
   }
 
-  /* removed */
+  
   public DoubleArrayList(int initialCapacity) {
     this(new double[initialCapacity]);
     setSizeRaw(0);
   }
 
-  /* removed */
+  
   public void add(double element) {
     // overridden for performance only.
     if (size == elements.length) {
@@ -43,7 +34,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     elements[size++] = element;
   }
 
-  /* removed */
+  
   public void beforeInsert(int index, double element) {
     // overridden for performance only.
     if (size == index) {
@@ -59,13 +50,13 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     size++;
   }
 
-  /* removed */
+  
   @Override
   public int binarySearchFromTo(double key, int from, int to) {
     return org.carrot2.mahout.math.Sorting.binarySearchFromTo(elements, key, from, to);
   }
   
-  /* removed */
+  
   @Override
   public Object clone() {
     // overridden for performance only.
@@ -74,30 +65,30 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return clone;
   }
 
-  /* removed */
+  
   public DoubleArrayList copy() {
     return (DoubleArrayList) clone();
   }
 
   
-  /* removed */
+  
   public double[] elements() {
     return elements;
   }
 
-  /* removed */
+  
   public AbstractDoubleList elements(double[] elements) {
     this.elements = elements;
     this.size = elements.length;
     return this;
   }
 
-  /* removed */
+  
   public void ensureCapacity(int minCapacity) {
     elements = org.carrot2.mahout.math.Arrays.ensureCapacity(elements, minCapacity);
   }
 
-  /* removed */
+  
   public boolean equals(Object otherObj) { //delta
     if (otherObj == null) {
       return false;
@@ -124,7 +115,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return true;
   }
 
-  /* removed */
+  
   public boolean forEach(DoubleProcedure procedure) {
     // overridden for performance only.
     double[] theElements = elements;
@@ -138,7 +129,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return true;
   }
 
-  /* removed */
+  
   public double get(int index) {
     // overridden for performance only.
     if (index >= size || index < 0) {
@@ -147,13 +138,13 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return elements[index];
   }
 
-  /* removed */
+  
   @Override
   public double getQuick(int index) {
     return elements[index];
   }
 
-  /* removed */
+  
   @Override
   public int indexOfFromTo(double element, int from, int to) {
     // overridden for performance only.
@@ -171,7 +162,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return -1; //not found
   }
 
-  /* removed */
+  
   @Override
   public int lastIndexOfFromTo(double element, int from, int to) {
     // overridden for performance only.
@@ -189,7 +180,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return -1; //not found
   }
 
-  /* removed */
+  
   @Override
   public AbstractDoubleList partFromTo(int from, int to) {
     if (size == 0) {
@@ -203,7 +194,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return new DoubleArrayList(part);
   }
 
-  /* removed */
+  
   @Override
   public boolean removeAll(AbstractDoubleList other) {
     // overridden for performance only.
@@ -255,7 +246,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return modified;
   }
 
-  /* removed */
+  
   @Override
   public void replaceFromToWithFrom(int from, int to, AbstractDoubleList other, int otherFrom) {
     // overridden for performance only.
@@ -272,7 +263,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     }
   }
 
-  /* removed */
+  
   @Override
   public boolean retainAll(AbstractDoubleList other) {
     // overridden for performance only.
@@ -321,7 +312,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return modified;
   }
 
-  /* removed */
+  
   @Override
   public void reverse() {
     // overridden for performance only.
@@ -336,7 +327,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     }
   }
 
-  /* removed */
+  
   @Override
   public void set(int index, double element) {
     // overridden for performance only.
@@ -346,15 +337,15 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     elements[index] = element;
   }
 
-  /* removed */
+  
   @Override
   public void setQuick(int index, double element) {
     elements[index] = element;
   }
 
-  /* removed */
+  
 
-  /* removed */
+  
   @Override
   public void sortFromTo(int from, int to) {
     /*
@@ -384,7 +375,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
         quickSortFromTo(from, to);
       }
 
-  /* removed */
+  
   @Override
   public void trimToSize() {
     elements = org.carrot2.mahout.math.Arrays.trimToCapacity(elements, size());
