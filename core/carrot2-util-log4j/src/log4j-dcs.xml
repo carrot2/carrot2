@@ -17,7 +17,7 @@
           <param name="ConversionPattern" value="[%p] %m%n"/>
       </layout>
   </appender>
-
+  
   <!-- Add logger filters here. -->
   &filters-common;
   &filters-silent;
@@ -29,7 +29,7 @@
   <logger name="dcs">
       <level value="info" />
   </logger>
-  
+
   <!-- Root logger config. -->
   <root>
       <priority value="info" />

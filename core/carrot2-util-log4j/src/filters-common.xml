@@ -32,3 +32,8 @@
 
 <!--  HTMLUnit -->
 <logger name="com.gargoylesoftware.htmlunit"><level value="warn" /></logger>
+
+<!-- Silence Jetty's SelectChannelEndPoint if it's unable to dispatch request to the (full) threadpool. -->
+<logger name="org.eclipse.jetty.io.nio">
+    <level value="error" />
+</logger>
