@@ -69,7 +69,7 @@
     <com.fasterxml.jackson.version>2.5.3</com.fasterxml.jackson.version>
     <org.slf4j.version>1.7.12</org.slf4j.version>
     <org.apache.httpcomponents.version>4.4.1</org.apache.httpcomponents.version>
-    <org.apache.lucene.version>5.1.0</org.apache.lucene.version>
+    <org.apache.lucene.version>5.3.1</org.apache.lucene.version>
     <org.simpleframework.version>2.7.1</org.simpleframework.version>
     <org.carrot2.attributes>1.2.3</org.carrot2.attributes>
   </properties>
