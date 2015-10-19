@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="jetty-http-7.3.1.v20110307.jar"/>
-	<classpathentry exported="true" kind="lib" path="jetty-io-7.3.1.v20110307.jar"/>
-	<classpathentry exported="true" kind="lib" path="jetty-server-7.3.1.v20110307.jar"/>
-	<classpathentry exported="true" kind="lib" path="jetty-util-7.3.1.v20110307.jar"/>
-	<classpathentry exported="true" kind="lib" path="jetty-webapp-7.3.1.v20110307.jar"/>
-	<classpathentry exported="true" kind="lib" path="jetty-servlet-7.3.1.v20110307.jar"/>
-	<classpathentry exported="true" kind="lib" path="jetty-servlets-7.3.1.v20110307.jar"/>
-	<classpathentry exported="true" kind="lib" path="jetty-xml-7.3.1.v20110307.jar"/>
-	<classpathentry exported="true" kind="lib" path="jetty-security-7.3.1.v20110307.jar"/>
-	<classpathentry exported="true" kind="lib" path="jetty-continuation-7.3.1.v20110307.jar"/>
-	<classpathentry exported="true" kind="lib" path="jetty-deploy-7.3.1.v20110307.jar"/>
+	<classpathentry exported="true" kind="lib" path="jetty-http-7.6.17.v20150415.jar"/>
+	<classpathentry exported="true" kind="lib" path="jetty-io-7.6.17.v20150415.jar"/>
+	<classpathentry exported="true" kind="lib" path="jetty-server-7.6.17.v20150415.jar"/>
+	<classpathentry exported="true" kind="lib" path="jetty-util-7.6.17.v20150415.jar" sourcepath="C:/Users/dweiss/.m2/repository/org/eclipse/jetty/jetty-util/7.6.17.v20150415/jetty-util-7.6.17.v20150415-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="jetty-webapp-7.6.17.v20150415.jar"/>
+	<classpathentry exported="true" kind="lib" path="jetty-servlet-7.6.17.v20150415.jar"/>
+	<classpathentry exported="true" kind="lib" path="jetty-servlets-7.6.17.v20150415.jar"/>
+	<classpathentry exported="true" kind="lib" path="jetty-xml-7.6.17.v20150415.jar"/>
+	<classpathentry exported="true" kind="lib" path="jetty-security-7.6.17.v20150415.jar"/>
+	<classpathentry exported="true" kind="lib" path="jetty-continuation-7.6.17.v20150415.jar"/>
+	<classpathentry exported="true" kind="lib" path="jetty-deploy-7.6.17.v20150415.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

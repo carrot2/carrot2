@@ -13,6 +13,7 @@
 package org.carrot2.dcs;
 
 import java.net.URL;
+import java.util.Locale;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
@@ -33,7 +34,12 @@ public class DcsApp
     /**
      * Is this the absolute minimum required for Jetty to run? 
      */
-    private final static int MIN_THREADS = 10;
+    private final static int MIN_THREADS = 2;
+    
+    /**
+     * The default number of threads.
+     */
+    private final static int DEFAULT_THREADS = Math.min(8, Runtime.getRuntime().availableProcessors());
 
     /**
      * DCS logger. Tests attach to this logger's LOG4J appender.
@@ -50,12 +56,12 @@ public class DcsApp
     boolean verbose;
 
     @Option(name = "--accept-queue", required = false, 
-        usage = "Socket accept queue length (default 20).")
-    int acceptQueue = 20;
+        usage = "Socket accept queue length.")
+    int acceptQueue;
 
     @Option(name = "--threads", required = false, 
-        usage = "Maximum number of processing threads (default " + MIN_THREADS + ").")
-    int maxThreads = MIN_THREADS;
+        usage = "Maximum number of processing threads.")
+    int maxThreads = DEFAULT_THREADS;
 
     String appName;
     Server server;
@@ -90,8 +96,12 @@ public class DcsApp
         // http://issues.carrot2.org/browse/CARROT-581
         if (maxThreads < MIN_THREADS)
         {
-            throw new IllegalArgumentException("Max number of threads must be greater than "
-                + MIN_THREADS);
+            throw new IllegalArgumentException("Max number of threads must be greater than " + MIN_THREADS);
+        }
+
+        // The default accept queue is twice the number of processing threads.
+        if (acceptQueue == 0) {
+          acceptQueue = maxThreads * 2;
         }
 
         server = new Server();
@@ -109,7 +119,13 @@ public class DcsApp
         {
             public void lifeCycleStarted(LifeCycle lc)
             {
-                log.info("DCS started on port: " + port + " [local: " + connector.getLocalPort() + "]");
+                log.info(
+                    String.format(Locale.ROOT,
+                        "DCS started on port: %d [local: %d], thread pool: %d, accept queue: %d",
+                        port,
+                        connector.getLocalPort(),
+                        maxThreads,
+                        acceptQueue));
             }
 
             public void lifeCycleFailure(LifeCycle lc, Throwable t)
