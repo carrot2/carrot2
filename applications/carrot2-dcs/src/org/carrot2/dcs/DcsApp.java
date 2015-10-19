@@ -83,7 +83,7 @@ public class DcsApp
         log.info("Starting DCS...");
 
         // Figure out the size of the thread pool and the number of acceptors. [CARROT-1118]
-        final int acceptors = Runtime.getRuntime().availableProcessors();
+        final int acceptors = Math.min(16, Runtime.getRuntime().availableProcessors());
         final int threads = acceptors * 2 + processingThreads; 
 
         // The default accept queue is twice the number of processing threads.
@@ -110,14 +110,17 @@ public class DcsApp
         {
             public void lifeCycleStarted(LifeCycle lc)
             {
-                log.info(
+                log.debug(
                     String.format(Locale.ROOT,
-                        "DCS started on port: %d [local: %d], threads: %d, accept queue: %d, qsize: %d",
-                        port,
-                        connector.getLocalPort(),
+                        "Threads: %d, accept queue: %d, tpq size: %d",
                         processingThreads,
                         acceptQueue,
                         threads));
+                log.info(
+                    String.format(Locale.ROOT,
+                        "DCS started on port: %d [local: %d]",
+                        port,
+                        connector.getLocalPort()));
             }
 
             public void lifeCycleFailure(LifeCycle lc, Throwable t)
