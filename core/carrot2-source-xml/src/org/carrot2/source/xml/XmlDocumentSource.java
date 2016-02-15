@@ -235,7 +235,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
     private Templates instanceLevelXslt;
 
     /** A helper class that groups common functionality for XML/XSLT based data sources. */
-    private final XmlDocumentSourceHelper xmlDocumentSourceHelper = new XmlDocumentSourceHelper();
+    public  final XmlDocumentSourceHelper xmlDocumentSourceHelper = new XmlDocumentSourceHelper();
 
     @Override
     public void init(IControllerContext context)

@@ -22,19 +22,19 @@ public abstract class DelegatingProcessingComponent implements IProcessingCompon
     @Init
     @Input
     @Attribute(key = "instanceAttribute")
-    private String instanceAttribute = "";
+    public String instanceAttribute = "";
 
     @Processing
     @Input
     @Attribute(key = "runtimeAttribute")
-    private String runtimeAttribute = "";
+    public String runtimeAttribute = "";
 
     @Processing
     @Input
     @Output
     @Required
     @Attribute(key = "data")
-    private String data = null;
+    public String data = null;
 
     public void init(IControllerContext context)
     {

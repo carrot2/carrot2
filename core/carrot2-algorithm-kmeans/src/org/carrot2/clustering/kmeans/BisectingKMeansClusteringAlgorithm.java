@@ -74,7 +74,6 @@ import org.carrot2.shaded.guava.common.collect.Lists;
  * cluster). On the other hand, the clusters are labeled only with individual words that
  * may not always fully correspond to all documents in the cluster.
  */
-@SuppressWarnings("deprecation")
 @Bindable(prefix = "BisectingKMeansClusteringAlgorithm", inherit = CommonAttributes.class)
 public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm

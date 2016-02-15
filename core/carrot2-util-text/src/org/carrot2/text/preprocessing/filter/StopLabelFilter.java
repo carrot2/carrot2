@@ -41,12 +41,12 @@ public class StopLabelFilter extends SingleLabelFilterBase
     /*
      * 
      */
-    private final LabelFormatter labelFormatter = new LabelFormatter();
+    public final LabelFormatter labelFormatter = new LabelFormatter();
 
     /*
      * 
      */
-    private ILexicalData lexicalData;
+    public ILexicalData lexicalData;
 
     @Override
     public void filter(PreprocessingContext context, boolean [] acceptedStems,

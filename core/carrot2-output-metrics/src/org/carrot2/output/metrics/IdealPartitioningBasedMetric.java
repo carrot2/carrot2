@@ -25,7 +25,7 @@ import org.carrot2.shaded.guava.common.collect.*;
  * A base class for metrics based on some reference partitioning.
  */
 @Bindable
-abstract class IdealPartitioningBasedMetric implements IClusteringMetric
+public abstract class IdealPartitioningBasedMetric implements IClusteringMetric
 {
     /**
      * Partition id field name.

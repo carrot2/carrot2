@@ -53,7 +53,7 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
         /**
          * Basic preprocessing pipeline.
          */
-        private final BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
+        public final BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
         /**
          * Expose the lexical data for English.

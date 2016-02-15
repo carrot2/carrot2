@@ -38,12 +38,12 @@ public class WebDocumentSource extends SimpleSearchEngine
     /**
      * ETools document source, contains bindable attributes.
      */
-    private EToolsDocumentSource etools = new EToolsDocumentSource();
+    public EToolsDocumentSource etools = new EToolsDocumentSource();
 
     /**
      * Google document source, contains bindable attributes.
      */
-    private GoogleDocumentSource google = new GoogleDocumentSource();
+    public GoogleDocumentSource google = new GoogleDocumentSource();
 
     /**
      * Query failure string (must be an identical object to cause a query for tests).

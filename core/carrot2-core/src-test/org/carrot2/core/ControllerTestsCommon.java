@@ -692,12 +692,12 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         @Input
         @Processing
         @Attribute(key = "other")
-        private Map<String,String> other;
+        public Map<String,String> other;
 
         @Output
         @Processing
         @Attribute(key = "result")
-        private String result;
+        public String result;
 
         @Override
         public void process() throws ProcessingException

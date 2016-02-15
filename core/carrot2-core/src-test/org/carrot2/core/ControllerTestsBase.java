@@ -253,7 +253,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         {
             IProcessingComponent.class
         }, strict = false)
-        protected IProcessingComponent delegate1;
+        public IProcessingComponent delegate1;
 
         @Override
         IProcessingComponent getDelegate()
@@ -273,7 +273,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         {
             IProcessingComponent.class
         }, strict = false)
-        protected IProcessingComponent delegate2;
+        public IProcessingComponent delegate2;
 
         @Override
         IProcessingComponent getDelegate()
@@ -292,7 +292,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         {
             IProcessingComponent.class
         }, strict = false)
-        protected IProcessingComponent delegate3;
+        public IProcessingComponent delegate3;
 
         @Override
         IProcessingComponent getDelegate()
@@ -321,7 +321,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         {
             IProcessingComponent.class
         }, strict = false)
-        protected IProcessingComponent delegate;
+        public IProcessingComponent delegate;
 
         @Init
         @Input
@@ -330,7 +330,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         {
             IControllerContextListener.class
         }, strict = false)
-        protected IControllerContextListener contextListener;
+        public IControllerContextListener contextListener;
 
         static AtomicBoolean contextListenerSubscribed = new AtomicBoolean();
         
@@ -359,13 +359,13 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         @Input
         @Output
         @Attribute(key = "key1")
-        protected String key1;
+        public String key1;
 
         @Processing
         @Input
         @Output
         @Attribute(key = "key2")
-        protected String key2;
+        public String key2;
 
         @Override
         public void process() throws ProcessingException
@@ -383,13 +383,13 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         @Input
         @Output
         @Attribute(key = "key1")
-        protected String key1 = "default";
+        public String key1 = "default";
 
         @Processing
         @Input
         @Output
         @Attribute(key = "key2")
-        protected String key2 = "default";
+        public String key2 = "default";
     }
 
     @Bindable
@@ -398,13 +398,12 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         @Input
         @Init
         @Attribute(key = "init")
-        private String init = "default";
+        public String init = "default";
 
         @Output
         @Processing
         @Attribute(key = "result")
-        @SuppressWarnings("unused")
-        private String result;
+        public String result;
 
         @Override
         public void process() throws ProcessingException
@@ -431,13 +430,12 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         @Input
         @Processing
         @Attribute(key = "processing")
-        private String processing = "default";
+        public String processing = "default";
 
         @Output
         @Processing
         @Attribute(key = "result")
-        @SuppressWarnings("unused")
-        private String result;
+        public String result;
 
         @Override
         public void process() throws ProcessingException
@@ -458,8 +456,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         {
             BindableInstanceCounter.class
         })
-        @SuppressWarnings("unused")
-        private BindableInstanceCounter initProcessing;
+        public BindableInstanceCounter initProcessing;
     }
 
     @Bindable
@@ -471,13 +468,12 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         @Processing
         @Required
         @Attribute(key = "initProcessing")
-        private String initProcessingRequired;
+        public String initProcessingRequired;
 
         @Output
         @Processing
         @Attribute(key = "result")
-        @SuppressWarnings("unused")
-        private String result;
+        public String result;
 
         @Override
         public void process() throws ProcessingException
@@ -494,8 +490,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         @Output
         @Attribute(key = "bindable")
         @ImplementingClasses(classes = BindableInstanceCounter.class)
-        @SuppressWarnings("unused")
-        private BindableInstanceCounter bindable = new BindableInstanceCounter();
+        public BindableInstanceCounter bindable = new BindableInstanceCounter();
     }
 
     @Bindable
@@ -505,12 +500,12 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         @Init
         @Output
         @Attribute(key = "initOutput")
-        protected String initOutput;
+        public String initOutput;
 
         @Init
         @Output
         @Attribute(key = "initOutputNull")
-        protected String initOutputNull;
+        public String initOutputNull;
 
         @Override
         public void init(IControllerContext context)
@@ -525,8 +520,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         @Output
         @Processing
         @Attribute(key = "attr")
-        @SuppressWarnings("unused")
-        private String result;
+        public String result;
 
         @Override
         public void process() throws ProcessingException
@@ -544,7 +538,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         @Required
         @Internal
         @Attribute(key = "attr")
-        private String result;
+        public String result;
 
         @Override
         public void process() throws ProcessingException
