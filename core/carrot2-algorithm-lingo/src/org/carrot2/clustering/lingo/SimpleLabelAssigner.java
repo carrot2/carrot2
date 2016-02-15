@@ -30,7 +30,6 @@ import com.carrotsearch.hppc.IntIntHashMap;
  * 
  * @see UniqueLabelAssigner
  */
-@SuppressWarnings("deprecation")
 @Bindable
 public class SimpleLabelAssigner implements ILabelAssigner
 {

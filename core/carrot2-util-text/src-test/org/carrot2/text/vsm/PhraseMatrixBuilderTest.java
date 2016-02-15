@@ -20,7 +20,6 @@ import org.carrot2.matrix.MatrixAssertions;
 /**
  * Test cases for phrase matrix building.
  */
-@SuppressWarnings("deprecation")
 public class PhraseMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase
 {
     @Test

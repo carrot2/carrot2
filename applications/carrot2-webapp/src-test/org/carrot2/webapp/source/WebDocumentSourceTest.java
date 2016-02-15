@@ -76,7 +76,6 @@ public class WebDocumentSourceTest extends
     @Test
     public void testRequestIndependence() 
     {
-        @SuppressWarnings("unchecked")
         final Controller controller = ControllerFactory.createCachingPooling(
             org.carrot2.core.IDocumentSource.class);
         closeAfterTest(controller);

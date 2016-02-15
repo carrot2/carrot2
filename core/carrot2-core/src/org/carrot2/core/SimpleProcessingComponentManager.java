@@ -44,7 +44,6 @@ public class SimpleProcessingComponentManager implements IProcessingComponentMan
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public IProcessingComponent prepare(Class<? extends IProcessingComponent> clazz,
         String id, Map<String, Object> inputAttributes,
         Map<String, Object> outputAttributes)

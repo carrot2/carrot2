@@ -186,7 +186,6 @@ public class QueryProcessorServlet extends HttpServlet
     /*
      * Perform GET request.
      */
-    @SuppressWarnings("unchecked")
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {

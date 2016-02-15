@@ -40,7 +40,6 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
  * Reduces the dimensionality of a term-document matrix using a matrix factorization
  * algorithm.
  */
-@SuppressWarnings("deprecation")
 @Bindable(prefix = "TermDocumentMatrixReducer")
 public class TermDocumentMatrixReducer
 {

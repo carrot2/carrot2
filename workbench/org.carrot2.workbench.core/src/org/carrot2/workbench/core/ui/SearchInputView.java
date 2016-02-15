@@ -67,7 +67,6 @@ public class SearchInputView extends ViewPart
     /**
      * Filter showing only required attributes.
      */
-    @SuppressWarnings("unchecked")
     private final static Predicate<AttributeDescriptor> SHOW_REQUIRED = new AnnotationsPredicate(
         false, Required.class);
 
@@ -651,7 +650,6 @@ public class SearchInputView extends ViewPart
      * Adds a {@link BindableDescriptor} to {@link #descriptors}, filtering
      * to only {@link Input} and {@link Processing} attributes.
      */
-    @SuppressWarnings("unchecked")
     private void addFilteredDescriptor(ProcessingComponentDescriptor e)
     {
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();

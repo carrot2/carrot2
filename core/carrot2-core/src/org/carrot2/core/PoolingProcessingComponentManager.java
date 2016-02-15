@@ -170,7 +170,6 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
     private final class ComponentInstantiationListener implements
         IInstantiationListener<IProcessingComponent, String>
     {
-        @SuppressWarnings("unchecked")
         public void objectInstantiated(IProcessingComponent component, String parameter)
         {
             try
@@ -366,7 +365,6 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
          */
         private ConcurrentHashMap<ReferenceEquality, Map<String, Object>> resetValues = new ConcurrentHashMap<ReferenceEquality, Map<String, Object>>();
 
-        @SuppressWarnings("unchecked")
         public void activate(IProcessingComponent processingComponent, String parameter)
         {
             // Remember values of @Input @Processing attributes
@@ -385,7 +383,6 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
             }
         }
 
-        @SuppressWarnings("unchecked")
         public void passivate(IProcessingComponent processingComponent, String parameter)
         {
             // Reset values of @Input @Processing attributes back to original values

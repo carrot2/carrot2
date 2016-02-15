@@ -92,7 +92,6 @@ public final class SearchInputFactory implements IElementFactory
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     static void saveState(SearchInput search, IMemento memento)
     {
         memento.createChild(SOURCE_ELEMENT).putString(ID_ATTRIBUTE, search.getSourceId());

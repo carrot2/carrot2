@@ -42,6 +42,7 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
      * Returns a controller that implements basic processing and results caching 
      * functionality. 
      */
+    @SuppressWarnings("unchecked")
     public abstract Controller getCachingController(Class<? extends IProcessingComponent>... cachedComponentClasses);
 
     /**

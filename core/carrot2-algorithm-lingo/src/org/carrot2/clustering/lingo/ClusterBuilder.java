@@ -33,7 +33,6 @@ import com.carrotsearch.hppc.cursors.IntIntCursor;
  * Builds cluster labels based on the reduced term-document matrix and assigns documents
  * to the labels.
  */
-@SuppressWarnings("deprecation")
 @Bindable(prefix = "LingoClusteringAlgorithm")
 public class ClusterBuilder
 {

@@ -31,7 +31,6 @@ import org.carrot2.shaded.guava.common.collect.Maps;
  * attempting to measure here is the impact of extra processing and synchronizations
  * within the controller itself.
  */
-@SuppressWarnings("unchecked")
 @AxisRange(min = 0)
 @BenchmarkMethodChart(filePrefix = "individual")
 @BenchmarkHistoryChart(filePrefix = "history")

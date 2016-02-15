@@ -1257,7 +1257,6 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /**
      * Get hold of the algorithm instance, extract its attribute descriptors.
      */
-    @SuppressWarnings("unchecked")
     BindableDescriptor getAlgorithmDescriptor()
     {
         final WorkbenchCorePlugin core = WorkbenchCorePlugin.getDefault();

@@ -488,7 +488,6 @@ public final class RestProcessorServlet extends HttpServlet
      * @param parameters
      * @throws IOException
      */
-    @SuppressWarnings("unchecked")
     private void processRequest(HttpServletResponse response, 
         ProcessingResult input, final Map<String, Object> parameters) 
         throws IOException

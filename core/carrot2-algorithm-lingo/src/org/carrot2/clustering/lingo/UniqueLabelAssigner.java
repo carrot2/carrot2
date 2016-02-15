@@ -28,7 +28,6 @@ import com.carrotsearch.hppc.*;
  * {@link SimpleLabelAssigner}. This method is slightly slower than
  * {@link SimpleLabelAssigner}.
  */
-@SuppressWarnings("deprecation")
 @Bindable
 public class UniqueLabelAssigner implements ILabelAssigner
 {

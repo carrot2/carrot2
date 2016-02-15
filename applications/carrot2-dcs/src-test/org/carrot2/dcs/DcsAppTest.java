@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -61,6 +60,7 @@ import org.carrot2.shaded.guava.common.io.Files;
 @Nightly
 @ThreadLeakLingering(linger = 1000)
 @ThreadLeakScope(Scope.SUITE)
+@SuppressWarnings("deprecation")
 public class DcsAppTest extends CarrotTestCase
 {
     private static DcsApp dcs;
@@ -501,46 +501,47 @@ public class DcsAppTest extends CarrotTestCase
     private ProcessingResult getOrPost(RequestType requestType, Map<String, Object> otherAttributes)
         throws IllegalStateException, Exception
     {
-        final HttpClient client = new DefaultHttpClient();
-        final HttpRequestBase request;
-        switch (requestType)
-        {
-            case POST_MULTIPART:
-                HttpPost post = new HttpPost(getDcsUrl("dcs/rest"));
-                post.setEntity(multipartParams(otherAttributes));
-                request = post;
-                break;
-
-            case POST_WWW_URL_ENCODING:
-                post = new HttpPost(getDcsUrl("dcs/rest"));
-                post.setEntity(new UrlEncodedFormEntity(formParams(otherAttributes), "UTF-8"));
-                request = post;
-                break;
-
-            case GET:
-                request = new HttpGet(
-                    getDcsUrl("dcs/rest") + "?" 
-                        + URLEncodedUtils.format(formParams(otherAttributes), "UTF-8"));
-                break;
-
-            default:
-                throw new RuntimeException();
-        }
-
-        try
-        {
-            HttpResponse response = client.execute(request);
-            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
-            {
-                throw new IOException("Unexpected DCS response: "
-                    + response.getStatusLine());
-            }
-
-            return ProcessingResult.deserialize(response.getEntity().getContent());
-        }
-        finally
-        {
-            client.getConnectionManager().shutdown();
+        try (final DefaultHttpClient client = new DefaultHttpClient()) {
+          final HttpRequestBase request;
+          switch (requestType)
+          {
+              case POST_MULTIPART:
+                  HttpPost post = new HttpPost(getDcsUrl("dcs/rest"));
+                  post.setEntity(multipartParams(otherAttributes));
+                  request = post;
+                  break;
+  
+              case POST_WWW_URL_ENCODING:
+                  post = new HttpPost(getDcsUrl("dcs/rest"));
+                  post.setEntity(new UrlEncodedFormEntity(formParams(otherAttributes), "UTF-8"));
+                  request = post;
+                  break;
+  
+              case GET:
+                  request = new HttpGet(
+                      getDcsUrl("dcs/rest") + "?" 
+                          + URLEncodedUtils.format(formParams(otherAttributes), "UTF-8"));
+                  break;
+  
+              default:
+                  throw new RuntimeException();
+          }
+  
+          try
+          {
+              HttpResponse response = client.execute(request);
+              if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
+              {
+                  throw new IOException("Unexpected DCS response: "
+                      + response.getStatusLine());
+              }
+  
+              return ProcessingResult.deserialize(response.getEntity().getContent());
+          }
+          finally
+          {
+              client.getConnectionManager().shutdown();
+          }
         }
     }
 

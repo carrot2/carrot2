@@ -27,7 +27,8 @@ import org.fest.util.Strings;
 
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.procedures.IntIntProcedure;
-import org.carrot2.shaded.guava.common.base.Objects;
+
+import org.carrot2.shaded.guava.common.base.MoreObjects;
 import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
@@ -513,7 +514,8 @@ nextPhrase:
                     image != null ? image.toCharArray() : null,
                     context.allTokens.image[tokenIndex]) == 0)
                     .as("token image equality: " + image + " vs. " + 
-                    new String(Objects.firstNonNull(context.allTokens.image[tokenIndex], "<null>".toCharArray())))
+                    new String(
+                        MoreObjects.firstNonNull(context.allTokens.image[tokenIndex], "<null>".toCharArray())))
                     .isTrue();
             return this;
         }

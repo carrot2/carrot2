@@ -77,7 +77,6 @@ import org.carrot2.shaded.guava.common.collect.Maps;
  */
 public class ClusteringNonEnglishContent
 {
-    @SuppressWarnings("unchecked")
     public static void main(String [] args)
     {
         // [[[start:clustering-non-english-content]]]

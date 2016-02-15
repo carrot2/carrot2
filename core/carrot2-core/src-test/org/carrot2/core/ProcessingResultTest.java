@@ -390,8 +390,7 @@ public class ProcessingResultTest extends CarrotTestCase
     private JsonNode getJsonRootNode(final String jsonString) throws IOException,
         JsonParseException
     {
-        final JsonParser jsonParser = new JsonFactory()
-            .createJsonParser(new StringReader(jsonString));
+        final JsonParser jsonParser = new JsonFactory().createParser(new StringReader(jsonString));
         final ObjectMapper mapper = new ObjectMapper();
         final JsonNode root = mapper.readTree(jsonParser);
         return root;

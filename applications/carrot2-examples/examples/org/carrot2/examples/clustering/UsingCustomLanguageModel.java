@@ -48,7 +48,6 @@ public class UsingCustomLanguageModel
 {
     public static void main(String [] args)
     {
-        @SuppressWarnings("unchecked")
         final Controller controller = ControllerFactory
             .createCachingPooling(IDocumentSource.class);
 

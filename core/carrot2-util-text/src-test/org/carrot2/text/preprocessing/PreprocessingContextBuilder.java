@@ -115,7 +115,6 @@ class PreprocessingContextBuilder
         return new PreprocessingContextAssert(buildContext());
     }
     
-    @SuppressWarnings("unchecked")
     public PreprocessingContext buildContext()
     {
         try

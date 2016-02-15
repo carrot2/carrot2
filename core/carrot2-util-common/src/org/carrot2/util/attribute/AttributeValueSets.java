@@ -244,7 +244,6 @@ public class AttributeValueSets
      * Updates base attribute value set ids before persisting.
      */
     @Persist
-    @SuppressWarnings("unused")
     private void updateBaseAttributeValueSetIds()
     {
         // There won't be too many attribute values sets, so nested loops should be fine
@@ -272,7 +271,6 @@ public class AttributeValueSets
      * Restores base attribute value set references based on ids on deserialization.
      */
     @Commit
-    @SuppressWarnings("unused")
     private void restoreBaseAttributeValueSets()
     {
         for (final AttributeValueSet attributeValueSet : attributeValueSets.values())

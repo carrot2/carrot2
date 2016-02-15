@@ -3,7 +3,7 @@
 	<classpathentry exported="true" kind="lib" path="lucene-analyzers-common-5.3.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lucene-analyzers-smartcn-5.3.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lucene-backward-codecs-5.3.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-core-5.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-core-5.3.1.jar" sourcepath="C:/Users/dweiss/.m2/repository/org/apache/lucene/lucene-core/5.3.1/lucene-core-5.3.1-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lucene-highlighter-5.3.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lucene-join-5.3.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lucene-memory-5.3.1.jar"/>

@@ -39,7 +39,6 @@ final class ControllerUtils
     /**
      * Performs all life cycle actions required upon initialization.
      */
-    @SuppressWarnings("unchecked")
     public static void init(IProcessingComponent processingComponent,
         Map<String, Object> inputAttributes, Map<String, Object> outputAttributes,
         boolean checkRequiredAttributes, IControllerContext context)
@@ -64,7 +63,6 @@ final class ControllerUtils
     /**
      * Performs all life cycle actions required before processing starts.
      */
-    @SuppressWarnings("unchecked")
     public static void beforeProcessing(IProcessingComponent processingComponent,
         Map<String, Object> attributes) throws ProcessingException
     {
@@ -114,7 +112,6 @@ final class ControllerUtils
     /**
      * Perform all life cycle actions after processing is completed.
      */
-    @SuppressWarnings("unchecked")
     public static void afterProcessing(IProcessingComponent processingComponent,
         Map<String, Object> attributes)
     {

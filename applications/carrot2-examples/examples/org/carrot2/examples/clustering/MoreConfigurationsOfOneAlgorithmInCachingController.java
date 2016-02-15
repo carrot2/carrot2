@@ -40,10 +40,6 @@ import org.carrot2.shaded.guava.common.collect.Maps;
  */
 public class MoreConfigurationsOfOneAlgorithmInCachingController
 {
-    @SuppressWarnings(
-    {
-        "unchecked"
-    })
     public static void main(String [] args)
     {
         /*

@@ -47,7 +47,6 @@ public class OpenSearchDocumentSourceByResultIncrementTest extends
         return false;
     }
 
-    @SuppressWarnings("unused")
     @Before
     private void prepareComponent()
     {

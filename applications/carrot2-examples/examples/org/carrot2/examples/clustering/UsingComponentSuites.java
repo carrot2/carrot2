@@ -45,7 +45,6 @@ public class UsingComponentSuites
 {
     public static void main(String [] args) throws Exception
     {
-        @SuppressWarnings("unchecked")
         final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
 
         // Initialization-time attributes that will apply to all components.

@@ -42,7 +42,6 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     /** Preprocessing pipeline used for tests */
     protected CompletePreprocessingPipeline preprocessingPipeline;
     
-    @SuppressWarnings("unchecked")
     @Before
     public void setUpMatrixBuilder() throws Exception
     {

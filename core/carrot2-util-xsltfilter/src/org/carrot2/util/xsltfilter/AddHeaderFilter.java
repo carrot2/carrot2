@@ -43,6 +43,7 @@ public final class AddHeaderFilter implements Filter
      * 
      * @param filterConfig The filter configuration object
      */
+    @SuppressWarnings("unchecked")
     public void init(FilterConfig filterConfig) throws ServletException
     {
         if (filterConfig == null)

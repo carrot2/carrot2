@@ -20,7 +20,6 @@ import com.carrotsearch.hppc.IntIntHashMap;
 /**
  * Assigns labels to base vectors obtained from the factorization.
  */
-@SuppressWarnings("deprecation")
 public interface ILabelAssigner
 {
     /**

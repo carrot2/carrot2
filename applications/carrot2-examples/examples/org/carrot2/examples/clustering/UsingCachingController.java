@@ -33,7 +33,7 @@ public class UsingCachingController
 {
     @SuppressWarnings(
     {
-        "unused", "unchecked"
+        "unused",
     })
     public static void main(String [] args)
     {

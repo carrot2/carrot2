@@ -202,7 +202,6 @@ public class ProcessingComponentDescriptor
      * is returned.
      * </p>
      */
-    @SuppressWarnings("unchecked")
     private IProcessingComponent newInitializedInstance()
         throws InstantiationException, IllegalAccessException
     {

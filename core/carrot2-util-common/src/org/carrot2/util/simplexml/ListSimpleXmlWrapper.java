@@ -24,7 +24,7 @@ import org.simpleframework.xml.core.Persist;
 @Root(name = "list")
 @SuppressWarnings(
 {
-    "unchecked", "unused", "rawtypes"
+    "unchecked", "rawtypes"
 })
 class ListSimpleXmlWrapper implements ISimpleXmlWrapper<List>
 {

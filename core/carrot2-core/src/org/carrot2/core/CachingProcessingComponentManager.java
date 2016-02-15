@@ -258,7 +258,6 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
          * {@link Output} {@link Processing} attributes of the component whose results
          * will be cached.
          */
-        @SuppressWarnings("unchecked")
         private InputOutputAttributeDescriptors prepareAttributeDescriptors()
         {
             InputOutputAttributeDescriptors descriptors = null;

@@ -28,7 +28,6 @@ import org.junit.Test;
 /**
  * Test cases for {@link AttributeTransformerFromString}.
  */
-@SuppressWarnings("unused")
 public class ResourceFromStringTest extends CarrotTestCase
 {
     @ImplementingClasses(classes =

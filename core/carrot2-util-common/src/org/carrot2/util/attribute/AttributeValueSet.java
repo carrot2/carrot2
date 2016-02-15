@@ -205,7 +205,6 @@ public class AttributeValueSet
      * Converts attribute values to {@link ISimpleXmlWrapper}s for serialization.
      */
     @Persist
-    @SuppressWarnings("unused")
     private void convertAttributeValuesToStrings()
     {
         overridenAttributeValuesForSerialization = new TreeMap<String, SimpleXmlWrapperValue>(
@@ -218,7 +217,6 @@ public class AttributeValueSet
      * Converts attribute values to {@link ISimpleXmlWrapper}s after deserialization.
      */
     @Commit
-    @SuppressWarnings("unused")
     private void convertAttributeValuesFromStrings() throws Exception
     {
         if (overridenAttributeValuesForSerialization == null)

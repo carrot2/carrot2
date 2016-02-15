@@ -31,6 +31,7 @@ import org.carrot2.shaded.guava.common.collect.Lists;
 /**
  * 
  */
+@SuppressWarnings("deprecation")
 public class HttpClientFactoryTest extends CarrotTestCase
 {
     private static Thread pseudoServer;

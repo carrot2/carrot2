@@ -42,7 +42,6 @@ public class UsingCustomLexicalResources
 {
     public static void main(String [] args)
     {
-        @SuppressWarnings("unchecked")
         final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
 
         // We will pass our custom resource locator at initialization time. There is a

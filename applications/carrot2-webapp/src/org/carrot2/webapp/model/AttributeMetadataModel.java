@@ -58,7 +58,6 @@ public class AttributeMetadataModel
      */
     private static class AttributeDescriptors
     {
-        @SuppressWarnings("unused")
         @ElementList(name = "attributes", inline = true)
         final List<AttributeDescriptor> descriptors;
 
@@ -74,7 +73,6 @@ public class AttributeMetadataModel
      */
     private static class AttributeInitValues
     {
-        @SuppressWarnings("unused")
         @ElementMap(name = "init-value", key = "key", entry="init-value",  attribute = true, inline = true)
         final HashMap<String, SimpleXmlWrapperValue> initValues;
 

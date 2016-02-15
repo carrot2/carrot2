@@ -21,7 +21,6 @@ import com.carrotsearch.hppc.IntIntHashMap;
 /**
  * Test cases for {@link TermDocumentMatrixBuilder}.
  */
-@SuppressWarnings("deprecation")
 public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase
 {
     @Test

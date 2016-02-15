@@ -88,11 +88,9 @@ public class RequestModel
 
     public Map<String, Object> otherParameters;
 
-    @SuppressWarnings("unused")
     @ElementMap(entry = "parameter", key = "key", attribute = true, inline = true, required = false)
     private HashMap<String, SimpleXmlWrapperValue> otherParametersToSerialize;
 
-    @SuppressWarnings("unused")
     @ElementMap(entry = "cookie", key = "key", attribute = true, inline = true, required = false)
     private HashMap<String, SimpleXmlWrapperValue> cookies;
 

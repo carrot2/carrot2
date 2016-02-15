@@ -277,7 +277,6 @@ abstract class SaveAttributesAction extends Action
     /**
      * Default attribute value set for a given component.
      */
-    @SuppressWarnings("unchecked")
     static AttributeValueSet getDefaultAttributeValueSet(String componentId)
     {
         BindableDescriptor desc = WorkbenchCorePlugin.getDefault()

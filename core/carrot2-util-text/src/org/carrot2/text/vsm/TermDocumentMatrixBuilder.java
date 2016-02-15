@@ -41,7 +41,6 @@ import com.carrotsearch.hppc.sorting.IndirectSort;
 /**
  * Builds a term document matrix based on the provided {@link PreprocessingContext}.
  */
-@SuppressWarnings("deprecation")
 @Bindable(prefix = "TermDocumentMatrixBuilder")
 public class TermDocumentMatrixBuilder
 {

@@ -48,6 +48,7 @@ import org.carrot2.shaded.guava.common.collect.Lists;
 /**
  * Various utilities for working with HTTP data streams.
  */
+@SuppressWarnings("deprecation")
 public class HttpUtils
 {
     private static Logger logger = LoggerFactory.getLogger(HttpUtils.class);

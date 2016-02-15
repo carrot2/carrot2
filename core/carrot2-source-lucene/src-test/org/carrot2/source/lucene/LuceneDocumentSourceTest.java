@@ -134,10 +134,10 @@ public class LuceneDocumentSourceTest extends
     @Test
     public void testCustomQuery() throws Exception
     {
-        final BooleanQuery query = new BooleanQuery();
-        query.add(new TermQuery(new Term("snippet", "data")), Occur.MUST);
+        final BooleanQuery.Builder builder = new BooleanQuery.Builder();
+        builder.add(new TermQuery(new Term("snippet", "data")), Occur.MUST);
 
-        this.processingAttributes.put(AttributeNames.QUERY, query);
+        this.processingAttributes.put(AttributeNames.QUERY, builder.build());
 
         assertThat(runQuery(null, getLargeQuerySize())).as("Number of results")
             .isGreaterThan(10);

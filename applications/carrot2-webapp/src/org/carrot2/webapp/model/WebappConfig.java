@@ -227,7 +227,6 @@ public class WebappConfig
         return loaded;
     }
 
-    @SuppressWarnings("unchecked")
     private static Map<String, List<AttributeDescriptor>> prepareSourceAttributeMetadata(
         ProcessingComponentSuite components) throws Exception
     {

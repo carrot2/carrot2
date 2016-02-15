@@ -19,7 +19,6 @@ import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
  * 
  * @see TermDocumentMatrixReducer
  */
-@SuppressWarnings("deprecation")
 public class ReducedVectorSpaceModelContext
 {
     /** Vector Space Model context for the underlying documents. */

@@ -112,7 +112,6 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     /**
      * Starts the bundle: scan suites and initialize the controller.
      */
-    @SuppressWarnings("unchecked")
     public void start(BundleContext context) throws Exception
     {
         super.start(context);

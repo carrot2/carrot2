@@ -323,7 +323,7 @@ public final class LuceneDocumentSource extends ProcessingComponentBase implemen
 
         final SearchEngineResponse response = new SearchEngineResponse();
         final IndexSearcher searcher = indexOpen(directory);
-        final TopDocs docs = searcher.search((Query) query, null, results);
+        final TopDocs docs = searcher.search((Query) query, results);
 
         response.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, docs.totalHits);
 

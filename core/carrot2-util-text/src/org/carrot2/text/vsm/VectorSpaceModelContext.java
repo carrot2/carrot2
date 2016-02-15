@@ -22,7 +22,6 @@ import com.carrotsearch.hppc.IntIntHashMap;
 /**
  * Stores data related to the Vector Space Model of the processed documents.
  */
-@SuppressWarnings("deprecation")
 public class VectorSpaceModelContext
 {
     /** Preprocessing context for the underlying documents. */
