@@ -71,7 +71,7 @@
     <org.apache.httpcomponents.version>4.4.1</org.apache.httpcomponents.version>
     <org.apache.lucene.version>5.3.1</org.apache.lucene.version>
     <org.simpleframework.version>2.7.1</org.simpleframework.version>
-    <org.carrot2.attributes>1.3.0</org.carrot2.attributes>
+    <org.carrot2.attributes>1.3.1</org.carrot2.attributes>
   </properties>
 
   <dependencies>
