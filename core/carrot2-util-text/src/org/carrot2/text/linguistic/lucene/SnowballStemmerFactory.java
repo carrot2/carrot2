@@ -70,8 +70,7 @@ public class SnowballStemmerFactory implements IFactory<IStemmer>
         Class<?> clz = null;
         try
         {
-            clz = Class.forName(snowballClazz, true, 
-                Thread.currentThread().getContextClassLoader());
+            clz = Class.forName(snowballClazz, true, Thread.currentThread().getContextClassLoader());
         }
         catch (Throwable t)
         {

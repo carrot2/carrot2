@@ -68,9 +68,18 @@ public final class ClassResource implements IResource
     void afterDeserialization() throws ClassNotFoundException
     {
         // We have to try to reinstantiate the origin class now.
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        if (cl == null) cl = this.getClass().getClassLoader();
-        
+        ClassLoader cl = null;
+        try {
+          cl = Thread.currentThread().getContextClassLoader();
+        } catch (SecurityException e) {
+          // CCL not available.
+        }
+
+        if (cl == null)
+        {
+          cl = this.getClass().getClassLoader();
+        }
+
         try
         {
             clazz = Class.forName(classname, false, cl);

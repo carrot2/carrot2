@@ -63,17 +63,18 @@ public final class ReflectionUtils
             // Retry with our CL.
         }
 
-        try {
+        try
+        {
           return Class.forName(clazzName, true, ReflectionUtils.class.getClassLoader());
         }
-        catch (ClassNotFoundException e)
+        catch (Exception e)
         {
           if (logWarning)
           {
               org.slf4j.LoggerFactory.getLogger(ReflectionUtils.class).warn(
-                  "Could not load class: " + clazzName + " (" + e.getMessage() + ").");
+                  "Could not load class: " + clazzName + " (" + e.getMessage() + ").", e);
           }
           throw e;
-      }
+        }
     }
 }

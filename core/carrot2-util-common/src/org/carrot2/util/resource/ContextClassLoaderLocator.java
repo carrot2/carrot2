@@ -25,13 +25,25 @@ public final class ContextClassLoaderLocator implements IResourceLocator
     @Override
     public IResource [] getAll(String resource)
     {
-        final ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        ClassLoader cl = getCCL();
         if (cl != null)
         {
             return ClassLoaderLocator.getAll(cl, resource);
         }
-
         return new IResource [0];
+    }
+
+
+    private ClassLoader getCCL() {
+      try
+      {
+        return Thread.currentThread().getContextClassLoader();  
+      } 
+      catch (SecurityException e)
+      {
+        // Not available.
+        return null;
+      }
     }
 
 
@@ -57,7 +69,6 @@ public final class ContextClassLoaderLocator implements IResourceLocator
     @Override
     public String toString()
     {
-        return this.getClass().getName() + " [current: "
-            + Thread.currentThread().getContextClassLoader() + "]";
+        return this.getClass().getName() + " [current: " + getCCL() + "]";
     }
 }

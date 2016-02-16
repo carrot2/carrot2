@@ -59,7 +59,9 @@ public final class ClassLoaderLocator implements IResourceLocator
              * on disk (Windows at least). Make them relative.
              */
             while (resource.startsWith("/"))
+            {
                 resource = resource.substring(1);
+            }
 
             final Enumeration<URL> e = loader.getResources(resource);
             while (e.hasMoreElements())
