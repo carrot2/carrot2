@@ -7,7 +7,7 @@ Require-Bundle:
  org.carrot2.core;bundle-version="0.0.0";visibility:=reexport,
  org.carrot2.util.matrix;bundle-version="0.0.0";visibility:=reexport,
  org.apache.lucene.v2;bundle-version="2.9.0";visibility:=reexport,
- morfologik;bundle-version="1.1.2";resolution:=optional;visibility:=reexport,
+ morfologik;bundle-version="2.1.0";resolution:=optional;visibility:=reexport,
  com.carrotsearch.hppc;bundle-version="0.3.0";visibility:=reexport
 Bundle-ClassPath: META-INF/,
  .,
