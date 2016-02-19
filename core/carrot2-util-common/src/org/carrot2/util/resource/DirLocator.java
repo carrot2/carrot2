@@ -13,8 +13,9 @@
 package org.carrot2.util.resource;
 
 import java.io.File;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.slf4j.LoggerFactory;
 
 /**
  * Looks up resources in a folder.
@@ -22,7 +23,8 @@ import org.apache.commons.lang.ObjectUtils;
 public final class DirLocator implements IResourceLocator
 {
     /** The folder relative to which resources are resolved. */
-    private File dir;
+    private final File dir;
+    private final boolean canAccess;
 
     /**
      * Initializes the locator using the given directory. If the argument is null or a
@@ -31,6 +33,16 @@ public final class DirLocator implements IResourceLocator
     public DirLocator(File dir)
     {
         this.dir = dir;
+        
+        boolean canAccess = true;
+        try {
+          canAccess = (dir != null && dir.canRead() && dir.isDirectory());
+        } catch (SecurityException e) {
+          LoggerFactory.getLogger(DirLocator.class)
+            .warn("Security prevented access to folder: " + dir, e);          
+        }
+
+        this.canAccess = canAccess;
     }
 
     /**
@@ -48,14 +60,14 @@ public final class DirLocator implements IResourceLocator
     @Override
     public IResource [] getAll(String resource)
     {
-        if (dir != null && dir.isDirectory() && dir.canRead())
+        if (canAccess)
         {
             resource = resource.replace('/', File.separatorChar);
             while (resource.startsWith(File.separator))
             {
                 resource = resource.substring(1);
             }
-
+  
             final File resourceFile = new File(dir, resource);
             if (resourceFile.isFile() && resourceFile.canRead())
             {
@@ -65,23 +77,28 @@ public final class DirLocator implements IResourceLocator
                 };
             }
         }
+
         return new IResource [0];
     }
-    
+
     @Override
     public int hashCode()
     {
-        return ObjectUtils.hashCode(dir);
+        return canAccess ? dir.hashCode() : 0;
     }
 
     @Override
     public boolean equals(Object target)
     {
-        if (target == this) return true;
+        if (target == this) { 
+          return true;
+        }
 
         if (target != null && target instanceof DirLocator)
         {
-            return ObjectUtils.equals(this.dir, ((DirLocator) target).dir);
+            DirLocator other = (DirLocator) target;
+            return other.canAccess == this.canAccess &&
+                   Objects.equals(other.dir, this.dir);
         }
 
         return false;
@@ -91,6 +108,6 @@ public final class DirLocator implements IResourceLocator
     public String toString()
     {
         return this.getClass().getName() + " [dir: "
-            + (dir == null ? "null" : dir.getAbsolutePath()) + "]";
+            + (canAccess ? dir.getAbsolutePath() : "<inaccessible>") + "]";
     }
 }
