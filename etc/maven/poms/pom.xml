@@ -61,7 +61,7 @@
     <!-- Versions of dependencies. -->
     <com.carrotsearch.hppc.version>0.7.1</com.carrotsearch.hppc.version>
     <com.google.guava.version>18.0</com.google.guava.version>
-    <morfologik.version>2.0.1</morfologik.version>
+    <morfologik.version>2.1.0</morfologik.version>
     <net.java.dev.rome.version>1.0.0</net.java.dev.rome.version>
     <net.java.dev.rome.fetcher.version>1.0.0</net.java.dev.rome.fetcher.version>
     <commons.lang.version>2.6</commons.lang.version>
