@@ -220,15 +220,11 @@ ant -Dlocal.properties=local.properties.example -Dtools.dir=... clean dist]]></p
 
       <listitem>
         <formalpara>
-          <title>Update download area server</title>
+          <title>Release on github and update downloads</title>
           
           <para>
-            Copy the stable version from gamma's 
-            <filename>/srv/vhosts/get.carrot2.org/head/</filename>
-            to 
-            <filename>/srv/vhosts/get.carrot2.org/stable/</filename>
-            and update the symbolic link <filename>stable/latest/</filename> to point
-            to the newest stable release.
+            Staging server has build files (<filename>/srv/vhosts/get.carrot2.org/head/</filename>)
+            upload them to github (<filename>https://github.com/carrot2/carrot2/releases</filename>) and create release news for the tag.
           </para>
         </formalpara>
       </listitem>
