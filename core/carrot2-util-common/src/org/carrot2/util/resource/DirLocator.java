@@ -36,10 +36,13 @@ public final class DirLocator implements IResourceLocator
         
         boolean canAccess = true;
         try {
-          canAccess = (dir != null && dir.canRead() && dir.isDirectory());
+          canAccess = dir != null && 
+                      dir.isDirectory() && 
+                      dir.canRead() &&
+                      dir.canExecute();
         } catch (SecurityException e) {
           LoggerFactory.getLogger(DirLocator.class)
-            .warn("Security prevented access to folder: " + dir, e);          
+            .warn("Security policy prevented access to folder: " + dir, e);          
         }
 
         this.canAccess = canAccess;
@@ -62,19 +65,24 @@ public final class DirLocator implements IResourceLocator
     {
         if (canAccess)
         {
-            resource = resource.replace('/', File.separatorChar);
-            while (resource.startsWith(File.separator))
-            {
-                resource = resource.substring(1);
-            }
-  
-            final File resourceFile = new File(dir, resource);
-            if (resourceFile.isFile() && resourceFile.canRead())
-            {
-                return new IResource []
-                {
-                    new FileResource(resourceFile)
-                };
+            try {
+              resource = resource.replace('/', File.separatorChar);
+              while (resource.startsWith(File.separator))
+              {
+                  resource = resource.substring(1);
+              }
+    
+              final File resourceFile = new File(dir, resource);
+              if (resourceFile.isFile() && resourceFile.canRead())
+              {
+                  return new IResource []
+                  {
+                      new FileResource(resourceFile)
+                  };
+              }
+            } catch (SecurityException e) {
+              LoggerFactory.getLogger(DirLocator.class)
+                .warn("Security policy prevented access to resource: " + resource + " in folder " + dir, e);
             }
         }
 
