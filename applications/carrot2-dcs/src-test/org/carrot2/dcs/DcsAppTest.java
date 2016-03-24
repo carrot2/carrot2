@@ -320,7 +320,7 @@ public class DcsAppTest extends CarrotTestCase
             "dcs.algorithm", "url"
         ));
         assertThatClusters(result.getClusters()).isNotEmpty();
-        assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
+        assertThat((String) result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
     }
 
     @UsesExternalServices
@@ -334,7 +334,7 @@ public class DcsAppTest extends CarrotTestCase
             "dcs.algorithm", "url"
         ));
         assertThatClusters(result.getClusters()).isNotEmpty();
-        assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
+        assertThat((String) result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
     }
 
     @Test
@@ -347,7 +347,7 @@ public class DcsAppTest extends CarrotTestCase
             "dcs.c2stream", new String(Files.toByteArray(testFiles.get(KEY_KACZYNSKI)), "UTF-8")
         ));
         assertThatClusters(result.getClusters()).isNotEmpty();
-        assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
+        assertThat((String) result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
     }
 
     @Test
@@ -377,17 +377,15 @@ public class DcsAppTest extends CarrotTestCase
         final ProcessingResult result = post(KEY_KACZYNSKI,
             ImmutableMap.<String, Object> of());
         assertThatClusters(result.getClusters()).isNotEmpty();
-        assertThat(result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
-        assertThat(result.getAttribute("DocumentAssigner.exactPhraseAssignment"))
-            .isEqualTo(true);
+        assertThat((String) result.getAttribute(AttributeNames.QUERY)).isEqualTo("kaczyński");
+        assertThat((Boolean) result.getAttribute("DocumentAssigner.exactPhraseAssignment")).isEqualTo(true);
         final int initialClusterCount = result.getClusters().size();
 
         // Override query
         final String otherQuery = "other query";
         final ProcessingResult overriddenQueryResult = post(KEY_KACZYNSKI,
             ImmutableMap.<String, Object> of(AttributeNames.QUERY, otherQuery));
-        assertThat(overriddenQueryResult.getAttribute(AttributeNames.QUERY)).isEqualTo(
-            otherQuery);
+        assertThat((String) overriddenQueryResult.getAttribute(AttributeNames.QUERY)).isEqualTo(otherQuery);
 
         // Override some attributes
         final ProcessingResult overriddenAttributesResult = post(KEY_KACZYNSKI,
@@ -400,7 +398,7 @@ public class DcsAppTest extends CarrotTestCase
         // input attributes to output exactly in the form they were provided, from string
         // type conversion is performed only for the purposes of binding to the
         // component's fields.
-        assertThat(
+        assertThat((String)
             overriddenAttributesResult
                 .getAttribute("LingoClusteringAlgorithm.desiredClusterCountBase")).isEqualTo("5");
 

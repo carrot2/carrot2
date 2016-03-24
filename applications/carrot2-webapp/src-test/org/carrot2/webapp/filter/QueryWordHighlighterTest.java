@@ -151,8 +151,7 @@ public class QueryWordHighlighterTest extends CarrotTestCase
                 QueryWordHighlighter.class);
             
             final Document highlightedDocument = result.getDocuments().get(0);
-            assertThat(highlightedDocument.getField(Document.SUMMARY + QueryWordHighlighter.HIGHLIGHTED_FIELD_NAME_SUFFIX))
-                .isEqualTo(expectedSnippet);
+            assertThat((String) highlightedDocument.getField(Document.SUMMARY + QueryWordHighlighter.HIGHLIGHTED_FIELD_NAME_SUFFIX)).isEqualTo(expectedSnippet);
         }
         finally
         {

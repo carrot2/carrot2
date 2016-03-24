@@ -103,7 +103,7 @@ public class ConsoleFormatter
         final String indent = getIndent(level);
 
         System.out.printf(indent + "[%2s] ", document.getStringId());
-        System.out.println(document.getField(Document.TITLE));
+        System.out.println((Object) document.getField(Document.TITLE));
         final String url = document.getField(Document.CONTENT_URL);
         if (StringUtils.isNotBlank(url))
         {
