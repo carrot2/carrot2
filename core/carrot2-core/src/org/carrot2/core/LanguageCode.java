@@ -13,13 +13,14 @@
 package org.carrot2.core;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.carrot2.util.StringUtils;
-
-import org.carrot2.shaded.guava.common.collect.Maps;
+import org.slf4j.LoggerFactory;
 
 /**
  * Codes for languages for which linguistic resources are available 
@@ -44,21 +45,21 @@ public enum LanguageCode
     
     ARABIC ("ar"),
     BULGARIAN ("bg"),
-    CZECH ("cz"),
+    CZECH ("cs"),
     CHINESE_SIMPLIFIED ("zh_cn"),
     CROATIAN("hr"),
     DANISH ("da"),
     DUTCH ("nl"),
     ENGLISH ("en"),
-    ESTONIAN ("ee"),
+    ESTONIAN ("et"),
     FINNISH ("fi"),
     FRENCH ("fr"),
     GERMAN ("de"),
-    GREEK ("gr"),
+    GREEK ("el"),  
     HUNGARIAN ("hu"),
     HINDI("hi"),
     ITALIAN ("it"),
-    IRISH ("ie"), // (Gaelic)
+    IRISH ("ga"), // (Gaelic)
     JAPANESE ("ja"),
     KOREAN ("ko"),
     LATVIAN ("lv"),
@@ -80,7 +81,7 @@ public enum LanguageCode
      * ISO 639-1 code for this language. An underscore may separate additional country/region
      * variant, should it be relevant (as in Simplified and Traditional Chinese).
      * 
-     * @see "http://www.loc.gov/standards/iso639-2/php/code_list.php"
+     * @see "https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
      */
     private final String isoCode;
 
@@ -90,19 +91,34 @@ public enum LanguageCode
      */
     private final Locale locale;
 
+    /** @see "http://issues.carrot2.org/browse/CARROT-1129" */
+    private final static Map<String, AtomicBoolean> wrongCodes;
+
     /**
      * A hash map of all ISO language codes.
      */
     private final static Map<String, LanguageCode> isoToLangCode;
     static
     {
-        isoToLangCode = Maps.newHashMap();
+        isoToLangCode = new HashMap<>();
         for (LanguageCode langCode : values())
         {
             isoToLangCode.put(langCode.getIsoCode(), langCode);
         }
+        
+        // Incorrect language codes, supported for legacy reasons.
+        wrongCodes = new HashMap<>();
+        wrongCodes.put("gr", new AtomicBoolean());
+        wrongCodes.put("cz", new AtomicBoolean());
+        wrongCodes.put("ee", new AtomicBoolean());
+        wrongCodes.put("ie", new AtomicBoolean());
+
+        isoToLangCode.put("gr", LanguageCode.GREEK);
+        isoToLangCode.put("cz", LanguageCode.CZECH);
+        isoToLangCode.put("ee", LanguageCode.ESTONIAN);
+        isoToLangCode.put("ie", LanguageCode.IRISH);
     }
-    
+
     /**
      * A hash map of all languages which do NOT use space delimiters.
      */
@@ -146,6 +162,14 @@ public enum LanguageCode
     public static LanguageCode forISOCode(String language)
     {
         language = language.toLowerCase();
+
+        // Emit the warning once.
+        if (wrongCodes.containsKey(language) &&
+            !wrongCodes.get(language).getAndSet(true)) {
+          LoggerFactory.getLogger(LanguageCode.class).warn(
+              "This language code was incorrect in C2 (see issue CARROT-1129), correct it to a proper ISO639-1: " + language);
+        }
+
         return isoToLangCode.get(language);
     }
     
