@@ -452,6 +452,7 @@
             parallelism="${tests.cpus}"
             shuffleOnSlave="true"
             leaveTemporary="false"
+            maxmemory="256m"
     >
         <listeners>
             <report-text
@@ -491,7 +492,7 @@
         </balancers> 
 
         <jvmarg value="-ea" />
-        
+
         <classpath refid="test.classpath" />
 
         <sysproperty key="tests.externalservices" value="${tests.externalservices}" />
