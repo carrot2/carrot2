@@ -160,7 +160,6 @@
     <exclude name="lib/com.thoughtworks.qdox/**" />
     <exclude name="lib/org.apache.velocity/**" />
     <exclude name="lib/org.apache.oro/**" />
-    <exclude name="lib/com.planetj.compression/**" />
     <exclude name="lib/org.eclipse.jetty/**" />
     <exclude name="lib/org.kohsuke.args4j/**" />
     <exclude name="lib/org.apache.xml/**" />

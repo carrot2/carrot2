@@ -7,7 +7,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-component-suites"/>
 	<classpathentry exported="true" kind="lib" path="lib/jawr-2.4.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.planetj.compression"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.simpleframework.xml"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.google.guava"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-xsltfilter"/>

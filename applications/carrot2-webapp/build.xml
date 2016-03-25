@@ -44,8 +44,6 @@
   <patternset id="lib.webapp">
     <include name="applications/carrot2-webapp/lib/*.jar" />
     <include name="applications/carrot2-webapp/lib/*.LICENSE" />
-    <include name="lib/com.planetj.compression/*.jar" />
-    <include name="lib/com.planetj.compression/*.LICENSE" />
     <include name="lib/org.apache.log4j/*.LICENSE" />
     <include name="lib/org.apache.log4j/*.jar" />
     <include name="lib/org.slf4j/slf4j-log4j12-*.jar" />

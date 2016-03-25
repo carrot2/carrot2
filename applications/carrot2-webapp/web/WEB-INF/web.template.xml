@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xmlns="http://java.sun.com/xml/ns/javaee" 
+         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+         id="WebApp_ID" 
+         version="2.5">
   <display-name>carrot2-webapp</display-name>
 
   <welcome-file-list>
@@ -83,37 +89,7 @@
     <url-pattern>/</url-pattern>
   </filter-mapping> 
 
-  <filter>
-    <filter-name>CompressingFilter</filter-name>
-    <filter-class>com.planetj.servlet.filter.compression.CompressingFilter</filter-class>
-  </filter>
-
-  <filter>
-    <filter-name>ContentLengthFilter</filter-name>
-    <filter-class>org.carrot2.webapp.ContentLengthFilter</filter-class>
-  </filter>
-
   <!-- The order of filters declaration here matters! -->
-
-  <filter-mapping>
-    <filter-name>ContentLengthFilter</filter-name>
-    <url-pattern>/xml</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>CompressingFilter</filter-name>
-    <url-pattern>/xml</url-pattern>
-  </filter-mapping>
- 
-  <filter-mapping>
-    <filter-name>CompressingFilter</filter-name>
-    <url-pattern>/search</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>CompressingFilter</filter-name>
-    <url-pattern>*.js</url-pattern>
-  </filter-mapping>
 
   <filter>
     <filter-name>xslt-filter</filter-name>
