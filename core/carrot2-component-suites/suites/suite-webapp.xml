@@ -1,20 +1,4 @@
 <component-suite>
-    <sources>
-        <!-- Webapp-specific document source (prefetching from Google) -->
-        <source component-class="org.carrot2.webapp.source.WebDocumentSource" id="web">
-            <label>Web</label>
-            <title>Search the Web with etools.ch</title>
-            <description>Searches the web using the etools.ch meta search
-                engine</description>
-            <mnemonic>W</mnemonic>
-            <example-queries>
-                <example-query>data mining</example-query>
-                <example-query>london</example-query>
-                <example-query>clustering</example-query>
-            </example-queries>
-        </source>
-    </sources>
-
     <components>
         <component component-class="org.carrot2.webapp.filter.QueryWordHighlighter" 
                    id="org.carrot2.webapp.filter.QueryWordHighlighter"
@@ -25,6 +9,7 @@
     </components>
 
     <!-- Search engines. -->
+    <include suite="source-etools.xml" />
     <include suite="source-bing.xml" />
     <include suite="source-wiki.xml" />
     

@@ -1,6 +1,6 @@
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.etools.EToolsDocumentSource" id="etools"
+    <source component-class="org.carrot2.source.etools.EToolsDocumentSource" id="web"
             attribute-sets-resource="source-etools-attributes.xml">
       <label>eTools Web Search</label>
       <title>eTools Metasearch Engine</title>

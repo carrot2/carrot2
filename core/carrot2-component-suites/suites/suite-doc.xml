@@ -17,14 +17,4 @@
   <include suite="algorithm-stc.xml" />
   <include suite="algorithm-kmeans.xml" />
   <include suite="algorithm-synthetic.xml" />
-
-  <sources>
-    <source component-class="org.carrot2.source.google.GoogleDocumentSource" id="google">
-      <label>Google Web Search</label>
-      <title>Google Web Search</title>
-      <description>
-        Searches the web using Google.
-      </description>
-    </source>
-  </sources>
 </component-suite>
