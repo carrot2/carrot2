@@ -10,8 +10,14 @@
 
     <!-- Search engines. -->
     <include suite="source-etools.xml" />
-    <include suite="source-bing.xml" />
     <include suite="source-wiki.xml" />
+
+    <!--
+    Bing source requires an application ID (free limit of 5000 requests
+    monthly). Edit source-bing-attributes.xml end insert your APPID there,
+    then uncomment this block. -->
+    <!-- <include suite="source-bing.xml" /> -->
+
     
     <!-- PubMed, Indeed job search. -->
     <include suite="source-indeed.xml" />
