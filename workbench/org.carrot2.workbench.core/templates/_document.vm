@@ -34,7 +34,5 @@
             #if ($hasSnippet || $hasTitle) <br> #end 
             <span class="du">$esc.html($url)</span>
         #end
-
-        <br><br>
     </div>
 #end

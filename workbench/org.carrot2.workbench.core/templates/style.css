@@ -1,20 +1,20 @@
 body, table {
-	font-size: 11px;
+	font-size: 9pt;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	margin: 0;
     overflow-y: auto;
-    overflow-x: hidden;			
+    overflow-x: auto;			
 }
-	
+
 div.cl, div.status {
 	color: white;
 	font-weight: bold;
 	background-color: #5588BE;
-	border-bottom: 1px solid #303030;
-	padding-bottom: 4px;
-	padding-top: 4px;
-	padding-left: 2px;
-	margin-bottom: 6pt;
+	border-bottom: .5pt solid #303030;
+	padding-bottom: 2pt;
+	padding-top: 2pt;
+	padding-left: 1pt;
+	margin-bottom: 3pt;
 }
 
 div.status {
@@ -23,8 +23,9 @@ div.status {
 
 div.snippet {
 	clear: both;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
+    padding-bottom: 6pt;
 }
 		
 span.du {
