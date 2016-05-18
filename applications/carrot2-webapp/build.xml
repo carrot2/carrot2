@@ -82,7 +82,7 @@
        Builds the webapp distribution. Currently, it just moves the WAR file
        to the output directory, not sure it if makes sense to wrap it with an extra ZIP file.
     -->
-  <target name="carrot2.webapp.dist" depends="basedir.check">
+  <target name="carrot2.webapp.dist" depends="basedir.check, carrot2.webapp.war">
     <move file="${webapp.dir}/${war.name.base}.war" 
     	tofile="${webapp.dir}/../${war.name.base}-${carrot2.version}.war" />
     <delete dir="${webapp.dir}" failonerror="false" />
