@@ -17,7 +17,6 @@
 
   <!-- Import common macros -->
   <import file="${carrot2.master.basedir}/etc/ant/common/basedir.xml" />
-  <import file="${carrot2.master.basedir}/etc/ant/common/webtest.xml" />
   <import file="${carrot2.webapp.basedir}/etc/ant/webapp.xml" />
 
   <!-- Load properties from the master base dir, otherwise sprites generator will not work -->
@@ -35,10 +34,6 @@
   <property name="webapp.dir" location="tmp/webapp" />
   <property name="webapp.context.dir" location="${webapp.dir}/context" />
   <property name="webapp.skins.dir" location="${webapp.context.dir}/skins${build.number}" />
-
-  <!-- Webtest parameters -->
-  <property name="cargo.dir" location="${carrot2.webapp.basedir}/tmp/cargo" />
-  <property name="webtest.report.dir" location="tmp/webapp-webtest-report" />
 
   <!-- Webapp-specific dependencies -->
   <patternset id="lib.webapp">
@@ -87,31 +82,12 @@
        Builds the webapp distribution. Currently, it just moves the WAR file
        to the output directory, not sure it if makes sense to wrap it with an extra ZIP file.
     -->
-  <target name="carrot2.webapp.dist" depends="basedir.check, carrot2.webapp.webtest.war">
+  <target name="carrot2.webapp.dist" depends="basedir.check">
     <move file="${webapp.dir}/${war.name.base}.war" 
     	tofile="${webapp.dir}/../${war.name.base}-${carrot2.version}.war" />
     <delete dir="${webapp.dir}" failonerror="false" />
   </target>
 
-  <!--
-       Performs a quick smoketest of the webapp WAR.
-    -->
-  <target name="carrot2.webapp.webtest.war" depends="basedir.check, carrot2.webapp.build, carrot2.common.webtest.war.prepare" 
-    if="webtest.war.resources.available">
-    <webtest-war cargo.tmp.dir="tmp/cargo"
-                 webtest.port="8382"
-                 war.path="${webapp.dir}/${war.name.base}.war"
-                 war.base.name="${war.name.base}"
-                 webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
-                 webtest.report.dir="${webtest.report.dir}" />
-  </target>
-
-  <target name="carrot2.webapp.webtest.localhost" depends="basedir.check, carrot2.common.webtest.deployed.check"> 
-    <webtest-deployed webtest.tests.dir="${carrot2.webapp.basedir}/webtest"
-                      webtest.report.dir="${webtest.report.dir}" 
-                      webtest.basepath="/" />
-  </target>
-    
   <!--
        Prepares resources the web applications WAR file. "Build scripts "extending" this
        script may want to add their own preparation steps (e.g. copy extra skins)

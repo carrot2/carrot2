@@ -1,9 +1,0 @@
-<project name="Startup page smoke test" default="webtest">
-  <import file="../includes/webapp.xml" />
-
-  <target name="webtest">
-    <webtest name="Startup page smoke test">
-       <invokeStartupPage />
-    </webtest>
-  </target>
-</project>

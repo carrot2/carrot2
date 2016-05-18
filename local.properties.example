@@ -29,19 +29,6 @@ findbugs.home=${tools.dir}/findbugs-3.0.1
 docbook.xsl.dir=${tools.dir}/docbook/stylesheet/docbook-xsl-ns
 docbook.dtd.dir=${tools.dir}/docbook/schema/dtd/5.0
 
-# Webapp web-tests: Canoo webtest home directory.
-cargo.home=${tools.dir}/cargo-0.9
-
-# Webapp web-tests: Canoo webtest home directory.
-webtest.home=${tools.dir}/webtest-3.0
-
-# Webapp web-tests: Apache Tomcat home.
-tomcat.home=${tools.dir}/apache-tomcat-6.0.32
-
-# To see a GUI progress indicator when running webtests, uncomment the property below.
-wt.headless=true
-
-
 #######################################################################################
 # Workbench (Eclipse RCP)
 
