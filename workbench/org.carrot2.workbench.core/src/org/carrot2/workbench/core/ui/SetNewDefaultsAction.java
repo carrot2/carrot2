@@ -42,7 +42,6 @@ final class SetNewDefaultsAction extends Action
         final Map<String, Object> overrides = 
             searchInput.getAttributeValueSet().getAttributeValues();
 
-        SaveAttributesAction.removeSpecialKeys(overrides);
         overrides.keySet().retainAll(defaults.getAttributeValues().keySet());
 
         // Find the SearchInputView and set the editor's attribute values as defaults.

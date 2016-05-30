@@ -139,7 +139,6 @@ abstract class SaveAttributesAction extends Action
          */
         final AttributeValueSet overridenAvs = new AttributeValueSet(
             "overridden-attributes", defaults);
-        removeSpecialKeys(overrides);
         removeInternalNonConfigurationAttributes(overrides, componentId);
         removeKeysWithDefaultValues(overrides, defaults);
         overrides.keySet().retainAll(defaults.getAttributeValues().keySet());
@@ -224,17 +223,6 @@ abstract class SaveAttributesAction extends Action
     }
 
     /**
-     * Handle the "special" {@link Input} keys that shouldn't be serialized.
-     */
-    protected static void removeSpecialKeys(Map<String, Object> keyMap)
-    {
-        keyMap.remove(AttributeNames.DOCUMENTS);
-        keyMap.remove(AttributeNames.QUERY);
-        keyMap.remove(AttributeNames.START);
-        keyMap.remove(AttributeNames.RESULTS);
-    }
-
-    /**
      * @return Create the menu for the action.
      */
     protected MenuManager createMenu()
@@ -288,7 +276,6 @@ abstract class SaveAttributesAction extends Action
         {
             defaults.put(e.getKey(), e.getValue().defaultValue);
         }
-        removeSpecialKeys(defaults);
         removeInternalNonConfigurationAttributes(defaults, componentId);
 
         AttributeValueSet result = new AttributeValueSet("defaults");
