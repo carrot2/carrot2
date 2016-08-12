@@ -689,7 +689,7 @@ public final class RestProcessorServlet extends HttpServlet
         if (!logPrefix.isDirectory()) {
             logPrefix.mkdirs();
         }
-
+        
         String logDestination = new File(logPrefix, "/c2-dcs-" + contextPath + "-full.log").getAbsolutePath();
         final FileAppender appender = 
             new FileAppender(new PatternLayout("%d{ISO8601} [%-5p] [%c] %m%n"), logDestination, true);

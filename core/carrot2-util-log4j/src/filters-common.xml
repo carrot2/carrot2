@@ -12,6 +12,7 @@
 
 <!-- Apache commons -->
 <logger name="org.apache.commons"><level value="warn"/></logger>
+<logger name="org.apache.http"><level value="warn"/></logger>
 
 <!-- Apache HTTPClient -->
 <logger name="httpclient"><level value="warn"/></logger>
