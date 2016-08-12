@@ -19,7 +19,6 @@ import java.util.Map;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.carrot2.core.ProcessingComponentDescriptor;
-import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.InternalAttributePredicate;
 import org.carrot2.util.attribute.AttributeDescriptor;
