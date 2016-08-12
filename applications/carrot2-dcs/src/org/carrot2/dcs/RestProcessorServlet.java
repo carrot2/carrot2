@@ -195,6 +195,7 @@ public final class RestProcessorServlet extends HttpServlet
         put("cluster", clusteringAction);
     }};
 
+    @SuppressWarnings("unchecked")
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
@@ -208,8 +209,6 @@ public final class RestProcessorServlet extends HttpServlet
             }
         }
 
-        config.logger.debug("DCS request processor starting.");        
-
         // Run in servlet container, load config from config.xml.
         ResourceLookup webInfLookup = new ResourceLookup(new PrefixDecoratorLocator(
             new ServletContextLocator(getServletContext()), "/WEB-INF/"));
@@ -222,7 +221,9 @@ public final class RestProcessorServlet extends HttpServlet
         {
             throw new ServletException("Could not read 'config.xml' resource.", e);
         }
-        
+
+        config.logger.debug("DCS request processor starting.");        
+
         // Initialize XSLT
         initXslt(config, webInfLookup);
 
@@ -547,25 +548,23 @@ public final class RestProcessorServlet extends HttpServlet
         try
         {
             long start = System.currentTimeMillis();
-            final String logMsg;
             if (requestModel.source != null)
             {
-                logMsg = "Processed results from " + requestModel.source + " with " + requestModel.algorithm;
-                result = controller.process(processingAttributes, requestModel.source,
-                    requestModel.algorithm);
+                result = controller.process(processingAttributes, requestModel.source, requestModel.algorithm);
             }
             else
             {
-                logMsg = "Processed direct results feed with " + requestModel.algorithm;
                 result = controller.process(processingAttributes, requestModel.algorithm);
             }
 
             if (config.logger.isInfoEnabled()) {
-                config.logger.info(
-                    String.format(Locale.ENGLISH,
-                        "%s [%.2fs.]",
-                        logMsg,
-                        (System.currentTimeMillis() - start) / 1000.0));
+              config.logger.info(String.format(Locale.ROOT,
+                  "Processed %d documents (~%.2f KB) from %s using %s [%.2fs.]",
+                  result.getDocuments().size(),
+                  approximateCharacterCount(result.getDocuments()) / 1024d,
+                  requestModel.source == null ? "[request]" : requestModel.source,
+                  requestModel.algorithm,
+                  (System.currentTimeMillis() - start) / 1000.0));
             }
         }
         catch (ProcessingException e)
@@ -599,6 +598,19 @@ public final class RestProcessorServlet extends HttpServlet
         {
             sendInternalServerError("Could not serialize results", response, e);
         }
+    }
+
+    private long approximateCharacterCount(List<Document> documents) {
+      long size = 0;
+      for (Document doc : documents) {
+        size += sizeOf(doc.getTitle());
+        size += sizeOf(doc.getSummary());
+      }
+      return size;
+    }
+
+    private long sizeOf(String string) {
+      return string == null ? 0 : string.length();
     }
 
     /**
