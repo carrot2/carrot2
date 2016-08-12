@@ -197,7 +197,7 @@ public final class RestProcessorServlet extends HttpServlet
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
-      super.init(servletConfig);
+        super.init(servletConfig);
 
         if (!disableLogFileAppender)
         {
@@ -207,6 +207,8 @@ public final class RestProcessorServlet extends HttpServlet
               throw new ServletException(e);
             }
         }
+
+        config.logger.debug("DCS request processor starting.");        
 
         // Run in servlet container, load config from config.xml.
         ResourceLookup webInfLookup = new ResourceLookup(new PrefixDecoratorLocator(
@@ -220,7 +222,7 @@ public final class RestProcessorServlet extends HttpServlet
         {
             throw new ServletException("Could not read 'config.xml' resource.", e);
         }
-
+        
         // Initialize XSLT
         initXslt(config, webInfLookup);
 
@@ -307,6 +309,8 @@ public final class RestProcessorServlet extends HttpServlet
         controller.init(
             ImmutableMap.<String, Object> of(resourceLookupAttrKey, new ResourceLookup(locators)), 
             configurations);
+
+        config.logger.info("DCS request processor started.");
     }
 
     @Override
