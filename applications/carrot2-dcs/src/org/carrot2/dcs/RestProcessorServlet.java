@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -127,8 +129,6 @@ public final class RestProcessorServlet extends HttpServlet
 
     private transient Controller controller;
 
-    private transient boolean loggerInitialized;
-
     private String defaultAlgorithmId;
 
     private transient Templates xsltTemplates;
@@ -196,9 +196,18 @@ public final class RestProcessorServlet extends HttpServlet
     }};
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void init() throws ServletException
-    {
+    public void init(ServletConfig servletConfig) throws ServletException {
+      super.init(servletConfig);
+
+        if (!disableLogFileAppender)
+        {
+            try {
+              Logger.getRootLogger().addAppender(getLogAppender(servletConfig.getServletContext()));
+            } catch (IOException e) {
+              throw new ServletException(e);
+            }
+        }
+
         // Run in servlet container, load config from config.xml.
         ResourceLookup webInfLookup = new ResourceLookup(new PrefixDecoratorLocator(
             new ServletContextLocator(getServletContext()), "/WEB-INF/"));
@@ -262,8 +271,8 @@ public final class RestProcessorServlet extends HttpServlet
             cachedComponentClasses.add(IClusteringAlgorithm.class);
         }
 
-        controller = ControllerFactory.createCachingPooling(cachedComponentClasses
-            .toArray(new Class [cachedComponentClasses.size()]));
+        controller = ControllerFactory.createCachingPooling(
+            cachedComponentClasses.toArray(new Class [cachedComponentClasses.size()]));
 
         List<IResourceLocator> locators = Lists.newArrayList();
         locators.add(new PrefixDecoratorLocator(new ServletContextLocator(
@@ -304,18 +313,6 @@ public final class RestProcessorServlet extends HttpServlet
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        synchronized (this)
-        {
-            if (!loggerInitialized)
-            {
-                if (!disableLogFileAppender)
-                {
-                    Logger.getRootLogger().addAppender(getLogAppender(request));
-                }
-                loggerInitialized = true;
-            }
-        }
-        
         // Allow ajax requests from anywhere. This is respected by browsers only 
         // anyway and somebody installing the DCS should provide other authentication/ filtering
         // means to limit potential spam/ leechers.
@@ -662,9 +659,9 @@ public final class RestProcessorServlet extends HttpServlet
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, finalMessage);
     }
 
-    private FileAppender getLogAppender(HttpServletRequest request) throws IOException
+    private FileAppender getLogAppender(ServletContext context) throws IOException
     {
-        String contextPath = request.getContextPath();
+        String contextPath = context.getContextPath();
         if (StringUtils.isBlank(contextPath))
         {
             contextPath = "root";
