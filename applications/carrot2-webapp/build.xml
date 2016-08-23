@@ -18,9 +18,6 @@
   <!-- Import common macros -->
   <import file="${carrot2.master.basedir}/etc/ant/common/basedir.xml" />
   <import file="${carrot2.webapp.basedir}/etc/ant/webapp.xml" />
-
-  <!-- Load properties from the master base dir, otherwise sprites generator will not work -->
-  <property file="${carrot2.master.basedir}/local.properties" />
   
   <!-- Customizable properties -->
   <property name="jawr.properties.template.path"
