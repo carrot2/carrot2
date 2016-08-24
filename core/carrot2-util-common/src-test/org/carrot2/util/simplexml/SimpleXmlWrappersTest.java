@@ -420,7 +420,7 @@ public class SimpleXmlWrappersTest extends CarrotTestCase
         persister.write(SimpleXmlWrappers.wrap(value), writer);
         final SimpleXmlWrapperValue deserialized = persister.read(
             SimpleXmlWrapperValue.class, writer.toString());
-        assertThat(SimpleXmlWrappers.unwrap(deserialized)).isNull();
+        assertThat((Object) SimpleXmlWrappers.unwrap(deserialized)).isNull();
     }
 
     public void checkMap(String key, Object value) throws Exception

@@ -221,7 +221,7 @@ public class LuceneDocumentSourceTest extends
             .isEqualTo(results);
         for (Document document : getDocuments())
         {
-            assertThat(document.getField(LuceneDocumentSource.LUCENE_DOCUMENT_FIELD))
+            assertThat((Object) document.getField(LuceneDocumentSource.LUCENE_DOCUMENT_FIELD))
                 .isInstanceOf(org.apache.lucene.document.Document.class);
         }
     }
