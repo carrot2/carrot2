@@ -23,7 +23,7 @@ import org.eclipse.swt.graphics.Image;
 public final class ClusterLabelProvider extends LabelProvider
 {
     private Image folderImage = 
-        WorkbenchCorePlugin.getImageDescriptor("icons/folder.gif").createImage();
+        WorkbenchCorePlugin.getImageDescriptor("icons/folder.png").createImage();
 
     /*
      * 

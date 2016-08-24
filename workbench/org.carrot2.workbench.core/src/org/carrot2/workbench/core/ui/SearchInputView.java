@@ -163,7 +163,7 @@ public class SearchInputView extends ViewPart
      * 
      */
     private Image errorStatusImage = WorkbenchCorePlugin.getImageDescriptor(
-        "icons/error.gif").createImage();
+        "icons/error.png").createImage();
 
     /**
      * Link the GUI of {@link SearchInputView} with the currently active
@@ -234,7 +234,7 @@ public class SearchInputView extends ViewPart
         {
             super("Show optional attributes", SWT.TOGGLE);
 
-            setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/optional.gif"));
+            setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/optional.png"));
 
             /*
              * Subscribe to change events on the global preference property and update
@@ -328,7 +328,7 @@ public class SearchInputView extends ViewPart
         final IAction linkWithEditor = new ActionDelegateProxy(
             new LinkWithEditorActionDelegate(), IAction.AS_CHECK_BOX);
         linkWithEditor.setImageDescriptor(WorkbenchCorePlugin
-            .getImageDescriptor("icons/link_e.gif"));
+            .getImageDescriptor("icons/link_e.png"));
         linkWithEditor.setToolTipText("Link the interface with current editor");
         toolBarManager.add(linkWithEditor);
         this.linkWithEditorAction = linkWithEditor;

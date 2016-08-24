@@ -45,7 +45,7 @@ public final class GroupingMethodAction extends Action
         this.menuCreator = DropDownMenuAction.getMenuFor(propertyKey, getText(),
             constants, host);
 
-        setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/grouping.gif"));
+        setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/grouping.png"));
         setMenuCreator(menuCreator);
     }
 

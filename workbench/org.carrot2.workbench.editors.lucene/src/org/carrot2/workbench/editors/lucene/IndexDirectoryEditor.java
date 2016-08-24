@@ -99,7 +99,7 @@ public class IndexDirectoryEditor extends AttributeEditorAdapter
      */
     private void createFileButton(Composite holder)
     {
-        final Image image = EditorsPlugin.getImageDescriptor("icons/open_folder.gif")
+        final Image image = EditorsPlugin.getImageDescriptor("icons/open_folder.png")
             .createImage();
         disposeBin.add(image);
 

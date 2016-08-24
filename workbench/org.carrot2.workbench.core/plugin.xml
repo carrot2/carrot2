@@ -15,19 +15,19 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="org.carrot2.workbench.core.ui.perspectives.SearchPerspective"
-            icon="icons/perspective_search.gif"
+            icon="icons/perspective_search.png"
             id="org.carrot2.workbench.core.perspective.search"
             name="Search">
       </perspective>
       <perspective
             class="org.carrot2.workbench.core.ui.perspectives.VisualizationPerspective"
-            icon="icons/perspective_visualization.gif"
+            icon="icons/perspective_visualization.png"
             id="org.carrot2.workbench.core.perspective.visualization"
             name="Visualization">
       </perspective>
       <perspective
             class="org.carrot2.workbench.core.ui.perspectives.TuningPerspective"
-            icon="icons/perspective_tuning.gif"
+            icon="icons/perspective_tuning.png"
             id="org.carrot2.workbench.core.perspective.tuning"
             name="Tuning">
       </perspective>
@@ -75,7 +75,7 @@
       <view
             category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.core.ui.SearchInputView"
-            icon="icons/view_search.gif"
+            icon="icons/view_search.png"
             id="org.carrot2.workbench.core.views.search"
             name="Search">
       </view>
@@ -83,7 +83,7 @@
             allowMultiple="false"
             category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.core.ui.DocumentListView"
-            icon="icons/view_documents.gif"
+            icon="icons/view_documents.png"
             id="org.carrot2.workbench.core.views.documents"
             name="Documents">
       </view>
@@ -91,14 +91,14 @@
             allowMultiple="false"
             category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.core.ui.ClusterTreeView"
-            icon="icons/view_clusters.gif"
+            icon="icons/view_clusters.png"
             id="org.carrot2.workbench.core.views.clusters"
             name="Clusters">
       </view>
       <view
             category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.core.ui.AttributeView"
-            icon="icons/view_attributes.gif"
+            icon="icons/view_attributes.png"
             id="org.carrot2.workbench.core.views.attributes"
             name="Attributes">
       </view>
@@ -106,7 +106,7 @@
             allowMultiple="false"
             category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.core.ui.AttributeInfoView"
-            icon="icons/view_attribute_info.gif"
+            icon="icons/view_attribute_info.png"
             id="org.carrot2.workbench.core.views.attributeInfo"
             name="Attribute Info">
       </view>
@@ -114,7 +114,7 @@
             allowMultiple="false"
             category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.core.ui.BenchmarkView"
-            icon="icons/view_benchmark.gif"
+            icon="icons/view_benchmark.png"
             id="org.carrot2.workbench.core.views.benchmark"
             name="Benchmark">
       </view>
@@ -127,7 +127,7 @@
       <!-- Simulated categories and views from org.eclipse.ui.ide -->
       <view
             name="Progress"
-            icon="icons/pview.gif"
+            icon="icons/pview.png"
             category="org.eclipse.ui"
             class="org.eclipse.ui.internal.progress.ProgressView"
             id="org.eclipse.ui.views.ProgressView">
@@ -394,8 +394,8 @@
          <action
                class="org.carrot2.workbench.core.ui.actions.ReprocessFlushCachesActionDelegate"
                definitionId="org.carrot2.workbench.core.ui.actions.ReprocessFlushCachesCommand"
-               disabledIcon="icons/reprocessnocache_d.gif"
-               icon="icons/reprocessnocache_e.gif"
+               disabledIcon="icons/reprocessnocache_d.png"
+               icon="icons/reprocessnocache_e.png"
                id="org.carrot2.workbench.core.ui.actions.ReprocessFlushCachesAction"
                label="&amp;Restart Processing (bypass cached input)"
                menubarPath="org.carrot2.workbench.menus.searchMenu/processing"
@@ -405,8 +405,8 @@
          <action
                class="org.carrot2.workbench.core.ui.actions.ReprocessActionDelegate"
                definitionId="org.carrot2.workbench.core.ui.actions.ReprocessCommand"
-               disabledIcon="icons/reprocess_d.gif"
-               icon="icons/reprocess_e.gif"
+               disabledIcon="icons/reprocess_d.png"
+               icon="icons/reprocess_e.png"
                id="org.carrot2.workbench.core.ui.actions.ReprocessAction"
                label="&amp;Restart Processing"
                menubarPath="org.carrot2.workbench.menus.searchMenu/processing"
@@ -515,7 +515,7 @@
           locationURI="menu:org.carrot2.menus.about?after=additions">
        <command
              commandId="org.carrot2.workbench.core.handlers.DisplayWelcomeView"
-             icon="icons/welcome16.gif"
+             icon="icons/welcome16.png"
              label="Welcome"
              style="push">
        </command>

@@ -71,7 +71,7 @@ abstract class SaveAttributesAction extends Action
     {
         super(text, IAction.AS_DROP_DOWN_MENU);
 
-        setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/save_e.gif"));
+        setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/save_e.png"));
         setMenuCreator(new MenuManagerCreator()
         {
             protected MenuManager createMenu()

@@ -106,7 +106,7 @@ public class AttributeInfoView extends ViewPart
     private void createToolbar(IToolBarManager toolBarManager)
     {
         final IAction action = new ActionDelegateProxy(new AttributeInfoSyncAction(), SWT.TOGGLE);
-        action.setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/help-sync.gif"));
+        action.setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/help-sync.png"));
         action.setToolTipText("Update when attribute tooltip is shown.");
 
         toolBarManager.add(action);
