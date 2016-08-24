@@ -10,5 +10,5 @@ Require-Bundle: org.carrot2.core,
  org.carrot2.util.matrix;visibility:=reexport
 Bundle-ClassPath: META-INF/,
  .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.carrot2.clustering.kmeans

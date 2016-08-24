@@ -101,7 +101,7 @@ public class ProcessingResultTest extends CarrotTestCase
         assertEquals(title, deserializedDocument.getField(Document.TITLE));
         assertEquals(snippet, deserializedDocument.getField(Document.SUMMARY));
         assertEquals(url, deserializedDocument.getField(Document.CONTENT_URL));
-        assertEquals(null, deserializedDocument.getField(Document.LANGUAGE));
+        assertNull(deserializedDocument.getField(Document.LANGUAGE));
         Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
             .isEqualTo(query);
     }
@@ -340,9 +340,9 @@ public class ProcessingResultTest extends CarrotTestCase
         assertEquals("a", (a = pr.getClusters().get(0)).getLabel());
         assertEquals("b", (b = pr.getClusters().get(1)).getLabel());
         assertEquals("c", (c = pr.getClusters().get(2)).getLabel());
-        assertThat(a.getAttribute(Cluster.OTHER_TOPICS)).isNull();
-        assertThat(b.getAttribute(Cluster.OTHER_TOPICS)).isNull();
-        assertThat(c.getAttribute(Cluster.OTHER_TOPICS)).isEqualTo(Boolean.TRUE);
+        assertThat((Object) a.getAttribute(Cluster.OTHER_TOPICS)).isNull();
+        assertThat((Object) b.getAttribute(Cluster.OTHER_TOPICS)).isNull();
+        assertThat((Object) c.getAttribute(Cluster.OTHER_TOPICS)).isEqualTo(Boolean.TRUE);
     }
 
     private void checkJsonQuery(final JsonNode root)
@@ -435,12 +435,12 @@ public class ProcessingResultTest extends CarrotTestCase
 
         if (attributesDeserialized)
         {
-            Assertions.assertThat(deserialized.getAttribute(AttributeNames.RESULTS))
+            Assertions.assertThat((Object) deserialized.getAttribute(AttributeNames.RESULTS))
                 .isEqualTo(sourceProcessingResult.getAttribute(AttributeNames.RESULTS));
         }
         else
         {
-            Assertions.assertThat(deserialized.getAttribute(AttributeNames.RESULTS))
+            Assertions.assertThat((Object) deserialized.getAttribute(AttributeNames.RESULTS))
                 .isNull();
         }
 

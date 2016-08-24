@@ -106,7 +106,7 @@
     
     <para>
       To build &C2; applications from source code, you will need Java Software Development 
-      Kit (Java SDK) version 1.7 or higher and Apache Ant version 1.7.1 or higher.
+      Kit (Java SDK) version 1.8 or higher and Apache Ant version 1.9.3 or higher.
       You can chcek out the latest &C2; source code using git:
     </para>
 

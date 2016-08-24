@@ -28,4 +28,4 @@ Require-Bundle: org.carrot2.attributes;bundle-version="0.0.0";visibility:=reexpo
 Bundle-ClassPath: .
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: dependent,registered
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
