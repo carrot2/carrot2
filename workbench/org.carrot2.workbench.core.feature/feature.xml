@@ -240,16 +240,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.filesystem.solaris.sparc"
-         os="solaris"
-         arch="sparc"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
          id="org.carrot2.text"
          download-size="0"
          install-size="0"
