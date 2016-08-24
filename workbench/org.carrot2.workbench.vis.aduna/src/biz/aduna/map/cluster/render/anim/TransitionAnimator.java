@@ -292,7 +292,7 @@ public class TransitionAnimator
         Q = new HashMap();
         f = new HashMap();
         i = null;
-        _ = -1F;
+        UNDERSCORE = -1F;
     }
 
     public void setAnimatingEdges(boolean flag)
@@ -1020,10 +1020,10 @@ public class TransitionAnimator
 
     private final BufferedImage A(Image image, float f1)
     {
-        if(image == i && f1 == _)
+        if(image == i && f1 == UNDERSCORE)
             return j;
         i = image;
-        _ = f1;
+        UNDERSCORE = f1;
         AlphaImageKey alphaimagekey = new AlphaImageKey(image, f1);
         BufferedImage bufferedimage = (BufferedImage)f.get(alphaimagekey);
         if(bufferedimage != null)
@@ -1179,7 +1179,7 @@ public class TransitionAnimator
     private Font g;
     private HashMap f;
     private Image i;
-    private float _;
+    private float UNDERSCORE;
     private BufferedImage j;
     private ImageSprite A[];
     private TextSprite M[];
