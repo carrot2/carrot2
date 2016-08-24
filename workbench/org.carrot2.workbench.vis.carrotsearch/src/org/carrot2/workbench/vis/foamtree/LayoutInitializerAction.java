@@ -72,7 +72,7 @@ public final class LayoutInitializerAction extends Action
         LayoutAlgorithm [] constants = LayoutAlgorithm.values();
         this.menuCreator = DropDownMenuAction.getMenuFor(propertyKey, getText(), constants, host);
 
-        setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.ID, "icons/enabled/layout.gif"));
+        setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.ID, "icons/enabled/layout.png"));
         setMenuCreator(menuCreator);
     }
 

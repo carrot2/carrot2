@@ -7,7 +7,7 @@
             allowMultiple="false"
             category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.vis.circles.CirclesView"
-            icon="icons/view_circles.gif"
+            icon="icons/view_circles.png"
             id="org.carrot2.workbench.views.circles"
             name="Circles Visualization">
       </view>
@@ -19,7 +19,7 @@
             allowMultiple="false"
             category="org.carrot2.workbench.core.workbench.category"
             class="org.carrot2.workbench.vis.foamtree.FoamTreeView"
-            icon="icons/view_foamtree.gif"
+            icon="icons/view_foamtree.png"
             id="org.carrot2.workbench.views.foamtree"
             name="FoamTree Visualization">
       </view>

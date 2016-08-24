@@ -38,7 +38,7 @@ public class ExportImageAction extends Action
     public ExportImageAction(IImageStreamProvider imageStreamProvider)
     {
         setImageDescriptor(WorkbenchCorePlugin
-            .getImageDescriptor("icons/save_e.gif"));
+            .getImageDescriptor("icons/save_e.png"));
         setToolTipText("Export as PNG");
 
         this.imageStreamProvider = imageStreamProvider;

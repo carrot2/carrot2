@@ -112,7 +112,7 @@ final class SearchEditorPanelsAction extends Action
         this.editor = editor;
 
         setMenuCreator(menuCreator);
-        setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/panels.gif"));
+        setImageDescriptor(WorkbenchCorePlugin.getImageDescriptor("icons/panels.png"));
     }
 
     /*

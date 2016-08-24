@@ -39,7 +39,7 @@ public final class VisualizationModeAction extends Action
             VisualizationMode.class.getEnumConstants(), host);
 
         setImageDescriptor(AdunaActivator.imageDescriptorFromPlugin(
-            AdunaActivator.PLUGIN_ID, "icons/selection.gif"));
+            AdunaActivator.PLUGIN_ID, "icons/selection.png"));
         setMenuCreator(menuCreator);
     }
 
