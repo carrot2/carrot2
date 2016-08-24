@@ -34,14 +34,8 @@ docbook.dtd.dir=${tools.dir}/docbook/schema/dtd/5.0
 
 # Workbench PDE Build and tests. Note the unusual layout of folders below -- 
 # they have the distribution version name and an /eclipse *subfolder*.
-target.platform=${tools.dir}/rcp/4.4.1
+target.platform=${tools.dir}/rcp/4.6.0
 eclipse.home=${target.platform}/eclipse
-
-# Workbench distribution (locally built). Your local platform by default, but can
-# be overriden. Possible values: [win32|linux|macosx], [win32|gtk|cocoa], [x86_64|x86]
-# configs=macosx,cocoa,x86_64
-# archivesFormat=macosx,cocoa,x86_64 - dir
-
 
 #######################################################################################
 # Properties controlling test execution.

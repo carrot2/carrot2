@@ -241,8 +241,8 @@
   </path>
 
   <antversion property="ant.version" />
-  <fail message="Use ANT 1.8.2 or later. Your ANT is: ${ant.version}">
-    <condition><not><antversion atleast="1.8.2" /></not></condition>
+  <fail message="Use ANT 1.9.3 or later. Your ANT is: ${ant.version}">
+    <condition><not><antversion atleast="1.9.3" /></not></condition>
   </fail>
 
   <!-- 
@@ -1183,7 +1183,7 @@
     <property file="${carrot2.master.basedir}/etc/buildinfo/workbench-platforms.properties" />
 
     <echo>${configs}</echo>
-    
+
     <pde.build
         build.dir="${workbench.build.dir}/build"  
         extra.args="

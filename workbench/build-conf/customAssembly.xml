@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project name="customAssembly.template" default="noDefault">
+<project name="customAssembly.template" default="noDefault"
+         xmlns:if="ant:if">
 
 	<!-- =====================================================================
 	    
@@ -55,8 +56,27 @@
 	<!--    - rootFolder : the folder containing the root files                -->
 	<!-- ===================================================================== -->
 	<target name="pre.archive">
-      <mkdir dir="${rootFolder}/Contents/MacOS" />
-	</target>
+        <!-- hotfix PDE Build problems -->
+        <local name="mac.target" />
+        <condition property="mac.target">
+            <equals arg1="${os}" arg2="macosx" />
+        </condition>
+        <parallel if:true="${mac.target}">
+          <sequential>
+            <!-- zipfileset references this path and fails the build if not present. -->
+            <mkdir dir="${rootFolder}/Contents/MacOS" />
+
+            <!-- Move broken paths around. -->
+            <move todir="${rootFolder}/${launcherName}/Contents">
+              <fileset dir="${rootFolder}">
+                <include name="MacOS/**" />
+                <include name="Resources/**" />
+                <include name="Info.plist" />
+              </fileset>
+            </move>
+          </sequential>
+        </parallel>
+     </target>
 
 	<!-- ===================================================================== -->
 	<!-- Default target                                                        -->
