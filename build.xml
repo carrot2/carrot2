@@ -1221,6 +1221,15 @@
         <mapper type="glob" from="*.zip" to="*-${carrot2.version}.zip"/>
       </chainedmapper>
     </copy>
+    
+    <!-- CARROT-1141: Remove the extra Contents folder manually for mac builds. -->
+    <property name="dist.mac.zip" location="${workbench.dist.dir}/${carrot2.workbench.base}-macosx.cocoa.x86_64-${carrot2.version}.zip" />
+    <zip destfile="${workbench.dist.dir}/temporary.zip">
+        <zipfileset src="${dist.mac.zip}">
+          <exclude name="*/Contents/**" />
+        </zipfileset>
+    </zip>
+    <move file="${workbench.dist.dir}/temporary.zip" tofile="${dist.mac.zip}" overwrite="true" />
   </target>
 
   <target name="workbench.rcp.defaults">

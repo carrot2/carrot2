@@ -67,7 +67,7 @@
             <mkdir dir="${rootFolder}/Contents/MacOS" />
 
             <!-- Move broken paths around. -->
-            <move todir="${rootFolder}/${launcherName}/Contents">
+            <move todir="${rootFolder}/${launcherName}.app/Contents">
               <fileset dir="${rootFolder}">
                 <include name="MacOS/**" />
                 <include name="Resources/**" />
