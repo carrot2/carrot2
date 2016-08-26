@@ -15,6 +15,9 @@ package org.carrot2.workbench.core;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +55,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.carrot2.shaded.guava.common.base.Objects;
 import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
 
@@ -156,7 +159,20 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
             {
                 try
                 {
-                    instanceLocation.set(installLocation.getDataArea("workspace"), true);
+                    // CARROT-1147: if instance location is inside the .app folder, search for
+                    // workspace.
+                    if (Objects.equal(Platform.getOS(), Platform.OS_MACOSX)) {
+                      Path installPath = Paths.get(installLocation.getURL().toURI());
+                      Path workspace = installPath.resolve("../../../workspace");
+                      if (Files.exists(workspace)) {
+                        instanceLocation.set(workspace.toUri().toURL(), true);
+                      } else {
+                        instanceLocation.set(Platform.getUserLocation().getDataArea("workspace"), true);
+                      }
+                    } else {
+                      instanceLocation.set(installLocation.getDataArea("workspace"), true);
+                    }
+
                     logger.info("Changed instanceLocation to: " + instanceLocation.getURL());
                 }
                 catch (Exception e)

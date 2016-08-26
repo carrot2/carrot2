@@ -1222,18 +1222,35 @@
       </chainedmapper>
     </copy>
 
-    <!-- CARROT-1141: Remove the extra Contents folder manually for mac builds. -->
+    <!-- CARROT-1141: For MacOS builds remove the extra Contents folder created to bypass PDE build issues,
+         fix permissions, relocate files so that the app is self-contained.
+    -->
     <property name="dist.mac.zip" location="${workbench.dist.dir}/${carrot2.workbench.base}-macosx.cocoa.x86_64-${carrot2.version}.zip" />
-    <zip destfile="${workbench.dist.dir}/temporary.zip" preserve0permissions="true">
-        <zipfileset src="${dist.mac.zip}">
+    <property name="dist.mac.tmp" location="${workbench.dist.dir}/temporary" />
+    <delete dir="${dist.mac.tmp}" failonerror="false" />
+    <unzip src="${dist.mac.zip}" dest="${dist.mac.tmp}" />
+    <move toDir="${dist.mac.tmp}/${carrot2.workbench.base}-${carrot2.version}/${carrot2.workbench.base}.app/Contents/Eclipse">
+      <fileset dir="${dist.mac.tmp}/${carrot2.workbench.base}-${carrot2.version}">
+          <include name="configuration/**" />
+          <include name="features/**" />
+          <include name="plugins/**" />
+          <include name=".eclipseproduct" />
+      </fileset>
+      <fileset dir="${dist.mac.tmp}/${carrot2.workbench.base}-${carrot2.version}/${carrot2.workbench.base}.app/Contents/MacOS">
+          <include name="*.ini" />
+      </fileset>
+    </move>
+
+    <zip destfile="${dist.mac.zip}">
+        <fileset dir="${dist.mac.tmp}">
+          <include name="**/*" />
           <exclude name="*/Contents/**" />
           <exclude name="*/*.app/Contents/MacOS/${carrot2.workbench.base}" />
-        </zipfileset>
-        <zipfileset src="${dist.mac.zip}" filemode="755">
+        </fileset>
+        <zipfileset dir="${dist.mac.tmp}" filemode="755">
           <include name="*/*.app/Contents/MacOS/${carrot2.workbench.base}" />
         </zipfileset>
-    </zip>
-    <move file="${workbench.dist.dir}/temporary.zip" tofile="${dist.mac.zip}" overwrite="true" />
+    </zip>  
   </target>
 
   <target name="workbench.rcp.defaults">
