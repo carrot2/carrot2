@@ -1251,6 +1251,7 @@
           <include name="*/*.app/Contents/MacOS/${carrot2.workbench.base}" />
         </zipfileset>
     </zip>  
+    <delete dir="${dist.mac.tmp}" failonerror="false" />
   </target>
 
   <target name="workbench.rcp.defaults">
