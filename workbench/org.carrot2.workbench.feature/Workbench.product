@@ -20,27 +20,33 @@ Apache Software Foundation http://www.apache.org/.
    </configIni>
 
    <launcherArgs>
-      <programArgs>-data @noDefault</programArgs>
-      <vmArgs>-Xms256m
--Xmx512m
+      <programArgs>-data @noDefault
+      </programArgs>
+      <programArgsMac>-startup
+../Eclipse/plugins/org.eclipse.equinox.launcher_1.3.200.v20160318-1642.jar
+--launcher.library
+../Eclipse/plugins/org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.400.v20160518-1444
+      </programArgsMac>
+      <vmArgs>-Xmx800m
+-Dosgi.requiredJavaVersion=1.8
 -Dorg.eclipse.update.reconcile=false
--Dlog4j.configuration=log4j-workbench.xml</vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+-Dlog4j.configuration=log4j-workbench.xml
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
    </launcherArgs>
 
-   <windowImages  i16="/org.carrot2.workbench.core/icons/logotype/16x16x32.png" 
-                  i32="/org.carrot2.workbench.core/icons/logotype/32x32x32.png" 
-		  i48="/org.carrot2.workbench.core/icons/logotype/48x48x32.png" 
-		  i64="/org.carrot2.workbench.core/icons/logotype/64x64x32.png" 
-		 i128="/org.carrot2.workbench.core/icons/logotype/128x128x32.png" />
+   <windowImages i16="/org.carrot2.workbench.core/icons/logotype/16x16x32.png" i32="/org.carrot2.workbench.core/icons/logotype/32x32x32.png" i48="/org.carrot2.workbench.core/icons/logotype/48x48x32.png" i64="/org.carrot2.workbench.core/icons/logotype/64x64x32.png" i128="/org.carrot2.workbench.core/icons/logotype/128x128x32.png"/>
 
-   <splash location="org.carrot2.workbench.core" />
+   <splash
+      location="org.carrot2.workbench.core" />
    <launcher name="carrot2-workbench">
       <linux icon="/org.carrot2.workbench.feature/icons/icon-linux.xpm"/>
       <macosx icon="/org.carrot2.workbench.feature/icons/icon-mac.icns"/>
       <solaris/>
       <win useIco="true">
          <ico path="/org.carrot2.workbench.feature/icons/icon-windows.ico"/>
+         <bmp/>
       </win>
    </launcher>
 

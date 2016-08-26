@@ -65,6 +65,15 @@
           <sequential>
             <!-- zipfileset references this path and fails the build if not present. -->
             <mkdir dir="${rootFolder}/Contents/MacOS" />
+            
+            <!-- Move broken paths around. -->
+            <move todir="${rootFolder}/${launcherName}.app/Contents">
+              <fileset dir="${rootFolder}">
+                <include name="MacOS/**" />
+                <include name="Resources/**" />
+                <include name="Info.plist" />
+              </fileset>
+            </move>            
           </sequential>
         </parallel>
      </target>
