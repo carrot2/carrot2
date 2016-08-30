@@ -452,9 +452,9 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
             ComponentWithInitParameter.class.getName());
         final ProcessingResult resultById = controller.process(attributes, "component");
 
-        assertThat((String) resultByClass.getAttribute("result")).isEqualTo("defaultdefault");
-        assertThat((String) resultByClassName.getAttribute("result")).isEqualTo("defaultdefault");
-        assertThat((String) resultById.getAttribute("result")).isEqualTo("defaultdefault");
+        assertThat(resultByClass.getAttribute("result")).isEqualTo("defaultdefault");
+        assertThat(resultByClassName.getAttribute("result")).isEqualTo("defaultdefault");
+        assertThat(resultById.getAttribute("result")).isEqualTo("defaultdefault");
 
         controller.dispose();
         controller = null;
@@ -715,12 +715,12 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
 
         processingAttributes.put("other", map1);
         ProcessingResult pr = performProcessing(ComponentWithMapParameter.class);
-        assertThat((Object) pr.getAttribute("result")).isEqualTo("{k1=v1, k2=v2}");
+        assertThat(pr.getAttribute("result")).isEqualTo("{k1=v1, k2=v2}");
 
         if (isCaching())
         {
             pr = performProcessing(ComponentWithMapParameter.class);
-            assertThat((String) pr.getAttribute("result")).isEqualTo("{k1=v1, k2=v2}");
+            assertThat(pr.getAttribute("result")).isEqualTo("{k1=v1, k2=v2}");
 
             final ControllerStatistics statistics = controller.getStatistics();
             assertThat(statistics.cacheMisses).isEqualTo(1);
@@ -731,7 +731,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         map2.putAll(map1);
         map1.put("k1", "v1_2");
         pr = performProcessing(ComponentWithMapParameter.class);
-        assertThat((Object) pr.getAttribute("result")).isEqualTo("{k1=v1_2, k2=v2}");
+        assertThat(pr.getAttribute("result")).isEqualTo("{k1=v1_2, k2=v2}");
         
         controller.dispose();
         controller = null;

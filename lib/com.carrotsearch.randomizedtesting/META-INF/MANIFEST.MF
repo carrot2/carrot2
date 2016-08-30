@@ -4,7 +4,7 @@ Bundle-Name: RandomizedTesting
 Bundle-SymbolicName: com.carrotsearch.randomizedtesting
 Bundle-Version: 2.1.17
 Bundle-Vendor: Carrot Search s.c.
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: randomizedtesting-runner-2.1.17.jar
 Export-Package: com.carrotsearch.randomizedtesting,
  com.carrotsearch.randomizedtesting.annotations,

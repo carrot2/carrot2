@@ -23,5 +23,5 @@ Export-Package:
  com.sun.syndication.fetcher.samples,
  com.sun.syndication.io,
  com.sun.syndication.io.impl
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 

@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.carrot2.shaded.guava
 Bundle-Version: 18.0
 Bundle-ClassPath: carrot2-guava-18.0.jar
 Bundle-Vendor: Carrot2.org (Google Inc.)
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.carrot2.shaded.guava.common.annotations,
  org.carrot2.shaded.guava.common.base,
  org.carrot2.shaded.guava.common.base.internal,
