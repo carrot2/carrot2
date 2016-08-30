@@ -116,12 +116,12 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
         final BindableInstanceCounter overridden = new BindableInstanceCounter();
         processingAttributes.put("bindable", overridden);
         performProcessing(ComponentWithBindableReference.class);
-        assertThat(result.getAttribute("bindable")).isSameAs(overridden);
+        assertThat((Object) result.getAttribute("bindable")).isSameAs(overridden);
 
         // Perform processing with no attributes. The initial value should be restored.
         processingAttributes.clear();
         performProcessingAndDispose(ComponentWithBindableReference.class);
-        assertThat(result.getAttribute("bindable")).isSameAs(initial);
+        assertThat((Object) result.getAttribute("bindable")).isSameAs(initial);
     }
 
     @Test(expected = ProcessingException.class)

@@ -55,7 +55,7 @@ public class IdealPartitioningBasedMetricTest extends CarrotTestCase
         final String [] clusterMetricKeys = getClusterMetricKeys();
         for (String metricKey : clusterMetricKeys)
         {
-            assertThat(c1.getAttribute(metricKey)).isNull();
+            assertThat((Object) c1.getAttribute(metricKey)).isNull();
         }
     }
 

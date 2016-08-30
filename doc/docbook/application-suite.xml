@@ -190,7 +190,7 @@
       
       <orderedlist>
         <listitem>
-          <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.7.0 or newer) if you have not done so.</para>
+          <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.8 or newer) if you have not done so.</para>
         </listitem>
       
         <listitem role="private">
@@ -333,7 +333,7 @@
       
       <orderedlist>
         <listitem>
-          <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.7.0 or newer) if you have not done so.</para>
+          <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.8.0 or newer) if you have not done so.</para>
         </listitem>
       
         <listitem role="private">
@@ -490,7 +490,7 @@
       
       <orderedlist>
         <listitem>
-          <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.7.0 or newer) if you have not done so.</para>
+          <para>Download and install <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link> (version 1.8.0 or newer) if you have not done so.</para>
         </listitem>
       
         <listitem role="private">
