@@ -15,10 +15,13 @@ package org.carrot2.text.linguistic;
 import java.util.EnumMap;
 
 import org.carrot2.core.LanguageCode;
+import org.carrot2.shaded.guava.common.base.Predicate;
+import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.text.linguistic.lucene.ArabicStemmerAdapter;
 import org.carrot2.text.linguistic.lucene.HindiStemmerAdapter;
-import org.carrot2.text.linguistic.lucene.SnowballStemmerFactory;
 import org.carrot2.text.linguistic.morfologik.MorfologikStemmerAdapter;
+import org.carrot2.text.linguistic.snowball.SnowballProgram;
+import org.carrot2.text.linguistic.snowball.stemmers.*;
 import org.carrot2.util.annotations.ThreadSafe;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.factory.FallbackFactory;
@@ -27,9 +30,6 @@ import org.carrot2.util.factory.NewClassInstanceFactory;
 import org.carrot2.util.factory.SingletonFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.carrot2.shaded.guava.common.base.Predicate;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 @Bindable
 @ThreadSafe
@@ -81,21 +81,21 @@ public class DefaultStemmerFactory implements IStemmerFactory
         map.put(LanguageCode.ARABIC,     new NewClassInstanceFactory<IStemmer>(ArabicStemmerAdapter.class));
 
         // Adapters to snowball.
-        map.put(LanguageCode.DANISH,     new SnowballStemmerFactory("org.tartarus.snowball.ext.DanishStemmer"));
-        map.put(LanguageCode.DUTCH,      new SnowballStemmerFactory("org.tartarus.snowball.ext.DutchStemmer"));
-        map.put(LanguageCode.ENGLISH,    new SnowballStemmerFactory("org.tartarus.snowball.ext.EnglishStemmer"));
-        map.put(LanguageCode.FINNISH,    new SnowballStemmerFactory("org.tartarus.snowball.ext.FinnishStemmer"));
-        map.put(LanguageCode.FRENCH,     new SnowballStemmerFactory("org.tartarus.snowball.ext.FrenchStemmer"));
-        map.put(LanguageCode.GERMAN,     new SnowballStemmerFactory("org.tartarus.snowball.ext.GermanStemmer"));
-        map.put(LanguageCode.HUNGARIAN,  new SnowballStemmerFactory("org.tartarus.snowball.ext.HungarianStemmer"));
-        map.put(LanguageCode.ITALIAN,    new SnowballStemmerFactory("org.tartarus.snowball.ext.ItalianStemmer"));
-        map.put(LanguageCode.NORWEGIAN,  new SnowballStemmerFactory("org.tartarus.snowball.ext.NorwegianStemmer"));
-        map.put(LanguageCode.PORTUGUESE, new SnowballStemmerFactory("org.tartarus.snowball.ext.PortugueseStemmer"));
-        map.put(LanguageCode.ROMANIAN,   new SnowballStemmerFactory("org.tartarus.snowball.ext.RomanianStemmer"));
-        map.put(LanguageCode.RUSSIAN,    new SnowballStemmerFactory("org.tartarus.snowball.ext.RussianStemmer"));
-        map.put(LanguageCode.SPANISH,    new SnowballStemmerFactory("org.tartarus.snowball.ext.SpanishStemmer"));
-        map.put(LanguageCode.SWEDISH,    new SnowballStemmerFactory("org.tartarus.snowball.ext.SwedishStemmer"));
-        map.put(LanguageCode.TURKISH,    new SnowballStemmerFactory("org.tartarus.snowball.ext.TurkishStemmer"));
+        map.put(LanguageCode.DANISH,     snowball(DanishStemmer.class));
+        map.put(LanguageCode.DUTCH,      snowball(DutchStemmer.class));
+        map.put(LanguageCode.ENGLISH,    snowball(EnglishStemmer.class));
+        map.put(LanguageCode.FINNISH,    snowball(FinnishStemmer.class));
+        map.put(LanguageCode.FRENCH,     snowball(FrenchStemmer.class));
+        map.put(LanguageCode.GERMAN,     snowball(GermanStemmer.class));
+        map.put(LanguageCode.HUNGARIAN,  snowball(HungarianStemmer.class));
+        map.put(LanguageCode.ITALIAN,    snowball(ItalianStemmer.class));
+        map.put(LanguageCode.NORWEGIAN,  snowball(NorwegianStemmer.class));
+        map.put(LanguageCode.PORTUGUESE, snowball(PortugueseStemmer.class));
+        map.put(LanguageCode.ROMANIAN,   snowball(RomanianStemmer.class));
+        map.put(LanguageCode.RUSSIAN,    snowball(RussianStemmer.class));
+        map.put(LanguageCode.SPANISH,    snowball(SpanishStemmer.class));
+        map.put(LanguageCode.SWEDISH,    snowball(SwedishStemmer.class));
+        map.put(LanguageCode.TURKISH,    snowball(TurkishStemmer.class));
 
         // Identity stemming for Chinese.
         map.put(LanguageCode.CHINESE_SIMPLIFIED, identity);
@@ -128,5 +128,18 @@ public class DefaultStemmerFactory implements IStemmerFactory
         }
 
         return map;
+    }
+
+    private static IFactory<IStemmer> snowball(final Class<? extends SnowballProgram> clazz) {
+      return new IFactory<IStemmer>() {
+        @Override
+        public IStemmer createInstance() {
+          try {
+            return new SnowballStemmerAdapter(clazz.newInstance());
+          } catch (InstantiationException |IllegalAccessException e) {
+            throw new RuntimeException(e);
+          }
+        }
+      };
     }
 }
