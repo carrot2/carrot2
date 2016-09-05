@@ -12,10 +12,13 @@
   <title>&PROD; clustering in Apache Solr</title>
   
   <para>
-    As of version 1.4.x of Apache Solr, &PROD; clustering can be performed directly
-    within Solr by means of the <link xlink:href="http://wiki.apache.org/solr/ClusteringComponent">Solr 
-    Clustering Component</link>.  We provide examples and a whitepaper discussing
-    several integration strategies with Solr at 
-    <link xlink:href="http://carrot2.github.io/solr-integration-strategies/">a separate GitHub repository</link>.
+    &PROD; clustering can be performed directly within Solr by means of the 
+    <link xlink:href="https://cwiki.apache.org/confluence/display/solr/Result+Clustering">Solr Clustering Component</link> 
+    contrib extension.
   </para>  
+
+  <para>
+    A whitepaper discussing several integration strategies between Solr and &C2; clustering
+    algorithms can be found at <link xlink:href="http://carrot2.github.io/solr-integration-strategies/">a separate GitHub repository</link>.
+  </para>
 </section>

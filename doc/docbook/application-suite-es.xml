@@ -15,7 +15,7 @@
     &PROD; search results clustering can be performed directly in ElasticSearch by
     installing a dedicated 
     <link xlink:href="https://github.com/carrot2/elasticsearch-carrot2">elasticsearch-carrot2</link>
-    plugin. Installation instructions are described in detail at the
+    plugin. Generic plugin's installation instructions are described in detail at the
     plugin's GitHub web site. The API's documentation is dynamically rendered 
     once installed (see installation instructions).
   </para>  
