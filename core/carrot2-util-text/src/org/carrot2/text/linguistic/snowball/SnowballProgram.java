@@ -493,5 +493,5 @@ extern void debug(struct SN_env * z, int number, int line_count)
     private static <T extends Throwable> void rethrow0(Throwable t) throws T {
       throw (T) t;
     }
-};
+}
 
