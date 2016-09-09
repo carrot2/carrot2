@@ -24,7 +24,7 @@ public final class XSLTFilterConstants
      * for example), set any object under this key in the request context, for example:
      * 
      * <pre>
-     * request.setAttribute(XsltFilter.NO_XSLT_PROCESSING, Boolean.TRUE);
+     * request.setAttribute(XSLTFilterConstants.NO_XSLT_PROCESSING, Boolean.TRUE);
      * </pre>
      * 
      * or pass a request parameter with this value.
