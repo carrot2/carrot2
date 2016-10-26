@@ -1,0 +1,3 @@
+// 401 Access Denied
+// [Content-Type, application/json]
+{ "statusCode": 401, "message": "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription." }

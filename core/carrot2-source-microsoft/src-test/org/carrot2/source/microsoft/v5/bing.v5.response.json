@@ -1,0 +1,1045 @@
+// 200 OK
+{
+  "_type":"SearchResponse",
+  "webPages":{
+    "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=wqhJc3Wbc3t27doJbcVclunTY-BBd-SmVpYYIr9AFjA&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dtrump&p=DevEx,5631.1",
+    "totalEstimatedMatches":23100000,
+    "value":[
+      {
+        "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.0",
+        "name":"Donald J. Trump - Official Site",
+        "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=_GrmnoUttB3T_DxhyB2nLiXcM2O825LS5nN1ht69nPk&v=1&r=https%3a%2f%2fwww.donaldjtrump.com%2f&p=DevEx,5113.1",
+        "displayUrl":"https:\/\/www.donaldjtrump.com",
+        "snippet":"I want to see your name. Contribute Now and add your name to the Trump Donor Wall!",
+        "deepLinks":[
+          {
+            "name":"Contact The Campaign",
+            "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=HUoULVYAPaLMTmwLlRF8GhudP-UW-1ejZypVwXYQLnc&v=1&r=https%3a%2f%2fwww.donaldjtrump.com%2fcontact&p=DevEx,5104.1"
+          },
+          {
+            "name":"Shop",
+            "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=Lwru0hdEpzQR2W-VGUn-F63D9A6C0m151pNgDPozBWM&v=1&r=https%3a%2f%2fshop.donaldjtrump.com%2f&p=DevEx,5105.1"
+          },
+          {
+            "name":"Schedule",
+            "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=F-kYb86vIASmAjqpTXGz-EtGeXLmLNM_zjoR-xAcqls&v=1&r=https%3a%2f%2fwww.donaldjtrump.com%2fschedule&p=DevEx,5106.1"
+          },
+          {
+            "name":"Immigration Reform",
+            "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=u912pqfnwCONsrSae26igIQG-m-4Iqn30fHeMJVZs2I&v=1&r=https%3a%2f%2fwww.donaldjtrump.com%2fpolicies%2fimmigration%2f&p=DevEx,5107.1"
+          },
+          {
+            "name":"Positions",
+            "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=zsA8MRPycXqqdY_wHQ0-JhTLtoZE4vZLaKW7HQViRtU&v=1&r=https%3a%2f%2fwww.donaldjtrump.com%2fpositions&p=DevEx,5109.1"
+          }
+        ],
+        "dateLastCrawled":"2016-10-18T20:27:00"
+      },
+      {
+        "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.1",
+        "name":"Trump Organization - Official Site",
+        "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=VQZ22GJzrH8hKgNtjsf8ZLi_hlsiuZId-JTtlePW9VY&v=1&r=http%3a%2f%2fwww.trump.com%2f&p=DevEx,5135.1",
+        "about":[
+          {
+            "name":"Eric Trump"
+          },
+          {
+            "name":"Donald Trump Jr."
+          },
+          {
+            "name":"The Trump Organization"
+          },
+          {
+            "name":"Ivanka Trump"
+          }
+        ],
+        "displayUrl":"www.trump.com",
+        "snippet":"Official website of Donald J. Trump's business organization. Includes portfolio (real estate, hotels, golf, entertainment and television), publications, merchandise ...",
+        "deepLinks":[
+          {
+            "name":"Charities",
+            "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=1TKUcxgVzch9uNoEq_iTIGUG6t6wsiadNI26IzQoe10&v=1&r=http%3a%2f%2fwww.trump.com%2fcharities%2f&p=DevEx,5126.1"
+          },
+          {
+            "name":"Signature Collection",
+            "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=7SpMGeD6SfMB2nExPQW4zQAC4aqqVeQizQG5hcNuOGo&v=1&r=http%3a%2f%2fwww.trump.com%2fmerchandise%2fsignature-collection%2f&p=DevEx,5127.1"
+          },
+          {
+            "name":"Trump Home",
+            "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=Mwj-amIDA3XgsO4Bs4cOBJ4JDZYWpl3FBvXpKLej16I&v=1&r=http%3a%2f%2fwww.trump.com%2fmerchandise%2ftrump-home%2f&p=DevEx,5128.1"
+          },
+          {
+            "name":"Merchandise",
+            "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=wJomKqlQoDZ9_Jdn4_dLDhVDmjNN_nBwvG8n-lNzrTY&v=1&r=http%3a%2f%2fwww.trump.com%2fmerchandise%2f&p=DevEx,5129.1"
+          },
+          {
+            "name":"Donald Trump Jr",
+            "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=-xSMUOXcts8RboMmYJBscTVcSIpoEDX7jpiin4BtVEs&v=1&r=http%3a%2f%2fwww.trump.com%2fthe-next-generation%2fdonald-trump-jr%2f&p=DevEx,5130.1"
+          }
+        ],
+        "dateLastCrawled":"2016-10-16T08:48:00"
+      },
+      {
+        "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.2",
+        "name":"Donald Trump - Wikipedia",
+        "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=LS3VX0zW7GtGIePb7DNeEfeNsOCbdeKtrfibErRX33o&v=1&r=https%3a%2f%2fen.wikipedia.org%2fwiki%2fDonald_Trump&p=DevEx,5158.1",
+        "about":[
+          {
+            "name":"Donald Trump"
+          }
+        ],
+        "displayUrl":"https:\/\/en.wikipedia.org\/wiki\/Donald_Trump",
+        "snippet":"Donald John Trump (born June 14, 1946) is an American businessman, television producer, author, politician, and the Republican Party nominee for President of the ...",
+        "deepLinks":[
+          {
+            "name":"Melania Trump",
+            "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=m4be5xJ-N8tFcydu5piG_tYkOpwrPBMeNKXqoi2sF1A&v=1&r=https%3a%2f%2fen.wikipedia.org%2fwiki%2fMelania_Trump&p=DevEx,5151.1"
+          },
+          {
+            "name":"Ivana Trump",
+            "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=bpjqDhWsQQwhx3KWcZYxvA04ggSvtC1lBU31j2HO9Zw&v=1&r=https%3a%2f%2fen.wikipedia.org%2fwiki%2fIvana_Trump&p=DevEx,5152.1"
+          },
+          {
+            "name":"Marla Maples",
+            "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=c-ETiXmo5Hxyn3ne-vohhSmmHIt6JKT8GLqpXjD8kmg&v=1&r=https%3a%2f%2fen.wikipedia.org%2fwiki%2fMarla_Maples&p=DevEx,5153.1"
+          },
+          {
+            "name":"Fred Trump",
+            "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=T8dgAMvyUdLTx2XzSNes9gLigtBtMPYI_DOL-Amr0nc&v=1&r=https%3a%2f%2fen.wikipedia.org%2fwiki%2fFred_Trump&p=DevEx,5155.1"
+          }
+        ],
+        "dateLastCrawled":"2016-10-20T20:55:00"
+      },
+      {
+        "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.3",
+        "name":"Donald J. Trump (@realDonaldTrump) | Twitter",
+        "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=pNw--j2DTPvBMffn7mY0KudwHZwBCny2tCq28xN88RA&v=1&r=https%3a%2f%2ftwitter.com%2frealdonaldtrump&p=DevEx,5177.1",
+        "about":[
+          {
+            "name":"Donald Trump"
+          }
+        ],
+        "displayUrl":"https:\/\/twitter.com\/realdonaldtrump",
+        "snippet":"33.7K tweets • 1,784 photos\/videos • 12.6M followers. Check out the latest Tweets from Donald J. Trump (@realDonaldTrump)",
+        "dateLastCrawled":"2016-10-21T22:10:00"
+      },
+      {
+        "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.4",
+        "name":"Donald Trump - CNBC",
+        "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=xasPjyw99P6KROMq3lrCFde3NzghPaU4jDhMnBTgGoQ&v=1&r=http%3a%2f%2fwww.cnbc.com%2fdonald-trump%2f&p=DevEx,5188.1",
+        "displayUrl":"www.cnbc.com\/donald-trump",
+        "snippet":"2 Hours Ago. Independent presidential candidate Evan McMullin explains what he stands for — and why he'd be a better president than Trump or Clinton.",
+        "dateLastCrawled":"2016-10-25T23:17:00"
+      },
+      {
+        "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.5",
+        "name":"Positions - Donald J Trump | Donald J Trump for President",
+        "url":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=zsA8MRPycXqqdY_wHQ0-JhTLtoZE4vZLaKW7HQViRtU&v=1&r=https%3a%2f%2fwww.donaldjtrump.com%2fpositions&p=DevEx,5202.1",
+        "displayUrl":"https:\/\/www.donaldjtrump.com\/positions",
+        "snippet":"Donald J. Trump is the very definition of the American success story, continually setting the standards of excellence in business, real estate and entertainment. Show ...",
+        "dateLastCrawled":"2016-10-19T22:25:00"
+      },
+      {
+        "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.6",
+        "name":"Donald Trump: Pictures, Videos, Breaking News",
+        "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=fDyOJUz6_X0KcQIM8VhJVL5b6ZfEyAHukNmKwxF_fgU&v=1&r=http%3a%2f%2fwww.huffingtonpost.com%2fnews%2fdonald-trump%2f&p=DevEx,5213.1",
+        "displayUrl":"www.huffingtonpost.com\/news\/donald-trump",
+        "snippet":"Big News on Donald Trump. Includes blogs, news, and community conversations about Donald Trump.",
+        "dateLastCrawled":"2016-10-26T04:57:00"
+      },
+      {
+        "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.7",
+        "name":"Trump | Definition of Trump by Merriam-Webster",
+        "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=hhjoSFS3M9ugZyT5b2hxGUuFbL6ICb9QrZTx4j3rdQs&v=1&r=http%3a%2f%2fwww.merriam-webster.com%2fdictionary%2ftrump&p=DevEx,5229.1",
+        "displayUrl":"www.merriam-webster.com\/dictionary\/trump",
+        "snippet":"1 a: a card of a suit any of whose cards will win over a card that is not of this suit —called also trump card b: the suit whose cards are trumps for a particular ...",
+        "dateLastCrawled":"2016-10-22T06:37:00"
+      },
+      {
+        "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.8",
+        "name":"Trump reverses statement on women, abortion after outcry ...",
+        "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=5pfXQZVbZ6_N-lOkmlW8ZotpFDMKWgxmlaQws11gJlM&v=1&r=http%3a%2f%2fwww.cnn.com%2f2016%2f03%2f30%2fpolitics%2fdonald-trump-abortion-town-hall%2findex.html&p=DevEx,5246.1",
+        "displayUrl":"www.cnn.com\/2016\/03\/30\/politics\/donald-trump-abortion-town-hall",
+        "snippet":"Donald Trump scrambled to clarify his position on abortion Wednesday after he said women who undergo the procedure should face \"some form of punishment ...",
+        "dateLastCrawled":"2016-10-21T18:08:00"
+      }
+    ]
+  },
+  "images":{
+    "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#Images",
+    "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/images\/search?q=trump&qpvt=trump&qpvt=trump",
+    "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=HKK1w-hBcU-lKQ0oQS2Dgr_ycO5qdnUFW806-KiksGM&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26qpvt%3dtrump%26qpvt%3dtrump&p=DevEx,5052.1",
+    "isFamilyFriendly":true,
+    "value":[
+      {
+        "name":"Trump speaks about illegal immigration July 10 at the Beverly Wilshire ...",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=slXjZP8h77v-9TIHXfnoDMfeIH-XnGXqPNYmss8pdMY&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3d202CC06422542BC9000A01A1B903378DA0E61ADA%26FORM%3dIARRTH&p=DevEx,5526.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M4c8434bb6aa231bb64a8fee61615caf2o1&pid=Api",
+        "datePublished":"2015-11-21T12:00:00",
+        "contentUrl":"http:\/\/i2.cdn.turner.com\/cnnnext\/dam\/assets\/150827102252-donald-trump-july-10-2015-super-169.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=3ENeHPyUE_XK-hKpC9M06D7LhDfs_ndoLgxLh7IA1ZQ&v=1&r=http%3a%2f%2fcnn.com%2f2015%2f11%2f20%2fopinions%2fobeidallah-trump-anti-muslim&p=DevEx,5648.1",
+        "contentSize":"115975 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/cnn.com\/2015\/11\/20\/opinions\/obeidallah-trump-anti-muslim",
+        "width":1100,
+        "height":619,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        }
+      },
+      {
+        "name":"Donald Trump Twitter insults: The complete collection | BGR",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=umbSVC7guzLjDZ-KfSkf_WVSdI9dTz0wHzgVpFOjE2M&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3dCA3453DAF678B7442053C49AF1191C4B2548AAB2%26FORM%3dIARRTH&p=DevEx,5527.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M3cfe9c6b58f47bcd7d751fb64d6c4ff2o1&pid=Api",
+        "datePublished":"2016-01-29T18:52:00",
+        "contentUrl":"http:\/\/cdn.bgr.com\/2016\/01\/donald-trump.png",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=UgyQbN5W0QgcWrSi6QJpIPFxBxaDMQv9zCGy_wJZRWM&v=1&r=http%3a%2f%2fbgr.com%2f2016%2f01%2f29%2fdonald-trump-twitter-insults-collection%2f&p=DevEx,5649.1",
+        "contentSize":"649321 B",
+        "encodingFormat":"png",
+        "hostPageDisplayUrl":"http:\/\/bgr.com\/2016\/01\/29\/donald-trump-twitter-insults-collection\/",
+        "width":1250,
+        "height":703,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        }
+      },
+      {
+        "name":"Donald Trump Is Hacked On Twitter, Emphatically Did Not Tweet Lil ...",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=GldlaJUSMktQtCnadi2OeGQYZ4_5aJBnKO1jNH_r488&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3d6C6FAD0A35CEF6AAC51B564EB715FF0E8470748C%26FORM%3dIARRTH&p=DevEx,5528.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M220da107040a647575f01c128614019fo1&pid=Api",
+        "datePublished":"2015-09-02T19:17:00",
+        "contentUrl":"http:\/\/i.huffpost.com\/gen\/1002546\/images\/o-DONALD-TRUMP-facebook.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=WcU89ST7OFZi_sp_TpOVbZUQRWKLYwPfePeGd5fg4iY&v=1&r=http%3a%2f%2fwww.huffingtonpost.co.uk%2f2013%2f02%2f21%2fdonald-trump-hacked-twitter-did-not-tweet-lil-wayne-lyrics-about-hoes_n_2734012.html&p=DevEx,5650.1",
+        "contentSize":"440880 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/www.huffingtonpost.co.uk\/2013\/02\/21\/donald-trump-hacked-twitter-did-not-tweet-lil-wayne-lyrics-about-hoes_n_2734012.html",
+        "width":1536,
+        "height":1940,
+        "thumbnail":{
+          "width":237,
+          "height":300
+        }
+      },
+      {
+        "name":"The demagogue cometh: The Donald Trump campaign - Liberation News",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=junotyNdz_b_vpgThHgvXqk322YwNQygO5Jq54jJYcw&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3d0C9A5882833A62E6EA01DC39C20AC76F675CA074%26FORM%3dIARRTH&p=DevEx,5529.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M798f772860e1331b4124c3eed5d4b811o1&pid=Api",
+        "datePublished":"2016-07-30T16:18:00",
+        "contentUrl":"http:\/\/www.liberationnews.org\/wp-content\/uploads\/2015\/07\/donaldtrump61815.jpg",
+        "hostPageUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=RpmMxkNOUAyGhaoXWgcPYODQZser0Q9jtnOfvjbky4U&v=1&r=https%3a%2f%2fwww.liberationnews.org%2fthe-demagogue-commeth-the-donald-trump-campaign%2f&p=DevEx,5651.1",
+        "contentSize":"616709 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"https:\/\/www.liberationnews.org\/the-demagogue-commeth-the-donald-trump-campaign\/",
+        "width":3000,
+        "height":2378,
+        "thumbnail":{
+          "width":300,
+          "height":237
+        }
+      },
+      {
+        "name":"Donald Trump is Running for President – SourceFed",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=6CzQAwN5pAKGu4t3PRZbf5EWpf7kSRysfPMCVAysyfs&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3d4019101FAC7A40A5689B9071689D08B4624392BB%26FORM%3dIARRTH&p=DevEx,5530.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M8c180336aa0a19e653b5ebdcf7cc66c1o1&pid=Api",
+        "datePublished":"2015-06-26T20:54:00",
+        "contentUrl":"http:\/\/sourcefed.com\/wp-content\/uploads\/2015\/06\/donald-j-trump.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=WZhel0rYxKPXuWX1vu3AuPn7gZUgopP7cARQUnlJ-Vo&v=1&r=http%3a%2f%2fsourcefed.com%2fdonald-trump-is-running-for-president%2f&p=DevEx,5652.1",
+        "contentSize":"4748007 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/sourcefed.com\/donald-trump-is-running-for-president\/",
+        "width":2592,
+        "height":3888,
+        "thumbnail":{
+          "width":200,
+          "height":300
+        }
+      },
+      {
+        "name":"Donald Trump is confirmed down by double digits! Loser! | RedState",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=za6o-c3oIDQhUqq_Uc7_uXZduAbe1H3pvY8MklXEkgU&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3dDFD06568FCECE25794777D01D8DA766AB3F6B484%26FORM%3dIARRTH&p=DevEx,5531.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.Mb023cd4f466e15e33ee2616bc7dc65fbo0&pid=Api",
+        "datePublished":"2016-04-01T15:37:00",
+        "contentUrl":"http:\/\/www.redstate.com\/uploads\/2016\/02\/donald-trump-is-still-soaring-in-iowa-but-there-are-now-some-clear-warning-signs.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=6SkYn31Nd8n4zccAQwB4HApkp7rBAmPbVhZIQ8MlIQg&v=1&r=http%3a%2f%2fwww.redstate.com%2fneil_stevens%2f2016%2f04%2f01%2fdonald-trump-confirmed-double-digits-loser%2f&p=DevEx,5653.1",
+        "contentSize":"796887 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/www.redstate.com\/neil_stevens\/2016\/04\/01\/donald-trump-confirmed-double-digits-loser\/",
+        "width":3066,
+        "height":2300,
+        "thumbnail":{
+          "width":300,
+          "height":225
+        }
+      },
+      {
+        "name":"Is Donald Trump a Natural Born Citizen? | Politics",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=oBx7DfiK95aRrzNpf7PAwxjceV_cTfh2sWzKDV0iMkE&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3d6065E85061836E5ABD680AD23DFBF2110D4F3964%26FORM%3dIARRTH&p=DevEx,5532.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M3376f4e0dd1a0c732846f1b5e1c695f4o0&pid=Api",
+        "datePublished":"2016-01-11T04:12:00",
+        "contentUrl":"http:\/\/www.redstate.com\/uploads\/2016\/01\/donald-trump-caricature-flickr-cc.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=Eflrc-vKt53DTUhmE-L1IBBwxe1qSMp6rnJZZymHssg&v=1&r=http%3a%2f%2fcomics.beforeitsnews.com%2fpolitics%2f2016%2f01%2fis-donald-trump-a-natural-born-citizen-2769112.html&p=DevEx,5654.1",
+        "contentSize":"239619 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/comics.beforeitsnews.com\/politics\/2016\/01\/is-donald-trump-a-natural-born-citizen-2769112.html",
+        "width":1920,
+        "height":1080,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        }
+      },
+      {
+        "name":"... Campaign Manager To Be “Strategist” For Donald Trump Super PAC",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=2x8rkLv35-hDN8ZjLds9YHMiOlH83vRiZgExxELVnQE&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3d7A66109AC330CE09400C5AE964411B7624D08CF5%26FORM%3dIARRTH&p=DevEx,5533.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M94cd13638fb8437323ff4cdfe3b46ed0o0&pid=Api",
+        "datePublished":"2016-03-11T16:00:00",
+        "contentUrl":"http:\/\/www.redstate.com\/uploads\/2016\/03\/trump-hair-flickr-cc1.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=2Z_aipV5seGmbGC8W_JXKyOwkzIm2eDKaqUqBvhv8dk&v=1&r=http%3a%2f%2fwww.redstate.com%2fstreiff%2f2016%2f03%2f11%2fmitch-mcconnells-campaign-manager-strategist-donald-trump-super-pac%2f&p=DevEx,5655.1",
+        "contentSize":"399490 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/www.redstate.com\/streiff\/2016\/03\/11\/mitch-mcconnells-campaign-manager-strategist-donald-trump-super-pac\/",
+        "width":1920,
+        "height":1080,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        }
+      },
+      {
+        "name":"LOL: Donald Trump Threatens to Sue Club for Growth Over Negative Ads ...",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=nlT4zDOiyI3lbEcUmwcu7rIEQ5Vx-jF4FIl3FduTMy4&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3dD79D421D062A305CE89D06E934392EF200A92CF4%26FORM%3dIARRTH&p=DevEx,5534.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.Md1a930ca29e8de2033a0c8539e91cf56o1&pid=Api",
+        "datePublished":"2015-09-22T21:10:00",
+        "contentUrl":"http:\/\/hinterlandgazette.com\/wp-content\/uploads\/2015\/09\/donald-trump-hair3.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=IDwX5SJOzkZ5Q5QWZXQ6172gAKETSFy7s-aIgJQRmOo&v=1&r=http%3a%2f%2fhinterlandgazette.com%2f2015%2f09%2fdonald-trump-threatens-to-sue-club-for-growth-over-attack-ads.html&p=DevEx,5656.1",
+        "contentSize":"506178 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/hinterlandgazette.com\/2015\/09\/donald-trump-threatens-to-sue-club-for-growth-over-attack-ads.html",
+        "width":1200,
+        "height":1137,
+        "thumbnail":{
+          "width":300,
+          "height":284
+        }
+      },
+      {
+        "name":"The Donald Trump Conversation: Murdoch, Ailes, NBC and the Rush of ...",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=A4071jOCk-VGSv6GSO9NRTSsT7fDRz_90G4Ztu0f0cc&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3dB7E7CBA0A809119C702A5537867105C847D2D50F%26FORM%3dIARRTH&p=DevEx,5535.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M22a71fdc676a13b3429013f94084c434o0&pid=Api",
+        "datePublished":"2016-09-30T22:57:00",
+        "contentUrl":"http:\/\/cdn1.thr.com\/sites\/default\/files\/2015\/08\/splash-trump-a1.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=qvM0h4AMh8A7ouZztb2m_kZ3jl5HA-JpGIffSwF466A&v=1&r=http%3a%2f%2fwww.hollywoodreporter.com%2ffeatures%2fdonald-trump-murdoch-ailes-nbc-816131&p=DevEx,5657.1",
+        "contentSize":"387543 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/www.hollywoodreporter.com\/features\/donald-trump-murdoch-ailes-nbc-816131",
+        "width":1500,
+        "height":844,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        }
+      },
+      {
+        "name":"So there you have it. Donald Trump is the world’s greatest modern ...",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=ZybbhEgRZ3Jf732ERcU7vEN4Ky_KCJFfohS3Z4sIlKo&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3dB6C1B51A0F543F27FA4044871E2512C3E94FFD12%26FORM%3dIARRTH&p=DevEx,5536.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.Mbaa51113ab3bc4616e812aa33f48abd1o1&pid=Api",
+        "datePublished":"2014-09-22T12:49:00",
+        "contentUrl":"http:\/\/www.lastwordonnothing.com\/wp-content\/uploads\/2014\/09\/trump-2.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=jx71PLs6H1wsf_UZyWLzJPfmbAYqJxC96_rKAPbwoIk&v=1&r=http%3a%2f%2fwww.lastwordonnothing.com%2f2014%2f09%2f22%2fwhy-donald-trump-is-the-worlds-greatest-artist%2f&p=DevEx,5658.1",
+        "contentSize":"439674 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/www.lastwordonnothing.com\/2014\/09\/22\/why-donald-trump-is-the-worlds-greatest-artist\/",
+        "width":1627,
+        "height":2048,
+        "thumbnail":{
+          "width":238,
+          "height":300
+        }
+      },
+      {
+        "name":"Amazing News You Guys: Donald Trump Is For Sure Running For President ...",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=SXv2ljFYVGt03obAeugeCTqC6TmFZMqxQsGC7oUr9fw&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3d5D53A041CCE3A4B1F0172D9A4EDA5647EBD501AD%26FORM%3dIARRTH&p=DevEx,5537.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.Mdc7e1790cee6b356a8fbead6cc24e716o2&pid=Api",
+        "datePublished":"2016-07-30T04:44:00",
+        "contentUrl":"http:\/\/libertycitys.com\/wp-content\/uploads\/2015\/02\/donald-trump.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=8RfYxZiTkeJAjC1ZqG5_MYmCgyq_0eSfm1zckV2JJoo&v=1&r=http%3a%2f%2flibertycitys.com%2famazing-news-you-guys-donald-trump-is-for-sure-running-for-president-in-2016%2f&p=DevEx,5659.1",
+        "contentSize":"56707 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/libertycitys.com\/amazing-news-you-guys-donald-trump-is-for-sure-running-for-president-in-2016\/",
+        "width":970,
+        "height":712,
+        "thumbnail":{
+          "width":300,
+          "height":220
+        }
+      },
+      {
+        "name":"... with the first 8 words of Donald Trump's speech - Business Insider",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=zmYXlkm5IjQXBmwe4oktTLFqelkim6faIyNHXWYtX-Y&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3dA24A8EE20A53CE2E582CB716929B3A424AF62DA0%26FORM%3dIARRTH&p=DevEx,5538.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.Mf1424ea38d9ef8ee9fe96e0bba071d08o2&pid=Api",
+        "datePublished":"2015-07-03T09:10:00",
+        "contentUrl":"http:\/\/static2.businessinsider.com\/image\/55805fececad046633bc01aa\/donald-trump-got-only-8-words-into-his-campaign-before-we-found-a-seriously-questionable-fact.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=HKOGvY4m6G6xhNudKRodrabKAOkhXZBmyF9CHHcn17g&v=1&r=http%3a%2f%2fwww.businessinsider.com%2fproblem-with-the-first-8-words-of-donald-trumps-speech-2015-6&p=DevEx,5660.1",
+        "contentSize":"581704 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/www.businessinsider.com\/problem-with-the-first-8-words-of-donald-trumps-speech-2015-6",
+        "width":4249,
+        "height":3187,
+        "thumbnail":{
+          "width":300,
+          "height":225
+        }
+      },
+      {
+        "name":"The Many Lawsuits of Donald Trump | The Reeves Law Group",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=VZ-JoqZWMLYDkmAeBOg40WJx4S8XE3Ndpcjn7StSNYg&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3dB3E5F4D0E157235B63528B535121085CCCFFA0A5%26FORM%3dIARRTH&p=DevEx,5539.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M3a565c128a0fd53ffa92d2b5a6aa2f18o1&pid=Api",
+        "datePublished":"2016-09-22T22:45:00",
+        "contentUrl":"http:\/\/www.robertreeveslaw.com\/wp-content\/uploads\/2015\/11\/Donald-Trump-Funny-Face.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=LmM_szHfcmt1XYPEuVlN4lt3xfkWCfkYREEUHpuPxWg&v=1&r=http%3a%2f%2fwww.robertreeveslaw.com%2fblog%2flawsuits-donald-trump%2f&p=DevEx,5661.1",
+        "contentSize":"505903 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/www.robertreeveslaw.com\/blog\/lawsuits-donald-trump\/",
+        "width":4232,
+        "height":3174,
+        "thumbnail":{
+          "width":300,
+          "height":225
+        }
+      },
+      {
+        "name":"PPP: Trump's Standing Significantly Diminished | RedState",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=NTALLUYUikaK-esV2hUMF1cNAcve1i062oci_-_uVOU&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3dCF2BF291A6C17441D5B33512CD1AD105BBF227EE%26FORM%3dIARRTH&p=DevEx,5540.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M51187880429fef062e068bb4b03b0d88o2&pid=Api",
+        "datePublished":"2016-02-03T14:36:00",
+        "contentUrl":"http:\/\/www.redstate.com\/uploads\/2016\/01\/donald-trump-angry-caricature-flickr-cc.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=8sojvx8-A_VphnXdMWObyiEhDMb1EyrGUPfxS5KHHCE&v=1&r=http%3a%2f%2fwww.redstate.com%2fcalifornia_yankee%2f2016%2f02%2f03%2fpp-trumps-standing-significantly-diminished%2f&p=DevEx,5662.1",
+        "contentSize":"146713 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/www.redstate.com\/california_yankee\/2016\/02\/03\/pp-trumps-standing-significantly-diminished\/",
+        "width":1920,
+        "height":1080,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        }
+      },
+      {
+        "name":"Donald Trump Has The Midas Touch [Exclusive Interview] - Forbes",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=x3S8_NPj-YpiVnRpKChLyfLqspSWZDD_3hZJHk9oufo&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3d2533BDCA0A0148DD012C951FED0813511025CD8F%26FORM%3dIARRTH&p=DevEx,5541.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M2d137264bfae98fbf97b7b4d981e0baeH2&pid=Api",
+        "datePublished":"2011-10-03T12:00:00",
+        "contentUrl":"http:\/\/blogs-images.forbes.com\/danschawbel\/files\/2011\/10\/donald-trump.jpg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=9xbzvhWAlwTn6I6AIU4s76U1XcAYm7Hc56sDRd6SxQY&v=1&r=http%3a%2f%2fwww.forbes.com%2fsites%2fdanschawbel%2f2011%2f10%2f03%2fdonald-trump-has-the-midas-touch-exclusive-interview%2f&p=DevEx,5663.1",
+        "contentSize":"312728 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/www.forbes.com\/sites\/danschawbel\/2011\/10\/03\/donald-trump-has-the-midas-touch-exclusive-interview\/",
+        "width":745,
+        "height":1024,
+        "thumbnail":{
+          "width":218,
+          "height":300
+        }
+      },
+      {
+        "name":"Donald “nae Pals” Trump Pays Actors To Attend His Party. | News ...",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=xoy1eBtK5z6DF__kZkVbmnXJPyQ4D0bQiQ6Bym3shSU&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3dD892D27E827C52872DEA4CB1068EFDFADF5D3EE0%26FORM%3dIARRTH&p=DevEx,5542.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M746bc16f02d02198c142cf9a112241efo2&pid=Api",
+        "datePublished":"2016-07-31T00:32:00",
+        "contentUrl":"http:\/\/www.newsnumpty.com\/wp-content\/uploads\/2015\/06\/trump-hair.jpeg",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=qmZNjTbFpX8S-nCACg7ALZgkHJWjxiFxxgwBb96v_1Y&v=1&r=http%3a%2f%2fwww.newsnumpty.com%2fdonald-nae-pals-trump-pays-actors-to-attend-his-party%2f&p=DevEx,5664.1",
+        "contentSize":"60373 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"http:\/\/www.newsnumpty.com\/donald-nae-pals-trump-pays-actors-to-attend-his-party\/",
+        "width":540,
+        "height":375,
+        "thumbnail":{
+          "width":300,
+          "height":208
+        }
+      },
+      {
+        "name":"Make America Great Again! | Donald J Trump for President",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=BxBNl0XV2eSUC1pvE7dLL7HfiXU371dWozlxs80aaj8&v=1&r=https%3a%2f%2fwww.bing.com%2fimages%2fsearch%3fq%3dtrump%26id%3d0DDF41EB77D107A9585A153F9A79BC1D3B5E2A15%26FORM%3dIARRTH&p=DevEx,5543.1",
+        "thumbnailUrl":"https:\/\/tse1.mm.bing.net\/th?id=OIP.M83673abe57fffb8d774aba5565bf9234o0&pid=Api",
+        "datePublished":"2015-04-19T17:28:00",
+        "contentUrl":"https:\/\/www.donaldjtrump.com\/images\/site\/hero_image_main_2.jpg",
+        "hostPageUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=_GrmnoUttB3T_DxhyB2nLiXcM2O825LS5nN1ht69nPk&v=1&r=https%3a%2f%2fwww.donaldjtrump.com%2f&p=DevEx,5665.1",
+        "contentSize":"59263 B",
+        "encodingFormat":"jpeg",
+        "hostPageDisplayUrl":"https:\/\/www.donaldjtrump.com\/",
+        "width":1200,
+        "height":678,
+        "thumbnail":{
+          "width":300,
+          "height":169
+        }
+      }
+    ],
+    "displayShoppingSourcesBadges":false,
+    "displayRecipeSourcesBadges":true
+  },
+  "news":{
+    "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#News",
+    "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/news\/search?q=Trump",
+    "value":[
+      {
+        "name":"Trump warns of World War III if Clinton is elected",
+        "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=qPieDhRllsG0IxbnAdr5bpNWaaodMD8gMLuvghB8YL8&v=1&r=http%3a%2f%2fwww.cnn.com%2f2016%2f10%2f25%2fpolitics%2fdonald-trump-hillary-clinton-world-war-iii-syria%2findex.html&p=DevEx,5326.1",
+        "image":{
+          "contentUrl":"http:\/\/i2.cdn.turner.com\/cnnnext\/dam\/assets\/161019232458-trump-clinton-debate-super-tease.jpg",
+          "thumbnail":{
+            "contentUrl":"https:\/\/www.bing.com\/th?id=ON.54EC3D87B0DCAB0A245ABCADFD65E53A&pid=News",
+            "width":700,
+            "height":393
+          }
+        },
+        "description":"(CNN)Donald Trump warned in an interview Tuesday that Hillary Clinton's policies as president to address the Syrian conflict would lead to World War III, arguing the Democratic nominee would draw the US into armed confrontation with Russia, Syria and Iran.",
+        "about":[
+          {
+            "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/entities\/1a466af2-ed23-25bd-794d-1ca925e4681b",
+            "name":"Donald Trump"
+          },
+          {
+            "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/entities\/29fe3d24-3a51-f669-2349-7285e694781d",
+            "name":"Bill Clinton"
+          }
+        ],
+        "provider":[
+          {
+            "_type":"Organization",
+            "name":"CNN"
+          }
+        ],
+        "datePublished":"2016-10-26T02:55:00",
+        "category":"Politics"
+      },
+      {
+        "name":"Donald Trump scales back big-dollar fundraising",
+        "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=Y7DKtxTTfCeWTvU9R3-nN_y2sDPm2T7w2Tbtp8-iTNA&v=1&r=http%3a%2f%2fwww.usatoday.com%2fstory%2fnews%2fpolitics%2fonpolitics%2f2016%2f10%2f25%2fdonald-trump-scales-back-big-dollar-fundraising%2f92742440%2f&p=DevEx,5330.1",
+        "image":{
+          "contentUrl":"http:\/\/www.gannett-cdn.com\/-mm-\/407e4e56f1dea1fb243638c73eea685c36b73f95\/c=0-39-2238-1303&r=x633&c=1200x630\/local\/-\/media\/2016\/10\/25\/USATODAY\/USATODAY\/636130154883633691-AP-Campaign-2016-Trump-007.jpg",
+          "thumbnail":{
+            "contentUrl":"https:\/\/www.bing.com\/th?id=ON.9EEB1E519CD5352C50DF4493F496C1BB&pid=News",
+            "width":700,
+            "height":367
+          }
+        },
+        "description":"Republican presidential candidate Donald Trump gestures as he arrives to speak to a campaign rally, Tuesday in Sanford, Fla. (Photo: Evan Vucci, AP) WASHINGTON — Republican presidential nominee Donald Trump is scaling back on big-dollar fundraising in ...",
+        "about":[
+          {
+            "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/entities\/1a466af2-ed23-25bd-794d-1ca925e4681b",
+            "name":"Donald Trump"
+          }
+        ],
+        "provider":[
+          {
+            "_type":"Organization",
+            "name":"USA Today"
+          }
+        ],
+        "datePublished":"2016-10-26T08:22:00",
+        "category":"Politics"
+      },
+      {
+        "name":"A guide to Donald Trump's 'rigged' election",
+        "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=OQ9TVAmKaEqtboWKVY-u2R_ZtVrNAGn4EnVskEM2i08&v=1&r=http%3a%2f%2fwww.politico.com%2fstory%2f2016%2f10%2fdonald-trump-rigged-election-guide-230302&p=DevEx,5332.1",
+        "image":{
+          "contentUrl":"http:\/\/v.politico.com\/images\/1155968404\/201610\/1729\/1155968404_5173549748001_5087413504001-vs.jpg?pubId=1155968404",
+          "thumbnail":{
+            "contentUrl":"https:\/\/www.bing.com\/th?id=ON.1DD2CFEB74A6BDC56AE5B09E583363E3&pid=News",
+            "width":700,
+            "height":393
+          }
+        },
+        "description":"Dead Democrats who “absolutely vote.” “Phony” polling and the colluding media “refusing” to report on his imminent victory. Paul Ryan’s backstabbing “months-long campaign” to get Hillary Clinton elected president. Donald Trump and his ...",
+        "about":[
+          {
+            "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/entities\/1a466af2-ed23-25bd-794d-1ca925e4681b",
+            "name":"Donald Trump"
+          },
+          {
+            "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/entities\/07182109-18e6-0f9a-debb-c574ef9bd08e",
+            "name":"Politico"
+          }
+        ],
+        "provider":[
+          {
+            "_type":"Organization",
+            "name":"Politico"
+          }
+        ],
+        "datePublished":"2016-10-26T08:06:00",
+        "video":{
+          "name":"A guide to Donald Trump s rigged election",
+          "thumbnailUrl":"https:\/\/www.bing.com\/th?id=ON.1DD2CFEB74A6BDC56AE5B09E583363E3&pid=News",
+          "embedHtml":"<object id=\"flashObj\" width=\"480\" height=\"270\" classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http:\/\/download.macromedia.com\/pub\/shockwave\/cabs\/flash\/swflash.cab#version=9,0,47,0\"><param name=\"movie\" value=\"http:\/\/c.brightcove.com\/services\/viewer\/federated_f9?isVid=1&isUI=1\" \/><param name=\"bgcolor\" value=\"#FFFFFF\" \/><param name=\"flashVars\" value=\"videoId=5087413504001&playerID=1764219419001&playerKey=AQ~~,AAAAAETmrZQ~,EVFEM4AKJdRI6UgfPhFgV0s-3wZ2v95n&domain=embed&dynamicStreaming=true\" \/><param name=\"base\" value=\"http:\/\/admin.brightcove.com\" \/><param name=\"seamlesstabbing\" value=\"false\" \/><param name=\"allowFullScreen\" value=\"true\" \/><param name=\"swLiveConnect\" value=\"true\" \/><param name=\"allowScriptAccess\" value=\"always\" \/><embed src=\"http:\/\/c.brightcove.com\/services\/viewer\/federated_f9?isVid=1&isUI=1\" bgcolor=\"#FFFFFF\" flashVars=\"videoId=5087413504001&playerID=1764219419001&playerKey=AQ~~,AAAAAETmrZQ~,EVFEM4AKJdRI6UgfPhFgV0s-3wZ2v95n&domain=embed&dynamicStreaming=true\" base=\"http:\/\/admin.brightcove.com\" name=\"flashObj\" width=\"480\" height=\"270\" seamlesstabbing=\"false\" type=\"application\/x-shockwave-flash\" allowFullScreen=\"true\" allowScriptAccess=\"always\" swLiveConnect=\"true\" pluginspage=\"http:\/\/www.macromedia.com\/shockwave\/download\/index.cgi?P1_Prod_Version=ShockwaveFlash\"><\/embed><\/object>",
+          "allowHttpsEmbed":true,
+          "thumbnail":{
+            "width":480,
+            "height":270
+          }
+        },
+        "category":"Politics"
+      },
+      {
+        "name":"Trump cuts off fundraising events for Republican Party",
+        "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=t6VKX4SJOkIHW5jSd17jqVCDNlIQUHOl6fPDoer9E3E&v=1&r=http%3a%2f%2fwww.foxnews.com%2fpolitics%2f2016%2f10%2f26%2ftrump-cuts-off-fundraising-events-for-republican-party.html&p=DevEx,5334.1",
+        "image":{
+          "contentUrl":"http:\/\/a57.foxnews.com\/media2.foxnews.com\/BrightCove\/694940094001\/2016\/10\/25\/0\/0\/694940094001_5184960929001_Trump-frustrated-by-lack-of-support-from-GOP-establishment.jpg?ve=1",
+          "thumbnail":{
+            "contentUrl":"https:\/\/www.bing.com\/th?id=ON.168D884D474E75559C4F36F9BD6677D9&pid=News",
+            "width":700,
+            "height":393
+          }
+        },
+        "description":"Donald Trump's campaign has ended fundraising events meant to support the Republican Party's get-out-the-vote efforts in next month's elections. Aides to the Republican nominee told Fox News that Trump Victory, the joint fundraising committee for the GOP ...",
+        "about":[
+          {
+            "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/entities\/1a466af2-ed23-25bd-794d-1ca925e4681b",
+            "name":"Donald Trump"
+          },
+          {
+            "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/entities\/53c34e6f-f7f3-a9b0-880a-612e57dd8e9b",
+            "name":"Republican Party"
+          },
+          {
+            "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/entities\/273e0477-30ed-3993-f232-f39244306805",
+            "name":"Fox News Channel"
+          }
+        ],
+        "provider":[
+          {
+            "_type":"Organization",
+            "name":"FOX News"
+          }
+        ],
+        "datePublished":"2016-10-26T05:46:00",
+        "video":{
+          "name":"Trump Cuts Off Fundraising Events For Republican Party",
+          "thumbnailUrl":"https:\/\/www.bing.com\/th?id=ON.8CFA627D40230597047C80170316AB49&pid=News",
+          "allowHttpsEmbed":true,
+          "thumbnail":{
+            "width":480,
+            "height":270
+          }
+        },
+        "category":"Politics"
+      },
+      {
+        "name":"Trump Campaign Pushes Back Against Report It Stopped Fundraising",
+        "url":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=frPJtLrQBiZKOFSnmEZ0aCfZMqqUKDN9BpsnvUmY8FQ&v=1&r=http%3a%2f%2fwww.nbcnews.com%2fpolitics%2f2016-election%2ftrump-campaign-pushes-back-against-report-it-stopped-fundraising-n672936&p=DevEx,5336.1",
+        "image":{
+          "contentUrl":"http:\/\/media4.s-nbcnews.com\/j\/newscms\/2016_43\/1767151\/161025-donald-trump-florida-1145p_61f9f5debfd0ef3818e7a32ae191c9b8.nbcnews-ux-320-320.jpg",
+          "thumbnail":{
+            "contentUrl":"https:\/\/www.bing.com\/th?id=ON.7A31E67112EF617E9B77D58566624E40&pid=News",
+            "width":320,
+            "height":244
+          }
+        },
+        "description":"Donald Trump's campaign is pushing back against a new report that says Trump has all but stopped raising money for the joint fundraising effort with the Republican National Committee, insisting that the campaign is continuing to support the Republican Party.",
+        "about":[
+          {
+            "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/entities\/1a466af2-ed23-25bd-794d-1ca925e4681b",
+            "name":"Donald Trump"
+          },
+          {
+            "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/entities\/eb9d24f7-9d35-b512-05d8-f102312f3128",
+            "name":"Report"
+          },
+          {
+            "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/entities\/90fd2ef2-8123-de59-2b1f-ccd033454a4a",
+            "name":"NBC News"
+          }
+        ],
+        "provider":[
+          {
+            "_type":"Organization",
+            "name":"NBC News"
+          }
+        ],
+        "datePublished":"2016-10-25T15:50:00",
+        "video":{
+          "name":"Trump Spotlights His Florida Property, While Knocking Obamacare",
+          "thumbnailUrl":"https:\/\/www.bing.com\/th?id=ON.D6A74596224E387B6980CDAACA3F0F38&pid=News",
+          "embedHtml":"<iframe width=\"635\" height=\"500\" src=\"http:\/\/player.theplatform.com\/p\/2E2eJC\/nbcNewsOffsite?guid=nn_hja_trump_florida_20161025\" scrolling=\"no\" frameborder=\"0\"><\/iframe>",
+          "allowHttpsEmbed":true,
+          "thumbnail":{
+            "width":480,
+            "height":270
+          }
+        },
+        "category":"Politics"
+      }
+    ]
+  },
+  "relatedSearches":{
+    "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#RelatedSearches",
+    "value":[
+      {
+        "text":"Trump Polls Today",
+        "displayText":"Trump Polls Today",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=IuCLFB_RYS8VYpeexJj7tGMWQE8tNOi85hmFiLYjC8s&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dTrump%2bPolls%2bToday&p=DevEx,5666.1"
+      },
+      {
+        "text":"Trump Will Win",
+        "displayText":"Trump Will Win",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=Gh-tC90Q-87c6ezmF6BS1NJDMjCmVHzKtnMsPNV5Efg&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dTrump%2bWill%2bWin&p=DevEx,5667.1"
+      },
+      {
+        "text":"Trump Rally Schedule",
+        "displayText":"Trump Rally Schedule",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=f1EAF94JTTZGUNwJrc4K4vWN0yX7srMUtagtRsc5Vyk&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dTrump%2bRally%2bSchedule&p=DevEx,5668.1"
+      },
+      {
+        "text":"Trump Twitter",
+        "displayText":"Trump Twitter",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=fnpJEbGL-tJTzyU-LASHRuLhp6KSRFgM9HP-63um8ek&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dTrump%2bTwitter&p=DevEx,5669.1"
+      },
+      {
+        "text":"Trump vs Clinton Polls",
+        "displayText":"Trump vs Clinton Polls",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=Ww1N29hNY6FuD9A83FSgzJwII9F2ppzRlQGVMB3G7ao&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dTrump%2bvs%2bClinton%2bPolls&p=DevEx,5670.1"
+      },
+      {
+        "text":"Trump Campaign Website",
+        "displayText":"Trump Campaign Website",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=DCkeBPSZ5EbgtC8ustREYqCi8tUs_lYm2HIrum97iZ4&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dTrump%2bCampaign%2bWebsite&p=DevEx,5671.1"
+      },
+      {
+        "text":"Donald Trump Newest Polls",
+        "displayText":"Donald Trump Newest Polls",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=PMQOMcNT5sul649U12T66aShyXPMG7Ei40bo_jNHrbM&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dDonald%2bTrump%2bNewest%2bPolls&p=DevEx,5672.1"
+      },
+      {
+        "text":"The Trump Organization",
+        "displayText":"The Trump Organization",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=hDbMUswEkuU1EBCEH3mpHo7HCeOIHT9QErZ9VPsXjEY&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dThe%2bTrump%2bOrganization&p=DevEx,5673.1"
+      }
+    ]
+  },
+  "videos":{
+    "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#Videos",
+    "readLink":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/videos\/search?q=trump",
+    "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=de2Mt5XWEWLxvEyj7sYBod5OAmhGw9D2FSJivSms0iU&v=1&r=https%3a%2f%2fwww.bing.com%2fvideos%2fsearch%3fq%3dtrump&p=DevEx,5084.1",
+    "isFamilyFriendly":true,
+    "value":[
+      {
+        "name":"Donald Trump refuses to take pledge at GOP debate",
+        "description":"In the first GOP debate hosted by Fox News Donald Trump raised his hand when asked if anyone would not make the pledge to run as an Independent candidate.",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=gIqanH4JhlH2hESottc8Tz2iCEn7o7q45PUOwogGRpM&v=1&r=https%3a%2f%2fwww.bing.com%2fvideos%2fsearch%3fq%3dtrump%26view%3ddetail%26mid%3d079DCEAD70F33170CD38079DCEAD70F33170CD38&p=DevEx,5633.1",
+        "thumbnailUrl":"https:\/\/tse2.mm.bing.net\/th?id=OVP.Vffdf5200101ad06d506ac1717220eb86&pid=Api",
+        "datePublished":"2015-08-07T09:10:44",
+        "publisher":[
+          {
+            "name":"CNN"
+          }
+        ],
+        "contentUrl":"http:\/\/www.cnn.com\/videos\/politics\/2015\/08\/07\/donald-trump-fox-news-gop-debate-republican-party-pledge-raises-hand.fox-news",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=Xk5oI4AjAeaeha5rDXCdmoepHR5gmlBQteCQ-hHb2XY&v=1&r=http%3a%2f%2fwww.cnn.com%2fvideos%2fpolitics%2f2015%2f08%2f07%2fdonald-trump-fox-news-gop-debate-republican-party-pledge-raises-hand.fox-news&p=DevEx,5632.1",
+        "encodingFormat":"flv",
+        "hostPageDisplayUrl":"http:\/\/www.cnn.com\/videos\/politics\/2015\/08\/07\/donald-trump-fox-news-gop-debate-republican-party-pledge-raises-hand.fox-news",
+        "width":512,
+        "height":288,
+        "duration":"PT2M14S",
+        "motionThumbnailUrl":"https:\/\/tse2.mm.bing.net\/th?id=OM.OM1wMfNwrc6dBw&pid=Api",
+        "embedHtml":"<iframe width='416' height='234' src='http:\/\/edition.cnn.com\/video\/api\/embed.html#\/video\/politics\/2015\/08\/07\/donald-trump-fox-news-gop-debate-republican-party-pledge-raises-hand.fox-news' frameborder='0'><\/iframe>",
+        "allowHttpsEmbed":false,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        },
+        "allowMobileEmbed":false
+      },
+      {
+        "name":"Trump quotes Bible, crowd laughs",
+        "description":"Donald Trump promised to protect Christians \"under siege\" while speaking to a packed audience at Liberty University in Virginia.",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=AVDBBEwNDB_IzZTWYJCJ4HwD2wBEoQjs_uU02t6qYec&v=1&r=https%3a%2f%2fwww.bing.com%2fvideos%2fsearch%3fq%3dtrump%26view%3ddetail%26mid%3dF01D616457B18CCB9512F01D616457B18CCB9512&p=DevEx,5635.1",
+        "thumbnailUrl":"https:\/\/tse4.mm.bing.net\/th?id=OVP.V02a96637bf230a5a5ee0712105cd44a5&pid=Api",
+        "datePublished":"2016-01-19T01:54:00",
+        "publisher":[
+          {
+            "name":"CNN"
+          }
+        ],
+        "contentUrl":"http:\/\/www.cnn.com\/videos\/us\/2016\/01\/18\/trump-courts-evangelicals-butted-sots.cnn",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=qUrG0Dq8gN5L3peUREFgRMyu5pqO5sVJs7wPouHw8jc&v=1&r=http%3a%2f%2fwww.cnn.com%2fvideos%2fus%2f2016%2f01%2f18%2ftrump-courts-evangelicals-butted-sots.cnn&p=DevEx,5634.1",
+        "encodingFormat":"flv",
+        "hostPageDisplayUrl":"http:\/\/www.cnn.com\/videos\/us\/2016\/01\/18\/trump-courts-evangelicals-butted-sots.cnn",
+        "width":512,
+        "height":288,
+        "duration":"PT2M26S",
+        "motionThumbnailUrl":"https:\/\/tse4.mm.bing.net\/th?id=OM.EpXLjLFXZGEd8A&pid=Api",
+        "embedHtml":"<iframe width='416' height='234' src='http:\/\/edition.cnn.com\/video\/api\/embed.html#\/video\/us\/2016\/01\/18\/trump-courts-evangelicals-butted-sots.cnn' frameborder='0'><\/iframe>",
+        "allowHttpsEmbed":false,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        },
+        "allowMobileEmbed":true
+      },
+      {
+        "name":"Donald Trump regrets Howard Stern interviews?",
+        "description":"Donald Trump told the Washington Post that he may not have participated in interviews with shock-jock Howard Stern if he had known he was going to run for president.",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=SGJVoDuxrksA2g1R7b2rKEXjPf2VzmwKZFfvMHCduHw&v=1&r=https%3a%2f%2fwww.bing.com%2fvideos%2fsearch%3fq%3dtrump%26view%3ddetail%26mid%3dA8BB55E697EB7885E863A8BB55E697EB7885E863&p=DevEx,5637.1",
+        "thumbnailUrl":"https:\/\/tse4.mm.bing.net\/th?id=OVP.V66f2211610d9b984a05910c658688765&pid=Api",
+        "datePublished":"2016-05-12T03:35:37",
+        "publisher":[
+          {
+            "name":"CNN"
+          }
+        ],
+        "contentUrl":"http:\/\/www.cnn.com\/videos\/politics\/2016\/05\/11\/donald-trump-howard-stern-women-regrets-nr-brooke.cnn",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=4APDrRSDxliqG2DlBhsCyj0JqrqMB0C1uIwTM66AgEo&v=1&r=http%3a%2f%2fwww.cnn.com%2fvideos%2fpolitics%2f2016%2f05%2f11%2fdonald-trump-howard-stern-women-regrets-nr-brooke.cnn&p=DevEx,5636.1",
+        "encodingFormat":"flv",
+        "hostPageDisplayUrl":"http:\/\/www.cnn.com\/videos\/politics\/2016\/05\/11\/donald-trump-howard-stern-women-regrets-nr-brooke.cnn",
+        "width":512,
+        "height":288,
+        "duration":"PT1M50S",
+        "motionThumbnailUrl":"https:\/\/tse4.mm.bing.net\/th?id=OM.Y%2biFeOuX5lW7qA&pid=Api",
+        "embedHtml":"<iframe width='416' height='234' src='http:\/\/edition.cnn.com\/video\/api\/embed.html#\/video\/politics\/2016\/05\/11\/donald-trump-howard-stern-women-regrets-nr-brooke.cnn' frameborder='0'><\/iframe>",
+        "allowHttpsEmbed":false,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        },
+        "allowMobileEmbed":false
+      },
+      {
+        "name":"Kimmel mocks Trump with fake campaign ad",
+        "description":"Jimmy Kimmel mocked Republican presidential candidate Donald Trump in a fake political ad.",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=JC1EOxA1OyGxVc2VEMq8cdks2b2MsC9_Ex1LvoPFYS4&v=1&r=https%3a%2f%2fwww.bing.com%2fvideos%2fsearch%3fq%3dtrump%26view%3ddetail%26mid%3d0F9E026FE3B6991BD9360F9E026FE3B6991BD936&p=DevEx,5639.1",
+        "thumbnailUrl":"https:\/\/tse2.mm.bing.net\/th?id=OVP.V22d656befb7f05c82c1c47ac241b9383&pid=Api",
+        "datePublished":"2015-08-29T20:20:44",
+        "publisher":[
+          {
+            "name":"CNN"
+          }
+        ],
+        "contentUrl":"http:\/\/www.cnn.com\/videos\/us\/2015\/08\/29\/jimmy-kimmel-donald-trump-fake-ad.cnn",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=RpqAe48k_1nP0E18Ggs5bGkUf37_jn_WGUoOveOsLNQ&v=1&r=http%3a%2f%2fwww.cnn.com%2fvideos%2fus%2f2015%2f08%2f29%2fjimmy-kimmel-donald-trump-fake-ad.cnn&p=DevEx,5638.1",
+        "encodingFormat":"flv",
+        "hostPageDisplayUrl":"http:\/\/www.cnn.com\/videos\/us\/2015\/08\/29\/jimmy-kimmel-donald-trump-fake-ad.cnn",
+        "width":512,
+        "height":288,
+        "duration":"PT1M49S",
+        "motionThumbnailUrl":"https:\/\/tse2.mm.bing.net\/th?id=OM.NtkbmbbjbwKeDw&pid=Api",
+        "embedHtml":"<iframe width='416' height='234' src='http:\/\/edition.cnn.com\/video\/api\/embed.html#\/video\/us\/2015\/08\/29\/jimmy-kimmel-donald-trump-fake-ad.cnn' frameborder='0'><\/iframe>",
+        "allowHttpsEmbed":false,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        },
+        "allowMobileEmbed":true
+      },
+      {
+        "name":"Trump blasts 'pathetic' new ad",
+        "description":"Priorities USA, a pro-Hillary Clinton super PAC, is spending $6 million dollars on anti-Trump ads in key battleground states.",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=ClhmJ3jOwtenSUof1IaHjj-Onj5vhBV5mUoiymtxO_8&v=1&r=https%3a%2f%2fwww.bing.com%2fvideos%2fsearch%3fq%3dtrump%26view%3ddetail%26mid%3d10005786F3780F4EC45710005786F3780F4EC457&p=DevEx,5641.1",
+        "thumbnailUrl":"https:\/\/tse4.mm.bing.net\/th?id=OVP.Vc2e7ad2de2c8e7138ace74ba2ee615bf&pid=Api",
+        "datePublished":"2016-05-17T22:31:06",
+        "publisher":[
+          {
+            "name":"CNN"
+          }
+        ],
+        "contentUrl":"http:\/\/www.cnn.com\/videos\/politics\/2016\/05\/17\/donald-trump-political-advertisement-ath.cnn",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=uz4X0gJF5zFkzUpZkRpkotGchTIVYJ06gN4SDSma97w&v=1&r=http%3a%2f%2fwww.cnn.com%2fvideos%2fpolitics%2f2016%2f05%2f17%2fdonald-trump-political-advertisement-ath.cnn&p=DevEx,5640.1",
+        "encodingFormat":"flv",
+        "hostPageDisplayUrl":"http:\/\/www.cnn.com\/videos\/politics\/2016\/05\/17\/donald-trump-political-advertisement-ath.cnn",
+        "width":512,
+        "height":288,
+        "duration":"PT1M59S",
+        "motionThumbnailUrl":"https:\/\/tse4.mm.bing.net\/th?id=OM.V8ROD3jzhlcAEA&pid=Api",
+        "embedHtml":"<iframe width='416' height='234' src='http:\/\/edition.cnn.com\/video\/api\/embed.html#\/video\/politics\/2016\/05\/17\/donald-trump-political-advertisement-ath.cnn' frameborder='0'><\/iframe>",
+        "allowHttpsEmbed":false,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        },
+        "allowMobileEmbed":false
+      },
+      {
+        "name":"Donald Trump's entire foreign policy speech",
+        "description":"Donald Trump delivers his first national policy speech outlining his views on U.S. foreign policy and changes he would make.",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=CIpnpbTnyPrRg4dcMWlAh2Ir5G9LtCYYwQ_FOoh20Hs&v=1&r=https%3a%2f%2fwww.bing.com%2fvideos%2fsearch%3fq%3dtrump%26view%3ddetail%26mid%3d3B1A1F018C9EDC83053A3B1A1F018C9EDC83053A&p=DevEx,5643.1",
+        "thumbnailUrl":"https:\/\/tse2.mm.bing.net\/th?id=OVP.Vaa0cc4126bbbdf514b4007e039250282&pid=Api",
+        "datePublished":"2016-04-28T05:48:00",
+        "publisher":[
+          {
+            "name":"CNN"
+          }
+        ],
+        "contentUrl":"http:\/\/www.cnn.com\/videos\/politics\/2016\/04\/27\/donald-trump-foreign-policy-speech-entire-sot.cnn",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=g07ydzZSGaMtNS2H9jZ2goFlkGNODsFR44dGFb9Svaw&v=1&r=http%3a%2f%2fwww.cnn.com%2fvideos%2fpolitics%2f2016%2f04%2f27%2fdonald-trump-foreign-policy-speech-entire-sot.cnn&p=DevEx,5642.1",
+        "encodingFormat":"flv",
+        "hostPageDisplayUrl":"http:\/\/www.cnn.com\/videos\/politics\/2016\/04\/27\/donald-trump-foreign-policy-speech-entire-sot.cnn",
+        "width":512,
+        "height":288,
+        "duration":"PT38M35S",
+        "motionThumbnailUrl":"https:\/\/tse2.mm.bing.net\/th?id=OM.OgWD3J6MAR8aOw&pid=Api",
+        "embedHtml":"<iframe width='416' height='234' src='http:\/\/edition.cnn.com\/video\/api\/embed.html#\/video\/politics\/2016\/04\/27\/donald-trump-foreign-policy-speech-entire-sot.cnn' frameborder='0'><\/iframe>",
+        "allowHttpsEmbed":false,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        },
+        "allowMobileEmbed":true
+      },
+      {
+        "name":"Donald Trump tops latest Fox News poll",
+        "description":"Carl Cameron reports from Washington",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=t36QGE3C6PFwXofIhN3WANLj7a8ogMH-c0iNI0B8Mu8&v=1&r=https%3a%2f%2fwww.bing.com%2fvideos%2fsearch%3fq%3dtrump%26view%3ddetail%26mid%3d81F28BCC9C0E8EFAFB1681F28BCC9C0E8EFAFB16&p=DevEx,5645.1",
+        "thumbnailUrl":"https:\/\/tse4.mm.bing.net\/th?id=OVP.Vb66b91c96dd57ae2e99b3dc08c7d8445&pid=Api",
+        "datePublished":"2015-07-16T23:00:10",
+        "publisher":[
+          {
+            "name":"Fox News"
+          }
+        ],
+        "contentUrl":"http:\/\/video.foxnews.com\/v\/4358806184001\/donald-trump-tops-latest-fox-news-poll\/",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=j2FAJugufF1zWly7SOwwo8Xp4qfzqz92x40DwarRWI4&v=1&r=http%3a%2f%2fvideo.foxnews.com%2fv%2f4358806184001%2fdonald-trump-tops-latest-fox-news-poll%2f&p=DevEx,5644.1",
+        "encodingFormat":"mp4",
+        "hostPageDisplayUrl":"http:\/\/video.foxnews.com\/v\/4358806184001\/donald-trump-tops-latest-fox-news-poll\/",
+        "width":640,
+        "height":360,
+        "duration":"PT3M4S",
+        "motionThumbnailUrl":"https:\/\/tse4.mm.bing.net\/th?id=OM.Fvv6jg6czIvygQ&pid=Api",
+        "embedHtml":"<iframe src=\"http:\/\/video.foxnews.com\/v\/video-embed.html?video_id=4358806184001&loc=http:\/\/www.bing.com&ref=http:\/\/www.bing.com\" width=\"466\" height=\"263\" marginwidth=\"0\" marginheight=\"0\" frameborder=\"0\" scrolling=\"no\"><\/iframe>",
+        "allowHttpsEmbed":true,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        },
+        "allowMobileEmbed":true
+      },
+      {
+        "name":"Trump mocks Rubio's SOTU water incident",
+        "description":"Donald Trump mocked Marco Rubio's 2013 State of the Union response where he took a sip of water mid-speech.",
+        "webSearchUrl":"https:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=eoRnZifto_kcbmEkkEh2OPmgSO5D30zzVH_KAjcc9GQ&v=1&r=https%3a%2f%2fwww.bing.com%2fvideos%2fsearch%3fq%3dtrump%26view%3ddetail%26mid%3d9CF2F3E4ED646DE5A39A9CF2F3E4ED646DE5A39A&p=DevEx,5647.1",
+        "thumbnailUrl":"https:\/\/tse3.mm.bing.net\/th?id=OVP.V03877194edc64c1326a2c46fef777d50&pid=Api",
+        "datePublished":"2016-02-27T04:08:42",
+        "publisher":[
+          {
+            "name":"CNN"
+          }
+        ],
+        "contentUrl":"http:\/\/www.cnn.com\/videos\/politics\/2016\/02\/26\/donald-trump-marco-rubio-water-state-of-the-union.cnn",
+        "hostPageUrl":"http:\/\/www.bing.com\/cr?IG=E81A8E795FAE4DA2BF4CC21F4BE3FC55&CID=3361F21C815267501732FBA680B5661F&rd=1&h=pYl77rHeuBW5cFLjlMs72Vt7-2RLxDzQySC704OJn14&v=1&r=http%3a%2f%2fwww.cnn.com%2fvideos%2fpolitics%2f2016%2f02%2f26%2fdonald-trump-marco-rubio-water-state-of-the-union.cnn&p=DevEx,5646.1",
+        "encodingFormat":"mp4",
+        "hostPageDisplayUrl":"http:\/\/www.cnn.com\/videos\/politics\/2016\/02\/26\/donald-trump-marco-rubio-water-state-of-the-union.cnn",
+        "width":512,
+        "height":288,
+        "duration":"PT47S",
+        "motionThumbnailUrl":"https:\/\/tse3.mm.bing.net\/th?id=OM.mqPlbWTt5PPynA&pid=Api",
+        "embedHtml":"<iframe width='416' height='234' src='http:\/\/edition.cnn.com\/video\/api\/embed.html#\/video\/politics\/2016\/02\/26\/donald-trump-marco-rubio-water-state-of-the-union.cnn' frameborder='0'><\/iframe>",
+        "allowHttpsEmbed":false,
+        "thumbnail":{
+          "width":300,
+          "height":168
+        },
+        "allowMobileEmbed":false
+      }
+    ],
+    "scenario":"List"
+  },
+  "rankingResponse":{
+    "mainline":{
+      "items":[
+        {
+          "answerType":"News",
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#News"
+          }
+        },
+        {
+          "answerType":"WebPages",
+          "resultIndex":0,
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.0"
+          }
+        },
+        {
+          "answerType":"WebPages",
+          "resultIndex":1,
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.1"
+          }
+        },
+        {
+          "answerType":"WebPages",
+          "resultIndex":2,
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.2"
+          }
+        },
+        {
+          "answerType":"Videos",
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#Videos"
+          }
+        },
+        {
+          "answerType":"WebPages",
+          "resultIndex":3,
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.3"
+          }
+        },
+        {
+          "answerType":"WebPages",
+          "resultIndex":4,
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.4"
+          }
+        },
+        {
+          "answerType":"WebPages",
+          "resultIndex":5,
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.5"
+          }
+        },
+        {
+          "answerType":"WebPages",
+          "resultIndex":6,
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.6"
+          }
+        },
+        {
+          "answerType":"WebPages",
+          "resultIndex":7,
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.7"
+          }
+        },
+        {
+          "answerType":"WebPages",
+          "resultIndex":8,
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#WebPages.8"
+          }
+        },
+        {
+          "answerType":"RelatedSearches",
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#RelatedSearches"
+          }
+        }
+      ]
+    },
+    "sidebar":{
+      "items":[
+        {
+          "answerType":"Images",
+          "value":{
+            "id":"https:\/\/api.cognitive.microsoft.com\/api\/v5\/#Images"
+          }
+        }
+      ]
+    }
+  }
+}
