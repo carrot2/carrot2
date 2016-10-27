@@ -22,7 +22,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @JsonSubTypes({
   @JsonSubTypes.Type(name = "unstructured", value = UnstructuredResponse.class),
   @JsonSubTypes.Type(name = "ErrorResponse", value = ErrorResponse.class),
-  @JsonSubTypes.Type(name = "SearchResponse", value = SearchResponse.class)})
+  @JsonSubTypes.Type(name = "SearchResponse", value = SearchResponse.class),
+  @JsonSubTypes.Type(name = "News", value = NewsResponse.class)})
 public abstract class BingResponse {
   private final static ObjectMapper mapper;
   static {

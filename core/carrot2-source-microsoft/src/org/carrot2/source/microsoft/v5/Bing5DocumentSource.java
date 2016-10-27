@@ -53,7 +53,8 @@ import org.carrot2.util.httpclient.HttpRedirectStrategy;
 import org.carrot2.util.httpclient.HttpUtils;
 
 /**
- * A base {@link IDocumentSource} sending requests to Bing Search API V5.
+ * A {@link IDocumentSource} fetching web page search results from Bing, 
+ * using Search API V5.
  * 
  * <p>Important: there are limits for free use of the above API (beyond which it is a
  * paid service).
@@ -71,23 +72,30 @@ public class Bing5DocumentSource extends MultipageSearchEngine
      */
     public static final String SYSPROP_BING5_API = "bing5.key";
 
-    /** Web search specific metadata. */
-    final static MultipageSearchEngineMetadata METADATA = new MultipageSearchEngineMetadata(50, 950);
-
-    /**
-     * REST endpoint.
-     */
-    private final static String SERVICE_URL = "https://api.cognitive.microsoft.com/bing/v5.0/search";
-
     /**
      * Default timeout.
      */
     private static final int BING_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(10);
 
     /**
+     * Max concurrent requests to Bing. 
+     * 
+     * @see #RATE_LIMITER
+     */
+    private static final int MAX_CONCURRENT_REQUESTS = 4;
+
+    /**
      * As per Bing's official guidelines, limit the rate to a maximum of 5 requests per second.
      */
-    private static final RateLimiter RATE_LIMITER = RateLimiter.create(3);
+    static final RateLimiter RATE_LIMITER = RateLimiter.create(MAX_CONCURRENT_REQUESTS);
+
+    /**
+     * REST endpoint.
+     */
+    private final static String SERVICE_URL = "https://api.cognitive.microsoft.com/bing/v5.0/search";
+
+    /** Web search specific metadata. */
+    final static MultipageSearchEngineMetadata METADATA = new MultipageSearchEngineMetadata(50, 950);
 
     /**
      * The API key used to authenticate requests. You will have to provide your own API key.
@@ -168,18 +176,28 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     @Label("Respect request rate limits")
     @Level(AttributeLevel.ADVANCED)
     @Group(SimpleSearchEngine.SERVICE)
-    public boolean respectRateLimits = true; 
-    
+    public boolean respectRateLimits = true;
+
+    private final MultipageSearchEngineMetadata metadata;
+    private final String serviceURL;
+
     public Bing5DocumentSource() {
+      this(METADATA, SERVICE_URL);
     }
-    
+
+    protected Bing5DocumentSource(MultipageSearchEngineMetadata metadata, String serviceURL) {
+      this.metadata = metadata;
+      this.serviceURL = serviceURL;
+    }
+
+
     @Override
-    public void process() throws ProcessingException {
-      process(METADATA, getSharedExecutor(10, this.getClass()));
+    public final void process() throws ProcessingException {
+      process(metadata, getSharedExecutor(MAX_CONCURRENT_REQUESTS, this.getClass()));
     }
 
     @Override
-    protected void process(MultipageSearchEngineMetadata metadata, ExecutorService executor) throws ProcessingException
+    protected final void process(MultipageSearchEngineMetadata metadata, ExecutorService executor) throws ProcessingException
     {
         if (Strings.isNullOrEmpty(apiKey)) {
             throw new ProcessingException("Bing V5 API requires a key. See "
@@ -222,9 +240,6 @@ public class Bing5DocumentSource extends MultipageSearchEngine
         params.add(new BasicNameValuePair("offset", Integer.toString(startAt)));
         params.add(new BasicNameValuePair("count", Integer.toString(totalResultsRequested)));
 
-        // Restrict search source type.
-        params.add(new BasicNameValuePair("responseFilter", sourceType.responseFilter()));
-
         if (market != null) {
           params.add(new BasicNameValuePair("mkt", market.marketCode));
         }
@@ -233,18 +248,18 @@ public class Bing5DocumentSource extends MultipageSearchEngine
           params.add(new BasicNameValuePair("safeSearch", adult.name()));
         }
 
-        // Disable hit highlighting.
-        params.add(new BasicNameValuePair("textDecorations", "false"));
-        // params.add(new BasicNameValuePair("textFormat", "Raw"));
+        augmentSearchParameters(params);
 
         List<Header> headers = Arrays.<Header> asList(
             new BasicHeader("Ocp-Apim-Subscription-Key", apiKey));
+
+        augmentSearchHeaders(headers);
 
         HttpUtils.Response response = null;
 retry:
         do {
           response = HttpUtils.doGET(
-                  SERVICE_URL, 
+                  serviceURL, 
                   params, 
                   headers, 
                   /* user */ null, 
@@ -279,14 +294,16 @@ retry:
           is.close();
         }
 
-        if (parsed instanceof SearchResponse) {
-          SearchResponse searchResponse = (SearchResponse) parsed;
-
+        if (parsed instanceof ErrorResponse) {
+          throw new IOException(((ErrorResponse) parsed).errors.get(0).message);
+        } else if (parsed instanceof UnstructuredResponse) {
+          throw new IOException(((UnstructuredResponse) parsed).message);
+        } else {
           SearchEngineResponse ser = new SearchEngineResponse();
           ser.metadata.put(SearchEngineResponse.COMPRESSION_KEY, response.compression);
 
-          process(searchResponse, ser);
-          
+          handleResponse(parsed, ser);
+
           if (market != null) {
             LanguageCode languageCode = market.toLanguageCode();
             for (Document doc : ser.results) {
@@ -295,19 +312,21 @@ retry:
           }
 
           return ser;
-        } else if (parsed instanceof ErrorResponse) {
-          throw new IOException(((ErrorResponse) parsed).errors.get(0).message);
-        } else if (parsed instanceof UnstructuredResponse) {
-          throw new IOException(((UnstructuredResponse) parsed).message);
-        } else {
-          throw new RuntimeException("Unreachable.");
         }
     }
 
-    private void process(SearchResponse searchResponse, SearchEngineResponse ser) {
+    protected void augmentSearchHeaders(List<Header> headers) {
+    }
+
+    protected void augmentSearchParameters(List<NameValuePair> params) {
+      params.add(new BasicNameValuePair("responseFilter", sourceType.responseFilter()));
+    }
+
+    protected void handleResponse(BingResponse response, SearchEngineResponse ser) {
+      SearchResponse searchResponse = (SearchResponse) response;
+      ser.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, searchResponse.webPages.totalEstimatedMatches);
+
       if (searchResponse.webPages != null) {
-        ser.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, searchResponse.webPages.totalEstimatedMatches);
-        
         for (SearchResponse.WebPages.Result r : searchResponse.webPages.value) {
           Document doc = new Document(r.name, r.snippet, r.displayUrl);
           if (r.displayUrl != null) {

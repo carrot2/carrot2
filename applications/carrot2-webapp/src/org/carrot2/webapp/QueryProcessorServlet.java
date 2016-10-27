@@ -572,7 +572,7 @@ public class QueryProcessorServlet extends HttpServlet
             this.maxCarrot2Results = config.maxCarrot2Results;
             this.useMaxCarrot2Results = useMaxCarrot2Results;
 
-            // Result sizes
+            // NewsArticle sizes
             final Set<Integer> resultSizes = Sets.newHashSet();
             for (ResultsSizeModel size : config.sizes)
             {
