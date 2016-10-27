@@ -1,0 +1,2 @@
+// 400 Bad Request
+{"_type": "ErrorResponse", "errors": [{"code": "RequestParameterMissing", "message": "Required parameter is missing.", "parameter": "q"}]}

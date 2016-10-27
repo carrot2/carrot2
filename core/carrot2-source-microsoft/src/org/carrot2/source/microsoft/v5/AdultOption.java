@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.source.microsoft;
+package org.carrot2.source.microsoft.v5;
 
 import org.carrot2.util.StringUtils;
 

@@ -21,10 +21,10 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
-import org.carrot2.source.microsoft.Bing3WebDocumentSource;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDescriptor;
 
 import org.carrot2.shaded.guava.common.collect.Maps;
+import org.carrot2.source.microsoft.v5.Bing5DocumentSource;
 
 /**
  * It is possible to initialize a {@link Controller} to host a number of different
@@ -110,11 +110,11 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
             .query("data mining");
 
         final ProcessingResult fastResult = controller.process(attributes,
-            Bing3WebDocumentSource.class.getName(), "lingo-fast");
+            Bing5DocumentSource.class.getName(), "lingo-fast");
         ConsoleFormatter.displayClusters(fastResult.getClusters());
         
         final ProcessingResult accurateResult = controller.process(attributes,
-            Bing3WebDocumentSource.class.getName(), "lingo-accurate");
+            Bing5DocumentSource.class.getName(), "lingo-accurate");
         ConsoleFormatter.displayClusters(accurateResult.getClusters());
     }
 }

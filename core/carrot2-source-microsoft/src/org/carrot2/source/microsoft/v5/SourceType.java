@@ -10,20 +10,30 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.source.microsoft;
+package org.carrot2.source.microsoft.v5;
+
+import java.util.Locale;
 
 import org.carrot2.util.StringUtils;
 
 /**
- * Sort order for {@link Bing3NewsDocumentSource}.
+ * Source type for Bing5 searches.
  */
-public enum SortOrder
+public enum SourceType
 {
-    DATE, RELEVANCE;
+    WEBPAGES, 
+    NEWS, 
+    IMAGES;
 
     @Override
     public String toString()
     {
         return StringUtils.identifierToHumanReadable(name());
+    }
+
+    final String responseFilterName = this.name().toLowerCase(Locale.ROOT);
+
+    String responseFilter() {
+      return responseFilterName;
     }
 }

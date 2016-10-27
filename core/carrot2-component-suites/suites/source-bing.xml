@@ -1,7 +1,7 @@
 <!-- Components included in all applications -->
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.microsoft.Bing3WebDocumentSource" id="bing-web"
+    <source component-class="org.carrot2.source.microsoft.v5.Bing5DocumentSource" id="bing-web"
             attribute-sets-resource="source-bing-attributes.xml">
       <label>Bing</label>
       <title>Bing Web Search</title>
@@ -14,32 +14,18 @@
         <example-query>java</example-query>
       </example-queries>
     </source>
-
-    <source component-class="org.carrot2.source.microsoft.Bing3NewsDocumentSource" id="news"
+    
+    <source component-class="org.carrot2.source.microsoft.v5.Bing5NewsDocumentSource" id="bing-news"
             attribute-sets-resource="source-bing-attributes.xml">
-      <label>News</label>
+      <label>Bing News</label>
       <title>Bing News Search</title>
       <mnemonic>N</mnemonic>
-      <description>Searches news stories using Bing Search</description>
+      <description>Searches news using Bing Search</description>
       <icon-path>icons/bing.png</icon-path>
       <example-queries>
-        <example-query>crisis</example-query>
-        <example-query>market</example-query>
-        <example-query>war</example-query>
-      </example-queries>
-    </source>
-    
-    <source component-class="org.carrot2.source.microsoft.Bing3ImageDocumentSource" id="images"
-            attribute-sets-resource="source-bing-attributes.xml">
-      <label>Images</label>
-      <title>Bing Image Search</title>
-      <mnemonic>I</mnemonic>
-      <description>Searches images using Bing Search</description>
-      <icon-path>icons/bing.png</icon-path>
-      <example-queries>
-        <example-query>cats</example-query>
-        <example-query>apple</example-query>
-        <example-query>dark side of the moon</example-query>
+        <example-query>nasa</example-query>
+        <example-query>conflict</example-query>
+        <example-query>basketball</example-query>
       </example-queries>
     </source>    
   </sources>

@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.source.microsoft;
+package org.carrot2.source.microsoft.v5;
 
 import java.util.Collections;
 import java.util.Map;
@@ -21,7 +21,7 @@ import org.carrot2.shaded.guava.common.collect.Maps;
 
 
 /**
- * Language and country/region information for {@link Bing3DocumentSource}.
+ * Language and country/region information for {@link Bing5DocumentSource}.
  */
 public enum MarketOption
 {
