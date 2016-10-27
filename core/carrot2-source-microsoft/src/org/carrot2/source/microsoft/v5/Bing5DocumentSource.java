@@ -327,7 +327,6 @@ retry:
 
       if (searchResponse.webPages != null) {
         ser.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, searchResponse.webPages.totalEstimatedMatches);
-
         for (SearchResponse.WebPages.Result r : searchResponse.webPages.value) {
           Document doc = new Document(r.name, r.snippet, r.displayUrl);
           if (r.displayUrl != null) {
