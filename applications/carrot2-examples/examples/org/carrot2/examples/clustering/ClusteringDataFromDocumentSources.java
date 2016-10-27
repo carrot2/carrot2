@@ -27,8 +27,8 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.source.etools.EToolsDocumentSource;
-import org.carrot2.source.microsoft.Bing3WebDocumentSource;
-import org.carrot2.source.microsoft.Bing3WebDocumentSourceDescriptor;
+import org.carrot2.source.microsoft.v5.Bing5DocumentSource;
+import org.carrot2.source.microsoft.v5.Bing5DocumentSourceDescriptor;
 
 /**
  * This example shows how to cluster {@link Document}s retrieved from
@@ -87,7 +87,7 @@ public class ClusteringDataFromDocumentSources
          * default one. You can pass the API key along with the query and the requested
          * number of results in an attribute map. Carrot2 manual lists all supported attributes
          * along with their keys, types and allowed values. The code shown below, fetches and clusters
-         * 50 results from {@link org.carrot2.source.microsoft.Bing3WebDocumentSource}. 
+         * 50 results from {@link org.carrot2.source.microsoft.v5.Bing5DocumentSource}. 
          * 
          * [[[end:clustering-data-from-document-sources-advanced-intro]]]
          */
@@ -100,8 +100,8 @@ public class ClusteringDataFromDocumentSources
             final Map<String, Object> attributes = new HashMap<String, Object>();
             
             /* Put your own API key here! */
-            Bing3WebDocumentSourceDescriptor.attributeBuilder(attributes)
-                .appid(BingKeyAccess.getKey());
+            Bing5DocumentSourceDescriptor.attributeBuilder(attributes)
+                .apiKey(BingKeyAccess.getKey());
 
             /* Query an the required number of results */
             attributes.put(CommonAttributesDescriptor.Keys.QUERY, "clustering");
@@ -109,7 +109,7 @@ public class ClusteringDataFromDocumentSources
     
             /* Perform processing */
             final ProcessingResult result = controller.process(attributes, 
-                Bing3WebDocumentSource.class, STCClusteringAlgorithm.class);
+                Bing5DocumentSource.class, STCClusteringAlgorithm.class);
 
             /* Documents fetched from the document source, clusters created by Carrot2. */
             final List<Document> documents = result.getDocuments();

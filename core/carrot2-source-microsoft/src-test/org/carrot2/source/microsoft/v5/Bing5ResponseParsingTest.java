@@ -16,7 +16,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import org.carrot2.shaded.guava.common.io.ByteStreams;
-import org.carrot2.source.microsoft.v5.ErrorResponse.Error;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
@@ -24,7 +23,7 @@ import org.junit.Test;
 /**
  * Tests Microsoft Bing document source.
  */
-public class BingResponseTest extends CarrotTestCase {
+public class Bing5ResponseParsingTest extends CarrotTestCase {
   @Test
   public void testInvalidKey() throws Exception {
     BingResponse response = parse("bing.v5.invalidkey.json");
@@ -43,16 +42,14 @@ public class BingResponseTest extends CarrotTestCase {
     Assertions.assertThat(response).isInstanceOf(ErrorResponse.class);
     ErrorResponse r = (ErrorResponse) response;
 
-    Error error = r.errors.get(0);
+    ErrorResponse.Error error = r.errors.get(0);
     Assertions.assertThat(error.code).isEqualTo("RequestParameterMissing");
   }
 
   @Test
-  public void testValidResponse() throws Exception {
+  public void testValidSearchResponse() throws Exception {
     SearchResponse response = (SearchResponse) parse("bing.v5.response.json");
 
-    Assertions.assertThat(response.news.value).hasSize(5);
-    Assertions.assertThat(response.images.value).hasSize(18);
     Assertions.assertThat(response.webPages.value).hasSize(9);
     
     SearchResponse.WebPages.Result result = response.webPages.value.get(0);

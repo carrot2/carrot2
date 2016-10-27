@@ -11,17 +11,8 @@
 
       for tools that will help you to edit this file.
 
-      <attribute key="Bing3DocumentSource.appid">
-        <value type="java.lang.String" value="..."/>
-      </attribute>
-      <attribute key="Bing3DocumentSource.market">
-        <value type="java.lang.String" value="FRENCH_FRANCE"/>
-      </attribute>
-      <attribute key="Bing3DocumentSource.adult">
-        <value type="java.lang.String" value="Strict"/>
-      </attribute>
-      <attribute key="search-mode">
-        <value type="java.lang.String" value="SPECULATIVE"/>
+      <attribute key="Bing5DocumentSource.apiKey">
+        <value value="..."/>
       </attribute>
       -->
     </value-set>

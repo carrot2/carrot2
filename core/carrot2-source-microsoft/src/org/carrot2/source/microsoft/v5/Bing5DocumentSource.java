@@ -107,15 +107,10 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     public String apiKey = System.getProperty(SYSPROP_BING5_API);
 
     /**
-     * Search type filter.
+     * Search type filter. We only use webpages since news and images on a generic
+     * websearch query are always returned in very small numbers and cannot be windowed. 
      */
-    @Input
-    @Processing
-    @Attribute
-    @Label("Search source type")
-    @Level(AttributeLevel.BASIC)
-    @Group(SimpleSearchEngine.SERVICE)
-    public SourceType sourceType = SourceType.WEBPAGES;
+    private final SourceType sourceType = SourceType.WEBPAGES;
 
     /**
      * Site restriction to return value under a given URL. Example:
@@ -314,36 +309,9 @@ retry:
         ser.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, searchResponse.webPages.totalEstimatedMatches);
         
         for (SearchResponse.WebPages.Result r : searchResponse.webPages.value) {
-          Document doc = new Document(r.name, r.snippet, r.url);
+          Document doc = new Document(r.name, r.snippet, r.displayUrl);
           if (r.displayUrl != null) {
-            doc.setField(Document.CLICK_URL, r.displayUrl);
-          }
-          ser.results.add(doc);
-        }
-      }
-
-      if (searchResponse.news != null) {
-        for (SearchResponse.News.Result r : searchResponse.news.value) {
-          Document doc = new Document(r.name, r.description, r.url);
-          if (r.image != null && r.image.thumbnail != null) {
-            doc.setField(Document.THUMBNAIL_URL, r.image.thumbnail.contentUrl);
-          }
-          if (r.provider != null) {
-            ArrayList<String> sources = new ArrayList<>();
-            for (SearchResponse.News.Result.Organization o : r.provider) {
-              sources.add(o.name);
-            }
-            doc.setField(Document.SOURCES, sources);
-          }
-          ser.results.add(doc);
-        }
-      }
-      
-      if (searchResponse.images != null) {
-        for (SearchResponse.Images.Result r : searchResponse.images.value) {
-          Document doc = new Document(r.name, null, r.hostPageDisplayUrl);
-          if (r.thumbnailUrl != null) {
-            doc.setField(Document.THUMBNAIL_URL, r.thumbnailUrl);
+            doc.setField(Document.CLICK_URL, r.url);
           }
           ser.results.add(doc);
         }

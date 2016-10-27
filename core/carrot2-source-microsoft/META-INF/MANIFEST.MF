@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Microsoft Live! Document Source
 Bundle-SymbolicName: org.carrot2.source.microsoft;singleton:=true
 Bundle-Version: 0.0.0.QUALIFIER
-Export-Package: org.carrot2.source.microsoft;uses:="org.carrot2.core.test"
+Export-Package: org.carrot2.source.microsoft;uses:="org.carrot2.core.test",
+ org.carrot2.source.microsoft.v5
 Require-Bundle: org.carrot2.core,
  org.carrot2.util.common,
  org.carrot2.text

@@ -256,7 +256,7 @@
     
     <para>
       Two sources that currently do not support the above properties are: 
-      Bing3WebDocumentSource and OpenSearchDocumentSource.
+      Bing5DocumentSource and OpenSearchDocumentSource.
     </para>
   </section>
   
