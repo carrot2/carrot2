@@ -12,11 +12,14 @@
 
 package org.carrot2.cli.batch;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +31,9 @@ import org.carrot2.core.ProcessingComponentDescriptor.ProcessingComponentDescrip
 import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.shaded.guava.common.collect.ImmutableMap;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.source.xml.XmlDocumentSource;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.util.CloseableUtils;
@@ -42,10 +48,6 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
-
-import org.carrot2.shaded.guava.common.collect.ImmutableMap;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Carrot2 batch processing command line application.
@@ -64,7 +66,7 @@ public class BatchApp
     {
         "--output-dir"
     }, required = false, metaVar = "DIR", usage = "Directory for output files")
-    File outputDir = new File("output");
+    Path outputDir = Paths.get("output");
 
     enum Format
     {
@@ -96,7 +98,7 @@ public class BatchApp
     String algorithm;
 
     @Argument(metaVar = "INPUT", required = true, usage = "File in Carrot2 XML format or directory of files to cluster")
-    List<File> inputFiles;
+    List<Path> inputFiles;
 
     int filesClusteredTotal = 0;
     int filesClusteredWithWarnings = 0;
@@ -109,7 +111,7 @@ public class BatchApp
      */
     private BatchApp() throws Exception
     {
-        final File suitesDir = new File("suites");
+        final Path suitesDir = Paths.get("suites");
         ResourceLookup suiteLookup = new ResourceLookup(
             new DirLocator(suitesDir));
 
@@ -117,7 +119,7 @@ public class BatchApp
         if (suite == null)
             throw new RuntimeException(
                 "Could not find suite-batch.xml in "
-                    + suitesDir.getAbsolutePath());
+                    + suitesDir.toAbsolutePath());
 
         componentSuite = ProcessingComponentSuite.deserialize(suite, suiteLookup);
 
@@ -184,7 +186,7 @@ public class BatchApp
         // Process files in the order they were specified. For input directories,
         // a corresponding directory will be created on output.
         final long start = System.currentTimeMillis();
-        for (File file : inputFiles)
+        for (Path file : inputFiles)
         {
             try
             {
@@ -209,12 +211,12 @@ public class BatchApp
     /**
      * Files a processing warning.
      */
-    private void processingWarning(File processedFile, Exception e)
+    private void processingWarning(Path processedFile, Exception e)
     {
         filesClusteredWithWarnings++;
         final String message = "Failed to process "
-            + (processedFile.isDirectory() ? "directory" : "file") + ": "
-            + processedFile.getAbsolutePath();
+            + (Files.isDirectory(processedFile) ? "directory" : "file") + ": "
+            + processedFile.toAbsolutePath();
         if (verbose)
         {
             log.warn(message, e);
@@ -230,24 +232,24 @@ public class BatchApp
      * 
      * @return <code>false</code> if the directory cannot be created
      */
-    private boolean checkAndMakeDir(final File dir)
+    private boolean checkAndMakeDir(final Path dir)
     {
-        if (dir.exists())
+        if (Files.exists(dir))
         {
-            if (!dir.isDirectory())
+            if (!Files.isDirectory(dir))
             {
-                log.warn("Output directory: " + dir.getAbsolutePath()
-                    + " exists, but is not a directory");
+                log.warn("Output directory: " + dir + " exists, but is not a directory");
                 return false;
             }
         }
         else
         {
-            if (!dir.mkdirs())
-            {
-                log.warn("Failed to create output directory: " + dir.getAbsolutePath());
-                return false;
-            }
+          try {
+            Files.createDirectories(dir);
+          } catch (IOException e) {
+            log.warn("Could not create folder: " + dir, e);
+            return false;
+          }
         }
 
         return true;
@@ -256,23 +258,23 @@ public class BatchApp
     /**
      * Processes an individual file or a directory.
      */
-    private void process(File fileOrDirectory, File currentOutputDir,
+    private void process(Path fileOrDirectory, Path currentOutputDir,
         Controller controller) throws Exception
     {
-        if (!fileOrDirectory.exists())
+        if (!Files.exists(fileOrDirectory))
         {
-            log.warn("File " + fileOrDirectory.getAbsolutePath() + " does not exist");
+            log.warn("File " + fileOrDirectory.toAbsolutePath() + " does not exist");
             return;
         }
 
-        final String fileName = fileOrDirectory.getName();
-        if (fileOrDirectory.isDirectory())
+        final String fileName = fileOrDirectory.getFileName().toString();
+        if (Files.isDirectory(fileOrDirectory))
         {
-            final File newCurrentOutputDir = new File(currentOutputDir, fileName);
+            final Path newCurrentOutputDir = currentOutputDir.resolve(fileName);
             if (checkAndMakeDir(newCurrentOutputDir))
             {
-                for (File fileOrDir : fileOrDirectory.listFiles())
-                {
+                try (DirectoryStream<Path> s = Files.newDirectoryStream(fileOrDirectory)) {
+                  for (Path fileOrDir : s) {
                     try
                     {
                         process(fileOrDir, newCurrentOutputDir, controller);
@@ -281,6 +283,7 @@ public class BatchApp
                     {
                         processingWarning(fileOrDir, e);
                     }
+                  }
                 }
             }
         }
@@ -298,8 +301,7 @@ public class BatchApp
                 Format.JSON.equals(outputFormat) && fileName.endsWith(".xml") 
                 ? fileName.substring(0, fileName .length() - 4) + ".json" : fileName;
 
-            final OutputStream stream = new FileOutputStream(
-                new File(currentOutputDir, outputFileName));
+            final OutputStream stream = Files.newOutputStream(currentOutputDir.resolve(outputFileName));
             try
             {
                 if (Format.JSON.equals(outputFormat))
@@ -318,7 +320,7 @@ public class BatchApp
                 CloseableUtils.close(stream);
             }
 
-            log.info("Clustering " + fileOrDirectory.getAbsolutePath() + " ["
+            log.info("Clustering " + fileOrDirectory.toAbsolutePath() + " ["
                 + result.getAttribute(AttributeNames.PROCESSING_TIME_TOTAL) + "ms]");
         }
     }

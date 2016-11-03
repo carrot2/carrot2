@@ -15,6 +15,7 @@ package org.carrot2.dcs;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.carrot2.dcs.RestProcessorServlet.DISABLE_LOGFILE_APPENDER;
 import static org.carrot2.dcs.RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR;
+import static org.junit.Assert.*;
 
 import java.io.*;
 import java.net.MalformedURLException;

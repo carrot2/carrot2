@@ -12,11 +12,14 @@
 
 package org.carrot2.text.linguistic;
 
-import java.io.File;
+import static org.junit.Assert.*;
+
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 
-import org.apache.commons.io.FileUtils;
 import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.LanguageCode;
@@ -24,6 +27,7 @@ import org.carrot2.core.ProcessingComponentBase;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.shaded.guava.common.collect.ImmutableMap;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.attribute.Attribute;
@@ -37,7 +41,8 @@ import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
-import org.carrot2.shaded.guava.common.collect.ImmutableMap;
+import com.carrotsearch.randomizedtesting.LifecycleScope;
+import com.carrotsearch.randomizedtesting.RandomizedTest;
 
 /**
  * Tests {@link ILexicalData}.
@@ -109,8 +114,8 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
     @Test
     public void testLexicalDataIsReloadedOnDemand() throws IOException
     {
-        final File tempDir1 = newTempDir();
-        FileUtils.writeStringToFile(new File(tempDir1, "stopwords.en"), "uniquea");
+        final Path tempDir1 = newTempDir(LifecycleScope.TEST);
+        Files.write(tempDir1.resolve("stopwords.en"), "uniquea".getBytes(StandardCharsets.UTF_8));
 
         final String resourceLookupKey = AttributeUtils.getKey(
             DefaultLexicalDataFactory.class, "resourceLookup");
@@ -155,7 +160,7 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
          * Now force reloading of resources from that path on ctrl1. The new stop word resource
          * should contain 'uniqueb'.
          */
-        FileUtils.writeStringToFile(new File(tempDir1, "stopwords.en"), "uniqueb");
+        Files.write(tempDir1.resolve("stopwords.en"), "uniqueb".getBytes(StandardCharsets.UTF_8));
 
         final ILexicalData data3 = ctrl1.process(
             ImmutableMap.<String, Object> of(reloadResourcesKey, true), TestComponent.class)
@@ -182,11 +187,11 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
     @Test
     public void testSeparateLexicalDataForDifferentResourceLookup() throws IOException
     {
-        final File tempDir1 = newTempDir();
-        FileUtils.writeStringToFile(new File(tempDir1, "stopwords.en"), "uniquea");
+        final Path tempDir1 = RandomizedTest.newTempDir(LifecycleScope.TEST);
+        Files.write(tempDir1.resolve("stopwords.en"), "uniquea".getBytes(StandardCharsets.UTF_8));
 
-        final File tempDir2 = newTempDir();
-        FileUtils.writeStringToFile(new File(tempDir2, "stopwords.en"), "uniqueb");
+        final Path tempDir2 = RandomizedTest.newTempDir(LifecycleScope.TEST);
+        Files.write(tempDir2.resolve("stopwords.en"), "uniqueb".getBytes(StandardCharsets.UTF_8));
 
         final IResourceLocator classpathLocator = Location.CONTEXT_CLASS_LOADER.locator;
 
@@ -198,7 +203,7 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
         {
             ctrl1.init(ImmutableMap.<String, Object> of(
                 resourceLookupKey, 
-                new ResourceLookup(new DirLocator(tempDir1.getPath()), classpathLocator),
+                new ResourceLookup(new DirLocator(tempDir1), classpathLocator),
                 resourceReloadKey,
                 true));
     
@@ -214,7 +219,7 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
         final Controller ctrl2 = ControllerFactory.createPooling();
         {
             ctrl2.init(ImmutableMap.<String, Object> of(resourceLookupKey, 
-                new ResourceLookup(new DirLocator(tempDir2.getPath()), classpathLocator)));
+                new ResourceLookup(new DirLocator(tempDir2), classpathLocator)));
     
             final ProcessingResult result = ctrl2.process(
                 Collections.<String, Object> emptyMap(), TestComponent.class);

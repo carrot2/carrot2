@@ -21,6 +21,8 @@ import org.junit.Test;
 
 import com.carrotsearch.hppc.IntArrayList;
 
+import static org.junit.Assert.*;
+
 /**
  * Sanity and validation tests for the {@link SuffixTree} class.
  */

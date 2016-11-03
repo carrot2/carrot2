@@ -23,6 +23,8 @@ import org.junit.Test;
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntStack;
 
+import static org.junit.Assert.*;
+
 /**
  * Tests running GST-functionality on top of a {@link SuffixTree}. This is for demonstration
  * purposes mostly.

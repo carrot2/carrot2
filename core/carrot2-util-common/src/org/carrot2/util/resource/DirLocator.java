@@ -13,7 +13,10 @@
 package org.carrot2.util.resource;
 
 import java.io.File;
-import java.util.Objects;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.slf4j.LoggerFactory;
 
@@ -23,23 +26,23 @@ import org.slf4j.LoggerFactory;
 public final class DirLocator implements IResourceLocator
 {
     /** The folder relative to which resources are resolved. */
-    private final File dir;
+    private final Path dir;
     private final boolean canAccess;
 
     /**
      * Initializes the locator using the given directory. If the argument is null or a
      * non-existent folder, the locator will return an empty set of resources.
      */
-    public DirLocator(File dir)
+    public DirLocator(Path dir)
     {
         this.dir = dir;
         
         boolean canAccess = true;
         try {
           canAccess = dir != null && 
-                      dir.isDirectory() && 
-                      dir.canRead() &&
-                      dir.canExecute();
+                      Files.isDirectory(dir) && 
+                      Files.isReadable(dir) &&
+                      Files.isExecutable(dir);
         } catch (SecurityException e) {
           LoggerFactory.getLogger(DirLocator.class)
             .warn("Security policy prevented access to folder: " + dir, e);          
@@ -48,13 +51,19 @@ public final class DirLocator implements IResourceLocator
         this.canAccess = canAccess;
     }
 
+    @Deprecated
+    public DirLocator(File dir)
+    {
+      this(dir.toPath());
+    }
+
     /**
      * Initializes the locator using the given path. If the argument is null or a
      * non-existent folder, the locator will return an empty set of resources.
      */
     public DirLocator(String dirPath)
     {
-        this(dirPath == null ? null : new File(dirPath));
+        this(dirPath == null ? null : Paths.get(dirPath));
     }
 
     /**
@@ -72,12 +81,12 @@ public final class DirLocator implements IResourceLocator
                   resource = resource.substring(1);
               }
     
-              final File resourceFile = new File(dir, resource);
-              if (resourceFile.isFile() && resourceFile.canRead())
+              Path resourcePath = dir.resolve(resource);
+              if (Files.isRegularFile(resourcePath) && Files.isReadable(resourcePath))
               {
                   return new IResource []
                   {
-                      new FileResource(resourceFile)
+                      new FileResource(resourcePath)
                   };
               }
             } catch (SecurityException e) {
@@ -105,8 +114,12 @@ public final class DirLocator implements IResourceLocator
         if (target != null && target instanceof DirLocator)
         {
             DirLocator other = (DirLocator) target;
-            return other.canAccess == this.canAccess &&
-                   Objects.equals(other.dir, this.dir);
+            try {
+              return other.canAccess == this.canAccess &&
+                     Files.isSameFile(other.dir, this.dir);
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
         }
 
         return false;
@@ -116,6 +129,6 @@ public final class DirLocator implements IResourceLocator
     public String toString()
     {
         return this.getClass().getName() + " [dir: "
-            + (canAccess ? dir.getAbsolutePath() : "<inaccessible>") + "]";
+            + (canAccess ? dir.toAbsolutePath() : "<inaccessible>") + "]";
     }
 }

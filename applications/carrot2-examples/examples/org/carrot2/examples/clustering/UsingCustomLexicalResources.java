@@ -12,7 +12,8 @@
 
 package org.carrot2.examples.clustering;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
@@ -25,13 +26,12 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactoryDescriptor;
 import org.carrot2.text.linguistic.LexicalDataLoaderDescriptor;
 import org.carrot2.util.resource.DirLocator;
 import org.carrot2.util.resource.ResourceLookup;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * This example shows how to configure the location of lexical resources to be something
@@ -47,7 +47,7 @@ public class UsingCustomLexicalResources
         // We will pass our custom resource locator at initialization time. There is a
         // variety of implementations of IResourceLocator interface, we will use
         // an explicit filesystem folder in the current working directory.
-        File resourcesDir = new File("resources");
+        Path resourcesDir = Paths.get("resources");
         ResourceLookup resourceLookup = new ResourceLookup(new DirLocator(resourcesDir));
 
         Map<String, Object> attrs = Maps.newHashMap();

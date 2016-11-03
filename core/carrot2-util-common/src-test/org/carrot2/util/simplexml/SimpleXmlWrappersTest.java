@@ -13,6 +13,7 @@
 package org.carrot2.util.simplexml;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -128,7 +129,7 @@ public class SimpleXmlWrappersTest extends CarrotTestCase
     @Test
     public void testFileResource() throws Exception
     {
-        check(new FileResource(new File(".").getAbsoluteFile()));
+        check(new FileResource(Paths.get(".").toAbsolutePath()));
     }
 
     @Test

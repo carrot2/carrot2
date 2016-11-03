@@ -20,6 +20,8 @@ import org.carrot2.util.tests.CarrotTestCase;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
  * Tests Microsoft Bing document source.
  */

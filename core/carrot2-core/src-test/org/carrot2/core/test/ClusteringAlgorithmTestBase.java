@@ -51,6 +51,8 @@ import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.shaded.guava.common.collect.Multimap;
 import org.carrot2.shaded.guava.common.collect.Sets;
 
+import static org.junit.Assert.*;
+
 /**
  * Simple baseline tests that apply to all clustering algorithms.
  */

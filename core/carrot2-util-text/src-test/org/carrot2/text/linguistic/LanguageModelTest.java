@@ -16,6 +16,8 @@ import org.carrot2.core.LanguageCode;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
  * 
  */

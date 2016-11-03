@@ -34,6 +34,8 @@ import org.carrot2.shaded.guava.common.base.Strings;
 import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
 
+import static org.junit.Assert.*;
+
 /**
  * Test cases for {@link XmlDocumentSource}.
  */

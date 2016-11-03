@@ -44,6 +44,8 @@ import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.shaded.guava.common.collect.Sets;
 
+import static org.junit.Assert.*;
+
 /**
  * Tests common functionality of a {@link Controller}. The fact that we need to resort to
  * having {@link #isCaching()} and {@link #isPooling()} methods here isn't pretty, but

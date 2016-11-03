@@ -16,6 +16,8 @@ import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
  * Tests {@link RollingWindowAverage}.
  */

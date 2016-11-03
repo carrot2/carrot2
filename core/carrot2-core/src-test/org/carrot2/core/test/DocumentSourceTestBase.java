@@ -29,6 +29,8 @@ import org.junit.Test;
 
 import org.carrot2.shaded.guava.common.base.Function;
 
+import static org.junit.Assert.*;
+
 /**
  * Simple baseline tests that apply to a generic data sources.
  */

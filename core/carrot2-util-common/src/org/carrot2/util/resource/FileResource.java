@@ -13,6 +13,10 @@
 package org.carrot2.util.resource;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.carrot2.util.StreamUtils;
 import org.simpleframework.xml.Attribute;
@@ -39,7 +43,7 @@ public final class FileResource implements IResource
     /**
      * File pointed to by this resource.
      */
-    private File file;
+    private Path file;
 
     /**
      * Absolute path, for serialization only.
@@ -50,18 +54,23 @@ public final class FileResource implements IResource
     FileResource()
     {
     }
-    
+
+    @Deprecated
     public FileResource(File file)
     {
+      this(file.toPath());
+    }
+    
+    public FileResource(Path file)
+    {
         this.file = file;
-        this.info = file.getAbsolutePath();
+        this.info = file.toAbsolutePath().toString();
     }
 
     public InputStream open() throws IOException
     {
-        return StreamUtils.prefetch(new FileInputStream(file));
+        return StreamUtils.prefetch(Files.newInputStream(file));
     }
-
 
     @Override
     public boolean equals(Object obj)
@@ -92,15 +101,26 @@ public final class FileResource implements IResource
     @Commit
     void afterDeserialization()
     {
-        file = new File(info);
+        file = Paths.get(info);
     }
 
     @JsonIgnore
+    @Deprecated
     public File getFile()
     {
-        return file;
+        return file.toFile();
     }
-    
+
+    public String getFileName()
+    {
+        Path p = file.getFileName();
+        if (p != null) {
+          return p.toString();
+        } else {
+          return file.toString();
+        }
+    }
+
     @JsonProperty
     private String getAbsolutePath()
     {
@@ -110,12 +130,19 @@ public final class FileResource implements IResource
     public static FileResource valueOf(String path)
     {
         // Return non-null value only if the string is a path to some existing file.
-        final File file = new File(path);
-        if (!file.exists())
-        {
+        try {
+          Path p = Paths.get(path);
+          if (Files.exists(p)) {
+            return new FileResource(p);
+          } else {
             return null;
+          }
+        } catch (InvalidPathException e) {
+          return null;
         }
-        
-        return new FileResource(file);
+    }
+
+    public Path getPath() {
+      return file;
     }
 }

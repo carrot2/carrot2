@@ -28,6 +28,8 @@ import org.junit.Test;
 import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Sets;
 
+import static org.junit.Assert.*;
+
 public class BisectingKMeansClusteringAlgorithmTest extends
     ClusteringAlgorithmTestBase<BisectingKMeansClusteringAlgorithm>
 {

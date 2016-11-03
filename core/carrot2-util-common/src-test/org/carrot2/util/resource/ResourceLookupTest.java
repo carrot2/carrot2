@@ -12,7 +12,9 @@
 
 package org.carrot2.util.resource;
 
-import java.io.File;
+import static org.junit.Assert.*;
+
+import java.nio.file.Paths;
 
 import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.tests.CarrotTestCase;
@@ -28,10 +30,10 @@ public class ResourceLookupTest extends CarrotTestCase
             new ResourceLookup(Location.CONTEXT_CLASS_LOADER));
 
         checkHashEquals(
-            new DirLocator(new File(".")),
-            new DirLocator(new File(".")));
+            new DirLocator(Paths.get(".")),
+            new DirLocator(Paths.get(".")));
     }
-    
+
     @Test
     public void testHashCodeEqualsClassLoaderLocator() 
     {
@@ -60,16 +62,16 @@ public class ResourceLookupTest extends CarrotTestCase
     public void testHashCodeEqualsDirLocator() 
     {
         checkHashEquals(
-            new DirLocator(new File(".")),
-            new DirLocator(new File(".")));
+            new DirLocator(Paths.get(".")),
+            new DirLocator(Paths.get(".")));
     }
 
     @Test
     public void testHashCodeEqualsPrefixDecorator() 
     {
         checkHashEquals(
-            new PrefixDecoratorLocator(new DirLocator(new File(".")), "/prefix/"),
-            new PrefixDecoratorLocator(new DirLocator(new File(".")), "/prefix/"));
+            new PrefixDecoratorLocator(new DirLocator(Paths.get(".")), "/prefix/"),
+            new PrefixDecoratorLocator(new DirLocator(Paths.get(".")), "/prefix/"));
     }
 
     static void checkHashEquals(Object o1, Object o2)

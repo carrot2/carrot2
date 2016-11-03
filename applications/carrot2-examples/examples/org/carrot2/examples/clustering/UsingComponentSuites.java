@@ -12,7 +12,7 @@
 
 package org.carrot2.examples.clustering;
 
-import java.io.File;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +53,7 @@ public class UsingComponentSuites
         // Prepare resource lookup facade. We will use the suites directory 
         // and class path resources.
         final ResourceLookup resourceLookup = new ResourceLookup(
-            new DirLocator(new File("suites")),
+            new DirLocator(Paths.get("suites")),
             new ContextClassLoaderLocator());
 
         // We know we'll be using Bing so set up its access key.

@@ -12,20 +12,29 @@
 
 package org.carrot2.workbench.editors.impl;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.util.attribute.constraint.ResourceNameFilter;
 import org.carrot2.util.attribute.constraint.ResourceNameFilters;
-import org.carrot2.util.resource.*;
+import org.carrot2.util.resource.FileResource;
+import org.carrot2.util.resource.IResource;
+import org.carrot2.util.resource.URLResource;
+import org.carrot2.util.resource.URLResourceWithParams;
 import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.GUIFactory;
-import org.carrot2.workbench.editors.*;
-import org.eclipse.jface.dialogs.*;
+import org.carrot2.workbench.editors.AttributeEditorAdapter;
+import org.carrot2.workbench.editors.AttributeEditorInfo;
+import org.carrot2.workbench.editors.AttributeEvent;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,9 +42,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.*;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * Editor for attributes that are of {@link IResource} type.
@@ -209,7 +219,7 @@ public class ResourceEditor extends AttributeEditorAdapter
 
         if (this.resource != null && resource instanceof FileResource)
         {
-            dialog.setFileName(((FileResource) resource).getFile().getAbsolutePath());
+            dialog.setFileName(((FileResource) resource).getPath().toString());
         }
         else
         {
@@ -221,12 +231,12 @@ public class ResourceEditor extends AttributeEditorAdapter
         final String path = dialog.open();
         if (path != null)
         {
-            final File file = new File(path);
+            Path p = Paths.get(path);
 
             EditorsPlugin.getDefault().getPreferenceStore().setValue(
-                EditorsPluginConstants.PREF_LAST_SELECTED_FILE, file.getAbsolutePath());
+                EditorsPluginConstants.PREF_LAST_SELECTED_FILE, p.toAbsolutePath().toString());
 
-            setValue(new FileResource(file));
+            setValue(new FileResource(p));
         }
     }
 

@@ -21,6 +21,8 @@ import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
  * Common tests for {@link IDocumentSource}s that can make more than one search requests to
  * get results for one query.

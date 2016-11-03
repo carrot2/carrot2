@@ -28,6 +28,8 @@ import org.junit.Test;
 import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.io.Resources;
 
+import static org.junit.Assert.*;
+
 /**
  * Test cases for the {@link STCClusteringAlgorithm}.
  */

@@ -12,7 +12,7 @@
 
 package org.carrot2.workbench.core;
 
-import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -31,6 +31,9 @@ import org.carrot2.core.IClusteringAlgorithm;
 import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.core.ProcessingComponentSuite;
+import org.carrot2.shaded.guava.common.base.Objects;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactoryDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.resource.DirLocator;
@@ -45,7 +48,6 @@ import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -55,9 +57,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.carrot2.shaded.guava.common.base.Objects;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * The activator class (plug-in's entry point), controls the life-cycle and contains a
@@ -463,27 +462,33 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         }
         
         // Invalid URLs may fail when converting to an URI. If so, try brute-force approach.
-        File workspacePath;
+        Path workspacePath;
         try {
-            workspacePath = URIUtil.toFile(instanceLocation.toURI());
+            workspacePath = Paths.get(instanceLocation.toURI());
         } catch (URISyntaxException e) {
-            workspacePath = new File(instanceLocation.getFile());
+          Utils.logError("Instance location URI couldn't be parsed.", e, false);
+          return null;
         }
         
-        workspacePath = workspacePath.getAbsoluteFile();
-        if (!workspacePath.exists())
+        workspacePath = workspacePath.toAbsolutePath();
+        if (!Files.exists(workspacePath))
         {
-            workspacePath.mkdirs();
+            try {
+              Files.createDirectories(workspacePath);
+            } catch (IOException e) {
+              Utils.logError("Could not create workspace folder.", e, false);
+              return null;
+            }
         }
 
-        if (!workspacePath.exists())
+        if (!Files.exists(workspacePath))
         {
             // Issue a warning about read-only location.
             Utils.logError("Instance location does not exist: " + workspacePath, false);
             return null;
         }
 
-        return new DirLocator(workspacePath.getAbsoluteFile());
+        return new DirLocator(workspacePath);
     }
 
     /**

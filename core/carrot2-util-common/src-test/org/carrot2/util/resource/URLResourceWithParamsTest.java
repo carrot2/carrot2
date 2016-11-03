@@ -19,6 +19,8 @@ import org.junit.Test;
 
 import org.carrot2.shaded.guava.common.collect.Maps;
 
+import static org.junit.Assert.*;
+
 /**
  * Test cases for {@link URLResourceWithParams}.
  */

@@ -889,7 +889,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /**
      * {@link SearchEditor} adaptations.
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings("all")
     @Override
     public Object getAdapter(Class adapter)
     {

@@ -342,7 +342,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
 
         if (resource instanceof FileResource)
         {
-            title = ((FileResource) resource).getFile().getName();
+            title = ((FileResource) resource).getFileName();
         }
 
         // Open the generic Resource instance

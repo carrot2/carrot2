@@ -22,6 +22,8 @@ import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class CharArrayUtilsTest extends CarrotTestCase
 {
     @Test

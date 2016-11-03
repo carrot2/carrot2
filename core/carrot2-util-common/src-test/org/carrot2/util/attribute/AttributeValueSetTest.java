@@ -21,6 +21,8 @@ import org.junit.Test;
 
 import org.carrot2.shaded.guava.common.collect.Maps;
 
+import static org.junit.Assert.*;
+
 public class AttributeValueSetTest extends CarrotTestCase
 {
     @Test

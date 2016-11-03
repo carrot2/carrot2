@@ -23,6 +23,8 @@ import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 import org.simpleframework.xml.Root;
 
+import static org.junit.Assert.*;
+
 public class AttributeValueSetsTest extends CarrotTestCase
 {
     @Test(expected = IllegalArgumentException.class)

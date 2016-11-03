@@ -28,6 +28,8 @@ import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.Rethrow;
 
+import static org.junit.Assert.*;
+
 /**
  * Test cases for {@link FixedSizePool}.
  */

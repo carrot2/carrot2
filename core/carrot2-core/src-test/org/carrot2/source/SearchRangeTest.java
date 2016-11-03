@@ -16,6 +16,8 @@ import org.carrot2.source.MultipageSearchEngine.SearchRange;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class SearchRangeTest extends CarrotTestCase
 {
     @Test

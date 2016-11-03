@@ -15,6 +15,8 @@ package org.carrot2.text.util;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
  * Test cases for {@link MutableCharArray}.
  */

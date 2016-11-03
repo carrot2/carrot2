@@ -16,6 +16,8 @@ import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 import static org.carrot2.util.StringUtils.*;
 
+import static org.junit.Assert.*;
+
 public class StringUtilsTest extends CarrotTestCase
 {
     @Test
