@@ -24,6 +24,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+import org.kohsuke.args4j.ParserProperties;
 import org.slf4j.Logger;
 
 /**
@@ -216,8 +217,9 @@ public class DcsApp
     {
         final DcsApp dcs = new DcsApp("dcs");
 
-        final CmdLineParser parser = new CmdLineParser(dcs);
-        parser.setUsageWidth(80);
+        ParserProperties p = ParserProperties.defaults();
+        p.withUsageWidth(80);
+        final CmdLineParser parser = new CmdLineParser(dcs, p);
 
         try
         {

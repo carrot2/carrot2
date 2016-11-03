@@ -47,6 +47,7 @@ import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+import org.kohsuke.args4j.ParserProperties;
 import org.slf4j.Logger;
 
 /**
@@ -329,8 +330,9 @@ public class BatchApp
     {
         final BatchApp batch = new BatchApp();
 
-        final CmdLineParser parser = new CmdLineParser(batch);
-        parser.setUsageWidth(80);
+        ParserProperties p = ParserProperties.defaults();
+        p.withUsageWidth(80);
+        final CmdLineParser parser = new CmdLineParser(batch, p);
 
         try
         {
