@@ -12,6 +12,8 @@
 
 package org.carrot2.source.microsoft.v5;
 
+import java.util.concurrent.ExecutionException;
+
 import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.tests.UsesExternalServices;
@@ -32,6 +34,21 @@ public class Bing5NewsDocumentSourceTest extends MultipageDocumentSourceTestBase
   @Override
   protected MultipageSearchEngineMetadata getSearchEngineMetadata() {
     return Bing5NewsDocumentSource.METADATA;
+  }
+  
+  @Override
+  public void testInCachingController() throws InterruptedException, ExecutionException {
+    super.testInCachingController();
+  }
+  
+  @Override
+  protected String getSmallQueryText() {
+    return "usa";
+  }
+  
+  @Override
+  protected boolean canReturnMoreResultsThanRequested() {
+    return true;
   }
 
   @Override
