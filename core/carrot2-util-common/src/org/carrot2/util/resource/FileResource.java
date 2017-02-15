@@ -12,7 +12,9 @@
 
 package org.carrot2.util.resource;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -22,6 +24,7 @@ import org.carrot2.util.StreamUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -138,6 +141,11 @@ public final class FileResource implements IResource
             return null;
           }
         } catch (InvalidPathException e) {
+          return null;
+        } catch (Throwable e) {
+          // CARROT-1162 (IKVM throws unchecked exceptions from Files.* on inaccessible folders.
+          LoggerFactory.getLogger(FileResource.class)
+            .warn("Could not access path: " + path, e);
           return null;
         }
     }

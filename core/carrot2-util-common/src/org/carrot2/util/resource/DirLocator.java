@@ -46,6 +46,10 @@ public final class DirLocator implements IResourceLocator
         } catch (SecurityException e) {
           LoggerFactory.getLogger(DirLocator.class)
             .warn("Security policy prevented access to folder: " + dir, e);          
+        } catch (Throwable e) {
+          // CARROT-1162 (IKVM throws unchecked exceptions from Files.* on inaccessible folders.
+          LoggerFactory.getLogger(DirLocator.class)
+            .warn("Could not access folder: " + dir, e);          
         }
 
         this.canAccess = canAccess;
