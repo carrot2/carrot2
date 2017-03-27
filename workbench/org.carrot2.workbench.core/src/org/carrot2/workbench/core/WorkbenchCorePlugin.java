@@ -12,6 +12,7 @@
 
 package org.carrot2.workbench.core;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -330,9 +331,13 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
                     }
                 }
 
-                final ResourceLookup resourceLookup = new ResourceLookup(
-                    workspaceLocator,
-                    new PrefixDecoratorLocator(new BundleResourceLocator(b), suiteRoot));
+                ArrayList<IResourceLocator> locators = new ArrayList<>();
+                if (workspaceLocator != null) {
+                  locators.add(workspaceLocator);
+                }
+                locators.add(new PrefixDecoratorLocator(new BundleResourceLocator(b), suiteRoot));
+                
+                final ResourceLookup resourceLookup = new ResourceLookup(locators);
 
                 IResource suiteResource = resourceLookup.getFirst(suiteResourceName);
                 if (suiteResource == null)
@@ -466,9 +471,19 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         try {
             workspacePath = Paths.get(instanceLocation.toURI());
         } catch (URISyntaxException e) {
-          Utils.logError("Instance location URI couldn't be parsed.", e, false);
+            Utils.logError("Instance location URI unparseable via .toURI(): " 
+                + instanceLocation, false);
+        }
+        
+        try {
+          // we know it's a file URL, so get the path directly.
+          workspacePath = new File(instanceLocation.getPath()).toPath();
+        } catch (Exception e) {
+          Utils.logError("Instance location URI couldn't be parsed: "
+              + instanceLocation, e, false);
           return null;
         }
+
         
         workspacePath = workspacePath.toAbsolutePath();
         if (!Files.exists(workspacePath))
