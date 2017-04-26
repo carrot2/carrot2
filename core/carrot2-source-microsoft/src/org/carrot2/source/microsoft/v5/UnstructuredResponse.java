@@ -14,6 +14,7 @@ package org.carrot2.source.microsoft.v5;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class UnstructuredResponse extends BingResponse {
   @JsonProperty(required = true)
   public int statusCode;
