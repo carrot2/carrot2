@@ -68,6 +68,7 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
         processingAttributes.put("search-mode", SearchMode.CONSERVATIVE);
 
         runAndCheckNoResultsQuery();
+        
         assertEquals(1, resultAttributes.get(AttributeUtils.getKey(
             SearchEngineStats.class, "pageRequests")));
     }

@@ -154,7 +154,7 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
     private boolean processingSuppressed(HttpServletRequest origRequest2)
     {
         return (origRequest.getAttribute(XSLTFilterConstants.NO_XSLT_PROCESSING) != null)
-            | (origRequest.getParameter(XSLTFilterConstants.NO_XSLT_PROCESSING) != null);
+            || (origRequest.getParameter(XSLTFilterConstants.NO_XSLT_PROCESSING) != null);
     }
 
     /**
@@ -279,7 +279,7 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
                 final byte [] bytes = ((DeferredOutputStream) stream).getBytes();
                 final boolean processingSuppressed = (origRequest
                     .getAttribute(XSLTFilterConstants.NO_XSLT_PROCESSING) != null)
-                    | (origRequest.getParameter(XSLTFilterConstants.NO_XSLT_PROCESSING) != null);
+                    || (origRequest.getParameter(XSLTFilterConstants.NO_XSLT_PROCESSING) != null);
 
                 if (processingSuppressed)
                 {
