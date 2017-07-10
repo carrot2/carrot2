@@ -188,6 +188,8 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     protected Bing5DocumentSource(MultipageSearchEngineMetadata metadata, String serviceURL) {
       this.metadata = metadata;
       this.serviceURL = serviceURL;
+      
+      this.searchMode = SearchMode.CONSERVATIVE;
     }
 
 
