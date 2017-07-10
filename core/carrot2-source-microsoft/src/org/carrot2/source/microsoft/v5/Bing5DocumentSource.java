@@ -334,6 +334,8 @@ retry:
           }
           ser.results.add(doc);
         }
+      } else {
+        ser.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, 0);
       }
     }
 }
