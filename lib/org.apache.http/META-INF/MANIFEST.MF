@@ -4,7 +4,7 @@ Bundle-Name: Apache HTTP Components (Carrot2)
 Bundle-SymbolicName: org.apache.http
 Bundle-Version: 4.4.1
 Bundle-Vendor: Apache Foundation
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.apache.commons.logging
 Require-Bundle: org.slf4j;bundle-version="1.5.8";resolution:=optional;visibility:=reexport,
  org.apache.commons;bundle-version="0.0.0";visibility:=reexport

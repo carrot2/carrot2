@@ -8,7 +8,7 @@ Bundle-ClassPath: commons-codec-1.10.jar,
  commons-lang-2.6.jar,
  commons-collections-3.2.2.jar
 Bundle-Vendor: Apache Foundation
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.apache.commons.logging
 Require-Bundle: org.slf4j;bundle-version="1.5.8";resolution:=optional;visibility:=reexport
 Export-Package: org.apache.commons.codec,

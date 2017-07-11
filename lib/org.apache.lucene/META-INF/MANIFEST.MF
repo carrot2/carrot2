@@ -14,7 +14,7 @@ Bundle-ClassPath: lucene-analyzers-common-6.6.0.jar,
  lucene-queryparser-6.6.0.jar,
  lucene-sandbox-6.6.0.jar
 Bundle-Vendor: Apache Foundation
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.apache.lucene,
  org.apache.lucene.analysis,
  org.apache.lucene.analysis.ar,
