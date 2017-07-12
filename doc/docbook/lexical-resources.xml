@@ -186,7 +186,7 @@ hit]]></programlisting>
     
     <para>
       Each line of a stop labels file corresponds to one stop label and is a 
-      <link xlink:href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html">Java regular
+      <link xlink:href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html">Java regular
       expression</link>. Please note that in order to be removed, a label 
       <emphasis>as a whole</emphasis> must match at least one of the stop label 
       expressions. A number of example stop label expressions are shown below.
