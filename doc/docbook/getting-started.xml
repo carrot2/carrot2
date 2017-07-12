@@ -608,56 +608,6 @@
       </orderedlist>  
     </section>
  
-    <section xml:id="section.integration.compiling-csharp-program-with-carrot2">
-      <title>Compiling a C# program using &PROD; API</title>
-      
-      <para>
-        The easiest way to integrate &PROD; with your C# / .NET programs is to use the &CSA; package:
-      </para>
-      
-      <orderedlist>
-        <listitem>
-          <para>
-            Make sure you have .NET framework version 3.5 or later installed in your environment.
-          </para>
-        </listitem>
-        
-        <listitem role="private">
-          <para>
-            <product:csharp-api-download-link>Download &CSA;</product:csharp-api-download-link>
-            and unpack it to some local directory.
-          </para>
-        </listitem>
-
-        <xi:include href="getting-started-csharp-api-download.xml">
-          <xi:fallback />
-        </xi:include>
-        
-        <listitem>
-          <para>
-            Compile example code based on the provided <command>msbuild</command> project file:
-          </para>
-<programlisting><![CDATA[CD examples
-C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild ]]>&PROD;<![CDATA[.Examples.csproj]]></programlisting>          
-        </listitem>
-        
-        <listitem>
-          <para>
-            Try running the executable files generated in the <filename>examples\</filename>
-            folder.
-          </para>
-        </listitem>
-      </orderedlist>
-
-      <tip>
-        <para>
-          The provided <command>msbuild</command> project is not directly compatible 
-          with Visual Studio To create a &PROD; project in Visual Studio, import the 
-          example source code and all the referenced DLLs to an existing or 
-          newly created project.
-        </para> 
-      </tip>
-    </section>
     
     <section xml:id="section.integration.calling-carrot2-from-non-java-software">
       <title>Calling &PROD; clustering from non-Java software</title>
