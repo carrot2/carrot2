@@ -223,6 +223,17 @@
     </para>
   </section>
   
+  <section xml:id="section.csharp-api">
+    <title>&CSA;</title>
+    
+    <para>
+      The &CSA; package contains all DLL libraries required to run &PROD;, 
+      C# API reference and code examples. You can use this package to integrate &PROD; 
+      clustering into your C# / .NET software. Please see 
+      <xref linkend="section.integration.compiling-csharp-program-with-carrot2" /> for instructions.
+    </para>
+  </section>
+    
   <section xml:id="section.dcs">
     <title>&DCS;</title>
     
