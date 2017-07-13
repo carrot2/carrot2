@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lucene-analyzers-common-6.6.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-analyzers-smartcn-6.6.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-backward-codecs-6.6.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-core-6.6.0.jar" sourcepath="C:/Users/dweiss/.m2/repository/org/apache/lucene/lucene-core/6.6.0/lucene-core-6.6.0-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-highlighter-6.6.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-join-6.6.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-memory-6.6.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-queries-6.6.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-queryparser-6.6.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lucene-sandbox-6.6.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-analyzers-common-5.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-analyzers-smartcn-5.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-backward-codecs-5.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-core-5.3.1.jar" sourcepath="C:/Users/dweiss/.m2/repository/org/apache/lucene/lucene-core/5.3.1/lucene-core-5.3.1-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-highlighter-5.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-join-5.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-memory-5.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-queries-5.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-queryparser-5.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lucene-sandbox-5.3.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="tmp/eclipse"/>
