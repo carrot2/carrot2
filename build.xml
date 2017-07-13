@@ -88,7 +88,7 @@
   <!-- Compilation presets. -->
   <presetdef name="javac">
       <javac deprecation="false" debug="true"
-          target="1.8" source="1.8"
+          target="1.7" source="1.7"
           encoding="UTF-8" includeantruntime="true" optimize="true"/>
   </presetdef>
 
@@ -657,7 +657,9 @@
       </condition>
     </fail>
 
-    <property name="javadoc.extra.args" value="-quiet --allow-script-in-comments" />
+    <condition property="javadoc.extra.args" value="-quiet" else="-quiet --allow-script-in-comments">
+      <equals arg1="${ant.java.version}" arg2="1.7"/>
+    </condition>
 
     <condition property="javadoc.failonerror" value="false" else="true">
       <equals arg1="${ant.java.version}" arg2="1.9"/>

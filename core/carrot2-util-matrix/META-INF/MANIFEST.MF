@@ -21,4 +21,4 @@ Export-Package:
  org.carrot2.matrix.factorization.seeding
 Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.util.common;bundle-version="0.0.0";visibility:=reexport
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
