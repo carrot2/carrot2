@@ -190,6 +190,7 @@ public class DcsAppTest extends CarrotTestCase
 
     @UsesExternalServices
     @Test
+    @Ignore("Bing API no longer available")
     public void testExternalSource() throws Exception
     {
         final String query = "kaczyński";
@@ -312,7 +313,7 @@ public class DcsAppTest extends CarrotTestCase
 
     @UsesExternalServices    
     @Test
-    @Ignore // Bing no longer available.
+    @Ignore("Bing API no longer available")
     public void testGetWithExternalSource() throws Exception
     {
         final ProcessingResult result = getOrPost(RequestType.GET, ImmutableMap.<String, Object> of(
@@ -327,7 +328,7 @@ public class DcsAppTest extends CarrotTestCase
 
     @UsesExternalServices
     @Test
-    @Ignore // Bing no longer available.
+    @Ignore("Bing API no longer available")
     public void testPostUrlEncodedWithExternalSource() throws Exception
     {
         final ProcessingResult result = getOrPost(RequestType.POST_WWW_URL_ENCODING, ImmutableMap.<String, Object> of(
@@ -341,7 +342,6 @@ public class DcsAppTest extends CarrotTestCase
     }
 
     @Test
-    @Ignore // Bing no longer available.
     public void testPostUrlEncodedWithC2Stream() throws Exception
     {
         final ProcessingResult result = getOrPost(RequestType.POST_WWW_URL_ENCODING, ImmutableMap.<String, Object> of(
