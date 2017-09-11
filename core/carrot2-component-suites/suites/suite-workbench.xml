@@ -10,9 +10,8 @@
     <include suite="source-lucene.xml" />
     <include suite="source-ambient.xml" />
 
-    <!-- PubMed, Indeed job search. -->
+    <!-- Document sources. -->
     <include suite="source-pubmed.xml" />
-    <include suite="source-indeed.xml" />
     <include suite="source-opensearch.xml" />
     <include suite="source-idolsearch.xml" />
 

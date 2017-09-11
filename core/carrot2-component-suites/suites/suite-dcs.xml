@@ -1,12 +1,9 @@
 <component-suite>
-    <!-- Search engines. -->
+    <!-- Document sources. -->
     <include suite="source-etools.xml" />
     <include suite="source-bing.xml" />
     <include suite="source-wiki.xml" />
-
-    <!-- PubMed, Indeed job search. -->
     <include suite="source-pubmed.xml" />
-    <include suite="source-indeed.xml" />
 
     <!-- Local sources. -->
     <include suite="source-xml.xml" />
