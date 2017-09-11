@@ -15,10 +15,16 @@ package org.carrot2.source.microsoft.v5;
 import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.tests.UsesExternalServices;
+import org.junit.*;
 
 /** */
 @UsesExternalServices
 public class Bing5DocumentSourceTest extends MultipageDocumentSourceTestBase<Bing5DocumentSource> {
+  @Before
+  public void checkKeyAvailable() {
+    Assume.assumeTrue(System.getProperty(Bing5DocumentSource.SYSPROP_BING5_API) != null);
+  }
+  
   @Override
   protected boolean hasTotalResultsEstimate() {
     return true;

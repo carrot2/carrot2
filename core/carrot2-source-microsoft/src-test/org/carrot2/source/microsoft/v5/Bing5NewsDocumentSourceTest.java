@@ -17,10 +17,17 @@ import java.util.concurrent.ExecutionException;
 import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
 import org.carrot2.util.tests.UsesExternalServices;
+import org.junit.Assume;
+import org.junit.Before;
 
 /** */
 @UsesExternalServices
 public class Bing5NewsDocumentSourceTest extends MultipageDocumentSourceTestBase<Bing5NewsDocumentSource> {
+  @Before
+  public void checkKeyAvailable() {
+    Assume.assumeTrue(System.getProperty(Bing5DocumentSource.SYSPROP_BING5_API) != null);
+  }
+
   @Override
   protected boolean hasTotalResultsEstimate() {
     return true;
