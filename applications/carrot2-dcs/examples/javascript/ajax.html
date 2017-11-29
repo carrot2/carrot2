@@ -60,7 +60,7 @@
           $result.text("Loading...").show(100);
           
           // Make a GET request. Here we'll search the web using the 
-          // "etools"document source. We'll use the JSON-P response format
+          // "web" document source. We'll use the JSON-P response format
           // to avoid same-origin-domain restrictions. The downside of JSON-P
           // is that we won't be able to catch errors.
           $.ajax({
@@ -76,7 +76,7 @@
             
             // Request parameters
             data: {
-              "dcs.source": "etools",
+              "dcs.source": "web",
               "query": "data mining",
               
               "dcs.output.format": "JSON"

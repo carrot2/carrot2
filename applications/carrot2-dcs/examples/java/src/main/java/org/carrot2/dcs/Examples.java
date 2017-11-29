@@ -112,7 +112,7 @@ final class Examples
         System.out.println("## Clustering search results from a search engine");
 
         // We use etools meta search engine input component.
-        attributes.put("dcs.source", "etools");
+        attributes.put("dcs.source", "web");
         attributes.put("query", "test");
         attributes.put("results", "20");
         attributes.put("dcs.algorithm", "lingo");

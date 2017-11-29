@@ -31,7 +31,7 @@
   //
   //
   echo '<h1>Clustering documents from external source</h1>';
-  $source = "etools";
+  $source = "web";
   $query = "data mining";
   $results = 20;
   $algorithm = "url"; // cluster by url to show how to handle subclusters

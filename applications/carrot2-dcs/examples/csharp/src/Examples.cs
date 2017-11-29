@@ -39,7 +39,7 @@ namespace Org.Carrot2.Examples
 
             // Cluster form an external document source (on the DCS).
             Console.WriteLine("## Clustering search results from a search engine...");
-            ClusterFromSearchEngine(service, "etools", "data mining");
+            ClusterFromSearchEngine(service, "web", "data mining");
         }
 
         /// <summary>

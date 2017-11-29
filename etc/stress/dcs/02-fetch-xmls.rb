@@ -19,7 +19,7 @@ end
 
 # Certain sources have different names between the webapp and the DCS.
 source_mapping = {
-  "web" => "etools",
+  "web" => "web",
   "yahoo-news" => "boss-news",
   "put" => "",
 }
