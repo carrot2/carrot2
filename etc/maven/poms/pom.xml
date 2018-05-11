@@ -64,7 +64,7 @@
     <morfologik.version>2.1.5</morfologik.version>
     <net.java.dev.rome.version>1.0.0</net.java.dev.rome.version>
     <net.java.dev.rome.fetcher.version>1.0.0</net.java.dev.rome.fetcher.version>
-    <commons.lang.version>2.6</commons.lang.version>
+    <commons.lang3.version>3.5</commons.lang3.version>
     <commons.codec.version>1.10</commons.codec.version>
     <com.fasterxml.jackson.version>2.5.4</com.fasterxml.jackson.version>
     <org.slf4j.version>1.7.13</org.slf4j.version>
@@ -114,9 +114,9 @@
     </dependency>
 
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>${commons.lang.version}</version>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${commons.lang3.version}</version>
     </dependency>
 
     <dependency>
