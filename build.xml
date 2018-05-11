@@ -156,7 +156,6 @@
     <exclude name="lib/org.junit4*/**" />
     <exclude name="lib/com.carrotsearch.randomizedtesting/**" />
     <exclude name="lib/org.carrot2*/attributes-processor*.jar" />
-    <exclude name="lib/org.gargoylesoftware.htmlunit/**" />
     <exclude name="lib/com.thoughtworks.qdox/**" />
     <exclude name="lib/org.apache.velocity/**" />
     <exclude name="lib/org.apache.oro/**" />
