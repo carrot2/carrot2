@@ -15,7 +15,7 @@ package org.carrot2.webapp.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.attribute.*;
@@ -127,7 +127,6 @@ public class RequestModel
             .wrap(otherParameters));
 
         this.cookies = MapUtils.asHashMap(SimpleXmlWrappers.wrap(cookies));
-
-        this.queryEscaped = StringEscapeUtils.escapeJavaScript(query);
+        this.queryEscaped = StringEscapeUtils.escapeEcmaScript(query);
     }
 }

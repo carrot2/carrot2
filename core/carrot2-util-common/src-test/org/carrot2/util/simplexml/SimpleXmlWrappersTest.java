@@ -12,21 +12,38 @@
 
 package org.carrot2.util.simplexml;
 
-import java.io.*;
+import java.io.File;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.carrot2.util.*;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Sets;
+import org.carrot2.util.ListUtils;
+import org.carrot2.util.MapUtils;
+import org.carrot2.util.SetUtils;
 import org.carrot2.util.resource.FileResource;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.simpleframework.xml.*;
-import org.simpleframework.xml.core.*;
-
-import org.carrot2.shaded.guava.common.collect.*;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementMap;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persist;
+import org.simpleframework.xml.core.Persister;
 
 /**
  * Test cases for {@link SimpleXmlWrappers}.
@@ -157,7 +174,7 @@ public class SimpleXmlWrappersTest extends CarrotTestCase
             // We're using the default constructor to deserialize instance of this
             // class, so it doesn't make sense to try to tell the difference between
             // different instances.
-            return ObjectUtils.equals(this.getClass(), obj != null ? obj.getClass() : null);
+            return Objects.equals(this.getClass(), obj != null ? obj.getClass() : null);
         }
 
         @Override
@@ -277,8 +294,8 @@ public class SimpleXmlWrappersTest extends CarrotTestCase
             {
                 return false;
             }
-            return ObjectUtils.equals(((AnnotatedClass) obj).string, string)
-                && ObjectUtils.equals(((AnnotatedClass) obj).integer, integer);
+            return Objects.equals(((AnnotatedClass) obj).string, string)
+                && Objects.equals(((AnnotatedClass) obj).integer, integer);
         }
 
         @Override
@@ -316,8 +333,8 @@ public class SimpleXmlWrappersTest extends CarrotTestCase
             {
                 return false;
             }
-            return ObjectUtils.equals(((ClassWithWrapper) obj).string, string)
-                && ObjectUtils.equals(((ClassWithWrapper) obj).integer, integer);
+            return Objects.equals(((ClassWithWrapper) obj).string, string)
+                && Objects.equals(((ClassWithWrapper) obj).integer, integer);
         }
 
         @Override

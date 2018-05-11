@@ -18,8 +18,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.util.attribute.constraint.ResourceNameFilter;
 import org.carrot2.util.attribute.constraint.ResourceNameFilters;
@@ -300,7 +300,7 @@ public class ResourceEditor extends AttributeEditorAdapter
     @Override
     public void setValue(Object newValue)
     {
-        if (ObjectUtils.equals(newValue, resource))
+        if (Objects.equals(newValue, resource))
         {
             return;
         }

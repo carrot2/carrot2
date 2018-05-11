@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.ReflectionUtils;

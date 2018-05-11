@@ -14,18 +14,24 @@ package org.carrot2.workbench.editors.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.carrot2.shaded.guava.common.collect.BiMap;
 import org.carrot2.workbench.core.helpers.GUIFactory;
-import org.carrot2.workbench.editors.*;
+import org.carrot2.workbench.editors.AttributeEditorAdapter;
+import org.carrot2.workbench.editors.AttributeEditorInfo;
+import org.carrot2.workbench.editors.AttributeEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.*;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-
-import org.carrot2.shaded.guava.common.collect.BiMap;
 
 /**
  * Template code for editors with mapped values (String to Object).
@@ -261,7 +267,7 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
     @Override
     public void setValue(Object newValue)
     {
-        if (ObjectUtils.equals(newValue, getValue()))
+        if (Objects.equals(newValue, getValue()))
         {
             return;
         }
@@ -301,7 +307,7 @@ public abstract class MappedValueComboEditor extends AttributeEditorAdapter
     {
         final Object asValue = getBoxValue();
 
-        if (!ObjectUtils.equals(currentValue, asValue))
+        if (!Objects.equals(currentValue, asValue))
         {
             this.currentValue = asValue;
             fireAttributeChanged(new AttributeEvent(this));

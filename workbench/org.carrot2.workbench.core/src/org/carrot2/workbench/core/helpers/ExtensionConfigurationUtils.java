@@ -12,8 +12,7 @@
 
 package org.carrot2.workbench.core.helpers;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
-
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.runtime.IConfigurationElement;
 
 /**
@@ -58,7 +57,7 @@ public final class ExtensionConfigurationUtils
         boolean throwOnError)
     {
         String classAtt = element.getAttribute(attName);
-        if (throwOnError && isBlank(classAtt))
+        if (throwOnError && StringUtils.isBlank(classAtt))
         {
             throw new IllegalArgumentException("Missing " + attName + " attribute");
         }

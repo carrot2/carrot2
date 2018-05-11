@@ -16,8 +16,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.IClusteringAlgorithm;
@@ -466,7 +466,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
                 result.get(maxRow).add(c);
             }
 
-            if (ObjectUtils.equals(previousResult, result))
+            if (Objects.equals(previousResult, result))
             {
                 // Unchanged result
                 break;

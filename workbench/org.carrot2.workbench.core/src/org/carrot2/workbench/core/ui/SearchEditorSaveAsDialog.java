@@ -12,7 +12,7 @@
 
 package org.carrot2.workbench.core.ui;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.eclipse.swt.SWT.Modify;
 import static org.eclipse.swt.SWT.Selection;
 

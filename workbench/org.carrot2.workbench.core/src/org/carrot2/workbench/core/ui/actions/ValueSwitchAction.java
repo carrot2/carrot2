@@ -12,9 +12,10 @@
 
 package org.carrot2.workbench.core.ui.actions;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.jface.action.*;
+import java.util.Objects;
+
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
@@ -73,7 +74,7 @@ public class ValueSwitchAction extends Action implements IPropertyChangeListener
      */
     public void propertyChange(PropertyChangeEvent event)
     {
-        if (ObjectUtils.equals(key, event.getProperty()))
+        if (Objects.equals(key, event.getProperty()))
         {
             updateState();
         }

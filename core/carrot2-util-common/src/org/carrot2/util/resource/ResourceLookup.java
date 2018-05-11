@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.util.annotations.ThreadSafe;
 import org.slf4j.Logger;
@@ -208,7 +208,7 @@ public final class ResourceLookup
 
         if (target != null && target instanceof ResourceLookup)
         {
-            return ArrayUtils.isEquals(
+            return Arrays.equals(
                 this.locators, ((ResourceLookup) target).locators);
         }
 

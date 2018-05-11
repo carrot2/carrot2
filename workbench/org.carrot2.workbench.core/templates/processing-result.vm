@@ -14,7 +14,7 @@
 *#
 
 #if ($result)
-    #set ( $totalProcessingSec = ${result.Attributes.processing-time-total} / 1000.0 )
+    #set ( $totalProcessingSec = ${result.Attributes["processing-time-total"]} / 1000.0 )
     #set ( $documents = $result.Documents )
     #set ( $remaining = $documents.size() - $maxDisplay )
     

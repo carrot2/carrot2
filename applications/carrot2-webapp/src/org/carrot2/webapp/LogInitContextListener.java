@@ -20,7 +20,7 @@ import java.util.Map.Entry;
 
 import javax.servlet.*;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.*;
 
 import org.carrot2.shaded.guava.common.collect.*;

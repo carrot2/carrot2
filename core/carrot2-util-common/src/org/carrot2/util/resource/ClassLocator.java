@@ -13,8 +13,7 @@
 package org.carrot2.util.resource;
 
 import java.net.URL;
-
-import org.apache.commons.lang.ObjectUtils;
+import java.util.Objects;
 
 /**
  * Looks up resources relative to the given class.
@@ -67,7 +66,7 @@ public class ClassLocator implements IResourceLocator
 
         if (target != null && target instanceof ClassLocator)
         {
-            return ObjectUtils.equals(this.clazz, ((ClassLocator) target).clazz);
+            return Objects.equals(this.clazz, ((ClassLocator) target).clazz);
         }
 
         return false;

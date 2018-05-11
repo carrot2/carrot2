@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.TextField;

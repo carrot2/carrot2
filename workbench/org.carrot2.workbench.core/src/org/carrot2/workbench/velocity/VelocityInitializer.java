@@ -12,13 +12,10 @@
 
 package org.carrot2.workbench.velocity;
 
-import org.apache.commons.collections.ExtendedProperties;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeInstance;
-import org.apache.velocity.runtime.log.NullLogChute;
-import org.apache.velocity.tools.generic.EscapeTool;
+import org.apache.velocity.util.ExtProperties;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -41,16 +38,11 @@ public final class VelocityInitializer
     {
         try
         {
-            final ExtendedProperties p = new ExtendedProperties();
+            final ExtProperties p = new ExtProperties();
             p.setProperty("resource.loader", "bundle");
-            p.setProperty("bundle.resource.loader.instance", new BundleResourceLoader(
-                bundleID, templatePrefix));
-            p.setProperty(RuntimeConstants.SET_NULL_ALLOWED, "true");
+            p.setProperty("bundle.resource.loader.instance", 
+                new BundleResourceLoader(bundleID, templatePrefix));
 
-            // Disable separate Velocity logging.
-            p.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, 
-                NullLogChute.class.getName());
-    
             final RuntimeInstance velocity = new RuntimeInstance();
             velocity.setConfiguration(p);
             return velocity;
@@ -68,7 +60,7 @@ public final class VelocityInitializer
     {
         final VelocityContext context = new VelocityContext();
         
-        context.put("esc", new EscapeTool());
+        context.put("esc", new EscaperUtils());
         context.put("stringutils", new StringUtils());
         context.put("annotationutils", new AnnotationUtils());
 

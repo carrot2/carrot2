@@ -16,8 +16,8 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
@@ -118,7 +118,7 @@ public abstract class SearchEngineBase extends ProcessingComponentBase implement
                         cleanedField = matcher.replaceAll("");
                     }
 
-                    cleanedField = StringEscapeUtils.unescapeHtml(cleanedField);
+                    cleanedField = StringEscapeUtils.escapeHtml4(cleanedField);
 
                     document.setField(field, cleanedField);
                 }

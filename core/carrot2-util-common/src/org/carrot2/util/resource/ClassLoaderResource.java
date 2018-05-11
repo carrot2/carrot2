@@ -14,8 +14,8 @@ package org.carrot2.util.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.util.StreamUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -67,8 +67,8 @@ public final class ClassLoaderResource implements IResource
     {
         if (obj instanceof ClassLoaderResource)
         {
-            return ObjectUtils.equals(((ClassLoaderResource) obj).resource, resource)
-                && ObjectUtils.equals(((ClassLoaderResource) obj).clazzLoader, clazzLoader);
+            return Objects.equals(((ClassLoaderResource) obj).resource, resource)
+                && Objects.equals(((ClassLoaderResource) obj).clazzLoader, clazzLoader);
         }
         else
         {
@@ -79,7 +79,7 @@ public final class ClassLoaderResource implements IResource
     @Override
     public int hashCode()
     {
-        return ObjectUtils.hashCode(clazzLoader) ^ ObjectUtils.hashCode(resource);
+        return Objects.hashCode(clazzLoader) ^ Objects.hashCode(resource);
     }
 
     @Override

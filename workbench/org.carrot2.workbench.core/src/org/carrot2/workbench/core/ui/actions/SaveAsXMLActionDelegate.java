@@ -18,7 +18,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.ExceptionUtils;

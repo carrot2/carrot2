@@ -17,11 +17,10 @@ import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 /**
- * Provides a number of useful method operating on {@link String}s that are not available
- * in {@link org.apache.commons.lang.StringUtils}.
+ * 
  */
 public final class StringUtils
 {

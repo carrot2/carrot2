@@ -12,14 +12,16 @@
 
 package org.carrot2.workbench.velocity;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 
-import org.apache.commons.collections.ExtendedProperties;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.resource.Resource;
 import org.apache.velocity.runtime.resource.loader.ResourceLoader;
+import org.apache.velocity.util.ExtProperties;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -56,33 +58,30 @@ public final class BundleResourceLoader extends ResourceLoader
         this.prefix = prefix;
     }
 
-    /**
-     * 
-     */
     @Override
-    public InputStream getResourceStream(String s) throws ResourceNotFoundException
+    public Reader getResourceReader(String name, String encoding) throws ResourceNotFoundException
     {
-        final URL resource = FileLocator.find(bundle, new Path(prefix + s), null);
+        final URL resource = FileLocator.find(bundle, new Path(prefix + name), null);
         if (resource == null)
         {
-            throw new ResourceNotFoundException("Not found: " + s);
+            throw new ResourceNotFoundException("Not found: " + name);
         }
         
         try
         {
-            return resource.openStream();
+            return new InputStreamReader(new BufferedInputStream(resource.openStream()), encoding);
         }
         catch (IOException e)
         {
-            throw new ResourceNotFoundException("Failed to open: " + s, e);
-        } 
+            throw new ResourceNotFoundException("Failed to open: " + name, e);
+        }
     }
 
     /**
      * 
      */
     @Override
-    public void init(ExtendedProperties props)
+    public void init(ExtProperties props)
     {
         if (bundle != null)
         {

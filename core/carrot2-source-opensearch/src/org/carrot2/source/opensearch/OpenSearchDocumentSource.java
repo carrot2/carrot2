@@ -206,7 +206,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
         this.metadata = new MultipageSearchEngineMetadata(resultsPerPage, maximumResults,
             hasStartPage);
         this.feedFetcher = new HttpURLFeedFetcher();
-        if (org.apache.commons.lang.StringUtils.isNotBlank(this.userAgent))
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(this.userAgent))
         {
             this.feedFetcher.setUserAgent(this.userAgent);
         }

@@ -15,7 +15,7 @@ package org.carrot2.workbench.core.ui;
 import java.io.*;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
