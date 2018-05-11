@@ -63,6 +63,11 @@
       </fileset>  
     </copy>
 
+    <manifestclasspath property="dcs.manifest.classpath" jarfile="${dcs.dir}/lib/carrot2-dcs-bootstrap-${carrot2.version}.jar">
+      <classpath>
+        <fileset dir="${dcs.dir}/lib" includes="*.jar" excludes="carrot2-dcs-bootstrap*.jar" />
+      </classpath>
+    </manifestclasspath>
     <jar jarfile="${dcs.dir}/lib/carrot2-dcs-bootstrap-${carrot2.version}.jar">
       <fileset dir="${dcs.dir}/classes">
         <include name="**/DcsApp*.class" />
@@ -74,13 +79,20 @@
         <include name="appender-*" />
         <include name="filters-*" />
       </fileset>
+      <manifest>
+        <attribute name="Main-Class" value="org.carrot2.dcs.DcsApp" />
+        <attribute name="Class-Path" value="${dcs.manifest.classpath}" />
+      </manifest>
     </jar>
 
-    <copy todir="${dcs.dir}">
+    <copy todir="${dcs.dir}" encoding="UTF-8">
       <fileset dir="${carrot2.dcs.basedir}/etc/distribution">
-        <include name="dcs.*" />
-        <include name="invoker.jar" />
+        <include name="dcs.cmd" />
+        <include name="dcs.sh" />
       </fileset>
+      <filterset>
+        <filter token="carrot2.version" value="${carrot2.version}"/>
+      </filterset>        
     </copy>
 
     <copy todir="${dcs.dir}">
