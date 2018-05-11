@@ -12,15 +12,23 @@
 
 package org.carrot2.workbench.editors.impl;
 
-import static org.eclipse.swt.SWT.BORDER;
+import static org.eclipse.swt.SWT.*;
 
 import java.util.Map;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.workbench.core.helpers.GUIFactory;
-import org.carrot2.workbench.editors.*;
+import org.carrot2.workbench.editors.AttributeEditorAdapter;
+import org.carrot2.workbench.editors.AttributeEditorInfo;
+import org.carrot2.workbench.editors.AttributeEvent;
+import org.carrot2.workbench.editors.IAttributeListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.*;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -130,7 +138,7 @@ public class StringEditor extends AttributeEditorAdapter
     @Override
     public void setValue(Object newValue)
     {
-        if (ObjectUtils.equals(newValue, getValue()))
+        if (Objects.equals(newValue, getValue()))
         {
             return;
         }
@@ -146,7 +154,7 @@ public class StringEditor extends AttributeEditorAdapter
     private void checkContentChange()
     {
         final String textBoxValue = this.textBox.getText();
-        if (!ObjectUtils.equals(textBoxValue, content) && isValid(textBoxValue))
+        if (!Objects.equals(textBoxValue, content) && isValid(textBoxValue))
         {
             this.content = textBoxValue;
             fireAttributeChanged(new AttributeEvent(this));

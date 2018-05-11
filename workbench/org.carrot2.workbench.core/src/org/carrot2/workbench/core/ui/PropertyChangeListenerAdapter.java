@@ -12,7 +12,8 @@
 
 package org.carrot2.workbench.core.ui;
 
-import org.apache.commons.lang.ObjectUtils;
+import java.util.Objects;
+
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -32,7 +33,7 @@ public abstract class PropertyChangeListenerAdapter implements IPropertyChangeLi
     
     public void propertyChange(PropertyChangeEvent event)
     {
-        if (ObjectUtils.equals(property, event.getProperty()))
+        if (Objects.equals(property, event.getProperty()))
         {
             propertyChangeFiltered(event);
         }

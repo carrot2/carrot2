@@ -14,7 +14,7 @@ package org.carrot2.workbench.core.ui;
 
 import java.io.File;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;

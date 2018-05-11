@@ -12,14 +12,32 @@
 
 package org.carrot2.clustering.synthetic;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.*;
-import org.carrot2.util.attribute.*;
-
-import org.carrot2.shaded.guava.common.collect.*;
+import org.apache.commons.lang3.ArrayUtils;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.Document;
+import org.carrot2.core.IClusteringAlgorithm;
+import org.carrot2.core.ProcessingComponentBase;
+import org.carrot2.core.ProcessingException;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.CommonAttributes;
+import org.carrot2.core.attribute.Internal;
+import org.carrot2.core.attribute.Processing;
+import org.carrot2.shaded.guava.common.collect.LinkedHashMultimap;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Multimap;
+import org.carrot2.util.attribute.Attribute;
+import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attribute.Input;
+import org.carrot2.util.attribute.Label;
+import org.carrot2.util.attribute.Output;
 
 /**
  * Hierarchically clusters documents according to their content URLs.

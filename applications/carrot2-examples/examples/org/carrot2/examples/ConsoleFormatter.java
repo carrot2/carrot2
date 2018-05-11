@@ -16,7 +16,7 @@ import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;

@@ -20,9 +20,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingResult;
+import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.helpers.Utils;
@@ -59,7 +60,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.carrotsearch.hppc.IntStack;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 public abstract class AbstractBrowserVisualizationViewPage extends Page
 {

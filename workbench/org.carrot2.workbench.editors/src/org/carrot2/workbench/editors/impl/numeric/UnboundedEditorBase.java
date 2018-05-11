@@ -14,7 +14,7 @@ package org.carrot2.workbench.editors.impl.numeric;
 
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.editors.*;
 import org.eclipse.jface.layout.GridDataFactory;

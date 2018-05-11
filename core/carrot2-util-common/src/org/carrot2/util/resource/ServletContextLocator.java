@@ -14,10 +14,10 @@ package org.carrot2.util.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.util.CloseableUtils;
 
 /**
@@ -97,7 +97,7 @@ public final class ServletContextLocator implements IResourceLocator
 
         if (target != null && target instanceof ServletContextLocator)
         {
-            return ObjectUtils.equals(this.context, ((ServletContextLocator) target).context);
+            return Objects.equals(this.context, ((ServletContextLocator) target).context);
         }
 
         return false;

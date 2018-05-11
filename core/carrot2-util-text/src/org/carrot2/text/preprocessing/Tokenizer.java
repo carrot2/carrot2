@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.Init;

@@ -20,15 +20,17 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.InternalAttributePredicate;
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.shaded.guava.common.base.Predicates;
+import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.util.attribute.Input;
@@ -95,9 +97,6 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.progress.UIJob;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-
-import org.carrot2.shaded.guava.common.base.Predicates;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Editor accepting {@link SearchInput} and performing operations on it. The editor also
@@ -532,7 +531,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         /*
          * Initially, set to dummy name.
          */
-        String title = ObjectUtils.toString(this.searchResult.getInput().getAttribute(
+        String title = Objects.toString(this.searchResult.getInput().getAttribute(
             AttributeNames.QUERY), null);
 
         /*
@@ -547,15 +546,14 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
              * the one set on input).
              */
 
-            title = ObjectUtils.toString(
+            title = Objects.toString(
                 result.getAttributes().get(AttributeNames.QUERY), null);
 
             /*
              * Override with custom title, if present.
              */
 
-            title = ObjectUtils.toString(result.getAttributes().get(
-                AttributeNames.PROCESSING_RESULT_TITLE), title);
+            title = Objects.toString(result.getAttributes().get(AttributeNames.PROCESSING_RESULT_TITLE), title);
         }
 
         if (StringUtils.isEmpty(title))

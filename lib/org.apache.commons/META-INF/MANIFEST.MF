@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.apache.commons
 Bundle-Version: 0.0.0.QUALIFIER
 Bundle-ClassPath: commons-codec-1.10.jar,
  commons-io-2.0.1.jar,
- commons-lang-2.6.jar,
+ commons-lang3-3.5.jar,
  commons-collections-3.2.2.jar
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -35,13 +35,16 @@ Export-Package: org.apache.commons.codec,
  org.apache.commons.io.input,
  org.apache.commons.io.monitor,
  org.apache.commons.io.output,
- org.apache.commons.lang,
- org.apache.commons.lang.builder,
- org.apache.commons.lang.enum,
- org.apache.commons.lang.enums,
- org.apache.commons.lang.exception,
- org.apache.commons.lang.math,
- org.apache.commons.lang.mutable,
- org.apache.commons.lang.reflect,
- org.apache.commons.lang.text,
- org.apache.commons.lang.time
+ org.apache.commons.lang3,
+ org.apache.commons.lang3.builder,
+ org.apache.commons.lang3.concurrent,
+ org.apache.commons.lang3.event,
+ org.apache.commons.lang3.exception,
+ org.apache.commons.lang3.math,
+ org.apache.commons.lang3.mutable,
+ org.apache.commons.lang3.reflect,
+ org.apache.commons.lang3.text,
+ org.apache.commons.lang3.text.translate,
+ org.apache.commons.lang3.time,
+ org.apache.commons.lang3.tuple
+

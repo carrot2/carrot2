@@ -12,14 +12,14 @@
 
 package org.carrot2.workbench.core.ui;
 
-import static org.apache.commons.lang.SystemUtils.*;
+import static org.apache.commons.lang3.SystemUtils.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
-import org.apache.commons.lang.mutable.MutableInt;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;

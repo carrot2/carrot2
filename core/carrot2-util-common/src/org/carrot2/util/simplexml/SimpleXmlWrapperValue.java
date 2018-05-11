@@ -15,7 +15,7 @@ package org.carrot2.util.simplexml;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.ReflectionUtils;
 import org.simpleframework.xml.*;

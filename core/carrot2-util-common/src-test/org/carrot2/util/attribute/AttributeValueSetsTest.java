@@ -12,18 +12,18 @@
 
 package org.carrot2.util.attribute;
 
+import static org.junit.Assert.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 import org.simpleframework.xml.Root;
-
-import static org.junit.Assert.*;
 
 public class AttributeValueSetsTest extends CarrotTestCase
 {
@@ -223,14 +223,14 @@ public class AttributeValueSetsTest extends CarrotTestCase
 
             final CustomClass other = (CustomClass) obj;
 
-            return ObjectUtils.equals(value1, other.value1)
-                && ObjectUtils.equals(value2, other.value2);
+            return Objects.equals(value1, other.value1)
+                && Objects.equals(value2, other.value2);
         }
 
         @Override
         public int hashCode()
         {
-            return ObjectUtils.hashCode(value1) ^ ObjectUtils.hashCode(value2);
+            return Objects.hashCode(value1) ^ Objects.hashCode(value2);
         }
     }
     

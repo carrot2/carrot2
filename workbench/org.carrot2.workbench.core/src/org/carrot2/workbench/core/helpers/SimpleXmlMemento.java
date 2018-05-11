@@ -15,7 +15,7 @@ package org.carrot2.workbench.core.helpers;
 import java.beans.Introspector;
 import java.io.*;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.eclipse.jface.preference.IPreferenceStore;

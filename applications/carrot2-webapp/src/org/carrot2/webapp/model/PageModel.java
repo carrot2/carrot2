@@ -146,7 +146,7 @@ public class PageModel
     private static void appendParameter(StringBuilder builder, String name, String value,
         char separator)
     {
-        if (org.apache.commons.lang.StringUtils.isNotBlank(value))
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(value))
         {
             builder.append(separator);
             builder.append(name);

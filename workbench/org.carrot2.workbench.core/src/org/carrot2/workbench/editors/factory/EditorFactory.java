@@ -12,7 +12,7 @@
 
 package org.carrot2.workbench.editors.factory;
 
-import static org.apache.commons.lang.ClassUtils.*;
+import static org.apache.commons.lang3.ClassUtils.*;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -212,7 +212,6 @@ public final class EditorFactory
      * Return <code>true</code> if a given <code>className<code> is assignable
      * to <code>clazz</code>.
      */
-    @SuppressWarnings("unchecked")
     private static boolean isCompatible(Class<?> clazz, String className)
     {
         /*
@@ -249,7 +248,6 @@ public final class EditorFactory
      * <code>clazz</code>. The distance is calculated based on the difference in the
      * number of classes in the hierarchy of inheritance.  
      */
-    @SuppressWarnings("unchecked")
     public static int distance(Class<?> clazz, String className)
     {
         if (clazz.getName().equals(className))

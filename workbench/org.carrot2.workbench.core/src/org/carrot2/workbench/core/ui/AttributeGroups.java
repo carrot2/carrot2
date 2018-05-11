@@ -12,21 +12,33 @@
 
 package org.carrot2.workbench.core.ui;
 
-import static org.eclipse.swt.SWT.NONE;
+import static org.eclipse.swt.SWT.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.IProcessingComponent;
-import org.carrot2.core.attribute.*;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.core.attribute.InternalAttributePredicate;
+import org.carrot2.shaded.guava.common.base.Predicate;
+import org.carrot2.shaded.guava.common.base.Predicates;
+import org.carrot2.shaded.guava.common.collect.Maps;
+import org.carrot2.shaded.guava.common.collect.Sets;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor.GroupingMethod;
 import org.carrot2.workbench.core.helpers.GUIFactory;
 import org.carrot2.workbench.core.helpers.Utils;
-import org.carrot2.workbench.editors.*;
+import org.carrot2.workbench.editors.AttributeEvent;
+import org.carrot2.workbench.editors.AttributeListenerAdapter;
+import org.carrot2.workbench.editors.ForwardingAttributeListener;
+import org.carrot2.workbench.editors.IAttributeEditor;
+import org.carrot2.workbench.editors.IAttributeEventProvider;
+import org.carrot2.workbench.editors.IAttributeListener;
 import org.carrot2.workbench.editors.factory.EditorFactory;
 import org.carrot2.workbench.editors.factory.EditorNotFoundException;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -34,15 +46,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
-import org.eclipse.ui.forms.widgets.*;
-
-import org.carrot2.shaded.guava.common.base.Predicate;
-import org.carrot2.shaded.guava.common.base.Predicates;
-import org.carrot2.shaded.guava.common.collect.Maps;
-import org.carrot2.shaded.guava.common.collect.Sets;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 
 /**
  * An SWT composite capable of displaying groups of {@link IAttributeEditor}s, sorted by

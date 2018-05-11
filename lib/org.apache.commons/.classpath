@@ -5,6 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry exported="true" kind="lib" path="commons-codec-1.10.jar" sourcepath="org.apache.commonssrc.zip"/>
 	<classpathentry exported="true" kind="lib" path="commons-io-2.0.1.jar" sourcepath="org.apache.commonssrc.zip"/>
-	<classpathentry exported="true" kind="lib" path="commons-lang-2.6.jar" sourcepath="org.apache.commonssrc.zip"/>
+	<classpathentry exported="true" kind="lib" path="commons-lang3-3.5.jar" sourcepath="org.apache.commonssrc.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

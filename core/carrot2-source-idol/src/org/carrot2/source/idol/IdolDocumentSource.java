@@ -206,7 +206,7 @@ public class IdolDocumentSource extends MultipageSearchEngine
         this.metadata = new MultipageSearchEngineMetadata(resultsPerPage, maximumResults,
             false);
         this.feedFetcher = new HttpURLFeedFetcher();
-        if (org.apache.commons.lang.StringUtils.isNotBlank(this.userAgent))
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(this.userAgent))
         {
             this.feedFetcher.setUserAgent(this.userAgent);
         }

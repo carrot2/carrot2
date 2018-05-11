@@ -16,7 +16,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang3.ClassUtils;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.Required;
 import org.carrot2.util.attribute.constraint.ImplementingClasses;

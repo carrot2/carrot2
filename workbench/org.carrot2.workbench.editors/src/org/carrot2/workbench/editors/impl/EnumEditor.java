@@ -14,10 +14,12 @@ package org.carrot2.workbench.editors.impl;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.util.attribute.Required;
-import org.carrot2.util.attribute.constraint.*;
+import org.carrot2.util.attribute.constraint.IValueHintMapping;
+import org.carrot2.util.attribute.constraint.ValueHintEnum;
+import org.carrot2.util.attribute.constraint.ValueHintMappingUtils;
 import org.carrot2.workbench.editors.AttributeEditorInfo;
 
 /**
@@ -77,7 +79,7 @@ public final class EnumEditor extends MappedValueComboEditor
     @Override
     public void setValue(Object newValue)
     {
-        if (ObjectUtils.equals(newValue, getValue()))
+        if (Objects.equals(newValue, getValue()))
         {
             return;
         }

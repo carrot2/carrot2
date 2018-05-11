@@ -16,8 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
-
-import org.apache.commons.lang.ObjectUtils;
+import java.util.Objects;
 
 import org.carrot2.shaded.guava.common.collect.Lists;
 
@@ -91,7 +90,7 @@ public final class ClassLoaderLocator implements IResourceLocator
 
         if (target != null && target instanceof ClassLoaderLocator)
         {
-            return ObjectUtils.equals(this.loader, ((ClassLoaderLocator) target).loader);
+            return Objects.equals(this.loader, ((ClassLoaderLocator) target).loader);
         }
 
         return false;

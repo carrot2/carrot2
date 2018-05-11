@@ -12,7 +12,7 @@
 
 package org.carrot2.util;
 
-import org.apache.commons.lang.ObjectUtils;
+import java.util.Objects;
 
 /**
  * An immutable pair of objects.
@@ -38,13 +38,13 @@ public class Pair<I, J>
 
         final Pair<?, ?> other = (Pair<?, ?>) obj;
 
-        return ObjectUtils.equals(other.objectA, objectA)
-            && ObjectUtils.equals(other.objectB, objectB);
+        return Objects.equals(other.objectA, objectA)
+            && Objects.equals(other.objectB, objectB);
     }
 
     @Override
     public int hashCode()
     {
-        return ObjectUtils.hashCode(objectA) ^ ObjectUtils.hashCode(objectB);
+        return Objects.hash(objectA, objectB);
     }
 }

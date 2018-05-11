@@ -13,9 +13,9 @@
 package org.carrot2.workbench.core.ui;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.carrot2.core.Controller;
 import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
@@ -107,7 +107,7 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
     public boolean setAttribute(String key, Object value, boolean fireEvent)
     {
         final Object prev = getAttribute(key);
-        if (ObjectUtils.equals(prev, value))
+        if (Objects.equals(prev, value))
         {
             return false;
         }

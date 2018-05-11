@@ -15,7 +15,7 @@ package org.carrot2.core;
 import java.io.*;
 import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.simplexml.SimpleXmlWrapperValue;

@@ -15,12 +15,13 @@ package org.carrot2.workbench.core.ui;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.InternalAttributePredicate;
+import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.util.attribute.AttributeDescriptor;
 import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.util.attribute.AttributeValueSets;
@@ -39,8 +40,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.widgets.Event;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
-
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Superclass for attribute management actions.
@@ -254,7 +253,7 @@ abstract class SaveAttributesAction extends Action
             final String key = e.getKey();
             final Object value = e.getValue();
 
-            if (ObjectUtils.equals(value, defaults.getAttributeValue(key)))
+            if (Objects.equals(value, defaults.getAttributeValue(key)))
             {
                 i.remove();
             }
