@@ -5,8 +5,7 @@ Bundle-SymbolicName: org.apache.commons
 Bundle-Version: 0.0.0.QUALIFIER
 Bundle-ClassPath: commons-codec-1.10.jar,
  commons-io-2.0.1.jar,
- commons-lang3-3.5.jar,
- commons-collections-3.2.2.jar
+ commons-lang3-3.5.jar
 Bundle-Vendor: Apache Foundation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.apache.commons.logging
