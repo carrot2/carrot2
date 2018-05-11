@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -36,6 +36,8 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import org.carrot2.shaded.guava.common.base.Function;
 import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
+
+import static org.junit.Assert.*;
 
 /**
  * Common tests for {@link IDocumentSource}s that accept a string query.

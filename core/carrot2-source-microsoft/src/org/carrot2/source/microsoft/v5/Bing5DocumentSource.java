@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -95,7 +95,7 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     private final static String SERVICE_URL = "https://api.cognitive.microsoft.com/bing/v5.0/search";
 
     /** Web search specific metadata. */
-    final static MultipageSearchEngineMetadata METADATA = new MultipageSearchEngineMetadata(50, 950);
+    final static MultipageSearchEngineMetadata METADATA = new MultipageSearchEngineMetadata(30, 200);
 
     /**
      * The API key used to authenticate requests. You will have to provide your own API key.
@@ -188,6 +188,8 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     protected Bing5DocumentSource(MultipageSearchEngineMetadata metadata, String serviceURL) {
       this.metadata = metadata;
       this.serviceURL = serviceURL;
+      
+      this.searchMode = SearchMode.CONSERVATIVE;
     }
 
 
@@ -334,6 +336,8 @@ retry:
           }
           ser.results.add(doc);
         }
+      } else {
+        ser.metadata.put(SearchEngineResponse.RESULTS_TOTAL_KEY, 0);
       }
     }
 }

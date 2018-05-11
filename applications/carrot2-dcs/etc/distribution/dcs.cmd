@@ -30,4 +30,4 @@ set DCS_OPTS=-Xmx768m
 rem
 rem Launch the DCS
 rem
-java %DCS_OPTS% -Ddcs.war=war/carrot2-dcs.war -jar invoker.jar -cpdir lib org.carrot2.dcs.DcsApp %*
+java %DCS_OPTS% -Ddcs.war=war/carrot2-dcs.war -jar lib/carrot2-dcs-bootstrap-@carrot2.version@.jar %*

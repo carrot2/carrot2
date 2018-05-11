@@ -56,7 +56,7 @@ options[:uri] = 'http://localhost:8080' unless options.has_key? :uri
 #
 
 CARROT2_30 = {
-	:sources => ["bing-web", "news", "etools"],
+	:sources => ["bing-web", "news", "web"],
 	:algorithms => ["lingo", "stc", "url", "source"],
     :uri_pattern => '/search?source=#{source}&view=tree&skin=fancy-compact&results=100&algorithm=#{algorithm}&query=#{query}&type=CLUSTERS'
 }

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -17,6 +17,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +56,9 @@ import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.dcs.DcsRequestModel.OutputFormat;
+import org.carrot2.shaded.guava.common.collect.ImmutableMap;
+import org.carrot2.shaded.guava.common.collect.Lists;
+import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeBinder;
@@ -67,10 +73,6 @@ import org.carrot2.util.resource.ResourceLookup;
 import org.carrot2.util.resource.ResourceLookup.Location;
 import org.carrot2.util.resource.ServletContextLocator;
 import org.carrot2.util.xslt.NopURIResolver;
-
-import org.carrot2.shaded.guava.common.collect.ImmutableMap;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A servlet that parses HTTP POST input in Carrot<sup>2</sup> XML format, clusters it and
@@ -292,8 +294,8 @@ public final class RestProcessorServlet extends HttpServlet
             ProcessingComponentConfiguration config = configurations[i];
             Object location = config.attributes.get(altResourceLookupAttrKey);
             if (location != null && location instanceof String) {
-                File resourceDir = new File((String) location);
-                if (!resourceDir.isDirectory()) {
+                Path resourceDir = Paths.get((String) location);
+                if (!Files.isDirectory(resourceDir)) {
                     Logger.getRootLogger().warn("Not a resource folder, ignored: " + resourceDir);
                 } else {
                     HashMap<String,Object> mutableMap = new HashMap<String,Object>(config.attributes);
@@ -424,7 +426,6 @@ public final class RestProcessorServlet extends HttpServlet
     /**
      * Handle multipart request, possibly including dcs.c2stream. 
      */
-    @SuppressWarnings("unchecked")
     private void handleMultiPart(HttpServletRequest request, HttpServletResponse response)
         throws IOException
     {

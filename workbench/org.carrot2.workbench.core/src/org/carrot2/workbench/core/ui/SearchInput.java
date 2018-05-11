@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -179,7 +179,7 @@ public class SearchInput implements IEditorInput, IPersistableElement, IAttribut
     /*
      * 
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings("all")
     public Object getAdapter(Class adapter)
     {
         if (adapter.isInstance(this))

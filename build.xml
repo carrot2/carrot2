@@ -241,8 +241,8 @@
   </path>
 
   <antversion property="ant.version" />
-  <fail message="Use ANT 1.9.3 or later. Your ANT is: ${ant.version}">
-    <condition><not><antversion atleast="1.9.3" /></not></condition>
+  <fail message="Use ANT 1.9.7 or later. Your ANT is: ${ant.version}">
+    <condition><not><antversion atleast="1.9.7" /></not></condition>
   </fail>
 
   <!-- 
@@ -657,6 +657,14 @@
       </condition>
     </fail>
 
+    <condition property="javadoc.extra.args" value="-quiet" else="-quiet --allow-script-in-comments">
+      <equals arg1="${ant.java.version}" arg2="1.7"/>
+    </condition>
+
+    <condition property="javadoc.failonerror" value="false" else="true">
+      <equals arg1="${ant.java.version}" arg2="1.9"/>
+    </condition>
+
     <mkdir dir="${javadoc.dir}" />
 
     <javadoc destdir="${javadoc.dir}"
@@ -673,7 +681,7 @@
              doctitle="Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} API Documentation"
              header="&lt;div class='logo'&gt;Carrot&lt;sup&gt;2&lt;/sup&gt; v${carrot2.version} &lt;br&gt;API Documentation&lt;/div&gt;"
              footer="&lt;div class='logo'&gt;Please refer to project documentation at &lt;br&gt;&lt;a target='_top' href=http://project.carrot2.org&gt;http://project.carrot2.org&lt;/a&gt;&lt;/div&gt;"
-             bottom="&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;&lt;script type=&quot;text/javascript&quot;&gt; var gaJsHost = ((&quot;https:&quot; == document.location.protocol) ? &quot;https://ssl.&quot; : &quot;http://www.&quot;); document.write(unescape(&quot;%3Cscript src='&quot; + gaJsHost + &quot;google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E&quot;)); &lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; var pageTracker = _gat._getTracker(&quot;UA-317750-1&quot;); pageTracker._trackPageview(); &lt;/script&gt;"
+             bottom="&lt;center&gt;Copyright (c) Dawid Weiss, Stanislaw Osinski &lt;/center&gt;"
              overview="${overview.dir}/overview.html"
              failonerror="${javadoc.failonerror}"
              stylesheetfile="${etc.dir}/javadoc/stylesheet.css"
@@ -714,7 +722,7 @@
       <tag name="level" enabled="true" scope="fields" description="Attribute level:" />
       <tag name="group" enabled="true" scope="fields" description="Attribute group:" />
 
-      <arg value="-quiet" />
+      <arg value="${javadoc.extra.args}" />
     </javadoc>
 
     <copy todir="${javadoc.dir}">

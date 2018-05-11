@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -21,6 +21,8 @@ import java.util.Arrays;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class CharArrayUtilsTest extends CarrotTestCase
 {

@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -18,12 +18,21 @@ import java.io.IOException;
 import org.carrot2.shaded.guava.common.io.ByteStreams;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.fest.assertions.Assertions;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests Microsoft Bing document source.
  */
 public class Bing5ResponseParsingTest extends CarrotTestCase {
+  @Before
+  public void checkKeyAvailable() {
+    Assume.assumeTrue(System.getProperty(Bing5DocumentSource.SYSPROP_BING5_API) != null);
+  }
+
   @Test
   public void testInvalidKey() throws Exception {
     BingResponse response = parse("bing.v5.invalidkey.json");

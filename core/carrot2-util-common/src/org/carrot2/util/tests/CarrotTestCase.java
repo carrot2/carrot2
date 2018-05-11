@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -58,8 +58,8 @@ import com.carrotsearch.randomizedtesting.MixWithSuiteName;
 import com.carrotsearch.randomizedtesting.RandomizedTest;
 import com.carrotsearch.randomizedtesting.annotations.SeedDecorators;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakAction;
-import com.carrotsearch.randomizedtesting.annotations.ThreadLeakGroup;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakAction.Action;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakGroup;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakGroup.Group;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
@@ -69,7 +69,6 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakZombies.Conseque
 import com.carrotsearch.randomizedtesting.annotations.TimeoutSuite;
 import com.carrotsearch.randomizedtesting.rules.NoClassHooksShadowingRule;
 import com.carrotsearch.randomizedtesting.rules.NoInstanceHooksOverridesRule;
-import com.carrotsearch.randomizedtesting.rules.StaticFieldsInvariantRule;
 import com.carrotsearch.randomizedtesting.rules.SystemPropertiesInvariantRule;
 
 /**
@@ -94,19 +93,16 @@ public class CarrotTestCase extends RandomizedTest
     };
 
     /**
-     * Maximum left memory allocated in static fields of a suite.  
-     */
-    private static final long MAX_STATIC_MEMORY_PER_SUITE_CLASS = 10 * 1024 * 1024;
-
-    /**
      * Class {@link TestRule}s.
      */
     @ClassRule
-    public static TestRule classRules = RuleChain
-      .outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES))
-      .around(new StaticFieldsInvariantRule(MAX_STATIC_MEMORY_PER_SUITE_CLASS, true))
-      .around(new NoClassHooksShadowingRule())
-      .around(new NoInstanceHooksOverridesRule());
+    public static final TestRule classRules;
+    static {
+      RuleChain rules = RuleChain.outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
+      rules = rules.around(new NoClassHooksShadowingRule())
+                   .around(new NoInstanceHooksOverridesRule());
+      classRules = rules;
+    }
 
     /**
      * Test {@link TestRule}s.

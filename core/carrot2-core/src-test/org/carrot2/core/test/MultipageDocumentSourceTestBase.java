@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -20,6 +20,8 @@ import org.carrot2.source.SearchEngineStats;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.tests.UsesExternalServices;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Common tests for {@link IDocumentSource}s that can make more than one search requests to
@@ -66,6 +68,7 @@ public abstract class MultipageDocumentSourceTestBase<T extends IDocumentSource>
         processingAttributes.put("search-mode", SearchMode.CONSERVATIVE);
 
         runAndCheckNoResultsQuery();
+        
         assertEquals(1, resultAttributes.get(AttributeUtils.getKey(
             SearchEngineStats.class, "pageRequests")));
     }

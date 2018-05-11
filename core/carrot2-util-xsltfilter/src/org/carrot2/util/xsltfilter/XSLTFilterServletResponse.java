@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -154,7 +154,7 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
     private boolean processingSuppressed(HttpServletRequest origRequest2)
     {
         return (origRequest.getAttribute(XSLTFilterConstants.NO_XSLT_PROCESSING) != null)
-            | (origRequest.getParameter(XSLTFilterConstants.NO_XSLT_PROCESSING) != null);
+            || (origRequest.getParameter(XSLTFilterConstants.NO_XSLT_PROCESSING) != null);
     }
 
     /**
@@ -279,7 +279,7 @@ final class XSLTFilterServletResponse extends HttpServletResponseWrapper
                 final byte [] bytes = ((DeferredOutputStream) stream).getBytes();
                 final boolean processingSuppressed = (origRequest
                     .getAttribute(XSLTFilterConstants.NO_XSLT_PROCESSING) != null)
-                    | (origRequest.getParameter(XSLTFilterConstants.NO_XSLT_PROCESSING) != null);
+                    || (origRequest.getParameter(XSLTFilterConstants.NO_XSLT_PROCESSING) != null);
 
                 if (processingSuppressed)
                 {

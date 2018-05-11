@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -20,6 +20,8 @@ import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
 import com.carrotsearch.hppc.IntArrayList;
+
+import static org.junit.Assert.*;
 
 /**
  * Sanity and validation tests for the {@link SuffixTree} class.

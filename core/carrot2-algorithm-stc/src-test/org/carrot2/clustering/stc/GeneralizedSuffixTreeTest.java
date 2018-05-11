@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -22,6 +22,8 @@ import org.junit.Test;
 
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntStack;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests running GST-functionality on top of a {@link SuffixTree}. This is for demonstration

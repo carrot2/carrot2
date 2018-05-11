@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jackson JSON Processor
 Bundle-SymbolicName: com.fasterxml.jackson;singleton:=true
-Bundle-Version: 2.5.3
-Bundle-ClassPath: jackson-annotations-2.5.3.jar,
- jackson-core-2.5.3.jar,
- jackson-databind-2.5.3.jar
+Bundle-Version: 2.8.1
+Bundle-ClassPath: jackson-annotations-2.8.1.jar,
+ jackson-core-2.8.1.jar,
+ jackson-databind-2.8.1.jar
 Bundle-Vendor: https://github.com/FasterXML
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.fasterxml.jackson.annotation,

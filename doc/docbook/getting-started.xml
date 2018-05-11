@@ -22,7 +22,7 @@
     <title>Requirements</title>
     
     <para>
-      All &PROD; applications require <link xlink:href="http://java.sun.com/javase/downloads/index.jsp">Java Runtime Environment</link>
+      All &PROD; applications require <link xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java Runtime Environment</link>
       version 1.8 or later. The &DCW; is distributed for Windows,
       Linux and MacOSX.
     </para>

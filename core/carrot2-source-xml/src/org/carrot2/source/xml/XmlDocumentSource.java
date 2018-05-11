@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -342,7 +342,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
 
         if (resource instanceof FileResource)
         {
-            title = ((FileResource) resource).getFile().getName();
+            title = ((FileResource) resource).getFileName();
         }
 
         // Open the generic Resource instance

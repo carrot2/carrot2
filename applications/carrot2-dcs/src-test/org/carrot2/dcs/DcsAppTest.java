@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,6 +15,7 @@ package org.carrot2.dcs;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.carrot2.dcs.RestProcessorServlet.DISABLE_LOGFILE_APPENDER;
 import static org.carrot2.dcs.RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR;
+import static org.junit.Assert.*;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -189,6 +190,7 @@ public class DcsAppTest extends CarrotTestCase
 
     @UsesExternalServices
     @Test
+    @Ignore("Bing API no longer available")
     public void testExternalSource() throws Exception
     {
         final String query = "kaczyński";
@@ -311,6 +313,7 @@ public class DcsAppTest extends CarrotTestCase
 
     @UsesExternalServices    
     @Test
+    @Ignore("Bing API no longer available")
     public void testGetWithExternalSource() throws Exception
     {
         final ProcessingResult result = getOrPost(RequestType.GET, ImmutableMap.<String, Object> of(
@@ -325,6 +328,7 @@ public class DcsAppTest extends CarrotTestCase
 
     @UsesExternalServices
     @Test
+    @Ignore("Bing API no longer available")
     public void testPostUrlEncodedWithExternalSource() throws Exception
     {
         final ProcessingResult result = getOrPost(RequestType.POST_WWW_URL_ENCODING, ImmutableMap.<String, Object> of(

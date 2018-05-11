@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -15,6 +15,8 @@ package org.carrot2.source;
 import org.carrot2.source.MultipageSearchEngine.SearchRange;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class SearchRangeTest extends CarrotTestCase
 {

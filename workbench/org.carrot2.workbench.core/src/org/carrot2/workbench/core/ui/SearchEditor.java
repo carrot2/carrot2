@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -889,7 +889,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
     /**
      * {@link SearchEditor} adaptations.
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings("all")
     @Override
     public Object getAdapter(Class adapter)
     {

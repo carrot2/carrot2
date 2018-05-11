@@ -27,7 +27,9 @@ Apache Software Foundation http://www.apache.org/.
 --launcher.library
 ../Eclipse/plugins/org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.400.v20160518-1444
       </programArgsMac>
-      <vmArgs>-Xmx800m
+      <vmArgs>-XX:+IgnoreUnrecognizedVMOptions
+--add-modules=java.se.ee
+-Xmx800m
 -Dosgi.requiredJavaVersion=1.8
 -Dorg.eclipse.update.reconcile=false
 -Dlog4j.configuration=log4j-workbench.xml

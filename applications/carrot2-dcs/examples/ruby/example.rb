@@ -53,7 +53,7 @@ uri = "http://localhost:8080/dcs/rest"
 
 puts "\n## Clustering data from a search engine...\n"
 dump(JSON.parse(dcs_request(uri, {
-     "dcs.source" => "etools",
+     "dcs.source" => "web",
      "query" => "data mining",
      "dcs.output.format" => "JSON",
      "dcs.clusters.only" => "false"

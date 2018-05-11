@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -27,6 +27,8 @@ import org.junit.Test;
 
 import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Sets;
+
+import static org.junit.Assert.*;
 
 public class BisectingKMeansClusteringAlgorithmTest extends
     ClusteringAlgorithmTestBase<BisectingKMeansClusteringAlgorithm>

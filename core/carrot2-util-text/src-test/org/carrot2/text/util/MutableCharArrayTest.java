@@ -2,7 +2,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2016, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2018, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -14,6 +14,8 @@ package org.carrot2.text.util;
 
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Test cases for {@link MutableCharArray}.
@@ -67,6 +69,7 @@ public class MutableCharArrayTest extends CarrotTestCase
         assertEquals("wi", seq.subSequence(2, 4).toString());
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEquals()
     {

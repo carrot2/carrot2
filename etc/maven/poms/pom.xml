@@ -61,17 +61,17 @@
     <!-- Versions of dependencies. -->
     <com.carrotsearch.hppc.version>0.7.1</com.carrotsearch.hppc.version>
     <com.google.guava.version>18.0</com.google.guava.version>
-    <morfologik.version>2.1.0</morfologik.version>
+    <morfologik.version>2.1.5</morfologik.version>
     <net.java.dev.rome.version>1.0.0</net.java.dev.rome.version>
     <net.java.dev.rome.fetcher.version>1.0.0</net.java.dev.rome.fetcher.version>
     <commons.lang.version>2.6</commons.lang.version>
     <commons.codec.version>1.10</commons.codec.version>
-    <com.fasterxml.jackson.version>2.5.3</com.fasterxml.jackson.version>
+    <com.fasterxml.jackson.version>2.5.4</com.fasterxml.jackson.version>
     <org.slf4j.version>1.7.13</org.slf4j.version>
     <org.apache.httpcomponents.version>4.4.1</org.apache.httpcomponents.version>
-    <org.apache.lucene.version>5.3.1</org.apache.lucene.version>
+    <org.apache.lucene.version>5.5.4</org.apache.lucene.version>
     <org.simpleframework.version>2.7.1</org.simpleframework.version>
-    <org.carrot2.attributes>1.3.1</org.carrot2.attributes>
+    <org.carrot2.attributes>1.3.3</org.carrot2.attributes>
   </properties>
 
   <dependencies>
