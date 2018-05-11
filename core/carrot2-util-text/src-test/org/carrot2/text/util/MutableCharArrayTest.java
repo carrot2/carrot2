@@ -69,6 +69,7 @@ public class MutableCharArrayTest extends CarrotTestCase
         assertEquals("wi", seq.subSequence(2, 4).toString());
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEquals()
     {

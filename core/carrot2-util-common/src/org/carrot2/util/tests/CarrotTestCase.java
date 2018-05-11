@@ -98,12 +98,7 @@ public class CarrotTestCase extends RandomizedTest
     @ClassRule
     public static final TestRule classRules;
     static {
-      // Maximum left memory allocated in static fields of a suite.  
-      final long MAX_STATIC_MEMORY_PER_SUITE_CLASS = 10 * 1024 * 1024;
-
       RuleChain rules = RuleChain.outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
-      // Disable, at least for now (JDK1.9 modularity breaks on reflection accesses from RamUsageEstimator).
-      // .around(new StaticFieldsInvariantRule(MAX_STATIC_MEMORY_PER_SUITE_CLASS, true))
       rules = rules.around(new NoClassHooksShadowingRule())
                    .around(new NoInstanceHooksOverridesRule());
       classRules = rules;

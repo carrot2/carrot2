@@ -16,6 +16,7 @@ import java.io.*;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileItemHeaders;
 
 /**
  * A file item factory storing contents of uploaded files in-memory.
@@ -33,6 +34,7 @@ final class MemoryFileItemFactory implements FileItemFactory
         private final boolean isFormField;
         private final String fileName;
         private ByteArrayOutputStream baos;
+        private FileItemHeaders headers;
 
         public MemoryFileItem(String fieldName, String contentType, boolean isFormField, String fileName)
         {
@@ -123,6 +125,16 @@ final class MemoryFileItemFactory implements FileItemFactory
         public void setFormField(boolean arg0)
         {
             throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public FileItemHeaders getHeaders() {
+          return headers;
+        }
+
+        @Override
+        public void setHeaders(FileItemHeaders headers) {
+          this.headers = headers;
         }
     }
 

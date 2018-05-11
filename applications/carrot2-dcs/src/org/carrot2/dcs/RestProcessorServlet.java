@@ -426,7 +426,6 @@ public final class RestProcessorServlet extends HttpServlet
     /**
      * Handle multipart request, possibly including dcs.c2stream. 
      */
-    @SuppressWarnings("unchecked")
     private void handleMultiPart(HttpServletRequest request, HttpServletResponse response)
         throws IOException
     {
