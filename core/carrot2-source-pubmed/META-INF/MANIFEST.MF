@@ -10,3 +10,4 @@ Require-Bundle: org.carrot2.core;bundle-version="0.0.0",
 Bundle-ClassPath: .,
  META-INF/
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Automatic-Module-Name: org.carrot2.source.pubmed

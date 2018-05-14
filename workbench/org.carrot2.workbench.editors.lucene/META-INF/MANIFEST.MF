@@ -16,3 +16,4 @@ Bundle-ClassPath: .,
 Export-Package: org.carrot2.workbench.editors.lucene
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Carrot2.org
+Automatic-Module-Name: org.carrot2.workbench.editors.lucene

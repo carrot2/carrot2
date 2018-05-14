@@ -9,3 +9,4 @@ Export-Package: org.easymock,
  org.easymock.internal,
  org.easymock.internal.matchers
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Automatic-Module-Name: org.easymock

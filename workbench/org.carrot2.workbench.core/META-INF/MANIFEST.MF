@@ -29,3 +29,4 @@ Export-Package: org.carrot2.workbench.core,
  org.carrot2.workbench.velocity
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Carrot2.org
+Automatic-Module-Name: org.carrot2.workbench.core

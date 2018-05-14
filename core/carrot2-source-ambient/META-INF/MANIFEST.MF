@@ -9,3 +9,4 @@ Bundle-ClassPath: META-INF/,
  .
 Bundle-Vendor: Carrot2.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Automatic-Module-Name: org.carrot2.source.ambient

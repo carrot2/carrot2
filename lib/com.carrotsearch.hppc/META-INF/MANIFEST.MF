@@ -11,3 +11,4 @@ Export-Package: com.carrotsearch.hppc,
  com.carrotsearch.hppc.sorting
 Bundle-Vendor: Carrot Search s.c.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Automatic-Module-Name: com.carrotsearch.hppc

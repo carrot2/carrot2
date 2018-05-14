@@ -12,3 +12,4 @@ Export-Package: org.apache.commons.logging,
  org.slf4j,
  org.slf4j.helpers
 Require-Bundle: org.apache.log4j;bundle-version="1.2.14"
+Automatic-Module-Name: org.slf4j

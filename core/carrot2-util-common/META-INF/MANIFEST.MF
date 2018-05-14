@@ -29,3 +29,4 @@ Bundle-ClassPath: .
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: dependent,registered
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Automatic-Module-Name: org.carrot2.util.common

@@ -9,3 +9,4 @@ Bundle-Vendor: Carrot2.org
 Bundle-ClassPath: META-INF/,
  .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Automatic-Module-Name: org.carrot2.output.metrics

@@ -40,4 +40,5 @@ Export-Package: org.apache.commons.codec,
  org.apache.commons.lang3.text.translate,
  org.apache.commons.lang3.time,
  org.apache.commons.lang3.tuple
+Automatic-Module-Name: org.apache.commons
 

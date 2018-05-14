@@ -21,3 +21,4 @@ Require-Bundle: org.carrot2.core,
  org.carrot2.source.ambient;resolution:=optional;visibility:=reexport,
  org.carrot2.output.metrics;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Automatic-Module-Name: org.carrot2.suites.default

@@ -22,3 +22,4 @@ Export-Package:
 Bundle-Vendor: Carrot2.org
 Require-Bundle: org.carrot2.util.common;bundle-version="0.0.0";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Automatic-Module-Name: org.carrot2.util.matrix

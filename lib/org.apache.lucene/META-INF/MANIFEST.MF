@@ -149,3 +149,4 @@ Export-Package: org.apache.lucene,
  org.apache.lucene.util.packed,
  org.tartarus.snowball,
  org.tartarus.snowball.ext
+Automatic-Module-Name: org.apache.lucene.v2

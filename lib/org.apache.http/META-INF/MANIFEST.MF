@@ -54,3 +54,4 @@ Export-Package: org.apache.http,
  org.apache.http.protocol,
  org.apache.http.ssl,
  org.apache.http.util
+Automatic-Module-Name: org.apache.http

@@ -22,3 +22,4 @@ Export-Package: org.carrot2.text.analysis,
  org.carrot2.text.vsm
 Bundle-Vendor: Carrot2.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Automatic-Module-Name: org.carrot2.text

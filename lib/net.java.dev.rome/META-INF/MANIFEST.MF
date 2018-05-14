@@ -24,4 +24,5 @@ Export-Package:
  com.sun.syndication.io,
  com.sun.syndication.io.impl
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Automatic-Module-Name: net.java.dev.rome
 

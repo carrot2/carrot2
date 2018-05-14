@@ -11,3 +11,4 @@ Export-Package: org.fest.assertions,
  org.fest.util
 Bundle-Vendor: fest.easytesting.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Automatic-Module-Name: org.fest

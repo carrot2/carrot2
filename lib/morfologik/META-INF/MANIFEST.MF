@@ -11,4 +11,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: morfologik.fsa,
  morfologik.stemming,
  morfologik.stemming.polish
+Automatic-Module-Name: morfologik
 

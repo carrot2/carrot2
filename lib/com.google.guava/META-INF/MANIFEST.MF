@@ -23,3 +23,4 @@ Export-Package: org.carrot2.shaded.guava.common.annotations,
  org.carrot2.shaded.guava.common.util.concurrent,
  org.carrot2.shaded.guava.common.xml,
  org.carrot2.shaded.guava.thirdparty.publicsuffix
+Automatic-Module-Name: org.carrot2.shaded.guava

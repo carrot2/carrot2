@@ -11,3 +11,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: attributes-processor-1.3.3.jar
 Export-Package: org.carrot2.util.attribute,
  org.carrot2.util.attribute.constraint
+Automatic-Module-Name: org.carrot2.attributes

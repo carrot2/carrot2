@@ -17,3 +17,4 @@ Export-Package: com.thoughtworks.qdox,
 Bundle-Vendor: com.thoughtworks.qdox
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: qdox-1.12.jar
+Automatic-Module-Name: com.thoughtworks.qdox
