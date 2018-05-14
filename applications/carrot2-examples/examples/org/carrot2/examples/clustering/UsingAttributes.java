@@ -60,7 +60,7 @@ public class UsingAttributes
         {
             // [[[start:using-attributes-raw-map]]]
             /* A controller to manage the processing pipeline. */
-            final Controller controller = ControllerFactory.createSimple();
+            final Controller controller = ControllerFactory.createPooling();
             
             /* Prepare attribute map */
             final Map<String, Object> attributes = new HashMap<String, Object>();
@@ -121,7 +121,7 @@ public class UsingAttributes
         {
             /// [[[start:using-attributes-builders]]]
             /* A controller to manage the processing pipeline. */
-            final Controller controller = ControllerFactory.createSimple();
+            final Controller controller = ControllerFactory.createPooling();
             
             /* Prepare attribute map */
             final Map<String, Object> attributes = new HashMap<String, Object>();
@@ -175,7 +175,7 @@ public class UsingAttributes
         {
             /// [[[start:using-attributes-output]]]
             /* A controller to manage the processing pipeline. */
-            final Controller controller = ControllerFactory.createSimple();
+            final Controller controller = ControllerFactory.createPooling();
             
             /* Prepare attribute map */
             final Map<String, Object> attributes = new HashMap<String, Object>();

@@ -141,7 +141,7 @@ public class QueryWordHighlighterTest extends CarrotTestCase
         final Document document = new Document();
         document.setField(Document.SUMMARY, snippetToHighlight);
 
-        final Controller controller = ControllerFactory.createSimple();
+        final Controller controller = ControllerFactory.createPooling();
         try
         {
             controller.init(attrs);

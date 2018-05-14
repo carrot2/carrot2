@@ -56,7 +56,7 @@ public class LoadingAttributeValuesFromXml
                 .getAttributeValueSet("faster-clustering").getAttributeValues();
 
             // Perform processing using the attribute values
-            final Controller controller = ControllerFactory.createSimple();
+            final Controller controller = ControllerFactory.createPooling();
 
             // Initialize the controller with one attribute set
             controller.init(fasterClusteringAttributes);

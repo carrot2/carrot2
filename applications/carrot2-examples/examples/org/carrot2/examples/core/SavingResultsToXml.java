@@ -38,7 +38,7 @@ public class SavingResultsToXml
     public static void main(String [] args) throws Exception
     {
         // Let's fetch some results from MSN first
-        final Controller controller = ControllerFactory.createSimple();
+        final Controller controller = ControllerFactory.createPooling();
         final Map<String, Object> attributes = Maps.newHashMap();
         CommonAttributesDescriptor.attributeBuilder(attributes)
             .documents(new ArrayList<Document>(SampleDocumentData.DOCUMENTS_DATA_MINING))

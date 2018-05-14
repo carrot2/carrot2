@@ -66,7 +66,7 @@ public class ClusteringDataFromDocumentSources
         {
             /// [[[start:clustering-data-from-document-sources-simple]]]
             /* A controller to manage the processing pipeline. */
-            final Controller controller = ControllerFactory.createSimple();
+            final Controller controller = ControllerFactory.createPooling();
 
             /* Perform processing */
             final ProcessingResult result = controller.process("data mining", 100,
@@ -94,7 +94,7 @@ public class ClusteringDataFromDocumentSources
         {
             /// [[[start:clustering-data-from-document-sources-advanced]]]
             /* A controller to manage the processing pipeline. */
-            final Controller controller = ControllerFactory.createSimple();
+            final Controller controller = ControllerFactory.createPooling();
     
             /* Prepare attributes */
             final Map<String, Object> attributes = new HashMap<String, Object>();

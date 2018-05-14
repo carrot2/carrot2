@@ -129,7 +129,7 @@ public class AuthConnectionTest extends CarrotTestCase
 
             System.setProperty(HttpAuthHub.USERNAME_PROPERTY, "username");
             System.setProperty(HttpAuthHub.PASSWORD_PROPERTY, "userpass");
-            Controller c = ControllerFactory.createSimple();
+            Controller c = ControllerFactory.createPooling();
             try
             {
                 Map<String,Object> attrs = new HashMap<String,Object>();
