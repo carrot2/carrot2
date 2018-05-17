@@ -1557,7 +1557,7 @@
       <value type="java.lang.Boolean" value="true"/>
    </attribute>
    <attribute key="EToolsDocumentSource.serviceUrlBase">
-      <value value="http://www.etools.ch/partnerSearch.do"/>
+      <value value="https://www.etools.ch/partnerSearch.do"/>
    </attribute>
    <attribute key="EToolsDocumentSource.partnerId">
       <value value="Carrot2"/>
