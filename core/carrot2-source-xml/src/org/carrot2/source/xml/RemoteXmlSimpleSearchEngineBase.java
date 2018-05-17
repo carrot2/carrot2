@@ -205,6 +205,7 @@ public abstract class RemoteXmlSimpleSearchEngineBase extends SimpleSearchEngine
         }
         else
         {
+          System.out.println(response);
             throw new HttpResponseException(statusCode, response.statusMessage);
         }
     }

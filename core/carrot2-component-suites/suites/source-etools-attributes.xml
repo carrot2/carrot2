@@ -20,7 +20,7 @@
         <value type="org.carrot2.source.etools.EToolsDocumentSource$Country" value="ALL"/>
       </attribute>
       <attribute key="EToolsDocumentSource.serviceUrlBase">
-        <value type="java.lang.String" value="http://www.etools.ch/partnerSearch.do"/>
+        <value type="java.lang.String" value="https://www.etools.ch/partnerSearch.do"/>
       </attribute>
       <attribute key="EToolsDocumentSource.partnerId">
         <value type="java.lang.String" value="Carrot2"/>

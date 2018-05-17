@@ -41,7 +41,7 @@ import org.carrot2.shaded.guava.common.base.Strings;
 import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
- * A Carrot2 input component for the eTools service (http://www.etools.ch). For commercial
+ * A Carrot2 input component for the eTools service (https://www.etools.ch). For commercial
  * licensing of the eTools feed, please e-mail: <code>contact@comcepta.com</code>.
  */
 @Bindable(prefix = "EToolsDocumentSource")
@@ -57,7 +57,7 @@ public class EToolsDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Label("Service URL")
     @Level(AttributeLevel.ADVANCED)
     @Group(SERVICE)
-    public String serviceUrlBase = "http://www.etools.ch/partnerSearch.do";
+    public String serviceUrlBase = "https://www.etools.ch/partnerSearch.do";
 
     /**
      * Enumeration for countries supported by {@link EToolsDocumentSource}, see
