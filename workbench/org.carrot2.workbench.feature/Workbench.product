@@ -22,6 +22,9 @@ Apache Software Foundation http://www.apache.org/.
    <launcherArgs>
       <programArgs>-data @noDefault
       </programArgs>
+      <programArgsLin>--launcher.GTK_version
+0
+      </programArgsLin>
       <programArgsMac>-startup
 ../Eclipse/plugins/org.eclipse.equinox.launcher_1.3.200.v20160318-1642.jar
 --launcher.library
@@ -45,7 +48,6 @@ Apache Software Foundation http://www.apache.org/.
    <launcher name="carrot2-workbench">
       <linux icon="/org.carrot2.workbench.feature/icons/icon-linux.xpm"/>
       <macosx icon="/org.carrot2.workbench.feature/icons/icon-mac.icns"/>
-      <solaris/>
       <win useIco="true">
          <ico path="/org.carrot2.workbench.feature/icons/icon-windows.ico"/>
          <bmp/>
