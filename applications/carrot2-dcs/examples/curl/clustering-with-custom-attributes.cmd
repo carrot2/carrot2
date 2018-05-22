@@ -3,7 +3,7 @@ set DCS_URL=http://localhost:8080/dcs/rest
 set RESULT=clusters-with-custom-attributes.xml
 
 curl %DCS_URL% -# ^
-     -F "dcs.source=etools" ^
+     -F "dcs.source=web" ^
      -F "dcs.algorithm=lingo" ^
      -F "query=berlin" ^
      -F "EToolsDocumentSource.language=GERMAN" ^
