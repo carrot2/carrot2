@@ -23,7 +23,7 @@ Apache Software Foundation http://www.apache.org/.
       <programArgs>-data @noDefault
       </programArgs>
       <programArgsLin>--launcher.GTK_version
-0
+2
       </programArgsLin>
       <programArgsMac>-startup
 ../Eclipse/plugins/org.eclipse.equinox.launcher_1.3.200.v20160318-1642.jar
