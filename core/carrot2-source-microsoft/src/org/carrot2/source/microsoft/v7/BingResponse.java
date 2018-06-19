@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.source.microsoft.v5;
+package org.carrot2.source.microsoft.v7;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,8 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
- * JSON responses, Bing API V5.
- * 
+ * JSON responses, Bing API V7.
+ *
  * @see "https://msdn.microsoft.com/en-us/library/dn760794.aspx#response"
  */
 @JsonTypeInfo(
@@ -48,9 +48,9 @@ public abstract class BingResponse {
 
     mapper.getFactory().enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
     mapper.getFactory().enable(JsonParser.Feature.ALLOW_COMMENTS);
-    mapper.getFactory().enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES); 
+    mapper.getFactory().enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES);
   }
-  
+
   public static BingResponse parse(InputStream is) throws IOException {
     return mapper.readValue(is, BingResponse.class);
   }

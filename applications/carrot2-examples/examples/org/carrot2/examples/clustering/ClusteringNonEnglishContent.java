@@ -27,9 +27,9 @@ import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
-import org.carrot2.source.microsoft.v5.Bing5DocumentSource;
-import org.carrot2.source.microsoft.v5.Bing5DocumentSourceDescriptor;
-import org.carrot2.source.microsoft.v5.MarketOption;
+import org.carrot2.source.microsoft.v7.Bing7DocumentSource;
+import org.carrot2.source.microsoft.v7.Bing7DocumentSourceDescriptor;
+import org.carrot2.source.microsoft.v7.MarketOption;
 
 /**
  * [[[start:clustering-non-english-content-intro]]]
@@ -61,8 +61,8 @@ import org.carrot2.source.microsoft.v5.MarketOption;
  * {@link org.carrot2.core.Document#LANGUAGE} of documents they produce based on their
  * specific language-related attributes. Currently, three documents support this scenario:
  * <ol>
- * <li>{@link org.carrot2.source.microsoft.v5.Bing5DocumentSource} through the
- * {@link org.carrot2.source.microsoft.v5.Bing5DocumentSource#market} attribute,</li>
+ * <li>{@link org.carrot2.source.microsoft.v7.Bing7DocumentSource} through the
+ * {@link org.carrot2.source.microsoft.v7.Bing7DocumentSource#market} attribute,</li>
  * <li>{@link org.carrot2.source.etools.EToolsDocumentSource} through the
  * {@link org.carrot2.source.etools.EToolsDocumentSource#language} attribute.</li>
  * </ol>
@@ -113,12 +113,12 @@ public class ClusteringNonEnglishContent
             .query("聚类" /* clustering? */)
             .results(100);
 
-        Bing5DocumentSourceDescriptor.attributeBuilder(attributes)
+        Bing7DocumentSourceDescriptor.attributeBuilder(attributes)
             .market(MarketOption.CHINESE_CHINA)
             .apiKey(BingKeyAccess.getKey()); // use your own ID here!
 
         final ProcessingResult chineseResult = controller.process(attributes,
-            Bing5DocumentSource.class, LingoClusteringAlgorithm.class);
+            Bing7DocumentSource.class, LingoClusteringAlgorithm.class);
         ConsoleFormatter.displayResults(chineseResult);
 
         // [[[end:clustering-non-english-content]]]

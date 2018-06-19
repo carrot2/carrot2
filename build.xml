@@ -503,7 +503,7 @@
 
         <!-- Pass any command-line properties that may alter tests' behavior. -->
         <syspropertyset>
-          <propertyref name="bing5.key" />
+          <propertyref name="bing7.key" />
           <propertyref name="tests.filter" />
         </syspropertyset>
 

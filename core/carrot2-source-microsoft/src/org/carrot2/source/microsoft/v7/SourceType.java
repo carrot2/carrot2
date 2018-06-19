@@ -10,14 +10,14 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.source.microsoft.v5;
+package org.carrot2.source.microsoft.v7;
 
 import java.util.Locale;
 
 import org.carrot2.util.StringUtils;
 
 /**
- * Source type for Bing5 searches.
+ * Source type for Bing7 searches.
  */
 public enum SourceType
 {

@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.source.microsoft.v5;
+package org.carrot2.source.microsoft.v7;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -33,16 +33,16 @@ import org.carrot2.util.attribute.Label;
 import org.carrot2.util.attribute.Level;
 
 /**
- * A {@link IDocumentSource} fetching news search results from Bing, 
- * using Search API V5.
- * 
+ * A {@link IDocumentSource} fetching news search results from Bing,
+ * using Search API V7.
+ *
  * <p>Important: there are limits for free use of the above API (beyond which it is a
  * paid service).
- * 
+ *
  * @see "https://msdn.microsoft.com/en-us/library/mt711408.aspx"
  */
-@Bindable(prefix = "Bing5NewsDocumentSource", inherit = CommonAttributes.class)
-public class Bing5NewsDocumentSource extends Bing5DocumentSource
+@Bindable(prefix = "Bing7NewsDocumentSource", inherit = CommonAttributes.class)
+public class Bing7NewsDocumentSource extends Bing7DocumentSource
 {
     /**
      * REST endpoint.
@@ -60,7 +60,7 @@ public class Bing5NewsDocumentSource extends Bing5DocumentSource
     @Group(DefaultGroups.FILTERING)
     public Freshness freshness;
 
-    public Bing5NewsDocumentSource() {
+    public Bing7NewsDocumentSource() {
       super(METADATA, SERVICE_URL);
     }
 

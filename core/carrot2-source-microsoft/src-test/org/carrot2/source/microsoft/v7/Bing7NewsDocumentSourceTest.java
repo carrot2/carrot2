@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.source.microsoft.v5;
+package org.carrot2.source.microsoft.v7;
 
 import java.util.concurrent.ExecutionException;
 
@@ -22,10 +22,10 @@ import org.junit.Before;
 
 /** */
 @UsesExternalServices
-public class Bing5NewsDocumentSourceTest extends MultipageDocumentSourceTestBase<Bing5NewsDocumentSource> {
+public class Bing7NewsDocumentSourceTest extends MultipageDocumentSourceTestBase<Bing7NewsDocumentSource> {
   @Before
   public void checkKeyAvailable() {
-    Assume.assumeTrue(System.getProperty(Bing5DocumentSource.SYSPROP_BING5_API) != null);
+    Assume.assumeTrue(System.getProperty(Bing7DocumentSource.SYSPROP_BING7_API) != null);
   }
 
   @Override
@@ -34,13 +34,13 @@ public class Bing5NewsDocumentSourceTest extends MultipageDocumentSourceTestBase
   }
 
   @Override
-  public Class<Bing5NewsDocumentSource> getComponentClass() {
-    return Bing5NewsDocumentSource.class;
+  public Class<Bing7NewsDocumentSource> getComponentClass() {
+    return Bing7NewsDocumentSource.class;
   }
 
   @Override
   protected MultipageSearchEngineMetadata getSearchEngineMetadata() {
-    return Bing5NewsDocumentSource.METADATA;
+    return Bing7NewsDocumentSource.METADATA;
   }
   
   @Override

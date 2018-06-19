@@ -27,8 +27,8 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.source.etools.EToolsDocumentSource;
-import org.carrot2.source.microsoft.v5.Bing5DocumentSource;
-import org.carrot2.source.microsoft.v5.Bing5DocumentSourceDescriptor;
+import org.carrot2.source.microsoft.v7.Bing7DocumentSource;
+import org.carrot2.source.microsoft.v7.Bing7DocumentSourceDescriptor;
 
 /**
  * This example shows how to cluster {@link Document}s retrieved from
@@ -87,7 +87,7 @@ public class ClusteringDataFromDocumentSources
          * default one. You can pass the API key along with the query and the requested
          * number of results in an attribute map. Carrot2 manual lists all supported attributes
          * along with their keys, types and allowed values. The code shown below, fetches and clusters
-         * 50 results from {@link org.carrot2.source.microsoft.v5.Bing5DocumentSource}. 
+         * 50 results from {@link org.carrot2.source.microsoft.v7.Bing7DocumentSource}. 
          * 
          * [[[end:clustering-data-from-document-sources-advanced-intro]]]
          */
@@ -100,7 +100,7 @@ public class ClusteringDataFromDocumentSources
             final Map<String, Object> attributes = new HashMap<String, Object>();
             
             /* Put your own API key here! */
-            Bing5DocumentSourceDescriptor.attributeBuilder(attributes)
+            Bing7DocumentSourceDescriptor.attributeBuilder(attributes)
                 .apiKey(BingKeyAccess.getKey());
 
             /* Query an the required number of results */
@@ -109,7 +109,7 @@ public class ClusteringDataFromDocumentSources
     
             /* Perform processing */
             final ProcessingResult result = controller.process(attributes, 
-                Bing5DocumentSource.class, STCClusteringAlgorithm.class);
+                Bing7DocumentSource.class, STCClusteringAlgorithm.class);
 
             /* Documents fetched from the document source, clusters created by Carrot2. */
             final List<Document> documents = result.getDocuments();

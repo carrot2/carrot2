@@ -27,8 +27,8 @@ import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
-import org.carrot2.source.microsoft.v5.Bing5DocumentSource;
-import org.carrot2.source.microsoft.v5.Bing5DocumentSourceDescriptor;
+import org.carrot2.source.microsoft.v7.Bing7DocumentSource;
+import org.carrot2.source.microsoft.v7.Bing7DocumentSourceDescriptor;
 
 /**
  * This example shows how to customize the behaviour of clustering algorithms and 
@@ -50,7 +50,7 @@ public class UsingAttributes
          * <p>
          * To pass attributes to Carrot2, put them into a {@link java.util.Map},
          * along with query or documents being clustered. The code shown below searches the
-         * web using {@link org.carrot2.source.microsoft.v5.Bing5DocumentSource} 
+         * web using {@link org.carrot2.source.microsoft.v7.Bing7DocumentSource} 
          * and clusters the results using {@link org.carrot2.clustering.lingo.LingoClusteringAlgorithm}
          * customized to create fewer clusters than by default.
          * </p> 
@@ -71,11 +71,11 @@ public class UsingAttributes
             attributes.put("LingoClusteringAlgorithm.desiredClusterCountBase", 15);
 
             /* Put your own API key here! */
-            attributes.put(Bing5DocumentSourceDescriptor.Keys.API_KEY, BingKeyAccess.getKey()); 
+            attributes.put(Bing7DocumentSourceDescriptor.Keys.API_KEY, BingKeyAccess.getKey()); 
             
             /* Perform processing */
             final ProcessingResult result = controller.process(attributes,
-                Bing5DocumentSource.class, LingoClusteringAlgorithm.class);
+                Bing7DocumentSource.class, LingoClusteringAlgorithm.class);
     
             /* Documents fetched from the document source, clusters created by Carrot2. */
             final List<Document> documents = result.getDocuments();
@@ -109,7 +109,7 @@ public class UsingAttributes
          * 
          * <p>
          * The code shown below fetches 100 results for query <em>data mining</em> from 
-         * {@link org.carrot2.source.microsoft.v5.Bing5DocumentSource} and clusters them using 
+         * {@link org.carrot2.source.microsoft.v7.Bing7DocumentSource} and clusters them using 
          * the {@link org.carrot2.clustering.lingo.LingoClusteringAlgorithm} tuned to create slightly 
          * fewer clusters than by default. Please note how the API key is passed and use your own 
          * key in production deployments.
@@ -137,13 +137,13 @@ public class UsingAttributes
                     .matrixReducer()
                         .factorizationQuality(FactorizationQuality.HIGH);
                         
-            Bing5DocumentSourceDescriptor
+            Bing7DocumentSourceDescriptor
                 .attributeBuilder(attributes)
                     .apiKey(BingKeyAccess.getKey()); // use your own key here
             
             /* Perform processing */
             final ProcessingResult result = controller.process(attributes,
-                Bing5DocumentSource.class, LingoClusteringAlgorithm.class);
+                Bing7DocumentSource.class, LingoClusteringAlgorithm.class);
     
             /* Documents fetched from the document source, clusters created by Carrot2. */
             final List<Document> documents = result.getDocuments();

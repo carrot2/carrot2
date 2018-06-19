@@ -11,19 +11,19 @@
 
   <section>
     <title>Required</title>
-    
+
     <para>
       &PROD; clustering requires a number of JAR files to run.
       The required JARs are available in the <filename>lib/required/</filename>
       folder of the &JA; package. Some of the JARs may not be required
       in certain specific situations:
     </para>
-    
+
     <itemizedlist>
       <listitem>
         <formalpara>
           <title>log4j, slf4j-log4j</title>
-          
+
           <para>
             Required only if using the Log4j logging framework. If your code
             uses a different logging framework, add a corresponding
@@ -34,72 +34,72 @@
       </listitem>
     </itemizedlist>
   </section>
-  
+
   <section>
     <title>Optional</title>
-    
+
     <para>
-      A number of optional JARs can be used optionally to increase the quality 
-      of clustering in certain languages or fetch search results from external 
+      A number of optional JARs can be used optionally to increase the quality
+      of clustering in certain languages or fetch search results from external
       sources. The purpose of the optional JARs is the following:
     </para>
-    
+
     <itemizedlist>
       <listitem>
         <formalpara>
           <title>commons-codec, httpclient, httpcore, httpmime</title>
-          
+
           <para>
             Used by document sources that fetch results from remote search engines,
-            such as <link role="javadoc" linkend="org.carrot2.source.microsoft.v5.Bing5DocumentSource" />.
+            such as <link role="javadoc" linkend="org.carrot2.source.microsoft.v7.Bing7DocumentSource" />.
           </para>
         </formalpara>
       </listitem>
-  
+
       <listitem>
         <formalpara>
           <title>lucene-core, lucene-highlighter, lucene-memory</title>
-          
+
           <para>
             Used by the <link role="javadoc" linkend="org.carrot2.source.lucene.LuceneDocumentSource" />.
           </para>
         </formalpara>
       </listitem>
-  
+
       <listitem>
         <formalpara>
           <title>rome, rome-fetcher, jdom</title>
-          
+
           <para>
             Used by the <link role="javadoc" linkend="org.carrot2.source.opensearch.OpenSearchDocumentSource" />.
           </para>
         </formalpara>
       </listitem>
-  
+
       <listitem>
         <formalpara>
           <title>lucene-analyzers-*</title>
-          
+
           <para>
             Required for clustering Chinese and Thai content.
           </para>
         </formalpara>
       </listitem>
-  
+
       <listitem>
         <formalpara>
           <title>lucene-analyzers</title>
-          
+
           <para>
             Required for clustering Arabic content.
           </para>
         </formalpara>
       </listitem>
-  
+
       <listitem>
         <formalpara>
           <title>morfologik-stemming</title>
-          
+
           <para>
             Required for clustering Polish content.
           </para>
@@ -108,4 +108,3 @@
     </itemizedlist>
   </section>
 </section>
-

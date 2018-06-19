@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.source.microsoft.v5;
+package org.carrot2.source.microsoft.v7;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -27,15 +27,15 @@ import static org.junit.Assert.*;
 /**
  * Tests Microsoft Bing document source.
  */
-public class Bing5ResponseParsingTest extends CarrotTestCase {
+public class Bing7ResponseParsingTest extends CarrotTestCase {
   @Before
   public void checkKeyAvailable() {
-    Assume.assumeTrue(System.getProperty(Bing5DocumentSource.SYSPROP_BING5_API) != null);
+    Assume.assumeTrue(System.getProperty(Bing7DocumentSource.SYSPROP_BING7_API) != null);
   }
 
   @Test
   public void testInvalidKey() throws Exception {
-    BingResponse response = parse("bing.v5.invalidkey.json");
+    BingResponse response = parse("bing.v7.invalidkey.json");
 
     Assertions.assertThat(response).isInstanceOf(UnstructuredResponse.class);
     UnstructuredResponse r = (UnstructuredResponse) response;
@@ -46,7 +46,7 @@ public class Bing5ResponseParsingTest extends CarrotTestCase {
 
   @Test
   public void testError() throws Exception {
-    BingResponse response = parse("bing.v5.error.json");
+    BingResponse response = parse("bing.v7.error.json");
 
     Assertions.assertThat(response).isInstanceOf(ErrorResponse.class);
     ErrorResponse r = (ErrorResponse) response;
@@ -57,10 +57,10 @@ public class Bing5ResponseParsingTest extends CarrotTestCase {
 
   @Test
   public void testValidSearchResponse() throws Exception {
-    SearchResponse response = (SearchResponse) parse("bing.v5.response.json");
+    SearchResponse response = (SearchResponse) parse("bing.v7.response.json");
 
     Assertions.assertThat(response.webPages.value).hasSize(9);
-    
+
     SearchResponse.WebPages.Result result = response.webPages.value.get(0);
     assertNotNull(result.name);
     assertNotNull(result.snippet);
