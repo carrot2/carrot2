@@ -1,7 +1,7 @@
 <!-- Components included in all applications -->
 <component-suite>
   <sources>
-    <source component-class="org.carrot2.source.microsoft.v5.Bing5DocumentSource" id="bing-web"
+    <source component-class="org.carrot2.source.microsoft.v7.Bing7DocumentSource" id="bing-web"
             attribute-sets-resource="source-bing-attributes.xml">
       <label>Bing</label>
       <title>Bing Web Search</title>
@@ -15,7 +15,7 @@
       </example-queries>
     </source>
     
-    <source component-class="org.carrot2.source.microsoft.v5.Bing5NewsDocumentSource" id="bing-news"
+    <source component-class="org.carrot2.source.microsoft.v7.Bing7NewsDocumentSource" id="bing-news"
             attribute-sets-resource="source-bing-attributes.xml">
       <label>Bing News</label>
       <title>Bing News Search</title>

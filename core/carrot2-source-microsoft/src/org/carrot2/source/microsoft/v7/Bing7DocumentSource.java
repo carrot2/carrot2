@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.source.microsoft.v5;
+package org.carrot2.source.microsoft.v7;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,24 +53,24 @@ import org.carrot2.util.httpclient.HttpRedirectStrategy;
 import org.carrot2.util.httpclient.HttpUtils;
 
 /**
- * A {@link IDocumentSource} fetching web page search results from Bing, 
- * using Search API V5.
- * 
+ * A {@link IDocumentSource} fetching web page search results from Bing,
+ * using Search API V7.
+ *
  * <p>Important: there are limits for free use of the above API (beyond which it is a
  * paid service).
- * 
+ *
  * @see "https://msdn.microsoft.com/en-us/library/mt604056.aspx"
  */
-@Bindable(prefix = "Bing5DocumentSource", inherit = CommonAttributes.class)
-public class Bing5DocumentSource extends MultipageSearchEngine
+@Bindable(prefix = "Bing7DocumentSource", inherit = CommonAttributes.class)
+public class Bing7DocumentSource extends MultipageSearchEngine
 {
     /**
      * System property name for passing Bing API key.
-     * 
-     * You can also override the key per-controller or request 
+     *
+     * You can also override the key per-controller or request
      * via init or runtime attributes.
      */
-    public static final String SYSPROP_BING5_API = "bing5.key";
+    public static final String SYSPROP_BING7_API = "bing7.key";
 
     /**
      * Default timeout.
@@ -78,8 +78,8 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     private static final int BING_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(10);
 
     /**
-     * Max concurrent requests to Bing. 
-     * 
+     * Max concurrent requests to Bing.
+     *
      * @see #RATE_LIMITER
      */
     private static final int MAX_CONCURRENT_REQUESTS = 4;
@@ -92,7 +92,7 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     /**
      * REST endpoint.
      */
-    private final static String SERVICE_URL = "https://api.cognitive.microsoft.com/bing/v5.0/search";
+    private final static String SERVICE_URL = "https://api.cognitive.microsoft.com/bing/v7.0/search";
 
     /** Web search specific metadata. */
     final static MultipageSearchEngineMetadata METADATA = new MultipageSearchEngineMetadata(30, 200);
@@ -101,7 +101,7 @@ public class Bing5DocumentSource extends MultipageSearchEngine
      * The API key used to authenticate requests. You will have to provide your own API key.
      * There is a free monthly grace request limit.
      *
-     * <p>By default takes the system property's value under key: <code>bing5.key</code>.</p>
+     * <p>By default takes the system property's value under key: <code>bing7.key</code>.</p>
      */
     @Init
     @Processing
@@ -112,11 +112,11 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     @Group(SERVICE)
     @Required
     @NotBlank
-    public String apiKey = System.getProperty(SYSPROP_BING5_API);
+    public String apiKey = System.getProperty(SYSPROP_BING7_API);
 
     /**
      * Search type filter. We only use webpages since news and images on a generic
-     * websearch query are always returned in very small numbers and cannot be windowed. 
+     * websearch query are always returned in very small numbers and cannot be windowed.
      */
     private final SourceType sourceType = SourceType.WEBPAGES;
 
@@ -129,7 +129,7 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     @Attribute
     @Label("Site restriction")
     @Level(AttributeLevel.ADVANCED)
-    @Group(DefaultGroups.FILTERING)        
+    @Group(DefaultGroups.FILTERING)
     public String site;
 
     /**
@@ -164,7 +164,7 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     @Level(AttributeLevel.MEDIUM)
     @Group(SimpleSearchEngine.SERVICE)
     @Internal
-    public HttpRedirectStrategy redirectStrategy = HttpRedirectStrategy.NO_REDIRECTS; 
+    public HttpRedirectStrategy redirectStrategy = HttpRedirectStrategy.NO_REDIRECTS;
 
     /**
      * Respect official guidelines concerning rate limits. If set to false,
@@ -181,14 +181,14 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     private final MultipageSearchEngineMetadata metadata;
     private final String serviceURL;
 
-    public Bing5DocumentSource() {
+    public Bing7DocumentSource() {
       this(METADATA, SERVICE_URL);
     }
 
-    protected Bing5DocumentSource(MultipageSearchEngineMetadata metadata, String serviceURL) {
+    protected Bing7DocumentSource(MultipageSearchEngineMetadata metadata, String serviceURL) {
       this.metadata = metadata;
       this.serviceURL = serviceURL;
-      
+
       this.searchMode = SearchMode.CONSERVATIVE;
     }
 
@@ -203,7 +203,7 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     {
         if (Strings.isNullOrEmpty(apiKey)) {
             throw new ProcessingException("Bing V5 API requires a key. See "
-                + Bing5DocumentSource.class.getSimpleName() + " class documentation.");
+                + Bing7DocumentSource.class.getSimpleName() + " class documentation.");
         }
         super.process(metadata, executor);
     }
@@ -224,7 +224,7 @@ public class Bing5DocumentSource extends MultipageSearchEngine
     }
 
     /**
-     * Run a single request to Bing API V5.
+     * Run a single request to Bing API V7.
      */
     private final SearchEngineResponse doSearch(String query, int startAt, int totalResultsRequested)
         throws Exception
@@ -261,12 +261,12 @@ public class Bing5DocumentSource extends MultipageSearchEngine
 retry:
         do {
           response = HttpUtils.doGET(
-                  serviceURL, 
-                  params, 
-                  headers, 
-                  /* user */ null, 
-                  /* pwd */ null, 
-                  BING_TIMEOUT, 
+                  serviceURL,
+                  params,
+                  headers,
+                  /* user */ null,
+                  /* pwd */ null,
+                  BING_TIMEOUT,
                   redirectStrategy.value());
 
           if (response.status == 429) {

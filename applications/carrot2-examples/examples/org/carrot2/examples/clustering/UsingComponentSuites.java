@@ -32,7 +32,7 @@ import org.carrot2.util.resource.ResourceLookup;
 
 import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
-import org.carrot2.source.microsoft.v5.Bing5DocumentSourceDescriptor;
+import org.carrot2.source.microsoft.v7.Bing7DocumentSourceDescriptor;
 
 /**
  * This example shows how to use 
@@ -58,7 +58,7 @@ public class UsingComponentSuites
 
         // We know we'll be using Bing so set up its access key.
         // use your own ID here!
-        Bing5DocumentSourceDescriptor
+        Bing7DocumentSourceDescriptor
             .attributeBuilder(initAttributes)
                 .apiKey(BingKeyAccess.getKey());
         

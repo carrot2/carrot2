@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.source.microsoft.v5;
+package org.carrot2.source.microsoft.v7;
 
 import org.carrot2.core.test.MultipageDocumentSourceTestBase;
 import org.carrot2.source.MultipageSearchEngineMetadata;
@@ -19,10 +19,10 @@ import org.junit.*;
 
 /** */
 @UsesExternalServices
-public class Bing5DocumentSourceTest extends MultipageDocumentSourceTestBase<Bing5DocumentSource> {
+public class Bing7DocumentSourceTest extends MultipageDocumentSourceTestBase<Bing7DocumentSource> {
   @Before
   public void checkKeyAvailable() {
-    Assume.assumeTrue(System.getProperty(Bing5DocumentSource.SYSPROP_BING5_API) != null);
+    Assume.assumeTrue(System.getProperty(Bing7DocumentSource.SYSPROP_BING7_API) != null);
   }
   
   @Override
@@ -31,13 +31,13 @@ public class Bing5DocumentSourceTest extends MultipageDocumentSourceTestBase<Bin
   }
 
   @Override
-  public Class<Bing5DocumentSource> getComponentClass() {
-    return Bing5DocumentSource.class;
+  public Class<Bing7DocumentSource> getComponentClass() {
+    return Bing7DocumentSource.class;
   }
 
   @Override
   protected MultipageSearchEngineMetadata getSearchEngineMetadata() {
-    return Bing5DocumentSource.METADATA;
+    return Bing7DocumentSource.METADATA;
   }
 
   @Override

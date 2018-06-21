@@ -12,7 +12,7 @@
 
 package org.carrot2.examples.clustering;
 
-import org.carrot2.source.microsoft.v5.Bing5DocumentSource;
+import org.carrot2.source.microsoft.v7.Bing7DocumentSource;
 
 /**
  * All examples that use Bing API will acquire their key from this class.
@@ -29,12 +29,12 @@ public class BingKeyAccess
     public static String getKey()
     {
         // Try to acquire the key from system properties.
-        final String key = System.getProperty(Bing5DocumentSource.SYSPROP_BING5_API);
+        final String key = System.getProperty(Bing7DocumentSource.SYSPROP_BING7_API);
 
         if (key == null)
         {
-            System.out.println("WARNING! Empty Bing API V5 key,  pass it via -D"
-                + Bing5DocumentSource.SYSPROP_BING5_API + "=...");
+            System.out.println("WARNING! Empty Bing API V7 key,  pass it via -D"
+                + Bing7DocumentSource.SYSPROP_BING7_API + "=...");
 
             // Return immediately as if nothing happened.
             System.exit(0);
