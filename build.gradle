@@ -1,15 +1,16 @@
 
+import java.nio.file.Files
+import org.gradle.util.GradleVersion
+
 plugins {
-  // id 'org.gradle.sample.hello' version '1.0.0' apply false
   id 'net.ltgt.apt-idea' version "0.20" apply false
+  id 'java-gradle-plugin'
 }
 
-
-String minimumGradleVersion = "5.2"
+String minimumGradleVersion = "5.1.1"
 if (GradleVersion.current() < GradleVersion.version(minimumGradleVersion)) {
     throw new GradleException("Gradle ${minimumGradleVersion}+ is required (use local ./gradlew for wrapper).")
 }
-
 
 allprojects {
   version = '4.0'
