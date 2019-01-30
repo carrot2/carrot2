@@ -1,9 +1,0 @@
-<component-suite>
-    <!-- Search engines. -->
-    <include suite="source-bing.xml" />
-
-    <!-- Algorithms. -->
-    <include suite="algorithm-lingo.xml" />
-    <include suite="algorithm-stc.xml" />
-    <include suite="algorithm-kmeans.xml" />
-</component-suite>
