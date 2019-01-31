@@ -15,6 +15,7 @@ package org.carrot2.examples.clustering;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Controller;
@@ -109,11 +110,9 @@ public class ClusteringDocumentList
          * Perform clustering by topic using the Lingo algorithm. Lingo can
          * take advantage of the original query, so we provide it along with the documents.
          */
-        /*
         final ProcessingResult byTopicClusters = controller.process(documents, "data mining", LingoClusteringAlgorithm.class);
         final List<Cluster> clustersByTopic = byTopicClusters.getClusters();
         ConsoleFormatter.displayClusters(clustersByTopic);
-        */
 
         /* Perform clustering by domain. In this case query is not useful, hence it is null. */
         final ProcessingResult byDomainClusters = controller.process(documents, null,
