@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.output.NullOutputStream;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.CollectionUtils;
@@ -404,7 +403,6 @@ public class ProcessingResultTest extends CarrotTestCase
         final ProcessingResult sourceProcessingResult = prepareProcessingResult();
 
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        sourceProcessingResult.serialize(new NullOutputStream());
         sourceProcessingResult.serialize(outputStream, documentsDeserialized,
             clustersDeserialized, attributesDeserialized);
         CloseableUtils.close(outputStream);

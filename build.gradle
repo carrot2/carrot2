@@ -73,7 +73,6 @@ project("carrot2-core") {
     implementation "org.apache.lucene:lucene-queryparser:5.5.5"
     implementation "org.apache.lucene:lucene-analyzers-smartcn:5.5.5"
 
-    compile "commons-io:commons-io:2.0.1"
     compile "org.apache.commons:commons-lang3:3.5"
     compile "com.carrotsearch:hppc:0.8.1"
 
