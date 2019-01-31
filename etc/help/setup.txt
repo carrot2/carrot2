@@ -1,0 +1,6 @@
+
+1. Import as "Existing sources" into IntelliJ Idea.
+
+2. Tick the "Delegate IDE build/run actions to Gradle" in the settings:
+   https://www.jetbrains.com/help/idea/gradle.html#delegate_build_gradle
+

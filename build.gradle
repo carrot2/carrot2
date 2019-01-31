@@ -49,6 +49,10 @@ configurations.all {
 */
 
 project("carrot2-core") {
+  configurations() {
+    testAnnotationProcessor.extendsFrom annotationProcessor
+  }
+
   dependencies {
     api "com.fasterxml.jackson.core:jackson-core:2.8.11"
     api "com.fasterxml.jackson.core:jackson-annotations:2.8.11"
