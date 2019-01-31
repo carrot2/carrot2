@@ -15,6 +15,7 @@ package org.carrot2.text.suffixtree;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import com.carrotsearch.randomizedtesting.RandomizedTest;
 import org.carrot2.text.suffixtree.SuffixTree.VisitorAdapter;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
@@ -66,7 +67,7 @@ public class SuffixTreeTest extends CarrotTestCase
         final int [] input = new int [scaledRandomIntBetween(1, 25000)];
         for (int i = 0; i < input.length; i++)
         {
-            input[i] = randomInt(100);
+            input[i] = randomIntBetween(0, 100);
         }
         input[input.length - 1] = Integer.MAX_VALUE;
 
