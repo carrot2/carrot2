@@ -22,7 +22,8 @@ allprojects {
 
 configure(subprojects.findAll {[
   "carrot2-core",
-  "carrot2-examples"
+  "carrot2-examples",
+  "carrot2-dcs"
 ].contains(it.name)}) {
   apply plugin: 'java-library'
   apply plugin: 'net.ltgt.apt-idea'
@@ -73,8 +74,8 @@ project("carrot2-core") {
     implementation "org.apache.lucene:lucene-queryparser:5.5.5"
     implementation "org.apache.lucene:lucene-analyzers-smartcn:5.5.5"
 
-    compile "org.apache.commons:commons-lang3:3.5"
-    compile "com.carrotsearch:hppc:0.8.1"
+    implementation "org.apache.commons:commons-lang3:3.5"
+    implementation "com.carrotsearch:hppc:0.8.1"
 
     annotationProcessor "org.carrot2.attributes:attributes-processor:1.3.3"
     annotationProcessor "org.slf4j:slf4j-simple:1.7.13"
@@ -88,3 +89,34 @@ project("carrot2-examples") {
     compile project(':carrot2-core')
   }
 }
+
+project("carrot2-dcs") {
+  configurations {
+    launcher
+    compile.extendsFrom(launcher)
+  }
+
+  dependencies {
+    launcher "args4j:args4j:2.33"
+
+    compile project(':carrot2-core')
+
+    compileClasspath "org.eclipse.jetty:jetty-server:7.6.21.v20160908"
+    implementation "org.eclipse.jetty:jetty-webapp:7.6.21.v20160908"
+
+    implementation "org.apache.commons:commons-lang3:3.5"
+    implementation "commons-fileupload:commons-fileupload:1.3.3"
+    implementation "log4j:log4j:1.2.16"
+  }
+
+  task libs(type: Sync) {
+    description = "Sync dependencies"
+    group = "Build"
+
+    // from configurations.runtimeClasspath
+    from project(':carrot2-core').jar
+    from configurations.launcher
+    into "$buildDir/libs"
+  }
+}
+

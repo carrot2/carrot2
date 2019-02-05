@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<searchresult>
+  <query>query (optional)</query>
+  <document id="0">
+    <title>Document 1 Title</title>
+    <snippet>Document 1 Content.</snippet>
+    <url>http://document.url/1</url>
+  </document>
+  <document id="1">
+    <title>Document 2 Title</title>
+    <snippet>Document 2 Content.</snippet>
+    <url>http://document.url/2</url>
+  </document>
+  <document id="2">
+    <title>Document 3 Title</title>
+    <snippet>Document 3 Content.</snippet>
+    <url>http://document.url/3</url>
+  </document>
+  <group id="0" score="1.0">
+    <title>
+      <phrase>Cluster 1</phrase>
+    </title>
+    <document refid="0" />
+    <document refid="2" />
+  </group>
+  <group id="1" score="0.63">
+    <title>
+      <phrase>Cluster 2</phrase>
+    </title>
+    <document refid="0" />
+    <group id="2" score="0.30">
+      <title>
+        <phrase>Cluster 2.1</phrase>
+      </title>
+      <document refid="1" />
+    </group>
+    <group id="3" score="0.15">
+      <title>
+        <phrase>Cluster 2.2</phrase>
+      </title>
+      <document refid="2" />
+    </group>
+  </group>
+</searchresult>

@@ -16,7 +16,6 @@ import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
@@ -105,11 +104,15 @@ public class ConsoleFormatter
         System.out.printf(indent + "[%2s] ", document.getStringId());
         System.out.println((Object) document.getField(Document.TITLE));
         final String url = document.getField(Document.CONTENT_URL);
-        if (StringUtils.isNotBlank(url))
+        if (isNotBlank(url))
         {
             System.out.println(indent + "     " + url);
         }
         System.out.println();
+    }
+
+    private static boolean isNotBlank(String s) {
+        return s != null && !s.trim().isEmpty();
     }
 
     private static void displayCluster(final int level, String tag, Cluster cluster,

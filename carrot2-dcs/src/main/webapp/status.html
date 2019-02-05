@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" title="style" media="all" href="css/style.css" />
+    <title>Status - Document Clustering Server</title>
+  </head>
+
+  <body>
+    <div id="source-tabs">
+      <span id="tab-lead-in"></span>
+      <ul class="tabs clearfix" style="position: relative;">
+        <li class="tab passive">
+          <a accesskey="Q" href="index.html" class="label quick-start"><u>Q</u>uick start</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive ">
+          <a accesskey="P" href="parameters.html" class="label parameters"><u>P</u>arameters</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive">
+          <a accesskey="I" href="input.html" class="label input"><u>I</u>nput format</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive before-active">
+          <a accesskey="O" href="output.html" class="label output"><u>O</u>utput format</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab active active-last">
+          <a accesskey="S" href="status.html" class="label status"><u>S</u>tatus</a>
+          <span class="right"></span>
+        </li>
+      </ul>
+    </div>
+
+    <div id="content">
+      <a href="index.html"><span id="logo"></span></a>
+      <p>
+        <b>Document Clustering Server</b> status:
+      </p>
+      
+      <div>
+        Total queries: <b id="total-queries"></b><br />
+        Good queries: <b id="good-queries"></b><br /><br />
+        Document source time average: <b id="source-time"></b> ms<br />
+        Clustering time average: <b id="algorithm-time"></b> ms<br />
+        Total time average: <b id="total-time"></b> ms<br /><br />
+        <span id="cache-statistics" style="display: none;">
+	        Cache hits: <b id="cache-hits"></b><br />
+	        Cache misses: <b id="cache-misses"></b>
+        </span>
+      </div>
+    </div>      
+    
+    <script src="js/jquery-1.2.6.js" type="text/javascript"></script>
+    <script type="text/javascript">//<![CDATA[
+      $(document).ready(function() {
+        $.ajax({
+          method: "GET",
+          url: "dcs/status",
+          dataType: "xml",
+          success: function (data) {
+            $data = $(data).find("statistics");
+
+            $("#total-queries").html($data.attr("total-queries"));
+            $("#good-queries").html($data.attr("good-queries"));
+            $("#source-time").html($data.attr("source-time-average-in-window"));
+            $("#algorithm-time").html($data.attr("algorithm-time-average-in-window"));
+            $("#total-time").html($data.attr("total-time-average-in-window"));
+
+            if ($data.attr("cache-hits-total")) {
+              $("#cache-statistics").show();
+	            $("#cache-hits").html($data.attr("cache-hits-total"));
+	            $("#cache-misses").html($data.attr("cache-misses"));
+            } else {
+              $("#cache-statistics").hide();
+            }
+          }
+        });
+      });
+      //]]></script>
+  </body>
+</html>
