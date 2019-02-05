@@ -1,9 +1,8 @@
-
+import org.apache.tools.ant.filters.*
 import org.gradle.util.GradleVersion
 
 plugins {
   id 'net.ltgt.apt-idea' version "0.20" apply false
-  id 'java-gradle-plugin'
 }
 
 String minimumGradleVersion = "5.1.1"
@@ -17,6 +16,13 @@ allprojects {
   repositories {
     mavenCentral()
   }
+}
+
+ext {
+  legal = files('carrot2.LICENSE')
+  replaceTokens = [
+    "version":      project.version
+  ]
 }
 
 /*
@@ -67,29 +73,6 @@ project("carrot2-examples") {
   }
 }
 
-project("carrot2-dcs-launcher") {
-  apply plugin: 'java'
-
-  dependencies {
-    implementation "org.slf4j:slf4j-api:1.7.13"
-    implementation "args4j:args4j:2.33"
-    implementation "org.eclipse.jetty:jetty-server:7.6.21.v20160908"
-    implementation "org.eclipse.jetty:jetty-webapp:7.6.21.v20160908"
-    implementation "log4j:log4j:1.2.16"
-  }
-
-  task assembleDcs(type: Sync) {
-    description = "Package DCS and dependencies"
-    group = "Build"
-
-    from configurations.compile
-
-    //from project(':carrot2-core').jar
-    //from configurations.launcher
-    into "$buildDir/${projects.name}"
-  }
-}
-
 project("carrot2-dcs-service") {
   apply plugin: 'war'
 
@@ -102,6 +85,55 @@ project("carrot2-dcs-service") {
     implementation "commons-fileupload:commons-fileupload:1.3.3"
     implementation "org.apache.commons:commons-lang3:3.5"
   }
+}
+
+project("carrot2-dcs-launcher") {
+  apply plugin: 'java'
+
+  dependencies {
+    implementation "args4j:args4j:2.33"
+    implementation "org.eclipse.jetty:jetty-server:7.6.21.v20160908"
+    implementation "org.eclipse.jetty:jetty-webapp:7.6.21.v20160908"
+    implementation "log4j:log4j:1.2.16"
+    implementation "org.slf4j:slf4j-api:1.7.13"
+    implementation "org.slf4j:slf4j-log4j12:1.7.13"
+  }
+
+  jar {
+    manifest {
+      attributes("Main-Class": "org.carrot2.dcs.DcsApp")
+      attributes("Class-Path": configurations.runtimeClasspath.collect { it.getName() }.join(' '))
+    }
+  }
+
+  task collectDependencies(type: Sync) {
+    from configurations.runtimeClasspath
+    from jar
+
+    into "$buildDir/${project.name}/lib"
+  }
+
+  task collectScripts(type: Sync) {
+    from files('src/main/assembly') {
+      filteringCharset = 'UTF-8'
+      filter(ReplaceTokens, tokens: replaceTokens)
+    }
+    from legal
+
+    into "$buildDir/${project.name}"
+    preserve {
+      include 'lib/'
+    }
+  }
+
+  task collectWars(type: Sync) {
+    // dependsOn ':carrot2-dcs-service:war'
+    from project(":carrot2-dcs-service").war
+
+    into "$buildDir/${project.name}/web"
+  }
+
+  assemble.dependsOn(collectScripts, collectDependencies, collectWars)
 }
 
 configure(subprojects.findAll {[

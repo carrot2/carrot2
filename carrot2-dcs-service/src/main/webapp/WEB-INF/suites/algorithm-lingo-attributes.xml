@@ -1,0 +1,122 @@
+<attribute-sets default="overridden-attributes">
+  <attribute-set id="overridden-attributes">
+    <value-set>
+      <label>overridden-attributes</label>
+
+      <!--
+      
+      Below are some attributes of this component you can change. Please see
+
+        http://download.carrot2.org/head/manual/#section.customizing.component-suites-and-attributes.component-attributes
+
+      for tools that will help you to edit this file.
+
+
+
+      <attribute key="MultilingualClustering.defaultLanguage">
+        <value type="org.carrot2.core.LanguageCode" value="ENGLISH"/>
+      </attribute>
+      <attribute key="MultilingualClustering.languageAggregationStrategy">
+        <value type="org.carrot2.text.clustering.MultilingualClustering$LanguageAggregationStrategy" value="FLATTEN_MAJOR_LANGUAGE"/>
+      </attribute> 
+      <attribute key="CaseNormalizer.dfThreshold">
+        <value type="java.lang.Integer" value="1"/>
+      </attribute>
+      <attribute key="CompleteLabelFilter.enabled">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="CompleteLabelFilter.labelOverrideThreshold">
+        <value type="java.lang.Double" value="0.65"/>
+      </attribute>
+      <attribute key="DefaultLanguageModelFactory.mergeResources">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="DefaultLanguageModelFactory.reloadResources">
+        <value type="java.lang.Boolean" value="false"/>
+      </attribute>
+      <attribute key="DocumentAssigner.exactPhraseAssignment">
+        <value type="java.lang.Boolean" value="false"/>
+      </attribute>
+      <attribute key="DocumentAssigner.minClusterSize">
+        <value type="java.lang.Integer" value="2"/>
+      </attribute>
+      <attribute key="GenitiveLabelFilter.enabled">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="LingoClusteringAlgorithm.clusterMergingThreshold">
+        <value type="java.lang.Double" value="0.7"/>
+      </attribute>
+      <attribute key="LingoClusteringAlgorithm.desiredClusterCountBase">
+        <value type="java.lang.Integer" value="30"/>
+      </attribute>
+      <attribute key="LingoClusteringAlgorithm.factorizationFactory">
+        <value>
+          <wrapper class="org.carrot2.matrix.factorization.NonnegativeMatrixFactorizationEDFactory"/>
+        </value>
+      </attribute>
+      <attribute key="LingoClusteringAlgorithm.factorizationQuality">
+        <value type="org.carrot2.matrix.factorization.IterationNumberGuesser$FactorizationQuality" value="HIGH"/>
+      </attribute>
+      <attribute key="LingoClusteringAlgorithm.labelAssigner">
+        <value>
+          <wrapper class="org.carrot2.clustering.lingo.UniqueLabelAssigner"/>
+        </value>
+      </attribute>
+      <attribute key="LingoClusteringAlgorithm.phraseLabelBoost">
+        <value type="java.lang.Double" value="1.5"/>
+      </attribute>
+      <attribute key="LingoClusteringAlgorithm.phraseLengthPenaltyStart">
+        <value type="java.lang.Integer" value="8"/>
+      </attribute>
+      <attribute key="LingoClusteringAlgorithm.phraseLengthPenaltyStop">
+        <value type="java.lang.Integer" value="8"/>
+      </attribute>
+      <attribute key="LingoClusteringAlgorithm.scoreWeight">
+        <value type="java.lang.Double" value="0.0"/>
+      </attribute>
+      <attribute key="MinLengthLabelFilter.enabled">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="NumericLabelFilter.enabled">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="PhraseExtractor.dfThreshold">
+        <value type="java.lang.Integer" value="1"/>
+      </attribute>
+      <attribute key="QueryLabelFilter.enabled">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="StopLabelFilter.enabled">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="StopWordLabelFilter.enabled">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.maximumMatrixSize">
+        <value type="java.lang.Integer" value="37500"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.maxWordDf">
+        <value type="java.lang.Double" value="1.0"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.termWeighting">
+        <value>
+          <wrapper class="org.carrot2.text.vsm.LogTfIdfTermWeighting"/>
+        </value>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.titleWordsBoost">
+        <value type="java.lang.Double" value="2.0"/>
+      </attribute>
+      <attribute key="Tokenizer.documentFields">
+        <value>
+          <wrapper class="org.carrot2.util.simplexml.ListSimpleXmlWrapper">
+            <list>
+              <value type="java.lang.String" value="title"/>
+              <value type="java.lang.String" value="snippet"/>
+            </list>
+          </wrapper>
+        </value>
+      </attribute>
+      -->
+    </value-set>
+  </attribute-set>
+</attribute-sets>

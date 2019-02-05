@@ -1,0 +1,10 @@
+
+<!--
+    Filtering of logs from various framework's utility methods.
+-->
+
+<logger name="org.carrot2.util.resource"><level value="debug"/></logger>
+<logger name="org.carrot2.util.xslt"><level value="warn"/></logger>
+<logger name="org.carrot2.webapp.stress"><level value="info"/></logger>
+
+<logger name="org.carrot2.workbench.core.ApplicationWorkbenchWindowAdvisor"><level value="info"/></logger>

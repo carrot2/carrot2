@@ -150,6 +150,7 @@ public class DcsApp
         if (dcsWar != null)
         {
             // WAR distribution provides, use it
+            System.setProperty(ENABLE_CLASSPATH_LOCATOR, "true");
             wac.setWar(dcsWar);
         }
         else

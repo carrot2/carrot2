@@ -1,0 +1,20 @@
+<component-suite>
+    <!-- Document sources.
+    <include suite="source-etools.xml" />
+    <include suite="source-bing.xml" />
+    <include suite="source-wiki.xml" />
+    <include suite="source-pubmed.xml" />
+    -->
+
+    <!-- Local sources. -->
+    <!--
+    <include suite="source-xml.xml" />
+    <include suite="source-solr.xml" />
+    -->
+
+    <!-- Algorithms. -->
+    <include suite="algorithm-lingo.xml" />
+    <include suite="algorithm-stc.xml" />
+    <include suite="algorithm-kmeans.xml" />
+    <include suite="algorithm-synthetic.xml" />
+</component-suite>

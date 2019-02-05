@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<config 
-	cache-documents="false" 
-	cache-clusters="false" 
-	component-suite-resource="suite-dcs.xml"
-/>

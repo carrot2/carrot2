@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" [
+  <!ENTITY filters-common SYSTEM "filters-common.xml">
+  <!ENTITY filters-silent SYSTEM "filters-silent.xml">
+]>
+
+<!-- 
+    Command line Log4j configuration.
+-->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <!-- Customized console appender. -->
+  <appender  name="appender-console" class="org.apache.log4j.ConsoleAppender">
+      <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="[%p] %m%n"/>
+      </layout>
+  </appender>
+
+  <!-- Add logger filters here. -->
+  &filters-common;
+  &filters-silent;
+  
+  <!-- XSLT-specific filters. -->
+  <logger name="org.carrot2.util.xslt.TemplatesPool"><level value="error" /></logger>
+  
+  <!-- Redirect command line logger to console appender -->
+  <logger name="batch" additivity="false">
+      <level value="info" />
+      <appender-ref ref="appender-console" />
+  </logger>
+  
+  <!-- Root logger config. -->
+  <root>
+      <priority value="info" />
+      <appender-ref ref="appender-console" />
+  </root>
+</log4j:configuration>

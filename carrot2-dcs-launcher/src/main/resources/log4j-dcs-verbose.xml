@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" [
+  <!ENTITY filters-common SYSTEM "filters-common.xml">
+  <!ENTITY filters-silent SYSTEM "filters-silent.xml">
+]>
+
+<!-- 
+    DCS Log4j configuration (verbose).
+-->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <!-- Customized console appender. -->
+  <appender  name="appender-console" class="org.apache.log4j.ConsoleAppender">
+      <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="[%p] %m%n"/>
+      </layout>
+  </appender>
+
+  <!-- Add logger filters here. -->
+  &filters-common;
+  &filters-silent;
+
+  <!-- DCS-specific filters. -->
+  <logger name="org.carrot2.util.xslt.TemplatesPool"><level value="error" /></logger>
+
+  <!-- Root logger config. -->
+  <root>
+      <priority value="debug" />
+      <appender-ref ref="appender-console" />
+  </root>
+</log4j:configuration>
