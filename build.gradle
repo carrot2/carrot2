@@ -48,11 +48,7 @@ project("carrot2-core") {
       exclude group: 'stax'
       exclude group: 'xpp3'
     }
-    implementation "org.apache.lucene:lucene-core:5.5.5"
     implementation "org.apache.lucene:lucene-analyzers-common:5.5.5"
-    implementation "org.apache.lucene:lucene-backward-codecs:5.5.5"
-    implementation "org.apache.lucene:lucene-highlighter:5.5.5"
-    implementation "org.apache.lucene:lucene-queryparser:5.5.5"
     implementation "org.apache.lucene:lucene-analyzers-smartcn:5.5.5"
 
     implementation "org.apache.commons:commons-lang3:3.5"
