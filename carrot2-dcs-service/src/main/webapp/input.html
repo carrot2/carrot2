@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" title="style" media="all" href="css/style.css" />
+    <title>Input format - Document Clustering Server</title>
+  </head>
+
+  <body>
+    <div id="source-tabs">
+      <span id="tab-lead-in"></span>
+      <ul class="tabs clearfix" style="position: relative;">
+        <li class="tab passive">
+          <a accesskey="Q" href="index.html" class="label quick-start"><u>Q</u>uick start</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive before-active">
+          <a accesskey="P" href="parameters.html" class="label parameters"><u>P</u>arameters</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab active">
+          <a accesskey="I" href="input.html" class="label input"><u>I</u>nput format</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive">
+          <a accesskey="O" href="output.html" class="label output"><u>O</u>utput format</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive passive-last">
+          <a accesskey="S" href="status.html" class="label status"><u>S</u>tatus</a>
+          <span class="right"></span>
+        </li>
+      </ul>
+    </div>
+
+    <div id="content">
+      <a href="index.html"><span id="logo"></span></a>
+      <p>
+        <b>Document Clustering Server</b> accepts input documents in the 
+        following XML format:
+      </p>
+
+      <div class="example-data" id="input-example">Loading...</div>
+    </div>      
+    
+    <script src="js/jquery-1.2.6.js" type="text/javascript"></script>
+    <script type="text/javascript">//<![CDATA[
+      $(document).ready(function() {
+        $.get("dcs/input-example", {}, function(data) {
+          var example = data;
+          example = example.replace(/</gi, "&lt;");
+          $("#input-example").html(example);
+        }, "text");
+      });
+      //]]></script>
+  </body>
+</html>

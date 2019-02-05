@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" title="style" media="all" href="css/style.css" />
+    <title>Request parameters - Document Clustering Server</title>
+  </head>
+
+  <body>
+    <div id="source-tabs">
+      <span id="tab-lead-in"></span>
+      <ul class="tabs clearfix" style="position: relative;">
+        <li class="tab passive before-active">
+          <a accesskey="Q" href="index.html" class="label quick-start"><u>Q</u>uick start</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab active">
+          <a accesskey="P" href="parameters.html" class="label parameters"><u>P</u>arameters</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive">
+          <a accesskey="I" href="input.html" class="label input"><u>I</u>nput format</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive">
+          <a accesskey="O" href="output.html" class="label output"><u>O</u>utput format</a>
+          <span class="right"></span>
+        </li>
+        <li class="tab passive passive-last">
+          <a accesskey="S" href="status.html" class="label status"><u>S</u>tatus</a>
+          <span class="right"></span>
+        </li>
+      </ul>
+    </div>
+
+    <div id="content">
+      <a href="index.html"><span id="logo"></span></a>
+      <p>
+        <b>Document Clustering Server</b> REST handler is available at
+        the <b><tt>/dcs/rest</tt></b> URL. It accepts POST and GET requests, with parameters
+        encoded using <tt>multipart/form-data</tt> or <tt>application/x-www-form-urlencoded</tt>
+        (with the exception of <tt>dcs.c2stream</tt>, see below).
+        
+        The following HTTP request parameters are supported:
+      </p>
+
+      <dl>
+        <dt>dcs.source</dt>
+        <dd>
+          Identifier of the external source of documents to be queried. If a non-empty value is provided,
+          <tt>dcs.c2stream</tt> parameter will be ignored.
+          This DCS instance supports the following external source identifiers:
+          <ul id="sources">
+            <li>Loading...</li>
+          </ul>
+        </dd>
+        
+        <dt>query</dt>
+        <dd>
+          Query to be sent to the external document source.
+        </dd>
+        
+        <dt>results</dt>
+        <dd>
+          The number of results to fetch from the external source. Meaningful only if the
+          <tt>dcs.source</tt> parameter is not empty.
+        </dd>
+        
+        <dt>dcs.c2stream</dt>
+        <dd>
+          Documents to be clustered in the following <a href="input.html">XML format</a>. This parameter
+          is ignored if <tt>dcs.source</tt> is provided. This parameter will be parsed only if the
+          request is sent the <b>HTTP POST</b> method.
+        </dd>
+
+        <dt>dcs.algorithm</dt>
+        <dd>
+          Identifier of the clustering algorithm to use. This DCS instance supports the following
+          clustering algorithm identifiers:
+          <ul id="algorithms">
+            <li>Loading...</li>
+          </ul>
+        </dd>
+
+        <dt>dcs.output.format</dt>
+        <dd>
+          Format of the output. The following values are supported (case sensitive!):
+          <ul>
+            <li><tt>XML</tt> <span class="hint">(default)</span></li>
+            <li><tt>JSON</tt></li>
+          </ul>
+        </dd>
+
+        <dt>dcs.clusters.only</dt>
+        <dd>
+          If not provided or set to <tt>false</tt>, both input documents and clusters
+          will be sent output. If set to <tt>true</tt>, only clusters will be output.
+        </dd>
+
+        <dt>dcs.json.callback</dt>
+        <dd>
+          If a non-empty value is provided and output format is <tt>JSON</tt>, the response
+          data will be wrapped with a function name as specified by the parameter value.
+        </dd>
+        
+        <dt>MultilingualClustering.defaultLanguage</dt>
+        <dd>
+          The default language to use for documents with undefined language.
+          <p>
+            Possible values: ARABIC, BULGARIAN, CZECH, CHINESE_SIMPLIFIED, 
+            DANISH, DUTCH, ENGLISH, ESTONIAN, FINNISH, FRENCH, GERMAN, GREEK,
+            HUNGARIAN, ITALIAN, IRISH, KOREAN, LATVIAN, LITHUANIAN, MALTESE, 
+            NORWEGIAN, POLISH, PORTUGUESE, ROMANIAN, RUSSIAN, SLOVAK, SLOVENE, 
+            SPANISH, SWEDISH, TURKISH. 
+          </p>
+        </dd>           
+
+        <dt>&lt;attribute-key&gt;</dt>
+        <dd>
+          Any other parameter names will be treated as attribute keys and will be passed, along with the value,
+          to the respective component. A complete reference of each component's attributes
+          is available in the documentation and in the source code of each algorithm.
+        </dd>
+      </dl>
+
+      <p>
+        <b>Important</b>: non-ASCII characters in GET and POST requests should be 
+        encoded consistently with the servlet container on which DCS is deployed.
+        For <tt>multipart/form-data</tt> POST requests, the character encoding for parameters
+        should be UTF-8. <tt>dcs.c2stream</tt> should not be encoded (should be a raw XML, with
+        correct encoding prologue, if needed). 
+      </p>
+    </div>
+
+    <script src="js/jquery-1.2.6.js" type="text/javascript"></script>
+    <script type="text/javascript">//<![CDATA[
+      $(document).ready(function() {
+        $("#sources").loadOptions("source");
+        $("#algorithms").loadOptions("algorithm", function() { 
+        	  $("#algorithms li:first").append("<span class='hint'>(default)</span>");
+        });
+      });
+
+      $.fn.loadOptions = function (option, callback)
+      {
+        return this.each(function() {
+          var $select = $(this);
+          $.ajax({
+            method: "GET",
+            url: "dcs/components",
+            dataType: "xml",
+            success: function (data) {
+              $select.html("");
+              $(data).find(option).each(function() {
+                $this = $(this);
+                $select.append("<li><tt>" + $this.attr("id") + "</tt> &mdash; " + $this.find("title").text() + "</li>"); 
+              });
+              if (callback) {
+                  callback.call();
+              }
+            }
+          });
+        });
+      }
+      //]]></script>
+  </body>
+</html>

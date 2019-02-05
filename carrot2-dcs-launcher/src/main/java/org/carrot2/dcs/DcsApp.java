@@ -32,6 +32,8 @@ import org.slf4j.Logger;
  */
 public class DcsApp
 {
+    final static String ENABLE_CLASSPATH_LOCATOR = "enable.classpath.locator";
+
     /**
      * DCS logger. Tests attach to this logger's LOG4J appender.
      */
@@ -159,7 +161,7 @@ public class DcsApp
             /*
              * Allow context classloader resource loading.
              */
-            System.setProperty(RestProcessorServlet.ENABLE_CLASSPATH_LOCATOR, "true");
+            System.setProperty(ENABLE_CLASSPATH_LOCATOR, "true");
         }
 
         if (System.getProperty("dcs.development.mode") != null)

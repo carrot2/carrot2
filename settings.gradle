@@ -1,6 +1,7 @@
 
 include 'carrot2-core'
 include 'carrot2-examples'
-include 'carrot2-dcs'
+include 'carrot2-dcs-launcher'
+include 'carrot2-dcs-service'
 
 rootProject.name = 'carrot2'
