@@ -13,6 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.carrot2.text.analysis.ITokenizer;
@@ -27,8 +28,6 @@ import org.carrot2.util.attribute.Bindable;
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.sorting.IndirectSort;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
  * Applies stemming to words and calculates a number of frequency statistics for stems.
@@ -245,7 +244,7 @@ public final class LanguageModelStemmer
 
     private Set<MutableCharArray> prepareQueryWords(String query, IStemmer stemmer)
     {
-        final Set<MutableCharArray> queryWords = Sets.newHashSet();
+        final Set<MutableCharArray> queryWords = new HashSet<>();
 
         if (query != null)
         {

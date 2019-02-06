@@ -13,8 +13,8 @@
 package org.carrot2.text.preprocessing.filter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Filters out phrases that are not left complete.
@@ -49,41 +49,34 @@ class LeftCompleteLabelFilter extends CompleteLabelFilterBase
     List<LabelIndexWithCodes> sortPhraseCodes(
         List<LabelIndexWithCodes> phrasesWithCodes)
     {
-        final ArrayList<LabelIndexWithCodes> sortedPhraseCodes = Lists
-            .newArrayList(phrasesWithCodes);
-        Collections.sort(sortedPhraseCodes, new Comparator<LabelIndexWithCodes>()
-        {
-            public int compare(LabelIndexWithCodes o1, LabelIndexWithCodes o2)
+        return phrasesWithCodes.stream().sorted((o1, o2) -> {
+            int [] codesA = o1.getCodes();
+            int [] codesB = o2.getCodes();
+
+            int minLength = Math.min(codesA.length, codesB.length);
+            for (int i = 1; i <= minLength; i++)
             {
-                int [] codesA = o1.getCodes();
-                int [] codesB = o2.getCodes();
-
-                int minLength = Math.min(codesA.length, codesB.length);
-                for (int i = 1; i <= minLength; i++)
-                {
-                    if (codesA[codesA.length - i] < codesB[codesB.length - i])
-                    {
-                        return -1;
-                    }
-                    else if (codesA[codesA.length - i] > codesB[codesB.length - i])
-                    {
-                        return 1;
-                    }
-                }
-
-                if (codesA.length < codesB.length)
+                if (codesA[codesA.length - i] < codesB[codesB.length - i])
                 {
                     return -1;
                 }
-                else if (codesA.length > codesB.length)
+                else if (codesA[codesA.length - i] > codesB[codesB.length - i])
                 {
                     return 1;
                 }
-
-                return 0;
             }
-        });
 
-        return sortedPhraseCodes;
+            if (codesA.length < codesB.length)
+            {
+                return -1;
+            }
+            else if (codesA.length > codesB.length)
+            {
+                return 1;
+            }
+
+            return 0;
+        })
+        .collect(Collectors.toList());
     }
 }

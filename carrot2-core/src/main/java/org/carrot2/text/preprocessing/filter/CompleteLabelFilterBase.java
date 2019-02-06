@@ -17,8 +17,6 @@ import java.util.List;
 
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-
 /**
  * Base class for complete phrase filtering.
  */
@@ -39,8 +37,7 @@ abstract class CompleteLabelFilterBase
 
         // Build labelIndex-wordIndices combos for each word and phrase. We'll use
         // them below to create an LCP array.
-        final ArrayList<LabelIndexWithCodes> phraseIndexesWithCodes = Lists
-            .newArrayListWithExpectedSize(acceptedStems.length + acceptedPhrases.length);
+        final ArrayList<LabelIndexWithCodes> phraseIndexesWithCodes = new ArrayList<>(acceptedStems.length + acceptedPhrases.length);
         for (int i = 0; i < acceptedStems.length + acceptedPhrases.length; i++)
         {
             phraseIndexesWithCodes.add(new LabelIndexWithCodes(i, getLabelWordIndexes(

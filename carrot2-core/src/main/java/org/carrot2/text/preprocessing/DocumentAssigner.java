@@ -22,7 +22,6 @@ import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntArrayList;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Assigns document to label candidates. For each label candidate from
@@ -142,8 +141,7 @@ public class DocumentAssigner
         {
             final IntArrayList newFeatureIndex = new IntArrayList(
                 labelsFeatureIndex.length);
-            final ArrayList<BitSet> newDocumentIndices = Lists
-                .newArrayListWithExpectedSize(labelsFeatureIndex.length);
+            final ArrayList<BitSet> newDocumentIndices = new ArrayList<>(labelsFeatureIndex.length);
 
             for (int i = 0; i < labelsFeatureIndex.length; i++)
             {

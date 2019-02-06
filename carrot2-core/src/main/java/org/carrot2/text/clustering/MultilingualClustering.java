@@ -13,6 +13,7 @@
 package org.carrot2.text.clustering;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Processing;
@@ -20,10 +21,6 @@ import org.carrot2.util.attribute.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.carrot2.shaded.guava.common.base.Function;
-import org.carrot2.shaded.guava.common.base.Predicate;
-import org.carrot2.shaded.guava.common.collect.*;
-import org.carrot2.shaded.guava.common.collect.Multiset.Entry;
 
 /**
  * A helper for clustering multilingual collections of documents. The helper partitions
@@ -161,7 +158,7 @@ public class MultilingualClustering
         // Clusters documents in each language separately,
         // creates a map of top-level Cluster instances named after the language code.
         final Map<LanguageCode, Cluster> clustersByLanguage = clusterByLanguage(documents, algorithm);
-        final List<Cluster> clusters = Lists.newArrayList(clustersByLanguage.values());
+        final List<Cluster> clusters = new ArrayList<>(clustersByLanguage.values());
 
         // For FLATTEN_ALL we combine all clusters
         if (clustersByLanguage.size() == 1 ||
@@ -198,33 +195,17 @@ public class MultilingualClustering
         {
             Collections.sort(clusters, Collections.reverseOrder(Cluster.BY_SIZE_COMPARATOR));
 
-            if (LanguageAggregationStrategy.FLATTEN_MAJOR_LANGUAGE.equals(languageAggregationStrategy))
-            {
+            if (LanguageAggregationStrategy.FLATTEN_MAJOR_LANGUAGE.equals(languageAggregationStrategy)) {
                 // For FLATTEN_MAJOR_LANGUAGE, we flatten the first biggest language
                 // cluster that has some nontrivial subclusters (clusters in that
                 // language). If there's no cluster with nontrivial subclusters,
                 // we default to FLATTEN_NONE.
-                final Iterator<Cluster> iterator = clusters.iterator();
-                Cluster majorLanguageCluster = null;
-                try
-                {
-                    majorLanguageCluster = Iterators.find(iterator,
-                        new Predicate<Cluster>()
-                        {
-                            public boolean apply(Cluster cluster)
-                            {
-                                return !cluster.getSubclusters().isEmpty();
-                            }
-                        });
-                }
-                catch (NoSuchElementException ignored)
-                {
-                    // When element is not found, Google Collections throws this exception
-                }
+                Cluster majorLanguageCluster =
+                    clusters.stream().filter(c -> !c.getSubclusters().isEmpty()).findFirst().orElse(null);
 
                 if (majorLanguageCluster != null)
                 {
-                    iterator.remove();
+                    clusters.remove(majorLanguageCluster);
                     final List<Cluster> flattenedClusters = new ArrayList<>();
                     flattenedClusters.addAll(majorLanguageCluster.getSubclusters());
 
@@ -233,15 +214,8 @@ public class MultilingualClustering
                     flattenedClusters.add(otherLanguages);
                     return flattenedClusters;
                 }
-                else
-                {
-                    return clusters;
-                }
             }
-            else
-            {
-                return clusters;
-            }
+            return clusters;
         }
     }
 
@@ -254,27 +228,26 @@ public class MultilingualClustering
         // Partition by language first. As Multimaps.index() does not handle null
         // keys, we'd need to index by LanguageCode string and have a dedicated empty
         // string for the null language.
-        final ImmutableListMultimap<String, Document> documentsByLanguage = 
-            Multimaps.index(documents, new Function<Document, String>()
-            {
-                public String apply(Document document)
-                {
-                    final LanguageCode language = document.getLanguage();
-                    return language != null ? language.name() : "";
-                }
-            });
+
+        final Object NO_VALUE =  new Object();
+        Map<Object, List<Document>> documentsByLanguage =
+            documents.stream().collect(Collectors.groupingBy(c -> {
+                Object v = c.getLanguage();
+                if (v == null) v = NO_VALUE;
+                return v;
+            }));
 
         // For each language, perform clustering. Please note that implementations of 
         // IMonolingualClusteringAlgorithm.cluster() are not guaranteed to be thread-safe
         // and hence the method must NOT be called concurrently.
         final Map<LanguageCode, Cluster> clusters = new HashMap<>();
-        for (String language : documentsByLanguage.keySet())
-        {
-            final ImmutableList<Document> languageDocuments = documentsByLanguage.get(language);
-            final LanguageCode languageCode = language.equals("") ? null : LanguageCode.valueOf(language);
+
+        documentsByLanguage.forEach((key, languageDocuments) -> {
+            LanguageCode languageCode = (key == NO_VALUE ? null : (LanguageCode) key);
+
             final Cluster languageCluster = new Cluster(
                 languageCode != null ? languageCode.toString() : "Unknown Language");
-            
+
             languageCounts.put(languageCode != null ? languageCode.getIsoCode() : "",
                 languageDocuments.size());
 
@@ -284,7 +257,7 @@ public class MultilingualClustering
             final List<Cluster> clustersForLanguage = algorithm.process(
                 languageDocuments, currentLanguage);
 
-            if (clustersForLanguage.size() == 0 || 
+            if (clustersForLanguage.size() == 0 ||
                 clustersForLanguage.size() == 1 && clustersForLanguage.get(0).isOtherTopics())
             {
                 languageCluster.addDocuments(languageDocuments);
@@ -295,7 +268,7 @@ public class MultilingualClustering
             }
 
             clusters.put(languageCode, languageCluster);
-        }
+        });
 
         return clusters;
     }
@@ -303,26 +276,23 @@ public class MultilingualClustering
     private List<Cluster> clusterInMajorityLanguage(List<Document> documents,
         IMonolingualClusteringAlgorithm algorithm)
     {
-        final Multiset<LanguageCode> counts = HashMultiset.create();
+        HashMap<LanguageCode, Integer> languageCodeIntegerEnumMap = new HashMap<>();
+
         for (Document d : documents)
         {
-            counts.add(d.getLanguage());
+            languageCodeIntegerEnumMap.merge(d.getLanguage(), 1, (c1, c2) -> c1 + c2);
         }
+
         LanguageCode majorityLanguage = defaultLanguage;
         int maxCount = 0;
-        for (Entry<LanguageCode> entry : counts.entrySet())
-        {
-            if (entry.getElement() != null)
-            {
-                if (entry.getCount() > maxCount)
-                {
-                    maxCount = entry.getCount();
-                    majorityLanguage = entry.getElement();
-                    this.majorityLanguage = entry.getElement().getIsoCode();
-                }
-            } 
-            languageCounts.put(entry.getElement() != null ? entry.getElement().getIsoCode() : "", 
-                entry.getCount());
+        for (Map.Entry<LanguageCode, Integer> e : languageCodeIntegerEnumMap.entrySet()) {
+            LanguageCode langCode = e.getKey();
+            if (langCode != null && e.getValue() > maxCount) {
+                maxCount = e.getValue();
+                majorityLanguage = langCode;
+                this.majorityLanguage = langCode.getIsoCode();
+            }
+            languageCounts.put(langCode != null ? langCode.getIsoCode() : "", e.getValue());
         }
         
         logger.debug("Performing clustering in majority language: " + majorityLanguage);
