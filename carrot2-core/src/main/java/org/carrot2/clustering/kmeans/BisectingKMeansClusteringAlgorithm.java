@@ -12,11 +12,7 @@
 
 package org.carrot2.clustering.kmeans;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
@@ -66,7 +62,6 @@ import org.carrot2.mahout.math.matrix.DoubleMatrix1D;
 import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix1D;
 import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A very simple implementation of bisecting k-means clustering. Unlike other algorithms
@@ -239,7 +234,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         preprocessingContext.allLabels.firstPhraseIndex = -1;
 
         // Further processing only if there are words to process
-        clusters = Lists.newArrayList();
+        clusters = new ArrayList<>();
         if (preprocessingContext.hasLabels())
         {
             // Term-document matrix building and reduction
@@ -275,7 +270,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
             {
                 columns.add(c);
             }
-            final List<IntArrayList> rawClusters = Lists.newArrayList();
+            final List<IntArrayList> rawClusters = new ArrayList<>();
             rawClusters.addAll(split(partitionCount, tdMatrix, columns, maxIterations));
             Collections.sort(rawClusters, BY_SIZE_DESCENDING);
             
@@ -355,7 +350,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
             centroid.assign(termDocumentMatrix.viewColumn(d.value), Functions.PLUS);
         }
 
-        final List<String> labels = Lists.newArrayListWithCapacity(labelCount);
+        final List<String> labels = new ArrayList<>(labelCount);
 
         final int [] order = IndirectSort.mergesort(0, centroid.size(),
             new IndirectComparator()
@@ -404,7 +399,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         }
 
         // Prepare results holders
-        List<IntArrayList> result = Lists.newArrayList();
+        List<IntArrayList> result = new ArrayList<>();
         List<IntArrayList> previousResult = null;
         for (int i = 0; i < partitions; i++)
         {
@@ -440,7 +435,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
             }
 
             previousResult = result;
-            result = Lists.newArrayList();
+            result = new ArrayList<>();
             for (int i = 0; i < partitions; i++)
             {
                 result.add(new IntArrayList(selected.columns()));

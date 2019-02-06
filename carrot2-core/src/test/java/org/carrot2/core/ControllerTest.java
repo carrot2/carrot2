@@ -31,15 +31,7 @@ import org.carrot2.shaded.guava.common.collect.ImmutableMap;
     ControllerTest.ComponentManagerIndependentTests.class,
     ControllerTest.SimpleControllerCommonTests.class,
     ControllerTest.PoolingControllerCommonTests.class,
-    ControllerTest.PoolingControllerPoolingTests.class,
-    ControllerTest.CachingPoolingControllerCachingOffCommonTests.class,
-    ControllerTest.CachingPoolingControllerCachingOffPoolingTests.class,
-    ControllerTest.CachingPoolingControllerCachingOnCommonTests.class,
-    ControllerTest.CachingPoolingControllerCachingOnPoolingTests.class,
-    ControllerTest.CachingPoolingControllerCachingOnCachingTests.class,
-    ControllerTest.CachingControllerCachingOffCommonTests.class,
-    ControllerTest.CachingControllerCachingOnCommonTests.class,
-    ControllerTest.CachingControllerCachingOnCachingTests.class
+    ControllerTest.PoolingControllerPoolingTests.class
 })
 @SuppressWarnings("unchecked")
 public class ControllerTest
@@ -72,13 +64,6 @@ public class ControllerTest
         public void testUsingPoolingManagerWithMoreThanOneController()
         {
             checkManagerWithMultipleControllers(new PoolingProcessingComponentManager());
-        }
-
-        @Test(expected = IllegalStateException.class)
-        public void testUsingCachingManagerWithMoreThanOneController()
-        {
-            checkManagerWithMultipleControllers(new CachingProcessingComponentManager(
-                new SimpleProcessingComponentManager()));
         }
 
         @Test(expected = IllegalArgumentException.class)
@@ -239,85 +224,6 @@ public class ControllerTest
         public Controller getPoolingController()
         {
             return ControllerFactory.createPooling();
-        }
-    }
-
-    public static class CachingPoolingControllerCachingOffCommonTests extends
-        ControllerTestsCommon
-    {
-        @Override
-        public Controller getSimpleController()
-        {
-            return ControllerFactory.createCachingPooling();
-        }
-    }
-
-    public static class CachingPoolingControllerCachingOffPoolingTests extends
-        ControllerTestsPooling
-    {
-        @Override
-        public Controller getPoolingController()
-        {
-            return ControllerFactory.createCachingPooling();
-        }
-    }
-
-    public static class CachingPoolingControllerCachingOnCommonTests extends
-        ControllerTestsCommon
-    {
-        @Override
-        public Controller getSimpleController()
-        {
-            return ControllerFactory.createCachingPooling(IProcessingComponent.class);
-        }
-    }
-
-    public static class CachingPoolingControllerCachingOnPoolingTests extends
-        ControllerTestsPooling
-    {
-        @Override
-        public Controller getPoolingController()
-        {
-            return ControllerFactory.createCachingPooling(IProcessingComponent.class);
-        }
-    }
-
-    public static class CachingPoolingControllerCachingOnCachingTests extends
-        ControllerTestsCaching
-    {
-        @Override
-        public Controller getCachingController(
-            Class<? extends IProcessingComponent>... cachedComponentClasses)
-        {
-            return ControllerFactory.createCachingPooling(cachedComponentClasses);
-        }
-    }
-
-    public static class CachingControllerCachingOffCommonTests extends ControllerTestsCommon
-    {
-        @Override
-        public Controller getSimpleController()
-        {
-            return ControllerFactory.createCaching();
-        }
-    }
-
-    public static class CachingControllerCachingOnCommonTests extends ControllerTestsCommon
-    {
-        @Override
-        public Controller getSimpleController()
-        {
-            return ControllerFactory.createCaching(IProcessingComponent.class);
-        }
-    }
-
-    public static class CachingControllerCachingOnCachingTests extends ControllerTestsCaching
-    {
-        @Override
-        public Controller getCachingController(
-            Class<? extends IProcessingComponent>... cachedComponentClasses)
-        {
-            return ControllerFactory.createCaching(cachedComponentClasses);
         }
     }
 }

@@ -37,7 +37,7 @@ import org.carrot2.shaded.guava.common.collect.*;
 public final class ProcessingResult
 {
     /** Attributes collected after processing */
-    private Map<String, Object> attributes = Maps.newHashMap();
+    private Map<String, Object> attributes = new HashMap<>();
 
     /** Read-only view of attributes exposed in {@link #getAttributes()} */
     private Map<String, Object> attributesView;
@@ -235,7 +235,7 @@ public final class ProcessingResult
         // Convert document ids to the actual references
         if (clusters != null && documents != null)
         {
-            final Map<String, Document> documentsById = Maps.newHashMap();
+            final Map<String, Document> documentsById = new HashMap<>();
             for (Document document : documents)
             {
                 documentsById.put(document.getStringId(), document);
@@ -494,7 +494,7 @@ public final class ProcessingResult
     private Map<String, Object> prepareAttributesForSerialization(boolean saveDocuments,
         boolean saveClusters, boolean saveOtherAttributes)
     {
-        final Map<String, Object> tempAttributes = Maps.newHashMap();
+        final Map<String, Object> tempAttributes = new HashMap<>();
 
         if (saveOtherAttributes)
         {

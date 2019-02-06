@@ -12,11 +12,11 @@
 
 package org.carrot2.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.carrotsearch.hppc.IntArrayDeque;
 import com.carrotsearch.hppc.IntArrayList;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Various utilities for processing graphs.
@@ -38,7 +38,7 @@ public class GraphUtils
     {
         // Find coherent sub-graphs using breadth-first search
         final boolean [] nodesChecked = new boolean [vertexCount];
-        final List<IntArrayList> clusterGroups = Lists.newArrayList();
+        final List<IntArrayList> clusterGroups = new ArrayList<>();
         final IntArrayDeque nodeQueue = new IntArrayDeque();
 
         for (int i = 0; i < vertexCount; i++)

@@ -31,7 +31,7 @@ final class ControllerContextImpl implements IControllerContext
     /**
      * Attributes of this context.
      */
-    private final HashMap<String, Object> attributes = Maps.newHashMap();
+    private final HashMap<String, Object> attributes = new HashMap<>();
 
     /**
      * {@inheritDoc}

@@ -21,8 +21,6 @@ import org.simpleframework.xml.strategy.Value;
 import org.simpleframework.xml.stream.NodeMap;
 import org.simpleframework.xml.stream.OutputNode;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Proxy for initializing session values.
  */
@@ -36,7 +34,7 @@ final class SessionInitStrategy implements Strategy
     public SessionInitStrategy(Strategy delegate, Map<Object, Object> sessionValues)
     {
         this.delegate = delegate;
-        this.sessionValues = Maps.newHashMap(sessionValues);
+        this.sessionValues = new HashMap<>(sessionValues);
     }
     
     @SuppressWarnings({"rawtypes", "unchecked"})

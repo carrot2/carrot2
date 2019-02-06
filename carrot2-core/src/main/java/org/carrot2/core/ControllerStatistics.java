@@ -93,26 +93,12 @@ public final class ControllerStatistics
     @Attribute(name = "total-time-window-size")
     public final long totalTimeWindowSize;
 
-    /**
-     * Number of requests that generated cache misses. May be null if the controller does
-     * not perform caching.
-     */
-    @Attribute(name = "cache-misses", required = false)
-    public final Long cacheMisses;
-
-    /**
-     * Number of requests served from cache. May be null if the controller does not
-     * perform caching.
-     */
-    @Attribute(name = "cache-hits-total", required = false)
-    public final Long cacheHitsTotal;
-
     ControllerStatistics(long totalQueries, long goodQueries,
         double algorithmTimeAverageInWindow, long algorithmTimeMeasurementsInWindow,
         long algorithmTimeWindowSize, double sourceTimeAverageInWindow,
         long sourceTimeMeasurementsInWindow, long sourceTimeWindowSize,
         double totalTimeAverageInWindow, long totalTimeMeasurementsInWindow,
-        long totalTimeWindowSize, Long cacheMisses, Long cacheHitsTotal)
+        long totalTimeWindowSize)
     {
         this.totalQueries = totalQueries;
         this.goodQueries = goodQueries;
@@ -128,9 +114,6 @@ public final class ControllerStatistics
         this.totalTimeAverageInWindow = totalTimeAverageInWindow;
         this.totalTimeMeasurementsInWindow = totalTimeMeasurementsInWindow;
         this.totalTimeWindowSize = totalTimeWindowSize;
-
-        this.cacheMisses = cacheMisses;
-        this.cacheHitsTotal = cacheHitsTotal;
     }
 
     /**

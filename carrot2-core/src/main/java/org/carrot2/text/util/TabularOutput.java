@@ -34,7 +34,7 @@ public final class TabularOutput
     final List<ColumnSpec> columns = Lists.newArrayList();
 
     /** */
-    final HashMap<String,ColumnSpec> columnsByName = Maps.newHashMap();
+    final HashMap<String,ColumnSpec> columnsByName = new HashMap<>();
 
     /** Currently buffered row. */
     final List<Object> currentRow = Lists.newArrayList();

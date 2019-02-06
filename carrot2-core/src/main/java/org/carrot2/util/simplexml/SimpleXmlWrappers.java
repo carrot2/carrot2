@@ -16,8 +16,6 @@ import java.util.*;
 
 import org.simpleframework.xml.Root;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Enables SimpleXML-based serialization of collections of arbitrary types, also those
  * contained in libraries. Depending on the actual type, 3 wrapping scenarios are
@@ -38,12 +36,12 @@ public class SimpleXmlWrappers
     /**
      * The supported {@link ISimpleXmlWrapper}s.
      */
-    static Map<Class<?>, Class<? extends ISimpleXmlWrapper<?>>> wrappers = Maps.newHashMap();
+    static Map<Class<?>, Class<? extends ISimpleXmlWrapper<?>>> wrappers = new HashMap<>();
 
     /**
      * Indicates whether the wrapper mapping is strict.
      */
-    static Map<Class<?>, Boolean> strict = Maps.newHashMap();
+    static Map<Class<?>, Boolean> strict = new HashMap<>();
 
     /**
      * Registers a new {@link ISimpleXmlWrapper}. If a wrapper for the provide
@@ -89,7 +87,7 @@ public class SimpleXmlWrappers
      */
     public static <K> Map<K, SimpleXmlWrapperValue> wrap(Map<K, ?> toWrap)
     {
-        final HashMap<K, SimpleXmlWrapperValue> wrapped = Maps.newHashMap();
+        final HashMap<K, SimpleXmlWrapperValue> wrapped = new HashMap<>();
         for (Map.Entry<K, ?> entry : toWrap.entrySet())
         {
             wrapped.put(entry.getKey(), SimpleXmlWrapperValue.wrap(entry.getValue()));
@@ -104,7 +102,7 @@ public class SimpleXmlWrappers
      */
     public static <K> Map<K, Object> unwrap(Map<K, SimpleXmlWrapperValue> wrapped)
     {
-        final HashMap<K, Object> result = Maps.newHashMap();
+        final HashMap<K, Object> result = new HashMap<>();
         for (Map.Entry<K, SimpleXmlWrapperValue> entry : wrapped.entrySet())
         {
             result.put(entry.getKey(), unwrap(entry.getValue()));

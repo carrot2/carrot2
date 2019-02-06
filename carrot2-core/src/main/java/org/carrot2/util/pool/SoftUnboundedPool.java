@@ -18,8 +18,6 @@ import java.util.Map.Entry;
 
 import org.carrot2.util.Pair;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * An extremely simple, unbounded object pool. The pool can provide objects of may types,
  * objects get created using parameterless constructors. The pool holds objects using
@@ -27,7 +25,7 @@ import org.carrot2.shaded.guava.common.collect.Maps;
  */
 public final class SoftUnboundedPool<T, P> implements IParameterizedPool<T, P>
 {
-    private Map<Pair<Class<? extends T>, P>, List<SoftReference<T>>> instances = Maps.newHashMap();
+    private Map<Pair<Class<? extends T>, P>, List<SoftReference<T>>> instances = new HashMap<>();
 
     private IInstantiationListener<T, P> instantiationListener;
     private IActivationListener<T, P> activationListener;

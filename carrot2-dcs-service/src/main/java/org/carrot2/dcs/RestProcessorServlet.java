@@ -262,20 +262,7 @@ public final class RestProcessorServlet extends HttpServlet
         }
         defaultAlgorithmId = componentSuite.getAlgorithms().get(0).getId();
 
-        // Initialize controller
-        final List<Class<? extends IProcessingComponent>> cachedComponentClasses = Lists
-            .newArrayListWithExpectedSize(2);
-        if (config.cacheDocuments)
-        {
-            cachedComponentClasses.add(IDocumentSource.class);
-        }
-        if (config.cacheClusters)
-        {
-            cachedComponentClasses.add(IClusteringAlgorithm.class);
-        }
-
-        controller = ControllerFactory.createCachingPooling(
-            cachedComponentClasses.toArray(new Class [cachedComponentClasses.size()]));
+        controller = ControllerFactory.createPooling();
 
         List<IResourceLocator> locators = Lists.newArrayList();
         locators.add(new PrefixDecoratorLocator(new ServletContextLocator(
@@ -407,7 +394,7 @@ public final class RestProcessorServlet extends HttpServlet
         }
 
         // Everything else is identical for POST and GET.
-        final Map<String, Object> parameters = Maps.newHashMap();
+        final Map<String, Object> parameters = new HashMap<>();
         @SuppressWarnings("unchecked")
         final Enumeration<String> parameterNames = (Enumeration<String>) request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
@@ -427,7 +414,7 @@ public final class RestProcessorServlet extends HttpServlet
     private void handleMultiPart(HttpServletRequest request, HttpServletResponse response)
         throws IOException
     {
-        final Map<String, Object> parameters = Maps.newHashMap();
+        final Map<String, Object> parameters = new HashMap<>();
         ProcessingResult input = null;
 
         final ServletFileUpload upload = new ServletFileUpload(new MemoryFileItemFactory());
@@ -517,7 +504,7 @@ public final class RestProcessorServlet extends HttpServlet
 
         // Build the attributes used for processing. Use the ones defined in the input
         // XML, if any, and override with the ones provided in POST parameters.
-        final Map<String, Object> processingAttributes = Maps.newHashMap();
+        final Map<String, Object> processingAttributes = new HashMap<>();
 
         // Attributes from the XML stream
         if (input != null)

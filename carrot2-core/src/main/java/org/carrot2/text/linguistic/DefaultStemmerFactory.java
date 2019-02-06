@@ -13,10 +13,9 @@
 package org.carrot2.text.linguistic;
 
 import java.util.EnumMap;
+import java.util.function.Predicate;
 
 import org.carrot2.core.LanguageCode;
-import org.carrot2.shaded.guava.common.base.Predicate;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.text.linguistic.lucene.ArabicStemmerAdapter;
 import org.carrot2.text.linguistic.lucene.HindiStemmerAdapter;
 import org.carrot2.text.linguistic.morfologik.MorfologikStemmerAdapter;
@@ -42,15 +41,10 @@ public class DefaultStemmerFactory implements IStemmerFactory
     /**
      * Functional verification for {@link IStemmer}.
      */
-    private final static Predicate<IStemmer> stemmerVerifier = new Predicate<IStemmer>()
-    {
-        @Override
-        public boolean apply(IStemmer stemmer)
-        {
-            // Assume functional if there's no exception.
-            stemmer.stem("verification");
-            return true;
-        }
+    private final static Predicate<IStemmer> stemmerVerifier = (stemmer) -> {
+        // Assume functional if there's no exception.
+        stemmer.stem("verification");
+        return true;
     };
 
     /**
@@ -73,12 +67,12 @@ public class DefaultStemmerFactory implements IStemmerFactory
      */
     private static EnumMap<LanguageCode, IFactory<IStemmer>> createDefaultStemmers()
     {
-        final IFactory<IStemmer> identity = new SingletonFactory<IStemmer>(new IdentityStemmer());
-        final EnumMap<LanguageCode, IFactory<IStemmer>> map = Maps.newEnumMap(LanguageCode.class);
+        final IFactory<IStemmer> identity = new SingletonFactory<>(new IdentityStemmer());
+        final EnumMap<LanguageCode, IFactory<IStemmer>> map = new EnumMap<>(LanguageCode.class);
 
         // Adapters to third-party libraries.
-        map.put(LanguageCode.POLISH,     new NewClassInstanceFactory<IStemmer>(MorfologikStemmerAdapter.class));
-        map.put(LanguageCode.ARABIC,     new NewClassInstanceFactory<IStemmer>(ArabicStemmerAdapter.class));
+        map.put(LanguageCode.POLISH,     new NewClassInstanceFactory<>(MorfologikStemmerAdapter.class));
+        map.put(LanguageCode.ARABIC,     new NewClassInstanceFactory<>(ArabicStemmerAdapter.class));
 
         // Adapters to snowball.
         map.put(LanguageCode.DANISH,     snowball(DanishStemmer.class));
@@ -111,7 +105,7 @@ public class DefaultStemmerFactory implements IStemmerFactory
                 IFactory<IStemmer> factory = map.get(lc);
                 if (factory != identity)
                 {
-                    factory = new FallbackFactory<IStemmer>(
+                    factory = new FallbackFactory<>(
                         factory, identity, stemmerVerifier,
                         logger, "Stemmer for "
                             + lc.toString() + " (" + lc.getIsoCode() + ") is not available."

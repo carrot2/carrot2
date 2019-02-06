@@ -31,8 +31,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 import static org.junit.Assert.*;
 
 /**
@@ -117,7 +115,7 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
     {
         final Controller c = prepareController();
 
-        final HashMap<String, Object> attrs = Maps.newHashMap();
+        final HashMap<String, Object> attrs = new HashMap<>();
         attrs.put(AttributeNames.DOCUMENTS, Arrays.asList(new Document("title", "summary")));
 
         ConcurrentComponent1.latch1 = new CountDownLatch(1);
@@ -254,11 +252,10 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
 
     
     @Test
-    @SuppressWarnings("unchecked")
     public void testOutputAttributesWithNullValuesOneComponentCached()
     {
         this.controller = getCachingController(ComponentWithInputOutputAttributes1.class);
-        this.controller.init(Maps.<String, Object> newHashMap());
+        this.controller.init(new HashMap<>());
 
         performProcessing(ComponentWithInputOutputAttributes1.class,
             ComponentWithInputOutputAttributes2.class);

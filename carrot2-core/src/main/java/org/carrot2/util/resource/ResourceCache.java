@@ -14,19 +14,16 @@ package org.carrot2.util.resource;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.Function;
 
 import org.carrot2.util.annotations.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.carrot2.shaded.guava.common.base.Function;
-import org.carrot2.shaded.guava.common.collect.MapMaker;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A static cache of immutable, reusable resources associated with a given
- * {@link ResourceLookup}. Roughly the same thing can be achieved with a
- * {@link MapMaker}, but we want some logging in place too.
+ * {@link ResourceLookup}.
  * 
  * @param <V> Resource value class.
  */
@@ -41,7 +38,7 @@ public final class ResourceCache<V>
     /**
      * Internal map for storing resources associated with a given {@link ResourceLookup}.
      */
-    private final HashMap<ResourceLookup, V> cache = Maps.newHashMap();
+    private final HashMap<ResourceLookup, V> cache = new HashMap<>();
 
     /**
      * Value maker.

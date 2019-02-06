@@ -12,6 +12,7 @@
 
 package org.carrot2.core;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.attribute.*;
@@ -119,7 +120,7 @@ final class ControllerUtils
         {
             processingComponent.afterProcessing();
 
-            final Map<String, Object> outputAttributesWithNulls = Maps.newHashMap();
+            final Map<String, Object> outputAttributesWithNulls = new HashMap<>();
             // Check if we need to do binding.
             if (processingComponent.getClass().getAnnotation(Bindable.class) != null)
             {

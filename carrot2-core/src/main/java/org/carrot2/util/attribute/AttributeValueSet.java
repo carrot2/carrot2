@@ -12,6 +12,7 @@
 
 package org.carrot2.util.attribute;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -110,7 +111,7 @@ public class AttributeValueSet
         this.description = description;
 
         this.baseAttributeValueSet = base;
-        this.overridenAttributeValues = Maps.newHashMap();
+        this.overridenAttributeValues = new HashMap<>();
     }
 
     /**
@@ -154,7 +155,7 @@ public class AttributeValueSet
      */
     public Map<String, Object> getAttributeValues()
     {
-        final Map<String, Object> result = Maps.newHashMap();
+        final Map<String, Object> result = new HashMap<>();
         if (baseAttributeValueSet != null)
         {
             result.putAll(baseAttributeValueSet.getAttributeValues());
@@ -221,7 +222,7 @@ public class AttributeValueSet
     {
         if (overridenAttributeValuesForSerialization == null)
         {
-            overridenAttributeValues = Maps.newHashMap();
+            overridenAttributeValues = new HashMap<>();
         }
         else
         {

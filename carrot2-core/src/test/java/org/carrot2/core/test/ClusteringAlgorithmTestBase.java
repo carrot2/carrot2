@@ -15,25 +15,14 @@ package org.carrot2.core.test;
 import static org.carrot2.core.test.SampleDocumentData.DOCUMENTS_DATA_MINING;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.carrot2.core.Cluster;
-import org.carrot2.core.Controller;
-import org.carrot2.core.Document;
-import org.carrot2.core.IClusteringAlgorithm;
-import org.carrot2.core.Platform;
-import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.BindableMetadata;
@@ -115,25 +104,6 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
         assertThat(clusters.size()).isGreaterThan(0);
     }
 
-    @SuppressWarnings("unchecked")
-    @Test
-    @ThreadLeakLingering(linger = 5000)
-    public void testRepeatedClusteringWithCache()
-    {
-        // Caching controller is not available for .NET at the moment.
-        assumeTrue("Java test only.", Platform.getPlatform() == Platform.JAVA);
-
-        final Controller controller = getCachingController(initAttributes, IClusteringAlgorithm.class);
-
-        final Map<String, Object> processingAttributes = ImmutableMap.of(
-            AttributeNames.DOCUMENTS, (Object) DOCUMENTS_DATA_MINING);
-
-        controller.process(processingAttributes, getComponentClass());
-        controller.process(processingAttributes, getComponentClass());
-
-        controller.dispose();
-    }
-
     /**
      * Performs a very simple stress test using a pooling {@link Controller}. The
      * test is performed with default init attributes.
@@ -149,23 +119,20 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
          * This yields a pooling controller effectively, because no cache interfaces are passed.
          */
         @SuppressWarnings("unchecked")
-        final Controller controller = getCachingController(initAttributes);
+        final Controller controller = ControllerFactory.createPooling();
+        controller.init(initAttributes);
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         List<Callable<ProcessingResult>> callables = Lists.newArrayList();
         for (int i = 0; i < numberOfThreads * queriesPerThread; i++)
         {
             final int dataSetIndex = i;
-            callables.add(new Callable<ProcessingResult>()
-            {
-                public ProcessingResult call() throws Exception
-                {
-                    Map<String, Object> localAttributes = Maps.newHashMap();
-                    localAttributes.put(AttributeNames.DOCUMENTS, SampleDocumentData.ALL
-                        .get(dataSetIndex % SampleDocumentData.ALL.size()));
-                    localAttributes.put("dataSetIndex", dataSetIndex);
-                    return controller.process(localAttributes, getComponentClass());
-                }
+            callables.add(() -> {
+                Map<String, Object> localAttributes = new HashMap<>();
+                localAttributes.put(AttributeNames.DOCUMENTS, SampleDocumentData.ALL
+                    .get(dataSetIndex % SampleDocumentData.ALL.size()));
+                localAttributes.put("dataSetIndex", dataSetIndex);
+                return controller.process(localAttributes, getComponentClass());
             });
         }
 

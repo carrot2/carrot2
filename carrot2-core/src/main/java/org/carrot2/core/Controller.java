@@ -14,6 +14,7 @@ package org.carrot2.core;
 
 import java.io.Closeable;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -158,7 +159,7 @@ public final class Controller implements Closeable
             throw new IllegalStateException("This controller is already initialized.");
         }
 
-        initAttributes = Collections.unmodifiableMap(Maps.newHashMap(attributes));
+        initAttributes = Collections.unmodifiableMap(new HashMap<>(attributes));
         componentIdToConfiguration = ProcessingComponentConfiguration
             .indexByComponentId(configurations);
 
@@ -186,7 +187,7 @@ public final class Controller implements Closeable
     public ProcessingResult process(String query, Integer results,
         Class<?>... processingComponentClasses) throws ProcessingException
     {
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
         attributes.put(AttributeNames.QUERY, query);
         if (results != null)
         {
@@ -215,7 +216,7 @@ public final class Controller implements Closeable
     public ProcessingResult process(List<Document> documents, String queryHint,
         Class<?>... processingComponentClasses) throws ProcessingException
     {
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
         attributes.put(AttributeNames.DOCUMENTS, documents);
         if (StringUtils.isNotBlank(queryHint))
         {
@@ -310,7 +311,7 @@ public final class Controller implements Closeable
         try
         {
             // Prepare final maps of all init- and processing-time input attributes
-            final Map<String, Object> inputAttributes = Maps.newHashMap();
+            final Map<String, Object> inputAttributes = new HashMap<>();
             for (int i = 0; i < processingComponentClassesOrIds.length; i++)
             {
                 configurations[i] = resolveComponent(processingComponentClassesOrIds[i]);
@@ -327,11 +328,11 @@ public final class Controller implements Closeable
             }
 
             // A copy of the input attributes
-            final Map<String, Object> attributesCopy = Maps.newHashMap(attributes);
+            final Map<String, Object> attributesCopy = new HashMap<>(attributes);
 
             // A modifiable map into which we'll be collecting all the results
             // Should we preserve unrelated entries from input on the output?
-            final Map<String, Object> resultAttributes = Maps.newHashMap(attributes);
+            final Map<String, Object> resultAttributes = new HashMap<>(attributes);
 
             // Perform processing
             for (int i = 0; i < components.length; i++)
@@ -609,9 +610,7 @@ public final class Controller implements Closeable
                     sourceTimeAverage.getWindowSizeMillis(),
                     totalTimeAverage.getCurrentAverage(),
                     totalTimeAverage.getUpdatesInWindow(),
-                    totalTimeAverage.getWindowSizeMillis(),
-                    (Long) extraStats.get(CachingProcessingComponentManager.CACHE_MISSES),
-                    (Long) extraStats.get(CachingProcessingComponentManager.CACHE_HITS_TOTAL));
+                    totalTimeAverage.getWindowSizeMillis());
             }
         }
 

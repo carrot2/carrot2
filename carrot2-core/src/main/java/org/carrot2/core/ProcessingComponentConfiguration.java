@@ -49,7 +49,7 @@ public class ProcessingComponentConfiguration
     {
         this.componentClass = componentClass;
         this.componentId = componentId;
-        this.attributes = Collections.unmodifiableMap(Maps.newHashMap(attributes));
+        this.attributes = Collections.unmodifiableMap(new HashMap<>(attributes));
     }
 
     /**

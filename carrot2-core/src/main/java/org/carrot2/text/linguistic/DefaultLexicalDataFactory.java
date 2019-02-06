@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -49,10 +50,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.carrotsearch.hppc.ObjectHashSet;
-import org.carrot2.shaded.guava.common.base.Function;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
  * The default management of lexical resources. Resources are read from disk, cached and shared 
@@ -67,22 +64,8 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     final static Logger logger = LoggerFactory.getLogger(DefaultLexicalDataFactory.class);
 
     private final static Function<ResourceLookup, HashMap<LanguageCode, ILexicalData>> resourceLoader =
-        new Function<ResourceLookup, HashMap<LanguageCode, ILexicalData>>()
-    {
-        public java.util.HashMap<LanguageCode, ILexicalData> apply(ResourceLookup resourceLookup) {
-            return reloadResources(resourceLookup);
-        }
+        (resourceLookup) -> reloadResources(resourceLookup);
 
-        public boolean equals(Object other) {
-            throw new UnsupportedOperationException();
-        }
-
-        public int hashCode()
-        {
-            throw new UnsupportedOperationException();
-        }
-    };
-    
     /**
      * Static shared cache of lexical resources, keyed by a {@link ResourceLookup} 
      * used to search for resources. 
@@ -151,9 +134,9 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     {
         // Load lexical resources.
         ObjectHashSet<MutableCharArray> mergedStopwords = new ObjectHashSet<>();
-        ArrayList<Pattern> mergedStoplabels = Lists.newArrayList();
+        ArrayList<Pattern> mergedStoplabels = new ArrayList<>();
 
-        HashMap<LanguageCode, ILexicalData> resourceMap = Maps.newHashMap();
+        HashMap<LanguageCode, ILexicalData> resourceMap = new HashMap<>();
         for (LanguageCode languageCode : LanguageCode.values())
         {
             final String isoCode = languageCode.getIsoCode();
@@ -245,7 +228,7 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
      */
     public static HashSet<String> load(IResource resource) throws IOException
     {
-        final HashSet<String> words = Sets.newHashSet();
+        final HashSet<String> words = new HashSet<>();
 
         final InputStream is = resource.open();
         if (is == null)

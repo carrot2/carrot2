@@ -15,12 +15,7 @@ package org.carrot2.core;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.carrot2.core.attribute.Init;
@@ -82,7 +77,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
      */
     public PoolingProcessingComponentManager()
     {
-        this(new SoftUnboundedPool<IProcessingComponent, String>());
+        this(new SoftUnboundedPool<>());
     }
 
     /**
@@ -114,7 +109,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         }
 
         this.context = context;
-        this.initAttributes = Maps.newHashMap(attributes);
+        this.initAttributes = new HashMap<>(attributes);
         this.componentIdToConfiguration = ProcessingComponentConfiguration
             .indexByComponentId(configurations);
     }
@@ -174,7 +169,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         {
             try
             {
-                final Map<String, Object> initAttrs = Maps.newHashMap(initAttributes);
+                final Map<String, Object> initAttrs = new HashMap<>(initAttributes);
 
                 if (parameter != null)
                 {
@@ -182,7 +177,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
                         .putAll(componentIdToConfiguration.get(parameter).attributes);
                 }
 
-                final Map<String, Object> initOutputAttrs = Maps.newHashMap();
+                final Map<String, Object> initOutputAttrs = new HashMap<>();
 
                 checkNonPrimitiveInstances(component, initAttrs,
                     new AllAnnotationsPresentPredicate(Input.class, Init.class));
@@ -191,9 +186,8 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
 
                 // Capture @Init @Output attributes
                 initOutputAttributes.putIfAbsent(
-                    new Pair<Class<? extends IProcessingComponent>, String>(component
-                        .getClass(), parameter), 
-                        Collections.unmodifiableMap(Maps.newHashMap(initOutputAttrs)));
+                    new Pair<>(component.getClass(), parameter),
+                        Collections.unmodifiableMap(new HashMap<>(initOutputAttrs)));
 
                 // To support a very natural scenario where processing attributes are
                 // provided/overridden during initialization, we'll also bind processing
@@ -368,7 +362,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         public void activate(IProcessingComponent processingComponent, String parameter)
         {
             // Remember values of @Input @Processing attributes
-            final Map<String, Object> originalValues = Maps.newHashMap();
+            final Map<String, Object> originalValues = new HashMap<>();
             try
             {
                 AttributeBinder.get(processingComponent, originalValues, Input.class,

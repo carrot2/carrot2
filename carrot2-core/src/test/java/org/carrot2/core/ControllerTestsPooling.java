@@ -169,14 +169,12 @@ public abstract class ControllerTestsPooling extends ControllerTestsBase
 
         performProcessing(ComponentWithInitProcessingInputReferenceAttribute.class);
         performProcessing(ComponentWithInitProcessingInputReferenceAttribute.class);
-        assertThat(BindableInstanceCounter.createdInstances).isEqualTo(
-            isCaching() ? 2 : eagerlyInitializedInstances());
+        assertThat(BindableInstanceCounter.createdInstances).isEqualTo(eagerlyInitializedInstances());
 
         processingAttributes.put("initProcessing", BindableInstanceCounter.class);
         performProcessing(ComponentWithInitProcessingInputReferenceAttribute.class);
         performProcessingAndDispose(ComponentWithInitProcessingInputReferenceAttribute.class);
-        assertThat(BindableInstanceCounter.createdInstances).isEqualTo(
-            isCaching() ? 2 : eagerlyInitializedInstances() + 3 - 1);
+        assertThat(BindableInstanceCounter.createdInstances).isEqualTo(eagerlyInitializedInstances() + 3 - 1);
     }
 
     @Test

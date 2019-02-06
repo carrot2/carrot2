@@ -117,7 +117,7 @@ public final class Document implements Cloneable
     public static final String PARTITIONS = "partitions";
 
     /** Fields of this document */
-    private final Map<String, Object> fields = Maps.newHashMap();
+    private final Map<String, Object> fields = new HashMap<>();
 
     /** Read-only collection of fields exposed in {@link #getField(String)}. */
     private final Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
@@ -416,7 +416,7 @@ public final class Document implements Cloneable
         // ConcurrentModificationExceptions.
         synchronized (this)
         {
-            otherFields = Maps.newHashMap(fields);
+            otherFields = new HashMap<>(fields);
         }
         otherFields.remove(TITLE);
         otherFields.remove(SUMMARY);
@@ -437,8 +437,7 @@ public final class Document implements Cloneable
         final HashMap<String, SimpleXmlWrapperValue> otherFieldsForSerialization;
         synchronized (this)
         {
-            otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
-                .wrap(fields));
+            otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers.wrap(fields));
         }
         otherFieldsForSerialization.remove(TITLE);
         otherFieldsForSerialization.remove(SUMMARY);

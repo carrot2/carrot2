@@ -13,14 +13,15 @@
 package org.carrot2.util.simplexml;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.ReflectionUtils;
 import org.simpleframework.xml.*;
-
-import org.carrot2.shaded.guava.common.collect.ImmutableSet;
 
 /**
  * A wrapper around typical serialized types, such as primitives. Without this wrapper
@@ -53,9 +54,10 @@ public class SimpleXmlWrapperValue
     /**
      * Type we can handle using toString() and valueOf() methods.
      */
-    private static final Set<Class<?>> TO_STRING_VALUE_OF_TYPES = ImmutableSet
-        .<Class<?>> of(Byte.class, Short.class, Integer.class, Long.class, Float.class,
-            Double.class, Boolean.class);
+    private static final Set<Class<?>> TO_STRING_VALUE_OF_TYPES = Collections.unmodifiableSet(
+        new HashSet<>(Arrays.<Class<?>> asList(
+            Byte.class, Short.class, Integer.class, Long.class, Float.class,
+            Double.class, Boolean.class)));
 
     /**
      * Wraps the provided value with the serialization wrapper.

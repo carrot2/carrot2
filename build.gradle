@@ -123,7 +123,6 @@ project("carrot2-dcs-launcher") {
   }
 
   task collectWars(type: Sync) {
-    // dependsOn ':carrot2-dcs-service:war'
     from project(":carrot2-dcs-service").war
 
     into "$buildDir/${project.name}/web"
@@ -149,7 +148,7 @@ configure(subprojects.findAll {[
   configurations() {
     testAnnotationProcessor.extendsFrom annotationProcessor
   }
-
+  
   dependencies {
     testImplementation "com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.7.2"
     testImplementation "junit:junit:4.12"

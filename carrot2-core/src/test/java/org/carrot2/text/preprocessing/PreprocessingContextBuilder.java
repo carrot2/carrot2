@@ -13,6 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.Document;
@@ -35,7 +36,7 @@ class PreprocessingContextBuilder
     private ArrayList<Document> documents = Lists.newArrayList();
     private LanguageCode language = LanguageCode.ENGLISH;
 
-    private Map<String, Object> attributes = Maps.newHashMap();
+    private Map<String, Object> attributes = new HashMap<>();
     private IPreprocessingPipeline pipeline = new CompletePreprocessingPipeline();
 
     public final static class FieldValue

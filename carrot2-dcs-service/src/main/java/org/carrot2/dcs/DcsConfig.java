@@ -33,12 +33,6 @@ class DcsConfig
     /** DCS application name */
     final static String DCS_APP_NAME = "dcs";
 
-    @Attribute(name = "cache-documents", required = false)
-    boolean cacheDocuments = true;
-
-    @Attribute(name = "cache-clusters", required = false)
-    boolean cacheClusters = false;
-
     @Attribute(name = "xslt", required = false)
     String xslt = null;
     

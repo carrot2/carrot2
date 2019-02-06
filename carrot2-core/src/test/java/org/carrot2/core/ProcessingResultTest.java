@@ -326,7 +326,7 @@ public class ProcessingResultTest extends CarrotTestCase
     public void testNoFalseJunkGroupAttribute() throws Exception
     {
         Cluster a, b, c;
-        final HashMap<String, Object> attrs = Maps.newHashMap();
+        final HashMap<String, Object> attrs = new HashMap<>();
         attrs.put(AttributeNames.CLUSTERS, Arrays.asList(
             a = new Cluster("a"),
             b = new Cluster("b"),
@@ -455,7 +455,7 @@ public class ProcessingResultTest extends CarrotTestCase
             "Test snippet 2", "http://test2.com/test"), new Document("Test title 3",
             "Test snippet 3. Some more words and <b>html</b>", "http://test2.com"),
             new Document("Other", "Other", "Other"));
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
         attributes.put(AttributeNames.DOCUMENTS, documents);
 
         final Document document = documents.get(0);

@@ -92,25 +92,6 @@ public abstract class ProcessingComponentTestBase<T extends IProcessingComponent
     }
 
     /**
-     * Return an instance of a {@link Controller} with caching, initializing it on the way.
-     */
-    @SuppressWarnings("unchecked")
-    protected final Controller getCachingController(Map<String, Object> initAttributes,
-        Class<? extends IProcessingComponent>... cachedComponentClasses)
-    {
-        if (this.cachingController != null)
-        {
-            throw new RuntimeException("One caching controller per test case, please.");
-        }
-
-        cachingController = ControllerFactory
-            .createCachingPooling(cachedComponentClasses);
-        cachingController.init(initAttributes);
-
-        return cachingController;
-    }
-
-    /**
      * Returns the documents stored in {@link #resultAttributes}.
      */
     @SuppressWarnings("unchecked")

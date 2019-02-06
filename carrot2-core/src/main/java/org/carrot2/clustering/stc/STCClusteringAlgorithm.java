@@ -12,13 +12,7 @@
 
 package org.carrot2.clustering.stc;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.core.Cluster;
@@ -587,7 +581,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     private void mergeStemEquivalentBaseClusters(SequenceBuilder sb, final List<ClusterCandidate> candidates)
     {
         // Look for candidates to merge.
-        Map<IntArrayList, ClusterCandidate> merged = Maps.newHashMap();
+        Map<IntArrayList, ClusterCandidate> merged = new HashMap<>();
         int j = 0;
         for (int max = candidates.size(), i = 0; i < max; i++)
         {

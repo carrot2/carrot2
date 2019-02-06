@@ -16,6 +16,7 @@ import static org.easymock.EasyMock.createStrictControl;
 import static org.easymock.EasyMock.isA;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -63,8 +64,6 @@ public abstract class ControllerTestsBase extends CarrotTestCase
 
     public abstract Controller prepareController();
 
-    /** A caching controller is used.*/
-    boolean caching;
     /** A pooling controller is used. */
     boolean pooling;
 
@@ -76,11 +75,6 @@ public abstract class ControllerTestsBase extends CarrotTestCase
          * Determine caching/ pooling setup.
          */
         IProcessingComponentManager p = c.componentManager;
-        if (p instanceof CachingProcessingComponentManager) {
-            caching = !((CachingProcessingComponentManager) c.componentManager).cachedComponentClasses.isEmpty();
-            p = ((CachingProcessingComponentManager) c.componentManager).delegate;
-        }
-
         if (p instanceof PoolingProcessingComponentManager) {
             pooling = true;
         }
@@ -88,7 +82,6 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         c.dispose();
     }
     
-    public final boolean isCaching() { return caching; }
     public final boolean isPooling() { return pooling; }
 
     @Before
@@ -100,13 +93,13 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         component2Mock = mocksControl.createMock(IProcessingComponent.class);
         component3Mock = mocksControl.createMock(IProcessingComponent.class);
 
-        initAttributes = Maps.newHashMap();
+        initAttributes = new HashMap<>();
         initAttributes.put("delegate1", component1Mock);
         initAttributes.put("delegate2", component2Mock);
         initAttributes.put("delegate3", component3Mock);
         initAttributes.put("instanceAttribute", "i");
 
-        processingAttributes = Maps.newHashMap();
+        processingAttributes = new HashMap<>();
     }
 
     @After

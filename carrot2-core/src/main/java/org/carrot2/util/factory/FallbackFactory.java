@@ -14,8 +14,8 @@ package org.carrot2.util.factory;
 
 import org.slf4j.Logger;
 
-import org.carrot2.shaded.guava.common.base.Predicate;
-import org.carrot2.shaded.guava.common.base.Throwables;
+import java.util.function.Predicate;
+
 
 /**
  * Fallback to the first factory that returns a value.
@@ -51,7 +51,7 @@ public final class FallbackFactory<T> implements IFactory<T>
         try
         {
             T instance = defaultFactory.createInstance();
-            if (verifier.apply(instance))
+            if (verifier.test(instance))
             {
                 return instance;
             }
@@ -62,7 +62,7 @@ public final class FallbackFactory<T> implements IFactory<T>
         catch (Throwable t)
         {
             if (logger.isDebugEnabled())
-                logger.warn(failureMessage, t.toString() + "\n" + Throwables.getStackTraceAsString(t));
+                logger.warn(failureMessage, t.toString(), t);
             else
                 logger.warn(failureMessage, t.toString());
 

@@ -12,6 +12,7 @@
 
 package org.carrot2.text.vsm;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.attribute.Init;
@@ -48,7 +49,7 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
         preprocessingPipeline = new CompletePreprocessingPipeline();
         preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
         
-        Map<String,Object> attrs = Maps.newHashMap();
+        Map<String,Object> attrs = new HashMap<>();
 
         CompletePreprocessingPipelineDescriptor.attributeBuilder(attrs)
             .lexicalDataFactory(createLexicalDataFactory())

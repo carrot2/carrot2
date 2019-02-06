@@ -13,13 +13,12 @@
 package org.carrot2.util.pool;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.carrot2.util.Pair;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * An object pool storing hard references to a fixed number of instantiated objects at the
@@ -28,7 +27,7 @@ import org.carrot2.shaded.guava.common.collect.Maps;
  */
 public final class FixedSizePool<T, P> implements IParameterizedPool<T, P>
 {
-    private Map<Pair<Class<? extends T>, P>, ArrayList<T>> instances = Maps.newHashMap();
+    private Map<Pair<Class<? extends T>, P>, ArrayList<T>> instances = new HashMap<>();
 
     private IInstantiationListener<T, P> instantiationListener;
     private IActivationListener<T, P> activationListener;
@@ -203,7 +202,7 @@ public final class FixedSizePool<T, P> implements IParameterizedPool<T, P>
     private <I extends T> ArrayList<T> createInstancePool(Class<I> clazz,
         P parameter) throws InstantiationException, IllegalAccessException
     {
-        ArrayList<T> list = Lists.newArrayList();
+        ArrayList<T> list = new ArrayList<>();
         for (int i = 0; i < listSizePerKey; i++)
         {
             I instance = clazz.newInstance();

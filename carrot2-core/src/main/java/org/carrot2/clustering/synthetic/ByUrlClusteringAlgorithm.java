@@ -12,13 +12,7 @@
 
 package org.carrot2.clustering.synthetic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.carrot2.core.Cluster;
@@ -30,9 +24,6 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.CommonAttributes;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.shaded.guava.common.collect.LinkedHashMultimap;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Multimap;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
@@ -61,7 +52,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
     private static final Set<String> STOP_URL_PARTS;
     static
     {
-        STOP_URL_PARTS = new HashSet<String>();
+        STOP_URL_PARTS = new HashSet<>();
         STOP_URL_PARTS.add("www");
     }
 
@@ -116,14 +107,21 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         Collection<Integer> documentIndexes, String [][] urlParts, int level,
         String labelSuffix)
     {
-        final Multimap<String, Integer> urlPartToDocumentIndex = LinkedHashMultimap.create();
+
+        final LinkedHashMap<String, List<Integer>> urlPartToDocumentIndex = new LinkedHashMap<>();
         for (final Integer documentIndex : documentIndexes)
         {
             final String [] urlPartsForDocument = urlParts[documentIndex.intValue()];
             if (urlPartsForDocument != null && urlPartsForDocument.length > level
                 && !STOP_URL_PARTS.contains(urlPartsForDocument[level]))
             {
-                urlPartToDocumentIndex.put(urlPartsForDocument[level], documentIndex);
+                urlPartToDocumentIndex.compute(
+                    urlPartsForDocument[level],
+                    (k, list) -> {
+                        if (list == null) list = new ArrayList<>();
+                        list.add(documentIndex);
+                        return list;
+                    });
             }
         }
 
@@ -131,7 +129,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
         final List<Cluster> clusters = new ArrayList<Cluster>();
         for (final String urlPart : urlPartToDocumentIndex.keySet())
         {
-            final Collection<Integer> indexes = urlPartToDocumentIndex.get(urlPart);
+            final List<Integer> indexes = urlPartToDocumentIndex.get(urlPart);
 
             if (indexes.size() > 1)
             {
@@ -172,15 +170,14 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
 
         if (documentsInClusters.isEmpty())
         {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
 
         // Sort clusters
         Collections.sort(clusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
 
         // Add junk clusters
-        final ArrayList<Document> documentsInCluster = Lists
-            .newArrayListWithExpectedSize(documentIndexes.size());
+        final ArrayList<Document> documentsInCluster = new ArrayList<>(documentIndexes.size());
         for (Integer documentIndex : documentIndexes)
         {
             documentsInCluster.add(documents[documentIndex]);

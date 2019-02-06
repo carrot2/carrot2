@@ -945,7 +945,7 @@ public final class Cluster
     @JsonProperty("attributes")
     private Map<String, Object> getOtherAttributes()
     {
-        final Map<String, Object> otherAttributes = Maps.newHashMap(attributesView);
+        final Map<String, Object> otherAttributes = new HashMap<>(attributesView);
         return otherAttributes.isEmpty() ? null : otherAttributes;
     }
 

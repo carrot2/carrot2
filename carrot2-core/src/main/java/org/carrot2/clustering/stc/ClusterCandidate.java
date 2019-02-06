@@ -15,7 +15,6 @@ package org.carrot2.clustering.stc;
 import java.util.ArrayList;
 
 import com.carrotsearch.hppc.BitSet;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A cluster candidate in the process of building STC clusters.
@@ -46,7 +45,7 @@ final class ClusterCandidate
     /* For cluster merging. */
     ClusterCandidate()
     {
-        this.phrases = Lists.newArrayList();
+        this.phrases = new ArrayList<>();
         this.documents = new BitSet();
     }
 
@@ -55,7 +54,7 @@ final class ClusterCandidate
     {
         assert documents.cardinality() == cardinality;
 
-        phrases = Lists.newArrayListWithCapacity(1);
+        phrases = new ArrayList<>(1);
         phrases.add(phraseIndices);
 
         this.documents = documents;

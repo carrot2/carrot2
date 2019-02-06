@@ -146,7 +146,7 @@ public class MultilingualClustering
     
     public List<Cluster> process(List<Document> documents, IMonolingualClusteringAlgorithm algorithm)
     {
-        languageCounts = Maps.newHashMap();
+        languageCounts = new HashMap<>();
         
         if (documents.isEmpty())
         {
@@ -267,7 +267,7 @@ public class MultilingualClustering
         // For each language, perform clustering. Please note that implementations of 
         // IMonolingualClusteringAlgorithm.cluster() are not guaranteed to be thread-safe
         // and hence the method must NOT be called concurrently.
-        final Map<LanguageCode, Cluster> clusters = Maps.newHashMap();
+        final Map<LanguageCode, Cluster> clusters = new HashMap<>();
         for (String language : documentsByLanguage.keySet())
         {
             final ImmutableList<Document> languageDocuments = documentsByLanguage.get(language);

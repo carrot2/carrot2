@@ -12,6 +12,7 @@
 
 package org.carrot2.clustering.lingo;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,7 +52,6 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 
 import com.carrotsearch.hppc.BitSet;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Lingo clustering algorithm. Implementation as described in: <i> "Stanisław Osiński,
@@ -192,7 +192,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
             query, language);
 
         // Further processing only if there are words to process
-        clusters = Lists.newArrayList();
+        clusters = new ArrayList<>();
         if (context.hasLabels())
         {
             // Term-document matrix building and reduction

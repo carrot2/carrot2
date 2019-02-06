@@ -15,6 +15,7 @@ package org.carrot2.text.linguistic;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.EnumMap;
+import java.util.function.Predicate;
 
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
@@ -29,9 +30,6 @@ import org.carrot2.util.factory.NewClassInstanceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.carrot2.shaded.guava.common.base.Predicate;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 @Bindable
 @ThreadSafe
 public class DefaultTokenizerFactory implements ITokenizerFactory
@@ -44,23 +42,17 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
     /**
      * Functional verification for {@link ITokenizer}.
      */
-    private final static Predicate<ITokenizer> tokenizerVerifier = new Predicate<ITokenizer>()
-    {
-        @Override
-        public boolean apply(ITokenizer tokenizer)
+    private final static Predicate<ITokenizer> tokenizerVerifier = (tokenizer) -> {
+        // Assume functional if there's no exception.
+        try
         {
-            // Assume functional if there's no exception.
-            try
-            {
-                tokenizer.reset(new StringReader("verify"));
-                tokenizer.nextToken();
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
-
+            tokenizer.reset(new StringReader("verify"));
+            tokenizer.nextToken();
             return true;
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
         }
     };
 
@@ -83,8 +75,7 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
      */
     private static EnumMap<LanguageCode, IFactory<ITokenizer>> createDefaultTokenizers()
     {
-        EnumMap<LanguageCode, IFactory<ITokenizer>> map = Maps
-            .newEnumMap(LanguageCode.class);
+        EnumMap<LanguageCode, IFactory<ITokenizer>> map = new EnumMap<>(LanguageCode.class);
 
         // By default, we use our own tokenizer for all languages.
         IFactory<ITokenizer> whitespaceTokenizerFactory = new NewClassInstanceFactory<ITokenizer>(
@@ -113,7 +104,7 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
                 IFactory<ITokenizer> factory = map.get(lc);
                 if (factory != whitespaceTokenizerFactory)
                 {
-                    map.put(lc, new FallbackFactory<ITokenizer>(factory,
+                    map.put(lc, new FallbackFactory<>(factory,
                         whitespaceTokenizerFactory, tokenizerVerifier, logger,
                         "Tokenizer for " + lc.toString() + " (" + lc.getIsoCode()
                             + ") is not available."

@@ -12,6 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -155,7 +156,7 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
         temporaryCaseNormalizer.normalize(temporaryContext);
 
         final char [][] images = temporaryContext.allWords.image;
-        wordIndices = Maps.newHashMap();
+        wordIndices = new HashMap<>();
         for (int i = 0; i < images.length; i++)
         {
             wordIndices.put(new String(images[i]), i);

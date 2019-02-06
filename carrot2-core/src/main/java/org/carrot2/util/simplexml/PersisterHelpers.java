@@ -13,6 +13,7 @@
 package org.carrot2.util.simplexml;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.util.CloseableUtils;
@@ -21,8 +22,6 @@ import org.carrot2.util.resource.ResourceLookup;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
-
-import org.carrot2.shaded.guava.common.collect.ImmutableMap;
 
 /**
  * Simple XML session context helpers.
@@ -53,8 +52,10 @@ public final class PersisterHelpers
     public static Persister createPersister(
         final ResourceLookup resourceLookup, Strategy strategy)
     {
+        HashMap<Object, Object> attrs = new HashMap<>();
+        attrs.put(RESOURCE_LOOKUP_KEY, resourceLookup);
         return createPersister(
-            ImmutableMap.<Object, Object> of(RESOURCE_LOOKUP_KEY, resourceLookup),
+            attrs,
             strategy);
     }
 

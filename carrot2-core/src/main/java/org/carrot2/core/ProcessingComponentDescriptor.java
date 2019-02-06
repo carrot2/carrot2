@@ -14,6 +14,7 @@ package org.carrot2.core;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -105,7 +106,7 @@ public class ProcessingComponentDescriptor
 
         if (result == null)
         {
-            result = Maps.newHashMap();
+            result = new HashMap<>();
         }
 
         return result;
@@ -206,7 +207,7 @@ public class ProcessingComponentDescriptor
         throws InstantiationException, IllegalAccessException
     {
         final IProcessingComponent instance = getComponentClass().newInstance();
-        final Map<String, Object> initAttributes = Maps.newHashMap();
+        final Map<String, Object> initAttributes = new HashMap<>();
         final AttributeValueSet defaultAttributeValueSet = attributeSets
             .getDefaultAttributeValueSet();
         if (defaultAttributeValueSet != null)

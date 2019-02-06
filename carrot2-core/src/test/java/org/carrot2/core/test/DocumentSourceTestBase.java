@@ -70,19 +70,6 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
     }
 
     /**
-     * Runs a query without specifying any additional attributes. The query is run using
-     * a {@link Controller} with caching.
-     * 
-     * @return Returns the number of fetched documents. Access
-     *         {@link #resultAttributes} map to get hold of the actual documents.
-     */
-    @SuppressWarnings("unchecked")
-    protected int runQueryInCachingController()
-    {
-        return runQuery(getCachingController(initAttributes));
-    }
-
-    /**
      * Runs a query without specifying any additional attributes.
      * 
      * @param controller the {@link Controller} to perform the query

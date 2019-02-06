@@ -53,7 +53,7 @@ public class IterationNumberGuesser
 
     static
     {
-        allKnownCoefficients = Maps.newHashMap();
+        allKnownCoefficients = new HashMap<>();
 
         /** NMF-ED, Random seeding, level 1 */
         allKnownCoefficients.put(Arrays.asList(new Object []

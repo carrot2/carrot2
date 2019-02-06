@@ -12,6 +12,7 @@
 
 package org.carrot2.mahout.math;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -111,7 +112,7 @@ public abstract class AbstractMatrix implements Matrix {
   @Override
   public void set(String rowLabel, int row, double[] rowData) {
     if (rowLabelBindings == null) {
-      rowLabelBindings = Maps.newHashMap();
+      rowLabelBindings = new HashMap<>();
     }
     rowLabelBindings.put(rowLabel, row);
     set(row, rowData);
@@ -133,11 +134,11 @@ public abstract class AbstractMatrix implements Matrix {
   @Override
   public void set(String rowLabel, String columnLabel, int row, int column, double value) {
     if (rowLabelBindings == null) {
-      rowLabelBindings = Maps.newHashMap();
+      rowLabelBindings = new HashMap<>();
     }
     rowLabelBindings.put(rowLabel, row);
     if (columnLabelBindings == null) {
-      columnLabelBindings = Maps.newHashMap();
+      columnLabelBindings = new HashMap<>();
     }
     columnLabelBindings.put(columnLabel, column);
 
@@ -353,10 +354,10 @@ public abstract class AbstractMatrix implements Matrix {
       throw new IllegalStateException(cnse); // can't happen
     }
     if (rowLabelBindings != null) {
-      clone.rowLabelBindings = Maps.newHashMap(rowLabelBindings);
+      clone.rowLabelBindings = new HashMap<>(rowLabelBindings);
     }
     if (columnLabelBindings != null) {
-      clone.columnLabelBindings = Maps.newHashMap(columnLabelBindings);
+      clone.columnLabelBindings = new HashMap<>(columnLabelBindings);
     }
     return clone;
   }

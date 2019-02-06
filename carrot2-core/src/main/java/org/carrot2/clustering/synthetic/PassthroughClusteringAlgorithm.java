@@ -12,6 +12,7 @@
 
 package org.carrot2.clustering.synthetic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.carrot2.core.Cluster;
@@ -27,8 +28,6 @@ import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Label;
 import org.carrot2.util.attribute.Output;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A do-nothing implementation of {@link IClusteringAlgorithm}. If no clusters are
@@ -57,7 +56,7 @@ public class PassthroughClusteringAlgorithm extends ProcessingComponentBase impl
     public void process() throws ProcessingException
     {
         if (clusters == null) {
-            clusters = Lists.newArrayList();
+            clusters = new ArrayList<>();
         }
     }
 }
