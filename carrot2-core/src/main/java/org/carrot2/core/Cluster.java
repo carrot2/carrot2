@@ -23,6 +23,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.carrot2.util.MapUtils;
 import org.carrot2.util.StringUtils;
@@ -39,11 +41,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.carrot2.shaded.guava.common.base.Function;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-import org.carrot2.shaded.guava.common.collect.Ordering;
-import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
  * A cluster (group) of {@link Document}s. Each cluster has a human-readable label
@@ -272,7 +269,7 @@ public final class Cluster
      */
     public List<Document> getAllDocuments(Comparator<Document> comparator)
     {
-        final List<Document> sortedDocuments = Lists.newArrayList(getAllDocuments());
+        final List<Document> sortedDocuments = new ArrayList<>(getAllDocuments());
         Collections.sort(sortedDocuments, comparator);
         return sortedDocuments;
     }
@@ -566,37 +563,22 @@ public final class Cluster
      * Compares clusters by size as returned by {@link #size()}. Clusters with more
      * documents are larger.
      */
-    public static final Comparator<Cluster> BY_SIZE_COMPARATOR = Ordering.natural()
-        .nullsFirst().onResultOf(new Function<Cluster, Integer>(){
-            public Integer apply(Cluster cluster)
-            {
-                return cluster.size();
-            }
-        });
+    public static final Comparator<Cluster> BY_SIZE_COMPARATOR =
+        Comparator.nullsFirst(Comparator.comparingInt(Cluster::size));
 
     /**
      * Compares clusters by score as returned by {@link #SCORE}. Clusters with larger
      * score are larger.
      */
-    public static final Comparator<Cluster> BY_SCORE_COMPARATOR = Ordering.natural()
-        .nullsFirst().onResultOf(new Function<Cluster, Double>(){
-            public Double apply(Cluster cluster)
-            {
-                return cluster.getAttribute(SCORE);
-            }
-        });
+    public static final Comparator<Cluster> BY_SCORE_COMPARATOR =
+        Comparator.nullsFirst(Comparator.comparingDouble(cluster -> cluster.getAttribute(SCORE)));
 
     /**
      * Compares clusters by the natural order of their labels as returned by
      * {@link #getLabel()}.
      */
-    public static final Comparator<Cluster> BY_LABEL_COMPARATOR = Ordering.natural()
-        .nullsFirst().onResultOf(new Function<Cluster, String>(){
-            public String apply(Cluster cluster)
-            {
-                return cluster.getLabel();
-            }
-        });
+    public static final Comparator<Cluster> BY_LABEL_COMPARATOR =
+        Comparator.nullsFirst(Comparator.comparing(cluster -> cluster.getLabel()));
 
     /**
      * Compares clusters first by their size as returned by {@link #size()} and labels as
@@ -608,8 +590,8 @@ public final class Cluster
      * the applications want to display clusters).
      * </p>
      */
-    public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR = Ordering
-        .from(Collections.reverseOrder(BY_SIZE_COMPARATOR)).compound(BY_LABEL_COMPARATOR);
+    public static final Comparator<Cluster> BY_REVERSED_SIZE_AND_LABEL_COMPARATOR =
+        Collections.reverseOrder(BY_SIZE_COMPARATOR).thenComparing(BY_LABEL_COMPARATOR);
 
     /**
      * Compares clusters first by their size as returned by {@link #SCORE} and labels as
@@ -621,9 +603,8 @@ public final class Cluster
      * the applications want to display clusters).
      * </p>
      */
-    public static final Comparator<Cluster> BY_REVERSED_SCORE_AND_LABEL_COMPARATOR = Ordering
-        .from(Collections.reverseOrder(BY_SCORE_COMPARATOR))
-        .compound(BY_LABEL_COMPARATOR);
+    public static final Comparator<Cluster> BY_REVERSED_SCORE_AND_LABEL_COMPARATOR =
+        Collections.reverseOrder(BY_SCORE_COMPARATOR).thenComparing(BY_LABEL_COMPARATOR);
 
     /**
      * Returns a comparator that compares clusters based on the aggregation of their size
@@ -648,14 +629,10 @@ public final class Cluster
                 "Score weight must be between 0.0 (inclusive) and 1.0 (inclusive) ");
         }
 
-        return Ordering.natural().onResultOf(new Function<Cluster, Double>()
-        {
-            public Double apply(Cluster cluster)
-            {
-                return -Math.pow(cluster.size(), (1 - scoreWeight))
-                    * Math.pow((Double) cluster.getAttribute(SCORE), scoreWeight);
-            }
-        }).compound(BY_LABEL_COMPARATOR);
+        return Comparator.<Cluster> comparingDouble(cluster ->
+            -Math.pow(cluster.size(), (1 - scoreWeight))
+                * Math.pow((Double) cluster.getAttribute(SCORE), scoreWeight))
+            .thenComparing(BY_LABEL_COMPARATOR);
     }
 
     /**
@@ -669,14 +646,8 @@ public final class Cluster
      * is better done in linear time without resorting to {@link Collections#sort(List)}.
      * </p>
      */
-    public static final Comparator<Cluster> OTHER_TOPICS_AT_THE_END = Ordering.natural()
-        .onResultOf(new Function<Cluster, Double>()
-        {
-            public Double apply(Cluster cluster)
-            {
-                return cluster.isOtherTopics() ? 1.0 : -1.0;
-            }
-        });
+    public static final Comparator<Cluster> OTHER_TOPICS_AT_THE_END =
+        Comparator.<Cluster> comparingDouble(cluster -> cluster.isOtherTopics() ? 1.0 : -1.0);
 
     /**
      * Assigns sequential identifiers to the provided <code>clusters</code> (and their
@@ -706,7 +677,7 @@ public final class Cluster
 
             if (hadIds)
             {
-                final HashSet<Integer> ids = Sets.newHashSet();
+                final HashSet<Integer> ids = new HashSet<>();
                 for (final Cluster c : flattened)
                 {
                     if (!ids.add(c.id))
@@ -816,8 +787,8 @@ public final class Cluster
     public static Cluster buildOtherTopics(List<Document> allDocuments,
         List<Cluster> clusters, String label)
     {
-        final Set<Document> unclusteredDocuments = Sets.newLinkedHashSet(allDocuments);
-        final Set<Document> assignedDocuments = Sets.newHashSet();
+        final Set<Document> unclusteredDocuments = new LinkedHashSet<>(allDocuments);
+        final Set<Document> assignedDocuments = new HashSet<>();
 
         for (Cluster cluster : clusters)
         {
@@ -890,17 +861,12 @@ public final class Cluster
     @Persist
     private void beforeSerialization()
     {
-        documentIds = Lists.transform(documents, new Function<Document, DocumentRefid>()
-        {
-            public DocumentRefid apply(Document document)
-            {
-                return new DocumentRefid(document.getStringId());
-            }
-        });
+        documentIds = documents.stream()
+            .map(document -> new DocumentRefid(document.getStringId()))
+            .collect(Collectors.toList());
 
         // Remove score from attributes for serialization
-        otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers
-            .wrap(attributes));
+        otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers.wrap(attributes));
         otherAttributesForSerialization.remove(SCORE);
         if (otherAttributesForSerialization.isEmpty())
         {
@@ -927,18 +893,9 @@ public final class Cluster
     @JsonProperty("documents")
     private List<String> getDocumentIds()
     {
-        return Lists.transform(documents, DOCUMENT_TO_ID);
+        return documents.stream().map(doc -> doc.getStringId()).collect(Collectors.toList());
     }
 
-    private static Function<Document, String> DOCUMENT_TO_ID = new Function<Document, String>()
-    {
-        @Override
-        public String apply(Document doc)
-        {
-            return doc.getStringId();
-        }
-    };
-    
     /**
      * For JSON and XML serialization only.
      */

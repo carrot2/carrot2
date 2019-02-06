@@ -15,7 +15,6 @@ package org.carrot2.core;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,11 +34,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.carrot2.shaded.guava.common.base.Function;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-import org.carrot2.shaded.guava.common.collect.Ordering;
-import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
  * A document that to be processed by the framework. Each document is a collection of
@@ -547,7 +541,7 @@ public final class Document implements Cloneable
 
             if (hadIds)
             {
-                final HashSet<String> ids = Sets.newHashSet();
+                final HashSet<String> ids = new HashSet<>();
                 for (Document doc : documents)
                 {
                     String id = doc.getStringId();
@@ -578,37 +572,6 @@ public final class Document implements Cloneable
             }
         }
     }
-
-    /**
-     * Transforms a {@link Document} to its identifier returned by
-     * {@link Document#getId()}.
-     * 
-     * @deprecated Please use #getStringId() directly or use your own {@link Function}
-     *             implementation.
-     */
-    public static final class DocumentToId implements Function<Document, Integer>
-    {
-        public static final DocumentToId INSTANCE = new DocumentToId();
-
-        private DocumentToId()
-        {
-        }
-
-        public Integer apply(Document document)
-        {
-            return document.getId();
-        }
-    }
-
-    /**
-     * Compares {@link Document}s by their identifiers {@link #getId()}, which effectively
-     * gives the original order in which they were returned by the document source.
-     * 
-     * @deprecated semantics of the identifiers depends on the document source, please
-     *             roll your own comparator that is aware of the actual id semantics.
-     */
-    public static final Comparator<Document> BY_ID_COMPARATOR = Ordering.natural()
-        .nullsFirst().onResultOf(DocumentToId.INSTANCE);
 
     /**
      * Adds a serialization listener to this document.

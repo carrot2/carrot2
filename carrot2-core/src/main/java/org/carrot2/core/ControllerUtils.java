@@ -18,9 +18,6 @@ import java.util.Map;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 
-import org.carrot2.shaded.guava.common.base.Predicates;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Static life cycle and controller utilities (for use within the core package).
  * <p>
@@ -127,8 +124,12 @@ final class ControllerUtils
                 AttributeBinder.get(processingComponent, outputAttributesWithNulls,
                     Output.class, Processing.class);
             }
-            attributes.putAll(Maps.filterValues(outputAttributesWithNulls,
-                Predicates.notNull()));
+
+            outputAttributesWithNulls.forEach((k, v) -> {
+                if (v != null) {
+                    attributes.put(k, v);
+                }
+            });
         }
         catch (final InstantiationException e)
         {

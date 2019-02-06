@@ -27,9 +27,6 @@ import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
 import org.simpleframework.xml.Attribute;
 
-import org.carrot2.shaded.guava.common.collect.ImmutableMap;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * A controller implementing the life cycle described in {@link IProcessingComponent}. Use
  * {@link ControllerFactory} to obtain controllers with different characteristics, e.g.
@@ -118,7 +115,7 @@ public final class Controller implements Closeable
      */
     public synchronized Controller init() throws ComponentInitializationException
     {
-        return init(ImmutableMap.<String, Object> of());
+        return init(Collections.emptyMap());
     }
 
     /**
