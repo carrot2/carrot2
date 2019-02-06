@@ -13,10 +13,9 @@
 package org.carrot2.source;
 
 import java.util.HashSet;
+import java.util.function.Predicate;
 
 import org.carrot2.core.Document;
-
-import org.carrot2.shaded.guava.common.base.Predicate;
 
 /**
  * This predicate allows one to filter out documents with non-unique
@@ -24,7 +23,7 @@ import org.carrot2.shaded.guava.common.base.Predicate;
  */
 final class UniqueFieldPredicate implements Predicate<Document>
 {
-    private final HashSet<Object> unique = new HashSet<Object>();
+    private final HashSet<Object> unique = new HashSet<>();
 
     private final String fieldName;
 
@@ -33,7 +32,7 @@ final class UniqueFieldPredicate implements Predicate<Document>
         this.fieldName = fieldName;
     }
 
-    public boolean apply(Document document)
+    public boolean test(Document document)
     {
         final Object fieldValue = document.getField(fieldName);
 

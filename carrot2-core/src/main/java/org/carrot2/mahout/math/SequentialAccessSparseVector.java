@@ -15,9 +15,8 @@ package org.carrot2.mahout.math;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import com.carrotsearch.hppc.AbstractIterator;
 import org.carrot2.mahout.math.function.Functions;
-import org.carrot2.shaded.guava.common.collect.AbstractIterator;
-import org.carrot2.shaded.guava.common.primitives.Doubles;
 
 
 public class SequentialAccessSparseVector extends AbstractVector {
@@ -200,10 +199,10 @@ public class SequentialAccessSparseVector extends AbstractVector {
     private final NonDefaultElement element = new NonDefaultElement();
 
     @Override
-    protected Element computeNext() {
+    protected Element fetch() {
       int numMappings = values.getNumMappings();
       if (numMappings <= 0 || element.getNextOffset() >= numMappings) {
-        return endOfData();
+        return done();
       }
       element.advanceOffset();
       return element;
@@ -216,10 +215,10 @@ public class SequentialAccessSparseVector extends AbstractVector {
     private final AllElement element = new AllElement();
 
     @Override
-    protected Element computeNext() {
+    protected Element fetch() {
       int numMappings = values.getNumMappings();
       if (numMappings <= 0 || element.getNextIndex() > values.getIndices()[numMappings - 1]) {
-        return endOfData();
+        return done();
       }
       element.advanceIndex();
       return element;
@@ -316,7 +315,7 @@ public class SequentialAccessSparseVector extends AbstractVector {
 
     @Override
     public int hashCode() {
-      return index ^ Doubles.hashCode(value);
+      return index ^ Double.hashCode(value);
     }
 
     @Override

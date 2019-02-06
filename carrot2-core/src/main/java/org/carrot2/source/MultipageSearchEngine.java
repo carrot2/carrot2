@@ -15,12 +15,12 @@ package org.carrot2.source;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Predicate;
 
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
-import org.carrot2.shaded.guava.common.base.Predicate;
 
 /**
  * A base class facilitating implementation of {@link IDocumentSource}s wrapping external
@@ -69,7 +69,7 @@ public abstract class MultipageSearchEngine extends SearchEngineBase
             final Predicate<Document> p = new UniqueFieldPredicate(Document.CONTENT_URL);
             while (i.hasNext())
             {
-                if (!p.apply(i.next()))
+                if (!p.test(i.next()))
                 {
                     i.remove();
                 }

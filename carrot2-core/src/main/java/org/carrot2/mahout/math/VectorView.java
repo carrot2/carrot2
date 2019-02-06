@@ -12,9 +12,9 @@
 
 package org.carrot2.mahout.math;
 
-import java.util.Iterator;
+import com.carrotsearch.hppc.AbstractIterator;
 
-import org.carrot2.shaded.guava.common.collect.AbstractIterator;
+import java.util.Iterator;
 
 
 public class VectorView extends AbstractVector {
@@ -108,7 +108,7 @@ public class VectorView extends AbstractVector {
     }
 
     @Override
-    protected Element computeNext() {
+    protected Element fetch() {
       while (it.hasNext()) {
         Element el = it.next();
         if (isInView(el.index()) && el.get() != 0) {
@@ -116,9 +116,8 @@ public class VectorView extends AbstractVector {
           return new DecoratorElement(decorated);
         }
       }
-      return endOfData();
+      return done();
     }
-
   }
 
   public final class AllIterator extends AbstractIterator<Element> {
@@ -130,7 +129,7 @@ public class VectorView extends AbstractVector {
     }
 
     @Override
-    protected Element computeNext() {
+    protected Element fetch() {
       while (it.hasNext()) {
         Element el = it.next();
         if (isInView(el.index())) {
@@ -138,9 +137,8 @@ public class VectorView extends AbstractVector {
           return new DecoratorElement(decorated);
         }
       }
-      return endOfData(); // No element was found
+      return done(); // No element was found
     }
-
   }
 
   private final class DecoratorElement implements Element {

@@ -15,9 +15,9 @@ package org.carrot2.mahout.math;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import com.carrotsearch.hppc.AbstractIterator;
 import org.carrot2.mahout.math.function.DoubleDoubleFunction;
 import org.carrot2.mahout.math.function.PlusMult;
-import org.carrot2.shaded.guava.common.collect.AbstractIterator;
 
 
 public class DenseVector extends AbstractVector {
@@ -211,7 +211,7 @@ public class DenseVector extends AbstractVector {
     private int index = 0;
 
     @Override
-    protected Element computeNext() {
+    protected Element fetch() {
       while (index < size() && values[index] == 0.0) {
         index++;
       }
@@ -220,7 +220,7 @@ public class DenseVector extends AbstractVector {
         index++;
         return element;
       } else {
-        return endOfData();
+        return done();
       }
     }
 
@@ -235,12 +235,12 @@ public class DenseVector extends AbstractVector {
     }
 
     @Override
-    protected Element computeNext() {
+    protected Element fetch() {
       if (element.index + 1 < size()) {
         element.index++;
         return element;
       } else {
-        return endOfData();
+        return done();
       }
     }
 

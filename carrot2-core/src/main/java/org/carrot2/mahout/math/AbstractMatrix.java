@@ -16,13 +16,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.carrotsearch.hppc.AbstractIterator;
 import org.carrot2.mahout.math.function.DoubleDoubleFunction;
 import org.carrot2.mahout.math.function.DoubleFunction;
 import org.carrot2.mahout.math.function.Functions;
 import org.carrot2.mahout.math.function.PlusMult;
 import org.carrot2.mahout.math.function.VectorFunction;
-import org.carrot2.shaded.guava.common.collect.AbstractIterator;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 
 public abstract class AbstractMatrix implements Matrix {
@@ -57,9 +56,9 @@ public abstract class AbstractMatrix implements Matrix {
     return new AbstractIterator<MatrixSlice>() {
       private int slice;
       @Override
-      protected MatrixSlice computeNext() {
+      protected MatrixSlice fetch() {
         if (slice >= numSlices()) {
-          return endOfData();
+          return done();
         }
         int i = slice++;
         return new MatrixSlice(viewRow(i), i);
@@ -605,9 +604,9 @@ public abstract class AbstractMatrix implements Matrix {
       return new AbstractIterator<Element>() {
         private int i;
         @Override
-        protected Element computeNext() {
+        protected Element fetch() {
           if (i >= size()) {
-            return endOfData();
+            return done();
           }
           return getElement(i++);
         }

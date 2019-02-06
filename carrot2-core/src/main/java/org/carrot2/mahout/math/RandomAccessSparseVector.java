@@ -14,9 +14,9 @@ package org.carrot2.mahout.math;
 
 import java.util.Iterator;
 
+import com.carrotsearch.hppc.AbstractIterator;
 import org.carrot2.mahout.math.list.IntArrayList;
 import org.carrot2.mahout.math.map.OpenIntDoubleHashMap;
-import org.carrot2.shaded.guava.common.collect.AbstractIterator;
 
 
 
@@ -158,9 +158,9 @@ public class RandomAccessSparseVector extends AbstractVector {
     }
 
     @Override
-    protected Element computeNext() {
+    protected Element fetch() {
       if (offset >= indices.size()) {
-        return endOfData();
+        return done();
       }
       element.index = indices.get(offset);
       offset++;
@@ -178,12 +178,12 @@ public class RandomAccessSparseVector extends AbstractVector {
     }
 
     @Override
-    protected Element computeNext() {
+    protected Element fetch() {
       if (element.index + 1 < size()) {
         element.index++;
         return element;
       } else {
-        return endOfData();
+        return done();
       }
     }
 
