@@ -81,7 +81,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     @Test
     public void testEmptyDocuments()
     {
-        final List<Document> documents = Lists.newArrayList();
+        final List<Document> documents = new ArrayList<>();
         final int documentCount = randomIntBetween(1, 100);
         for (int i = 0; i < documentCount; i++)
         {
@@ -123,7 +123,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
         controller.init(initAttributes);
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
-        List<Callable<ProcessingResult>> callables = Lists.newArrayList();
+        List<Callable<ProcessingResult>> callables = new ArrayList<>();
         for (int i = 0; i < numberOfThreads * queriesPerThread; i++)
         {
             final int dataSetIndex = i;

@@ -12,6 +12,7 @@
 
 package org.carrot2.clustering.kmeans;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -42,7 +43,7 @@ public class BisectingKMeansClusteringAlgorithmTest extends
     @Test
     public void smokeTest()
     {
-        final List<Document> documents = Lists.newArrayList();
+        final List<Document> documents = new ArrayList<>();
         documents.add(new Document("WordA . WordA"));
         documents.add(new Document("WordB . WordB"));
         documents.add(new Document("WordC . WordC"));

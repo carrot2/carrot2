@@ -12,10 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllPhrases;
@@ -27,9 +24,6 @@ import org.fest.util.Strings;
 
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.procedures.IntIntProcedure;
-
-import org.carrot2.shaded.guava.common.base.MoreObjects;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Fest-style assertions on the content of {@link PreprocessingContext}.
@@ -111,7 +105,7 @@ class PreprocessingContextAssert
         Assertions.assertThat(context.allWords.image)
             .describedAs("the context's allWords is not properly initialized.").isNotNull();
 
-        List<String> result = Lists.newArrayList();
+        List<String> result = new ArrayList<>();
         for (int i = context.allWords.image.length; --i >= 0;)
         {
             result.add(new String(context.allWords.image[i]));
@@ -128,7 +122,7 @@ class PreprocessingContextAssert
         Assertions.assertThat(context.allPhrases.wordIndices)
             .describedAs("the context's allPhrases is not properly initialized.").isNotNull();
 
-        List<String> result = Lists.newArrayList();
+        List<String> result = new ArrayList<>();
         for (int i = context.allPhrases.wordIndices.length; --i >= 0;)
         {
             result.add(context.allPhrases.getPhrase(i).toString());
@@ -471,7 +465,7 @@ nextPhrase:
 
     public List<TokenEntry> tokens()
     {
-        List<TokenEntry> result = Lists.newArrayList();
+        List<TokenEntry> result = new ArrayList<>();
         for (int i = 0; i < context.allTokens.image.length; i++)
             result.add(new TokenEntry(i));
         return result;
@@ -514,8 +508,7 @@ nextPhrase:
                     image != null ? image.toCharArray() : null,
                     context.allTokens.image[tokenIndex]) == 0)
                     .as("token image equality: " + image + " vs. " + 
-                    new String(
-                        MoreObjects.firstNonNull(context.allTokens.image[tokenIndex], "<null>".toCharArray())))
+                    new String(firstNonNull(context.allTokens.image[tokenIndex], "<null>".toCharArray())))
                     .isTrue();
             return this;
         }
@@ -536,7 +529,17 @@ nextPhrase:
             return this;
         }
     }
-    
+
+    private static <T> T firstNonNull(T o1, T o2) {
+        if (o1 != null) {
+            return o1;
+        }
+        if (o2 == null) {
+            throw new RuntimeException("Both arguments null.");
+        }
+        return o2;
+    }
+
     public TokenAssert tokenAt(int tokenIndex)
     {
         return new TokenAssert(tokenIndex);

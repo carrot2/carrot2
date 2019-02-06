@@ -19,9 +19,6 @@ import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.*;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
-import org.carrot2.shaded.guava.common.collect.Sets;
-
 /**
  * Maintains a collection of {@link AttributeValueSet}s and provides methods for
  * serializing and deserializing attribute value sets from XML streams.
@@ -40,7 +37,7 @@ public class AttributeValueSets
      */
     public AttributeValueSets()
     {
-        this.attributeValueSets = Maps.newLinkedHashMap();
+        this.attributeValueSets = new LinkedHashMap<>();
     }
 
     /**
@@ -227,7 +224,7 @@ public class AttributeValueSets
     public Set<AttributeValueSet> getAttributeValueSetsBasedOn(
         AttributeValueSet baseAttributeValueSet)
     {
-        final Set<AttributeValueSet> result = Sets.newHashSet();
+        final Set<AttributeValueSet> result = new HashSet<>();
         for (final AttributeValueSet set : attributeValueSets.values())
         {
             if (set.baseAttributeValueSet == baseAttributeValueSet)

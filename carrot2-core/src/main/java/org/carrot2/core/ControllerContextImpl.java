@@ -26,7 +26,7 @@ final class ControllerContextImpl implements IControllerContext
     /**
      * Listeners on this context.
      */
-    private final ArrayList<IControllerContextListener> listeners = Lists.newArrayList();
+    private final ArrayList<IControllerContextListener> listeners = new ArrayList<>();
 
     /**
      * Attributes of this context.

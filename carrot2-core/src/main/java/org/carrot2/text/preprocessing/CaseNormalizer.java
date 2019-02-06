@@ -12,6 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -89,9 +90,9 @@ public final class CaseNormalizer
             tokenImages.length, CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR);
 
         // Create holders for new arrays
-        final List<char []> normalizedWordImages = Lists.newArrayList();
+        final List<char []> normalizedWordImages = new ArrayList<>();
         final IntArrayList normalizedWordTf = new IntArrayList();
-        final List<int []> wordTfByDocumentList = Lists.newArrayList();
+        final List<int []> wordTfByDocumentList = new ArrayList<>();
         final ByteArrayList fieldIndexList = new ByteArrayList();
         final ShortArrayList types = new ShortArrayList();
 

@@ -14,16 +14,12 @@ package org.carrot2.core;
 
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatDocuments;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import org.carrot2.util.tests.CarrotTestCase;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
 import static org.junit.Assert.*;
 
 /**
@@ -56,7 +52,7 @@ public class ClusterTest extends CarrotTestCase
     public void testSizeNonEmptyFlat()
     {
         final Cluster flatCluster = new Cluster();
-        final List<Document> documents = Lists.newArrayList(new Document(),
+        final List<Document> documents = Arrays.asList(new Document(),
             new Document());
 
         flatCluster.addDocuments(documents);
@@ -77,7 +73,7 @@ public class ClusterTest extends CarrotTestCase
         final Document documentB = new Document();
         subcluster.addDocuments(documentB);
 
-        final List<Document> expectedAllDocuments = Lists.newArrayList(documentA,
+        final List<Document> expectedAllDocuments = Arrays.asList(documentA,
             documentB);
 
         assertEquals(2, hierarchicalCluster.size());
@@ -100,7 +96,7 @@ public class ClusterTest extends CarrotTestCase
         final Document documentC = new Document();
         subcluster.addDocuments(documentC);
 
-        final List<Document> expectedAllDocuments = Lists.newArrayList(document1,
+        final List<Document> expectedAllDocuments = Arrays.asList(document1,
             documentB, documentC);
 
         assertEquals(3, hierarchicalCluster.size());
@@ -118,7 +114,7 @@ public class ClusterTest extends CarrotTestCase
 
         final Cluster clusterNull = new Cluster();
 
-        checkOrder(Lists.newArrayList(clusterNull, clusterA, clusterB),
+        checkOrder(Arrays.asList(clusterNull, clusterA, clusterB),
             Cluster.BY_SIZE_COMPARATOR);
     }
 
@@ -130,7 +126,7 @@ public class ClusterTest extends CarrotTestCase
 
         final Cluster clusterB = new Cluster();
 
-        checkOrder(Lists.newArrayList(clusterB, clusterA), Cluster.BY_SIZE_COMPARATOR);
+        checkOrder(Arrays.asList(clusterB, clusterA), Cluster.BY_SIZE_COMPARATOR);
     }
 
     @Test
@@ -148,7 +144,7 @@ public class ClusterTest extends CarrotTestCase
         clusterC.addPhrases("C");
         clusterC.addDocuments(new Document(), new Document(), new Document());
 
-        checkOrder(Lists.newArrayList(clusterC, clusterA, clusterB),
+        checkOrder(Arrays.asList(clusterC, clusterA, clusterB),
             Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
     }
 
@@ -192,7 +188,7 @@ public class ClusterTest extends CarrotTestCase
 
     private void checkOrder(List<Cluster> expected, Comparator<Cluster> comparator)
     {
-        List<Cluster> toSort = Lists.newArrayList(expected);
+        List<Cluster> toSort = new ArrayList<>(expected);
         Collections.sort(toSort, comparator);
         Assertions.assertThat(toSort).isEqualTo(expected);
     }
@@ -204,7 +200,7 @@ public class ClusterTest extends CarrotTestCase
         final Cluster d2 = new Cluster();
         final Cluster d3 = new Cluster();
 
-        Cluster.assignClusterIds(Lists.newArrayList(d1, d2, d3));
+        Cluster.assignClusterIds(Arrays.asList(d1, d2, d3));
         assertThat(d1.id).isEqualTo(0);
         assertThat(d2.id).isEqualTo(1);
         assertThat(d3.id).isEqualTo(2);
@@ -220,7 +216,7 @@ public class ClusterTest extends CarrotTestCase
         d1.addSubclusters(d2);
         d2.addSubclusters(d4);
 
-        Cluster.assignClusterIds(Lists.newArrayList(d1, d3));
+        Cluster.assignClusterIds(Arrays.asList(d1, d3));
         assertThat(d1.id).isEqualTo(0);
         assertThat(d2.id).isEqualTo(1);
         assertThat(d4.id).isEqualTo(2);
@@ -238,7 +234,7 @@ public class ClusterTest extends CarrotTestCase
         d4.id = 5;
         final Cluster d5 = new Cluster();
 
-        Cluster.assignClusterIds(Lists.newArrayList(d1, d2, d3, d4, d5));
+        Cluster.assignClusterIds(Arrays.asList(d1, d2, d3, d4, d5));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -249,7 +245,7 @@ public class ClusterTest extends CarrotTestCase
         final Cluster d2 = new Cluster();
         d2.id = 0;
 
-        Cluster.assignClusterIds(Lists.newArrayList(d1, d2));
+        Cluster.assignClusterIds(Arrays.asList(d1, d2));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -258,7 +254,7 @@ public class ClusterTest extends CarrotTestCase
         final Cluster d1 = new Cluster();
         d1.id = 0;
         final Cluster d2 = new Cluster();
-        Cluster.assignClusterIds(Lists.newArrayList(d1, d2));
+        Cluster.assignClusterIds(Arrays.asList(d1, d2));
     }
 
     @Test
@@ -269,7 +265,7 @@ public class ClusterTest extends CarrotTestCase
         final Cluster c2 = new Cluster();
         c2.id = 1;
 
-        Assertions.assertThat(Cluster.find(1, Lists.newArrayList(c1, c2))).isSameAs(c2);
+        Assertions.assertThat(Cluster.find(1, Arrays.asList(c1, c2))).isSameAs(c2);
     }
 
     @Test
@@ -284,7 +280,7 @@ public class ClusterTest extends CarrotTestCase
         c3.id = 2;
         c2.addSubclusters(c3);
 
-        Assertions.assertThat(Cluster.find(2, Lists.newArrayList(c1))).isSameAs(c3);
+        Assertions.assertThat(Cluster.find(2, Arrays.asList(c1))).isSameAs(c3);
     }
 
     @Test
@@ -299,7 +295,7 @@ public class ClusterTest extends CarrotTestCase
         c3.id = 2;
         c2.addSubclusters(c3);
 
-        Assertions.assertThat(Cluster.find(3, Lists.newArrayList(c1))).isNull();
+        Assertions.assertThat(Cluster.find(3, Arrays.asList(c1))).isNull();
     }
 
     @Test
@@ -308,13 +304,13 @@ public class ClusterTest extends CarrotTestCase
         final Document d1 = new Document();
         final Document d2 = new Document();
         final Document d3 = new Document();
-        final List<Document> allDocuments = Lists.newArrayList(d1, d2, d3);
+        final List<Document> allDocuments = Arrays.asList(d1, d2, d3);
 
         final Cluster c1 = new Cluster();
         final Cluster c2 = new Cluster();
         final Cluster c3 = new Cluster();
         c2.addSubclusters(c3);
-        final List<Cluster> clusters = Lists.newArrayList(c1, c2);
+        final List<Cluster> clusters = Arrays.asList(c1, c2);
 
         final Cluster otherTopics = Cluster.buildOtherTopics(allDocuments, clusters);
 
@@ -327,18 +323,18 @@ public class ClusterTest extends CarrotTestCase
         final Document d1 = new Document();
         final Document d2 = new Document();
         final Document d3 = new Document();
-        final List<Document> allDocuments = Lists.newArrayList(d1, d2, d3);
+        final List<Document> allDocuments = Arrays.asList(d1, d2, d3);
 
         final Cluster c1 = new Cluster();
         final Cluster c2 = new Cluster();
         final Cluster c3 = new Cluster();
         c2.addSubclusters(c3);
         c3.addDocuments(d2);
-        final List<Cluster> clusters = Lists.newArrayList(c1, c2);
+        final List<Cluster> clusters = Arrays.asList(c1, c2);
 
         final Cluster otherTopics = Cluster.buildOtherTopics(allDocuments, clusters);
 
-        assertThatDocuments(otherTopics.getDocuments()).isEquivalentTo(Lists.newArrayList(d1, d3));
+        assertThatDocuments(otherTopics.getDocuments()).isEquivalentTo(Arrays.asList(d1, d3));
     }
 
     @Test
@@ -347,7 +343,7 @@ public class ClusterTest extends CarrotTestCase
         final Document d1 = new Document();
         final Document d2 = new Document();
         final Document d3 = new Document();
-        final List<Document> allDocuments = Lists.newArrayList(d1, d2, d3);
+        final List<Document> allDocuments = Arrays.asList(d1, d2, d3);
 
         final Cluster c1 = new Cluster();
         final Cluster c2 = new Cluster();
@@ -356,11 +352,11 @@ public class ClusterTest extends CarrotTestCase
         c3.addDocuments(d2);
         c1.addDocuments(d1);
         c2.addDocuments(d3);
-        final List<Cluster> clusters = Lists.newArrayList(c1, c2);
+        final List<Cluster> clusters = Arrays.asList(c1, c2);
 
         final Cluster otherTopics = Cluster.buildOtherTopics(allDocuments, clusters);
 
         assertThatDocuments(otherTopics.getDocuments()).isEquivalentTo(
-            Lists.<Document> newArrayList());
+            new ArrayList<>());
     }
 }

@@ -16,12 +16,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isA;
 import static org.fest.assertions.MapAssert.entry;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -34,14 +29,11 @@ import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
+import org.fest.assertions.MapAssert;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.annotations.Nightly;
-import org.carrot2.shaded.guava.common.collect.ImmutableMap;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-import org.carrot2.shaded.guava.common.collect.Sets;
 
 import static org.junit.Assert.*;
 
@@ -124,7 +116,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         final int numberOfQueries = randomIntBetween(numberOfQueriesBase, 2 * numberOfQueriesBase);
         final int numberOfThreads = randomIntBetween(5, 30);
         final String [] data = new String [numberOfQueries];
-        final Set<String> uniqueQueries = Sets.newHashSet();
+        final Set<String> uniqueQueries = new HashSet<>();
         for (int i = 0; i < data.length; i++)
         {
             data[i] = Integer.toString(randomIntBetween(1, 30));
@@ -170,7 +162,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         mocksControl.replay();
 
         // Perform processing
-        final List<Thread> children = Collections.synchronizedList(Lists.<Thread>newArrayList());
+        final List<Thread> children = Collections.synchronizedList(new ArrayList<>());
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads, new ThreadFactory()
         {
             public Thread newThread(Runnable r)
@@ -181,7 +173,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
             }
         });
 
-        List<Callable<String>> callables = Lists.newArrayList();
+        List<Callable<String>> callables = new ArrayList<>();
         for (final String string : data)
         {
             callables.add(new Callable<String>()
@@ -409,9 +401,8 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
     public void testProcessingInvocationMethods()
     {
         controller = prepareController().init(
-            ImmutableMap.<String, Object> of(),
-            new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
-                "component", ImmutableMap.<String, Object> of()));
+            Collections.emptyMap(),
+            new ProcessingComponentConfiguration(ComponentWithInitParameter.class, "component", Collections.emptyMap()));
 
         final Map<String, Object> attributes = new HashMap<>();
 
@@ -447,11 +438,11 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
     public void testComponentConfigurationDifferentInitAttributes()
     {
         controller = prepareController().init(
-            ImmutableMap.<String, Object> of(),
+            Collections.emptyMap(),
             new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
-                "component1", ImmutableMap.of("init", (Object) "v1")),
+                "component1", mapOf("init", (Object) "v1")),
             new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
-                "component2", ImmutableMap.of("init", (Object) "v2")));
+                "component2", mapOf("init", (Object) "v2")));
 
         final Map<String, Object> attributes = new HashMap<>();
 
@@ -469,11 +460,11 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
     public void testComponentConfigurationProcessingAttributeAtInitTime()
     {
         controller = prepareController().init(
-            ImmutableMap.<String, Object> of(),
+            Collections.emptyMap(),
             new ProcessingComponentConfiguration(ComponentWithProcessingParameter.class,
-                "component1", ImmutableMap.of("processing", (Object) "v1")),
+                "component1", mapOf("processing", (Object) "v1")),
             new ProcessingComponentConfiguration(ComponentWithProcessingParameter.class,
-                "component2", ImmutableMap.of("processing", (Object) "v2")));
+                "component2", mapOf("processing", (Object) "v2")));
 
         final Map<String, Object> attributes = new HashMap<>();
 
@@ -501,14 +492,20 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         Controller controller = prepareController();
         try {
             controller.init(
-                ImmutableMap.<String, Object> of(),
+                Collections.emptyMap(),
                 new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
-                    "component", ImmutableMap.of("init", (Object) "v1")),
+                    "component", mapOf("init", (Object) "v1")),
                 new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
-                    "component", ImmutableMap.of("init", (Object) "v2")));
+                    "component", mapOf("init", (Object) "v2")));
         } finally {
             controller.dispose();
         }
+    }
+
+    public static <K, V> Map<K, V> mapOf(K k, V v) {
+        HashMap<K, V> map = new HashMap<>();
+        map.put(k, v);
+        return map;
     }
 
     @Test

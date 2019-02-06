@@ -251,9 +251,9 @@ public class MultilingualClusteringTest extends CarrotTestCase
     private void checkEmpty(final LanguageAggregationStrategy strategy)
     {
         final List<Document> documents = documentsWithLanguages();
-        final List<Cluster> expectedClusters = Lists.newArrayList();
+        final List<Cluster> expectedClusters = new ArrayList<>();
 
-        check(documents, expectedClusters, Lists.<LanguageCode> newArrayList(), strategy);
+        check(documents, expectedClusters, new ArrayList<>(), strategy);
     }
 
     private void checkNoLanguage(final LanguageAggregationStrategy strategy)
@@ -338,7 +338,7 @@ public class MultilingualClusteringTest extends CarrotTestCase
 
         public List<Cluster> process(List<Document> documents, LanguageCode language)
         {
-            final List<Cluster> clusters = Lists.newArrayList();
+            final List<Cluster> clusters = new ArrayList<>();
 
             clusteringLanguages.add(language);
 

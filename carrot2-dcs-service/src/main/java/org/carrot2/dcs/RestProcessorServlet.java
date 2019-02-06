@@ -20,11 +20,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -230,7 +226,7 @@ public final class RestProcessorServlet extends HttpServlet
         // Load component suite. Use classpath too (for JUnit tests).
         try
         {
-            List<IResourceLocator> resourceLocators = Lists.newArrayList();
+            List<IResourceLocator> resourceLocators = new ArrayList<>();
             resourceLocators.add(new PrefixDecoratorLocator(new ServletContextLocator(
                 getServletContext()), "/WEB-INF/suites/"));
 
@@ -264,7 +260,7 @@ public final class RestProcessorServlet extends HttpServlet
 
         controller = ControllerFactory.createPooling();
 
-        List<IResourceLocator> locators = Lists.newArrayList();
+        List<IResourceLocator> locators = new ArrayList<>();
         locators.add(new PrefixDecoratorLocator(new ServletContextLocator(
             getServletContext()), "/WEB-INF/resources/"));
 

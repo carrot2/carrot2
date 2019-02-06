@@ -621,7 +621,7 @@ public final class Document implements Cloneable
         {
             if (serializationListeners == null)
             {
-                serializationListeners = Lists.newArrayList();
+                serializationListeners = new ArrayList<>();
             }
             serializationListeners.add(listener);
         }

@@ -12,6 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +26,6 @@ import org.carrot2.util.attribute.constraint.IntRange;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Extracts frequent phrases from the provided document. A frequent phrase is a sequence
@@ -93,9 +93,9 @@ public class PhraseExtractor
         // Find all subphrases
         List<Substring> rcs = discoverRcs(suffixArray, lcpArray, documentIndexArray);
 
-        List<int []> phraseWordIndexes = Lists.newArrayList();
+        List<int []> phraseWordIndexes = new ArrayList<>();
         IntArrayList phraseTf = new IntArrayList();
-        List<int []> phraseTfByDocumentList = Lists.newArrayList();
+        List<int []> phraseTfByDocumentList = new ArrayList<>();
 
         if (rcs.size() > 0)
         {
@@ -179,7 +179,7 @@ public class PhraseExtractor
 
         i = 1;
 
-        final List<Substring> result = Lists.newArrayList();
+        final List<Substring> result = new ArrayList<>();
         while (i < lcpArray.length - 1)
         {
             final int currentSuffixIndex = suffixArray[i];

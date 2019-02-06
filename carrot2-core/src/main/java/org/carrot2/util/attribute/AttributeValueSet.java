@@ -21,7 +21,6 @@ import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persist;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Maintains a named set of attribute values. Allows one {@link AttributeValueSet} (A) to

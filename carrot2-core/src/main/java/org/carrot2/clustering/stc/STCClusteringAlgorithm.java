@@ -13,6 +13,7 @@
 package org.carrot2.clustering.stc;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.core.Cluster;
@@ -53,10 +54,6 @@ import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.BitSetIterator;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.IntStack;
-import org.carrot2.shaded.guava.common.base.Predicate;
-import org.carrot2.shaded.guava.common.collect.Collections2;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Suffix Tree Clustering (STC) algorithm. Pretty much as described in: <i>Oren Zamir,
@@ -361,13 +358,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      * Returns a collection of {@link PhraseCandidate}s that have
      * {@link PhraseCandidate#selected} set to <code>false</code>. 
      */
-    private final static Predicate<PhraseCandidate> notSelected = new Predicate<PhraseCandidate>()
-    {
-        public boolean apply(PhraseCandidate p)
-        {
-            return !p.selected;
-        }
-    };
+    private final static Predicate<PhraseCandidate> notSelected = (p) -> !p.selected;
 
     /**
      * Performs STC clustering of {@link #documents}.
@@ -482,7 +473,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
          * Collect all phrases that will form base clusters, 
          * initially filtered to fulfill the minimum acceptance criteria.
          */
-        final List<ClusterCandidate> candidates = Lists.newArrayList();
+        final List<ClusterCandidate> candidates = new ArrayList<>();
 
         // Walk the internal nodes of the suffix tree.
         new GeneralizedSuffixTree.Visitor(sb, minBaseClusterSize) {
@@ -696,8 +687,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         final int [] merged = new int [baseClusters.size()];
         Arrays.fill(merged, NO_INDEX);
 
-        final ArrayList<ClusterCandidate> mergedClusters = 
-            Lists.newArrayListWithCapacity(baseClusters.size());
+        final ArrayList<ClusterCandidate> mergedClusters =
+            new ArrayList<>(baseClusters.size());
         final IntStack stack = new IntStack(baseClusters.size());
         final IntStack mergeList = new IntStack(baseClusters.size());
         int mergedIndex = 0;
@@ -795,10 +786,10 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         }
 
         markSubSuperPhrases(phrases);
-        Collections2.filter(phrases, notSelected).clear();
+        phrases.removeIf(notSelected);
 
         markOverlappingPhrases(phrases);
-        Collections2.filter(phrases, notSelected).clear();
+        phrases.removeIf(notSelected);
 
         Collections.sort(phrases, new Comparator<PhraseCandidate>() {
             public int compare(PhraseCandidate p1, PhraseCandidate p2) {
@@ -1042,8 +1033,8 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     {
         // Adapt to Carrot2 classes, counting used documents on the way.
         final BitSet all = new BitSet(documents.size());
-        final ArrayList<Document> docs = Lists.newArrayListWithCapacity(documents.size());
-        final ArrayList<String> phrases = Lists.newArrayListWithCapacity(3);
+        final ArrayList<Document> docs = new ArrayList<>(documents.size());
+        final ArrayList<String> phrases = new ArrayList<>(3);
         for (ClusterCandidate c : clusters)
         {
             final Cluster c2 = new Cluster();
@@ -1083,7 +1074,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     {
         if (l == null)
         {
-            l = Lists.newArrayListWithCapacity((int) bitset.cardinality());
+            l = new ArrayList<>((int) bitset.cardinality());
         }
 
         final BitSetIterator i = bitset.iterator();

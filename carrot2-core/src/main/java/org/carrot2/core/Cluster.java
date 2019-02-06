@@ -741,7 +741,7 @@ public final class Cluster
      */
     public static List<Cluster> flatten(Collection<Cluster> hierarchical)
     {
-        return flatten(hierarchical, Lists.<Cluster> newArrayList());
+        return flatten(hierarchical, new ArrayList<>());
     }
 
     /*

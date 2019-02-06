@@ -12,11 +12,11 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Test cases for {@link PreprocessedDocumentScannerTest}.
@@ -28,9 +28,9 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
     {
         createDocuments();
 
-        final List<List<Integer>> expectedDocumentRanges = Lists.newArrayList();
-        final List<List<Integer>> expectedFieldRanges = Lists.newArrayList();
-        final List<List<Integer>> expectedSentenceRanges = Lists.newArrayList();
+        final List<List<Integer>> expectedDocumentRanges = new ArrayList<>();
+        final List<List<Integer>> expectedFieldRanges = new ArrayList<>();
+        final List<List<Integer>> expectedSentenceRanges = new ArrayList<>();
 
         check(expectedDocumentRanges, expectedFieldRanges, expectedSentenceRanges);
     }
@@ -87,10 +87,10 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
 
     private List<List<Integer>> ranges(int... ranges)
     {
-        final List<List<Integer>> result = Lists.newArrayList();
+        final List<List<Integer>> result = new ArrayList<>();
         for (int i = 0; i < ranges.length / 2; i++)
         {
-            result.add(Lists.newArrayList(ranges[i * 2], ranges[i * 2 + 1]));
+            result.add(Arrays.asList(ranges[i * 2], ranges[i * 2 + 1]));
         }
         return result;
     }
@@ -107,9 +107,9 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context);
 
-        final List<List<Integer>> actualDocumentRanges = Lists.newArrayList();
-        final List<List<Integer>> actualFieldRanges = Lists.newArrayList();
-        final List<List<Integer>> actualSentenceRanges = Lists.newArrayList();
+        final List<List<Integer>> actualDocumentRanges = new ArrayList<>();
+        final List<List<Integer>> actualFieldRanges = new ArrayList<>();
+        final List<List<Integer>> actualSentenceRanges = new ArrayList<>();
 
         final PreprocessedDocumentScanner scanner = new PreprocessedDocumentScanner()
         {
@@ -117,21 +117,21 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
             protected void document(PreprocessingContext context, int start, int length)
             {
                 super.document(context, start, length);
-                actualDocumentRanges.add(Lists.newArrayList(start, length));
+                actualDocumentRanges.add(Arrays.asList(start, length));
             }
 
             @Override
             protected void field(PreprocessingContext context, int start, int length)
             {
                 super.field(context, start, length);
-                actualFieldRanges.add(Lists.newArrayList(start, length));
+                actualFieldRanges.add(Arrays.asList(start, length));
             }
 
             @Override
             protected void sentence(PreprocessingContext context, int start, int length)
             {
                 super.sentence(context, start, length);
-                actualSentenceRanges.add(Lists.newArrayList(start, length));
+                actualSentenceRanges.add(Arrays.asList(start, length));
             }
         };
 

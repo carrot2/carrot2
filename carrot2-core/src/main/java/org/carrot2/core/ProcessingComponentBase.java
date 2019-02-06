@@ -68,7 +68,7 @@ public abstract class ProcessingComponentBase implements IProcessingComponent
     }
 
     /*
-     * 
+     *
      */
     protected ExecutorService getSharedExecutor(int maxConcurrentThreads, Class<?> clazz)
     {

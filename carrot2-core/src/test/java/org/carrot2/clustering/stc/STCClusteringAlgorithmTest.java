@@ -12,6 +12,7 @@
 
 package org.carrot2.clustering.stc;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -88,7 +89,7 @@ public class STCClusteringAlgorithmTest extends
     @Test
     public void testMergingBaseClustersWithStemEquivalentPhrases()
     {
-        List<Document> documents = Lists.newArrayList();
+        List<Document> documents = new ArrayList<>();
         documents.add(new Document("good programs . foo1"));
         documents.add(new Document("foo2 good programs . foo2"));
         documents.add(new Document("good programs taste good"));

@@ -33,7 +33,7 @@ import org.carrot2.shaded.guava.common.collect.Maps;
 class PreprocessingContextBuilder
 {
     private String query;
-    private ArrayList<Document> documents = Lists.newArrayList();
+    private ArrayList<Document> documents = new ArrayList<>();
     private LanguageCode language = LanguageCode.ENGLISH;
 
     private Map<String, Object> attributes = new HashMap<>();

@@ -3247,7 +3247,7 @@ public final class SampleDocumentData
     {
         ALL = ImmutableList.of(
             DOCUMENTS_DATA_MINING, DOCUMENTS_DAWID, DOCUMENTS_SALSA_MULTILINGUAL);
-        List<Document> flattened = Lists.newArrayList();
+        List<Document> flattened = new ArrayList<>();
         for (List<Document> sub : ALL) {
             flattened.addAll(sub);
         }

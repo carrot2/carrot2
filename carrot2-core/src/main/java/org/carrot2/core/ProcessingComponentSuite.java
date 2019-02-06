@@ -61,7 +61,7 @@ public class ProcessingComponentSuite
     {
         this.algorithms = algorithms;
         this.sources = sources;
-        this.otherComponents = Lists.newArrayList();
+        this.otherComponents = new ArrayList<>();
     }
 
     /**
@@ -114,7 +114,7 @@ public class ProcessingComponentSuite
         final ResourceLookup resourceLookup = PersisterHelpers.getResourceLookup(session);
 
         // Load included suites. Currently, we don't check for cycles.
-        final List<ProcessingComponentSuite> suites = Lists.newArrayList();
+        final List<ProcessingComponentSuite> suites = new ArrayList<>();
 
         for (ProcessingComponentSuiteInclude include : includes)
         {
@@ -187,7 +187,7 @@ public class ProcessingComponentSuite
      */
     public List<ProcessingComponentDescriptor> removeUnavailableComponents()
     {
-        ArrayList<ProcessingComponentDescriptor> failed = Lists.newArrayList();
+        ArrayList<ProcessingComponentDescriptor> failed = new ArrayList<>();
         ProcessingComponentDescriptor p;
         for (Iterator<? extends ProcessingComponentDescriptor> i = Iterators.concat(
             sources.iterator(), algorithms.iterator()); i.hasNext();)

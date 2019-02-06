@@ -150,7 +150,7 @@ public class MultilingualClustering
         
         if (documents.isEmpty())
         {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
         
         if (LanguageAggregationStrategy.CLUSTER_IN_MAJORITY_LANGUAGE.equals(languageAggregationStrategy)) 
@@ -169,7 +169,7 @@ public class MultilingualClustering
         {
             // For FLATTEN_ALL, we simply mix up all clusters, moving all unclustered
             // documents under one common Other Topics cluster.
-            final List<Cluster> flattenedClusters = Lists.newArrayList();
+            final List<Cluster> flattenedClusters = new ArrayList<>();
             for (Cluster cluster : clusters)
             {
                 final List<Cluster> subclusters = cluster.getSubclusters();
@@ -225,7 +225,7 @@ public class MultilingualClustering
                 if (majorLanguageCluster != null)
                 {
                     iterator.remove();
-                    final List<Cluster> flattenedClusters = Lists.newArrayList();
+                    final List<Cluster> flattenedClusters = new ArrayList<>();
                     flattenedClusters.addAll(majorLanguageCluster.getSubclusters());
 
                     final Cluster otherLanguages = new Cluster("Other Languages");

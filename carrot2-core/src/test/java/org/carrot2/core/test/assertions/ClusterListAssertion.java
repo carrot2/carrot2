@@ -16,17 +16,14 @@ import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThat;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 import org.carrot2.core.Cluster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.carrot2.shaded.guava.common.base.Strings;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
  * Assertions on lists of {@link Cluster}s.
@@ -106,8 +103,8 @@ public class ClusterListAssertion extends
             assertThat(actual).isNotNull();
         }
 
-        List<String> expectedLabels = labelList(Lists.<String>newArrayList(), 0, expected);
-        List<String> actualLabels = labelList(Lists.<String>newArrayList(), 0, actual);
+        List<String> expectedLabels = labelList(new ArrayList<>(), 0, expected);
+        List<String> actualLabels = labelList(new ArrayList<>(), 0, actual);
         if (!actualLabels.equals(expectedLabels))
         {
             tabularizedReport(expectedLabels, actualLabels);
@@ -142,8 +139,8 @@ public class ClusterListAssertion extends
             maxL1Width = Math.max(maxL1Width, s.length());
 
         final StringBuilder sb = new StringBuilder();
-        final Set<String> l1s = Sets.newTreeSet(l1);
-        final Set<String> l2s = Sets.newTreeSet(l2);
+        final Set<String> l1s = new TreeSet<>(l1);
+        final Set<String> l2s = new TreeSet<>(l2);
 
         if (l1s.equals(l2s))
         {
@@ -154,7 +151,7 @@ public class ClusterListAssertion extends
             {
                 String lbl = l1.get(i);
                 sb.append(l2.get(i).equals(lbl) ? "  " : "* ");
-                sb.append(Strings.padEnd(lbl, maxL1Width, ' '));
+                sb.append(String.format(Locale.ROOT, "%" + maxL1Width + "s", lbl));
                 sb.append(" | ");
 
                 lbl = l2.get(i);
@@ -165,7 +162,7 @@ public class ClusterListAssertion extends
         }
         else
         {
-            Set<String> common = Sets.newTreeSet(l1s);
+            Set<String> common = new TreeSet<>(l1s);
             common.retainAll(l2s);
             l1s.removeAll(common);
             l2s.removeAll(common);
@@ -180,7 +177,7 @@ public class ClusterListAssertion extends
             {
                 String lbl = (i < l1.size() ? l1.get(i) : "--");
                 sb.append(l1s.contains(lbl) ? "* " : "  ");
-                sb.append(Strings.padEnd(lbl, maxL1Width, ' '));
+                sb.append(String.format(Locale.ROOT, "%" + maxL1Width + "s", lbl));
                 sb.append(" | ");
 
                 lbl = (i < l2.size() ? l2.get(i) : "--");
@@ -196,9 +193,11 @@ public class ClusterListAssertion extends
 
     private List<String> labelList(List<String> list, int indent, List<Cluster> clusters)
     {
+        StringBuilder pad = new StringBuilder();
+        for (int i = 0; i < indent; i++) pad.append("   ");
         for (Cluster c : clusters)
         {
-            list.add(Strings.repeat("   ", indent) + c.getLabel());
+            list.add(pad.toString() + c.getLabel());
             labelList(list, indent + 1, c.getSubclusters());
         }
         return list;
