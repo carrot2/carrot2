@@ -15,9 +15,6 @@ package org.carrot2.util.attribute.constraint;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 
-import org.simpleframework.xml.Root;
-
-@Root(name = "passes-value-of")
 public class PassesValueOfConstraint extends Constraint
 {
     private Class<?> clazz;

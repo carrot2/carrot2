@@ -14,30 +14,13 @@ package org.carrot2.util.attribute.constraint;
 
 import java.lang.annotation.Annotation;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Persist;
-
 /**
  * Implementation of the {@link DoubleRangeConstraint}.
  */
-@Root(name = "double-range")
 class DoubleRangeConstraint extends Constraint
 {
     Double min;
     Double max;
-
-    /**
-     * For serialization.
-     */
-    @Attribute(name = "min", required = false)
-    Double minOrNull;
-
-    /**
-     * For serialization.
-     */
-    @Attribute(name = "max", required = false)
-    Double maxOrNull;
 
     protected boolean isMet(Object value)
     {
@@ -64,19 +47,5 @@ class DoubleRangeConstraint extends Constraint
         final DoubleRange range = (DoubleRange) annotation;
         this.min = range.min();
         this.max = range.max();
-    }
-
-    @Persist
-    void beforeSerialization()
-    {
-        if (min > Double.NEGATIVE_INFINITY)
-        {
-            minOrNull = min;
-        }
-
-        if (max < Double.POSITIVE_INFINITY)
-        {
-            maxOrNull = max;
-        }
     }
 }

@@ -14,11 +14,8 @@ package org.carrot2.util.attribute.constraint;
 
 import java.io.File;
 
-import org.simpleframework.xml.Attribute;
-
 abstract class IsFileConstraintBase extends Constraint
 {
-    @Attribute(name = "must-exist")
     boolean mustExist;
 
     @Override

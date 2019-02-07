@@ -21,43 +21,22 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.carrot2.util.StreamUtils;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Commit;
 import org.slf4j.LoggerFactory;
 
 /**
  * A local filesystem resource. This loader provides cached content of
  * returned resources and closes the underlying stream handle in {@link #open()}.
  */
-@Root(name = "file-resource")
 public final class FileResource implements IResource
 {
     /**
      * File pointed to by this resource.
      */
-    private Path file;
+    private final Path file;
 
-    /**
-     * Absolute path, for serialization only.
-     */
-    @Attribute(name = "absolute-path")
-    private String info;
-
-    FileResource()
-    {
-    }
-
-    @Deprecated
-    public FileResource(File file)
-    {
-      this(file.toPath());
-    }
-    
     public FileResource(Path file)
     {
         this.file = file;
-        this.info = file.toAbsolutePath().toString();
     }
 
     public InputStream open() throws IOException
@@ -88,19 +67,7 @@ public final class FileResource implements IResource
     @Override
     public String toString()
     {
-        return info;
-    }
-
-    @Commit
-    void afterDeserialization()
-    {
-        file = Paths.get(info);
-    }
-
-    @Deprecated
-    public File getFile()
-    {
-        return file.toFile();
+        return getPath().toAbsolutePath().toString();
     }
 
     public String getFileName()
@@ -113,11 +80,6 @@ public final class FileResource implements IResource
         }
     }
 
-    private String getAbsolutePath()
-    {
-        return info;
-    }
-    
     public static FileResource valueOf(String path)
     {
         // Return non-null value only if the string is a path to some existing file.

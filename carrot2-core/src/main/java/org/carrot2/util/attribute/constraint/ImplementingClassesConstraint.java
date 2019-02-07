@@ -14,12 +14,9 @@ package org.carrot2.util.attribute.constraint;
 
 import java.lang.annotation.Annotation;
 
-import org.simpleframework.xml.*;
-
 /**
  * Implementation of the {@link ImplementingClasses} constraint.
  */
-@Root(name = "implementing-classes")
 class ImplementingClassesConstraint extends Constraint
 {
     /**
@@ -28,8 +25,6 @@ class ImplementingClassesConstraint extends Constraint
      * @see ImplementingClasses#classes()
      */
     private Class<?> [] classes;
-    
-    @ElementArray(name = "classes", entry = "class")
     private String [] classesAsStrings;
 
     /**
@@ -37,7 +32,6 @@ class ImplementingClassesConstraint extends Constraint
      * 
      * @see ImplementingClasses#strict()
      */
-    @Attribute
     private boolean strict;
 
     protected boolean isMet(Object value)

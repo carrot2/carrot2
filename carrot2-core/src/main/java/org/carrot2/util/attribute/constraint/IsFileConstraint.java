@@ -15,9 +15,6 @@ package org.carrot2.util.attribute.constraint;
 import java.io.File;
 import java.lang.annotation.Annotation;
 
-import org.simpleframework.xml.Root;
-
-@Root(name = "is-file")
 class IsFileConstraint extends IsFileConstraintBase
 {
     @Override

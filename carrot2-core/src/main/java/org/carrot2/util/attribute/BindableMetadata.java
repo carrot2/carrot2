@@ -14,16 +14,12 @@ package org.carrot2.util.attribute;
 
 import java.util.*;
 
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
 
 /**
  * Human-readable metadata for a {@link Bindable} type.
  */
-@Root(name = "component-metadata")
 public class BindableMetadata extends CommonMetadata
 {
-    @ElementMap(name = "attributes", entry = "attribute", key = "field-name", inline = false, attribute = true)
     private Map<String, AttributeMetadata> attributeMetadataInternal; 
 
     public BindableMetadata()

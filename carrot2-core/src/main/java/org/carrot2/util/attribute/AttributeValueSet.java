@@ -14,12 +14,6 @@ package org.carrot2.util.attribute;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
-
-import org.carrot2.util.simplexml.*;
-import org.simpleframework.xml.*;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
 
 
 /**
@@ -29,19 +23,16 @@ import org.simpleframework.xml.core.Persist;
  * {@link AttributeValueSet} (B) and can override some of them. Any depth of the base
  * attribute sets hierarchy is possible.
  */
-@Root(name = "value-set")
 public class AttributeValueSet
 {
     /**
      * Human-readable value of this attribute value set. <b>Only for read-only use.</b>
      */
-    @Element
     public String label;
 
     /**
      * Human-readable description of this attribute value set. <b>Only for read-only use.</b>
      */
-    @Element(required = false)
     public String description;
 
     /**
@@ -58,16 +49,7 @@ public class AttributeValueSet
      * Identifier of the attribute value set this set is based on. Used only for
      * serialization/ deserialization purposes.
      */
-    @org.simpleframework.xml.Attribute(name = "based-on", required = false)
     String baseAttributeValueSetId;
-
-    /**
-     * This collection is used only for serialization/ deserialization purposes, see
-     * {@link #convertAttributeValuesToStrings()} and
-     * {@link #convertAttributeValuesFromStrings()}.
-     */
-    @ElementMap(entry = "attribute", key = "key", attribute = true, inline = true, required = false)
-    private TreeMap<String, SimpleXmlWrapperValue> overridenAttributeValuesForSerialization;
 
     AttributeValueSet()
     {
@@ -199,35 +181,6 @@ public class AttributeValueSet
         AttributeValueSet attributeValueSet)
     {
         return attributeValueSet != null ? attributeValueSet.getAttributeValues() : null;
-    }
-
-    /**
-     * Converts attribute values to {@link ISimpleXmlWrapper}s for serialization.
-     */
-    @Persist
-    private void convertAttributeValuesToStrings()
-    {
-        overridenAttributeValuesForSerialization = new TreeMap<String, SimpleXmlWrapperValue>(
-            String.CASE_INSENSITIVE_ORDER);
-        overridenAttributeValuesForSerialization.putAll(SimpleXmlWrappers
-            .wrap(overridenAttributeValues));
-    }
-
-    /**
-     * Converts attribute values to {@link ISimpleXmlWrapper}s after deserialization.
-     */
-    @Commit
-    private void convertAttributeValuesFromStrings() throws Exception
-    {
-        if (overridenAttributeValuesForSerialization == null)
-        {
-            overridenAttributeValues = new HashMap<>();
-        }
-        else
-        {
-            overridenAttributeValues = SimpleXmlWrappers
-                .unwrap(overridenAttributeValuesForSerialization);
-        }
     }
 
     /*

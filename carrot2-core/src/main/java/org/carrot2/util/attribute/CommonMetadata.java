@@ -12,20 +12,13 @@
 
 package org.carrot2.util.attribute;
 
-import org.simpleframework.xml.Element;
-
 /**
  * Common metadata items for {@link BindableMetadata} and {@link AttributeMetadata}.
  */
 public class CommonMetadata
 {
-    @Element(required = false, data = true)
     protected String title;
-
-    @Element(required = false)
     protected String label;
-
-    @Element(required = false, data = true)
     protected String description;
 
     /**

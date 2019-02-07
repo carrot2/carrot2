@@ -24,34 +24,17 @@ import java.util.stream.Stream;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceLookup;
-import org.carrot2.util.simplexml.PersisterHelpers;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.TreeStrategy;
 
 /**
  * A set of {@link IProcessingComponent}s used in Carrot2 applications.
  */
-@Root(name = "component-suite")
 public class ProcessingComponentSuite
 {
-    @ElementList(inline = true, required = false, entry = "include")
     ArrayList<ProcessingComponentSuiteInclude> includes;
 
-    @ElementList(name = "sources", entry = "source", required = false)
     private ArrayList<DocumentSourceDescriptor> sources;
-
-    @ElementList(name = "algorithms", entry = "algorithm", required = false)
     private ArrayList<ProcessingComponentDescriptor> algorithms;
-
-    @ElementList(name = "components", entry = "component", required = false)
     private ArrayList<ProcessingComponentDescriptor> otherComponents;
-
-    public ProcessingComponentSuite()
-    {
-    }
 
     public ProcessingComponentSuite(ArrayList<DocumentSourceDescriptor> sources,
                                     ArrayList<ProcessingComponentDescriptor> algorithms)
@@ -98,87 +81,6 @@ public class ProcessingComponentSuite
         out.addAll(algorithms);
         out.addAll(otherComponents);
         return out;
-    }
-
-    /**
-     * Replace missing attributes with empty lists.
-     */
-    @Commit
-    private void postDeserialize(Map<Object, Object> session) throws Exception
-    {
-        if (sources == null) sources = new ArrayList<>();
-        if (algorithms == null) algorithms = new ArrayList<>();
-        if (includes == null) includes = new ArrayList<>();
-        if (otherComponents == null) otherComponents = new ArrayList<>();
-
-        // Acquire contextual resource lookup from the session.
-        final ResourceLookup resourceLookup = PersisterHelpers.getResourceLookup(session);
-
-        // Load included suites. Currently, we don't check for cycles.
-        final List<ProcessingComponentSuite> suites = new ArrayList<>();
-
-        for (ProcessingComponentSuiteInclude include : includes)
-        {
-            final IResource resource = resourceLookup.getFirst(include.suite);
-            if (resource == null)
-            {
-                throw new Exception("Could not locate resource: " + include.suite);
-            }
-            suites.add(deserialize(resource, resourceLookup));
-        }
-
-        // Merge sources
-        for (ProcessingComponentSuite suite : suites)
-        {
-            sources.addAll(suite.getSources());
-            algorithms.addAll(suite.getAlgorithms());
-            otherComponents.addAll(suite.getOtherComponents());
-        }
-    }
-
-    /**
-     * Deserializes component suite information from an XML stream.
-     * 
-     * @param resource The resource to be deserialized (must not be null).
-     * @param resourceLookup Resource lookup utilities for potential included resources. 
-     */
-    public static ProcessingComponentSuite deserialize(IResource resource,
-                                                        ResourceLookup resourceLookup) 
-        throws Exception
-    {
-        if (resource == null)
-        {
-            throw new IOException("Resource must not be null.");
-        }
-
-        final InputStream inputStream = resource.open();
-        try
-        {
-            if (inputStream == null)
-            {
-                throw new IOException("Input stream must not be null.");
-            }
-            
-            final Persister persister = PersisterHelpers.createPersister(
-                resourceLookup, new TreeStrategy());
-            final ProcessingComponentSuite suite = persister.read(ProcessingComponentSuite.class, inputStream);
-            
-            // Clear internals related do deserialization
-            suite.includes = null;
-            return suite;
-        }
-        finally
-        {
-            CloseableUtils.close(inputStream);
-        }
-    }
-
-    /**
-     * Serializes this component suite as an UTF-8 encoded XML.
-     */
-    public void serialize(OutputStream stream) throws Exception
-    {
-        new Persister().write(this, stream);
     }
 
     /**

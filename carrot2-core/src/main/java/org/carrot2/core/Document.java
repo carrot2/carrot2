@@ -12,7 +12,6 @@
 
 package org.carrot2.core;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,22 +19,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.carrot2.util.MapUtils;
 import org.carrot2.util.StringUtils;
-import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
-import org.carrot2.util.simplexml.SimpleXmlWrappers;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
 
 /**
  * A document that to be processed by the framework. Each document is a collection of
  * fields carrying different bits of information, e.g. {@link #TITLE} or
  * {@link #CONTENT_URL}.
  */
-@Root(name = "document")
 public final class Document implements Cloneable
 {
     /** Field name for the title of the document. */
@@ -107,13 +97,7 @@ public final class Document implements Cloneable
      * @see #getStringId()
      * @see ProcessingResult
      */
-    @Attribute(required = false)
     String id;
-
-    /**
-     * Listeners to be notified before this document gets serialized.
-     */
-    private ArrayList<IDocumentSerializationListener> serializationListeners;
 
     /**
      * Creates an empty document with no fields.
@@ -226,7 +210,6 @@ public final class Document implements Cloneable
     /**
      * Returns this document's {@link #TITLE} field.
      */
-    @Element(required = false)
     public String getTitle()
     {
         return getField(TITLE);
@@ -238,7 +221,6 @@ public final class Document implements Cloneable
      * @param title title to set
      * @return this document for convenience
      */
-    @Element(required = false)
     public Document setTitle(String title)
     {
         return setField(TITLE, title);
@@ -247,7 +229,6 @@ public final class Document implements Cloneable
     /**
      * Returns this document's {@link #SUMMARY} field.
      */
-    @Element(name = "snippet", required = false)
     public String getSummary()
     {
         return getField(SUMMARY);
@@ -259,7 +240,6 @@ public final class Document implements Cloneable
      * @param summary summary to set
      * @return this document for convenience
      */
-    @Element(name = "snippet", required = false)
     public Document setSummary(String summary)
     {
         return setField(SUMMARY, summary);
@@ -268,7 +248,6 @@ public final class Document implements Cloneable
     /**
      * Returns this document's {@link #CONTENT_URL} field.
      */
-    @Element(name = "url", required = false)
     public String getContentUrl()
     {
         return getField(CONTENT_URL);
@@ -280,7 +259,6 @@ public final class Document implements Cloneable
      * @param contentUrl content URL to set
      * @return this document for convenience
      */
-    @Element(name = "url", required = false)
     public Document setContentUrl(String contentUrl)
     {
         return setField(CONTENT_URL, contentUrl);
@@ -289,7 +267,6 @@ public final class Document implements Cloneable
     /**
      * Returns this document's {@link #SOURCES} field.
      */
-    @ElementList(entry = "source", required = false)
     public List<String> getSources()
     {
         return getField(SOURCES);
@@ -301,7 +278,6 @@ public final class Document implements Cloneable
      * @param sources the sources list to set
      * @return this document for convenience
      */
-    @ElementList(entry = "source", required = false)
     public Document setSources(List<String> sources)
     {
         return setField(SOURCES, sources);
@@ -331,7 +307,6 @@ public final class Document implements Cloneable
      * 
      * @return this document's {@link #SCORE}.
      */
-    @Attribute(name = "score", required = false)
     public Double getScore()
     {
         return getField(SCORE);
@@ -343,99 +318,9 @@ public final class Document implements Cloneable
      * @param score the {@link #SCORE} to set
      * @return this document for convenience.
      */
-    @Attribute(name = "score", required = false)
     public Document setScore(Double score)
     {
         return setField(SCORE, score);
-    }
-
-    @Attribute(required = false, name = "language")
-    private String getLanguageIsoCode()
-    {
-        final LanguageCode language = getLanguage();
-        return language != null ? language.getIsoCode() : null;
-    }
-
-    @Attribute(required = false, name = "language")
-    private void setLanguageIsoCode(String languageIsoCode)
-    {
-        if (languageIsoCode != null)
-        {
-            final LanguageCode language = LanguageCode.forISOCode(languageIsoCode);
-            if (language != null)
-            {
-                setLanguage(language);
-            }
-            else
-            {
-                // Try by enum name for backward-compatibility
-                setLanguage(LanguageCode.valueOf(languageIsoCode));
-            }
-        }
-        else
-        {
-            setLanguage(null);
-        }
-    }
-
-    /**
-     * For JSON and XML serialization only.
-     */
-    private Map<String, Object> getOtherFields()
-    {
-        final Map<String, Object> otherFields;
-
-        // If a caching controller is used, concurrent threads can operate on the same
-        // instance of the Document class, so we need to synchronize here to avoid
-        // ConcurrentModificationExceptions.
-        synchronized (this)
-        {
-            otherFields = new HashMap<>(fields);
-        }
-        otherFields.remove(TITLE);
-        otherFields.remove(SUMMARY);
-        otherFields.remove(CONTENT_URL);
-        otherFields.remove(SOURCES);
-        otherFields.remove(LANGUAGE);
-        otherFields.remove(SCORE);
-        fireSerializationListeners(otherFields);
-        return otherFields.isEmpty() ? null : otherFields;
-    }
-
-    /*
-     * 
-     */
-    @ElementMap(entry = "field", key = "key", attribute = true, inline = true, required = false)
-    private HashMap<String, SimpleXmlWrapperValue> getOtherFieldsXml()
-    {
-        final HashMap<String, SimpleXmlWrapperValue> otherFieldsForSerialization;
-        synchronized (this)
-        {
-            otherFieldsForSerialization = MapUtils.asHashMap(SimpleXmlWrappers.wrap(fields));
-        }
-        otherFieldsForSerialization.remove(TITLE);
-        otherFieldsForSerialization.remove(SUMMARY);
-        otherFieldsForSerialization.remove(CONTENT_URL);
-        otherFieldsForSerialization.remove(SOURCES);
-        otherFieldsForSerialization.remove(LANGUAGE);
-        otherFieldsForSerialization.remove(SCORE);
-        fireSerializationListeners(otherFieldsForSerialization);
-        return otherFieldsForSerialization.isEmpty() ? null : otherFieldsForSerialization;
-    }
-
-    /*
-     * 
-     */
-    @ElementMap(entry = "field", key = "key", attribute = true, inline = true, required = false)
-    private void setOtherFieldsXml(
-        HashMap<String, SimpleXmlWrapperValue> otherFieldsForSerialization)
-    {
-        if (otherFieldsForSerialization != null)
-        {
-            // No need to synchronize here, the object is being deserialized,
-            // so it can't yet be seen by other threads.
-            fields.putAll(SimpleXmlWrappers.unwrap(otherFieldsForSerialization));
-        }
     }
 
     /**
@@ -548,57 +433,6 @@ public final class Document implements Cloneable
                 {
                     document.id = Integer.toString(id);
                     id++;
-                }
-            }
-        }
-    }
-
-    /**
-     * Adds a serialization listener to this document.
-     * 
-     * @param listener the listener to add
-     */
-    public void addSerializationListener(IDocumentSerializationListener listener)
-    {
-        synchronized (this)
-        {
-            if (serializationListeners == null)
-            {
-                serializationListeners = new ArrayList<>();
-            }
-            serializationListeners.add(listener);
-        }
-    }
-
-    /**
-     * Enables listening to events related to XML/JSON serialization of {@link Document}s.
-     */
-    public static interface IDocumentSerializationListener
-    {
-        /**
-         * Called before a {@link Document} gets serialized to XML or JSON. Specific
-         * implementations may want to modify some properties of the document before it
-         * gets serialized
-         * 
-         * @param document the documents being serialized. Note: changes to the document
-         *            will not be undone after serialization completes.
-         * @param otherFieldsForSerialization custom fields that are about to be
-         *            serialized. Changes made on this map will not affect the contents of
-         *            the document.
-         */
-        public void beforeSerialization(Document document,
-            Map<String, ?> otherFieldsForSerialization);
-    }
-
-    private void fireSerializationListeners(Map<String, ?> otherFieldsForSerialization)
-    {
-        synchronized (this)
-        {
-            if (serializationListeners != null)
-            {
-                for (IDocumentSerializationListener listener : serializationListeners)
-                {
-                    listener.beforeSerialization(this, otherFieldsForSerialization);
                 }
             }
         }

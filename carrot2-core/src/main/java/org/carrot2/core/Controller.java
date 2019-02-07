@@ -25,7 +25,6 @@ import org.carrot2.util.RollingWindowAverage;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
-import org.simpleframework.xml.Attribute;
 
 /**
  * A controller implementing the life cycle described in {@link IProcessingComponent}. Use
@@ -231,7 +230,7 @@ public final class Controller implements Closeable
      * @param attributes attributes to be used during processing. {@link Input} attributes
      *            will be transferred from this map to the corresponding fields. Keys of
      *            the map are computed based on the <code>key</code> parameter of the
-     *            {@link Attribute} annotation. Controller will not modify the provided
+     *            Attribute annotation. Controller will not modify the provided
      *            map, processing results will be available in the returned
      *            {@link ProcessingResult}.
      * @param processingComponentClasses classes of components to perform processing in
@@ -252,7 +251,7 @@ public final class Controller implements Closeable
      * @param attributes attributes to be used during processing. {@link Input} attributes
      *            will be transferred from this map to the corresponding fields. Keys of
      *            the map are computed based on the <code>key</code> parameter of the
-     *            {@link Attribute} annotation. Controller will not modify the provided
+     *            {@code Attribute} annotation. Controller will not modify the provided
      *            map, processing results will be available in the returned
      *            {@link ProcessingResult}.
      * @param processingComponentIdsOrClassNames identifiers of components to perform
@@ -274,7 +273,7 @@ public final class Controller implements Closeable
      * @param attributes attributes to be used during processing. {@link Input} attributes
      *            will be transferred from this map to the corresponding fields. Keys of
      *            the map are computed based on the <code>key</code> parameter of the
-     *            {@link Attribute} annotation. Controller will not modify the provided
+     *            {@code Attribute} annotation. Controller will not modify the provided
      *            map, processing results will be available in the returned
      *            {@link ProcessingResult}.
      * @param processingComponentClassesOrIds classes or identifiers of components to

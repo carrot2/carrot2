@@ -15,21 +15,13 @@ package org.carrot2.util.attribute;
 import java.io.*;
 import java.util.*;
 
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.*;
-
 /**
  * Maintains a collection of {@link AttributeValueSet}s and provides methods for
  * serializing and deserializing attribute value sets from XML streams.
  */
-@Root(name = "attribute-sets")
 public class AttributeValueSets
 {
-    @ElementMap(name = "attribute-sets", entry = "attribute-set", key = "id", inline = true, attribute = true, required = false)
     Map<String, AttributeValueSet> attributeValueSets;
-
-    @org.simpleframework.xml.Attribute(name = "default", required = false)
     String defaultAttributeValueSetId;
 
     /**
@@ -240,7 +232,6 @@ public class AttributeValueSets
     /**
      * Updates base attribute value set ids before persisting.
      */
-    @Persist
     private void updateBaseAttributeValueSetIds()
     {
         // There won't be too many attribute values sets, so nested loops should be fine
@@ -267,7 +258,6 @@ public class AttributeValueSets
     /**
      * Restores base attribute value set references based on ids on deserialization.
      */
-    @Commit
     private void restoreBaseAttributeValueSets()
     {
         for (final AttributeValueSet attributeValueSet : attributeValueSets.values())
@@ -275,38 +265,6 @@ public class AttributeValueSets
             attributeValueSet.baseAttributeValueSet = attributeValueSets
                 .get(attributeValueSet.baseAttributeValueSetId);
         }
-    }
-
-    /**
-     * Serializes this collection of {@link AttributeValueSet}s to an XML stream.
-     * 
-     * @param stream the stream to serialize this {@link AttributeValueSets} to. The stream
-     *            will <strong>not</strong> be closed.
-     * @throws Exception in case of any problems with serialization
-     */
-    public void serialize(OutputStream stream) throws Exception
-    {
-        new Persister().write(this, stream);
-    }
-
-    /**
-     * Deserializes a collection of {@link AttributeValueSet}s from an XML stream.
-     * 
-     * @param inputStream the {@link InputStream} to deserialize a
-     *            {@link AttributeValueSets} from. The stream will <strong>not</strong> be
-     *            closed.
-     * @return Deserialized collection of {@link AttributeValueSet}s
-     * @throws Exception is case of any problems with deserialization.
-     */
-    public static AttributeValueSets deserialize(InputStream inputStream)
-        throws Exception
-    {
-        final AttributeValueSets attributeValueSet = new Persister().read(
-            AttributeValueSets.class, inputStream);
-
-        checkDefaultAttributeValueSetExists(attributeValueSet);
-
-        return attributeValueSet;
     }
 
     private static void checkDefaultAttributeValueSetExists(

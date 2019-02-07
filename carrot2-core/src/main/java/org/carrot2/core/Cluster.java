@@ -18,24 +18,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.carrot2.util.MapUtils;
 import org.carrot2.util.StringUtils;
-import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
-import org.carrot2.util.simplexml.SimpleXmlWrappers;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
 
 /**
  * A cluster (group) of {@link Document}s. Each cluster has a human-readable label
@@ -43,7 +30,6 @@ import org.simpleframework.xml.core.Persist;
  * subclusters. Optionally, additional attributes can be associated with a cluster, e.g.
  * {@link #OTHER_TOPICS}. This class is <strong>not</strong> thread-safe.
  */
-@Root(name = "group", strict = false)
 public final class Cluster
 {
     /**
@@ -78,18 +64,15 @@ public final class Cluster
     /**
      * @see #getId()
      */
-    @Attribute(required = false)
     Integer id;
 
     /** Phrases describing this cluster. */
-    @ElementList(required = false, name = "title", entry = "phrase")
     private ArrayList<String> phrases = new ArrayList<String>();
 
     /** A read-only list of phrases exposed in {@link #getPhrases()}. */
     private List<String> phrasesView = Collections.unmodifiableList(phrases);
 
     /** Subclusters of this cluster. */
-    @ElementList(required = false, inline = true)
     private ArrayList<Cluster> subclusters = new ArrayList<Cluster>();
 
     /** A read-only list of subclusters exposed in {@link #getSubclusters()}. */
@@ -112,35 +95,6 @@ public final class Cluster
 
     /** Cached list of documents from this cluster and subclusters */
     private List<Document> allDocuments;
-
-    /** Attributes of this cluster for serialization/ deserialization purposes. */
-    @ElementMap(entry = "attribute", key = "key", attribute = true, inline = true, required = false)
-    private HashMap<String, SimpleXmlWrapperValue> otherAttributesForSerialization;
-
-    /**
-     * List of document ids used for serialization/ deserialization purposes.
-     */
-    @ElementList(required = false, inline = true)
-    List<DocumentRefid> documentIds;
-
-    /**
-     * A helper class for serialization/ deserialization of documents with refids.
-     */
-    @Root(name = "document")
-    static class DocumentRefid
-    {
-        @Attribute
-        String refid;
-
-        DocumentRefid()
-        {
-        }
-
-        DocumentRefid(String refid)
-        {
-            this.refid = refid;
-        }
-    }
 
     /**
      * Creates a {@link Cluster} with an empty label, no documents and no subclusters.
@@ -409,7 +363,6 @@ public final class Cluster
     /**
      * Returns this cluster's {@value #SCORE} field.
      */
-    @Attribute(required = false)
     public Double getScore()
     {
         return getAttribute(SCORE);
@@ -421,7 +374,6 @@ public final class Cluster
      * @param score score to set
      * @return this cluster for convenience
      */
-    @Attribute(required = false)
     public Cluster setScore(Double score)
     {
         return setAttribute(SCORE, score);
@@ -483,24 +435,6 @@ public final class Cluster
     public int size()
     {
         return getAllDocuments().size();
-    }
-
-    /**
-     * For serialization only.
-     */
-    @Attribute(required = false)
-    private int getSize()
-    {
-        return size();
-    }
-
-    /**
-     * Empty implementation, SimpleXML requires both a getter and a setter.
-     */
-    @Attribute(required = false)
-    private void setSize(int size)
-    {
-        // We only serialize the size, hence empty implementation
     }
 
     /**
@@ -813,77 +747,6 @@ public final class Cluster
             clusters.add(otherTopics);
         }
         return otherTopics;
-    }
-
-    /**
-     * An extremely dodgy method that remaps {@link Document} references 
-     * inside this cluster. This operation is allowed only when the cluster has not been
-     * assigned an ID yet (so theoretically before the {@link ProcessingResult} has been
-     * published. While there are theoretically other ways to achieve the same result (copying
-     * the entire set of clusters) this is the most memory and cpu efficient way.
-     * 
-     * Only documents from this cluster are remapped, subclusters need to be processed separately.
-     */
-    public void remapDocumentReferences(IdentityHashMap<Document, Document> docMapping)
-    {
-        if (this.id != null) throw new IllegalStateException();
-        for (int i = documents.size(); --i >= 0;) 
-        {
-            Document doc = documents.get(i);
-            Document remapped = docMapping.get(doc);
-            if (remapped != null) {
-                documents.set(i, remapped);
-            }
-        }
-
-        // Invalidate recursive flattened cache.
-        this.allDocuments = null;
-    }
-
-    @Persist
-    private void beforeSerialization()
-    {
-        documentIds = documents.stream()
-            .map(document -> new DocumentRefid(document.getStringId()))
-            .collect(Collectors.toList());
-
-        // Remove score from attributes for serialization
-        otherAttributesForSerialization = MapUtils.asHashMap(SimpleXmlWrappers.wrap(attributes));
-        otherAttributesForSerialization.remove(SCORE);
-        if (otherAttributesForSerialization.isEmpty())
-        {
-            otherAttributesForSerialization = null;
-        }
-    }
-
-    @Commit
-    private void afterDeserialization() throws Exception
-    {
-        if (otherAttributesForSerialization != null)
-        {
-            attributes.putAll(SimpleXmlWrappers.unwrap(otherAttributesForSerialization));
-        }
-
-        phrasesView = Collections.unmodifiableList(phrases);
-        subclustersView = Collections.unmodifiableList(subclusters);
-        // Documents will be restored on the ProcessingResult level
-    }
-
-    /**
-     * For JSON serialization only.
-     */
-    private List<String> getDocumentIds()
-    {
-        return documents.stream().map(doc -> doc.getStringId()).collect(Collectors.toList());
-    }
-
-    /**
-     * For JSON and XML serialization only.
-     */
-    private Map<String, Object> getOtherAttributes()
-    {
-        final Map<String, Object> otherAttributes = new HashMap<>(attributesView);
-        return otherAttributes.isEmpty() ? null : otherAttributes;
     }
 
     @Override

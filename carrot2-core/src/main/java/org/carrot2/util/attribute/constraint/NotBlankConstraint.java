@@ -12,12 +12,9 @@
 
 package org.carrot2.util.attribute.constraint;
 
-import org.simpleframework.xml.Root;
-
 /**
  * Implementation of the {@link NotBlank}.
  */
-@Root(name = "not-blank")
 class NotBlankConstraint extends Constraint
 {
     NotBlankConstraint()

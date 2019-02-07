@@ -21,6 +21,7 @@ import java.util.*;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,13 +38,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
-import org.carrot2.core.Controller;
-import org.carrot2.core.ControllerFactory;
-import org.carrot2.core.Document;
-import org.carrot2.core.ProcessingComponentConfiguration;
-import org.carrot2.core.ProcessingComponentSuite;
-import org.carrot2.core.ProcessingException;
-import org.carrot2.core.ProcessingResult;
+import org.carrot2.core.*;
 import org.carrot2.dcs.DcsRequestModel.OutputFormat;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.util.CloseableUtils;
@@ -94,10 +89,10 @@ public final class RestProcessorServlet extends HttpServlet
         {
             streamInput = new ClassResource(RestProcessorServlet.class,
                 "example-input.xml").open();
-            EXAMPLE_INPUT = ProcessingResult.deserialize(streamInput);
+            EXAMPLE_INPUT = deserialize(streamInput);
             streamOutput = new ClassResource(RestProcessorServlet.class,
                 "example-output.xml").open();
-            EXAMPLE_OUTPUT = ProcessingResult.deserialize(streamOutput);
+            EXAMPLE_OUTPUT = deserialize(streamOutput);
         }
         catch (Exception e)
         {
@@ -131,18 +126,19 @@ public final class RestProcessorServlet extends HttpServlet
     };
 
     private transient HashMap<String, CommandAction> commandActions = new HashMap<String, CommandAction>() {{
+      /*
         put("components", new CommandAction() {
             public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
             {
                 response.setContentType(MIME_XML_UTF8);
-                componentSuite.serialize(response.getOutputStream());
+                serialize(componentSuite, response.getOutputStream());
             }
         });
         put("input-example", new CommandAction() {
             public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
             {
                 response.setContentType(MIME_XML_UTF8);
-                EXAMPLE_INPUT.serialize(response.getOutputStream(), true, false);
+                serialize(EXAMPLE_INPUT, response.getOutputStream(), true, false);
             }
         });
         put("output-example-xml", new CommandAction() {
@@ -165,6 +161,7 @@ public final class RestProcessorServlet extends HttpServlet
                 controller.getStatistics().serialize(response.getOutputStream());
             }
         });
+        */
 
         // Aliases for clustering commands.
         CommandAction clusteringAction = new CommandAction() {
@@ -177,7 +174,7 @@ public final class RestProcessorServlet extends HttpServlet
         put("cluster", clusteringAction);
     }};
 
-    @SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked")
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
@@ -229,8 +226,10 @@ public final class RestProcessorServlet extends HttpServlet
                     "Suite file not found in servlet context's /WEB-INF/suites: "
                         + config.componentSuiteResource);
             }
-            componentSuite = ProcessingComponentSuite.deserialize(suiteResource,
-                suitesLookup);
+
+            // TODO: ProcessingComponentSuite.deserialize(suiteResource, suitesLookup);
+            ArrayList<ProcessingComponentDescriptor> algorithms = new ArrayList<>();
+            componentSuite = new ProcessingComponentSuite(new ArrayList<>(), algorithms);
         }
         catch (Exception e)
         {
@@ -365,7 +364,7 @@ public final class RestProcessorServlet extends HttpServlet
             // Deserialize documents from the stream
             try
             {
-                input = ProcessingResult.deserialize(request.getParameter(DCS_C2STREAM));
+                input = null; // TODO: deserialize(request.getParameter(DCS_C2STREAM));
             }
             catch (Exception e)
             {
@@ -430,7 +429,7 @@ public final class RestProcessorServlet extends HttpServlet
                 // Deserialize documents from the stream
                 try
                 {
-                    input = ProcessingResult.deserialize(uploadInputStream);
+                    input = deserialize(uploadInputStream);
                 }
                 catch (Exception e)
                 {
@@ -592,7 +591,7 @@ public final class RestProcessorServlet extends HttpServlet
         if (xsltTemplates != null)
         {
             final ByteArrayOutputStream output = new ByteArrayOutputStream();
-            result.serialize(output, includeDocuments, includeClusters);
+            serialize(result, output, includeDocuments, includeClusters);
             xsltTemplates.newTransformer().transform(
                 new StreamSource(new ByteArrayInputStream(output.toByteArray())),
                 new StreamResult(response.getOutputStream()));
@@ -600,8 +599,7 @@ public final class RestProcessorServlet extends HttpServlet
         }
         else
         {
-            result.serialize(response.getOutputStream(), includeDocuments,
-                includeClusters);
+            serialize(result, response.getOutputStream(), includeDocuments, includeClusters);
         }
     }
 
@@ -727,5 +725,22 @@ public final class RestProcessorServlet extends HttpServlet
         throws IOException
     {
         throw new IOException("TODO: implement me.");
+    }
+
+    private static ProcessingResult deserialize(InputStream is) throws IOException
+    {
+      throw new IOException(); // TODO: implement me.
+    }
+
+    private void serialize(ProcessingComponentSuite componentSuite, ServletOutputStream os)
+      throws IOException
+    {
+      throw new IOException(); // TODO: implement me.
+    }
+
+    private void serialize(ProcessingResult result, OutputStream output, boolean includeDocuments, boolean includeClusters)
+        throws IOException
+    {
+      throw new IOException();
     }
 }

@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 import org.carrot2.util.attribute.constraint.*;
 import org.carrot2.util.attribute.constraint.Constraint;
-import org.simpleframework.xml.*;
 
 /**
  * Provides a full description of an individual attribute, including its {@link #key},
@@ -31,26 +30,22 @@ import org.simpleframework.xml.*;
  * {@link AttributeDescriptor}s can be obtained from {@link BindableDescriptor}s, which in
  * turn are built by {@link BindableDescriptorBuilder#buildDescriptor(Object)};
  */
-@Root(name = "attribute-descriptor")
 public class AttributeDescriptor
 {
     /**
      * Human-readable metadata describing the attribute.
      */
-    @Element
     public final AttributeMetadata metadata;
 
     /**
      * Type of the attribute as defined by {@link Attribute#key()}.
      */
-    @org.simpleframework.xml.Attribute
     public final String key;
 
     /**
      * Type of the attribute. Primitive types are represented by their corresponding
      * wrapper/ box types.
      */
-    @org.simpleframework.xml.Attribute
     public final Class<?> type;
 
     /**
@@ -77,7 +72,6 @@ public class AttributeDescriptor
     /**
      * <code>True</code> if the attribute is a {@link Required} attribute.
      */
-    @org.simpleframework.xml.Attribute(name = "required")
     public final boolean requiredAttribute;
 
     /**
@@ -88,37 +82,31 @@ public class AttributeDescriptor
     /**
      * Name of field representing the attribute, for serialization.
      */
-    @org.simpleframework.xml.Attribute(name = "field")
     private String attributeFieldString;
 
     /**
      * Name of the class declaring the attribute, for serialization.
      */
-    @org.simpleframework.xml.Attribute(name = "declaring-class")
     private String attributeDeclaringClassString;
     
     /**
      * Default value as string, for serialization.
      */
-    @org.simpleframework.xml.Attribute(name = "default", required = false)
     private String defaultValueString;
 
     /**
      * Annotation names, for serialization.
      */
-    @ElementList(entry = "annotation", required = false)
     private ArrayList<String> annotations;
 
     /**
      * Instances of this attribute's constraints, for serialization.
      */
-    @ElementList(name = "constraints", required = false)
     private List<Constraint> constraintInstances;
 
     /**
      * In case of Enum attributes, a list of allowed values, for serialization.
      */
-    @Element(name = "allowed-values", required = false)
     private AllowedValues allowedValues;
 
     /**
@@ -290,13 +278,9 @@ public class AttributeDescriptor
         }
     }
 
-    @Root(name = "allowed-values")
     private static class AllowedValues
     {
-        @ElementList(name = "allowed-values", entry = "value", required = false, inline = true)
         private ArrayList<AllowedValue> allowedValues;
-
-        @org.simpleframework.xml.Attribute(name = "other-values-allowed")
         private boolean otherValuesAllowed;
 
         private AllowedValues(boolean otherValuesAllowed)
@@ -313,10 +297,7 @@ public class AttributeDescriptor
 
     private static class AllowedValue
     {
-        @org.simpleframework.xml.Attribute
         String label;
-
-        @Text
         String value;
 
         public AllowedValue(String value, String label)

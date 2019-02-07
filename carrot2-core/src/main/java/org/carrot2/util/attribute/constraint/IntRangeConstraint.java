@@ -15,30 +15,13 @@ package org.carrot2.util.attribute.constraint;
 import java.lang.annotation.Annotation;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Persist;
-
 /**
  * Implementation of the {@link IntRangeConstraint}.
  */
-@Root(name = "int-range")
 class IntRangeConstraint extends Constraint
 {
     Integer min;
     Integer max;
-
-    /**
-     * For serialization.
-     */
-    @Attribute(name = "min", required = false)
-    Integer minOrNull;
-
-    /**
-     * For serialization.
-     */
-    @Attribute(name = "max", required = false)
-    Integer maxOrNull;
 
     protected boolean isMet(Object value)
     {
@@ -65,19 +48,5 @@ class IntRangeConstraint extends Constraint
         final IntRange range = (IntRange) annotation;
         this.min = range.min();
         this.max = range.max();
-    }
-
-    @Persist
-    void beforeSerialization()
-    {
-        if (min > Integer.MIN_VALUE)
-        {
-            minOrNull = min;
-        }
-
-        if (max < Integer.MAX_VALUE)
-        {
-            maxOrNull = max;
-        }
     }
 }

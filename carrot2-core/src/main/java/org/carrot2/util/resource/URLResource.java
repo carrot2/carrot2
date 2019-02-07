@@ -14,14 +14,11 @@ package org.carrot2.util.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.jar.JarFile;
 
 import org.carrot2.util.StreamUtils;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Commit;
 
 /**
  * This class opens a connection to a resource pointed to by an URI. Note that JAR
@@ -32,31 +29,18 @@ import org.simpleframework.xml.core.Commit;
  * 
  * @see <a href="http://issues.carrot2.org/browse/CARROT-143">Issue CARROT-143</a>
  */
-@Root(name = "url-resource")
 public class URLResource implements IResource
 {
     /**
      * URL for the resource.
      */
-    private URL url;
-
-    /**
-     * URL string, for serialization only.
-     */
-    @Attribute(name = "url")
-    private String info;
-
-    /**
-     * For XML serialization/deserialization only, use {@link #URLResource(URL)}.
-     */
-    URLResource()
-    {
-    }
+    private final URL url;
+    private final String urlString;
 
     public URLResource(URL url)
     {
         this.url = url;
-        this.info = url.toExternalForm();
+        this.urlString = url.toExternalForm();
     }
 
     public InputStream open() throws IOException
@@ -67,7 +51,7 @@ public class URLResource implements IResource
     @Override
     public String toString()
     {
-        return info;
+        return urlString;
     }
 
     @Override
@@ -79,7 +63,7 @@ public class URLResource implements IResource
         }
         if (obj instanceof URLResource)
         {
-            return ((URLResource) obj).info.equals(this.info);
+            return Objects.equals(this.urlString, ((URLResource) obj).urlString);
         }
         return false;
     }
@@ -87,17 +71,11 @@ public class URLResource implements IResource
     @Override
     public final int hashCode()
     {
-        return this.info.hashCode();
+        return urlString.hashCode();
     }
 
     public URL getUrl()
     {
         return url;
-    }
-
-    @Commit
-    void afterDeserialization() throws MalformedURLException
-    {
-        url = new URL(info);
     }
 }

@@ -17,19 +17,15 @@ import java.io.InputStream;
 import java.util.Objects;
 
 import org.carrot2.util.StreamUtils;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
 
 /**
  * A resource loaded using a class loader. This loader provides cached content of
  * returned resources and closes the stream handle in {@link #open()}.
  */
-@Root(name = "class-loader-resource")
 public final class ClassLoaderResource implements IResource
 {
     private ClassLoader clazzLoader;
 
-    @Attribute
     private String resource;
 
     /**

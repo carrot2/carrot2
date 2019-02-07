@@ -15,19 +15,12 @@ package org.carrot2.util.attribute.constraint;
 import java.lang.annotation.Annotation;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
-
 /**
  * Implementation of the {@link IntModuloConstraint}.
  */
-@Root(name = "int-modulo")
 class IntModuloConstraint extends Constraint
 {
-    @Attribute
     int modulo;
-    
-    @Attribute
     int offset;
 
     protected boolean isMet(Object value)

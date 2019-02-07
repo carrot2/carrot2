@@ -30,12 +30,6 @@ import org.carrot2.util.attribute.BindableDescriptorBuilder;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
 import org.carrot2.util.attribute.Required;
-import org.carrot2.util.resource.IResource;
-import org.carrot2.util.resource.ResourceLookup;
-import org.carrot2.util.simplexml.PersisterHelpers;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Commit;
 
 /**
  * Descriptor of a {@link IProcessingComponent} being part of a
@@ -43,7 +37,6 @@ import org.simpleframework.xml.core.Commit;
  */
 public class ProcessingComponentDescriptor
 {
-    @Attribute(name = "component-class")
     private String componentClassName;
 
     /** Cached component class instantiated from {@link #componentClassName}. */
@@ -52,30 +45,22 @@ public class ProcessingComponentDescriptor
     /** If not <code>null</code>, component initialization ended with an exception. */
     private Throwable initializationException;
 
-    @Attribute
     private String id;
 
-    @Element
     private String label;
 
-    @Element(required = false)
     private String mnemonic;
 
-    @Element
     private String title;
 
-    @Element(required = false, name = "icon-path")
     private String iconPath;
 
-    @Element(required = false)
     private String description;
 
     private AttributeValueSets attributeSets;
 
-    @Attribute(name = "attribute-sets-resource", required = false)
     private String attributeSetsResource;
 
-    @Attribute(name = "attribute-set-id", required = false)
     private String attributeSetId;
 
     /**
@@ -267,66 +252,5 @@ public class ProcessingComponentDescriptor
     public Throwable getInitializationFailure()
     {
         return this.initializationException;
-    }
-
-    /**
-     * Invoked by the XML loading framework when the object is deserialized. 
-     */
-    private void loadAttributeSets(ResourceLookup resourceLookup) throws Exception
-    {
-        attributeSets = new AttributeValueSets();
-
-        IResource resource = null;
-        if (StringUtils.isNotBlank(attributeSetsResource))
-        {
-            // Try to load from the directly provided resource name
-            resource = resourceLookup.getFirst(attributeSetsResource);
-
-            if (resource == null)
-            {
-                throw new IOException("Attribute set resource not found: "
-                    + attributeSetsResource);
-            }
-        }
-
-        if (resource != null)
-        {
-            final InputStream inputStream = resource.open();
-            try
-            {
-                attributeSets = AttributeValueSets.deserialize(inputStream);
-            }
-            finally
-            {
-                CloseableUtils.close(inputStream);
-            }
-        }
-
-        if (getAttributeSets() == null)
-        {
-            attributeSets = new AttributeValueSets();
-        }
-    }
-
-    /**
-     * On commit, attempt to verify component class and instance availability.
-     */
-    @Commit
-    private void onCommit(Map<Object, Object> session)
-    {
-        this.initializationException = null;
-        try
-        {
-            ResourceLookup resourceLookup = PersisterHelpers.getResourceLookup(session);
-            loadAttributeSets(resourceLookup);
-            bindableDescriptor = 
-                BindableDescriptorBuilder.buildDescriptor(newInitializedInstance());
-        }
-        catch (Throwable e)
-        {
-            org.slf4j.LoggerFactory.getLogger(this.getClass()).warn(
-                "Component unavailable: " + componentClassName, e);
-            this.initializationException = e;
-        }
     }
 }
