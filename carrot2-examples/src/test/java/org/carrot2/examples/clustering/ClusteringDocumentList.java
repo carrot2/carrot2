@@ -35,7 +35,7 @@ import org.junit.Test;
 public class ClusteringDocumentList
 {
     // [[[start:clustering-document-list]]]
-    /* A few example documents, normally you would need at least 20 for reasonable clusters. */
+    /* A few example documents, normally you would need at least 200 for reasonable clusters. */
     private final String [][] data = new String [][] {
         {
             "http://en.wikipedia.org/wiki/Data_mining",
