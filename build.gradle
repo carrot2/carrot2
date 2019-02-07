@@ -1,10 +1,6 @@
 import org.apache.tools.ant.filters.*
 import org.gradle.util.GradleVersion
 
-plugins {
-  id 'net.ltgt.apt-idea' version "0.20" apply false
-}
-
 String minimumGradleVersion = "5.1.1"
 if (GradleVersion.current() < GradleVersion.version(minimumGradleVersion)) {
     throw new GradleException("Gradle ${minimumGradleVersion}+ is required (use local ./gradlew for wrapper).")
@@ -25,35 +21,27 @@ ext {
   ]
 }
 
-/*
-configurations.all {
-  transitive = false
-}
-*/
-
 project("carrot2-core") {
   apply plugin: 'java-library'
-  apply plugin: 'net.ltgt.apt-idea'
 
   dependencies {
     api "com.fasterxml.jackson.core:jackson-core:2.8.11"
     api "com.fasterxml.jackson.core:jackson-annotations:2.8.11"
     api "com.fasterxml.jackson.core:jackson-databind:2.8.11"
-    api "org.slf4j:slf4j-api:1.7.13"
 
-    implementation "org.carrot2:morfologik-polish:2.1.5"
-    implementation("org.simpleframework:simple-xml:2.7.1") {
+    api("org.simpleframework:simple-xml:2.7.1") {
       exclude group: 'stax'
       exclude group: 'xpp3'
     }
+
+    api "org.slf4j:slf4j-api:1.7.13"
+
+    implementation "com.carrotsearch:hppc:0.8.1"
+    implementation "org.carrot2:morfologik-polish:2.1.5"
     implementation "org.apache.lucene:lucene-analyzers-common:5.5.5"
     implementation "org.apache.lucene:lucene-analyzers-smartcn:5.5.5"
-
     implementation "org.apache.commons:commons-lang3:3.5"
-    implementation "com.carrotsearch:hppc:0.8.1"
   }
-
-  compileJava.dependsOn(processResources)
 }
 
 project("carrot2-examples") {
@@ -136,8 +124,6 @@ configure(subprojects.findAll {[
         "carrot2-dcs-launcher",
         "carrot2-dcs-service"
 ].contains(it.name)}) {
-  apply plugin: 'net.ltgt.apt-idea'
-
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
 
